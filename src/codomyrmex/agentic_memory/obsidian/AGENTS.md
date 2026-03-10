@@ -1,68 +1,77 @@
-# Obsidian Agentic Context
+# Codomyrmex Agents — src/codomyrmex/agentic_memory/obsidian
 
-**Version**: v3.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Overview
+## Purpose
+Contains components for the src system.
 
-This module gives agents full Obsidian vault access via two modes:
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `bookmarks.py` – Project file
+- `canvas.py` – Project file
+- `cli.py` – Project file
+- `cli_search.py` – Project file
+- `commands.py` – Project file
+- `crud.py` – Project file
+- `daily_notes.py` – Project file
+- `developer.py` – Project file
+- `graph.py` – Project file
+- `models.py` – Project file
+- `parser.py` – Project file
+- `plugins.py` – Project file
+- `properties.py` – Project file
+- `py.typed` – Project file
+- `search.py` – Project file
+- `sync.py` – Project file
+- `tasks.py` – Project file
+- `templates.py` – Project file
+- `vault.py` – Project file
+- `workspace.py` – Project file
 
-1. **Filesystem mode** — Direct file operations for parsing, CRUD, search, graph analysis, and canvas. No external dependencies.
-2. **CLI mode** — Subprocess wrapper for the `obsidian` binary (≥1.12). The Obsidian app must be running.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Operational Directives
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `bookmarks.py`
+- `canvas.py`
+- `cli.py`
+- `cli_search.py`
+- `commands.py`
+- `crud.py`
+- `daily_notes.py`
+- `developer.py`
+- `graph.py`
+- `models.py`
+- `parser.py`
+- `plugins.py`
+- `properties.py`
+- `py.typed`
+- `search.py`
+- `sync.py`
+- `tasks.py`
+- `templates.py`
+- `vault.py`
+- `workspace.py`
 
-1. **Mode Selection**: Use filesystem mode for offline/CI/batch. Use CLI mode for live Obsidian interaction.
-2. **CLI Availability**: Check `ObsidianCLI.is_available()` or handle `ObsidianCLINotAvailable`.
-3. **Vault Targeting**: CLI defaults to CWD vault. Use `vault=` to target specific vaults.
-4. **File Targeting**: Use `file=` (wikilink resolution) or `path=` (exact path). Omit both for active file.
-5. **Flat Imports**: All models and functions are exported from `__init__.py` for convenience.
-6. **Documentation Sync**: Keep `AGENTS.md`, `README.md`, `SPEC.md` synchronized.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Key Entry Points
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Filesystem Operations
-
-| Task | Import | Example |
-| ---- | ------ | ------- |
-| Load vault | `ObsidianVault` | `vault = ObsidianVault(path)` |
-| Check note | `ObsidianVault` | `vault.has_note("name")` or `"name" in vault` |
-| List notes | `ObsidianVault` | `vault.list_notes(folder="sub")` |
-| Create note | `create_note` | `create_note(vault, "n", content="...", template="T")` |
-| Append/Prepend | `append_note`, `prepend_note` | `append_note(vault, "n", "text")` |
-| Move/Rename | `move_note`, `rename_note` | `move_note(vault, "n", to="folder/")` |
-| Raw read | `read_note_raw` | `text = read_note_raw(vault, "n")` |
-| Full-text search | `search_vault` | `search_vault(vault, "q", folder="x")` |
-| Regex search | `search_regex` | `search_regex(vault, r"\d+")` |
-| Multi-tag filter | `filter_by_tags` | `filter_by_tags(vault, ["a","b"], match_all=True)` |
-| Notes with key | `filter_by_frontmatter_exists` | `filter_by_frontmatter_exists(vault, "status")` |
-| Notes linking to | `find_notes_linking_to` | `find_notes_linking_to(vault, "Target")` |
-| Orphans | `find_orphans` | `find_orphans(vault)` |
-| Dead ends | `find_dead_ends` | `find_dead_ends(vault)` |
-| Hub notes | `find_hubs` | `find_hubs(vault, min_links=5)` |
-| Shortest path | `get_shortest_path` | `get_shortest_path(vault, "A", "B")` |
-| Graph stats | `get_link_stats` | Stats with orphan/dead_end counts |
-| Parse canvas | `parse_canvas` | `canvas = parse_canvas("f.canvas")` |
-| Create nodes | `create_text_node` | `node = create_text_node("Hi", color="#ff0")` |
-| Connect nodes | `connect_nodes` | `edge = connect_nodes(n1.id, n2.id)` |
-| Extract code | `extract_code_blocks` | From parsed `note.code_blocks` |
-| Extract math | `extract_math` | From parsed `note.math_blocks` |
-| Dataview fields | `extract_dataview_fields` | From parsed `note.dataview_fields` |
-
-### CLI Operations
-
-| Task | Module | Example |
-| ---- | ------ | ------- |
-| Search (CLI) | `cli_search.py` | `cli_search(cli, query, limit=10)` |
-| Daily notes | `daily_notes.py` | `read_daily(cli)`, `append_daily(cli, text)` |
-| Tasks | `tasks.py` | `list_tasks(cli, todo=True)` |
-| Properties | `properties.py` | `set_property(cli, "title", "val")` |
-| Plugins | `plugins.py` | `list_plugins(cli)`, `reload_plugin(cli, id)` |
-| Themes | `plugins.py` | `set_theme(cli, name)`, `install_theme(cli, name)` |
-| Sync/Publish | `sync.py` | `sync_status(cli)`, `publish_add(cli, file="n")` |
-| Bookmarks | `bookmarks.py` | `bookmark_file(cli, file="note")` |
-| Templates | `templates.py` | `read_template(cli, file="t", resolve=True)` |
-| Workspaces | `workspace.py` | `save_workspace(cli, name)`, `list_tabs(cli)` |
-| Dev tools | `developer.py` | `eval_js(cli, code)`, `cdp_command(cli, method)` |
-| Links | `commands.py` | `get_orphans(cli)`, `get_deadends(cli)` |
-| History | `commands.py` | `list_history(cli, file="n")`, `restore_history(cli)` |
-| Random/Web | `commands.py` | `open_random(cli)`, `open_web(cli, url)` |
+## Navigation Links
+- **📁 Parent Directory**: [agentic_memory](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -128,7 +128,7 @@ class TestDeploymentStatusEnum:
 
     @pytest.mark.unit
     def test_deployment_status_member_count(self):
-        assert len(DeploymentStatus) == 6
+        assert len(DeploymentStatus) == 9
 
 
 class TestEnvironmentTypeEnum:
@@ -855,13 +855,24 @@ class TestPipelineStatusEnums:
 
     @pytest.mark.unit
     @pytest.mark.parametrize("enum_cls", [PipelineStatus, StageStatus, JobStatus])
-    def test_status_enums_have_six_members(self, enum_cls):
-        assert len(enum_cls) == 6
+    def test_status_enums_have_members(self, enum_cls):
+        assert len(enum_cls) == 10
 
     @pytest.mark.unit
     @pytest.mark.parametrize("enum_cls", [PipelineStatus, StageStatus, JobStatus])
     def test_status_enums_share_same_values(self, enum_cls):
-        expected = {"pending", "running", "success", "failure", "cancelled", "skipped"}
+        expected = {
+            "pending",
+            "running",
+            "success",
+            "failure",
+            "cancelled",
+            "skipped",
+            "queued",
+            "created",
+            "succeeded",
+            "failed",
+        }
         actual = {member.value for member in enum_cls}
         assert actual == expected
 

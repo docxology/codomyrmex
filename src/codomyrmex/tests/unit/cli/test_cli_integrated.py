@@ -116,30 +116,21 @@ class TestCLIIntegrated:
         assert "Python" in output
         assert "virtual environment" in output
 
-    def test_cli_test_handler_real_module(self, monkeypatch):
-        """Test the test handler with a real module."""
-        import subprocess
-
-        def mock_run(*args, **kwargs):
-            # Verify the command is mostly correct
-            assert "pytest" in args[0]
-            return subprocess.CompletedProcess(
-                args=args[0], returncode=0, stdout="Mocked tests passed\n", stderr=""
-            )
-
-        monkeypatch.setattr(subprocess, "run", mock_run)
+    def test_cli_test_handler_real_module(self):
+        """Test the test handler with a real module and no mocks."""
         cli = Cli()
 
         captured = io.StringIO()
         sys.stdout = captured
         try:
-            # We don't necessarily need it to pass, just that it runs the right command
-            result = cli.test("cli")
+            # Use 'utils' module as it's likely small/fast if tests exist
+            # This follows the Zero-Mock policy by executing the real subprocess.
+            result = cli.test("utils")
             output = captured.getvalue()
         finally:
             sys.stdout = sys.__stdout__
 
-        assert "Running tests for module: cli" in output
+        assert "Running tests for module: utils" in output
         assert isinstance(result, bool)
 
 

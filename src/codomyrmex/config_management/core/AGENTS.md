@@ -1,34 +1,41 @@
-# Config Management Core -- Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/config_management/core
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Configuration files and templates.
 
-Core configuration loading, validation, and management. Provides multi-source configuration loading (YAML, JSON, environment variables, URLs), JSON schema validation via `jsonschema`, dot-notation access, and environment-specific configuration merging.
-
-## Key Components
-
-| Component | File | Role |
-|-----------|------|------|
-| `ConfigSchema` | `config_loader.py` | JSON schema wrapper with `jsonschema` validation and `FormatChecker` support |
-| `Configuration` | `config_loader.py` | Config object with dot-notation `get_value()` / `set_value()`, schema validation, serialisation |
-| `ConfigurationManager` | `config_loader.py` | Multi-source loader, schema registry, env-specific merging, hot-reload |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `config_loader.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Multi-source loading**: `ConfigurationManager.load_configuration()` merges from files (YAML/JSON), environment variables (`{NAME}_` prefix), and URL sources (`http://`, `https://`). Later sources override earlier ones.
-- **Source resolution order**: `{name}.yaml` -> `{name}.yml` -> `{name}.json` -> `environments/{env}/{name}.*` -> environment variables.
-- **Schema validation**: If a `schema_path` is provided, configuration is validated against a JSON schema using `jsonschema`. Validation errors are logged as warnings but do not prevent loading.
-- **Dot-notation access**: `Configuration.get_value("a.b.c")` traverses nested dicts. `set_value()` creates intermediate dicts as needed.
-- **Config directory**: Defaults to `{cwd}/config/`. Falls back to `tempfile.mkdtemp()` if the path is not writable.
-- **No MCP tools**: This submodule does not directly expose MCP tools. The parent `config_management` module exposes `get_config`, `set_config`, `validate_config` via `@mcp_tool` decorators.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `config_loader.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Logging**: Uses `codomyrmex.logging_monitoring.core.logger_config.get_logger`.
-- **Exceptions**: Uses `codomyrmex.exceptions.ConfigurationError`, `FileOperationError`, `ValidationError`.
-- **External deps**: `jsonschema` (validation), `pyyaml` (YAML loading), `requests` (URL source loading).
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [config_management/](../AGENTS.md)
-- **Siblings**: [monitoring/](../monitoring/AGENTS.md)
-- **Specification**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [config_management](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

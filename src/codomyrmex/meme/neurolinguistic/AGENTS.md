@@ -1,42 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/meme/neurolinguistic
+# Codomyrmex Agents — src/codomyrmex/meme/neurolinguistic
 
-**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Models neurolinguistic programming concepts including cognitive framing (Lakoff), linguistic pattern libraries (Milton Model hypnotic patterns, Meta Model clarifying patterns), pattern detection in text, frame analysis via keyword matching, and content reframing between cognitive frames.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `engine.py` | `NeurolinguisticEngine` | Orchestrator: register frames, audit text, spin content toward target frame |
-| `framing.py` | `analyze_frames` | Identify active cognitive frames via keyword matching |
-| `framing.py` | `reframe` | Translate content between frames via primary keyword substitution |
-| `patterns.py` | `milton_model_patterns` | Library of 3 hypnotic patterns (Mind Read, Lost Performative, Cause-Effect) |
-| `patterns.py` | `meta_model_patterns` | Library of 2 clarifying patterns (Universal Quantifier Challenge, Specify Verb) |
-| `patterns.py` | `detect_patterns` | Detect linguistic patterns via keyword heuristic |
-| `models.py` | `CognitiveFrame` | A Lakoff-style cognitive frame with keywords and semantic roles |
-| `models.py` | `LinguisticPattern` | A detected or generated linguistic pattern with type and template |
-| `models.py` | `PatternType` | HYPNOTIC, CLARIFYING, PERSUASIVE, DECEPTIVE |
-| `models.py` | `PersuasionAttempt` | Record of a persuasive communication attempt |
-| `models.py` | `BiasInstance` | A detected instance of cognitive bias |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `engine.py` – Project file
+- `framing.py` – Project file
+- `models.py` – Project file
+- `patterns.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Frame analysis uses keyword-hit-count matching; no semantic similarity or embeddings.
-- `reframe` substitutes only the first keyword from each frame; naive string replacement.
-- `detect_patterns` currently detects only "always"/"never" (Universal Quantifier) usage.
-- `spin` appends a keyword phrase rather than restructuring content.
-- `spin` returns original text unchanged if target frame is not registered.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `engine.py`
+- `framing.py`
+- `models.py`
+- `patterns.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: None (self-contained within `meme` package)
-- **Used by**: `meme.memetics` (NLP patterns increase meme virality), `meme.narrative` (framing reinforces narrative moral)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [meme](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [meme](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

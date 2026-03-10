@@ -1,20 +1,21 @@
 # templating
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Tests for the templating module.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `test_templating.py` - Test Templating
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `test_engines.py` – File
+- `test_templating.py` – File
+- `test_templating_mcp_tools.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

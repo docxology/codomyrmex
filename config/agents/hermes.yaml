@@ -1,0 +1,66 @@
+# config/agents/hermes.yaml
+
+module: hermes
+enabled: true
+
+# Backend options: auto, cli, ollama
+backend: auto
+
+# The default model to use when falling back to Ollama
+model: hermes3
+
+# The command/binary name for the official NousResearch Hermes CLI
+command: hermes
+
+# Subprocess timeout in seconds for normal chat/run operations
+timeout: 120
+
+# Longer timeout for dispatch operations, which include full source code in prompts
+# Set high enough to handle scripts up to ~200 lines through Ollama
+dispatch_timeout: 600
+
+# SQLite session database path (~ is expanded at runtime)
+session_db: ~/.codomyrmex/hermes_sessions.db
+
+# Default prompt sent when run_hermes.py is invoked with no --prompt flag
+default_prompt: "Explain what Hermes Agent is in one sentence."
+
+# Observability and telemetry
+observability:
+  enable_traces: true
+  log_level: DEBUG
+  trace_file: logs/hermes_traces.jsonl
+
+# Evaluator configuration (used by evaluate_orchestrators.py)
+evaluator:
+  # Directory for saving evaluation JSON + overall report (repo-root relative)
+  output_dir: evaluations
+  # Per-script execution timeout in seconds (script is executed before Hermes assesses it)
+  script_timeout: 30
+  # Hermes assessment timeout in seconds (separate from script_timeout)
+  # Must be long enough to receive Hermes reasoning + JSON for the full source
+  assessment_timeout: 600
+  # Scripts that should be assessed from source only (NOT executed as subprocesses).
+  # evaluate_orchestrators.py would recurse; dispatch_hermes.py would block on Hermes.
+  no_exec_scripts:
+    - evaluate_orchestrators.py
+    - dispatch_hermes.py
+  # Directories to exclude from script discovery
+  excluded_dirs:
+    - evaluations
+    - output
+    - __pycache__
+    - dispatches
+
+# Dispatch configuration (used by dispatch_hermes.py)
+dispatch:
+  # Agent to use: hermes | jules | claude
+  agent: hermes
+  # Mode: prompt (send directly) | issue (write shell command files)
+  mode: prompt
+  # Output directory for dispatch artefacts (repo-root relative)
+  output_dir: dispatches
+  # Only dispatch for NON_COMPLIANT scripts when true
+  filter_failing: true
+  # Always include full script source code in dispatch prompts (set false only when debugging)
+  include_source: true

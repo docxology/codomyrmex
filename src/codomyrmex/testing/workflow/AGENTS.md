@@ -1,40 +1,45 @@
-# Workflow Testing -- Agentic Context
+# Codomyrmex Agents — src/codomyrmex/testing/workflow
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Test files and validation suites.
 
-Provides a structured workflow test framework with step-based execution, assertion validation, and context passing between steps. Agents use this module to define multi-step test workflows with typed executors and retry logic.
-
-## Key Components
-
-| Component | Source | Role |
-|-----------|--------|------|
-| `Workflow` | `models.py` | Test definition with `add_step()`, `add_assertion()`, `add_wait()` helpers and shared `variables` |
-| `WorkflowStep` | `models.py` | Single step with `step_type`, `config`, `dependencies`, `retry_count`, `timeout_seconds` |
-| `WorkflowRunner` | `runner.py` | Executor orchestrator with step-type-to-executor registry, context passing, and retry logic |
-| `StepExecutor` (ABC) | `executors.py` | Base executor: `execute(step, context) -> StepResult` |
-| `AssertionExecutor` | `executors.py` | Assertion checks: equals, contains, not_null, greater_than, less_than |
-| `WaitExecutor` | `executors.py` | Time delay step (`time.sleep`) |
-| `ScriptExecutor` | `executors.py` | Callable or restricted `eval` expression execution with `{"__builtins__": {}}` sandbox |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `executors.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `runner.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Step Types**: `WorkflowStepType` enum: `HTTP_REQUEST`, `ASSERTION`, `WAIT`, `SCRIPT`, `CONDITIONAL`. Only ASSERTION, WAIT, and SCRIPT have registered executors by default.
-2. **Context Passing**: `WorkflowRunner.run()` maintains a shared `context` dict. Step output is stored as `step_{id}` in context for downstream steps.
-3. **Retry Logic**: `WorkflowRunner._run_step()` retries up to `step.retry_count` times. Only the last `StepResult` is returned.
-4. **Error Propagation**: Steps returning `StepStatus.ERROR` cause the workflow to stop (break). `FAILED` steps continue execution of remaining steps.
-5. **Custom Executors**: `WorkflowRunner.register_executor(step_type, executor)` allows extending with new step types.
-6. **Workflow Result**: `WorkflowResult` provides `pass_rate`, `total_steps`, `passed_steps`, `duration_ms` properties. Status is PASSED only if all steps pass.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `executors.py`
+- `models.py`
+- `py.typed`
+- `runner.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **testing parent**: Part of the `testing` module alongside `chaos`, `fixtures`, and `generators`
-- **CLI**: `cli_commands()` in `__init__.py` exposes workflow testing commands
-- **Serialization**: `WorkflowStep`, `StepResult`, and `WorkflowResult` all provide `to_dict()` methods
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [testing/](../README.md)
-- **Siblings**: [chaos/](../chaos/), [fixtures/](../fixtures/), [generators/](../generators/)
-- **Spec**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [testing](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

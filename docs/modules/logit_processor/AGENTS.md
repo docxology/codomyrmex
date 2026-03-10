@@ -1,33 +1,33 @@
-# Logit Processor -- Agent Coordination
+# Codomyrmex Agents — docs/modules/logit_processor
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides sampling strategies for language model outputs including temperature scaling, top-k filtering, nucleus (top-p) sampling, and repetition penalty. Implements a composable processor pipeline for token sampling.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `process_logits` | Apply sampling strategies to language model logits and return sampled token | Standard | logit_processor |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| EXECUTE | Engineer Agent | Apply configurable sampling strategies to LLM output logits |
-| BUILD | Engineer Agent | Compose logit processor chains for custom generation behavior |
-
-
-## Agent Instructions
-
-1. Temperature > 1.0 increases diversity; < 1.0 focuses on high-probability tokens
-2. top_k=0 disables top-k filtering; top_p=1.0 disables nucleus sampling
-3. Set seed for reproducible sampling results
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/logit_processor/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

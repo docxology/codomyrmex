@@ -1,31 +1,19 @@
-# Demos Module
+# demos
 
-The `demos` module provides a centralized registry and orchestration framework for system demonstrations across the Codomyrmex workspace.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Features
-- **Centralized Registry**: A decorator-based registry for marking functions or scripts as demos.
-- **Discovery**: Automatically discover demos in specific directories.
-- **Orchestration**: Run individual demos or suites of demos using the thin orchestrator.
-- **Reporting**: Consistent reporting of demo results.
+## Overview
 
-## Usage
+Contains components for the src system.
 
-### Registering a Demo
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `registry.py` – File
 
-```python
-from codomyrmex.demos import demo
-
-@demo(name="my_feature_demo", description="Demonstrates my new feature")
-def run_my_demo():
-    # Demo logic here
-    return True
-```
-
-### Running Demos
-
-```python
-from codomyrmex.demos import get_registry
-
-registry = get_registry()
-registry.run_demo("my_feature_demo")
-```
+## Navigation
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

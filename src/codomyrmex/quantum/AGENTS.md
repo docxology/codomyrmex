@@ -1,90 +1,55 @@
-# Agent Guidelines - Quantum
+# Codomyrmex Agents — src/codomyrmex/quantum
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Quantum computing simulation with gates, circuits, and algorithms.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `algorithms.py` – Project file
+- `circuit.py` – Project file
+- `mcp_tools.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `simulator.py` – Project file
+- `visualization.py` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **QuantumCircuit** — Build quantum circuits (fluent API)
-- **Gate** — Gate dataclass (gate_type, target, control, parameter)
-- **GateType** — Enum of supported gate types
-- **QuantumSimulator** — Statevector simulation
-- **bell_state()** — Create Bell pair circuit
-- **ghz_state(n)** — Create GHZ state circuit
-- **circuit_to_ascii()** — Render circuit as ASCII art
-- **circuit_stats()** — Get circuit statistics dict
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `algorithms.py`
+- `circuit.py`
+- `mcp_tools.py`
+- `models.py`
+- `py.typed`
+- `simulator.py`
+- `visualization.py`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Initialize qubits** — Start with |0⟩ state
-2. **Apply gates in order** — Gates compose left-to-right
-3. **Measure at end** — Measurement collapses state
-4. **Use named states** — Bell, GHZ for entanglement
-5. **Simulate before run** — Test on simulator first
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.quantum import (
-    QuantumCircuit, QuantumSimulator, bell_state, ghz_state,
-    circuit_to_ascii, circuit_stats
-)
-
-# Build simple circuit (fluent API)
-circuit = QuantumCircuit(2)
-circuit.h(0).cnot(0, 1).measure_all()
-
-# Simulate — returns dict[str, int] of bitstring counts
-sim = QuantumSimulator()
-counts = sim.run(circuit, shots=1000)
-print(counts)  # {"00": ~500, "11": ~500}
-
-# Create entangled states
-bell = bell_state()
-ghz = ghz_state(3)  # 3-qubit GHZ
-
-# Visualize
-print(circuit_to_ascii(bell))
-# q0: -H--*--M-
-# q1: ----X--M-
-
-# Statistics
-stats = circuit_stats(bell)
-print(stats)  # {"num_qubits": 2, "num_gates": 2, ...}
-```
-
-## Testing Patterns
-
-```python
-# Verify Bell state
-sim = QuantumSimulator()
-counts = sim.run(bell_state(), shots=1000)
-# Should produce only "00" and "11" outcomes
-assert set(counts.keys()) <= {"00", "11"}
-assert counts.get("00", 0) > 0
-assert counts.get("11", 0) > 0
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Implements quantum algorithms and circuit simulations using `QuantumCircuit`, `QuantumSimulator`, and gate operations. Builds circuits with the fluent API, runs statevector simulations, and creates entangled states (Bell, GHZ).
-
-### Architect Agent
-**Use Cases**: Designs quantum-classical hybrid architectures, reviews circuit composition patterns, evaluates gate set completeness, and plans integration with classical optimization loops.
-
-### QATester Agent
-**Use Cases**: Validates quantum gate operations, verifies entanglement outcomes (Bell state produces only "00"/"11"), confirms circuit statistics accuracy, and tests simulator determinism with seeded runs.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,45 +1,45 @@
-# Codomyrmex Agents -- src/codomyrmex/logging_monitoring/core
+# Codomyrmex Agents — src/codomyrmex/logging_monitoring/core
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Centralized logging configuration, correlation ID propagation, log aggregation,
-and audit trail support. This is the foundation layer that all other modules
-depend on for structured logging output.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `logger_config.py` | `setup_logging()` | Configure logging system from environment variables (level, file, format, JSON/text) |
-| `logger_config.py` | `get_logger()` | Get a named logger instance inheriting root config |
-| `logger_config.py` | `LogContext` | Context manager for correlation ID scoping with nesting support |
-| `logger_config.py` | `JSONFormatter` | JSON formatter for structured log output |
-| `logger_config.py` | `AuditLogger` | Security audit logger with actor/action/resource/outcome recording |
-| `logger_config.py` | `log_with_context()` | Log a message with attached context dictionary |
-| `logger_config.py` | `enable_structured_json()` | Switch a logger to structured JSON output |
-| `correlation.py` | `CorrelationFilter` | Logging filter injecting `correlation_id` into every log record |
-| `correlation.py` | `with_correlation()` | Context manager that sets/clears correlation IDs |
-| `correlation.py` | `enrich_event_data()` | Add correlation ID to event data dicts |
-| `correlation.py` | `create_mcp_correlation_header()` | Generate MCP metadata headers with correlation ID |
-| `log_aggregator.py` | `LogAggregator` | In-memory log aggregation with search, filtering, and analytics |
-| `log_aggregator.py` | `LogRecord` / `LogQuery` / `LogStats` | Data models for aggregated log records, search queries, and statistics |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `correlation.py` – Project file
+- `log_aggregator.py` – Project file
+- `logger_config.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `setup_logging()` should be called once at application startup; subsequent calls require `force=True`.
-- Environment variables: `CODOMYRMEX_LOG_LEVEL`, `CODOMYRMEX_LOG_FILE`, `CODOMYRMEX_LOG_FORMAT`, `CODOMYRMEX_LOG_OUTPUT_TYPE`.
-- Correlation IDs use `contextvars.ContextVar` for async-safe propagation.
-- `LogAggregator` caps in-memory records at `max_records` (default 100,000).
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `correlation.py`
+- `log_aggregator.py`
+- `logger_config.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `logging_monitoring.audit.audit_logger` (re-exports `AuditLogger`), `logging_monitoring.formatters`, stdlib `logging`, `contextvars`
-- **Used by**: Every module in codomyrmex (foundation layer), MCP bridge, EventBus
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [logging_monitoring](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [logging_monitoring](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

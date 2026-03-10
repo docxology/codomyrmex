@@ -193,12 +193,13 @@ class VectorStoreMemory:
 
         self._embedder = None
         if self.vector_store is not None:
-            if SentenceTransformer is None:
-                raise ImportError(
-                    "sentence-transformers is required to use VectorStoreMemory "
-                    "with a vector_store backend. Please install it."
-                )
-            self._embedder = SentenceTransformer(embedding_model)
+            if SentenceTransformer is not None:
+                self._embedder = SentenceTransformer(embedding_model)
+            else:
+                # If sentence-transformers is missing, we don't raise error here.
+                # Methods like remember() and search() will gracefully degrade
+                # to non-vector operations if self._embedder is None.
+                self._embedder = None
 
     def remember(
         self,

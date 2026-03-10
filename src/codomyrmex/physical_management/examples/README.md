@@ -1,20 +1,19 @@
 # examples
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `examples` module provides core functionality for Examples..
+Example implementations and demonstrations.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `advanced_usage.py` - Advanced Usage
-- `basic_usage.py` - Basic Usage
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `advanced_usage.py` – File
+- `basic_usage.py` – File
 
 ## Navigation
-
-- **Parent Module**: [physical_management](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [physical_management](../README.md)
+- **Project Root**: ../../../../README.md

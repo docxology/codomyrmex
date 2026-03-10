@@ -1,69 +1,41 @@
-# Agent Guidelines - API
+# Codomyrmex Agents — docs/modules/api
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-RESTful API framework with routing, middleware, and OpenAPI support.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **APIRouter** — Route definitions
-- **APIApp** — Application instance
-- **Request/Response** — HTTP objects
-- **Middleware** — Request processing
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Version APIs** — /v1/, /v2/ prefixes
-2. **Use middleware** — Auth, logging, validation
-3. **Document endpoints** — OpenAPI/Swagger
-4. **Handle errors** — Consistent error format
-5. **Validate input** — Use Pydantic models
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.api import APIRouter, APIApp, JSONResponse
-
-router = APIRouter(prefix="/v1")
-
-@router.get("/users")
-async def list_users():
-    return JSONResponse(users)
-
-@router.post("/users")
-async def create_user(request):
-    data = await request.json()
-    user = create(data)
-    return JSONResponse(user, status=201)
-
-# Create app
-app = APIApp()
-app.include_router(router)
-app.add_middleware(AuthMiddleware)
-app.add_middleware(LoggingMiddleware)
-```
-
-## Testing Patterns
-
-```python
-from codomyrmex.api.testing import TestClient
-
-client = TestClient(app)
-
-# Test endpoint
-response = client.get("/v1/users")
-assert response.status_code == 200
-
-# Test with auth
-response = client.post("/v1/users", 
-    json={"name": "Test"},
-    headers={"Authorization": "Bearer token"}
-)
-assert response.status_code == 201
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

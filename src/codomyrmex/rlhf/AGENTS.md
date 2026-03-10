@@ -1,41 +1,45 @@
-# RLHF -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/rlhf
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides PPO-based RLHF training primitives for AI agents that need to fine-tune policies from human preference data or reward signals.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `ppo.py` – Project file
+- `py.typed` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `rlhf_ppo_step` | Run a PPO step on synthetic data | `d_state, d_action, batch_size, seed` | `{policy_loss, value_loss, entropy, total_loss, mean_ratio, clip_fraction}` |
-| `rlhf_reward_score` | Score states using the reward model | `d_state, batch_size, seed` | `{scores, preference_loss, mean_score}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `ppo.py`
+- `py.typed`
 
-### Policy Evaluation
-An agent can use `rlhf_ppo_step` to verify that PPO loss computation produces valid metrics on synthetic data.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Reward Scoring
-Use `rlhf_reward_score` to evaluate response quality via the learned reward model.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Training Loop Monitoring
-Track `clip_fraction` and `entropy` across steps to diagnose training stability.
-
-## Example Agent Workflow
-
-```
-1. Agent receives: "Evaluate PPO training stability"
-2. Agent calls: rlhf_ppo_step(d_state=8, d_action=4, batch_size=32)
-3. Response: {"clip_fraction": 0.12, "entropy": 1.38, ...}
-4. Agent interprets: clip_fraction < 0.3 indicates stable training
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full — run PPO training steps, score rewards, tune policies | None | TRUSTED |
-| **Architect** | Read + Architecture review | None | SAFE |
-| **QATester** | Validation + output verification | None | SAFE |
-| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

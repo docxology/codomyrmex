@@ -2,12 +2,12 @@
 Shared test fixtures for Infomaniak cloud client tests.
 
 Provides stub OpenStack connections, S3 clients, and factory helpers
-used across all per-client test files.  Zero ``unittest.mock`` usage.
+used across all per-client test files.  Zero ``unittest.stub`` usage.
 """
 
 
 class _CallRecord:
-    """Container for a single call — mirrors ``unittest.mock.call``'s interface."""
+    """Container for a single call — mirrors ``unittest.stub.call``'s interface."""
 
     __slots__ = ("args", "kwargs")
 
@@ -33,21 +33,21 @@ class _CallRecord:
 
 
 # =========================================================================
-# Stub — drop-in MagicMock replacement (zero ``unittest.mock``)
+# Stub — drop-in MagicStub replacement (zero ``unittest.stub``)
 # =========================================================================
 
 
 class Stub:
-    """Lightweight MagicMock replacement that records calls.
+    """Lightweight MagicStub replacement that records calls.
 
     Features:
     * **Auto-vivifying attributes** — accessing any undefined attribute
-      returns a child ``Stub`` (like ``MagicMock``).
+      returns a child ``Stub`` (like ``MagicStub``).
     * **Callable** — calling a ``Stub`` records positional / keyword args
       and returns ``return_value`` (or raises from ``side_effect``).
     * **Call tracking** — ``assert_called_once()``,
       ``assert_called_once_with(...)``, ``assert_not_called()``, and
-      ``call_args`` / ``call_count`` work the same as ``MagicMock``.
+      ``call_args`` / ``call_count`` work the same as ``MagicStub``.
     * **Restricted mode** — ``Stub(spec=[])`` disables auto-vivification
       so ``hasattr(stub, "anything")`` is ``False``.
 
@@ -156,7 +156,7 @@ class Stub:
         children.pop(name, None)
         object.__setattr__(self, name, value)
 
-    # ---- assertion helpers (MagicMock-compatible) -------------------
+    # ---- assertion helpers (MagicStub-compatible) -------------------
 
     def assert_called_once(self):
         calls = object.__getattribute__(self, "_stub_calls")
@@ -180,6 +180,12 @@ class Stub:
 
     def __repr__(self):
         return "<Stub>"
+
+    def __or__(self, other):
+        return self
+
+    def __ror__(self, other):
+        return self
 
 
 # =========================================================================

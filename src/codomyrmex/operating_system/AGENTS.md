@@ -1,66 +1,50 @@
-# Agent Guidelines — Operating System
+# Codomyrmex Agents — src/codomyrmex/operating_system
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Cross-platform OS abstraction. Auto-detects platform and dispatches to macOS / Linux / Windows providers.
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `base.py` – Project file
+- `detector.py` – Project file
+- `linux/` – Directory containing linux components
+- `mac/` – Directory containing mac components
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `windows/` – Directory containing windows components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **`OSProviderBase`** — Abstract base for platform providers
-- **`MacOSProvider`** / **`LinuxProvider`** / **`WindowsProvider`** — Concrete implementations
-- **`SystemInfo`** / **`ProcessInfo`** / **`DiskInfo`** / **`ServiceInfo`** / **`NetworkInfo`** — Data models
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `base.py`
+- `detector.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use generic functions** — Always prefer `get_system_info()` over direct provider instantiation
-2. **Cache results** — `get_provider()` is cached; no need to store the provider yourself
-3. **Check disk before I/O** — Use `get_disk_usage()` before large writes
-4. **Exec sparingly** — `execute_command()` runs real commands; validate input
-5. **Filter env vars** — Use `prefix=` to limit scope when inspecting environment
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.operating_system import (
-    detect_platform, get_system_info, list_processes,
-    execute_command, get_environment_variables,
-)
-
-# Quick system check
-platform = detect_platform()
-info = get_system_info()
-print(f"{platform.value}: {info.hostname}")
-
-# Safe command execution
-result = execute_command("whoami")
-if result.success:
-    print(result.stdout)
-
-# Environment inspection
-path_vars = get_environment_variables(prefix="PATH")
-```
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `os_system_info` | System information (hostname, CPU, memory, kernel) | Safe |
-| `os_list_processes` | Running processes with CPU/memory stats | Safe |
-| `os_disk_usage` | Disk usage for mounted filesystems | Safe |
-| `os_network_info` | Network interface details | Safe |
-| `os_execute_command` | Execute a shell command | Observed |
-| `os_environment_variables` | Environment variable inspection | Safe |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | All MCP tools; system command execution | TRUSTED |
-| **Architect** | Read | `os_system_info`, `os_disk_usage`, `os_network_info`; capacity planning | OBSERVED |
-| **QATester** | Validation | `os_system_info`, `os_list_processes`; environment verification | OBSERVED |
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,36 +1,43 @@
-# Health Checker Agentic Context
+# Codomyrmex Agents — src/codomyrmex/system_discovery/health
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Health checking and status reporting for Codomyrmex modules. Agents use the `HealthChecker` to verify module importability, dependency satisfaction, and RASP documentation completeness.
-
-## Key Components
-
-| Component | Type | Role |
-|-----------|------|------|
-| `HealthChecker` | Class | Runs health probes against discovered modules |
-| `HealthResult` | Dataclass | Per-module health status (healthy, degraded, unhealthy) |
-| `HealthReport` | Dataclass | Aggregate report with overall score and per-module results |
-| `HealthProbe` | Protocol | Interface for custom health check implementations |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `health_checker.py` – Project file
+- `health_reporter.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `HealthChecker.check(module_name)` returns a `HealthResult` for a single module.
-- `HealthChecker.check_all()` returns a `HealthReport` covering every discovered module.
-- A module is `healthy` if it imports successfully and all dependencies are satisfied.
-- A module is `degraded` if it imports but has missing optional dependencies.
-- A module is `unhealthy` if it fails to import or has missing required dependencies.
-- RASP completeness (4 docs present) is reported but does not affect health status.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `health_checker.py`
+- `health_reporter.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- Depends on `system_discovery/core` for module enumeration.
-- Backs the `health_check` MCP tool and `codomyrmex check` CLI command.
-- Uses `logging_monitoring.get_logger` for structured logging.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- Parent: [system_discovery](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [system_discovery](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,7 +1,7 @@
 """
 Unit tests for Coda.io CloudClient implementation.
 
-Uses strictly zero-mock tests with the Stub class.
+Uses strictly zero-stub tests with the Stub class.
 """
 
 import pytest
@@ -29,10 +29,10 @@ class TestCodaCloudClient:
 
     def test_coda_list_resources(self, client):
         """Test CodaClient list_resources."""
-        mock_response = Stub()
-        mock_response.status_code = 200
-        mock_response.content = b'{"items": []}'  # Not used but good to have
-        mock_response.json.return_value = {
+        stub_response = Stub()
+        stub_response.status_code = 200
+        stub_response.content = b'{"items": []}'  # Not used but good to have
+        stub_response.json.return_value = {
             "items": [
                 {
                     "id": "doc1",
@@ -47,7 +47,7 @@ class TestCodaCloudClient:
                 }
             ]
         }
-        client.session.request.return_value = mock_response
+        client.session.request.return_value = stub_response
 
         resources = client.list_resources(ResourceType.DOCUMENT)
 
@@ -60,8 +60,8 @@ class TestCodaCloudClient:
 
     def test_coda_get_resource(self, client):
         """Test CodaClient get_resource."""
-        mock_response = Stub()
-        mock_response.status_code = 200
+        stub_response = Stub()
+        stub_response.status_code = 200
         doc_data = {
             "id": "doc1",
             "name": "Document 1",
@@ -73,8 +73,8 @@ class TestCodaCloudClient:
             "owner": "owner1",
             "ownerName": "Owner 1",
         }
-        mock_response.json.return_value = doc_data
-        client.session.request.return_value = mock_response
+        stub_response.json.return_value = doc_data
+        client.session.request.return_value = stub_response
 
         resource = client.get_resource("doc1")
 
@@ -85,8 +85,8 @@ class TestCodaCloudClient:
 
     def test_coda_create_resource(self, client):
         """Test CodaClient create_resource."""
-        mock_response = Stub()
-        mock_response.status_code = 201
+        stub_response = Stub()
+        stub_response.status_code = 201
         doc_data = {
             "id": "new-doc",
             "name": "New Document",
@@ -98,8 +98,8 @@ class TestCodaCloudClient:
             "owner": "owner1",
             "ownerName": "Owner 1",
         }
-        mock_response.json.return_value = doc_data
-        client.session.request.return_value = mock_response
+        stub_response.json.return_value = doc_data
+        client.session.request.return_value = stub_response
 
         resource = client.create_resource("New Document", ResourceType.DOCUMENT, {})
 
@@ -109,10 +109,10 @@ class TestCodaCloudClient:
 
     def test_coda_delete_resource(self, client):
         """Test CodaClient delete_resource."""
-        mock_response = Stub()
-        mock_response.status_code = 202
-        mock_response.json.return_value = {}
-        client.session.request.return_value = mock_response
+        stub_response = Stub()
+        stub_response.status_code = 202
+        stub_response.json.return_value = {}
+        client.session.request.return_value = stub_response
 
         assert client.delete_resource("doc-to-delete") is True
         client.session.request.assert_called_once()

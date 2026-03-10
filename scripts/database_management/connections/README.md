@@ -1,24 +1,17 @@
-# Database Connections Scripts
+# connections
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for database connection management, demonstrating connection pooling, health checks, failover handling, and connection lifecycle management.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `connections_demo.py` | Demonstrates connection pool setup, health monitoring, and failover |
-
-## Usage
-
-```bash
-uv run python scripts/database_management/connections/connections_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `connections_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: database_management/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [database_management](../README.md)
+- **Project Root**: ../../../README.md

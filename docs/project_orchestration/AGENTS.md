@@ -1,47 +1,49 @@
 # Codomyrmex Agents — docs/project_orchestration
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Advanced documentation for multi-project workflow orchestration, task coordination, and resource management at scale.
+Documentation files and guides.
 
 ## Active Components
-
-| File | Priority | Description |
-|------|----------|-------------|
-| [task-orchestration-guide.md](task-orchestration-guide.md) | **Critical** | Complete orchestration guide |
-| [workflow-configuration-schema.md](workflow-configuration-schema.md) | **Critical** | Workflow schema spec |
-| [project-lifecycle-guide.md](project-lifecycle-guide.md) | High | Lifecycle management |
-| [dispatch-coordination.md](dispatch-coordination.md) | High | Task dispatch patterns |
-| [config-driven-operations.md](config-driven-operations.md) | High | Config-driven workflows |
-| [project-template-schema.md](project-template-schema.md) | Medium | Project templates |
-| [resource-configuration.md](resource-configuration.md) | Medium | Resource management |
-
-## Agent Guidelines
-
-### Orchestration Quality Standards
-
-1. **Correctness**: Workflow schemas must be valid YAML/JSON
-2. **Examples**: Include runnable workflow examples
-3. **Patterns**: Document common orchestration patterns
-4. **Error Handling**: Document retry and fallback strategies
-
-### When Modifying Orchestration Docs
-
-- Validate all workflow schemas against current spec
-- Test orchestration examples with the orchestrator module
-- Update DAG visualization when dependencies change
-- Keep resource limits current with available hardware
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `config-driven-operations.md` – Project file
+- `dispatch-coordination.md` – Project file
+- `project-lifecycle-guide.md` – Project file
+- `project-template-schema.md` – Project file
+- `resource-configuration.md` – Project file
+- `task-orchestration-guide.md` – Project file
+- `workflow-configuration-schema.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment between orchestration docs and orchestrator module
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Record outcomes in shared telemetry and update TODO queues when necessary
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `config-driven-operations.md`
+- `dispatch-coordination.md`
+- `project-lifecycle-guide.md`
+- `project-template-schema.md`
+- `resource-configuration.md`
+- `task-orchestration-guide.md`
+- `workflow-configuration-schema.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [docs/](../README.md)
-- **🏠 Project Root**: [../../README.md](../../README.md)
-- **📦 Related**: [Orchestrator Reference](../reference/orchestrator.md) | [Examples](../examples/orchestration-examples.md)
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

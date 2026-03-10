@@ -1,25 +1,15 @@
-# Quantization
+# quantization
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Model weight quantization utilities supporting INT8 and INT4 formats.
+Documentation files and guides.
 
-## Source
-
-**Source code**: [`src/codomyrmex/quantization/`](../../../src/codomyrmex/quantization/)
-
-## MCP Tools
-
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
-
-## Related Documentation
-
-- [Source README](../../../src/codomyrmex/quantization/README.md)
-- [API Specification](../../../src/codomyrmex/quantization/API_SPECIFICATION.md)
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Parent**: [Module Documentation](../README.md)
-- **Root**: [docs/](../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

@@ -25,7 +25,12 @@ from codomyrmex.calendar_integration.generics import CalendarEvent, CalendarProv
 
 
 class TestCalendarEvent:
-    """Tests for the CalendarEvent data model."""
+    """Tests for the CalendarEvent data model.
+
+    These tests verify the behavior of the CalendarEvent Pydantic model
+    using real instantiation and validation, strictly following the
+    Zero-Mock policy.
+    """
 
     def _event(self, **kwargs) -> CalendarEvent:
         defaults = {
@@ -115,7 +120,12 @@ class TestCalendarEvent:
 
 
 class TestCalendarProviderAbstractInterface:
-    """Tests that CalendarProvider is abstract and cannot be instantiated directly."""
+    """Tests for the CalendarProvider abstract base class.
+
+    Verifies that the ABC cannot be instantiated and that subclasses must
+    implement required methods. Uses real class definitions and
+    instantiation attempts without mocks.
+    """
 
     def test_cannot_instantiate_abstract_provider(self):
         with pytest.raises(TypeError):
@@ -182,7 +192,11 @@ class TestCalendarProviderAbstractInterface:
 
 
 class TestCalendarAvailabilityFlag:
-    """Tests for the CALENDAR_AVAILABLE module-level flag."""
+    """Tests for module-level availability flags.
+
+    Ensures CALENDAR_AVAILABLE and GCAL_AVAILABLE flags are correctly
+    initialized and consistent across the module.
+    """
 
     def test_calendar_available_flag_is_bool(self):
         assert isinstance(cal_module.CALENDAR_AVAILABLE, bool)
@@ -194,16 +208,25 @@ class TestCalendarAvailabilityFlag:
         # CALENDAR_AVAILABLE is True iff GCAL_AVAILABLE is True
         assert cal_module.CALENDAR_AVAILABLE == cal_module.GCAL_AVAILABLE
 
-    def test_google_calendar_none_when_unavailable(self):
-        if not cal_module.CALENDAR_AVAILABLE:
-            assert cal_module.GoogleCalendar is None
+    def test_google_calendar_class_present_when_unavailable(self):
+        """Verifies that GoogleCalendar class is available for import.
+
+        Even if dependencies are missing (GCAL_AVAILABLE=False), the class
+        should still be present in the module (though it will raise
+        ImportError on instantiation).
+        """
+        assert cal_module.GoogleCalendar is not None
 
 
 # ── Exception hierarchy ───────────────────────────────────────────────
 
 
 class TestCalendarExceptions:
-    """Tests for exception classes and hierarchy."""
+    """Tests for the calendar exception hierarchy.
+
+    Verifies that all specific calendar exceptions inherit from the base
+    CalendarError and can be raised and caught as expected.
+    """
 
     def test_calendar_error_is_base(self):
         assert issubclass(CalendarAuthError, CalendarError)
@@ -245,7 +268,11 @@ class TestCalendarExceptions:
 
 
 class TestCalendarModuleExports:
-    """Tests that the calendar module exports expected symbols."""
+    """Tests for module-level exports.
+
+    Ensures that all key classes, exceptions, and utility functions are
+    properly exported by the codomyrmex.calendar_integration package.
+    """
 
     def test_calendar_event_exported(self):
         assert hasattr(cal_module, "CalendarEvent")
@@ -274,7 +301,12 @@ class TestCalendarModuleExports:
 
 
 class TestGoogleCalendarFromEnv:
-    """Unit tests for GoogleCalendar.from_env() — no live API calls required."""
+    """Tests for GoogleCalendar environmental initialization.
+
+    Exercises the .from_env() logic using real module attribute
+    manipulation and environment variable state without MagicMock or
+    monkeypatch, conforming to the Zero-Mock policy.
+    """
 
     def test_from_env_exists(self):
         """GoogleCalendar.from_env() classmethod exists and is callable."""

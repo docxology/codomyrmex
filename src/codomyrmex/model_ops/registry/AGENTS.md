@@ -1,41 +1,45 @@
 # Codomyrmex Agents — src/codomyrmex/model_ops/registry
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Model registry sub-module for versioning, lifecycle management, and artifact storage of ML models. Supports registering model versions with framework metadata, performance metrics, and training parameters. Manages stage transitions (Development -> Staging -> Production -> Archived) with automatic demotion of previous production versions. Provides pluggable storage backends for model artifacts.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `models.py` | `ModelStage` | Enum: DEVELOPMENT, STAGING, PRODUCTION, ARCHIVED |
-| `models.py` | `ModelFramework` | Enum: SKLEARN, PYTORCH, TENSORFLOW, ONNX, CUSTOM |
-| `models.py` | `ModelMetrics` | Dataclass for performance metrics (accuracy, precision, recall, f1, auc_roc, mse, mae, custom) |
-| `models.py` | `ModelVersion` | Dataclass for a versioned model with stage, framework, metrics, parameters, tags, artifact path |
-| `models.py` | `RegisteredModel` | Container for all versions of a named model; provides `latest_version`, `production_version`, `get_version()` |
-| `stores.py` | `ModelStore` (ABC) | Abstract storage backend: `save_artifact`, `load_artifact`, `delete_artifact` |
-| `stores.py` | `FileModelStore` | File-system backed storage at `{base_path}/{model_name}/{version}/model.bin` |
-| `stores.py` | `InMemoryModelStore` | Thread-safe in-memory artifact storage for testing |
-| `registry.py` | `ModelRegistry` | Central registry: register versions, stage transitions, artifact load/save, model/version listing and deletion |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `registry.py` – Project file
+- `stores.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `ModelRegistry.register()` raises `ValueError` if a version string already exists for a given model name.
-- `transition_stage()` to `PRODUCTION` automatically demotes the current production version to `ARCHIVED`.
-- `ModelRegistry` uses `threading.Lock` for all mutating operations.
-- `FileModelStore` creates directory trees on first artifact save via `mkdir(parents=True)`.
-- `InMemoryModelStore` uses `threading.Lock` for artifact mutations.
-- `delete_version()` also deletes the associated artifact via the store backend.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `models.py`
+- `py.typed`
+- `registry.py`
+- `stores.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Standard library only (`threading`, `datetime`, `pathlib`, `dataclasses`, `enum`)
-- **Used by**: MLOps pipelines needing model versioning and promotion workflows
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [model_ops](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [model_ops](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

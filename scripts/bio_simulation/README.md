@@ -1,30 +1,16 @@
-# Bio-Simulation
+# bio_simulation
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Orchestrator script demonstrating the bio_simulation module capabilities including ant colony creation, environmental configuration, simulation stepping, and population genomics.
+Automation and utility scripts.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `run_colony.py` | Runs a full ant colony simulation with food sources, pheromone tracking, and population statistics |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync
-```
-
-**Run:**
-```bash
-uv run python scripts/bio_simulation/run_colony.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `run_colony.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

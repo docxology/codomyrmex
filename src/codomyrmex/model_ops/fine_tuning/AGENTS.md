@@ -1,31 +1,41 @@
 # Codomyrmex Agents — src/codomyrmex/model_ops/fine_tuning
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Fine-tuning orchestration sub-module for triggering and tracking LLM fine-tuning jobs on remote providers. Wraps the concept of a fine-tuning job with model selection, dataset association, provider routing, and status tracking.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `fine_tuning.py` | `FineTuningJob` | Represents a fine-tuning job with `base_model`, `dataset`, `provider`, `job_id`, and `status` tracking |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `fine_tuning.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `FineTuningJob.__init__` requires a `base_model` name, a `Dataset` instance, and an optional `provider` string (defaults to `"openai"`).
-- `FineTuningJob.run()` triggers the job and sets `status` to `"running"`, returning the `job_id`.
-- `FineTuningJob.refresh_status()` polls the provider for current status and updates `self.status`.
-- The `Dataset` import references the sibling `datasets` sub-module (via relative import `.datasets`).
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `fine_tuning.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `model_ops.datasets.Dataset` (via relative import from `.datasets`)
-- **Used by**: Higher-level training orchestration workflows
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [model_ops](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [model_ops](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,21 +1,14 @@
-# Container Optimization Module
+# container_optimization
 
-## Purpose
-The `container_optimization` module provides tools and utilities to analyze, optimize, and tune container images and resource configurations for Codomyrmex.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Features
-- **ContainerOptimizer**: Analyzes Docker images for size, layer efficiency, and security best practices.
-- **ResourceTuner**: Evaluates container resource usage and suggests optimal limits and requests.
-- **Dockerfile Improvement**: Suggests automated improvements for Dockerfiles based on optimization best practices.
+## Overview
 
-## Usage
-```python
-from codomyrmex.container_optimization.optimizer import ContainerOptimizer
+Documentation files and guides.
 
-optimizer = ContainerOptimizer()
-report = optimizer.get_optimization_report("my-image:latest")
-print(report)
-```
+## Directory Contents
+- `readme.md` – File
 
-## Zero-Mock Policy
-Following the Codomyrmex Zero-Mock Policy, all tests for this module must use real Docker interactions and authentic fixtures instead of mocks.
+## Navigation
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../../../../README.md

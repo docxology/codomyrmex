@@ -1,32 +1,41 @@
 # Codomyrmex Agents — src/codomyrmex/auth/rbac
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Role-based access control (RBAC) with role-permission registration, role hierarchy (inheritance), multi-role user assignments, wildcard permission matching, and permission checks with audit logging.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `permissions.py` | `PermissionRegistry` | Central registry for roles, permissions, user assignments, and access checks |
-| `permissions.py` | `PermissionCheck` | Audit record dataclass capturing user, role, permission, granted/denied, and timestamp |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `permissions.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Role hierarchy supports inheritance: child roles inherit all parent permissions (cycle-safe via visited set).
-- Wildcard matching: `"files.*"` matches `"files.read"`; `"*"` matches everything; `"admin"` in permissions grants all.
-- `check()` logs every access check (granted or denied) to the internal audit trail.
-- Multi-role users are supported: permissions are the union of all assigned roles.
-- Errors must be logged via `logging` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `permissions.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Standard library only (`logging`, `time`, `dataclasses`)
-- **Used by**: `auth` parent module, Trust Gateway, API authorization middleware
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [auth](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [auth](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,31 +1,39 @@
-# Cursor - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/ide/cursor
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Integration with the Cursor AI-first code editor, providing programmatic access to workspace connection, `.cursorrules` management, model selection, and command execution.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `CursorClient` | `IDEClient` subclass for Cursor IDE interaction |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `connect()` returns `True` if `.cursor/` dir, `.cursorrules` file, or workspace path exists.
-- `get_active_file()` scans workspace root (non-recursive) for the most recently modified source file across 30+ extensions.
-- `get_rules()` reads and returns `.cursorrules` file content; returns `{"exists": False}` if absent.
-- `update_rules()` writes content to `.cursorrules`; accepts string or dict (auto-serialized to JSON).
-- `get_capabilities()` returns static model list: gpt-4, gpt-4-turbo, gpt-3.5-turbo, claude-3-opus, claude-3-sonnet.
-- `execute_command()` raises `CommandExecutionError` if not connected.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent module**: `ide/` provides the `IDEClient` abstract base class and shared exceptions (`IDEError`, `ConnectionError`, `CommandExecutionError`).
-- **Workspace**: Operates on the filesystem at `workspace_path` (defaults to `cwd()`).
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [ide/](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md)
-- **Root**: [/README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [ide](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

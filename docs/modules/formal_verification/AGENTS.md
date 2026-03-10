@@ -1,51 +1,43 @@
-# Formal Verification — Agent Capabilities
+# Codomyrmex Agents — docs/modules/formal_verification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Available Agent Actions
+## Purpose
+Documentation files and guides.
 
-### Constraint Solving
-- Build Z3 constraint models incrementally via 6 MCP tools
-- Solve SAT/UNSAT/optimization problems
-- Extract satisfying assignments for constraint variables
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-### ISC Verification
-- Check ISC criteria consistency before execution
-- Detect conflicting numeric constraints
-- Provide formal proof of criteria satisfiability
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-### Model Management
-- Create, modify, and reset constraint models
-- Replace individual constraints during refinement
-- Inspect full model state
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Tool Reference
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Tool | Input | Output | When to Use |
-|------|-------|--------|-------------|
-| `clear_model` | None | Status | Before building a new constraint set |
-| `add_item` | item: str, index?: int | Index | Adding constraints incrementally |
-| `delete_item` | index: int | Removed item | Removing a constraint |
-| `replace_item` | index: int, new_item: str | Old item | Refining a constraint |
-| `get_model` | None | Items list | Reviewing current model |
-| `solve_model` | timeout_ms?: int | Result | Checking satisfiability |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Recommended Patterns
-
-### Quick Satisfiability Check
-```python
-solver = ConstraintSolver()
-solver.add_constraints(
-    "x = Int('x')",
-    "solver.add(x > 0)",
-    "solver.add(x < 10)",
-)
-assert solver.is_satisfiable()
-```
-
-### ISC Batch Verification
-```python
-result = verify_criteria_consistency(criteria_list)
-if result.consistent is False:
-    # Handle conflicts
-```
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

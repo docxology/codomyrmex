@@ -1,37 +1,46 @@
 # Codomyrmex Agents — docs/getting-started
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Agent coordination guidelines for the `docs/getting-started/` directory.
+## Active Components
+- `GETTING_STARTED_WITH_AGENTS.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `full-setup.md` – Project file
+- `installation.md` – Project file
+- `quickstart.md` – Project file
+- `setup.md` – Project file
+- `tutorials/` – Directory containing tutorials components
+
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `GETTING_STARTED_WITH_AGENTS.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `full-setup.md`
+- `installation.md`
+- `quickstart.md`
+- `setup.md`
 
-| File | Purpose |
-|------|---------|
-| `quickstart.md` | 5-minute quick start |
-| `setup.md` | Full installation and environment config |
-| `GETTING_STARTED_WITH_AGENTS.md` | Agent deployment, orchestration, MCP, skills |
-| `tutorials/` | Hands-on learning guides (8 tutorials) |
-| `installation.md` | Redirect to `setup.md` (legacy) |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Agent Interaction Rules
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-1. **Use real examples**: All code snippets must use real, functional imports
-2. **Keep prerequisites minimal**: Default to `uv sync` without optional extras
-3. **Link to source**: Reference actual module paths (`src/codomyrmex/...`)
-4. **Maintain cross-references**: Ensure links between docs are valid
-5. **Zero-Mock policy**: No placeholder or mocked code examples
-
-## Content Standards
-
-- Tutorials must include runnable code blocks
-- Version numbers must match `pyproject.toml`
-- All file references must use relative paths
-- Include navigation links (Parent, Root)
-
-## Navigation
-
-- **Parent**: [README.md](README.md)
-- **Root**: [Project Root](../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

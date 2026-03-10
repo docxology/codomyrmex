@@ -1,66 +1,50 @@
-# Agent Guidelines - Environment Setup
+# Codomyrmex Agents — docs/modules/environment_setup
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Environment validation, dependency checking, and setup automation.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `index.md` – Project file
+- `technical_overview.md` – Project file
+- `tutorials/` – Directory containing tutorials components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **validate_environment()** — Check system requirements
-- **check_dependencies()** — Verify installed packages
-- **install_dependencies(source)** — Install from requirements
-- **get_uv_path()** — Get uv package manager path
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `index.md`
+- `technical_overview.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Validate first** — Call `validate_environment()` before running
-2. **Check API keys** — Verify required keys are set
-3. **Use uv** — Prefer uv over pip for faster installs
-4. **Cache results** — Environment rarely changes
-5. **Report missing** — List all missing deps, not just first
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.environment_setup import (
-    validate_environment, check_dependencies, install_dependencies
-)
-
-# Full environment validation
-report = validate_environment()
-if not report.valid:
-    print(f"Missing: {report.missing_items}")
-    install_dependencies("pyproject.toml")
-
-# Check specific dependencies
-deps = check_dependencies(["numpy", "pandas", "openai"])
-for dep in deps:
-    if not dep.installed:
-        print(f"Install {dep.name}: uv pip install {dep.name}")
-
-# Verify API keys
-from codomyrmex.environment_setup import check_api_keys
-keys = check_api_keys(["OPENAI_API_KEY", "ANTHROPIC_API_KEY"])
-if not keys.all_present:
-    print(f"Missing: {keys.missing}")
-```
-
-## Testing Patterns
-
-```python
-# Verify environment check
-report = validate_environment()
-assert hasattr(report, "valid")
-assert hasattr(report, "missing_items")
-
-# Verify dependency check
-deps = check_dependencies(["pip"])
-assert len(deps) == 1
-assert deps[0].installed  # pip should exist
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

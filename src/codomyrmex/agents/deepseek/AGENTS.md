@@ -1,49 +1,43 @@
-# AI Agent Guidelines - Deepseek
+# Codomyrmex Agents — src/codomyrmex/agents/deepseek
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.agents.deepseek`  
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-DeepSeek Coder integration for code generation and analysis
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `deepseek_client.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-## Agent Instructions
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-When working with this submodule:
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `deepseek_client.py`
+- `mcp_tools.py`
+- `py.typed`
 
-### Key Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Import Convention**:
-   ```python
-   from codomyrmex.agents.deepseek import <specific_import>
-   ```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-2. **Error Handling**: Always handle exceptions gracefully
-3. **Configuration**: Check for required environment variables
-
-### Common Operations
-
-- Operation 1: Description
-- Operation 2: Description
-
-### Integration Points
-
-- Integrates with: `agents` (parent module)
-- Dependencies: Listed in `__init__.py`
-
-## File Reference
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module exports and initialization |
-| `README.md` | User documentation |
-| `SPEC.md` | Technical specification |
-
-## Troubleshooting
-
-Common issues and solutions:
-
-1. **Issue**: Description
-   **Solution**: Resolution steps
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

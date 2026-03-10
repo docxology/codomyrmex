@@ -94,6 +94,7 @@ class FileBasedCache(Cache):
             # Write metadata
             ttl = ttl or self.default_ttl
             meta = {
+                "key": key,
                 "timestamp": time.time(),
                 "ttl": ttl,
             }
@@ -135,6 +136,33 @@ class FileBasedCache(Cache):
             return True
         except Exception as e:
             logger.error("Error clearing cache: %s", e)
+            raise
+
+    def delete_pattern(self, pattern: str) -> int:
+        """Delete all keys matching a pattern."""
+        import fnmatch
+
+        deleted_count = 0
+        try:
+            for meta_path in self.cache_dir.glob("*.meta"):
+                try:
+                    with open(meta_path) as f:
+                        meta = json.load(f)
+                    key = meta.get("key")
+                    if key and fnmatch.fnmatch(key, pattern):
+                        # Corresponding cache file
+                        file_path = meta_path.with_suffix(".cache")
+                        file_path.unlink(missing_ok=True)
+                        meta_path.unlink()
+                        deleted_count += 1
+                except (json.JSONDecodeError, OSError):
+                    continue
+
+            if deleted_count > 0:
+                self._stats.size = max(0, self._stats.size - deleted_count)
+            return deleted_count
+        except Exception as e:
+            logger.error("Error deleting pattern from FileBasedCache: %s", e)
             raise
 
     def exists(self, key: str) -> bool:

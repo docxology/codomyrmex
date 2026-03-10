@@ -1,3 +1,5 @@
+"""Validation tests for cursorrules content — strictly zero-mock."""
+
 from pathlib import Path
 
 import pytest

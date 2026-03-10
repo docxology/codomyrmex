@@ -1,33 +1,33 @@
-# Data Curation -- Agent Coordination
+# Codomyrmex Agents — docs/modules/data_curation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides MinHash-based near-duplicate detection and deduplication for text corpora. Uses Locality-Sensitive Hashing (LSH) for efficient approximate nearest neighbor search.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `data_curation_deduplicate` | Deduplicate a list of texts using MinHash and LSH | Standard | data_curation |
-| `data_curation_similarity` | Estimate Jaccard similarity between two texts using MinHash | Standard | data_curation |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Prepare deduplicated training corpora for ML pipelines |
-| VERIFY | QA Agent | Validate dataset quality by detecting near-duplicate documents |
-
-
-## Agent Instructions
-
-1. Set similarity threshold between 0.0 and 1.0 (default 0.8) for deduplication strictness
-2. Use data_curation_similarity to compare two individual documents before batch deduplication
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/data_curation/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

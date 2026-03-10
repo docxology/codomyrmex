@@ -1,7 +1,10 @@
-"""Comprehensive tests for the codomyrmex.api.pagination module.
+"""
+Comprehensive tests for the codomyrmex.api.pagination module.
 
 Tests cover all public API surface: dataclasses, enums, concrete paginators,
 cursor encoding/decoding, and the factory function.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
 """
 
 import pytest

@@ -1,45 +1,16 @@
-# Documents Configuration
+# documents
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Document I/O operations for multiple formats including markdown, JSON, PDF, YAML, XML, CSV, HTML, and plain text. Provides read, write, parse, validate, convert, merge, and split operations.
+Documentation files and guides.
 
-## Quick Configuration
-
-```bash
-export CODOMYRMEX_CACHE_DIR=""    # Directory for document cache storage (required)
-```
-
-## Configuration Options
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `CODOMYRMEX_CACHE_DIR` | str | None | Directory for document cache storage |
-
-## MCP Tools
-
-This module exposes 3 MCP tool(s):
-
-- `documents_read`
-- `documents_write`
-- `documents_convert`
-
-## PAI Integration
-
-PAI agents invoke documents tools through the MCP bridge. Cache directory defaults to system temp. Document format detection is automatic based on file extension.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep documents
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/documents/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

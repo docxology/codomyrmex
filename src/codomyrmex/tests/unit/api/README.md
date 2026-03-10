@@ -1,26 +1,36 @@
 # api
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Unit tests for API module.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `authentication/` - Subdirectory
-- `circuit_breaker/` - Subdirectory
-- `mocking/` - Subdirectory
-- `pagination/` - Subdirectory
-- `rate_limiting/` - Subdirectory
-- `test_api.py` - Test Api
-- `webhooks/` - Subdirectory
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `authentication/` – Subdirectory
+- `circuit_breaker/` – Subdirectory
+- `mocking/` – Subdirectory
+- `pagination/` – Subdirectory
+- `py.typed` – File
+- `rate_limiting/` – Subdirectory
+- `test_api_freeze.py` – File
+- `test_api_http_primitives.py` – File
+- `test_api_request_response.py` – File
+- `test_api_routing.py` – File
+- `test_api_schema.py` – File
+- `test_api_versioning.py` – File
+- `test_api_versioning_direct.py` – File
+- `test_graphql_api.py` – File
+- `test_openapi.py` – File
+- `test_openapi_doc_generator.py` – File
+- `test_openapi_std_generator.py` – File
+- `test_rest_api.py` – File
+- `webhooks/` – Subdirectory
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

@@ -1,11 +1,19 @@
-# ML Pipeline
+# ml_pipeline
 
-The ML Pipeline module provides tools for building, executing, and managing machine learning pipelines.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Features
-- Pipeline definition and execution
-- Step management and sequencing
-- Input/output validation and tracking
+## Overview
 
-## Usage
-Refer to the `mcp_tools.py` file for available tools.
+Contains components for the src system.
+
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `mcp_tools.py` – File
+- `py.typed` – File
+
+## Navigation
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

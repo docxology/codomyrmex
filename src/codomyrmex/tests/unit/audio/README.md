@@ -1,10 +1,27 @@
-# Audio
+# audio
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Audio` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Test files and validation suites.
+
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `speech_to_text/` – Subdirectory
+- `test_audio.py` – File
+- `test_audio_exceptions.py` – File
+- `test_codec.py` – File
+- `test_mcp_tools.py` – File
+- `test_streaming.py` – File
+- `test_stt_models.py` – File
+- `test_transcription.py` – File
+- `test_tts_models.py` – File
+
+## Navigation
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

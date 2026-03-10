@@ -1,22 +1,20 @@
 # core
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `core` module provides core functionality for Core..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_document_parser.py` - Test Document Parser
-- `test_document_reader.py` - Test Document Reader
-- `test_document_validator.py` - Test Document Validator
-- `test_document_writer.py` - Test Document Writer
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `test_document_parser.py` – File
+- `test_document_reader.py` – File
+- `test_document_validator.py` – File
+- `test_document_writer.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../../../README.md

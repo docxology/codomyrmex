@@ -1,5 +1,7 @@
 """
 Tests for API Circuit Breaker Module
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
 """
 
 import pytest

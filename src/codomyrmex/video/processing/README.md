@@ -1,24 +1,19 @@
-# Processing
+# processing
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.video.processing` | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Video processing submodule.
+Contains components for the src system.
 
-## Key Exports
-
-- **`VideoProcessor`** — Video processing class for manipulating video files.
-
-## Quick Start
-
-```python
-from codomyrmex.video.processing import VideoProcessor
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `video_processor.py` – File
 
 ## Navigation
-
-- **📁 Parent**: [Video](../README.md)
-- **🏠 Root**: [codomyrmex](../../../../README.md)
+- **Parent Directory**: [video](../README.md)
+- **Project Root**: ../../../../README.md

@@ -1,39 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/meme/semiotic
+# Codomyrmex Agents — src/codomyrmex/meme/semiotic
 
-**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Implements computational semiotics based on Peircean sign theory. Provides sign extraction from text (icon/index/symbol classification), semiotic drift measurement between corpora, semantic territory mapping, synonym-based linguistic steganography for embedding hidden payloads, and mnemonic device construction using the Method of Loci.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `analyzer.py` | `SemioticAnalyzer` | Decode text into signs, measure drift, map semantic territories |
-| `encoding.py` | `SemioticEncoder` | Meaning-level steganography via synonym substitution |
-| `mnemonics.py` | `MnemonicDevice` | Memory palace structure with anchors and associations |
-| `mnemonics.py` | `build_memory_palace` | Construct Method of Loci device linking items to locations |
-| `models.py` | `Sign` | Fundamental semiotic unit: signifier, signified, Peircean type |
-| `models.py` | `SignType` | ICON, INDEX, SYMBOL (Peircean trichotomy) |
-| `models.py` | `SemanticTerritory` | Mapped region of semantic space with density metric |
-| `models.py` | `DriftReport` | Semiotic drift analysis with stability_ratio property |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `analyzer.py` – Project file
+- `encoding.py` – Project file
+- `mnemonics.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Sign type inference uses heuristics: emoji unicode ranges for ICON, deictic words for INDEX, default SYMBOL.
-- Drift threshold is fixed at Jaccard < 0.3 for meaning shift; not configurable.
-- Steganography uses a fixed 8-word synonym map; proof-of-concept only.
-- Words shorter than 2 characters are excluded from sign extraction.
-- Meaning is context-dependent; a Sign valid in one SemanticTerritory may be invalid in another.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `analyzer.py`
+- `encoding.py`
+- `mnemonics.py`
+- `models.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: None (standard library only: `hashlib`, `time`, `re`, `collections`)
-- **Used by**: `meme.memetics` (validate mutated memes retain intended signifier), `meme.neurolinguistic` (semiotic analysis identifies framing mechanisms)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [meme](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [meme](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

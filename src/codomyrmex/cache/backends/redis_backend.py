@@ -112,7 +112,21 @@ class RedisCache(Cache):
             logger.error("Error checking Redis: %s", e)
             raise
 
-    def get_stats(self) -> CacheStats:
+    def delete_pattern(self, pattern: str) -> int:
+        """Delete all keys matching a pattern."""
+        try:
+            keys = self.client.keys(pattern)
+            if keys:
+                count = self.client.delete(*keys)
+                self._stats.size = max(0, self._stats.size - count)
+                return count
+            return 0
+        except Exception as e:
+            logger.error("Error deleting pattern from Redis: %s", e)
+            raise
+
+    @property
+    def stats(self) -> CacheStats:
         """Get cache statistics."""
         try:
             info = self.client.info("stats")

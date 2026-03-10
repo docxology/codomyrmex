@@ -1,8 +1,8 @@
-"""Comprehensive unit tests for codomyrmex.api.standardization.api_versioning.
+"""
+Comprehensive unit tests for codomyrmex.api.standardization.api_versioning.
 
 Uses direct importlib loading to bypass the circular import chain in the
-codomyrmex.api package __init__.  No mocks used — all test doubles are real
-callables/objects.
+codomyrmex.api package __init__.  No mocks are used. All test doubles are real concrete subclasses or callable objects.
 """
 
 import importlib.util

@@ -1,38 +1,51 @@
-# Agent Instructions for `codomyrmex.bio_simulation`
+# Codomyrmex Agents — src/codomyrmex/bio_simulation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Context
+## Purpose
+Contains components for the src system.
 
-The Bio-Simulation module provides high-fidelity ant colony simulation. It is used for studying emergent behavior patterns that inform the Codomyrmex agent architecture.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `ant_colony/` – Directory containing ant_colony components
+- `colony.py` – Project file
+- `genomics/` – Directory containing genomics components
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `visualization.py` – Project file
 
-## Usage Guidelines
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Importing**: Import from the module root for most uses.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `colony.py`
+- `mcp_tools.py`
+- `py.typed`
+- `visualization.py`
 
-   ```python
-   from codomyrmex.bio_simulation import Colony, Ant, AntState, Environment, Genome, Population
-   ```
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-2. **Colony Simulation**: Create colonies with `Colony(population=N)` and advance time with `colony.step(hours=H)`. Each hour corresponds to 60 ticks.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-3. **Genomics**: Use `Genome.random()` for synthetic genomes with default traits (speed, strength, perception, endurance).
-
-4. **Zero-Mock Policy**: Tests must instantiate real objects. No mocking of simulation state is allowed.
-
-5. **Performance**: Large populations (> 100k) may be slow. Use smaller populations for quick experiments.
-
-6. **Safety**: Dead ants are automatically removed from `colony.ants` during `step()`.
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md)
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
-| **Architect** | Read + Architecture review | Read-only | SAFE |
-| **QATester** | Validation + output verification | Read + Inspect | SAFE |
-| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

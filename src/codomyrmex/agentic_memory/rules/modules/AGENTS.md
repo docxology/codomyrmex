@@ -1,85 +1,155 @@
-# Codomyrmex Agents — cursorrules/modules
+# Codomyrmex Agents — src/codomyrmex/agentic_memory/rules/modules
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Module-specific cursor rules (60 total) that supplement `general.cursorrules`. Each rule provides coding standards, testing requirements, and best practices for its respective source module.
-
-> **Mandatory Policies** (from `general.cursorrules §2`): Zero-Mock, UV-Only, RASP, Python ≥ 3.10 — these apply unconditionally at all levels and are encoded in every module rule.
-
-## Agent Guidelines
-
-### Rule Application
-
-1. **Identify the module** you're working in (e.g., `security`, `agents`, `cloud`)
-2. **Load the corresponding rule** from `modules/{module_name}.cursorrules`
-3. **Apply rules in order**: file-specific → module-specific → cross-module → general
-
-### Quick Module Lookup by Domain
-
-| Domain | Key Modules |
-|--------|-------------|
-| **Security** | `security`, `defense`, `identity`, `wallet`, `privacy`, `encryption`, `auth` |
-| **AI/Agents** | `agents`, `llm`, `agentic_memory`, `cerebrum`, `graph_rag` |
-| **Infrastructure** | `cloud`, `orchestrator`, `cache`, `api`, `deployment`, `networking` |
-| **Development** | `cli`, `testing`, `coding`, `utils`, `tree_sitter`, `static_analysis` |
-| **Operations** | `containerization`, `ci_cd_automation`, `telemetry`, `metrics` |
-
-### Standard Rule Template
-
-All module rules follow this 8-section structure:
-0. **Preamble** - Relationship to general.cursorrules
-
-1. **Purpose & Context** - Core functionality
-2. **Key Files & Structure** - Important files
-3. **Coding Standards** - Language requirements
-4. **Testing** - Test requirements
-5. **Documentation** - Doc maintenance
-6. **Specific Considerations** - Module-specific notes
-7. **Final Check** - Verification steps
-
-### When to Create New Rules
-
-Create a new module rule when:
-
-- A source module has unique coding requirements
-- Module-specific testing patterns are needed (always Zero-Mock)
-- Special security considerations apply
-- Cross-cutting concerns don't cover the need
-
-### Key Policies in Every Module Rule
-
-- **Testing** sections mandate real implementations — no mocks, data factories instead
-- **Key Files** sections reference `pyproject.toml` for dependencies — no `requirements.txt`
-- **Documentation** sections enforce RASP (README, AGENTS, SPEC, PAI) at module level
-- **Coding Standards** target Python ≥ 3.10 with type hints
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `agentic_memory.cursorrules` – Project file
+- `agents.cursorrules` – Project file
+- `ai_code_editing.cursorrules` – Project file
+- `api.cursorrules` – Project file
+- `api_documentation.cursorrules` – Project file
+- `auth.cursorrules` – Project file
+- `build_synthesis.cursorrules` – Project file
+- `cache.cursorrules` – Project file
+- `cerebrum.cursorrules` – Project file
+- `ci_cd_automation.cursorrules` – Project file
+- `cli.cursorrules` – Project file
+- `cloud.cursorrules` – Project file
+- `code.cursorrules` – Project file
+- `coding.cursorrules` – Project file
+- `config_management.cursorrules` – Project file
+- `containerization.cursorrules` – Project file
+- `data_visualization.cursorrules` – Project file
+- `database_management.cursorrules` – Project file
+- `defense.cursorrules` – Project file
+- `deployment.cursorrules` – Project file
+- `documentation.cursorrules` – Project file
+- `encryption.cursorrules` – Project file
+- `environment_setup.cursorrules` – Project file
+- `events.cursorrules` – Project file
+- `git_operations.cursorrules` – Project file
+- `graph_rag.cursorrules` – Project file
+- `identity.cursorrules` – Project file
+- `language_models.cursorrules` – Project file
+- `llm.cursorrules` – Project file
+- `logging_monitoring.cursorrules` – Project file
+- `market.cursorrules` – Project file
+- `metrics.cursorrules` – Project file
+- `model_context_protocol.cursorrules` – Project file
+- `modeling_3d.cursorrules` – Project file
+- `module_template.cursorrules` – Project file
+- `networking.cursorrules` – Project file
+- `notification.cursorrules` – Project file
+- `ollama_integration.cursorrules` – Project file
+- `orchestrator.cursorrules` – Project file
+- `pattern_matching.cursorrules` – Project file
+- `performance.cursorrules` – Project file
+- `physical_management.cursorrules` – Project file
+- `plugin_system.cursorrules` – Project file
+- `privacy.cursorrules` – Project file
+- `project_orchestration.cursorrules` – Project file
+- `prompt_testing.cursorrules` – Project file
+- `security.cursorrules` – Project file
+- `security_audit.cursorrules` – Project file
+- `serialization.cursorrules` – Project file
+- `skills.cursorrules` – Project file
+- `static_analysis.cursorrules` – Project file
+- `system_discovery.cursorrules` – Project file
+- `telemetry.cursorrules` – Project file
+- `terminal_interface.cursorrules` – Project file
+- `testing.cursorrules` – Project file
+- `tree_sitter.cursorrules` – Project file
+- `utils.cursorrules` – Project file
+- `validation.cursorrules` – Project file
+- `wallet.cursorrules` – Project file
+- `workflow_testing.cursorrules` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Module rules supplement (don't replace) general.cursorrules
-- When conflicts occur, module rules take precedence
-- Document any departures from general rules
-- Ensure MCP interfaces remain consistent across modules
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `agentic_memory.cursorrules`
+- `agents.cursorrules`
+- `ai_code_editing.cursorrules`
+- `api.cursorrules`
+- `api_documentation.cursorrules`
+- `auth.cursorrules`
+- `build_synthesis.cursorrules`
+- `cache.cursorrules`
+- `cerebrum.cursorrules`
+- `ci_cd_automation.cursorrules`
+- `cli.cursorrules`
+- `cloud.cursorrules`
+- `code.cursorrules`
+- `coding.cursorrules`
+- `config_management.cursorrules`
+- `containerization.cursorrules`
+- `data_visualization.cursorrules`
+- `database_management.cursorrules`
+- `defense.cursorrules`
+- `deployment.cursorrules`
+- `documentation.cursorrules`
+- `encryption.cursorrules`
+- `environment_setup.cursorrules`
+- `events.cursorrules`
+- `git_operations.cursorrules`
+- `graph_rag.cursorrules`
+- `identity.cursorrules`
+- `language_models.cursorrules`
+- `llm.cursorrules`
+- `logging_monitoring.cursorrules`
+- `market.cursorrules`
+- `metrics.cursorrules`
+- `model_context_protocol.cursorrules`
+- `modeling_3d.cursorrules`
+- `module_template.cursorrules`
+- `networking.cursorrules`
+- `notification.cursorrules`
+- `ollama_integration.cursorrules`
+- `orchestrator.cursorrules`
+- `pattern_matching.cursorrules`
+- `performance.cursorrules`
+- `physical_management.cursorrules`
+- `plugin_system.cursorrules`
+- `privacy.cursorrules`
+- `project_orchestration.cursorrules`
+- `prompt_testing.cursorrules`
+- `security.cursorrules`
+- `security_audit.cursorrules`
+- `serialization.cursorrules`
+- `skills.cursorrules`
+- `static_analysis.cursorrules`
+- `system_discovery.cursorrules`
+- `telemetry.cursorrules`
+- `terminal_interface.cursorrules`
+- `testing.cursorrules`
+- `tree_sitter.cursorrules`
+- `utils.cursorrules`
+- `validation.cursorrules`
+- `wallet.cursorrules`
+- `workflow_testing.cursorrules`
 
-## Rule Categories Summary
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Category | Count | Examples |
-|----------|-------|----------|
-| Security & Identity | 7 | security, defense, identity |
-| AI & Agents | 7 | agents, llm, cerebrum |
-| Infrastructure | 9 | cloud, api, deployment |
-| Development Tools | 14 | cli, testing, utils |
-| Metrics & Testing | 5 | metrics, testing |
-| Documentation & Build | 5 | documentation, deployment |
-| Operations | 7 | containerization, ci_cd_automation |
-| Specialized | 6 | model_context_protocol, modeling_3d |
-| **Total** | **60** | |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [../README.md](../README.md) - cursorrules root
-- **📄 File Rules**: [../file-specific/](../file-specific/) - 6 file-type rules
-- **🔗 Cross-Module**: [../cross-module/](../cross-module/) - 8 cross-module rules
-- **📋 PAI Context**: [PAI.md](PAI.md) - AI infrastructure context
-- **🏠 Project Root**: [../../README.md](../../README.md)
+- **📁 Parent Directory**: [rules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

@@ -1,33 +1,33 @@
-# Neural Network Primitives -- Agent Coordination
+# Codomyrmex Agents — docs/modules/neural
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides from-scratch Transformer implementation including multi-head attention, flash attention, feed-forward networks, layer normalization, positional encoding, and activation functions. All implemented in pure NumPy.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `transformer_encode` | Run a forward pass through a randomly-initialized Transformer encoder | Standard | neural |
-| `attention_forward` | Run multi-head attention on random inputs and return attention weights | Standard | neural |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Construct and evaluate neural network components from scratch |
-| VERIFY | QA Agent | Validate attention patterns and transformer output shapes |
-
-
-## Agent Instructions
-
-1. d_model must be divisible by n_heads for proper head dimension calculation
-2. Flash attention verifies against standard attention within a tight error tolerance
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/neural/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

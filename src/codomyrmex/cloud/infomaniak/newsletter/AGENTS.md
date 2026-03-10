@@ -1,36 +1,41 @@
 # Codomyrmex Agents — src/codomyrmex/cloud/infomaniak/newsletter
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-REST API client for Infomaniak's Newsletter service. Provides campaign management (create, send, schedule, statistics), mailing list CRUD, contact management (import, subscribe/unsubscribe), and utility endpoints (credits, async task status).
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `client.py` | `InfomaniakNewsletterClient` | Main client; extends `InfomaniakRESTBase` with OAuth2 Bearer auth |
-| `client.py` | `from_env()` | Factory that reads `INFOMANIAK_NEWSLETTER_TOKEN` and `INFOMANIAK_NEWSLETTER_ID` |
-| `client.py` | `from_credentials()` | Factory accepting explicit token and newsletter ID |
-| `client.py` | `validate_connection()` | Health check via `get_credits()` |
-| `__init__.py` | -- | Re-exports `InfomaniakNewsletterClient` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `client.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Requires env vars `INFOMANIAK_NEWSLETTER_TOKEN` (OAuth2 bearer) and `INFOMANIAK_NEWSLETTER_ID` (product ID) for `from_env()`.
-- All HTTP methods (`_get`, `_post`, `_put`, `_delete`) classify errors via `classify_http_error()` from `infomaniak.exceptions`.
-- `manage_contact()` validates `action` against `{"subscribe", "unsubscribe"}`; raises `ValueError` for invalid actions.
-- List methods (`list_campaigns`, `list_mailing_lists`, `get_list_contacts`) normalize API response shape to `list[dict]`.
-- The client is a context manager (`with` statement supported via `InfomaniakRESTBase`).
-- Errors must be logged via module logger before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `client.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.cloud.infomaniak.base.InfomaniakRESTBase`, `codomyrmex.cloud.infomaniak.exceptions.classify_http_error`, `requests`
-- **Used by**: Any agent needing email campaign automation via Infomaniak
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [infomaniak](../README.md)
-- **Root**: [Root](../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [infomaniak](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

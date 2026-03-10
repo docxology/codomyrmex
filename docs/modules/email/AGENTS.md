@@ -1,29 +1,35 @@
-# Agent Instructions for `codomyrmex.email`
+# Codomyrmex Agents — docs/modules/email
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Context
+## Purpose
+Documentation files and guides.
 
-The `email` module provides the Codomyrmex ecosystem with a unified interface to interact with third-party email providers. It supports two backends: **Gmail** (Google OAuth2) and **AgentMail** (API key-based).
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Usage Guidelines
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Importing:** Always import `EmailProvider`, `EmailMessage`, `EmailDraft`, and provider classes directly from the `email` module root.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-   ```python
-   from codomyrmex.email import EmailMessage, EmailDraft, GmailProvider, AgentMailProvider
-   from codomyrmex.email.exceptions import EmailError, EmailAuthError, MessageNotFoundError
-   ```
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-2. **Availability Check:**
-   Before running any provider-specific code, check the `EMAIL_AVAILABLE` flag (overall), or `GMAIL_AVAILABLE` / `AGENTMAIL_AVAILABLE` per-provider. Instruct the user to install dependencies if a flag evaluates to `False`.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-   ```bash
-   uv sync --extra email
-   ```
-
-3. **Zero-Mock Policy:**
-   When writing tests involving the email module, **never mock** the `GmailProvider` or `AgentMailProvider` API interactions. Rely strictly on authentic responses. Use `pytest.mark.skipif` to bypass tests if valid credentials are not accessible.
-
-4. **Querying Structure:**
-   The `list_messages` method accepts provider-specific syntax via the `query` argument (e.g., `"is:unread"`, `"has:attachment"`, `"from:xyz@abc.com"`). Agents should use valid search modifiers for the currently active backend.
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

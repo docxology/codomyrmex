@@ -1,22 +1,22 @@
 # gemini
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Tests for Gemini agent integration.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `test_gemini_api.py` - Test Gemini Api
-- `test_gemini_client.py` - Test Gemini Client
-- `test_gemini_integration.py` - Test Gemini Integration
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `test_gemini_api.py` – File
+- `test_gemini_cli.py` – File
+- `test_gemini_client.py` – File
+- `test_gemini_integration.py` – File
 
 ## Navigation
-
-- **Parent Module**: [agents](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: ../../../../../../README.md

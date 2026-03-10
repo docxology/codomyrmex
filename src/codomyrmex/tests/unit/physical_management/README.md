@@ -1,19 +1,22 @@
 # physical_management
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `physical_management` module provides core functionality for Physical Management..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_physical_management.py` - Test Physical Management
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `test_mcp_tools_physical_management.py` – File
+- `test_object_manager.py` – File
+- `test_physical_analytics.py` – File
+- `test_physical_management.py` – File
+- `test_physical_models.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

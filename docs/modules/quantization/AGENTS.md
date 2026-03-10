@@ -1,33 +1,33 @@
-# Quantization -- Agent Coordination
+# Codomyrmex Agents — docs/modules/quantization
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides Int8 and FP4 (4-bit float) quantization for neural network weights. Supports symmetric and asymmetric Int8 quantization with nibble-packed FP4 storage, plus error metrics for quality assessment.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `quantize_tensor` | Quantize a list of float values to int8 or fp4 with error metrics | Standard | quantization |
-| `quantization_benchmark` | Benchmark int8 vs fp4 quantization error on random data | Standard | quantization |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Quantize model weights for reduced memory and faster inference |
-| VERIFY | QA Agent | Measure quantization error and compare methods |
-
-
-## Agent Instructions
-
-1. Int8 supports 'symmetric' and 'asymmetric' schemes; asymmetric has lower error for skewed distributions
-2. FP4 achieves 8x compression vs float32 with higher error than int8
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/quantization/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

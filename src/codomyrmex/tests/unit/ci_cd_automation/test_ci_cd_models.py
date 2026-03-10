@@ -2,6 +2,8 @@
 
 from datetime import UTC, datetime
 
+import pytest
+
 from codomyrmex.ci_cd_automation.pipeline import (
     AsyncPipelineResult,
     JobStatus,
@@ -13,6 +15,7 @@ from codomyrmex.ci_cd_automation.pipeline import (
 )
 
 
+@pytest.mark.unit
 class TestPipelineJob:
     """Test cases for PipelineJob dataclass."""
 
@@ -60,6 +63,7 @@ class TestPipelineJob:
         assert "start_time" in job_dict
 
 
+@pytest.mark.unit
 class TestPipelineStage:
     """Test cases for PipelineStage dataclass."""
 
@@ -93,6 +97,7 @@ class TestPipelineStage:
         assert "jobs" in stage_dict
 
 
+@pytest.mark.unit
 class TestPipeline:
     """Test cases for Pipeline dataclass."""
 
@@ -136,6 +141,7 @@ class TestPipeline:
         assert "stages" in pipeline_dict
 
 
+@pytest.mark.unit
 class TestAsyncPipelineResult:
     """Test cases for AsyncPipelineResult dataclass."""
 
@@ -170,6 +176,7 @@ class TestAsyncPipelineResult:
 
 
 # From test_coverage_boost_r4.py
+@pytest.mark.unit
 class TestDeploymentEnvironment:
     """Tests for Environment dataclass."""
 
@@ -203,6 +210,7 @@ class TestDeploymentEnvironment:
 
 
 # From test_coverage_boost_r5.py
+@pytest.mark.unit
 class TestPipelineModels:
     """Tests for pipeline data models."""
 

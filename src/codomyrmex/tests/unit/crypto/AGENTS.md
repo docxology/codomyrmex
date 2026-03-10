@@ -1,55 +1,91 @@
-# Crypto Tests — Agent Responsibilities
+# Codomyrmex Agents — src/codomyrmex/tests/unit/crypto
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Test Ownership
+## Purpose
+Test files and validation suites.
 
-### Engineer Agent
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `conftest.py` – Project file
+- `py.typed` – Project file
+- `test_analysis_classical.py` – Project file
+- `test_analysis_entropy.py` – Project file
+- `test_analysis_frequency.py` – Project file
+- `test_analysis_strength.py` – Project file
+- `test_crypto_mcp_tools.py` – Project file
+- `test_currency_addresses.py` – Project file
+- `test_currency_blockchain.py` – Project file
+- `test_currency_tokens.py` – Project file
+- `test_currency_transactions.py` – Project file
+- `test_currency_wallet.py` – Project file
+- `test_encoding.py` – Project file
+- `test_graphy_asymmetric.py` – Project file
+- `test_graphy_certificates.py` – Project file
+- `test_graphy_hashing.py` – Project file
+- `test_graphy_kdf.py` – Project file
+- `test_graphy_mac.py` – Project file
+- `test_graphy_signatures.py` – Project file
+- `test_graphy_symmetric.py` – Project file
+- `test_protocols_key_exchange.py` – Project file
+- `test_protocols_secret_sharing.py` – Project file
+- `test_protocols_zero_knowledge.py` – Project file
+- `test_random.py` – Project file
+- `test_steganography_detection.py` – Project file
+- `test_steganography_image.py` – Project file
+- `test_steganography_text.py` – Project file
 
-**Responsibility**: Implement and maintain all test files.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Test File | Focus |
-|---|---|
-| test_graphy_symmetric.py | AES-GCM, ChaCha20-Poly1305 round-trip, error handling |
-| test_graphy_asymmetric.py | RSA, Ed25519, X25519, ECC key generation and operations |
-| test_graphy_hashing.py | Hash correctness against known vectors |
-| test_graphy_signatures.py | Sign/verify round-trip, invalid signature rejection |
-| test_graphy_kdf.py | KDF output against RFC vectors, parameter validation |
-| test_graphy_mac.py | MAC computation and constant-time verification |
-| test_graphy_certs.py | Certificate generation, chain verification |
-| test_currency.py | Wallet generation, address derivation, transaction signing |
-| test_encoding.py | Round-trip encoding, malformed input rejection |
-| test_protocols.py | Key exchange, secret sharing, ZKP correctness |
-| test_random.py | CSPRNG output quality, NIST test execution |
-| test_steganography.py | Embed/extract round-trip, detection methods |
-| test_analysis.py | Entropy calculation, strength assessment |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `conftest.py`
+- `py.typed`
+- `test_analysis_classical.py`
+- `test_analysis_entropy.py`
+- `test_analysis_frequency.py`
+- `test_analysis_strength.py`
+- `test_crypto_mcp_tools.py`
+- `test_currency_addresses.py`
+- `test_currency_blockchain.py`
+- `test_currency_tokens.py`
+- `test_currency_transactions.py`
+- `test_currency_wallet.py`
+- `test_encoding.py`
+- `test_graphy_asymmetric.py`
+- `test_graphy_certificates.py`
+- `test_graphy_hashing.py`
+- `test_graphy_kdf.py`
+- `test_graphy_mac.py`
+- `test_graphy_signatures.py`
+- `test_graphy_symmetric.py`
+- `test_protocols_key_exchange.py`
+- `test_protocols_secret_sharing.py`
+- `test_protocols_zero_knowledge.py`
+- `test_random.py`
+- `test_steganography_detection.py`
+- `test_steganography_image.py`
+- `test_steganography_text.py`
 
-### QATester Agent
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Responsibility**: Execute test suite and validate results.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Activity | Command |
-|---|---|
-| Run all crypto tests | `uv run pytest src/codomyrmex/tests/unit/crypto/ -v` |
-| Run with coverage | `uv run pytest src/codomyrmex/tests/unit/crypto/ --cov=src/codomyrmex/crypto` |
-| Run security tests | `uv run pytest -m "crypto and security"` |
-| Run fast tests only | `uv run pytest -m "crypto and not slow"` |
-| Validate coverage targets | Compare report against SPEC.md thresholds |
-
-### Architect Agent
-
-**Responsibility**: Review test architecture and coverage strategy.
-
-- Verify tests cover all API surfaces defined in API_SPECIFICATION.md.
-- Ensure test categories (correctness, error, security, performance) are balanced.
-- Review fixture design for appropriate isolation.
-- Validate that test vectors reference authoritative sources.
-
-### Security Agent
-
-**Responsibility**: Audit security-specific tests.
-
-- Verify nonce uniqueness tests use sufficient sample sizes.
-- Confirm constant-time comparison tests are meaningful.
-- Validate that error paths do not leak sensitive information.
-- Ensure deprecated algorithm tests include appropriate warnings.
+## Navigation Links
+- **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

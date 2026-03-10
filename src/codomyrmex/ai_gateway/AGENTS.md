@@ -1,40 +1,45 @@
-# Agent Guidelines - AI Gateway
+# Codomyrmex Agents — src/codomyrmex/ai_gateway
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Load balancing, failover, and circuit breaker for routing requests across multiple LLM providers.
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `gateway.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **AIGateway** -- Multi-provider gateway with strategy-based routing
-- **Provider** -- Provider endpoint with health and weight config
-- **CircuitBreaker** -- Prevents cascade failures (closed/open/half-open)
-- **GatewayConfig** -- Strategy and threshold configuration
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `gateway.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## MCP Tools Available
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `gateway_complete` | Route a completion request with load balancing and failover | Safe |
-| `gateway_health` | Check health and circuit state of all providers | Safe |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Agent Instructions
-
-1. **Configure providers** -- Supply provider list with endpoints and weights
-2. **Use weighted strategy** -- For heterogeneous provider capacity
-3. **Monitor health** -- Call `gateway_health` to check circuit states
-4. **Handle failures** -- Gateway returns `success=False` when all providers are down
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `gateway_complete`, `gateway_health` | TRUSTED |
-| **Architect** | Read + Design | `gateway_health` -- architecture review | OBSERVED |
-| **QATester** | Validation | `gateway_complete`, `gateway_health` -- failover testing | OBSERVED |
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

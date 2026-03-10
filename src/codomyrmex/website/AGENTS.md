@@ -1,93 +1,67 @@
-# Agent Guidelines - Website
+# Codomyrmex Agents — src/codomyrmex/website
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-**Type**: Application Module
-**Status**: Active
+## Purpose
+Contains components for the src system.
 
-## Module Overview
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `accessibility/` – Directory containing accessibility components
+- `architecture_layers.yaml` – Project file
+- `assets/` – Directory containing assets components
+- `data_provider.py` – Project file
+- `generator.py` – Project file
+- `handlers/` – Directory containing handlers components
+- `health_mixin.py` – Project file
+- `pai_mixin.py` – Project file
+- `py.typed` – Project file
+- `requirements.template.txt` – Project file
+- `server.py` – Project file
+- `templates/` – Directory containing templates components
 
-The Website module serves as the primary user interface for the Codomyrmex ecosystem. While not an autonomous agent itself, it acts as a critical interface layer (Human-in-the-Loop) for interacting with agents, monitoring system health, and managing configurations.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Capabilities
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `__init__.py`
+- `architecture_layers.yaml`
+- `data_provider.py`
+- `generator.py`
+- `health_mixin.py`
+- `pai_mixin.py`
+- `py.typed`
+- `requirements.template.txt`
+- `server.py`
 
-1. **Observability**: Real-time dashboard for system metrics (CPU, Memory, Uptime) and Git status.
-2. **Agent Interaction**: Direct chat interface for interacting with LLM agents via Ollama.
-3. **Documentation Browser**: Rendered view of project documentation and specifications.
-4. **Configuration Management**: Web-based editor for system configuration files.
-5. **Task Execution**: Trigger scripts and workflows directly from the UI.
-6. **PAI Awareness**: Visualization of the Personal AI Infrastructure (Missions, Projects, Tasks).
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Key Classes
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-- **WebsiteGenerator**: Renders Jinja2 templates into a static site.
-- **DataProvider**: Aggregates module, agent, script, config, and PAI data.
-- **WebsiteServer**: HTTP request handler with 19 REST API endpoints.
-
-## Integration Points
-
-- **Data Provider**: Aggregates data from `src/codomyrmex/` and `.claude/` directories.
-- **Ollama**: Proxies chat requests to local LLM inference server via `http://localhost:11434`.
-- **Scripts**: Discovers and executes scripts from `scripts/`.
-- **CI/CD**: Monitors `.github/workflows` status.
-
-## Usage
-
-### Starting the Dashboard
-
-```bash
-uv run python -m codomyrmex.website.server
-```
-
-Access at: `http://localhost:8787`
-
-### API Interaction
-
-The module exposes a REST API for external integrations. Key endpoints include:
-
-- `GET /api/status`: System health check.
-- `GET /api/llm/config`: Retrieve current LLM configuration.
-- `POST /api/chat`: Send message to active agent/LLM.
-- `POST /api/execute`: Run a registered script.
-
-## Development
-
-The frontend is built with vanilla HTML/JS/CSS for maximum performance and zero build-step requirements.
-
-- **Templates**: `src/codomyrmex/website/templates/`
-- **Assets**: `src/codomyrmex/website/assets/`
-- **Logic**: `src/codomyrmex/website/server.py` and `data_provider.py`
-
-## Common Patterns
-
-```python
-import socketserver
-from codomyrmex.website import WebsiteGenerator, DataProvider, WebsiteServer
-
-# Generate static website
-generator = WebsiteGenerator(output_dir="./build", root_dir=".")
-generator.generate()
-
-# Start development server
-WebsiteServer.root_dir = Path(".")
-WebsiteServer.data_provider = DataProvider(Path("."))
-with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
-    httpd.serve_forever()
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Deploy and manage the dashboard web application, configure WebsiteServer endpoints, integrate DataProvider during BUILD phases
-
-### Architect Agent
-**Use Cases**: Review API endpoint design, plan REST route structure, evaluate template and asset organization
-
-### QATester Agent
-**Use Cases**: Validate endpoint responses and status codes, verify UI behavior via browser automation, test chat proxy and script execution
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

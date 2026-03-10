@@ -15,7 +15,11 @@ from typing import Any
 
 from google import genai
 from google.genai import types
-from PIL import Image
+
+try:
+    from PIL import Image
+except ImportError:
+    Image = None
 
 from codomyrmex.agents.core import (
     AgentCapabilities,

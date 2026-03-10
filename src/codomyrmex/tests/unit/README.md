@@ -1,117 +1,205 @@
-# tests/unit — Unit Test Suite
+# unit
 
-Unit tests for all codomyrmex modules. Each test file exercises one module in
-isolation using real objects — no mocks, stubs, or fakes (zero-mock policy).
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Structure
+## Overview
 
-```
-tests/unit/
-├── <module>/                # One directory per top-level module
-│   └── test_<module>.py    # Primary test file for that module
-├── orchestrator/
-│   └── test_core.py
-├── validation/
-│   ├── schemas/
-│   │   └── test_schemas.py  # removed — schemas module rebuilt as type registry
-│   └── test_validation.py
-└── ...
-```
+Test files and validation suites.
 
-As of Feb 2026: **417 test files, 10,041 collected tests, 31% coverage**.
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `accessibility/` – Subdirectory
+- `agentic_memory/` – Subdirectory
+- `agents/` – Subdirectory
+- `ai_code_editing/` – Subdirectory
+- `ai_gateway/` – Subdirectory
+- `aider/` – Subdirectory
+- `api/` – Subdirectory
+- `api_documentation/` – Subdirectory
+- `api_standardization/` – Subdirectory
+- `audio/` – Subdirectory
+- `auth/` – Subdirectory
+- `autograd/` – Subdirectory
+- `bio_simulation/` – Subdirectory
+- `build_synthesis/` – Subdirectory
+- `cache/` – Subdirectory
+- `calendar_integration/` – Subdirectory
+- `cerebrum/` – Subdirectory
+- `chaos_engineering/` – Subdirectory
+- `ci_cd_automation/` – Subdirectory
+- `cli/` – Subdirectory
+- `cloud/` – Subdirectory
+- `coding/` – Subdirectory
+- `collaboration/` – Subdirectory
+- `compression/` – Subdirectory
+- `concurrency/` – Subdirectory
+- `config_audits/` – Subdirectory
+- `config_management/` – Subdirectory
+- `config_monitoring/` – Subdirectory
+- `conftest.py` – File
+- `container_optimization/` – Subdirectory
+- `containerization/` – Subdirectory
+- `cost_management/` – Subdirectory
+- `coverage_push/` – Subdirectory
+- `crypto/` – Subdirectory
+- `dark/` – Subdirectory
+- `data_curation/` – Subdirectory
+- `data_lineage/` – Subdirectory
+- `data_visualization/` – Subdirectory
+- `database_management/` – Subdirectory
+- `defense/` – Subdirectory
+- `demos/` – Subdirectory
+- `dependency_injection/` – Subdirectory
+- `deployment/` – Subdirectory
+- `distillation/` – Subdirectory
+- `distributed_training/` – Subdirectory
+- `docs_gen/` – Subdirectory
+- `documentation/` – Subdirectory
+- `documents/` – Subdirectory
+- `dpo/` – Subdirectory
+- `edge_computing/` – Subdirectory
+- `education/` – Subdirectory
+- `email/` – Subdirectory
+- `embodiment/` – Subdirectory
+- `encryption/` – Subdirectory
+- `environment_setup/` – Subdirectory
+- `eval_harness/` – Subdirectory
+- `events/` – Subdirectory
+- `evolutionary_ai/` – Subdirectory
+- `examples/` – Subdirectory
+- `exceptions/` – Subdirectory
+- `feature_flags/` – Subdirectory
+- `feature_store/` – Subdirectory
+- `file_system/` – Subdirectory
+- `finance/` – Subdirectory
+- `formal_verification/` – Subdirectory
+- `fpf/` – Subdirectory
+- `git_analysis/` – Subdirectory
+- `git_operations/` – Subdirectory
+- `governance/` – Subdirectory
+- `graph_rag/` – Subdirectory
+- `i18n/` – Subdirectory
+- `ide/` – Subdirectory
+- `identity/` – Subdirectory
+- `image/` – Subdirectory
+- `inference_optimization/` – Subdirectory
+- `integration/` – Subdirectory
+- `interpretability/` – Subdirectory
+- `languages/` – Subdirectory
+- `llm/` – Subdirectory
+- `logging/` – Subdirectory
+- `logging_monitoring/` – Subdirectory
+- `logistics/` – Subdirectory
+- `logit_processor/` – Subdirectory
+- `lora/` – Subdirectory
+- `maintenance/` – Subdirectory
+- `market/` – Subdirectory
+- `matmul_kernel/` – Subdirectory
+- `mcp/` – Subdirectory
+- `meme/` – Subdirectory
+- `metrics/` – Subdirectory
+- `migration/` – Subdirectory
+- `ml_pipeline/` – Subdirectory
+- `model_context_protocol/` – Subdirectory
+- `model_evaluation/` – Subdirectory
+- `model_merger/` – Subdirectory
+- `model_ops/` – Subdirectory
+- `model_registry/` – Subdirectory
+- `module_template/` – Subdirectory
+- `multimodal/` – Subdirectory
+- `nas/` – Subdirectory
+- `networking/` – Subdirectory
+- `networks/` – Subdirectory
+- `neural/` – Subdirectory
+- `notification/` – Subdirectory
+- `observability/` – Subdirectory
+- `observability_dashboard/` – Subdirectory
+- `operating_system/` – Subdirectory
+- `orchestrator/` – Subdirectory
+- `p3_remediation/` – Subdirectory
+- `pai_pm/` – Subdirectory
+- `pattern_matching/` – Subdirectory
+- `peft/` – Subdirectory
+- `performance/` – Subdirectory
+- `physical_management/` – Subdirectory
+- `plugin_system/` – Subdirectory
+- `privacy/` – Subdirectory
+- `prompt_engineering/` – Subdirectory
+- `prompt_testing/` – Subdirectory
+- `quantization/` – Subdirectory
+- `quantum/` – Subdirectory
+- `rate_limiting/` – Subdirectory
+- `relations/` – Subdirectory
+- `release/` – Subdirectory
+- `rlhf/` – Subdirectory
+- `scheduler/` – Subdirectory
+- `schemas/` – Subdirectory
+- `scrape/` – Subdirectory
+- `search/` – Subdirectory
+- `security/` – Subdirectory
+- `semantic_router/` – Subdirectory
+- `serialization/` – Subdirectory
+- `service_mesh/` – Subdirectory
+- `simulation/` – Subdirectory
+- `skills/` – Subdirectory
+- `slm/` – Subdirectory
+- `smart_contracts/` – Subdirectory
+- `softmax_opt/` – Subdirectory
+- `soul/` – Subdirectory
+- `spatial/` – Subdirectory
+- `ssm/` – Subdirectory
+- `static_analysis/` – Subdirectory
+- `streaming/` – Subdirectory
+- `synthetic_data/` – Subdirectory
+- `system_discovery/` – Subdirectory
+- `telemetry/` – Subdirectory
+- `template/` – Subdirectory
+- `templating/` – Subdirectory
+- `terminal_interface/` – Subdirectory
+- `test_agentic_memory_coverage.py` – File
+- `test_audio_streaming.py` – File
+- `test_cerebrum_coverage.py` – File
+- `test_cerebrum_deep_coverage.py` – File
+- `test_cli_coverage.py` – File
+- `test_cloud_coverage.py` – File
+- `test_cloud_deep_coverage.py` – File
+- `test_collaboration_coverage.py` – File
+- `test_config_management_coverage.py` – File
+- `test_cost_hooks.py` – File
+- `test_coverage_smoke.py` – File
+- `test_credential_rotation.py` – File
+- `test_data_visualization_coverage.py` – File
+- `test_documentation_coverage.py` – File
+- `test_generated_addition.py` – File
+- `test_generated_async_example.py` – File
+- `test_generated_example.py` – File
+- `test_generated_math_functions.py` – File
+- `test_git_operations_coverage.py` – File
+- `test_hermes_client.py` – File
+- `test_hermes_session.py` – File
+- `test_hermes_templates.py` – File
+- `test_physical_management_coverage.py` – File
+- `test_rate_limiter.py` – File
+- `test_vad.py` – File
+- `test_vision.py` – File
+- `testing/` – Subdirectory
+- `text_to_sql/` – Subdirectory
+- `tokenizer/` – Subdirectory
+- `tool_use/` – Subdirectory
+- `tree_sitter/` – Subdirectory
+- `trust_gateway/` – Subdirectory
+- `utils/` – Subdirectory
+- `validation/` – Subdirectory
+- `vector_store/` – Subdirectory
+- `video/` – Subdirectory
+- `vision/` – Subdirectory
+- `visualization/` – Subdirectory
+- `wallet/` – Subdirectory
+- `website/` – Subdirectory
+- `workflow/` – Subdirectory
+- `workflow_testing/` – Subdirectory
 
-## Running Tests
-
-```bash
-# All tests
-uv run pytest
-
-# Specific module
-uv run pytest src/codomyrmex/tests/unit/<module>/ -v
-
-# Pattern match
-uv run pytest -k "test_name_pattern"
-
-# By marker
-uv run pytest -m unit
-uv run pytest -m "unit and not slow"
-
-# Skip coverage (faster for dev)
-uv run pytest --no-cov -v
-
-# Single file
-uv run pytest src/codomyrmex/tests/unit/orchestrator/test_core.py -v
-```
-
-## Test Markers
-
-Defined in `pytest.ini`. Use `@pytest.mark.<marker>` on test classes or functions:
-
-| Marker | When to use |
-|--------|-------------|
-| `unit` | Pure unit tests (default) |
-| `integration` | Tests that connect multiple modules |
-| `slow` | Tests that take >5 seconds |
-| `performance` | Benchmarks and timing tests |
-| `network` | Tests requiring network access |
-| `database` | Tests requiring database connection |
-| `external` | Tests requiring external services (API keys) |
-| `security` | Security-focused tests |
-| `asyncio` | Async tests (auto-detected via asyncio_mode=auto) |
-| `crypto` | Cryptography tests |
-| `orchestrator` | Orchestrator/workflow tests |
-
-## Zero-Mock Policy
-
-**This codebase never uses mocks.** Tests must use real objects or skip:
-
-```python
-# WRONG — never do this
-from unittest.mock import MagicMock
-mock_logger = MagicMock()
-
-# CORRECT — use real objects or skip with guard
-import pytest
-@pytest.mark.skipif(
-    not os.getenv("DATABASE_URL"),
-    reason="Requires DATABASE_URL environment variable"
-)
-def test_with_database():
-    db = RealDatabase(os.getenv("DATABASE_URL"))
-    ...
-```
-
-## Skip Policy
-
-Use `@pytest.mark.skipif` at **module level** (not per-test) for external dependencies:
-
-```python
-import pytest
-import importlib.util
-
-# Module-level guard — if SDK not installed, skip all tests in file
-pytest.importorskip("some_sdk", reason="Requires optional SDK: uv sync --extra sdk")
-
-class TestModule:
-    def test_feature(self):
-        ...
-```
-
-## Adding New Tests
-
-1. Create `src/codomyrmex/tests/unit/<module>/test_<module>.py`
-2. Follow the naming pattern: `class Test<Feature>:`, `def test_<behavior>(self):`
-3. Use `tmp_path` pytest fixture for filesystem isolation
-4. Mark with appropriate markers
-5. No mocks — if you can't test without mocking, the code needs refactoring
-
-## Coverage
-
-Current baseline: **31%** (Feb 2026). Target: **35%**.
-
-Run coverage report:
-```bash
-uv run pytest --cov=src/codomyrmex --cov-report=term-missing
-```
-
-The `htmlcov/` directory contains the visual coverage report after a test run.
+## Navigation
+- **Parent Directory**: [tests](../README.md)
+- **Project Root**: ../../../../README.md

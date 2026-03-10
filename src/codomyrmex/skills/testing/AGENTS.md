@@ -1,31 +1,39 @@
-# Testing - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/skills/testing
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Test files and validation suites.
 
-Skill testing framework providing test execution, metadata validation, and performance benchmarking for Codomyrmex skill instances.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `SkillTestRunner` | Runs test cases, validates skill metadata, and benchmarks skill performance |
-| `SkillTestResult` | Dataclass: name, passed, expected, actual, error |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `test_skill(skill, test_cases)` accepts test case dicts with keys: `name`, `inputs` (kwargs dict), `expected` (optional).
-- If `expected` is provided, the test passes when `actual == expected`. If omitted, the test passes if no exception is raised.
-- `validate_skill(skill)` checks for `metadata` attribute (with `name`, `description`, `id` fields) and `execute`/`validate_params` methods.
-- `benchmark_skill(skill, iterations, **kwargs)` runs the skill `iterations` times (default 100) and returns min/max/avg/total times and error count.
-- Skill instances must have an `execute(**kwargs)` method.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent module**: `skills/` provides skill discovery and invocation management.
-- **Skill interface**: Tested skills must implement `execute()`, `validate_params()`, and expose a `metadata` attribute with `name`, `description`, `id`.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [skills/](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md)
-- **Root**: [/README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [skills](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

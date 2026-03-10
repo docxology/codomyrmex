@@ -1,13 +1,12 @@
 # standardization
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-API standardization patterns for consistent request/response formats and error handling.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `PAI.md` – File
@@ -16,9 +15,9 @@ API standardization patterns for consistent request/response formats and error h
 - `__init__.py` – File
 - `api_versioning.py` – File
 - `graphql_api.py` – File
+- `py.typed` – File
 - `rest_api.py` – File
 
 ## Navigation
-
 - **Parent Directory**: [api](../README.md)
 - **Project Root**: ../../../../README.md

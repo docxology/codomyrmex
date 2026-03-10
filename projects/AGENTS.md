@@ -1,80 +1,35 @@
 # Codomyrmex Agents — projects
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Project workspace containing working projects that use Codomyrmex functionality. Includes templates and reference implementations for building new projects.
-
-## Directory Structure
-
-```text
-projects/
-├── test_project/        # Reference implementation project
-│   ├── src/             # Project source code
-│   ├── data/            # Input and processed data
-│   ├── reports/         # Generated reports
-│   ├── tests/           # Project-specific tests
-│   └── config/          # Project configuration
-└── (future projects)    # Additional project workspaces
-```
+Project workspace and templates.
 
 ## Active Components
-
-| Component | Type | Description |
-|-----------|------|-------------|
-| `test_project/` | Project | 100% Zero-Mock Reference implementation |
-| [README.md](README.md) | Doc | Directory overview |
-| [SPEC.md](SPEC.md) | Doc | Functional specification |
-| [PAI.md](PAI.md) | Doc | Personal AI considerations |
-
-## Agent Guidelines
-
-### Project Creation Standards
-
-1. **Structure**: Follow test_project template structure
-2. **RASP Compliance**: Each subdirectory needs README, AGENTS, SPEC, PAI
-3. **Configuration**: Use `config/` for project-specific settings
-4. **Documentation**: Document project purpose and usage
-
-### Reference Implementation: test_project
-
-`test_project/` demonstrates how to:
-
-- Integrate Codomyrmex modules
-- Structure project directories
-- Configure workflows
-- Generate reports and visualizations
-
-### Creating New Projects
-
-1. Copy `test_project/` as template
-2. Rename and update `README.md`
-3. Modify `config/` for your use case
-4. Implement in `src/`
-5. Add tests in `tests/`
-
-## Project Capabilities
-
-Projects can leverage all Codomyrmex modules:
-
-| Capability | Module | Example |
-|------------|--------|---------|
-| Data visualization | `data_visualization` | Charts, plots |
-| Code analysis | `static_analysis` | Quality reports |
-| AI generation | `agents/ai_code_editing` | Code synthesis |
-| Orchestration | `orchestrator` | Workflow automation |
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `test_project/` – Directory containing test_project components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Projects should not modify core Codomyrmex modules
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Keep project-specific code isolated in `src/`
-- Document all project dependencies
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent**: [../README.md](../README.md) - Project root
-- **📦 Source**: [../src/codomyrmex/](../src/codomyrmex/) - Available modules
-- **📖 Docs**: [../docs/](../docs/) - Codomyrmex documentation
-- **🎯 Test Project**: [test_project/README.md](test_project/README.md) - Reference project
+- **🏠 Project Root**: ../README.md - Main project documentation

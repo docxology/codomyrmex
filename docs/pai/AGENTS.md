@@ -1,85 +1,50 @@
 # Codomyrmex Agents — docs/pai
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Documentation module for the PAI-Codomyrmex integration. Provides architecture references, tool inventories, API documentation, and workflow guides. The PAI Command Center (port 8888) is a 15-tab modular SPA served from `src/codomyrmex/agents/pai/pm/`.
+Documentation files and guides.
 
 ## Active Components
-
-| File | Description |
-|------|-------------|
-| `README.md` | Index page with full 15-tab screenshot gallery |
-| `architecture.md` | MCP bridge architecture and trust model |
-| `dashboard-setup.md` | Both dashboards, modular server architecture, API endpoints |
-| `tools-reference.md` | Complete tool inventory (22 static + dynamic) |
-| `api-reference.md` | Python API reference (PAIBridge, TrustRegistry) |
-| `workflows.md` | Workflow documentation and Algorithm mapping |
-| `skills-and-commands.md` | External Claude Code skills and slash commands |
-| `on-ramp.md` | 5-level flexibility curriculum — Observer → Orchestrator |
-| `screenshots/` | PAI Dashboard interface screenshots (15 tabs) |
-
-## Visual Reference
-
-The PAI Dispatch tab demonstrates Algorithm phase execution with per-mission action buttons:
-
-![PAI Dispatch — Mission action center with Summarize, Scope & Plan, Review, Enact Next Step](screenshots/pai_dispatch.png)
-
-The Network tab shows the agent's awareness of mission→project→task relationships:
-
-![PAI Network — Force-directed graph visualization with missions (blue), projects (cyan), tasks (gray)](screenshots/pai_network.png)
-
-## Agent Coordination Rules
-
-When PAI sub-agents (Engineer, Architect, QATester, etc.) use codomyrmex tools from this docs folder:
-
-### Which Agent Uses What
-
-| PAI Agent Type | Primary Docs | Primary Tools |
-|----------------|-------------|---------------|
-| **Engineer** | `tools-reference.md`, `api-reference.md` | `write_file`, `run_command`, `run_tests`, `call_module_function` |
-| **Architect** | `architecture.md`, `tools-reference.md` | `list_modules`, `module_info`, `list_module_functions`, `pai_status` |
-| **QATester** | `workflows.md`, `api-reference.md` | `run_tests`, `scan_vulnerabilities`, `validate_schema` |
-| **Researcher** | `README.md`, `architecture.md` | `read_file`, `search_documents`, `get_module_readme` |
-| **General-purpose** | All docs | All safe tools (post-`/codomyrmexVerify`) |
-
-### Trust Protocol for Agents
-
-1. All agents start UNTRUSTED — read-only tools work immediately
-2. Before any write/execute operation: run `/codomyrmexVerify` (promotes ~469 safe tools to VERIFIED)
-3. For destructive tools: run `/codomyrmexTrust` per tool name explicitly
-4. Trust persists to `~/.codomyrmex/trust_ledger.json` across the session
-5. If unsure of trust level: call `GET /api/trust/status` or `codomyrmex.pai_status`
-
-### Boundary Rules
-
-- **docs/pai/**: Read-only documentation — never write to these files from agent code
-- **src/codomyrmex/agents/pai/**: Implementation — modify only via explicit user request
-- **~/.claude/**: PAI private config — codomyrmex tools read but never write here
-- **~/.codomyrmex/**: Trust ledger — only trust_gateway.py writes here
-
-### Inter-Agent Communication
-
-Agents do not communicate directly. PAI orchestrates via:
-
-- Filesystem: `MEMORY/WORK/<task>/` for handoffs
-- MCP protocol: Codomyrmex tools shared across all agents in a session
-- Trust ledger: Shared trust state persists across agent calls in same session
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `api-reference.md` – Project file
+- `architecture.md` – Project file
+- `dashboard-setup.md` – Project file
+- `on-ramp.md` – Project file
+- `screenshots/` – Directory containing screenshots components
+- `skills-and-commands.md` – Project file
+- `tools-reference.md` – Project file
+- `workflows.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Reference only**: This folder contains documentation, not executable code
-2. **No duplication**: Expands on the root PAI.md bridge doc, does not duplicate it
-3. **Synchronized**: Counts and versions match the implementation in `src/codomyrmex/agents/pai/`
-4. **Visual-first**: Every doc embeds relevant interface screenshots for context
-5. **Trust-aware**: Agents respect the 3-tier trust model before any destructive operation
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `api-reference.md`
+- `architecture.md`
+- `dashboard-setup.md`
+- `on-ramp.md`
+- `skills-and-commands.md`
+- `tools-reference.md`
+- `workflows.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **README**: [README.md](README.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-- **Dashboard Setup**: [dashboard-setup.md](dashboard-setup.md)
-- **Parent**: [docs/](../)
-- **Root PAI Bridge**: [../../PAI.md](../../PAI.md)
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

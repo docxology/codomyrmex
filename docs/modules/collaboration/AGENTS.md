@@ -1,63 +1,41 @@
-# Agent Guidelines - Collaboration
+# Codomyrmex Agents — docs/modules/collaboration
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Multi-agent collaboration, shared state, and coordination patterns.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **CollaborationSession** — Shared workspace for agents
-- **MessageBus** — Inter-agent messaging
-- **SharedState** — Synchronized state
-- **TaskPool** — Distributed task allocation
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use sessions** — Create sessions for related work
-2. **Message async** — Prefer async messaging
-3. **Lock shared state** — Use locks for concurrent access
-4. **Acknowledge tasks** — Confirm task completion
-5. **Handle failures** — Implement task retry logic
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.collaboration import (
-    CollaborationSession, MessageBus, SharedState
-)
-
-# Create collaboration session
-session = CollaborationSession("project_analysis")
-session.add_agent("analyzer")
-session.add_agent("validator")
-
-# Shared state
-state = SharedState()
-state.set("progress", 0.5)
-progress = state.get("progress")
-
-# Inter-agent messaging
-bus = MessageBus()
-bus.subscribe("results", handle_result)
-bus.publish("tasks", {"type": "analyze", "file": "main.py"})
-```
-
-## Testing Patterns
-
-```python
-# Verify session
-session = CollaborationSession("test")
-session.add_agent("a1")
-assert "a1" in session.agents
-
-# Verify shared state
-state = SharedState()
-state.set("key", "value")
-assert state.get("key") == "value"
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,32 +1,45 @@
-# Vision Module — Agentic Guide
+# Codomyrmex Agents — src/codomyrmex/vision
 
-**Module**: `codomyrmex.vision` | **Version**: v1.1.9
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Quick Reference
+## Purpose
+Contains components for the src system.
 
-```python
-from codomyrmex.vision import VLMClient, PDFExtractor, AnnotationExtractor
-```
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `annotation_extractor.py` – Project file
+- `models.py` – Project file
+- `pdf_extractor.py` – Project file
+- `vlm_client.py` – Project file
 
-## Agent Instructions
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Check availability** before using VLM: `VLMClient().is_available()`
-2. **PDF text**: Use `PDFExtractor.extract_text()` first; fall back to `extract_with_vlm()` for scanned docs
-3. **Annotations**: Parse JSON from VLM responses; fallback produces `raw_description` annotations
-4. **Local-only**: All VLM calls go through local Ollama — no external API keys required
-5. **Zero-Mock**: All tests use real file I/O, real JSON parsing, and real Ollama (when available)
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `annotation_extractor.py`
+- `models.py`
+- `pdf_extractor.py`
+- `vlm_client.py`
 
-## Capabilities
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Capability | Tool | Notes |
-|-----------|------|-------|
-| Image analysis | `VLMClient.analyze_image()` | Requires Ollama + llava |
-| Text extraction | `VLMClient.extract_text()` | OCR-like via VLM prompt |
-| PDF parsing | `PDFExtractor.extract_text()` | Requires pymupdf |
-| Annotation | `AnnotationExtractor.extract_annotations()` | JSON response parsing |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Testing
-
-```bash
-uv run pytest src/codomyrmex/tests/unit/test_vision.py -v --no-cov
-```
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

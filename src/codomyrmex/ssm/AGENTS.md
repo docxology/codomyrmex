@@ -1,52 +1,45 @@
-# SSM Module -- Agent Integration
+# Codomyrmex Agents — src/codomyrmex/ssm
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides state space model primitives (Mamba/S6) for AI agents that need sequence modeling capabilities beyond attention-based Transformers. Useful for long-sequence tasks where O(N) complexity is required.
+## Purpose
+Contains components for the src system.
 
-## Available Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mamba.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-| Tool | Category | Description |
-|------|----------|-------------|
-| `ssm_forward` | ssm | Run forward pass through stacked Mamba blocks |
-| `flash_attention_forward` | neural | Run Flash Attention with standard-attention verification |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Usage Patterns
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mamba.py`
+- `mcp_tools.py`
+- `py.typed`
 
-### Sequence Modeling Agent
-```
-1. Call ssm_forward with desired sequence_length, d_model, d_state
-2. Inspect output_shape to verify dimensions
-3. Compare with transformer_encode for attention-based alternative
-```
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Architecture Comparison Agent
-```
-1. Call ssm_forward (O(N) complexity) for long sequences
-2. Call flash_attention_forward (O(N) memory, O(N^2) compute) for comparison
-3. Evaluate trade-offs: SSM for speed, attention for quality on short sequences
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Key Parameters
-
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `d_model` | 16 | Model dimension (width) |
-| `d_state` | 8 | SSM hidden state dimension |
-| `n_layers` | 2 | Number of stacked Mamba blocks |
-| `sequence_length` | 8 | Input sequence length |
-
-## Constraints
-
-- Pure NumPy implementation: suitable for prototyping and testing, not production inference
-- Random weight initialization: outputs are not meaningful without training
-- Sequential scan: no parallel scan optimization (would need GPU kernels)
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
-| **Architect** | Read + Architecture review | Read-only | SAFE |
-| **QATester** | Validation + output verification | Read + Inspect | SAFE |
-| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

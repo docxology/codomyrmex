@@ -99,9 +99,21 @@ def validate_agents_structure(
 
     results: list[ValidationResult] = []
 
+    # Directories to completely ignore during validation
+    IGNORE_DIRS = {
+        ".git", "node_modules", "output", "build", "dist",
+        ".venv", "venv", "__pycache__", ".pytest_cache", ".mypy_cache",
+        ".cursor", ".vscode", ".cache", "vendor", ".claude", ".gitnexus",
+        ".sisyphus", ".benchmarks", ".pipelines", ".workflows",
+        ".github", ".docusaurus", "@output", ".codomyrmex"
+    }
+
     # Find all AGENTS.md files
-    agents_files = list(repo_root.rglob("AGENTS.md"))
-    agents_files = [f for f in agents_files if ".git" not in str(f)]
+    agents_files = []
+    for f in repo_root.rglob("AGENTS.md"):
+        # Check if any parent directory is in IGNORE_DIRS
+        if not set(f.parts).intersection(IGNORE_DIRS):
+            agents_files.append(f)
 
     if not agents_files:
         print("⚠️  No AGENTS.md files found")

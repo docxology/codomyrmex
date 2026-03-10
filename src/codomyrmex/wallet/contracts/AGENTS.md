@@ -1,39 +1,51 @@
-# Codomyrmex Agents -- src/codomyrmex/wallet/contracts
+# Codomyrmex Agents — src/codomyrmex/wallet/contracts
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides smart contract modeling, transaction building, event logging, and a versioned contract registry with lifecycle management for blockchain wallet operations.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `models.py` | `Address`, `Transaction`, `ContractFunction` | Core data models for blockchain addresses (with network validation), transactions, and ABI-parsed contract functions |
-| `models.py` | `Network`, `TransactionStatus` | Enums for supported blockchain networks (Ethereum, Polygon, Arbitrum, etc.) and transaction lifecycle states |
-| `contract.py` | `Contract` | Represents a smart contract with ABI-parsed functions; provides `view_functions`, `payable_functions`, and `validate` |
-| `contract.py` | `ContractCall` | Fluent builder for constructing contract function calls with arguments, value, and gas limit; encodes to `Transaction` |
-| `builders.py` | `TransactionBuilder` | Fluent API for constructing transactions with validation, auto-gas estimation, and chain ID support |
-| `builders.py` | `estimate_gas` / `build_batch` | Gas estimation from calldata bytes and batch transaction creation from transfer specs |
-| `events.py` | `ContractEvent`, `EventFilter`, `EventLog` | Event dataclass, fluent query builder for filtering events by name/block/args, and event store with aggregation and export |
-| `registry.py` | `ContractRegistry` | Named contract storage with versioning, lifecycle management (DRAFT to ARCHIVED), and tag/status-based filtering |
-| `registry.py` | `ContractVersion`, `ContractStatus` | Version snapshot dataclass and lifecycle status enum |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `builders.py` – Project file
+- `contract.py` – Project file
+- `events.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `registry.py` – Project file
+- `utils.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `Address.is_valid` checks EVM-compatible addresses for `0x` prefix and 42-character length; Solana addresses only require non-empty values.
-- `TransactionBuilder.validate` enforces minimum gas limit of 21,000, non-negative values and nonces, and requires data for contract creation (no `to` address).
-- `ContractRegistry` enforces lifecycle transitions: DRAFT to DEPLOYED to ACTIVE to DEPRECATED to ARCHIVED; invalid transitions return `False`.
-- `EventFilter.matches` applies all criteria as an AND conjunction -- all set filters must pass for a match.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `builders.py`
+- `contract.py`
+- `events.py`
+- `models.py`
+- `py.typed`
+- `registry.py`
+- `utils.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Python standard library (`hashlib`, `dataclasses`, `enum`); no external blockchain SDKs
-- **Used by**: `wallet/security` (key management references wallet IDs), wallet CLI commands
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [wallet](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

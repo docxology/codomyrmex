@@ -1,41 +1,45 @@
 # Codomyrmex Agents — src/codomyrmex/agents/specialized
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Autonomous code improvement subsystem that detects anti-patterns via regex-based analysis, proposes fixes with confidence scoring, generates regression tests, and renders markdown improvement reports. Also provides a generate-test-review loop for iterative code generation convergence.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `improvement_pipeline.py` | `ImprovementPipeline` | Full cycle: analyze anti-patterns -> generate fixes -> generate tests -> review verdict |
-| `improvement_pipeline.py` | `AntiPatternDetector` | Regex-based scanner for bare_except, mutable_default, star_import, print_debug, todo_fixme |
-| `improvement_report.py` | `ImprovementReport` | Complete report with anti-patterns, proposed changes, test results, verdict, markdown rendering |
-| `improvement_report.py` | `AntiPattern` | Detected pattern with name, severity, file path, line range, snippet |
-| `improvement_report.py` | `ProposedChange` | Proposed fix with old/new code, rationale, confidence, risk level |
-| `improvement_report.py` | `ReviewVerdict` / `RiskLevel` | Enums: APPROVE/REJECT/REVISE and LOW/MEDIUM/HIGH/CRITICAL |
-| `improvement_report.py` | `TestSuiteResult` | Test generation results: total, passed, failed, errors, test source code |
-| `improvement_config.py` | `ImprovementConfig` | Safety limits: max_changes_per_run, min_confidence, severity_threshold, auto_apply flag |
-| `review_loop.py` | `ReviewLoop` | Generate -> test -> review cycle using `CodeGenerator` and `TestGenerator` until approval |
-| `review_loop.py` | `ReviewResult` / `ReviewLoopResult` | Iteration result and overall convergence status |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `improvement_config.py` – Project file
+- `improvement_pipeline.py` – Project file
+- `improvement_report.py` – Project file
+- `review_loop.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `AntiPatternDetector` ships with 5 built-in patterns: bare_except (0.7), mutable_default (0.8), star_import (0.5), print_debug (0.3), todo_fixme (0.2). Severity threshold filters patterns below the configured floor.
-- `ImprovementPipeline.improve()` enforces `max_changes_per_run` and `min_confidence` gates. Only changes with confidence >= threshold are proposed.
-- Review verdict is APPROVE when average confidence >= min_confidence, REVISE when below threshold, REJECT when no changes were generated.
-- `ReviewLoop._review()` uses a 4-criterion scoring system: has functions (+0.3), has tests (+0.3), compiles (+0.2), reasonable size (+0.2). Approval at >= 0.7 by default.
-- `ImprovementReport.to_markdown()` renders diff-formatted output with anti-patterns, proposed changes, and test results.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `improvement_config.py`
+- `improvement_pipeline.py`
+- `improvement_report.py`
+- `review_loop.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring`, `codomyrmex.coding.generator.CodeGenerator`, `codomyrmex.coding.test_generator.TestGenerator`
-- **Used by**: Agent improvement workflows, PAI VERIFY phase post-processing
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [agents](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

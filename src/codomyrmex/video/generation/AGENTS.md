@@ -1,62 +1,37 @@
-# Video Generation -- Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/video/generation
 
-**Version**: v1.1.9 | **Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Contains components for the src system.
 
-Agent-facing reference for the `video.generation` submodule. Provides text-to-video generation via Google AI Veo 2.0, accessed through the `VideoGenerator` class.
-
-## Key Files
-
-| File | Class / Export | Role |
-|------|---------------|------|
-| `video_generator.py` | `VideoGenerator` | Wraps `GeminiClient.generate_videos` for text-to-video generation |
-| `video_generator.py` | `VideoGenerator.__init__` | Accepts optional `GeminiClient`; instantiates a new one if `None` |
-| `video_generator.py` | `VideoGenerator.generate` | Accepts `prompt` (str), `model` (str, default `veo-2.0-generate-001`), returns `list[dict]` |
-| `__init__.py` | `VideoGenerator` | Re-exported for `from codomyrmex.video.generation import VideoGenerator` |
-
-## MCP Tools Available
-
-None. This submodule has no `mcp_tools.py` and is not auto-discovered via the MCP bridge.
-
-## Agent Instructions
-
-1. **Instantiation**: Create `VideoGenerator()` for default Gemini client, or pass a pre-configured `GeminiClient` instance.
-2. **Prompt quality**: Provide descriptive, specific text prompts for better video generation results.
-3. **Model selection**: The default model is `veo-2.0-generate-001`. Override via the `model` parameter if newer models become available.
-4. **Return format**: `generate()` returns a `list[dict[str, Any]]` -- each dict represents a generated video object from the Google AI response.
-5. **Error handling**: Failures propagate from `GeminiClient`; wrap calls in try/except when used in automated pipelines.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `video_generator.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Requires `GOOGLE_API_KEY` environment variable (via `GeminiClient`).
-- Network access to Google AI APIs is required at generation time.
-- No local file I/O is performed by this module; callers handle persistence of returned video data.
-- No MCP tool registration; this module is consumed as a Python library only.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `video_generator.py`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-# Agent workflow: generate and persist
-from codomyrmex.video.generation import VideoGenerator
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-gen = VideoGenerator()
-videos = gen.generate("Underwater coral reef with tropical fish")
-for i, video in enumerate(videos):
-    # Process video dict as needed
-    print(f"Video {i}: {video}")
-```
-
-## PAI Agent Role Access Matrix
-
-| Agent Role | Access Level | Notes |
-|-----------|-------------|-------|
-| Engineer | Full | Primary consumer for video generation workflows |
-| Architect | Read-only | Architecture review of generation pipeline |
-| QA Tester | Full | Integration testing with API |
-| Designer | Full | Content generation for visual assets |
-
-## Navigation
-
-- **Parent**: [video/AGENTS.md](../AGENTS.md)
-- **RASP**: [README.md](README.md) | **AGENTS.md** | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [video](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

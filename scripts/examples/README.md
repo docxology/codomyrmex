@@ -1,6 +1,6 @@
 # examples
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -11,6 +11,7 @@ Example implementations and demonstrations.
 - `README.md` – File
 - `SPEC.md` – File
 - `orchestrate.py` – File
+- `orchestration_demo.py` – File
 
 ## Navigation
 - **Parent Directory**: [scripts](../README.md)

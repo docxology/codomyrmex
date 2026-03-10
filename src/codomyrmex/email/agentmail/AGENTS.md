@@ -1,106 +1,46 @@
-# AgentMail — AI Agent Usage Guidelines
+# Codomyrmex Agents — src/codomyrmex/email/agentmail
 
-## Overview
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-This module is purpose-built for AI agents. AgentMail provides API-key-based
-authentication that works without interactive OAuth flows — ideal for autonomous
-agents operating in production environments.
+## Purpose
+Contains components for the src system.
 
-## Zero-Mock Policy
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mixins/` – Directory containing mixins components
+- `models.py` – Project file
+- `provider.py` – Project file
+- `py.typed` – Project file
 
-**Never mock, stub, or fake AgentMail responses in production code.**
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Tests use `@pytest.mark.skipif(not os.getenv("AGENTMAIL_API_KEY"), ...)` to skip gracefully
-- No `MagicMock`, `monkeypatch`, `patch`, or `unittest.mock` in test files
-- Unimplemented features raise `NotImplementedError`, not silent fallbacks
-- Failures are explicit via typed exceptions, never swallowed
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `models.py`
+- `provider.py`
+- `py.typed`
 
-## Authentication
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-# Correct — reads from environment
-provider = AgentMailProvider()
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Also correct — explicit key for testing
-provider = AgentMailProvider(api_key=os.environ["AGENTMAIL_API_KEY"])
-
-# WRONG — never hardcode credentials
-provider = AgentMailProvider(api_key="am_us_hardcoded_key")  # FORBIDDEN
-```
-
-## Recommended Usage Patterns
-
-### Inbox-per-Agent Pattern
-
-Each AI agent gets a dedicated inbox for isolation:
-
-```python
-inbox = provider.create_inbox(
-    username=f"agent-{agent_id}",
-    display_name=f"Agent {agent_id} inbox",
-)
-# Use inbox.inbox_id for all subsequent operations
-```
-
-### Webhook for Real-time Events
-
-Register a webhook so the agent receives incoming messages without polling:
-
-```python
-webhook = provider.create_webhook(
-    url="https://your-agent-server/email-events",
-    event_types=["message.received"],
-    inbox_ids=[inbox.inbox_id],
-)
-```
-
-### Pod for Multi-agent Coordination
-
-Group related agent inboxes into a pod:
-
-```python
-pod = provider.create_pod(name="research-team")
-# Then create inboxes with pod_id=pod.pod_id
-```
-
-## Error Handling
-
-Always catch specific exceptions:
-
-```python
-from codomyrmex.email.exceptions import (
-    EmailAuthError,
-    EmailAPIError,
-    MessageNotFoundError,
-)
-
-try:
-    msg = provider.get_message(message_id)
-except MessageNotFoundError:
-    # Message was already processed or deleted
-    pass
-except EmailAuthError:
-    # API key is invalid or expired
-    raise
-except EmailAPIError as exc:
-    # Rate limiting, server errors, etc.
-    logger.error("AgentMail API error: %s", exc)
-```
-
-## MCP Tool Usage
-
-The 8 MCP tools are registered under the `"email"` category and are
-auto-discovered by the PAI MCP bridge. Use them in agent prompts:
-
-```
-Use agentmail_list_messages to check for new emails, then
-agentmail_reply_to_message to respond to any that need attention.
-```
-
-## Limitations
-
-- Free-text search (`query=` parameter) is not supported by AgentMail — the `query`
-  argument in `list_messages` is accepted for interface compatibility but ignored
-- Individual message deletion is not available; `delete_message` deletes the
-  entire thread containing the specified message
-- Attachment binary data requires a separate `get_message_attachment` call
+## Navigation Links
+- **📁 Parent Directory**: [email](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

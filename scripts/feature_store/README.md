@@ -1,17 +1,17 @@
-# Feature Store Orchestrator
+# feature_store
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-The `feature_store_demo.py` script is a thin orchestrator that demonstrates the core capabilities of the `codomyrmex.feature_store` module.
 
-## Usage
-Run the script directly from the project root:
-```bash
-python3 scripts/feature_store/feature_store_demo.py
-```
+Automation and utility scripts.
 
-## Features Demonstrated
-- Feature definition and registration.
-- Batch ingestion of data.
-- Feature vector retrieval with defaults.
-- On-the-fly feature transformations.
-- Type validation and error handling.
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `feature_store_demo.py` – File
+
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

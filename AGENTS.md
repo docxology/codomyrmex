@@ -24,7 +24,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 | **projects/** | Project workspace and templates | [projects/README.md](projects/README.md) |
 | **src/codomyrmex/examples/** | Executable examples and demos | [src/codomyrmex/examples/README.md](src/codomyrmex/examples/README.md) |
 
-### Repository Root Files
+## Key Files
 
 - `README.md` - Primary entry point for users and contributors
 - `AGENTS.md` - This file: agent coordination and navigation
@@ -36,6 +36,18 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `uv.lock` - Python dependency lock file
 - `start_here.sh` - Interactive entry point for exploration
 - `package.json` - Node.js package configuration
+
+## Dependencies
+
+- All dependencies are managed via `uv` (for Python) and `npm`/`yarn` (for JS/TS).
+- See `pyproject.toml` and `package.json` for explicit version constraints.
+- No direct dependencies between modular layers are permitted without interface contracts.
+
+## Development Guidelines
+
+- **Zero-Mock Policy:** All tests must use real components. No mocks.
+- **Coverage Gate:** Ensure test coverage exceeds 35.0% on new features.
+- **Documentation:** Maintain `AGENTS.md`, `README.md`, and `SPEC.md` parity on structural changes.
 
 ## Operating Contracts
 
@@ -423,9 +435,9 @@ Before completing significant changes:
 - **[Contributing](docs/project/contributing.md)** - Contributing guidelines and workflow
 
 <!-- gitnexus:start -->
-# GitNexus — Code Intelligence
+## GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (81530 symbols, 189037 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (82226 symbols, 190871 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -460,7 +472,7 @@ This project is indexed by GitNexus as **codomyrmex** (81530 symbols, 189037 rel
 ## Tools Quick Reference
 
 | Tool | When to use | Command |
-|------|-------------|---------|
+| ------ | ------------- | --------- |
 | `query` | Find code by concept | `gitnexus_query({query: "auth validation"})` |
 | `context` | 360-degree view of one symbol | `gitnexus_context({name: "validateUser"})` |
 | `impact` | Blast radius before editing | `gitnexus_impact({target: "X", direction: "upstream"})` |
@@ -471,7 +483,7 @@ This project is indexed by GitNexus as **codomyrmex** (81530 symbols, 189037 rel
 ## Impact Risk Levels
 
 | Depth | Meaning | Action |
-|-------|---------|--------|
+| ------- | --------- | -------- |
 | d=1 | WILL BREAK — direct callers/importers | MUST update these |
 | d=2 | LIKELY AFFECTED — indirect deps | Should test |
 | d=3 | MAY NEED TESTING — transitive | Test if critical path |
@@ -479,7 +491,7 @@ This project is indexed by GitNexus as **codomyrmex** (81530 symbols, 189037 rel
 ## Resources
 
 | Resource | Use for |
-|----------|---------|
+| ---------- | --------- |
 | `gitnexus://repo/codomyrmex/context` | Codebase overview, check index freshness |
 | `gitnexus://repo/codomyrmex/clusters` | All functional areas |
 | `gitnexus://repo/codomyrmex/processes` | All execution flows |
@@ -488,6 +500,7 @@ This project is indexed by GitNexus as **codomyrmex** (81530 symbols, 189037 rel
 ## Self-Check Before Finishing
 
 Before completing any code modification task, verify:
+
 1. `gitnexus_impact` was run for all modified symbols
 2. No HIGH/CRITICAL risk warnings were ignored
 3. `gitnexus_detect_changes()` confirms changes match expected scope

@@ -132,6 +132,9 @@ class TestOpenCodeClient:
     def test_opencode_client_get_version(self):
         """Test getting OpenCode version information."""
         client = OpenCodeClient()
+        if not client.is_available():
+            pytest.skip("opencode command not available")
+
         version_info = client.get_opencode_version()
 
         # Test real result structure

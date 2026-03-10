@@ -1,37 +1,16 @@
-# Search Configuration
+# search
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Full-text, fuzzy, and indexed search across documents and code. Provides search indexing, query parsing, and ranked result retrieval.
+Configuration files and templates.
 
-## Configuration Options
-
-The search module operates with sensible defaults and does not require environment variable configuration. Search index storage path and tokenization settings are configurable. Fuzzy search threshold controls match sensitivity.
-
-## MCP Tools
-
-This module exposes 3 MCP tool(s):
-
-- `search_documents`
-- `search_index_query`
-- `search_fuzzy`
-
-## PAI Integration
-
-PAI agents invoke search tools through the MCP bridge. Search index storage path and tokenization settings are configurable. Fuzzy search threshold controls match sensitivity.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep search
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/search/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

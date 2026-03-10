@@ -1,6 +1,6 @@
 # feature_flags
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -11,6 +11,7 @@ Automation and utility scripts.
 - `README.md` – File
 - `SPEC.md` – File
 - `examples/` – Subdirectory
+- `feature_flags_utils.py` – File
 - `orchestrate.py` – File
 
 ## Navigation

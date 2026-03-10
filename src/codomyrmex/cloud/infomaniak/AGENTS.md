@@ -1,46 +1,56 @@
-# Codomyrmex Agents — cloud/infomaniak
+# Codomyrmex Agents — src/codomyrmex/cloud/infomaniak
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-AI agent integration guide for Infomaniak Public Cloud services.
+Contains components for the src system.
 
 ## Active Components
-
-| Component | Description |
-|-----------|-------------|
-| `auth.py` | Credential management and connection factories |
-| `compute/` | Instance lifecycle and compute resources |
-| `block_storage/` | Volume and backup operations |
-| `network/` | Networking, security, load balancing |
-| `object_storage/` | Swift and S3 object storage |
-| `identity/` | Application credentials and EC2 credentials |
-| `dns/` | DNS zones and reverse DNS |
-| `orchestration/` | Heat stack management |
-| `metering/` | Billing and usage data |
-| `newsletter/` | Campaign and mailing list management |
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `auth.py` – Project file
+- `base.py` – Project file
+- `block_storage/` – Directory containing block_storage components
+- `compute/` – Directory containing compute components
+- `dns/` – Directory containing dns components
+- `exceptions.py` – Project file
+- `identity/` – Directory containing identity components
+- `metering/` – Directory containing metering components
+- `network/` – Directory containing network components
+- `newsletter/` – Directory containing newsletter components
+- `object_storage/` – Directory containing object_storage components
+- `orchestration/` – Directory containing orchestration components
+- `py.typed` – Project file
+- `security.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Use Application Credentials (never raw user passwords)
-- Handle openstacksdk ImportError gracefully
-- Log all operations via module logger
-- Return consistent types (List[Dict], bool, Dict)
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `auth.py`
+- `base.py`
+- `exceptions.py`
+- `py.typed`
+- `security.py`
 
-## Environment Variables
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Variable | Purpose |
-|----------|---------|
-| `INFOMANIAK_APP_CREDENTIAL_ID` | Application credential ID |
-| `INFOMANIAK_APP_CREDENTIAL_SECRET` | Application credential secret |
-| `INFOMANIAK_AUTH_URL` | Identity endpoint override |
-| `INFOMANIAK_S3_ACCESS_KEY` | S3 access key |
-| `INFOMANIAK_S3_SECRET_KEY` | S3 secret key |
-| `INFOMANIAK_NEWSLETTER_TOKEN` | OAuth2 bearer token for Newsletter API |
-| `INFOMANIAK_NEWSLETTER_ID` | Newsletter product ID |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [cloud/](../AGENTS.md)
-- **🏠 Project Root**: ../../../../README.md
+- **📁 Parent Directory**: [cloud](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

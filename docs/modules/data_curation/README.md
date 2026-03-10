@@ -1,25 +1,15 @@
-# Data Curation
+# data_curation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Dataset curation, filtering, and quality pipeline tools.
+Documentation files and guides.
 
-## Source
-
-**Source code**: [`src/codomyrmex/data_curation/`](../../../src/codomyrmex/data_curation/)
-
-## MCP Tools
-
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
-
-## Related Documentation
-
-- [Source README](../../../src/codomyrmex/data_curation/README.md)
-- [API Specification](../../../src/codomyrmex/data_curation/API_SPECIFICATION.md)
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Parent**: [Module Documentation](../README.md)
-- **Root**: [docs/](../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

@@ -34,7 +34,7 @@ class TestCLIHelp:
             capture_output=True,
             text=True,
             timeout=30,
-            cwd="/Users/mini/Documents/GitHub/codomyrmex",
+            cwd=".",
         )
         assert result.returncode == 0
         assert "Codomyrmex Droid TODO Processor" in result.stdout
@@ -48,7 +48,7 @@ class TestCLIHelp:
             capture_output=True,
             text=True,
             timeout=30,
-            cwd="/Users/mini/Documents/GitHub/codomyrmex",
+            cwd=".",
         )
         assert "--config" in result.stdout
 
@@ -59,7 +59,7 @@ class TestCLIHelp:
             capture_output=True,
             text=True,
             timeout=30,
-            cwd="/Users/mini/Documents/GitHub/codomyrmex",
+            cwd=".",
         )
         assert "--list" in result.stdout
 
@@ -70,7 +70,7 @@ class TestCLIHelp:
             capture_output=True,
             text=True,
             timeout=30,
-            cwd="/Users/mini/Documents/GitHub/codomyrmex",
+            cwd=".",
         )
         assert "--non-interactive" in result.stdout
 
@@ -95,7 +95,7 @@ class TestCLIDryRun:
             capture_output=True,
             text=True,
             timeout=30,
-            cwd="/Users/mini/Documents/GitHub/codomyrmex",
+            cwd=".",
         )
         # Exit code should be 0 (dry-run, or no TODOs)
         assert result.returncode == 0
@@ -114,7 +114,7 @@ class TestCLIDryRun:
             capture_output=True,
             text=True,
             timeout=30,
-            cwd="/Users/mini/Documents/GitHub/codomyrmex",
+            cwd=".",
         )
         assert result.returncode == 0
 
@@ -139,7 +139,7 @@ class TestCLIList:
             capture_output=True,
             text=True,
             timeout=30,
-            cwd="/Users/mini/Documents/GitHub/codomyrmex",
+            cwd=".",
         )
         assert result.returncode == 0
         assert "TODO" in result.stdout

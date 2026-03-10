@@ -1,41 +1,45 @@
-# Core - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/plugin_system/core
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Plugin lifecycle management system providing registration, loading, dependency resolution, and hook-based extension for the Codomyrmex platform.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `PluginRegistry` | Central registry for plugin instances with category tracking and global hooks |
-| `PluginManager` | High-level manager coordinating registry, validator, and loader |
-| `PluginLoader` | Discovery and loading from `plugins/` and `~/.codomyrmex/plugins/` directories |
-| `Plugin` | Base class for all plugins with lifecycle methods and hook support |
-| `PluginInfo` | Dataclass: name, version, description, author, plugin_type, entry_point, dependencies |
-| `PluginType` | Enum: ANALYZER, FORMATTER, EXPORTER, IMPORTER, PROCESSOR, HOOK, UTILITY, ADAPTER, AGENT |
-| `PluginState` | Enum: 10 lifecycle states from UNKNOWN to UNLOADED |
-| `Hook` | Named hook with handler list and `emit()` method |
-| `LoadResult` | Dataclass: plugin_name, success, plugin_instance, error_message, warnings |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `plugin_loader.py` – Project file
+- `plugin_manager.py` – Project file
+- `plugin_registry.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `PluginRegistry.register()` rejects duplicate plugin names (logs warning, returns False).
-- `Plugin.initialize(config)` transitions state to ACTIVE; `shutdown()` transitions to SHUTTING_DOWN.
-- `PluginLoader` searches both local `plugins/` and user-global `~/.codomyrmex/plugins/` directories.
-- Plugin metadata may come from `plugin.json`, `plugin.yaml`, or `pyproject.toml`.
-- `PluginManager` is a singleton via `get_plugin_manager()`.
-- `PluginRegistry` is a singleton via `get_registry()`.
-- `check_dependencies(name)` returns list of missing dependency names.
-- Hook `emit()` catches and logs exceptions from individual handlers without propagating.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `plugin_loader.py`
+- `plugin_manager.py`
+- `plugin_registry.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent module**: `plugin_system/` exposes `plugin_scan_entry_points` and `plugin_resolve_dependencies` MCP tools.
-- **Global hooks**: `register_global_hook()` and `emit_global_hook()` for cross-plugin events.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [plugin_system/](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md)
-- **Root**: [/README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [plugin_system](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

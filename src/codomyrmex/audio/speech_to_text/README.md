@@ -1,28 +1,22 @@
-# Speech To Text
+# speech_to_text
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.audio.speech_to_text` | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Speech-to-text (STT) transcription module.
+Contains components for the src system.
 
-## Key Exports
-
-- **`WhisperModelSize`** — Available Whisper model sizes.
-- **`Word`** — A single word with timing information.
-- **`Segment`** — A transcription segment (typically a sentence or phrase).
-- **`TranscriptionResult`** — Complete transcription result.
-- **`TranscriptionConfig`** — Configuration for transcription operations.
-
-## Quick Start
-
-```python
-from codomyrmex.audio.speech_to_text import WhisperModelSize, Word, Segment
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `models.py` – File
+- `providers/` – Subdirectory
+- `py.typed` – File
+- `transcriber.py` – File
+- `vad.py` – File
 
 ## Navigation
-
-- **📁 Parent**: [Audio](../README.md)
-- **🏠 Root**: [codomyrmex](../../../../README.md)
+- **Parent Directory**: [audio](../README.md)
+- **Project Root**: ../../../../README.md

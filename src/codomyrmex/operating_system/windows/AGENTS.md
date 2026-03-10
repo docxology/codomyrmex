@@ -1,62 +1,39 @@
-# Windows Provider - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/operating_system/windows
 
-> Codomyrmex v1.1.9 | March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Contains components for the src system.
 
-The Windows provider implements `OSProviderBase` using native Windows commands (`wmic`, `systeminfo`) and PowerShell cmdlets (`Get-Process`, `Get-PSDrive`, `Get-Service`, `Get-NetAdapter`, `Get-NetIPAddress`) to gather real system information. It is auto-selected by `get_provider()` when `detect_platform()` returns `OSPlatform.WINDOWS`.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `WindowsProvider` |
-| `provider.py` | `WindowsProvider` class with five abstract method implementations, `_run()` and `_powershell()` helpers |
-
-## MCP Tools Available
-
-The Windows provider does not expose its own MCP tools. It is consumed indirectly through the parent `operating_system` module's generic API (`get_system_info()`, `list_processes()`, `get_disk_usage()`, `get_services()`, `get_network_interfaces()`).
-
-## Agent Instructions
-
-1. **Never instantiate directly** -- use `operating_system.get_provider()` which auto-detects the platform and returns the correct provider instance.
-2. **PowerShell is the primary command interface** -- the `_powershell()` helper runs one-liners via `powershell -NoProfile -Command`, with a 15-second timeout.
-3. **`wmic` is used for memory info** -- `wmic ComputerSystem get TotalPhysicalMemory` provides total physical memory; this command is deprecated in newer Windows versions but remains functional.
-4. **Service management uses Get-Service** -- `get_services()` calls the PowerShell `Get-Service` cmdlet and maps `Running` status to RUNNING, all others to STOPPED.
-5. **Network interfaces use Get-NetAdapter** -- combined with `Get-NetIPAddress` for IP addresses; both require PowerShell 3.0+.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `provider.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `WindowsProvider` implements all five abstract methods from `OSProviderBase`: `get_system_info`, `list_processes`, `get_disk_usage`, `get_services`, `get_network_interfaces`.
-- The inherited concrete methods `execute_command` and `get_environment_variables` work identically across all platforms.
-- `_run()` uses 15-second timeout (vs 10 seconds on macOS/Linux) to account for typically slower Windows command startup.
-- `_powershell()` wraps `_run()` with `powershell -NoProfile -Command` prefix.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `provider.py`
+- `py.typed`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.operating_system import get_provider, get_system_info
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Auto-detected usage (recommended)
-info = get_system_info()
-print(f"{info.hostname}: Windows {info.platform_version}")
-
-# Direct provider usage
-provider = get_provider()
-services = provider.get_services(pattern="sql")
-disks = provider.get_disk_usage()
-```
-
-## PAI Agent Role Access Matrix
-
-| Agent Role | Access Level | Typical Use |
-|------------|-------------|-------------|
-| Engineer | Read | Query system info for Windows-specific development |
-| Architect | Read | Assess Windows platform capabilities |
-| QATester | Read | Verify Windows-specific test prerequisites |
-
-## Navigation
-
-- Parent: [operating_system module](../README.md)
-- Sibling: [macOS provider](../mac/AGENTS.md) | [Linux provider](../linux/AGENTS.md)
-- Root: [codomyrmex](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [operating_system](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

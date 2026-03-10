@@ -1,34 +1,21 @@
-# Documentation Scripts
+# docs
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Scripts for documentation generation, maintenance, and quality improvement including docstring fixers, architecture diagram generation, and spec file updates.
+Documentation files and guides.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `fix_missing_docstrings.py` | Prepends placeholder docstrings to __init__.py files missing them |
-| `generate_architecture_diagram.py` | Auto-generates Mermaid architecture diagrams from static import analysis |
-| `remediate_documentation.py` | Remediates documentation quality issues identified by audit scripts |
-| `update_root_docs.py` | Updates root-level documentation files with current module information |
-| `update_spec_md.py` | Updates SPEC.md files across modules with current API specifications |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync
-```
-
-**Run:**
-```bash
-uv run python scripts/docs/generate_architecture_diagram.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `add_rule_crossref.py` – File
+- `fix_missing_docstrings.py` – File
+- `generate_architecture_diagram.py` – File
+- `remediate_documentation.py` – File
+- `update_root_docs.py` – File
+- `update_spec_md.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

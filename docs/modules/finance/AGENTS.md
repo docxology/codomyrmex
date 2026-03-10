@@ -1,36 +1,39 @@
-# Agent Instructions for `codomyrmex.finance`
+# Codomyrmex Agents — docs/modules/finance
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Context
+## Purpose
+Documentation files and guides.
 
-The Finance module provides double-entry accounting, tax compliance, payroll processing, and financial forecasting. All financial operations use immutable `Transaction` records and must maintain balanced ledger states.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Usage Guidelines
-
-1. **Importing**: Import from the module root.
-
-   ```python
-   from codomyrmex.finance import Ledger, Transaction, Account, Forecaster, TaxCalculator, PayrollProcessor
-   ```
-
-2. **Double-Entry Principle**: Every `Transaction` must have equal debit and credit amounts. The `Ledger` enforces this invariant.
-
-3. **Account Chart**: Use standard account naming: `Assets:*`, `Liabilities:*`, `Revenue:*`, `Expenses:*`, `Equity:*`.
-
-4. **Zero-Mock Policy**: Tests must use real `Ledger` instances with actual transactions. No mocking of financial calculations or storage.
-
-5. **Tax Calculations**: `TaxCalculator` requires a `jurisdiction` parameter. Results are advisory — always validate with a professional.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-| File | Purpose |
-|------|---------|
-| `ledger/` | Core accounting (Ledger, Transaction, Account, Journal) |
-| `taxes/` | TaxCalculator, TaxResult |
-| `payroll/` | PayrollProcessor, PayStub |
-| `forecasting/` | Financial prediction models |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Navigation
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

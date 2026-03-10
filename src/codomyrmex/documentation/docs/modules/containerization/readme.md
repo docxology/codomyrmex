@@ -1,133 +1,18 @@
-# Containerization Module
+# containerization
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Container management, orchestration, and deployment module organized into four submodules: Docker lifecycle management, Kubernetes orchestration, container registry operations, and container security/performance optimization. Provides classes for building and managing Docker containers, deploying to Kubernetes clusters, interacting with container registries, and scanning containers for security vulnerabilities. All submodule imports are optional and gracefully degrade if dependencies are unavailable.
-
-## PAI Integration
-
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **BUILD** | Engineer agent builds container images for artifact packaging | `container_build` |
-| **EXECUTE** | Manage running containers for deployment and testing | `container_list`, `container_runtime_status` |
-| **VERIFY** | QATester scans container images for security vulnerabilities | `container_security_scan` |
-
-PAI's BUILD phase uses `container_build` to package artifacts; EXECUTE uses `container_list` and `container_runtime_status` to manage deployments. QATester calls `container_security_scan` during VERIFY to confirm image security before deployment.
-
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-Or for development:
-
-```bash
-uv sync
-```
-
-## Key Exports
-
-### Submodules
-
-- **`docker`** -- Docker container lifecycle management
-- **`kubernetes`** -- Kubernetes cluster orchestration
-- **`registry`** -- Container image registry operations
-- **`security`** -- Container security scanning and performance optimization
-
-### Docker Management
-
-- **`DockerManager`** -- Manages Docker container lifecycle (build, run, stop, remove)
-- **`ContainerConfig`** -- Configuration data class for container parameters (image, ports, volumes, env)
-- **`build_containers()`** -- Build one or more Docker images from Dockerfiles
-- **`manage_containers()`** -- Start, stop, and manage running containers
-
-### Container Registry
-
-- **`ContainerRegistry`** -- Interface for pushing, pulling, and listing images in registries
-- **`manage_container_registry()`** -- Administrative operations on container registries
-
-### Kubernetes Orchestration
-
-- **`KubernetesOrchestrator`** -- Orchestrates deployments, services, and pods on Kubernetes
-- **`KubernetesDeployment`** -- Deployment configuration with replicas, resources, and strategy
-- **`orchestrate_kubernetes()`** -- Execute Kubernetes deployment workflows
-
-### Security and Performance
-
-- **`ContainerSecurityScanner`** -- Scans container images for vulnerabilities
-- **`SecurityScanResult`** -- Result container for container security scans
-- **`scan_container_security()`** -- Run a security scan on a container image
-- **`ContainerOptimizer`** -- Optimizes container resource usage and performance
-- **`ContainerMetrics`** -- Container runtime metrics (CPU, memory, network)
-- **`optimize_containers()`** -- Apply performance optimizations to containers
-
-### Exceptions
-
-- **`ContainerError`** -- Base exception for container operations
-- **`ImageBuildError`** -- Error during Docker image build
-- **`NetworkError`** -- Container networking error
-- **`VolumeError`** -- Container volume mount or storage error
-- **`RegistryError`** -- Container registry operation error
-- **`KubernetesError`** -- Kubernetes API or orchestration error
+Documentation files and guides.
 
 ## Directory Contents
-
-- `__init__.py` - Module entry point with dynamic submodule imports
-- `docker/` - Docker manager and container lifecycle operations
-- `kubernetes/` - Kubernetes orchestrator and deployment management
-- `registry/` - Container registry client and image management
-- `security/` - Security scanner and performance optimizer
-- `exceptions.py` - Exception hierarchy for container operations
-
-## Dependencies
-
-Install the containerization extras:
-
-```bash
-uv sync --extra containerization
-```
-
-| Package | Purpose |
-|---------|---------|
-| `docker>=6.0.0` | Docker Engine API -- build, run, stop, and inspect containers |
-| `kubernetes` | Kubernetes client -- deploy, scale, and manage pods/services |
-| `PyYAML` | Parse Kubernetes manifests and Compose files |
-
-**Environment variables** (optional):
-
-| Variable | Description |
-|----------|-------------|
-| `DOCKER_HOST` | Docker daemon socket (default: `unix:///var/run/docker.sock`) |
-| `KUBECONFIG` | Path to Kubernetes config (default: `~/.kube/config`) |
-
-All submodule imports are guarded with `try/except ImportError`, so the module loads even when these packages are not installed -- only the affected submodule becomes unavailable.
-
-## Quick Start
-
-```python
-from codomyrmex.containerization import DockerManager, ContainerConfig, scan_container_security
-
-# Build and manage Docker containers
-manager = DockerManager()
-config = ContainerConfig(image="python:3.12-slim", ports={"8080": "80"}, env={"APP_ENV": "prod"})
-container = manager.run_container(config)
-
-# Scan a container image for vulnerabilities
-scan_result = scan_container_security("myapp:latest")
-print(f"Vulnerabilities found: {len(scan_result.findings)}")
-```
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k containerization -v
-```
+- `SPEC.md` – File
+- `api_specification.md` – File
+- `mcp_tool_specification.md` – File
+- `readme.md` – File
+- `security.md` – File
 
 ## Navigation
-
-- **Full Documentation**: [docs/modules/containerization/](../../../docs/modules/containerization/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../../../../README.md

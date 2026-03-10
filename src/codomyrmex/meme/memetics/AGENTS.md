@@ -1,44 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/meme/memetics
+# Codomyrmex Agents — src/codomyrmex/meme/memetics
 
-**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Core memetic engine providing data structures and algorithms for modeling memes as discrete replicable information units. Implements text dissection into atomic meme units, evolutionary selection (tournament/truncation), mutation operators (semantic drift, recombination, splicing), fitness evaluation, and population-level analysis.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `engine.py` | `MemeticEngine` | High-level orchestrator: dissect, synthesize, evolve, select |
-| `models.py` | `Meme` | Discrete information unit with fidelity, fecundity, longevity |
-| `models.py` | `Memeplex` | Co-adapted meme complex with synergy bonus and mutation/recombination |
-| `models.py` | `MemeticCode` | Ordered meme sequence with splice, excise, and fitness operations |
-| `models.py` | `MemeType` | BELIEF, NORM, STRATEGY, AESTHETIC, NARRATIVE, SYMBOL, RITUAL, SLOGAN |
-| `models.py` | `FitnessMap` | Population fitness snapshot with summary statistics |
-| `fitness.py` | `virality_score` | Estimate virality from fecundity, brevity, and network scaling |
-| `fitness.py` | `robustness_score` | Coefficient-of-variation based robustness metric for memeplexes |
-| `fitness.py` | `decay_rate` | Exponential decay constant adjusted by longevity |
-| `mutation.py` | `semantic_drift` | Token-level perturbation with fidelity degradation |
-| `mutation.py` | `recombine` | Content crossover with averaged properties |
-| `mutation.py` | `splice` | Horizontal gene transfer: inject foreign content |
-| `mutation.py` | `batch_mutate` | Apply mutations to population at configurable rate |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `engine.py` – Project file
+- `fitness.py` – Project file
+- `models.py` – Project file
+- `mutation.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Fitness dimensions (fidelity, fecundity, longevity) are clamped to [0, 1] on construction.
-- Type classification uses keyword matching; defaults to BELIEF when no keywords match.
-- High mutation rates (>0.3) risk semantic drift where original meaning is lost.
-- `evolve` currently uses cloning instead of crossover recombination for offspring.
-- Meme IDs are SHA-256 truncated to 16 chars; not collision-free at scale.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `engine.py`
+- `fitness.py`
+- `models.py`
+- `mutation.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: None (standard library only: `hashlib`, `time`, `uuid`, `math`, `random`, `re`)
-- **Used by**: `meme.semiotic` (validate mutated memes retain intended signifier), `meme.contagion` (evolved memes feed contagion simulation), `meme.narrative` (narrative meme type classification)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [meme](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [meme](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

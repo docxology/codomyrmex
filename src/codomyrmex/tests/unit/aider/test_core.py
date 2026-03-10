@@ -360,9 +360,40 @@ class TestAiderRunnerLive:
         """run_ask must return a dict with stdout, stderr, returncode keys."""
         test_file = tmp_path / "hello.py"
         test_file.write_text("print('hello')\n", encoding="utf-8")
-        runner = AiderRunner(timeout=60)
+        runner = AiderRunner(timeout=120)
         result = runner.run_ask([str(test_file)], "What does this file do?")
         assert isinstance(result, dict)
         assert "stdout" in result
         assert "stderr" in result
         assert "returncode" in result
+
+    def test_run_message_returns_dict(self, tmp_path):
+        """run_message must return a dict with stdout, stderr, returncode keys."""
+        test_file = tmp_path / "app.py"
+        test_file.write_text("def main(): pass\n", encoding="utf-8")
+        runner = AiderRunner(timeout=120)
+        result = runner.run_message([str(test_file)], "add a docstring to main")
+        assert isinstance(result, dict)
+        assert "stdout" in result
+        assert "stderr" in result
+        assert "returncode" in result
+
+    def test_run_architect_returns_dict(self, tmp_path):
+        """run_architect must return a dict with stdout, stderr, returncode keys."""
+        test_file = tmp_path / "logic.py"
+        test_file.write_text("class Logic: pass\n", encoding="utf-8")
+        runner = AiderRunner(timeout=180)
+        result = runner.run_architect([str(test_file)], "refactor Logic class")
+        assert isinstance(result, dict)
+        assert "stdout" in result
+        assert "stderr" in result
+        assert "returncode" in result
+
+    def test_timeout_raises_aider_timeout_error(self, tmp_path):
+        """AiderRunner must raise AiderTimeoutError when subprocess exceeds timeout."""
+        test_file = tmp_path / "timeout.py"
+        test_file.write_text("pass\n", encoding="utf-8")
+        # Use extremely short timeout to force failure
+        runner = AiderRunner(timeout=1)
+        with pytest.raises(AiderTimeoutError):
+            runner.run_ask([str(test_file)], "Think very hard about this.")

@@ -1,41 +1,45 @@
-# Data Curation -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/data_curation
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides MinHash-based near-duplicate detection and deduplication for AI agents that need to clean text corpora, remove redundant training data, or estimate document similarity.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `minhash.py` – Project file
+- `py.typed` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `data_curation_deduplicate` | Deduplicate a list of texts using MinHash + LSH | `texts: list[str]`, `threshold: float` | `{unique_texts, stats}` |
-| `data_curation_similarity` | Estimate Jaccard similarity between two texts | `text_a: str`, `text_b: str` | `{similarity, are_similar}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `minhash.py`
+- `py.typed`
 
-### Corpus Deduplication
-An agent preparing training data can use `data_curation_deduplicate` to remove near-duplicate documents, improving data quality and reducing training cost.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Document Similarity
-Use `data_curation_similarity` to check if two documents are near-duplicates before adding to a corpus.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Data Quality Auditing
-Agents can assess corpus quality by checking deduplication ratios across document collections.
-
-## Example Agent Workflow
-
-```
-1. Agent receives: "Clean this dataset of 1000 documents"
-2. Agent calls: data_curation_deduplicate(texts, threshold=0.8)
-3. Response: {"unique_texts": [...], "stats": {"duplicates_removed": 47, ...}}
-4. Agent reports: "Removed 47 near-duplicates, 953 unique documents remain"
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full — deduplicate, similarity-check, curate, configure thresholds | All available | TRUSTED |
-| **Architect** | Read + Architecture review | Read-only | SAFE |
-| **QATester** | Validation + output verification | Read + Inspect | SAFE |
-| **Researcher** | Read-only — study algorithms and configurations | None | OBSERVED |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

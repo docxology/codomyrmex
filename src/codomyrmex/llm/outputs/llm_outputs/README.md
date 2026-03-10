@@ -1,13 +1,13 @@
 # llm_outputs
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-LLM output data structures and model definitions for response handling.
+Contains components for the src system.
 
 ## Directory Contents
-
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `chat_completion.md` – File
@@ -18,6 +18,5 @@ LLM output data structures and model definitions for response handling.
 - `text_generation_with_options.md` – File
 
 ## Navigation
-
 - **Parent Directory**: [outputs](../README.md)
 - **Project Root**: ../../../../../README.md

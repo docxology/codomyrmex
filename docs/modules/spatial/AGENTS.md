@@ -1,58 +1,43 @@
-# Agent Guidelines - Spatial
+# Codomyrmex Agents — docs/modules/spatial
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-3D/4D spatial modeling, physics, coordinates, and rendering.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `architecture.md` – Project file
+- `index.md` – Project file
 
-## Key Submodules
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **three_d** — 3D geometry: Vec3, Quaternion, Mesh, Transform
-- **four_d** — 4D Synergetics modeling
-- **coordinates** — Coordinate systems and projections
-- **rendering** — Visualization and rendering
-- **physics** — Physics simulation, rigid bodies
-- **world_models** — Spatial world representations
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `architecture.md`
+- `index.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use Vec3 for positions** — All 3D positions should use `Vec3` class
-2. **Quaternions for rotation** — Avoid Euler angles; use `Quaternion` for rotation
-3. **Coordinate transforms** — Use `Transform3D` for position + rotation + scale
-4. **Choose projection** — Use appropriate projection (mercator, orthographic, perspective)
-5. **Physics timestep** — Use fixed timestep for deterministic physics
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.spatial.three_d import Vec3, Quaternion, Mesh
-
-# Create positioned mesh
-mesh = Mesh.cube(size=1.0)
-mesh.position = Vec3(1, 2, 3)
-mesh.rotation = Quaternion.from_euler(0, 45, 0)
-
-# Coordinate conversion
-from codomyrmex.spatial.coordinates import GeoCoordinate
-geo = GeoCoordinate(lat=37.7749, lon=-122.4194)
-cartesian = geo.to_cartesian()
-```
-
-## Testing Patterns
-
-```python
-# Verify vector operations
-v1 = Vec3(1, 0, 0)
-v2 = Vec3(0, 1, 0)
-assert v1.dot(v2) == 0  # Perpendicular
-
-# Verify quaternion rotation
-q = Quaternion.from_euler(0, 90, 0)
-rotated = q.rotate(Vec3(1, 0, 0))
-assert abs(rotated.z - 1.0) < 0.001  # Rotated 90° around Y
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

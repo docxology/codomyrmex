@@ -1,30 +1,16 @@
-# Multimodal Examples
+# examples
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Example scripts demonstrating image generation with Google AI (Imagen 3) using the codomyrmex multimodal module.
+Example implementations and demonstrations.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `basic_usage.py` | Minimal pattern for text-to-image generation via Google AI Imagen 3 API |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync (requires GEMINI_API_KEY environment variable)
-```
-
-**Run:**
-```bash
-uv run python scripts/multimodal/examples/basic_usage.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `basic_usage.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [multimodal](../README.md)
+- **Project Root**: ../../../README.md

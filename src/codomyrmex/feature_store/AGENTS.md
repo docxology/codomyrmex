@@ -1,44 +1,49 @@
 # Codomyrmex Agents — src/codomyrmex/feature_store
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Feature store module for ML inference and training pipelines. Provides typed feature definitions, versioned per-entity feature storage, feature vector retrieval, feature grouping, batch ingestion, and configurable pre-serving transforms. Includes both an abstract `FeatureStore` backend interface and a thread-safe `InMemoryFeatureStore` implementation.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `models.py` | `FeatureType` | Enum of feature types: NUMERIC, CATEGORICAL, EMBEDDING, TEXT, TIMESTAMP, BOOLEAN |
-| `models.py` | `ValueType` | Enum of value types: INT, FLOAT, STRING, BOOL, LIST, DICT |
-| `models.py` | `FeatureDefinition` | Dataclass defining a feature with name, type, description, default value, tags |
-| `models.py` | `FeatureValue` | Dataclass holding a versioned value for a specific feature/entity pair with timestamp |
-| `models.py` | `FeatureVector` | Collection of feature values for a single entity; supports `get()` and `to_list()` |
-| `models.py` | `FeatureGroup` | Named group of related `FeatureDefinition` instances with entity type |
-| `store.py` | `FeatureStore` (ABC) | Abstract backend interface: `register_feature`, `set_value`, `get_value`, `get_vector` |
-| `store.py` | `InMemoryFeatureStore` | Thread-safe in-memory implementation with auto-versioning and default-value fallback |
-| `service.py` | `FeatureTransform` | Registers per-feature callables; `apply()` transforms a `FeatureVector` immutably |
-| `service.py` | `FeatureService` | High-level facade: group registration, single/batch ingestion, transform-aware retrieval |
-| `exceptions.py` | `FeatureStoreError` | Module-specific exception hierarchy. |
-| `mcp_tools.py` | `get_mcp_tools` | Provides Model Context Protocol tools for registering, ingesting, and retrieving features. |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `exceptions.py` – Project file
+- `mcp_tools.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `service.py` – Project file
+- `store.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `InMemoryFeatureStore` uses `threading.Lock` for all mutations; safe for concurrent access.
-- `FeatureValue.version` auto-increments on each `set_value()` call for the same feature/entity pair.
-- `get_vector()` falls back to `FeatureDefinition.default_value` when no stored value exists.
-- `FeatureTransform.apply()` returns a new `FeatureVector` without mutating the input.
-- `FeatureService.ingest_batch()` expects records with an `entity_id_field` key; records lacking it are skipped.
-- `set_value()` performs type validation based on `ValueType`.
-- Errors must be logged before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `exceptions.py`
+- `mcp_tools.py`
+- `models.py`
+- `py.typed`
+- `service.py`
+- `store.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.exceptions`
-- **Used by**: ML inference pipelines requiring feature lookup at serving time
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [Root](../README.md)
-- **Root**: [Root](../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

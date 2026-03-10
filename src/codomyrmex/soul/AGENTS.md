@@ -1,106 +1,49 @@
-# soul — Agent Capabilities
+# Codomyrmex Agents — src/codomyrmex/soul
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Access Matrix
+## Purpose
+Contains components for the src system.
 
-### Engineer Agent
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent.py` – Project file
+- `exceptions.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-**Access**: Full
-**Trust Level**: TRUSTED
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Capability | Tool / Method |
-|---|---|
-| Create agent memory files | `soul_init` |
-| Query persistent agent | `soul_ask` |
-| Inject facts into memory | `soul_remember` |
-| Reset session context | `soul_reset` |
-| File statistics | `soul_status` |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `agent.py`
+- `exceptions.py`
+- `mcp_tools.py`
+- `py.typed`
 
-**Use Cases**: Building persistent AI assistants, storing project context across sessions, constructing git-trackable agent identities.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
----
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Architect Agent
-
-**Access**: Read-only
-**Trust Level**: OBSERVED
-
-| Capability | Tool / Method |
-|---|---|
-| Inspect memory files | `soul_status` |
-| Review agent identity | Read SOUL.md directly |
-
-**Use Cases**: Reviewing agent identity design, auditing memory growth, evaluating soul vs agentic_memory trade-offs.
-
----
-
-### QATester Agent
-
-**Access**: File-level validation
-**Trust Level**: OBSERVED
-
-| Capability | Tool / Method |
-|---|---|
-| Verify file creation | `soul_init`, `soul_status` |
-| Validate memory structure | `soul_status` |
-
-**Use Cases**: Verifying that soul_init creates valid files, confirming memory persists across calls.
-
----
-
-### Security Agent
-
-**Access**: Full
-**Trust Level**: TRUSTED
-
-| Capability | Tool / Method |
-|---|---|
-| Audit stored memory content | `soul_status` + direct file read |
-| Check for PII in MEMORY.md | Read MEMORY.md |
-
-**Use Cases**: Verifying no credentials are persisted in MEMORY.md, auditing agent identity in SOUL.md.
-
----
-
-## Trust Level Definitions
-
-| Level | Operations Permitted |
-|---|---|
-| UNTRUSTED | None |
-| OBSERVED | `soul_status`, `soul_init` (file creation only), read-only |
-| TRUSTED | Full access — `soul_ask`, `soul_remember`, `soul_reset` |
-
----
-
-## MCP Tools Available
-
-| Tool | Description | Requires soul-agent | Trust |
-|------|-------------|---------------------|-------|
-| `soul_init` | Create SOUL.md + MEMORY.md | No | OBSERVED |
-| `soul_status` | File size statistics | No | OBSERVED |
-| `soul_ask` | Query the agent | Yes | TRUSTED |
-| `soul_remember` | Append note to MEMORY.md | Yes | TRUSTED |
-| `soul_reset` | Clear session history | Yes | TRUSTED |
-
----
-
-## PAI Algorithm Phase Mapping
-
-| Phase | Tools | Agent |
-|-------|-------|-------|
-| OBSERVE | `soul_status` | All |
-| PLAN | `soul_init` | Engineer, Architect |
-| BUILD | `soul_ask`, `soul_remember` | Engineer |
-| EXECUTE | `soul_ask` | Engineer |
-| VERIFY | `soul_status`, `soul_init` | QATester |
-| LEARN | `soul_remember` | Engineer |
-
----
-
-## Security Constraints
-
-1. API keys are never written to SOUL.md or MEMORY.md — sourced from environment only.
-2. MEMORY.md is auto-truncated to 6 000 chars by soul.py — prevents unbounded growth.
-3. All file I/O uses explicit `encoding="utf-8"` to prevent platform encoding issues.
-4. `soul_init` never overwrites existing files — safe for idempotent use.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,121 +1,59 @@
-# Agent Guidelines - Scrape
+# Codomyrmex Agents — src/codomyrmex/scrape
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Web scraping with browser automation and DOM extraction. Provides `Scraper` for simple HTTP-based
-scraping, `BrowserScraper` for JavaScript-heavy sites, and `DOMExtractor` for structured DOM
-parsing. Two MCP tools (`scrape_extract_content`, `scrape_text_similarity`) expose content
-extraction and similarity comparison.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `Scraper`, `BrowserScraper`, `DOMExtractor`, `RateLimiter` |
-| `extractors/scraper.py` | `Scraper` — HTTP-based content fetching with URL validation |
-| `browser_scraper.py` | `BrowserScraper` — async browser automation for JavaScript sites |
-| `dom_extractor.py` | `DOMExtractor` — CSS-selector-based DOM parsing |
-| `rate_limiter.py` | `RateLimiter` — per-domain rate limiting |
-| `mcp_tools.py` | MCP tools: `scrape_extract_content`, `scrape_text_similarity` |
-
-## Key Classes
-
-- **Scraper** — High-level scraping
-- **BrowserScraper** — Browser-based scraping
-- **DOMExtractor** — Extract from DOM
-- **RateLimiter** — Respect rate limits
-
-## MCP Tools Available
-
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `scrape_extract_content` | Extract structured content (title, headings, links) from raw HTML | Safe |
-| `scrape_text_similarity` | Compute text similarity between two strings using Jaccard index | Safe |
-
-## Agent Instructions
-
-1. **Respect robots.txt** — Check before scraping
-2. **Rate limit** — Don't overwhelm servers
-3. **Handle failures** — Retry with backoff
-4. **Cache responses** — Avoid repeat requests
-5. **User-agent** — Set appropriate user agent
-
-## Common Patterns
-
-```python
-from codomyrmex.scrape import Scraper, BrowserScraper, DOMExtractor
-
-# Simple scraping
-scraper = Scraper()
-html = scraper.get("https://example.com")
-links = scraper.extract_links(html)
-
-# Browser for JavaScript sites
-browser = BrowserScraper()
-await browser.navigate("https://spa.example.com")
-await browser.wait_for_selector(".data")
-content = await browser.get_content()
-
-# DOM extraction
-extractor = DOMExtractor(html)
-titles = extractor.select_all("h1")
-data = extractor.extract({
-    "title": "h1",
-    "price": ".price",
-    "description": ".desc"
-})
-```
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `TESTING.md` – Project file
+- `__init__.py` – Project file
+- `config.py` – Project file
+- `core.py` – Project file
+- `exceptions.py` – Project file
+- `extractors/` – Directory containing extractors components
+- `firecrawl/` – Directory containing firecrawl components
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `Scraper.get()` validates URL scheme — only `http://` and `https://` are accepted; others raise `ValueError`
-- `BrowserScraper` requires an async runtime — always `await` its methods
-- `RateLimiter` is enforced per-domain — create one instance and reuse across requests
-- `scrape_text_similarity` uses Jaccard index — returns 0.0–1.0 (1.0 = identical)
-- **DO NOT** pass raw file paths or file:// URLs to `Scraper.get()` — only web URLs
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `TESTING.md`
+- `__init__.py`
+- `config.py`
+- `core.py`
+- `exceptions.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## Testing Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-# Verify extraction
-extractor = DOMExtractor("<h1>Test</h1>")
-titles = extractor.select_all("h1")
-assert len(titles) == 1
-assert titles[0].text == "Test"
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Verify rate limiting
-scraper = Scraper(rate_limit=1.0)  # 1 req/sec
-start = time.time()
-scraper.get("url1")
-scraper.get("url2")
-assert time.time() - start >= 1.0
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `scrape_extract_content`, `scrape_text_similarity` | TRUSTED |
-| **Architect** | Read + Design | `scrape_text_similarity` — content similarity analysis, data extraction design | OBSERVED |
-| **QATester** | Validation | `scrape_extract_content`, `scrape_text_similarity` — extraction correctness verification | OBSERVED |
-| **Researcher** | Read-only | `scrape_extract_content`, `scrape_text_similarity` — full read access for research | SAFE |
-
-### Engineer Agent
-**Use Cases**: Extracting web content during OBSERVE phase, computing text similarity for research, gathering external data.
-
-### Architect Agent
-**Use Cases**: Designing content extraction pipelines, reviewing similarity metrics, planning data aggregation.
-
-### QATester Agent
-**Use Cases**: Validating extraction quality during VERIFY, confirming URL validation works correctly.
-
-### Researcher Agent
-**Use Cases**: Extracting structured content from web pages and computing text similarity for research analysis.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

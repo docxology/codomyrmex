@@ -1,30 +1,17 @@
-# Formal Verification Examples
+# examples
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Example scripts demonstrating advanced formal verification workflows using Z3 constraint solving, including incremental solving, optimization, and multi-constraint scenarios.
+Example implementations and demonstrations.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `advanced_workflow.py` | Demonstrates advanced Z3 workflows: incremental solving, optimization, unsat cores |
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync --extra formal_verification  # requires z3-solver
-```
-
-**Run:**
-```bash
-uv run python scripts/formal_verification/examples/advanced_workflow.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `advanced_workflow.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: formal_verification/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [formal_verification](../README.md)
+- **Project Root**: ../../../README.md

@@ -1,45 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/cloud/infomaniak/block_storage
+# Codomyrmex Agents — src/codomyrmex/cloud/infomaniak/block_storage
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides block storage operations for Infomaniak Public Cloud via the OpenStack Cinder API. Manages volumes (create, delete, extend, attach, detach), backups (create, restore, delete), and snapshots (create, delete, list).
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `client.py` | `InfomaniakVolumeClient` | Cinder client extending `InfomaniakOpenStackBase`; `_service_name = "block_storage"` |
-| `client.py` | `list_volumes()` | List all block storage volumes as dicts |
-| `client.py` | `get_volume(volume_id)` | Get details for a specific volume by UUID |
-| `client.py` | `create_volume(size, name, ...)` | Create a new volume (size in GB, optional type/AZ/snapshot/image) |
-| `client.py` | `delete_volume(volume_id, force)` | Delete a volume, optionally forcing if attached |
-| `client.py` | `extend_volume(volume_id, new_size)` | Extend volume size (new_size must exceed current) |
-| `client.py` | `attach_volume(volume_id, instance_id, device)` | Attach volume to compute instance via Nova API |
-| `client.py` | `detach_volume(volume_id, instance_id)` | Detach volume by finding and removing the attachment |
-| `client.py` | `list_backups()` | List volume backups |
-| `client.py` | `create_backup(volume_id, name, ...)` | Create backup with optional incremental and force flags |
-| `client.py` | `restore_backup(backup_id, volume_id, name)` | Restore backup to new or existing volume |
-| `client.py` | `delete_backup(backup_id, force)` | Delete a backup |
-| `client.py` | `list_snapshots()` | List volume snapshots |
-| `client.py` | `create_snapshot(volume_id, name, ...)` | Create a volume snapshot |
-| `client.py` | `delete_snapshot(snapshot_id, force)` | Delete a snapshot |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `client.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All methods return `None`, empty list, or `False` on failure rather than raising exceptions.
-- All errors are logged via `logging` before returning failure values.
-- `attach_volume` delegates to `self._conn.compute.create_volume_attachment` (Nova API).
-- `detach_volume` iterates volume attachments to find the correct attachment ID before deletion.
-- Volume dicts include: `id`, `name`, `status`, `size`, `volume_type`, `availability_zone`, `bootable`, `encrypted`, `attachments`, `created_at`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `client.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.cloud.infomaniak.base.InfomaniakOpenStackBase`, `openstacksdk`
-- **Used by**: `codomyrmex.cloud.infomaniak` (parent), metering client (storage usage queries)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [infomaniak](../AGENTS.md)
-- **Root**: [../../../../../README.md](../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [infomaniak](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

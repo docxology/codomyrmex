@@ -1,13 +1,11 @@
 # Codomyrmex Agents — src/codomyrmex/agents/ai_code_editing
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-AI code editing integration providing automated refactoring, code suggestions, and intelligent edits.
+Contains components for the src system.
 
 ## Active Components
-
 - `API_SPECIFICATION.md` – Project file
 - `CHANGELOG.md` – Project file
 - `MCP_TOOL_SPECIFICATION.md` – Project file
@@ -18,21 +16,47 @@ AI code editing integration providing automated refactoring, code suggestions, a
 - `SPEC.md` – Project file
 - `USAGE_EXAMPLES.md` – Project file
 - `__init__.py` – Project file
-- `ai_code_helpers.py` – Project file
+- `ai_code_helpers/` – Directory containing ai_code_helpers components
 - `claude_task_master.py` – Project file
 - `code_editor.py` – Project file
 - `droid_manager.py` – Project file
 - `openai_codex.py` – Project file
 - `prompt_composition.py` – Project file
-- `pyproject.toml` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
-
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation Links
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `PROMPT_ENGINEERING.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `__init__.py`
+- `claude_task_master.py`
+- `code_editor.py`
+- `droid_manager.py`
+- `openai_codex.py`
+- `prompt_composition.py`
+- `py.typed`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
 - **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../README.md - Main project documentation

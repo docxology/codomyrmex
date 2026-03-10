@@ -1,13 +1,12 @@
 # governance
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Governance capabilities for the Codomyrmex platform including contract lifecycle management, policy enforcement, dispute resolution, and compliance visualization. Provides structured workflows for managing agreements between agents, enforcing rule-based policies, and resolving disputes through a formal mediation process.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -15,9 +14,9 @@ Governance capabilities for the Codomyrmex platform including contract lifecycle
 - `contracts.py` – File
 - `dispute_resolution.py` – File
 - `policy.py` – File
+- `py.typed` – File
 - `visualization.py` – File
 
 ## Navigation
-
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: ../../../../README.md

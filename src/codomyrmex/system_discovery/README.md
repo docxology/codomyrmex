@@ -1,113 +1,25 @@
-# System Discovery Module
+# system_discovery
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Module scanning, capability discovery, and system status reporting.
+## Overview
 
-## PAI Integration
+Contains components for the src system.
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | System-wide module discovery at the start of every Algorithm cycle | `health_check`, `list_modules` |
-| **VERIFY** | Confirm all modules are healthy and discoverable after changes | `health_check` |
-| **PLAN** | Dependency tree informs which modules are needed for a given task | `dependency_tree` |
-
-Every PAI Algorithm cycle begins with `list_modules` and `health_check` during OBSERVE. `dependency_tree` supports PLAN by mapping module interdependencies. This module is the foundation of PAI's system awareness.
-
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-Or for development:
-
-```bash
-uv sync
-```
-
-## Key Exports
-
-### Classes
-- **`FunctionCapability`** — Metadata about a discovered function capability.
-- **`ClassCapability`** — Metadata about a discovered class capability.
-- **`ModuleCapability`** — Aggregated capability information for a module.
-- **`CapabilityScanner`** — Advanced capability scanner for the Codomyrmex ecosystem.
-- **`ModuleInfo`** — Aggregated metadata and capabilities for a single discovered Codomyrmex module.
-- **`SystemDiscovery`** — Comprehensive system discovery and orchestration for Codomyrmex.
-- **`HealthStatus`** — Health status enumeration.
-- **`HealthCheckResult`** — Result of a health check.
-
-### Functions
-- **`get_system_context()`** — Get the current system context for agents.
-- **`check_module_availability()`** — Check if a module is available and importable.
-
-## Quick Start
-
-```python
-from codomyrmex.system_discovery import (
-    SystemDiscovery, StatusReporter, CapabilityScanner, get_system_context
-)
-
-# Discover all modules
-discovery = SystemDiscovery()
-modules = discovery.scan()
-
-for module in modules:
-    print(f"{module.name}: {len(module.capabilities)} capabilities")
-
-# Get system context for LLM
-context = get_system_context()
-print(context)
-
-# Scan capabilities
-scanner = CapabilityScanner()
-capabilities = scanner.scan_module("codomyrmex.llm")
-for cap in capabilities:
-    print(f"  - {cap.name}: {cap.description}")
-
-# Generate status report
-reporter = StatusReporter()
-report = reporter.generate()
-print(f"Modules: {report.module_count}")
-print(f"Health: {report.health_score}%")
-```
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `SystemDiscovery` | Scan all Codomyrmex modules |
-| `CapabilityScanner` | Extract capabilities from modules |
-| `StatusReporter` | Generate system health reports |
-| `get_system_context()` | Get context string for LLM |
-
-## Directory Structure
-
-```
-system_discovery/
-├── __init__.py          # Module exports (SystemDiscovery, CapabilityScanner, StatusReporter)
-└── mcp_tools.py         # MCP: health_check, list_modules, dependency_tree
-```
-
-## Use Cases
-
-- **Module introspection** — Discover available functionality
-- **Health monitoring** — Check module status
-- **LLM context** — Provide system awareness to agents
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k system_discovery -v
-```
-
-## Documentation
-
-- [Module Documentation](../../../docs/modules/system_discovery/README.md)
-- [Agent Guide](../../../docs/modules/system_discovery/AGENTS.md)
-- [Specification](../../../docs/modules/system_discovery/SPEC.md)
+## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SECURITY.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `core/` – Subdirectory
+- `health/` – Subdirectory
+- `mcp_tools.py` – File
+- `py.typed` – File
+- `reporting/` – Subdirectory
 
 ## Navigation
-
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

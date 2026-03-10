@@ -1,20 +1,31 @@
 # events
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `events` module provides core functionality for Events..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_async_events.py` - Test Async Events
-- `test_events.py` - Test Events
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `test_async_events.py` – File
+- `test_core_exceptions.py` – File
+- `test_event_bus.py` – File
+- `test_event_emitter.py` – File
+- `test_event_exceptions.py` – File
+- `test_event_schema.py` – File
+- `test_event_streaming.py` – File
+- `test_event_system_review.py` – File
+- `test_events.py` – File
+- `test_events_comprehensive.py` – File
+- `test_events_core.py` – File
+- `test_hypothesis_events.py` – File
+- `test_mcp_tools.py` – File
+- `test_zero_mock.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

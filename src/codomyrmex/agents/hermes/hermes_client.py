@@ -26,6 +26,7 @@ from codomyrmex.agents.core import (
 )
 from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError
 from codomyrmex.agents.generic import CLIAgentBase
+from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -98,6 +99,12 @@ class HermesClient(CLIAgentBase):
         self._ollama_model: str = str(
             self.get_config_value("hermes_model", config=cfg) or self.DEFAULT_OLLAMA_MODEL
         )
+
+        db_default = Path.home() / ".codomyrmex" / "hermes_sessions.db"
+        self._session_db_path = str(
+            self.get_config_value("hermes_session_db", config=cfg) or db_default
+        )
+        Path(self._session_db_path).parent.mkdir(parents=True, exist_ok=True)
 
         # Probe availability
         self._cli_available = self._check_command_available(check_args=["version"])
@@ -249,6 +256,55 @@ class HermesClient(CLIAgentBase):
         except Exception as e:
             self.logger.error("Ollama streaming failed: %s", e, exc_info=True)
             yield f"Error: {e}"
+
+    # ------------------------------------------------------------------
+    # Sessions (Multi-turn Chat)
+    # ------------------------------------------------------------------
+
+    def chat_session(self, prompt: str, session_id: str | None = None) -> AgentResponse:
+        """Execute a stateful multi-turn chat.
+
+        Args:
+            prompt: User prompt.
+            session_id: Session ID (optional). If omitted, a new one is created.
+
+        Returns:
+            Response containing the assistant's reply and the session ID in metadata.
+        """
+        with SQLiteSessionStore(self._session_db_path) as store:
+            if session_id:
+                session = store.load(session_id)
+                if not session:
+                    session = HermesSession(session_id=session_id)
+            else:
+                session = HermesSession()
+                session_id = session.session_id
+
+            session.add_message("user", prompt)
+
+            # Build full prompt containing history
+            history_text = ""
+            for msg in session.messages[:-1]:  # exclude the current user prompt
+                history_text += f"[{msg['role'].upper()}]\n{msg['content']}\n\n"
+            
+            if history_text:
+                full_prompt = (
+                    f"Previous Conversation:\n{history_text}"
+                    f"[{session.messages[-1]['role'].upper()}]\n{prompt}\n\n"
+                    f"Please respond to the user's latest message."
+                )
+            else:
+                full_prompt = prompt
+
+            request = AgentRequest(prompt=full_prompt)
+            response = self.execute(request)
+
+            if response.is_success():
+                session.add_message("assistant", response.content)
+                store.save(session)
+                
+            response.metadata["session_id"] = session.session_id
+            return response
 
     # ------------------------------------------------------------------
     # Helpers

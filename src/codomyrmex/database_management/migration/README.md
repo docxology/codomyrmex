@@ -1,5 +1,22 @@
-# Migration
+# migration
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Documentation for database_management/migration.
+## Overview
+
+Contains components for the src system.
+
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `_db_connector.py` – File
+- `executor.py` – File
+- `migration_manager.py` – File
+- `models.py` – File
+- `py.typed` – File
+
+## Navigation
+- **Parent Directory**: [database_management](../README.md)
+- **Project Root**: ../../../../README.md

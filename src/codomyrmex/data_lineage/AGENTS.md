@@ -1,55 +1,59 @@
-# Agent Guidelines - Data Lineage
+# Codomyrmex Agents — src/codomyrmex/data_lineage
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-The `data_lineage` module provides a graph-based framework for tracking data movement and transformations.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `data_lineage.py` – Project file
+- `graph.py` – Project file
+- `mcp_tools.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `tracker.py` – Project file
 
-## Core Concepts
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **LineageNode**: Represents a data entity (Dataset, Transformation, Model, etc.).
-- **LineageEdge**: Represents a relationship between nodes (Input to, Produced by, etc.).
-- **LineageGraph**: The DAG containing all nodes and edges.
-- **ImpactAnalyzer**: Tool for assessing the blast radius of changes.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `__init__.py`
+- `data_lineage.py`
+- `graph.py`
+- `mcp_tools.py`
+- `models.py`
+- `py.typed`
+- `tracker.py`
 
-## Best Practices for Agents
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Always use IDs**: When registering nodes, ensure IDs are unique across the ecosystem.
-2. **Validate Before Export**: Always call `graph.validate_graph()` before using the graph for critical path analysis to ensure no cycles were introduced.
-3. **Capture Metadata**: Use the `metadata` field to store environment-specific information like timestamps, row counts, or schema versions.
-4. **Prefer Upstream Tracing**: When diagnosing data quality issues, use `get_origin()` to find the root source of the data.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Operations
-
-### Tracing Upstream
-```python
-origins = tracker.get_origin("final_report_dataset")
-for origin in origins:
-    print(f"Report depends on: {origin.name}")
-```
-
-### Visualizing Subgraphs
-```python
-dot_output = tracker.graph.export_to_dot()
-# Save to file or render
-```
-
-### Checking for Cycles
-```python
-cycles = tracker.graph.validate_graph()
-if cycles:
-    raise ValueError(f"Cycle detected involving nodes: {cycles}")
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Registering nodes/edges, analyzing impact | TRUSTED |
-| **Architect** | Read | Reviewing lineage topology | OBSERVED |
-| **DataScientist**| Read/Write | Tracking model lineage | TRUSTED |
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

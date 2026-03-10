@@ -1,37 +1,38 @@
-# AGENTS.md — Video Generation Scripts
+# Codomyrmex Agents — scripts/video
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-These scripts are the **runnable entry points** for video generation. AI agents should use these as the canonical way to trigger video generation workflows.
+Automation and utility scripts.
 
-## Key Entry Points
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `examples/` – Directory containing examples components
+- `orchestrate.py` – Project file
 
-| Script | When to Use |
-|--------|-------------|
-| `orchestrate.py` | Config-driven generation with all parameters from YAML |
-| `examples/basic_usage.py` | Minimal API demonstration |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Execution Contract
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `orchestrate.py`
 
-- **Safe to run without API key**: Both scripts print a warning and exit 0 (not a failure)
-- **Requires `GEMINI_API_KEY`** for live generation via Veo 2.0
-- **Configurable via**: `config/video/config.yaml` — change model, prompt, aspect ratio, duration
-- **Output destination**: `output/videos/` (relative to repo root, auto-created)
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Invocation Pattern
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```python
-# Programmatic invocation from another script
-import subprocess
-result = subprocess.run(
-    ["uv", "run", "python", "scripts/video/orchestrate.py", "--prompt", "A sunset"],
-    capture_output=True,
-    text=True,
-)
-```
-
-## Agent Guidelines
-
-1. **Never hardcode API keys** — always use `GEMINI_API_KEY` environment variable
-2. **Check output dir** before assuming generation succeeded — bytes may be returned as URI
-3. **Veo 2.0 is slow** — expect 30–120 seconds per generation; handle timeouts gracefully
-4. **Model selection**: Use `veo-2.0-generate-001` (stable) — do not use `veo-latest` in production scripts
+## Navigation Links
+- **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

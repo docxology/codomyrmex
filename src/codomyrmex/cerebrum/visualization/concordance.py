@@ -1,9 +1,5 @@
 from typing import Any
 
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.figure import Figure
-
 from codomyrmex.cerebrum.core.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization.base import (
     BaseChartVisualizer,
@@ -24,9 +20,20 @@ showing agreement, correlation, and concordance patterns.
 
 
 try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.figure import Figure
+
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
+    plt = Any  # type: ignore
+
+    class _MockNP:
+        def __getattr__(self, name):
+            return Any
+
+    np = _MockNP()  # type: ignore
     Figure = Any  # type: ignore
 
 

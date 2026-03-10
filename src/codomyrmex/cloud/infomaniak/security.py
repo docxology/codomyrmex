@@ -133,14 +133,16 @@ class CloudSecurityPipeline:
         # Check 1: Exploit detection on string params
         if self._defense is not None:
             for key, value in parameters.items():
-                if isinstance(value, str) and self._defense.detect_exploit(value):
-                    result.allowed = False
-                    result.reason = f"Exploit detected in parameter '{key}'"
-                    result.checks_failed.append("exploit_detection")
-                    logger.warning(
-                        "Security: blocked %s — exploit in '%s'", operation_name, key
-                    )
-                    return result
+                if isinstance(value, str):
+                    detection = self._defense.detect_exploit(value)
+                    if isinstance(detection, dict) and detection.get("detected"):
+                        result.allowed = False
+                        result.reason = f"Exploit detected in parameter '{key}'"
+                        result.checks_failed.append("exploit_detection")
+                        logger.warning(
+                            "Security: blocked %s — exploit in '%s'", operation_name, key
+                        )
+                        return result
             result.checks_passed.append("exploit_detection")
 
         # Check 2: Identity verification for risky operations

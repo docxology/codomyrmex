@@ -1,8 +1,5 @@
 from dataclasses import dataclass
-
-import matplotlib.pyplot as plt
-from matplotlib.patches import Patch
-from matplotlib.ticker import PercentFormatter, ScalarFormatter
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -14,9 +11,17 @@ visualizations with professional fonts, colorblind-safe palettes, and standardiz
 
 
 try:
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Patch
+    from matplotlib.ticker import PercentFormatter, ScalarFormatter
+
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
+    plt = Any  # type: ignore
+    Patch = Any  # type: ignore
+    PercentFormatter = Any  # type: ignore
+    ScalarFormatter = Any  # type: ignore
 
 
 logger = get_logger(__name__)

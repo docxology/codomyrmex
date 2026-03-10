@@ -1,31 +1,45 @@
-# Semantic Router -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/semantic_router
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides embedding-based intent routing for AI agents that need to classify user inputs into named categories without training a full classifier.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `router.py` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `semantic_router_route` | Route text to best matching route | `text, routes, embedding_dim` | `{route_name, score, matched, all_routes}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
+- `router.py`
 
-### Intent Classification
-An agent can use `semantic_router_route` to classify user queries into predefined categories (weather, help, greeting, etc.).
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Multi-Agent Dispatch
-Route incoming requests to specialized agents based on semantic similarity to known intents.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Fallback Detection
-When no route matches above threshold, the agent knows to ask for clarification or use a general-purpose handler.
-
-## Example Agent Workflow
-
-```
-1. Agent receives: "What will the temperature be tomorrow?"
-2. Agent calls: semantic_router_route(text="What will the temperature be tomorrow?")
-3. Response: {"route_name": "weather", "score": 0.92, "matched": true}
-4. Agent dispatches to weather-handling sub-agent
-```
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

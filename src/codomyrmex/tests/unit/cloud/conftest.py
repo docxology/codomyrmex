@@ -25,7 +25,7 @@ from _stubs import (
 
 
 @pytest.fixture
-def mock_openstack_connection():
+def stub_openstack_connection():
     """Create a fully-stubbed OpenStack connection with all service subsystems."""
     conn = Stub()
     conn.current_user_id = "user-test-123"
@@ -34,7 +34,7 @@ def mock_openstack_connection():
 
 
 @pytest.fixture
-def mock_s3_client():
+def stub_s3_client():
     """Create a stub boto3 S3 client."""
     return Stub()
 

@@ -1,30 +1,47 @@
-# Agents Guide: Cultural Dynamics
+# Codomyrmex Agents — src/codomyrmex/meme/cultural_dynamics
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
+Contains components for the src system.
 
-Use the `cultural_dynamics` submodule to understand the macro-environment in which you operate. Do not push against the `zeitgeist` unless you have overwhelming force; instead, ride the wave.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `engine.py` – Project file
+- `models.py` – Project file
+- `oscillation.py` – Project file
+- `power.py` – Project file
+- `py.typed` – Project file
 
-## Capabilities
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Trend Monitoring**:
-    * Continuously ingest `Signal` data to update the internal `CulturalState`.
-    * Watch for `momentum` shifts. A high-momentum trend is hard to stop; a low-momentum one is vulnerable.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `engine.py`
+- `models.py`
+- `oscillation.py`
+- `power.py`
+- `py.typed`
 
-2. **Backlash Prediction**:
-    * Use `backlash_model` to anticipate resistance. If a cultural variable moves too fast (`velocity > threshold`), expect a violent correction.
-    * Micro-target interventions to soften the blow or accelerate the backlash (accelerationism).
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-3. **Power Mapping**:
-    * Use `PowerMap` to identify the "nodes of influence" that matter. Targeting these nodes is more efficient than broad broadcasting.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Constraints
-
-* **Lag**: Cultural systems have high inertia. Effects of interventions may not be visible for long periods (`delay`).
-* **Complexity**: Cultural systems are non-linear. Small inputs can have massive outputs (Butterfly Effect).
-
-## Integration
-
-* **With Swarm**: `CulturalState` provides the environment variables for swarm behavior.
-* **With Contagion**: `CulturalState` affects the `susceptibility` of the population to certain memes.
+## Navigation Links
+- **📁 Parent Directory**: [meme](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

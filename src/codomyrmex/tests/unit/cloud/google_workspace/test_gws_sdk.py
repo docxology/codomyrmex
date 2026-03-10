@@ -1,4 +1,4 @@
-"""Zero-mock tests for cloud/google_workspace SDK module.
+"""Zero-stub tests for cloud/google_workspace SDK module.
 
 Tests exception/auth class logic directly without SDK calls.
 Tests requiring the SDK or live credentials are guarded with skipif.
@@ -193,11 +193,23 @@ class TestGoogleCredentialsInit:
         """Raises ImportError when google-auth not installed (no SDK in test env)."""
         if _SDK_INSTALLED:
             pytest.skip("google-auth SDK is installed — ImportError path not reachable")
-        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
 
-        creds = GoogleCredentials(credentials_file="/nonexistent.json")
-        with pytest.raises(ImportError, match="google-auth"):
-            creds.get_credentials()
+        import sys
+
+        # Temporarily hide google module
+        saved = sys.modules.get("google")
+        sys.modules["google"] = None
+        try:
+            from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+
+            creds = GoogleCredentials(credentials_file="/nonexistent.json")
+            with pytest.raises(ImportError, match="google-auth"):
+                creds.get_credentials()
+        finally:
+            if saved is None:
+                del sys.modules["google"]
+            else:
+                sys.modules["google"] = saved
 
     def test_build_service_raises_without_sdk(self):
         """Raises ImportError when google-api-python-client not installed."""
@@ -205,11 +217,23 @@ class TestGoogleCredentialsInit:
             pytest.skip(
                 "google-api-python-client is installed — ImportError path not reachable"
             )
-        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
 
-        creds = GoogleCredentials(credentials_file="/nonexistent.json")
-        with pytest.raises(ImportError, match="google-api-python-client"):
-            creds.build_service("drive", "v3")
+        import sys
+
+        # Temporarily hide googleapiclient module
+        saved = sys.modules.get("googleapiclient")
+        sys.modules["googleapiclient"] = None
+        try:
+            from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+
+            creds = GoogleCredentials(credentials_file="/nonexistent.json")
+            with pytest.raises(ImportError, match="google-api-python-client"):
+                creds.build_service("drive", "v3")
+        finally:
+            if saved is None:
+                del sys.modules["googleapiclient"]
+            else:
+                sys.modules["googleapiclient"] = saved
 
     def test_default_scopes_includes_drive(self):
         from codomyrmex.cloud.google_workspace.auth import _DEFAULT_SCOPES
@@ -730,10 +754,22 @@ class TestGoogleDriveUploadFile:
     def test_upload_file_raises_import_error_without_sdk(self):
         if _SDK_INSTALLED:
             pytest.skip("googleapiclient is installed — ImportError path not reachable")
-        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
-        from codomyrmex.cloud.google_workspace.drive import GoogleDriveClient
 
-        creds = GoogleCredentials(credentials_file="/nonexistent.json")
-        client = GoogleDriveClient(creds)
-        with pytest.raises(ImportError, match="google-api-python-client"):
-            client.upload_file("/any/path.txt", "name.txt")
+        import sys
+
+        # Temporarily hide googleapiclient module
+        saved = sys.modules.get("googleapiclient")
+        sys.modules["googleapiclient"] = None
+        try:
+            from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+            from codomyrmex.cloud.google_workspace.drive import GoogleDriveClient
+
+            creds = GoogleCredentials(credentials_file="/nonexistent.json")
+            client = GoogleDriveClient(creds)
+            with pytest.raises(ImportError, match="google-api-python-client"):
+                client.upload_file("/any/path.txt", "name.txt")
+        finally:
+            if saved is None:
+                del sys.modules["googleapiclient"]
+            else:
+                sys.modules["googleapiclient"] = saved

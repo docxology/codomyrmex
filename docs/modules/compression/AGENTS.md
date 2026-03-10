@@ -1,60 +1,39 @@
-# Agent Guidelines - Compression
+# Codomyrmex Agents — docs/modules/compression
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Data compression with gzip, zlib, ZIP, and Zstandard support.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Compressor** — Configurable compression with format detection
-- **ArchiveManager** — ZIP/tar archive creation and extraction
-- **ZstdCompressor** — High-performance Zstandard compression
-- **ParallelCompressor** — Multi-threaded compression
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Choose format wisely** — Use gzip for general, zstd for performance
-2. **Use appropriate level** — Higher levels = slower but smaller
-3. **Stream large files** — Use streaming for memory efficiency
-4. **Handle errors** — Catch `CompressionError` for corrupt data
-5. **Use parallel for batches** — `ParallelCompressor` for multiple files
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.compression import compress, decompress, ArchiveManager
-
-# Compress data
-compressed = compress(data, level=6, format="gzip")
-
-# Create archive with multiple files
-with ArchiveManager("output.zip", mode="w") as archive:
-    for file in files:
-        archive.add_file(file)
-
-# High-performance for large data
-from codomyrmex.compression import ZstdCompressor
-zstd = ZstdCompressor(level=3)
-result = zstd.compress(large_data)
-```
-
-## Testing Patterns
-
-```python
-# Verify round-trip
-from codomyrmex.compression import compress, decompress
-
-data = b"test data " * 100
-compressed = compress(data)
-decompressed = decompress(compressed)
-assert decompressed == data
-
-# Verify compression ratio
-assert len(compressed) < len(data)
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

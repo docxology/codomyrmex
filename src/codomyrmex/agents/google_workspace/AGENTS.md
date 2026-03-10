@@ -1,30 +1,45 @@
-# AGENTS.md — agents/google_workspace
+# Codomyrmex Agents — src/codomyrmex/agents/google_workspace
 
-## Agent Consumption Guide
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-### When to Use This Module
+## Purpose
+Contains components for the src system.
 
-Use `agents/google_workspace` when you need to interact with Google Workspace services (Drive, Gmail, Calendar, Sheets, Tasks, etc.) without installing the Google Python SDK.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `config.py` – Project file
+- `core.py` – Project file
+- `exceptions.py` – Project file
+- `mcp_tools.py` – Project file
 
-### Key Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | When to Use |
-|------|-------------|
-| `gws_check` | Verify installation and auth before other operations |
-| `gws_run` | General-purpose command for any gws operation |
-| `gws_drive_list_files` | Browse or search Drive files |
-| `gws_gmail_list_messages` | Search inbox, find emails |
-| `gws_calendar_list_events` | Read calendar events in a date range |
-| `gws_sheets_get_values` | Read spreadsheet data |
-| `gws_tasks_list` | List tasks from Google Tasks |
-| `gws_schema` | Inspect available parameters for any gws command |
-| `gws_config` | Check current configuration status |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `config.py`
+- `core.py`
+- `exceptions.py`
+- `mcp_tools.py`
 
-### Trust Requirements
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- Read operations (`list`, `get`): VERIFIED trust level
-- Write operations (`create`, `update`, `delete`): TRUSTED trust level (run `/codomyrmexTrust`)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Error Handling
-
-All tools return `{"status": "error", "message": "..."}` on failure. Always check `result["status"]` before using results.
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

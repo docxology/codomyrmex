@@ -1,13 +1,12 @@
 # physical
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Physical security considerations for hardware, deployment environments, and access control.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -16,9 +15,9 @@ Physical security considerations for hardware, deployment environments, and acce
 - `asset_inventory.py` – File
 - `perimeter_management.py` – File
 - `physical_vulnerability.py` – File
+- `py.typed` – File
 - `surveillance.py` – File
 
 ## Navigation
-
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: ../../../../README.md

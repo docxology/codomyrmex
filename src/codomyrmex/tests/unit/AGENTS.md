@@ -1,72 +1,250 @@
-# tests/unit — Agent Context
+# Codomyrmex Agents — src/codomyrmex/tests/unit
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Test files and validation suites.
 
-This directory contains the unit test suite for all codomyrmex modules.
-When working with tests, this is the primary location.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `accessibility/` – Directory containing accessibility components
+- `agentic_memory/` – Directory containing agentic_memory components
+- `agents/` – Directory containing agents components
+- `ai_code_editing/` – Directory containing ai_code_editing components
+- `ai_gateway/` – Directory containing ai_gateway components
+- `aider/` – Directory containing aider components
+- `api/` – Directory containing api components
+- `api_documentation/` – Directory containing api_documentation components
+- `api_standardization/` – Directory containing api_standardization components
+- `audio/` – Directory containing audio components
+- `auth/` – Directory containing auth components
+- `autograd/` – Directory containing autograd components
+- `bio_simulation/` – Directory containing bio_simulation components
+- `build_synthesis/` – Directory containing build_synthesis components
+- `cache/` – Directory containing cache components
+- `calendar_integration/` – Directory containing calendar_integration components
+- `cerebrum/` – Directory containing cerebrum components
+- `chaos_engineering/` – Directory containing chaos_engineering components
+- `ci_cd_automation/` – Directory containing ci_cd_automation components
+- `cli/` – Directory containing cli components
+- `cloud/` – Directory containing cloud components
+- `coding/` – Directory containing coding components
+- `collaboration/` – Directory containing collaboration components
+- `compression/` – Directory containing compression components
+- `concurrency/` – Directory containing concurrency components
+- `config_audits/` – Directory containing config_audits components
+- `config_management/` – Directory containing config_management components
+- `config_monitoring/` – Directory containing config_monitoring components
+- `conftest.py` – Project file
+- `container_optimization/` – Directory containing container_optimization components
+- `containerization/` – Directory containing containerization components
+- `cost_management/` – Directory containing cost_management components
+- `coverage_push/` – Directory containing coverage_push components
+- `crypto/` – Directory containing crypto components
+- `dark/` – Directory containing dark components
+- `data_curation/` – Directory containing data_curation components
+- `data_lineage/` – Directory containing data_lineage components
+- `data_visualization/` – Directory containing data_visualization components
+- `database_management/` – Directory containing database_management components
+- `defense/` – Directory containing defense components
+- `demos/` – Directory containing demos components
+- `dependency_injection/` – Directory containing dependency_injection components
+- `deployment/` – Directory containing deployment components
+- `distillation/` – Directory containing distillation components
+- `distributed_training/` – Directory containing distributed_training components
+- `docs_gen/` – Directory containing docs_gen components
+- `documentation/` – Directory containing documentation components
+- `documents/` – Directory containing documents components
+- `dpo/` – Directory containing dpo components
+- `edge_computing/` – Directory containing edge_computing components
+- `education/` – Directory containing education components
+- `email/` – Directory containing email components
+- `embodiment/` – Directory containing embodiment components
+- `encryption/` – Directory containing encryption components
+- `environment_setup/` – Directory containing environment_setup components
+- `eval_harness/` – Directory containing eval_harness components
+- `events/` – Directory containing events components
+- `evolutionary_ai/` – Directory containing evolutionary_ai components
+- `examples/` – Directory containing examples components
+- `exceptions/` – Directory containing exceptions components
+- `feature_flags/` – Directory containing feature_flags components
+- `feature_store/` – Directory containing feature_store components
+- `file_system/` – Directory containing file_system components
+- `finance/` – Directory containing finance components
+- `formal_verification/` – Directory containing formal_verification components
+- `fpf/` – Directory containing fpf components
+- `git_analysis/` – Directory containing git_analysis components
+- `git_operations/` – Directory containing git_operations components
+- `governance/` – Directory containing governance components
+- `graph_rag/` – Directory containing graph_rag components
+- `i18n/` – Directory containing i18n components
+- `ide/` – Directory containing ide components
+- `identity/` – Directory containing identity components
+- `image/` – Directory containing image components
+- `inference_optimization/` – Directory containing inference_optimization components
+- `integration/` – Directory containing integration components
+- `interpretability/` – Directory containing interpretability components
+- `languages/` – Directory containing languages components
+- `llm/` – Directory containing llm components
+- `logging/` – Directory containing logging components
+- `logging_monitoring/` – Directory containing logging_monitoring components
+- `logistics/` – Directory containing logistics components
+- `logit_processor/` – Directory containing logit_processor components
+- `lora/` – Directory containing lora components
+- `maintenance/` – Directory containing maintenance components
+- `market/` – Directory containing market components
+- `matmul_kernel/` – Directory containing matmul_kernel components
+- `mcp/` – Directory containing mcp components
+- `meme/` – Directory containing meme components
+- `metrics/` – Directory containing metrics components
+- `migration/` – Directory containing migration components
+- `ml_pipeline/` – Directory containing ml_pipeline components
+- `model_context_protocol/` – Directory containing model_context_protocol components
+- `model_evaluation/` – Directory containing model_evaluation components
+- `model_merger/` – Directory containing model_merger components
+- `model_ops/` – Directory containing model_ops components
+- `model_registry/` – Directory containing model_registry components
+- `module_template/` – Directory containing module_template components
+- `multimodal/` – Directory containing multimodal components
+- `nas/` – Directory containing nas components
+- `networking/` – Directory containing networking components
+- `networks/` – Directory containing networks components
+- `neural/` – Directory containing neural components
+- `notification/` – Directory containing notification components
+- `observability/` – Directory containing observability components
+- `observability_dashboard/` – Directory containing observability_dashboard components
+- `operating_system/` – Directory containing operating_system components
+- `orchestrator/` – Directory containing orchestrator components
+- `p3_remediation/` – Directory containing p3_remediation components
+- `pai_pm/` – Directory containing pai_pm components
+- `pattern_matching/` – Directory containing pattern_matching components
+- `peft/` – Directory containing peft components
+- `performance/` – Directory containing performance components
+- `physical_management/` – Directory containing physical_management components
+- `plugin_system/` – Directory containing plugin_system components
+- `privacy/` – Directory containing privacy components
+- `prompt_engineering/` – Directory containing prompt_engineering components
+- `prompt_testing/` – Directory containing prompt_testing components
+- `quantization/` – Directory containing quantization components
+- `quantum/` – Directory containing quantum components
+- `rate_limiting/` – Directory containing rate_limiting components
+- `relations/` – Directory containing relations components
+- `release/` – Directory containing release components
+- `rlhf/` – Directory containing rlhf components
+- `scheduler/` – Directory containing scheduler components
+- `schemas/` – Directory containing schemas components
+- `scrape/` – Directory containing scrape components
+- `search/` – Directory containing search components
+- `security/` – Directory containing security components
+- `semantic_router/` – Directory containing semantic_router components
+- `serialization/` – Directory containing serialization components
+- `service_mesh/` – Directory containing service_mesh components
+- `simulation/` – Directory containing simulation components
+- `skills/` – Directory containing skills components
+- `slm/` – Directory containing slm components
+- `smart_contracts/` – Directory containing smart_contracts components
+- `softmax_opt/` – Directory containing softmax_opt components
+- `soul/` – Directory containing soul components
+- `spatial/` – Directory containing spatial components
+- `ssm/` – Directory containing ssm components
+- `static_analysis/` – Directory containing static_analysis components
+- `streaming/` – Directory containing streaming components
+- `synthetic_data/` – Directory containing synthetic_data components
+- `system_discovery/` – Directory containing system_discovery components
+- `telemetry/` – Directory containing telemetry components
+- `template/` – Directory containing template components
+- `templating/` – Directory containing templating components
+- `terminal_interface/` – Directory containing terminal_interface components
+- `test_agentic_memory_coverage.py` – Project file
+- `test_audio_streaming.py` – Project file
+- `test_cerebrum_coverage.py` – Project file
+- `test_cerebrum_deep_coverage.py` – Project file
+- `test_cli_coverage.py` – Project file
+- `test_cloud_coverage.py` – Project file
+- `test_cloud_deep_coverage.py` – Project file
+- `test_collaboration_coverage.py` – Project file
+- `test_config_management_coverage.py` – Project file
+- `test_cost_hooks.py` – Project file
+- `test_coverage_smoke.py` – Project file
+- `test_credential_rotation.py` – Project file
+- `test_data_visualization_coverage.py` – Project file
+- `test_documentation_coverage.py` – Project file
+- `test_generated_addition.py` – Project file
+- `test_generated_async_example.py` – Project file
+- `test_generated_example.py` – Project file
+- `test_generated_math_functions.py` – Project file
+- `test_git_operations_coverage.py` – Project file
+- `test_hermes_client.py` – Project file
+- `test_hermes_session.py` – Project file
+- `test_hermes_templates.py` – Project file
+- `test_physical_management_coverage.py` – Project file
+- `test_rate_limiter.py` – Project file
+- `test_vad.py` – Project file
+- `test_vision.py` – Project file
+- `testing/` – Directory containing testing components
+- `text_to_sql/` – Directory containing text_to_sql components
+- `tokenizer/` – Directory containing tokenizer components
+- `tool_use/` – Directory containing tool_use components
+- `tree_sitter/` – Directory containing tree_sitter components
+- `trust_gateway/` – Directory containing trust_gateway components
+- `utils/` – Directory containing utils components
+- `validation/` – Directory containing validation components
+- `vector_store/` – Directory containing vector_store components
+- `video/` – Directory containing video components
+- `vision/` – Directory containing vision components
+- `visualization/` – Directory containing visualization components
+- `wallet/` – Directory containing wallet components
+- `website/` – Directory containing website components
+- `workflow/` – Directory containing workflow components
+- `workflow_testing/` – Directory containing workflow_testing components
 
-## Key Facts for Agents
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **417 test files** across all modules (Feb 2026)
-- **10,041 tests collected**, 253 skipped (external dependencies), 0 failures
-- **Zero-mock policy**: No `unittest.mock`, `MagicMock`, or `monkeypatch`. Real objects only.
-- **pytest** with `importlib` import mode (allows testing without `__init__.py` in test dirs)
-- Tests live here, not in module directories
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `conftest.py`
+- `test_agentic_memory_coverage.py`
+- `test_audio_streaming.py`
+- `test_cerebrum_coverage.py`
+- `test_cerebrum_deep_coverage.py`
+- `test_cli_coverage.py`
+- `test_cloud_coverage.py`
+- `test_cloud_deep_coverage.py`
+- `test_collaboration_coverage.py`
+- `test_config_management_coverage.py`
+- `test_cost_hooks.py`
+- `test_coverage_smoke.py`
+- `test_credential_rotation.py`
+- `test_data_visualization_coverage.py`
+- `test_documentation_coverage.py`
+- `test_generated_addition.py`
+- `test_generated_async_example.py`
+- `test_generated_example.py`
+- `test_generated_math_functions.py`
+- `test_git_operations_coverage.py`
+- `test_hermes_client.py`
+- `test_hermes_session.py`
+- `test_hermes_templates.py`
+- `test_physical_management_coverage.py`
+- `test_rate_limiter.py`
+- `test_vad.py`
+- `test_vision.py`
 
-## Test File Locations
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```
-src/codomyrmex/tests/unit/<module_name>/test_<module_name>.py
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-Examples:
-- `tests/unit/orchestrator/test_core.py` — orchestrator.core.main()
-- `tests/unit/agents/core/test_base.py` — agents.core.base interfaces
-- `tests/unit/events/test_events.py` — events module emit/subscribe
-
-## Quick Commands
-
-```bash
-# Run all unit tests
-uv run pytest src/codomyrmex/tests/unit/ -v --no-cov
-
-# Run a specific module's tests
-uv run pytest src/codomyrmex/tests/unit/orchestrator/ -v
-
-# Run by marker
-uv run pytest -m unit --no-cov
-
-# Check which tests would run (dry run)
-uv run pytest --collect-only -q
-```
-
-## When to Skip Tests
-
-Use `pytest.importorskip()` or `@pytest.mark.skipif` when:
-- Test requires an API key not available in CI
-- Test requires a running service (database, server)
-- Test imports an optional SDK not in the base install
-
-Never skip tests for core modules — use `uv sync --extra <module>` to install deps.
-
-## Adding Tests for a New Module
-
-1. Create directory: `src/codomyrmex/tests/unit/<module>/`
-2. Create: `src/codomyrmex/tests/unit/<module>/test_<module>.py`
-3. Import from the module under test: `from codomyrmex.<module> import ...`
-4. Write classes with `Test` prefix, methods with `test_` prefix
-5. Use real objects, `tmp_path` for filesystem, no mocks
-
-## Anti-Patterns to Avoid
-
-- `MagicMock`, `patch`, `monkeypatch` — zero-mock policy
-- Hardcoded paths outside `tmp_path`
-- Tests that depend on network without `@pytest.mark.network`
-- Silent fallbacks that hide failures
-- Tests that always pass regardless of behavior (assert True)
-
-## Related Files
-
-- `pytest.ini` — Markers, paths, coverage settings (project root)
-- `src/codomyrmex/testing/` — Test fixtures and integration helpers
-- `src/codomyrmex/tests/unit/orchestrator/test_core.py` — Reference example
+## Navigation Links
+- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

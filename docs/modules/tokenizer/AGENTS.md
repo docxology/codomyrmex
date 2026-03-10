@@ -1,34 +1,33 @@
-# BPE Tokenizer -- Agent Coordination
+# Codomyrmex Agents — docs/modules/tokenizer
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Implements a from-scratch Byte-Pair Encoding (BPE) tokenizer. Supports training on text corpora, encoding text to token IDs, and decoding IDs back to text with a configurable vocabulary size.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `tokenizer_train` | Train a BPE tokenizer on a list of texts with target vocab size | Standard | tokenizer |
-| `tokenizer_encode` | Encode text to BPE token IDs | Standard | tokenizer |
-| `tokenizer_decode` | Decode BPE token IDs back to text | Standard | tokenizer |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Train and deploy custom BPE tokenizers for text processing |
-| EXECUTE | Engineer Agent | Tokenize and detokenize text for language model pipelines |
-
-
-## Agent Instructions
-
-1. Call tokenizer_train before encode/decode to build the vocabulary
-2. Vocabulary is maintained as a module-level singleton between MCP tool calls
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/tokenizer/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

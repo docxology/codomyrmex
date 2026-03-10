@@ -1,43 +1,53 @@
-# AGENTS.md — PAI Documentation Folder
+# Codomyrmex Agents — docs/modules/agents/PAI
 
-## Agent Coordination Guide
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-This folder contains the documentation for the bidirectional integration between **Codomyrmex** and [**Daniel Miessler's Personal AI Infrastructure (PAI)**](https://github.com/danielmiessler/Personal_AI_Infrastructure).
+## Purpose
+Documentation files and guides.
 
-### For AI Agents Working in This Folder
+## Active Components
+- `ALGORITHM.md` – Project file
+- `ARCHITECTURE.md` – Project file
+- `FLOWS.md` – Project file
+- `HOOKS.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SIGNPOSTS.md` – Project file
+- `SKILLS.md` – Project file
+- `SPEC.md` – Project file
+- `TELOS.md` – Project file
+- `UPSTREAM_ISSUE.md` – Project file
+- `WORKFLOWS.md` – Project file
 
-When operating on PAI-related tasks, agents should:
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Read [README.md](README.md) first** — Understand the bidirectional architecture and the 16 PAI Principles.
-2. **Consult [ARCHITECTURE.md](ARCHITECTURE.md)** — For the three-layer breakdown (PAIBridge → MCPBridge → TrustGateway).
-3. **Reference [FLOWS.md](FLOWS.md)** — For operational sequence diagrams before implementing new flows.
-4. **Use [SIGNPOSTS.md](SIGNPOSTS.md)** — For precise line-level code pointers before editing integration code.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `ALGORITHM.md`
+- `ARCHITECTURE.md`
+- `FLOWS.md`
+- `HOOKS.md`
+- `PAI.md`
+- `README.md`
+- `SIGNPOSTS.md`
+- `SKILLS.md`
+- `SPEC.md`
+- `TELOS.md`
+- `UPSTREAM_ISSUE.md`
+- `WORKFLOWS.md`
 
-### Key Source Files
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| File | Path | Layer |
-|:---|:---|:---|
-| `pai_bridge.py` | `src/codomyrmex/agents/pai/pai_bridge.py` | Discovery |
-| `mcp_bridge.py` | `src/codomyrmex/agents/pai/mcp_bridge.py` | Communication |
-| `trust_gateway.py` | `src/codomyrmex/agents/pai/trust_gateway.py` | Security |
-| `claude_client.py` | `src/codomyrmex/agents/claude/claude_client.py` | Execution |
-| `claude_integration.py` | `src/codomyrmex/agents/claude/claude_integration.py` | Adaptation |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Critical Constraints
-
-- **Zero-Mock Policy**: All PAI/Codomyrmex tests use real filesystem operations. Never introduce mocks.
-- **Trust Hierarchy**: Destructive tools must always go through [`trusted_call_tool()`](../../../src/codomyrmex/agents/pai/trust_gateway.py).
-- **Upstream Alignment**: Any changes must maintain compatibility with [PAI upstream](https://github.com/danielmiessler/Personal_AI_Infrastructure).
-- **Algorithm Compliance**: New tools should be mapped to Algorithm phases in [`get_skill_manifest()`](../../../src/codomyrmex/agents/pai/mcp_bridge.py).
-
-### Workflow Commands
-
-| Command | Purpose |
-|:---|:---|
-| `/codomyrmexVerify` | Audit all capabilities, promote safe tools to VERIFIED |
-| `/codomyrmexTrust` | Promote destructive tools to TRUSTED |
-| `/codomyrmexStatus` | Full PAI + Codomyrmex health report |
-| `/codomyrmexAnalyze` | Deep structural analysis |
-| `/codomyrmexSearch` | Regex search across codebase |
-| `/codomyrmexDocs` | Retrieve module documentation |
-| `/codomyrmexMemory` | Add entry to agentic memory |
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

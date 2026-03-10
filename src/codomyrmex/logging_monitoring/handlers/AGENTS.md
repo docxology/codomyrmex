@@ -1,38 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/logging_monitoring/handlers
+# Codomyrmex Agents — src/codomyrmex/logging_monitoring/handlers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides specialized log handlers: an EventBus-to-log bridge for converting
-typed events into structured JSON log entries, a WebSocket handler for
-real-time log streaming with backpressure management, rotating file handlers
-with disk monitoring, and a performance logger for timing operations.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `event_bridge.py` | `EventLoggingBridge` | Subscribes to `EventBus` typed events and logs each as structured JSON with correlation ID threading |
-| `ws_handler.py` | `WebSocketLogHandler` | `logging.Handler` subclass pushing records to async queues for WebSocket broadcast with drop-oldest backpressure |
-| `rotation.py` | `LogRotationManager` | Manages `RotatingFileHandler` attachment, disk usage monitoring, and old log cleanup |
-| `performance.py` | `PerformanceLogger` | Timing operations via start/end timer, context manager, and metric logging |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `event_bridge.py` – Project file
+- `performance.py` – Project file
+- `py.typed` – Project file
+- `rotation.py` – Project file
+- `ws_handler.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `EventLoggingBridge` must call `start()` to subscribe and `stop()` to unsubscribe from the EventBus.
-- `WebSocketLogHandler` drops oldest entries when queues are full (backpressure).
-- `LogRotationManager` creates the log directory on initialization if it does not exist.
-- `PerformanceLogger.time_operation()` context manager logs duration even on exception.
-- `LogRotationManager.cleanup_old_logs()` removes files older than `max_age_days` (default 30).
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `event_bridge.py`
+- `performance.py`
+- `py.typed`
+- `rotation.py`
+- `ws_handler.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `events.core.event_bus.EventBus`, `events.core.event_schema.Event/EventType`, stdlib `logging`, `asyncio`
-- **Used by**: Observability pipeline, WebSocket log viewers, performance monitoring
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [logging_monitoring](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [logging_monitoring](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

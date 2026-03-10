@@ -31,7 +31,10 @@ import json
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
+
+import pytest
 
 BASE_URL = "http://localhost:8888"
 
@@ -143,7 +146,7 @@ def test_email_gmail() -> bool:
     return True
 
 
-def test_compose(template: str, backend: str, project: str | None = None) -> bool:
+def run_compose(template: str, backend: str, project: str | None = None) -> bool:
     """
     Test LLM email compose for a specific template.
 
@@ -193,7 +196,7 @@ def test_compose(template: str, backend: str, project: str | None = None) -> boo
     return True
 
 
-def test_compose_all_templates(backend: str) -> dict:
+def run_compose_all_templates(backend: str) -> dict:
     """Run compose tests for all 4 standard templates.
 
     Includes a 5-second cooldown between calls to avoid ollama resource
@@ -224,7 +227,7 @@ def test_compose_all_templates(backend: str) -> dict:
         if i > 0:
             print(f"\n  ⏳ Cooldown (5s) — letting {backend} release resources...")
             time.sleep(5)
-        results[template] = test_compose(template, backend, project=project)
+        results[template] = run_compose(template, backend, project=project)
 
     # Retry any failures once (ollama can be flaky under load)
     failed = [t for t, ok in results.items() if not ok]
@@ -233,11 +236,17 @@ def test_compose_all_templates(backend: str) -> dict:
         time.sleep(10)
         for template in failed:
             project = project_slug if template == "project-summary" else None
-            results[template] = test_compose(template, backend, project=project)
+            results[template] = run_compose(template, backend, project=project)
             if template != failed[-1]:
                 time.sleep(5)
 
     return results
+
+
+def test_pytest_compose_integration():
+    """Pytest entrypoint for running integration compose tests."""
+    results = run_compose_all_templates("ollama")
+    assert all(results.values()), f"Some LLM email compose templates failed: {results}"
 
 
 # ── Dry-Run Mode ─────────────────────────────────────────────────────────────
@@ -317,10 +326,10 @@ def main() -> int:
     print("══════════════════════════════════════════")
 
     if args.template:
-        ok = test_compose(args.template, args.backend, project=args.project)
+        ok = run_compose(args.template, args.backend, project=args.project)
         results = {args.template: ok}
     else:
-        results = test_compose_all_templates(args.backend)
+        results = run_compose_all_templates(args.backend)
 
     # Summary
     print("\n══════════════════════════════════════════")

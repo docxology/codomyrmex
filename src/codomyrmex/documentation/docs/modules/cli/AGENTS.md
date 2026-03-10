@@ -1,63 +1,37 @@
-# CLI Module - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/cli
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-The CLI module is the primary user-facing entry point for Codomyrmex. Agents interact with it through MCP tools (`cli_list_commands`, `cli_run_command`) or by invoking handler functions directly. The `Cli` class exposes nested subcommand groups via Python Fire.
-
-## Key Files
-
-| File | Class/Function | Role |
-|------|---------------|------|
-| `core.py` | `Cli` | Main CLI class with nested subcommand classes |
-| `core.py` | `Cli.doctor()` | Self-diagnostics (PAI, MCP, RASP, workflows, imports) |
-| `doctor.py` | `CheckResult`, `run_doctor()` | Diagnostic check framework and runner |
-| `mcp_tools.py` | `cli_list_commands()` | MCP tool: enumerate available CLI commands |
-| `mcp_tools.py` | `cli_run_command()` | MCP tool: execute a CLI command by name |
-| `handlers/system.py` | `show_modules()`, `show_system_status()` | System inspection handlers |
-| `handlers/ai.py` | `handle_ai_generate()`, `handle_ai_refactor()` | AI code operation handlers |
-| `handlers/quick.py` | `handle_quick_run()`, `handle_quick_batch()` | Fast script execution handlers |
-
-## MCP Tools Available
-
-| Tool | Category | Description |
-|------|----------|-------------|
-| `cli_list_commands` | cli | List all available CLI commands from the Cli class |
-| `cli_run_command` | cli | Execute a named CLI command with optional JSON arguments |
-
-## Agent Instructions
-
-1. Use `cli_list_commands` to discover available commands before attempting execution.
-2. Use `cli_run_command` with the `command` parameter matching method names on the `Cli` class (e.g., `"check"`, `"modules"`, `"status"`).
-3. The `doctor` command accepts flags `--pai`, `--mcp`, `--rasp`, `--workflows`, `--imports`, `--all` for targeted diagnostics.
-4. All handlers return structured data or print formatted output; error conditions raise exceptions rather than returning silent failures.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- The `Cli` class requires `fire` (Python Fire) as a runtime dependency.
-- Verbose mode (`--verbose`) sets logger to DEBUG level.
-- The `doctor` command returns exit code 0 (pass), 1 (warnings), or 2 (errors).
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.cli.mcp_tools import cli_list_commands, cli_run_command
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-commands = cli_list_commands()
-result = cli_run_command(command="check")
-```
-
-## PAI Agent Role Access Matrix
-
-| Agent | Access Level | Primary Tools |
-|-------|-------------|---------------|
-| Engineer | Full | `cli_run_command`, `cli_list_commands`, all handlers |
-| Architect | Read | `cli_list_commands`, `show_modules`, `show_system_status` |
-| QATester | Execute | `cli_run_command` (test, doctor commands) |
-
-## Navigation
-
-- [readme.md](readme.md) -- Module overview
-- [SPEC.md](SPEC.md) -- Technical specification
-- [Source Module](../../../../cli/)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

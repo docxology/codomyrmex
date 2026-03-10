@@ -1,69 +1,39 @@
-# Cache -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/cache
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Capabilities
+## Purpose
+Documentation files and guides.
 
-The Cache module provides agents with key-value caching for intermediate results, enabling faster repeated operations and cross-phase data sharing.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
+- `security.md` – Project file
 
-## Available MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-### cache_get
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
+- `security.md`
 
-Get a value from the named in-memory cache.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Parameters:**
-- `key` (str, required) -- The cache key to look up
-- `cache_name` (str, default: "default") -- Name of the cache instance
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-**Returns:** The cached value, or None if the key is missing or expired.
-
-### cache_set
-
-Store a value in the named in-memory cache with optional TTL.
-
-**Parameters:**
-- `key` (str, required) -- The cache key
-- `value` (object, required) -- The value to store (must be serializable)
-- `ttl` (int | None, default: None) -- Time-to-live in seconds; None means no expiry
-- `cache_name` (str, default: "default") -- Name of the cache instance
-
-**Returns:** True on success.
-
-### cache_delete
-
-Delete a key from the named in-memory cache.
-
-**Parameters:**
-- `key` (str, required) -- The cache key to delete
-- `cache_name` (str, default: "default") -- Name of the cache instance
-
-**Returns:** True if deleted, False if the key did not exist.
-
-### cache_stats
-
-Get hit/miss/eviction statistics for the named cache.
-
-**Parameters:**
-- `cache_name` (str, default: "default") -- Name of the cache instance
-
-**Returns:** Dictionary with hits, misses, hit_rate, size, writes, deletes.
-
-## Agent Interaction Patterns
-
-### Cross-Phase Caching
-Store intermediate results in the OBSERVE phase for reuse in BUILD and VERIFY phases. Use descriptive keys like `"module_analysis:{module_name}"`.
-
-### Performance Optimization
-Before performing expensive operations (code analysis, API calls), check the cache first with `cache_get`. Store results with appropriate TTL values.
-
-## Trust Level
-
-All four MCP tools are classified as **Safe** -- they operate on in-process data and do not perform file system or network operations.
-
-## Navigation
-
-- **Source**: [src/codomyrmex/cache/](../../../../src/codomyrmex/cache/)
-- **Extended README**: [README.md](readme.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **Parent**: [All Modules](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

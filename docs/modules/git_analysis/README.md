@@ -1,25 +1,16 @@
-# git_analysis Module Documentation
+# git_analysis
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Git repository analysis utilities for the Codomyrmex platform. Provides tools for analyzing git history, commit patterns, and repository health.
+Documentation files and guides.
 
-## Features
-
-- Git history analysis
-- Commit pattern detection
-- Repository health metrics
-- Contributor analysis
-
-## Related Modules
-
-- [git_operations](../git_operations/) — Git workflow automation
-- [coding](../coding/) — Code analysis
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Source**: [../../src/codomyrmex/git_analysis/](../../../src/codomyrmex/git_analysis/)
-- **Parent**: [modules/](../README.md)
-- **Root**: [Project Root](../../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

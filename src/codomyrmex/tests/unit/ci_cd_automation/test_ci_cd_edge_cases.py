@@ -42,6 +42,7 @@ from codomyrmex.ci_cd_automation.rollback_manager import (
     RollbackStrategy,
 )
 
+
 _HAS_GITHUB_TOKEN = bool(os.environ.get("GITHUB_TOKEN"))
 _GITHUB_OWNER = os.environ.get("GITHUB_REPO_OWNER", "")
 _GITHUB_REPO = os.environ.get("GITHUB_REPO_NAME", "")
@@ -52,6 +53,7 @@ requires_github_api = pytest.mark.skipif(
 )
 
 
+@pytest.mark.unit
 class TestErrorHandling:
     """Test cases for error handling in CI/CD operations."""
 
@@ -89,6 +91,7 @@ class TestErrorHandling:
             )
 
 
+@pytest.mark.unit
 class TestPipelineCancellation:
     """Test cases for pipeline cancellation."""
 
@@ -141,6 +144,7 @@ class TestPipelineCancellation:
         assert result.status in (PipelineStatus.CANCELLED, PipelineStatus.FAILURE)
 
 
+@pytest.mark.unit
 class TestErrorHandlingAndRetries:
     """Test cases for error handling and retry mechanisms."""
 
@@ -213,6 +217,7 @@ class TestErrorHandlingAndRetries:
         assert result.status == PipelineStatus.FAILURE
 
 
+@pytest.mark.unit
 class TestRollbackManager:
     """Test cases for rollback management."""
 
@@ -284,6 +289,7 @@ class TestRollbackManager:
         assert len(plans) == 2
 
 
+@pytest.mark.unit
 class TestPipelineOptimizer:
     """Test cases for pipeline performance optimization."""
 

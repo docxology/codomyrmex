@@ -1,39 +1,63 @@
-# Antigravity - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/ide/antigravity
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Integration layer for Google DeepMind's Antigravity IDE, providing programmatic control, inter-agent messaging via JSONL relay, artifact management, and conversation tracking.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `AntigravityClient` | `IDEClient` subclass: connect, execute commands, manage artifacts and conversations |
-| `AgentRelay` | JSONL-backed inter-agent message bus at `~/.codomyrmex/agent_relay/<channel>/` |
-| `RelayMessage` | Dataclass with message type constants: CHAT, TOOL_REQUEST, TOOL_RESULT, SYSTEM, HEARTBEAT |
-| `Artifact` | Dataclass: name, path, artifact_type, content, size, modified |
-| `ConversationContext` | Dataclass: conversation_id, task_name, task_status, mode, artifacts |
-| `AntigravityToolProvider` | Tool provider bridge (lazy import) |
-| `LiveAgentBridge` | Live agent communication bridge (lazy import) |
-| `MessageScheduler` | Message scheduling for relay (lazy import) |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent_bridge.py` – Project file
+- `agent_relay.py` – Project file
+- `antigravity_dispatcher.py` – Project file
+- `client.py` – Project file
+- `history_bridge.py` – Project file
+- `live_bridge.py` – Project file
+- `message_scheduler.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `relay_cli.py` – Project file
+- `relay_endpoint.py` – Project file
+- `skill_adapter.py` – Project file
+- `tool_provider.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `AntigravityClient.connect()` checks for `~/.gemini/` directory presence.
-- `send_chat_gui()` uses AppleScript automation on macOS; returns `False` on non-macOS platforms.
-- Artifact storage location: `~/.gemini/antigravity/brain/`.
-- `AgentRelay` stores messages as JSONL at `~/.codomyrmex/agent_relay/<channel_id>/messages.jsonl`.
-- `await_response()` polls with configurable timeout and interval.
-- 18 tool names and 4 artifact types are defined as class-level constants on `AntigravityClient`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `agent_bridge.py`
+- `agent_relay.py`
+- `antigravity_dispatcher.py`
+- `client.py`
+- `history_bridge.py`
+- `live_bridge.py`
+- `message_scheduler.py`
+- `models.py`
+- `py.typed`
+- `relay_cli.py`
+- `relay_endpoint.py`
+- `skill_adapter.py`
+- `tool_provider.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent module**: `ide/` provides the `IDEClient` base class.
-- **Event system**: `AgentRelay` can integrate with `events/` for cross-agent communication.
-- **Lazy imports**: Bridge classes (`AntigravityToolProvider`, `LiveAgentBridge`, etc.) are imported on first access to reduce startup cost.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [ide/](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md)
-- **Root**: [/README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [ide](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

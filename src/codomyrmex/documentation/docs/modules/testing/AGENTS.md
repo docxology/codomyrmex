@@ -1,60 +1,37 @@
-# testing - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/testing
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Test files and validation suites.
 
-Testing utilities module exposing 2 MCP tools for synthetic test data generation plus a comprehensive library of property-based testing, fuzzing, fixture management, and generator strategies for agent-driven test workflows.
-
-## Key Files
-
-| File | Role |
-|------|------|
-| `__init__.py` | Package root; exports all components + `cli_commands()` |
-| `mcp_tools.py` | 2 MCP tool definitions |
-| `strategies.py` | `GeneratorStrategy`, `IntGenerator`, `FloatGenerator`, `StringGenerator`, `ListGenerator`, `DictGenerator`, `OneOfGenerator` |
-| `property_testing.py` | `property_test` decorator, `PropertyTestResult` |
-| `fuzzing.py` | `Fuzzer`, `FuzzingStrategy`, `FuzzResult` |
-| `fixture_utils.py` | `Fixture`, `FixtureManager`, `fixture` decorator, `TestDataFactory` |
-| `chaos/` | Chaos engineering scenarios |
-| `workflow/` | Workflow testing utilities |
-
-## MCP Tools Available
-
-| Tool | Parameters | Returns |
-|------|-----------|---------|
-| `testing_generate_data` | `strategy_type: str, count: int, config: dict` | List of generated values |
-| `testing_list_strategies` | none | `["int", "float", "string", "list", "dict"]` |
-
-## Agent Instructions
-
-1. `testing_generate_data` accepts `strategy_type` as one of `"int"`, `"float"`, `"string"`, `"list"`, `"dict"`.
-2. The `config` parameter is optional and controls generator bounds: `min_val`/`max_val` for int/float, `min_length`/`max_length` for string/list, `min_size`/`max_size` for dict.
-3. `count` controls how many values to generate (default 10).
-4. Both tools are pure Python with no external dependencies.
-5. `testing_generate_data` raises `ValueError` for unknown strategy types.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All generators are stateless; each call produces fresh random values.
-- `Fuzzer` is designed for CPU-intensive randomized testing; use with appropriate timeouts.
-- Property-based testing via `@property_test` runs `num_cases` iterations by default.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-# MCP tool usage
-result = testing_generate_data("string", count=5, config={"min_length": 3, "max_length": 10})
-# Returns: ["abc", "defgh", "ij", "klmno", "pq"]
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## PAI Agent Role Access Matrix
-
-| Agent Role | Access Level | Primary Tools |
-|-----------|-------------|---------------|
-| Engineer | Full | Both tools |
-| QATester | Full | Both tools |
-
-## Navigation
-
-- [Root](../../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

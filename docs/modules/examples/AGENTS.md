@@ -1,67 +1,39 @@
-# Agent Guidelines - Examples
+# Codomyrmex Agents — docs/modules/examples
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Reference implementations, demonstrations, and validation reports.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Contents
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Usage patterns** — Common Codomyrmex usage patterns
-- **Integration examples** — Multi-module integration demos
-- **Validation reports** — Config and link check results
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Reference first** — Check examples before implementing new patterns
-2. **Copy and adapt** — Use examples as starting points
-3. **Update examples** — Keep examples in sync with API changes
-4. **Test examples** — Examples should be runnable
-5. **Document patterns** — Examples explain the "how"
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-# Run an example
-from codomyrmex.examples import run_example
-
-run_example("llm_chat")  # Interactive example
-
-# List available examples
-from codomyrmex.examples import list_examples
-
-for example in list_examples():
-    print(f"{example.name}: {example.description}")
-
-# Use example as template
-from codomyrmex.examples import get_example_code
-
-code = get_example_code("agentic_memory_basic")
-# Adapt code to your needs
-```
-
-## Key Examples
-
-| Example | Description |
-|---------|-------------|
-| `llm_chat` | Basic LLM chat interaction |
-| `agentic_memory` | Memory persistence patterns |
-| `multi_agent` | Multi-agent coordination |
-| `rag_pipeline` | RAG with vector store |
-
-## Testing Patterns
-
-```python
-# Verify examples are valid Python
-import ast
-from codomyrmex.examples import get_example_code
-
-for example in list_examples():
-    code = get_example_code(example.name)
-    ast.parse(code)  # Should not raise
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

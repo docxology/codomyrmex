@@ -1,5 +1,7 @@
 """
 Tests for Cache Invalidation Module
+
+Zero-Mock Policy: no unittest.mock, MagicMock, monkeypatch, or pytest-mock.
 """
 
 import time

@@ -1,4 +1,8 @@
-"""Tests for StandardizationOpenAPIGenerator."""
+"""
+Tests for StandardizationOpenAPIGenerator.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
+"""
 
 import json
 import os

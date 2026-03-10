@@ -1,29 +1,16 @@
-# Vector Store Configuration
+# vector_store
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Vector database integration for embedding storage and similarity search. Provides vector indexing, nearest neighbor search, and embedding management.
+Configuration files and templates.
 
-## Configuration Options
-
-The vector_store module operates with sensible defaults and does not require environment variable configuration. Vector dimensions, distance metric (cosine, euclidean, dot product), and index type are set at store creation time.
-
-## PAI Integration
-
-PAI agents interact with vector_store through direct Python imports. Vector dimensions, distance metric (cosine, euclidean, dot product), and index type are set at store creation time.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep vector_store
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/vector_store/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

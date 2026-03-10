@@ -1,66 +1,44 @@
-# Agent Guidelines - Coding
+# Codomyrmex Agents — docs/modules/coding
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Unified toolkit for code execution, analysis, review, and transformation.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `MIGRATION_COMPLETE.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `parsers/` – Directory containing parsers components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **CodeReviewer** — Orchestrate code quality reviews
-- **StaticAnalyzer** — Run deep linting and complexity analysis
-- **PatternMatcher** — Search for structural patterns (AST-based)
-- **CodeGenerator** — Generate code from functional specs
-- **Debugger** — Automated error diagnosis and patching
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `MIGRATION_COMPLETE.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Analyze before fix** — Use `StaticAnalyzer` to verify code quality before suggesting fixes
-2. **Structural Search** — Use `PatternMatcher` to find all instances of a pattern before refactoring
-3. **Sandbox execution** — Always use `coding.execution` for untrusted code
-4. **Metric-driven review** — Check `CodeMetrics` during reviews
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.coding import (
-    CodeReviewer, StaticAnalyzer, PatternMatcher, Debugger
-)
-
-# Deep Static Analysis
-analyzer = StaticAnalyzer()
-results = analyzer.analyze_project("./src")
-print(f"Complexity: {results.complexity}")
-
-# Find occurrences of a pattern
-matcher = PatternMatcher()
-occurrences = matcher.find_pattern(
-    "Assignment(target=Name(id='x'), value=Constant(value=1))"
-)
-
-# Automated Debug Loop
-debugger = Debugger()
-diagnosis = debugger.diagnose(failing_script_path)
-if diagnosis.can_fix:
-    patch = debugger.generate_patch(diagnosis)
-    debugger.apply_and_verify(patch)
-```
-
-## Testing Patterns
-
-```python
-# Verify static analysis findings
-analyzer = StaticAnalyzer()
-results = analyzer.analyze_file("bad_code.py")
-assert any(r.type == "Complexity" for r in results)
-
-# Verify pattern matching
-matcher = PatternMatcher()
-matches = matcher.find_in_string("x = 10", "Assignment")
-assert len(matches) == 1
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

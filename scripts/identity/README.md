@@ -1,30 +1,16 @@
-# Identity Module Demos
+# identity
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demonstrates the identity module including persona management, bio-cognitive verification levels, and identity lifecycle management.
+Automation and utility scripts.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `orchestrator.py` | Shows persona creation, switching, and bio-cognitive verification with multiple verification levels |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync
-```
-
-**Run:**
-```bash
-uv run python scripts/identity/orchestrator.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `orchestrator.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

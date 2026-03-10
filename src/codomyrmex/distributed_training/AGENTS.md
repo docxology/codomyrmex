@@ -1,59 +1,45 @@
-# Agent Guidelines -- Distributed Training
+# Codomyrmex Agents — src/codomyrmex/distributed_training
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Distributed Training provides FSDP and DDP simulation for understanding distributed training
-mechanics. Simulates parameter sharding, AllGather, ReduceScatter, and AllReduce collective
-operations using pure NumPy. One MCP tool (`fsdp_simulate_step`) exposes the simulation to
-PAI agents.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `FSDPShard`, `AllReduce`, `simulate_fsdp_step` |
-| `fsdp.py` | Core FSDP/DDP simulation (sharding, collectives, optimizer step) |
-| `mcp_tools.py` | MCP tool: `fsdp_simulate_step` |
-
-## Key Classes
-
-- **FSDPShard** -- Dataclass representing one device's parameter and gradient shard
-- **AllReduce** -- Static methods for sum and mean gradient synchronization (DDP)
-- **all_gather** -- Concatenate shards to reconstruct full tensor
-- **reduce_scatter** -- Split gradient into averaged shards
-- **simulate_fsdp_step** -- Full FSDP optimizer step simulation
-
-## Agent Instructions
-
-1. **Simulate FSDP** -- Use `simulate_fsdp_step(params, grads, world_size)` for a full step
-2. **AllGather** -- Use `all_gather(shards)` to reconstruct full parameters from shards
-3. **ReduceScatter** -- Use `reduce_scatter(grad, world_size)` for gradient sharding
-4. **AllReduce** -- Use `AllReduce.mean(grads)` for DDP-style gradient sync
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `fsdp_simulate_step` | Simulate one FSDP distributed training step | SAFE |
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `fsdp.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `FSDPShard.grad_shard` defaults to zeros if not provided
-- `all_gather` concatenates along axis 0 (1D shards expected)
-- `reduce_scatter` divides by world_size (averaging, not summing)
-- `AllReduce` returns independent copies (mutating one does not affect others)
-- `simulate_fsdp_step` uses simple SGD: params -= lr * mean_grad
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `fsdp.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## PAI Agent Role Access Matrix
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full simulation | `fsdp_simulate_step` | SAFE |
-| **Architect** | Scaling analysis | `fsdp_simulate_step` -- world_size experiments | SAFE |
-| **QATester** | Verification | `fsdp_simulate_step` -- shard coverage checks | SAFE |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

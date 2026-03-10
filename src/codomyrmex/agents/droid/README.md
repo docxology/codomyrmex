@@ -1,25 +1,25 @@
 # droid
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Droid agent implementation for automated code tasks with specialized handlers.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
 - `controller.py` – File
+- `generators/` – Subdirectory
 - `handlers/` – Subdirectory
+- `py.typed` – File
 - `run_todo_droid.py` – File
 - `tasks.py` – File
 - `todo.py` – File
 - `todo_list.txt` – File
 
 ## Navigation
-
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../README.md

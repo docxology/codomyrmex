@@ -1,33 +1,33 @@
-# RLHF Pipeline -- Agent Coordination
+# Codomyrmex Agents — docs/modules/rlhf
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Implements Proximal Policy Optimization (PPO) for Reinforcement Learning from Human Feedback. Includes Actor-Critic networks, reward model with preference learning, and GAE advantage estimation for language model alignment.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `rlhf_ppo_step` | Run a single PPO step on synthetic data and return loss metrics | Standard | rlhf |
-| `rlhf_reward_score` | Score synthetic states using the RLHF reward model | Standard | rlhf |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Train language models with PPO-based RLHF alignment |
-| VERIFY | QA Agent | Validate PPO loss components and reward model preference accuracy |
-
-
-## Agent Instructions
-
-1. PPO step returns policy_loss, value_loss, entropy, total_loss, mean_ratio, and clip_fraction
-2. rlhf_reward_score computes reward scores and preference loss between sample pairs
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/rlhf/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

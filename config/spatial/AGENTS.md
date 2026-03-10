@@ -1,52 +1,35 @@
-# Spatial -- Configuration Agent Coordination
+# Codomyrmex Agents — config/spatial
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Configuration files and templates.
 
-Agent coordination guide for configuring and using the spatial module. Spatial computing with 2D/3D geometry, coordinate systems, and spatial indexing.
-
-## Configuration Requirements
-
-Before using spatial in any PAI workflow, ensure:
-
-1. The module is importable via `from codomyrmex.spatial import *`
-2. Any optional dependencies are installed (check with `codomyrmex check`)
-
-## Agent Instructions
-
-1. Import the module directly: `from codomyrmex.spatial import ...`
-2. Check module availability with `list_modules()` from system_discovery
-3. This module has no auto-discovered MCP tools; use direct Python imports
-4. Coordinate reference systems and spatial index parameters are set per-instance. 3D rendering requires optional dependencies.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `config.yaml` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Import Safety**: Module import does not trigger side effects or network calls
-- **Error Handling**: All errors raise specific exceptions (never returns None silently)
-- **Thread Safety**: Configuration reads are thread-safe after initialization
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `config.yaml`
 
-## Configuration Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.config_management.mcp_tools import get_config, set_config
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Read current configuration
-value = get_config("spatial.setting")
-
-# Update configuration
-set_config("spatial.setting", "new_value")
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Config Access | Notes |
-|-----------|--------------|-------|
-| Engineer | Read/Write | Can update configuration during setup |
-| Architect | Read | Reviews configuration for compliance |
-| QATester | Read | Validates configuration before test runs |
-| Researcher | Read | No configuration changes |
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [Source Module](../../src/codomyrmex/spatial/AGENTS.md)
+## Navigation Links
+- **📁 Parent Directory**: [config](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

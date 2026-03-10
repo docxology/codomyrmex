@@ -1,21 +1,22 @@
 # documents
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `documents` module provides core functionality for Documents..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `integration/` - Subdirectory
-- `test_documents.py` - Test Documents
-- `unit/` - Subdirectory
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `integration/` – Subdirectory
+- `test_documents_chunking.py` – File
+- `test_documents_io.py` – File
+- `test_documents_models.py` – File
+- `test_documents_processing.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

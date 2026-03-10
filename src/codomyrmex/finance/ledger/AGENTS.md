@@ -1,39 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/finance/ledger
+# Codomyrmex Agents — src/codomyrmex/finance/ledger
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Implements a double-entry bookkeeping general ledger following standard accounting principles. Every transaction must balance (total debits equal total credits), accounts are classified by type (asset, liability, equity, revenue, expense), and financial statements (balance sheet, income statement, trial balance) can be generated from recorded data.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `ledger.py` | `AccountType` | Enum of five standard account classifications: ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE |
-| `ledger.py` | `LedgerError` | Exception raised on validation failures (duplicate accounts, unbalanced transactions, missing accounts) |
-| `ledger.py` | `Account` | Dataclass representing a named financial account with type, running balance, and creation timestamp |
-| `ledger.py` | `TransactionEntry` | A single leg of a transaction affecting one account; positive amount is debit, negative is credit |
-| `ledger.py` | `Transaction` | Atomic collection of balanced entries with an `is_balanced` property |
-| `ledger.py` | `Ledger` | General ledger managing accounts, transactions, balance sheets, income statements, and trial balances |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `ledger.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `create_account` raises `LedgerError` if an account with the same name already exists.
-- `post_transaction` validates that all referenced accounts exist and that entries sum to zero before applying.
-- Balance updates follow normal-balance rules: Asset and Expense accounts increase with debits; Liability, Equity, and Revenue accounts increase with credits.
-- `get_balance_sheet` returns assets, liabilities, equity totals with a `balanced` flag confirming the accounting equation holds.
-- `get_income_statement` accepts optional date range filters and returns revenue, expenses, and net income.
-- `trial_balance` sums all debit-normal and credit-normal accounts to verify the ledger is in balance.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `ledger.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Python stdlib (`uuid`, `logging`, `datetime`, `dataclasses`, `enum`)
-- **Used by**: `finance.payroll` (payroll transactions may post to ledger accounts), financial reporting modules
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Siblings**: [forecasting](../forecasting/AGENTS.md) | [payroll](../payroll/AGENTS.md) | [taxes](../taxes/AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [finance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

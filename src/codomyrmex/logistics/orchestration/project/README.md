@@ -1,13 +1,12 @@
 # project
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Project lifecycle management for multi-project orchestration and coordination.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `COMPREHENSIVE_API_DOCUMENTATION.md` – File
@@ -24,6 +23,7 @@ Project lifecycle management for multi-project orchestration and coordination.
 - `orchestration_engine.py` – File
 - `parallel_executor.py` – File
 - `project_manager.py` – File
+- `py.typed` – File
 - `resource_manager.py` – File
 - `task_orchestrator.py` – File
 - `templates/` – Subdirectory
@@ -31,6 +31,5 @@ Project lifecycle management for multi-project orchestration and coordination.
 - `workflow_manager.py` – File
 
 ## Navigation
-
 - **Parent Directory**: [orchestration](../README.md)
 - **Project Root**: ../../../../../README.md

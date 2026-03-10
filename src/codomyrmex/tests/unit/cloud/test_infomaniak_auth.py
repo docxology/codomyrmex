@@ -7,8 +7,8 @@ Tests cover:
 - InfomaniakS3Credentials dataclass and from_env factory
 - to_openstack_auth() conversion
 - S3Credentials defaults
-- create_openstack_connection with mock openstack module
-- create_s3_client with mock boto3 module
+- create_openstack_connection with stub openstack module
+- create_s3_client with stub boto3 module
 - Error paths for missing credentials and import failures
 
 Total: ~16 tests in 1 test class.
@@ -222,9 +222,9 @@ class TestAuthFunctions:
             create_openstack_connection,
         )
 
-        mock_openstack = Stub()
-        mock_openstack.connect.side_effect = Exception("auth failed")
-        sys.modules["openstack"] = mock_openstack  # type: ignore
+        stub_openstack = Stub()
+        stub_openstack.connect.side_effect = Exception("auth failed")
+        sys.modules["openstack"] = stub_openstack  # type: ignore
         try:
             creds = InfomaniakCredentials(
                 application_credential_id="id",
@@ -243,18 +243,18 @@ class TestAuthFunctions:
             create_openstack_connection,
         )
 
-        mock_conn = Stub()
-        mock_openstack = Stub()
-        mock_openstack.connect.return_value = mock_conn
-        sys.modules["openstack"] = mock_openstack  # type: ignore
+        stub_conn = Stub()
+        stub_openstack = Stub()
+        stub_openstack.connect.return_value = stub_conn
+        sys.modules["openstack"] = stub_openstack  # type: ignore
         try:
             creds = InfomaniakCredentials(
                 application_credential_id="id",
                 application_credential_secret="secret",
             )
             result = create_openstack_connection(creds)
-            assert result is mock_conn
-            mock_openstack.connect.assert_called_once()
+            assert result is stub_conn
+            stub_openstack.connect.assert_called_once()
         finally:
             sys.modules.pop("openstack", None)
 
@@ -282,18 +282,18 @@ class TestAuthFunctions:
             create_s3_client,
         )
 
-        mock_s3 = Stub()
-        mock_boto3 = Stub()
-        mock_boto3.client.return_value = mock_s3
-        sys.modules["boto3"] = mock_boto3  # type: ignore
+        stub_s3 = Stub()
+        stub_boto3 = Stub()
+        stub_boto3.client.return_value = stub_s3
+        sys.modules["boto3"] = stub_boto3  # type: ignore
         try:
             creds = InfomaniakS3Credentials(
                 access_key="ak",
                 secret_key="sk",
             )
             result = create_s3_client(creds)
-            assert result is mock_s3
-            mock_boto3.client.assert_called_once_with(
+            assert result is stub_s3
+            stub_boto3.client.assert_called_once_with(
                 "s3",
                 endpoint_url=creds.endpoint_url,
                 aws_access_key_id="ak",

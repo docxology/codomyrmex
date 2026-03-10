@@ -1,30 +1,16 @@
-# Documentation Generation
+# docs_gen
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Orchestrator for the docs_gen module demonstrating comprehensive API extraction, search indexing with CamelCase/snake_case support, and static site configuration generation.
+Documentation files and guides.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `orchestrate_docs.py` | Demonstrates docs_gen SiteGenerator capabilities with sample source code extraction |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync
-```
-
-**Run:**
-```bash
-uv run python scripts/docs_gen/orchestrate_docs.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `orchestrate_docs.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

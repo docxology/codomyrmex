@@ -1,35 +1,41 @@
 # Codomyrmex Agents — src/codomyrmex/security/scanning
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Automated CVE scanning against installed Python dependencies using pip-audit and safety as backends. Produces structured `ScanReport` objects with vulnerability details and generates fix commands.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `vulnerability_scanner.py` | `Vulnerability` | Dataclass with `package`, `installed_version`, `vulnerability_id`, `description`, `fix_versions`, `severity`, `url`; has `.to_dict()` |
-| `vulnerability_scanner.py` | `ScanReport` | Dataclass with `vulnerabilities`, `packages_scanned`, `scan_tool`, `success`, `error`; computed `.critical_count`, `.high_count` |
-| `vulnerability_scanner.py` | `VulnerabilityScanner` | Main scanner: `scan_pip_audit()` (primary), `scan_safety()` (fallback), `scan()` (best available), `generate_fix_commands()` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
+- `vulnerability_scanner.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `scan()` tries `scan_pip_audit()` first; falls back to `scan_safety()` only if pip-audit fails.
-- Both scan methods use `subprocess.run()` with a 120-second timeout.
-- `scan_pip_audit()` returns `ScanReport(success=False)` with error message when pip-audit is not installed (no exception raised to caller).
-- `generate_fix_commands()` produces deduplicated `pip install` commands targeting the latest fix version for each vulnerable package.
-- External tool output parsing failures (JSON decode, missing keys) are caught and return empty results.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
+- `vulnerability_scanner.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Standard library (`subprocess`, `json`, `logging`)
-- **External tools**: `pip-audit` (primary), `safety` (fallback) -- both optional
-- **Used by**: CI/CD security gates, `security` parent module MCP tool `scan_vulnerabilities`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [security](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [security](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

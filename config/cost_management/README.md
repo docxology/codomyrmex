@@ -1,29 +1,16 @@
-# Cost Management Configuration
+# cost_management
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Spend tracking, budgeting, and cost optimization. Provides CostTracker for recording expenses, BudgetManager for budget enforcement, and JSON-backed persistent storage.
+Configuration files and templates.
 
-## Configuration Options
-
-The cost_management module operates with sensible defaults and does not require environment variable configuration. Cost data is stored via CostStore implementations (InMemoryCostStore for testing, JSONCostStore for persistence). Budget periods are configurable.
-
-## PAI Integration
-
-PAI agents interact with cost_management through direct Python imports. Cost data is stored via CostStore implementations (InMemoryCostStore for testing, JSONCostStore for persistence). Budget periods are configurable.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep cost_management
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/cost_management/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

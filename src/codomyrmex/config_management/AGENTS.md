@@ -1,113 +1,55 @@
-# Agent Guidelines - Config Management
+# Codomyrmex Agents — src/codomyrmex/config_management
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Configuration files and templates.
 
-Hierarchical configuration management supporting YAML/JSON loading, namespace-scoped key access, schema validation, and environment-variable merging. Three MCP tools (`get_config`, `set_config`, `validate_config`) expose the full config lifecycle to PAI agents. Default values are centralized here and consumed by all 130 modules to avoid hard-coded strings.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `core/` – Directory containing core components
+- `defaults.py` – Project file
+- `deployment/` – Directory containing deployment components
+- `mcp_tools.py` – Project file
+- `migration/` – Directory containing migration components
+- `monitoring/` – Directory containing monitoring components
+- `py.typed` – Project file
+- `secrets/` – Directory containing secrets components
+- `validation/` – Directory containing validation components
+
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `defaults.py`
+- `mcp_tools.py`
+- `py.typed`
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `get_config`, `set_config`, `validate_config`, `ConfigManager` |
-| `defaults.py` | Centralized default values (URLs, ports, connection strings) |
-| `mcp_tools.py` | MCP tools: `get_config`, `set_config`, `validate_config` |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## MCP Tools Available
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `get_config` | Retrieve a configuration value by key and namespace. | SAFE |
-| `set_config` | Set a configuration value (persisted for session lifetime). | TRUSTED |
-| `validate_config` | Validate a configuration dictionary against common patterns. | SAFE |
-
-## Key Classes
-
-- **`ConfigManager`** — Namespace-scoped configuration store with YAML/JSON loading
-- **`get_config(key, namespace)`** — Function for key lookup with namespace support
-- **`set_config(key, value, namespace)`** — Function for setting config values
-
-## Agent Instructions
-
-1. **Layer configs** — defaults → file → env → args
-2. **Validate early** — Check config at startup
-3. **No secrets in code** — Use SecretManager
-4. **Document settings** — List all config options
-5. **Type coercion** — Handle string→int conversion
-
-## Common Patterns
-
-```python
-from codomyrmex.config_management import (
-    ConfigLoader, Environment, SecretManager
-)
-
-# Load configuration
-config = ConfigLoader.load(
-    path="config.yaml",
-    environment="production",
-    env_prefix="MYAPP_"
-)
-
-# Access values
-db_host = config.get("database.host")
-debug = config.get("debug", default=False)
-
-# Secrets
-secrets = SecretManager()
-api_key = secrets.get("API_KEY")
-
-# Environment-aware
-env = Environment.detect()
-if env.is_production:
-    log_level = "WARNING"
-```
-
-## Testing Patterns
-
-```python
-# Verify config loading
-config = ConfigLoader.load("test_config.yaml")
-assert config.get("key") is not None
-
-# Verify environment detection
-env = Environment.detect()
-assert env.name in ["development", "production", "test"]
-
-# Verify validation
-errors = ConfigValidator.validate(config, schema)
-assert len(errors) == 0
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `get_config`, `set_config`, `validate_config` | TRUSTED |
-| **Architect** | Read + Design | `get_config`, `validate_config` — schema review, settings architecture | OBSERVED |
-| **QATester** | Validation | `validate_config`, `get_config` — config correctness and schema compliance | OBSERVED |
-| **Researcher** | Read-only | `get_config` — read configuration state during analysis | SAFE |
-
-### Engineer Agent
-**Use Cases**: Reading/writing config during BUILD and EXECUTE, validating configuration files, applying environment-specific overrides.
-
-### Architect Agent
-**Use Cases**: Config schema design, reviewing configuration hierarchies, validating settings architecture.
-
-### QATester Agent
-**Use Cases**: Validating config files during VERIFY, checking schema compliance, confirming config values match expectations.
-
-### Researcher Agent
-**Use Cases**: Reading configuration state to understand system behavior during research analysis.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/config_management.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/config_management.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

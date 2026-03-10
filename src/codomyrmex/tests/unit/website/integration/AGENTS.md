@@ -1,35 +1,37 @@
-# Agent Guide — Website Integration Tests
+# Codomyrmex Agents — src/codomyrmex/tests/unit/website/integration
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-End-to-end validation ensuring the full website generation pipeline produces correct output and security controls are enforced.
+Test files and validation suites.
 
 ## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `test_website_integration.py` – Project file
 
-- `test_website_integration.py` — Comprehensive integration test suite covering:
-  - `TestFullWebsiteGeneration` — DataProvider data collection, 10-page generation, content verification
-  - `TestConfigOperations` — Config read/write round-trip
-  - `TestDocumentationTree` — Nested doc structure scanning
-  - `TestAssetsCopying` — CSS/JS asset pipeline
-  - `TestWebsiteServerIntegration` — Server class attributes and handler method existence
-  - `TestSecurityIntegration` — Path traversal, absolute path, and file type restrictions
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Testing Patterns
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `test_website_integration.py`
 
-```python
-# Full project fixture with modules, scripts, configs, and docs
-@pytest.fixture
-def project_structure(self, tmp_path):
-    (tmp_path / "src" / "codomyrmex").mkdir(parents=True)
-    module1 = tmp_path / "src" / "codomyrmex" / "coding"
-    module1.mkdir()
-    (module1 / "__init__.py").write_text('"""Code editing module."""')
-    ...
-```
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [website](../README.md)
-- **🏠 Project Root**: [codomyrmex](../../../../../README.md)
+- **📁 Parent Directory**: [website](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

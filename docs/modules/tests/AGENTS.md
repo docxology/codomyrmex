@@ -1,67 +1,41 @@
-# Agent Guidelines - Tests
+# Codomyrmex Agents — docs/modules/tests
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Test files and validation suites.
 
-Test framework with fixtures, utilities, and test patterns.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `RUNNING_TESTS.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Directories
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `unit/` — Unit tests
-- `integration/` — Integration tests
-- `performance/` — Performance tests
-- `fixtures/` — Shared fixtures
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `RUNNING_TESTS.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Follow AAA** — Arrange, Act, Assert
-2. **Use fixtures** — Share setup with fixtures
-3. **Test with real data** — Use real data factories, not mocks
-4. **Test edge cases** — Not just happy path
-5. **Name descriptively** — `test_user_login_fails_with_wrong_password`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-import pytest
-from codomyrmex.tests.fixtures.real_data_factory import create_test_data
-
-# Basic test
-def test_function_returns_expected():
-    result = function_under_test(input_data)
-    assert result == expected_output
-
-# Using fixtures
-@pytest.fixture
-def sample_user():
-    return {"id": 1, "name": "Test"}
-
-def test_user_creation(sample_user):
-    user = create_user(sample_user)
-    assert user.id == 1
-
-# Parametrized tests
-@pytest.mark.parametrize("input,expected", [
-    ("a", 1), ("b", 2), ("c", 3)
-])
-def test_mapping(input, expected):
-    assert map_value(input) == expected
-```
-
-## Running Tests
-
-```bash
-# All tests
-pytest
-
-# Specific module
-pytest tests/unit/test_auth.py
-
-# With coverage
-pytest --cov=codomyrmex
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

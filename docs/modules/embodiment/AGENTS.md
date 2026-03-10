@@ -1,59 +1,39 @@
-# Agent Guidelines - Embodiment
+# Codomyrmex Agents — docs/modules/embodiment
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Robotics integration with ROS2, sensors, actuators, and 3D coordinate transforms.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **ROS2Bridge** — WebSocket bridge to ROS2 nodes
-- **Transform3D** — Position, rotation, and scale transforms
-- **SensorInterface** — Abstract sensor data handling
-- **ActuatorController** — Motor/actuator control
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Connect before use** — Call `bridge.connect()` before pub/sub operations
-2. **Handle disconnects** — Implement reconnection logic for ROS2 bridge
-3. **Transform frame** — Always specify coordinate frame for transforms
-4. **Rate limit commands** — Don't flood actuators with commands
-5. **Validate sensor data** — Check timestamps and validity flags
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## ROS2 Patterns
-
-```python
-from codomyrmex.embodiment import ROS2Bridge
-
-bridge = ROS2Bridge(uri="ws://localhost:9090")
-await bridge.connect()
-
-# Subscribe to topics
-await bridge.subscribe("/camera/image", on_image_callback)
-await bridge.subscribe("/odom", on_odometry_callback)
-
-# Publish commands
-await bridge.publish("/cmd_vel", {
-    "linear": {"x": 0.5, "y": 0, "z": 0},
-    "angular": {"x": 0, "y": 0, "z": 0.1}
-})
-```
-
-## Testing Patterns
-
-```python
-# Test transform operations
-from codomyrmex.embodiment import Transform3D
-
-t = Transform3D()
-t.translate(1, 0, 0)
-t.rotate_euler(0, 0, 90)
-
-point = t.apply([0, 1, 0])
-assert abs(point[0] - 0) < 0.01  # Rotated 90°
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

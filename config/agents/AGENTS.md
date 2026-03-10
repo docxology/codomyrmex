@@ -1,55 +1,35 @@
-# Agents -- Configuration Agent Coordination
+# Codomyrmex Agents — config/agents
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Configuration files and templates.
 
-Agent coordination guide for configuring and using the agents module. AI agent framework integrations supporting 13 agentic frameworks including Claude, Codex, Gemini, Jules, and more.
-
-## Configuration Requirements
-
-Before using agents in any PAI workflow, ensure:
-
-1. `AGENT_DEFAULT_TIMEOUT` is set (default: `30`) -- Default timeout in seconds for agent operations
-2. `AGENT_ENABLE_LOGGING` is set (default: `true`) -- Enable or disable agent execution logging
-3. `ANTHROPIC_API_KEY` is set -- API key for Claude agent integration
-4. `OPENAI_API_KEY` is set -- API key for Codex/O1 agent integration
-5. `GEMINI_API_KEY` is set -- API key for Gemini agent integration
-
-## Agent Instructions
-
-1. Verify required environment variables are set before invoking agents tools
-2. Use `get_config("agents.<key>")` from config_management to read module settings
-3. Available MCP tools: `execute_agent`, `list_agents`, `get_agent_memory`
-4. Each agent provider requires its own API key. CLI-based agents (Jules, OpenCode) require the respective CLI tool installed on PATH.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `config.yaml` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Import Safety**: Module import does not trigger side effects or network calls
-- **Error Handling**: All errors raise specific exceptions (never returns None silently)
-- **Thread Safety**: Configuration reads are thread-safe after initialization
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `config.yaml`
 
-## Configuration Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.config_management.mcp_tools import get_config, set_config
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Read current configuration
-value = get_config("agents.setting")
-
-# Update configuration
-set_config("agents.setting", "new_value")
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Config Access | Notes |
-|-----------|--------------|-------|
-| Engineer | Read/Write | Can update configuration during setup |
-| Architect | Read | Reviews configuration for compliance |
-| QATester | Read | Validates configuration before test runs |
-| Researcher | Read | No configuration changes |
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [Source Module](../../src/codomyrmex/agents/AGENTS.md)
+## Navigation Links
+- **📁 Parent Directory**: [config](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

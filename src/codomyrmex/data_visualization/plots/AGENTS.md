@@ -1,51 +1,79 @@
-# Codomyrmex Agents -- src/codomyrmex/data_visualization/plots
+# Codomyrmex Agents — src/codomyrmex/data_visualization/plots
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-A library of 19 plot types built on a common `BasePlot` dataclass. Each plot renders to HTML via `to_html()` (base64-encoded PNG from matplotlib) and supports `render()`, `save()`, and `to_dict()`. Plot types span statistical charts (bar, line, scatter, histogram, box, violin, heatmap), specialized visualizations (candlestick, gantt, funnel, sankey, radar, treemap, wordcloud, confusion matrix, network graph), area plots, pie charts, and Mermaid diagram wrappers.
-
-## Key Components
-
-| File | Class | Role |
-|------|-------|------|
-| `_base.py` | `BasePlot` | Abstract base: `to_html()` renders matplotlib figure to base64 PNG |
-| `bar_chart.py` | `BarChart` | Bar chart from categories/values or (label, value) tuples |
-| `line_plot.py` | `LinePlot` | Line plot from x/y data lists |
-| `scatter.py` | `ScatterPlot` | Scatter plot with configurable marker size and colour |
-| `histogram.py` | `Histogram` | Distribution histogram with bin count |
-| `heatmap.py` | `Heatmap` | 2D heatmap with colormap and annotation |
-| `box.py` | `BoxPlot` | Box-and-whisker plot |
-| `violin.py` | `ViolinPlot` | Violin plot for distribution shape |
-| `pie.py` | `PieChart` | Pie chart with labels and sizes |
-| `area.py` | `AreaPlot` | Filled area chart |
-| `candlestick.py` | `CandlestickChart` | Financial OHLC candlestick chart |
-| `gantt.py` | `GanttChart` | Gantt chart for task scheduling |
-| `funnel.py` | `FunnelChart` | Conversion funnel chart |
-| `sankey.py` | `SankeyDiagram` | Flow diagram with source-target-value links |
-| `radar.py` | `RadarChart` | Radar/spider chart |
-| `treemap.py` | `TreeMap` | Hierarchical treemap |
-| `wordcloud.py` | `WordCloud` | Word cloud from text data |
-| `confusion_matrix.py` | `ConfusionMatrix` | ML confusion matrix heatmap |
-| `network.py` | `NetworkGraph` | Network/graph visualization |
-| `mermaid.py` | `MermaidDiagram` | Wraps mermaid flowchart builder for HTML output |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `_base.py` – Project file
+- `area.py` – Project file
+- `bar_chart.py` – Project file
+- `box.py` – Project file
+- `candlestick.py` – Project file
+- `confusion_matrix.py` – Project file
+- `funnel.py` – Project file
+- `gantt.py` – Project file
+- `heatmap.py` – Project file
+- `histogram.py` – Project file
+- `line_plot.py` – Project file
+- `mermaid.py` – Project file
+- `network.py` – Project file
+- `pie.py` – Project file
+- `py.typed` – Project file
+- `radar.py` – Project file
+- `sankey.py` – Project file
+- `scatter.py` – Project file
+- `treemap.py` – Project file
+- `violin.py` – Project file
+- `wordcloud.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All plot classes inherit from `BasePlot` and override `_render_figure(fig, ax)`.
-- `to_html()` returns an `<img>` tag with inline base64 PNG data -- no external files needed.
-- `save(output_path)` writes a minimal HTML document wrapping the base64 image.
-- `to_dict()` returns serialized metadata including `type`, `title`, `width`, `height`, `data_count`.
-- `__str__()` delegates to `to_html()` for direct template interpolation.
-- matplotlib uses `"Agg"` backend (non-interactive) to support headless rendering.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `_base.py`
+- `area.py`
+- `bar_chart.py`
+- `box.py`
+- `candlestick.py`
+- `confusion_matrix.py`
+- `funnel.py`
+- `gantt.py`
+- `heatmap.py`
+- `histogram.py`
+- `line_plot.py`
+- `mermaid.py`
+- `network.py`
+- `pie.py`
+- `py.typed`
+- `radar.py`
+- `sankey.py`
+- `scatter.py`
+- `treemap.py`
+- `violin.py`
+- `wordcloud.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `matplotlib` (Agg backend), Python stdlib (`base64`, `io`, `dataclasses`)
-- **Used by**: `data_visualization.reports` (e.g., `LogisticsReport` uses `SankeyDiagram`), dashboard composition
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [data_visualization](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

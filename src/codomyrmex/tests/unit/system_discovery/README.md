@@ -1,20 +1,22 @@
 # system_discovery
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `system_discovery` module provides core functionality for System Discovery..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_system_discovery.py` - Test System Discovery
-- `test_system_discovery_comprehensive.py` - Test System Discovery Comprehensive
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `test_capability_scanner.py` – File
+- `test_discovery_engine.py` – File
+- `test_health_reporter.py` – File
+- `test_introspection.py` – File
+- `test_status_reporter.py` – File
+- `test_system_discovery.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

@@ -1,90 +1,34 @@
-# Hermes Agent Submodule
+# Hermes Agent Module
 
 **Version**: v2.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `hermes` submodule provides a dual-backend wrapper for the [NousResearch Hermes Agent](https://github.com/NousResearch/hermes-agent), exposing chat completion, tool-calling, and skills management to the Codomyrmex ecosystem.
+The Hermes Agent Module integrates NousResearch's Hermes capabilities deeply into the Codomyrmex ecosystem. Designed for maximum reliability and local-first execution, it provides dual-backend scaling, persistent multi-turn chat, and specialized prompt templating.
 
-**Backends** (configurable via `hermes_backend`):
+## Core Features
 
-| Backend | Requirement | Priority |
-| --- | --- | --- |
-| `cli` | `hermes` binary in `$PATH` | Preferred (when available) |
-| `ollama` | `ollama` with `hermes3` model | Automatic fallback |
-| `auto` | Either of the above | **Default** — uses CLI if found, else Ollama |
+1. **Dual-Backend Auto-Detection**: 
+   The module seamlessly targets either the official `hermes` CLI binary or a local `ollama` instance (defaulting to the `hermes3` model). This fallback ensures the agent is strictly available on local developer machines even without the custom CLI.
 
-## Quick Start
+2. **Persistent Stateful Chat**:
+   Using `SQLiteSessionStore`, the module tracks multi-turn conversational history natively. Both local Python scripts and remote MCP agents can append to ongoing conversational threads without needing to juggle context windows manually.
 
-```python
-from codomyrmex.agents.core import AgentRequest
-from codomyrmex.agents.hermes import HermesClient
+3. **Evolutionary Submodule**:
+   The `evolution/` directory contains the `hermes-agent-self-evolution` submodule, implementing DSPy-based Genetic-Pareto (GEPA) optimization to continuously harden and improve the agent's prompts and skills based on real execution traces.
 
-client = HermesClient()  # auto-detects backend
-print(f"Using: {client.active_backend}")  # "cli" or "ollama"
+4. **MCP Tool Suite**:
+   Provides 9 comprehensive Model Context Protocol tools, granting Claude and other swarm agents full capability to invoke, manage, and trace Hermes operations.
 
-request = AgentRequest(prompt="Explain active inference in one sentence.")
-response = client.execute(request)
+## Directory Structure
 
-if response.is_success():
-    print(response.content)
-```
+- `hermes_client.py`: The `HermesClient` concrete agent subclass.
+- `session.py`: Persistent SQLite tracking (`HermesSession`, `SQLiteSessionStore`).
+- `mcp_tools.py`: Model Context Protocol tools, e.g., `hermes_chat_session`.
+- `templates/`: Built-in template registries (System Prompts, Debugging, Code Review).
+- `scripts/`: Operational scripts (`run_hermes.py`).
+- `evolution/`: Genetic self-improvement subsystem.
 
-## Configuration
-
-| Key | Default | Description |
-| --- | --- | --- |
-| `hermes_backend` | `auto` | Backend: `auto`, `cli`, `ollama` |
-| `hermes_model` | `hermes3` | Ollama model name |
-| `hermes_command` | `hermes` | Path to CLI binary |
-| `hermes_timeout` | `120` | Subprocess timeout (s) |
-| `hermes_working_dir` | `None` | Working directory for CLI |
-
-## Features
-
-- **Dual-Backend**: Seamlessly switches between Hermes CLI and Ollama
-- **Single-Turn Chat**: Send task prompts via CLI (`hermes chat -q`) or Ollama (`ollama run hermes3`)
-- **Streaming**: Line-by-line output streaming from either backend
-- **Skills Management**: Programmatically list skills (CLI backend only)
-- **Diagnostic Polling**: `get_hermes_status()` reports active backend and availability
-- **MCP Integration**: Exposes `hermes_execute`, `hermes_status`, `hermes_skills_list`
-
-## Installation
-
-```bash
-# Option A: Ollama backend (recommended)
-ollama pull hermes3
-
-# Option B: Full Hermes CLI
-curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
-```
-
-## Evolution Submodule
-
-The `evolution/` directory is a git submodule tracking [NousResearch/hermes-agent-self-evolution](https://github.com/NousResearch/hermes-agent-self-evolution) — evolutionary self-improvement for Hermes Agent using **DSPy + GEPA** (Genetic-Pareto Prompt Evolution).
-
-It automatically evolves and optimizes skills, tool descriptions, system prompts, and code — producing measurably better variants through reflective evolutionary search. No GPU training required; everything operates via API calls (~$2–10 per run).
-
-### Evolution Quick Start
-
-```bash
-# Initialize the submodule (first time)
-git submodule update --init src/codomyrmex/agents/hermes/evolution
-
-# Install evolution dependencies
-cd src/codomyrmex/agents/hermes/evolution
-pip install -e ".[dev]"
-
-# Evolve a skill
-export HERMES_AGENT_REPO=~/.hermes/hermes-agent
-python -m evolution.skills.evolve_skill \
-    --skill github-code-review \
-    --iterations 10 \
-    --eval-source synthetic
-```
-
-See [`evolution/PLAN.md`](evolution/PLAN.md) for the full architecture, evaluation strategy, and phased roadmap.
-
-## Rules
-
-Governed by the `agents.cursorrules` module standards requiring Zero-Mock testing and robust exception translation (`HermesError` derived from `AgentError`).
+## Navigation
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

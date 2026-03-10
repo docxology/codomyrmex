@@ -1,38 +1,33 @@
-# Operating System -- Agent Coordination
+# Codomyrmex Agents — docs/modules/operating_system
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides cross-platform operating system abstraction with auto-detection and platform-specific providers for macOS, Linux, and Windows. Offers unified APIs for system info, process management, disk usage, service listing, network interfaces, and command execution.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `os_system_info` | Retrieve system information for the current platform | Standard | operating_system |
-| `os_list_processes` | List running processes on the current platform | Standard | operating_system |
-| `os_disk_usage` | Return disk usage for all mounted filesystems | Standard | operating_system |
-| `os_network_info` | Return network interface information | Standard | operating_system |
-| `os_execute_command` | Execute a shell command on the current platform | Trusted | operating_system |
-| `os_environment_variables` | Return current environment variables with optional prefix filter | Standard | operating_system |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| OBSERVE | Infrastructure Agent | Gather system information and monitor resource usage |
-| EXECUTE | Infrastructure Agent | Execute commands and manage system resources |
-
-
-## Agent Instructions
-
-1. os_execute_command has a 30-second default timeout; adjust for long-running commands
-2. os_environment_variables accepts an optional prefix filter to narrow results
-3. Platform auto-detection dispatches to macOS, Linux, or Windows provider
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/operating_system/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

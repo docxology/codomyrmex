@@ -1,19 +1,18 @@
-# GCP Storage Submodule
+# storage
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Extended GCP Cloud Storage utilities including resumable uploads, signed URLs, and lifecycle management.
+Contains components for the src system.
 
-## Planned Features
-
-- Resumable uploads for large files
-- Signed URL generation
-- Lifecycle policy management
-- Cross-region replication
-- Object versioning
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent**: [gcp/](../README.md)
+- **Parent Directory**: [gcp](../README.md)
+- **Project Root**: ../../../../../README.md

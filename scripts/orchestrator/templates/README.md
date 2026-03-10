@@ -1,24 +1,17 @@
-# Orchestrator Templates Scripts
+# templates
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for workflow templates, demonstrating reusable workflow definitions, parameterized templates, and template instantiation.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `templates_demo.py` | Demonstrates workflow template creation, parameterization, and instantiation |
-
-## Usage
-
-```bash
-uv run python scripts/orchestrator/templates/templates_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `templates_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: orchestrator/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [orchestrator](../README.md)
+- **Project Root**: ../../../README.md

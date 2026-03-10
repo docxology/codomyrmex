@@ -1,22 +1,21 @@
 # core
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `core` module provides core functionality for Core..
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `context_builder.py` - Context Builder
-- `extractor.py` - Extractor
-- `models.py` - Models
-- `parser.py` - Parser
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `context_builder.py` – File
+- `extractor.py` – File
+- `models.py` – File
+- `parser.py` – File
 
 ## Navigation
-
-- **Parent Module**: [fpf](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [fpf](../README.md)
+- **Project Root**: ../../../../README.md

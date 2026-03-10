@@ -12,12 +12,17 @@ class TestCerebrumMCPTools:
         assert "Case stored successfully" in res["message"]
         assert "case_id" in res
 
-    def test_add_case_reference_error(self, monkeypatch):
-        # We need an authentic way to trigger the exception, but as per zero-mock policy,
-        # we can pass something that causes an internal exception if possible.
-        # However, the params are strings. The only way it fails is if CaseBase fails to init.
-        # Since we can't mock, we'll just test the success path primarily, to achieve line coverage.
-        pass
+    def test_add_case_reference_error(self):
+        """Test add_case_reference with invalid inputs."""
+        # Empty concept
+        res = add_case_reference("", "solution")
+        assert res["status"] == "error"
+        assert "concept must be a non-empty string" in res["message"]
+
+        # Empty solution
+        res = add_case_reference("concept", "")
+        assert res["status"] == "error"
+        assert "solution must be a non-empty string" in res["message"]
 
     def test_query_knowledge_base_success(self):
         # Put something in first

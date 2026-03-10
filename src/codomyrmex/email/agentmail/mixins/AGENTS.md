@@ -1,68 +1,43 @@
-# AgentMail Mixins - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/email/agentmail/mixins
 
-> Codomyrmex v1.1.9 | March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Contains components for the src system.
 
-Internal mixin classes that compose `AgentMailProvider`. Agents do not interact with mixins directly -- they use the provider's unified interface. This document describes the method contracts agents inherit through the provider.
-
-## Key Files
-
-| File                | Purpose                                      |
-|---------------------|----------------------------------------------|
-| `__init__.py`       | Re-exports `DraftMixin`, `InboxMixin`, `ThreadMixin`, `WebhookMixin` |
-| `draft_mixin.py`    | Draft lifecycle: create, list, get, update, send, delete |
-| `inbox_mixin.py`    | Inbox management: list, get, create, delete  |
-| `thread_mixin.py`   | Thread operations: list (with label/date filters), get, delete |
-| `webhook_mixin.py`  | Webhook CRUD: list, get, create, update, delete |
-
-## MCP Tools Available
-
-No MCP tools are defined in this sub-module. MCP tools for email are defined in the parent `email/mcp_tools.py` and delegate to `AgentMailProvider` which inherits these mixins.
-
-## Agent Instructions
-
-1. Always call methods through `AgentMailProvider`, never instantiate mixins standalone
-2. All methods require a valid `AGENTMAIL_API_KEY` environment variable
-3. Inbox IDs default to `AGENTMAIL_DEFAULT_INBOX` when not specified -- ensure the env var is set
-4. All API errors raise `EmailAPIError` or `MessageNotFoundError` -- handle both
-5. Draft `send_draft()` returns `EmailMessage` -- the draft is consumed and no longer exists after sending
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `draft_mixin.py` – Project file
+- `inbox_mixin.py` – Project file
+- `thread_mixin.py` – Project file
+- `webhook_mixin.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Error handling**: Every SDK call is wrapped in try/except. `ApiError` from the SDK is translated to codomyrmex exceptions via `_raise_for_api_error`.
-- **No silent fallbacks**: Failed API calls always raise. No default/placeholder data is returned.
-- **Inbox resolution**: Methods accepting `inbox_id: str | None` resolve `None` to `AGENTMAIL_DEFAULT_INBOX` via `self._resolve_inbox_id()`.
-- **Model conversion**: SDK responses are converted to typed dataclasses (`AgentMailDraft`, `AgentMailInbox`, `AgentMailThread`, `AgentMailWebhook`) before return.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `draft_mixin.py`
+- `inbox_mixin.py`
+- `thread_mixin.py`
+- `webhook_mixin.py`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-# Pattern: inbox resolution with fallback to default
-resolved_inbox = self._resolve_inbox_id(inbox_id)  # None -> env var default
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Pattern: SDK response extraction
-response = self._client.inboxes.drafts.list(resolved_inbox, limit=limit)
-items = getattr(response, "drafts", None) or list(response)
-
-# Pattern: error translation
-except ApiError as exc:
-    _raise_for_api_error(exc, "list_drafts")
-```
-
-## PAI Agent Role Access Matrix
-
-| Agent Role | Access Level | Notes                          |
-|------------|-------------|--------------------------------|
-| Engineer   | Full        | Extend mixins, add new methods |
-| QATester   | Read        | Validate method contracts      |
-| Architect  | Read        | Review mixin decomposition     |
-
-## Navigation
-
-| Document   | Purpose                     |
-|------------|-----------------------------|
-| README.md  | Usage guide                 |
-| AGENTS.md  | This file -- agent rules    |
-| SPEC.md    | Technical specification     |
-| [Parent](../AGENTS.md) | AgentMail agent docs |
+## Navigation Links
+- **📁 Parent Directory**: [agentmail](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

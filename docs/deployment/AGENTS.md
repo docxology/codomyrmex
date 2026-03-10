@@ -1,44 +1,37 @@
 # Codomyrmex Agents — docs/deployment
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Documentation for deploying Codomyrmex to production environments. Covers infrastructure, configuration, monitoring, and operational best practices.
+Documentation files and guides.
 
 ## Active Components
-
-| File | Priority | Description |
-|------|----------|-------------|
-| [production.md](production.md) | **Critical** | Production deployment guide |
-| [README.md](README.md) | High | Directory overview |
-| [SPEC.md](SPEC.md) | Medium | Functional specification |
-| [PAI.md](PAI.md) | Medium | PAI considerations |
-
-## Agent Guidelines
-
-### Deployment Quality Standards
-
-1. **Infrastructure**: Ensure infrastructure docs match current architecture
-2. **Configuration**: Validate all configuration examples are correct
-3. **Security**: Verify security recommendations are up-to-date
-4. **Monitoring**: Keep monitoring setup docs current
-
-### When Modifying Deployment Docs
-
-- Test all deployment commands before documenting
-- Update environment variable lists when configs change
-- Verify Docker/K8s configurations are valid
-- Update troubleshooting for new failure modes
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `production.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment between deployment docs and actual infrastructure
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Record outcomes in shared telemetry and update TODO queues when necessary
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `production.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [docs/](../README.md)
-- **🏠 Project Root**: [../../README.md](../../README.md)
-- **📦 Related**: [Development](../development/) | [Reference](../reference/)
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

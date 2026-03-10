@@ -231,25 +231,25 @@ class TestCloudSecurityPipeline:
         result = pipeline.pre_check("delete_instance", {"id": "i-1"})
         assert result.allowed is True
 
-    def test_exploit_detection_with_mock(self):
-        """Exploit detection using mock ActiveDefense."""
+    def test_exploit_detection_with_stub(self):
+        """Exploit detection using stub ActiveDefense."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
 
-        mock_defense = Stub()
-        mock_defense.detect_exploit.return_value = True
-        pipeline = CloudSecurityPipeline(active_defense=mock_defense)
+        stub_defense = Stub()
+        stub_defense.detect_exploit.return_value = {"detected": True}
+        pipeline = CloudSecurityPipeline(active_defense=stub_defense)
         pipeline._identity = None  # Skip identity check
         result = pipeline.pre_check("create_instance", {"name": "bad-input"})
         assert result.allowed is False
-        mock_defense.detect_exploit.assert_called()
+        stub_defense.detect_exploit.assert_called()
 
-    def test_no_exploit_passes_with_mock(self):
-        """Clean input passes mock exploit detection."""
+    def test_no_exploit_passes_with_stub(self):
+        """Clean input passes stub exploit detection."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
 
-        mock_defense = Stub()
-        mock_defense.detect_exploit.return_value = False
-        pipeline = CloudSecurityPipeline(active_defense=mock_defense)
+        stub_defense = Stub()
+        stub_defense.detect_exploit.return_value = {"detected": False}
+        pipeline = CloudSecurityPipeline(active_defense=stub_defense)
         pipeline._identity = None
         result = pipeline.pre_check("list_instances", {"region": "dc3"})
         assert result.allowed is True
@@ -259,9 +259,9 @@ class TestCloudSecurityPipeline:
         """Write operations blocked when no active persona."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
 
-        mock_identity = Stub()
-        mock_identity.active_persona = None
-        pipeline = CloudSecurityPipeline(identity_manager=mock_identity)
+        stub_identity = Stub()
+        stub_identity.active_persona = None
+        pipeline = CloudSecurityPipeline(identity_manager=stub_identity)
         pipeline._defense = None  # Skip exploit check
         result = pipeline.pre_check("create_network", {"name": "test"})
         assert result.allowed is False
@@ -276,12 +276,12 @@ class TestCloudSecurityPipeline:
         except ImportError:
             pytest.skip("identity module not available")
 
-        mock_persona = Stub()
-        mock_persona.level = VerificationLevel.KYC
-        mock_identity = Stub()
-        mock_identity.active_persona = mock_persona
+        stub_persona = Stub()
+        stub_persona.level = VerificationLevel.KYC
+        stub_identity = Stub()
+        stub_identity.active_persona = stub_persona
 
-        pipeline = CloudSecurityPipeline(identity_manager=mock_identity)
+        pipeline = CloudSecurityPipeline(identity_manager=stub_identity)
         pipeline._defense = None
         result = pipeline.pre_check("create_instance", {"name": "srv"})
         assert result.allowed is True
@@ -296,12 +296,12 @@ class TestCloudSecurityPipeline:
         except ImportError:
             pytest.skip("identity module not available")
 
-        mock_persona = Stub()
-        mock_persona.level = VerificationLevel.ANON
-        mock_identity = Stub()
-        mock_identity.active_persona = mock_persona
+        stub_persona = Stub()
+        stub_persona.level = VerificationLevel.ANON
+        stub_identity = Stub()
+        stub_identity.active_persona = stub_persona
 
-        pipeline = CloudSecurityPipeline(identity_manager=mock_identity)
+        pipeline = CloudSecurityPipeline(identity_manager=stub_identity)
         pipeline._defense = None
         result = pipeline.pre_check("delete_instance", {"id": "i-1"})
         assert result.allowed is False
@@ -321,15 +321,15 @@ class TestCloudSecurityPipeline:
         result = pipeline.pre_check("terminate_instance", {"id": "i-1"})
         assert result.risk_level == OperationRisk.ADMIN
 
-    def test_post_process_with_mock_cleaner(self):
+    def test_post_process_with_stub_cleaner(self):
         """post_process delegates to CrumbCleaner.scrub()."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
 
-        mock_cleaner = Stub()
-        mock_cleaner.scrub.return_value = {"id": "cleaned"}
-        pipeline = CloudSecurityPipeline(crumb_cleaner=mock_cleaner)
+        stub_cleaner = Stub()
+        stub_cleaner.scrub.return_value = {"id": "cleaned"}
+        pipeline = CloudSecurityPipeline(crumb_cleaner=stub_cleaner)
         result = pipeline.post_process("get_instance", {"id": "1", "session_id": "s"})
-        mock_cleaner.scrub.assert_called_once()
+        stub_cleaner.scrub.assert_called_once()
         assert result == {"id": "cleaned"}
 
     def test_empty_params_pass(self):

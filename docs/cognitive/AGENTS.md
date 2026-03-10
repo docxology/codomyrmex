@@ -1,19 +1,49 @@
-# Cognitive Perspectives — Agents
+# Codomyrmex Agents — docs/cognitive
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Agent coordination for the cognitive science and engineering perspectives documentation. These essays map formal theoretical frameworks (information theory, active inference, cognitive architecture) to Codomyrmex module implementations by identity, not analogy.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `active_inference.md` – Project file
+- `cognitive_modeling.md` – Project file
+- `cognitive_security.md` – Project file
+- `ergonomics.md` – Project file
+- `industrialization.md` – Project file
+- `signal_information_theory.md` – Project file
+- `stigmergy.md` – Project file
 
-## Agent Guidelines
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Leverage the theoretical formalisms documented here for precise architectural reasoning
-- Cross-reference with biological perspectives for intuitive understanding
-- Use active inference and free energy principle documentation when reasoning about agent behavior
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `active_inference.md`
+- `cognitive_modeling.md`
+- `cognitive_security.md`
+- `ergonomics.md`
+- `industrialization.md`
+- `signal_information_theory.md`
+- `stigmergy.md`
 
-## Navigation
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent**: [docs/](../AGENTS.md)
-- **Self**: [cognitive/AGENTS.md](AGENTS.md)
-- **Human Docs**: [README.md](README.md)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

@@ -46,6 +46,18 @@ class TestValueForward:
         assert c.data == 9.0
 
     @pytest.mark.unit
+    def test_pow_negative_exponent(self):
+        a = Value(2.0)
+        c = a**-1
+        assert abs(c.data - 0.5) < 1e-9
+
+    @pytest.mark.unit
+    def test_pow_fractional_exponent(self):
+        a = Value(9.0)
+        c = a**0.5
+        assert abs(c.data - 3.0) < 1e-9
+
+    @pytest.mark.unit
     def test_neg_forward(self):
         a = Value(7.0)
         b = -a
@@ -131,6 +143,14 @@ class TestValueBackward:
         c.backward()
         # d(x^3)/dx = 3x^2 = 27
         assert abs(a.grad - 27.0) < 1e-9
+
+    @pytest.mark.unit
+    def test_pow_negative_backward(self):
+        a = Value(2.0)
+        c = a**-1  # 1/x
+        c.backward()
+        # d(1/x)/dx = -1/x^2 = -1/4 = -0.25
+        assert abs(a.grad - (-0.25)) < 1e-9
 
     @pytest.mark.unit
     def test_chain_rule(self):
@@ -352,6 +372,22 @@ class TestTensorForward:
         np.testing.assert_allclose(c.data, [6.0, 8.0])
 
     @pytest.mark.unit
+    def test_tensor_sum_axis(self):
+        a = Tensor([[1.0, 2.0], [3.0, 4.0]])
+        s0 = a.sum(axis=0)
+        s1 = a.sum(axis=1)
+        np.testing.assert_allclose(s0.data, [4.0, 6.0])
+        np.testing.assert_allclose(s1.data, [3.0, 7.0])
+
+    @pytest.mark.unit
+    def test_tensor_mean_axis(self):
+        a = Tensor([[1.0, 2.0], [3.0, 4.0]])
+        m0 = a.mean(axis=0)
+        m1 = a.mean(axis=1)
+        np.testing.assert_allclose(m0.data, [2.0, 3.0])
+        np.testing.assert_allclose(m1.data, [1.5, 3.5])
+
+    @pytest.mark.unit
     def test_tensor_repr(self):
         a = Tensor([1.0, 2.0])
         r = repr(a)
@@ -401,11 +437,55 @@ class TestTensorBackward:
         np.testing.assert_allclose(a.grad, [1.0, 1.0, 1.0])  # type: ignore
 
     @pytest.mark.unit
+    def test_sum_axis_backward(self):
+        a = Tensor([[1.0, 2.0], [3.0, 4.0]])
+        s = a.sum(axis=0)
+        # s is [4, 6]
+        # loss = sum(s) = sum(a)
+        loss = s.sum()
+        loss.backward()
+        np.testing.assert_allclose(a.grad, np.ones((2, 2)))  # type: ignore
+
+    @pytest.mark.unit
     def test_mean_backward(self):
         a = Tensor([2.0, 4.0, 6.0])
         m = a.mean()
         m.backward()
         np.testing.assert_allclose(a.grad, [1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0])  # type: ignore
+
+    @pytest.mark.unit
+    def test_mean_axis_backward(self):
+        a = Tensor([[1.0, 2.0], [3.0, 4.0]])
+        m = a.mean(axis=1)
+        # m is [1.5, 3.5]
+        # loss = m.sum() = (a[0,0]+a[0,1])/2 + (a[1,0]+a[1,1])/2
+        loss = m.sum()
+        loss.backward()
+        np.testing.assert_allclose(a.grad, np.ones((2, 2)) * 0.5)  # type: ignore
+
+    @pytest.mark.unit
+    def test_broadcasting_add_backward(self):
+        # Matrix + Row Vector
+        a = Tensor([[1.0, 2.0], [3.0, 4.0]])
+        b = Tensor([10.0, 20.0])
+        c = a + b  # [[11, 22], [13, 24]]
+        s = c.sum()
+        s.backward()
+        np.testing.assert_allclose(a.grad, np.ones((2, 2)))  # type: ignore
+        np.testing.assert_allclose(b.grad, [2.0, 2.0])  # type: ignore
+
+    @pytest.mark.unit
+    def test_broadcasting_mul_backward(self):
+        # Matrix * Column Vector
+        a = Tensor([[1.0, 2.0], [3.0, 4.0]])
+        b = Tensor([[10.0], [20.0]])
+        c = a * b  # [[10, 20], [60, 80]]
+        s = c.sum()
+        s.backward()
+        # dc/da = b (broadcasted)
+        np.testing.assert_allclose(a.grad, [[10.0, 10.0], [20.0, 20.0]])  # type: ignore
+        # dc/db = sum(a, axis=1, keepdims=True)
+        np.testing.assert_allclose(b.grad, [[3.0], [7.0]])  # type: ignore
 
     @pytest.mark.unit
     def test_reshape_backward(self):
@@ -531,6 +611,17 @@ class TestMCPTools:
         assert abs(result["result"] - 7.0) < 1e-9  # 4 + 3
         assert abs(result["gradients"]["x"] - 4.0) < 1e-9  # 2*x = 4
         assert abs(result["gradients"]["y"] - 1.0) < 1e-9  # dy/dy = 1
+
+    @pytest.mark.unit
+    def test_autograd_compute_activations(self):
+        """Test that activations are available in autograd_compute."""
+        from codomyrmex.autograd.mcp_tools import autograd_compute
+
+        # We expect this might fail initially if activations aren't in namespace
+        result = autograd_compute("relu(x) + tanh(y)", {"x": -1.0, "y": 0.0})
+        assert result["result"] == 0.0  # relu(-1) + tanh(0) = 0 + 0
+        assert result["gradients"]["x"] == 0.0
+        assert result["gradients"]["y"] == 1.0
 
     @pytest.mark.unit
     def test_autograd_compute_power(self):

@@ -1,47 +1,39 @@
 # Codomyrmex Agents — src/codomyrmex/performance/analysis
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Memory leak detection and performance regression analysis. Provides `MemoryProfiler`
-for gc-based object counting across execution phases, and `RegressionDetector` for
-comparing benchmark measurements against stored baselines with configurable severity thresholds.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `memory_profiler.py` | `MemoryProfiler` | Track memory across phases; gc-based snapshot + diff |
-| `memory_profiler.py` | `MemoryProfiler.snapshot()` | Full gc traversal: collect, count all objects by type (top 20 types stored) |
-| `memory_profiler.py` | `MemoryProfiler.snapshot_lightweight()` | No gc traversal; accepts manually provided object count |
-| `memory_profiler.py` | `MemoryProfiler.diff()` | Compute `MemoryDelta` between two labeled snapshots |
-| `memory_profiler.py` | `MemorySnapshot` | Dataclass: `label`, `timestamp`, `object_count`, `tracked_types` |
-| `memory_profiler.py` | `MemoryDelta` | Dataclass: `object_delta`, `type_deltas`, `leak_suspected` |
-| `regression_detector.py` | `RegressionDetector` | Compare `BenchmarkResult` against `Baseline`; return `RegressionReport` |
-| `regression_detector.py` | `RegressionDetector.check()` | Single benchmark check; raises `KeyError` if no baseline registered |
-| `regression_detector.py` | `RegressionDetector.check_all()` | Batch check; silently skips results with no matching baseline |
-| `regression_detector.py` | `RegressionDetector.summary()` | Multi-line text report with ✓/⚠ flags |
-| `regression_detector.py` | `BenchmarkResult` | Dataclass: `name`, `value`, `unit`, `higher_is_better`, `metadata` |
-| `regression_detector.py` | `Baseline` | Dataclass: `mean`, `stddev`, `warning_threshold` (10%), `critical_threshold` (25%) |
-| `regression_detector.py` | `RegressionSeverity` | Enum: `INFO`, `WARNING`, `CRITICAL` |
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `memory_profiler.py` – Project file
+- `regression_detector.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `MemoryProfiler.snapshot()` calls `gc.collect()` before traversal — ensures stable counts but is slow for large heaps.
-- `MemoryDelta.leak_suspected` is `True` when `object_delta > leak_threshold` (default: 1000 objects).
-- `RegressionDetector.check()` raises `KeyError` if no baseline exists for the benchmark name — callers must register baselines first via `set_baseline()` or `set_baselines()`.
-- `check_all()` silently skips results with no matching baseline (no exception, no log); use `check()` directly when all results must have baselines.
-- Deviation direction: `higher_is_better=True` → decrease = regression; `higher_is_better=False` (default) → increase = regression.
-- Default thresholds: WARNING at 10% deviation, CRITICAL at 25% deviation.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `memory_profiler.py`
+- `regression_detector.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: stdlib only (`gc`, `dataclasses`, `enum`, `time`)
-- **Used by**: `codomyrmex.performance` top-level, `performance.mcp_tools` (`performance_check_regression`, `performance_compare_benchmarks`), `performance.profiling.benchmark`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **📁 Parent**: [performance](../README.md)
-- **🏠 Root**: ../../../../README.md
+## Navigation Links
+- **📁 Parent Directory**: [performance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,83 +1,49 @@
-# Agent Guidelines - Tree-sitter
+# Codomyrmex Agents — src/codomyrmex/tree_sitter
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Code parsing with tree-sitter for syntax analysis and AST transformations.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `languages/` – Directory containing languages components
+- `mcp_tools.py` – Project file
+- `parsers/` – Directory containing parsers components
+- `py.typed` – Project file
+- `queries/` – Directory containing queries components
+- `transformers/` – Directory containing transformers components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **TreeSitterParser** — Parse code to syntax tree
-- **LanguageManager** — Load and manage language grammars
-- **QueryEngine** — Execute tree-sitter queries
-- **ASTTransformer** — Transform parsed ASTs
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Load languages first** — Call `LanguageManager.load(lang)` before parsing
-2. **Use queries for search** — Tree-sitter queries are faster than tree traversal
-3. **Cache parsers** — Reuse parser instances for same language
-4. **Handle parse errors** — Trees may have ERROR nodes; check `tree.root_node.has_error`
-5. **Use node types** — Query by node type (e.g., `function_definition`, `class_definition`)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Queries
-
-```python
-# Find all functions
-functions = parser.query("(function_definition name: (identifier) @name)")
-
-# Find all classes
-classes = parser.query("(class_definition name: (identifier) @name)")
-
-# Find all imports
-imports = parser.query("(import_statement) @import")
-
-# Find function calls
-calls = parser.query("(call expression: (identifier) @fn)")
-```
-
-## Testing Patterns
-
-```python
-# Verify parser loads language
-manager = LanguageManager()
-assert manager.load("python")
-
-# Verify parsing works
-parser = TreeSitterParser(language="python")
-tree = parser.parse("def foo(): pass")
-assert not tree.root_node.has_error
-
-# Verify query results
-results = parser.query("(function_definition) @fn")
-assert len(results) == 1
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Parse code ASTs for analysis, execute tree-sitter queries for function/class extraction during BUILD/VERIFY phases
-
-### Architect Agent
-**Use Cases**: Design code analysis pipelines, plan query patterns for cross-language parsing, evaluate grammar coverage
-
-### QATester Agent
-**Use Cases**: Validate parser accuracy across languages, verify query result correctness, test error node detection
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/tree_sitter.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/tree_sitter.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,23 +1,43 @@
-# Audio Streaming — Agentic Guide
+# Codomyrmex Agents — src/codomyrmex/audio/streaming
 
-**Module**: `codomyrmex.audio.streaming` | **Version**: v1.1.9
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Quick Reference
+## Purpose
+Contains components for the src system.
 
-```python
-from codomyrmex.audio.streaming import AudioStreamServer, AudioStreamClient, StreamConfig
-```
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `client.py` – Project file
+- `codec.py` – Project file
+- `models.py` – Project file
+- `server.py` – Project file
 
-## Agent Instructions
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Server**: Use `AudioStreamServer.process_chunk()` for direct chunk processing
-2. **Client**: Call `connect()` before `send_chunk()`; catch `RuntimeError` if not connected
-3. **Codec**: `CodecNegotiator.negotiate()` returns `NegotiationResult` with `success` flag
-4. **Sessions**: Server tracks independent sessions by `session_id`
-5. **VAD**: Use `audio.speech_to_text.vad.VoiceActivityDetector` for pre-filtering chunks
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `client.py`
+- `codec.py`
+- `models.py`
+- `server.py`
 
-## Testing
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```bash
-uv run pytest src/codomyrmex/tests/unit/test_audio_streaming.py -v --no-cov
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
+- **📁 Parent Directory**: [audio](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

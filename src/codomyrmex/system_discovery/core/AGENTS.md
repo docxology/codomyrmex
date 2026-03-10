@@ -1,34 +1,49 @@
-# Discovery Engine Agentic Context
+# Codomyrmex Agents — src/codomyrmex/system_discovery/core
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Module discovery and dependency analysis for the Codomyrmex platform. Agents use the `DiscoveryEngine` to enumerate installed modules, inspect their metadata, and query the dependency graph.
-
-## Key Components
-
-| Component | Type | Role |
-|-----------|------|------|
-| `DiscoveryEngine` | Class | Scans `src/codomyrmex/` for modules, builds dependency graph |
-| `ModuleMetadata` | Dataclass | Name, version, status, dependencies, MCP tools, RASP doc paths |
-| `DependencyGraph` | Class | DAG of module dependencies with cycle detection |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `capability_scanner.py` – Project file
+- `context.py` – Project file
+- `dependency_analyzer.py` – Project file
+- `discovery_engine.py` – Project file
+- `health_checker.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `DiscoveryEngine.discover()` scans the source tree and populates the module registry.
-- `get_module(name)` returns `ModuleMetadata`; raises `KeyError` if unknown.
-- `list_modules()` returns all discovered modules sorted alphabetically.
-- `dependency_tree(module_name)` returns transitive dependency set.
-- The engine uses `pkgutil` for package enumeration and inspects `__init__.py` for metadata.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `capability_scanner.py`
+- `context.py`
+- `dependency_analyzer.py`
+- `discovery_engine.py`
+- `health_checker.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- Exposes MCP tools: `health_check`, `list_modules`, `dependency_tree`.
-- Used by `system_discovery/health` for health checks against discovered modules.
-- CLI `codomyrmex modules` command delegates to this engine.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- Parent: [system_discovery](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [system_discovery](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

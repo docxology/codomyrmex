@@ -1,24 +1,17 @@
-# Telemetry Tracing Scripts
+# tracing
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for distributed tracing, demonstrating span creation, context propagation, trace correlation, and latency analysis across service boundaries.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `tracing_demo.py` | Demonstrates distributed trace creation, span hierarchy, and trace visualization |
-
-## Usage
-
-```bash
-uv run python scripts/telemetry/tracing/tracing_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `tracing_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: telemetry/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [telemetry](../README.md)
+- **Project Root**: ../../../README.md

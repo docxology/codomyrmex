@@ -1,8 +1,8 @@
-"""Comprehensive tests for cloud.coda_io.models — zero-mock.
+"""Comprehensive tests for cloud.coda_io.models — zero-stub.
 
 Covers all enums, all reference types, all core resources, all pagination
 list types, permissions, user, mutation results, and to_dict methods.
-Uses real class instantiation only; no mocking.
+Uses real class instantiation only; no stubing.
 """
 
 from codomyrmex.cloud.coda_io.models import (

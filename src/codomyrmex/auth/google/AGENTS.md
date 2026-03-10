@@ -1,39 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/auth/google
+# Codomyrmex Agents — src/codomyrmex/auth/google
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides `GoogleAuthenticator` for OAuth2 authentication with Google services (Calendar, Gmail). Handles token caching, automatic refresh, and interactive browser-based authorization flows using `google-auth-oauthlib`.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `authenticator.py` | `GoogleAuthenticator` | OAuth2 authentication manager with token caching and refresh |
-| `authenticator.py` | `DEFAULT_SCOPES` | Default OAuth2 scopes: Calendar full access and Gmail modify |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `authenticator.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `GoogleAuthenticator.__init__()` raises `ImportError` if `google-auth-oauthlib` is not installed.
-- `get_credentials()` returns valid `google.oauth2.credentials.Credentials`; automatically refreshes expired tokens or initiates interactive browser flow.
-- Token cache file defaults to `~/.codomyrmex/auth/google/token.json` with `0o600` permissions.
-- `_run_interactive_flow()` raises `FileNotFoundError` if `client_secrets_file` does not exist.
-- Malformed token cache files are silently discarded and re-authentication is triggered.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `authenticator.py`
+- `py.typed`
 
-## Agent Testing Notes
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- This module triggers blocking interactive browser prompts. Never call `get_credentials()` in headless test suites without a skip guard.
-- Use `@pytest.mark.skipif(os.environ.get("CODOMYRMEX_RUN_LIVE_AUTH_TESTS") != "1")` for live auth tests.
-- Under zero-mock policy, focus testing on schema validation, `FileNotFoundError` for missing client secrets, and invalid `token.json` handling.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Integration Points
-
-- **Depends on**: `google-auth-oauthlib`, `google-auth-httplib2`, `google-api-python-client` (all optional, guarded by `try/except ImportError`)
-- **Used by**: `calendar_integration.gcal.GoogleCalendar`, `email.gmail.provider`
-
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../README.md](../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [auth](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

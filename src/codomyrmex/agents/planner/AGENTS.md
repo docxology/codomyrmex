@@ -1,41 +1,49 @@
 # Codomyrmex Agents — src/codomyrmex/agents/planner
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Hierarchical task planning subsystem that decomposes goals into tree-structured plans, executes them via a workflow runner, evaluates quality with multi-dimensional scoring, and iterates in a convergent feedback loop backed by memory persistence.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `plan_engine.py` | `PlanEngine` | Decomposes goal strings into hierarchical `Plan` objects using keyword-based phase detection |
-| `plan_engine.py` | `Plan` | Hierarchical plan with goal, tasks list, completion tracking, and task flattening |
-| `plan_engine.py` | `PlanTask` | Tree node with name, description, subtasks, dependencies, priority, and state |
-| `plan_engine.py` | `TaskPriority` / `TaskState` | Enums for LOW/MEDIUM/HIGH/CRITICAL priority and PENDING/IN_PROGRESS/COMPLETED/BLOCKED/FAILED state |
-| `plan_evaluator.py` | `PlanEvaluator` | Scores plan execution via weighted composite of success rate, time efficiency, retry ratio, and memory hits |
-| `plan_evaluator.py` | `PlanScore` | Dataclass with overall composite, four component scores, iteration number, and details dict |
-| `executor.py` | `PlanExecutor` | Flattens task tree and executes actions with progress tracking and failure counting |
-| `executor.py` | `ExecutionResult` | Dataclass with success flag, completed/failed counts, replan flag, duration_ms |
-| `feedback_loop.py` | `FeedbackLoop` | Full cycle: PlanEngine -> WorkflowRunner -> PlanEvaluator -> MemoryStore, iterating until convergence |
-| `feedback_loop.py` | `FeedbackResult` | Dataclass capturing goal, success, final score, iteration count, convergence status |
-| `feedback_config.py` | `FeedbackConfig` | Configuration for iteration limits, quality floor, convergence threshold, retry policy, scoring weights |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `executor.py` – Project file
+- `feedback_config.py` – Project file
+- `feedback_loop.py` – Project file
+- `plan_engine.py` – Project file
+- `plan_evaluator.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `PlanEngine.decompose()` uses keyword matching to select phase templates: build/create -> [design, implement, test, deploy]; fix/debug -> [diagnose, fix, verify]; analyze/audit -> [gather_data, analyze, report]; default -> [plan, execute, review].
-- `PlanEvaluator` default weights: success_rate 0.4, time_efficiency 0.3, retry_ratio 0.2, memory_hits 0.1.
-- `FeedbackLoop.run()` terminates when: (a) score >= quality_floor, (b) convergence detected (improvement < threshold), (c) max_iterations exhausted, or (d) partial failure with retry disabled.
-- Memory entries are tagged with `feedback:{goal_hash}` and respect configurable TTL (default 24h).
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `executor.py`
+- `feedback_config.py`
+- `feedback_loop.py`
+- `plan_engine.py`
+- `plan_evaluator.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring`, `codomyrmex.agents.memory.store.MemoryStore`, `codomyrmex.orchestrator.workflows.workflow_engine`
-- **Used by**: Agent orchestration pipelines, PAI PLAN phase implementations
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [agents](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

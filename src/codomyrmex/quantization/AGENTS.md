@@ -1,61 +1,49 @@
-# Quantization Module -- Agent Capabilities
+# Codomyrmex Agents — src/codomyrmex/quantization
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Access Matrix
+## Purpose
+Contains components for the src system.
 
-### Engineer Agent
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `fp4.py` – Project file
+- `int8.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `utils.py` – Project file
 
-**Access**: Full access to all quantization functions
-**Trust Level**: TRUSTED
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Function | Capabilities |
-|----------|-------------|
-| `quantize_int8` | Quantize weight tensors to int8 (symmetric/asymmetric) |
-| `quantize_fp4` | Quantize to FP4 with nibble packing |
-| `Int8Quantizer` | Calibrate and quantize with stateful workflow |
-| `FP4Quantizer` | Stateful FP4 quantization |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `fp4.py`
+- `int8.py`
+- `mcp_tools.py`
+- `py.typed`
+- `utils.py`
 
-**Use Cases**: Model compression, inference optimization, weight quantization pipelines.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Architect Agent
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-**Access**: Read-only analysis, error evaluation
-**Trust Level**: OBSERVED
-
-| Function | Capabilities |
-|----------|-------------|
-| `quantization_error` | Evaluate accuracy/compression trade-offs |
-| `compute_scale_zero_point` | Understand quantization parameters |
-
-**Use Cases**: Architecture decisions on quantization strategy, accuracy vs size trade-off analysis.
-
-### QATester Agent
-
-**Access**: Validation and error measurement
-**Trust Level**: OBSERVED
-
-| Function | Capabilities |
-|----------|-------------|
-| `quantize_int8` / `dequantize_int8` | Roundtrip validation |
-| `quantize_fp4` / `dequantize_fp4` | Roundtrip validation |
-| `quantization_error` | Accuracy regression testing |
-| `quantization_benchmark` | Performance benchmarking |
-
-**Use Cases**: Quantization accuracy regression tests, roundtrip correctness validation.
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `quantize_tensor` | Quantize a list of float values to int8 or fp4 | SAFE |
-| `quantization_benchmark` | Benchmark int8 vs fp4 on random data | SAFE |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `quantize_tensor`, `quantization_benchmark` | TRUSTED |
-| **Architect** | Analysis | `quantization_benchmark` -- trade-off evaluation | OBSERVED |
-| **QATester** | Validation | `quantize_tensor`, `quantization_benchmark` -- accuracy testing | OBSERVED |
-| **Researcher** | Read-only | `quantization_benchmark` -- comparison data | SAFE |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

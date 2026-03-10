@@ -1,63 +1,63 @@
 # Codomyrmex Agents — scripts/agents/pai
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Automation and utility scripts.
 
-Deep PAI integration example scripts exercising the full 31-symbol PAI agent API. Each script targets a distinct capability area with real tool invocations and orchestration patterns.
-
-## Script Inventory
-
-| File | ~Lines | Description |
-|------|--------|-------------|
-| `trust_lifecycle.py` | 180 | Complete trust state machine demo |
-| `mcp_server_ops.py` | 170 | MCP server creation and health validation |
-| `tool_invocation.py` | 160 | Direct, trusted, dynamic, and error tool patterns |
-| `skill_manifest.py` | 150 | Manifest generation and algorithm mapping |
-| `agent_personality.py` | 140 | Agent personality enumeration and cross-referencing |
-| `memory_explorer.py` | 150 | Memory system three-tier analysis |
-| `algorithm_orchestrator.py` | 200 | 7-phase Algorithm orchestration capstone |
-| `claude_pai_bridge.py` | 180 | ClaudeClient + PAI combined workflow |
-| `security_audit.py` | 150 | Security config, TELOS, tool classification |
-| `hook_lifecycle.py` | 140 | Hook enumeration and lifecycle analysis |
-
-## Method Coverage Matrix
-
-| API Method | trust | mcp | tool | skill | agent | memory | algo | claude | sec | hook |
-|------------|:-----:|:---:|:----:|:-----:|:-----:|:------:|:----:|:------:|:---:|:----:|
-| `PAIBridge.is_installed()` | | | | | X | | X | X | | |
-| `PAIBridge.get_status()` | | | | | | | X | | | |
-| `PAIBridge.get_components()` | | | | | | | X | | | |
-| `PAIBridge.list_skills()` | | | | X | X | | X | | | |
-| `PAIBridge.list_tools()` | | | | | | | X | | | |
-| `PAIBridge.list_hooks()` | | | | | | | | | | X |
-| `PAIBridge.list_active_hooks()` | | | | | | | | | | X |
-| `PAIBridge.list_agents()` | | | | | X | | | | | |
-| `PAIBridge.list_memory_stores()` | | | | | | X | X | | | |
-| `PAIBridge.get_security_config()` | | | | | | | | | X | |
-| `PAIBridge.get_telos_files()` | | | | | | | | | X | |
-| `PAIBridge.get_settings()` | | | | | | | | | X | |
-| `PAIBridge.get_pai_env()` | | | | | | | | | X | |
-| `verify_capabilities()` | X | | X | | | | X | | | |
-| `trust_tool()` | X | | | | | | | | | |
-| `trust_all()` | X | | X | | | | X | | | |
-| `trusted_call_tool()` | X | | X | | | | X | | | |
-| `get_trust_report()` | X | | | | | | X | | | |
-| `reset_trust()` | X | | X | | | | X | | | |
-| `call_tool()` | X | | X | | | | X | X | | |
-| `create_mcp_server()` | | X | | | | | | | | |
-| `get_tool_registry()` | | X | | X | | | | X | | |
-| `get_skill_manifest()` | | | | X | | | X | X | | |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `agent_personality.py` – Project file
+- `algorithm_orchestrator.py` – Project file
+- `claude_pai_bridge.py` – Project file
+- `hook_lifecycle.py` – Project file
+- `mcp_server_ops.py` – Project file
+- `memory_explorer.py` – Project file
+- `pai_dashboard.py` – Project file
+- `pai_example.py` – Project file
+- `security_audit.py` – Project file
+- `simulate_pai_chat.py` – Project file
+- `skill_manifest.py` – Project file
+- `tool_invocation.py` – Project file
+- `trust_lifecycle.py` – Project file
+- `z3_pai_example.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **No Mutation of PAI**: Scripts never write to `~/.claude/` (except trust_ledger.json, which is reset)
-2. **Trust Reset**: Scripts that modify trust state must reset on exit via `finally` block
-3. **Graceful Degradation**: Return 0 when PAI is not installed
-4. **CLI Helpers**: Use `codomyrmex.utils.cli_helpers` for formatted output
-5. **argparse CLI**: All scripts accept `--help` and `--json` flags
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `agent_personality.py`
+- `algorithm_orchestrator.py`
+- `claude_pai_bridge.py`
+- `hook_lifecycle.py`
+- `mcp_server_ops.py`
+- `memory_explorer.py`
+- `pai_dashboard.py`
+- `pai_example.py`
+- `security_audit.py`
+- `simulate_pai_chat.py`
+- `skill_manifest.py`
+- `tool_invocation.py`
+- `trust_lifecycle.py`
+- `z3_pai_example.py`
 
-## Navigation
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- **Parent**: [../README.md](../README.md)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

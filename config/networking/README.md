@@ -1,29 +1,16 @@
-# Networking Configuration
+# networking
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Network communication utilities including HTTP clients, WebSocket support, and protocol implementations for service-to-service communication.
+Configuration files and templates.
 
-## Configuration Options
-
-The networking module operates with sensible defaults and does not require environment variable configuration. Connection timeouts, retry policies, and proxy settings are configurable per-client instance.
-
-## PAI Integration
-
-PAI agents interact with networking through direct Python imports. Connection timeouts, retry policies, and proxy settings are configurable per-client instance.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep networking
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/networking/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

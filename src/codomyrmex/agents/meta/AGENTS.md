@@ -1,39 +1,47 @@
 # Codomyrmex Agents — src/codomyrmex/agents/meta
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Self-improving meta-agent framework that wraps task execution, scores outcomes across multiple dimensions (correctness, efficiency, quality, speed), and evolves strategy selection over time using A/B testing and success-rate tracking.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `meta_agent.py` | `MetaAgent` | Orchestrates the learning loop: select strategy, execute task, score outcome, update success rate |
-| `meta_agent.py` | `EvolutionRecord` | Dataclass capturing iteration number, strategy used, and composite score |
-| `ab_testing.py` | `ABTestEngine` | Compares two strategies over paired score lists using binomial proportion test |
-| `ab_testing.py` | `ABTestResult` | Dataclass with wins_a, wins_b, ties, winner, and statistical significance |
-| `scoring.py` | `OutcomeScorer` | Computes weighted composite from correctness, efficiency, quality, and speed |
-| `scoring.py` | `OutcomeScore` | Dataclass holding the four dimension scores plus composite |
-| `strategies.py` | `StrategyLibrary` | CRUD operations on named strategies; tracks success rates and selects best |
-| `strategies.py` | `Strategy` | Named strategy with prompt template, parameters, running success rate |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `ab_testing.py` – Project file
+- `meta_agent.py` – Project file
+- `py.typed` – Project file
+- `scoring.py` – Project file
+- `strategies.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `MetaAgent.run()` selects the best strategy (or round-robins) each iteration, calls `task_fn(strategy.name)`, and updates `Strategy.success_rate` based on a composite > 0.5 threshold.
-- `OutcomeScorer` default weights: correctness 0.4, quality 0.25, efficiency 0.2, speed 0.15. Custom weights accepted via constructor.
-- `ABTestEngine.compare_scores()` uses a simple binomial proportion approximation: `significance = abs(p_a - 0.5) * 2` where `p_a` is the win fraction.
-- `Strategy.record_outcome()` uses a running weighted average: `success_rate = success_rate * (1 - 1/count) + outcome * (1/count)`.
-- Errors in `task_fn` are caught, logged, and counted as failures (score 0.0) rather than aborting the loop.
-- All components log via `logging_monitoring.get_logger()` before re-raising or returning.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `ab_testing.py`
+- `meta_agent.py`
+- `py.typed`
+- `scoring.py`
+- `strategies.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring`
-- **Used by**: Agent orchestration workflows, PAI meta-learning loops
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [agents](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

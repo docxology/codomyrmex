@@ -1,34 +1,43 @@
-# Codomyrmex Agents -- src/codomyrmex/audio/speech_to_text/providers
+# Codomyrmex Agents — src/codomyrmex/audio/speech_to_text/providers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides pluggable speech-to-text (STT) provider implementations. Defines an abstract `STTProvider` base class and a concrete `WhisperProvider` that uses the `faster-whisper` library (CTranslate2-accelerated Whisper) for local audio transcription with word-level timestamps and VAD filtering.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `base.py` | `STTProvider` | Abstract base class defining the STT provider interface (transcribe, detect_language, stream) |
-| `whisper_provider.py` | `WhisperProvider` | Concrete provider using `faster-whisper` for local transcription with 99+ language support |
-| `__init__.py` | `get_provider()` | Factory function to instantiate STT providers by name |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `base.py` – Project file
+- `py.typed` – Project file
+- `whisper_provider.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All providers must implement the `STTProvider` ABC: `transcribe()`, `transcribe_async()`, `transcribe_stream()`, `detect_language()`, `get_supported_languages()`, `is_loaded`, `unload()`.
-- `WhisperProvider.__init__()` raises `ProviderNotAvailableError` if `faster-whisper` is not installed.
-- `WhisperProvider.transcribe()` raises `ModelNotLoadedError` if the model failed to load, `AudioFormatError` for unsupported formats, `TranscriptionError` for other failures.
-- Supported audio formats: `.wav`, `.mp3`, `.flac`, `.ogg`, `.m4a`, `.webm`, `.mp4`, `.mpeg`, `.mpga`, `.oga`, `.opus`.
-- The `get_provider()` factory raises `ValueError` for unrecognized provider names.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `base.py`
+- `py.typed`
+- `whisper_provider.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `audio.speech_to_text.models` (TranscriptionConfig, TranscriptionResult, WhisperModelSize, Segment, Word), `audio.exceptions` (TranscriptionError, AudioFormatError, ModelNotLoadedError, ProviderNotAvailableError), `faster-whisper` (optional external)
-- **Used by**: `audio.speech_to_text` parent module, any consumer of STT functionality
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [speech_to_text](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

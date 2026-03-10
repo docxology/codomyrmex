@@ -1,33 +1,33 @@
-# Interpretability -- Agent Coordination
+# Codomyrmex Agents — docs/modules/interpretability
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides Sparse Autoencoder (SAE) tools for mechanistic interpretability of neural networks. Trains SAEs on activation data to discover interpretable sparse features and analyze activation patterns.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `sae_train` | Train a Sparse Autoencoder on activation data for mechanistic interpretability | Standard | interpretability |
-| `sae_analyze` | Analyze features learned by a Sparse Autoencoder on provided activations | Standard | interpretability |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| OBSERVE | Research Agent | Analyze neural network internals via sparse feature decomposition |
-| VERIFY | QA Agent | Validate interpretability results against expected feature patterns |
-
-
-## Agent Instructions
-
-1. d_features defaults to 4x d_input for overcomplete dictionary learning
-2. lambda_l1 controls sparsity penalty -- higher values produce sparser features
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/interpretability/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

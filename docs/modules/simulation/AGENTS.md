@@ -1,78 +1,39 @@
-# Agent Guidelines - Simulation
+# Codomyrmex Agents — docs/modules/simulation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Step-based simulation engine for agent-based modeling and system dynamics.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Simulator** -- Core simulation engine with run/step/results lifecycle
-- **SimulationConfig** -- Configuration dataclass (name, max_steps, seed, params)
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Configure before running** -- Create a `SimulationConfig` with appropriate parameters before instantiating `Simulator`
-2. **Set seeds for reproducibility** -- Always provide a `seed` value when deterministic results are needed
-3. **Use step() for control** -- Prefer `step()` in a loop when you need per-step inspection or early termination
-4. **Check results** -- Call `get_results()` after completion to retrieve simulation outcome data
-5. **Handle exceptions** -- Wrap `run()` calls in try/except; simulation errors are logged and re-raised
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.simulation import Simulator, SimulationConfig
-
-# Full run with configuration
-config = SimulationConfig(
-    name="agent_experiment",
-    max_steps=1000,
-    seed=42,
-    params={"decay_rate": 0.95}
-)
-sim = Simulator(config)
-results = sim.run()
-print(f"Completed: {results['steps_completed']} steps")
-
-# Step-by-step with inspection
-sim = Simulator(SimulationConfig(max_steps=100))
-for i in range(50):
-    sim.step()
-    sim.step_count += 1  # tracked internally by run()
-results = sim.get_results()
-
-# Default configuration
-sim = Simulator()
-results = sim.run()
-assert results["status"] == "completed"
-```
-
-## Testing Patterns
-
-```python
-from codomyrmex.simulation import Simulator, SimulationConfig
-
-# Verify default initialization
-sim = Simulator()
-assert sim.config.name == "default_simulation"
-assert sim.config.max_steps == 1000
-assert sim.step_count == 0
-
-# Verify configuration
-config = SimulationConfig(name="test", max_steps=10, seed=42)
-sim = Simulator(config)
-results = sim.run()
-assert results["steps_completed"] == 10
-assert results["status"] == "completed"
-
-# Verify get_results structure
-results = sim.get_results()
-assert "steps_completed" in results
-assert "config" in results
-assert "status" in results
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

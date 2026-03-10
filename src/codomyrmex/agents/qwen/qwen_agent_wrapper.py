@@ -15,9 +15,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+Assistant = None
 with contextlib.suppress(ImportError):
     from qwen_agent.agents import Assistant
 
+WebUI = None
 with contextlib.suppress(ImportError):
     from qwen_agent.gui import WebUI
 

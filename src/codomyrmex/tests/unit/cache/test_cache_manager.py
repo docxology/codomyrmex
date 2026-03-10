@@ -6,6 +6,8 @@ Covers:
 - InMemoryCache operations (get, set, delete, clear, exists, TTL, eviction, stats, patterns)
 - FileBasedCache operations (get, set, delete, clear, exists, TTL, stats)
 - TTLManager periodic cleanup registration
+
+Zero-Mock Policy: no unittest.mock, MagicMock, monkeypatch, or pytest-mock.
 """
 
 import time

@@ -1,34 +1,43 @@
-# CRM Agentic Context
+# Codomyrmex Agents — src/codomyrmex/relations/crm
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Contact relationship management with tagging, interaction history, and search. Agents use this submodule to track contacts and their interactions over time.
-
-## Key Components
-
-| Component | Type | Role |
-|-----------|------|------|
-| `ContactManager` | Class | Central registry -- add, remove, search, tag contacts |
-| `Contact` | Dataclass | Name, email, company, tags, metadata, timestamps |
-| `Interaction` | Dataclass | Type (email/meeting/call/note), summary, timestamp per contact |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `crm.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `add_contact(name, email, ...)` returns a `Contact` with a generated UUID.
-- `search(query)` performs case-insensitive substring match on name and email.
-- `add_tag` / `remove_tag` mutate the contact's tag set in place.
-- `add_interaction(contact_id, interaction_type, summary)` appends to the contact's history list.
-- `get_interactions(contact_id)` returns interactions newest-first by default.
-- Contact IDs are `uuid4` strings; passing an unknown ID raises `KeyError`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `crm.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- Parent module `relations` provides `relations_score_strength` MCP tool.
-- Uses `logging_monitoring.get_logger` for structured logging.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- Parent: [relations](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [relations](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

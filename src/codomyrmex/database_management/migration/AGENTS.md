@@ -1,46 +1,47 @@
-# Migration — Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/database_management/migration
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides database migration and data transformation capabilities for AI agents, supporting step-based schema migrations with rollback, record-level data transformations, and SQL-based migration management across SQLite, PostgreSQL, and MySQL.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `models.py` | `MigrationStep` | Single migration step with `up_fn` / `down_fn` callables and dependency list |
-| `models.py` | `Migration` | Migration definition grouping ordered `MigrationStep` instances with `add_step` / `add_simple_step` |
-| `models.py` | `MigrationResult` | Result dataclass with `status`, `progress`, `duration_seconds`, and `to_dict` serialization |
-| `models.py` | `MigrationStatus` | Enum: `PENDING`, `RUNNING`, `COMPLETED`, `FAILED`, `ROLLED_BACK` |
-| `models.py` | `DataTransformer` | Abstract base class for record-level data transformations |
-| `models.py` | `FieldRenameTransformer` | Renames dictionary keys according to a mapping |
-| `models.py` | `FieldTypeTransformer` | Converts field values to target types with logged warnings on failure |
-| `models.py` | `CompositeTransformer` | Chains multiple `DataTransformer` instances in sequence |
-| `executor.py` | `MigrationRunner` | Thread-safe migration executor with step-by-step `run` and `rollback` |
-| `executor.py` | `DataMigrator` | Pipeline runner applying `DataTransformer` chains to record lists |
-| `migration_manager.py` | `DatabaseConnector` | URL-based database connection for SQLite, PostgreSQL, and MySQL with `execute` and `execute_script` |
-| `migration_manager.py` | `MigrationManager` | Full lifecycle manager: `create_migration`, `apply_migration`, `rollback_migration`, `apply_pending_migrations`, with tracking table and JSON persistence |
-| `migration_manager.py` | `run_migrations` | Convenience function wrapping `MigrationManager.apply_pending_migrations` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `_db_connector.py` – Project file
+- `executor.py` – Project file
+- `migration_manager.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Agents SHOULD use `MigrationManager` for SQL-based database migrations and `MigrationRunner` for callable-based step migrations; the two systems are independent.
-- `MigrationRunner.run` executes steps sequentially; if any step returns `False`, the migration status is set to `FAILED` and execution stops.
-- `MigrationRunner.rollback` runs steps in reverse order using each step's `down_fn`.
-- `MigrationManager` creates a `_migrations` tracking table in the target database to record applied migrations.
-- `MigrationManager` persists migration metadata to JSON files in the `migrations_dir`; agents should not modify these files directly.
-- `DataMigrator` applies transformers to each record independently; field conversion failures are logged as warnings but do not halt the pipeline.
-- `MigrationManager.apply_migration` supports `dry_run=True` for previewing SQL without executing.
-- Dependency checking in `MigrationManager` verifies all listed dependencies are already applied before running a migration.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `_db_connector.py`
+- `executor.py`
+- `migration_manager.py`
+- `models.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **logging_monitoring**: `MigrationManager` and `FieldTypeTransformer` use the codomyrmex structured logger.
-- **exceptions**: `MigrationManager` raises `CodomyrmexError` on failures.
-- **database_management/lineage**: Migration steps can be registered as transformations in the lineage graph.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [database_management/README.md](../README.md)
-- **Siblings**: [backup/](../backup/), [lineage/](../lineage/)
-- **RASP**: [README.md](README.md) | **AGENTS.md** | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [database_management](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

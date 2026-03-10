@@ -1,73 +1,44 @@
-# Agent Guidelines - Documents
+# Codomyrmex Agents — docs/modules/documents
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Document processing: parsing, extraction, and transformation.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `tutorials/` – Directory containing tutorials components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **DocumentParser** — Parse various formats
-- **TextExtractor** — Extract text content
-- **DocumentConverter** — Format conversion
-- **ChunkSplitter** — Split into chunks
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Detect format** — Auto-detect document type
-2. **Extract metadata** — Title, author, date
-3. **Chunk for LLM** — Split large documents
-4. **Handle encoding** — UTF-8 by default
-5. **Preserve structure** — Maintain headings
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.documents import (
-    DocumentParser, TextExtractor, ChunkSplitter
-)
-
-# Parse document
-parser = DocumentParser()
-doc = parser.parse("report.pdf")
-print(f"Title: {doc.metadata.title}")
-print(f"Pages: {doc.page_count}")
-
-# Extract text
-extractor = TextExtractor()
-text = extractor.extract("document.docx")
-text = extractor.extract_from_bytes(pdf_bytes, format="pdf")
-
-# Split into chunks for RAG
-splitter = ChunkSplitter(
-    chunk_size=1000,
-    overlap=100,
-    separator="paragraph"
-)
-chunks = splitter.split(text)
-for chunk in chunks:
-    embed_and_store(chunk)
-
-# Convert formats
-from codomyrmex.documents import DocumentConverter
-pdf = DocumentConverter.to_pdf("input.docx")
-```
-
-## Testing Patterns
-
-```python
-# Verify parsing
-parser = DocumentParser()
-doc = parser.parse_string("# Heading\n\nText", format="markdown")
-assert doc.metadata is not None
-
-# Verify chunking
-splitter = ChunkSplitter(chunk_size=100)
-chunks = splitter.split("A" * 300)
-assert len(chunks) > 1
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

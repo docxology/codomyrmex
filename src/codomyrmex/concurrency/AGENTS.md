@@ -1,106 +1,53 @@
-# Concurrency Module - Agent Guidelines
+# Codomyrmex Agents — src/codomyrmex/concurrency
 
-**Version**: v1.2.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-The `concurrency` module provides thread-safe and process-safe synchronization primitives for coordinating parallel tasks.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `dead_letter.py` – Project file
+- `locks/` – Directory containing locks components
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `result_aggregator.py` – Project file
+- `semaphores/` – Directory containing semaphores components
+- `tasks/` – Directory containing tasks components
+- `workers/` – Directory containing workers components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **`LocalLock`** — Thread-safe and process-safe file-based lock. Supports re-entry.
-- **`RedisLock`** — Redis-backed distributed lock for multi-node coordination.
-- **`LockManager`** — Orchestrates multiple named locks to prevent deadlocks.
-- **`ReadWriteLock`** — Efficient in-process lock (multiple readers, exclusive writer).
-- **`LocalSemaphore`** — Limit concurrent access to resources.
-- **`AsyncLocalSemaphore`** — Asyncio-compatible semaphore with sync bridge.
-- **`AsyncWorkerPool`** — Managed pool for bounded async task execution.
-- **`Channel`** — Go-style async communication channels for inter-task coordination.
-- **`TaskQueue`** — Priority-based task queue with deduplication and dead-letter support.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `dead_letter.py`
+- `mcp_tools.py`
+- `py.typed`
+- `result_aggregator.py`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Always Use Context Managers** — Prefer the `with lock:` or `async with sem:` patterns for guaranteed cleanup.
-2. **Set Timeouts** — Never block indefinitely. Always provide a `timeout` argument to `acquire()` calls to prevent system-wide deadlocks.
-3. **Prefer the LockManager** — When acquiring multiple locks, use `LockManager.acquire_all()` which handles resource sorting to prevent circular wait deadlocks.
-4. **Choose the Right Primitive**:
-   - Use `LocalLock` for local process synchronization.
-   - Use `RedisLock` for distributed systems.
-   - Use `ReadWriteLock` for data structures that are frequently read but rarely updated.
-   - Use `AsyncWorkerPool` for limiting concurrency of async tasks (e.g., API calls).
-   - Use `Channel` for message passing between async tasks.
-   - Use `TaskQueue` for managing work that requires priority, deduplication, or retries.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-### Safe Multi-Resource Acquisition
-```python
-from codomyrmex.concurrency import LockManager, LocalLock
-
-manager = LockManager()
-manager.register_lock("db", LocalLock("database"))
-manager.register_lock("file", LocalLock("log_file"))
-
-# Safely acquire both in sorted order
-if manager.acquire_all(["file", "db"], timeout=5.0):
-    try:
-        # Critical section
-        pass
-    finally:
-        manager.release_all(["db", "file"])
-```
-
-### Bounded Async Execution
-```python
-from codomyrmex.concurrency import AsyncWorkerPool
-
-async def process_data(item):
-    # Process item
-    return item * 2
-
-async with AsyncWorkerPool(max_workers=5) as pool:
-    results = await pool.map(process_data, range(20))
-    # results is a list of TaskResult objects
-```
-
-### Async Channels (CSP Pattern)
-```python
-import asyncio
-from codomyrmex.concurrency import Channel
-
-async def producer(ch: Channel):
-    for i in range(5):
-        await ch.send(f"msg-{i}")
-    ch.close()
-
-async def consumer(ch: Channel):
-    async for msg in ch:
-        print(f"Received: {msg}")
-
-async def main():
-    ch = Channel(capacity=2)
-    await asyncio.gather(producer(ch), consumer(ch))
-```
-
-### Redis Distributed Locking
-```python
-from redis import Redis
-from codomyrmex.concurrency import RedisLock
-
-redis_client = Redis.from_url("redis://localhost:6379")
-lock = RedisLock("global_task", redis_client, ttl=60)
-
-with lock:
-    # Exclusive distributed operation
-    pass
-```
-
-## Testing Guidelines
-
-- **Zero-Mock Policy**: Use `fakeredis.FakeRedis()` for testing Redis-dependent code instead of mocking the Redis client.
-- **Race Conditions**: When testing concurrency, use multiple threads/processes and verify consistency of shared state.
-- **Timeouts**: Verify that `TimeoutError` is raised (or `False` is returned) when locks cannot be acquired.
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,46 +1,47 @@
 # Codomyrmex Agents — docs/development
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Development environment documentation and best practices for contributing to Codomyrmex. Covers environment setup, testing, documentation standards, and tooling.
+Documentation files and guides.
 
 ## Active Components
-
-| File | Priority | Description |
-|------|----------|-------------|
-| [environment-setup.md](environment-setup.md) | **Critical** | Complete dev environment setup |
-| [testing-strategy.md](testing-strategy.md) | **Critical** | Testing patterns and requirements |
-| [documentation.md](documentation.md) | High | Documentation standards |
-| [uv-usage-guide.md](uv-usage-guide.md) | High | UV package manager guide |
-| [README.md](README.md) | Medium | Directory overview |
-| [SPEC.md](SPEC.md) | Medium | Functional specification |
-
-## Agent Guidelines
-
-### Development Quality Standards
-
-1. **Environment**: Keep setup docs working across Mac/Linux/Windows
-2. **Testing**: Maintain >80% test coverage requirement
-3. **Documentation**: Enforce RASP compliance in all modules
-4. **Tooling**: Keep uv/pip instructions current
-
-### When Modifying Development Docs
-
-- Test all installation commands on a clean environment
-- Update Python version requirements when changed
-- Verify test commands with current test suite
-- Update IDE configuration for new VS Code/PyCharm versions
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `documentation.md` – Project file
+- `environment-setup.md` – Project file
+- `google-integration.md` – Project file
+- `multi-agent-git.md` – Project file
+- `testing-strategy.md` – Project file
+- `uv-usage-guide.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment between code, documentation, and configured workflows
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Record outcomes in shared telemetry and update TODO queues when necessary
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `documentation.md`
+- `environment-setup.md`
+- `google-integration.md`
+- `multi-agent-git.md`
+- `testing-strategy.md`
+- `uv-usage-guide.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [docs/](../README.md)
-- **🏠 Project Root**: [../../README.md](../../README.md)
-- **📦 Related**: [Deployment](../deployment/) | [Contributing](../project/contributing.md)
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

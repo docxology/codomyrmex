@@ -1,13 +1,12 @@
 # cognitive
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Cognitive security patterns for AI safety and human-AI interaction protection.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -16,9 +15,9 @@ Cognitive security patterns for AI safety and human-AI interaction protection.
 - `behavior_analysis.py` – File
 - `cognitive_threat_assessment.py` – File
 - `phishing_analyzer.py` – File
+- `py.typed` – File
 - `social_engineering_detector.py` – File
 
 ## Navigation
-
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: ../../../../README.md

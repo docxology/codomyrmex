@@ -1,20 +1,19 @@
 # api
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `api` module provides core functionality for Api..
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `github.py` - Github
-- `visualization.py` - Visualization
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `github/` – Subdirectory
+- `visualization.py` – File
 
 ## Navigation
-
-- **Parent Module**: [git_operations](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [git_operations](../README.md)
+- **Project Root**: ../../../../README.md

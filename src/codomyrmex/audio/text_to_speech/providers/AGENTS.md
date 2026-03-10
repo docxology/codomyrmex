@@ -1,36 +1,45 @@
-# Codomyrmex Agents -- src/codomyrmex/audio/text_to_speech/providers
+# Codomyrmex Agents — src/codomyrmex/audio/text_to_speech/providers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides pluggable text-to-speech (TTS) provider implementations. Defines an abstract `TTSProvider` base class and two concrete providers: `EdgeTTSProvider` (Microsoft Edge neural voices, requires internet) and `Pyttsx3Provider` (offline synthesis using system TTS engines).
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `base.py` | `TTSProvider` | Abstract base class defining the TTS provider interface (synthesize, list_voices, get_voice) |
-| `edge_tts_provider.py` | `EdgeTTSProvider` | Neural TTS via Microsoft Edge service; 300+ voices in 40+ languages; free, requires internet |
-| `pyttsx3_provider.py` | `Pyttsx3Provider` | Offline TTS using system engines (SAPI5 on Windows, NSSpeechSynthesizer on macOS, espeak on Linux) |
-| `__init__.py` | `get_provider()` | Factory function to instantiate TTS providers by name (`"pyttsx3"`, `"edge-tts"`) |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `base.py` – Project file
+- `edge_tts_provider.py` – Project file
+- `py.typed` – Project file
+- `pyttsx3_provider.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All providers must implement the `TTSProvider` ABC: `synthesize()`, `synthesize_async()`, `list_voices()`, `get_voice()`, `get_supported_languages()`, `default_voice`.
-- Both providers raise `ProviderNotAvailableError` if their respective library is not installed.
-- `synthesize()` raises `SynthesisError` for empty text or runtime failures, `VoiceNotFoundError` for invalid voice IDs.
-- `EdgeTTSProvider` loads voice list lazily from the Edge TTS service on first use.
-- `Pyttsx3Provider` loads system voices eagerly at initialization.
-- The `get_provider()` factory raises `ValueError` for unrecognized provider names.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `base.py`
+- `edge_tts_provider.py`
+- `py.typed`
+- `pyttsx3_provider.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `audio.text_to_speech.models` (TTSConfig, SynthesisResult, VoiceInfo, AudioFormat, VoiceGender), `audio.exceptions` (SynthesisError, VoiceNotFoundError, ProviderNotAvailableError), `edge-tts` (optional), `pyttsx3` (optional)
-- **Used by**: `audio.text_to_speech` parent module, any consumer of TTS functionality
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [text_to_speech](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

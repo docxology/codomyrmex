@@ -30,7 +30,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
 
     def list_zones(self) -> list[dict[str, Any]]:
         """List all DNS zones."""
-        try:
+
+        def _list():
             zones = list(self._conn.dns.zones())
             return [
                 {
@@ -43,13 +44,13 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
                 }
                 for z in zones
             ]
-        except Exception as e:
-            logger.error("Failed to list zones: %s", e)
-            raise
+
+        return self._safe_call(_list, "list", "zones", default=[])
 
     def get_zone(self, zone_id: str) -> dict[str, Any] | None:
         """Get a specific zone by ID or name."""
-        try:
+
+        def _get():
             zone = self._conn.dns.find_zone(zone_id)
             if zone:
                 return {
@@ -60,9 +61,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
                     "ttl": zone.ttl,
                 }
             return None
-        except Exception as e:
-            logger.error("Failed to get zone %s: %s", zone_id, e)
-            raise
+
+        return self._safe_call(_get, "get", f"zone {zone_id}")
 
     def create_zone(
         self, name: str, email: str, ttl: int = 3600, description: str | None = None
@@ -76,29 +76,28 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             ttl: Default TTL for records
             description: Optional description
         """
-        try:
+
+        def _create():
             # Ensure zone name ends with dot
-            if not name.endswith("."):
-                name = name + "."
+            normalized_name = name if name.endswith(".") else f"{name}."
 
             zone = self._conn.dns.create_zone(
-                name=name, email=email, ttl=ttl, description=description
+                name=normalized_name, email=email, ttl=ttl, description=description
             )
             logger.info("Created zone: %s", zone.id)
             return {"id": zone.id, "name": zone.name}
-        except Exception as e:
-            logger.error("Failed to create zone %s: %s", name, e)
-            raise
+
+        return self._safe_call(_create, "create", f"zone {name}")
 
     def delete_zone(self, zone_id: str) -> bool:
         """Delete a DNS zone."""
-        try:
+
+        def _delete():
             self._conn.dns.delete_zone(zone_id)
             logger.info("Deleted zone: %s", zone_id)
             return True
-        except Exception as e:
-            logger.error("Failed to delete zone %s: %s", zone_id, e)
-            raise
+
+        return self._safe_call(_delete, "delete", f"zone {zone_id}", default=False)
 
     def update_zone(
         self,
@@ -108,7 +107,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         description: str | None = None,
     ) -> bool:
         """Update a DNS zone."""
-        try:
+
+        def _update():
             updates = {}
             if email is not None:
                 updates["email"] = email
@@ -120,9 +120,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             self._conn.dns.update_zone(zone_id, **updates)
             logger.info("Updated zone: %s", zone_id)
             return True
-        except Exception as e:
-            logger.error("Failed to update zone %s: %s", zone_id, e)
-            raise
+
+        return self._safe_call(_update, "update", f"zone {zone_id}", default=False)
 
     # =========================================================================
     # Record Set Operations
@@ -130,7 +129,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
 
     def list_records(self, zone_id: str) -> list[dict[str, Any]]:
         """List all record sets in a zone."""
-        try:
+
+        def _list():
             records = list(self._conn.dns.recordsets(zone_id))
             return [
                 {
@@ -143,13 +143,13 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
                 }
                 for r in records
             ]
-        except Exception as e:
-            logger.error("Failed to list records in zone %s: %s", zone_id, e)
-            raise
+
+        return self._safe_call(_list, "list", f"records in zone {zone_id}", default=[])
 
     def get_record(self, zone_id: str, record_id: str) -> dict[str, Any] | None:
         """Get a specific record set."""
-        try:
+
+        def _get():
             record = self._conn.dns.get_recordset(record_id, zone_id)
             if record:
                 return {
@@ -160,9 +160,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
                     "ttl": record.ttl,
                 }
             return None
-        except Exception as e:
-            logger.error("Failed to get record %s: %s", record_id, e)
-            raise
+
+        return self._safe_call(_get, "get", f"record {record_id} in zone {zone_id}")
 
     def create_record(
         self,
@@ -184,14 +183,14 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             ttl: Time to live in seconds
             description: Optional description
         """
-        try:
+
+        def _create():
             # Ensure name ends with dot
-            if not name.endswith("."):
-                name = name + "."
+            normalized_name = name if name.endswith(".") else f"{name}."
 
             record = self._conn.dns.create_recordset(
                 zone=zone_id,
-                name=name,
+                name=normalized_name,
                 type=record_type,
                 records=records,
                 ttl=ttl,
@@ -199,9 +198,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             )
             logger.info("Created record: %s", record.id)
             return {"id": record.id, "name": record.name, "type": record_type}
-        except Exception as e:
-            logger.error("Failed to create record %s: %s", name, e)
-            raise
+
+        return self._safe_call(_create, "create", f"record {name} in zone {zone_id}")
 
     def update_record(
         self,
@@ -212,7 +210,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         description: str | None = None,
     ) -> bool:
         """Update a DNS record set."""
-        try:
+
+        def _update():
             updates = {}
             if records is not None:
                 updates["records"] = records
@@ -224,19 +223,22 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             self._conn.dns.update_recordset(record_id, zone_id, **updates)
             logger.info("Updated record: %s", record_id)
             return True
-        except Exception as e:
-            logger.error("Failed to update record %s: %s", record_id, e)
-            raise
+
+        return self._safe_call(
+            _update, "update", f"record {record_id} in zone {zone_id}", default=False
+        )
 
     def delete_record(self, zone_id: str, record_id: str) -> bool:
         """Delete a DNS record set."""
-        try:
+
+        def _delete():
             self._conn.dns.delete_recordset(record_id, zone_id)
             logger.info("Deleted record: %s", record_id)
             return True
-        except Exception as e:
-            logger.error("Failed to delete record %s: %s", record_id, e)
-            raise
+
+        return self._safe_call(
+            _delete, "delete", f"record {record_id} in zone {zone_id}", default=False
+        )
 
     # =========================================================================
     # Reverse DNS (PTR) Operations
@@ -244,7 +246,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
 
     def list_ptr_records(self) -> list[dict[str, Any]]:
         """List all PTR records (reverse DNS)."""
-        try:
+
+        def _list():
             ptrs = list(self._conn.dns.ptr_records())
             return [
                 {
@@ -255,9 +258,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
                 }
                 for ptr in ptrs
             ]
-        except Exception as e:
-            logger.error("Failed to list PTR records: %s", e)
-            raise
+
+        return self._safe_call(_list, "list", "PTR records", default=[])
 
     def set_reverse_dns(
         self,
@@ -275,10 +277,10 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             ttl: Time to live
             description: Optional description
         """
-        try:
+
+        def _set():
             # Ensure hostname ends with dot
-            if not hostname.endswith("."):
-                hostname = hostname + "."
+            normalized_hostname = hostname if hostname.endswith(".") else f"{hostname}."
 
             # Find the floating IP
             fip = self._conn.network.find_ip(floating_ip)
@@ -288,19 +290,23 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
 
             ptr = self._conn.dns.create_ptr_record(
                 floating_ip_id=fip.id,
-                ptrdname=hostname,
+                ptrdname=normalized_hostname,
                 ttl=ttl,
                 description=description,
             )
-            logger.info("Set reverse DNS for %s: %s", floating_ip, hostname)
-            return {"id": ptr.id, "address": floating_ip, "ptrdname": hostname}
-        except Exception as e:
-            logger.error("Failed to set reverse DNS for %s: %s", floating_ip, e)
-            raise
+            logger.info("Set reverse DNS for %s: %s", floating_ip, normalized_hostname)
+            return {
+                "id": ptr.id,
+                "address": floating_ip,
+                "ptrdname": normalized_hostname,
+            }
+
+        return self._safe_call(_set, "set", f"reverse DNS for {floating_ip}")
 
     def get_reverse_dns(self, floating_ip: str) -> dict[str, Any] | None:
         """Get reverse DNS (PTR record) for a floating IP."""
-        try:
+
+        def _get():
             fip = self._conn.network.find_ip(floating_ip)
             if not fip:
                 return None
@@ -314,13 +320,13 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
                     "ttl": ptr.ttl,
                 }
             return None
-        except Exception as e:
-            logger.error("Failed to get reverse DNS for %s: %s", floating_ip, e)
-            raise
+
+        return self._safe_call(_get, "get", f"reverse DNS for {floating_ip}")
 
     def delete_reverse_dns(self, floating_ip: str) -> bool:
         """Delete reverse DNS (PTR record) for a floating IP."""
-        try:
+
+        def _delete():
             fip = self._conn.network.find_ip(floating_ip)
             if not fip:
                 logger.error("Floating IP not found: %s", floating_ip)
@@ -329,6 +335,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             self._conn.dns.delete_ptr_record(fip.id)
             logger.info("Deleted reverse DNS for %s", floating_ip)
             return True
-        except Exception as e:
-            logger.error("Failed to delete reverse DNS for %s: %s", floating_ip, e)
-            raise
+
+        return self._safe_call(
+            _delete, "delete", f"reverse DNS for {floating_ip}", default=False
+        )

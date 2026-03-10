@@ -1,32 +1,33 @@
-# Softmax Optimization -- Agent Coordination
+# Codomyrmex Agents — docs/modules/softmax_opt
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides numerically stable softmax implementations including standard softmax, log-softmax, online softmax (single-pass algorithm), and safe softmax with overflow prevention.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `compute_softmax` | Compute softmax probabilities from logits with temperature and variant selection | Standard | softmax_opt |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Apply optimized softmax implementations in model computations |
-| VERIFY | QA Agent | Validate numerical stability and probability sum invariants |
-
-
-## Agent Instructions
-
-1. Supported variants: 'standard' (with temperature), 'log', and 'online' (single-pass)
-2. Temperature > 1.0 produces more uniform distributions; < 1.0 produces more peaked distributions
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/softmax_opt/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

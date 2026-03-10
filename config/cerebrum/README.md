@@ -1,36 +1,16 @@
-# Cerebrum Configuration
+# cerebrum
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Case-Enabled Reasoning Engine with Bayesian Representations for Unified Modeling. Provides case-based reasoning combined with Bayesian probabilistic inference.
+Configuration files and templates.
 
-## Configuration Options
-
-The cerebrum module operates with sensible defaults and does not require environment variable configuration. The CerebrumEngine is instantiated with case base size limits and inference parameters. Integrates with logging_monitoring for operational logging.
-
-## MCP Tools
-
-This module exposes 2 MCP tool(s):
-
-- `query_knowledge_base`
-- `add_case_reference`
-
-## PAI Integration
-
-PAI agents invoke cerebrum tools through the MCP bridge. The CerebrumEngine is instantiated with case base size limits and inference parameters. Integrates with logging_monitoring for operational logging.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep cerebrum
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/cerebrum/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

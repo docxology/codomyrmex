@@ -1,19 +1,17 @@
 # models
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `models` module provides core functionality for Models..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_document.py` - Test Document
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `test_document.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../../../README.md

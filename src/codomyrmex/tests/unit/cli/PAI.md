@@ -7,7 +7,7 @@
 
 ## Context
 
-Unit and integration tests for the cli module with pytest fixtures and mocks.
+Unit and integration tests for the cli module with pytest fixtures and zero-mock policy.
 
 ## AI Strategy
 

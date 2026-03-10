@@ -1,39 +1,45 @@
-# Codomyrmex Agents -- src/codomyrmex/meme/epistemic
+# Codomyrmex Agents — src/codomyrmex/meme/epistemic
 
-**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Models epistemic states for truth verification and disinformation defense. Maintains a knowledge base of facts and beliefs, verifies claims by aggregating weighted evidence (penalizing fabricated sources), and detects contradictions between beliefs and established facts.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `engine.py` | `EpistemicEngine` | Orchestrator managing epistemic state, claim assessment, contradiction detection |
-| `truth.py` | `verify_claim` | Aggregate evidence weights to produce a Fact with confidence score |
-| `truth.py` | `calculate_certainty` | Compute average certainty across a set of beliefs |
-| `models.py` | `Evidence` | A piece of evidence with type, weight, and validity |
-| `models.py` | `EvidenceType` | EMPIRICAL, LOGICAL, TESTIMONIAL, ANECDOTAL, FABRICATED |
-| `models.py` | `Fact` | A verified claim with confidence score (0-1) |
-| `models.py` | `Belief` | A held conviction with certainty and emotional investment |
-| `models.py` | `EpistemicState` | Aggregate epistemic status: facts, beliefs, entropy |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `engine.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `truth.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Claims assessed via `assess_claim` are auto-accepted as facts when confidence exceeds 0.8.
-- Fabricated evidence receives a 2x negative weight penalty in `verify_claim`.
-- Contradiction detection uses naive string-negation matching (`"not {fact}"` in belief text).
-- `verify_claim` returns 0.5 (neutral) confidence when no evidence is provided.
-- Operate with probabilistic confidence intervals; absolute truth is rarely attainable.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `engine.py`
+- `models.py`
+- `py.typed`
+- `truth.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: None (self-contained within `meme` package)
-- **Used by**: `meme.hyperreality` (epistemic checks distinguish real from simulacrum), `meme.memetics` (meme fitness often depends on perceived truth value)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [meme](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [meme](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

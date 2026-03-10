@@ -1,23 +1,23 @@
 # unit
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Unit tests for the scrape module.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `test_config.py` - Test Config
-- `test_core.py` - Test Core
-- `test_firecrawl.py` - Test Firecrawl
-- `test_scraper.py` - Test Scraper
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `test_config.py` – File
+- `test_core.py` – File
+- `test_firecrawl.py` – File
+- `test_scrape_core.py` – File
+- `test_scraper.py` – File
 
 ## Navigation
-
-- **Parent Module**: [scrape](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent Directory**: [scrape](../README.md)
+- **Project Root**: ../../../../../../README.md

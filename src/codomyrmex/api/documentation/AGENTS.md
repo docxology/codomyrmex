@@ -1,38 +1,47 @@
-# AI Agent Guidelines — api/documentation
+# Codomyrmex Agents — src/codomyrmex/api/documentation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Automates API documentation generation by introspecting Python source code via AST parsing to produce OpenAPI 3.0.3 specifications and structured endpoint inventories.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `APIEndpoint` | Dataclass capturing a discovered endpoint: `path`, `method`, `summary`, `parameters`, `request_body`, `responses` |
-| `APIDocumentation` | Dataclass aggregating `title`, `version`, `description`, `endpoints` list, and `tags` |
-| `APIDocumentationGenerator` | Main class: AST-based endpoint discovery, OpenAPI spec generation, JSON/YAML export, spec validation |
-| `OpenAPISpecification` | Re-exported from parent `openapi_generator` module |
-| `StandardizationOpenAPIGenerator` | Re-exported as `OpenAPIGenerator` for backward compatibility |
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `doc_generator.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `APIDocumentationGenerator.__init__(source_dir)` takes a directory path to scan.
-- `discover_endpoints()` walks Python files using `ast.parse` to find route decorators and handler signatures.
-- `generate_openapi_spec()` returns an OpenAPI 3.0.3-compliant dict from discovered endpoints.
-- `export_json(path)` and `export_yaml(path)` write specs to disk.
-- `validate_spec()` checks the generated spec for completeness issues.
-- Code is the source of truth; docs are never maintained separately.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `__init__.py`
+- `doc_generator.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent**: `api` module re-exports doc generation capabilities.
-- **Consumers**: CI/CD pipelines, `documentation` module, MCP tool `generate_module_docs`.
-- **Dependencies**: `ast` (stdlib), parent module's `openapi_generator.py`.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [api/README.md](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md) | [README.md](README.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [api](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,100 +1,53 @@
-# Agent Guidelines - Search
+# Codomyrmex Agents — src/codomyrmex/search
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Full-text search, fuzzy matching, and semantic search capabilities.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `engine.py` – Project file
+- `hybrid.py` – Project file
+- `mcp_tools.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `semantic.py` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **SearchIndex** — Full-text search index
-- **InMemoryIndex** — Fast in-memory index
-- **FuzzyMatcher** — Fuzzy string matching
-- **QueryParser** — Parse search queries
-- **Tokenizer** — Text tokenization
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `engine.py`
+- `hybrid.py`
+- `mcp_tools.py`
+- `models.py`
+- `py.typed`
+- `semantic.py`
 
-## MCP Tools Available
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `search_documents` | Perform a quick full-text search across a list of text strings with TF-IDF scoring | Safe |
-| `search_index_query` | Create a search index from documents, then query it | Safe |
-| `search_fuzzy` | Find the best fuzzy match for a query string among candidates using Levenshtein distance | Safe |
-
-## Agent Instructions
-
-1. **Index at startup** — Build index before queries
-2. **Use analyzers** — Tokenization affects results
-3. **Fuzzy for typos** — Use fuzzy for user input
-4. **Filter before search** — Reduce search space
-5. **Cache results** — Common queries, cache results
-
-## Common Patterns
-
-```python
-from codomyrmex.search import (
-    SearchIndex, InMemoryIndex, FuzzyMatcher, create_index, quick_search
-)
-
-# Create and populate index
-index = create_index()
-index.add_document("doc1", {"title": "Python Guide", "content": "..."})
-index.add_document("doc2", {"title": "JavaScript Basics", "content": "..."})
-
-# Search
-results = index.search("python programming")
-for r in results:
-    print(f"{r.score:.2f}: {r.document['title']}")
-
-# Fuzzy matching
-matcher = FuzzyMatcher()
-matches = matcher.match("pythn", ["python", "java", "rust"])
-print(matches)  # [("python", 0.83)]
-
-# Quick search utility
-results = quick_search("query", corpus)
-```
-
-## Testing Patterns
-
-```python
-# Verify indexing and search
-index = create_index()
-index.add_document("d1", {"title": "test", "content": "hello world"})
-results = index.search("hello")
-assert len(results) > 0
-assert results[0].id == "d1"
-
-# Verify fuzzy matching
-matcher = FuzzyMatcher()
-matches = matcher.match("helo", ["hello", "goodbye"])
-assert matches[0][0] == "hello"
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `search_documents`, `search_index_query`, `search_fuzzy` | TRUSTED |
-| **Architect** | Read + Design | `search_documents`, `search_index_query` — index design and strategy review | OBSERVED |
-| **QATester** | Validation | `search_documents`, `search_fuzzy` — search result quality verification | OBSERVED |
-| **Researcher** | Read-only | `search_documents`, `search_fuzzy`, `search_index_query` — full search access for research | SAFE |
-
-### Engineer Agent
-**Use Cases**: Document discovery during OBSERVE, full-text and fuzzy search across codebases, indexed queries during research.
-
-### Architect Agent
-**Use Cases**: Index schema design, search relevance tuning, reviewing search pipeline architecture.
-
-### QATester Agent
-**Use Cases**: Validating search result quality during VERIFY, confirming fuzzy match thresholds, testing index completeness.
-
-### Researcher Agent
-**Use Cases**: Full read access for research-phase document discovery, codebase search, knowledge retrieval.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

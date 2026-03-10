@@ -1,19 +1,17 @@
 # fixtures
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `fixtures` module provides core functionality for Fixtures..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `real_data_factory.py` - Real Data Factory
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `real_data_factory.py` – File
 
 ## Navigation
-
-- **Parent Module**: [tests](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [tests](../README.md)
+- **Project Root**: ../../../../README.md

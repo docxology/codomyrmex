@@ -1,4 +1,4 @@
-"""Tests for agentic_memory/consolidation.py."""
+"""Tests for agentic_memory/consolidation.py — strictly zero-mock."""
 
 from __future__ import annotations
 
@@ -117,7 +117,8 @@ class TestMemoryConsolidator:
 
         from codomyrmex.agentic_memory.rules.models import Rule, RulePriority, RuleSet
 
-        class _FakeRuleEngine:
+        class _RealRuleEngine:
+            """A simple, real (zero-mock) rule engine for testing."""
             def get_applicable_rules(self, file_path=None, module_name=None):
                 if file_path == "important.py":
                     return RuleSet(
@@ -135,7 +136,7 @@ class TestMemoryConsolidator:
 
         consolidator = MemoryConsolidator(
             config=ConsolidationConfig(
-                min_importance=MemoryImportance.MEDIUM, rule_engine=_FakeRuleEngine()
+                min_importance=MemoryImportance.MEDIUM, rule_engine=_RealRuleEngine()
             )
         )
 

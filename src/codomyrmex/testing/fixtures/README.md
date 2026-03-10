@@ -1,22 +1,19 @@
 # fixtures
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Test fixture management with scoped lifecycle, dependency resolution, and multiple data sources. Provides `FixtureManager` for registering, resolving, and cleaning up test resources, plus `DataFixture` for pre-defined data, `JSONFixtureLoader` for file-based fixtures, and `FixtureBuilder` for fluent data construction.
+Test files and validation suites.
 
-## Key Exports
-
-- **`FixtureManager`** — Core fixture lifecycle manager with `register()`, `get()`, `cleanup()`, `cleanup_all()`, and context manager `use()`. Thread-safe with dependency resolution.
-- **`DataFixture`** — Pre-defined data fixture wrapping a list of dicts with `filter(**kwargs)`, `find(**kwargs)`, and `all()` query methods
-- **`JSONFixtureLoader`** — Loads fixtures from JSON files with caching. `load("name")` returns a `DataFixture` from `{base_path}/{name}.json`
-- **`FixtureBuilder`** — Fluent builder: `FixtureBuilder("user").with_field("name", "Alice").build()`. Supports `build_many(count)` for batch creation
-- **`FixtureScope`** — Enum: `FUNCTION`, `CLASS`, `MODULE`, `SESSION`
-- **`FixtureDefinition`** — Dataclass: name, factory, scope, cleanup callback, dependencies
-- **`FixtureInstance`** — Dataclass: name, value, scope, created_at timestamp
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `integration_servers.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent Module**: [testing](../README.md)
-- **Parent Directory**: [codomyrmex](../../README.md)
+- **Parent Directory**: [testing](../README.md)
+- **Project Root**: ../../../../README.md

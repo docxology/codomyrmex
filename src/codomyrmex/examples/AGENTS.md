@@ -1,84 +1,67 @@
-# Agent Guidelines - Examples
+# Codomyrmex Agents — src/codomyrmex/examples
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Example implementations and demonstrations.
 
-Reference implementations, demonstrations, and validation reports.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent_orchestration_demo.py` – Project file
+- `api_endpoint_example.py` – Project file
+- `config_validation_report.json` – Project file
+- `fastapi_endpoint.py` – Project file
+- `fastapi_endpoint_example.py` – Project file
+- `generated_api_endpoint.py` – Project file
+- `invalid_prompt_demo.py` – Project file
+- `invalid_prompt_failure.py` – Project file
+- `link_check_report.json` – Project file
+- `new_item_endpoint.py` – Project file
+- `py.typed` – Project file
+- `simple_endpoint.py` – Project file
+- `test_fastapi_endpoint.py` – Project file
 
-## Contents
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Usage patterns** — Common Codomyrmex usage patterns
-- **Integration examples** — Multi-module integration demos
-- **Validation reports** — Config and link check results
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `agent_orchestration_demo.py`
+- `api_endpoint_example.py`
+- `config_validation_report.json`
+- `fastapi_endpoint.py`
+- `fastapi_endpoint_example.py`
+- `generated_api_endpoint.py`
+- `invalid_prompt_demo.py`
+- `invalid_prompt_failure.py`
+- `link_check_report.json`
+- `new_item_endpoint.py`
+- `py.typed`
+- `simple_endpoint.py`
+- `test_fastapi_endpoint.py`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Reference first** — Check examples before implementing new patterns
-2. **Copy and adapt** — Use examples as starting points
-3. **Update examples** — Keep examples in sync with API changes
-4. **Test examples** — Examples should be runnable
-5. **Document patterns** — Examples explain the "how"
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-# Run an example
-from codomyrmex.examples import run_example
-
-run_example("llm_chat")  # Interactive example
-
-# List available examples
-from codomyrmex.examples import list_examples
-
-for example in list_examples():
-    print(f"{example.name}: {example.description}")
-
-# Use example as template
-from codomyrmex.examples import get_example_code
-
-code = get_example_code("agentic_memory_basic")
-# Adapt code to your needs
-```
-
-## Key Examples
-
-| Example | Description |
-|---------|-------------|
-| `llm_chat` | Basic LLM chat interaction |
-| `agentic_memory` | Memory persistence patterns |
-| `multi_agent` | Multi-agent coordination |
-| `rag_pipeline` | RAG with vector store |
-
-## Testing Patterns
-
-```python
-# Verify examples are valid Python
-import ast
-from codomyrmex.examples import get_example_code
-
-for example in list_examples():
-    code = get_example_code(example.name)
-    ast.parse(code)  # Should not raise
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Consult examples for implementation patterns, use examples as templates during BUILD phases
-
-### Architect Agent
-**Use Cases**: Architecture review of example patterns, integration example design, usage pattern documentation
-
-### QATester Agent
-**Use Cases**: Validate example correctness, verify examples are runnable, ensure examples stay in sync with API
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

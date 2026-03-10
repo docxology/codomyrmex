@@ -1,24 +1,19 @@
-# Analysis
+# analysis
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.video.analysis` | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Video analysis submodule.
+Contains components for the src system.
 
-## Key Exports
-
-- **`VideoAnalyzer`** — Analyze video files and extract metadata.
-
-## Quick Start
-
-```python
-from codomyrmex.video.analysis import VideoAnalyzer
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `video_analyzer.py` – File
 
 ## Navigation
-
-- **📁 Parent**: [Video](../README.md)
-- **🏠 Root**: [codomyrmex](../../../../README.md)
+- **Parent Directory**: [video](../README.md)
+- **Project Root**: ../../../../README.md

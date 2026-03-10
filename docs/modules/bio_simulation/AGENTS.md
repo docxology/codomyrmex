@@ -1,37 +1,39 @@
-# Agent Instructions for `codomyrmex.bio_simulation`
+# Codomyrmex Agents — docs/modules/bio_simulation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Context
+## Purpose
+Documentation files and guides.
 
-The Bio-Simulation module provides high-fidelity ant colony simulation with individual agent behavior, pheromone signaling, and population genomics. It is used for studying emergent behavior patterns that inform the Codomyrmex agent architecture.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Usage Guidelines
-
-1. **Importing**: Import from the module root.
-
-   ```python
-   from codomyrmex.bio_simulation import Colony, Ant, AntState, Environment, Genome, Population
-   ```
-
-2. **Colony Simulation**: Create colonies with `Colony(population=N)` and advance time with `colony.step(hours=H)`. Each step processes agent state machines, pheromone diffusion, and resource depletion.
-
-3. **Genomics**: Use `Genome.random()` for synthetic genomes. `Population` tracks allele frequencies and trait distributions across generations.
-
-4. **Zero-Mock Policy**: Tests must instantiate real `Colony` and `Population` objects — no mocking of simulation state. Use small populations (N < 100) for test speed.
-
-5. **Performance**: Colony simulation is CPU-bound. For populations > 10,000, consider using `step(hours=1)` increments instead of large time jumps.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-| File | Purpose |
-|------|---------|
-| `ant_colony/colony.py` | Colony lifecycle and population dynamics |
-| `ant_colony/ant.py` | Individual agent behavior and state machine |
-| `ant_colony/environment.py` | Spatial environment and resource management |
-| `genomics/genome.py` | Genome representation and expression |
-| `genomics/population.py` | Population genetics simulation |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Navigation
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

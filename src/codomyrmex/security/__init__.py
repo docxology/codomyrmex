@@ -39,8 +39,8 @@ try:
         CertificateValidator,
         # Compliance
         ComplianceChecker,
-        ComplianceCheckResult,
-        ComplianceRequirement,
+        ComplianceControl,
+        ComplianceResult,
         ComplianceStandard,
         # Encryption
         EncryptionManager,
@@ -64,20 +64,20 @@ try:
         analyze_file_security,
         audit_access_logs,
         audit_code_security,
-        audit_secrets_exposure,
         check_compliance,
         decrypt_sensitive_data,
         encrypt_sensitive_data,
         generate_security_report,
         monitor_security_events,
-        scan_directory_for_secrets,
-        scan_file_for_secrets,
+        scan_secrets,
         scan_vulnerabilities,
         validate_ssl_certificates,
     )
 
     DIGITAL_AVAILABLE = True
-except ImportError:
+except ImportError as e:
+    import traceback
+    traceback.print_exc()
     DIGITAL_AVAILABLE = False
 
 # Import from physical security
@@ -172,9 +172,9 @@ if DIGITAL_AVAILABLE:
     __all__.extend(
         [
             "CertificateValidator",
-            "ComplianceCheckResult",
             "ComplianceChecker",
-            "ComplianceRequirement",
+            "ComplianceControl",
+            "ComplianceResult",
             "ComplianceStandard",
             "EncryptionManager",
             "SSLValidationResult",
@@ -192,14 +192,12 @@ if DIGITAL_AVAILABLE:
             "analyze_file_security",
             "audit_access_logs",
             "audit_code_security",
-            "audit_secrets_exposure",
             "check_compliance",
             "decrypt_sensitive_data",
             "encrypt_sensitive_data",
             "generate_security_report",
             "monitor_security_events",
-            "scan_directory_for_secrets",
-            "scan_file_for_secrets",
+            "scan_secrets",
             "scan_vulnerabilities",
             "validate_ssl_certificates",
         ]
@@ -313,7 +311,7 @@ def scan_project_security(path: str = ".") -> dict[str, Any]:
 
         # 2. Secrets
         try:
-            secrets = scan_directory_for_secrets(path)
+            secrets = scan_secrets(path)
             results["secrets"] = {
                 "count": len(secrets),
                 "findings": [s.to_dict() for s in secrets] if secrets else [],

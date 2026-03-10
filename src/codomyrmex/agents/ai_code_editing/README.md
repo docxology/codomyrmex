@@ -1,13 +1,12 @@
 # ai_code_editing
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-AI code editing integration for Cursor, Continue, Copilot, and other editor agents.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -18,15 +17,14 @@ AI code editing integration for Cursor, Continue, Copilot, and other editor agen
 - `SPEC.md` – File
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
-- `ai_code_helpers.py` – File
+- `ai_code_helpers/` – Subdirectory
 - `claude_task_master.py` – File
 - `code_editor.py` – File
 - `droid_manager.py` – File
 - `openai_codex.py` – File
 - `prompt_composition.py` – File
-- `pyproject.toml` – File
+- `py.typed` – File
 
 ## Navigation
-
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../README.md

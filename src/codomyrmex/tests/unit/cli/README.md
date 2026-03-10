@@ -1,20 +1,22 @@
 # cli
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `cli` module provides core functionality for Cli..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_cli_comprehensive.py` - Test Cli Comprehensive
-- `test_cli_simple.py` - Test Cli Simple
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `test_cli.py` – File
+- `test_cli_completion.py` – File
+- `test_cli_integrated.py` – File
+- `test_cli_quick_handlers.py` – File
+- `test_cli_simple.py` – File
+- `test_doctor.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

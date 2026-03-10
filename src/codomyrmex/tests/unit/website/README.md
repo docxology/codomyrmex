@@ -1,35 +1,23 @@
-# Website Test Suite
+# website
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Test suite for the `codomyrmex.website` module covering `DataProvider`, `WebsiteGenerator`, and `WebsiteServer`. All tests follow the **Zero-Mock policy** — no `unittest.mock.Mock` is used except for external service calls (Ollama).
+Test files and validation suites.
 
-## Directory Structure
-
-| Directory | Purpose | Test Count |
-| --------- | ------- | ---------- |
-| `unit/` | Isolated unit tests for each class | ~95 |
-| `integration/` | End-to-end generation and security tests | ~80 |
-| Root files | Smoke tests for quick validation | ~6 |
-
-## Test Files
-
-- `test_website_data_provider.py` — Smoke tests for `DataProvider` initialisation
-- `test_website_generator.py` — Smoke tests for `WebsiteGenerator` output
-- `unit/test_data_provider.py` — Comprehensive `DataProvider` unit tests
-- `unit/test_generator.py` — `WebsiteGenerator` rendering and asset copying
-- `unit/test_server.py` — Live HTTP server tests for all 18 API endpoints
-- `integration/test_website_integration.py` — Full generation, security, and config operations
-
-## Running
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/unit/website/ -v
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `integration/` – Subdirectory
+- `test_dashboard_orchestrator.py` – File
+- `test_health_mixin.py` – File
+- `test_pai_mixin.py` – File
+- `test_website_data_provider.py` – File
+- `test_website_generator.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: [codomyrmex](../../../../README.md)
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

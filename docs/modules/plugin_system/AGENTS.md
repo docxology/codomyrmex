@@ -1,68 +1,39 @@
-# Agent Guidelines - Plugin System
+# Codomyrmex Agents — docs/modules/plugin_system
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Extensible plugin architecture for third-party modules.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **PluginManager** — Load, activate, deactivate plugins
-- **PluginLoader** — Load plugins from paths
-- **PluginRegistry** — Register and discover plugins
-- **PluginValidator** — Validate plugin structure
-- **Plugin** — Base plugin class
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Validate before load** — Use `PluginValidator` to check plugins
-2. **Handle dependencies** — Check plugin dependencies before activation
-3. **Lifecycle order** — Always: load → activate → use → deactivate
-4. **Catch plugin errors** — Wrap plugin calls in try/except
-5. **Use registry** — Register plugins for discovery by other modules
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.plugin_system import PluginManager, PluginError
-
-manager = PluginManager()
-
-# Load all plugins
-try:
-    manager.load_plugins_from("./plugins")
-except PluginError as e:
-    log.error(f"Plugin load failed: {e}")
-
-# Use a plugin safely
-plugin = manager.get_plugin("my_plugin")
-if plugin:
-    try:
-        plugin.activate()
-        result = plugin.execute(data)
-    except PluginError as e:
-        log.error(f"Plugin error: {e}")
-    finally:
-        plugin.deactivate()
-```
-
-## Testing Patterns
-
-```python
-# Verify plugin loading
-manager = PluginManager()
-manager.load_plugins_from("tests/fixtures/plugins")
-assert len(manager.list_plugins()) > 0
-
-# Verify plugin lifecycle
-plugin = manager.get_plugin("test_plugin")
-plugin.activate()
-assert plugin.state == PluginState.ACTIVE
-plugin.deactivate()
-assert plugin.state == PluginState.INACTIVE
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

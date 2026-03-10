@@ -1,110 +1,61 @@
-# Agent Guidelines - Telemetry
+# Codomyrmex Agents — src/codomyrmex/telemetry
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-OpenTelemetry-compatible tracing, metrics, and observability for the Codomyrmex platform. Provides
-`start_span()` for code tracing, `MetricCollector` for counters and gauges, `OTLPExporter` for
-shipping telemetry to OTLP endpoints, and `Dashboard` for real-time metric visualization. No MCP
-tools — accessed exclusively via direct Python import.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `TraceContext`, `MetricCollector`, `Dashboard`, `OTLPExporter`, `start_span`, `traced`, `monitor_performance` |
-| `tracing.py` | `TraceContext`, `start_span()` — span management and context propagation |
-| `metrics.py` | `MetricCollector` — counter and gauge recording |
-| `exporters.py` | `OTLPExporter` — ship telemetry to OTLP endpoints |
-| `dashboard.py` | `Dashboard` — real-time metric visualization server |
-
-## Key Classes
-
-- **TraceContext** — Manage trace context
-- **MetricCollector** — Record system and application metrics
-- **Dashboard** — Real-time observability visualization
-- **OTLPExporter** — Export telemetry data to OTLP endpoints
-
-## Agent Instructions
-
-1. **Trace entry points** — Trace all major agent tasks and API requests
-2. **Instrument long-running tasks** — Use counters and gauges to track task progress
-3. **Use descriptive names** — Ensure metric and span names are globally unique
-4. **Dashboard Registration** — Register new critical metrics with the `Dashboard` for visibility
-
-## Common Patterns
-
-```python
-from codomyrmex.telemetry import start_span, MetricCollector, Dashboard
-
-# Trace a block of code
-with start_span("complex_operation") as span:
-    span.set_attribute("data_size", len(data))
-    process(data)
-
-# Record Metrics
-metrics = MetricCollector()
-metrics.record_counter("task_completed", 1, {"status": "success"})
-metrics.record_gauge("system_load", 0.75)
-
-# Start Dashboard for real-time monitoring
-dash = Dashboard()
-dash.start_server(port=8080)
-dash.add_view("task_completed", type="line_chart")
-```
-
-## Testing Patterns
-
-```python
-# Verify span creation
-with start_span("test") as span:
-    assert span is not None
-    span.set_attribute("key", "value")
-
-# Verify decorator
-@traced("test")
-def test_func():
-    return 42
-assert test_func() == 42
-```
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent_hooks.py` – Project file
+- `alerting/` – Directory containing alerting components
+- `context/` – Directory containing context components
+- `dashboard/` – Directory containing dashboard components
+- `exporters/` – Directory containing exporters components
+- `mcp_tools.py` – Project file
+- `metric_aggregator.py` – Project file
+- `metrics/` – Directory containing metrics components
+- `otel.py` – Project file
+- `pipeline.py` – Project file
+- `py.typed` – Project file
+- `sampling/` – Directory containing sampling components
+- `spans/` – Directory containing spans components
+- `tracing/` – Directory containing tracing components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All span names must be globally unique — use `module.operation` pattern (e.g., `agents.execute`)
-- `MetricCollector` is not thread-safe — create one instance per thread or use thread-local storage
-- `OTLPExporter` requires `OTLP_ENDPOINT` env var — raises `ConfigurationError` if not set
-- `Dashboard.start_server()` binds to a port — ensure port is free before calling
-- **DO NOT** include PII (user IDs, emails) in span attributes or metric labels
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `agent_hooks.py`
+- `mcp_tools.py`
+- `metric_aggregator.py`
+- `otel.py`
+- `pipeline.py`
+- `py.typed`
 
-## PAI Agent Role Access Matrix
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | None — Python import only | TRUSTED |
-| **Architect** | Read + Design | None — observability strategy and metric naming design | OBSERVED |
-| **QATester** | Validation | None — metric accuracy and span propagation testing | OBSERVED |
-| **Researcher** | Read-only | None — inspect trace and metric data for analysis | SAFE |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Engineer Agent
-**Use Cases**: Instrument code with metrics and traces, configure OTLP exporters, register dashboard views during BUILD/VERIFY phases.
-
-### Architect Agent
-**Use Cases**: Design observability strategy, define metric naming conventions, plan tracing topology across services.
-
-### QATester Agent
-**Use Cases**: Validate metric collection accuracy, verify alert rule thresholds, test span propagation and dashboard rendering.
-
-### Researcher Agent
-**Use Cases**: Inspecting trace data and metric time series for performance research and observability analysis.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/telemetry.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/telemetry.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,10 +1,22 @@
-# Finance
+# finance
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Finance` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Test files and validation suites.
+
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `test_account_and_visualization.py` – File
+- `test_finance_comprehensive.py` – File
+- `test_finance_models.py` – File
+- `test_mcp_tools_finance.py` – File
+
+## Navigation
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

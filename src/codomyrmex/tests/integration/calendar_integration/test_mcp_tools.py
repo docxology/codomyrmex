@@ -43,20 +43,21 @@ def test_calendar_mcp_flow():
     """Verify calendar mcp flow behavior."""
     # 1. List
     res = calendar_list_events(days_ahead=2)
-    assert res["status"] == "success"
+    assert res["status"] == "success", f"List events failed: {res}"
     assert "events" in res
 
     # 2. Create
     now = datetime.now(UTC)
+    valid_attendees = [_DEFAULT_ATTENDEE] if _DEFAULT_ATTENDEE else []
     res_create = calendar_create_event(
         summary="Test MCP Agent Event",
         start_time=now.isoformat(),
         end_time=(now + timedelta(hours=1)).isoformat(),
         description="Created via MCP tool",
         location="Virtual",
-        attendees=[_DEFAULT_ATTENDEE],
+        attendees=valid_attendees,
     )
-    assert res_create["status"] == "success"
+    assert res_create["status"] == "success", res_create
     event_id = res_create["event_id"]
 
     # 3. Get
@@ -72,9 +73,9 @@ def test_calendar_mcp_flow():
         end_time=(now + timedelta(hours=2)).isoformat(),
         description="Updated via MCP tool",
         location="Virtual",
-        attendees=[_DEFAULT_ATTENDEE],
+        attendees=valid_attendees,
     )
-    assert res_update["status"] == "success"
+    assert res_update["status"] == "success", res_update
 
     # 5. Delete
     res_delete = calendar_delete_event(event_id)
@@ -85,8 +86,19 @@ def test_calendar_mcp_flow():
     not _GCAL_AVAILABLE,
     reason=_GCAL_SKIP_REASON,
 )
-def test_calendar_attendee_injection():
+def test_calendar_attendee_injection(monkeypatch):
     """Verify that _DEFAULT_ATTENDEE is always injected as an attendee."""
+    test_attendee = "test@example.com"
+    monkeypatch.setenv("CODOMYRMEX_CALENDAR_ATTENDEE", test_attendee)
+    
+    # Needs to match the env var or use monkeypatch's effect on the module. 
+    # But wait, mcp_tools reads os.environ at IMPORT time!
+    # So monkeypatching os.environ during the test execution 
+    # won't change mcp_tools._DEFAULT_ATTENDEE because it was evaluated at import.
+    # We must patch mcp_tools._DEFAULT_ATTENDEE directly!
+    import codomyrmex.calendar_integration.mcp_tools as mcp_tools_mod
+    monkeypatch.setattr(mcp_tools_mod, "_DEFAULT_ATTENDEE", test_attendee)
+
     now = datetime.now(UTC)
     res_create = calendar_create_event(
         summary="PAI Attendee Injection Test",
@@ -95,16 +107,16 @@ def test_calendar_attendee_injection():
         description="Automated attendee injection test — safe to delete",
         attendees=[],  # Intentionally empty — injection must still occur
     )
-    assert res_create["status"] == "success", f"Create failed: {res_create.get('error')}"
+    assert res_create["status"] == "success", f"Create failed: {res_create}"
     event_id = res_create["event_id"]
 
     try:
         res_get = calendar_get_event(event_id)
         assert res_get["status"] == "success", f"Get failed: {res_get.get('error')}"
-        attendees = res_get["event"]["attendees"]
+        attendees = res_get["event"].get("attendees", [])
         attendees_lower = [a.lower() for a in attendees]
-        assert _DEFAULT_ATTENDEE.lower() in attendees_lower, (
-            f"Expected {_DEFAULT_ATTENDEE} in attendees (case-insensitive), got: {attendees}"
+        assert test_attendee.lower() in attendees_lower, (
+            f"Expected {test_attendee} in attendees, got: {attendees}"
         )
     finally:
         calendar_delete_event(event_id)

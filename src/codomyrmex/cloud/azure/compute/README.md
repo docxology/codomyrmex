@@ -1,17 +1,18 @@
-# Azure Compute Submodule
+# compute
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Azure Virtual Machine management.
+Contains components for the src system.
 
-## Planned Features
-
-- VM lifecycle management
-- Scale set operations
-- Disk management
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent**: [azure/](../README.md)
+- **Parent Directory**: [azure](../README.md)
+- **Project Root**: ../../../../../README.md

@@ -1,22 +1,35 @@
-# Video Examples -- Agent Coordination
+# Codomyrmex Agents — scripts/video/examples
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Example implementations and demonstrations.
 
-Example scripts demonstrating video generation with Google AI (Veo 2.0) using the codomyrmex video module.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `basic_usage.py` – Project file
 
-## Scripts Available
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **basic_usage.py**: Minimal pattern for text-to-video generation via Google AI Veo 2.0 API
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `basic_usage.py`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Agent Instructions
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-1. Run scripts from the repository root directory using `uv run python scripts/video/examples/<script>`
-2. Ensure prerequisites are installed: `uv sync (requires GEMINI_API_KEY environment variable)`
-3. Scripts are demonstration/utility tools and do not modify production state
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [video](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,32 +1,45 @@
-# Text-to-SQL -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/text_to_sql
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Converts natural language questions into SQL queries using schema-aware pattern matching. Enables AI agents to query databases without writing raw SQL.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `engine.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `text_to_sql_generate` | Generate SQL from natural language question | `question: str`, `tables: dict`, `primary_keys: dict` | `{query, confidence, tables_used, valid, error}` |
-| `text_to_sql_validate` | Validate SQL for safety and syntax | `sql: str` | `{valid, error}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `engine.py`
+- `mcp_tools.py`
+- `py.typed`
 
-### Natural Language Querying
-An agent can convert user questions into SQL without requiring the user to know SQL syntax.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### SQL Safety Checking
-Use `text_to_sql_validate` to verify that generated or user-provided SQL is safe (no DROP, DELETE, etc.).
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Schema-Aware Generation
-Providing the schema ensures generated SQL references real tables and columns.
-
-## Example Agent Workflow
-
-```
-1. Agent receives: "Show me the top 5 orders by total"
-2. Agent calls: text_to_sql_generate("top 5 orders by total", {"orders": ["id", "total", "user_id"]})
-3. Response: {"query": "SELECT total FROM orders ORDER BY total LIMIT 5;", "valid": true}
-4. Agent executes query or presents it for review
-```
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

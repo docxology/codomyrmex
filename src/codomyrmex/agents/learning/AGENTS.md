@@ -1,33 +1,46 @@
-# Codomyrmex Agents -- src/codomyrmex/agents/learning
+# Codomyrmex Agents — src/codomyrmex/agents/learning
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides mechanisms for agents to acquire, store, and query reusable skills. The module defines a `Skill` dataclass representing a learnable capability with associated code and tags, a `SkillLibrary` repository for adding, retrieving, and tag-searching skills, and a visualization helper that renders bar charts of skill distribution by tag.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `skills.py` | `Skill` | Dataclass: name, description, code_snippet, tags, usage_count, UUID id |
-| `skills.py` | `SkillLibrary` | In-memory skill repository with `add_skill`, `get_skill`, `search` by tag |
-| `visualization.py` | `plot_skill_distribution` | Renders a `BarChart` of skill counts grouped by tag using `data_visualization.charts` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `curriculum/` – Directory containing curriculum components
+- `py.typed` – Project file
+- `reflection/` – Directory containing reflection components
+- `skills/` – Directory containing skills components
+- `skills.py` – Project file
+- `visualization.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `SkillLibrary.add_skill` raises `ValueError` if a skill with the same name already exists; names are unique keys.
-- `SkillLibrary.search` performs exact tag membership checks (tag must appear in `Skill.tags` list).
-- `plot_skill_distribution` accesses `library._skills` directly to aggregate tag counts via `collections.Counter`.
-- Each `Skill` receives a `uuid4` on creation; `created_at` defaults to `datetime.now()`.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
+- `skills.py`
+- `visualization.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.data_visualization.charts.bar_chart` (`BarChart`)
-- **Used by**: Agent learning pipelines, skill cataloging workflows
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [agents](../README.md)
-- **Root**: [codomyrmex](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

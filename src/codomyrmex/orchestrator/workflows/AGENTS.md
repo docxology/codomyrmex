@@ -1,43 +1,53 @@
 # Codomyrmex Agents — src/codomyrmex/orchestrator/workflows
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides DAG-based workflow orchestration with two complementary engines: a rich async `Workflow` class with retry policies, conditional execution, result passing, and progress callbacks; and a synchronous `WorkflowRunner` with Kahn's-algorithm topological sorting. Includes workflow journaling for audit trails, analytics for failure hotspot detection, and reusable workflow templates.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `workflow.py` | `Workflow` | Async DAG executor with retry, conditions, timeouts, fail-fast, EventBus integration |
-| `workflow.py` | `Task` / `TaskStatus` / `TaskResult` / `RetryPolicy` | Task model with dependencies, conditional execution, and retry config |
-| `workflow.py` | `chain`, `parallel`, `fan_out_fan_in` | Convenience factory functions for common workflow patterns |
-| `workflow.py` | `WorkflowError` / `CycleError` / `TaskFailedError` | Exception hierarchy for workflow failures |
-| `workflow_engine.py` | `WorkflowRunner` | Synchronous DAG runner using Kahn's topological sort |
-| `workflow_engine.py` | `WorkflowStep` / `StepStatus` / `WorkflowResult` | Step model with status, timing, and aggregated result |
-| `workflow_journal.py` | `WorkflowJournal` | Records workflow start/step/complete events as `JournalEntry` objects |
-| `workflow_journal.py` | `JournalEntry` | Structured event record with workflow_id, event_type, status, duration |
-| `workflow_analytics.py` | `WorkflowAnalytics` | Analyzes journal entries for failure hotspots, duration trends, and per-step success rates |
-| `workflow_analytics.py` | `WorkflowInsight` | Summary dataclass with aggregated metrics |
-| `workflow_templates.py` | `WorkflowTemplate` | Reusable template that instantiates `WorkflowRunner` with overrideable step actions |
-| `workflow_templates.py` | `ci_cd_template`, `code_review_template`, `data_pipeline_template` | Pre-built pipeline templates |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `_factories.py` – Project file
+- `_models.py` – Project file
+- `py.typed` – Project file
+- `workflow.py` – Project file
+- `workflow_analytics.py` – Project file
+- `workflow_engine.py` – Project file
+- `workflow_journal.py` – Project file
+- `workflow_templates.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `Workflow.run()` validates the DAG for cycles before execution (raises `CycleError`).
-- Tasks with unsatisfied dependencies are skipped; fail-fast mode cancels remaining tasks.
-- `Workflow` injects `_task_results` into async task kwargs for inter-task result passing.
-- `WorkflowRunner` uses Kahn's algorithm; raises `ValueError` on cycle detection.
-- `WorkflowJournal` optionally persists entries to `MemoryStore` for cross-session storage.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `_factories.py`
+- `_models.py`
+- `py.typed`
+- `workflow.py`
+- `workflow_analytics.py`
+- `workflow_engine.py`
+- `workflow_journal.py`
+- `workflow_templates.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring`, `codomyrmex.agents.memory.store.MemoryStore` (optional persistence), `orchestrator.workflows.observability` (optional EventBus events)
-- **Used by**: `orchestrator` top-level, CI/CD pipelines, agent task execution
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [orchestrator](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [orchestrator](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

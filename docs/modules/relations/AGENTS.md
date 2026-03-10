@@ -1,35 +1,39 @@
-# Agent Instructions for `codomyrmex.relations`
+# Codomyrmex Agents — docs/modules/relations
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Context
+## Purpose
+Documentation files and guides.
 
-The Relations module provides CRM (Contact Relationship Management), social network analysis, and Universal Object Reference (UOR) capabilities for tracking entities and their relationships.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Usage Guidelines
-
-1. **Importing**: Import from the module root.
-
-   ```python
-   from codomyrmex.relations import Contact, ContactManager, Interaction, SocialGraph, GraphMetrics
-   ```
-
-2. **Contact Management**: Use `ContactManager` for all CRUD operations. Always record `Interaction` events when engaging with contacts.
-
-3. **Social Graph**: Use `SocialGraph` for modeling entity relationships. `GraphMetrics` provides centrality, clustering, and connectivity analysis.
-
-4. **UOR**: Universal Object References enable bidirectional linking between entities across different modules (contacts ↔ projects, projects ↔ tasks).
-
-5. **Zero-Mock Policy**: Tests must use real `ContactManager` instances — no mocking of storage or graph operations.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-| File | Purpose |
-|------|---------|
-| `crm.py` | Contact, ContactManager, Interaction |
-| `network_analysis.py` | SocialGraph, GraphMetrics |
-| `uor.py` | Universal Object Reference |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Navigation
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,37 +1,45 @@
-# documents/search — Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/documents/search
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Provides full-text search over document collections using an in-memory inverted index with TF-based scoring. Agents use this subpackage to index, query, and rank documents.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `InMemoryIndex` | Inverted index mapping terms to document ID sets; supports add, remove, search (AND intersection), JSON persistence |
-| `QueryBuilder` | Fluent API for constructing search queries with terms, filters, and sort fields |
-| `search_documents()` | Searches a list of `Document` objects by matching content against query terms |
-| `search_index()` | Searches an `InMemoryIndex` and returns scored results using term-frequency ranking |
-| `build_query()` | Convenience function wrapping `QueryBuilder` for one-shot query construction |
-| `index_document()` | Convenience function to add a document to an index |
-| `create_index()` | Convenience function to create a new `InMemoryIndex` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `indexer.py` – Project file
+- `py.typed` – Project file
+- `query_builder.py` – Project file
+- `searcher.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `InMemoryIndex.add(doc_id, content, document)` tokenizes content (lowercase split), builds inverted index entries, and stores the document reference.
-- `InMemoryIndex.search(query)` tokenizes the query and returns document IDs where ALL terms appear (AND semantics).
-- `InMemoryIndex.save(path)` / `load(path)` persist/restore the index and document store as JSON.
-- `search_index(index, query)` returns `list[tuple[str, float]]` where float is a TF score computed via `collections.Counter`.
-- `QueryBuilder` supports method chaining: `builder.add_term("x").add_filter("type", "md").build()` returns a space-joined query string.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `indexer.py`
+- `py.typed`
+- `query_builder.py`
+- `searcher.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Models**: Indexes and returns `Document` objects from `documents.models`.
-- **Core**: Documents produced by `DocumentReader` or `DocumentParser` feed into the index.
-- **Logging**: Uses `codomyrmex.logging_monitoring.get_logger`.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [documents README](../README.md)
-- **Siblings**: [core](../core/AGENTS.md) | [models](../models/AGENTS.md)
-- **Spec**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [documents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

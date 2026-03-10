@@ -1,57 +1,39 @@
-# Agent Guidelines - Testing
+# Codomyrmex Agents — docs/modules/testing
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Test files and validation suites.
 
-Test utilities, fixtures, and testing patterns for Codomyrmex.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **TestRunner** — Execute tests with configuration
-- **RealDataFactory** — Generate real test data (Zero-Mock policy: no test doubles)
-- **FixtureManager** — Manage test fixtures
-- **AssertionHelpers** — Enhanced assertions
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use real data** — Avoid mocks; use real implementations with test data.
-2. **Property Tests** — Use `property_test` for functions with large input spaces.
-3. **Resilience Testing** — Use `chaos` sub-module to verify recovery from failure.
-4. **Isolate tests** — Each test should be independent and stateless.
-5. **Cover edge cases** — Test boundaries, errors, and malicious inputs.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Testing Patterns
-
-```python
-# Use shared fixtures
-@pytest.fixture
-def sample_data():
-    return {"key": "value"}
-
-def test_feature(sample_data):
-    result = process(sample_data)
-    assert result is not None, "Processing returned None"
-
-# Test exceptions
-def test_error_handling():
-    with pytest.raises(ValueError, match="Invalid input"):
-        process(None)
-
-# Parameterized tests
-@pytest.mark.parametrize("input,expected", [
-    ("a", 1),
-    ("b", 2),
-])
-def test_parametrized(input, expected):
-    assert transform(input) == expected
-```
-
-## Integration Points
-
-- **All modules** — Provide test utilities
-- **ci_cd** — Run tests in pipelines
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,61 +1,39 @@
-# Agent Guidelines - Telemetry
+# Codomyrmex Agents — docs/modules/telemetry
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-OpenTelemetry-compatible tracing, metrics, and observability.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **TraceContext** — Manage trace context
-- **MetricCollector** — Record system and application metrics
-- **Dashboard** — Real-time observability visualization
-- **OTLPExporter** — Export telemetry data to OTLP endpoints
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Trace entry points** — Trace all major agent tasks and API requests
-2. **Instrument long-running tasks** — Use counters and gauges to track task progress
-3. **Use descriptive names** — Ensure metric and span names are globally unique
-4. **Dashboard Registration** — Register new critical metrics with the `Dashboard` for visibility
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.telemetry import start_span, MetricCollector, Dashboard
-
-# Trace a block of code
-with start_span("complex_operation") as span:
-    span.set_attribute("data_size", len(data))
-    process(data)
-
-# Record Metrics
-metrics = MetricCollector()
-metrics.record_counter("task_completed", 1, {"status": "success"})
-metrics.record_gauge("system_load", 0.75)
-
-# Start Dashboard for real-time monitoring
-dash = Dashboard()
-dash.start_server(port=8080)
-dash.add_view("task_completed", type="line_chart")
-```
-
-## Testing Patterns
-
-```python
-# Verify span creation
-with start_span("test") as span:
-    assert span is not None
-    span.set_attribute("key", "value")
-
-# Verify decorator
-@traced("test")
-def test_func():
-    return 42
-assert test_func() == 42
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

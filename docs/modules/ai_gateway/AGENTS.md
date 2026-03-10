@@ -1,33 +1,33 @@
-# AI Gateway -- Agent Coordination
+# Codomyrmex Agents — docs/modules/ai_gateway
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides load balancing, failover, and circuit breaker patterns for LLM provider management. Routes completion requests across multiple AI providers with configurable strategies.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `gateway_complete` | Route a completion request through the AI Gateway with load balancing and failover | Standard | ai_gateway |
-| `gateway_health` | Check the health status of all configured AI Gateway providers | Standard | ai_gateway |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| EXECUTE | Infrastructure Agent | Route LLM completions through load-balanced gateway |
-| OBSERVE | Monitoring Agent | Check provider health and circuit breaker states |
-
-
-## Agent Instructions
-
-1. Provide a list of provider configurations (name, endpoint, weight) before calling gateway_complete
-2. Use gateway_health to verify provider availability before routing requests
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/ai_gateway/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

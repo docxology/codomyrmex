@@ -1,37 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/edge_computing/deployment
+# Codomyrmex Agents — src/codomyrmex/edge_computing/deployment
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Manages the deployment lifecycle of edge functions across a cluster using configurable strategies (rolling, blue-green, canary). Provides plan creation, execution with automatic rollback on failure, and deployment state tracking.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `deployment.py` | `DeploymentStrategy` | Enum of available strategies: ROLLING, BLUE_GREEN, CANARY |
-| `deployment.py` | `DeploymentState` | Enum of deployment lifecycle states: PENDING, IN_PROGRESS, COMPLETED, ROLLED_BACK, FAILED |
-| `deployment.py` | `DeploymentPlan` | Dataclass capturing function, strategy, target nodes, canary percentage, and deployment progress |
-| `deployment.py` | `DeploymentManager` | Orchestrates plan creation, strategy-based execution, and rollback across an `EdgeCluster` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `deployment.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `DeploymentManager` requires an `EdgeCluster` instance at construction time; it delegates all runtime operations to the cluster.
-- `create_plan` defaults to targeting all ONLINE nodes if no explicit `target_nodes` list is provided.
-- Rolling deployment stops and rolls back on the first node failure when `rollback_on_error` is True.
-- Blue-green deployment deploys to all targets simultaneously and only rolls back after all attempts complete.
-- Canary deployment splits targets into a canary subset (controlled by `canary_percent`) and remaining nodes, deploying canary first.
-- `rollback` undeploys the function from all successfully deployed nodes and sets state to ROLLED_BACK.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `deployment.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `edge_computing.core.cluster.EdgeCluster`, `edge_computing.core.models.EdgeFunction`, `edge_computing.core.models.EdgeNodeStatus`
-- **Used by**: Higher-level deployment orchestration and CI/CD pipelines
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Siblings**: [core](../core/AGENTS.md) | [infrastructure](../infrastructure/AGENTS.md) | [scheduling](../scheduling/AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [edge_computing](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

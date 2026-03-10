@@ -1,34 +1,43 @@
-# Telemetry Alerting - Agentic Context
+# Codomyrmex Agents — src/codomyrmex/telemetry/alerting
 
-**Module**: `codomyrmex.telemetry.alerting`
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Key Components
+## Purpose
+Contains components for the src system.
 
-| Component | Purpose | Key Methods |
-|-----------|---------|-------------|
-| `AlertEvaluator` | Evaluates `AlertRule` objects against `MetricAggregator` snapshots (counters, gauges, histograms) | `add_rule()`, `remove_rule()`, `evaluate()`, `alert_history()` |
-| `AlertEngine` | Standalone rule engine evaluating dict-based metrics with handler callbacks | `add_rule()`, `on_alert()`, `evaluate()` |
-| `AlertRule` (alert_evaluator) | Rule dataclass: metric name, threshold, operator (gt/lt/gte/lte/eq), severity | Dataclass |
-| `AlertRule` (alerts) | Rule dataclass with `evaluate(value)` method and `message_template` formatting | `evaluate()` returns bool |
-| `Alert` | Fired alert record: rule name, severity, value, state (FIRING/RESOLVED), timestamp | Dataclass with `to_dict()` |
-| `AlertSeverity` | Enum: INFO, WARNING, CRITICAL | Enum |
-| `AlertState` | Enum: OK, FIRING, RESOLVED | Enum |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `alert_evaluator.py` – Project file
+- `alerts.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Two parallel implementations exist: `alert_evaluator.py` evaluates against `MetricAggregator` snapshots; `alerts.py` evaluates against flat `dict[str, float]` metrics.
-- `AlertEvaluator` tracks active alerts and auto-resolves when a previously firing rule stops triggering.
-- `AlertEngine` dispatches to registered `AlertHandler` callbacks; handler exceptions are caught, logged at WARNING, and do not prevent other handlers from running.
-- Operator comparison uses a dict of lambdas mapping string operators (`"gt"`, `"lt"`, etc.) to comparison functions.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `alert_evaluator.py`
+- `alerts.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **telemetry.metric_aggregator**: `AlertEvaluator` reads counters/gauges/histograms from `MetricAggregator.snapshot()`.
-- **logging_monitoring**: `AlertEngine` uses `get_logger` for handler failure warnings.
-- **telemetry.dashboard.alerting**: `AlertManager` provides a higher-level API layered on similar concepts.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Constraints
-
-- No persistence of alert history; state is in-memory only and lost on process restart.
-- `AlertEvaluator` extracts histogram `mean` for threshold comparison; percentile-based alerting is not supported.
+## Navigation Links
+- **📁 Parent Directory**: [telemetry](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

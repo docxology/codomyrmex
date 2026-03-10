@@ -1,24 +1,19 @@
-# Extraction
+# extraction
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.video.extraction` | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Video extraction submodule.
+Contains components for the src system.
 
-## Key Exports
-
-- **`FrameExtractor`** — Extract frames and audio from video files.
-
-## Quick Start
-
-```python
-from codomyrmex.video.extraction import FrameExtractor
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `frame_extractor.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **📁 Parent**: [Video](../README.md)
-- **🏠 Root**: [codomyrmex](../../../../README.md)
+- **Parent Directory**: [video](../README.md)
+- **Project Root**: ../../../../README.md

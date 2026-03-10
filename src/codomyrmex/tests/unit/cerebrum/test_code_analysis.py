@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import textwrap
 
+import pytest
+
 from codomyrmex.cerebrum.agent_prompts import (
     AgentPromptSelector,
     PromptSelection,
@@ -28,6 +30,7 @@ from codomyrmex.cerebrum.drift_tracker import (
 # ── AntiPatternDetector ──────────────────────────────────────────
 
 
+@pytest.mark.unit
 class TestAntiPattern:
     """Test suite for AntiPattern."""
 
@@ -38,6 +41,7 @@ class TestAntiPattern:
         assert d["severity"] == "warning"
 
 
+@pytest.mark.unit
 class TestAntiPatternDetector:
     """Test suite for AntiPatternDetector."""
 
@@ -117,6 +121,7 @@ class TestAntiPatternDetector:
 # ── ConceptDriftTracker ──────────────────────────────────────────
 
 
+@pytest.mark.unit
 class TestDriftEvent:
     """Test suite for DriftEvent."""
 
@@ -127,6 +132,7 @@ class TestDriftEvent:
         assert d["category"] == "new"
 
 
+@pytest.mark.unit
 class TestConceptDriftTracker:
     """Test suite for ConceptDriftTracker."""
 
@@ -171,6 +177,7 @@ class TestConceptDriftTracker:
 # ── AgentPromptSelector ──────────────────────────────────────────
 
 
+@pytest.mark.unit
 class TestAgentPromptSelector:
     """Test suite for AgentPromptSelector."""
 
@@ -229,6 +236,7 @@ class TestAgentPromptSelector:
 # ── CodeReviewer ─────────────────────────────────────────────────
 
 
+@pytest.mark.unit
 class TestReviewFinding:
     """Test suite for ReviewFinding."""
 
@@ -238,6 +246,7 @@ class TestReviewFinding:
         assert d["category"] == "test"
 
 
+@pytest.mark.unit
 class TestCodeReviewer:
     """Test suite for CodeReviewer."""
 

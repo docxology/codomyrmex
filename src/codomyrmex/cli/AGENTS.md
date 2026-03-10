@@ -1,113 +1,64 @@
-# Agent Guidelines - CLI
+# Codomyrmex Agents — src/codomyrmex/cli
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-The `cli` module is the primary user interface for the Codomyrmex platform. Uses `google-fire` to
-map a Python `Cli` class to command-line sub-commands. Handlers live in `handlers/` and are
-dispatched via the `Cli` class in `core.py`. No MCP tools — the CLI is consumed by human operators
-and shell scripts, not PAI agents via MCP.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module entry point |
-| `core.py` | `Cli` class — main `fire` entrypoint; all top-level commands |
-| `handlers/` | Handler functions by domain (`ai.py`, `workflow.py`, `project.py`, etc.) |
-| `handlers/__init__.py` | Exports all handler functions |
-| `utils.py` | `print_success()`, `print_error()`, `print_warning()` — consistent output helpers |
-| `formatters.py` | Output formatting helpers for tables and JSON |
-| `doctor.py` | `DoctorCheck` — environment health diagnostics |
-
-## Key Classes
-
-- **`Cli`** (`core.py`) — Root `fire` class; all `codomyrmex` sub-commands are methods
-- **`DoctorCheck`** (`doctor.py`) — Environment diagnostics and health reporting
-- **`print_success()`**, **`print_error()`**, **`print_warning()`** — Consistent output helpers
-
-## Agent Instructions
-
-1. **Zero-Mock Policy** — When writing tests for the CLI, **do not use mocks**; exercise real handlers
-2. **Graceful Imports** — Use lazy imports or `try-except ImportError` in handlers; CLI must remain usable without optional modules
-3. **Consistent Formatting** — Use `print_success`, `print_error`, `print_warning` from `utils.py`
-4. **Method Documentation** — Every `Cli` method needs a docstring; `fire` uses them for help text
-5. **Subcommand Grouping** — Group related functionality into logical subcommands (`ai`, `workflow`, `fpf`)
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `__main__.py` – Project file
+- `commands.py` – Project file
+- `completion.py` – Project file
+- `completions/` – Directory containing completions components
+- `core.py` – Project file
+- `doctor.py` – Project file
+- `formatters/` – Directory containing formatters components
+- `handlers/` – Directory containing handlers components
+- `mcp_tools.py` – Project file
+- `parsers/` – Directory containing parsers components
+- `py.typed` – Project file
+- `status.py` – Project file
+- `themes/` – Directory containing themes components
+- `utils.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All handler functions must return `True` on success, `False` on failure — never raise unhandled exceptions
-- `print_success()`, `print_error()`, and `print_warning()` are the only permitted output paths in handlers
-- The `Cli` class is the sole entrypoint — no direct calls to handler functions from outside `cli/`
-- New commands must use lazy imports: `from codomyrmex.my_module import X` inside the function body
-- **DO NOT** import heavy modules at module-level in `core.py` — this slows CLI startup
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `__main__.py`
+- `commands.py`
+- `completion.py`
+- `core.py`
+- `doctor.py`
+- `mcp_tools.py`
+- `py.typed`
+- `status.py`
+- `utils.py`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Adding a New Command Group
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-1. Create a new handler file in `handlers/` (e.g., `my_feature.py`)
-2. Implement handler functions with proper error handling
-3. Export them in `handlers/__init__.py`
-4. Add a method to the `Cli` class in `core.py` that dispatches to these handlers
-
-### Robust Handler Implementation
-
-```python
-def handle_my_command(param):
-    try:
-        from codomyrmex.my_module import real_logic
-        result = real_logic(param)
-        print_success("Operation completed")
-        return True
-    except ImportError:
-        print_error("My Module not available")
-        return False
-    except Exception as e:
-        print_error(f"Failed: {e}")
-        return False
-```
-
-## Testing Patterns
-
-```python
-def test_my_command_integrated():
-    from codomyrmex.cli.core import Cli
-    cli = Cli()
-    # Exercise real command logic — no mocks
-    result = cli.my_command(param="value")
-    assert result is True
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | None — Python import / shell execution only | TRUSTED |
-| **Architect** | Read + Design | None — design command hierarchy and API specs | OBSERVED |
-| **QATester** | Validation | None — run integrated CLI tests and doctor checks | OBSERVED |
-| **Researcher** | Read-only | None — inspect CLI command structure | SAFE |
-
-### Engineer Agent
-**Use Cases**: Building and maintaining CLI handlers during BUILD, adding new command groups.
-
-### Architect Agent
-**Use Cases**: Defining command hierarchy, reviewing API specs, planning subcommand taxonomy.
-
-### QATester Agent
-**Use Cases**: Running integrated CLI tests during VERIFY, confirming doctor check results.
-
-### Researcher Agent
-**Use Cases**: Inspecting CLI command structure and handler implementations for analysis.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/cli.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/cli.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

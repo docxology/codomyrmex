@@ -1,29 +1,16 @@
-# Identity Configuration
+# identity
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Identity management for users, agents, and system components. Provides identity resolution, verification, and credential management.
+Configuration files and templates.
 
-## Configuration Options
-
-The identity module operates with sensible defaults and does not require environment variable configuration. Identity providers are configured programmatically. No global environment variables required.
-
-## PAI Integration
-
-PAI agents interact with identity through direct Python imports. Identity providers are configured programmatically. No global environment variables required.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep identity
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/identity/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

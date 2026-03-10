@@ -1,74 +1,136 @@
 # Codomyrmex Agents — config
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Configuration templates and examples for all Codomyrmex subsystems. Provides reusable configuration patterns for LLM providers, databases, monitoring, security, and workflows.
-
-## Directory Structure
-
-```
-config/
-├── api/           # API configuration templates
-├── cache/         # Cache strategy configurations
-├── database/      # Database connection configs
-├── examples/      # Example configuration files
-├── llm/           # LLM provider configurations
-├── monitoring/    # Monitoring and alerting configs
-├── security/      # Security policy templates
-├── templates/     # Generic configuration templates
-└── workflows/     # Workflow definition templates
-```
+Configuration templates and examples.
 
 ## Active Components
-
-| Component | Type | Description |
-|-----------|------|-------------|
-| `llm/` | Directory | LLM provider configs (OpenAI, Anthropic, Ollama) |
-| `database/` | Directory | Database connection templates |
-| `monitoring/` | Directory | Logging and metrics configuration |
-| `security/` | Directory | Security policies and API key management |
-| `workflows/` | Directory | Workflow orchestration templates |
-| `templates/` | Directory | Base configuration templates |
-| `examples/` | Directory | Working configuration examples |
-
-## Agent Guidelines
-
-### Configuration Quality Standards
-
-1. **Security**: Never commit real credentials; use placeholders
-2. **Validation**: All configs should have JSON Schema or Pydantic validation
-3. **Documentation**: Each config file should have inline documentation
-4. **Defaults**: Provide sensible defaults with override capability
-
-### When Modifying Configurations
-
-- Test configurations in isolation before integration
-- Update corresponding documentation when adding new fields
-- Ensure backward compatibility or document breaking changes
-- Validate against schemas where available
-
-### Configuration Categories
-
-| Category | Purpose | Location |
-|----------|---------|----------|
-| **LLM** | AI provider settings | `llm/` |
-| **Database** | Connection strings, pools | `database/` |
-| **Monitoring** | Logging levels, metrics | `monitoring/` |
-| **Security** | API keys, policies | `security/` |
-| **Workflows** | Orchestration definitions | `workflows/` |
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `agentic_memory/` – Directory containing agentic_memory components
+- `agents/` – Directory containing agents components
+- `api/` – Directory containing api components
+- `audio/` – Directory containing audio components
+- `auth/` – Directory containing auth components
+- `bio_simulation/` – Directory containing bio_simulation components
+- `cache/` – Directory containing cache components
+- `calendar_integration/` – Directory containing calendar_integration components
+- `cerebrum/` – Directory containing cerebrum components
+- `ci_cd_automation/` – Directory containing ci_cd_automation components
+- `cli/` – Directory containing cli components
+- `cloud/` – Directory containing cloud components
+- `coding/` – Directory containing coding components
+- `collaboration/` – Directory containing collaboration components
+- `compression/` – Directory containing compression components
+- `concurrency/` – Directory containing concurrency components
+- `config_audits/` – Directory containing config_audits components
+- `config_management/` – Directory containing config_management components
+- `config_monitoring/` – Directory containing config_monitoring components
+- `container_optimization/` – Directory containing container_optimization components
+- `containerization/` – Directory containing containerization components
+- `cost_management/` – Directory containing cost_management components
+- `crypto/` – Directory containing crypto components
+- `dark/` – Directory containing dark components
+- `data_lineage/` – Directory containing data_lineage components
+- `data_visualization/` – Directory containing data_visualization components
+- `database/` – Directory containing database components
+- `database_management/` – Directory containing database_management components
+- `default.yaml` – Project file
+- `defense/` – Directory containing defense components
+- `dependency_injection/` – Directory containing dependency_injection components
+- `deployment/` – Directory containing deployment components
+- `docs_gen/` – Directory containing docs_gen components
+- `documentation/` – Directory containing documentation components
+- `documents/` – Directory containing documents components
+- `edge_computing/` – Directory containing edge_computing components
+- `email/` – Directory containing email components
+- `embodiment/` – Directory containing embodiment components
+- `encryption/` – Directory containing encryption components
+- `environment_setup/` – Directory containing environment_setup components
+- `events/` – Directory containing events components
+- `evolutionary_ai/` – Directory containing evolutionary_ai components
+- `examples/` – Directory containing examples components
+- `exceptions/` – Directory containing exceptions components
+- `feature_flags/` – Directory containing feature_flags components
+- `feature_store/` – Directory containing feature_store components
+- `file_system/` – Directory containing file_system components
+- `finance/` – Directory containing finance components
+- `formal_verification/` – Directory containing formal_verification components
+- `fpf/` – Directory containing fpf components
+- `git_analysis/` – Directory containing git_analysis components
+- `git_operations/` – Directory containing git_operations components
+- `graph_rag/` – Directory containing graph_rag components
+- `ide/` – Directory containing ide components
+- `identity/` – Directory containing identity components
+- `llm/` – Directory containing llm components
+- `logging_monitoring/` – Directory containing logging_monitoring components
+- `logistics/` – Directory containing logistics components
+- `maintenance/` – Directory containing maintenance components
+- `market/` – Directory containing market components
+- `meme/` – Directory containing meme components
+- `model_context_protocol/` – Directory containing model_context_protocol components
+- `model_ops/` – Directory containing model_ops components
+- `module_template/` – Directory containing module_template components
+- `monitoring/` – Directory containing monitoring components
+- `multimodal/` – Directory containing multimodal components
+- `networking/` – Directory containing networking components
+- `networks/` – Directory containing networks components
+- `operating_system/` – Directory containing operating_system components
+- `orchestrator/` – Directory containing orchestrator components
+- `performance/` – Directory containing performance components
+- `physical_management/` – Directory containing physical_management components
+- `plugin_system/` – Directory containing plugin_system components
+- `privacy/` – Directory containing privacy components
+- `prompt_engineering/` – Directory containing prompt_engineering components
+- `quantum/` – Directory containing quantum components
+- `relations/` – Directory containing relations components
+- `release/` – Directory containing release components
+- `scrape/` – Directory containing scrape components
+- `search/` – Directory containing search components
+- `security/` – Directory containing security components
+- `serialization/` – Directory containing serialization components
+- `simulation/` – Directory containing simulation components
+- `skills/` – Directory containing skills components
+- `spatial/` – Directory containing spatial components
+- `static_analysis/` – Directory containing static_analysis components
+- `system_discovery/` – Directory containing system_discovery components
+- `telemetry/` – Directory containing telemetry components
+- `templates/` – Directory containing templates components
+- `templating/` – Directory containing templating components
+- `terminal_interface/` – Directory containing terminal_interface components
+- `testing/` – Directory containing testing components
+- `tool_use/` – Directory containing tool_use components
+- `tree_sitter/` – Directory containing tree_sitter components
+- `utils/` – Directory containing utils components
+- `validation/` – Directory containing validation components
+- `vector_store/` – Directory containing vector_store components
+- `video/` – Directory containing video components
+- `wallet/` – Directory containing wallet components
+- `website/` – Directory containing website components
+- `workflows/` – Directory containing workflows components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment between configurations and runtime requirements
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Never expose sensitive credentials in configuration examples
-- Use environment variables for secrets with clear documentation
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `default.yaml`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent**: [../README.md](../README.md) - Project root
-- **📖 Config Docs**: [../docs/reference/](../docs/reference/) - Reference documentation
-- **🔧 Deployment**: [../docs/deployment/](../docs/deployment/) - Deployment guides
-- **🔒 Security**: [../docs/reference/security.md](../docs/reference/security.md) - Security practices
+- **🏠 Project Root**: ../README.md - Main project documentation

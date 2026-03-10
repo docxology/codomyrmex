@@ -1,40 +1,23 @@
-# Agent Learning Module
+# learning
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Implements the learning loop for autonomous agents. Enables skill acquisition, performance reflection, and curriculum-based improvement.
+Contains components for the src system.
 
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-## Key Exports
-
-### Learning
-
-- **`Skill`** — Reusable capability unit
-- **`Reflection`** — Post-action analysis
-- **`LessonPlan`** — Targeted improvement strategy
-
-### Submodules
-
-- `skills/` — Extraction and storage
-- `reflection/` — Self-evaluation logic
-- `curriculum/` — Automated difficulty scaling
-
-## Quick Start
-
-```python
-from codomyrmex.agents.learning import Skill, Reflection
-
-reflection = Reflection(action_log=logs)
-new_skill = reflection.extract_skill()
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `curriculum/` – Subdirectory
+- `py.typed` – File
+- `reflection/` – Subdirectory
+- `skills/` – Subdirectory
+- `skills.py` – File
+- `visualization.py` – File
 
 ## Navigation
-
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [Parent](../README.md)
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: ../../../../README.md

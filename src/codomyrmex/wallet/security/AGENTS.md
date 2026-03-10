@@ -1,38 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/wallet/security
+# Codomyrmex Agents — src/codomyrmex/wallet/security
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides wallet security primitives including encrypted credential storage with HMAC-based key derivation, key rotation lifecycle management with configurable policies, encrypted backup/restore operations, and a "Natural Ritual" multi-factor recovery system.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `encrypted_storage.py` | `EncryptedStore` | In-memory encrypted credential vault using HMAC-SHA256 key derivation and XOR-based symmetric encryption with integrity verification |
-| `encrypted_storage.py` | `EncryptedEntry` | Dataclass for an encrypted credential entry with ciphertext, nonce, auth tag, and timestamps |
-| `key_rotation.py` | `KeyRotation` | Key rotation lifecycle manager with configurable policies (max age, max signatures), audit trail, and pre/post-rotation hooks |
-| `key_rotation.py` | `RotationPolicy`, `RotationRecord` | Policy dataclass (max_age_days, max_signatures, auto_rotate) and rotation event record |
-| `recovery.py` | `NaturalRitualRecovery` | Multi-factor recovery via ordered secret-experience challenges; all-or-nothing verification with lockout after max attempts |
-| `recovery.py` | `RitualStep`, `hash_response` | Step dataclass with prompt and expected SHA-256 hash, and helper to hash plaintext responses |
-| `backup.py` | `BackupManager` | Encrypted wallet backup/restore with JSON persistence, integrity verification via key hash comparison, and file-level permissions |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `backup.py` – Project file
+- `encrypted_storage.py` – Project file
+- `key_rotation.py` – Project file
+- `py.typed` – Project file
+- `recovery.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `EncryptedStore` uses `os.urandom(32)` for master key generation and `os.urandom(16)` for per-entry nonces; integrity is verified via HMAC-SHA256 tag comparison using `hmac.compare_digest`.
-- `EncryptedStore.rotate_master_key` decrypts all entries with the old key, then re-encrypts with the new key atomically -- partial rotation is not possible.
-- `KeyRotation.needs_rotation` returns `True` if signature count exceeds `max_signatures` OR key age exceeds `max_age_days`.
-- `NaturalRitualRecovery.initiate_recovery` is all-or-nothing: every step must match for success; failed attempts increment a counter and lockout occurs after `max_attempts` (default 5).
-- `BackupManager` stores backup files with `0o600` permissions; plaintext keys are never persisted.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `backup.py`
+- `encrypted_storage.py`
+- `key_rotation.py`
+- `py.typed`
+- `recovery.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring` (structured logging), `codomyrmex.encryption.keys.key_manager` (KeyManager for backup operations), `wallet.exceptions` (WalletNotFoundError, RitualError)
-- **Used by**: Wallet CLI commands, wallet management workflows
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [wallet](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

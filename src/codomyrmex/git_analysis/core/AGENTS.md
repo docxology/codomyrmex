@@ -1,33 +1,39 @@
-# Core - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/git_analysis/core
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Git repository analysis engine combining GitPython-based commit history analysis with GitNexus structural code analysis via subprocess bridge.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `GitHistoryAnalyzer` | Commit history, contributor stats, churn, hotspot, and frequency analysis via GitPython |
-| `GitNexusBridge` | Subprocess bridge to GitNexus Node.js CLI for structural code queries |
-| `GitNexusNotAvailableError` | Raised when neither npx nor vendor GitNexus is found |
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `gitnexus_bridge.py` – Project file
+- `history_analyzer.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `GitHistoryAnalyzer` operates on the git object model directly (no subprocess calls). Requires a valid git repository path.
-- `GitNexusBridge` requires Node.js/npx or a built vendor distribution. Call `check_availability()` before use.
-- `GitNexusBridge.analyze()` must be called before `query()`, `get_context()`, or `assess_impact()` -- it indexes the repository.
-- `max_count` parameters are capped at 10000 to prevent memory exhaustion.
-- History analyzer complements git_operations (operational) with analytical capabilities (read-only).
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `gitnexus_bridge.py`
+- `history_analyzer.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent module**: `git_analysis/` exposes 16 `@mcp_tool`-decorated tools via `mcp_tools.py`.
-- **GitPython**: Core dependency -- no extra install required.
-- **GitNexus**: Optional Node.js tool for Tree-sitter AST + KuzuDB graph analysis.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [git_analysis/](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md)
-- **Root**: [/README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [git_analysis](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

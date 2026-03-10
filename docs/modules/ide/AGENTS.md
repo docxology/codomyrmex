@@ -1,62 +1,39 @@
-# Agent Guidelines - IDE
+# Codomyrmex Agents — docs/modules/ide
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Programmatic integration with IDEs: Antigravity, Cursor, and VS Code.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **IDEClient** — Abstract base for all IDE integrations
-- **CursorClient** — Cursor AI-first editor client
-- **IDECommand** — Command with name, args, timeout
-- **IDECommandResult** — Result with success, output, error
-- **FileInfo** — File metadata (path, language, lines)
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Connect before use** — Call `connect()` before executing commands
-2. **Use safe execution** — Prefer `execute_command_safe()` for error handling
-3. **Batch related commands** — Use `execute_batch()` for sequences
-4. **Check success rate** — Monitor `get_success_rate()` for reliability
-5. **Handle disconnects** — Catch `ConnectionError` and reconnect
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.ide import CursorClient, IDECommand
-
-client = CursorClient()
-client.connect()
-
-# Safe command execution
-result = client.execute_command_safe("editor.action.formatDocument")
-if not result.success:
-    log.error(f"Format failed: {result.error}")
-
-# Batch execution
-commands = [
-    IDECommand("editor.action.formatDocument"),
-    IDECommand("workbench.action.files.save"),
-]
-results = client.execute_batch(commands)
-```
-
-## Testing Patterns
-
-```python
-# Verify connection
-client = CursorClient()
-assert client.connect()
-assert client.is_connected()
-assert client.status == IDEStatus.CONNECTED
-
-# Verify command execution
-result = client.execute_command_safe("test.command")
-assert "success" in dir(result)
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

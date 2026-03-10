@@ -1,10 +1,30 @@
-# Workflows
+# workflows
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Workflows` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Test files and validation suites.
+
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `conftest.py` – File
+- `py.typed` – File
+- `test_cli_doctor.py` – File
+- `test_infinite_conversation.py` – File
+- `test_workflow_analyze.py` – File
+- `test_workflow_concurrent.py` – File
+- `test_workflow_docs.py` – File
+- `test_workflow_memory.py` – File
+- `test_workflow_roundtrip.py` – File
+- `test_workflow_search.py` – File
+- `test_workflow_status.py` – File
+- `test_workflow_trust.py` – File
+- `test_workflow_verify.py` – File
+
+## Navigation
+- **Parent Directory**: [integration](../README.md)
+- **Project Root**: ../../../../../README.md

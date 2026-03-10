@@ -1,40 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/meme/narrative
+# Codomyrmex Agents — src/codomyrmex/meme/narrative
 
-**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Implements computational narratology with Jungian/Campbellian archetypal character mapping, structural arc definitions (Hero's Journey, Freytag's Pyramid, Fichtean Curve), text-based narrative analysis, template-driven generation, counter-narrative construction, and synthetic myth assembly.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `engine.py` | `NarrativeEngine` | Orchestrator: analyze text, generate from templates, produce counter-narratives |
-| `models.py` | `Narrative` | Full computational representation of a story |
-| `models.py` | `NarrativeArc` | Tension curve and emotional valence over time |
-| `models.py` | `NarrativeTemplate` | Reusable template with stages and required archetypal roles |
-| `models.py` | `Archetype` | HERO, SHADOW, MENTOR, TRICKSTER, HERALD, THRESHOLD_GUARDIAN, SHAPESHIFTER, ALLY |
-| `structure.py` | `heros_journey_arc` | 12-stage Monomyth tension and emotion curve |
-| `structure.py` | `freytag_pyramid_arc` | Classic 5-act dramatic structure |
-| `structure.py` | `fichtean_curve_arc` | Series of crises leading to climax (8 stages) |
-| `myth.py` | `synthesize_myth` | Assemble a Hero's Journey myth for a given domain |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `engine.py` – Project file
+- `models.py` – Project file
+- `myth.py` – Project file
+- `py.typed` – Project file
+- `structure.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `analyze` uses punctuation density for tension (no NLP dependency); exclamation and question marks drive scores.
-- Character detection is keyword-based ("hero", "villain", "mentor"); case-insensitive.
-- Theme detection uses word frequency after stopword removal; defaults to "unidentified".
-- `insurgent_counter` deep-copies the narrative and inverts title/theme with hardcoded counter-segments.
-- Narratives must be internally consistent; do not mix arc structures arbitrarily.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `engine.py`
+- `models.py`
+- `myth.py`
+- `py.typed`
+- `structure.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: None (standard library only: `re`, `copy`, `time`, `uuid`, `collections`)
-- **Used by**: `meme.neurolinguistic` (framing reinforces narrative), `meme.hyperreality` (narratives build reality tunnels)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [meme](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [meme](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

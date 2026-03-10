@@ -78,12 +78,27 @@ def test_colony_construction():
 
 
 @pytest.mark.unit
+def test_colony_construction_negative_population():
+    """Colony cannot be created with negative population."""
+    with pytest.raises(ValueError, match="Population must be non-negative"):
+        Colony(population=-1)
+
+
+@pytest.mark.unit
 def test_colony_step_advances_tick():
     """Colony.step increments the tick counter."""
     colony = Colony(population=5)
     # 1 hour = 60 ticks
     colony.step(hours=1)
     assert colony.tick == 60
+
+
+@pytest.mark.unit
+def test_colony_step_negative_hours():
+    """Colony.step cannot run for negative hours."""
+    colony = Colony(population=5)
+    with pytest.raises(ValueError, match="Hours must be non-negative"):
+        colony.step(hours=-1)
 
 
 @pytest.mark.unit
@@ -96,6 +111,51 @@ def test_colony_stats():
     assert "dead" in stats
     assert "food_collected" in stats
     assert "state_distribution" in stats
+
+
+@pytest.mark.unit
+def test_colony_resting_recovery():
+    """Ants in RESTING state recover energy."""
+    # Create colony with no random genome traits to avoid interference
+    colony = Colony(population=1)
+    ant = colony.ants[0]
+    ant.genome.traits = {"endurance": 0.5}  # recovery = 0.01 * (0.5 + 0.5) = 0.01
+    ant.state = AntState.RESTING
+    ant.energy = 0.5
+    # 1 tick = 1/60 hour
+    # recovery = 0.01 per tick. After 10 ticks energy should be 0.6
+    for _ in range(10):
+        colony._step_tick()
+    assert ant.energy == pytest.approx(0.6)
+    assert ant.state == AntState.RESTING
+
+
+@pytest.mark.unit
+def test_colony_resting_to_foraging():
+    """Ants in RESTING state switch to FORAGING when energy is high."""
+    colony = Colony(population=1)
+    ant = colony.ants[0]
+    ant.genome.traits = {"endurance": 0.5}
+    ant.state = AntState.RESTING
+    ant.energy = 0.895
+    colony._step_tick()
+    assert ant.energy >= 0.9
+    assert ant.state == AntState.FORAGING
+
+
+@pytest.mark.unit
+def test_colony_idle_to_foraging():
+    """Ants in IDLE state sometimes switch to FORAGING."""
+    colony = Colony(population=100)
+    for ant in colony.ants:
+        ant.state = AntState.IDLE
+    
+    # Run a few ticks, some should switch
+    for _ in range(10):
+        colony._step_tick()
+    
+    states = [ant.state for ant in colony.ants]
+    assert AntState.FORAGING in states
 
 
 # ======================================================================
@@ -127,11 +187,20 @@ def test_ant_deposit_pheromone_with_trail():
 @pytest.mark.unit
 def test_ant_pick_up_food():
     """Ant picks up food and switches to RETURNING."""
-    ant = Ant(id=12)
+    ant = Ant(id=12, genome=Genome(traits={"strength": 0.5}))
+    # Default max_carry is 10.0. strength=0.5 -> max_carry=10.0
     picked = ant.pick_up_food(5.0)
     assert picked == pytest.approx(5.0)
     assert ant.carrying is True
     assert ant.state == AntState.RETURNING
+
+
+@pytest.mark.unit
+def test_ant_pick_up_food_already_carrying():
+    """Ant cannot pick up food if already carrying some."""
+    ant = Ant(id=12, carrying=True)
+    picked = ant.pick_up_food(5.0)
+    assert picked == 0.0
 
 
 @pytest.mark.unit
@@ -143,6 +212,37 @@ def test_ant_drop_food():
     assert dropped == pytest.approx(8.0)
     assert ant.carrying is False
     assert ant.state == AntState.RESTING
+
+
+@pytest.mark.unit
+def test_ant_drop_food_dead():
+    """Dead ant cannot drop food."""
+    ant = Ant(id=14, energy=0.0, carrying=True)
+    dropped = ant.drop_food()
+    assert dropped == 0.0
+
+
+@pytest.mark.unit
+def test_ant_move_dead():
+    """Dead ant cannot move."""
+    ant = Ant(id=15, energy=0.0, position=(0.0, 0.0))
+    ant.move((1.0, 1.0))
+    assert ant.position == (0.0, 0.0)
+
+
+@pytest.mark.unit
+def test_ant_move_zero_magnitude():
+    """Moving in zero direction does nothing."""
+    ant = Ant(id=16, position=(0.0, 0.0))
+    ant.move((0.0, 0.0))
+    assert ant.position == (0.0, 0.0)
+
+
+@pytest.mark.unit
+def test_ant_valid_transitions():
+    """Verify valid state transitions."""
+    ant = Ant(id=17, state=AntState.FORAGING)
+    assert AntState.RETURNING in ant.valid_transitions
 
 
 # ======================================================================
@@ -169,6 +269,16 @@ def test_environment_add_food_source():
 
 
 @pytest.mark.unit
+def test_environment_add_food_source_merge():
+    """Adding food to existing location merges sources."""
+    env = Environment(10, 10)
+    env.add_food_source((3, 3), 50.0)
+    env.add_food_source((3, 3), 50.0)
+    assert len(env.food_sources) == 1
+    assert env.food_sources[0].amount == pytest.approx(100.0)
+
+
+@pytest.mark.unit
 def test_environment_remove_food():
     """Removing food reduces the source amount."""
     env = Environment(10, 10)
@@ -176,6 +286,14 @@ def test_environment_remove_food():
     taken = env.remove_food((5, 5), 40.0)
     assert taken == pytest.approx(40.0)
     assert env.food_sources[0].amount == pytest.approx(60.0)
+
+
+@pytest.mark.unit
+def test_environment_remove_food_missing():
+    """Removing food from non-existent source returns 0."""
+    env = Environment(10, 10)
+    taken = env.remove_food((5, 5), 40.0)
+    assert taken == 0.0
 
 
 @pytest.mark.unit
@@ -198,6 +316,14 @@ def test_environment_obstacle_blocks_passability():
 
 
 @pytest.mark.unit
+def test_environment_is_passable_out_of_bounds():
+    """Cells out of bounds are not passable."""
+    env = Environment(10, 10)
+    assert env.is_passable((-1, 0)) is False
+    assert env.is_passable((10, 10)) is False
+
+
+@pytest.mark.unit
 def test_environment_pheromone_decay():
     """Pheromone decay reduces intensity."""
     env = Environment(10, 10, pheromone_decay=0.1)
@@ -205,6 +331,16 @@ def test_environment_pheromone_decay():
     env.decay_pheromones()
     pmap = env.get_pheromone_map()
     assert pmap[(3, 3)] == pytest.approx(0.9)
+
+
+@pytest.mark.unit
+def test_environment_pheromone_decay_custom_rate():
+    """Pheromone decay with custom rate."""
+    env = Environment(10, 10)
+    env.set_pheromone((3, 3), 1.0)
+    env.decay_pheromones(rate=0.5)
+    pmap = env.get_pheromone_map()
+    assert pmap[(3, 3)] == pytest.approx(0.5)
 
 
 @pytest.mark.unit
@@ -223,6 +359,21 @@ def test_environment_get_neighbors_excludes_obstacles():
     neighbors = env.get_neighbors((5, 5))
     assert (6, 5) not in neighbors
     assert len(neighbors) == 7
+
+
+@pytest.mark.unit
+def test_environment_food_at_empty():
+    """food_at returns None if no food sources."""
+    env = Environment(10, 10)
+    assert env.food_at((5, 5)) is None
+
+
+@pytest.mark.unit
+def test_environment_obstacles_property():
+    """Verify obstacles property."""
+    env = Environment(10, 10)
+    env.add_obstacle((1, 1))
+    assert (1, 1) in env.obstacles
 
 
 # ======================================================================
@@ -248,11 +399,38 @@ def test_genome_fitness():
 
 
 @pytest.mark.unit
+def test_genome_fitness_empty():
+    """Fitness of empty genome is 0.0."""
+    g = Genome(traits={})
+    assert g.fitness_score() == 0.0
+
+
+@pytest.mark.unit
 def test_genome_mutate():
     """Mutation produces a new genome."""
     g = Genome.random()
     mutated = g.mutate(rate=1.0)
     assert isinstance(mutated, Genome)
+
+
+@pytest.mark.unit
+def test_genome_crossover_empty():
+    """Crossover of empty genomes returns empty offspring."""
+    g1 = Genome(traits={})
+    g2 = Genome(traits={})
+    c1, c2 = g1.crossover(g2)
+    assert not c1.traits
+    assert not c2.traits
+
+
+@pytest.mark.unit
+def test_genome_repr():
+    """Genome repr contains fitness and traits."""
+    g = Genome(traits={"speed": 0.5})
+    r = repr(g)
+    assert "Genome" in r
+    assert "fitness=0.5000" in r
+    assert "speed=0.500" in r
 
 
 # ======================================================================
@@ -266,6 +444,7 @@ def test_population_creation():
     pop = Population(genomes=[Genome.random() for _ in range(20)])
     assert pop.size == 20
     assert pop.generation == 0
+    assert len(pop.individuals) == 20
 
 
 @pytest.mark.unit
@@ -274,6 +453,13 @@ def test_population_evolve():
     pop = Population()
     pop.evolve(generations=5)
     assert pop.generation == 5
+
+
+@pytest.mark.unit
+def test_population_average_fitness_empty():
+    """Average fitness of empty population is 0.0."""
+    pop = Population(genomes=[])
+    assert pop.average_fitness() == 0.0
 
 
 @pytest.mark.unit

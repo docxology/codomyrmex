@@ -1,38 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/website/accessibility
+# Codomyrmex Agents — src/codomyrmex/website/accessibility
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides WCAG-compliant accessibility auditing for web content, including a rule-based element checker, data models for issues and reports, multi-format report output (summary, JSON, Markdown), and utility functions for contrast ratio calculation and heading hierarchy validation.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `models.py` | `WCAGLevel`, `IssueType` | Enums for WCAG conformance levels (A, AA, AAA) and issue severity (error, warning, notice) |
-| `models.py` | `AccessibilityIssue` | Dataclass for a single accessibility issue with WCAG criterion, level, selector, and remediation suggestion |
-| `models.py` | `AccessibilityReport` | Audit report aggregating issues with pass/error/warning counts and a computed percentage score |
-| `models.py` | `WCAGRule` | Rule definition binding a WCAG criterion code and level to a check function; returns `AccessibilityIssue` on failure |
-| `checker.py` | `A11yChecker` | Rule-based accessibility checker with 5 built-in rules (img-alt, form-label, link-text, color-contrast, focus-visible); supports custom rules and level-filtered checking |
-| `reporters.py` | `AccessibilityReporter` | Multi-format report formatter producing one-line summary, serializable dict, JSON string, and Markdown table output |
-| `utils.py` | `calculate_contrast_ratio` | WCAG contrast ratio calculator using relative luminance from hex color values |
-| `utils.py` | `check_heading_hierarchy` | Validates heading level hierarchy (no skipped levels, must start with h1) |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `checker.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `reporters.py` – Project file
+- `utils.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `A11yChecker` filters rules by target WCAG level: at level A only level-A rules run; at level AA, both A and AA rules run; at AAA all rules run.
-- `WCAGRule.check` returns `None` on pass and an `AccessibilityIssue` on failure; the checker aggregates issues into an `AccessibilityReport`.
-- `AccessibilityReport.score` is computed as `(passed / (passed + errors)) * 100`; reports with zero checks score 100.0.
-- `calculate_contrast_ratio` follows the WCAG 2.0 relative luminance formula with gamma correction; returns 0.0 on invalid hex input.
-- Errors must be logged via `logging` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `checker.py`
+- `models.py`
+- `py.typed`
+- `reporters.py`
+- `utils.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Python standard library (`json`, `logging`, `dataclasses`, `enum`)
-- **Used by**: `website.generator` (site-level accessibility audits), website quality pipelines
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [website](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

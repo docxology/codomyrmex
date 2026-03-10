@@ -1,29 +1,33 @@
-# Container Optimization -- Agent Coordination
+# Codomyrmex Agents — docs/modules/container_optimization
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides tools for analyzing and improving container images and resource usage. Optimizes container configurations, identifies inefficiencies, and tunes resource allocation.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-No MCP tools defined for this module.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
-## PAI Integration
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| EXECUTE | Infrastructure Agent | Optimize container images and resource allocations |
-| OBSERVE | Monitoring Agent | Analyze container resource utilization patterns |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-
-## Agent Instructions
-
-1. Use ContainerOptimizer to analyze and optimize Docker images
-2. Use ResourceTuner to adjust CPU and memory allocation based on observed usage
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/container_optimization/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

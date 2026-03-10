@@ -1,40 +1,40 @@
-# Logistics Orchestration -- Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/logistics/orchestration
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Facade package that re-exports the orchestration API from the `project/` subpackage. Agents interact with this module to access workflow management, task orchestration, resource allocation, project lifecycle management, and parallel execution.
-
-## Key Components
-
-| Component | Source | Role |
-|-----------|--------|------|
-| `WorkflowManager` | `project/workflow_manager.py` | Workflow CRUD, JSON config loading, DAG creation, parallel execution |
-| `TaskOrchestrator` | `project/task_orchestrator.py` | Priority-queued task scheduling with dependency resolution |
-| `OrchestrationEngine` | `project/orchestration_engine.py` | Session management, health checks, metrics, event handling |
-| `ProjectManager` | `project/project_manager.py` | Project lifecycle with directory scaffolding and doc generation |
-| `ResourceManager` | `project/resource_manager.py` | Thread-safe resource allocation with capacity limits (11 resource types) |
-| `ParallelExecutor` | `project/parallel_executor.py` | `ThreadPoolExecutor`-based parallel task execution with timeouts |
-| `WorkflowDAG` | `project/workflow_dag.py` | DAG validation, cycle detection (DFS), topological sort (Kahn's algorithm) |
-| `OrchestrationMCPTools` | `project/mcp_tools.py` | Class-based MCP tool exposure (10 tools) |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `project/` – Directory containing project components
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Thread safety**: `OrchestrationEngine` uses `threading.RLock` for session state; `ResourceManager` uses `threading.Lock` for allocation. Agents may call concurrently.
-- **Singletons**: Access shared instances via `get_workflow_manager()`, `get_task_orchestrator()`, `get_orchestration_engine()`, `get_resource_manager()`. Each lazily initialised on first call.
-- **MCP pattern**: Uses class-based `OrchestrationMCPTools` (not `@mcp_tool` decorators). Tools are registered via `get_tool_definitions()` and dispatched through `execute_tool()`.
-- **Persistence**: `WorkflowManager` reads workflow definitions from `config/workflows/production/*.json` and persists execution data to `.workflows/`.
-- **DAG validation**: Agents must validate task graphs before execution -- `WorkflowDAG` detects cycles via DFS and computes topological order with Kahn's algorithm.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Logging**: All components use `codomyrmex.logging_monitoring.core.logger_config.get_logger`.
-- **Documentation**: `ProjectManager` delegates to `DocumentationGenerator` for RASP file scaffolding.
-- **Events**: `OrchestrationEngine` fires events via an internal event handler registry.
-- **Performance**: `ResourceManager` and `OrchestrationEngine` optionally integrate with `codomyrmex.performance` for monitoring.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [logistics/](../README.md)
-- **Children**: [project/](project/AGENTS.md)
-- **Siblings**: [routing/](../routing/AGENTS.md)
-- **Specification**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [logistics](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

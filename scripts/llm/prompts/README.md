@@ -1,38 +1,18 @@
-# Prompts Scripts
+# prompts
 
-**Module**: scripts/llm/prompts  
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Scripts for prompt template management, versioning, and rendering.
+Automation and utility scripts.
 
-## Scripts
-
-| Script | API Required | Description |
-|--------|-------------|-------------|
-| `prompts_demo.py` | No | Template library and versioning demo |
-| `openrouter_free_example.py` | Yes | Real template usage with OpenRouter |
-
-## Quick Start
-
-```bash
-# Demo (no API key required)
-python prompts_demo.py
-
-# Live example (requires API key)
-export OPENROUTER_API_KEY='your-key-here'
-python openrouter_free_example.py
-```
-
-## Features Demonstrated
-
-- Prompt template loading
-- Variable substitution
-- Template validation
-- Version management
-- Reusable prompt library
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `openrouter_free_example.py` – File
+- `prompts_demo.py` – File
 
 ## Navigation
-
-- **Parent**: [scripts/llm](../README.md)
+- **Parent Directory**: [llm](../README.md)
+- **Project Root**: ../../../README.md

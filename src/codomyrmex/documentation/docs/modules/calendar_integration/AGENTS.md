@@ -1,28 +1,37 @@
-# Calendar Integration -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/calendar_integration
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Capabilities
+## Purpose
+Documentation files and guides.
 
-The Calendar Integration module provides agents with calendar event management through 5 MCP tools for listing, creating, reading, updating, and deleting events.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
 
-## Available MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description |
-|------|-------------|
-| `calendar_list_events` | List events within a date range |
-| `calendar_create_event` | Create a new event |
-| `calendar_get_event` | Get event details by ID |
-| `calendar_delete_event` | Delete an event by ID |
-| `calendar_update_event` | Update an existing event |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
 
-## Trust Level
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-All five MCP tools are classified as **Safe**.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Source**: [src/codomyrmex/calendar_integration/](../../../../src/codomyrmex/calendar_integration/)
-- **Extended README**: [README.md](readme.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **Parent**: [All Modules](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

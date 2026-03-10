@@ -1,8 +1,11 @@
-"""Comprehensive tests for the codomyrmex.api.webhooks module.
+"""
+Comprehensive tests for the codomyrmex.api.webhooks module.
 
 Covers enum members, dataclass defaults, auto-generated fields,
 serialization, HMAC signature signing/verification, the webhook
 registry, the dispatcher (including retry logic), and factory functions.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
 """
 
 import json

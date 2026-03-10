@@ -1,55 +1,34 @@
-# Agentic Memory Tests - Agent Coordination
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+# Codomyrmex Agents — src/codomyrmex/agentic_memory/tests
 
-## Overview
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Agent coordination guide for the `agentic_memory/tests` package. This directory contains zero-mock tests for the agentic_memory module, primarily the `rules/` sub-module test suite.
+## Purpose
+Test files and validation suites.
 
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `rules/test_rules.py` | 40+ tests for RuleLoader, RuleEngine, RuleRegistry, RuleSet, and MCP tools |
-| `rules/__init__.py` | Test package marker |
-
-## MCP Tools Available
-
-No MCP tools. This is a test-only package.
-
-## Agent Instructions
-
-1. Run tests with `uv run pytest src/codomyrmex/agentic_memory/tests/ -v` before modifying any rules module code.
-2. All tests use real `.cursorrules` files from the `rules/` package -- never introduce mocks or stubs.
-3. When adding new MCP tools to `rules/mcp_tools.py`, add corresponding tests in `rules/test_rules.py`.
-4. Tests validate the full rule hierarchy: FILE_SPECIFIC > MODULE > CROSS_MODULE > GENERAL.
-5. Verify the expected rule count (75 total) if adding or removing `.cursorrules` files.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `rules/` – Directory containing rules components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Zero-Mock Policy**: All tests operate against real `.cursorrules` files on disk.
-- **Explicit Failure**: Tests use `pytest.raises` for expected errors (FileNotFoundError, ValueError).
-- **No Silent Fallbacks**: Missing rules cause assertion failures, not silent degradation.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-# Standard test setup: locate rules root directory
-RULES_ROOT = Path(__file__).parent.parent.parent / "rules"
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Load and validate a rule
-rule = RuleLoader.load(RULES_ROOT / "modules" / "agentic_memory.cursorrules")
-assert rule.name == "agentic_memory"
-assert rule.priority == RulePriority.MODULE
-```
-
-## PAI Agent Role Access Matrix
-
-| Agent Role | Access Level | Notes |
-|------------|-------------|-------|
-| QATester | Full | Primary consumer -- runs and extends tests |
-| Engineer | Full | Modifies tests when changing rules module code |
-| Architect | Read | Reviews test coverage and structure |
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [Parent](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agentic_memory](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

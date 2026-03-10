@@ -1,54 +1,34 @@
-# git_analysis/vendor — Agent Context
+# Codomyrmex Agents — src/codomyrmex/git_analysis/vendor
 
-## CRITICAL: Do Not Modify Contents
-
-The `gitnexus/` subdirectory is a **git submodule** pointing to an external
-third-party repository. Do NOT create, edit, or delete files inside `gitnexus/`.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-This `vendor/` directory holds third-party tools needed by `git_analysis` that
-are vendored (included directly) rather than installed as package dependencies.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `gitnexus/` – Directory containing gitnexus components
 
-## Current Contents
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Directory | Type | What It Is |
-|-----------|------|-----------|
-| `gitnexus/` | git submodule | GitNexus — knowledge graph tool for structural code analysis |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
-## When Agents Should Access This Directory
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Read `vendor/README.md`** when you need to:
-- Understand why GitNexus is vendored
-- Find instructions for building the vendor dist
-- Understand how to update the submodule
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-**Do NOT touch `gitnexus/` internals** — it is an external submodule.
-Any RASP docs missing inside `gitnexus/` are intentional (we don't own that code).
-
-## Quick Checks
-
-```bash
-# Is the submodule checked out?
-ls src/codomyrmex/git_analysis/vendor/gitnexus/
-
-# Is it initialized?
-git submodule status src/codomyrmex/git_analysis/vendor/gitnexus
-
-# What commit is it pinned to?
-cd src/codomyrmex/git_analysis/vendor/gitnexus && git log --oneline -1
-```
-
-## GitNexus Availability
-
-The `git_analysis` module gracefully handles GitNexus being unavailable:
-```python
-from codomyrmex.git_analysis import GITNEXUS_AVAILABLE
-# True if node/npx is on PATH; False otherwise
-# All GitNexus MCP tools return {"status": "error"} when unavailable
-```
-
-## Related
-
-- `../core/gitnexus_bridge.py` — Python interface to the vendored GitNexus tool
-- `../README.md` — Full git_analysis module documentation
+## Navigation Links
+- **📁 Parent Directory**: [git_analysis](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

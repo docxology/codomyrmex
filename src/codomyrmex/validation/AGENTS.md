@@ -1,115 +1,66 @@
-# Agent Guidelines - Validation
+# Codomyrmex Agents — src/codomyrmex/validation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Data validation, schema checking, and input sanitization.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `contextual.py` – Project file
+- `examples_validator.py` – Project file
+- `exceptions.py` – Project file
+- `mcp_tools.py` – Project file
+- `pai.py` – Project file
+- `parser.py` – Project file
+- `py.typed` – Project file
+- `rules/` – Directory containing rules components
+- `sanitizers/` – Directory containing sanitizers components
+- `schemas/` – Directory containing schemas components
+- `schemas.py` – Project file
+- `summary.py` – Project file
+- `validation_manager.py` – Project file
+- `validator.py` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Validator** — General validation
-- **SchemaValidator** — JSON Schema validation
-- **EmailValidator** — Email format validation
-- **URLValidator** — URL format validation
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `contextual.py`
+- `examples_validator.py`
+- `exceptions.py`
+- `mcp_tools.py`
+- `pai.py`
+- `parser.py`
+- `py.typed`
+- `schemas.py`
+- `summary.py`
+- `validation_manager.py`
+- `validator.py`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Validate early** — Check at API boundaries
-2. **Return all errors** — Don't stop at first error
-3. **Use schemas** — Define validation schemas
-4. **Custom messages** — User-friendly error messages
-5. **Whitelist** — Prefer whitelist over blacklist
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.validation import (
-    Validator, SchemaValidator, validate, ValidationError
-)
-
-# Simple validation
-validator = Validator()
-errors = validator.validate({
-    "email": "user@example.com",
-    "age": 25
-}, rules={
-    "email": ["required", "email"],
-    "age": ["required", "min:18"]
-})
-
-if errors:
-    raise ValidationError(errors)
-
-# Schema validation
-schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string"},
-        "count": {"type": "integer"}
-    },
-    "required": ["name"]
-}
-SchemaValidator.validate(data, schema)
-```
-
-## Testing Patterns
-
-```python
-# Verify validation
-validator = Validator()
-errors = validator.validate(
-    {"email": "invalid"},
-    rules={"email": ["email"]}
-)
-assert len(errors) > 0
-
-# Verify valid input
-errors = validator.validate(
-    {"email": "test@test.com"},
-    rules={"email": ["email"]}
-)
-assert len(errors) == 0
-```
-
-## MCP Tools Available
-
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `validate_schema` | Validate data against a JSON Schema | Safe |
-| `validate_config` | Validate a configuration dictionary against common patterns | Safe |
-| `validation_summary` | Get a summary of validation operations performed in this session | Safe |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `validate_schema`, `validate_config`, `validation_summary` | TRUSTED |
-| **Architect** | Read + Design | `validate_schema` — schema design review, data contract validation | OBSERVED |
-| **QATester** | Validation | `validate_schema`, `validate_config`, `validation_summary` — full VERIFY-phase validation | OBSERVED |
-| **Researcher** | Read-only | `validate_schema` — validate research data structures | SAFE |
-
-### Engineer Agent
-**Use Cases**: Schema validation at system boundaries during BUILD, config validation before EXECUTE, generating validation summaries.
-
-### Architect Agent
-**Use Cases**: Reviewing data schemas, validating API contracts, confirming data shapes match design.
-
-### QATester Agent
-**Use Cases**: Running full validation suite during VERIFY, generating compliance reports, confirming schema correctness.
-
-### Researcher Agent
-**Use Cases**: Validating research data structures against schemas before analysis.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/validation.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/validation.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

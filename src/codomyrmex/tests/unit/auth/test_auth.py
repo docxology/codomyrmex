@@ -1,4 +1,4 @@
-"""Comprehensive tests for the auth module.
+"""Comprehensive zero-mock tests for the auth module.
 
 Tests cover:
 - Token creation, validation, and lifecycle
@@ -6,6 +6,8 @@ Tests cover:
 - Permission registry and RBAC
 - Authenticator integration
 - Token validator and signatures
+
+Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 """
 
 import time

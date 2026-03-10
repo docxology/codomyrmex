@@ -1,14 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/tests/unit/ci_cd_automation/rollback_plans
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
 Test files and validation suites.
 
 ## Active Components
-
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `plan_deploy_123_1769446417.json` – Project file
 - `plan_deploy_123_1769446514.json` – Project file
 - `plan_deploy_123_1769447249.json` – Project file
@@ -195,12 +195,209 @@ Test files and validation suites.
 - `plan_deploy_rolling_1769526568.json` – Project file
 
 ## Operating Contracts
-
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation Links
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `plan_deploy_123_1769446417.json`
+- `plan_deploy_123_1769446514.json`
+- `plan_deploy_123_1769447249.json`
+- `plan_deploy_123_1769447320.json`
+- `plan_deploy_123_1769450516.json`
+- `plan_deploy_123_1769450617.json`
+- `plan_deploy_123_1769450974.json`
+- `plan_deploy_123_1769452571.json`
+- `plan_deploy_123_1769452673.json`
+- `plan_deploy_123_1769453198.json`
+- `plan_deploy_123_1769453298.json`
+- `plan_deploy_123_1769454040.json`
+- `plan_deploy_123_1769454140.json`
+- `plan_deploy_123_1769455191.json`
+- `plan_deploy_123_1769455290.json`
+- `plan_deploy_123_1769456474.json`
+- `plan_deploy_123_1769456573.json`
+- `plan_deploy_123_1769470286.json`
+- `plan_deploy_123_1769470392.json`
+- `plan_deploy_123_1769525989.json`
+- `plan_deploy_123_1769526100.json`
+- `plan_deploy_123_1769526399.json`
+- `plan_deploy_123_1769526568.json`
+- `plan_deploy_1_1769446417.json`
+- `plan_deploy_1_1769446514.json`
+- `plan_deploy_1_1769447249.json`
+- `plan_deploy_1_1769447320.json`
+- `plan_deploy_1_1769450516.json`
+- `plan_deploy_1_1769450617.json`
+- `plan_deploy_1_1769450974.json`
+- `plan_deploy_1_1769452571.json`
+- `plan_deploy_1_1769452673.json`
+- `plan_deploy_1_1769453198.json`
+- `plan_deploy_1_1769453298.json`
+- `plan_deploy_1_1769454040.json`
+- `plan_deploy_1_1769454140.json`
+- `plan_deploy_1_1769455191.json`
+- `plan_deploy_1_1769455290.json`
+- `plan_deploy_1_1769456474.json`
+- `plan_deploy_1_1769456573.json`
+- `plan_deploy_1_1769470286.json`
+- `plan_deploy_1_1769470392.json`
+- `plan_deploy_1_1769525989.json`
+- `plan_deploy_1_1769526100.json`
+- `plan_deploy_1_1769526399.json`
+- `plan_deploy_1_1769526568.json`
+- `plan_deploy_2_1769446417.json`
+- `plan_deploy_2_1769446514.json`
+- `plan_deploy_2_1769447249.json`
+- `plan_deploy_2_1769447320.json`
+- `plan_deploy_2_1769450516.json`
+- `plan_deploy_2_1769450617.json`
+- `plan_deploy_2_1769450974.json`
+- `plan_deploy_2_1769452571.json`
+- `plan_deploy_2_1769452673.json`
+- `plan_deploy_2_1769453198.json`
+- `plan_deploy_2_1769453298.json`
+- `plan_deploy_2_1769454040.json`
+- `plan_deploy_2_1769454140.json`
+- `plan_deploy_2_1769455191.json`
+- `plan_deploy_2_1769455290.json`
+- `plan_deploy_2_1769456474.json`
+- `plan_deploy_2_1769456573.json`
+- `plan_deploy_2_1769470286.json`
+- `plan_deploy_2_1769470392.json`
+- `plan_deploy_2_1769525989.json`
+- `plan_deploy_2_1769526100.json`
+- `plan_deploy_2_1769526399.json`
+- `plan_deploy_2_1769526568.json`
+- `plan_deploy_blue_green_1769446417.json`
+- `plan_deploy_blue_green_1769446514.json`
+- `plan_deploy_blue_green_1769447249.json`
+- `plan_deploy_blue_green_1769447320.json`
+- `plan_deploy_blue_green_1769450516.json`
+- `plan_deploy_blue_green_1769450617.json`
+- `plan_deploy_blue_green_1769450974.json`
+- `plan_deploy_blue_green_1769452571.json`
+- `plan_deploy_blue_green_1769452673.json`
+- `plan_deploy_blue_green_1769453198.json`
+- `plan_deploy_blue_green_1769453298.json`
+- `plan_deploy_blue_green_1769454040.json`
+- `plan_deploy_blue_green_1769454140.json`
+- `plan_deploy_blue_green_1769455191.json`
+- `plan_deploy_blue_green_1769455290.json`
+- `plan_deploy_blue_green_1769456474.json`
+- `plan_deploy_blue_green_1769456573.json`
+- `plan_deploy_blue_green_1769470286.json`
+- `plan_deploy_blue_green_1769470392.json`
+- `plan_deploy_blue_green_1769525989.json`
+- `plan_deploy_blue_green_1769526100.json`
+- `plan_deploy_blue_green_1769526399.json`
+- `plan_deploy_blue_green_1769526568.json`
+- `plan_deploy_canary_1769446417.json`
+- `plan_deploy_canary_1769446514.json`
+- `plan_deploy_canary_1769447249.json`
+- `plan_deploy_canary_1769447320.json`
+- `plan_deploy_canary_1769450516.json`
+- `plan_deploy_canary_1769450617.json`
+- `plan_deploy_canary_1769450974.json`
+- `plan_deploy_canary_1769452571.json`
+- `plan_deploy_canary_1769452673.json`
+- `plan_deploy_canary_1769453198.json`
+- `plan_deploy_canary_1769453298.json`
+- `plan_deploy_canary_1769454040.json`
+- `plan_deploy_canary_1769454140.json`
+- `plan_deploy_canary_1769455191.json`
+- `plan_deploy_canary_1769455290.json`
+- `plan_deploy_canary_1769456474.json`
+- `plan_deploy_canary_1769456573.json`
+- `plan_deploy_canary_1769470286.json`
+- `plan_deploy_canary_1769470392.json`
+- `plan_deploy_canary_1769525989.json`
+- `plan_deploy_canary_1769526100.json`
+- `plan_deploy_canary_1769526399.json`
+- `plan_deploy_canary_1769526568.json`
+- `plan_deploy_immediate_1769446417.json`
+- `plan_deploy_immediate_1769446514.json`
+- `plan_deploy_immediate_1769447249.json`
+- `plan_deploy_immediate_1769447320.json`
+- `plan_deploy_immediate_1769450516.json`
+- `plan_deploy_immediate_1769450617.json`
+- `plan_deploy_immediate_1769450974.json`
+- `plan_deploy_immediate_1769452571.json`
+- `plan_deploy_immediate_1769452673.json`
+- `plan_deploy_immediate_1769453198.json`
+- `plan_deploy_immediate_1769453298.json`
+- `plan_deploy_immediate_1769454040.json`
+- `plan_deploy_immediate_1769454140.json`
+- `plan_deploy_immediate_1769455191.json`
+- `plan_deploy_immediate_1769455290.json`
+- `plan_deploy_immediate_1769456474.json`
+- `plan_deploy_immediate_1769456573.json`
+- `plan_deploy_immediate_1769470286.json`
+- `plan_deploy_immediate_1769470392.json`
+- `plan_deploy_immediate_1769525989.json`
+- `plan_deploy_immediate_1769526100.json`
+- `plan_deploy_immediate_1769526399.json`
+- `plan_deploy_immediate_1769526568.json`
+- `plan_deploy_manual_1769446417.json`
+- `plan_deploy_manual_1769446514.json`
+- `plan_deploy_manual_1769447249.json`
+- `plan_deploy_manual_1769447320.json`
+- `plan_deploy_manual_1769450516.json`
+- `plan_deploy_manual_1769450617.json`
+- `plan_deploy_manual_1769450974.json`
+- `plan_deploy_manual_1769452571.json`
+- `plan_deploy_manual_1769452673.json`
+- `plan_deploy_manual_1769453198.json`
+- `plan_deploy_manual_1769453298.json`
+- `plan_deploy_manual_1769454040.json`
+- `plan_deploy_manual_1769454140.json`
+- `plan_deploy_manual_1769455191.json`
+- `plan_deploy_manual_1769455290.json`
+- `plan_deploy_manual_1769456474.json`
+- `plan_deploy_manual_1769456573.json`
+- `plan_deploy_manual_1769470286.json`
+- `plan_deploy_manual_1769470392.json`
+- `plan_deploy_manual_1769525989.json`
+- `plan_deploy_manual_1769526100.json`
+- `plan_deploy_manual_1769526399.json`
+- `plan_deploy_manual_1769526568.json`
+- `plan_deploy_rolling_1769446417.json`
+- `plan_deploy_rolling_1769446514.json`
+- `plan_deploy_rolling_1769447249.json`
+- `plan_deploy_rolling_1769447320.json`
+- `plan_deploy_rolling_1769450516.json`
+- `plan_deploy_rolling_1769450617.json`
+- `plan_deploy_rolling_1769450974.json`
+- `plan_deploy_rolling_1769452571.json`
+- `plan_deploy_rolling_1769452673.json`
+- `plan_deploy_rolling_1769453198.json`
+- `plan_deploy_rolling_1769453298.json`
+- `plan_deploy_rolling_1769454040.json`
+- `plan_deploy_rolling_1769454140.json`
+- `plan_deploy_rolling_1769455191.json`
+- `plan_deploy_rolling_1769455290.json`
+- `plan_deploy_rolling_1769456474.json`
+- `plan_deploy_rolling_1769456573.json`
+- `plan_deploy_rolling_1769470286.json`
+- `plan_deploy_rolling_1769470392.json`
+- `plan_deploy_rolling_1769525989.json`
+- `plan_deploy_rolling_1769526100.json`
+- `plan_deploy_rolling_1769526399.json`
+- `plan_deploy_rolling_1769526568.json`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
 - **📁 Parent Directory**: [ci_cd_automation](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../../../README.md - Main project documentation

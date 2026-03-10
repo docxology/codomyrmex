@@ -77,3 +77,9 @@ class TestBioSimulationEvolvePopulation:
         dist = result["trait_distribution"]
         assert isinstance(dist, dict)
         assert "speed" in dist
+
+    def test_error_handling(self):
+        # Trigger an error by passing invalid population_size (negative)
+        result = bio_simulation_evolve_population(population_size=-1)
+        assert result["status"] == "error"
+        assert "message" in result

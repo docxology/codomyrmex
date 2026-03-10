@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from codomyrmex.cerebrum.distillation import (
     DistillationConfig,
     DistillationPipeline,
@@ -39,6 +41,7 @@ def _make_complete_trace(
     return trace
 
 
+@pytest.mark.unit
 class TestDistillationConfig:
     """Test suite for DistillationConfig."""
 
@@ -49,6 +52,7 @@ class TestDistillationConfig:
         assert cfg.dedup_by_prompt is True
 
 
+@pytest.mark.unit
 class TestDistillationPipeline:
     """Test suite for DistillationPipeline."""
 
@@ -125,6 +129,7 @@ class TestDistillationPipeline:
         assert "trace_id" in cases[0].metadata
 
 
+@pytest.mark.unit
 class TestBayesianInference:
     def test_distribution(self):
         from codomyrmex.cerebrum.inference.bayesian import Distribution
@@ -155,6 +160,7 @@ class TestBayesianInference:
         assert engine is not None
 
 
+@pytest.mark.unit
 class TestVisualizationTheme:
     def test_color_palette(self):
         from codomyrmex.cerebrum.visualization.theme import ColorPalette
@@ -188,6 +194,7 @@ class TestVisualizationTheme:
 
 
 # Coverage push — cerebrum/visualization/base
+@pytest.mark.unit
 class TestBaseVisualizer:
     """Tests for BaseVisualizer and theme utilities."""
 
@@ -198,6 +205,7 @@ class TestBaseVisualizer:
         assert theme is not None
 
 
+@pytest.mark.unit
 class TestBayesianDeep:
     """Deep tests for Bayesian inference execution paths."""
 

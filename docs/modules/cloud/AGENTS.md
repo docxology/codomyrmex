@@ -1,153 +1,39 @@
-# Codomyrmex Agents — src/codomyrmex/cloud
+# Codomyrmex Agents — docs/modules/cloud
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Cloud provider integration module supporting AWS, GCP, Azure, Coda.io, and Infomaniak. Provides unified interfaces for cloud resources, storage, compute, serverless, DNS, orchestration, metering, and newsletter services.
-
-## Module Architecture
-
-```
-cloud/
-├── __init__.py          # Public API exports
-├── common/              # Abstract base classes and utilities
-│   ├── CloudClient      # Generic cloud resource management
-│   ├── StorageClient    # Object storage abstraction
-│   ├── ComputeClient    # VM/instance abstraction
-│   └── ServerlessClient # Function-as-a-service abstraction
-├── aws/                 # Amazon Web Services
-│   ├── S3Client         # S3 object storage
-│   ├── storage/         # Extended storage operations
-│   ├── compute/         # EC2 operations (planned)
-│   └── serverless/      # Lambda operations (planned)
-├── gcp/                 # Google Cloud Platform
-│   ├── GCSClient        # Cloud Storage
-│   ├── storage/         # Extended storage operations
-│   ├── compute/         # GCE operations (planned)
-│   └── serverless/      # Cloud Functions (planned)
-├── azure/               # Microsoft Azure
-│   ├── AzureBlobClient  # Blob Storage
-│   ├── storage/         # Extended storage operations
-│   ├── compute/         # VM operations (planned)
-│   └── serverless/      # Azure Functions (planned)
-├── coda_io/             # Coda.io API
-│   ├── CodaClient       # REST API v1 client
-│   ├── models.py        # Data models (Doc, Page, Table, Row, etc.)
-│   └── exceptions.py    # API error types
-└── infomaniak/          # Infomaniak Public Cloud + Newsletter
-    ├── auth.py          # Credentials and connection factories
-    ├── compute/         # InfomaniakComputeClient (Nova)
-    ├── block_storage/   # InfomaniakVolumeClient (Cinder)
-    ├── network/         # InfomaniakNetworkClient (Neutron/Octavia)
-    ├── object_storage/  # InfomaniakObjectStorageClient (Swift) / InfomaniakS3Client
-    ├── identity/        # InfomaniakIdentityClient (Keystone)
-    ├── dns/             # InfomaniakDNSClient (Designate)
-    ├── orchestration/   # InfomaniakHeatClient (Heat)
-    ├── metering/        # InfomaniakMeteringClient
-    └── newsletter/      # InfomaniakNewsletterClient (REST API)
-```
+Documentation files and guides.
 
 ## Active Components
-
-| Component | Type | Status | Description |
-|-----------|------|--------|-------------|
-| `S3Client` | Class | Active | AWS S3 object storage client |
-| `GCSClient` | Class | Active | GCP Cloud Storage client |
-| `AzureBlobClient` | Class | Active | Azure Blob Storage client |
-| `CodaClient` | Class | Active | Coda.io REST API v1 client |
-| `StorageClient` | ABC | Active | Abstract storage interface |
-| `ComputeClient` | ABC | Planned | Abstract compute interface |
-| `ServerlessClient` | ABC | Planned | Abstract serverless interface |
-| `InfomaniakComputeClient` | Class | Active | Infomaniak compute (Nova) |
-| `InfomaniakVolumeClient` | Class | Active | Infomaniak block storage (Cinder) |
-| `InfomaniakNetworkClient` | Class | Active | Infomaniak networking (Neutron/Octavia) |
-| `InfomaniakObjectStorageClient` | Class | Active | Infomaniak Swift object storage |
-| `InfomaniakS3Client` | Class | Active | Infomaniak S3-compatible storage |
-| `InfomaniakIdentityClient` | Class | Active | Infomaniak identity (Keystone) |
-| `InfomaniakDNSClient` | Class | Active | Infomaniak DNS (Designate) |
-| `InfomaniakHeatClient` | Class | Active | Infomaniak orchestration (Heat) |
-| `InfomaniakMeteringClient` | Class | Active | Infomaniak metering/billing |
-| `InfomaniakNewsletterClient` | Class | Active | Infomaniak Newsletter REST API |
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-### Import Pattern
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-```python
-# Recommended: Direct client imports
-from codomyrmex.cloud import S3Client, GCSClient, AzureBlobClient, CodaClient
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-# Infomaniak clients
-from codomyrmex.cloud import InfomaniakComputeClient, InfomaniakS3Client
-from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-
-# Access common abstractions
-from codomyrmex.cloud.common import StorageClient, CloudProvider
-```
-
-### Error Handling Pattern
-
-```python
-from codomyrmex.cloud import S3Client
-import logging
-
-logger = logging.getLogger(__name__)
-
-client = S3Client()
-try:
-    objects = client.list_objects("my-bucket")
-except Exception as e:
-    logger.error(f"Operation failed: {e}")
-    # Errors are logged internally; re-raise or handle as needed
-```
-
-### Dependency Checks
-
-```python
-from codomyrmex.cloud import S3Client, GCSClient, AzureBlobClient
-
-# Clients are None if optional dependencies are missing
-if S3Client is None:
-    print("boto3 not installed - AWS features unavailable")
-
-if GCSClient is None:
-    print("google-cloud-storage not installed - GCP features unavailable")
-
-if AzureBlobClient is None:
-    print("azure-storage-blob not installed - Azure features unavailable")
-
-if InfomaniakComputeClient is None:
-    print("openstacksdk not installed - Infomaniak features unavailable")
-```
-
-## Agent Integration Guidelines
-
-1. **Use Public API**: Import from `codomyrmex.cloud`, not internal modules
-2. **Check Availability**: Always verify client is not None before use
-3. **Handle Errors**: All operations may raise exceptions; wrap in try/except
-4. **Respect Rate Limits**: Coda.io has strict rate limits (see SPEC.md)
-5. **Use Logging**: Errors are logged via `logging_monitoring` module
-
-## Cross-Module Dependencies
-
-| Module | Relationship |
-|--------|--------------|
-| `logging_monitoring` | Used for structured logging |
-| `config_management` | Credential configuration |
-| `validation` | Input validation |
-
-## MCP Interface
-
-This module exposes cloud operations for Model Context Protocol agents:
-
-- Storage CRUD operations across providers
-- Document management via Coda.io
-- Resource listing and metadata retrieval
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [codomyrmex](../README.md)
-- **🏠 Project Root**: [../../../README.md](../../../README.md)
-- **📖 Specification**: [SPEC.md](SPEC.md)
-- **🔌 API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

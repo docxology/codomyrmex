@@ -1,4 +1,4 @@
-"""Tests for SQLiteStore."""
+"""Tests for SQLiteStore — strictly zero-mock."""
 
 import os
 import tempfile

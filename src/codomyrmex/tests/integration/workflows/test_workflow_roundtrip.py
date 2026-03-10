@@ -72,12 +72,13 @@ class TestWorkflowRoundtrip:
         assert isinstance(workflows, list)
         assert len(workflows) >= 5, f"Expected ≥5 workflows, got {len(workflows)}"
 
-    def test_call_tool_unknown_raises_keyerror(self):
-        """Calling a nonexistent tool raises KeyError."""
+    def test_call_tool_unknown_returns_error(self):
+        """Calling a nonexistent tool returns an error dict."""
         from codomyrmex.agents.pai import trust_gateway
         from codomyrmex.agents.pai.mcp_bridge import call_tool
 
         trust_gateway.trust_all()
 
-        with pytest.raises(KeyError):
-            call_tool("codomyrmex.nonexistent_tool_xyz")
+        result = call_tool("codomyrmex.nonexistent_tool_xyz")
+        assert "error" in result
+        assert "Unknown tool" in str(result["error"])

@@ -1,58 +1,55 @@
-# UOR Submodule — Agent Definitions
+# Codomyrmex Agents — src/codomyrmex/relations/uor
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agents
+## Purpose
+Contains components for the src system.
 
-### PRISM Coordinator Agent
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `derivation.py` – Project file
+- `engine.py` – Project file
+- `entities.py` – Project file
+- `graph.py` – Project file
+- `manager.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-**Role**: Manages PRISM engine initialization, coordinate computation, and algebraic verification.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-**Capabilities**:
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `derivation.py`
+- `engine.py`
+- `entities.py`
+- `graph.py`
+- `manager.py`
+- `mcp_tools.py`
+- `py.typed`
 
-- Initialize PrismEngine at specified quantum levels
-- Compute triadic coordinates for arbitrary values
-- Measure structural fidelity between value pairs
-- Verify algebraic coherence across all states
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Tools**: `uor_compute_triad`, `uor_correlate`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Entity Manager Agent
-
-**Role**: Handles entity lifecycle, search, and structural similarity.
-
-**Capabilities**:
-
-- Create, retrieve, and remove content-addressed entities
-- Search entities by text across name, type, and attributes
-- Find structurally similar entities via triadic fidelity
-- Detect duplicate entities by content hash
-
-**Tools**: `uor_manage_entity`
-
-### Graph Navigator Agent
-
-**Role**: Manages entity relationships and graph traversal.
-
-**Capabilities**:
-
-- Create and remove typed relationships between entities
-- Discover entity neighborhoods
-- Find shortest paths between entities via BFS
-- Cascade entity removal (automatically cleans up relationships)
-
-**Tools**: `uor_find_path`, `uor_manage_entity`
-
-### Provenance Agent
-
-**Role**: Tracks operational provenance via derivation certificates.
-
-**Capabilities**:
-
-- Record content-addressed derivation certificates
-- Retrieve provenance history for entities
-- Verify derivation chain integrity
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [Parent](../AGENTS.md)
+## Navigation Links
+- **📁 Parent Directory**: [relations](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

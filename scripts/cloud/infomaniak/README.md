@@ -1,58 +1,27 @@
-# Infomaniak Cloud Examples
+# infomaniak
 
-Comprehensive example scripts demonstrating all Infomaniak Public Cloud service clients.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Prerequisites
+## Overview
 
-```bash
-uv pip install openstacksdk boto3
-```
+Automation and utility scripts.
 
-## Environment Setup
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `block_storage_examples.py` – File
+- `compute_examples.py` – File
+- `dns_examples.py` – File
+- `full_workflow.py` – File
+- `identity_examples.py` – File
+- `metering_examples.py` – File
+- `network_examples.py` – File
+- `newsletter_examples.py` – File
+- `object_storage_examples.py` – File
+- `orchestration_examples.py` – File
+- `setup_env.py` – File
 
-```bash
-export INFOMANIAK_APP_CREDENTIAL_ID="your-app-credential-id"
-export INFOMANIAK_APP_CREDENTIAL_SECRET="your-app-credential-secret"
-export INFOMANIAK_AUTH_URL="https://api.pub1.infomaniak.cloud/identity/v3/"
-export INFOMANIAK_REGION="dc3-a"
-
-# For S3-compatible storage
-export INFOMANIAK_S3_ACCESS_KEY="your-s3-access-key"
-export INFOMANIAK_S3_SECRET_KEY="your-s3-secret-key"
-export INFOMANIAK_S3_ENDPOINT="https://s3.pub1.infomaniak.cloud/"
-```
-
-## Scripts
-
-| Script | Service | Description |
-|--------|---------|-------------|
-| `compute_examples.py` | Compute (Nova) | Instances, flavors, keypairs |
-| `block_storage_examples.py` | Block Storage (Cinder) | Volumes, snapshots |
-| `network_examples.py` | Network (Neutron) | Networks, routers, security groups |
-| `object_storage_examples.py` | Object Storage | Swift and S3 operations |
-| `identity_examples.py` | Identity (Keystone) | Users, credentials |
-| `dns_examples.py` | DNS (Designate) | Zones, records |
-| `orchestration_examples.py` | Orchestration (Heat) | Stack management |
-| `metering_examples.py` | Metering | Usage and quotas |
-| `newsletter_examples.py` | Newsletter API | Campaigns, mailing lists, contacts |
-| `full_workflow.py` | All Services | Complete deployment workflow |
-
-## Quick Start
-
-```bash
-# Check status
-python compute_examples.py --list-instances
-
-# S3 example
-python object_storage_examples.py --s3 --list-buckets
-
-# Newsletter example
-export INFOMANIAK_NEWSLETTER_TOKEN="your-oauth2-token"
-export INFOMANIAK_NEWSLETTER_ID="your-newsletter-id"
-python newsletter_examples.py --list-campaigns
-python newsletter_examples.py --send-test --campaign 123 --email test@activeinference.tech
-```
-
----
-
-**Navigation**: [Parent README](../README.md) | [Cloud Module](../../../src/codomyrmex/cloud/infomaniak/README.md)
+## Navigation
+- **Parent Directory**: [cloud](../README.md)
+- **Project Root**: ../../../README.md

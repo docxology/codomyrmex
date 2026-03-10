@@ -1,68 +1,39 @@
-# Codomyrmex Agents — src/codomyrmex/orchestrator
+# Codomyrmex Agents — docs/modules/orchestrator
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Script orchestration engine for discovering, configuring, executing, and reporting on Python scripts. Provides workflow DAG execution with dependency resolution, parallel runners, retry logic, and CI/CD integration bridges.
+Documentation files and guides.
 
 ## Active Components
-
-- **`core.py`** — Main entry point (`run_orchestrator`): CLI-driven script discovery, execution, and summary reporting
-- **`discovery.py`** — `discover_scripts()`: finds Python scripts by directory traversal with depth, pattern, and skip-list filtering
-- **`runner.py`** — `run_script()`, `run_function()`: execute individual scripts/functions with timeout and config support
-- **`parallel_runner.py`** — `ParallelRunner`, `BatchRunner`, `run_parallel()`: concurrent script execution with resource management
-- **`workflow.py`** — `Workflow`, `Task`, `RetryPolicy`: DAG-based workflow engine with `chain()`, `parallel()`, `fan_out_fan_in()` helpers
-- **`thin.py`** — Lightweight orchestration DSL: `step()`, `pipe()`, `batch()`, `shell()`, `python_func()`, `retry()`, `timeout()`, `condition()`
-- **`config.py`** — `load_config()`, `get_script_config()`: YAML/JSON configuration loading for script execution
-- **`reporting.py`** — `generate_report()`, `save_log()`, `generate_script_documentation()`: execution logs and Markdown doc generation
-- **`integration.py`** — `OrchestratorBridge`, `CICDBridge`, `AgentOrchestrator`: bridges to CI/CD pipelines and agent task runners
-- **`exceptions.py`** — `StepError`, `OrchestratorTimeoutError`, `StateError`, `DependencyResolutionError`, `ConcurrencyError`
-- **`engines/`** — Pluggable execution engines
-- **`monitors/`** — Execution monitoring and health checks
-- **`schedulers/`** — Task scheduling strategies
-- **`workflows/`** — Pre-built workflow definitions
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Use `discover_scripts()` before execution to respect skip-lists and depth limits.
-- Prefer `Workflow` with `RetryPolicy` for multi-step pipelines; use `thin` DSL for quick one-off chains.
-- Always pass `timeout` to `run_script()` — the default is 60 seconds.
-- Use `ParallelRunner` for independent scripts; `Workflow` DAG for scripts with dependencies.
-- Integration bridges (`CICDBridge`, `AgentOrchestrator`) require corresponding external services to be available.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.orchestrator import (
-    discover_scripts, run_script, Workflow, Task, RetryPolicy,
-    chain, parallel, ParallelRunner, run_parallel,
-    step, pipe, shell, python_func, retry, timeout
-)
-
-# Discover and run scripts
-scripts = discover_scripts(Path("./scripts"), max_depth=2)
-for script in scripts:
-    result = run_script(script, timeout=30)
-
-# DAG workflow with retry
-wf = Workflow("deploy")
-wf.add_task(Task("build", fn=build_app))
-wf.add_task(Task("test", fn=run_tests, depends_on=["build"]))
-wf.add_task(Task("deploy", fn=deploy, depends_on=["test"],
-                  retry_policy=RetryPolicy(max_retries=3)))
-wf.run()
-
-# Thin DSL for quick chains
-pipe(
-    shell("echo 'start'"),
-    python_func(my_function),
-    retry(flaky_task, max_retries=2),
-    timeout(slow_task, seconds=10)
-)
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-- **Parent**: [codomyrmex](../README.md)
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

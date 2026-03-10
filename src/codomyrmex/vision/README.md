@@ -1,40 +1,21 @@
-# Vision
+# vision
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
-
-**Module**: `codomyrmex.vision` | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Image analysis and document parsing module using Vision-Language Models (VLMs) via local Ollama backends. Provides image analysis, text extraction (OCR-like), structured annotation extraction, and PDF text parsing with VLM fallback for scanned documents.
+Contains components for the src system.
 
-## Key Exports
-
-- **`VLMClient`** — Ollama-based Vision-Language Model client (llava, bakllava).
-- **`PDFExtractor`** — Text extraction from PDF documents using pymupdf.
-- **`AnnotationExtractor`** — Structured annotation extraction from images.
-- **`VLMConfig`** — Configuration for VLM connections.
-- **`VLMResponse`** — VLM analysis response data.
-- **`BoundingBox`** — Spatial annotation with area and center calculation.
-- **`Annotation`** — Structured annotation with label, bounding box, confidence.
-- **`PageContent`** — Extracted page content with text, images, annotations.
-
-## Quick Start
-
-```python
-from codomyrmex.vision import VLMClient, VLMConfig
-
-client = VLMClient(VLMConfig(model_name="llava"))
-if client.is_available():
-    response = client.analyze_image("photo.jpg", "What is in this image?")
-    print(response.text)
-```
-
-## Dependencies
-
-- **Required**: None (core models are dependency-free)
-- **Optional**: `pymupdf` (for PDF extraction), Ollama server (for VLM analysis)
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `annotation_extractor.py` – File
+- `models.py` – File
+- `pdf_extractor.py` – File
+- `vlm_client.py` – File
 
 ## Navigation
-
-- **🏠 Root**: [codomyrmex](../../../../README.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

@@ -1,58 +1,45 @@
-# Defense Module - Agent Guide
+# Codomyrmex Agents — docs/modules/defense
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Secure Cognitive Agent module providing active defense against cognitive attacks. Shifts security from passive filters to active countermeasures including context poisoning and attacker engagement.
-
-## Key Components
-
-| Component | Description |
-|-----------|-------------|
-| `ActiveDefense` | Core exploit detection and response |
-| `RabbitHole` | Attacker engagement/diversion system |
-| `ContextPoisoner` | Injects false context to mislead attackers |
-| `ExploitDetector` | Pattern-based attack detection |
-
-## Usage for Agents
-
-### Active Defense
-
-```python
-from codomyrmex.defense import ActiveDefense
-
-defense = ActiveDefense()
-if defense.detect_exploit(user_input):
-    # Deploy countermeasures
-    context = defense.poison_context(attacker_id="unknown", intensity=0.8)
-    return context
-```
-
-### Rabbit Hole
-
-```python
-from codomyrmex.defense import RabbitHole
-
-hole = RabbitHole()
-# Engage attacker in endless loop
-response = hole.engage("attacker_ip")
-```
-
-## Agent Guidelines
-
-1. **Detection First**: Always detect before responding
-2. **Proportional Response**: Match countermeasure to threat level
-3. **Logging**: Log all defense activations for audit
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment between code, documentation, and configured workflows
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Record outcomes in shared telemetry and update TODO queues when necessary
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent**: [codomyrmex/](../README.md)
-- **🏠 Root**: [../../../README.md](../../../README.md)
-- **🔗 Related**: [identity/](../identity/) | [wallet/](../wallet/) | [privacy/](../privacy/)
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

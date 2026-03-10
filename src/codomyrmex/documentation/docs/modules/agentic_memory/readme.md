@@ -1,112 +1,17 @@
-# Agentic Memory Module
+# agentic_memory
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The Agentic Memory module provides persistent, structured memory for AI agents — enabling learning across sessions, context continuity, and experience-based decision making. It supports in-memory and file-backed storage backends, key-value memory operations, search, and user profile tracking.
+Documentation files and guides.
 
-## PAI Integration
-
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | Retrieve past context, prior decisions, and learned patterns | `memory_search`, `memory_get` |
-| **THINK** | Load architecture context and prior reasoning traces | `memory_search` |
-| **LEARN** | Store new patterns, outcomes, and knowledge for future sessions | `memory_put` |
-
-PAI's LEARN phase is primarily implemented via this module. `memory_put` stores insights after each Algorithm cycle; `memory_search` retrieves relevant prior context during OBSERVE/THINK. The Engineer subagent has full CRUD access; all agents use `memory_search` for context retrieval.
-
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-## Key Exports
-
-| Export | Type | Description |
-|--------|------|-------------|
-| `AgentMemory` | Class | Primary memory store for AI agents |
-| `ConversationMemory` | Class | Conversation history with sliding window |
-| `InMemoryStore` | Class | In-process volatile memory backend |
-| `JSONFileStore` | Class | JSON file-backed persistent memory |
-| `KnowledgeMemory` | Class | Semantic knowledge base with retrieval |
-| `Memory` | Class | Base memory abstraction |
-| `MemoryImportance` | Enum | Importance levels (LOW/MEDIUM/HIGH/CRITICAL) |
-| `MemoryType` | Enum | Memory categories (EPISODIC/SEMANTIC/PROCEDURAL/WORKING) |
-| `RetrievalResult` | Class | Memory retrieval result with relevance score |
-| `UserProfile` | Class | User-specific memory profile |
-| `VectorStoreMemory` | Class | Vector embedding-backed memory store |
-
-## Quick Start
-
-> **MCP Tools vs Python API**: The MCP tools `memory_put`, `memory_get`, and `memory_search`
-> are exposed for AI agent use via the MCP bridge (see `mcp_tools.py`). For direct Python
-> usage, use the class-based API documented below: `AgentMemory`, `InMemoryStore`,
-> `JSONFileStore`, etc.
-
-```python
-from codomyrmex.agentic_memory import AgentMemory, InMemoryStore
-
-# Create an in-memory store
-store = InMemoryStore()
-memory = AgentMemory(store=store)
-
-# Store a memory
-memory.store("The user prefers concise responses", importance="high")
-
-# Retrieve relevant memories
-results = memory.retrieve("user preferences", top_k=5)
-for result in results:
-    print(f"[{result.importance}] {result.content}")
-```
-
-### Using Storage Backends
-
-```python
-from codomyrmex.agentic_memory import InMemoryStore, JSONFileStore
-
-# Session-scoped memory (volatile)
-session = InMemoryStore()
-
-# Persistent across sessions (file-backed)
-persistent = JSONFileStore(path="~/.codomyrmex/memory/")
-```
-
-## Architecture
-
-```
-agentic_memory/
-├── __init__.py          # Public API (AgentMemory, Memory, stores, enums, RuleEngine)
-├── memory.py            # Core memory classes (AgentMemory, ConversationMemory, etc.)
-├── models.py            # Memory, MemoryType, MemoryImportance, RetrievalResult
-├── stores.py            # InMemoryStore, JSONFileStore backends
-├── user_profile.py      # UserProfile tracking
-├── mcp_tools.py         # MCP tool definitions (memory_put, memory_get, memory_search)
-├── rules/               # Coding governance rules submodule (see rules/README.md)
-│   ├── engine.py        # RuleEngine — hierarchy-aware rule resolution
-│   ├── loader.py        # RuleLoader — parses .cursorrules files
-│   ├── registry.py      # RuleRegistry — indexed access by module/extension
-│   ├── models.py        # Rule, RuleSet, RulePriority, RuleSection
-│   ├── mcp_tools.py     # rules_list_modules, rules_get_module_rule, rules_get_applicable
-│   ├── general.cursorrules
-│   ├── modules/         # 60 module-specific rules
-│   ├── cross-module/    # 8 cross-cutting rules
-│   └── file-specific/   # 6 file-type rules
-└── tests/               # Unit tests (Zero-Mock policy)
-```
-
-## MCP Integration
-
-Three MCP tools are exposed via `mcp_tools.py` (auto-discovered by the MCP bridge):
-
-| MCP Tool | Description |
-|----------|-------------|
-| `memory_put` | Store a new memory entry with content, type, and importance |
-| `memory_get` | Retrieve a memory by its ID |
-| `memory_search` | Search memories by text query, returns ranked results |
+## Directory Contents
+- `SPEC.md` – File
+- `api_specification.md` – File
+- `mcp_tool_specification.md` – File
+- `readme.md` – File
 
 ## Navigation
-
-- **Extended Docs**: [docs/modules/agentic_memory/](../../../docs/modules/agentic_memory/)
-- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../../../../README.md

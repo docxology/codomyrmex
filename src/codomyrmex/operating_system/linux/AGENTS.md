@@ -1,63 +1,39 @@
-# Linux Provider - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/operating_system/linux
 
-> Codomyrmex v1.1.9 | March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Contains components for the src system.
 
-The Linux provider implements `OSProviderBase` using native Linux commands and the `/proc` filesystem to gather real system information. It is auto-selected by `get_provider()` when `detect_platform()` returns `OSPlatform.LINUX`.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `LinuxProvider` |
-| `provider.py` | `LinuxProvider` class with five abstract method implementations plus `_run()` helper |
-
-## MCP Tools Available
-
-The Linux provider does not expose its own MCP tools. It is consumed indirectly through the parent `operating_system` module's generic API (`get_system_info()`, `list_processes()`, `get_disk_usage()`, `get_services()`, `get_network_interfaces()`).
-
-## Agent Instructions
-
-1. **Never instantiate directly** -- use `operating_system.get_provider()` which auto-detects the platform and returns the correct provider instance.
-2. **Network interface detection has two paths** -- `get_network_interfaces()` tries `ip -o addr show` first, falling back to `ifconfig -a` if the `ip` command is unavailable.
-3. **Memory comes from /proc/meminfo** -- reported in kB by the kernel, converted to bytes by multiplying by 1024.
-4. **Uptime comes from /proc/uptime** -- the first floating-point value in the file, representing seconds since boot.
-5. **Service management uses systemctl** -- `get_services()` calls `systemctl list-units --type=service`; on systems without systemd, the method returns an empty list.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `provider.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `LinuxProvider` implements all five abstract methods from `OSProviderBase`: `get_system_info`, `list_processes`, `get_disk_usage`, `get_services`, `get_network_interfaces`.
-- The inherited concrete methods `execute_command` and `get_environment_variables` work identically across all platforms.
-- Process status mapping: `S` prefix -> SLEEPING, `T` -> STOPPED, `Z` -> ZOMBIE, all others -> RUNNING.
-- Service status: `active` -> RUNNING, all other states -> STOPPED.
-- `_run()` uses 10-second timeout; all exceptions return empty string.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `provider.py`
+- `py.typed`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.operating_system import get_provider, get_system_info
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Auto-detected usage (recommended)
-info = get_system_info()
-print(f"{info.hostname}: {info.platform_version}")
-
-# Direct provider usage
-provider = get_provider()
-processes = provider.list_processes(limit=20)
-interfaces = provider.get_network_interfaces()
-```
-
-## PAI Agent Role Access Matrix
-
-| Agent Role | Access Level | Typical Use |
-|------------|-------------|-------------|
-| Engineer | Read | Query system info for CI/CD environment validation |
-| Architect | Read | Assess server platform capabilities |
-| QATester | Read | Verify Linux-specific test prerequisites |
-
-## Navigation
-
-- Parent: [operating_system module](../README.md)
-- Sibling: [macOS provider](../mac/AGENTS.md) | [Windows provider](../windows/AGENTS.md)
-- Root: [codomyrmex](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [operating_system](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

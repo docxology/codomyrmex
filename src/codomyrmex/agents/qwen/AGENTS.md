@@ -1,44 +1,45 @@
-# Qwen Agent — Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/agents/qwen
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Agent guidelines for the `codomyrmex.agents.qwen` module.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `qwen_agent_wrapper.py` – Project file
+- `qwen_client.py` – Project file
 
-## Agent-Accessible Resources
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Resource | Path | Description |
-|----------|------|-------------|
-| QwenClient | `qwen_client.py` | DashScope API client with tool calling |
-| Agent Wrapper | `qwen_agent_wrapper.py` | Native qwen-agent framework |
-| MCP Tools | `mcp_tools.py` | 5 MCP tools for AI consumption |
-| Model Registry | `qwen_client.QWEN_MODELS` | 14 model variants |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
+- `qwen_agent_wrapper.py`
+- `qwen_client.py`
 
-## Key Capabilities
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Chat**: Single/multi-turn via `qwen_chat` MCP tool
-2. **Tool Calling**: `chat_with_tools()` for function calling loops
-3. **Code Review**: `qwen_code_review` with language/focus targeting
-4. **Agent Framework**: Create qwen-agent Assistants with MCP servers
-5. **Streaming**: Both DashScope and qwen-agent streaming
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Agent Guidelines
-
-- Use `DASHSCOPE_API_KEY` or `QWEN_API_KEY` for authentication
-- Default model is `qwen-coder-turbo` (code-specialized)
-- For reasoning tasks, prefer `qwen3-max`
-- For long documents, use `qwen-long` (1M context)
-- For vision tasks, use `qwen-vl-max`
-
-## Zero-Mock Compliance
-
-All tests use real client construction (guarded by API key availability).
-No mocks or stubs.
-
-## Navigation
-
-- **README**: [README.md](README.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-- **Parent**: [agents/](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

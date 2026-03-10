@@ -1,32 +1,33 @@
-# Distributed Training -- Agent Coordination
+# Codomyrmex Agents — docs/modules/distributed_training
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Simulates FSDP (Fully Sharded Data Parallel) and tensor parallelism for distributed neural network training. Provides parameter sharding, all-reduce gradient aggregation, and multi-device training step simulation.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `fsdp_simulate_step` | Simulate one FSDP distributed training step with parameter sharding | Standard | distributed_training |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Configure and simulate distributed training across multiple devices |
-| OBSERVE | Monitoring Agent | Monitor gradient norms and parameter convergence across shards |
-
-
-## Agent Instructions
-
-1. Set world_size to the number of simulated GPU devices for sharding
-2. Parameter size should match the model layer dimensions being distributed
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/distributed_training/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

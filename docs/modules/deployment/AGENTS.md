@@ -1,66 +1,39 @@
-# Agent Guidelines - Deployment
+# Codomyrmex Agents — docs/modules/deployment
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Container deployment, infrastructure automation, and environment management.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **DeploymentManager** — Orchestrate deployments
-- **ContainerBuilder** — Docker/OCI image building
-- **InfrastructureConfig** — Infrastructure as code
-- **EnvironmentManager** — Manage deployment environments
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Validate configs** — Check before deploying
-2. **Use staging first** — Never deploy directly to prod
-3. **Rollback ready** — Always have rollback plan
-4. **Health checks** — Wait for health before marking success
-5. **Log everything** — Capture deployment logs
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.deployment import (
-    DeploymentManager, ContainerBuilder, EnvironmentManager
-)
-
-# Build container
-builder = ContainerBuilder()
-image = builder.build("./Dockerfile", tag="app:v1.0")
-
-# Deploy to environment
-deployer = DeploymentManager()
-result = deployer.deploy(
-    image="app:v1.0",
-    environment="staging",
-    replicas=3
-)
-
-# Wait for health
-if deployer.wait_healthy(timeout=300):
-    deployer.promote("production")
-else:
-    deployer.rollback()
-```
-
-## Testing Patterns
-
-```python
-# Verify config validation
-config = InfrastructureConfig(path="infra.yaml")
-errors = config.validate()
-assert len(errors) == 0
-
-# Verify deployment (dry run)
-deployer = DeploymentManager(dry_run=True)
-result = deployer.deploy(image="test", environment="test")
-assert result.dry_run
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

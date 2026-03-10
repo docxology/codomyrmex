@@ -1,45 +1,49 @@
-# AI Agent Guidelines — api/standardization
+# Codomyrmex Agents — src/codomyrmex/api/standardization
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides standardized REST API and GraphQL API frameworks alongside API versioning with semantic version support, migration rules, and OpenAPI spec generation.
-
-## Key Components
-
-| Component | File | Role |
-|-----------|------|------|
-| `RESTAPI` | `rest_api.py` | Main REST API: router, middleware pipeline, request handling, metrics |
-| `APIRouter` | `rest_api.py` | Route registration with prefix support, parameterized path matching, sub-routers |
-| `APIRequest` / `APIResponse` | `rest_api.py` | Request/response dataclasses with JSON body parsing and factory methods (`success`, `error`, `not_found`) |
-| `APIEndpoint` | `rest_api.py` | Endpoint config: path, method, handler callable, middleware, OpenAPI metadata |
-| `HTTPMethod` / `HTTPStatus` | `rest_api.py` | Enums for HTTP methods (7 values) and status codes (13 values) |
-| `GraphQLAPI` | `graphql_api.py` | GraphQL request execution: query parsing, complexity limiting, resolver dispatch |
-| `GraphQLSchema` | `graphql_api.py` | Schema container with SDL generation (`generate_sdl`) |
-| `GraphQLObjectType` / `GraphQLField` | `graphql_api.py` | Type system building blocks |
-| `GraphQLResolver` / `GraphQLMutation` | `graphql_api.py` | Field resolution and mutation execution with error logging |
-| `APIVersionManager` | `api_versioning.py` | Version registry, request version parsing (headers/query/Accept), migration path resolution |
-| `APIVersion` | `api_versioning.py` | Version metadata: format (semver/date/integer), deprecation, breaking changes |
-| `VersionedEndpoint` | `api_versioning.py` | Maps version strings to handler callables with deprecation tracking |
-| `version` / `deprecated_version` | `api_versioning.py` | Decorators for annotating handler functions with version metadata |
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `api_versioning.py` – Project file
+- `graphql_api.py` – Project file
+- `py.typed` – Project file
+- `rest_api.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `RESTAPI.handle_request(method, path, headers, body, query_string)` is the main entry point for REST dispatch.
-- `APIRouter` supports decorator-based registration (`@router.get("/path")`) and parametric route matching via regex.
-- `GraphQLAPI.execute_query(query, variables, context)` returns `{"data": ...}` or `{"errors": [...]}`.
-- `APIVersionManager.parse_version_from_request(headers, query_params)` extracts version from `X-API-Version` header, `?version=` query param, or `Accept` header with vendored content type.
-- `migrate_data(data, from_version, to_version)` walks registered migration rules to transform data between versions.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `api_versioning.py`
+- `graphql_api.py`
+- `py.typed`
+- `rest_api.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent**: `api` module re-exports all standardization components.
-- **Sibling**: `api/documentation` consumes endpoint metadata for OpenAPI generation.
-- **Consumers**: Any module building HTTP or GraphQL interfaces.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [api/README.md](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md) | [README.md](README.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [api](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

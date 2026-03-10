@@ -1,25 +1,15 @@
-# Data Lineage
+# data_lineage
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Data provenance and lineage tracking for reproducible ML pipelines.
+Documentation files and guides.
 
-## Source
-
-**Source code**: [`src/codomyrmex/data_lineage/`](../../../src/codomyrmex/data_lineage/)
-
-## MCP Tools
-
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
-
-## Related Documentation
-
-- [Source README](../../../src/codomyrmex/data_lineage/README.md)
-- [API Specification](../../../src/codomyrmex/data_lineage/API_SPECIFICATION.md)
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Parent**: [Module Documentation](../README.md)
-- **Root**: [docs/](../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

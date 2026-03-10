@@ -59,6 +59,7 @@ requires_github_api = pytest.mark.skipif(
 )
 
 
+@pytest.mark.unit
 class TestPipelineManager:
     """Test cases for PipelineManager functionality."""
 
@@ -192,6 +193,7 @@ stages:
             assert config["name"] == "test_pipeline"
 
 
+@pytest.mark.unit
 class TestDeploymentOrchestrator:
     """Test cases for DeploymentOrchestrator functionality."""
 
@@ -473,6 +475,7 @@ class TestDeploymentOrchestrator:
         assert isinstance(result, bool)
 
 
+@pytest.mark.unit
 class TestConvenienceFunctions:
     """Test cases for module-level convenience functions."""
 
@@ -505,6 +508,7 @@ class TestConvenienceFunctions:
         assert isinstance(result, DeploymentOrchestrator)
 
 
+@pytest.mark.unit
 class TestIntegration:
     """Integration tests for CI/CD automation components."""
 
@@ -587,6 +591,7 @@ class TestIntegration:
         assert "finished_at" in deployment_dict
 
 
+@pytest.mark.unit
 class TestPipelineTriggeringGitHubActions:
     """Test cases for GitHub Actions pipeline triggering -- skip if no API token."""
 
@@ -648,6 +653,7 @@ class TestPipelineTriggeringGitHubActions:
         assert result.status == PipelineStatus.FAILURE
 
 
+@pytest.mark.unit
 class TestPipelineStatusMonitoring:
     """Test cases for pipeline status monitoring -- skip if no GitHub API token."""
 
@@ -685,6 +691,7 @@ class TestPipelineStatusMonitoring:
         assert result.status in (PipelineStatus.SUCCESS, PipelineStatus.FAILURE)
 
 
+@pytest.mark.unit
 class TestWorkflowDispatching:
     """Test cases for workflow dispatching -- skip if no GitHub API token."""
 
@@ -742,6 +749,7 @@ class TestWorkflowDispatching:
         assert result.status == PipelineStatus.FAILURE
 
 
+@pytest.mark.unit
 class TestPipelineMonitor:
     """Test cases for pipeline monitoring functionality."""
 

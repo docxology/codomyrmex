@@ -1,30 +1,41 @@
-# Performance Optimization - Agentic Context
+# Codomyrmex Agents — src/codomyrmex/performance/optimization
 
-**Module**: `codomyrmex.performance.optimization`
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Key Components
+## Purpose
+Contains components for the src system.
 
-| Component | Purpose | Key Methods |
-|-----------|---------|-------------|
-| `LazyLoader` | Proxy object that defers `importlib.import_module` until first attribute access | `__getattr__()` triggers import |
-| `lazy_import()` | Factory function returning a fresh `LazyLoader` | Returns `LazyLoader` |
-| `get_lazy_loader()` | Registry-cached lazy loader avoiding duplicate imports | Returns `LazyLoader` from `_lazy_loaders` dict |
-| `lazy_function()` | Creates a callable that loads a specific function on first invocation | Returns wrapped `Callable` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `lazy_loader.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `LazyLoader.__getattr__` uses a `_loading` flag to prevent recursive import loops; re-entrant access during loading raises `ImportError`.
-- `get_lazy_loader()` maintains a global `_lazy_loaders` registry keyed by `"{package}.{module_name}"` to ensure each module is loaded at most once.
-- Pre-configured lazy loaders exist for heavy dependencies: `matplotlib`, `numpy`, `pandas`, `seaborn`, `plotly`, `openai`, `anthropic`, `google_genai`, `docker`, `git`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `lazy_loader.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **importlib**: Standard library module loading; no external dependencies.
-- **logging_monitoring**: Uses `get_logger` for import timing and error reporting.
-- Used across the codebase wherever heavy optional dependencies should not slow startup.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Constraints
-
-- Lazy loaders are not picklable; do not serialize them.
-- Type checkers may not resolve attributes through `LazyLoader.__getattr__`; use `TYPE_CHECKING` imports for static analysis.
+## Navigation Links
+- **📁 Parent Directory**: [performance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

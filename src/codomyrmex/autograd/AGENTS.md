@@ -1,49 +1,47 @@
-# Autograd -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/autograd
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides from-scratch automatic differentiation for AI agents that need gradient computation, numerical optimization, or educational demonstrations of backpropagation.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `engine.py` – Project file
+- `mcp_tools.py` – Project file
+- `ops.py` – Project file
+- `py.typed` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `autograd_compute` | Evaluate expression and compute gradients | `expression: str`, `variables: dict` | `{result, gradients}` |
-| `autograd_gradient_check` | Verify analytic vs numerical gradients | `func_name: str`, `inputs: list[float]` | `{max_error, passed, analytic_grads, numeric_grads}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `engine.py`
+- `mcp_tools.py`
+- `ops.py`
+- `py.typed`
 
-### Gradient Computation
-An agent can use `autograd_compute` to find derivatives of mathematical expressions without symbolic math libraries.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Gradient Verification
-Use `autograd_gradient_check` to verify that a function's analytic gradient implementation is correct by comparing against finite differences.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Educational / Explanation
-Agents can demonstrate how backpropagation works by building Value computation graphs and showing step-by-step gradient flow.
-
-## Example Agent Workflow
-
-```
-1. Agent receives: "What is the derivative of x^3 + 2x at x=3?"
-2. Agent calls: autograd_compute("x**3 + 2*x", {"x": 3.0})
-3. Response: {"result": 33.0, "gradients": {"x": 29.0}}
-4. Agent explains: f'(x) = 3x^2 + 2 = 27 + 2 = 29
-```
-
-## Supported Functions for Gradient Check
-
-- `relu` -- max(0, x)
-- `tanh` -- hyperbolic tangent
-- `sigmoid` -- logistic function
-- `square` -- x^2
-- `sum` -- identity (for scalar inputs)
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
-| **Architect** | Read + Architecture review | Read-only | SAFE |
-| **QATester** | Validation + output verification | Read + Inspect | SAFE |
-| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

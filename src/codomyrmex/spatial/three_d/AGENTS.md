@@ -1,40 +1,50 @@
-# Three-D Agentic Context
+# Codomyrmex Agents — src/codomyrmex/spatial/three_d
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-AR/VR device management and spatial computing support. Agents use this submodule to register devices, manage sessions, track spatial anchors, and handle hand-tracking input.
-
-## Key Components
-
-| Component | Type | Role |
-|-----------|------|------|
-| `ARVRManager` | Class | Central manager for AR/VR devices, sessions, and spatial data |
-| `XRDevice` | Dataclass | Device metadata: id, name, type (AR/VR/MR), capabilities, tracking |
-| `XRSession` | Dataclass | Active session with device, mode, start time, spatial anchors |
-| `SpatialAnchor` | Dataclass | Named 3D anchor with position, rotation, confidence, persistence |
-| `HandTrackingData` | Dataclass | Per-hand joint positions, gestures, confidence |
-| `DeviceType` | Enum | AR, VR, MR device classification |
-| `TrackingState` | Enum | NOT_TRACKING, LIMITED, NORMAL, EXCESSIVE_MOTION |
-| `SessionMode` | Enum | IMMERSIVE_VR, IMMERSIVE_AR, INLINE |
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `ar_vr_support.py` – Project file
+- `engine_3d.py` – Project file
+- `examples/` – Directory containing examples components
+- `py.typed` – Project file
+- `rendering_pipeline.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `register_device(device)` adds a device; raises `ValueError` on duplicate ID.
-- `create_session(device_id, mode)` returns an `XRSession`; raises `ValueError` if device unknown.
-- `add_spatial_anchor(session_id, anchor)` appends to session's anchor list; raises `ValueError` if session unknown.
-- `update_hand_tracking(session_id, hand_data)` stores latest hand-tracking snapshot.
-- `get_nearby_anchors(session_id, position, radius)` returns anchors within Euclidean distance.
-- `end_session(session_id)` removes the session from active tracking.
-- All IDs are caller-provided strings.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `ar_vr_support.py`
+- `engine_3d.py`
+- `py.typed`
+- `rendering_pipeline.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- Companion modules `engine_3d.py` and `rendering_pipeline.py` handle 3D rendering.
-- Uses `spatial/coordinates` for underlying coordinate types.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- Parent: [spatial](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [spatial](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

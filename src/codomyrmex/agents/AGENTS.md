@@ -1,128 +1,95 @@
 # Codomyrmex Agents — src/codomyrmex/agents
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Multi-provider agent framework with 14 provider integrations (6 API, 7 CLI, 1 local), session management, response parsing, multi-agent pooling, evaluation, conversation history, and an interactive setup wizard. Core layer for intelligent automation workflows.
+Contains components for the src system.
 
 ## Active Components
-
-### Provider Clients
-
-| Agent | Type | Base Class | Binary / Env Var | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| `claude/` | API | `APIAgentBase` | `ANTHROPIC_API_KEY` | Functional |
-| `codex/` | API | `APIAgentBase` | `OPENAI_API_KEY` | Functional |
-| `o1/` | API | `APIAgentBase` | `OPENAI_API_KEY` | Functional |
-| `deepseek/` | API | `APIAgentBase` | `DEEPSEEK_API_KEY` | Functional |
-| `qwen/` | API | `APIAgentBase` | `DASHSCOPE_API_KEY` | Functional |
-| `perplexity/` | API | `APIAgentBase` | `PERPLEXITY_API_KEY` | Functional |
-| `jules/` | CLI | `CLIAgentBase` | `jules` | Functional |
-| `opencode/` | CLI | `CLIAgentBase` | `opencode` | Functional |
-| `gemini/` | CLI | `CLIAgentBase` | `gemini` | Functional |
-| `mistral_vibe/` | CLI | `CLIAgentBase` | `vibe` | Functional |
-| `hermes/` | CLI | `CLIAgentBase` | `hermes` | Functional |
-| `every_code/` | CLI | `CLIAgentBase` | `code` | Functional |
-| Ollama (local) | Local | via `llm/ollama/` | `OLLAMA_BASE_URL` | Functional |
-
-### Core & Infrastructure
-
-| Component | Path | Description |
-| :--- | :--- | :--- |
-| Core framework | `core/` | `BaseAgent`, `AgentInterface`, `AgentConfig`, parsers, sessions, `ReActAgent` |
-| Generic bases | `generic/` | `APIAgentBase`, `CLIAgentBase`, `AgentOrchestrator`, `MessageBus`, `TaskPlanner` |
-| Pooling | `pooling/` | `AgentPool`, `CircuitBreaker`, `AgentHealth` — load balancing and failover |
-| Evaluation | `evaluation/` | `AgentBenchmark`, scorers (`ExactMatch`, `Contains`, `Length`, `Composite`) |
-| History | `history/` | `ConversationManager`, `InMemoryHistoryStore`, `FileHistoryStore`, `SQLiteHistoryStore` |
-| Agent Setup | `agent_setup/` | `AgentRegistry`, YAML config persistence, interactive setup wizard |
-| Exceptions | `exceptions.py` | Full exception hierarchy: `AgentError` → provider-specific errors |
-
-### Supplementary
-
-| Component | Path | Description |
-| :--- | :--- | :--- |
-| AI code editing | `ai_code_editing/` | `CodeEditor` for refactoring, review, generation |
-| Git agent | `git_agent/` | `GitAgent` for Git operations |
-| Droid | `droid/` | Task management and automation |
-| Infrastructure | `infrastructure/` | Infrastructure management agent |
-| Theory | `theory/` | `ReactiveArchitecture`, `DeliberativeArchitecture`, `HybridArchitecture` |
-| CLI | `cli/` | CLI subcommands and handlers |
-| PAI Bridge | `pai/` | PAI system discovery and validation |
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-| :--- | :--- | :--- |
-| `execute_agent` | Execute an agent conversation with a given prompt. Uses `AgentRegistry` to look up and instantiate the agent. | TRUSTED |
-| `list_agents` | Return a list of all available AI agents from `AgentRegistry`. | SAFE |
-| `get_agent_memory` | Retrieve interaction logs and memory for a specific agent session by session ID. | SAFE |
-
-## Quick Verification
-
-```bash
-# Check which agents are operative on this machine
-uv run python -m codomyrmex.agents.agent_setup --status-only
-
-# Run the full agent test suite (350+ tests, zero-mock)
-uv run python -m pytest src/codomyrmex/tests/unit/agents/ -v
-
-# Run specific component tests
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_config.py
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_session.py
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_tools.py
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_orchestration.py
-
-# Run the orchestration demo
-uv run python src/codomyrmex/examples/agent_orchestration_demo.py
-```
+- `AGENT_COMPARISON.md` – Project file
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent_setup/` – Directory containing agent_setup components
+- `agentic_seek/` – Directory containing agentic_seek components
+- `ai_code_editing/` – Directory containing ai_code_editing components
+- `autonomous.py` – Project file
+- `benchmarks.py` – Project file
+- `claude/` – Directory containing claude components
+- `cli/` – Directory containing cli components
+- `codex/` – Directory containing codex components
+- `context/` – Directory containing context components
+- `core/` – Directory containing core components
+- `deepseek/` – Directory containing deepseek components
+- `droid/` – Directory containing droid components
+- `editing_loop.py` – Project file
+- `education.py` – Project file
+- `evaluation/` – Directory containing evaluation components
+- `every_code/` – Directory containing every_code components
+- `gemini/` – Directory containing gemini components
+- `generic/` – Directory containing generic components
+- `git_agent/` – Directory containing git_agent components
+- `google_workspace/` – Directory containing google_workspace components
+- `hermes/` – Directory containing hermes components
+- `history/` – Directory containing history components
+- `infrastructure/` – Directory containing infrastructure components
+- `jules/` – Directory containing jules components
+- `learning/` – Directory containing learning components
+- `llm_client.py` – Project file
+- `mcp_tools.py` – Project file
+- `memory/` – Directory containing memory components
+- `meta/` – Directory containing meta components
+- `mistral_vibe/` – Directory containing mistral_vibe components
+- `o1/` – Directory containing o1 components
+- `openclaw/` – Directory containing openclaw components
+- `opencode/` – Directory containing opencode components
+- `openfang/` – Directory containing openfang components
+- `orchestrator.py` – Project file
+- `pai/` – Directory containing pai components
+- `perplexity/` – Directory containing perplexity components
+- `planner/` – Directory containing planner components
+- `pooling/` – Directory containing pooling components
+- `py.typed` – Project file
+- `qwen/` – Directory containing qwen components
+- `specialized/` – Directory containing specialized components
+- `theory/` – Directory containing theory components
+- `transport/` – Directory containing transport components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All agents implement `AgentInterface`: `execute()`, `stream()`, `setup()`, `test_connection()`
-- All responses use `AgentResponse` with content, error, metadata, tokens, execution time
-- Configuration through `AgentConfig` dataclass with environment variable fallbacks
-- API keys masked in `to_dict()` output
-- Zero-mock testing policy — all tests use real objects and functional verification
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `AGENT_COMPARISON.md`
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `autonomous.py`
+- `benchmarks.py`
+- `editing_loop.py`
+- `education.py`
+- `llm_client.py`
+- `mcp_tools.py`
+- `orchestrator.py`
+- `py.typed`
 
-## PAI Agent Role Access Matrix
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-This section defines which PAI v4.0.1 agent types can access which agents submodules and at what trust level.
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-| :--- | :--- | :--- | :--- |
-| **Engineer** | Full | `execute_agent`, `list_agents`, `get_agent_memory`; `CodeEditor`, `AgentOrchestrator`, all 14 provider clients | TRUSTED |
-| **Architect** | Read + Design | `list_agents`, `get_agent_memory`; architecture analysis, provider selection, pool strategy design | OBSERVED |
-| **QATester** | Validation | `list_agents`, `execute_agent` (test runs only); `AgentBenchmark`, all scorers (`ExactMatch`, `Contains`, `Composite`) | OBSERVED |
-| **Researcher** | Read-only | `list_agents`, `get_agent_memory`; session history retrieval, conversation context inspection | OBSERVED |
-
-### Engineer Agent
-
-**Access**: Full — all provider clients, orchestration, code editing, session management
-**Use Cases**: Implementing new provider integrations, building multi-agent workflows, AI-assisted code editing automation, parallel agent pool configuration.
-
-### Architect Agent
-
-**Access**: Read + Design — provider inventory, capability analysis, pool/circuit-breaker design
-**Use Cases**: Agent architecture design, provider comparison and selection, pool sizing strategy, evaluation framework design, theoretical architecture review (reactive/deliberative/hybrid).
-
-### QATester Agent
-
-**Access**: Validation — benchmark runs, response validation, session persistence tests
-**Use Cases**: Agent benchmark execution, provider integration verification, response format validation, conversation history round-trip tests.
-
-### Researcher Agent
-
-**Access**: Read-only — session history, agent capability discovery
-**Use Cases**: Querying agent memory for prior work context, listing available providers for capability awareness, inspecting conversation history for research continuity.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [codomyrmex](../README.md)
-- **🏠 Project Root**: [README.md](../../../README.md)
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/agents.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/agents.cursorrules)
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

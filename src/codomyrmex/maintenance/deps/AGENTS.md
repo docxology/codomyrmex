@@ -1,45 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/maintenance/deps
+# Codomyrmex Agents — src/codomyrmex/maintenance/deps
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Dependency management tooling for analyzing circular imports, validating
-the module dependency hierarchy, checking installed packages and security
-vulnerabilities, consolidating per-module `requirements.txt` files into
-`pyproject.toml`, and validating the consolidated dependency configuration.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `dependency_analyzer.py` | `DependencyAnalyzer` | AST-based import scanner detecting circular dependencies and hierarchy violations across all modules |
-| `dependency_checker.py` | `check_python_version()` | Verify Python >= 3.10 requirement |
-| `dependency_checker.py` | `check_dependencies()` | Check importability of core, LLM, analysis, data, and dev packages |
-| `dependency_checker.py` | `check_security()` | Run pip-audit/safety for vulnerability scanning |
-| `dependency_checker.py` | `check_environment()` | Verify virtual env, uv, git, docker availability |
-| `dependency_consolidator.py` | `analyze_dependencies()` | Scan all `requirements.txt` files and identify version conflicts |
-| `dependency_consolidator.py` | `generate_pyproject_additions()` | Generate `[project.optional-dependencies]` TOML for pyproject.toml |
-| `validate_dependencies.py` | `parse_pyproject_dependencies()` | Parse dependencies from pyproject.toml content |
-| `validate_dependencies.py` | `check_version_constraints()` | Verify all dependencies have version constraints |
-| `validate_dependencies.py` | `check_duplicates()` | Detect duplicate packages across sections |
-| `validate_dependencies.py` | `check_requirements_txt_deprecated()` | Ensure requirements.txt files have deprecation notices |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `dependency_analyzer.py` – Project file
+- `dependency_checker.py` – Project file
+- `dependency_consolidator.py` – Project file
+- `py.typed` – Project file
+- `validate_dependencies.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `DependencyAnalyzer` uses `ast.parse()` to extract imports -- never executes target code.
-- The allowed dependency hierarchy is hard-coded in `DependencyAnalyzer.__init__` (from `relationships.md`).
-- `dependency_checker.py` uses subprocess with 300-second timeout for external tool calls.
-- All scripts have `main()` entry points and can be run standalone.
-- `dependency_consolidator.py` generates reports but does not modify pyproject.toml automatically.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `dependency_analyzer.py`
+- `dependency_checker.py`
+- `dependency_consolidator.py`
+- `py.typed`
+- `validate_dependencies.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `logging_monitoring.core.logger_config` (setup_logging, get_logger), stdlib `ast`, `subprocess`, `re`, `pathlib`
-- **Used by**: CI/CD pipeline validation, maintenance health checks, developer tooling
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [maintenance](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [maintenance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

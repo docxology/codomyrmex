@@ -1,5 +1,20 @@
-# Health
+# health
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Documentation for system_discovery/health.
+## Overview
+
+Contains components for the src system.
+
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `health_checker.py` – File
+- `health_reporter.py` – File
+- `py.typed` – File
+
+## Navigation
+- **Parent Directory**: [system_discovery](../README.md)
+- **Project Root**: ../../../../README.md

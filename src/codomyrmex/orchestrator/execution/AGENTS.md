@@ -1,39 +1,47 @@
 # Codomyrmex Agents — src/codomyrmex/orchestrator/execution
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides synchronous and asynchronous execution primitives for running Python scripts and coroutines in parallel. Includes process-based script execution with resource limits, thread-pool-based parallel runners, native asyncio runners with structured concurrency (TaskGroup), and an async-first job scheduler with priority queuing and EventBus integration.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `runner.py` | `run_script` | Execute a Python script via `subprocess.run` with timeout, memory limits, and environment setup |
-| `runner.py` | `run_function` | Run a callable in a separate `multiprocessing.Process` with timeout and memory limits |
-| `parallel_runner.py` | `ParallelRunner` | Concurrent script execution via `ProcessPoolExecutor` with progress callbacks and fail-fast |
-| `parallel_runner.py` | `BatchRunner` | Sequential batch execution of script groups using `ParallelRunner` internally |
-| `parallel_runner.py` | `ExecutionResult` | Aggregated outcome dataclass (total, passed, failed, timeout, skipped) |
-| `async_runner.py` | `AsyncParallelRunner` | Native asyncio concurrency with `Semaphore` bounds and optional `TaskGroup` fail-fast |
-| `async_runner.py` | `AsyncTaskResult` / `AsyncExecutionResult` | Per-task and batch-level result containers for async execution |
-| `async_scheduler.py` | `AsyncScheduler` | Priority-based async job scheduler with `EventBus` lifecycle event emission |
-| `async_scheduler.py` | `AsyncJob` / `AsyncJobStatus` / `SchedulerMetrics` | Job model, status enum, and runtime metrics dataclass |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `async_runner.py` – Project file
+- `async_scheduler.py` – Project file
+- `parallel_runner.py` – Project file
+- `py.typed` – Project file
+- `runner.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Script execution uses `subprocess.run` with `stdin=DEVNULL`; never connects interactive stdin.
-- Memory limits (via `resource.setrlimit`) apply only on Unix; silently skipped on other platforms.
-- `AsyncParallelRunner` requires Python 3.11+ for `asyncio.TaskGroup` structured concurrency.
-- `AsyncScheduler` emits optional EventBus events; missing EventBus is tolerated silently.
-- All execution errors are logged via `logging_monitoring.get_logger` before propagation.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `async_runner.py`
+- `async_scheduler.py`
+- `parallel_runner.py`
+- `py.typed`
+- `runner.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring` (structured logging), `codomyrmex.events.core.event_schema` (optional EventBus events)
-- **Used by**: `orchestrator.scheduler`, `orchestrator.workflows`, top-level `orchestrator.process_orchestrator`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [orchestrator](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [orchestrator](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,24 +1,17 @@
-# Database Sharding Scripts
+# sharding
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for database sharding, demonstrating horizontal partitioning strategies, shard key selection, cross-shard queries, and rebalancing.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `sharding_demo.py` | Demonstrates shard key design, partition routing, and cross-shard operations |
-
-## Usage
-
-```bash
-uv run python scripts/database_management/sharding/sharding_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `sharding_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: database_management/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [database_management](../README.md)
+- **Project Root**: ../../../README.md

@@ -1,20 +1,19 @@
 # population
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Population lifecycle. This submodule is scaffolded for future implementation; no exports are currently defined.
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `population.py` - Population
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `population.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent Module**: [evolutionary_ai](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [evolutionary_ai](../README.md)
+- **Project Root**: ../../../../README.md

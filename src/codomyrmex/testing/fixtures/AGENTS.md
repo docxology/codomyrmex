@@ -1,38 +1,41 @@
-# Fixtures -- Agentic Context
+# Codomyrmex Agents — src/codomyrmex/testing/fixtures
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Test files and validation suites.
 
-Provides test fixture management including lifecycle-scoped fixtures with dependency resolution, pre-defined data fixtures, JSON fixture loading, and a fluent builder API. Also provides `TestServerManager` for zero-mock integration testing with real FastAPI servers.
-
-## Key Components
-
-| Component | Source | Role |
-|-----------|--------|------|
-| `FixtureManager` | `__init__.py` | Core fixture registry with `register()`, `get()`, `cleanup()`, `use()` context manager, and dependency resolution |
-| `DataFixture` | `__init__.py` | List-based data container with `filter(**kwargs)` and `find(**kwargs)` query methods |
-| `JSONFixtureLoader` | `__init__.py` | File-based fixture loading from JSON with internal cache |
-| `FixtureBuilder` | `__init__.py` | Fluent builder: `with_field()`, `with_fields()`, `build()`, `build_many()` with incremental IDs |
-| `TestServerManager` | `integration_servers.py` | Starts real FastAPI/uvicorn server on background thread for zero-mock HTTP integration testing |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `integration_servers.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Fixture Scoping**: `FixtureScope` enum defines 4 scopes: `FUNCTION`, `CLASS`, `MODULE`, `SESSION`. Function-scoped fixtures auto-cleanup when the `use()` context manager exits.
-2. **Dependency Resolution**: `FixtureDefinition.dependencies` lists prerequisite fixture names. `FixtureManager.get()` recursively resolves dependencies before creating the requested fixture.
-3. **Thread Safety**: `FixtureManager` uses `threading.Lock` for instance storage operations.
-4. **Cleanup**: `cleanup(name)` invokes the registered `cleanup` callable on the fixture value. `cleanup_all()` cleans up all active instances.
-5. **TestServerManager Lifecycle**: Call `start()` to launch uvicorn on a daemon thread (blocks up to 5s for startup confirmation), `stop()` to signal exit and join the thread (2s timeout).
-6. **JSON Fixtures**: `JSONFixtureLoader.load(name)` reads `{base_path}/{name}.json`. Arrays become multi-record fixtures; single objects become single-element fixtures.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `integration_servers.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **FastAPI/uvicorn**: `TestServerManager` requires `fastapi` and `uvicorn` packages
-- **testing parent**: Part of the `testing` module alongside `chaos`, `generators`, and `workflow`
-- **Zero-Mock Policy**: `TestServerManager` aligns with the project zero-mock policy by providing real HTTP servers
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [testing/](../README.md)
-- **Siblings**: [chaos/](../chaos/), [generators/](../generators/), [workflow/](../workflow/)
-- **Spec**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [testing](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,36 +1,45 @@
-# Ant Colony -- Agent Capabilities
+# Codomyrmex Agents — src/codomyrmex/bio_simulation/ant_colony
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-The `ant_colony` submodule provides a discrete-time ant colony simulation with pheromone-based foraging. Agents use it for swarm intelligence experiments, emergent behavior analysis, and optimization algorithm prototyping.
-
-## Key Components
-
-| Component | Kind | Description |
-|-----------|------|-------------|
-| `Ant` | dataclass | Autonomous foraging agent with position, energy, carrying capacity, and pheromone trail |
-| `AntState` | enum | Behavioral states: `FORAGING`, `RETURNING`, `IDLE` |
-| `Colony` | class | Simulation orchestrator managing ant population, food collection, and pheromone decay |
-| `Environment` | class | Grid-based world with pheromone map, food sources, and obstacles |
-| `FoodSource` | dataclass | Localized food deposit at a grid position |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `ant.py` – Project file
+- `colony.py` – Project file
+- `environment.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Stateful simulation**: `Colony.simulate_step()` advances the simulation by one tick; call repeatedly for multi-step runs.
-- **Pheromone decay**: Environment pheromones decay multiplicatively each tick (default rate 0.95); cells below 0.01 are pruned.
-- **Energy model**: Ants consume 0.5 energy per movement step; dead ants (energy <= 0) are skipped.
-- **Carry capacity**: Each ant can carry a maximum of 10 food units.
-- **No MCP tools**: This submodule has no `@mcp_tool` decorators; access is via direct Python import only.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `ant.py`
+- `colony.py`
+- `environment.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent module**: `bio_simulation` re-exports `Ant`, `AntState`, `Colony`, `Environment`.
-- **Genomics sibling**: Can be combined with `bio_simulation.genomics` to evolve ant behavioral parameters.
-- **Data visualization**: Colony statistics (`get_stats()`) produce dict output suitable for charting.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [bio_simulation/AGENTS.md](../AGENTS.md)
-- **Siblings**: [SPEC.md](SPEC.md), [README.md](README.md), [PAI.md](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [bio_simulation](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

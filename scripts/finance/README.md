@@ -1,30 +1,16 @@
-# Finance Module Demos
+# finance
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demonstrates the finance module including double-entry ledger, tax calculations, payroll processing, and financial forecasting with text-based reports.
+Automation and utility scripts.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `orchestrator.py` | Runs ledger, taxes, payroll, and forecasting demos with balance sheet and income statement output |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync
-```
-
-**Run:**
-```bash
-uv run python scripts/finance/orchestrator.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `orchestrator.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

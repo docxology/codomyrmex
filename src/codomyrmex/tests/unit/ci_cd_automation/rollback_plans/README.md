@@ -1,14 +1,15 @@
 # rollback_plans
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Test files and validation suites.
 
 ## Directory Contents
-
+- `PAI.md` – File
 - `README.md` – File
+- `SPEC.md` – File
 - `plan_deploy_123_1769446417.json` – File
 - `plan_deploy_123_1769446514.json` – File
 - `plan_deploy_123_1769447249.json` – File
@@ -195,6 +196,5 @@ Test files and validation suites.
 - `plan_deploy_rolling_1769526568.json` – File
 
 ## Navigation
-
 - **Parent Directory**: [ci_cd_automation](../README.md)
 - **Project Root**: ../../../../../../README.md

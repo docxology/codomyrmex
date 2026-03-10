@@ -1,90 +1,47 @@
-# Tokenizer Module — Agent Capabilities
+# Codomyrmex Agents — src/codomyrmex/tokenizer
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Access Matrix
+## Purpose
+Contains components for the src system.
 
-This document defines which PAI agent types can access tokenizer capabilities and at what trust level.
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `bpe.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `vocab.py` – Project file
 
-### Engineer Agent
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-**Access**: Full access to all operations
-**Trust Level**: TRUSTED
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `bpe.py`
+- `mcp_tools.py`
+- `py.typed`
+- `vocab.py`
 
-| Operation | Capabilities |
-|---|---|
-| Training | Train BPE on arbitrary corpora, configure vocab size |
-| Encoding | Tokenize any text input |
-| Decoding | Reconstruct text from token IDs |
-| Persistence | Save/load trained tokenizers to JSON |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Use Cases**: Building tokenization pipelines, preparing text for LLM consumption, measuring token budgets for prompt engineering.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Architect Agent
-
-**Access**: Read-only analysis
-**Trust Level**: OBSERVED
-
-| Operation | Capabilities |
-|---|---|
-| Encoding | Tokenize text to analyze token distribution |
-| Vocabulary | Inspect vocab contents and merge rules |
-
-**Use Cases**: Evaluating tokenization strategies, comparing vocab sizes, analyzing subword granularity for different domains.
-
-### QATester Agent
-
-**Access**: Validation operations
-**Trust Level**: OBSERVED
-
-| Operation | Capabilities |
-|---|---|
-| Encoding | Tokenize test inputs |
-| Decoding | Verify round-trip fidelity |
-| Training | Train on test corpora for validation |
-
-**Use Cases**: Testing encode/decode round-trip correctness, validating that tokenization handles edge cases (empty strings, unicode, repeated tokens).
-
-### Researcher Agent
-
-**Access**: Full read access
-**Trust Level**: OBSERVED
-
-| Operation | Capabilities |
-|---|---|
-| Training | Train tokenizers on research corpora |
-| Encoding | Tokenize for analysis |
-| Vocabulary | Inspect learned merge rules |
-
-**Use Cases**: Analyzing BPE behavior on different text distributions, comparing tokenization efficiency across corpora.
-
-## Trust Level Definitions
-
-| Level | Description | Operations Permitted |
-|---|---|---|
-| UNTRUSTED | No tokenizer access | None |
-| OBSERVED | Read-only, analysis | Encode, decode, vocab inspection |
-| TRUSTED | Full access | Training, persistence, all operations |
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `tokenizer_train` | Train BPE tokenizer on a corpus of texts | SAFE |
-| `tokenizer_encode` | Encode text to BPE token IDs | SAFE |
-| `tokenizer_decode` | Decode BPE token IDs back to text | SAFE |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `tokenizer_train`, `tokenizer_encode`, `tokenizer_decode` | TRUSTED |
-| **Architect** | Read + Analysis | `tokenizer_encode`, `tokenizer_decode` | OBSERVED |
-| **QATester** | Validation | `tokenizer_train`, `tokenizer_encode`, `tokenizer_decode` | OBSERVED |
-| **Researcher** | Read-only | `tokenizer_train`, `tokenizer_encode`, `tokenizer_decode` | OBSERVED |
-
-## Security Constraints
-
-1. **No persistent state by default**: The module-level tokenizer is ephemeral per process. Persistence requires explicit `save()` call.
-2. **No network access**: Training and inference are purely local operations.
-3. **No file system side effects**: Only `save()` writes to disk, and only to the specified path.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

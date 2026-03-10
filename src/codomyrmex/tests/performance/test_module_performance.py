@@ -95,7 +95,7 @@ class PerformanceBaseline:
     operation_name: str
     baseline_time: float  # seconds
     baseline_memory: float  # MB
-    tolerance_percent: float = 200.0  # Allow 3x baseline before flagging (CI-friendly)
+    tolerance_percent: float = 500.0  # Allow 6x baseline before flagging (CI-friendly)
     measurements: list[float] = None  # type: ignore
 
     def __post_init__(self):

@@ -1,18 +1,17 @@
-# Agent Rules
+# rules
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Core behavioral rules and operational guidelines for autonomous agents working within the Codomyrmex ecosystem.
+Documentation files and guides.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| [general.md](general.md) | General operating rules for all agents |
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `general.md` – File
 
 ## Navigation
-
-- **Parent**: [docs/agents/](../README.md)
-- **Root**: [Project Root](../../../README.md)
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: ../../../README.md

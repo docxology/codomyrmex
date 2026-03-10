@@ -1,32 +1,45 @@
-# Eval Harness -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/eval_harness
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides standardized LLM evaluation tools for agents that need to benchmark model performance, compare metrics, or validate model outputs.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `harness.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `eval_harness_run` | Run evaluation tasks against a model | `tasks, metric` | `{num_tasks, mean_score, results}` |
-| `eval_harness_score` | Score predictions against targets | `predictions, targets, metric` | `{score, metric, num_examples}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `harness.py`
+- `mcp_tools.py`
+- `py.typed`
 
-### Model Benchmarking
-An agent can use `eval_harness_run` to evaluate model performance on standard QA or classification tasks.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Quick Scoring
-Use `eval_harness_score` for ad-hoc comparison of predictions against gold labels without defining full tasks.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Regression Detection
-Compare scores across model versions to detect regressions.
-
-## Example Agent Workflow
-
-```
-1. Agent receives: "Evaluate my model on the QA benchmark"
-2. Agent calls: eval_harness_run(tasks=[{name: "qa", examples: [...]}], metric="f1")
-3. Response: {"mean_score": 0.78, "results": [...]}
-4. Agent reports: "Model achieves 78% F1 on the QA benchmark"
-```
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

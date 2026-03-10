@@ -1,13 +1,12 @@
 # three_d
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Three-dimensional geometry and mesh processing for 3D visualization and modeling.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -17,10 +16,9 @@ Three-dimensional geometry and mesh processing for 3D visualization and modeling
 - `ar_vr_support.py` – File
 - `engine_3d.py` – File
 - `examples/` – Subdirectory
+- `py.typed` – File
 - `rendering_pipeline.py` – File
-- `pyproject.toml` – File
 
 ## Navigation
-
 - **Parent Directory**: [spatial](../README.md)
 - **Project Root**: ../../../../README.md

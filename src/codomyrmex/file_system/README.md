@@ -1,40 +1,21 @@
-# File System Module README.md
+# file_system
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-The `file_system` module in Codomyrmex provides a simple and consistent interface for common filesystem operations. It wraps standard library functions from `os`, `shutil`, and `pathlib` into a more coherent and safe API for the Codomyrmex ecosystem.
 
-## Features
-- **Directory Operations**: List, create, delete, and walk directories.
-- **File CRUD**: Read, write, append, delete, move, and copy files.
-- **Metadata**: Get detailed file/directory information, size, and timestamps.
-- **Advanced Tools**: Find duplicate files, search by pattern, and analyze disk usage.
+Contains components for the src system.
 
-## Usage Example
-```python
-from pathlib import Path
-from codomyrmex.file_system.core import FileSystemManager
+## Directory Contents
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `core.py` – File
+- `mcp_tools.py` – File
+- `py.typed` – File
 
-fs = FileSystemManager()
-path = Path("example.txt")
-
-# Create a file
-fs.create_file(path, "Hello, Codomyrmex!")
-
-# Get file info
-info = fs.get_info(path)
-print(f"File size: {info['size']} bytes")
-
-# Read content
-content = fs.read_file(path)
-print(f"Content: {content}")
-
-# Delete file
-fs.delete(path)
-```
-
-## Integration
-- **Logging**: All file operations are logged via `codomyrmex.logging_monitoring`.
-- **Validation**: Path validation and safety checks are performed before operations.
-
-## Testing
-Unit tests for this module are located in `src/codomyrmex/tests/unit/file_system/` and follow a strict zero-mock policy.
+## Navigation
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

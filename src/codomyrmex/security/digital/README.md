@@ -1,13 +1,12 @@
 # digital
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Digital security implementations including encryption, access control, and secure communications.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `PAI.md` – File
@@ -18,6 +17,7 @@ Digital security implementations including encryption, access control, and secur
 - `certificate_validator.py` – File
 - `compliance_checker.py` – File
 - `encryption_manager.py` – File
+- `py.typed` – File
 - `secrets_detector.py` – File
 - `security_analyzer.py` – File
 - `security_monitor.py` – File
@@ -25,6 +25,5 @@ Digital security implementations including encryption, access control, and secur
 - `vulnerability_scanner.py` – File
 
 ## Navigation
-
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: ../../../../README.md

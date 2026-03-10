@@ -1,105 +1,80 @@
 # Codomyrmex Agents — src/codomyrmex/orchestrator
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Script orchestration engine for discovering, configuring, executing, and reporting on Python scripts. Provides workflow DAG execution with dependency resolution, parallel runners, retry logic, and CI/CD integration bridges.
+Contains components for the src system.
 
 ## Active Components
-
-- **`core.py`** — Main entry point (`run_orchestrator`): CLI-driven script discovery, execution, and summary reporting
-- **`discovery.py`** — `discover_scripts()`: finds Python scripts by directory traversal with depth, pattern, and skip-list filtering
-- **`runner.py`** — `run_script()`, `run_function()`: execute individual scripts/functions with timeout and config support
-- **`parallel_runner.py`** — `ParallelRunner`, `BatchRunner`, `run_parallel()`: concurrent script execution with resource management
-- **`workflow.py`** — `Workflow`, `Task`, `RetryPolicy`: DAG-based workflow engine with `chain()`, `parallel()`, `fan_out_fan_in()` helpers
-- **`thin.py`** — Lightweight orchestration DSL: `step()`, `pipe()`, `batch()`, `shell()`, `python_func()`, `retry()`, `timeout()`, `condition()`
-- **`config.py`** — `load_config()`, `get_script_config()`: YAML/JSON configuration loading for script execution
-- **`reporting.py`** — `generate_report()`, `save_log()`, `generate_script_documentation()`: execution logs and Markdown doc generation
-- **`integration.py`** — `OrchestratorBridge`, `CICDBridge`, `AgentOrchestrator`: bridges to CI/CD pipelines and agent task runners
-- **`exceptions.py`** — `StepError`, `OrchestratorTimeoutError`, `StateError`, `DependencyResolutionError`, `ConcurrencyError`
-- **`engines/`** — Pluggable execution engines
-- **`monitors/`** — Execution monitoring and health checks
-- **`schedulers/`** — Task scheduling strategies
-- **`workflows/`** — Pre-built workflow definitions
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent_supervisor.py` – Project file
+- `config.py` – Project file
+- `core.py` – Project file
+- `discovery.py` – Project file
+- `engines/` – Directory containing engines components
+- `exceptions.py` – Project file
+- `execution/` – Directory containing execution components
+- `fractals/` – Directory containing fractals components
+- `heartbeat.py` – Project file
+- `integration.py` – Project file
+- `mcp_tools.py` – Project file
+- `module_connector.py` – Project file
+- `monitors/` – Directory containing monitors components
+- `observability/` – Directory containing observability components
+- `pipelines/` – Directory containing pipelines components
+- `process_orchestrator.py` – Project file
+- `py.typed` – Project file
+- `resilience/` – Directory containing resilience components
+- `scheduler/` – Directory containing scheduler components
+- `schedulers/` – Directory containing schedulers components
+- `state/` – Directory containing state components
+- `templates/` – Directory containing templates components
+- `thin.py` – Project file
+- `triage_engine.py` – Project file
+- `triggers/` – Directory containing triggers components
+- `workflows/` – Directory containing workflows components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Use `discover_scripts()` before execution to respect skip-lists and depth limits.
-- Prefer `Workflow` with `RetryPolicy` for multi-step pipelines; use `thin` DSL for quick one-off chains.
-- Always pass `timeout` to `run_script()` — the default is 60 seconds.
-- Use `ParallelRunner` for independent scripts; `Workflow` DAG for scripts with dependencies.
-- Integration bridges (`CICDBridge`, `AgentOrchestrator`) require corresponding external services to be available.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `agent_supervisor.py`
+- `config.py`
+- `core.py`
+- `discovery.py`
+- `exceptions.py`
+- `heartbeat.py`
+- `integration.py`
+- `mcp_tools.py`
+- `module_connector.py`
+- `process_orchestrator.py`
+- `py.typed`
+- `thin.py`
+- `triage_engine.py`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.orchestrator import (
-    discover_scripts, run_script, Workflow, Task, RetryPolicy,
-    chain, parallel, ParallelRunner, run_parallel,
-    step, pipe, shell, python_func, retry, timeout
-)
-
-# Discover and run scripts
-scripts = discover_scripts(Path("./scripts"), max_depth=2)
-for script in scripts:
-    result = run_script(script, timeout=30)
-
-# DAG workflow with retry
-wf = Workflow("deploy")
-wf.add_task(Task("build", fn=build_app))
-wf.add_task(Task("test", fn=run_tests, depends_on=["build"]))
-wf.add_task(Task("deploy", fn=deploy, depends_on=["test"],
-                  retry_policy=RetryPolicy(max_retries=3)))
-wf.run()
-
-# Thin DSL for quick chains
-pipe(
-    shell("echo 'start'"),
-    python_func(my_function),
-    retry(flaky_task, max_retries=2),
-    timeout(slow_task, seconds=10)
-)
-```
-
-## MCP Tools Available
-
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `get_scheduler_metrics` | Retrieve the current metrics of the Orchestrator AsyncScheduler | Safe |
-| `analyze_workflow_dependencies` | Analyze a proposed workflow DAG for cyclic dependencies | Safe |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full orchestration | `get_scheduler_metrics`, `analyze_workflow_dependencies` | TRUSTED |
-| **Architect** | DAG design | `analyze_workflow_dependencies` | OBSERVED |
-| **QATester** | Performance verification | `get_scheduler_metrics` | OBSERVED |
-| **Researcher** | Read-only | `get_scheduler_metrics` | OBSERVED |
-
-### Engineer Agent
-**Access**: Full — workflow definition, DAG validation, and scheduler metrics.
-**Use Cases**: Building multi-step workflows in the PLAN phase, validating DAG structure before BUILD begins, debugging scheduler performance during complex parallel execution.
-
-### Architect Agent
-**Access**: DAG analysis only — validate dependency graphs without execution.
-**Use Cases**: Designing workflow DAGs, detecting cyclic dependencies before committing workflow definitions, evaluating fan-out/fan-in strategies.
-
-### QATester Agent
-**Access**: Metrics verification — read scheduler state to validate workflow health.
-**Use Cases**: Confirming EXECUTE-phase workflows completed without deadlocks, verifying scheduler metrics after workflow runs, regression testing scheduler behavior.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-- **Parent**: [codomyrmex](../README.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/orchestrator.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/orchestrator.cursorrules)
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

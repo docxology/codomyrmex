@@ -1,63 +1,43 @@
-# crypto/random -- Agent Context
+# Codomyrmex Agents — src/codomyrmex/crypto/random
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Summary
+## Purpose
+Contains components for the src system.
 
-The `crypto/random` submodule provides cryptographically secure random number generation and NIST SP 800-22 statistical randomness tests. The generator side produces random bytes, integers, strings, nonces, and UUIDs. The testing side validates randomness quality using monobit, runs, and block frequency tests.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `generator.py` – Project file
+- `py.typed` – Project file
+- `testing.py` – Project file
 
-## When to Use This Module
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- You need cryptographically secure random bytes, integers, or strings (passwords, tokens)
-- You need random nonces for cryptographic operations
-- You need to generate UUIDv4 identifiers
-- You need to verify the statistical quality of random data (NIST SP 800-22 suite)
-- You are auditing or testing a CSPRNG implementation
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `generator.py`
+- `py.typed`
+- `testing.py`
 
-## Exports
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Name | Kind | Purpose |
-|------|------|---------|
-| `secure_random_bytes` | function | Generate N bytes from CSPRNG |
-| `secure_random_int` | function | Generate random integer in a range |
-| `secure_random_string` | function | Generate random alphanumeric string of given length |
-| `generate_nonce` | function | Generate a random nonce (default 12 or 16 bytes) |
-| `generate_uuid4` | function | Generate a random UUIDv4 string |
-| `NistTestResult` | dataclass | Result container for NIST statistical tests |
-| `monobit_test` | function | NIST monobit (frequency) test for randomness |
-| `runs_test` | function | NIST runs test for randomness |
-| `block_frequency_test` | function | NIST block frequency test |
-| `run_nist_suite` | function | Run all NIST tests and return aggregate results |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Example Agent Usage
-
-```python
-from codomyrmex.crypto.random import (
-    secure_random_bytes, secure_random_string, generate_nonce, run_nist_suite,
-)
-
-# Generate cryptographic material
-key_bytes = secure_random_bytes(32)
-nonce = generate_nonce(12)
-api_token = secure_random_string(48)
-
-# Validate randomness quality
-data = secure_random_bytes(1000)
-results = run_nist_suite(data)
-for r in results:
-    print(r.test_name, r.passed, r.p_value)
-```
-
-## Constraints
-
-- All random generation uses `os.urandom` or equivalent CSPRNG; never pseudo-random.
-- NIST tests require sufficient data length (typically 100+ bytes) for meaningful results.
-- `secure_random_int` uses rejection sampling for uniform distribution.
-
-## Relationship to Other Modules
-
-| Module | Relationship |
-|--------|-------------|
-| `crypto.analysis` | Entropy functions complement NIST randomness tests |
-| `crypto.graphy` | Symmetric key generation uses similar CSPRNG primitives |
-| `encryption.algorithms` | AES-GCM nonce generation can be replaced with `generate_nonce` |
+## Navigation Links
+- **📁 Parent Directory**: [crypto](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

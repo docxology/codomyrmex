@@ -1,69 +1,41 @@
-# Agent Guidelines - Events
+# Codomyrmex Agents — docs/modules/events
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Event-driven architecture with pub/sub, event sourcing, and handlers.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **EventBus** — Publish/subscribe hub
-- **Event** — Base event class
-- **EventHandler** — Event processing
-- **EventStore** — Event persistence
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Name events** — Use past tense (UserCreated)
-2. **Include context** — Event ID, timestamp, actor
-3. **Idempotent handlers** — Handle duplicates
-4. **Order matters** — Preserve event order
-5. **Log all events** — Audit trail
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.events import EventBus, Event, event_handler
-
-# Define events
-class UserCreated(Event):
-    user_id: str
-    email: str
-
-# Event handlers
-@event_handler(UserCreated)
-async def send_welcome_email(event: UserCreated):
-    await send_email(event.email, "Welcome!")
-
-# Publish events
-bus = EventBus()
-bus.register(send_welcome_email)
-
-event = UserCreated(user_id="u1", email="user@example.com")
-await bus.publish(event)
-
-# Event store
-store = EventStore()
-store.append("user-stream", event)
-events = store.load("user-stream")
-```
-
-## Testing Patterns
-
-```python
-# Verify event handling
-handled = []
-@event_handler(UserCreated)
-def track(event):
-    handled.append(event)
-
-bus = EventBus()
-bus.register(track)
-await bus.publish(UserCreated(user_id="1", email="test@test.com"))
-assert len(handled) == 1
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,40 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/calendar_integration/gcal
+# Codomyrmex Agents — src/codomyrmex/calendar_integration/gcal
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides the `GoogleCalendar` class implementing the `CalendarProvider` interface for Google Calendar API operations. Handles CRUD operations on calendar events, serialization between Google API DTOs and internal `CalendarEvent` models, and multiple credential acquisition strategies.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `provider.py` | `GoogleCalendar` | Concrete `CalendarProvider` implementation for Google Calendar API v3 |
-| `provider.py` | `GoogleCalendar.from_env()` | Factory classmethod to create instances from environment variables or token files |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `provider.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `GoogleCalendar.__init__()` requires either `credentials` or a pre-built `service` object; raises `CalendarAuthError` if neither is provided, `ImportError` if Google API libraries are missing.
-- `from_env()` tries three credential sources in order: env vars (`GOOGLE_REFRESH_TOKEN` + `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET`), token file (`~/.codomyrmex/gcal_token.json`), Application Default Credentials.
-- All CRUD methods raise `CalendarAPIError` for API failures and `EventNotFoundError` (HTTP 404) for missing events.
-- `_gcal_dict_to_event()` raises `InvalidEventError` if response dicts have missing or unparseable datetime fields.
-- `list_events()` returns up to 2500 events sorted by start time.
-- UTC `Z` suffix is normalized to `+00:00` for Python `datetime.fromisoformat()` compatibility.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `provider.py`
+- `py.typed`
 
-## Agent Testing Notes
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- This module connects directly to the authenticated Google Calendar API.
-- Under zero-mock policy, API calls must never be intercepted with fake responses.
-- Tests requiring credentials should use `@pytest.mark.skipif` when env vars are absent.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Integration Points
-
-- **Depends on**: `calendar_integration.generics` (CalendarProvider, CalendarEvent), `calendar_integration.exceptions` (CalendarAPIError, CalendarAuthError, EventNotFoundError, InvalidEventError), `google-api-python-client`, `google-auth` (optional)
-- **Used by**: `calendar_integration.mcp_tools`, any consumer of calendar functionality
-
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../README.md](../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [calendar_integration](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

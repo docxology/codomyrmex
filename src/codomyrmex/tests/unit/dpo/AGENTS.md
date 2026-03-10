@@ -1,31 +1,37 @@
-# DPO (Direct Preference Optimization) Tests -- Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/tests/unit/dpo
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Test files and validation suites.
 
-Test suite for the `dpo` module, implementing the zero-mock testing policy.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `test_dpo.py` – Project file
 
-## Running Tests
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-```bash
-uv run pytest src/codomyrmex/tests/unit/dpo/ -v
-```
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `test_dpo.py`
 
-## Test Markers
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Marker | Usage |
-|--------|-------|
-| `@pytest.mark.unit` | All tests in this suite |
-| `@pytest.mark.skipif` | Tests requiring external services or optional SDKs |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Agent Instructions
-
-1. Run this test suite after any changes to `src/codomyrmex/dpo/`
-2. Tests must pass before merging changes to main
-3. Check for `@pytest.mark.skipif` guards before adding new tests
-4. Follow the zero-mock policy: no `unittest.mock`, `MagicMock`, or `monkeypatch`
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [Source](../../../../dpo/)
+## Navigation Links
+- **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

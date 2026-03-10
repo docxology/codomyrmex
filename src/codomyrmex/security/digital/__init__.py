@@ -75,9 +75,7 @@ except ImportError:
 try:
     from .secrets_detector import (
         SecretsDetector,
-        audit_secrets_exposure,
-        scan_directory_for_secrets,
-        scan_file_for_secrets,
+        scan_secrets,
     )
 
     SECRETS_DETECTION_AVAILABLE = True
@@ -100,8 +98,8 @@ except ImportError:
 try:
     from .compliance_checker import (
         ComplianceChecker,
-        ComplianceCheckResult,
-        ComplianceRequirement,
+        ComplianceControl,
+        ComplianceResult,
         ComplianceStandard,
     )
     from .compliance_checker import (
@@ -134,9 +132,7 @@ if SECRETS_DETECTION_AVAILABLE:
     __all__.extend(
         [
             "SecretsDetector",
-            "audit_secrets_exposure",
-            "scan_directory_for_secrets",
-            "scan_file_for_secrets",
+            "scan_secrets",
         ]
     )
 
@@ -154,9 +150,9 @@ if SECURITY_ANALYSIS_AVAILABLE:
 if COMPLIANCE_CHECKING_AVAILABLE:
     __all__.extend(
         [
-            "ComplianceCheckResult",
             "ComplianceChecker",
-            "ComplianceRequirement",
+            "ComplianceControl",
+            "ComplianceResult",
             "ComplianceStandard",
             "check_compliance_new",
         ]

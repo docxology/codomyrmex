@@ -1,20 +1,19 @@
 # integration
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Integration tests for CEREBRUM module.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `test_integration.py` - Test Integration
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `test_integration.py` – File
 
 ## Navigation
-
-- **Parent Module**: [cerebrum](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent Directory**: [cerebrum](../README.md)
+- **Project Root**: ../../../../../../README.md

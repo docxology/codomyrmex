@@ -1,24 +1,17 @@
-# Security Scanning Scripts
+# scanning
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for security scanning, demonstrating automated vulnerability scanning, dependency CVE checks, and attack surface analysis.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `scanning_demo.py` | Demonstrates vulnerability scanning and CVE detection workflows |
-
-## Usage
-
-```bash
-uv run python scripts/security/scanning/scanning_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `scanning_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: security/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [security](../README.md)
+- **Project Root**: ../../../README.md

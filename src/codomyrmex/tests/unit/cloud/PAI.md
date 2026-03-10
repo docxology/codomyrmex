@@ -7,7 +7,7 @@
 
 ## Context
 
-Unit and integration tests for the cloud module with pytest fixtures and mocks.
+Unit and integration tests for the cloud module with pytest fixtures and stubs.
 
 ## AI Strategy
 

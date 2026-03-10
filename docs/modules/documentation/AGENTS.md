@@ -1,61 +1,49 @@
-# Codomyrmex Agents — src/codomyrmex/documentation
+# Codomyrmex Agents — docs/modules/documentation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Documentation generation and quality management module. Provides Docusaurus-based website generation, documentation consistency checking, quality assessment scoring, and doc aggregation utilities.
+Documentation files and guides.
 
 ## Active Components
-
-- **`documentation_website.py`** — Core website lifecycle: `check_doc_environment()`, `install_dependencies()`, `start_dev_server()`, `build_static_site()`, `serve_static_site()`, `aggregate_docs()`, `validate_doc_versions()`, `assess_site()`
-- **`consistency_checker.py`** — `DocumentationConsistencyChecker`: validates naming conventions, formatting standards, and content alignment across markdown files. Produces `ConsistencyReport` with per-file `ConsistencyIssue` entries
-- **`quality_assessment.py`** — `DocumentationQualityAnalyzer`: scores documentation on 5 axes (completeness, consistency, technical accuracy, readability, structure). `generate_quality_report()` produces a project-wide quality summary
-- **`education/`** — Curriculum and tutorial generation submodule
-- **`docusaurus.config.js`** — Docusaurus site configuration
-- **`sidebars.js`** — Documentation sidebar navigation structure
-- **`docs/`** — Static documentation content for the generated site
-- **`scripts/`** — Build and deployment scripts for the documentation site
-- **`src/`** — Docusaurus React components and pages
-- **`static/`** — Static assets (images, stylesheets) for the documentation site
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `bug_taxonomy.md` – Project file
+- `coverage_assessment.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Call `check_doc_environment()` before any build operation to verify Node.js and npm are available.
-- Use `aggregate_docs()` to collect module documentation before building the site.
-- `DocumentationConsistencyChecker` operates on markdown files only — pass directory paths for recursive checks.
-- Quality scores are 0-100 floats; `generate_quality_report()` analyzes key project files (`README.md`, `AGENTS.md`).
-- The `education` submodule handles curriculum content separately from the main doc site.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `bug_taxonomy.md`
+- `coverage_assessment.md`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.documentation import (
-    check_doc_environment, build_static_site, aggregate_docs,
-    DocumentationConsistencyChecker, DocumentationQualityAnalyzer,
-    generate_quality_report
-)
-
-# Check environment and build site
-check_doc_environment()
-aggregate_docs("./src")
-build_static_site()
-
-# Check documentation consistency
-checker = DocumentationConsistencyChecker()
-report = checker.check_directory("./docs", recursive=True)
-print(f"Files: {report.files_checked}, Issues: {len(report.issues)}")
-
-# Assess documentation quality
-analyzer = DocumentationQualityAnalyzer()
-scores = analyzer.analyze_file(Path("README.md"))
-print(f"Overall: {scores['overall_score']:.1f}/100")
-
-# Generate project-wide quality report
-report = generate_quality_report(Path("."))
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-- **Parent**: [codomyrmex](../README.md)
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

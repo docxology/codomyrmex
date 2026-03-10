@@ -1,74 +1,60 @@
-# Agent Guidelines - Database Management
+# Codomyrmex Agents — src/codomyrmex/database_management
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: October 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Database connections, migrations, backups, performance monitoring, and query execution.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `audit/` – Directory containing audit components
+- `backup/` – Directory containing backup components
+- `connections/` – Directory containing connections components
+- `db_manager.py` – Project file
+- `lineage/` – Directory containing lineage components
+- `mcp_tools.py` – Project file
+- `migration/` – Directory containing migration components
+- `performance_monitor.py` – Project file
+- `py.typed` – Project file
+- `replication/` – Directory containing replication components
+- `schema_generator.py` – Project file
+- `sharding/` – Directory containing sharding components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **DatabaseManager** — Core orchestrator for multiple database connections.
-- **DatabaseConnection** — Individual connection handler and low-level executor.
-- **MigrationManager** — Schema migrations and version tracking.
-- **SchemaGenerator** — Programmatic schema definition and DDL generation.
-- **BackupManager** — Database snapshots and recovery.
-- **DatabasePerformanceMonitor** — Real-time metrics and query analysis.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `db_manager.py`
+- `mcp_tools.py`
+- `performance_monitor.py`
+- `py.typed`
+- `schema_generator.py`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use DatabaseManager** — Prefer `DatabaseManager` for managing one or more connections.
-2. **Parameterize queries** — Never use string concatenation for SQL queries to prevent SQL injection.
-3. **Transaction scope** — Use `with manager.transaction():` for atomic operations.
-4. **SQLite first** — For local development and examples, use SQLite with `sqlite:///path/to/db.sqlite`.
-5. **Handle Results** — Always check `QueryResult.success` and use `.to_dict_list()` for easy data access.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.database_management import (
-    manage_databases, DatabaseType, DatabaseConnection
-)
-
-# Initialize manager
-manager = manage_databases()
-
-# Add a connection
-conn = DatabaseConnection(name="main", db_type=DatabaseType.SQLITE, database="app.db")
-manager.add_connection(conn)
-
-# Safe query execution
-result = manager.execute("SELECT * FROM users WHERE id = ?", (1,))
-if result.success:
-    users = result.to_dict_list()
-
-# Using transactions
-with manager.transaction():
-    manager.execute("INSERT INTO logs (msg) VALUES (?)", ("Action performed",))
-```
-
-## Testing Patterns
-
-```python
-# Zero-mock testing with SQLite in-memory
-manager = manage_databases("sqlite:///:memory:")
-manager.execute("CREATE TABLE test (id INTEGER PRIMARY KEY, val TEXT)")
-manager.execute("INSERT INTO test (val) VALUES (?)", ("data",))
-result = manager.execute("SELECT * FROM test")
-assert result.row_count == 1
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Database operations, schema management, query execution, connection pooling | TRUSTED |
-| **Architect** | Read + Design | Schema design review, query optimization analysis, database architecture | OBSERVED |
-| **QATester** | Validation | Query correctness, schema validation, data integrity verification | OBSERVED |
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/database_management.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/database_management.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

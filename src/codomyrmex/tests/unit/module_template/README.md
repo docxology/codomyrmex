@@ -1,21 +1,23 @@
 # module_template
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `module_template` module provides core functionality for Module Template..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `integration/` - Subdirectory
-- `test_module_template.py` - Test Module Template
-- `unit/` - Subdirectory
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `integration/` – Subdirectory
+- `template/` – Subdirectory
+- `test_module_template.py` – File
+- `test_scaffold.py` – File
+- `test_scaffold_comprehensive.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

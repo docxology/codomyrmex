@@ -1,38 +1,39 @@
-# Codomyrmex Agents -- src/codomyrmex/coding/static_analysis/complexity
+# Codomyrmex Agents — src/codomyrmex/coding/static_analysis/complexity
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Python-native cyclomatic complexity calculation, line counting, and function-level metrics. Operates on Python source via the `ast` module without requiring external tools. Provides both standalone functions and a `ComplexityAnalyzer` class for batch analysis.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `__init__.py` | `ComplexityAnalyzer` | Batch analyzer: walks files, computes per-function and per-file metrics, returns `FileMetrics` |
-| `__init__.py` | `calculate_cyclomatic_complexity` | Standalone function: counts decision points (if, elif, for, while, except, with, and, or, assert) in an AST node |
-| `__init__.py` | `count_lines` | Standalone function: returns total lines, code lines, blank lines, comment lines for a source string |
-| `__init__.py` | `ComplexityLevel` | Enum: LOW (1-5), MODERATE (6-10), HIGH (11-20), VERY_HIGH (21+) |
-| `__init__.py` | `ComplexityMetric` | Dataclass: function name, complexity score, `ComplexityLevel`, line number |
-| `__init__.py` | `FunctionMetrics` | Dataclass: function name, line count, complexity, parameter count, return count |
-| `__init__.py` | `FileMetrics` | Dataclass: file path, total lines, code lines, blank lines, comment lines, list of `FunctionMetrics` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `calculate_cyclomatic_complexity()` accepts an `ast.AST` node (typically `ast.FunctionDef` or `ast.AsyncFunctionDef`); returns `int >= 1`.
-- `count_lines()` accepts a source string; returns a 4-tuple of `(total, code, blank, comment)`.
-- `ComplexityAnalyzer` accepts a file path or directory; raises `FileNotFoundError` for invalid paths.
-- `ComplexityLevel` thresholds are fixed: LOW 1-5, MODERATE 6-10, HIGH 11-20, VERY_HIGH 21+.
-- All functions operate on Python source only; non-Python files raise `SyntaxError` during AST parsing.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Python `ast` stdlib
-- **Used by**: `static_analysis.StaticAnalyzer.calculate_metrics()`, `review.analyzer.PyscnAnalyzer.analyze_complexity()`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [static_analysis](../README.md)
-- **Sibling**: [linting](../linting/)
-- **Root**: [Root](../../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [static_analysis](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

@@ -1,51 +1,47 @@
-# Agent Guide — Website Test Suite
+# Codomyrmex Agents — src/codomyrmex/tests/unit/website
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Validation suite for the `codomyrmex.website` module. Tests verify `DataProvider`, `WebsiteGenerator`, and `WebsiteServer` using real objects and live HTTP requests.
-
-## Testing Patterns
-
-### Zero-Mock Policy
-
-All tests use real functional objects:
-
-```python
-# ✅ Correct — real DataProvider with temp project tree
-provider = DataProvider(tmp_path)
-modules = provider.get_modules()
-assert isinstance(modules, list)
-
-# ✅ Correct — live HTTP server with real requests
-srv = _LiveServer(tmp_path)
-status, data = srv.get("/api/status")
-assert status == 200
-```
-
-The only permitted `@patch` usage is for external services (Ollama):
-
-```python
-@patch("codomyrmex.website.server.requests")
-def test_chat(self, mock_requests, live_server):
-    ...
-```
-
-### Fixture Patterns
-
-- `tmp_path` + `_build_project()` — creates minimal project tree for `DataProvider`
-- `live_server` — starts a real `TCPServer` + `WebsiteServer` on a random port
-- `simple_template_dir` — creates minimal Jinja2 templates for rendering tests
+Test files and validation suites.
 
 ## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `integration/` – Directory containing integration components
+- `test_dashboard_orchestrator.py` – Project file
+- `test_health_mixin.py` – Project file
+- `test_pai_mixin.py` – Project file
+- `test_website_data_provider.py` – Project file
+- `test_website_generator.py` – Project file
+- `unit/` – Directory containing unit components
 
-- `unit/` — Isolated unit tests (data_provider, generator, server)
-- `integration/` — End-to-end generation, security, and config tests
-- `test_website_data_provider.py` — DataProvider smoke tests
-- `test_website_generator.py` — Generator smoke tests
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `test_dashboard_orchestrator.py`
+- `test_health_mixin.py`
+- `test_pai_mixin.py`
+- `test_website_data_provider.py`
+- `test_website_generator.py`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [unit](../README.md)
-- **🏠 Project Root**: [codomyrmex](../../../../README.md)
+- **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

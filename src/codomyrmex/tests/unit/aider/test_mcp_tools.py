@@ -265,3 +265,43 @@ class TestMCPMetadata:
             assert meta["name"].startswith("codomyrmex."), (
                 f"{tool.__name__} name={meta['name']} missing codomyrmex. prefix"
             )
+
+
+# ---------------------------------------------------------------------------
+# Live MCP tool tests (requires aider + API key)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.unit
+@pytest.mark.aider
+@pytest.mark.skipif(
+    shutil.which("aider") is None or not os.getenv("ANTHROPIC_API_KEY"),
+    reason="aider not installed or ANTHROPIC_API_KEY not set",
+)
+@pytest.mark.slow
+class TestMCPToolsLive:
+    """Live tests for aider MCP tools."""
+
+    def test_aider_ask_success(self, tmp_path):
+        """aider_ask should return success and an answer."""
+        f = tmp_path / "test.py"
+        f.write_text("x = 42\n")
+        result = aider_ask([str(f)], "what is x?")
+        assert result["status"] == "success"
+        assert "answer" in result
+
+    def test_aider_edit_success(self, tmp_path):
+        """aider_edit should return success and output."""
+        f = tmp_path / "test.py"
+        f.write_text("def foo(): pass\n")
+        result = aider_edit([str(f)], "add docstring to foo")
+        assert result["status"] == "success"
+        assert "output" in result
+
+    def test_aider_architect_success(self, tmp_path):
+        """aider_architect should return success and output."""
+        f = tmp_path / "test.py"
+        f.write_text("class A: pass\n")
+        result = aider_architect([str(f)], "refactor class A")
+        assert result["status"] == "success"
+        assert "output" in result

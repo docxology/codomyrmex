@@ -1,43 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/config_management/migration
+# Codomyrmex Agents — src/codomyrmex/config_management/migration
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Configuration files and templates.
 
-Provides configuration migration between versions with support for field renaming, moving, value transformation, addition, removal, splitting, merging, and custom transformations. Handles automatic migration path discovery across a linear version chain.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `config_migrator.py` | `ConfigMigrator` | Main migrator engine managing rules, version ordering, and path finding |
-| `config_migrator.py` | `ConfigMigrator.add_migration_rule` | Registers a `MigrationRule` for a specific version transition |
-| `config_migrator.py` | `ConfigMigrator.migrate_config` | Migrates config from one version to another by applying chained rules |
-| `config_migrator.py` | `ConfigMigrator.get_migration_path` | Finds step-by-step path between two versions |
-| `config_migrator.py` | `ConfigMigrator.validate_migration` | Checks compatibility of a config with a target version |
-| `config_migrator.py` | `ConfigMigrator.register_migration` | Registers a custom callable as a migration function |
-| `config_migrator.py` | `MigrationRule` | Dataclass defining a single migration action with conditions and transforms |
-| `config_migrator.py` | `MigrationResult` | Dataclass capturing success, applied rules, warnings, errors, and backup |
-| `config_migrator.py` | `MigrationAction` | Enum of 8 action types: RENAME, MOVE, TRANSFORM, ADD, REMOVE, SPLIT, MERGE, CUSTOM |
-| `config_migrator.py` | `create_logging_migration_rules` | Predefined rules for logging config upgrades |
-| `config_migrator.py` | `create_database_migration_rules` | Predefined rules for database config upgrades |
-| `config_migrator.py` | `migrate_config` | Convenience function applying common migration rules |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `config_migrator.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Migration paths follow a linear version ordering based on rule registration order.
-- Configs are deep-copied before migration; a backup is preserved in `MigrationResult.backup_config`.
-- Nested field paths use dot notation (e.g., `connection_pool.connection_timeout`).
-- Rules with a `condition` callable are skipped when the condition returns `False`.
-- If any rule fails during migration, the result is marked `success=False` and remaining rules are skipped.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `config_migrator.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring.core.logger_config`
-- **Used by**: Config management core, deployment workflows, version upgrade pipelines
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [config_management](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

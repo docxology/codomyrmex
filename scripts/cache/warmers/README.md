@@ -1,24 +1,17 @@
-# Cache Warmers Scripts
+# warmers
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for cache warming strategies, demonstrating how to pre-populate caches with frequently accessed data to reduce cold-start latency.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `warmers_demo.py` | Demonstrates cache warming strategies and pre-population patterns |
-
-## Usage
-
-```bash
-uv run python scripts/cache/warmers/warmers_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `warmers_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: cache/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [cache](../README.md)
+- **Project Root**: ../../../README.md

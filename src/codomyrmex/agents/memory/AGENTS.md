@@ -1,36 +1,45 @@
-# Codomyrmex Agents -- src/codomyrmex/agents/memory
+# Codomyrmex Agents — src/codomyrmex/agents/memory
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides three complementary memory primitives for agent sessions: turn-based conversation history with summarization (`ConversationHistory`), a learning journal with pattern detection (`LearningJournal`), and a TTL-aware key-value memory store (`MemoryStore`). Together they enable agents to track dialogue context, accumulate insights, and cache runtime data with automatic expiration.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `conversation.py` | `Turn` | Dataclass for a single conversation turn: role, content, timestamp, metadata, word count |
-| `conversation.py` | `ConversationHistory` | Multi-turn tracker with `add`, `last`, `by_role`, `summary`, and LLM-compatible `to_messages` export |
-| `journal.py` | `JournalEntry` | Dataclass: topic, insight, source, confidence (0-1), tags, timestamp |
-| `journal.py` | `LearningJournal` | Append-only journal with `record`, `by_topic`, `by_tag`, `detect_patterns`, `high_confidence` |
-| `store.py` | `MemoryEntry` | Dataclass: key, value, created_at, expires_at, tags, access_count with `is_expired` property |
-| `store.py` | `MemoryStore` | Key-value store with `put` (TTL support), `get` (auto-evicts expired), `delete`, `has`, `search_by_tag` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `conversation.py` – Project file
+- `journal.py` – Project file
+- `py.typed` – Project file
+- `store.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `ConversationHistory` enforces `max_turns` by slicing to the most recent N turns on each `add` call.
-- `MemoryStore.get` lazily evicts expired entries on access; `search_by_tag`, `size`, and `keys` batch-clean expired entries first.
-- `LearningJournal.detect_patterns` returns top-5 topics and tags via `Counter.most_common` plus average confidence.
-- All three classes use `time.time()` for timestamps; `Turn` and `JournalEntry` auto-set timestamp in `__post_init__`.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `conversation.py`
+- `journal.py`
+- `py.typed`
+- `store.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring` (`get_logger`)
-- **Used by**: `codomyrmex.agents.core` session management, agent reflection pipelines, runtime caching
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [agents](../README.md)
-- **Root**: [codomyrmex](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

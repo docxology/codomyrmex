@@ -1,39 +1,45 @@
-# Agent Guidelines - Model Merger
+# Codomyrmex Agents — src/codomyrmex/model_merger
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Merge neural network model parameters using SLERP interpolation, linear interpolation, or model soups.
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `merger.py` – Project file
+- `py.typed` – Project file
 
-## Key Classes and Functions
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **`slerp(v0, v1, t)`** -- Spherical Linear Interpolation (direction-preserving)
-- **`linear_interpolate(params_a, params_b, alpha)`** -- Linear weight blending
-- **`model_soup(param_dicts, weights)`** -- Weighted average of multiple models
-- **`ModelMerger`** -- High-level merge API with method selection
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `merger.py`
+- `py.typed`
 
-## MCP Tools Available
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `merge_models` | Merge two model parameter sets with SLERP or linear interpolation | Safe |
-| `create_model_soup` | Average multiple model parameter sets into a soup | Safe |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Agent Instructions
-
-1. **SLERP for direction** -- Use SLERP when angular interpolation matters (e.g., attention heads)
-2. **Linear for simple blends** -- Use linear interpolation for straightforward parameter mixing
-3. **Model soup for ensembles** -- Average 3+ fine-tuned checkpoints from the same base model
-4. **Alpha tuning** -- Try alpha values 0.3, 0.5, 0.7 and evaluate downstream
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `merge_models`, `create_model_soup` | TRUSTED |
-| **Researcher** | Full | Both tools -- model merging experiments | SAFE |
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

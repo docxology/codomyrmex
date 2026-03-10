@@ -1,33 +1,33 @@
-# LLM Eval Harness -- Agent Coordination
+# Codomyrmex Agents — docs/modules/eval_harness
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides a standardized evaluation framework for language models. Defines evaluation tasks with input-target pairs and supports exact match and F1 scoring metrics for systematic model benchmarking.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `eval_harness_run` | Run evaluation tasks against a model and return aggregated metrics | Standard | eval_harness |
-| `eval_harness_score` | Score predictions against targets using exact match or F1 metric | Standard | eval_harness |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| VERIFY | QA Agent | Benchmark language model performance on standardized evaluation tasks |
-| OBSERVE | Monitoring Agent | Track model performance regressions across evaluation runs |
-
-
-## Agent Instructions
-
-1. Define tasks as dicts with 'name' and 'examples' (list of input/target pairs)
-2. Supported metrics: 'exact_match' (strict string equality) and 'f1' (token-level F1 score)
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/eval_harness/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

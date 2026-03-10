@@ -1,22 +1,21 @@
 # utils
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Document utilities.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Documentation files and guides.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `encoding_detector.py` - Encoding Detector
-- `file_validator.py` - File Validator
-- `mime_type_detector.py` - Mime Type Detector
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `encoding_detector.py` – File
+- `file_validator.py` – File
+- `mime_type_detector.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent Module**: [documents](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [documents](../README.md)
+- **Project Root**: ../../../../README.md

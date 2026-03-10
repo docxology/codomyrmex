@@ -1,35 +1,41 @@
-# Codomyrmex Agents -- evolutionary_ai/fitness
+# Codomyrmex Agents — src/codomyrmex/evolutionary_ai/fitness
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Fitness evaluation functions for evolutionary algorithms, supporting single-objective, multi-objective (Pareto), and constraint-based fitness scoring.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `FitnessResult` | Dataclass: `score: float`, `components: dict[str, float]`, `feasible: bool`, `metadata: dict` |
-| `FitnessFunction` (ABC) | Abstract base with `evaluate(genome) -> FitnessResult` and `is_better(a, b) -> bool` |
-| `ScalarFitness` | Single-objective evaluator wrapping a `Callable[[list], float]`; supports `maximize` flag |
-| `MultiObjectiveFitness` | Multi-objective evaluator with `dominates(a, b)` Pareto comparison; aggregates via weighted sum |
-| `ConstrainedFitness` | Wraps another `FitnessFunction` and applies penalty for constraint violations; marks `feasible` flag |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `fitness.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `ScalarFitness.evaluate()` calls the user-provided function with `genome.to_list()` and returns a `FitnessResult`.
-- `ScalarFitness.is_better()` compares scores respecting the `maximize` flag.
-- `MultiObjectiveFitness.__init__` takes a list of `(objective_fn, weight)` tuples; `evaluate()` returns weighted sum as the aggregate score with per-objective components.
-- `MultiObjectiveFitness.dominates(a, b)` returns True if `a` is better on all objectives and strictly better on at least one.
-- `ConstrainedFitness.__init__` takes a base `FitnessFunction` and a list of `(constraint_fn, penalty_weight)` tuples; violations subtract penalty from the base score.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `fitness.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- `FitnessFunction` implementations are consumed by `evolutionary_ai.population.PopulationManager.evolve_generation()`.
-- `FitnessResult.components` dict provides per-objective breakdown for analysis.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README](../README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-- Parent: [evolutionary_ai](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [evolutionary_ai](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,77 +1,39 @@
-# Agent Guidelines - Validation
+# Codomyrmex Agents — docs/modules/validation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Data validation, schema checking, and input sanitization.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Validator** — General validation
-- **SchemaValidator** — JSON Schema validation
-- **EmailValidator** — Email format validation
-- **URLValidator** — URL format validation
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Validate early** — Check at API boundaries
-2. **Return all errors** — Don't stop at first error
-3. **Use schemas** — Define validation schemas
-4. **Custom messages** — User-friendly error messages
-5. **Whitelist** — Prefer whitelist over blacklist
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.validation import (
-    Validator, SchemaValidator, validate, ValidationError
-)
-
-# Simple validation
-validator = Validator()
-errors = validator.validate({
-    "email": "user@example.com",
-    "age": 25
-}, rules={
-    "email": ["required", "email"],
-    "age": ["required", "min:18"]
-})
-
-if errors:
-    raise ValidationError(errors)
-
-# Schema validation
-schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string"},
-        "count": {"type": "integer"}
-    },
-    "required": ["name"]
-}
-SchemaValidator.validate(data, schema)
-```
-
-## Testing Patterns
-
-```python
-# Verify validation
-validator = Validator()
-errors = validator.validate(
-    {"email": "invalid"},
-    rules={"email": ["email"]}
-)
-assert len(errors) > 0
-
-# Verify valid input
-errors = validator.validate(
-    {"email": "test@test.com"},
-    rules={"email": ["email"]}
-)
-assert len(errors) == 0
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,4 +1,8 @@
-"""Unit tests for API versioning -- version models, version manager, and versioned endpoint routing."""
+"""
+Unit tests for API versioning -- version models, version manager, and versioned endpoint routing.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
+"""
 
 from datetime import datetime
 

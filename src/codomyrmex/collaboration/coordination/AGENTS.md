@@ -1,43 +1,45 @@
 # Codomyrmex Agents — src/codomyrmex/collaboration/coordination
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides three coordination subsystems for multi-agent workflows: (1) consensus and voting via `VotingMechanism` and `ConsensusBuilder`, (2) leader election with bully, ring, random, and rotating strategies, and (3) task scheduling via `TaskManager` with a priority queue, dependency graph, and load-balanced assignment.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `consensus.py` | `VotingMechanism` | Proposal creation, vote casting, and tally with configurable quorum and threshold |
-| `consensus.py` | `ConsensusBuilder` | Iterative value convergence across agents with configurable threshold |
-| `consensus.py` | `Proposal`, `Vote`, `VotingResult` | Data classes for voting workflow |
-| `leader_election.py` | `LeaderElection` | Abstract base for election protocols with history tracking |
-| `leader_election.py` | `BullyElection` | Highest-priority agent wins; filters unhealthy agents |
-| `leader_election.py` | `RingElection` | Simulated ring traversal election |
-| `leader_election.py` | `RandomElection` | Random selection from healthy agents |
-| `leader_election.py` | `RotatingLeadership` | Round-robin leadership rotation with term tracking |
-| `task_manager.py` | `TaskManager` | Priority scheduling, dependency resolution, agent assignment, and workflow execution |
-| `task_manager.py` | `TaskQueue` | Heap-based priority queue with lazy removal |
-| `task_manager.py` | `DependencyGraph` | Tracks task dependencies with topological ordering and cycle detection |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `consensus.py` – Project file
+- `leader_election.py` – Project file
+- `py.typed` – Project file
+- `task_manager.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `VotingMechanism.cast_vote()` raises `ValueError` if the proposal is not active or the deadline has passed.
-- `VotingMechanism.tally_votes()` removes the proposal from active state and records the result.
-- All election implementations filter out agents in `AgentState.ERROR` before selecting a leader.
-- `TaskManager.get_next_task()` respects both dependency ordering and agent capability matching.
-- `TaskManager.cancel()` cannot cancel running tasks; only queued tasks are cancellable.
-- `DependencyGraph.has_cycle()` uses DFS with a recursion stack to detect cycles.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `consensus.py`
+- `leader_election.py`
+- `py.typed`
+- `task_manager.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `collaboration.agents.base` (CollaborativeAgent), `collaboration.exceptions` (TaskNotFoundError), `collaboration.models` (Task, TaskResult, TaskStatus), `collaboration.protocols` (AgentState)
-- **Used by**: `collaboration.agents.supervisor` (SupervisorAgent.execute_workflow), higher-level orchestration modules
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [collaboration](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [collaboration](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

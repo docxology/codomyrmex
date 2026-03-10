@@ -1,29 +1,16 @@
-# Feature Store Configuration
+# feature_store
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Feature management, storage, and serving for ML applications. Provides FeatureDefinition, FeatureGroup, and FeatureVector with typed feature values.
+Configuration files and templates.
 
-## Configuration Options
-
-The feature_store module operates with sensible defaults and does not require environment variable configuration. Feature definitions are registered with type constraints. Feature vectors include timestamp and user ID features by default.
-
-## PAI Integration
-
-PAI agents interact with feature_store through direct Python imports. Feature definitions are registered with type constraints. Feature vectors include timestamp and user ID features by default.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep feature_store
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/feature_store/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

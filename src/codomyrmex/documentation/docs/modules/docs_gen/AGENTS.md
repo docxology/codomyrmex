@@ -1,48 +1,37 @@
-# docs_gen - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/docs_gen
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Documentation generation module exposing 2 MCP tools for extracting API documentation from Python source and building searchable indices. Uses AST-based analysis via `APIDocExtractor` and inverted-index search via `SearchIndex`.
-
-## Key Files
-
-| File | Role |
-|------|------|
-| `__init__.py` | Package root; exports all components |
-| `mcp_tools.py` | 2 MCP tool definitions |
-| `api_doc_extractor.py` | `APIDocExtractor`, `ModuleDoc`, `ClassDoc`, `FunctionDoc` |
-| `search_index.py` | `SearchIndex`, `IndexEntry`, `SearchResult` |
-| `site_generator.py` | `SiteGenerator`, `SiteConfig` |
-
-## MCP Tools Available
-
-| Tool | Parameters | Returns |
-|------|-----------|---------|
-| `docs_gen_extract_api` | `source_code: str, module_name: str` | Module docstring, functions, classes with counts |
-| `docs_gen_build_search_index` | `source_code: str, module_name: str` | Index statistics with entry counts |
-
-## Agent Instructions
-
-1. `docs_gen_extract_api` accepts raw Python source code as a string, not file paths.
-2. `docs_gen_build_search_index` combines extraction and indexing in one call.
-3. Both tools return `{"status": "success", ...}` on success or `{"status": "error", "message": "..."}` on failure.
-4. The `module_name` parameter is optional and used for labeling output.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Both tools are read-only and produce no side effects.
-- `APIDocExtractor` uses Python's `ast` module for parsing; invalid Python source raises errors.
-- `SearchIndex` is ephemeral (in-memory); state does not persist across calls.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
 
-## PAI Agent Role Access Matrix
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Agent Role | Access Level | Primary Tools |
-|-----------|-------------|---------------|
-| Engineer | Full | Both tools |
-| Architect | Read | `docs_gen_extract_api` |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [Root](../../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

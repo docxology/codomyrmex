@@ -1,39 +1,43 @@
-# Health - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/maintenance/health
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Health check and maintenance scheduling framework providing a registry of callable checks with aggregated status reporting and a cron-like task scheduler with retry logic.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `HealthChecker` | Registry and executor for health check functions |
-| `HealthCheck` | Dataclass: name, description, check_fn callable, critical flag, timeout_ms |
-| `HealthCheckResult` | Dataclass: name, status, message, duration_ms, details, timestamp |
-| `AggregateHealthReport` | Aggregated report: overall_status, per-check results, counts |
-| `HealthStatus` | Enum: HEALTHY, DEGRADED, UNHEALTHY, UNKNOWN |
-| `MaintenanceScheduler` | Cron-like scheduler with priority, retry logic, and result history |
-| `MaintenanceTask` | Dataclass: name, description, action callable, schedule config, priority |
-| `ScheduleConfig` | Dataclass: interval_seconds, max_retries, retry_delay, timeout, run_on_startup |
-| `TaskResult` | Dataclass: task_name, status, started_at, completed_at, duration, retries_used |
-| `TaskPriority` | Enum: LOW, MEDIUM, HIGH, CRITICAL |
-| `TaskStatus` | Enum: PENDING, RUNNING, COMPLETED, FAILED, SKIPPED |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `health_check.py` – Project file
+- `py.typed` – Project file
+- `scheduler.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Health check functions must return `tuple[HealthStatus, str, dict]` (status, message, details).
-- Checks marked `critical=True` cause overall status to be UNHEALTHY on failure.
-- Scheduler `execute()` retries up to `max_retries` times with `retry_delay_seconds` between attempts.
-- `get_due_tasks(now)` returns tasks sorted by priority whose interval has elapsed since last run.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `health_check.py`
+- `py.typed`
+- `scheduler.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent module**: `maintenance/` exposes `maintenance_health_check` and `maintenance_list_tasks` MCP tools.
-- **Used by**: `system_discovery/` health monitoring.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [maintenance/](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md)
-- **Root**: [/README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [maintenance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

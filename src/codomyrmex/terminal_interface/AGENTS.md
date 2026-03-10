@@ -1,116 +1,52 @@
-# Agent Guidelines - Terminal Interface
+# Codomyrmex Agents — src/codomyrmex/terminal_interface
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Rich terminal output, interactive shell REPL, command execution, and tab completion for the Codomyrmex CLI. Powers all PAI Algorithm phase headers, progress bars, and structured result display. No MCP tools — access exclusively via direct Python import. Use `TerminalFormatter` for all agent-facing output formatting to maintain consistent visual style across the CLI.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Package-level exports |
-| `shells/` | `InteractiveShell` REPL implementation |
-| `commands/` | Command registration and dispatch |
-| `rendering/` | Rich output formatting and styling |
-| `completions/` | Tab completion provider |
-| `utils/` | `CommandRunner`, `TerminalFormatter` helpers |
-
-## Key Classes
-
-- **`InteractiveShell`** (in `shells/`) — REPL-style interactive shell with command registration
-- **`CommandRunner`** (in `utils/`) — Execute shell commands and capture stdout/stderr/exit_code
-- **`TerminalFormatter`** (in `utils/`) — Rich colored output: success(), error(), table(), progress
-- **`CompletionProvider`** (in `completions/`) — Tab completion for CLI commands
-
-## Agent Instructions
-
-1. **Use rich output** — Colors and formatting
-2. **Stream long output** — Don't buffer everything
-3. **Handle signals** — Ctrl+C gracefully
-4. **Validate input** — Check before execute
-5. **Log commands** — Track command history
-
-## Common Patterns
-
-```python
-from codomyrmex.terminal_interface import (
-    InteractiveShell, CommandRunner, TerminalFormatter
-)
-
-# Execute commands
-runner = CommandRunner()
-result = runner.run("ls -la")
-print(result.stdout)
-
-# Rich formatting
-fmt = TerminalFormatter()
-fmt.print_success("Operation completed!")
-fmt.print_error("Something went wrong")
-fmt.print_table(data, headers=["Name", "Value"])
-
-# Interactive shell
-shell = InteractiveShell()
-shell.register_command("status", show_status)
-shell.run()  # Start REPL
-```
-
-## Testing Patterns
-
-```python
-# Verify command execution
-runner = CommandRunner()
-result = runner.run("echo hello")
-assert "hello" in result.stdout
-
-# Verify formatter
-fmt = TerminalFormatter()
-output = fmt.format_success("Test")
-assert "Test" in output
-```
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `commands/` – Directory containing commands components
+- `completions/` – Directory containing completions components
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `rendering/` – Directory containing rendering components
+- `shells/` – Directory containing shells components
+- `utils/` – Directory containing utils components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-**DO:**
-- Import from subpackages: `from codomyrmex.terminal_interface.utils import TerminalFormatter`
-- Use `TerminalFormatter.success/error/table()` for all user-visible output
-- Handle `KeyboardInterrupt` (Ctrl+C) gracefully in `InteractiveShell` loops
-- Stream long command output rather than buffering to avoid memory issues
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
 
-**DO NOT:**
-- Use `print()` directly in agent code — use `TerminalFormatter` for consistent styling
-- Block the shell thread on long-running operations without progress feedback
-- Expose raw terminal escape codes — use the formatter's named methods only
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Agent Role Access Matrix
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Rich terminal output, formatting, progress bars, interactive prompts; full display control | TRUSTED |
-| **Architect** | Read + Design | Interface design review, output format specification | OBSERVED |
-| **QATester** | Validation | Terminal output correctness, formatting verification, accessibility compliance | OBSERVED |
-| **Researcher** | Read-only | Display research results via `TerminalFormatter.table()` | SAFE |
-
-### Engineer Agent
-**Use Cases**: Rendering BUILD/EXECUTE progress output, displaying structured results, creating interactive CLI flows.
-
-### Architect Agent
-**Use Cases**: Designing terminal UX patterns, reviewing output format specifications.
-
-### QATester Agent
-**Use Cases**: Validating terminal output format, testing display correctness during VERIFY phase.
-
-### Researcher Agent
-**Use Cases**: Displaying research findings in formatted tables, showing progress during long research operations.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/terminal_interface.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/terminal_interface.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

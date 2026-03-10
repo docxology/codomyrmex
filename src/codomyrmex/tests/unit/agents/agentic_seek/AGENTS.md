@@ -1,31 +1,45 @@
-# Agents / AgenticSeek Tests -- Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/agentic_seek
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Test files and validation suites.
 
-Test suite for the `agents/agentic_seek` module, implementing the zero-mock testing policy.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `test_agent_router.py` – Project file
+- `test_agent_types.py` – Project file
+- `test_agentic_seek_client.py` – Project file
+- `test_code_execution.py` – Project file
+- `test_task_planner.py` – Project file
 
-## Running Tests
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-```bash
-uv run pytest src/codomyrmex/tests/unit/agents/agentic_seek/ -v
-```
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `test_agent_router.py`
+- `test_agent_types.py`
+- `test_agentic_seek_client.py`
+- `test_code_execution.py`
+- `test_task_planner.py`
 
-## Test Markers
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Marker | Usage |
-|--------|-------|
-| `@pytest.mark.unit` | All tests in this suite |
-| `@pytest.mark.skipif` | Tests requiring external services or optional SDKs |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Agent Instructions
-
-1. Run this test suite after any changes to `src/codomyrmex/agents/agentic_seek/`
-2. Tests must pass before merging changes to main
-3. Check for `@pytest.mark.skipif` guards before adding new tests
-4. Follow the zero-mock policy: no `unittest.mock`, `MagicMock`, or `monkeypatch`
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [Source](../../../../../agents/agentic_seek/)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

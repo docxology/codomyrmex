@@ -13,11 +13,15 @@ class DeploymentStatus(Enum):
     """Status of a deployment."""
 
     PENDING = "pending"
+    RUNNING = "running"
+    SUCCESS = "success"
+    FAILURE = "failure"
+    ROLLED_BACK = "rolled_back"
+    CANCELLED = "cancelled"
+    # Legacy / extended values
     IN_PROGRESS = "in_progress"
     DEPLOYED = "deployed"
-    FAILED = "failed"
     ROLLING_BACK = "rolling_back"
-    ROLLED_BACK = "rolled_back"
 
 
 class PipelineStatus(Enum):

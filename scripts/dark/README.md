@@ -1,30 +1,16 @@
-# Dark Mode Processing
+# dark
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Orchestrator script for the dark module demonstrating PDF dark mode processing with presets and custom filter configurations using PyMuPDF (fitz).
+Automation and utility scripts.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `dark_orchestrator.py` | Processes PDFs with dark mode filters, supporting multiple presets and custom color configurations |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync --extra dark (requires PyMuPDF/fitz)
-```
-
-**Run:**
-```bash
-uv run python scripts/dark/dark_orchestrator.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `dark_orchestrator.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

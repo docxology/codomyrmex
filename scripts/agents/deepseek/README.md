@@ -1,24 +1,17 @@
-# DeepSeek Agent Scripts
+# deepseek
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for the DeepSeek LLM agent provider, demonstrating DeepSeek model integration within the codomyrmex agent framework.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `deepseek_demo.py` | Demonstrates DeepSeek agent invocation and response handling |
-
-## Usage
-
-```bash
-uv run python scripts/agents/deepseek/deepseek_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `deepseek_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: agents/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: ../../../README.md

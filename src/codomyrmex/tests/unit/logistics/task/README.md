@@ -1,19 +1,17 @@
 # task
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `task` module provides core functionality for Task..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_queue.py` - Test Queue
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `test_queue.py` – File
 
 ## Navigation
-
-- **Parent Module**: [logistics](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent Directory**: [logistics](../README.md)
+- **Project Root**: ../../../../../../README.md

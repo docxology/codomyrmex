@@ -1,29 +1,39 @@
-# Codomyrmex Agents -- src/codomyrmex/coding/parsers/tree_sitter/transformers
+# Codomyrmex Agents — src/codomyrmex/tree_sitter/transformers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Placeholder sub-module for AST transformation and code rewriting utilities. Currently exports nothing; intended for visitor-pattern based AST transformers that apply structural modifications to parsed syntax trees.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `__init__.py` | _(empty exports)_ | Namespace package marker |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Future transformer classes must implement a visitor interface that operates on `tree_sitter.Node` objects.
-- Transformations must be non-destructive (produce new source rather than mutating in place).
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `tree_sitter` (external)
-- **Used by**: _(future code refactoring and rewriting tools)_
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [tree_sitter](../README.md)
-- **Root**: [Root](../../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [tree_sitter](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

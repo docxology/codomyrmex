@@ -1,52 +1,43 @@
 # Codomyrmex Agents — docs/examples
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Runnable code examples demonstrating Codomyrmex capabilities at various complexity levels. From basic module usage to advanced orchestration patterns.
+Documentation files and guides.
 
 ## Active Components
-
-| File | Priority | Description |
-|------|----------|-------------|
-| [basic-examples.md](basic-examples.md) | **Critical** | Entry-level examples |
-| [integration-examples.md](integration-examples.md) | High | Cross-module integration |
-| [orchestration-examples.md](orchestration-examples.md) | High | Advanced workflow patterns |
-| [README.md](README.md) | Medium | Directory overview |
-| [SPEC.md](SPEC.md) | Medium | Functional specification |
-
-## Agent Guidelines
-
-### Example Quality Standards
-
-1. **Runnable**: All code examples must be executable
-2. **Complete**: Include imports, dependencies, and expected output
-3. **Documented**: Clear comments explaining key concepts
-4. **Tested**: Verify examples work with current codebase
-
-### When Modifying Examples
-
-- Test all code snippets before committing
-- Update imports when module APIs change
-- Add Secure Cognitive Agent examples where relevant
-- Include error handling in production-ready examples
-
-### Example Categories to Maintain
-
-- **Basic**: Single-module, standalone examples
-- **Integration**: Multi-module, interconnected examples
-- **Orchestration**: Workflow and pipeline examples
-- **Secure Cognitive**: Identity, Wallet, Defense, Market, Privacy
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `basic-examples.md` – Project file
+- `integration-examples.md` – Project file
+- `orchestration-examples.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment between examples and current APIs
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Record outcomes in shared telemetry and update TODO queues when necessary
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `basic-examples.md`
+- `integration-examples.md`
+- `orchestration-examples.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [docs/](../README.md)
-- **🏠 Project Root**: [../../README.md](../../README.md)
-- **📦 Related**: [Tutorials](../getting-started/tutorials/) | [API Reference](../reference/api.md)
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

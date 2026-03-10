@@ -1,47 +1,57 @@
-# Infomaniak Examples - AI Agent Guide
+# Codomyrmex Agents — scripts/cloud/infomaniak
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+
+## Purpose
+Automation and utility scripts.
 
 ## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `block_storage_examples.py` – Project file
+- `compute_examples.py` – Project file
+- `dns_examples.py` – Project file
+- `full_workflow.py` – Project file
+- `identity_examples.py` – Project file
+- `metering_examples.py` – Project file
+- `network_examples.py` – Project file
+- `newsletter_examples.py` – Project file
+- `object_storage_examples.py` – Project file
+- `orchestration_examples.py` – Project file
+- `setup_env.py` – Project file
 
-| Script | Entry Point | Purpose |
-|--------|-------------|---------|
-| `compute_examples.py` | `main()` | Compute instance management |
-| `block_storage_examples.py` | `main()` | Volume/snapshot operations |
-| `network_examples.py` | `main()` | Network infrastructure |
-| `object_storage_examples.py` | `main()` | Swift and S3 storage |
-| `identity_examples.py` | `main()` | Identity/credentials |
-| `dns_examples.py` | `main()` | DNS zone/record management |
-| `orchestration_examples.py` | `main()` | Heat stack orchestration |
-| `metering_examples.py` | `main()` | Usage and quota metrics |
-| `newsletter_examples.py` | `main()` | Newsletter campaign and contact management |
-| `full_workflow.py` | `main()` | Complete deployment |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Operating Contract
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `block_storage_examples.py`
+- `compute_examples.py`
+- `dns_examples.py`
+- `full_workflow.py`
+- `identity_examples.py`
+- `metering_examples.py`
+- `network_examples.py`
+- `newsletter_examples.py`
+- `object_storage_examples.py`
+- `orchestration_examples.py`
+- `setup_env.py`
 
-**Input**: CLI arguments + environment variable credentials  
-**Output**: Console output with status icons and resource details  
-**Side Effects**: Creates/modifies Infomaniak cloud resources
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Common Patterns
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```bash
-# List resources
-python compute_examples.py --list-instances
-
-# Get details
-python compute_examples.py --get-instance INSTANCE_ID
-
-# Create resource
-python compute_examples.py --create-instance --name my-vm --flavor a1-ram2-disk20-perf1
-
-# Newsletter operations
-python newsletter_examples.py --list-campaigns
-python newsletter_examples.py --create-campaign --subject "Test" --sender "news@test.com" --list-id 123
-python newsletter_examples.py --schedule CAMPAIGN_ID --schedule-at "2026-03-01T10:00:00Z"
-
-# Full workflow
-python full_workflow.py --deploy --name my-project
-```
-
----
-
-**Navigation**: [README](README.md) | [SPEC](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [cloud](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

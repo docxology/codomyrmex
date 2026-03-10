@@ -1,7 +1,7 @@
 # git_analysis MCP Tool Specification
 
-16 tools in category `git_analysis`. All return `{"status": "ok", ...}` on success
-or `{"status": "error", "error": "<message>"}` on failure.
+16 tools in category `git_analysis`. All return `{"status": "success", ...}` on success
+or `{"status": "error", "message": "<message>"}` on failure.
 
 ---
 
@@ -13,14 +13,16 @@ Index a repository with GitNexus. Creates `.gitnexus/` knowledge graph.
 **Must be called before** query/context/impact tools.
 
 **Parameters:**
+
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `repo_path` | `str` | Yes | Absolute or relative path to the git repository |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "repo_path": "/path/to/repo",
   "result": {"stdout": "...", "stderr": "...", "indexed": true}
 }
@@ -33,6 +35,7 @@ Index a repository with GitNexus. Creates `.gitnexus/` knowledge graph.
 Hybrid BM25 + semantic search over the GitNexus knowledge graph.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | Yes | — | Path to the indexed repository |
@@ -40,9 +43,10 @@ Hybrid BM25 + semantic search over the GitNexus knowledge graph.
 | `limit` | `int` | No | 10 | Maximum number of results |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "query": "authentication module",
   "results": { ... }
 }
@@ -55,15 +59,17 @@ Hybrid BM25 + semantic search over the GitNexus knowledge graph.
 360-degree symbol analysis: all incoming and outgoing dependencies.
 
 **Parameters:**
+
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `repo_path` | `str` | Yes | Path to the indexed repository |
 | `symbol` | `str` | Yes | Fully-qualified symbol (e.g., `"MyClass.my_method"`) |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "symbol": "GitHistoryAnalyzer",
   "context": { "incoming": [...], "outgoing": [...] }
 }
@@ -76,15 +82,17 @@ Hybrid BM25 + semantic search over the GitNexus knowledge graph.
 Blast-radius assessment: all symbols transitively affected by changing `symbol`.
 
 **Parameters:**
+
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `repo_path` | `str` | Yes | Path to the indexed repository |
 | `symbol` | `str` | Yes | Symbol to assess blast radius for |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "symbol": "GitHistoryAnalyzer",
   "impact": { "affected": [...], "confidence": 0.87 }
 }
@@ -97,15 +105,17 @@ Blast-radius assessment: all symbols transitively affected by changing `symbol`.
 Map a git diff to architectural impact using the knowledge graph.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | Yes | — | Path to the indexed repository |
 | `diff` | `str` | No | `null` | Unified diff string. Uses HEAD diff if null |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "impact": { "modules_affected": [...], "symbols_changed": [...] }
 }
 ```
@@ -117,15 +127,17 @@ Map a git diff to architectural impact using the knowledge graph.
 Execute a raw Cypher query against the KuzuDB knowledge graph.
 
 **Parameters:**
+
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `repo_path` | `str` | Yes | Path to the indexed repository |
 | `cypher_query` | `str` | Yes | Cypher query string (KuzuDB dialect) |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "query": "MATCH (n:Function) RETURN n.name LIMIT 10",
   "result": { "rows": [...] }
 }
@@ -140,9 +152,10 @@ List all repositories in the global `~/.gitnexus` registry.
 **Parameters:** None
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "repos": [{"name": "codomyrmex", "path": "/path/to/repo"}],
   "count": 1
 }
@@ -157,6 +170,7 @@ List all repositories in the global `~/.gitnexus` registry.
 Detailed commit history with per-commit statistics.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
@@ -164,9 +178,10 @@ Detailed commit history with per-commit statistics.
 | `branch` | `str \ | null` | No | `null` Branch to walk (default: active branch) |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "count": 50,
   "commits": [
     {
@@ -190,14 +205,16 @@ Detailed commit history with per-commit statistics.
 Per-author aggregate statistics across all commits.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "count": 4,
   "contributors": [
     {
@@ -219,15 +236,17 @@ Per-author aggregate statistics across all commits.
 Top N most-frequently-changed files.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
 | `top_n` | `int` | No | 20 | Number of top-churned files |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "count": 20,
   "files": [
     {"file": "README.md", "change_count": 58},
@@ -243,14 +262,16 @@ Top N most-frequently-changed files.
 Branch names, tip commits, and active branch.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "active_branch": "main",
   "branch_count": 2,
   "branches": [
@@ -271,15 +292,17 @@ Branch names, tip commits, and active branch.
 Commit counts bucketed by time period.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
 | `by` | `str` | No | `"week"` | Bucket: `"day"` (YYYY-MM-DD), `"week"` (YYYY-WNN), `"month"` (YYYY-MM) |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "bucket": "month",
   "frequency": {
     "2025-05": 6,
@@ -295,6 +318,7 @@ Commit counts bucketed by time period.
 Filtered commit history with optional date range, author, and branch constraints.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
@@ -305,9 +329,10 @@ Filtered commit history with optional date range, author, and branch constraints
 | `branch` | `str \ | null` | No | `null` Branch to walk (default: active branch) |
 
 **Returns on success:** Same shape as `git_analysis_commit_history`.
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "count": 12,
   "commits": [{ "sha": "...", "author": "...", "date": "...", "message": "..." }]
 }
@@ -320,6 +345,7 @@ Filtered commit history with optional date range, author, and branch constraints
 All commits that touched a specific file path.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
@@ -327,9 +353,10 @@ All commits that touched a specific file path.
 | `max_count` | `int` | No | 50 | Maximum commits to return |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "file": "src/codomyrmex/git_analysis/mcp_tools.py",
   "count": 8,
   "commits": [{ "sha": "...", "author": "...", "date": "...", "message": "..." }]
@@ -343,15 +370,17 @@ All commits that touched a specific file path.
 Commit frequency aggregated by top-level directory. Identifies which modules have the most git activity.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
 | `top_n` | `int` | No | 10 | Number of top directories to return |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "count": 10,
   "directories": [
     {"directory": "src", "change_count": 312, "files": 87}
@@ -366,15 +395,17 @@ Commit frequency aggregated by top-level directory. Identifies which modules hav
 Hotspot analysis combining churn frequency with recency. Score = `change_count / (1 + days_since_last_change / 30)`. High-score files are both frequently changed and recently touched.
 
 **Parameters:**
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
 | `top_n` | `int` | No | 20 | Number of top hotspot files to return |
 
 **Returns on success:**
+
 ```json
 {
-  "status": "ok",
+  "status": "success",
   "count": 20,
   "hotspots": [
     {

@@ -1,50 +1,45 @@
-# Matmul Kernel Module -- Agent Capabilities
+# Codomyrmex Agents — src/codomyrmex/matmul_kernel
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Access Matrix
+## Purpose
+Contains components for the src system.
 
-This document defines which PAI agent types can access matmul_kernel tools and at what trust level.
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `kernel.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-### Engineer Agent
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-**Access**: Full access to all tools
-**Trust Level**: TRUSTED
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `kernel.py`
+- `mcp_tools.py`
+- `py.typed`
 
-| Tool | Capabilities |
-|------|-------------|
-| `matmul_compute` | Compute matrix products with configurable tile sizes |
-| `matmul_benchmark` | Run performance benchmarks comparing tiled vs BLAS |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Use Cases**: Numerical computation pipelines, performance analysis, algorithm prototyping.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Architect Agent
-
-**Access**: Read-only benchmarking
-**Trust Level**: OBSERVED
-
-| Tool | Capabilities |
-|------|-------------|
-| `matmul_benchmark` | Evaluate performance characteristics for architecture decisions |
-
-**Use Cases**: Evaluating compute performance tradeoffs, sizing hardware requirements.
-
-### QATester Agent
-
-**Access**: Correctness validation
-**Trust Level**: OBSERVED
-
-| Tool | Capabilities |
-|------|-------------|
-| `matmul_compute` | Validate correctness of matrix operations against numpy reference |
-| `matmul_benchmark` | Verify performance regression bounds |
-
-**Use Cases**: Numerical accuracy testing, performance regression detection.
-
-## Trust Levels
-
-| Level | Description |
-|-------|-------------|
-| TRUSTED | Full read/write access to all module capabilities |
-| OBSERVED | Read-only access, results logged for audit |
-| UNTRUSTED | No access |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

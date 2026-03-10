@@ -1,4 +1,8 @@
-"""Tests for APISchema and OpenAPISpecification from codomyrmex.api.openapi_generator."""
+"""
+Tests for APISchema and OpenAPISpecification from codomyrmex.api.openapi_generator.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
+"""
 
 import json
 import os

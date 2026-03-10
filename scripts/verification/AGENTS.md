@@ -1,25 +1,41 @@
-# System Verification -- Agent Coordination
+# Codomyrmex Agents — scripts/verification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Automation and utility scripts.
 
-Phase-based verification scripts that validate the full secure agent system including identity, wallet, defense, market, and privacy modules.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `verify_phase1.py` – Project file
+- `verify_phase2.py` – Project file
+- `verify_phase3.py` – Project file
+- `verify_secure_agent_system.py` – Project file
 
-## Scripts Available
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **verify_phase1.py**: Verifies Identity and Wallet module functionality: persona creation, bio-cognitive metrics, wallet creation, Natural Ritual Recovery
-- **verify_phase2.py**: Verifies Defense and Market modules: active defense triggers, exploit detection, reverse auctions, demand aggregation
-- **verify_phase3.py**: Verifies Privacy module: crumb scrubbing (metadata removal), mixnet routing simulation
-- **verify_secure_agent_system.py**: Master runner that executes all phase verification scripts to ensure full system integrity
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `verify_phase1.py`
+- `verify_phase2.py`
+- `verify_phase3.py`
+- `verify_secure_agent_system.py`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Agent Instructions
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-1. Run scripts from the repository root directory using `uv run python scripts/verification/<script>`
-2. Ensure prerequisites are installed: `uv sync`
-3. Scripts are demonstration/utility tools and do not modify production state
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

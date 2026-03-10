@@ -1,25 +1,15 @@
-# AI Gateway
+# ai_gateway
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Unified AI provider gateway with routing, rate limiting, and fallback logic.
+Documentation files and guides.
 
-## Source
-
-**Source code**: [`src/codomyrmex/ai_gateway/`](../../../src/codomyrmex/ai_gateway/)
-
-## MCP Tools
-
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
-
-## Related Documentation
-
-- [Source README](../../../src/codomyrmex/ai_gateway/README.md)
-- [API Specification](../../../src/codomyrmex/ai_gateway/API_SPECIFICATION.md)
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Parent**: [Module Documentation](../README.md)
-- **Root**: [docs/](../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

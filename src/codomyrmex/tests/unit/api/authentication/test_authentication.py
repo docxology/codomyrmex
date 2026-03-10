@@ -1,4 +1,8 @@
-"""Comprehensive tests for the codomyrmex.api.authentication module."""
+"""
+Comprehensive tests for the codomyrmex.api.authentication module.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
+"""
 
 import base64
 import time

@@ -1,46 +1,53 @@
-# Neural -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/neural
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides from-scratch Transformer and attention primitives for AI agents that need to demonstrate, inspect, or run neural network forward passes without framework dependencies.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `activations.py` – Project file
+- `attention.py` – Project file
+- `flash_attention.py` – Project file
+- `layers.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `transformer.py` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `transformer_encode` | Run forward pass through a random Transformer encoder | `sequence_length`, `d_model`, `n_heads`, `n_layers` | `{status, output_shape, d_model, n_heads, n_layers, sequence_length}` |
-| `attention_forward` | Run multi-head attention on random inputs | `seq_len`, `d_model`, `n_heads` | `{status, output_shape, attention_weights_shape, d_k}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `activations.py`
+- `attention.py`
+- `flash_attention.py`
+- `layers.py`
+- `mcp_tools.py`
+- `py.typed`
+- `transformer.py`
 
-### Architecture Exploration
-An agent can use `transformer_encode` to verify output shapes for different hyperparameter configurations (d_model, n_heads, n_layers) before committing to a design.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Attention Visualization
-Use `attention_forward` to generate attention weight matrices that can be inspected or visualized to understand attention patterns.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Educational Demonstration
-Agents can walk through the Transformer architecture step by step, using the Python API directly to show intermediate representations at each layer.
-
-## Example Agent Workflow
-
-```
-1. Agent receives: "Show me how a 4-head attention mechanism works on a sequence of 8 tokens"
-2. Agent calls: attention_forward(seq_len=8, d_model=32, n_heads=4)
-3. Response: {"status": "success", "output_shape": [1, 8, 32], "attention_weights_shape": [1, 4, 8, 8], "d_k": 8}
-4. Agent explains: "Each of the 4 heads independently computes an 8x8 attention matrix..."
-```
-
-## Python API (for direct agent use)
-
-```python
-from codomyrmex.neural import (
-    scaled_dot_product_attention,
-    MultiHeadAttention,
-    TransformerBlock,
-    TransformerEncoder,
-    TransformerDecoder,
-    LayerNorm, FeedForward, PositionalEncoding, Embedding,
-    gelu, relu, swish,
-)
-```
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

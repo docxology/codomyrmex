@@ -1,46 +1,47 @@
-# AI Agent Guidelines — api/rate_limiting
+# Codomyrmex Agents — src/codomyrmex/api/rate_limiting
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides rate limiting for API endpoints with multiple algorithms (fixed window, sliding window, token bucket), composite limiting, distributed Redis-backed limiting, and middleware wrappers.
-
-## Key Components
-
-| Component | File | Role |
-|-----------|------|------|
-| `RateLimiter` | `limiters.py` | ABC defining `check`, `acquire`, `reset`, and `consume` methods |
-| `FixedWindowLimiter` | `limiters.py` | Time-windowed counter with thread-safe locking |
-| `SlidingWindowLimiter` | `limiters.py` | Deque-based sliding window tracking individual request timestamps |
-| `TokenBucketLimiter` | `limiters.py` | Token bucket with configurable capacity, refill rate, and initial tokens |
-| `CompositeRateLimiter` | `limiters.py` | Enforces multiple limiters simultaneously; request allowed only if all pass |
-| `RateLimiterMiddleware` | `limiters.py` | Wrapper providing `check` (acquire-or-deny) and `would_allow` (peek) methods |
-| `RateLimitResult` | `models.py` | Dataclass with `allowed`, `remaining`, `limit`, `reset_at`, `retry_after`; generates HTTP headers |
-| `RateLimitExceeded` | `models.py` | Exception with `retry_after` field |
-| `QuotaManager` | `strategies.py` | Manages multiple named limiters per key; atomic `acquire_all` |
-| `RedisRateLimiter` | `distributed.py` | Redis-backed limiter with local fallback |
-| `LeakyBucketLimiter` | `distributed.py` | Leaky bucket algorithm variant |
-| `AdaptiveRateLimiter` | `distributed.py` | Adjusts limits based on system load metrics |
-| `create_limiter` | `strategies.py` | Factory function selecting algorithm by name string |
-| `create_rate_limiter` | `limiters.py` | Factory function selecting algorithm by strategy name |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `distributed.py` – Project file
+- `limiters.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `strategies.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `check(key, cost)` inspects quota without consuming; `acquire(key, cost)` consumes and raises `RateLimitExceeded` on failure.
-- `consume(key, cost)` is a convenience wrapper that catches `RateLimitExceeded` and returns a denied `RateLimitResult` instead.
-- `RateLimitResult.headers` / `to_headers()` produces standard `X-RateLimit-*` and `Retry-After` HTTP headers.
-- All in-memory limiters are thread-safe via `threading.Lock`.
-- `CompositeRateLimiter` returns the most restrictive result across all constituent limiters.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `distributed.py`
+- `limiters.py`
+- `models.py`
+- `py.typed`
+- `strategies.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent**: `api` module applies rate limiters as middleware in request pipelines.
-- **Consumers**: REST API endpoints, MCP bridge, webhook dispatchers.
-- **Distributed**: `RedisRateLimiter` requires a Redis connection; falls back to local limiting if unavailable.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [api/README.md](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md) | [README.md](README.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [api](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

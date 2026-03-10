@@ -1,43 +1,17 @@
-# Model Registry Scripts
+# model_registry
 
-**Version**: v1.1.9 | **Status**: Placeholder | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Placeholder scripts for the `model_registry` module, which will provide ML model versioning, metadata tracking, and deployment lifecycle management.
+Automation and utility scripts.
 
-## Purpose
-
-These scripts will demonstrate model registry workflows (registration, versioning, promotion, deployment tracking) once the underlying module is implemented. Currently the demo raises `NotImplementedError`.
-
-## Contents
-
-| File | Description |
-|------|-------------|
-| `model_registry_demo.py` | Placeholder demo (raises `NotImplementedError` -- module not yet implemented) |
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync
-```
-
-**Run:**
-```bash
-# Will raise NotImplementedError until module is implemented
-uv run python scripts/model_registry/model_registry_demo.py
-```
-
-## Status
-
-The `codomyrmex.model_registry` source module is not yet implemented. Create `src/codomyrmex/model_registry/` with real functionality before using this demo.
-
-## Agent Usage
-
-Agents should not attempt to use this module until the source implementation exists. Check `src/codomyrmex/model_registry/` for availability.
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `model_registry_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: scripts/](../README.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

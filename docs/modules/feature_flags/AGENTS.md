@@ -1,69 +1,41 @@
-# Agent Guidelines - Feature Flags
+# Codomyrmex Agents — docs/modules/feature_flags
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Runtime feature toggles for gradual rollouts and quick incident response.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **FlagManager** — Create and manage feature flags
-- **FlagEvaluator** — Evaluate flags for users
-- **RolloutStrategy** — Percentage-based rollouts
-- **FlagStore** — Persistent flag storage
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Default to off** — New flags should be disabled by default
-2. **Use descriptive names** — `enable_new_checkout` not `flag_1`
-3. **Clean up** — Remove flags after full rollout
-4. **Percentage rollouts** — Use for gradual releases
-5. **Override for testing** — Use test overrides, not hardcodes
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.feature_flags import FlagManager, FlagEvaluator
-
-# Initialize flag manager
-flags = FlagManager()
-
-# Create a feature flag
-flags.create("new_dashboard", default=False, description="New dashboard UI")
-
-# Percentage rollout
-flags.set_rollout("new_dashboard", percentage=10)  # 10% of users
-
-# Evaluate for a user
-evaluator = FlagEvaluator(flags)
-if evaluator.is_enabled("new_dashboard", user_id=user.id):
-    show_new_dashboard()
-else:
-    show_old_dashboard()
-
-# Override for testing
-with flags.override("new_dashboard", True):
-    test_new_dashboard()
-```
-
-## Testing Patterns
-
-```python
-# Verify flag creation
-flags = FlagManager()
-flags.create("test_flag", default=False)
-assert not flags.is_enabled("test_flag")
-
-# Verify rollout
-flags.set_rollout("test_flag", percentage=100)
-assert flags.is_enabled("test_flag", user_id="any")
-
-# Verify override
-with flags.override("test_flag", True):
-    assert flags.is_enabled("test_flag")
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,76 +1,41 @@
-# Agent Guidelines - Cache
+# Codomyrmex Agents — docs/modules/cache
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Multi-backend caching: memory, Redis, and disk.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Cache** — Abstract cache interface
-- **MemoryCache** — In-memory LRU cache
-- **RedisCache** — Redis-backed cache
-- **DiskCache** — Filesystem cache
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Set TTL** — Always set expiration
-2. **Key naming** — Use consistent key patterns
-3. **Serialize** — Handle complex objects
-4. **Invalidate** — Clear stale entries
-5. **Monitor hits** — Track hit/miss ratio
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.cache import MemoryCache, RedisCache, cached
-
-# In-memory cache
-cache = MemoryCache(max_size=1000)
-cache.set("user:123", user_data, ttl=300)
-user = cache.get("user:123")
-
-# Redis cache
-redis_cache = RedisCache(url="redis://localhost:6379")
-redis_cache.set("session:abc", session, ttl=3600)
-
-# Decorator
-@cached(ttl=60)
-def expensive_query(query):
-    return db.execute(query)
-
-# Batch operations
-cache.set_many({
-    "key1": value1,
-    "key2": value2,
-}, ttl=300)
-
-# Invalidation
-cache.delete("user:123")
-cache.delete_pattern("user:*")  # All user keys
-```
-
-## Testing Patterns
-
-```python
-# Verify set/get
-cache = MemoryCache()
-cache.set("key", "value", ttl=60)
-assert cache.get("key") == "value"
-
-# Verify expiration
-cache.set("temp", "data", ttl=0.1)
-time.sleep(0.2)
-assert cache.get("temp") is None
-
-# Verify decorator
-@cached(ttl=60)
-def add(a, b):
-    return a + b
-assert add(1, 2) == 3
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

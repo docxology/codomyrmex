@@ -1,33 +1,42 @@
-# Codomyrmex Agents — cloud/aws
+# Codomyrmex Agents — src/codomyrmex/cloud/aws
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-AWS service integrations including S3, EC2 (planned), and Lambda (planned).
+Contains components for the src system.
 
 ## Active Components
-
-| Component | Type | Status |
-|-----------|------|--------|
-| `S3Client` | Class | Active |
-| `storage/` | Module | Planned |
-| `compute/` | Module | Planned |
-| `serverless/` | Module | Planned |
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `compute/` – Directory containing compute components
+- `py.typed` – Project file
+- `serverless/` – Directory containing serverless components
+- `storage/` – Directory containing storage components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-```python
-from codomyrmex.cloud import S3Client
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-# Check availability
-if S3Client is None:
-    print("boto3 not installed")
-else:
-    client = S3Client()
-```
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Navigation
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-- **📁 Parent**: [cloud/](../README.md)
-- **📖 Specification**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [cloud](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

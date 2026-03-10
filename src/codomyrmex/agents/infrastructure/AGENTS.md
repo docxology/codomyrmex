@@ -1,36 +1,43 @@
-# Codomyrmex Agents -- src/codomyrmex/agents/infrastructure
+# Codomyrmex Agents — src/codomyrmex/agents/infrastructure
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides a `BaseAgent` subclass specialized for cloud infrastructure operations. The module wraps Infomaniak cloud clients (compute, volume, network, S3, DNS, Heat orchestration) behind a JSON command-dispatch interface and auto-generates tool descriptors from client method signatures via `CloudToolFactory`.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `agent.py` | `InfrastructureAgent` | `BaseAgent` subclass that dispatches JSON `{"service", "action", ...params}` prompts to cloud clients |
-| `agent.py` | `InfrastructureAgent.from_env` | Class method that creates an agent from environment variables, silently skipping unavailable clients |
-| `agent.py` | `InfrastructureAgent.populate_tool_registry` | Auto-generates `Tool` objects from all registered client methods |
-| `tool_factory.py` | `Tool` | Lightweight dataclass descriptor: name, description, JSON-schema parameters, callable handler |
-| `tool_factory.py` | `CloudToolFactory` | Static factory that introspects client methods, extracts parameter schemas, and optionally wraps handlers with security pipeline checks |
-| `tool_factory.py` | `_method_to_args_schema` | Converts a method signature into a JSON-schema-like parameter dict |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent.py` – Project file
+- `py.typed` – Project file
+- `tool_factory.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `_execute_impl` expects a JSON prompt with `service` and `action` keys; returns `AgentResponse` with JSON content or error.
-- Security pipeline (`CloudSecurityPipeline`) runs `pre_check` before and `post_process` after every client call when configured.
-- `CloudToolFactory._wrap_with_security` raises `PermissionError` if `pre_check.allowed` is False.
-- Clients are lazily imported in `from_env` and silently skipped on `ImportError`, `OSError`, `ValueError`, or `AttributeError`.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `agent.py`
+- `py.typed`
+- `tool_factory.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.agents.core.base` (`BaseAgent`, `AgentCapabilities`, `AgentRequest`, `AgentResponse`), `codomyrmex.cloud.infomaniak` (compute, volume, network, S3, DNS, Heat clients), `codomyrmex.cloud.infomaniak.security` (`CloudSecurityPipeline`)
-- **Used by**: Cloud-facing agent workflows, PAI infrastructure operations
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [agents](../README.md)
-- **Root**: [codomyrmex](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

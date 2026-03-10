@@ -1,38 +1,55 @@
-# Codomyrmex Agents -- src/codomyrmex/data_visualization/engines
+# Codomyrmex Agents — src/codomyrmex/data_visualization/engines
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Plotting engine layer providing two levels of abstraction over matplotlib/seaborn: `Plotter` (simple facade re-exporting chart functions) and `AdvancedPlotter` (stateful, multi-axis engine with style/palette/config management, performance monitoring, and dashboard creation).
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `plotter.py` | `Plotter` | Simple wrapper delegating to `charts.*` factory functions |
-| `plotter.py` | `create_heatmap()` | Standalone heatmap function with `@monitor_performance` |
-| `advanced_plotter.py` | `AdvancedPlotter` | Full-featured plotter with figure management, subplot support, and multiple chart methods |
-| `advanced_plotter.py` | `PlotConfig` | Dataclass for figure size, DPI, style, palette, grid, legend settings |
-| `advanced_plotter.py` | `PlotType`, `ChartStyle`, `ColorPalette` | Enums for 13 plot types, 7 chart styles, and 10 colour palettes |
-| `advanced_plotter.py` | `DataPoint`, `Dataset` | Dataclasses for typed data input to `create_dashboard()` |
-| `advanced_plotter.py` | `create_advanced_line_plot()`, etc. | Six convenience functions wrapping `AdvancedPlotter` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `_dashboard.py` – Project file
+- `_heatmap.py` – Project file
+- `_histogram.py` – Project file
+- `_line_bar.py` – Project file
+- `_scatter.py` – Project file
+- `_types.py` – Project file
+- `advanced_plotter.py` – Project file
+- `plotter.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `Plotter` is stateless: each method call creates and returns an independent figure.
-- `AdvancedPlotter` is stateful: `create_figure()` sets `current_figure`/`current_axes`, subsequent `plot_*` calls draw onto those axes.
-- All `AdvancedPlotter.plot_*` methods auto-create a figure if none exists.
-- `finalize_plot()` applies title, labels, legend, grid, tight_layout, optional save, and optional show.
-- `clear_figures()` closes all tracked figures to prevent memory leaks.
-- `@monitor_performance` decorators are no-op when `codomyrmex.performance` is unavailable.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `_dashboard.py`
+- `_heatmap.py`
+- `_histogram.py`
+- `_line_bar.py`
+- `_scatter.py`
+- `_types.py`
+- `advanced_plotter.py`
+- `plotter.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `matplotlib`, `numpy`, `pandas`, `seaborn`, `data_visualization.charts.*`, `logging_monitoring`, `performance` (optional)
-- **Used by**: MCP tool `generate_chart` and `export_dashboard`, any module needing programmatic chart generation
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [data_visualization](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

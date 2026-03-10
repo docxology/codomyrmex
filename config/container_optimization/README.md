@@ -1,29 +1,16 @@
-# Container Optimization Configuration
+# container_optimization
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Container image analysis and optimization. Provides tools for analyzing container images and tuning resource usage with ContainerOptimizer and ResourceTuner.
+Configuration files and templates.
 
-## Configuration Options
-
-The container_optimization module operates with sensible defaults and does not require environment variable configuration. Requires Docker daemon access for image analysis. Resource tuning parameters (CPU limits, memory requests) are set per-container.
-
-## PAI Integration
-
-PAI agents interact with container_optimization through direct Python imports. Requires Docker daemon access for image analysis. Resource tuning parameters (CPU limits, memory requests) are set per-container.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep container_optimization
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/container_optimization/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

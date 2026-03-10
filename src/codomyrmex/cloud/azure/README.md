@@ -1,55 +1,21 @@
-# Azure Integration Module
+# azure
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Microsoft Azure integration providing Blob Storage, with planned support for VMs and Azure Functions.
+Contains components for the src system.
 
-## Components
-
-| Component | Status | Description |
-|-----------|--------|-------------|
-| `AzureBlobClient` | ✅ Active | Blob Storage operations |
-| `storage/` | Planned | Extended storage utilities |
-| `compute/` | Planned | VM management |
-| `serverless/` | Planned | Azure Functions management |
-
-## Quick Start
-
-```python
-from codomyrmex.cloud.azure import AzureBlobClient
-
-# Uses DefaultAzureCredential
-client = AzureBlobClient(account_url="https://myaccount.blob.core.windows.net")
-
-# Upload
-client.upload_blob("my-container", "remote.txt", "local.txt")
-
-# List
-for blob in client.list_blobs("my-container"):
-    print(blob)
-
-# Download
-client.download_blob("my-container", "remote.txt", "downloaded.txt")
-```
-
-## Authentication
-
-Uses DefaultAzureCredential chain:
-
-1. Environment variables (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_CLIENT_SECRET`)
-2. Managed Identity (on Azure VMs/App Service)
-3. Azure CLI credentials
-4. Visual Studio Code Azure extension
-
-## Dependencies
-
-```bash
-uv add azure-storage-blob azure-identity
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `compute/` – Subdirectory
+- `py.typed` – File
+- `serverless/` – Subdirectory
+- `storage/` – Subdirectory
 
 ## Navigation
-
-- **Parent**: [cloud/](../README.md)
-- **Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [cloud](../README.md)
+- **Project Root**: ../../../../README.md

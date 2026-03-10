@@ -1,81 +1,61 @@
 # Codomyrmex Agents — docs
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation components and guides for the Codomyrmex platform.
 
-Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 130 specialized modules.
-
-## Documentation Organization
-
-| Section | Scope | Agent Priority |
-|---------|-------|----------------|
-| [**getting-started/**](getting-started/) | Installation, setup, tutorials | High - user onboarding |
-| [**development/**](development/) | Dev environment, testing | Medium - dev workflows |
-| [**reference/**](reference/) | API, CLI, troubleshooting | High - technical reference |
-| [**deployment/**](deployment/) | Production deployment | Medium - operations |
-| [**modules/**](modules/) | Per-module docs (130) | High - module details |
-| [**integration/**](integration/) | External integrations | Medium - integrations |
-| [**examples/**](examples/) | Code examples | Medium - learning |
-| [**project/**](project/) | Architecture, contributing | Low - project info |
-| [**project_orchestration/**](project_orchestration/) | Multi-project workflows | Low - advanced |
-| [**bio/**](bio/) | Biological perspectives | Medium - theory |
-| [**cognitive/**](cognitive/) | Cognitive science perspectives | Medium - theory |
-| [**compliance/**](compliance/) | Audit reports, policy compliance | Medium - quality |
-| [**pai/**](pai/) | PAI integration reference | High - PAI details |
-| [**security/**](security/) | Security theory & practice | High - security |
-| [**skills/**](skills/) | Skill system documentation | Medium - skills |
-| [**agents/**](agents/) | Agent rules and coordination | High - agent guidance |
-
-### Secure Cognitive Agent Documentation
-
-| Directory | Scope | Agent Priority |
-|-----------|-------|----------------|
-| [**src/codomyrmex/identity/**](../src/codomyrmex/identity/) | Identity & Verification | Critical - Security Core |
-| [**src/codomyrmex/wallet/**](../src/codomyrmex/wallet/) | Self-Custody & Recovery | Critical - Security Core |
-| [**src/codomyrmex/defense/**](../src/codomyrmex/defense/) | Active Defense | Critical - Security Core |
-| [**src/codomyrmex/market/**](../src/codomyrmex/market/) | Anonymous Markets | High - Economic Layer |
-| [**src/codomyrmex/privacy/**](../src/codomyrmex/privacy/) | Privacy & Mixnets | Critical - Privacy Core |
-
-## Agent Guidelines
-
-### Documentation Quality Standards
-
-1. **Accuracy**: Keep documentation synchronized with code changes
-2. **Completeness**: Ensure all public APIs are documented
-3. **Clarity**: Use clear, concise language
-4. **Examples**: Include working code examples where applicable
-
-### When Modifying Documentation
-
-- Update corresponding source code docstrings if applicable
-- Verify all links are valid after changes
-- Run spell-check on modified content
-- Ensure code examples are runnable
-
-### Cross-Reference Patterns
-
-```markdown
-# Link to module source
-[llm module](../src/codomyrmex/llm/)
-
-# Link to API reference
-[API Reference](reference/api.md)
-
-# Link to sibling doc
-[Installation Guide](getting-started/installation.md)
-```
+## Active Components
+- `ARCHITECTURE.md` – Project file
+- `DEPENDENCIES.md` – Project file
+- `PAI.md` – Project file
+- `PAI_DASHBOARD.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `agents/` – Directory containing agents components
+- `agi/` – Directory containing agi components
+- `assets/` – Directory containing assets components
+- `bio/` – Directory containing bio components
+- `cognitive/` – Directory containing cognitive components
+- `compliance/` – Directory containing compliance components
+- `deployment/` – Directory containing deployment components
+- `development/` – Directory containing development components
+- `examples/` – Directory containing examples components
+- `getting-started/` – Directory containing getting-started components
+- `index.md` – Project file
+- `integration/` – Directory containing integration components
+- `modules/` – Directory containing modules components
+- `pai/` – Directory containing pai components
+- `plans/` – Directory containing plans components
+- `project/` – Directory containing project components
+- `project_orchestration/` – Directory containing project_orchestration components
+- `reference/` – Directory containing reference components
+- `security/` – Directory containing security components
+- `skills/` – Directory containing skills components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment between documentation and source code
-- All modules must have corresponding documentation in `modules/`
-- Ensure RASP compliance (README, AGENTS, SPEC, PAI) in each directory
-- Update documentation when API changes are made
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `ARCHITECTURE.md`
+- `DEPENDENCIES.md`
+- `PAI.md`
+- `PAI_DASHBOARD.md`
+- `README.md`
+- `SPEC.md`
+- `index.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **🏠 Project Root**: [../README.md](../README.md) - Main project entry
-- **📦 Source Code**: [../src/codomyrmex/](../src/codomyrmex/) - Implementation
-- **🔧 Scripts**: [../scripts/](../scripts/) - Automation utilities
-- **📋 Examples**: [../examples/](../examples/) - Executable examples
+- **🏠 Project Root**: ../README.md - Main project documentation

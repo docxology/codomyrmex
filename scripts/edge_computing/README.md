@@ -1,30 +1,16 @@
-# Edge Computing
+# edge_computing
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demonstrates the full lifecycle of edge computing including node management, function deployment, state synchronization, scheduling, and monitoring.
+Automation and utility scripts.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `orchestrator.py` | Runs edge cluster lifecycle: node registration, function deployment, scheduling, and metrics collection |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync
-```
-
-**Run:**
-```bash
-uv run python scripts/edge_computing/orchestrator.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `orchestrator.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

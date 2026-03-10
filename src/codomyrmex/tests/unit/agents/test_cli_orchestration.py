@@ -190,6 +190,10 @@ class TestJulesCommands:
         from codomyrmex.agents.jules import JulesClient
 
         client = JulesClient()
+        # Skip if jules command not in PATH
+        if not client.is_available():
+            pytest.skip("jules command not available")
+
         help_info = client.get_jules_help()
 
         assert isinstance(help_info, dict)
@@ -282,6 +286,10 @@ class TestOpenCodeCommands:
         from codomyrmex.agents.opencode import OpenCodeClient
 
         client = OpenCodeClient()
+        # Skip if opencode command not in PATH
+        if not client.is_available():
+            pytest.skip("opencode command not available")
+
         version_info = client.get_opencode_version()
 
         assert isinstance(version_info, dict)

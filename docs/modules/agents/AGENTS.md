@@ -1,82 +1,47 @@
 # Codomyrmex Agents — docs/modules/agents
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Multi-provider agent framework with 12 provider integrations (5 API, 6 CLI, 1 local), session management, response parsing, multi-agent pooling, evaluation, conversation history, and an interactive setup wizard. Core layer for intelligent automation workflows.
+Documentation files and guides.
 
 ## Active Components
-
-### Provider Clients
-
-| Agent | Type | Base Class | Binary / Env Var | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| `claude/` | API | `APIAgentBase` | `ANTHROPIC_API_KEY` | Functional |
-| `codex/` | API | `APIAgentBase` | `OPENAI_API_KEY` | Functional |
-| `o1/` | API | `APIAgentBase` | `OPENAI_API_KEY` | Functional |
-| `deepseek/` | API | `APIAgentBase` | `DEEPSEEK_API_KEY` | Functional |
-| `qwen/` | API | `APIAgentBase` | `DASHSCOPE_API_KEY` | Functional |
-| `jules/` | CLI | `CLIAgentBase` | `jules` | Functional |
-| `opencode/` | CLI | `CLIAgentBase` | `opencode` | Functional |
-| `gemini/` | CLI | `CLIAgentBase` | `gemini` | Functional |
-| `mistral_vibe/` | CLI | `CLIAgentBase` | `vibe` | Functional |
-| `every_code/` | CLI | `CLIAgentBase` | `code` | Functional |
-| `openclaw/` | CLI | `CLIAgentBase` | `openclaw` | Functional |
-| Ollama (local) | Local | via `llm/ollama/` | `OLLAMA_BASE_URL` | Functional |
-
-### Core & Infrastructure
-
-| Component | Path | Description |
-| :--- | :--- | :--- |
-| Core framework | `core/` | `BaseAgent`, `AgentInterface`, `AgentConfig`, parsers, sessions, `ReActAgent` |
-| Generic bases | `generic/` | `APIAgentBase`, `CLIAgentBase`, `AgentOrchestrator`, `MessageBus`, `TaskPlanner` |
-| Pooling | `pooling/` | `AgentPool`, `CircuitBreaker`, `AgentHealth` — load balancing and failover |
-| Evaluation | `evaluation/` | `AgentBenchmark`, scorers (`ExactMatch`, `Contains`, `Length`, `Composite`) |
-| History | `history/` | `ConversationManager`, `InMemoryHistoryStore`, `FileHistoryStore`, `SQLiteHistoryStore` |
-| Agent Setup | `agent_setup/` | `AgentRegistry`, YAML config persistence, interactive setup wizard |
-| Exceptions | `exceptions.py` | Full exception hierarchy: `AgentError` → provider-specific errors |
-
-### Supplementary
-
-| Component | Path | Description |
-| :--- | :--- | :--- |
-| AI code editing | `ai_code_editing/` | `CodeEditor` for refactoring, review, generation |
-| Git agent | `git_agent/` | `GitAgent` for Git operations |
-| Droid | `droid/` | Task management and automation |
-| Infrastructure | `infrastructure/` | Infrastructure management agent |
-| Theory | `theory/` | `ReactiveArchitecture`, `DeliberativeArchitecture`, `HybridArchitecture` |
-| CLI | `cli/` | CLI subcommands and handlers |
-| PAI Bridge | `pai/` | PAI system discovery and validation |
-
-## Quick Verification
-
-```bash
-# Check which agents are operative on this machine
-uv run python -m codomyrmex.agents.agent_setup --status-only
-
-# Run the full agent test suite (350+ tests, zero-mock)
-uv run python -m pytest src/codomyrmex/tests/unit/agents/ -v
-
-# Run specific component tests
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_config.py
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_session.py
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_tools.py
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_orchestration.py
-
-# Run the orchestration demo
-uv run python src/codomyrmex/examples/agent_orchestration_demo.py
-```
+- `AGENT_COMPARISON.md` – Project file
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI/` – Directory containing PAI components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `index.md` – Project file
+- `technical_overview.md` – Project file
+- `tutorials/` – Directory containing tutorials components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All agents implement `AgentInterface`: `execute()`, `stream()`, `setup()`, `test_connection()`
-- All responses use `AgentResponse` with content, error, metadata, tokens, execution time
-- Configuration through `AgentConfig` dataclass with environment variable fallbacks
-- API keys masked in `to_dict()` output
-- Zero-mock testing policy — all tests use real objects and functional verification
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `AGENT_COMPARISON.md`
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `index.md`
+- `technical_overview.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [codomyrmex](../README.md)
-- **🏠 Project Root**: [README.md](../../../README.md)
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

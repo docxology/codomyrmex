@@ -1,41 +1,45 @@
-# NAS -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/nas
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides neural architecture search capabilities for AI agents that need to explore model design spaces, compare architectures, or recommend model configurations.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `search.py` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `nas_sample_architecture` | Sample a random architecture from default space | `seed: int` | `{n_layers, d_model, n_heads, d_ff, dropout, activation, total_params_estimate}` |
-| `nas_random_search` | Run random NAS with size-based heuristic | `n_trials: int`, `seed: int` | `{best_config, best_score, total_evaluated}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
+- `search.py`
 
-### Architecture Exploration
-An agent can sample random architectures to understand the search space and parameter tradeoffs.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Model Size Optimization
-Use `nas_random_search` to find architectures that balance model size and capacity.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Design Space Analysis
-Agents can repeatedly sample to build statistical profiles of the architecture space.
-
-## Example Agent Workflow
-
-```
-1. Agent receives: "Suggest a transformer architecture around 10M parameters"
-2. Agent calls: nas_random_search(n_trials=50, seed=42)
-3. Response: {"best_config": {"n_layers": 4, "d_model": 256, ...}, "best_score": -0.12}
-4. Agent presents: "Recommended: 4-layer, 256-dim transformer (~10.5M params)"
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
-| **Architect** | Read + Architecture review | Read-only | SAFE |
-| **QATester** | Validation + output verification | Read + Inspect | SAFE |
-| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,37 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/logging_monitoring/audit
+# Codomyrmex Agents — src/codomyrmex/logging_monitoring/audit
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides immutable audit logging for security and compliance events with
-structured records, queryable history, severity levels, category filtering,
-and JSON Lines export. Designed for tracking authentication, access control,
-and administrative actions.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `audit_logger.py` | `AuditRecord` | Immutable dataclass for a single audit event (event_type, user_id, status, severity, category) |
-| `audit_logger.py` | `AuditLogger` | Structured audit logger with event recording, multi-field querying, aggregation, and JSONL export |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `audit_logger.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `AuditLogger` maintains an in-memory record store capped at `max_records` (default 10000); oldest records are trimmed on overflow.
-- Records are immutable after creation -- no update or delete operations on individual records.
-- Status values: `success`, `failure`, `denied`. Severity values: `info`, `warning`, `critical`.
-- Category values: `general`, `auth`, `access`, `admin`, `data`, `system`.
-- `query()` supports filtering by user_id, event_type, status, severity, category, and time range.
-- Output is formatted via `JSONFormatter` from sibling `formatters/` module.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `audit_logger.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `logging_monitoring.formatters.JSONFormatter`, stdlib `json`, `logging`, `time`, `dataclasses`
-- **Used by**: `logging_monitoring.core.logger_config` (re-exports `AuditLogger`), security modules, PAI trust gateway
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [logging_monitoring](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [logging_monitoring](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

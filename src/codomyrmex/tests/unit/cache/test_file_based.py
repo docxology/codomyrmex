@@ -1,5 +1,7 @@
 """Zero-mock unit tests for cache/backends/file_based.py.
 
+Zero-Mock Policy: no unittest.mock, MagicMock, monkeypatch, or pytest-mock.
+
 Tests FileBasedCache with real temp files (tmp_path fixture).
 Covers: init, get/set/delete/clear/exists, TTL expiry,
 stats tracking, persistence across instances, and edge cases.

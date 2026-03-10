@@ -1,46 +1,41 @@
-# Image -- Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/image
 
-**Version**: v1.1.9 | **Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Contains components for the src system.
 
-Agent-facing reference for the `image` module. This module is currently an empty namespace reserved for future image processing capabilities. No code, exports, or MCP tools exist.
-
-## Key Files
-
-| File | Class / Export | Role |
-|------|---------------|------|
-| (none) | -- | No Python files in this module |
-
-## MCP Tools Available
-
-None. No `mcp_tools.py` exists; this module is not auto-discovered via the MCP bridge.
-
-## Agent Instructions
-
-1. **Do not import from this module** -- there are no exports. Imports will fail.
-2. **For image generation**, use `codomyrmex.multimodal.ImageGenerator` instead.
-3. **Future work**: When this module is populated, expect image analysis, format conversion, and thumbnail generation capabilities.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- This module has no runtime behavior.
-- No dependencies, no configuration, no environment variables required.
-- RASP documentation (`PAI.md`, `README.md`, `AGENTS.md`, `SPEC.md`) is maintained for namespace reservation.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-No patterns -- module is unimplemented. Use `multimodal` for image generation workflows.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## PAI Agent Role Access Matrix
-
-| Agent Role | Access Level | Notes |
-|-----------|-------------|-------|
-| Engineer | N/A | No code to interact with |
-| Architect | Read-only | Namespace planning reference |
-
-## Navigation
-
-- **Parent**: [codomyrmex/](../)
-- **Related**: [video/AGENTS.md](../video/AGENTS.md), [multimodal/](../multimodal/)
-- **RASP**: [README.md](README.md) | **AGENTS.md** | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

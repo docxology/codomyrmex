@@ -1,66 +1,41 @@
-# Agent Guidelines - Performance
+# Codomyrmex Agents — docs/modules/performance
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Lazy loading, caching, profiling, and performance monitoring.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **LazyLoader** — Defer module loading until first use
-- **CacheManager** — Cache with TTL and multiple backends
-- **PerformanceMonitor** — System metrics (requires psutil)
-- **AsyncProfiler** — Profile async code execution
-- **ResourceTracker** — Track memory and CPU usage
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Lazy load heavy modules** — Use `lazy_import()` for numpy, pandas, etc.
-2. **Cache expensive operations** — Use `@cached_function` decorator
-3. **Profile hot paths** — Use `@monitor_performance` on performance-critical code
-4. **Set appropriate TTL** — Cache TTL should match data freshness requirements
-5. **Track resources in long-running code** — Use `ResourceTracker` for memory leaks
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Patterns
-
-```python
-from codomyrmex.performance import (
-    lazy_import, cached_function, CacheManager, monitor_performance
-)
-
-# Lazy import heavy modules
-np = lazy_import("numpy")
-pd = lazy_import("pandas")
-
-# Cache expensive functions
-cache = CacheManager(ttl=300)
-
-@cached_function(cache, key_fn=lambda x: f"result_{x}")
-def expensive_computation(x):
-    return x ** 2
-
-# Profile functions
-@monitor_performance(name="process_batch")
-async def process_batch(items):
-    for item in items:
-        await process(item)
-```
-
-## Testing Patterns
-
-```python
-# Verify lazy loading works
-np = lazy_import("numpy")
-assert not hasattr(np, "_loaded")  # Not loaded yet
-_ = np.array([1, 2, 3])  # Now loaded
-
-# Verify caching
-cache = CacheManager()
-cache.set("key", "value", ttl=60)
-assert cache.get("key") == "value"
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

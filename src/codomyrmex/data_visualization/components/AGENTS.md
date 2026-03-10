@@ -1,41 +1,61 @@
-# Codomyrmex Agents -- src/codomyrmex/data_visualization/components
+# Codomyrmex Agents — src/codomyrmex/data_visualization/components
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-HTML UI components for building dashboards and reports. Each component is a `@dataclass` subclass of `BaseComponent` with a `render() -> str` method that produces self-contained HTML. Components cover alerts, badges, chat bubbles, heatmap tables, JSON viewers, media (image/video), progress bars, stat boxes, text/code blocks, and timelines.
-
-## Key Components
-
-| File | Class | Role |
-|------|-------|------|
-| `_base.py` | `BaseComponent` | Abstract base dataclass with `render()`, `to_dict()`, `css_class`, and `style` |
-| `alert.py` | `Alert` | Notification alert with `message` and `level` (success/warning/danger/info) |
-| `badge.py` | `Badge` | Inline label badge with `label` and `color` (named or hex) |
-| `chat_bubble.py` | `ChatBubble` | Chat message bubble with `message`, `role`, and `timestamp` |
-| `heatmap_table.py` | `HeatmapTable` | HTML table with colour-coded cells based on numeric value intensity |
-| `json_view.py` | `JsonView` | Collapsible JSON viewer using `<details>/<summary>` |
-| `media.py` | `Image`, `Video` | Image with optional caption; video with autoplay/controls toggles |
-| `progress.py` | `ProgressBar` | Progress bar with `value`, `max_value`, and optional `label` |
-| `statbox.py` | `StatBox` | KPI stat box with `label`, `value`, `delta`, and `direction` (up/down) |
-| `text.py` | `TextBlock`, `CodeBlock` | Plain/markdown text block; syntax-highlighted code block |
-| `timeline.py` | `TimelineEvent`, `Timeline` | Single timeline event and a container that renders a list of events |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `_base.py` – Project file
+- `alert.py` – Project file
+- `badge.py` – Project file
+- `chat_bubble.py` – Project file
+- `heatmap_table.py` – Project file
+- `json_view.py` – Project file
+- `media.py` – Project file
+- `progress.py` – Project file
+- `py.typed` – Project file
+- `statbox.py` – Project file
+- `text.py` – Project file
+- `timeline.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All components inherit from `BaseComponent` and implement `render() -> str`.
-- `render()` returns valid, self-contained HTML fragments (no external CSS dependencies).
-- `HeatmapTable` computes min/max colour scaling automatically from numeric cell values.
-- `Alert` and `Badge` use internal colour maps for named levels/colours.
-- `__str__()` delegates to `render()` on all components for direct string interpolation.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `_base.py`
+- `alert.py`
+- `badge.py`
+- `chat_bubble.py`
+- `heatmap_table.py`
+- `json_view.py`
+- `media.py`
+- `progress.py`
+- `py.typed`
+- `statbox.py`
+- `text.py`
+- `timeline.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Python stdlib only (`dataclasses`, `json`)
-- **Used by**: `data_visualization.core.ui` (Dashboard composition), `data_visualization.reports` (report sections)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [data_visualization](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

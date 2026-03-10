@@ -1,38 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/finance/forecasting
+# Codomyrmex Agents — src/codomyrmex/finance/forecasting
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides simple financial time-series forecasting using moving averages, single exponential smoothing, and linear trend analysis. All methods operate on plain lists of float values representing sequential observations (e.g., monthly revenue).
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `forecast.py` | `ForecastError` | Exception raised when forecasting cannot proceed (insufficient data, invalid parameters) |
-| `forecast.py` | `Forecaster` | Forecasting engine with moving average, exponential smoothing, linear trend, and multi-period projection |
-| `forecast.py` | `Forecaster.moving_average` | Computes simple moving average over a configurable window |
-| `forecast.py` | `Forecaster.exponential_smoothing` | Single exponential smoothing (SES) with configurable alpha |
-| `forecast.py` | `Forecaster.linear_trend` | Ordinary least squares regression returning slope, intercept, and R-squared |
-| `forecast.py` | `Forecaster.forecast` | Generates N future values using any of the three methods |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `forecast.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `Forecaster` accepts an optional `data` list at construction; data must be ordered oldest-first.
-- `moving_average` requires `window >= 1` and at least `window` data points; raises `ForecastError` otherwise.
-- `exponential_smoothing` requires `0 < alpha < 1` and non-empty data.
-- `linear_trend` requires at least 2 data points and returns `slope`, `intercept`, and `r_squared`.
-- `forecast` dispatches to the specified method and projects values forward; raises `ForecastError` for unknown methods.
-- No external dependencies -- pure Python implementation using standard math.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `forecast.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Python stdlib only (no external packages)
-- **Used by**: Financial planning modules, dashboard data providers
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [finance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

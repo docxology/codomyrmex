@@ -1,19 +1,25 @@
 # workflows
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Workflow management. This submodule is scaffolded for future implementation; no exports are currently defined.
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `_factories.py` – File
+- `_models.py` – File
+- `py.typed` – File
+- `workflow.py` – File
+- `workflow_analytics.py` – File
+- `workflow_engine.py` – File
+- `workflow_journal.py` – File
+- `workflow_templates.py` – File
 
 ## Navigation
-
-- **Parent Module**: [orchestrator](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [orchestrator](../README.md)
+- **Project Root**: ../../../../README.md

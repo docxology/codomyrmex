@@ -1,37 +1,39 @@
-# Codomyrmex Agents -- src/codomyrmex/llm/models
+# Codomyrmex Agents — src/codomyrmex/llm/models
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides structured data models for chain-of-thought (CoT) reasoning pipelines,
-including reasoning steps, traces, conclusions, and thinking depth configuration.
-All types are JSON-serializable dataclasses designed for the AgentProtocol
-plan-act-observe lifecycle.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `reasoning.py` | `ThinkingDepth` | Enum controlling reasoning depth: SHALLOW (1 step), NORMAL (3), DEEP (5), EXHAUSTIVE (8+) |
-| `reasoning.py` | `ReasoningStep` | Single step in a CoT trace with thought, confidence, evidence, and step_type |
-| `reasoning.py` | `Conclusion` | Synthesized outcome with action, justification, confidence, alternatives, and risks |
-| `reasoning.py` | `ReasoningTrace` | Complete reasoning session record with steps, conclusion, duration, and token count |
-| `reasoning.py` | `DEPTH_TO_STEPS` | Dict mapping ThinkingDepth enum values to target step counts |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `reasoning.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Confidence values are clamped to [0.0, 1.0] in `__post_init__`.
-- `ReasoningTrace.total_confidence` is a weighted blend: 70% mean step confidence + 30% conclusion confidence.
-- All types support round-trip serialization via `to_dict()` / `from_dict()` and `to_json()` / `from_json()`.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `reasoning.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: stdlib `dataclasses`, `json`, `uuid`, `datetime`
-- **Used by**: `agents/core/thinking_agent.py`, `llm/chain_of_thought.py`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [llm](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [llm](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

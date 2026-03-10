@@ -1,24 +1,17 @@
-# Security Compliance Scripts
+# compliance
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for security compliance checking, demonstrating policy enforcement, regulatory compliance validation, and compliance report generation.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `compliance_demo.py` | Demonstrates compliance checking against security policies |
-
-## Usage
-
-```bash
-uv run python scripts/security/compliance/compliance_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `compliance_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: security/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [security](../README.md)
+- **Project Root**: ../../../README.md

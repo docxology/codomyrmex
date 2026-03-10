@@ -1,25 +1,15 @@
-# Cost Management
+# cost_management
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Cloud cost monitoring, budget alerts, and optimization recommendations.
+Documentation files and guides.
 
-## Source
-
-**Source code**: [`src/codomyrmex/cost_management/`](../../../src/codomyrmex/cost_management/)
-
-## MCP Tools
-
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
-
-## Related Documentation
-
-- [Source README](../../../src/codomyrmex/cost_management/README.md)
-- [API Specification](../../../src/codomyrmex/cost_management/API_SPECIFICATION.md)
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Parent**: [Module Documentation](../README.md)
-- **Root**: [docs/](../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

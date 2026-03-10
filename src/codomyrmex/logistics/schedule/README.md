@@ -1,30 +1,22 @@
-# Schedule
+# schedule
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Advanced scheduling capabilities for logistics operations. Provides cron-like pattern parsing, recurring schedule definitions, timezone-aware scheduling, and a unified schedule manager.
-
-## Key Exports
-
-- **`ScheduleManager`** -- Unified manager for creating and coordinating schedules
-- **`CronScheduler`** -- Scheduler that executes tasks based on cron expression timing
-- **`CronExpression`** -- Parser and evaluator for cron-style schedule expressions
-- **`RecurringScheduler`** -- Scheduler for recurring task patterns
-- **`RecurringSchedule`** -- Definition of a recurring schedule with interval and frequency
-- **`TimezoneManager`** -- Timezone-aware scheduling utilities
+Contains components for the src system.
 
 ## Directory Contents
-
-- `__init__.py` - Package exports and version declaration
-- `cron.py` - Cron expression parsing and cron-based scheduling
-- `recurring.py` - Recurring schedule definitions and scheduler
-- `scheduler.py` - Unified ScheduleManager implementation
-- `timezone.py` - Timezone management utilities
-- `py.typed` - PEP 561 type stub marker
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `cron.py` – File
+- `py.typed` – File
+- `recurring.py` – File
+- `scheduler.py` – File
+- `timezone.py` – File
 
 ## Navigation
-
-- **Parent Module**: [logistics](../README.md)
-- **Project Root**: [../../../../README.md](../../../../README.md)
+- **Parent Directory**: [logistics](../README.md)
+- **Project Root**: ../../../../README.md

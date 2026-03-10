@@ -1,31 +1,41 @@
-# Formal Verification -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/formal_verification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Capabilities
+## Purpose
+Documentation files and guides.
 
-The Formal Verification module provides specialized capabilities for AI agents within the codomyrmex platform.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `changelog.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
+- `security.md` – Project file
 
-## Available MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description |
-|------|-------------|
-| `clear_model` | Formal Verification operation |
-| `add_item` | Formal Verification operation |
-| `delete_item` | Formal Verification operation |
-| `replace_item` | Formal Verification operation |
-| `get_model` | Formal Verification operation |
-| `solve_model` | Formal Verification operation |
-| `push` | Formal Verification operation |
-| `pop` | Formal Verification operation |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `changelog.md`
+- `mcp_tool_specification.md`
+- `readme.md`
+- `security.md`
 
-## Trust Level
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-All MCP tools are classified as **Safe** unless otherwise noted.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Source**: [src/codomyrmex/formal_verification/](../../../../src/codomyrmex/formal_verification/)
-- **Extended README**: [README.md](readme.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **Parent**: [All Modules](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

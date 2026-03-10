@@ -1,73 +1,39 @@
-# Agent Guidelines - Quantum
+# Codomyrmex Agents — docs/modules/quantum
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Quantum computing simulation with gates, circuits, and algorithms.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **QuantumCircuit** — Build quantum circuits (fluent API)
-- **Gate** — Gate dataclass (gate_type, target, control, parameter)
-- **GateType** — Enum of supported gate types
-- **QuantumSimulator** — Statevector simulation
-- **bell_state()** — Create Bell pair circuit
-- **ghz_state(n)** — Create GHZ state circuit
-- **circuit_to_ascii()** — Render circuit as ASCII art
-- **circuit_stats()** — Get circuit statistics dict
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Initialize qubits** — Start with |0⟩ state
-2. **Apply gates in order** — Gates compose left-to-right
-3. **Measure at end** — Measurement collapses state
-4. **Use named states** — Bell, GHZ for entanglement
-5. **Simulate before run** — Test on simulator first
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.quantum import (
-    QuantumCircuit, QuantumSimulator, bell_state, ghz_state,
-    circuit_to_ascii, circuit_stats
-)
-
-# Build simple circuit (fluent API)
-circuit = QuantumCircuit(2)
-circuit.h(0).cnot(0, 1).measure_all()
-
-# Simulate — returns dict[str, int] of bitstring counts
-sim = QuantumSimulator()
-counts = sim.run(circuit, shots=1000)
-print(counts)  # {"00": ~500, "11": ~500}
-
-# Create entangled states
-bell = bell_state()
-ghz = ghz_state(3)  # 3-qubit GHZ
-
-# Visualize
-print(circuit_to_ascii(bell))
-# q0: -H--*--M-
-# q1: ----X--M-
-
-# Statistics
-stats = circuit_stats(bell)
-print(stats)  # {"num_qubits": 2, "num_gates": 2, ...}
-```
-
-## Testing Patterns
-
-```python
-# Verify Bell state
-sim = QuantumSimulator()
-counts = sim.run(bell_state(), shots=1000)
-# Should produce only "00" and "11" outcomes
-assert set(counts.keys()) <= {"00", "11"}
-assert counts.get("00", 0) > 0
-assert counts.get("11", 0) > 0
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

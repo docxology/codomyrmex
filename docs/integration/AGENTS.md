@@ -1,51 +1,49 @@
 # Codomyrmex Agents — docs/integration
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-External system integration documentation. Covers AI providers, cloud services, Git platforms, and third-party APIs.
+Documentation files and guides.
 
 ## Active Components
-
-| File | Priority | Description |
-|------|----------|-------------|
-| [external-systems.md](external-systems.md) | **Critical** | Comprehensive integration guide |
-| [fabric-ai-integration.md](fabric-ai-integration.md) | High | Fabric AI framework |
-| [README.md](README.md) | Medium | Directory overview |
-| [SPEC.md](SPEC.md) | Medium | Functional specification |
-
-## Agent Guidelines
-
-### Integration Quality Standards
-
-1. **Authentication**: Document all auth methods (API keys, OAuth, tokens)
-2. **Rate Limits**: Include rate limiting guidance for each provider
-3. **Error Handling**: Document common error codes and recovery
-4. **Examples**: Provide working integration code snippets
-
-### When Modifying Integration Docs
-
-- Verify API endpoints are current
-- Test authentication flows with real credentials
-- Update version requirements for external SDKs
-- Add new providers as they become supported
-
-### Integration Categories
-
-- **AI Providers**: OpenAI, Anthropic, Google, Ollama
-- **Git Platforms**: GitHub, GitLab, Bitbucket
-- **Cloud**: AWS, GCP, Azure
-- **MCP**: Model Context Protocol standard
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `ci-cd.md` – Project file
+- `cloud.md` – Project file
+- `database.md` – Project file
+- `external-systems.md` – Project file
+- `fabric-ai-integration.md` – Project file
+- `monitoring.md` – Project file
+- `overview-and-patterns.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment between integration docs and actual APIs
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Record outcomes in shared telemetry and update TODO queues when necessary
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `ci-cd.md`
+- `cloud.md`
+- `database.md`
+- `external-systems.md`
+- `fabric-ai-integration.md`
+- `monitoring.md`
+- `overview-and-patterns.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [docs/](../README.md)
-- **🏠 Project Root**: [../../README.md](../../README.md)
-- **📦 Related**: [LLM Module](../modules/llm/) | [MCP Module](../modules/model_context_protocol/)
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

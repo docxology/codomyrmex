@@ -1,36 +1,41 @@
-# Website Handlers Agentic Context
+# Codomyrmex Agents — src/codomyrmex/website/handlers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-HTTP request handler mixins for the Codomyrmex website server. Each mixin class handles a group of API endpoints, keeping the main server class thin. Agents use these handlers indirectly through the website server's routing.
-
-## Key Components
-
-| Component | Source | Role |
-|-----------|--------|------|
-| `HealthHandler` | `health_handler.py` | /api/health, /api/status, /api/telemetry, /api/security/posture, /api/awareness, /api/llm/config |
-| `ProxyHandler` | `proxy_handler.py` | /api/chat (Ollama proxy), /api/awareness/summary (AI-generated) |
-| `APIHandler` | `api_handler.py` | /api/modules, /api/agents, /api/scripts, /api/config, /api/docs, /api/tests, /api/pai/action, /api/agent/dispatch |
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `api_handler.py` – Project file
+- `health_handler.py` – Project file
+- `proxy_handler.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All handlers are mixin classes expecting the host to provide `self.data_provider`, `self.headers`, `self.rfile`, `self.send_json_response(data, status)`, and `self.send_error(code, msg)`.
-- `HealthHandler` lazily initializes a shared `MetricCollector` and `DashboardManager` for telemetry.
-- `ProxyHandler.handle_chat()` forwards requests to Ollama at `CODOMYRMEX_OLLAMA_URL`; returns 502/503/504 on Ollama errors.
-- `APIHandler.handle_execute()` runs scripts with path traversal protection (rejects `..` in paths).
-- `APIHandler.handle_tests_run()` spawns test execution in a background thread.
-- `APIHandler.handle_pai_action()` dispatches PAI commands: verify, trust, reset, status, analyze, search, docs, add_memory.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `api_handler.py`
+- `health_handler.py`
+- `proxy_handler.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- Mixed into `WebsiteServer` via multiple inheritance.
-- `HealthHandler` imports `SecurityDashboard` and `telemetry.dashboard` lazily.
-- `ProxyHandler` uses `requests` library for Ollama HTTP calls.
-- `APIHandler` delegates to `DataProvider` for all data access.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- Parent: [website](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [website](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

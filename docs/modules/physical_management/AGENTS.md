@@ -1,65 +1,47 @@
-# Agent Guidelines - Physical Management
+# Codomyrmex Agents — docs/modules/physical_management
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Physical device and hardware management for IoT and robotics.
+## Active Components
+- `API_REFERENCE.md` – Project file
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `architecture.md` – Project file
+- `index.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **DeviceManager** — Manage physical devices
-- **SensorHub** — Collect sensor data
-- **ActuatorController** — Control actuators
-- **ResourceMonitor** — Monitor physical resources
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_REFERENCE.md`
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `architecture.md`
+- `index.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Verify connections** — Check device connectivity
-2. **Handle timeouts** — Physical devices may be slow
-3. **Safe defaults** — Use safe actuator defaults
-4. **Rate limit** — Don't overwhelm hardware
-5. **Log all actions** — Audit trail for physical changes
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.physical_management import (
-    DeviceManager, SensorHub, ActuatorController
-)
-
-# Manage devices
-devices = DeviceManager()
-devices.discover()  # Auto-discover devices
-
-for device in devices.list():
-    print(f"{device.id}: {device.status}")
-
-# Collect sensor data
-sensors = SensorHub()
-temp = sensors.read("temperature_01")
-humidity = sensors.read_batch(["humidity_01", "humidity_02"])
-
-# Control actuators
-actuator = ActuatorController("motor_01")
-actuator.set_position(90)  # degrees
-actuator.wait_for_completion()
-```
-
-## Testing Patterns
-
-```python
-# Verify device discovery (simulation mode)
-devices = DeviceManager(simulation=True)
-devices.add_simulated_device("test_device")
-assert len(devices.list()) == 1
-
-# Verify sensor reading (simulation mode)
-sensors = SensorHub(simulation=True)
-value = sensors.read("simulated_sensor")
-assert value is not None
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

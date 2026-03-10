@@ -1,70 +1,50 @@
 # Codomyrmex Agents — src/codomyrmex/agents/claude
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Anthropic Claude-based agent implementation for AI-assisted coding with advanced reasoning and Claude Code agentic capabilities.
+Contains components for the src system.
 
 ## Active Components
-
-| File | Description |
-|------|-------------|
-| `__init__.py` | Public API exports (`ClaudeClient`, `ClaudeIntegrationAdapter`) |
-| `claude_client.py` | Full-featured API client (1595 lines) |
-| `claude_integration.py` | Codomyrmex module adapters (468 lines) |
-| `API_SPECIFICATION.md` | Complete API reference |
-| `MCP_TOOL_SPECIFICATION.md` | Model Context Protocol tools |
-
-## Method Inventory
-
-### ClaudeClient (claude_client.py)
-
-| Method | Lines | Description |
-|--------|-------|-------------|
-| `execute(request)` | Inherited | Main execution entry point |
-| `stream(request)` | 372-445 | Streaming response generator |
-| `register_tool()` | 124-154 | Register tool for function calling |
-| `execute_tool_call()` | 607-638 | Execute registered tool handler |
-| `execute_with_tools()` | 640-740 | Automatic tool execution loop |
-| `execute_with_session()` | 544-590 | Multi-turn conversation |
-| `create_session()` | 592-603 | Create conversation session |
-| `edit_file()` | (new) | AI-guided file editing |
-| `create_file()` | (new) | Generate new file from description |
-| `review_code()` | (new) | Code review with suggestions |
-| `scan_directory()` | (new) | Scan project structure for context |
-| `generate_diff()` | (new) | Generate unified diff output |
-
-### ClaudeIntegrationAdapter (claude_integration.py)
-
-| Method | Lines | Description |
-|--------|-------|-------------|
-| `adapt_for_ai_code_editing()` | 47-143 | Code generation with style hints |
-| `adapt_for_ai_code_editing_stream()` | 145-174 | Streaming code generation |
-| `adapt_for_llm()` | 176-243 | OpenAI-compatible message format |
-| `adapt_for_code_execution()` | 245-318 | Security/bug/performance analysis |
-| `adapt_for_code_refactoring()` | 320-373 | Refactoring with instructions |
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `claude_client.py` – Project file
+- `claude_integration.py` – Project file
+- `mcp_tools.py` – Project file
+- `mixins/` – Directory containing mixins components
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **API Key Management**: Use `ANTHROPIC_API_KEY` env var or config dict
-2. **Error Handling**: All methods wrap API errors in `ClaudeError`
-3. **Logging**: Use `logging_monitoring.get_logger()` for structured logs
-4. **Cost Tracking**: Methods return `cost_usd` in metadata
-5. **Retry Logic**: Exponential backoff with jitter for transient failures
-6. **MCP Compliance**: Maintain Model Context Protocol interfaces for sibling agents
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `claude_client.py`
+- `claude_integration.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## Related Components
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **ClaudeTaskMaster**: [`../ai_code_editing/claude_task_master.py`](../ai_code_editing/claude_task_master.py) - Advanced task orchestration (815 lines)
-- **Core Agents**: [`../core/`](../core/) - Base classes and session management
-- **Generic Agent**: [`../generic/api_agent_base.py`](../generic/api_agent_base.py) - API agent base class
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **� README**: [README.md](README.md) - Human documentation
-- **📋 SPEC**: [SPEC.md](SPEC.md) - Technical specification  
-- **🔧 API**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - API reference
-- **📡 MCP**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tools
-- **📁 Parent**: [agents](../README.md) - Parent directory
-- **🏠 Root**: [../../../../README.md](../../../../README.md) - Project root
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

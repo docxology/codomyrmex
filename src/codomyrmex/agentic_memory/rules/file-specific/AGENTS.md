@@ -1,80 +1,47 @@
-# Codomyrmex Agents — cursorrules/file-specific
+# Codomyrmex Agents — src/codomyrmex/agentic_memory/rules/file-specific
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-File-specific cursor rules that take **highest priority** in the rule hierarchy. Apply these rules based on the file type you are editing.
-
-> **Mandatory Policies** (from `general.cursorrules §2`): Zero-Mock, UV-Only, RASP, Python ≥ 3.10 — these apply unconditionally at all levels.
-
-## Active Rules (6)
-
-| Rule | File Pattern | Auto-Apply |
-|------|--------------|------------|
-| `python.cursorrules` | `*.py` | ✅ Always |
-| `yaml.cursorrules` | `*.yaml`, `*.yml` | ✅ Always |
-| `json.cursorrules` | `*.json` | ✅ Always |
-| `CHANGELOG.cursorrules` | `CHANGELOG.md` | ✅ Always |
-| `SPEC.cursorrules` | `SPEC.md` | ✅ Always |
-| `README.md.cursorrules` | `README.md` | ✅ Always |
-
-## Agent Guidelines
-
-### Rule Selection Algorithm
-
-```
-1. Match file extension/name to file-specific rule
-2. If match found → Apply file-specific rule
-3. Then check module-specific rules
-4. Then check cross-module rules
-5. Fall back to general.cursorrules
-```
-
-### When Editing Python Files
-
-1. Run `ruff` or `flake8` for linting
-2. Ensure type hints on all functions
-3. Add Google-style docstrings
-4. Write tests in `tests/` directory (Zero-Mock — real implementations only)
-5. Run tests via `uv run pytest`
-
-### When Editing YAML/JSON Files
-
-1. Validate against schema if available
-2. Use 2-space indentation
-3. Add inline documentation (YAML only)
-4. Test configuration loads correctly
-
-### When Editing Documentation
-
-1. Follow RASP pattern for directories
-2. Use Keep a Changelog for CHANGELOG.md
-3. Include Mermaid diagrams in SPEC.md
-4. Add navigation links in README.md
-
-## Key Requirements by File Type
-
-| File Type | Critical Requirements |
-|-----------|----------------------|
-| Python | PEP 8, type hints, docstrings, 80%+ coverage |
-| YAML | 2-space indent, schema validation, quotes for strings |
-| JSON | 2-space indent, valid schema, no trailing commas |
-| CHANGELOG | Semantic versioning, Keep a Changelog format |
-| SPEC | Mermaid diagrams, architecture section, contracts |
-| README | Overview, structure, navigation, RASP compliance |
+## Active Components
+- `CHANGELOG.cursorrules` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `README.md.cursorrules` – Project file
+- `SPEC.cursorrules` – Project file
+- `SPEC.md` – Project file
+- `json.cursorrules` – Project file
+- `python.cursorrules` – Project file
+- `yaml.cursorrules` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- File-specific rules override all other rules for matching files
-- Always check file extension before applying module rules
-- Maintain consistency within file types across the project
-- Update file-specific rules when project standards change
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `CHANGELOG.cursorrules`
+- `PAI.md`
+- `README.md`
+- `README.md.cursorrules`
+- `SPEC.cursorrules`
+- `SPEC.md`
+- `json.cursorrules`
+- `python.cursorrules`
+- `yaml.cursorrules`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [../README.md](../README.md) - cursorrules root
-- **📦 Module Rules**: [../modules/](../modules/) - 60 module rules
-- **🔗 Cross-Module**: [../cross-module/](../cross-module/) - 8 cross-module rules
-- **📋 PAI Context**: [PAI.md](PAI.md) - AI infrastructure context
-- **🏠 Project Root**: [../../README.md](../../README.md)
+- **📁 Parent Directory**: [rules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

@@ -1,36 +1,43 @@
 # Codomyrmex Agents — src/codomyrmex/compression/engines
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Compression engine implementations providing multi-threaded parallel compression with progress tracking and statistics, plus a high-performance Zstandard compressor. Supports chunked large-data compression with split-and-merge workflows.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `parallel.py` | `ParallelCompressor` | Multi-threaded batch compress/decompress via `ThreadPoolExecutor` with progress callbacks |
-| `parallel.py` | `CompressionStats` | Statistics dataclass: input/output bytes, duration, ratio, throughput_mbps, savings_percent |
-| `zstd_compressor.py` | `ZstdCompressor` | High-performance Zstandard compression with configurable level (requires `zstandard` package) |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `parallel.py` – Project file
+- `py.typed` – Project file
+- `zstd_compressor.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `ParallelCompressor` preserves input order in output (indexed result array).
-- `split_and_compress` splits data into configurable chunks (default 1MB) for parallel processing.
-- `decompress_and_merge` reverses `split_and_compress` by decompressing and concatenating.
-- `CompressionStats` is computed after every batch operation and available via `last_stats` property.
-- `ZstdCompressor` raises `ImportError` at construction if `zstandard` package is not installed.
-- `ZstdCompressor.compress` accepts an optional `level` override per call (default uses constructor level).
-- Errors must be logged before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `parallel.py`
+- `py.typed`
+- `zstd_compressor.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `compression.core.compressor.Compressor` (base compressor for format dispatch)
-- **Used by**: `compression` parent module, data pipeline compression, backup systems
-- **External**: `zstandard` (optional, for `ZstdCompressor`)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [compression](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [compression](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

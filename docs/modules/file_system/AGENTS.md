@@ -1,33 +1,33 @@
-# File System -- Agent Coordination
+# Codomyrmex Agents — docs/modules/file_system
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides a unified interface for filesystem operations including file CRUD, directory management, searching, and metadata retrieval. Abstracts platform-specific filesystem details behind a consistent API.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `file_system_read` | Read a file and return its contents with metadata | Standard | file_system |
-| `file_system_list_directory` | List entries in a directory with optional recursion | Standard | file_system |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| OBSERVE | Infrastructure Agent | Read and list filesystem contents for analysis |
-| EXECUTE | Engineer Agent | Perform file operations as part of build workflows |
-
-
-## Agent Instructions
-
-1. file_system_read returns content and size metadata for the specified path
-2. Set recursive=True on file_system_list_directory to traverse subdirectories
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/file_system/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

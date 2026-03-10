@@ -1,95 +1,53 @@
-# Agent Guidelines - Graph RAG
+# Codomyrmex Agents — src/codomyrmex/graph_rag
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Knowledge graph-enhanced RAG with entity relationships and traversal.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent_bridge.py` – Project file
+- `graph.py` – Project file
+- `mcp_tools.py` – Project file
+- `models.py` – Project file
+- `pipeline.py` – Project file
+- `py.typed` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **KnowledgeGraph** — Entity and relationship storage
-- **Entity** — Node with id, name, type, properties
-- **Relationship** — Edge with source, target, type, weight
-- **EntityType** — Enum: person, organization, location, concept, etc.
-- **RelationType** — Enum: is_a, part_of, related_to, authored_by, etc.
-- **GraphRAGPipeline** — Query graph for LLM context
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `agent_bridge.py`
+- `graph.py`
+- `mcp_tools.py`
+- `models.py`
+- `pipeline.py`
+- `py.typed`
 
-## MCP Tools
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-The following MCP tools are available for agents to interact with the knowledge graph:
-- **`graph_rag_search_entities`** — Search for entities matching a query string
-- **`graph_rag_get_neighbors`** — Retrieve neighbors of a specific entity
-- **`graph_rag_get_stats`** — Get entity and relationship counts
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Agent Instructions
-
-1. **Build graph incrementally** — Add entities and relationships as discovered
-2. **Use typed entities** — Set `EntityType` for better traversal
-3. **Weight relationships** — Higher weight = stronger connection
-4. **Query multi-hop** — Use path finding for indirect relationships
-5. **Combine with text** — Use graph context alongside text retrieval
-
-## Common Patterns
-
-```python
-from codomyrmex.graph_rag import (
-    KnowledgeGraph, Entity, Relationship, EntityType, RelationType
-)
-
-graph = KnowledgeGraph()
-
-# Build knowledge graph
-graph.add_entity(Entity(id="python", name="Python", entity_type=EntityType.CONCEPT))
-graph.add_entity(Entity(id="ml", name="Machine Learning", entity_type=EntityType.CONCEPT))
-graph.add_relationship(Relationship(
-    source_id="python", target_id="ml", relation_type=RelationType.USED_FOR
-))
-
-# Query neighbors
-neighbors = graph.get_neighbors("python")
-
-# Find paths
-path = graph.find_path("python", "ml")
-```
-
-## Testing Patterns
-
-```python
-# Verify graph operations
-graph = KnowledgeGraph()
-graph.add_entity(Entity(id="a", name="A", entity_type=EntityType.CONCEPT))
-graph.add_entity(Entity(id="b", name="B", entity_type=EntityType.CONCEPT))
-graph.add_relationship(Relationship("a", "b", RelationType.RELATED_TO))
-
-assert len(graph.get_neighbors("a")) == 1
-assert graph.get_entity("a").name == "A"
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Builds knowledge graphs and RAG pipelines using KnowledgeGraph, Entity, and Relationship classes for entity extraction, graph traversal, and multi-hop context retrieval.
-
-### Architect Agent
-**Use Cases**: Designs graph schemas, evaluates retrieval strategies, and reviews entity/relationship type hierarchies for scalable knowledge representation.
-
-### QATester Agent
-**Use Cases**: Validates graph query accuracy, retrieval quality, path-finding correctness, and entity resolution consistency via pytest.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/graph_rag.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/graph_rag.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

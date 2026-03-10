@@ -1,74 +1,53 @@
-# Agent Guidelines - Security
+# Codomyrmex Agents — docs/modules/security
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Security utilities: input validation, vulnerability scanning, and hardening.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `ai_safety/` – Directory containing ai_safety components
+- `audit/` – Directory containing audit components
+- `cognitive/` – Directory containing cognitive components
+- `compliance/` – Directory containing compliance components
+- `digital/` – Directory containing digital components
+- `governance/` – Directory containing governance components
+- `index.md` – Project file
+- `physical/` – Directory containing physical components
+- `scanning/` – Directory containing scanning components
+- `secrets/` – Directory containing secrets components
+- `technical_overview.md` – Project file
+- `theory/` – Directory containing theory components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Component | Description |
-|-----------|-------------|
-| `VulnerabilityScanner` | Comprehensive scanning for vulnerabilities |
-| `SecretsDetector` | Identify exposed API keys and secrets |
-| `SecurityAnalyzer` | Analyze source code for common security pitfalls |
-| `ThreatModel` | Structured risk assessment for system architectures |
-| `PolicyEngine` | Governance rule enforcement and compliance |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `index.md`
+- `technical_overview.md`
 
-## Usage for Agents
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Vulnerability Scanning
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```python
-from codomyrmex.security import VulnerabilityScanner
-
-scanner = VulnerabilityScanner()
-results = scanner.scan_project_security("./src")
-if results.get("vulnerabilities"):
-    print(f"Found {results['vulnerabilities']['count']} vulnerabilities")
-```
-
-### Secrets Detection
-
-```python
-from codomyrmex.security import SecretsDetector
-
-detector = SecretsDetector()
-findings = detector.scan_directory_for_secrets("./src")
-for finding in findings:
-    print(f"Secret leaked in {finding.file_path}: {finding.secret_type}")
-```
-
-### Threat Modeling
-
-```python
-from codomyrmex.security import create_threat_model, analyze_threats
-
-model = create_threat_model(
-    system_name="Auth API",
-    assets=["User DB", "API Keys"],
-    attack_surface=["/login", "/signup"]
-)
-analysis = analyze_threats(model)
-print(f"Total threats identified: {analysis['total_threats']}")
-```
-
-### Policy Enforcement
-
-```python
-from codomyrmex.security.governance import PolicyEngine, Policy
-
-engine = PolicyEngine()
-# Rule: password must be present in context
-engine.add_policy(Policy("PasswordRule", lambda c: "password" in c, "Missing password"))
-
-try:
-    engine.enforce({"username": "admin"})
-except Exception as e:
-    print(f"Enforcement failed: {e}")
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

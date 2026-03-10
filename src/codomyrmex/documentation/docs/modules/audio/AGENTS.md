@@ -1,49 +1,37 @@
-# Audio -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/audio
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Capabilities
+## Purpose
+Documentation files and guides.
 
-The Audio module provides agents with audio processing capabilities, allowing them to check available STT/TTS providers and list available voices for synthesis.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
 
-## Available MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-### audio_get_capabilities
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
 
-Report which speech-to-text and text-to-speech providers are installed and ready to use.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Parameters:** None
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-**Returns:** Dictionary with `stt_providers` (list), `tts_providers` (list), and `ready` (bool).
-
-### audio_list_voices
-
-List available text-to-speech voices for a given provider.
-
-**Parameters:**
-- `provider` (str, default: "pyttsx3") -- TTS provider to query ("pyttsx3" or "edge-tts")
-
-**Returns:** Dictionary with voice details (id, name, locale/languages) for the selected provider.
-
-## Agent Interaction Patterns
-
-### OBSERVE Phase
-Use `audio_get_capabilities` to check what audio processing is available before attempting transcription or synthesis tasks.
-
-### BUILD Phase
-Use `audio_list_voices` to select an appropriate voice before generating speech output. Consider language and locale requirements.
-
-## Trust Level
-
-Both MCP tools are classified as **Safe** -- they perform read-only capability and voice listing operations.
-
-## Optional Dependencies
-
-Audio functionality requires `uv sync --extra audio`. When dependencies are not installed, capability checks return empty provider lists and the `ready` flag is `false`.
-
-## Navigation
-
-- **Source**: [src/codomyrmex/audio/](../../../../src/codomyrmex/audio/)
-- **Extended README**: [README.md](readme.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **Parent**: [All Modules](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

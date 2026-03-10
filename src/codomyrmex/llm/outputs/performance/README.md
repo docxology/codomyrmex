@@ -1,13 +1,13 @@
 # performance
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-LLM performance metrics collection including latency, token usage, and throughput tracking.
+Contains components for the src system.
 
 ## Directory Contents
-
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `consistency_evaluation.json` – File
@@ -18,6 +18,5 @@ LLM performance metrics collection including latency, token usage, and throughpu
 - `token_generation_speed.json` – File
 
 ## Navigation
-
 - **Parent Directory**: [outputs](../README.md)
 - **Project Root**: ../../../../../README.md

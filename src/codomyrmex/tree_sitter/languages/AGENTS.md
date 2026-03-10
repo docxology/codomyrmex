@@ -1,31 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/coding/parsers/tree_sitter/languages
+# Codomyrmex Agents — src/codomyrmex/tree_sitter/languages
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Manages loading and caching of tree-sitter grammar shared libraries (`.so`, `.dylib`, `.dll`). Provides `LanguageManager`, a class-level registry that maps language names to loaded `tree_sitter.Language` instances.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `languages.py` | `LanguageManager` | Class-method based registry for loaded grammars |
-| `__init__.py` | _(empty exports)_ | Namespace package marker |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `languages.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `load_language()` must be called before `get_language()` for any grammar.
-- `discover_languages()` walks a directory for `.so`/`.dylib`/`.dll` files and infers language names from filenames (`tree-sitter-python.so` -> `python`).
-- Languages are cached in a class-level `_languages` dict -- loading the same language twice is a no-op (returns cached).
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `languages.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `tree_sitter` (external), `os` (stdlib)
-- **Used by**: `parsers.tree_sitter.parsers.TreeSitterParser`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [tree_sitter](../README.md)
-- **Root**: [Root](../../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [tree_sitter](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

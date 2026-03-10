@@ -1,24 +1,17 @@
-# API Pagination Scripts
+# pagination
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for API pagination, demonstrating cursor-based, offset-based, and keyset pagination patterns for large result sets.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `pagination_demo.py` | Demonstrates pagination strategies for API responses |
-
-## Usage
-
-```bash
-uv run python scripts/api/pagination/pagination_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `pagination_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: api/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [api](../README.md)
+- **Project Root**: ../../../README.md

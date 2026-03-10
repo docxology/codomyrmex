@@ -89,7 +89,7 @@ class TestRunChat:
         """Even without a backend, run_chat should return a dict, not raise."""
         from codomyrmex.agents.hermes.scripts.run_chat import run_chat
 
-        result = run_chat("test", backend="ollama", timeout=5)
+        result = run_chat("test", backend="nonexistent", timeout=5)
         assert isinstance(result, dict)
         assert "status" in result
 

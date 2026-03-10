@@ -1,54 +1,48 @@
-# pai_pm — Agent Reference
+# Codomyrmex Agents — src/codomyrmex/pai_pm
 
-## Quick Decision Tree
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-```
-Need to check if PAI PM server is running?
-  → pai_pm_health()
+## Purpose
+Contains components for the src system.
 
-Need to start the server?
-  → pai_pm_start()  [requires bun in PATH]
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `client.py` – Project file
+- `config.py` – Project file
+- `exceptions.py` – Project file
+- `mcp_tools.py` – Project file
+- `server/` – Directory containing server components
+- `server_manager.py` – Project file
 
-Need full project/mission state?
-  → pai_pm_get_state()
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-Need to trigger an AI action?
-  → pai_pm_dispatch(action="...", backend="claude")
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `client.py`
+- `config.py`
+- `exceptions.py`
+- `mcp_tools.py`
+- `server_manager.py`
 
-Need to stop the server?
-  → pai_pm_stop()
-```
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## When to Use MCP Tools vs CLI
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Scenario | Use |
-|----------|-----|
-| PAI session startup / health check | `pai_pm_health` MCP tool |
-| Agent needs project context | `pai_pm_get_state` MCP tool |
-| Dispatch AI task from Python | `pai_pm_dispatch` MCP tool |
-| Manual server administration | `bun src/codomyrmex/pai_pm/server/server.ts` CLI |
-| Adding new routes/endpoints | Edit TypeScript in `server/routes/` |
-
-## Environment Requirements
-
-- **bun** runtime must be in PATH (`which bun`)
-- Server dependencies installed: `cd src/codomyrmex/pai_pm/server && bun install`
-- `HAS_BUN` flag available: `from codomyrmex.pai_pm import HAS_BUN`
-
-## Import Pattern
-
-```python
-from codomyrmex.pai_pm import HAS_BUN, PaiPmServerManager
-from codomyrmex.pai_pm.mcp_tools import pai_pm_health, pai_pm_get_state
-
-if HAS_BUN:
-    mgr = PaiPmServerManager()
-    if not mgr.is_running():
-        mgr.start()
-```
-
-## Safety Notes
-
-- `pai_pm_stop()` uses SIGTERM then SIGKILL after 5s — safe for normal shutdown.
-- `_build_safe_env()` strips `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` from the subprocess env.
-- All MCP tools return structured dicts and never raise — safe to call without try/except.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

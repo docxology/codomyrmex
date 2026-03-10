@@ -1,23 +1,37 @@
-# Hermes Templates — Agentic Guide
+# Codomyrmex Agents — src/codomyrmex/agents/hermes/templates
 
-**Module**: `codomyrmex.agents.hermes.templates` | **Version**: v1.1.9
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Quick Reference
+## Purpose
+Contains components for the src system.
 
-```python
-from codomyrmex.agents.hermes.templates import TemplateLibrary, CODE_REVIEW
-```
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `models.py` – Project file
 
-## Agent Instructions
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Use `TemplateLibrary`** for template lookup: `lib.get("code_review")`
-2. **`render()`** raises `KeyError` for missing variables — validate first
-3. **`render_safe()`** fills missing vars with `{var_name}` placeholders
-4. **Custom templates**: Use `lib.register(PromptTemplate(name=..., ...))`
-5. **4 built-ins**: `code_review`, `task_decomposition`, `documentation`, `debugging`
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `models.py`
 
-## Testing
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```bash
-uv run pytest src/codomyrmex/tests/unit/test_hermes_templates.py -v --no-cov
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
+- **📁 Parent Directory**: [hermes](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

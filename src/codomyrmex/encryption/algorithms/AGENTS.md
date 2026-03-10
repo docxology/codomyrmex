@@ -1,48 +1,41 @@
-# encryption/algorithms -- Agent Context
+# Codomyrmex Agents — src/codomyrmex/encryption/algorithms
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Summary
+## Purpose
+Contains components for the src system.
 
-The `encryption/algorithms` submodule provides `AESGCMEncryptor` for authenticated symmetric encryption using AES-GCM. This is the recommended cipher for all new encryption work, replacing the legacy AES-CBC mode in `encryption/core`.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `aes_gcm.py` – Project file
+- `py.typed` – Project file
 
-## When to Use This Module
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- You need to encrypt data with both confidentiality and integrity guarantees
-- You want authenticated encryption (detects tampering automatically)
-- You need to attach authenticated-but-unencrypted metadata (AAD) alongside ciphertext
-- You are building new encryption workflows (do not use `encryption/core` AES-CBC for new code)
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `aes_gcm.py`
+- `py.typed`
 
-## Exports
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Name | Kind | Purpose |
-|------|------|---------|
-| `AESGCMEncryptor` | class | AES-GCM authenticated encryption with auto-nonce and AAD support |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Example Agent Usage
-
-```python
-from codomyrmex.encryption.algorithms import AESGCMEncryptor
-
-enc = AESGCMEncryptor()  # auto-generates 256-bit key
-ct = enc.encrypt(b"sensitive data", associated_data=b"context-id")
-pt = enc.decrypt(ct, associated_data=b"context-id")
-assert pt == b"sensitive data"
-
-# Persist the key
-key_bytes = enc.key
-```
-
-## Constraints
-
-- Key must be 16, 24, or 32 bytes (128/192/256-bit AES). `ValueError` raised otherwise.
-- Tampered ciphertext raises `cryptography.exceptions.InvalidTag` on decrypt.
-- Each `encrypt()` call uses a unique random nonce; safe for many messages under one key.
-
-## Relationship to Other Modules
-
-| Module | Relationship |
-|--------|-------------|
-| `encryption.core` | Legacy alternative (AES-CBC, no authentication); use this module instead |
-| `encryption.keys` | Use `KeyManager` to store/retrieve keys, `derive_key_hkdf` for derivation |
-| `encryption.containers` | `SecureDataContainer` uses `AESGCMEncryptor` internally |
+## Navigation Links
+- **📁 Parent Directory**: [encryption](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

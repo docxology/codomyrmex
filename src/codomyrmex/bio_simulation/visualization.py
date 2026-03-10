@@ -7,16 +7,17 @@ def render_colony_state(colony: Colony) -> ScatterPlot:
     """
     Renders a scatter plot of current ant positions.
     """
-    # Assuming ants have x and y attributes
-    # If not, use mock data or fix based on Colony implementation
-    # Based on test failure 'None', likely the import failed or render() failed.
-
     x_coords = []
     y_coords = []
 
     if hasattr(colony, "ants"):
-        x_coords = [ant.position[0] for ant in colony.ants]
-        y_coords = [ant.position[1] for ant in colony.ants]
+        for ant in colony.ants:
+            if hasattr(ant, "position"):
+                x_coords.append(ant.position[0])
+                y_coords.append(ant.position[1])
+            elif hasattr(ant, "x") and hasattr(ant, "y"):
+                x_coords.append(ant.x)
+                y_coords.append(ant.y)
 
     return ScatterPlot(
         title="Real-time Colony State",

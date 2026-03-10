@@ -1,33 +1,33 @@
-# Small Language Model -- Agent Coordination
+# Codomyrmex Agents — docs/modules/slm
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Implements a tiny GPT-2 style transformer for on-device inference. Provides configurable model architecture with token generation and forward pass capabilities in pure NumPy.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `slm_generate` | Generate tokens from a tiny language model given a prompt | Standard | slm |
-| `slm_forward` | Run a forward pass through the SLM and return logit statistics | Standard | slm |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Construct and run small language models for local inference |
-| VERIFY | QA Agent | Validate model output shapes and logit distributions |
-
-
-## Agent Instructions
-
-1. Configure model with vocab_size, d_model, n_heads, n_layers, d_ff, and max_seq_len
-2. slm_generate produces token sequences autoregressively from a prompt
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/slm/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

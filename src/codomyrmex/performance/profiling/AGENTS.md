@@ -1,34 +1,43 @@
-# Performance Profiling - Agentic Context
+# Codomyrmex Agents — src/codomyrmex/performance/profiling
 
-**Module**: `codomyrmex.performance.profiling`
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Key Components
+## Purpose
+Contains components for the src system.
 
-| Component | Purpose | Key Methods |
-|-----------|---------|-------------|
-| `AsyncProfiler` | Decorator-based profiler for async and sync functions with slow-call threshold alerts | `profile()` (async), `profile_sync()`, `record()`, `get_stats()`, `all_stats()`, `summary()` |
-| `ProfileEntry` | Single measurement: function name, duration, timestamp, error | Dataclass |
-| `ProfileStats` | Aggregate stats: call count, total/min/max seconds, error count | Properties: `avg_seconds`, `avg_ms`, `max_ms` |
-| `BenchmarkSuite` | Named collection of benchmark results with tabular reporting | `add()`, `report()`, `compare()` |
-| `run_benchmark()` | Run a function N iterations with warmup, returning `BenchmarkResult` | Standalone function |
-| `compare_benchmarks()` | Side-by-side comparison of two functions with speedup ratio | Returns comparison dict |
-| `PerformanceProfiler` | Class wrapper combining `time.perf_counter` timing with optional memory delta tracking | `run()`, `report()` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `async_profiler.py` – Project file
+- `benchmark.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `AsyncProfiler` must be instantiated before decorating: `profiler = AsyncProfiler(); @profiler.profile`. Class-level `@AsyncProfiler.profile` will fail.
-- Slow-call threshold defaults to 1.0 second; calls exceeding it are logged at WARNING level and appended to `_slow_calls`.
-- `run_benchmark()` supports a `warmup` parameter (default 3) to exclude cold-start iterations from results.
-- `BenchmarkResult` computes percentiles (p50, p75, p90, p95, p99) from raw timings.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `async_profiler.py`
+- `benchmark.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **time.perf_counter**: High-resolution timer used for all duration measurements.
-- **gc/tracemalloc**: Optional memory tracking in `profile_function()` for memory delta reporting.
-- **performance/monitoring**: Complements `ResourceTracker` -- profiling measures function-level latency while monitoring tracks system-level resources.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Constraints
-
-- `AsyncProfiler.profile` wraps async functions only; use `profile_sync` for synchronous functions.
-- Profiling data is stored in memory with no size limit; call `clear()` to release when no longer needed.
+## Navigation Links
+- **📁 Parent Directory**: [performance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

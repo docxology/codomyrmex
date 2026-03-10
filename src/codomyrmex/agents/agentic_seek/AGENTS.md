@@ -1,64 +1,51 @@
-# AI Agent Guidelines - agenticSeek
+# Codomyrmex Agents — src/codomyrmex/agents/agentic_seek
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.agents.agentic_seek`
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Integration with [agenticSeek](https://github.com/Fosowl/agenticSeek)—a fully-local autonomous agent system for web browsing, code execution, and task planning.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent_router.py` – Project file
+- `agent_types.py` – Project file
+- `agentic_seek_client.py` – Project file
+- `browser_automation.py` – Project file
+- `code_execution.py` – Project file
+- `py.typed` – Project file
+- `task_planner.py` – Project file
 
-## Agent Instructions
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-When working with this sub-module:
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `agent_router.py`
+- `agent_types.py`
+- `agentic_seek_client.py`
+- `browser_automation.py`
+- `code_execution.py`
+- `py.typed`
+- `task_planner.py`
 
-### Key Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Import Convention**:
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-   ```python
-   from codomyrmex.agents.agentic_seek import AgenticSeekClient
-   from codomyrmex.agents.agentic_seek import AgenticSeekRouter
-   from codomyrmex.agents.agentic_seek import AgenticSeekCodeExecutor
-   ```
-
-2. **Error Handling**: All external calls (subprocess, Docker) are wrapped; catch `AgentError` from `codomyrmex.agents.core.exceptions`.
-
-3. **Configuration**: Use `AgenticSeekClient.parse_config_ini()` to read `config.ini` files. The `AgenticSeekConfig` dataclass is frozen.
-
-### Common Operations
-
-- **Route a query**: `AgenticSeekRouter().classify_query(prompt)` → `AgenticSeekAgentType`
-- **Extract code blocks**: `AgenticSeekCodeExecutor().extract(text)` → `list[CodeBlock]`
-- **Parse a plan**: `AgenticSeekTaskPlanner().parse(text)` → `list[AgenticSeekTaskStep]`
-- **Extract links**: `extract_links(text)` → `list[str]`
-
-### Integration Points
-
-- Integrates with: `agents.generic.CLIAgentBase` (parent class)
-- Integrates with: `agents.core` (AgentCapabilities, AgentRequest, AgentResponse)
-- Uses: `logging_monitoring` for all logging
-
-## File Reference
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module exports |
-| `agentic_seek_client.py` | Main CLI client |
-| `agent_router.py` | Query-to-agent classification |
-| `agent_types.py` | Enums and dataclasses |
-| `code_execution.py` | Code block extraction and execution |
-| `task_planner.py` | Plan parsing and ordering |
-| `browser_automation.py` | Browser helpers |
-
-## Troubleshooting
-
-1. **Issue**: `AgentError: agenticSeek CLI not found`
-   **Solution**: Clone the repo and set `agentic_seek_path` in config.
-
-2. **Issue**: `AgentError: agenticSeek timed out`
-   **Solution**: Increase `agentic_seek_timeout` in config (default: 300s).
-
-3. **Issue**: Router misclassifies queries
-   **Solution**: Be explicit in queries (e.g. "search the web for…" instead of "find…").
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

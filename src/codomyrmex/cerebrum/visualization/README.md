@@ -1,24 +1,25 @@
 # visualization
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Visualization tools for Cerebrum reasoning engine.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `base.py` - Base
-- `composition.py` - Composition
-- `concordance.py` - Concordance
-- `core.py` - Core
-- `theme.py` - Theme
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `base.py` – File
+- `composition.py` – File
+- `concordance.py` – File
+- `core.py` – File
+- `py.typed` – File
+- `theme.py` – File
+- `visualization_base.py` – File
+- `visualization_theme.py` – File
 
 ## Navigation
-
-- **Parent Module**: [cerebrum](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [cerebrum](../README.md)
+- **Project Root**: ../../../../README.md

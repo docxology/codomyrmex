@@ -1,40 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/cloud/infomaniak/metering
+# Codomyrmex Agents — src/codomyrmex/cloud/infomaniak/metering
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides resource usage metering and quota reporting for Infomaniak Public Cloud. Aggregates compute, storage, network, and object storage usage by querying the respective OpenStack APIs directly, and reports project-level quotas.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `client.py` | `InfomaniakMeteringClient` | Metering client extending `InfomaniakOpenStackBase`; `_service_name = "metering"` |
-| `client.py` | `get_compute_usage(start, end)` | Aggregate compute usage (instance count, vcpus, ram, disk) by summing flavors |
-| `client.py` | `get_storage_usage()` | Block storage summary (volume count, total GB, attached/unattached) |
-| `client.py` | `get_network_usage()` | Network resource counts (networks, routers, security groups, floating IPs) |
-| `client.py` | `get_object_storage_usage()` | Object storage summary (containers, objects, total bytes/GB) |
-| `client.py` | `get_all_usage()` | Comprehensive usage across all four services with UTC timestamp |
-| `client.py` | `list_resources_with_usage()` | Flat list of all resources (instances, volumes, floating IPs) with status |
-| `client.py` | `get_compute_quotas()` | Project compute quotas (instances, cores, ram, key_pairs, server_groups) |
-| `client.py` | `get_network_quotas()` | Project network quotas (networks, subnets, routers, floating_ips, security_groups) |
-| `client.py` | `get_storage_quotas()` | Project storage quotas (volumes, gigabytes, snapshots, backups) |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `client.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `get_compute_usage` iterates all servers and resolves each flavor to sum vcpus, ram, and disk; this performs N+1 API calls (1 list + N get_flavor).
-- `get_all_usage` combines all four per-service usage methods into a single dict with a UTC timestamp.
-- `list_resources_with_usage` returns a heterogeneous list with `type` prefixes: `compute.instance`, `storage.volume`, `network.floating_ip`.
-- Quota methods use `self._conn.current_project_id` to scope queries.
-- All errors are logged and methods return empty dicts/lists rather than raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `client.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.cloud.infomaniak.base.InfomaniakOpenStackBase`, `openstacksdk` (Nova, Cinder, Neutron, Swift proxies)
-- **Used by**: `codomyrmex.cloud.infomaniak` (parent), cost management module
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [infomaniak](../AGENTS.md)
-- **Root**: [../../../../../README.md](../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [infomaniak](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

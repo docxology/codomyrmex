@@ -1,66 +1,39 @@
-# Agent Guidelines - Evolutionary AI
+# Codomyrmex Agents — docs/modules/evolutionary_ai
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Genetic algorithms, neural evolution, and evolutionary optimization.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **GeneticAlgorithm** — Classic GA with selection, crossover, mutation
-- **NEATEvolver** — NeuroEvolution of Augmenting Topologies
-- **PopulationManager** — Manage populations across generations
-- **FitnessEvaluator** — Parallel fitness evaluation
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Define fitness clearly** — Fitness function drives evolution
-2. **Use diverse populations** — Prevent premature convergence
-3. **Save checkpoints** — Evolution takes time, save progress
-4. **Tune hyperparameters** — Mutation rate, population size matter
-5. **Parallelize evaluation** — Use `FitnessEvaluator` for speed
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.evolutionary_ai import (
-    GeneticAlgorithm, PopulationManager, FitnessEvaluator
-)
-
-# Define fitness function
-def fitness(individual):
-    return evaluate_performance(individual)
-
-# Set up GA
-ga = GeneticAlgorithm(
-    population_size=100,
-    mutation_rate=0.1,
-    crossover_rate=0.7
-)
-
-# Evolve
-for generation in range(100):
-    population = ga.evolve(fitness)
-    best = ga.get_best()
-    print(f"Gen {generation}: fitness={best.fitness:.4f}")
-
-# Parallel evaluation
-evaluator = FitnessEvaluator(workers=8)
-evaluated = evaluator.evaluate_batch(population, fitness)
-```
-
-## Testing Patterns
-
-```python
-# Verify evolution improves fitness
-ga = GeneticAlgorithm(population_size=10)
-initial_fitness = ga.get_best().fitness
-for _ in range(10):
-    ga.evolve(lambda x: sum(x.genes))
-assert ga.get_best().fitness >= initial_fitness
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

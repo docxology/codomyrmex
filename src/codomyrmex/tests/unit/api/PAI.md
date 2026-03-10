@@ -7,7 +7,7 @@
 
 ## Context
 
-Unit and integration tests for the api module with pytest fixtures and mocks.
+Unit and integration tests for the api module without mocks, using real concrete implementations.
 
 ## AI Strategy
 

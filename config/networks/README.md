@@ -1,29 +1,16 @@
-# Networks Configuration
+# networks
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Neural network architectures and graph network implementations. Provides network topology definitions and graph-based computation models.
+Configuration files and templates.
 
-## Configuration Options
-
-The networks module operates with sensible defaults and does not require environment variable configuration. Network architecture parameters (layers, activation functions, dimensions) are set during model construction.
-
-## PAI Integration
-
-PAI agents interact with networks through direct Python imports. Network architecture parameters (layers, activation functions, dimensions) are set during model construction.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep networks
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/networks/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

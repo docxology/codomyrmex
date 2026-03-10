@@ -1,40 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/email/gmail
+# Codomyrmex Agents — src/codomyrmex/email/gmail
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Implements the `EmailProvider` interface for Google Gmail, providing authenticated access to send, list, read, delete, and label-manage email messages via the Gmail REST API. Supports OAuth2 credentials from environment variables, token files, and Application Default Credentials.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `provider.py` | `GmailProvider` | Concrete `EmailProvider` using `google-api-python-client` for all Gmail operations |
-| `provider.py` | `GmailProvider.from_env` | Factory classmethod that resolves credentials from env vars, token file, or ADC |
-| `provider.py` | `GmailProvider.list_messages` | Lists messages matching a Gmail query string with full metadata fetch |
-| `provider.py` | `GmailProvider.get_message` | Fetches a single message by ID with full MIME part parsing |
-| `provider.py` | `GmailProvider.send_message` | Sends an email from an `EmailDraft`, returns the sent `EmailMessage` |
-| `provider.py` | `GmailProvider.create_draft` | Creates a Gmail draft and returns its draft ID |
-| `provider.py` | `GmailProvider.delete_message` | Moves a message to trash |
-| `provider.py` | `GmailProvider.modify_labels` | Adds or removes labels on a message |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `provider.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Construction raises `ImportError` if `google-api-python-client` / `google-auth` are not installed.
-- Construction raises `EmailAuthError` if neither credentials nor a pre-built service object is provided.
-- `from_env` tries OAuth2 env vars first, then `~/.codomyrmex/gmail_token.json`, then Application Default Credentials.
-- All Gmail API errors are caught as `HttpError` and re-raised as `EmailAPIError` or `MessageNotFoundError` (for 404s).
-- MIME parsing handles both single-part and recursive multipart message structures with base64url decoding.
-- Tests requiring real API credentials must use `@pytest.mark.skipif` guards -- never mock the Gmail API.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `provider.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `email.generics` (`EmailProvider`, `EmailAddress`, `EmailDraft`, `EmailMessage`), `email.exceptions`, `google-api-python-client`, `google-auth`
-- **Used by**: `email.mcp_tools` (exposes `gmail_send_message`, `gmail_list_messages`, `gmail_get_message`, `gmail_create_draft`)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [email](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

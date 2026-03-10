@@ -1,22 +1,35 @@
-# Documentation Generation -- Agent Coordination
+# Codomyrmex Agents — scripts/docs_gen
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Orchestrator for the docs_gen module demonstrating comprehensive API extraction, search indexing with CamelCase/snake_case support, and static site configuration generation.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `orchestrate_docs.py` – Project file
 
-## Scripts Available
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **orchestrate_docs.py**: Demonstrates docs_gen SiteGenerator capabilities with sample source code extraction
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `orchestrate_docs.py`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Agent Instructions
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-1. Run scripts from the repository root directory using `uv run python scripts/docs_gen/<script>`
-2. Ensure prerequisites are installed: `uv sync`
-3. Scripts are demonstration/utility tools and do not modify production state
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

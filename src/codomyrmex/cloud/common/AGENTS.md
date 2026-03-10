@@ -1,59 +1,41 @@
-# Codomyrmex Agents — cloud/common
+# Codomyrmex Agents — src/codomyrmex/cloud/common
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Shared abstractions and utilities for cloud provider implementations. Defines contracts that ensure consistent interfaces across AWS, GCP, and Azure.
+Contains components for the src system.
 
 ## Active Components
-
-| Component | Type | Description |
-|-----------|------|-------------|
-| `CloudProvider` | Enum | AWS, GCP, AZURE, LOCAL identifiers |
-| `ResourceType` | Enum | COMPUTE, STORAGE, DATABASE, etc. |
-| `CloudCredentials` | Dataclass | Provider credentials container |
-| `CloudResource` | Dataclass | Generic resource representation |
-| `CloudClient` | ABC | Generic resource management interface |
-| `StorageClient` | ABC | Object storage interface |
-| `ComputeClient` | ABC | VM/Instance management interface |
-| `ServerlessClient` | ABC | FaaS interface |
-| `CloudConfig` | Class | Multi-provider configuration manager |
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
+- `rate_limiter.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-### Import Pattern
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
+- `rate_limiter.py`
 
-```python
-from codomyrmex.cloud.common import (
-    CloudProvider,
-    ResourceType,
-    CloudCredentials,
-    CloudResource,
-    StorageClient,
-    ComputeClient,
-    ServerlessClient,
-    CloudConfig,
-)
-```
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Implementing Custom Clients
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-When creating provider-specific implementations:
-
-1. Inherit from appropriate ABC (`StorageClient`, `ComputeClient`, etc.)
-2. Implement ALL abstract methods
-3. Handle provider exceptions internally
-4. Use consistent return types as specified in contracts
-5. Log errors using Python `logging` module
-
-## Modification Guidelines
-
-- **Adding New ABCs**: Follow existing pattern with `@abstractmethod` decorators
-- **Extending Enums**: Add new values to `CloudProvider` or `ResourceType` as needed
-- **Updating Dataclasses**: Maintain backward compatibility with optional fields
-
-## Navigation
-
-- **📁 Parent**: [cloud/](../README.md)
-- **📖 Specification**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [cloud](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

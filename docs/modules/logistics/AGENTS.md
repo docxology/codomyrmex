@@ -1,68 +1,39 @@
-# Agent Guidelines - Logistics
+# Codomyrmex Agents — docs/modules/logistics
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Supply chain management, inventory tracking, and delivery optimization.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **InventoryManager** — Track inventory levels
-- **ShipmentTracker** — Track shipments
-- **RouteOptimizer** — Optimize delivery routes
-- **WarehouseManager** — Warehouse operations
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Track everything** — Full audit trail
-2. **Optimize routes** — Use RouteOptimizer for efficiency
-3. **Handle exceptions** — Plan for delays/shortages
-4. **Batch updates** — Reduce API calls
-5. **Alert on low stock** — Proactive notifications
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.logistics import (
-    InventoryManager, ShipmentTracker, RouteOptimizer
-)
-
-# Manage inventory
-inventory = InventoryManager()
-inventory.add_item("SKU-001", quantity=100, location="warehouse-a")
-inventory.decrement("SKU-001", 5)  # Sold 5 units
-
-# Check stock levels
-low_stock = inventory.get_low_stock(threshold=10)
-for item in low_stock:
-    notify_reorder(item)
-
-# Track shipments
-tracker = ShipmentTracker()
-tracker.create_shipment("order-123", items=["SKU-001"])
-status = tracker.get_status("order-123")
-
-# Optimize delivery routes
-optimizer = RouteOptimizer()
-route = optimizer.optimize(deliveries, start_location)
-```
-
-## Testing Patterns
-
-```python
-# Verify inventory tracking
-inventory = InventoryManager()
-inventory.add_item("A", quantity=10)
-inventory.decrement("A", 3)
-assert inventory.get_quantity("A") == 7
-
-# Verify route optimization
-optimizer = RouteOptimizer()
-route = optimizer.optimize([loc1, loc2, loc3])
-assert len(route.stops) == 3
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,39 +1,45 @@
-# Codomyrmex Agents -- src/codomyrmex/meme/ideoscape
+# Codomyrmex Agents — src/codomyrmex/meme/ideoscape
 
-**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Models information landscapes as 2D terrain maps using Gaussian kernel density estimation. Features (memes, concepts, events) are rendered as height-map elevations representing attention or virality intensity. Supports multi-layer compositing with opacity weighting for thematic filtering.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `engine.py` | `IdeoscapeEngine` | Orchestrator rendering layers and compositing terrain maps |
-| `cartography.py` | `generate_terrain` | Generate height map from feature points using Gaussian kernels |
-| `cartography.py` | `locate_features` | Find grid coordinates of peaks above a threshold |
-| `models.py` | `MapFeature` | A point on the map with position, type, and magnitude |
-| `models.py` | `IdeoscapeLayer` | A thematic layer of features with opacity weighting |
-| `models.py` | `TerrainMap` | Generated 2D height map with resolution and features |
-| `models.py` | `CoordinateSystem` | Mapping space definition with dimensions and bounds |
-| `models.py` | `ProjectionType` | MERCATOR, HYPERBOLIC, TOROIDAL, SPHERICAL |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `cartography.py` – Project file
+- `engine.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Fixed Gaussian sigma of 10.0 for all features; not configurable per feature.
-- Default grid is 100x100 over [-100, 100] bounds in both dimensions.
-- `MapFeature.position` must have at least 2 coordinates; features with fewer are silently skipped.
-- Compositing is additive (no normalization); overlapping layers may produce large values.
-- `composite` returns an empty 100x100 zero array when given no layers.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `cartography.py`
+- `engine.py`
+- `models.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `numpy` (external)
-- **Used by**: `meme.rhizome` (rhizome defines paths, ideoscape defines terrain intensity), `meme.contagion` (cascade intensity visualization)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [meme](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [meme](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

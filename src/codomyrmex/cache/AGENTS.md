@@ -1,122 +1,67 @@
-# Agent Guidelines - Cache
+# Codomyrmex Agents — src/codomyrmex/cache
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Multi-backend in-process caching with memory, Redis, and disk backends. Provides a `CacheManager` singleton with named caches, TTL support, LRU eviction, hit/miss statistics, and a `@cached` decorator. Sprint 17 added four MCP tools for cache operations. Use for memoizing expensive computations, session data, and pipeline intermediate results.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `async_ops/` – Directory containing async_ops components
+- `backends/` – Directory containing backends components
+- `cache.py` – Project file
+- `cache_manager.py` – Project file
+- `distributed/` – Directory containing distributed components
+- `exceptions.py` – Project file
+- `invalidation/` – Directory containing invalidation components
+- `mcp_tools.py` – Project file
+- `namespaced.py` – Project file
+- `policies/` – Directory containing policies components
+- `py.typed` – Project file
+- `replication/` – Directory containing replication components
+- `serializers/` – Directory containing serializers components
+- `stats.py` – Project file
+- `ttl_manager.py` – Project file
+- `warmers/` – Directory containing warmers components
+
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `cache.py`
+- `cache_manager.py`
+- `exceptions.py`
+- `mcp_tools.py`
+- `namespaced.py`
+- `py.typed`
+- `stats.py`
+- `ttl_manager.py`
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `CacheManager`, `MemoryCache`, `RedisCache`, `DiskCache`, `cached` |
-| `backends/` | Backend implementations (memory, redis, disk) |
-| `policies/` | Eviction policies (LRU, LFU, TTL) |
-| `mcp_tools.py` | MCP tools: `cache_get`, `cache_set`, `cache_delete`, `cache_stats` |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Key Classes
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-- **`CacheManager`** — Singleton managing named cache instances
-- **`MemoryCache`** — In-memory LRU cache with TTL and stats
-- **`RedisCache`** — Redis-backed distributed cache (requires `redis` package)
-- **`DiskCache`** — Filesystem-backed persistent cache
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `cache_get` | Get a value from the named in-memory cache. Returns value or None. | SAFE |
-| `cache_set` | Store a value in the named cache with optional TTL in seconds. | SAFE |
-| `cache_delete` | Delete a key from the named cache. Returns True if deleted. | SAFE |
-| `cache_stats` | Get hit/miss/eviction statistics for a named cache. Returns hits, misses, hit_rate, size. | SAFE |
-
-## Agent Instructions
-
-1. **Set TTL** — Always set TTL to prevent unbounded growth; default TTL is no expiry
-2. **Key naming** — Use consistent namespaced keys: `"module:type:identifier"`
-3. **Use `cache_stats`** — Monitor hit rate to validate caching effectiveness
-4. **Invalidate on mutation** — Delete cached entries when underlying data changes
-5. **Module-level singleton** — Use `CacheManager()` singleton; multiple instantiations share state
-
-## Common Patterns
-
-```python
-from codomyrmex.cache import MemoryCache, RedisCache, cached
-
-# In-memory cache
-cache = MemoryCache(max_size=1000)
-cache.set("user:123", user_data, ttl=300)
-user = cache.get("user:123")
-
-# Redis cache
-redis_cache = RedisCache(url="redis://localhost:6379")
-redis_cache.set("session:abc", session, ttl=3600)
-
-# Decorator
-@cached(ttl=60)
-def expensive_query(query):
-    return db.execute(query)
-
-# Batch operations
-cache.set_many({
-    "key1": value1,
-    "key2": value2,
-}, ttl=300)
-
-# Invalidation
-cache.delete("user:123")
-cache.delete_pattern("user:*")  # All user keys
-```
-
-## Testing Patterns
-
-```python
-# Verify set/get
-cache = MemoryCache()
-cache.set("key", "value", ttl=60)
-assert cache.get("key") == "value"
-
-# Verify expiration
-cache.set("temp", "data", ttl=0.1)
-time.sleep(0.2)
-assert cache.get("temp") is None
-
-# Verify decorator
-@cached(ttl=60)
-def add(a, b):
-    return a + b
-assert add(1, 2) == 3
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `cache_get`, `cache_set`, `cache_delete`, `cache_stats` | TRUSTED |
-| **Architect** | Read + Design | `cache_stats` — review cache effectiveness | OBSERVED |
-| **QATester** | Validation | `cache_get`, `cache_stats` — verify hit/miss behavior | OBSERVED |
-| **Researcher** | Read-only | `cache_get`, `cache_stats` — read cached results during analysis | SAFE |
-
-### Engineer Agent
-**Use Cases**: Configuring caches during BUILD, implementing cache warm-up during EXECUTE, tuning TTL settings.
-
-### Architect Agent
-**Use Cases**: Designing caching strategies, reviewing TTL policies, assessing hit rates.
-
-### QATester Agent
-**Use Cases**: Testing cache hit/miss behavior during VERIFY, confirming TTL-based invalidation.
-
-### Researcher Agent
-**Use Cases**: Reading cached results for research continuity, checking cache statistics.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/cache.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/cache.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

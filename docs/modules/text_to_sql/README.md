@@ -1,25 +1,15 @@
-# Text to SQL
+# text_to_sql
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Natural language to SQL translation using large language models.
+Documentation files and guides.
 
-## Source
-
-**Source code**: [`src/codomyrmex/text_to_sql/`](../../../src/codomyrmex/text_to_sql/)
-
-## MCP Tools
-
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
-
-## Related Documentation
-
-- [Source README](../../../src/codomyrmex/text_to_sql/README.md)
-- [API Specification](../../../src/codomyrmex/text_to_sql/API_SPECIFICATION.md)
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Parent**: [Module Documentation](../README.md)
-- **Root**: [docs/](../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

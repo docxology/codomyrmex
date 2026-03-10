@@ -1,33 +1,33 @@
-# Autograd Engine -- Agent Coordination
+# Codomyrmex Agents — docs/modules/autograd
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides from-scratch automatic differentiation (Micrograd-style) with Value and Tensor types. Supports forward computation and backward pass gradient computation for neural network training.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `autograd_compute` | Evaluate a simple expression and compute its gradient via backward pass | Standard | autograd |
-| `autograd_gradient_check` | Numerically verify analytic gradients match finite differences | Standard | autograd |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Construct differentiable computation graphs |
-| VERIFY | QA Agent | Validate gradient correctness via numerical gradient checking |
-
-
-## Agent Instructions
-
-1. Expressions support +, -, *, ** operators with named variables
-2. Call autograd_gradient_check with func_name from: relu, tanh, sigmoid, square, sum
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/autograd/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

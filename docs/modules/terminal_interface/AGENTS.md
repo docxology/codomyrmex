@@ -1,64 +1,41 @@
-# Agent Guidelines - Terminal Interface
+# Codomyrmex Agents — docs/modules/terminal_interface
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Interactive shell, command execution, and terminal rendering.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **InteractiveShell** — Interactive command shell
-- **CommandRunner** — Execute commands
-- **TerminalFormatter** — Rich terminal output
-- **CompletionProvider** — Tab completion
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use rich output** — Colors and formatting
-2. **Stream long output** — Don't buffer everything
-3. **Handle signals** — Ctrl+C gracefully
-4. **Validate input** — Check before execute
-5. **Log commands** — Track command history
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.terminal_interface import (
-    InteractiveShell, CommandRunner, TerminalFormatter
-)
-
-# Execute commands
-runner = CommandRunner()
-result = runner.run("ls -la")
-print(result.stdout)
-
-# Rich formatting
-fmt = TerminalFormatter()
-fmt.print_success("Operation completed!")
-fmt.print_error("Something went wrong")
-fmt.print_table(data, headers=["Name", "Value"])
-
-# Interactive shell
-shell = InteractiveShell()
-shell.register_command("status", show_status)
-shell.run()  # Start REPL
-```
-
-## Testing Patterns
-
-```python
-# Verify command execution
-runner = CommandRunner()
-result = runner.run("echo hello")
-assert "hello" in result.stdout
-
-# Verify formatter
-fmt = TerminalFormatter()
-output = fmt.format_success("Test")
-assert "Test" in output
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

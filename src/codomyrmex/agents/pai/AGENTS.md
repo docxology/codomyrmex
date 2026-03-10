@@ -1,101 +1,55 @@
 # Codomyrmex Agents — src/codomyrmex/agents/pai
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
-
-**Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Full-featured PAI bridge module. Discovers, validates, and provides programmatic access to all PAI subsystems at `~/.claude/PAI/` (v4+; v3 legacy: `~/.claude/skills/PAI/`).
+Contains components for the src system.
 
 ## Active Components
-
-| File | Lines | Description |
-|------|-------|-------------|
-| `__init__.py` | ~110 | Public API exports (31 symbols) |
-| `pai_bridge.py` | ~680 | Bridge client with all subsystem operations |
-| `mcp_bridge.py` | ~1,266 | MCP bridge — 22 static tools (17 core + 3 universal proxy + 2 maintenance) + auto-discovered module tools, 2 resources, 10 prompts |
-| `trust_gateway.py` | ~405 | Trust gateway — UNTRUSTED/VERIFIED/TRUSTED tiers |
-
-## Method Inventory
-
-### PAIBridge (pai_bridge.py)
-
-| Category | Method | Description |
-|----------|--------|-------------|
-| Discovery | `is_installed()` | SKILL.md existence check |
-| Discovery | `get_status()` | Full installation status |
-| Discovery | `get_components()` | Component enumeration |
-| Algorithm | `get_algorithm_phases()` | 7 phases (static) |
-| Algorithm | `get_algorithm_version()` | Parse version from SKILL.md |
-| Algorithm | `get_principles()` | 16 PAI Principles (static) |
-| Algorithm | `get_response_depth_levels()` | 3 depth levels (static) |
-| Skills | `list_skills()` | All skill packs |
-| Skills | `get_skill_info(name)` | Single skill details |
-| Tools | `list_tools()` | All TypeScript tools |
-| Tools | `get_tool_info(name)` | Single tool details |
-| Hooks | `list_hooks()` | All hooks (active + archived) |
-| Hooks | `list_active_hooks()` | Active hooks only |
-| Hooks | `get_hook_info(name)` | Single hook details |
-| Agents | `list_agents()` | Agent personalities |
-| Agents | `get_agent_info(name)` | Single agent details |
-| Memory | `list_memory_stores()` | Memory subdirectories |
-| Memory | `get_memory_info(store)` | Single store details |
-| Security | `get_security_config()` | Security system status |
-| TELOS | `get_telos_files()` | Identity/goals files |
-| Settings | `get_settings()` | Parsed settings.json |
-| Settings | `get_pai_env()` | PAI env variables |
-| MCP | `get_mcp_registration()` | MCP config |
-| MCP | `has_codomyrmex_mcp()` | Registration check |
-
-### PAIConfig (pai_bridge.py)
-
-| Property | Path (v4+) | v3 Legacy |
-|----------|-----------|-----------|
-| `pai_root` | `~/.claude/PAI` | `~/.claude/skills/PAI` |
-| `skill_md` | `~/.claude/PAI/SKILL.md` | Algorithm SKILL.md |
-| `skills_dir` | `~/.claude/skills/` | `~/.claude/skills/` |
-| `tools_dir` | `~/.claude/PAI/Tools/` | `~/.claude/skills/PAI/Tools/` |
-| `agents_dir` | `~/.claude/agents/` | `~/.claude/agents/` |
-| `memory_dir` | `~/.claude/MEMORY/` | `~/.claude/MEMORY/` |
-| `hooks_dir` | `~/.claude/hooks/` | `~/.claude/hooks/` |
-| `security_dir` | `~/.claude/PAI/PAISECURITYSYSTEM/` | `~/.claude/skills/PAI/PAISECURITYSYSTEM/` |
-| `telos_dir` | `~/.claude/USER/` | `~/.claude/USER/` |
-| `components_dir` | `~/.claude/PAI/Components/` | `~/.claude/skills/PAI/Components/` |
-
-### MCP Bridge (mcp_bridge.py)
-
-| Category | Function | Description |
-|----------|----------|-------------|
-| Server | `create_codomyrmex_mcp_server()` | Fully-configured MCP server |
-| Registry | `get_tool_registry()` | Pre-populated tool registry |
-| Direct | `call_tool(name, **kwargs)` | Direct Python invocation |
-| Manifest | `get_skill_manifest()` | PAI-compatible skill manifest |
-
-### Trust Gateway (trust_gateway.py)
-
-| Category | Function | Description |
-|----------|----------|-------------|
-| Audit | `verify_capabilities()` | Full capability audit → VERIFIED |
-| Trust | `trust_tool(name)` | Promote single tool to TRUSTED |
-| Trust | `trust_all()` | Promote all tools to TRUSTED |
-| Execute | `trusted_call_tool(name, **kw)` | Trust-gated tool invocation |
-| Query | `get_trust_report()` | Current trust state |
-| Query | `is_trusted(name)` | Bool trust check |
-| Reset | `reset_trust()` | Reset all to UNTRUSTED |
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SKILL.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp/` – Directory containing mcp components
+- `mcp_bridge.py` – Project file
+- `pai_bridge.py` – Project file
+- `pai_client.py` – Project file
+- `pai_webhook.py` – Project file
+- `pm/` – Directory containing pm components
+- `py.typed` – Project file
+- `trust_gateway.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Real Filesystem**: All discovery uses actual filesystem operations — zero mocks
-2. **Graceful Degradation**: Returns structured results even when PAI is not installed
-3. **Logging**: Uses `logging_monitoring.get_logger()` for warnings
-4. **No Side Effects**: Read-only discovery; never modifies PAI files
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SKILL.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_bridge.py`
+- `pai_bridge.py`
+- `pai_client.py`
+- `pai_webhook.py`
+- `py.typed`
+- `trust_gateway.py`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **README**: [README.md](README.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-- **MCP Tool Spec**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
-- **SKILL**: [SKILL.md](SKILL.md)
-- **Parent**: [agents](../README.md)
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

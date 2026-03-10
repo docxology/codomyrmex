@@ -1,24 +1,17 @@
-# Telemetry Sampling Scripts
+# sampling
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for telemetry sampling, demonstrating rate-based, probability-based, and adaptive sampling strategies for managing telemetry data volume.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `sampling_demo.py` | Demonstrates sampling strategy configuration and volume control |
-
-## Usage
-
-```bash
-uv run python scripts/telemetry/sampling/sampling_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `sampling_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: telemetry/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [telemetry](../README.md)
+- **Project Root**: ../../../README.md

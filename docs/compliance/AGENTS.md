@@ -1,23 +1,37 @@
-# Compliance — Agent Coordination
+# Codomyrmex Agents — docs/compliance
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Compliance documentation providing audit reports and quality assurance artifacts.
+## Active Components
+- `MOCK_AUDIT.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Capabilities
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Audit report access and review
-- Policy compliance verification
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MOCK_AUDIT.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Usage Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-Agents should reference compliance documents when verifying testing standards and mock usage policies.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Integration Points
-
-- **Docs**: [README.md](README.md)
-- **Testing**: [Testing Strategy](../development/testing-strategy.md)
-
-## Testing Guidelines
-
-Compliance documents are reference-only; no executable tests.
+## Navigation Links
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

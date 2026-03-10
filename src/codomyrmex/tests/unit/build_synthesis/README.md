@@ -1,21 +1,19 @@
-# deployment
+# build_synthesis
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `deployment` module provides core functionality for Build Synthesis..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `integration/` - Subdirectory
-- `test_deployment.py` - Test Build Synthesis
-- `unit/` - Subdirectory
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `integration/` – Subdirectory
+- `test_build_synthesis.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

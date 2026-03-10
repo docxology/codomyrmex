@@ -1,21 +1,25 @@
 # networking
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `networking` module provides core functionality for Networking..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_networking.py` - Test Networking
-- `test_networking_expansion.py` - Test Networking Expansion
-- `test_websocket_client.py` - Test Websocket Client
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `test_mcp_tools_networking.py` – File
+- `test_networking.py` – File
+- `test_networking_core.py` – File
+- `test_networking_exceptions.py` – File
+- `test_networking_expansion.py` – File
+- `test_networking_reliability.py` – File
+- `test_response_error.py` – File
+- `test_websocket_client.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

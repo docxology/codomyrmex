@@ -1,27 +1,47 @@
-# System Demos -- Agent Coordination
+# Codomyrmex Agents — scripts/demos
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Automation and utility scripts.
 
-Orchestrator for running system demonstrations across multiple modules including defense, identity, market, privacy, and wallet functionality.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `demo_defense.py` – Project file
+- `demo_identity.py` – Project file
+- `demo_jules_swarm.py` – Project file
+- `demo_market.py` – Project file
+- `demo_privacy.py` – Project file
+- `demo_wallet.py` – Project file
+- `run_demos.py` – Project file
 
-## Scripts Available
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **run_demos.py**: Main orchestrator that discovers and runs registered demos from the demos registry
-- **demo_defense.py**: Defense module demonstration script
-- **demo_identity.py**: Identity module demonstration script
-- **demo_market.py**: Market module demonstration script
-- **demo_privacy.py**: Privacy module demonstration script
-- **demo_wallet.py**: Wallet module demonstration script
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `demo_defense.py`
+- `demo_identity.py`
+- `demo_jules_swarm.py`
+- `demo_market.py`
+- `demo_privacy.py`
+- `demo_wallet.py`
+- `run_demos.py`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Agent Instructions
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-1. Run scripts from the repository root directory using `uv run python scripts/demos/<script>`
-2. Ensure prerequisites are installed: `uv sync`
-3. Scripts are demonstration/utility tools and do not modify production state
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

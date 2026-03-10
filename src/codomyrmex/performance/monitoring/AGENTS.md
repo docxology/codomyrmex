@@ -1,33 +1,43 @@
-# Performance Monitoring - Agentic Context
+# Codomyrmex Agents — src/codomyrmex/performance/monitoring
 
-**Module**: `codomyrmex.performance.monitoring`
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Key Components
+## Purpose
+Contains components for the src system.
 
-| Component | Purpose | Key Methods |
-|-----------|---------|-------------|
-| `PerformanceMonitor` | Record timing metrics per-function with stats aggregation | `record_metrics()`, `get_stats()`, `export_metrics()`, `clear_metrics()` |
-| `SystemMonitor` | Background thread polling CPU/memory via `psutil` | `start()`, `stop()`, `get_latest_metrics()` |
-| `ResourceTracker` | Detailed psutil-based resource snapshots during an operation | `start_tracking()`, `stop_tracking()` returning `ResourceTrackingResult` |
-| `ResourceSnapshot` | Point-in-time capture of RSS, VMS, CPU times, threads, FDs | Dataclass with `to_dict()` |
-| `monitor_performance` | Decorator that wraps a function with timing and metrics | Returns decorated function |
-| `track_resource_usage` | Context manager for resource sampling during a block | Yields `ResourceTracker` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `performance_monitor.py` – Project file
+- `py.typed` – Project file
+- `resource_tracker.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `ResourceTracker` requires `psutil`; when absent it logs a warning and returns empty results instead of raising.
-- `SystemMonitor` uses a daemon thread for background polling; call `stop()` before process exit.
-- Snapshot retention is bounded by `max_snapshots` (default 1000); when exceeded, oldest non-boundary snapshots are dropped.
-- `PerformanceMonitor` is available as a global singleton via `_performance_monitor`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `performance_monitor.py`
+- `py.typed`
+- `resource_tracker.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **psutil**: Optional dependency for CPU/memory/thread/FD metrics; gracefully degrades when missing.
-- **logging_monitoring**: Uses `get_logger` for structured log output.
-- **performance/profiling**: Complements `AsyncProfiler` with system-level resource tracking vs. per-function timing.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Constraints
-
-- `start_tracking()` is not re-entrant; calling while already tracking logs a warning and returns immediately.
-- CPU percent values from `psutil.Process.cpu_percent(interval=None)` require two successive calls for accuracy.
+## Navigation Links
+- **📁 Parent Directory**: [performance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

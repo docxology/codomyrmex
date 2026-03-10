@@ -1,73 +1,39 @@
-# Agent Guidelines - Utils
+# Codomyrmex Agents — docs/modules/utils
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Common utility functions: subprocess, JSON, file handling, retry, hashing.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Functions
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **run_command(cmd)** — Execute shell command
-- **safe_json_loads/dumps** — Safe JSON parsing
-- **ensure_directory(path)** — Create directory if needed
-- **hash_file(path)** — Hash file contents
-- **retry(max_attempts)** — Retry decorator
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use safe JSON** — Always use `safe_json_loads` for untrusted input
-2. **Retry transients** — Use `@retry()` for network calls
-3. **Hash for verification** — Use `hash_file` for integrity
-4. **Get env safely** — Use `get_env(key, required=True)`
-5. **Time operations** — Use `@timing_decorator` for monitoring
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.utils import (
-    run_command, safe_json_loads, ensure_directory,
-    hash_file, retry, get_env, deep_merge
-)
-
-# Execute command safely
-result = run_command(["git", "status"])
-if result.success:
-    print(result.stdout)
-
-# Parse JSON with fallback
-data = safe_json_loads(response.text, default={})
-
-# Ensure output directory
-output_dir = ensure_directory("./output/reports")
-
-# Retry with exponential backoff
-@retry(max_attempts=3, delay=1.0, backoff=2.0)
-def call_api():
-    return requests.get(url)
-
-# Merge configs
-config = deep_merge(defaults, user_overrides)
-```
-
-## Testing Patterns
-
-```python
-# Verify safe JSON
-result = safe_json_loads("invalid", default=None)
-assert result is None
-
-# Verify retry
-attempts = []
-@retry(max_attempts=3)
-def flaky():
-    attempts.append(1)
-    if len(attempts) < 3:
-        raise ValueError()
-    return "ok"
-assert flaky() == "ok"
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

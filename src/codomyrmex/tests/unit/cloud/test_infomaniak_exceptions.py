@@ -1,7 +1,7 @@
 """
 Unit tests for Infomaniak exceptions.
 
-Zero ``unittest.mock`` — uses ``Stub`` from ``conftest.py``.
+Zero ``unittest.stub`` — uses ``Stub`` from ``conftest.py``.
 """
 
 from _stubs import Stub

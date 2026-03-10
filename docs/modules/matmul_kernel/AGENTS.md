@@ -1,33 +1,33 @@
-# Matrix Multiplication Kernel -- Agent Coordination
+# Codomyrmex Agents — docs/modules/matmul_kernel
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides a tiled (cache-efficient) matrix multiplication kernel in pure Python/NumPy. Implements BLAS-style blocked matmul for improved cache locality, plus batched multiplication and FLOP counting.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `matmul_compute` | Multiply two matrices using tiled algorithm and verify against NumPy | Standard | matmul_kernel |
-| `matmul_benchmark` | Benchmark tiled matmul against NumPy for various matrix sizes | Standard | matmul_kernel |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Perform matrix multiplications with cache-efficient tiling |
-| VERIFY | QA Agent | Benchmark tiled matmul correctness and performance vs NumPy |
-
-
-## Agent Instructions
-
-1. tile_size controls cache block size (default 32); adjust for target cache hierarchy
-2. max_size capped at 512 for matmul_benchmark to keep execution time reasonable
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/matmul_kernel/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

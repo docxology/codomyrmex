@@ -1,4 +1,8 @@
-"""Unit tests for HTTP method and status code primitives."""
+"""
+Unit tests for HTTP method and status code primitives.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
+"""
 
 
 class TestHTTPMethod:

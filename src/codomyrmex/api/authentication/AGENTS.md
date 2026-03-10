@@ -1,40 +1,39 @@
-# AI Agent Guidelines — api/authentication
+# Codomyrmex Agents — src/codomyrmex/api/authentication
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides pluggable authentication strategies for API requests, supporting six auth types through a common `Authenticator` interface with factory-based instantiation.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `AuthType` | Enum of supported auth types: `API_KEY`, `BEARER_TOKEN`, `BASIC_AUTH`, `OAUTH2`, `HMAC`, `JWT` |
-| `AuthCredentials` | Dataclass holding auth type, credential value, and optional metadata |
-| `AuthResult` | Dataclass with `authenticated` bool, `user_id`, `roles`, and `error` |
-| `Authenticator` | ABC defining `authenticate(credentials) -> AuthResult` contract |
-| `APIKeyAuthenticator` | Validates API keys against a key store dict |
-| `BearerTokenAuthenticator` | Validates bearer tokens via a verification callable |
-| `BasicAuthenticator` | Username/password authentication against a user store |
-| `HMACAuthenticator` | HMAC signature verification with shared secret |
-| `create_authenticator` | Factory function returning the correct `Authenticator` for a given `AuthType` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All authenticators implement the `Authenticator` ABC (`authenticate` method).
-- `AuthResult.authenticated` is always set; `error` is populated on failure.
-- `create_authenticator(auth_type, **kwargs)` selects the implementation by `AuthType` enum value.
-- No external dependencies beyond the Python standard library.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent**: `api` module uses authenticators as middleware in request pipelines.
-- **Consumers**: Any module requiring request-level authentication (REST API, webhooks, MCP server).
-- **Pattern**: Instantiate via `create_authenticator`, then call `authenticate(credentials)`.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [api/README.md](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md) | [README.md](README.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [api](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

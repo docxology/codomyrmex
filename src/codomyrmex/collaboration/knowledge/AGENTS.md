@@ -1,40 +1,45 @@
 # Codomyrmex Agents — src/codomyrmex/collaboration/knowledge
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides a namespace-isolated shared knowledge store (`SharedMemoryPool`) with ACL-gated access, configurable conflict resolution, and expertise-based query routing (`KnowledgeRouter`). Agents contribute domain-tagged knowledge entries and the router scores queries using tag overlap, domain match, and recency weighting.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `models.py` | `KnowledgeEntry` | Dataclass for knowledge items with agent provenance, domain, tags, and citation count |
-| `models.py` | `ExpertiseProfile` | Agent expertise: domains with confidence scores, tags, and last-active timestamp |
-| `models.py` | `QueryResult` | Query result container with entries, routing info, and search timing |
-| `models.py` | `NamespaceACL` | Access control with owner/read/write/admin permission checks |
-| `models.py` | `AccessLevel` | Enum: READ, WRITE, ADMIN |
-| `models.py` | `ConflictStrategy` | Enum: LAST_WRITE_WINS, HIGHEST_CITATION, MERGE |
-| `shared_pool.py` | `SharedMemoryPool` | Multi-namespace knowledge store with ACL enforcement and cross-namespace search |
-| `shared_pool.py` | `NamespaceStats` | Per-namespace statistics: entry count, domain counts, total citations |
-| `knowledge_router.py` | `KnowledgeRouter` | Routes queries to best-matching expert using composite scoring |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `knowledge_router.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `shared_pool.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Namespaces must be created via `SharedMemoryPool.create_namespace()` before writing entries.
-- `SharedMemoryPool.put()` returns `False` (not an exception) when the ACL denies write access.
-- `SharedMemoryPool.get()` increments citation count on each successful read.
-- `KnowledgeRouter.route()` returns `("", 0.0)` when no experts are registered.
-- Conflict resolution applies `ConflictStrategy` on key collision: LAST_WRITE_WINS preserves citation count, HIGHEST_CITATION keeps the more-cited entry, MERGE combines tags.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `knowledge_router.py`
+- `models.py`
+- `py.typed`
+- `shared_pool.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Standard library only (`time`, `dataclasses`, `enum`)
-- **Used by**: `collaboration.swarm`, `collaboration.coordination`, higher-level orchestration agents
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [collaboration](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [collaboration](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

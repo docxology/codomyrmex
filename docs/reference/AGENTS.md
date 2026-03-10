@@ -1,56 +1,59 @@
 # Codomyrmex Agents — docs/reference
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Technical reference documentation for APIs, CLI, troubleshooting, and performance optimization. The authoritative source for implementation details.
+Documentation files and guides.
 
 ## Active Components
-
-| File | Priority | Description |
-|------|----------|-------------|
-| [api.md](api.md) | **Critical** | Complete API reference |
-| [api-complete.md](api-complete.md) | **Critical** | Extended API documentation |
-| [cli.md](cli.md) | **Critical** | CLI command reference |
-| [troubleshooting.md](troubleshooting.md) | High | Common issues and solutions |
-| [performance.md](performance.md) | High | Performance optimization |
-| [security.md](security.md) | High | Security best practices |
-| [migration-guide.md](migration-guide.md) | Medium | Version migration |
-| [changelog.md](changelog.md) | Medium | Version history |
-| [orchestrator.md](orchestrator.md) | Medium | Orchestrator reference |
-
-## Agent Guidelines
-
-### Reference Quality Standards
-
-1. **Accuracy**: API docs must match actual function signatures
-2. **Completeness**: Document all public APIs
-3. **Currency**: Update immediately when APIs change
-4. **Examples**: Include working code snippets
-
-### When Modifying Reference Docs
-
-- Generate API docs from docstrings when possible
-- Verify all code examples are runnable
-- Update changelog for version changes
-- Keep troubleshooting current with reported issues
-
-### API Categories to Maintain
-
-- **Python Module APIs**: Direct imports and function calls
-- **CLI APIs**: Command-line interface commands
-- **MCP Tool APIs**: AI/LLM integration interfaces
-- **Secure Cognitive APIs**: Identity, Wallet, Defense, Market, Privacy
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `api-complete.md` – Project file
+- `api.md` – Project file
+- `changelog.md` – Project file
+- `cli.md` – Project file
+- `glossary.md` – Project file
+- `migration-guide.md` – Project file
+- `orchestrator.md` – Project file
+- `performance-benchmarks.md` – Project file
+- `performance-optimization.md` – Project file
+- `performance.md` – Project file
+- `security.md` – Project file
+- `troubleshooting.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment between reference docs and source code
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Record outcomes in shared telemetry and update TODO queues when necessary
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `api-complete.md`
+- `api.md`
+- `changelog.md`
+- `cli.md`
+- `glossary.md`
+- `migration-guide.md`
+- `orchestrator.md`
+- `performance-benchmarks.md`
+- `performance-optimization.md`
+- `performance.md`
+- `security.md`
+- `troubleshooting.md`
+
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [docs/](../README.md)
-- **🏠 Project Root**: [../../README.md](../../README.md)
-- **📦 Related**: [Getting Started](../getting-started/) | [Modules](../modules/)
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

@@ -1,20 +1,19 @@
 # ros
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-ROS bridge and communication. This submodule is scaffolded for future implementation; no exports are currently defined.
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `ros_bridge.py` - Ros Bridge
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `ros_bridge.py` – File
 
 ## Navigation
-
-- **Parent Module**: [embodiment](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [embodiment](../README.md)
+- **Project Root**: ../../../../README.md

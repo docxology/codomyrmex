@@ -1,13 +1,13 @@
 # prompt_templates
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Prompt template library for structured LLM interactions and reusable prompt patterns.
+Contains components for the src system.
 
 ## Directory Contents
-
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `context_template.md` – File
@@ -15,6 +15,5 @@ Prompt template library for structured LLM interactions and reusable prompt patt
 - `task_template.md` – File
 
 ## Navigation
-
 - **Parent Directory**: [llm](../README.md)
 - **Project Root**: ../../../../README.md

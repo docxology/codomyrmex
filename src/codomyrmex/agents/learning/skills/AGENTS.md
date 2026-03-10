@@ -1,34 +1,35 @@
-# Codomyrmex Agents -- src/codomyrmex/agents/learning/skills
+# Codomyrmex Agents — src/codomyrmex/agents/learning/skills
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Subpackage directory for the agent skill learning system. The primary implementation lives in the parent module at `agents/learning/skills.py`, which provides the `Skill` dataclass and `SkillLibrary` class for managing learnable agent capabilities.
-
-This directory is reserved for future expansion of the skills subsystem (e.g., skill templates, skill evaluation, skill composition).
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `../skills.py` | `Skill` | Dataclass representing a learnable capability with name, description, code snippet, tags, and usage tracking |
-| `../skills.py` | `SkillLibrary` | Repository for storing, retrieving, and searching agent skills by name or tag |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `SkillLibrary.add_skill()` raises `ValueError` if a skill with the same name already exists.
-- `SkillLibrary.get_skill()` returns `None` for unknown skill names (does not raise).
-- `SkillLibrary.search()` filters skills by matching a single tag against each skill's tag list.
-- Each `Skill` has a unique `id` (UUID) and a `created_at` timestamp set at creation time.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `dataclasses`, `datetime`, `uuid` (standard library only)
-- **Used by**: `agents.learning.curriculum` (planned), `agents.learning.reflection` (planned)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [learning](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

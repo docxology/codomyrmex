@@ -1,24 +1,18 @@
-# Four D
+# four_d
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-4D modeling module based on Synergetics. Provides support for Quadray coordinates, the Isotropic Vector Matrix (IVM), and close-packed sphere arrangements.
-
-## Key Exports
-
-- **`QuadrayCoordinate`** -- Represents a coordinate in the Quadray (4-vector) system with components (a, b, c, d)
-- **`IsotropicVectorMatrix`** -- Represents the IVM structure (stub)
-- **`ClosePackedSphere`** -- Represents a sphere in a close-packed arrangement (stub)
-- **`synergetics_transform()`** -- Transforms 3D coordinates to 4D Synergetic coordinates (stub)
+Contains components for the src system.
 
 ## Directory Contents
-
-- `__init__.py` - Quadray, IVM, and close-packed sphere definitions (25 lines)
-- `py.typed` - PEP 561 type stub marker
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent Module**: [spatial](../README.md)
-- **Project Root**: [../../../../README.md](../../../../README.md)
+- **Parent Directory**: [spatial](../README.md)
+- **Project Root**: ../../../../README.md

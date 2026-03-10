@@ -1,39 +1,49 @@
-# Codomyrmex Agents -- src/codomyrmex/git_operations/docs
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/git_operations/docs
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Documentation subdirectory for the git_operations module. This is NOT a Python
-module -- it contains no `.py` implementation files. It holds API specifications,
-usage examples, security guidelines, and operational guides for the
-git_operations system.
-
-## Contents
-
-| File | Role |
-|------|------|
-| `API_SPECIFICATION.md` | Programmatic API documentation for git_operations |
-| `MCP_TOOL_SPECIFICATION.md` | Model Context Protocol tool definitions (34 git_* tools) |
-| `USAGE_EXAMPLES.md` | Practical usage examples and workflows |
-| `REPOSITORY_MANAGEMENT_GUIDE.md` | Guide for repository management operations |
-| `METADATA_SYSTEM_GUIDE.md` | Guide for the repository metadata system |
-| `CHANGELOG.md` | Version history and change log |
-| `README.md` | Overview documentation |
-| `SECURITY.md` | Security considerations and guidelines |
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `METADATA_SYSTEM_GUIDE.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `REPOSITORY_MANAGEMENT_GUIDE.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Documentation files must stay synchronized with the actual git_operations API.
-- MCP tool specification must match the `@mcp_tool` decorators in `mcp_tools.py`.
-- No Python imports originate from this directory.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `METADATA_SYSTEM_GUIDE.md`
+- `PAI.md`
+- `README.md`
+- `REPOSITORY_MANAGEMENT_GUIDE.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Nothing (static documentation)
-- **Used by**: Developers, AI agents, and PAI system for understanding git_operations capabilities
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [git_operations](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [git_operations](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../../README.md - Main project documentation

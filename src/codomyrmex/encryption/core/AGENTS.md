@@ -1,50 +1,41 @@
-# encryption/core -- Agent Context
+# Codomyrmex Agents — src/codomyrmex/encryption/core
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Summary
+## Purpose
+Contains components for the src system.
 
-The `encryption/core` submodule provides the `Encryptor` class and convenience functions for symmetric and asymmetric encryption, key generation, digital signatures, file encryption, and hashing. This is the legacy encryption engine; for authenticated encryption, prefer `encryption/algorithms`.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `encryptor.py` – Project file
+- `py.typed` – Project file
 
-## When to Use This Module
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- You need to encrypt/decrypt data or files with AES-256 or RSA-OAEP
-- You need to generate RSA key pairs or derive keys from passwords (PBKDF2)
-- You need to sign data with RSA-PSS and verify signatures
-- You need quick hashing (SHA-256, SHA-512, etc.)
-- You need a simple one-call interface (`encrypt_data`, `decrypt_data`)
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `encryptor.py`
+- `py.typed`
 
-## Exports
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Name | Kind | Purpose |
-|------|------|---------|
-| `Encryptor` | class | Full-featured encryption class (AES, RSA, sign, verify, file ops, hash) |
-| `encrypt_data` | function | Convenience: encrypt bytes with one call |
-| `decrypt_data` | function | Convenience: decrypt bytes with one call |
-| `generate_aes_key` | function | Generate a random 32-byte AES-256 key |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Example Agent Usage
-
-```python
-from codomyrmex.encryption.core import generate_aes_key, encrypt_data, decrypt_data
-
-key = generate_aes_key()
-ct = encrypt_data(b"agent-sensitive payload", key)
-pt = decrypt_data(ct, key)
-assert pt == b"agent-sensitive payload"
-```
-
-## Constraints
-
-- AES-CBC mode emits a `DeprecationWarning`; prefer `AESGCMEncryptor` from `encryption.algorithms`.
-- RSA encryption is limited to small payloads due to OAEP overhead.
-- All failures raise `EncryptionError`.
-
-## Relationship to Other Modules
-
-| Module | Relationship |
-|--------|-------------|
-| `encryption.algorithms` | Preferred alternative for authenticated symmetric encryption (AES-GCM) |
-| `encryption.keys` | Key management, HKDF derivation, HMAC utilities |
-| `encryption.containers` | High-level encrypted object storage built on `algorithms` |
-| `crypto.graphy` | Lower-level cryptographic primitives (separate module tree) |
+## Navigation Links
+- **📁 Parent Directory**: [encryption](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

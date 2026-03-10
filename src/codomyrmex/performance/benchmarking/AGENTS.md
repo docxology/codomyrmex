@@ -1,47 +1,39 @@
-# Codomyrmex Agents -- src/codomyrmex/performance/benchmarking
+# Codomyrmex Agents — src/codomyrmex/performance/benchmarking
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Benchmark execution engine and statistical comparison utilities. `BenchmarkRunner`
-runs timed iterations of callables with threshold certification. `benchmark_comparison`
-provides delta computation, mean, standard deviation, and coefficient of variation
-for comparing results across runs.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `benchmark_runner.py` | `BenchmarkRunner` | Register, execute, and certify benchmark functions |
-| `benchmark_runner.py` | `BenchmarkRunner.add()` | Register a callable with iteration count and threshold |
-| `benchmark_runner.py` | `BenchmarkRunner.run()` | Execute all registered benchmarks; return `BenchmarkSuite` |
-| `benchmark_runner.py` | `BenchmarkRunner.to_markdown()` | Render suite results as a markdown table |
-| `benchmark_runner.py` | `BenchmarkResult` | Dataclass: `name`, `mean_ms`, `min_ms`, `max_ms`, `ops_per_sec`, `passed` |
-| `benchmark_runner.py` | `BenchmarkSuite` | Dataclass: `name`, `results`, `total_ms`, `all_passed` |
-| `benchmark_comparison.py` | `compute_delta()` | Compute `BenchmarkDelta` between two values with direction awareness |
-| `benchmark_comparison.py` | `BenchmarkDelta` | Dataclass: `before`, `after`, `absolute_delta`, `relative_delta`, `improved` |
-| `benchmark_comparison.py` | `mean()` | Arithmetic mean; returns 0.0 for empty list |
-| `benchmark_comparison.py` | `stddev()` | Sample standard deviation; returns 0.0 for fewer than 2 values |
-| `benchmark_comparison.py` | `coefficient_of_variation()` | CV as percentage; returns 0.0 if mean is zero |
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `benchmark_comparison.py` – Project file
+- `benchmark_runner.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `BenchmarkRunner.run()` uses `time.monotonic()` for wall-clock timing -- not CPU time.
-- Each iteration calls the registered callable once with no arguments.
-- `threshold_ms=0.0` (default) disables threshold checking; the benchmark always passes.
-- `BenchmarkResult.passed` is `True` when `mean_ms <= threshold_ms` or threshold is 0.
-- `compute_delta()` defaults to `higher_is_better=False` (lower values = improvement).
-- `stddev()` uses sample standard deviation (Bessel's correction: divides by n-1).
-- All functions are pure stdlib; no external dependencies.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `benchmark_comparison.py`
+- `benchmark_runner.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: stdlib only (`time`, `math`, `dataclasses`, `collections.abc`)
-- **Used by**: `codomyrmex.performance` top-level, `performance.mcp_tools` (`performance_compare_benchmarks`), CI benchmark pipelines
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [performance](../README.md)
-- **Sibling**: [analysis](../analysis/AGENTS.md)
-- **Root**: [codomyrmex](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [performance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

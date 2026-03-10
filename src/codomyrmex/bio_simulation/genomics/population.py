@@ -39,7 +39,7 @@ class Population:
         """
         from .genome import Genome  # Local import to avoid circular dependency
 
-        if genomes:
+        if genomes is not None:
             self._individuals = list(genomes)
             self.size = len(self._individuals)
         else:

@@ -38,7 +38,11 @@ from codomyrmex.calendar_integration.mcp_tools import (
 
 @pytest.mark.unit
 class TestWithDefaultAttendee:
-    """Tests for _with_default_attendee — pure Python, no I/O."""
+    """Tests for the _with_default_attendee internal helper.
+
+    Verifies the attendee injection logic with various input scenarios.
+    Uses real list manipulation without mocks.
+    """
 
     def _call(self, attendees, default=""):
         """Call helper with a patched _DEFAULT_ATTENDEE via module attribute."""
@@ -105,9 +109,10 @@ class TestWithDefaultAttendee:
 
 @pytest.mark.unit
 class TestGetProviderErrors:
-    """Test _get_provider raises RuntimeError under bad conditions.
+    """Tests for provider initialization error paths.
 
-    These tests exercise real error paths without any real credentials.
+    Exercises the _get_provider() function under invalid credential states.
+    Strictly mock-free, relying on the absence of real credentials.
     """
 
     def test_raises_when_no_token_file(self):
@@ -147,12 +152,11 @@ class TestGetProviderErrors:
 
 @pytest.mark.unit
 class TestGetProviderMalformedToken:
-    """Test _get_provider error paths using a real temp token dir.
+    """Tests for provider initialization with malformed tokens.
 
-    We redirect CODOMYRMEX_HOME-equivalent by writing a token file to a
-    temp dir and adjusting the token_path directly in the module's namespace
-    via a context manager — no monkeypatch, just direct attribute surgery
-    that is fully reversed in a finally block.
+    Verifies handling of invalid JSON in the token file. Conforms to the
+    Zero-Mock policy by using real temporary files and Path.home
+    replacement (via direct attribute surgery) instead of monkeypatch.
     """
 
     def test_malformed_json_raises_runtime_error(self, tmp_path):
@@ -214,6 +218,12 @@ class TestGetProviderMalformedToken:
 
 @pytest.mark.unit
 class TestCalendarListEventsErrorPath:
+    """Tests for the calendar_list_events MCP tool error paths.
+
+    Verifies that the tool returns structured error dictionaries when
+    authentication or connection fails. Exercises real tool code.
+    """
+
     def test_returns_error_dict_when_provider_fails(self):
         result = calendar_list_events(days_ahead=1)
         assert isinstance(result, dict)
@@ -237,6 +247,12 @@ class TestCalendarListEventsErrorPath:
 
 @pytest.mark.unit
 class TestCalendarCreateEventErrorPath:
+    """Tests for the calendar_create_event MCP tool error paths.
+
+    Ensures the tool correctly handles failures during event creation
+    and returns a valid error status.
+    """
+
     def test_returns_error_dict_when_provider_fails(self):
         result = calendar_create_event(
             summary="Test Event",
@@ -272,6 +288,12 @@ class TestCalendarCreateEventErrorPath:
 
 @pytest.mark.unit
 class TestCalendarGetEventErrorPath:
+    """Tests for the calendar_get_event MCP tool error paths.
+
+    Verifies that non-existent event IDs result in an appropriate
+    error response from the tool.
+    """
+
     def test_returns_error_dict_for_nonexistent_event(self):
         result = calendar_get_event("fake_event_id_xyz_12345")
         assert isinstance(result, dict)
@@ -288,6 +310,12 @@ class TestCalendarGetEventErrorPath:
 
 @pytest.mark.unit
 class TestCalendarDeleteEventErrorPath:
+    """Tests for the calendar_delete_event MCP tool error paths.
+
+    Ensures failures during event deletion are reported via structured
+    error responses.
+    """
+
     def test_returns_error_dict_for_nonexistent_event(self):
         result = calendar_delete_event("fake_event_id_xyz_12345")
         assert isinstance(result, dict)
@@ -300,6 +328,11 @@ class TestCalendarDeleteEventErrorPath:
 
 @pytest.mark.unit
 class TestCalendarUpdateEventErrorPath:
+    """Tests for the calendar_update_event MCP tool error paths.
+
+    Verifies error reporting for event updates under invalid state.
+    """
+
     def test_returns_error_dict_when_provider_fails(self):
         result = calendar_update_event(
             event_id="fake_event_id_xyz",
@@ -332,7 +365,11 @@ class TestCalendarUpdateEventErrorPath:
 
 @pytest.mark.unit
 class TestMcpToolRegistration:
-    """Verify that the @mcp_tool decorator was applied to all 5 calendar tools."""
+    """Verifies that all MCP tools are correctly decorated and registered.
+
+    Ensures that tool metadata is present and that tools are callable
+    and return expected types.
+    """
 
     def test_calendar_list_events_has_mcp_meta(self):
         assert hasattr(calendar_list_events, "_mcp_tool_meta") or callable(
@@ -373,7 +410,12 @@ class TestMcpToolRegistration:
     reason="GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET not set — skipping live calendar tests",
 )
 class TestCalendarToolsLive:
-    """Live integration tests — only run when full Google credentials are available."""
+    """Live integration tests for calendar MCP tools.
+
+    These tests run only when real Google credentials are provided in
+    the environment. They interact with the live API, following the
+    Zero-Mock policy for integration verification.
+    """
 
     def test_list_events_returns_success(self):
         result = calendar_list_events(days_ahead=1)

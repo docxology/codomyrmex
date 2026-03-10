@@ -7,13 +7,12 @@ Remediates documentation gaps:
 2. Generates missing RASP files (README, AGENTS, SPEC, PAI) with template content.
 """
 
-logger = logging.getLogger(__name__)
-
-
 import argparse
 import logging
 import os
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
 

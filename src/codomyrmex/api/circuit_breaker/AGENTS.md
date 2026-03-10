@@ -1,40 +1,49 @@
-# AI Agent Guidelines — api/circuit_breaker
+# Codomyrmex Agents — src/codomyrmex/api/circuit_breaker
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Implements the circuit breaker resilience pattern with retry policies and bulkhead concurrency limiting for protecting API calls against cascading failures.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `CircuitState` | Enum: `CLOSED`, `OPEN`, `HALF_OPEN` |
-| `CircuitStats` | Dataclass tracking `total_requests`, `failures`, `successes`, `last_failure_time` |
-| `CircuitBreakerConfig` | Dataclass with `failure_threshold`, `recovery_timeout`, `half_open_max_calls` |
-| `CircuitBreaker` | Context-manager-based circuit breaker with state machine (closed/open/half-open transitions) |
-| `RetryPolicy` | Configurable retry with exponential backoff, jitter, and retryable exception filtering |
-| `Bulkhead` | Semaphore-based concurrency limiter with `max_concurrent` and `max_wait` settings |
-| `circuit_breaker` | Decorator wrapping a function with circuit breaker protection |
-| `retry` | Decorator wrapping a function with retry policy |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `breaker.py` – Project file
+- `bulkhead.py` – Project file
+- `decorators.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `retry.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `CircuitBreaker` is used as a context manager (`with cb:`) or via the `circuit_breaker` decorator.
-- State transitions: CLOSED (tracking failures) -> OPEN (rejecting calls) -> HALF_OPEN (probing) -> CLOSED.
-- `RetryPolicy.execute(func)` runs `func` with configurable retries and backoff.
-- `Bulkhead` limits concurrent access; raises `BulkheadFullError` when the semaphore is exhausted and `max_wait` expires.
-- All three patterns are independent and can be composed.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `breaker.py`
+- `bulkhead.py`
+- `decorators.py`
+- `models.py`
+- `py.typed`
+- `retry.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent**: `api` module composes these patterns around HTTP client calls.
-- **Consumers**: Any module making external or unreliable calls (cloud providers, LLM APIs, webhooks).
-- **Composition**: `circuit_breaker(retry(fn))` is a common stacking pattern.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [api/README.md](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md) | [README.md](README.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [api](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

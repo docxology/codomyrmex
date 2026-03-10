@@ -1,38 +1,41 @@
-# Chaos Engineering -- Agentic Context
+# Codomyrmex Agents — src/codomyrmex/testing/chaos
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Test files and validation suites.
 
-Provides fault injection and resilience testing primitives for verifying system behavior under failure conditions. Agents use this module to simulate latency, errors, timeouts, resource exhaustion, and network partitions.
-
-## Key Components
-
-| Component | Source | Role |
-|-----------|--------|------|
-| `FaultInjector` | `__init__.py` | Thread-safe fault registry with probabilistic injection via `register_fault()`, `should_inject()`, `inject()`, `maybe_inject()` |
-| `ChaosExperiment` | `__init__.py` | Structured experiment runner: verifies steady state before/after action, with optional rollback |
-| `ChaosMonkey` | `__init__.py` | Orchestrates multiple experiments via `run_all()` or `run_random()` |
-| `ChaosScenarioRunner` | `scenarios.py` | Async runner with 4 built-in scenarios: network partition, service outage, high latency, cascading failure |
-| `GameDay` | `scenarios.py` | Coordinated multi-scenario runner with sequential or parallel execution and markdown report generation |
-| `with_chaos` | `__init__.py` | Decorator for probabilistic fault injection on any function |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
+- `scenarios.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Fault Registration**: Register faults via `FaultInjector.register_fault(name, FaultConfig)` before injection. `FaultConfig.probability` controls injection rate (0.0--1.0).
-2. **Steady State**: Every `ChaosExperiment` requires a `SteadyStateHypothesis` with a `check_fn` returning `bool`. Experiment fails if system is not in steady state before the action.
-3. **Rollback**: `ChaosExperiment` accepts an optional `rollback` callable invoked after the action regardless of outcome.
-4. **Scenario Types**: `ScenarioType` enum defines 8 failure modes; `ChaosScenarioRunner` implements 4 (NETWORK_PARTITION, SERVICE_OUTAGE, HIGH_LATENCY, CASCADING_FAILURE).
-5. **Thread Safety**: `FaultInjector` uses `threading.Lock` for concurrent access to the active faults registry.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
+- `scenarios.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **validation.schemas**: Optional import of `Result` and `ResultStatus` for cross-module interop
-- **testing parent**: Part of the `testing` module alongside `fixtures`, `generators`, and `workflow`
-- **CLI**: `cli_commands()` exposes `experiments` and `run` subcommands
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [testing/](../README.md)
-- **Siblings**: [fixtures/](../fixtures/), [generators/](../generators/), [workflow/](../workflow/)
-- **Spec**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [testing](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

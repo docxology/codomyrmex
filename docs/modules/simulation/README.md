@@ -1,47 +1,18 @@
-# Simulation Module
+# simulation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The Simulation module provides a general-purpose discrete event simulation engine. It supports configurable simulation parameters, event scheduling, time-stepping, and result collection for modeling complex systems.
+Documentation files and guides.
 
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-## Key Exports
-
-| Export | Type | Purpose |
-|--------|------|---------|
-| `Simulator` | Class | Core simulation engine |
-| `SimulationConfig` | Class | Simulation parameter configuration |
-
-## Quick Start
-
-```python
-from codomyrmex.simulation import Simulator, SimulationConfig
-
-config = SimulationConfig(
-    duration=100,
-    time_step=0.1,
-    seed=42
-)
-sim = Simulator(config)
-results = sim.run()
-```
-
-## Architecture
-
-```
-simulation/
-├── __init__.py     # Exports: Simulator, SimulationConfig
-├── simulator.py    # Core simulation engine
-└── tests/          # Zero-Mock tests
-```
+## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

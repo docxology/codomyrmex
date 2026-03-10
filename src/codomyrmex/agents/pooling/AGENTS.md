@@ -1,38 +1,47 @@
-# Codomyrmex Agents -- agents/pooling
+# Codomyrmex Agents — src/codomyrmex/agents/pooling
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Multi-agent load balancing, failover, and intelligent routing with per-agent circuit breakers and health tracking.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `LoadBalanceStrategy` | Enum: `ROUND_ROBIN`, `RANDOM`, `LEAST_LATENCY`, `LEAST_ERRORS`, `WEIGHTED`, `PRIORITY` |
-| `AgentStatus` | Enum: `HEALTHY`, `DEGRADED`, `UNHEALTHY`, `CIRCUIT_OPEN` |
-| `AgentHealth` | Dataclass: `avg_latency_ms`, `error_rate`, `consecutive_failures`, `total_requests`, `is_available` |
-| `PooledAgent[T]` | Generic dataclass wrapping an agent with `weight`, `priority`, `health`, and `metadata` |
-| `PoolConfig` | Dataclass: circuit breaker thresholds (`failure_threshold`, `reset_timeout_s`), retry settings (`max_retries`), health thresholds (`degraded_error_rate`, `unhealthy_error_rate`) |
-| `CircuitBreaker` | Thread-safe state machine (closed/open/half-open) with `record_success()`, `record_failure()`, `reset()` |
-| `AgentPool[T]` | Generic load-balanced pool: `add_agent()`, `remove_agent()`, `execute(func)` with retries and failover, `get_stats()` |
-| `FallbackChain[T]` | Ordered chain trying agents sequentially until success; fluent `add()` API |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `circuit_breaker.py` – Project file
+- `fallback.py` – Project file
+- `models.py` – Project file
+- `pool.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `AgentPool.execute(func, retries)` selects an agent using the configured strategy, calls `func(agent)`, records success/failure on the agent's circuit breaker, and retries with a different agent on failure.
-- `CircuitBreaker` transitions: closed -> open (after `failure_threshold` consecutive failures), open -> half-open (after `reset_timeout_s` elapsed), half-open -> closed (on success) or open (on failure).
-- `AgentPool._update_health_status()` derives `AgentStatus` from error-rate thresholds in `PoolConfig`; agents degrade and recover automatically.
-- `FallbackChain.execute(func, on_fallback)` tries each agent in order; calls `on_fallback(name, exception)` when falling back to next agent.
-- `AgentPool.get_stats()` returns per-agent health metrics dict keyed by agent ID.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `circuit_breaker.py`
+- `fallback.py`
+- `models.py`
+- `pool.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- Used by `agents` parent module for pooled agent execution.
-- `AgentPool` is generic over any agent type `T`; consumers define the callable passed to `execute()`.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-- Parent: [agents](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

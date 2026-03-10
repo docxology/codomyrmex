@@ -1,18 +1,18 @@
-# Azure Storage Submodule
+# storage
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Extended Azure Blob Storage utilities including SAS tokens, lifecycle management, and tiering.
+Contains components for the src system.
 
-## Planned Features
-
-- SAS token generation
-- Lifecycle policy management
-- Access tier management
-- Blob versioning
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent**: [azure/](../README.md)
+- **Parent Directory**: [azure](../README.md)
+- **Project Root**: ../../../../../README.md

@@ -1,6 +1,6 @@
 # orchestrator
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -13,7 +13,12 @@ Automation and utility scripts.
 - `__init__.py` – File
 - `examples/` – Subdirectory
 - `orchestrate.py` – File
+- `pipeline_utils.py` – File
+- `pipelines/` – Subdirectory
 - `run_workflow.py` – File
+- `state/` – Subdirectory
+- `templates/` – Subdirectory
+- `triggers/` – Subdirectory
 - `workflows/` – Subdirectory
 
 ## Navigation

@@ -1,44 +1,45 @@
-# Config Monitoring -- Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/config_monitoring
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Configuration files and templates.
 
-Configuration change detection, drift analysis, compliance auditing, and file-system hot-reload. Monitors configuration files for modifications, takes snapshots for drift comparison, and audits configurations against compliance rules.
-
-## Key Components
-
-| Component | File | Role |
-|-----------|------|------|
-| `ConfigChange` | `config_monitor.py` | Change record: path, type (created/modified/deleted), hashes, source |
-| `ConfigAudit` | `config_monitor.py` | Audit record: environment, compliance status, issues, recommendations |
-| `ConfigSnapshot` | `config_monitor.py` | Snapshot for drift detection: per-file SHA-256 hashes, file count |
-| `ConfigurationMonitor` | `config_monitor.py` | Change tracking, snapshot creation, drift analysis, compliance auditing |
-| `ConfigWatcher` | `watcher.py` | Filesystem mtime-polling hot-reload with thread-safe daemon thread |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `config_monitor.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `watcher.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Hash-based change detection**: `ConfigurationMonitor.calculate_file_hash()` uses SHA-256 to detect file modifications.
-- **Persistence**: Hashes are stored in `config_monitoring/config_hashes.json`. Snapshots in `config_monitoring/snapshots/`. Audits in `config_audits/`.
-- **Snapshot drift**: `detect_drift()` compares current file hashes against a saved `ConfigSnapshot` to find added, removed, and modified files.
-- **Compliance auditing**: `audit_configuration()` scans for sensitive data patterns (passwords, keys), overly permissive file permissions, and policy violations.
-- **Hot-reload**: `ConfigWatcher` polls `mtime` at a configurable interval (default 5 seconds) and invokes a callback on change. Thread-safe `start()`/`stop()`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `config_monitor.py`
+- `mcp_tools.py`
+- `py.typed`
+- `watcher.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Logging**: Uses `codomyrmex.logging_monitoring.core.logger_config.get_logger`.
-- **Exceptions**: Uses `codomyrmex.exceptions.CodomyrmexError`.
-- **No external deps**: Uses only standard library (`hashlib`, `json`, `re`, `pathlib`, `threading`, `time`).
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [config_management/](../config_management/AGENTS.md)
-- **Specification**: [SPEC.md](SPEC.md)
-- **README**: [README.md](README.md)
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full — configure, monitor, snapshot, audit, hot-reload | All available | TRUSTED |
-| **Architect** | Read + Architecture review | Read-only | SAFE |
-| **QATester** | Validation + output verification | Read + Inspect | SAFE |
-| **Researcher** | Read-only — study algorithms and configurations | None | OBSERVED |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

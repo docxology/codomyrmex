@@ -1,29 +1,45 @@
-# SLM -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/slm
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides a tiny GPT-2 style language model for agents that need local text generation, embedding extraction, or transformer architecture exploration.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `model.py` – Project file
+- `py.typed` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `slm_generate` | Generate tokens from a tiny LM | `prompt_tokens, max_new_tokens, vocab_size, d_model, n_heads, n_layers, seed` | `{prompt, generated, full_sequence}` |
-| `slm_forward` | Run forward pass and return logit stats | `batch_size, seq_len, vocab_size, d_model, n_heads, n_layers, seed` | `{output_shape, logit_mean, logit_std}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `model.py`
+- `py.typed`
 
-### Token Generation
-An agent can use `slm_generate` to produce token sequences for testing downstream pipelines.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Architecture Validation
-Use `slm_forward` to verify output shapes and logit distributions for different model configurations.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Example Agent Workflow
-
-```
-1. Agent receives: "Generate 5 tokens from a small model"
-2. Agent calls: slm_generate(prompt_tokens=[1,2,3], max_new_tokens=5, vocab_size=100)
-3. Response: {"generated": [42, 17, 88, 3, 55], ...}
-4. Agent uses generated tokens for downstream processing
-```
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

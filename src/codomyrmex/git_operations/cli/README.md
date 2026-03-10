@@ -1,21 +1,20 @@
 # cli
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `cli` module provides core functionality for Cli..
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `demo.py` - Demo
-- `metadata.py` - Metadata
-- `repo.py` - Repo
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `demo.py` – File
+- `metadata.py` – File
+- `repo.py` – File
 
 ## Navigation
-
-- **Parent Module**: [git_operations](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [git_operations](../README.md)
+- **Project Root**: ../../../../README.md

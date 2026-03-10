@@ -1,30 +1,47 @@
-# Agent Setup — AGENTS.md
+# Codomyrmex Agents — src/codomyrmex/agents/agent_setup
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-This module is consumed by autonomous agents to configure and verify agent availability.
+## Purpose
+Contains components for the src system.
 
-## Key Entry Points
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `__main__.py` – Project file
+- `config_file.py` – Project file
+- `py.typed` – Project file
+- `registry.py` – Project file
+- `setup_wizard.py` – Project file
 
-| Function / Class | Purpose |
-|-----------------|---------|
-| `AgentRegistry.probe_all()` | Probe all 12 agents, returns `list[ProbeResult]` |
-| `AgentRegistry.get_operative()` | Returns names of currently working agents |
-| `load_config()` / `save_config()` | YAML config persistence |
-| `run_setup_wizard(non_interactive=True)` | Programmatic status scan |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Environment Variables
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `__main__.py`
+- `config_file.py`
+- `py.typed`
+- `registry.py`
+- `setup_wizard.py`
 
-| Variable | Agent | Type |
-|----------|-------|------|
-| `ANTHROPIC_API_KEY` | Claude | API |
-| `OPENAI_API_KEY` | Codex, O1 | API |
-| `DEEPSEEK_API_KEY` | DeepSeek | API |
-| `DASHSCOPE_API_KEY` | Qwen | API |
-| `OLLAMA_BASE_URL` | Ollama | Local |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Testing
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```bash
-uv run python -m pytest tests/unit/agents/test_agent_setup.py -v --no-cov
-```
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

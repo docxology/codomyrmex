@@ -1,120 +1,57 @@
-# Agent Guidelines - Serialization
+# Codomyrmex Agents — src/codomyrmex/serialization
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Multi-format data serialization and deserialization supporting JSON, YAML, msgpack, protobuf, and
-custom formats. Provides `Serializer` for format-agnostic round-trips with custom encoder
-registration, `YAMLSerializer` with enforced safe loading, and `ProtobufSerializer` for typed binary
-encoding. Three MCP tools expose the full serialize/deserialize lifecycle to PAI agents without
-requiring Python imports.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `Serializer`, `JSONSerializer`, `YAMLSerializer`, `ProtobufSerializer`, `serialize`, `deserialize` |
-| `serializer.py` | Base `Serializer` with encoder registration and format dispatch |
-| `json_serializer.py` | JSON with custom encoder/decoder support |
-| `yaml_serializer.py` | YAML with safe_load enforcement |
-| `protobuf_serializer.py` | Protocol Buffers serialization |
-| `mcp_tools.py` | MCP tools: `serialize_data`, `deserialize_data`, `serialization_list_formats` |
-
-## Key Classes
-
-- **Serializer** — Multi-format serialization with custom encoder registration
-- **JSONSerializer** — JSON with custom encoders and decoders
-- **YAMLSerializer** — YAML with `safe_load` enforcement (no arbitrary Python objects)
-- **ProtobufSerializer** — Protocol Buffers serialization
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `serialize_data` | Serialize a Python dict to a named format (json, yaml, msgpack) | SAFE |
-| `deserialize_data` | Deserialize bytes or a string back to a Python dict | SAFE |
-| `serialization_list_formats` | List all supported serialization format names | SAFE |
-
-## Agent Instructions
-
-1. **Use appropriate format** — JSON for APIs, msgpack for speed, YAML for config files
-2. **Handle dates** — Use ISO format for datetime serialization
-3. **Safe loading** — `YAMLSerializer` enforces `safe_load`; never bypass this
-4. **Version schemas** — Include a `version` field in serialized payloads
-5. **Validate on deserialize** — Check structure after loading untrusted data
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `binary_formats.py` – Project file
+- `exceptions.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `serialization_manager.py` – Project file
+- `serializer.py` – Project file
+- `streaming.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `YAMLSerializer` always uses `safe_load` — arbitrary Python objects will not deserialize
-- `Serializer.register_encoder(type, fn)` is not thread-safe; register before concurrent use
-- `serialize_data` MCP tool accepts only JSON-serializable dicts as input
-- Round-trip fidelity: `deserialize(serialize(data, fmt), fmt) == data` for JSON and YAML
-- **DO NOT** pass raw file bytes to `deserialize` without specifying a format
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `binary_formats.py`
+- `exceptions.py`
+- `mcp_tools.py`
+- `py.typed`
+- `serialization_manager.py`
+- `serializer.py`
+- `streaming.py`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.serialization import (
-    Serializer, JSONSerializer, serialize, deserialize
-)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Auto-detect format round-trip
-data = {"name": "test", "count": 42}
-json_bytes = serialize(data, format="json")
-back = deserialize(json_bytes, format="json")
-assert back == data
-
-# Custom encoder for datetime
-from datetime import datetime
-serializer = Serializer()
-serializer.register_encoder(datetime, lambda d: d.isoformat())
-output = serializer.dumps({"created": datetime.now()})
-```
-
-## Testing Patterns
-
-```python
-# Verify JSON round-trip
-data = {"key": "value", "num": 123}
-encoded = serialize(data, format="json")
-decoded = deserialize(encoded, format="json")
-assert decoded == data
-
-# Verify YAML round-trip
-encoded = serialize(data, format="yaml")
-decoded = deserialize(encoded, format="yaml")
-assert decoded == data
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `serialize_data`, `deserialize_data`, `serialization_list_formats` | TRUSTED |
-| **Architect** | Read + Design | `serialization_list_formats` — format selection and schema design review | OBSERVED |
-| **QATester** | Validation | `serialize_data`, `deserialize_data`, `serialization_list_formats` — round-trip fidelity verification | OBSERVED |
-| **Researcher** | Read-only | `serialization_list_formats`, `serialize_data` — format inspection for research analysis | SAFE |
-
-### Engineer Agent
-**Use Cases**: Serializing inter-module data payloads during BUILD/EXECUTE, registering custom encoders, format conversion pipelines.
-
-### Architect Agent
-**Use Cases**: Designing serialization schemas, reviewing format selection trade-offs (JSON vs msgpack vs YAML), planning versioned schema migration strategies.
-
-### QATester Agent
-**Use Cases**: Validating round-trip serialization fidelity across all formats, verifying format auto-detection, testing edge cases.
-
-### Researcher Agent
-**Use Cases**: Inspecting supported format catalog and serializing research data structures during analysis.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/serialization.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/serialization.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

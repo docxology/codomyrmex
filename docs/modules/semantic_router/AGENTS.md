@@ -1,32 +1,33 @@
-# Semantic Router -- Agent Coordination
+# Codomyrmex Agents — docs/modules/semantic_router
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides embedding-based intent routing for natural language inputs. Routes text to predefined semantic categories using vector similarity matching against example utterances.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `semantic_router_route` | Route input text to the best matching semantic route | Standard | semantic_router |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| EXECUTE | Engineer Agent | Route natural language inputs to appropriate handlers |
-| BUILD | Architect Agent | Define semantic routes with example utterances for intent classification |
-
-
-## Agent Instructions
-
-1. Define routes with name, utterances list, and optional similarity threshold (default 0.7)
-2. Default routes include weather, greeting, and help categories
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/semantic_router/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

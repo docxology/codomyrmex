@@ -1,38 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/agents/claude/mixins
+# Codomyrmex Agents — src/codomyrmex/agents/claude/mixins
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Mixin classes that decompose the `ClaudeClient` into focused capabilities: API execution with retry logic, tool/function calling, session management, file operations, code intelligence, and system operations. Each mixin is composed into `ClaudeClient` via multiple inheritance.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `execution.py` | `ExecutionMixin` | Core API execution with exponential backoff retry, streaming, system-message handling, cost calculation, and response extraction |
-| `tools.py` | `ToolsMixin` | Tool registration, handler dispatch, and automatic multi-round tool execution loop |
-| `session.py` | `SessionMixin` | Multi-turn conversation management via `AgentSession`, context injection from history |
-| `file_ops.py` | `FileOpsMixin` | AI-guided file editing (`edit_file`), file generation (`create_file`), and code-block extraction |
-| `code_intel.py` | `CodeIntelMixin` | Code review, explanation, diff generation, and test suggestion using Claude as analyst |
-| `system_ops.py` | `SystemOpsMixin` | Directory scanning, shell command execution, and project structure analysis |
-| `__init__.py` | -- | Package marker (no exports) |
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `code_intel.py` – Project file
+- `execution.py` – Project file
+- `file_ops.py` – Project file
+- `session.py` – Project file
+- `system_ops.py` – Project file
+- `tools.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Each mixin assumes it will be composed with `APIAgentBase` and accesses `self.client`, `self.model`, `self.max_tokens`, `self.temperature`, `self._tools`, and `self.logger`.
-- `ExecutionMixin._execute_with_retry` implements exponential backoff with jitter (25% variance) and honours `Retry-After` headers from rate-limit responses.
-- `ToolsMixin.execute_with_tools` loops up to `max_tool_rounds` (default 10), executing registered tool handlers and feeding results back to Claude.
-- `FileOpsMixin.edit_file` auto-detects language from file extension; returns original content, modified content, and unified diff.
-- `SystemOpsMixin.run_command` executes shell commands via `subprocess.run` with configurable timeout and working directory.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `code_intel.py`
+- `execution.py`
+- `file_ops.py`
+- `session.py`
+- `system_ops.py`
+- `tools.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.agents.core` (AgentRequest, AgentResponse, AgentSession, ClaudeError), `codomyrmex.agents.core.session` (SessionManager), `codomyrmex.logging_monitoring`
-- **Used by**: `codomyrmex.agents.claude.claude_client.ClaudeClient` (composes all six mixins)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [claude](../AGENTS.md)
-- **Root**: [Root](../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [claude](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

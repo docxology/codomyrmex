@@ -1,63 +1,39 @@
-# Agent Guidelines - Templating
+# Codomyrmex Agents — docs/modules/templating
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Template engine support (Jinja2, Mako) for code generation and dynamic content.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **TemplateEngine** — Configurable template engine
-- **Template** — Loaded template object
-- **TemplateManager** — Template directory management
-- **render()** — Convenience function for rendering
-- **render_file()** — Render template from file
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Choose engine wisely** — Jinja2 for HTML/configs, Mako for Python-heavy
-2. **Use render() for simple** — Convenience function for quick templates
-3. **Cache templates** — Use `TemplateEngine` for repeated rendering
-4. **Register filters** — Add custom filters for complex transformations
-5. **Handle errors** — Catch `TemplatingError` for invalid templates
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.templating import render, TemplateEngine
-
-# Simple rendering
-output = render("Hello {{ name }}!", {"name": "World"})
-
-# Complex template with engine
-engine = TemplateEngine(engine="jinja2")
-
-# Add custom filter
-engine.add_filter("uppercase", str.upper)
-
-# Render with data
-template = engine.load_template("report.html.j2")
-result = template.render({
-    "title": "Report",
-    "items": data_items
-})
-```
-
-## Testing Patterns
-
-```python
-# Verify template rendering
-from codomyrmex.templating import render
-
-output = render("{{ x + y }}", {"x": 1, "y": 2})
-assert output == "3"
-
-# Verify file rendering
-output = render_file("templates/test.j2", {"name": "test"})
-assert "test" in output
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

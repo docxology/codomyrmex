@@ -1,41 +1,51 @@
 # Codomyrmex Agents — src/codomyrmex/orchestrator/resilience
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides fault-tolerance primitives for the orchestrator: error classification into a taxonomy of failure categories, automated retry with exponential backoff, per-agent circuit breaker for fault isolation, self-healing diagnosis with recovery plans, pipeline retry policies with dead-letter routing, and an append-only healing event log for learning from past recoveries.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `failure_taxonomy.py` | `FailureCategory` | Enum of failure categories: config, resource, dependency, logic, timeout, permission, unknown |
-| `failure_taxonomy.py` | `RecoveryStrategy` | Enum of recovery actions: retry, adjust_config, fallback, escalate, skip, restart |
-| `failure_taxonomy.py` | `classify_error` | Keyword-heuristic classifier mapping error messages to `ClassifiedError` with strategies |
-| `failure_taxonomy.py` | `RECOVERY_MAP` | Static mapping from `FailureCategory` to ordered `RecoveryStrategy` lists |
-| `agent_circuit_breaker.py` | `CircuitBreaker` | Per-agent circuit breaker (closed/open/half-open) with configurable threshold and cooldown |
-| `agent_circuit_breaker.py` | `AgentHealth` | Health record dataclass tracking consecutive failures, lifetime counts, and state |
-| `self_healing.py` | `Diagnoser` | Diagnoses errors and generates `Diagnosis` with root cause, impact, and `RecoveryStep` plan |
-| `retry_engine.py` | `RetryEngine` | Config-aware retry with exponential backoff and per-category config adjusters |
-| `retry_policy.py` | `RetryPolicy` / `PipelineRetryExecutor` | Pipeline-step retry with jitter, dead-letter routing, sync and async execution |
-| `retry_policy.py` | `with_retry` | Decorator for retrying sync/async functions with exponential backoff |
-| `healing_log.py` | `HealingLog` / `HealingEvent` | Append-only log of diagnosis-recovery-outcome triples with JSONL export |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `agent_circuit_breaker.py` – Project file
+- `failure_taxonomy.py` – Project file
+- `healing_log.py` – Project file
+- `py.typed` – Project file
+- `retry_engine.py` – Project file
+- `retry_policy.py` – Project file
+- `self_healing.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `classify_error` uses keyword heuristics; confidence is 0.5 for unclassified errors.
-- `CircuitBreaker` transitions: CLOSED -> OPEN (after threshold) -> HALF_OPEN (after cooldown) -> CLOSED (on success).
-- `RetryEngine` sleeps between attempts; first retry delay is `base_delay * backoff_factor`.
-- `PipelineRetryExecutor` routes exhausted retries to `RetryOutcome.DEAD_LETTER`.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `agent_circuit_breaker.py`
+- `failure_taxonomy.py`
+- `healing_log.py`
+- `py.typed`
+- `retry_engine.py`
+- `retry_policy.py`
+- `self_healing.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring` (structured logging)
-- **Used by**: `orchestrator.process_orchestrator`, `orchestrator.workflows`, `orchestrator.execution`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [orchestrator](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [orchestrator](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,40 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/config_management/deployment
+# Codomyrmex Agents — src/codomyrmex/config_management/deployment
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Configuration files and templates.
 
-Provides configuration deployment and environment management for pushing configuration files across development, staging, production, and testing environments. Supports environment variable substitution, deployment tracking, and rollback capabilities.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `config_deployer.py` | `ConfigurationDeployer` | Main deployer managing environments, deployments, and rollbacks |
-| `config_deployer.py` | `ConfigurationDeployer.create_environment` | Creates a named environment with type, config path, and variables |
-| `config_deployer.py` | `ConfigurationDeployer.deploy_configuration` | Deploys config files to an environment with change analysis |
-| `config_deployer.py` | `ConfigurationDeployer.rollback_deployment` | Rolls back a specific deployment by ID |
-| `config_deployer.py` | `Environment` | Dataclass holding environment name, type, config path, variables, and secrets |
-| `config_deployer.py` | `ConfigDeployment` | Dataclass representing a deployment record with status tracking |
-| `config_deployer.py` | `DeploymentStatus` | Enum: `PENDING`, `IN_PROGRESS`, `SUCCESS`, `FAILED`, `ROLLED_BACK` |
-| `config_deployer.py` | `EnvironmentType` | Enum: `DEVELOPMENT`, `STAGING`, `PRODUCTION`, `TESTING` |
-| `config_deployer.py` | `deploy_configuration` | Convenience function for quick deployment |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `config_deployer.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Environment and deployment records are persisted as JSON files under `config_deployments/` and `environments/` directories.
-- Environment variable substitution supports both `${KEY}` and `$KEY` placeholder syntax.
-- Deployment IDs are generated from environment name and Unix timestamp.
-- A deployment that fails has its status set to `FAILED` and the record is still saved.
-- Rollback creates a new deployment record with status tracking independent of the original.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `config_deployer.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.exceptions.CodomyrmexError`, `codomyrmex.logging_monitoring.core.logger_config`
-- **Used by**: CI/CD pipelines, orchestrator workflows, environment management
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [config_management](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

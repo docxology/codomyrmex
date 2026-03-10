@@ -1,55 +1,56 @@
-# agents/openfang — Agent Capabilities
+# Codomyrmex Agents — src/codomyrmex/agents/openfang
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Wraps the openfang Agent Operating System via subprocess for use as a codomyrmex agent provider.
+## Purpose
+Contains components for the src system.
 
-## Capabilities
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `config.py` – Project file
+- `core.py` – Project file
+- `exceptions.py` – Project file
+- `hands.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `update.py` – Project file
+- `vendor/` – Directory containing vendor components
 
-```
-CODE_GENERATION
-TEXT_COMPLETION
-STREAMING
-MULTI_TURN
-TOOL_USE
-AUTONOMOUS_SCHEDULING
-MULTI_CHANNEL_MESSAGING
-WEBSOCKET_GATEWAY
-```
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Constraints
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `config.py`
+- `core.py`
+- `exceptions.py`
+- `hands.py`
+- `mcp_tools.py`
+- `py.typed`
+- `update.py`
 
-- Requires the openfang binary on PATH (or configured via `OPENFANG_COMMAND`)
-- Binary installation is external to Python — `uv sync` does not install it
-- Build from source requires Rust toolchain (`cargo`) and the vendor submodule initialized
-- Streaming via `OpenFangRunner.stream()` yields lines; no structured streaming protocol
-- WebSocket gateway requires openfang daemon running locally
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Navigation
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```
-agents/openfang/
-├── __init__.py        HAS_OPENFANG flag, all public exports
-├── core.py            OpenFangRunner subprocess wrapper
-├── config.py          OpenFangConfig env-var dataclass
-├── exceptions.py      OpenFangError hierarchy (5 classes)
-├── hands.py           HandsManager and Hand dataclass
-├── update.py          Submodule sync + build pipeline
-├── mcp_tools.py       7 @mcp_tool functions (auto-discovered)
-└── vendor/openfang/   git submodule → github.com/RightNow-AI/openfang
-```
-
-## Agent Providers
-
-`OpenFangRunner` (aliased as `OpenFangClient`) is registered in `agents/__init__.py`
-and can be used wherever a CLI agent client is expected.
-
-## MCP Auto-Discovery
-
-The 7 tools in `mcp_tools.py` are auto-discovered via the `@mcp_tool` decorator
-and surfaced through the PAI MCP bridge without manual registration.
-
-## Zero-Mock Policy
-
-All tests use real filesystem state and real subprocess calls.
-Binary-dependent tests use `@pytest.mark.skipif(not HAS_OPENFANG, ...)`.
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

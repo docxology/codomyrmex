@@ -1,26 +1,55 @@
-# AGENTS.md — cloud/google_workspace
+# Codomyrmex Agents — src/codomyrmex/cloud/google_workspace
 
-## Agent Consumption Guide
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-### When to Use This Module
+## Purpose
+Contains components for the src system.
 
-Use `cloud/google_workspace` when you need typed Python SDK access to Google Workspace APIs with service account authentication.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `auth.py` – Project file
+- `base.py` – Project file
+- `calendar.py` – Project file
+- `chat.py` – Project file
+- `docs.py` – Project file
+- `drive.py` – Project file
+- `exceptions.py` – Project file
+- `gmail.py` – Project file
+- `sheets.py` – Project file
 
-### Available SDK Tools (via cloud/mcp_tools.py)
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Operation |
-|------|-----------|
-| `gws_sdk_drive_list_files` | List Drive files |
-| `gws_sdk_gmail_list_messages` | List Gmail messages |
-| `gws_sdk_calendar_list_events` | List Calendar events |
-| `gws_sdk_sheets_get_values` | Read Sheets values |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `auth.py`
+- `base.py`
+- `calendar.py`
+- `chat.py`
+- `docs.py`
+- `drive.py`
+- `exceptions.py`
+- `gmail.py`
+- `sheets.py`
 
-### Prerequisites
-- SDK installed: `uv sync --extra google_workspace`
-- Service account key: `GWS_SERVICE_ACCOUNT_FILE=/path/to/sa.json`
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Error Handling
-- Missing creds -> `GoogleWorkspaceAuthError` (explicit, not silent)
-- API errors -> `GoogleWorkspaceAPIError(status_code, reason)`
-- Quota exceeded -> `GoogleWorkspaceQuotaError`
-- Not found -> `GoogleWorkspaceNotFoundError`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
+- **📁 Parent Directory**: [cloud](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,25 +1,26 @@
 # charts
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Chart generation components for bar, line, pie, and other visualization types.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
+- `area_chart.py` – File
 - `bar_chart.py` – File
+- `box_plot.py` – File
+- `heatmap.py` – File
 - `histogram.py` – File
 - `line_plot.py` – File
 - `pie_chart.py` – File
-- `plot_utils.py` – File
+- `py.typed` – File
 - `scatter_plot.py` – File
 
 ## Navigation
-
 - **Parent Directory**: [data_visualization](../README.md)
 - **Project Root**: ../../../../README.md

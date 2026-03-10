@@ -1,24 +1,17 @@
-# Orchestrator State Scripts
+# state
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for workflow state management, demonstrating state persistence, checkpoint/restore, and state machine transitions for long-running workflows.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `state_demo.py` | Demonstrates workflow state persistence, checkpointing, and recovery |
-
-## Usage
-
-```bash
-uv run python scripts/orchestrator/state/state_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `state_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: orchestrator/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [orchestrator](../README.md)
+- **Project Root**: ../../../README.md

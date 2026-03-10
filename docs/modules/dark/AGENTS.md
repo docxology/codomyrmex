@@ -1,63 +1,39 @@
-# Agent Guidelines - Dark
+# Codomyrmex Agents — docs/modules/dark
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Dark mode utilities for PDFs, network, hardware, and software.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **DarkPDF** — PDF dark mode processing
-- **DarkPDFFilter** — Filter types: inversion, brightness, contrast, sepia
-- **apply_dark_mode(path)** — Apply dark mode to PDF
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use apply_dark_mode** — Convenience function for simple conversions
-2. **Choose filter type** — Inversion for basic, sepia for readability
-3. **Adjust brightness** — Reduce for eye comfort
-4. **Preserve images** — Use smart inversion to skip images
-5. **Check output quality** — Verify text remains readable
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.dark import apply_dark_mode, DarkPDF, DarkPDFFilter
-
-# Simple dark mode conversion
-dark_pdf = apply_dark_mode("document.pdf")
-dark_pdf.save("document_dark.pdf")
-
-# Advanced customization
-processor = DarkPDF("document.pdf")
-processor.set_filter(DarkPDFFilter.SEPIA)
-processor.set_brightness(0.8)
-processor.set_contrast(1.1)
-processor.process()
-processor.save("output.pdf")
-
-# Batch processing
-for pdf in pdf_files:
-    apply_dark_mode(pdf).save(pdf.replace(".pdf", "_dark.pdf"))
-```
-
-## Testing Patterns
-
-```python
-# Verify dark mode processing
-from codomyrmex.dark import apply_dark_mode
-
-result = apply_dark_mode("test.pdf")
-assert result is not None
-assert result.page_count > 0
-
-# Verify filter application
-processor = DarkPDF("test.pdf")
-processor.set_filter(DarkPDFFilter.INVERSION)
-assert processor.current_filter == DarkPDFFilter.INVERSION
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

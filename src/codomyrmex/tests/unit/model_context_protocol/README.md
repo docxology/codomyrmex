@@ -1,21 +1,27 @@
 # model_context_protocol
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `model_context_protocol` module provides core functionality for Model Context Protocol..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `integration/` - Subdirectory
-- `test_model_context_protocol.py` - Test Model Context Protocol
-- `unit/` - Subdirectory
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `integration/` – Subdirectory
+- `test_decorators.py` – File
+- `test_discovery.py` – File
+- `test_mcp_server.py` – File
+- `test_mcp_tools.py` – File
+- `test_model_context_protocol.py` – File
+- `test_schemas.py` – File
+- `test_server_coverage.py` – File
+- `test_tools_extended.py` – File
+- `test_transport.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

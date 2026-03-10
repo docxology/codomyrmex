@@ -1,39 +1,41 @@
 # Codomyrmex Agents — src/codomyrmex/security/audit
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Security audit logging with two complementary systems: an event-based `AuditLogger` with pluggable storage backends, and an immutable HMAC-chained `AuditTrail` for tamper-evident agent action recording.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `__init__.py` | `AuditEventType` | Enum of 11 event types: `AUTH_LOGIN`, `AUTH_LOGOUT`, `AUTH_FAILED`, `DATA_ACCESS`, `DATA_CREATE`, `DATA_UPDATE`, `DATA_DELETE`, `PERMISSION_CHANGE`, `CONFIG_CHANGE`, `SYSTEM_ERROR`, `ADMIN_ACTION` |
-| `__init__.py` | `AuditSeverity` | Enum: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL` |
-| `__init__.py` | `AuditEvent` | Dataclass with SHA-256 `.signature` property and `.to_dict()` / `.to_json()` serialization |
-| `__init__.py` | `AuditStore` (ABC) | Abstract storage interface: `store()`, `query()` |
-| `__init__.py` | `InMemoryAuditStore` | Thread-safe in-memory store with LRU eviction at `max_events` (default 10,000) |
-| `__init__.py` | `FileAuditStore` | Thread-safe JSONL append-only file store |
-| `__init__.py` | `AuditLogger` | Main service: `log()`, `log_login()`, `log_data_access()`, `log_admin_action()`, `query()` |
-| `audit_trail.py` | `AuditEntry` | Dataclass with `previous_hash`, `entry_hash` for chain integrity |
-| `audit_trail.py` | `AuditTrail` | Append-only HMAC-SHA256 chained trail: `record()`, `verify_chain()`, `entries_by_actor()`, `to_jsonl()` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `audit_trail.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Both `InMemoryAuditStore` and `FileAuditStore` use `threading.Lock` for safe concurrent writes.
-- `AuditTrail` uses HMAC-SHA256 with a configurable `signing_key` (default `b"codomyrmex-audit"`) for chain integrity.
-- `verify_chain()` validates the full chain from genesis and returns `False` on any tampered entry.
-- `FileAuditStore.query()` performs a full linear scan; no indexing.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `audit_trail.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring` (structured logging)
-- **Used by**: PAI trust gateway audit, agent action tracking, security compliance checks
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [security](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [security](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

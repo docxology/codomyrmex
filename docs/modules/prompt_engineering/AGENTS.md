@@ -1,91 +1,39 @@
-# Prompt Engineering Module — Agent Coordination
+# Codomyrmex Agents — docs/modules/prompt_engineering
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Prompt Engineering Module
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-Provides tools for prompt template management, version tracking,
-optimization strategies, and evaluation scoring. Part of the
-Codomyrmex modular development platform.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Key Capabilities
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-- **`PromptTemplate`** -- Reusable prompt template with variable placeholders and rendering.
-- **`TemplateRegistry`** -- Registry for managing collections of prompt templates.
-- **`PromptVersion`** -- Versioned snapshot of a prompt template.
-- **`VersionManager`** -- Version history tracking with diff and rollback.
-- **`OptimizationStrategy`** -- Enum: CONCISE, DETAILED, CHAIN_OF_THOUGHT, FEW_SHOT.
-- **`OptimizationResult`** -- Result of a prompt optimization with token reduction estimate.
-- **`PromptOptimizer`** -- Applies optimization strategies to templates.
-- **`EvaluationCriteria`** -- Single evaluation criterion with scorer function and weight.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Agent Usage Patterns
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```python
-from codomyrmex.prompt_engineering import PromptTemplate, TemplateRegistry
-
-template = PromptTemplate(
-    name="summarize",
-    template_str="Summarize the following {content_type}: {text}",
-)
-print(template.variables)  # ['content_type', 'text']
-
-rendered = template.render(content_type="article", text="Machine learning is...")
-print(rendered)
-
-# Use a registry
-registry = TemplateRegistry()
-registry.add(template)
-output = registry.render("summarize", content_type="paper", text="Deep learning...")
-```
-
-## Key Components
-
-| Export | Type |
-|--------|------|
-| `PromptTemplate` | Public API |
-| `TemplateRegistry` | Public API |
-| `get_default_registry` | Public API |
-| `PromptVersion` | Public API |
-| `VersionManager` | Public API |
-| `OptimizationStrategy` | Public API |
-| `OptimizationResult` | Public API |
-| `PromptOptimizer` | Public API |
-| `EvaluationCriteria` | Public API |
-| `EvaluationResult` | Public API |
-| `PromptEvaluator` | Public API |
-| `get_default_criteria` | Public API |
-| `score_relevance` | Public API |
-| `score_response_length` | Public API |
-| `score_structure` | Public API |
-
-## Source Files
-
-| File | Description |
-|------|-------------|
-| `evaluation.py` | Prompt Evaluation and Scoring |
-| `optimization.py` | Prompt Optimization Utilities |
-| `templates.py` | Prompt Template Management |
-| `versioning.py` | Prompt Version Tracking |
-
-## Internal Dependencies
-
-- `codomyrmex.exceptions`
-- `codomyrmex.schemas`
-
-## Integration Points
-
-- **Docs**: [Module Documentation](../../../docs/modules/prompt_engineering/README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k prompt_engineering -v
-```
-
-- Always use real, functional tests — no mocks (Zero-Mock policy)
-- Verify all changes pass existing tests before submitting
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

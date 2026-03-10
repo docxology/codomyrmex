@@ -1,32 +1,33 @@
-# LoRA (Low-Rank Adaptation) -- Agent Coordination
+# Codomyrmex Agents — docs/modules/lora
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Implements Low-Rank Adaptation (LoRA) for parameter-efficient fine-tuning. Decomposes weight update matrices into low-rank factors, enabling fine-tuning with a fraction of the original parameters.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `lora_apply` | Apply LoRA decomposition to a weight matrix and report parameter reduction | Standard | lora |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Apply LoRA adapters to model weight matrices for efficient fine-tuning |
-| VERIFY | QA Agent | Verify parameter reduction and adaptation quality |
-
-
-## Agent Instructions
-
-1. Rank r should be much smaller than min(d, k) for meaningful parameter reduction
-2. Alpha controls the scaling of the LoRA delta (scaling = alpha / rank)
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/lora/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

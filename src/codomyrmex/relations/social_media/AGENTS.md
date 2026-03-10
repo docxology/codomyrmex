@@ -1,34 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/relations/social_media
+# Codomyrmex Agents — src/codomyrmex/relations/social_media
 
-**Version**: v1.0.0 | **Status**: Placeholder | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Placeholder subpackage reserved for social media integration features within
-the relations module. No concrete implementation exists yet; the package
-contains only an empty `__init__.py` with `__all__ = []`.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `__init__.py` | _(empty)_ | Package marker; exports nothing |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- This submodule currently exposes no public API.
-- Any future implementation must follow the zero-mock policy: real external
-  service calls or `NotImplementedError`, never fake data.
-- Agents must not generate stub implementations that silently return placeholder
-  data for social media endpoints.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: None (empty package)
-- **Used by**: Not currently imported by any module
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [relations](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [relations](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

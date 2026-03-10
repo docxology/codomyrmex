@@ -1,43 +1,51 @@
-# Codomyrmex Agents -- src/codomyrmex/agents/droid
+# Codomyrmex Agents — src/codomyrmex/agents/droid
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-The droid package implements a thread-safe autonomous task runner that processes TODO lists through configurable controllers, with support for handler resolution, interactive and non-interactive execution modes, and real-time progress metrics.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `controller.py` | `DroidController` | Thread-safe controller coordinating droid operations with lifecycle management (start/stop), task execution gated by permission checks, and performance-monitored methods |
-| `controller.py` | `DroidConfig` | Frozen dataclass holding immutable configuration (LLM provider, mode, safe_mode, retry settings); constructed from dicts, JSON, files, or environment variables |
-| `controller.py` | `DroidMetrics` | Mutable dataclass tracking sessions started/completed, tasks executed/failed, last error, and heartbeat timestamps |
-| `controller.py` | `DroidMode` / `DroidStatus` | Enums for operating modes (DEVELOPMENT, PRODUCTION, TEST, MAINTENANCE) and lifecycle states (STOPPED, IDLE, RUNNING, ERROR) |
-| `todo.py` | `TodoItem` | Dataclass representing a single TODO entry; parses both new 3-column format (`task_name description outcomes`) and legacy handler-based format |
-| `todo.py` | `TodoManager` | Manages TODO file I/O: load, save, rotate completed items, validate entries, and migrate legacy formats to 3-column |
-| `tasks.py` | `ensure_documentation_exists` | Task handler verifying DroidController has docstrings |
-| `tasks.py` | `verify_real_methods` | Task handler confirming required symbols exist in the controller module |
-| `tasks.py` | `verify_readiness` | Task handler checking that required project directories exist on disk |
-| `run_todo_droid.py` | `run_todos` | Core execution loop: processes N items sequentially with progress bars, per-task timing, ETA, and summary statistics |
-| `run_todo_droid.py` | `resolve_handler` | Resolves `module:function` handler strings to callables, with short-name expansion for `droid:` and `ai_code:` prefixes |
-| `run_todo_droid.py` | `main` | CLI entry point with argparse: supports `--count`, `--list`, `--dry-run`, `--non-interactive`, `--config` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `controller.py` – Project file
+- `generators/` – Directory containing generators components
+- `handlers/` – Directory containing handlers components
+- `py.typed` – Project file
+- `run_todo_droid.py` – Project file
+- `tasks.py` – Project file
+- `todo.py` – Project file
+- `todo_list.txt` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `DroidController` uses an `RLock` for all state mutations; callers must not assume single-threaded access.
-- `DroidConfig` is immutable (`frozen=True`); updates return new instances via `with_overrides()`.
-- Safe mode (`safe_mode=True` by default) rejects handlers whose names start with `unsafe_`.
-- Operations are permission-gated: `allowed_operations` whitelist and `blocked_operations` blacklist are checked before every `execute_task` call.
-- `TodoManager.load()` skips malformed entries with a warning rather than aborting the entire file.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `controller.py`
+- `py.typed`
+- `run_todo_droid.py`
+- `tasks.py`
+- `todo.py`
+- `todo_list.txt`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring.core.logger_config`, `codomyrmex.performance` (`monitor_performance`, `performance_context`)
-- **Used by**: CLI invocation via `python -m codomyrmex.agents.droid.run_todo_droid`, droid task handlers in `generators/` subpackage
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [agents](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

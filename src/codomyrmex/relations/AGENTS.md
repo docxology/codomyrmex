@@ -1,117 +1,53 @@
-# Agent Instructions for `codomyrmex.relations`
+# Codomyrmex Agents — src/codomyrmex/relations
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-The Relations module provides three complementary subsystems for tracking entities and their connections: a CRM (Contact Relationship Management) engine for contact storage, tagging, and interaction logging; a social-network analysis toolkit with community detection, centrality metrics, and shortest-path search; and a UOR (Universal Object Reference) layer that gives every entity a content-addressed identity with PRISM triadic coordinates. Agents use this module to build, query, and score relationship graphs across the codomyrmex ecosystem.
+Contains components for the src system.
 
 ## Active Components
-
-| Component | Type | File | Status |
-|-----------|------|------|--------|
-| `Contact` | Dataclass | `crm/crm.py` | Active |
-| `ContactManager` | Class | `crm/crm.py` | Active |
-| `Interaction` | Dataclass | `crm/crm.py` | Active |
-| `SocialGraph` | Class | `network_analysis/graph.py` | Active |
-| `GraphMetrics` | Static utility | `network_analysis/graph.py` | Active |
-| `PrismEngine` | Class | `uor/engine.py` | Active |
-| `TriadicCoordinate` | Frozen dataclass | `uor/engine.py` | Active |
-| `UOREntity` | Dataclass | `uor/entities.py` | Active |
-| `UORRelationship` | Dataclass | `uor/entities.py` | Active |
-| `EntityManager` | Class | `uor/` | Active |
-| `DerivationRecord` | Dataclass | `uor/` | Active |
-| `DerivationTracker` | Class | `uor/` | Active |
-| `UORGraph` | Class | `uor/` | Active |
-| `render_social_graph()` | Function | `visualization.py` | Active |
-| `render_interaction_timeline()` | Function | `visualization.py` | Active |
-| `contact_heatmap_data()` | Function | `visualization.py` | Active |
-| `tag_co_occurrence()` | Function | `visualization.py` | Active |
-| `network_summary_text()` | Function | `visualization.py` | Active |
-| `export_contacts_csv()` | Function | `visualization.py` | Active |
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `relations_score_strength` | Score pairwise relationship strength from interaction history with configurable decay (exponential, linear, step, none) | Safe (read-only) |
-
-This is the only MCP tool exposed in `mcp_tools.py`. It accepts a source entity, target entity, interaction list, and decay parameters, returning a raw score and interaction count.
-
-## Usage Guidelines
-
-1. **Importing**: Import from the module root for all public types.
-
-   ```python
-   from codomyrmex.relations import (
-       Contact, ContactManager, Interaction,
-       SocialGraph, GraphMetrics,
-       UOREntity, UORRelationship, PrismEngine, TriadicCoordinate,
-   )
-   ```
-
-2. **Contact Management**: Use `ContactManager` for all CRUD operations. Always record `Interaction` events when engaging with contacts. Contacts support tagging via `contact.tags`.
-
-3. **Social Graph**: Use `SocialGraph` for modeling entity relationships as an undirected weighted graph. Key methods:
-   - `add_node()` / `add_edge()` -- build the graph
-   - `find_communities()` -- label-propagation community detection
-   - `calculate_centrality()` -- degree centrality scores
-   - `shortest_path()` -- BFS shortest path between nodes
-   - `get_influence_score()` -- weighted influence metric
-
-4. **Graph Metrics**: `GraphMetrics` provides static methods: `density()`, `clustering_coefficient()`, and `degree_distribution()`.
-
-5. **UOR Entities**: Use `UOREntity` for content-addressed entities with SHA256 hashing. Attribute mutations auto-recompute the content hash. `UORRelationship` links entities with typed, weighted, optionally bidirectional edges.
-
-6. **PRISM Engine**: `PrismEngine` operates over the modular ring Z/(2^(8*(quantum+1)))Z with triadic coordinates (datum, stratum, spectrum). Use `verify()` to confirm algebraic coherence.
-
-## Quick Verification
-
-```bash
-uv run python -c "from codomyrmex.relations import Contact, ContactManager, SocialGraph, GraphMetrics, UOREntity, PrismEngine; print('OK')"
-uv run pytest src/codomyrmex/tests/unit/relations/ -v
-```
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `crm/` – Directory containing crm components
+- `mcp_tools.py` – Project file
+- `network_analysis/` – Directory containing network_analysis components
+- `py.typed` – Project file
+- `social_media/` – Directory containing social_media components
+- `strength_scoring.py` – Project file
+- `uor/` – Directory containing uor components
+- `visualization.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Every `SocialGraph` edge is undirected: `add_edge(a, b)` creates both `a->b` and `b->a`.
-- `UOREntity.content_hash` is recomputed automatically on `set_attribute()`, `remove_attribute()`, and `merge_attributes()`. Do not set `content_hash` manually.
-- `PrismEngine.verify()` must be called before trusting algebraic operations at quantum levels above 0.
-- The `relations_score_strength` MCP tool catches all exceptions internally and returns `{"status": "error"}` rather than raising.
-- **Zero-Mock Policy**: Tests must use real `ContactManager`, `SocialGraph`, and `PrismEngine` instances. No mocking of storage, graph operations, or hash computation.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
+- `strength_scoring.py`
+- `visualization.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **visualization module**: `render_social_graph()` and related functions consume `ContactManager` to produce graph definitions, timelines, heatmaps, and CSV exports.
-- **data_visualization module**: Not directly imported (circular-import avoidance), but graph data can be passed to the `data_visualization` charting pipeline.
-- **cerebrum module**: Case-based reasoning can use `SocialGraph` centrality and community data as features.
-- **networks module**: The general `networks` module provides lower-level graph primitives; `relations` builds domain-specific CRM and UOR semantics on top.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `relations_score_strength` | TRUSTED |
-| **Architect** | Read + Design | `relations_score_strength` — relationship design, entity graph architecture | OBSERVED |
-| **QATester** | Validation | `relations_score_strength` — relationship strength verification | OBSERVED |
-| **Researcher** | Read-only | `relations_score_strength` — compute relationship scores for analysis | SAFE |
-
-### Engineer Agent
-**Use Cases**: Scoring entity relationships during OBSERVE/THINK, building relationship graphs, computing link strength metrics.
-
-### Architect Agent
-**Use Cases**: Designing entity relationship models, reviewing relationship schema, graph architecture analysis.
-
-### QATester Agent
-**Use Cases**: Validating relationship scores during VERIFY, confirming entity linkage correctness.
-
-### Researcher Agent
-**Use Cases**: Computing relationship strength scores between entities for research analysis and insight extraction.
-
-## Navigation
-
-- Module: `src/codomyrmex/relations/`
-- PAI integration: [PAI.md](PAI.md)
-- Specification: [SPEC.md](SPEC.md)
-- Root bridge: [/PAI.md](../../../PAI.md)
-- Parent: [../AGENTS.md](../AGENTS.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

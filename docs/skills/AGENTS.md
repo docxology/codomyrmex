@@ -1,19 +1,45 @@
-# Skills Documentation — Agents
+# Codomyrmex Agents — docs/skills
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Skills documentation for agent use. Agents should reference these guides to understand how to discover, invoke, compose, and test skills within the Codomyrmex ecosystem.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `composition-and-testing.md` – Project file
+- `discovery-and-execution.md` – Project file
+- `index.md` – Project file
+- `marketplace-and-governance.md` – Project file
+- `skill-lifecycle.md` – Project file
 
-## Agent Guidelines
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Use skill discovery APIs before attempting manual invocation
-- Respect skill version constraints and compatibility matrices
-- Follow composition patterns documented in composition-and-testing.md
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `composition-and-testing.md`
+- `discovery-and-execution.md`
+- `index.md`
+- `marketplace-and-governance.md`
+- `skill-lifecycle.md`
 
-## Navigation
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent**: [docs/](../AGENTS.md)
-- **Self**: [skills/AGENTS.md](AGENTS.md)
-- **Human Docs**: [README.md](README.md)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

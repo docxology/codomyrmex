@@ -1,20 +1,25 @@
 # concurrency
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `concurrency` module provides core functionality for Concurrency..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_async_concurrency.py` - Test Async Concurrency
-- `test_concurrency.py` - Test Concurrency
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `test_async_concurrency.py` – File
+- `test_concurrency.py` – File
+- `test_concurrency_core.py` – File
+- `test_dead_letter_queue.py` – File
+- `test_distributed_lock.py` – File
+- `test_distributed_tasks.py` – File
+- `test_mcp_tools.py` – File
+- `test_result_aggregator.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

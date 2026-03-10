@@ -1,38 +1,47 @@
-# documents/core — Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/documents/core
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Provides document I/O and validation primitives that agents use to read, write, parse, and validate documents in multiple formats (Markdown, JSON, YAML, PDF, plain text).
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `DocumentReader` | Reads files with auto-format detection via MIME type and encoding detection |
-| `DocumentWriter` | Writes `Document` objects to disk, auto-creating parent directories |
-| `DocumentValidator` | Validates document content; supports JSON/YAML syntax and jsonschema validation |
-| `DocumentParser` | Parses raw content strings into `Document` objects with format inference |
-| `read_document()` | Convenience function wrapping `DocumentReader.read()` |
-| `write_document()` | Convenience function wrapping `DocumentWriter.write()` |
-| `validate_document()` | Convenience function wrapping `DocumentValidator.validate()` |
-| `parse_document()` | Convenience function wrapping `DocumentParser.parse()` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `document_parser.py` – Project file
+- `document_reader.py` – Project file
+- `document_validator.py` – Project file
+- `document_writer.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `DocumentReader.read(path)` returns a `Document` with content loaded as bytes or string depending on format.
-- `DocumentWriter.write(doc, path)` serializes the document content to the specified path. Creates intermediate directories.
-- `DocumentValidator.validate(doc)` returns a `ValidationResult` with `is_valid`, `errors`, and `warnings` lists.
-- Schema validation via `_validate_against_schema()` requires the `jsonschema` package.
-- All four classes follow the same pattern: stateless class instantiation, single primary method, plus a module-level convenience function.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `document_parser.py`
+- `document_reader.py`
+- `document_validator.py`
+- `document_writer.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Models**: Uses `Document`, `DocumentFormat`, and `DocumentType` from `documents.models`.
-- **Search**: Validated and parsed documents feed into `documents.search` for indexing.
-- **Logging**: Uses `codomyrmex.logging_monitoring.get_logger` for structured logging.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [documents README](../README.md)
-- **Siblings**: [models](../models/AGENTS.md) | [search](../search/AGENTS.md)
-- **Spec**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [documents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

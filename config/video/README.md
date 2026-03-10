@@ -1,29 +1,16 @@
-# Video Configuration
+# video
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Video processing including capture, editing, transcoding, and analysis. Provides video frame extraction, format conversion, and video metadata handling.
+Configuration files and templates.
 
-## Configuration Options
-
-The video module operates with sensible defaults and does not require environment variable configuration. Requires optional dependencies: `uv sync --extra video`. FFmpeg must be installed for transcoding operations.
-
-## PAI Integration
-
-PAI agents interact with video through direct Python imports. Requires optional dependencies: `uv sync --extra video`. FFmpeg must be installed for transcoding operations.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep video
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/video/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

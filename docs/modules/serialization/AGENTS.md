@@ -1,62 +1,41 @@
-# Agent Guidelines - Serialization
+# Codomyrmex Agents — docs/modules/serialization
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Data serialization: JSON, YAML, msgpack, protobuf, and custom formats.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Serializer** — Multi-format serialization
-- **JSONSerializer** — JSON with custom encoders
-- **YAMLSerializer** — YAML with safe loading
-- **ProtobufSerializer** — Protocol Buffers
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use appropriate format** — JSON for APIs, msgpack for speed
-2. **Handle dates** — Use ISO format for datetime
-3. **Safe loading** — Use safe_load for YAML
-4. **Version schemas** — Include version in format
-5. **Validate on deserialize** — Check structure after load
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.serialization import (
-    Serializer, JSONSerializer, serialize, deserialize
-)
-
-# Auto-detect format
-data = {"name": "test", "count": 42}
-json_bytes = serialize(data, format="json")
-back = deserialize(json_bytes, format="json")
-
-# Custom serializer
-serializer = Serializer()
-serializer.register_encoder(datetime, lambda d: d.isoformat())
-output = serializer.dumps({"created": datetime.now()})
-
-# With validation
-from codomyrmex.serialization import deserialize_validated
-data = deserialize_validated(raw, schema=MySchema)
-```
-
-## Testing Patterns
-
-```python
-# Verify round-trip
-data = {"key": "value", "num": 123}
-encoded = serialize(data, format="json")
-decoded = deserialize(encoded, format="json")
-assert decoded == data
-
-# Verify format detection
-assert detect_format(b'{"a":1}') == "json"
-assert detect_format(b'a: 1') == "yaml"
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

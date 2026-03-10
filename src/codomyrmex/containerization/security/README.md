@@ -1,21 +1,20 @@
 # security
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Provides container security scanning and optimization.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `performance_optimizer.py` - Performance Optimizer
-- `security_scanner.py` - Security Scanner
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `performance_optimizer.py` – File
+- `py.typed` – File
+- `security_scanner.py` – File
 
 ## Navigation
-
-- **Parent Module**: [containerization](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [containerization](../README.md)
+- **Project Root**: ../../../../README.md

@@ -1,24 +1,17 @@
-# Telemetry Alerting Scripts
+# alerting
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for telemetry alerting, demonstrating alert rule configuration, threshold monitoring, notification routing, and alert lifecycle management.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `alerting_demo.py` | Demonstrates alert rule creation, threshold triggers, and notification dispatch |
-
-## Usage
-
-```bash
-uv run python scripts/telemetry/alerting/alerting_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `alerting_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: telemetry/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [telemetry](../README.md)
+- **Project Root**: ../../../README.md

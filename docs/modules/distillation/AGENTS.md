@@ -1,32 +1,33 @@
-# Knowledge Distillation -- Agent Coordination
+# Codomyrmex Agents — docs/modules/distillation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Implements teacher-student knowledge distillation training pipeline. Computes distillation loss combining soft-label KL divergence with hard-label cross-entropy for model compression.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `distillation_compute_loss` | Compute knowledge distillation loss on synthetic teacher-student data | Standard | distillation |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Train smaller student models from larger teacher models |
-| VERIFY | QA Agent | Validate distillation loss convergence and student quality |
-
-
-## Agent Instructions
-
-1. Set temperature > 1.0 for softer probability distributions (typical range 2.0-20.0)
-2. Alpha controls the weight between distillation loss and hard-label cross-entropy loss
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/distillation/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

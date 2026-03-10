@@ -1,5 +1,7 @@
 """Tests for cache MCP tools.
 
+Zero-Mock Policy: no unittest.mock, MagicMock, monkeypatch, or pytest-mock.
+
 Zero-mock policy: tests use the real in-memory Cache via the MCP tool functions.
 Each test uses a unique cache name to avoid cross-test state. The module-level
 manager singleton is reset via autouse fixture.

@@ -1,71 +1,41 @@
-# Agent Guidelines - LLM
+# Codomyrmex Agents — docs/modules/llm
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Large Language Model integration: providers, chains, and prompts.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **LLMClient** — Multi-provider LLM client
-- **ChatSession** — Stateful conversations
-- **PromptTemplate** — Template-based prompts
-- **LLMChain** — Chained LLM operations
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use templates** — Structured, reusable prompts
-2. **Handle streaming** — Stream for long responses
-3. **Token awareness** — Track token usage
-4. **Error handling** — Retry on transient failures
-5. **Cache responses** — Cache where appropriate
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.llm import LLMClient, ChatSession, PromptTemplate
-
-# Initialize client
-client = LLMClient(provider="openai", model="gpt-4")
-
-# Simple completion
-response = client.complete("Explain quantum computing")
-
-# Chat session
-session = ChatSession(client)
-session.add_system("You are a helpful coding assistant")
-response = session.chat("How do I implement a binary tree?")
-response = session.chat("Now add a delete method")  # Has context
-
-# Prompt templates
-template = PromptTemplate(
-    "Summarize {document} in {num_sentences} sentences."
-)
-prompt = template.format(document=text, num_sentences=3)
-summary = client.complete(prompt)
-
-# Streaming
-async for chunk in client.stream("Long response needed"):
-    print(chunk, end="")
-```
-
-## Testing Patterns
-
-```python
-# Verify client with real provider
-import os
-client = LLMClient(provider="openai", model="gpt-4")
-if os.getenv("OPENAI_API_KEY"):
-    response = client.complete("Test")
-    assert response is not None
-
-# Verify template
-template = PromptTemplate("Hello {name}")
-prompt = template.format(name="World")
-assert prompt == "Hello World"
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

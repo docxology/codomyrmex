@@ -1,26 +1,55 @@
 # Codomyrmex Agents — src/codomyrmex/tests/unit/serialization
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
 Test files and validation suites.
 
 ## Active Components
-
 - `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `test_binary_formats_fuzzing.py` – Project file
+- `test_hypothesis_round_trips.py` – Project file
 - `test_serialization.py` – Project file
+- `test_serialization_core.py` – Project file
+- `test_serialization_exceptions.py` – Project file
 - `test_serialization_expansion.py` – Project file
+- `test_serialization_manager.py` – Project file
+- `test_serialization_mcp_tools.py` – Project file
+- `test_streaming.py` – Project file
 
 ## Operating Contracts
-
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation Links
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `test_binary_formats_fuzzing.py`
+- `test_hypothesis_round_trips.py`
+- `test_serialization.py`
+- `test_serialization_core.py`
+- `test_serialization_exceptions.py`
+- `test_serialization_expansion.py`
+- `test_serialization_manager.py`
+- `test_serialization_mcp_tools.py`
+- `test_streaming.py`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
 - **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../../README.md - Main project documentation

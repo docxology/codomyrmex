@@ -1,42 +1,57 @@
-# Bio-Inspired Design — Agent Coordination
+# Codomyrmex Agents — docs/bio
 
-**Section**: `docs/bio` | **Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Bio-inspired design documentation drawing precise structural parallels between ant colony behavior, cognitive science, and the software architecture patterns used in Codomyrmex. These essays are the theoretical substrate underlying the platform's multi-agent coordination philosophy.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `eusociality.md` – Project file
+- `evolution.md` – Project file
+- `free_energy.md` – Project file
+- `immune_system.md` – Project file
+- `memory_and_forgetting.md` – Project file
+- `metabolism.md` – Project file
+- `myrmecology.md` – Project file
+- `stigmergy.md` – Project file
+- `superorganism.md` – Project file
+- `swarm_intelligence.md` – Project file
+- `symbiosis.md` – Project file
 
-## Key Capabilities
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Stigmergic coordination models** — Event-driven pub/sub as computational pheromone trails (see [stigmergy.md](./stigmergy.md))
-- **Eusocial role assignment** — Agent specialization via response-threshold dynamics (see [eusociality.md](./eusociality.md))
-- **Swarm intelligence patterns** — Quorum sensing, ACO, flocking for collective decisions (see [swarm_intelligence.md](./swarm_intelligence.md))
-- **Active inference agents** — Free energy minimization as agent action policy (see [free_energy.md](./free_energy.md))
-- **Immune defense models** — Self/non-self discrimination, danger signals, layered defense (see [immune_system.md](./immune_system.md))
-- **Adaptive memory** — Forgetting as feature, multi-store architecture (see [memory_and_forgetting.md](./memory_and_forgetting.md))
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `eusociality.md`
+- `evolution.md`
+- `free_energy.md`
+- `immune_system.md`
+- `memory_and_forgetting.md`
+- `metabolism.md`
+- `myrmecology.md`
+- `stigmergy.md`
+- `superorganism.md`
+- `swarm_intelligence.md`
+- `symbiosis.md`
 
-## Agent Usage Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-Agents interacting with Codomyrmex should use these documents as **design heuristics**:
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| When Designing... | Consult... | Because... |
-|-------------------|-----------|------------|
-| Multi-agent task allocation | [eusociality.md](./eusociality.md) | Response-threshold model avoids central authority |
-| Event-based coordination | [stigmergy.md](./stigmergy.md) | Indirect communication via shared environment |
-| System-wide health monitoring | [superorganism.md](./superorganism.md) | Colony-level metrics reveal emergent pathologies |
-| Security architecture | [immune_system.md](./immune_system.md) | Layered defense with danger-signal detection |
-| Cache/memory strategy | [memory_and_forgetting.md](./memory_and_forgetting.md) | Forgetting optimizes retrieval relevance |
-| Predictive monitoring | [free_energy.md](./free_energy.md) | Active inference preempts reactive correction |
-| Plugin/integration design | [symbiosis.md](./symbiosis.md) | Holobiont model for composite system boundaries |
-
-## Integration Points
-
-- **Docs**: [README.md](README.md) — Series overview and reading order
-- **Bio Simulation**: [../modules/bio_simulation/](../modules/bio_simulation/) — Computational ant colony models
-- **Embodiment**: [../modules/embodiment/](../modules/embodiment/) — Sensor/actuator bridge (ROS2)
-- **Agents**: [../modules/agents/](../modules/agents/) — Multi-agent framework integration
-- **SPEC**: [SPEC.md](SPEC.md) — Formal biological-software analogies
-
-## Testing Guidelines
-
-Bio documentation is reference-only; no executable tests. However, the architectural mappings herein should be validated against the modules they reference — if a mapping claims a module implements a pattern, the module's tests should exercise that pattern.
+## Navigation Links
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

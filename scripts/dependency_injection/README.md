@@ -1,30 +1,16 @@
-# Dependency Injection
+# dependency_injection
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demonstrates the dependency injection module including IoC container usage, scope management, and auto-injection with Protocol-based interfaces.
+Automation and utility scripts.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `orchestrator.py` | Shows IoC container registration, scoped injection, and service resolution patterns |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync
-```
-
-**Run:**
-```bash
-uv run python scripts/dependency_injection/orchestrator.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `orchestrator.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

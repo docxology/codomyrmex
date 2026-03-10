@@ -1,5 +1,5 @@
 """
-Tests for Agentic Memory Module
+Tests for Agentic Memory Module — strictly zero-mock.
 """
 
 import pytest

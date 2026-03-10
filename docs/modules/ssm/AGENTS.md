@@ -1,33 +1,33 @@
-# State Space Models -- Agent Coordination
+# Codomyrmex Agents — docs/modules/ssm
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Implements Mamba selective State Space Model (SSM) from scratch. Provides MambaBlock with selective scan mechanism for efficient sequence modeling as an alternative to attention-based transformers.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `ssm_forward` | Run a forward pass through Mamba State Space Model | Standard | ssm |
-| `flash_attention_forward` | Run Flash Attention and verify against standard attention | Standard | neural |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Construct and evaluate SSM-based sequence models |
-| VERIFY | QA Agent | Validate SSM output shapes and selective scan behavior |
-
-
-## Agent Instructions
-
-1. d_state controls the SSM hidden state dimension (higher = more expressive but slower)
-2. Stack multiple MambaBlock layers via n_layers parameter for deeper models
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/ssm/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

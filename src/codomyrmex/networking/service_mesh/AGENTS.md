@@ -1,38 +1,43 @@
-# Service Mesh - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/networking/service_mesh
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Service mesh primitives providing circuit breaker, load balancer, retry policy, and service proxy patterns for resilient inter-service communication.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `CircuitBreaker` | Fault tolerance with CLOSED/OPEN/HALF_OPEN state machine |
-| `CircuitBreakerConfig` | Config: failure_threshold (5), success_threshold (2), timeout_seconds (30), half_open_max_calls (3) |
-| `CircuitState` | Enum: CLOSED, OPEN, HALF_OPEN |
-| `LoadBalancer` | Request distribution across service instances |
-| `LoadBalancerStrategy` | Enum: ROUND_ROBIN, RANDOM, WEIGHTED, LEAST_CONNECTIONS |
-| `ServiceInstance` | Dataclass: id, host, port, weight, healthy, connections, metadata |
-| `RetryPolicy` | Configurable retry logic with backoff |
-| `ServiceProxy` | Composite proxy combining circuit breaker, load balancer, and retry |
-| `with_circuit_breaker` | Decorator for circuit breaker wrapping |
-| `with_retry` | Decorator for retry policy wrapping |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `resilience.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `CircuitOpenError` is raised when calling through an open circuit breaker.
-- `NoHealthyInstanceError` is raised when no healthy `ServiceInstance` entries are available for load balancing.
-- `ServiceInstance.address` property returns `"{host}:{port}"`.
-- `cli_commands()` function provides CLI integration for service mesh operations.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `models.py`
+- `py.typed`
+- `resilience.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent module**: `networking/` provides shared exceptions and network utilities.
-- **Decorators**: `with_circuit_breaker` and `with_retry` can wrap any callable.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [networking/](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md)
-- **Root**: [/README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [networking](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

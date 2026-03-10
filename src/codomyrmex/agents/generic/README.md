@@ -1,13 +1,12 @@
 # generic
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Generic agent templates and base implementations for creating custom agents.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -16,9 +15,9 @@ Generic agent templates and base implementations for creating custom agents.
 - `api_agent_base.py` – File
 - `cli_agent_base.py` – File
 - `message_bus.py` – File
+- `py.typed` – File
 - `task_planner.py` – File
 
 ## Navigation
-
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../README.md

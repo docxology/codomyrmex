@@ -93,6 +93,9 @@ class TestDeploymentStatusEnum:
             "FAILURE",
             "ROLLED_BACK",
             "CANCELLED",
+            "IN_PROGRESS",
+            "DEPLOYED",
+            "ROLLING_BACK",
         }
         assert set(DeploymentStatus.__members__.keys()) == expected
 

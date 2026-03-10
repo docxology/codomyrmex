@@ -1,123 +1,77 @@
-# Agent Guidelines - LLM
+# Codomyrmex Agents — src/codomyrmex/llm
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Multi-provider LLM integration layer supporting OpenRouter (cloud), Ollama (local), and Microsoft Fabric. Provides text generation via `ask()`, local model management via `OllamaManager`, Fabric integration via `FabricManager`, and a rich submodule ecosystem covering chains, embeddings, RAG, cost tracking, guardrails, streaming, and prompt versioning. Three MCP tools expose inference and model introspection to PAI agents.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `chain_of_thought.py` – Project file
+- `chains/` – Directory containing chains components
+- `config.py` – Project file
+- `context_manager.py` – Project file
+- `cost_tracking/` – Directory containing cost_tracking components
+- `embeddings/` – Directory containing embeddings components
+- `exceptions.py` – Project file
+- `fabric/` – Directory containing fabric components
+- `guardrails/` – Directory containing guardrails components
+- `mcp.py` – Project file
+- `mcp_tools.py` – Project file
+- `memory/` – Directory containing memory components
+- `models/` – Directory containing models components
+- `multimodal/` – Directory containing multimodal components
+- `ollama/` – Directory containing ollama components
+- `outputs/` – Directory containing outputs components
+- `prompt_templates/` – Directory containing prompt_templates components
+- `prompts/` – Directory containing prompts components
+- `providers/` – Directory containing providers components
+- `py.typed` – Project file
+- `rag/` – Directory containing rag components
+- `router.py` – Project file
+- `safety.py` – Project file
+- `streaming/` – Directory containing streaming components
+- `tools/` – Directory containing tools components
+
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `chain_of_thought.py`
+- `config.py`
+- `context_manager.py`
+- `exceptions.py`
+- `mcp.py`
+- `mcp_tools.py`
+- `py.typed`
+- `router.py`
+- `safety.py`
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `ask`, `OllamaManager`, `FabricManager`, `LLMConfig`, `get_config` |
-| `config.py` | `LLMConfig`, `LLMConfigPresets`, `get_config`, `set_config`, `reset_config` |
-| `ollama/` | `OllamaManager`, `ModelRunner`, `ConfigManager`, `OutputManager` |
-| `fabric/` | `FabricManager`, `FabricConfigManager`, `FabricOrchestrator` |
-| `providers/` | Multi-provider client interfaces |
-| `chains/` | Multi-step reasoning chain implementations |
-| `embeddings/` | Text embedding generation and caching |
-| `rag/` | Retrieval-Augmented Generation pipeline |
-| `mcp_tools.py` | MCP tools: `generate_text`, `list_local_models`, `query_fabric_metadata` |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Key Exports
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-- **`ask(question, model)`** — Simple text generation via OpenRouter
-- **`OllamaManager`** — Local model management (list, generate, pull)
-- **`FabricManager`** — Microsoft Fabric integration
-- **`LLMConfig`** — Configuration dataclass with provider/model settings
-
-## MCP Tools Available
-
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `generate_text` | Generate text using a specified LLM provider and model (OpenRouter, Ollama) | Safe |
-| `list_local_models` | List available local models managed by Ollama | Safe |
-| `query_fabric_metadata` | Query configuration metadata for Microsoft Fabric integration | Safe |
-
-## Agent Instructions
-
-1. **Use templates** — Structured, reusable prompts
-2. **Handle streaming** — Stream for long responses
-3. **Token awareness** — Track token usage
-4. **Error handling** — Retry on transient failures
-5. **Cache responses** — Cache where appropriate
-
-## Common Patterns
-
-```python
-from codomyrmex.llm import LLMClient, ChatSession, PromptTemplate
-
-# Initialize client
-client = LLMClient(provider="openai", model="gpt-4")
-
-# Simple completion
-response = client.complete("Explain quantum computing")
-
-# Chat session
-session = ChatSession(client)
-session.add_system("You are a helpful coding assistant")
-response = session.chat("How do I implement a binary tree?")
-response = session.chat("Now add a delete method")  # Has context
-
-# Prompt templates
-template = PromptTemplate(
-    "Summarize {document} in {num_sentences} sentences."
-)
-prompt = template.format(document=text, num_sentences=3)
-summary = client.complete(prompt)
-
-# Streaming
-async for chunk in client.stream("Long response needed"):
-    print(chunk, end="")
-```
-
-## Testing Patterns
-
-```python
-# Verify client with real provider
-import os
-client = LLMClient(provider="openai", model="gpt-4")
-if os.getenv("OPENAI_API_KEY"):
-    response = client.complete("Test")
-    assert response is not None
-
-# Verify template
-template = PromptTemplate("Hello {name}")
-prompt = template.format(name="World")
-assert prompt == "Hello World"
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full LLM access | `generate_text`, `list_local_models`, `query_fabric_metadata` | TRUSTED |
-| **Architect** | Model inventory | `list_local_models`, `query_fabric_metadata` | OBSERVED |
-| **QATester** | Inference testing | `generate_text`, `list_local_models` | OBSERVED |
-| **Researcher** | Read-only | `list_local_models`, `query_fabric_metadata` | OBSERVED |
-
-### Engineer Agent
-**Access**: Full — text generation, model listing, and Fabric metadata queries.
-**Use Cases**: Invoking LLM inference during BUILD phase, generating code/docs with local Ollama models, selecting the right model tier for cost-performance tradeoffs.
-
-### Architect Agent
-**Access**: Model inventory — list available models and Fabric integration specs without running inference.
-**Use Cases**: Evaluating which local models are available before Algorithm capability selection, reviewing Fabric metadata for integration architecture, capacity planning.
-
-### QATester Agent
-**Access**: Inference testing — run `generate_text` with controlled inputs to verify LLM behavior.
-**Use Cases**: Confirming local model availability and responsiveness, regression testing prompt templates, verifying response format consistency.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/llm.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/llm.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

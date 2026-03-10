@@ -1,73 +1,41 @@
-# Agent Guidelines - Containerization
+# Codomyrmex Agents — docs/modules/containerization
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Docker container management, image building, and orchestration.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **ContainerManager** — Manage container lifecycle
-- **ImageBuilder** — Build Docker images
-- **DockerCompose** — Compose file management
-- **Container** — Container operations
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use multi-stage** — Smaller images
-2. **Pin versions** — Specific base image tags
-3. **Clean build** — Remove build artifacts
-4. **Health checks** — Add container health checks
-5. **Log to stdout** — Container logging best practice
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.containerization import (
-    ContainerManager, ImageBuilder, DockerCompose
-)
-
-# Build image
-builder = ImageBuilder()
-image = builder.build(
-    dockerfile="./Dockerfile",
-    tag="myapp:v1.0",
-    build_args={"ENV": "production"}
-)
-
-# Manage containers
-manager = ContainerManager()
-container = manager.run(
-    image="myapp:v1.0",
-    ports={"8080/tcp": 8080},
-    environment={"API_KEY": key}
-)
-
-# Container operations
-manager.logs(container.id)
-manager.stop(container.id)
-
-# Docker Compose
-compose = DockerCompose("docker-compose.yml")
-compose.up(detach=True)
-compose.down()
-```
-
-## Testing Patterns
-
-```python
-# Verify image build
-builder = ImageBuilder()
-image = builder.build("./test/Dockerfile", tag="test:latest")
-assert image is not None
-
-# Verify container management
-manager = ContainerManager()
-containers = manager.list()
-assert isinstance(containers, list)
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

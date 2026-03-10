@@ -1,51 +1,47 @@
 # Codomyrmex Agents — src/codomyrmex/cost_management
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides comprehensive spend tracking, budgeting, and alerting. `CostTracker` records individual cost entries categorized by type (LLM inference, compute, storage, etc.), while `BudgetManager` creates budgets with configurable periods and threshold-based alerts.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `models.py` | `CostCategory` | Enum: `LLM_INFERENCE`, `LLM_EMBEDDING`, `LLM_FINE_TUNING`, `COMPUTE`, `STORAGE`, `NETWORK`, `API_CALLS`, `DATABASE`, `LICENSE`, `OTHER` |
-| `models.py` | `BudgetPeriod` | Enum: `HOURLY`, `DAILY`, `WEEKLY`, `MONTHLY`, `YEARLY` |
-| `models.py` | `CostEntry` | Dataclass for a single cost record with amount, category, tags, and timestamp |
-| `models.py` | `Budget` | Budget allocation with period, category filter, and alert thresholds; has `get_period_start()` |
-| `models.py` | `CostSummary` | Aggregated view with `total`, `by_category`, `by_resource`, `by_tag` breakdowns |
-| `models.py` | `BudgetAlert` | Alert dataclass with `utilization` and `message` properties |
-| `stores.py` | `CostStore` | ABC defining `save_entry()` and `get_entries()` |
-| `stores.py` | `InMemoryCostStore` | Thread-safe in-memory implementation of `CostStore` |
-| `stores.py` | `JSONCostStore` | File-based JSON storage implementation of `CostStore` |
-| `tracker.py` | `CostTracker` | Main service: `record()` costs and `get_summary()` / `get_total()` for periods |
-| `tracker.py` | `BudgetManager` | Budget CRUD, utilization tracking, threshold alerting via `check_budgets()`, spend gating via `can_spend()` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `stores.py` – Project file
+- `tracker.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `CostTracker` defaults to `InMemoryCostStore` if no store is provided.
-- `BudgetManager` requires a `CostTracker` instance at construction.
-- Alert thresholds default to `[0.5, 0.8, 0.9, 1.0]`; each threshold fires only once per period.
-- Call `reset_period_alerts()` at period boundaries to re-arm alerts.
-- `can_spend(amount, category, tags)` returns `False` if any applicable budget would be exceeded.
-- Thread safety is provided by `threading.Lock` in `InMemoryCostStore`, `JSONCostStore`, `CostTracker`, and `BudgetManager`.
-- Errors must be logged via `codomyrmex.logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `models.py`
+- `py.typed`
+- `stores.py`
+- `tracker.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring` (for logging), `codomyrmex.validation.schemas` (optional, for `Result`/`ResultStatus` interop)
-- **Used by**: Any module tracking expenditure or requiring budget gating.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Root**: [Root](../../../README.md)
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full — track spend, create budgets, set alerts, gate expenditure | All available | TRUSTED |
-| **Architect** | Read + Architecture review | Read-only | SAFE |
-| **QATester** | Validation + output verification | Read + Inspect | SAFE |
-| **Researcher** | Read-only — study algorithms and configurations | None | OBSERVED |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

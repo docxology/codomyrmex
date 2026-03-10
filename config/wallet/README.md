@@ -1,29 +1,16 @@
-# Wallet Configuration
+# wallet
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Digital wallet management for cryptocurrency and token operations. Provides wallet creation, balance tracking, and transaction signing.
+Configuration files and templates.
 
-## Configuration Options
-
-The wallet module operates with sensible defaults and does not require environment variable configuration. Wallet encryption keys and network endpoints are configured per-wallet instance. Private key storage uses encrypted containers.
-
-## PAI Integration
-
-PAI agents interact with wallet through direct Python imports. Wallet encryption keys and network endpoints are configured per-wallet instance. Private key storage uses encrypted containers.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep wallet
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/wallet/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

@@ -1,92 +1,58 @@
-# Agent Guidelines - Networking
+# Codomyrmex Agents — src/codomyrmex/networking
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Network utilities: HTTP clients, sockets, protocols, and DNS.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `exceptions.py` – Project file
+- `http_client.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `raw_sockets.py` – Project file
+- `service_mesh/` – Directory containing service_mesh components
+- `ssh_sftp.py` – Project file
+- `websocket_client.py` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **HTTPClient** — Async HTTP client with retries
-- **SocketManager** — TCP/UDP socket handling
-- **DNSResolver** — DNS lookups and caching
-- **NetworkMonitor** — Network health checks
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `exceptions.py`
+- `http_client.py`
+- `mcp_tools.py`
+- `py.typed`
+- `raw_sockets.py`
+- `ssh_sftp.py`
+- `websocket_client.py`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use async** — Prefer async for concurrent requests
-2. **Set timeouts** — Always configure timeouts
-3. **Retry transients** — Retry on network errors
-4. **Pool connections** — Reuse HTTP connections
-5. **Cache DNS** — Cache DNS lookups
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.networking import (
-    HTTPClient, SocketManager, DNSResolver
-)
-
-# HTTP client with retry
-client = HTTPClient(
-    timeout=30,
-    retries=3,
-    backoff_factor=1.5
-)
-
-response = await client.get("https://api.example.com/data")
-print(response.json())
-
-# Socket communication
-socket = SocketManager()
-socket.connect("server.example.com", 8080)
-socket.send(b"Hello")
-data = socket.receive()
-
-# DNS resolution
-resolver = DNSResolver(cache_ttl=300)
-ips = resolver.resolve("example.com")
-```
-
-## Testing Patterns
-
-```python
-# Verify HTTP client with real endpoint
-client = HTTPClient()
-response = await client.get("http://httpbin.org/get")
-assert response.status_code == 200
-
-# Verify DNS resolver
-resolver = DNSResolver()
-ips = resolver.resolve("localhost")
-assert "127.0.0.1" in ips
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Network operations, HTTP/TCP clients, connection management, protocol handling | TRUSTED |
-| **Architect** | Read + Design | Network architecture review, protocol selection, connectivity design | OBSERVED |
-| **QATester** | Validation | Connectivity testing, protocol conformance verification, latency measurement | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Network operations during EXECUTE, managing connections, protocol-level communication.
-
-### Architect Agent
-**Use Cases**: Designing network topologies, reviewing protocol choices, planning connectivity.
-
-### QATester Agent
-**Use Cases**: Testing network connectivity during VERIFY, confirming protocol conformance.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/networking.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/networking.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

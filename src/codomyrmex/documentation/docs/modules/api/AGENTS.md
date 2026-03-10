@@ -1,57 +1,39 @@
-# API -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/api
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Capabilities
+## Purpose
+Documentation files and guides.
 
-The API module provides agents with tools to discover, document, and verify API infrastructure. Agents can list endpoints from source code, generate OpenAPI specifications, and check the health of API submodules.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
+- `security.md` – Project file
 
-## Available MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-### api_list_endpoints
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
+- `security.md`
 
-Scan source code for API endpoint definitions using the documentation generator's code analysis.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Parameters:**
-- `source_path` (str, default: ".") -- Directory or file path to scan for API endpoints
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-**Returns:** Dictionary with discovered endpoint count and endpoint details.
-
-### api_get_spec
-
-Generate an API specification from source code analysis.
-
-**Parameters:**
-- `title` (str, default: "Codomyrmex API") -- Title for the generated API documentation
-- `version` (str, default: "1.0.0") -- API version string
-- `source_paths` (str, default: "") -- Comma-separated list of source directories to scan
-- `base_url` (str, default: "") -- Base URL for the API
-
-**Returns:** Dictionary with the generated API specification.
-
-### api_health_check
-
-Verify that all core API submodules can be imported successfully.
-
-**Parameters:** None
-
-**Returns:** Dictionary with health status per submodule (documentation, standardization, authentication, rate_limiting, circuit_breaker, webhooks, mocking, pagination).
-
-## Agent Interaction Patterns
-
-### OBSERVE Phase
-Use `api_health_check` to verify module readiness. Use `api_list_endpoints` to discover existing API surface before making changes.
-
-### BUILD Phase
-Use `api_get_spec` to generate OpenAPI specifications after implementing new endpoints. The generated spec can be used for documentation and client generation.
-
-## Trust Level
-
-All three MCP tools are classified as **Safe** -- they perform read-only operations.
-
-## Navigation
-
-- **Source**: [src/codomyrmex/api/](../../../../src/codomyrmex/api/)
-- **Extended README**: [README.md](readme.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **Parent**: [All Modules](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

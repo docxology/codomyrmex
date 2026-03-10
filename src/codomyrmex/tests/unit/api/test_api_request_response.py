@@ -1,4 +1,8 @@
-"""Unit tests for API request and response data models."""
+"""
+Unit tests for API request and response data models.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
+"""
 
 import json
 

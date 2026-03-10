@@ -1,25 +1,15 @@
-# Multimodal
+# multimodal
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Multi-modal input/output processing for text, image, and audio.
+Documentation files and guides.
 
-## Source
-
-**Source code**: [`src/codomyrmex/multimodal/`](../../../src/codomyrmex/multimodal/)
-
-## MCP Tools
-
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
-
-## Related Documentation
-
-- [Source README](../../../src/codomyrmex/multimodal/README.md)
-- [API Specification](../../../src/codomyrmex/multimodal/API_SPECIFICATION.md)
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Parent**: [Module Documentation](../README.md)
-- **Root**: [docs/](../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

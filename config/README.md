@@ -1,54 +1,116 @@
 # config
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Configuration templates and examples for the Codomyrmex platform. These configurations are used to customize module behavior, set up environments, and define workflows.
+Configuration templates and examples.
 
-## Directory Structure
-
-| Directory | Purpose |
-|-----------|---------|
-| [**api/**](api/) | API configuration (endpoints, rate limits, timeouts) |
-| [**cache/**](cache/) | Caching configuration (Redis, memory, file) |
-| [**database/**](database/) | Database connections and pooling |
-| [**examples/**](examples/) | Example configuration files |
-| [**llm/**](llm/) | LLM provider settings (OpenAI, Anthropic, Ollama) |
-| [**monitoring/**](monitoring/) | Logging, metrics, and alerting |
-| [**security/**](security/) | Authentication, encryption, API keys |
-| [**templates/**](templates/) | Configuration templates |
-| [**workflows/**](workflows/) | Workflow and pipeline definitions |
-
-## Usage
-
-```yaml
-# Example: config/llm/providers.yaml
-providers:
-  ollama:
-    enabled: true
-    base_url: "http://localhost:11434"
-    default_model: "llama2"
-
-  openai:
-    enabled: false
-    api_key: "${OPENAI_API_KEY}"
-```
-
-## Best Practices
-
-1. **Use Templates**: Copy from `templates/` and customize
-2. **Environment Variables**: Store secrets in environment variables, not files
-3. **Version Control**: Track configuration changes in git
-4. **Validation**: Use `validation/` module to validate configs
-
-## Companion Files
-
-- [**AGENTS.md**](AGENTS.md) - Agent coordination
-- [**SPEC.md**](SPEC.md) - Configuration specification
-- [**PAI.md**](PAI.md) - Personal AI Infrastructure
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `agentic_memory/` – Subdirectory
+- `agents/` – Subdirectory
+- `api/` – Subdirectory
+- `audio/` – Subdirectory
+- `auth/` – Subdirectory
+- `bio_simulation/` – Subdirectory
+- `cache/` – Subdirectory
+- `calendar_integration/` – Subdirectory
+- `cerebrum/` – Subdirectory
+- `ci_cd_automation/` – Subdirectory
+- `cli/` – Subdirectory
+- `cloud/` – Subdirectory
+- `coding/` – Subdirectory
+- `collaboration/` – Subdirectory
+- `compression/` – Subdirectory
+- `concurrency/` – Subdirectory
+- `config_audits/` – Subdirectory
+- `config_management/` – Subdirectory
+- `config_monitoring/` – Subdirectory
+- `container_optimization/` – Subdirectory
+- `containerization/` – Subdirectory
+- `cost_management/` – Subdirectory
+- `crypto/` – Subdirectory
+- `dark/` – Subdirectory
+- `data_lineage/` – Subdirectory
+- `data_visualization/` – Subdirectory
+- `database/` – Subdirectory
+- `database_management/` – Subdirectory
+- `default.yaml` – File
+- `defense/` – Subdirectory
+- `dependency_injection/` – Subdirectory
+- `deployment/` – Subdirectory
+- `docs_gen/` – Subdirectory
+- `documentation/` – Subdirectory
+- `documents/` – Subdirectory
+- `edge_computing/` – Subdirectory
+- `email/` – Subdirectory
+- `embodiment/` – Subdirectory
+- `encryption/` – Subdirectory
+- `environment_setup/` – Subdirectory
+- `events/` – Subdirectory
+- `evolutionary_ai/` – Subdirectory
+- `examples/` – Subdirectory
+- `exceptions/` – Subdirectory
+- `feature_flags/` – Subdirectory
+- `feature_store/` – Subdirectory
+- `file_system/` – Subdirectory
+- `finance/` – Subdirectory
+- `formal_verification/` – Subdirectory
+- `fpf/` – Subdirectory
+- `git_analysis/` – Subdirectory
+- `git_operations/` – Subdirectory
+- `graph_rag/` – Subdirectory
+- `ide/` – Subdirectory
+- `identity/` – Subdirectory
+- `llm/` – Subdirectory
+- `logging_monitoring/` – Subdirectory
+- `logistics/` – Subdirectory
+- `maintenance/` – Subdirectory
+- `market/` – Subdirectory
+- `meme/` – Subdirectory
+- `model_context_protocol/` – Subdirectory
+- `model_ops/` – Subdirectory
+- `module_template/` – Subdirectory
+- `monitoring/` – Subdirectory
+- `multimodal/` – Subdirectory
+- `networking/` – Subdirectory
+- `networks/` – Subdirectory
+- `operating_system/` – Subdirectory
+- `orchestrator/` – Subdirectory
+- `performance/` – Subdirectory
+- `physical_management/` – Subdirectory
+- `plugin_system/` – Subdirectory
+- `privacy/` – Subdirectory
+- `prompt_engineering/` – Subdirectory
+- `quantum/` – Subdirectory
+- `relations/` – Subdirectory
+- `release/` – Subdirectory
+- `scrape/` – Subdirectory
+- `search/` – Subdirectory
+- `security/` – Subdirectory
+- `serialization/` – Subdirectory
+- `simulation/` – Subdirectory
+- `skills/` – Subdirectory
+- `spatial/` – Subdirectory
+- `static_analysis/` – Subdirectory
+- `system_discovery/` – Subdirectory
+- `telemetry/` – Subdirectory
+- `templates/` – Subdirectory
+- `templating/` – Subdirectory
+- `terminal_interface/` – Subdirectory
+- `testing/` – Subdirectory
+- `tool_use/` – Subdirectory
+- `tree_sitter/` – Subdirectory
+- `utils/` – Subdirectory
+- `validation/` – Subdirectory
+- `vector_store/` – Subdirectory
+- `video/` – Subdirectory
+- `wallet/` – Subdirectory
+- `website/` – Subdirectory
+- `workflows/` – Subdirectory
 
 ## Navigation
-
-- **Project Root**: [../README.md](../README.md)
-- **Source Code**: [../src/codomyrmex/](../src/codomyrmex/)
+- **Project Root**: ../README.md

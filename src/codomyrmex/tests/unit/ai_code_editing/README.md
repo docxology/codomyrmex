@@ -1,19 +1,18 @@
 # ai_code_editing
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `ai_code_editing` module provides core functionality for Ai Code Editing..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_ai_code_editing.py` - Test Ai Code Editing
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `test_ai_code_editing.py` – File
+- `test_droid_manager.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

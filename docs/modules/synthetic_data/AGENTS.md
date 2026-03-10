@@ -1,34 +1,33 @@
-# Synthetic Data Generator -- Agent Coordination
+# Codomyrmex Agents — docs/modules/synthetic_data
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides template-based and schema-driven synthetic data generation for ML training pipelines. Supports structured records, classification datasets, and RLHF/DPO preference pairs.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `synth_generate_structured` | Generate structured synthetic data from a schema definition | Standard | synthetic_data |
-| `synth_generate_classification` | Generate synthetic classification data with configurable class balance | Standard | synthetic_data |
-| `synth_generate_preference_pairs` | Generate preference pairs for RLHF/DPO training | Standard | synthetic_data |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Generate synthetic training data for ML experiments |
-| VERIFY | QA Agent | Validate data distributions and class balance in generated datasets |
-
-
-## Agent Instructions
-
-1. Define schema fields with type specs: {'age': {'type': 'int', 'min': 18, 'max': 65}}
-2. class_balance supports 'balanced' and 'imbalanced' distributions for classification data
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/synthetic_data/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

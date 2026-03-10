@@ -1,70 +1,46 @@
-# Agent Guidelines - Git Operations
+# Codomyrmex Agents — docs/modules/git_operations
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Git repository operations: commits, branches, merges, and history.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `index.md` – Project file
+- `technical_overview.md` – Project file
+- `tutorials/` – Directory containing tutorials components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **GitRepo** — Repository operations
-- **Commit** — Commit representation
-- **Branch** — Branch management
-- **DiffManager** — View diffs
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `index.md`
+- `technical_overview.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Check status first** — Verify clean state
-2. **Branch often** — Feature branches for work
-3. **Small commits** — Atomic, focused commits
-4. **Meaningful messages** — Descriptive commit messages
-5. **Pull before push** — Avoid merge conflicts
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.git_operations import GitRepo, Branch
-
-# Open repository
-repo = GitRepo(".")
-
-# Check status
-status = repo.status()
-if status.is_dirty:
-    print(f"Modified: {status.modified_files}")
-
-# Commit changes
-repo.add(["src/main.py"])
-repo.commit("feat: add new feature")
-
-# Branch operations
-branch = Branch(repo)
-branch.create("feature/new-thing")
-branch.checkout("feature/new-thing")
-
-# View history
-for commit in repo.log(limit=10):
-    print(f"{commit.hash[:7]} - {commit.message}")
-```
-
-## Testing Patterns
-
-```python
-# Verify status
-repo = GitRepo(".")
-status = repo.status()
-assert hasattr(status, "is_dirty")
-
-# Verify log
-commits = repo.log(limit=5)
-assert len(commits) <= 5
-
-# Verify branch listing
-branches = repo.branches()
-assert "main" in branches or "master" in branches
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

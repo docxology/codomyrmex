@@ -1,125 +1,55 @@
-# Agent Guidelines - Logging Monitoring
+# Codomyrmex Agents — src/codomyrmex/logging_monitoring
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Centralized structured logging infrastructure for all Codomyrmex modules and PAI agents. Provides JSON-formatted log emission, correlation ID propagation, audit trails, log rotation, and monitoring integration. Every PAI Algorithm phase emits structured logs via `logging_format_structured`; the LEARN phase archives logs for retrospective analysis. Use this module to add observability to any component.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `setup_logging`, `get_logger`, `LogContext`, `log_with_context`, `new_correlation_id` |
-| `core/` | `LogContext`, `log_with_context`, `correlation` management |
-| `formatters/structured_formatter.py` | `StructuredFormatter`, `LogLevel`, `LogContext`, `StructuredLogEntry` |
-| `handlers/` | `LogRotationManager`, `PerformanceLogger` |
-| `audit/` | `AuditLogger` for immutable security/audit events |
-| `mcp_tools.py` | Exposes `logging_format_structured` as MCP tool |
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `logging_format_structured` | Format a log entry as structured JSON for pipeline ingestion. Accepts level, message, module, correlation_id, fields. | SAFE |
-
-## Agent Instructions
-
-1. **Use structured** — Prefer JSON for machine parsing; pass `fields={"key": "val"}` for metadata
-2. **Add context** — Include `correlation_id` for request tracing across module boundaries
-3. **Set levels correctly** — DEBUG for dev, WARNING for prod; never log credentials or PII
-4. **Rotate logs** — Use `LogRotationManager` for long-running processes
-5. **Audit sensitive** — Use `AuditLogger` for security events; audit logs are immutable
-
-## Common Patterns
-
-```python
-from codomyrmex.logging_monitoring import (
-    get_logger, setup_logging, LogContext
-)
-from codomyrmex.logging_monitoring.audit import AuditLogger
-
-# Configure logging at app startup
-# Levels: DEBUG, INFO, WARNING, ERROR, CRITICAL
-# Set via environment variables: CODOMYRMEX_LOG_LEVEL, CODOMYRMEX_LOG_OUTPUT_TYPE=JSON
-setup_logging()
-
-# Get module logger
-log = get_logger(__name__)
-
-# Structured logging with context
-with LogContext(correlation_id="req-123", additional_context={"user_id": "u42"}):
-    log.info("Processing started")
-    try:
-        # ... logic ...
-        pass
-    except Exception as e:
-        log.error("Failed to process", exc_info=True)
-
-# Audit logging for security events
-audit = AuditLogger()
-audit.log_event("login", user_id="u42", status="success", category="auth")
-```
-
-## Testing Patterns
-
-```python
-# Verify logger creation
-log = get_logger("test")
-assert log is not None
-assert hasattr(log, "info")
-
-# Verify JSON formatting
-from codomyrmex.logging_monitoring import JSONFormatter
-fmt = JSONFormatter()
-record = create_log_record("test")
-output = fmt.format(record)
-import json
-assert json.loads(output)  # Valid JSON
-```
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `audit/` – Directory containing audit components
+- `core/` – Directory containing core components
+- `formatters/` – Directory containing formatters components
+- `handlers/` – Directory containing handlers components
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-**DO:**
-- Call `setup_logging()` once at application start before any other logging.
-- Use `LogContext` or `with_correlation` to ensure `correlation_id` is propagated.
-- Use `AuditLogger` for all security-sensitive events (auth, data access, config changes).
-- Use `logging_format_structured` MCP tool to emit logs from agent workflows.
-- Use `PerformanceLogger` to track duration of critical operations.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
 
-**DO NOT:**
-- Log secrets, API keys, passwords, or PII in any field. Use `RedactedJSONFormatter` if possible.
-- Create module-level loggers before `setup_logging()` is called.
-- Use Python's built-in `print()` for any operational output — use `get_logger()` instead.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Agent Role Access Matrix
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `logging_format_structured`; structured log emission, monitoring integration, alert configuration | TRUSTED |
-| **Architect** | Read + Design | Log format review, observability architecture design | OBSERVED |
-| **QATester** | Validation | Log output validation, structured log correctness, monitoring pipeline health checks | OBSERVED |
-| **Researcher** | Read-only | Inspect log output during analysis; use `logging_format_structured` for research audit trail | SAFE |
-
-### Engineer Agent
-**Use Cases**: Emitting structured logs during EXECUTE phase, configuring monitoring integrations, alerting setup.
-
-### Architect Agent
-**Use Cases**: Designing observability strategy, reviewing log schema, setting alert thresholds.
-
-### QATester Agent
-**Use Cases**: Validating log format compliance, verifying monitoring pipeline during VERIFY phase.
-
-### Researcher Agent
-**Use Cases**: Creating an audit trail of research operations, inspecting log output for debugging analysis.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/logging_monitoring.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/logging_monitoring.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

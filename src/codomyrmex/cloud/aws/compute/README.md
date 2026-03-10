@@ -1,19 +1,18 @@
-# AWS Compute Submodule
+# compute
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-AWS EC2 compute instance management.
+Contains components for the src system.
 
-## Planned Features
-
-- Instance lifecycle (start, stop, terminate)
-- Instance creation with templates
-- Security group management
-- Key pair management
-- AMI operations
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent**: [aws/](../README.md)
+- **Parent Directory**: [aws](../README.md)
+- **Project Root**: ../../../../../README.md

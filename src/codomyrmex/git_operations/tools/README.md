@@ -1,19 +1,18 @@
 # tools
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `tools` module provides core functionality for Tools..
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `library_generator.py` - Library Generator
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `library_generator.py` – File
 
 ## Navigation
-
-- **Parent Module**: [git_operations](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [git_operations](../README.md)
+- **Project Root**: ../../../../README.md

@@ -1,37 +1,45 @@
 # Codomyrmex Agents — src/codomyrmex/concurrency/locks
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Distributed and local lock primitives for multi-process and multi-node synchronization. Provides an abstract `BaseLock` interface, a file-based `LocalLock` using `fcntl`, a Redis-backed `RedisLock` using SETNX with TTL and Lua-script atomic release, a `LockManager` for deadlock-safe multi-resource acquisition, and an in-process `ReadWriteLock` (shared/exclusive).
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `distributed_lock.py` | `BaseLock` | ABC defining `acquire(timeout, retry_interval) -> bool`, `release()`, and context manager protocol |
-| `distributed_lock.py` | `LocalLock` | File-based lock using `fcntl.flock` (LOCK_EX/LOCK_NB) for local multi-process synchronization |
-| `redis_lock.py` | `RedisLock` | Distributed lock using Redis `SET NX EX`; atomic owner-checked release via Lua script; supports `extend()` |
-| `lock_manager.py` | `LockManager` | Orchestrates multiple `BaseLock` instances; `acquire_all` sorts by name to prevent deadlocks |
-| `lock_manager.py` | `LockStats` | Dataclass tracking total_locks, total_acquisitions, total_releases, active_locks |
-| `lock_manager.py` | `ReadWriteLock` | In-process shared/exclusive lock using `threading.Condition`; multiple readers or single writer |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `distributed_lock.py` – Project file
+- `lock_manager.py` – Project file
+- `py.typed` – Project file
+- `redis_lock.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `BaseLock.__enter__` raises `TimeoutError` if acquisition fails within the default timeout.
-- `LocalLock` creates lock files under `/tmp/codomyrmex/locks/` by default; cleans up on release.
-- `RedisLock.release` uses a Lua script to atomically check ownership before deletion (prevents releasing another client's lock).
-- `LockManager.acquire_all` sorts lock names alphabetically to prevent deadlock; rolls back all acquired locks on any failure.
-- `RedisLock` is conditionally imported; `RedisLock` is `None` if `redis` is not installed.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `distributed_lock.py`
+- `lock_manager.py`
+- `py.typed`
+- `redis_lock.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring.core.logger_config` (for `get_logger`), `redis` (optional, for `RedisLock`)
-- **Used by**: `concurrency.tasks`, `concurrency.workers`, any module needing mutual exclusion
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [concurrency](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [concurrency](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

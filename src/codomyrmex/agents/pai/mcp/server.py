@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 
 _REGISTRY_CACHE: "_ToolRegistry | None" = None
 _REGISTRY_EXPIRY: float = 0.0
-_REGISTRY_LOCK = threading.Lock()
+_REGISTRY_LOCK = threading.RLock()
 
 
 class _ToolRegistry:

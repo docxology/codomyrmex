@@ -1,20 +1,21 @@
 # terminal_interface
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `terminal_interface` module provides core functionality for Terminal Interface..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_terminal_interface.py` - Test Terminal Interface
-- `test_terminal_interface_comprehensive.py` - Test Terminal Interface Comprehensive
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `test_interactive_shell.py` – File
+- `test_rich_renderer.py` – File
+- `test_terminal_interface.py` – File
+- `test_terminal_utils.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

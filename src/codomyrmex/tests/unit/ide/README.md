@@ -1,19 +1,28 @@
 # ide
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `ide` module provides core functionality for Ide..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `test_ide.py` - Test Ide
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `test_agent_bridge.py` – File
+- `test_antigravity.py` – File
+- `test_antigravity_client.py` – File
+- `test_antigravity_client_extended.py` – File
+- `test_cursor_impl.py` – File
+- `test_cursor_settings.py` – File
+- `test_ide.py` – File
+- `test_ide_common.py` – File
+- `test_relay_cli.py` – File
+- `test_tool_provider.py` – File
+- `test_vscode_impl.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

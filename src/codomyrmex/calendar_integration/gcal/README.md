@@ -1,17 +1,19 @@
-# Google Calendar Submodule (`gcal`)
+# gcal
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-This submodule provides the specific implementation of `CalendarProvider` for Google Calendar.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-It is responsible for utilizing Google API credentials via the `google-api-python-client` to list, create, edit, and delete events.
+Contains components for the src system.
 
-## Dependency
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `provider.py` – File
+- `py.typed` – File
 
-Install the calendar dependencies from the root:
-
-```bash
-uv sync --extra calendar
-```
+## Navigation
+- **Parent Directory**: [calendar_integration](../README.md)
+- **Project Root**: ../../../../README.md

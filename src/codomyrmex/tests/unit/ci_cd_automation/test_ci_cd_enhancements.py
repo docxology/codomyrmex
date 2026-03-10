@@ -14,6 +14,7 @@ from codomyrmex.ci_cd_automation.pipeline import (
 )
 
 
+@pytest.mark.unit
 class TestPipelineEnhancements:
     """Test cases for enhanced pipeline functionality."""
 
@@ -141,6 +142,7 @@ class TestPipelineEnhancements:
         assert isinstance(optimization["optimization_suggestions"], list)
 
 
+@pytest.mark.unit
 class TestPipelineConfigurationParsing:
     """Test cases for pipeline configuration parsing."""
 
@@ -246,6 +248,7 @@ stages:
         assert any("empty" in error.lower() for error in errors)
 
 
+@pytest.mark.unit
 class TestJobStepExecutionTracking:
     """Test cases for job and step execution tracking."""
 
@@ -311,6 +314,7 @@ class TestJobStepExecutionTracking:
         assert job_dict["error"] == "Warning: something minor"
 
 
+@pytest.mark.unit
 class TestArtifactHandling:
     """Test cases for artifact handling in pipelines."""
 
@@ -370,6 +374,7 @@ stages:
         assert len(build_stage.jobs[0].artifacts) == 2
 
 
+@pytest.mark.unit
 class TestEnvironmentVariableInjection:
     """Test cases for environment variable injection."""
 
@@ -451,6 +456,7 @@ class TestEnvironmentVariableInjection:
         assert "staging" in substituted[2]
 
 
+@pytest.mark.unit
 class TestSecretManagement:
     """Test cases for secret management in CI/CD pipelines."""
 
@@ -515,6 +521,7 @@ stages:
         assert "key_path" in env_dict
 
 
+@pytest.mark.unit
 class TestStageDependencyValidation:
     """Test cases for stage dependency validation."""
 
@@ -573,6 +580,7 @@ class TestStageDependencyValidation:
         assert set(deps["deploy"]) == {"test", "build"}
 
 
+@pytest.mark.unit
 class TestParallelPipelineExecution:
     """Test cases for parallel pipeline execution."""
 

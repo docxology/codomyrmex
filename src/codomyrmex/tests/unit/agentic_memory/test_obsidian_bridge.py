@@ -1,4 +1,4 @@
-"""Tests for ObsidianMemoryBridge."""
+"""Tests for ObsidianMemoryBridge — strictly zero-mock."""
 
 import tempfile
 

@@ -17,22 +17,30 @@ from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
+from codomyrmex.validation.schemas.infra import DeploymentStatus
+
 # Optional imports handled gracefully at runtime
-with contextlib.suppress(ImportError):
+try:
     import docker
+except ImportError:
+    docker = None
 
 try:
     import kubernetes
     import kubernetes.client
     import kubernetes.config
 except ImportError:
-    pass
+    kubernetes = None
 
-with contextlib.suppress(ImportError):
+try:
     import requests
+except ImportError:
+    requests = None
 
-with contextlib.suppress(ImportError):
+try:
     import yaml
+except ImportError:
+    yaml = None
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -41,17 +49,6 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 
 logger = get_logger(__name__)
-
-
-class DeploymentStatus(Enum):
-    """Deployment execution status."""
-
-    PENDING = "pending"
-    RUNNING = "running"
-    SUCCESS = "success"
-    FAILURE = "failure"
-    ROLLED_BACK = "rolled_back"
-    CANCELLED = "cancelled"
 
 
 class EnvironmentType(Enum):

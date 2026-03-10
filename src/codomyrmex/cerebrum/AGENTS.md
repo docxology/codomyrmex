@@ -1,128 +1,65 @@
-# Agent Guidelines - Cerebrum
+# Codomyrmex Agents — src/codomyrmex/cerebrum
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Cognitive architecture for case-based reasoning, planning, and decision-making. Provides
-`CerebrumEngine` for orchestrating multi-step reasoning, `WorkingMemory` for short-term context
-storage, and a `CaseBase` knowledge store for storing and retrieving prior problem-solution pairs.
-Two MCP tools (`query_knowledge_base`, `add_case_reference`) expose the knowledge lifecycle to
-PAI agents.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `CerebrumEngine`, `WorkingMemory`, `ReasoningChain`, `DecisionModule` |
-| `engine.py` | `CerebrumEngine` — core reasoning engine |
-| `memory.py` | `WorkingMemory` — short-term context storage |
-| `reasoning.py` | `ReasoningChain` — step-by-step chain-of-thought orchestration |
-| `decision.py` | `DecisionModule` — multi-criteria decision making |
-| `case_base.py` | `CaseBase` — knowledge store for prior problem-solution pairs |
-| `mcp_tools.py` | MCP tools: `query_knowledge_base`, `add_case_reference` |
-
-## Key Classes
-
-- **CerebrumEngine** — Core reasoning engine that orchestrates all cognitive components.
-- **WorkingMemory** — Short-term context storage for reasoning steps and decisions.
-- **ReasoningChain** — Orchestrates step-by-step chain-of-thought reasoning.
-- **DecisionModule** — Handles multi-criteria decision making based on weighted attributes.
-
-## Agent Instructions
-
-1. **Context management** — Update working memory as needed
-2. **Chain reasoning** — Use step-by-step reasoning
-3. **Validate decisions** — Check decision consistency
-4. **Track uncertainty** — Maintain confidence scores
-5. **Explain reasoning** — Provide rationale
-
-## Common Patterns
-
-```python
-from codomyrmex.cerebrum import (
-    CerebrumEngine, WorkingMemory, ReasoningChain
-)
-
-# Initialize engine
-engine = CerebrumEngine()
-engine.load_knowledge("domain_knowledge.json")
-
-# Working memory
-memory = WorkingMemory()
-memory.store("user_goal", "Refactor authentication")
-memory.store("constraints", ["maintain compatibility", "add tests"])
-
-# Reasoning chain
-chain = ReasoningChain()
-chain.add_step("Analyze current implementation")
-chain.add_step("Identify refactoring patterns")
-chain.add_step("Generate implementation plan")
-result = chain.execute(memory)
-
-# Decision making
-decision = engine.decide(options, criteria, context)
-print(f"Decision: {decision.choice} (confidence: {decision.confidence})")
-```
-
-## Testing Patterns
-
-```python
-# Verify reasoning
-chain = ReasoningChain()
-chain.add_step("Analyze")
-result = chain.execute(context)
-assert result.steps_completed == 1
-
-# Verify working memory
-memory = WorkingMemory()
-memory.store("key", "value")
-assert memory.retrieve("key") == "value"
-```
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `query_knowledge_base` | Perform semantic retrieval from the CaseBase | SAFE |
-| `add_case_reference` | Store intelligence context directly into the CaseBase | SAFE |
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `agent_prompts.py` – Project file
+- `anti_patterns.py` – Project file
+- `code_reviewer.py` – Project file
+- `core/` – Directory containing core components
+- `distillation.py` – Project file
+- `drift_tracker.py` – Project file
+- `fpf/` – Directory containing fpf components
+- `inference/` – Directory containing inference components
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `visualization/` – Directory containing visualization components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `WorkingMemory` is not thread-safe — create one instance per concurrent reasoning task
-- `ReasoningChain.execute()` requires all steps to be added before calling
-- `query_knowledge_base` is read-only — does not modify the CaseBase
-- `add_case_reference` writes persist within the session but may not be durable across restarts
-- **DO NOT** call `engine.decide()` without providing a non-empty `options` list
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `__init__.py`
+- `agent_prompts.py`
+- `anti_patterns.py`
+- `code_reviewer.py`
+- `distillation.py`
+- `drift_tracker.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## PAI Agent Role Access Matrix
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full knowledge CRUD | `query_knowledge_base`, `add_case_reference` | TRUSTED |
-| **Architect** | Query-only | `query_knowledge_base` — architectural decision retrieval | OBSERVED |
-| **QATester** | Retrieval verification | `query_knowledge_base` — retrieval accuracy verification | OBSERVED |
-| **Researcher** | Read-only | `query_knowledge_base` — knowledge retrieval for research | SAFE |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Engineer Agent
-**Use Cases**: Adding case references during LEARN phase, storing problem-solution pairs, building domain knowledge from successful Algorithm runs.
-
-### Architect Agent
-**Use Cases**: Querying past architectural decisions, retrieving analogous problems for pattern matching, informing ISC criteria with case-based precedents during THINK phase.
-
-### QATester Agent
-**Use Cases**: Verifying that `add_case_reference` writes are retrievable, testing relevance ranking, confirming CaseBase consistency.
-
-### Researcher Agent
-**Use Cases**: Semantic knowledge retrieval for research analysis, querying prior case references.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/cerebrum.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/cerebrum.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,86 +1,54 @@
-# Agent Guidelines - Auth
+# Codomyrmex Agents — src/codomyrmex/auth
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Authentication and authorization with signed tokens, API keys, and Role-Based Access Control (RBAC).
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `core/` – Directory containing core components
+- `google/` – Directory containing google components
+- `mcp_tools.py` – Project file
+- `providers/` – Directory containing providers components
+- `py.typed` – Project file
+- `rbac/` – Directory containing rbac components
+- `rotation.py` – Project file
+- `tokens/` – Directory containing tokens components
 
-## Key Components
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Component | Description |
-|-----------|-------------|
-| `Authenticator` | Main singleton entry point for authentication and authorization. |
-| `PermissionRegistry` | Manages role-based and resource-based access control. |
-| `TokenManager` | Lifecycle and secure signing (HMAC-SHA256) for authentication tokens. |
-| `APIKeyManager` | Secure generation, validation, and rotation of API keys. |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
+- `rotation.py`
 
-## Usage for Agents
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Authentication and User Management
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```python
-from codomyrmex.auth import Authenticator
-
-auth = Authenticator()
-
-# 1. Register a user (typically done during BUILD phase)
-auth.register_user("agent_alpha", "secure_password", roles=["editor"])
-
-# 2. Authenticate with credentials (during EXECUTE phase)
-token = auth.authenticate({"username": "agent_alpha", "password": "secure_password"})
-
-if token:
-    # 3. Check authorization (using signed token)
-    is_allowed = auth.authorize(token, resource="secure_data", permission="read")
-    # or using signed token string (JWT)
-    is_allowed = auth.authorize(token.jwt, resource="secure_data", permission="read")
-```
-
-### RBAC Management
-
-```python
-# During setup (OBSERVE/BUILD)
-auth.permissions.register_role("reader", ["data.read"])
-auth.permissions.register_role("editor", ["data.write"])
-auth.permissions.add_inheritance("editor", "reader")
-
-# Assign role to user
-auth.permissions.assign_role("agent_alpha", "editor")
-
-# Check permission
-has_perm = auth.permissions.check("agent_alpha", "data.read")  # True via inheritance
-```
-
-### API Key Management
-
-```python
-# Generate an API key for persistent access
-api_key = auth.api_key_manager.generate("agent_alpha", permissions=["data.read"])
-
-# Authenticate with API key
-token = auth.authenticate({"api_key": api_key})
-```
-
-## Testing Patterns
-
-**Strict Zero-Mock Testing**: Always use real `Authenticator`, `TokenManager`, and `PermissionRegistry` objects in tests to ensure that the integrated behavior (signing, verification, inheritance) is correctly validated.
-
-```python
-# Verify token roundtrip
-from codomyrmex.auth import Authenticator
-auth = Authenticator()
-token = auth.token_manager.create_token(user_id="test")
-assert auth.token_manager.validate_token(token.jwt)
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/auth.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/auth.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

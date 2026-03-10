@@ -1,34 +1,41 @@
-# Codomyrmex Agents -- templating/loaders
+# Codomyrmex Agents — src/codomyrmex/templating/loaders
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Template management layer providing named template registration, directory loading, template inheritance, batch rendering, and validation.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `TemplateManager` | Registry of named templates with render, inheritance, batch, and validation operations |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
+- `template_manager.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `TemplateManager.__init__(engine="jinja2")` creates an internal `TemplateEngine` instance from `engines/template_engine.py`.
-- Templates are stored as raw source strings keyed by name in `_templates: dict[str, str]`.
-- `register(name, source, parent=None)` stores the template and optionally records a parent relationship for inheritance.
-- `render(name, context)` renders the child template first, then injects its output into the parent's `{{ content }}` variable if a parent is defined.
-- `load_directory(directory, extension=".html")` loads all matching files from a directory, using the filename stem as the template name.
-- `validate(name)` attempts to render with an empty context; returns `(True, "")` on success or `(False, error_message)` on failure.
-- `render_batch(name, contexts)` renders the same template with a list of context dicts.
-- `remove_template(name)` also removes any parent relationship for that template.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
+- `template_manager.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- Depends on `templating.engines.template_engine.Template` and `TemplateEngine` for rendering.
-- Uses `logging_monitoring` for structured logging of register, add, and directory load operations.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README](../README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-- Parent: [templating](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [templating](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

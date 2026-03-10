@@ -1,127 +1,59 @@
-# Meme Module — Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/meme
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-codomyrmex.meme — Unified Memetic Warfare & Information Dynamics Module.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `contagion/` – Directory containing contagion components
+- `cultural_dynamics/` – Directory containing cultural_dynamics components
+- `cybernetic/` – Directory containing cybernetic components
+- `epistemic/` – Directory containing epistemic components
+- `hyperreality/` – Directory containing hyperreality components
+- `ideoscape/` – Directory containing ideoscape components
+- `mcp_tools.py` – Project file
+- `memetics/` – Directory containing memetics components
+- `narrative/` – Directory containing narrative components
+- `neurolinguistic/` – Directory containing neurolinguistic components
+- `py.typed` – Project file
+- `rhizome/` – Directory containing rhizome components
+- `semiotic/` – Directory containing semiotic components
+- `swarm/` – Directory containing swarm components
+- `verify_all.py` – Project file
 
-A comprehensive framework for modeling, analyzing, and engineering the
-propagation, mutation, and evolution of information units (memes) through
-cultural, cognitive, and network substrates.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-Submodules
-----------
-memetics        Core memetic engine — Meme, Memeplex, fitness, mutation.
-semiotic        Computational semiotics — signs, encoding, drift.
-contagion       Information cascade & epidemic propagation models.
-narrative       Computational narratology — arcs, myths, insurgency.
-cultural_dynamics  Cultural oscillation, zeitgeist, power dynamics.
-hyperreality    Baudrillardian simulacra & consensus engineering.
-swarm           Swarm intelligence — ACO, PSO, stigmergy, emergence.
-neurolinguistic Cognitive framing, bias exploitation, metacognition.
-ideoscape       Ideational ecosystem ecology — Lotka-Volterra for ideas.
-rhizome         Rhizomatic network analysis — plateaus, lines of flight.
-epistemic       Epistemic territory mapping & knowledge warfare.
-cybernetic      Cybernetic control theory & feedback engineering.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `py.typed`
+- `verify_all.py`
 
-## Key Capabilities
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **`Meme`** — Available export
-- **`Memeplex`** — Available export
-- **`MemeticCode`** — Available export
-- **`FitnessMap`** — Available export
-- **`MemeticEngine`** — Available export
-- **`Sign`** — Available export
-- **`SignType`** — Available export
-- **`DriftReport`** — Available export
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Agent Usage Patterns
-
-```python
-from codomyrmex.meme import MemeticEngine, Meme
-
-# Initialize engine
-engine = MemeticEngine()
-
-# Dissect text into memes
-text = "The quick brown fox jumps over the lazy dog."
-memes = engine.dissect(text)
-
-# Analyze fitness
-for meme in memes:
-    print(f"Meme: {meme.content}, Fitness: {meme.fitness}")
-```
-
-## Key Components
-
-| Export | Type |
-|--------|------|
-| `Meme` | Public API |
-| `Memeplex` | Public API |
-| `MemeticCode` | Public API |
-| `FitnessMap` | Public API |
-| `MemeticEngine` | Public API |
-| `Sign` | Public API |
-| `SignType` | Public API |
-| `DriftReport` | Public API |
-| `SemioticAnalyzer` | Public API |
-| `ContagionModel` | Public API |
-| `CascadeDetector` | Public API |
-| `PropagationTrace` | Public API |
-| `Cascade` | Public API |
-| `CascadeType` | Public API |
-| `ResonanceMap` | Public API |
-
-## Source Files
-
-| File | Description |
-|------|-------------|
-| `verify_all.py` | Verification script for the new meme module. |
-
-## Submodules
-
-- `contagion/` — Contagion
-- `cultural_dynamics/` — Cultural Dynamics
-- `cybernetic/` — Cybernetic
-- `epistemic/` — Epistemic
-- `hyperreality/` — Hyperreality
-- `ideoscape/` — Ideoscape
-- `memetics/` — Memetics
-- `narrative/` — Narrative
-- `neurolinguistic/` — Neurolinguistic
-- `rhizome/` — Rhizome
-- `semiotic/` — Semiotic
-- `swarm/` — Swarm
-
-## Integration Points
-
-- **Docs**: [Module Documentation](../../../docs/modules/meme/README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k meme -v
-```
-
-- Always use real, functional tests — no mocks (Zero-Mock policy)
-- Verify all changes pass existing tests before submitting
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Creates and manages meme content generation using MemeticEngine, Meme, Memeplex, and related classes across 12 submodules including contagion, narrative, and swarm intelligence.
-
-### Architect Agent
-**Use Cases**: Designs content generation pipelines, reviews memetic engine architecture, and evaluates submodule interaction patterns across semiotic, cultural dynamics, and cybernetic subsystems.
-
-### QATester Agent
-**Use Cases**: Validates generated content quality, meme fitness scoring accuracy, contagion model behavior, and cross-submodule integration correctness.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

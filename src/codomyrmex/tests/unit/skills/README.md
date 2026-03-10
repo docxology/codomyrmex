@@ -1,25 +1,31 @@
 # skills
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Tests for skills module.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `test_discovery.py` - Test Discovery
-- `test_skill_loader.py` - Test Skill Loader
-- `test_skill_registry.py` - Test Skill Registry
-- `test_skill_sync.py` - Test Skill Sync
-- `test_skill_validator.py` - Test Skill Validator
-- `test_skills_manager.py` - Test Skills Manager
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
+- `test_arscontexta.py` – File
+- `test_arscontexta_core.py` – File
+- `test_arscontexta_models.py` – File
+- `test_arscontexta_services.py` – File
+- `test_discovery.py` – File
+- `test_mcp_tools_coverage.py` – File
+- `test_skill_generator.py` – File
+- `test_skill_loader.py` – File
+- `test_skill_registry.py` – File
+- `test_skill_sync.py` – File
+- `test_skill_updater.py` – File
+- `test_skill_validator.py` – File
+- `test_skills_manager.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

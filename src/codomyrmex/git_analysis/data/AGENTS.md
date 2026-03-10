@@ -1,55 +1,35 @@
-# git_analysis/data — Agent Context
+# Codomyrmex Agents — src/codomyrmex/git_analysis/data
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-This directory stores persisted output from `git_analysis` operations — primarily
-cached analysis results and generated reports for the codomyrmex repository itself.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `codomyrmex_description.md` – Project file
 
-## Key Facts for Agents
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `codomyrmex_description.md` is the live analysis output for this repo
-- Files here are **tracked in git** — safe to read, careful about overwriting
-- Do NOT store large binary blobs or `.gitnexus/` graph data here
-- This is output storage, not source code
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `codomyrmex_description.md`
 
-## When to Use This Directory
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Read `codomyrmex_description.md` when you need:**
-- Quick overview of the codomyrmex codebase structure
-- Contributor statistics without running a live analysis
-- Historical snapshot of the module layout
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-**Write to this directory when:**
-- Running a documentation sprint or codebase audit
-- Generating fresh analysis reports to commit as living docs
-- Updating the description after major structural changes
-
-## Quick Analysis Commands
-
-```bash
-# Read cached description
-cat src/codomyrmex/git_analysis/data/codomyrmex_description.md
-
-# Generate fresh contributor stats
-uv run python -c "
-from codomyrmex.git_analysis import GitHistoryAnalyzer
-a = GitHistoryAnalyzer('.')
-for s in a.get_contributor_stats(max_count=10):
-    print(s['author'], s['commit_count'])
-"
-
-# Get recent hotspots
-uv run python -c "
-from codomyrmex.git_analysis import GitHistoryAnalyzer
-a = GitHistoryAnalyzer('.')
-for h in a.get_hotspot_analysis(top_n=5):
-    print(h['file_path'], h['change_count'])
-"
-```
-
-## What NOT to Put Here
-
-- Raw git objects or pack files
-- `.gitnexus/` graph database files (these are gitignored at repo root)
-- Temporary analysis artifacts from a single session
-- Binary files of any kind
+## Navigation Links
+- **📁 Parent Directory**: [git_analysis](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

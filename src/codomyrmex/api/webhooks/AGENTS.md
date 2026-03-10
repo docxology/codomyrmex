@@ -1,45 +1,51 @@
-# AI Agent Guidelines — api/webhooks
+# Codomyrmex Agents — src/codomyrmex/api/webhooks
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides webhook dispatch and receipt management for event-driven APIs, including endpoint registration, HMAC payload signing, event dispatching with retry logic, and pluggable transport layers.
-
-## Key Components
-
-| Component | File | Role |
-|-----------|------|------|
-| `WebhookEventType` | `models.py` | Enum: `CREATED`, `UPDATED`, `DELETED`, `CUSTOM` |
-| `WebhookStatus` | `models.py` | Enum: `PENDING`, `DELIVERED`, `FAILED`, `RETRYING` |
-| `SignatureAlgorithm` | `models.py` | Enum: `HMAC_SHA256`, `HMAC_SHA512` |
-| `WebhookEvent` | `models.py` | Dataclass with `event_type`, `payload`, auto-generated `event_id` (UUID4), `timestamp`, `source`; serializes via `to_dict()` / `to_json()` |
-| `WebhookConfig` | `models.py` | Dataclass with `url`, `secret`, `events`, `max_retries`, `retry_delay`, `timeout`, `signature_algorithm`, `active` |
-| `DeliveryResult` | `models.py` | Dataclass recording delivery outcome: `webhook_id`, `event_id`, `status`, `status_code`, `attempt`, `error` |
-| `WebhookTransport` | `transport.py` | ABC requiring `send(url, payload, headers, timeout) -> (status_code, body)` |
-| `HTTPWebhookTransport` | `transport.py` | Callback-based transport delegating to a user-supplied callable (for testing/in-process dispatch) |
-| `WebhookSignature` | `signature.py` | Static utility: `sign(payload, secret, algorithm)` and `verify(payload, secret, signature, algorithm)` using HMAC with constant-time comparison |
-| `WebhookRegistry` | `registry.py` | In-memory registry: `register`, `unregister`, `get`, `list_all`, `list_for_event` (filters by active + subscribed event type) |
-| `WebhookDispatcher` | `dispatcher.py` | Dispatches events to matching webhooks; `dispatch` (single attempt) and `dispatch_with_retry` (linear backoff) |
-| `create_webhook_registry` | `factory.py` | Factory returning empty `WebhookRegistry` |
-| `create_webhook_dispatcher` | `factory.py` | Factory returning `WebhookDispatcher` with optional defaults (no-op transport if none provided) |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `dispatcher.py` – Project file
+- `factory.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `registry.py` – Project file
+- `signature.py` – Project file
+- `transport.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Register webhooks via `registry.register(webhook_id, config)` before dispatching events.
-- `dispatcher.dispatch(event)` sends to all active webhooks subscribed to the event type.
-- `dispatcher.dispatch_with_retry(event)` retries failed deliveries up to `config.max_retries` with `config.retry_delay` linear backoff.
-- All payloads are HMAC-signed; `WebhookSignature.verify` uses `hmac.compare_digest` (constant-time) to prevent timing attacks.
-- `list_for_event` returns webhooks that are active AND either subscribe to the specific event type or have an empty events list (wildcard).
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `dispatcher.py`
+- `factory.py`
+- `models.py`
+- `py.typed`
+- `registry.py`
+- `signature.py`
+- `transport.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent**: `api` module re-exports webhook components via `api/webhooks/__init__.py`.
-- **Transport**: Implement `WebhookTransport` ABC for production HTTP delivery (e.g., `httpx`, `aiohttp`).
-- **Events module**: Can be paired with `codomyrmex.events` for internal event bus bridging.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [api/README.md](../README.md)
-- **Sibling**: [SPEC.md](SPEC.md) | [README.md](README.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [api](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

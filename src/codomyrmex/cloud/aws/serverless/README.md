@@ -1,19 +1,18 @@
-# AWS Serverless Submodule
+# serverless
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-AWS Lambda serverless function management.
+Contains components for the src system.
 
-## Planned Features
-
-- Function deployment
-- Invocation (sync/async)
-- Layer management
-- Event source mapping
-- Alias and version management
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent**: [aws/](../README.md)
+- **Parent Directory**: [aws](../README.md)
+- **Project Root**: ../../../../../README.md

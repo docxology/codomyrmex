@@ -1,38 +1,35 @@
-# Codomyrmex Agents -- src/codomyrmex/agents/learning/reflection
+# Codomyrmex Agents — src/codomyrmex/agents/learning/reflection
 
-**Version**: v1.0.0 | **Status**: Planned | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Placeholder subpackage for agent self-reflection and introspection capabilities. This directory is reserved for future implementation of mechanisms that allow agents to analyze their own reasoning, identify mistakes, and improve over time.
-
-No Python implementation exists in this directory yet. The parent module `agents/learning/` contains the implemented `skills.py` module with `Skill` and `SkillLibrary` classes.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| *(none yet)* | -- | No implementation files present |
-
-## Planned Capabilities
-
-- Agent self-evaluation after task completion
-- Reasoning trace analysis and error identification
-- Iterative improvement through reflection loops
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- When implemented, must integrate with `agents.learning.skills.SkillLibrary` for updating learned capabilities.
-- Must follow the zero-mock policy: no stub data or placeholder implementations in production code.
-- Errors must be logged via `logging_monitoring` before re-raising.
-- Unimplemented paths must raise `NotImplementedError`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `agents.learning.skills` (sibling module), `agents.core` (ThinkingAgent reasoning traces)
-- **Used by**: Agent training and improvement pipelines (planned)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [learning](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

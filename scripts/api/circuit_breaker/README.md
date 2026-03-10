@@ -1,24 +1,17 @@
-# API Circuit Breaker Scripts
+# circuit_breaker
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for the circuit breaker pattern, demonstrating fault-tolerant API calls with automatic failure detection, fallback behavior, and recovery.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `circuit_breaker_demo.py` | Demonstrates circuit breaker states (closed, open, half-open) and recovery |
-
-## Usage
-
-```bash
-uv run python scripts/api/circuit_breaker/circuit_breaker_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `circuit_breaker_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: api/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [api](../README.md)
+- **Project Root**: ../../../README.md

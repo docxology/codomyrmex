@@ -44,26 +44,26 @@ class TestComputeClientBase:
         """InfomaniakComputeClient also inherits from ComputeClient ABC."""
         assert issubclass(InfomaniakComputeClient, ComputeClient)
 
-    def test_service_name_is_compute(self, mock_openstack_connection):
+    def test_service_name_is_compute(self, stub_openstack_connection):
         """The _service_name class attribute is set to 'compute'."""
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         assert client._service_name == "compute"
 
-    def test_context_manager_enter_returns_self(self, mock_openstack_connection):
+    def test_context_manager_enter_returns_self(self, stub_openstack_connection):
         """Using the client as a context manager returns itself on __enter__."""
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
 
         with client as ctx:
             assert ctx is client
 
-    def test_context_manager_calls_close(self, mock_openstack_connection):
+    def test_context_manager_calls_close(self, stub_openstack_connection):
         """Exiting the context manager calls close() on the connection."""
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
 
         with client:
             pass
 
-        mock_openstack_connection.close.assert_called_once()
+        stub_openstack_connection.close.assert_called_once()
 
 
 # =========================================================================
@@ -74,12 +74,12 @@ class TestComputeClientBase:
 class TestComputeInstanceOps:
     """Tests for instance lifecycle operations."""
 
-    def test_list_instances(self, mock_openstack_connection):
+    def test_list_instances(self, stub_openstack_connection):
         """list_instances returns a list of dicts from OpenStack servers."""
         server = make_stub_server()
-        mock_openstack_connection.compute.servers.return_value = [server]
+        stub_openstack_connection.compute.servers.return_value = [server]
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         instances = client.list_instances()
 
         assert len(instances) == 1
@@ -90,38 +90,38 @@ class TestComputeInstanceOps:
         assert instances[0]["availability_zone"] == "dc3-a"
         assert "default" in instances[0]["security_groups"]
 
-    def test_get_instance(self, mock_openstack_connection):
+    def test_get_instance(self, stub_openstack_connection):
         """get_instance returns a dict for a specific server ID."""
         server = make_stub_server(server_id="srv-abc", name="specific-server")
-        mock_openstack_connection.compute.get_server.return_value = server
+        stub_openstack_connection.compute.get_server.return_value = server
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.get_instance("srv-abc")
 
         assert result is not None
         assert result["id"] == "srv-abc"
         assert result["name"] == "specific-server"
-        mock_openstack_connection.compute.get_server.assert_called_once_with("srv-abc")
+        stub_openstack_connection.compute.get_server.assert_called_once_with("srv-abc")
 
-    def test_create_instance_happy_path(self, mock_openstack_connection):
+    def test_create_instance_happy_path(self, stub_openstack_connection):
         """create_instance resolves flavor/image/network and returns created server."""
         # Set up resolved objects
-        mock_flavor = Stub()
-        mock_flavor.id = "flavor-a1"
-        mock_image = Stub()
-        mock_image.id = "img-ubuntu"
-        mock_network = Stub()
-        mock_network.id = "net-main"
+        stub_flavor = Stub()
+        stub_flavor.id = "flavor-a1"
+        stub_image = Stub()
+        stub_image.id = "img-ubuntu"
+        stub_network = Stub()
+        stub_network.id = "net-main"
 
-        mock_openstack_connection.compute.find_flavor.return_value = mock_flavor
-        mock_openstack_connection.image.find_image.return_value = mock_image
-        mock_openstack_connection.network.find_network.return_value = mock_network
+        stub_openstack_connection.compute.find_flavor.return_value = stub_flavor
+        stub_openstack_connection.image.find_image.return_value = stub_image
+        stub_openstack_connection.network.find_network.return_value = stub_network
 
         created = make_stub_server(server_id="srv-new", name="new-instance")
-        mock_openstack_connection.compute.create_server.return_value = created
-        mock_openstack_connection.compute.wait_for_server.return_value = created
+        stub_openstack_connection.compute.create_server.return_value = created
+        stub_openstack_connection.compute.wait_for_server.return_value = created
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.create_instance(
             name="new-instance",
             flavor="a1-ram2-disk20-perf1",
@@ -132,16 +132,16 @@ class TestComputeInstanceOps:
 
         assert result is not None
         assert result["id"] == "srv-new"
-        mock_openstack_connection.compute.create_server.assert_called_once()
-        mock_openstack_connection.compute.wait_for_server.assert_called_once_with(
+        stub_openstack_connection.compute.create_server.assert_called_once()
+        stub_openstack_connection.compute.wait_for_server.assert_called_once_with(
             created
         )
 
-    def test_create_instance_flavor_not_found(self, mock_openstack_connection):
+    def test_create_instance_flavor_not_found(self, stub_openstack_connection):
         """create_instance returns None when the flavor is not found."""
-        mock_openstack_connection.compute.find_flavor.return_value = None
+        stub_openstack_connection.compute.find_flavor.return_value = None
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.create_instance(
             name="bad-flavor",
             flavor="nonexistent-flavor",
@@ -150,16 +150,16 @@ class TestComputeInstanceOps:
         )
 
         assert result is None
-        mock_openstack_connection.compute.create_server.assert_not_called()
+        stub_openstack_connection.compute.create_server.assert_not_called()
 
-    def test_create_instance_image_not_found(self, mock_openstack_connection):
+    def test_create_instance_image_not_found(self, stub_openstack_connection):
         """create_instance returns None when the image is not found."""
-        mock_flavor = Stub()
-        mock_flavor.id = "flavor-1"
-        mock_openstack_connection.compute.find_flavor.return_value = mock_flavor
-        mock_openstack_connection.image.find_image.return_value = None
+        stub_flavor = Stub()
+        stub_flavor.id = "flavor-1"
+        stub_openstack_connection.compute.find_flavor.return_value = stub_flavor
+        stub_openstack_connection.image.find_image.return_value = None
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.create_instance(
             name="bad-image",
             flavor="a1-ram2-disk20-perf1",
@@ -168,19 +168,19 @@ class TestComputeInstanceOps:
         )
 
         assert result is None
-        mock_openstack_connection.compute.create_server.assert_not_called()
+        stub_openstack_connection.compute.create_server.assert_not_called()
 
-    def test_create_instance_network_not_found(self, mock_openstack_connection):
+    def test_create_instance_network_not_found(self, stub_openstack_connection):
         """create_instance returns None when the network is not found."""
-        mock_flavor = Stub()
-        mock_flavor.id = "flavor-1"
-        mock_image = Stub()
-        mock_image.id = "image-1"
-        mock_openstack_connection.compute.find_flavor.return_value = mock_flavor
-        mock_openstack_connection.image.find_image.return_value = mock_image
-        mock_openstack_connection.network.find_network.return_value = None
+        stub_flavor = Stub()
+        stub_flavor.id = "flavor-1"
+        stub_image = Stub()
+        stub_image.id = "image-1"
+        stub_openstack_connection.compute.find_flavor.return_value = stub_flavor
+        stub_openstack_connection.image.find_image.return_value = stub_image
+        stub_openstack_connection.network.find_network.return_value = None
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.create_instance(
             name="bad-network",
             flavor="a1-ram2-disk20-perf1",
@@ -189,55 +189,55 @@ class TestComputeInstanceOps:
         )
 
         assert result is None
-        mock_openstack_connection.compute.create_server.assert_not_called()
+        stub_openstack_connection.compute.create_server.assert_not_called()
 
-    def test_start_instance(self, mock_openstack_connection):
+    def test_start_instance(self, stub_openstack_connection):
         """start_instance calls start_server and returns True."""
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.start_instance("srv-stopped")
 
         assert result is True
-        mock_openstack_connection.compute.start_server.assert_called_once_with(
+        stub_openstack_connection.compute.start_server.assert_called_once_with(
             "srv-stopped"
         )
 
-    def test_stop_instance(self, mock_openstack_connection):
+    def test_stop_instance(self, stub_openstack_connection):
         """stop_instance calls stop_server and returns True."""
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.stop_instance("srv-running")
 
         assert result is True
-        mock_openstack_connection.compute.stop_server.assert_called_once_with(
+        stub_openstack_connection.compute.stop_server.assert_called_once_with(
             "srv-running"
         )
 
-    def test_reboot_instance(self, mock_openstack_connection):
+    def test_reboot_instance(self, stub_openstack_connection):
         """reboot_instance calls reboot_server with the requested reboot type."""
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.reboot_instance("srv-123", reboot_type="HARD")
 
         assert result is True
-        mock_openstack_connection.compute.reboot_server.assert_called_once_with(
+        stub_openstack_connection.compute.reboot_server.assert_called_once_with(
             "srv-123", "HARD"
         )
 
-    def test_delete_instance(self, mock_openstack_connection):
+    def test_delete_instance(self, stub_openstack_connection):
         """delete_instance calls delete_server with force=False by default."""
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.delete_instance("srv-del")
 
         assert result is True
-        mock_openstack_connection.compute.delete_server.assert_called_once_with(
+        stub_openstack_connection.compute.delete_server.assert_called_once_with(
             "srv-del", force=False
         )
 
-    def test_terminate_instance_delegates_to_delete(self, mock_openstack_connection):
+    def test_terminate_instance_delegates_to_delete(self, stub_openstack_connection):
         """terminate_instance is an alias that calls delete_instance with force=True."""
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.terminate_instance("srv-term")
 
         assert result is True
-        mock_openstack_connection.compute.delete_server.assert_called_once_with(
+        stub_openstack_connection.compute.delete_server.assert_called_once_with(
             "srv-term", force=True
         )
 
@@ -250,12 +250,12 @@ class TestComputeInstanceOps:
 class TestComputeImageOps:
     """Tests for image listing and retrieval."""
 
-    def test_list_images(self, mock_openstack_connection):
+    def test_list_images(self, stub_openstack_connection):
         """list_images returns a list of image dicts from Glance."""
         img = make_stub_image(image_id="img-ubuntu", name="Ubuntu 22.04")
-        mock_openstack_connection.image.images.return_value = [img]
+        stub_openstack_connection.image.images.return_value = [img]
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         images = client.list_images()
 
         assert len(images) == 1
@@ -264,24 +264,24 @@ class TestComputeImageOps:
         assert images[0]["min_disk"] == 10
         assert images[0]["min_ram"] == 512
 
-    def test_get_image(self, mock_openstack_connection):
+    def test_get_image(self, stub_openstack_connection):
         """get_image returns a dict for a found image."""
         img = make_stub_image(image_id="img-found", name="Debian 12")
-        mock_openstack_connection.image.find_image.return_value = img
+        stub_openstack_connection.image.find_image.return_value = img
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.get_image("img-found")
 
         assert result is not None
         assert result["id"] == "img-found"
         assert result["name"] == "Debian 12"
-        mock_openstack_connection.image.find_image.assert_called_once_with("img-found")
+        stub_openstack_connection.image.find_image.assert_called_once_with("img-found")
 
-    def test_get_image_returns_none_when_not_found(self, mock_openstack_connection):
+    def test_get_image_returns_none_when_not_found(self, stub_openstack_connection):
         """get_image returns None when the image does not exist."""
-        mock_openstack_connection.image.find_image.return_value = None
+        stub_openstack_connection.image.find_image.return_value = None
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.get_image("img-missing")
 
         assert result is None
@@ -295,19 +295,19 @@ class TestComputeImageOps:
 class TestComputeFlavorOps:
     """Tests for flavor listing."""
 
-    def test_list_flavors(self, mock_openstack_connection):
+    def test_list_flavors(self, stub_openstack_connection):
         """list_flavors returns flavor dicts with vcpus, ram, disk."""
-        mock_flavor = Stub()
-        mock_flavor.id = "a1-ram2-disk20-perf1"
-        mock_flavor.name = "a1-ram2-disk20-perf1"
-        mock_flavor.vcpus = 1
-        mock_flavor.ram = 2048
-        mock_flavor.disk = 20
-        mock_flavor.is_public = True
+        stub_flavor = Stub()
+        stub_flavor.id = "a1-ram2-disk20-perf1"
+        stub_flavor.name = "a1-ram2-disk20-perf1"
+        stub_flavor.vcpus = 1
+        stub_flavor.ram = 2048
+        stub_flavor.disk = 20
+        stub_flavor.is_public = True
 
-        mock_openstack_connection.compute.flavors.return_value = [mock_flavor]
+        stub_openstack_connection.compute.flavors.return_value = [stub_flavor]
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         flavors = client.list_flavors()
 
         assert len(flavors) == 1
@@ -326,16 +326,16 @@ class TestComputeFlavorOps:
 class TestComputeKeypairOps:
     """Tests for SSH keypair management."""
 
-    def test_list_keypairs(self, mock_openstack_connection):
+    def test_list_keypairs(self, stub_openstack_connection):
         """list_keypairs returns keypair dicts with name and fingerprint."""
-        mock_kp = Stub()
-        mock_kp.name = "deploy-key"
-        mock_kp.fingerprint = "aa:bb:cc:dd:ee:ff"
-        mock_kp.type = "ssh"
+        stub_kp = Stub()
+        stub_kp.name = "deploy-key"
+        stub_kp.fingerprint = "aa:bb:cc:dd:ee:ff"
+        stub_kp.type = "ssh"
 
-        mock_openstack_connection.compute.keypairs.return_value = [mock_kp]
+        stub_openstack_connection.compute.keypairs.return_value = [stub_kp]
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         keypairs = client.list_keypairs()
 
         assert len(keypairs) == 1
@@ -343,17 +343,17 @@ class TestComputeKeypairOps:
         assert keypairs[0]["fingerprint"] == "aa:bb:cc:dd:ee:ff"
         assert keypairs[0]["type"] == "ssh"
 
-    def test_create_keypair_with_public_key(self, mock_openstack_connection):
+    def test_create_keypair_with_public_key(self, stub_openstack_connection):
         """create_keypair imports an existing public key and returns the result."""
-        mock_kp = Stub()
-        mock_kp.name = "imported-key"
-        mock_kp.fingerprint = "11:22:33:44"
-        mock_kp.public_key = "ssh-rsa AAAA..."
-        mock_kp.private_key = None
+        stub_kp = Stub()
+        stub_kp.name = "imported-key"
+        stub_kp.fingerprint = "11:22:33:44"
+        stub_kp.public_key = "ssh-rsa AAAA..."
+        stub_kp.private_key = None
 
-        mock_openstack_connection.compute.create_keypair.return_value = mock_kp
+        stub_openstack_connection.compute.create_keypair.return_value = stub_kp
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.create_keypair(
             name="imported-key", public_key="ssh-rsa AAAA..."
         )
@@ -362,21 +362,21 @@ class TestComputeKeypairOps:
         assert result["name"] == "imported-key"
         assert result["public_key"] == "ssh-rsa AAAA..."
         assert "private_key" not in result
-        mock_openstack_connection.compute.create_keypair.assert_called_once_with(
+        stub_openstack_connection.compute.create_keypair.assert_called_once_with(
             name="imported-key", public_key="ssh-rsa AAAA..."
         )
 
-    def test_create_keypair_generates_private_key(self, mock_openstack_connection):
+    def test_create_keypair_generates_private_key(self, stub_openstack_connection):
         """create_keypair without public_key generates a new pair with private_key."""
-        mock_kp = Stub()
-        mock_kp.name = "generated-key"
-        mock_kp.fingerprint = "55:66:77:88"
-        mock_kp.public_key = "ssh-rsa BBBB..."
-        mock_kp.private_key = "-----BEGIN RSA PRIVATE KEY-----\nMIIE..."
+        stub_kp = Stub()
+        stub_kp.name = "generated-key"
+        stub_kp.fingerprint = "55:66:77:88"
+        stub_kp.public_key = "ssh-rsa BBBB..."
+        stub_kp.private_key = "-----BEGIN RSA PRIVATE KEY-----\nMIIE..."
 
-        mock_openstack_connection.compute.create_keypair.return_value = mock_kp
+        stub_openstack_connection.compute.create_keypair.return_value = stub_kp
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.create_keypair(name="generated-key")
 
         assert result is not None
@@ -384,17 +384,17 @@ class TestComputeKeypairOps:
         assert result["public_key"] == "ssh-rsa BBBB..."
         assert "private_key" in result
         assert result["private_key"].startswith("-----BEGIN RSA PRIVATE KEY-----")
-        mock_openstack_connection.compute.create_keypair.assert_called_once_with(
+        stub_openstack_connection.compute.create_keypair.assert_called_once_with(
             name="generated-key", public_key=None
         )
 
-    def test_delete_keypair(self, mock_openstack_connection):
+    def test_delete_keypair(self, stub_openstack_connection):
         """delete_keypair calls delete_keypair on the connection and returns True."""
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.delete_keypair("old-key")
 
         assert result is True
-        mock_openstack_connection.compute.delete_keypair.assert_called_once_with(
+        stub_openstack_connection.compute.delete_keypair.assert_called_once_with(
             "old-key"
         )
 
@@ -407,15 +407,15 @@ class TestComputeKeypairOps:
 class TestComputeAZOps:
     """Tests for availability zone listing."""
 
-    def test_list_availability_zones(self, mock_openstack_connection):
+    def test_list_availability_zones(self, stub_openstack_connection):
         """list_availability_zones returns zone dicts with name and state."""
-        mock_zone = Stub()
-        mock_zone.name = "dc3-a"
-        mock_zone.state = {"available": True}
+        stub_zone = Stub()
+        stub_zone.name = "dc3-a"
+        stub_zone.state = {"available": True}
 
-        mock_openstack_connection.compute.availability_zones.return_value = [mock_zone]
+        stub_openstack_connection.compute.availability_zones.return_value = [stub_zone]
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         zones = client.list_availability_zones()
 
         assert len(zones) == 1
@@ -431,35 +431,35 @@ class TestComputeAZOps:
 class TestComputeErrorPaths:
     """Tests verifying graceful error handling returns safe defaults."""
 
-    def test_list_instances_error_returns_empty_list(self, mock_openstack_connection):
+    def test_list_instances_error_returns_empty_list(self, stub_openstack_connection):
         """Connection error during list_instances returns [] instead of raising."""
-        mock_openstack_connection.compute.servers.side_effect = Exception(
+        stub_openstack_connection.compute.servers.side_effect = Exception(
             "Connection refused"
         )
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.list_instances()
 
         assert result == []
 
-    def test_get_instance_error_returns_none(self, mock_openstack_connection):
+    def test_get_instance_error_returns_none(self, stub_openstack_connection):
         """Exception during get_instance returns None instead of raising."""
-        mock_openstack_connection.compute.get_server.side_effect = Exception(
+        stub_openstack_connection.compute.get_server.side_effect = Exception(
             "Server error"
         )
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.get_instance("srv-bad")
 
         assert result is None
 
-    def test_create_instance_error_returns_none(self, mock_openstack_connection):
+    def test_create_instance_error_returns_none(self, stub_openstack_connection):
         """Exception during create_instance returns None instead of raising."""
-        mock_openstack_connection.compute.find_flavor.side_effect = Exception(
+        stub_openstack_connection.compute.find_flavor.side_effect = Exception(
             "API timeout"
         )
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.create_instance(
             name="fail-server",
             flavor="a1-ram2",
@@ -469,13 +469,13 @@ class TestComputeErrorPaths:
 
         assert result is None
 
-    def test_list_flavors_error_returns_empty_list(self, mock_openstack_connection):
+    def test_list_flavors_error_returns_empty_list(self, stub_openstack_connection):
         """Exception during list_flavors returns [] instead of raising."""
-        mock_openstack_connection.compute.flavors.side_effect = Exception(
+        stub_openstack_connection.compute.flavors.side_effect = Exception(
             "Service unavailable"
         )
 
-        client = InfomaniakComputeClient(mock_openstack_connection)
+        client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.list_flavors()
 
         assert result == []
@@ -490,8 +490,8 @@ class TestInfomaniakComputeClientExpanded:
     def _make_client(self):
         from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
 
-        mock_conn = Stub()
-        return InfomaniakComputeClient(connection=mock_conn), mock_conn
+        stub_conn = Stub()
+        return InfomaniakComputeClient(connection=stub_conn), stub_conn
 
     def test_get_image(self):
         """get_image returns dict with image details."""

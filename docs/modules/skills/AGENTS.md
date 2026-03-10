@@ -1,69 +1,39 @@
-# Agent Guidelines - Skills
+# Codomyrmex Agents — docs/modules/skills
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Agent skill management: discovery, registration, and execution.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Skill** — Base skill class
-- **SkillRegistry** — Discover and register skills
-- **SkillExecutor** — Execute skills
-- **SkillComposer** — Compose skills
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Register skills** — Add to registry on startup
-2. **Version skills** — Track skill versions
-3. **Dependencies** — Declare skill dependencies
-4. **Input validation** — Validate skill inputs
-5. **Document skills** — Clear descriptions
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.skills import Skill, SkillRegistry, SkillExecutor
-
-# Define a skill
-@Skill(name="code_review", version="1.0")
-def review_code(code: str, language: str = "python"):
-    \"\"\"Review code for issues.\"\"\"
-    return analyze(code, language)
-
-# Register skills
-registry = SkillRegistry()
-registry.register(review_code)
-registry.discover("./skills/")  # Auto-discover
-
-# List available skills
-for skill in registry.list():
-    print(f"{skill.name} v{skill.version}: {skill.description}")
-
-# Execute skills
-executor = SkillExecutor(registry)
-result = executor.execute("code_review", code=source, language="python")
-
-# Compose skills
-composed = registry.compose(["parse", "analyze", "format"])
-result = executor.execute_composed(composed, input_data)
-```
-
-## Testing Patterns
-
-```python
-# Verify skill registration
-registry = SkillRegistry()
-registry.register(review_code)
-assert "code_review" in registry.list_names()
-
-# Verify execution
-executor = SkillExecutor(registry)
-result = executor.execute("code_review", code="print(1)")
-assert result is not None
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

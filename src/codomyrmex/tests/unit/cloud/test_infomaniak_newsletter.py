@@ -1,7 +1,7 @@
 """
 Unit tests for Infomaniak newsletter.
 
-Zero ``unittest.mock`` — uses ``Stub`` from ``conftest.py``.
+Zero ``unittest.stub`` — uses ``Stub`` from ``conftest.py``.
 """
 
 import os
@@ -15,9 +15,9 @@ from _stubs import Stub
 class TestInfomaniakNewsletterClient:
     """Tests for InfomaniakNewsletterClient.
 
-    Uses instance-level mocking: creates a real client (exercises __init__,
+    Uses instance-level stubing: creates a real client (exercises __init__,
     URL construction, header setup, payload building), then replaces
-    ``_session.get/post/put/delete`` with mocks so only HTTP transport
+    ``_session.get/post/put/delete`` with stubs so only HTTP transport
     is faked.
     """
 
@@ -26,7 +26,7 @@ class TestInfomaniakNewsletterClient:
     URL_PREFIX = f"{BASE}/1/newsletters/{NL_ID}"
 
     def _make_client(self):
-        """Create a newsletter client and replace its session with a mock."""
+        """Create a newsletter client and replace its session with a stub."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
 
         client = InfomaniakNewsletterClient(
@@ -38,7 +38,7 @@ class TestInfomaniakNewsletterClient:
         return client
 
     @staticmethod
-    def _mock_response(json_data, status_code=200):
+    def _stub_response(json_data, status_code=200):
         resp = Stub()
         resp.status_code = status_code
         resp.json.return_value = json_data
@@ -123,7 +123,7 @@ class TestInfomaniakNewsletterClient:
     def test_validate_connection(self):
         """validate_connection calls GET credits endpoint."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": {"remaining": 100}},
         )
         assert client.validate_connection() is True
@@ -137,7 +137,7 @@ class TestInfomaniakNewsletterClient:
     def test_list_campaigns(self):
         """list_campaigns GETs campaigns URL and returns list."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": [{"id": "c-1", "subject": "Hello"}]},
         )
         result = client.list_campaigns()
@@ -150,7 +150,7 @@ class TestInfomaniakNewsletterClient:
     def test_get_campaign(self):
         """get_campaign GETs campaign by ID."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": {"id": "c-99", "subject": "Detail"}},
         )
         result = client.get_campaign("c-99")
@@ -162,7 +162,7 @@ class TestInfomaniakNewsletterClient:
     def test_create_campaign(self):
         """create_campaign POSTs with all 5 payload fields."""
         client = self._make_client()
-        client._session.post.return_value = self._mock_response(
+        client._session.post.return_value = self._stub_response(
             {"data": {"id": "c-new"}},
         )
         result = client.create_campaign(
@@ -186,7 +186,7 @@ class TestInfomaniakNewsletterClient:
     def test_update_campaign(self):
         """update_campaign PUTs kwargs to campaign URL."""
         client = self._make_client()
-        client._session.put.return_value = self._mock_response(
+        client._session.put.return_value = self._stub_response(
             {"data": {"id": "c-1", "subject": "Updated"}},
         )
         result = client.update_campaign("c-1", subject="Updated")
@@ -211,7 +211,7 @@ class TestInfomaniakNewsletterClient:
     def test_send_test(self):
         """send_test POSTs email payload to test endpoint."""
         client = self._make_client()
-        client._session.post.return_value = self._mock_response(
+        client._session.post.return_value = self._stub_response(
             {"data": {"status": "sent"}},
         )
         assert client.send_test("c-1", "test@example.com") is True
@@ -223,7 +223,7 @@ class TestInfomaniakNewsletterClient:
     def test_schedule_campaign(self):
         """schedule_campaign POSTs send_at to schedule endpoint."""
         client = self._make_client()
-        client._session.post.return_value = self._mock_response(
+        client._session.post.return_value = self._stub_response(
             {"data": {"scheduled": True}},
         )
         assert client.schedule_campaign("c-1", "2026-03-01T10:00:00Z") is True
@@ -235,7 +235,7 @@ class TestInfomaniakNewsletterClient:
     def test_unschedule_campaign(self):
         """unschedule_campaign POSTs to unschedule endpoint."""
         client = self._make_client()
-        client._session.post.return_value = self._mock_response(
+        client._session.post.return_value = self._stub_response(
             {"data": {"unscheduled": True}},
         )
         assert client.unschedule_campaign("c-1") is True
@@ -245,7 +245,7 @@ class TestInfomaniakNewsletterClient:
     def test_send_campaign(self):
         """send_campaign POSTs to send endpoint."""
         client = self._make_client()
-        client._session.post.return_value = self._mock_response(
+        client._session.post.return_value = self._stub_response(
             {"data": {"status": "sending"}},
         )
         assert client.send_campaign("c-1") is True
@@ -255,7 +255,7 @@ class TestInfomaniakNewsletterClient:
     def test_get_campaign_statistics(self):
         """get_campaign_statistics GETs statistics URL."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": {"sent": 1000, "opened": 450}},
         )
         stats = client.get_campaign_statistics("c-1")
@@ -272,7 +272,7 @@ class TestInfomaniakNewsletterClient:
     def test_list_mailing_lists(self):
         """list_mailing_lists GETs mailing-lists URL."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": [{"id": "ml-1", "name": "Subs"}, {"id": "ml-2", "name": "VIPs"}]},
         )
         result = client.list_mailing_lists()
@@ -284,7 +284,7 @@ class TestInfomaniakNewsletterClient:
     def test_get_mailing_list(self):
         """get_mailing_list GETs specific list by ID."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": {"id": "ml-1", "name": "Subs"}},
         )
         result = client.get_mailing_list("ml-1")
@@ -296,7 +296,7 @@ class TestInfomaniakNewsletterClient:
     def test_create_mailing_list(self):
         """create_mailing_list POSTs name payload."""
         client = self._make_client()
-        client._session.post.return_value = self._mock_response(
+        client._session.post.return_value = self._stub_response(
             {"data": {"id": "ml-new", "name": "New List"}},
         )
         result = client.create_mailing_list("New List")
@@ -310,7 +310,7 @@ class TestInfomaniakNewsletterClient:
     def test_update_mailing_list(self):
         """update_mailing_list PUTs kwargs."""
         client = self._make_client()
-        client._session.put.return_value = self._mock_response(
+        client._session.put.return_value = self._stub_response(
             {"data": {"id": "ml-1", "name": "Renamed"}},
         )
         result = client.update_mailing_list("ml-1", name="Renamed")
@@ -333,7 +333,7 @@ class TestInfomaniakNewsletterClient:
     def test_get_list_contacts(self):
         """get_list_contacts GETs contacts for a list."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": [{"id": "ct-1", "email": "a@test.com"}]},
         )
         result = client.get_list_contacts("ml-1")
@@ -345,7 +345,7 @@ class TestInfomaniakNewsletterClient:
     def test_import_contacts(self):
         """import_contacts POSTs contacts list."""
         client = self._make_client()
-        client._session.post.return_value = self._mock_response(
+        client._session.post.return_value = self._stub_response(
             {"data": {"task_id": "task-123", "imported": 3}},
         )
         contacts = [{"email": "a@test.com"}, {"email": "b@test.com"}]
@@ -360,7 +360,7 @@ class TestInfomaniakNewsletterClient:
     def test_manage_contact(self):
         """manage_contact POSTs to action URL."""
         client = self._make_client()
-        client._session.post.return_value = self._mock_response(
+        client._session.post.return_value = self._stub_response(
             {"data": {"subscribed": True}},
         )
         assert client.manage_contact("ml-1", "ct-5", "subscribe") is True
@@ -374,7 +374,7 @@ class TestInfomaniakNewsletterClient:
     def test_get_contact(self):
         """get_contact GETs contact by ID."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": {"id": "ct-1", "email": "a@test.com"}},
         )
         result = client.get_contact("ct-1")
@@ -386,7 +386,7 @@ class TestInfomaniakNewsletterClient:
     def test_update_contact(self):
         """update_contact PUTs kwargs."""
         client = self._make_client()
-        client._session.put.return_value = self._mock_response(
+        client._session.put.return_value = self._stub_response(
             {"data": {"id": "ct-1", "name": "Updated"}},
         )
         result = client.update_contact("ct-1", name="Updated")
@@ -415,7 +415,7 @@ class TestInfomaniakNewsletterClient:
     def test_get_task_status(self):
         """get_task_status GETs tasks URL."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": {"id": "t-1", "status": "completed"}},
         )
         result = client.get_task_status("t-1")
@@ -427,7 +427,7 @@ class TestInfomaniakNewsletterClient:
     def test_get_credits(self):
         """get_credits GETs credits URL."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": {"remaining": 5000, "used": 1500}},
         )
         credits = client.get_credits()
@@ -484,7 +484,7 @@ class TestInfomaniakNewsletterClient:
     def test_list_campaigns_dict_response(self):
         """list_campaigns extracts items from dict-wrapped response."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"data": {"total": 5, "items": [{"id": "c1"}]}},
         )
         result = client.list_campaigns()
@@ -504,7 +504,7 @@ class TestInfomaniakNewsletterClient:
     def test_get_response_without_data_key(self):
         """_get returns full dict when no 'data' key in response."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response(
+        client._session.get.return_value = self._stub_response(
             {"result": "ok", "value": 42},
         )
         result = client.get_credits()
@@ -538,7 +538,7 @@ class TestInfomaniakNewsletterClient:
     def test_get_list_contacts_empty(self):
         """get_list_contacts returns [] for empty contact list."""
         client = self._make_client()
-        client._session.get.return_value = self._mock_response({"data": []})
+        client._session.get.return_value = self._stub_response({"data": []})
         assert client.get_list_contacts("ml-1") == []
 
     def test_validate_connection_failure(self):

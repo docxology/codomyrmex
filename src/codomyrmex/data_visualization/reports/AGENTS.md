@@ -1,35 +1,49 @@
-# Codomyrmex Agents -- src/codomyrmex/data_visualization/reports
+# Codomyrmex Agents — src/codomyrmex/data_visualization/reports
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Domain-specific report generators built on `BaseReport`. Each report composes a `Dashboard` with `Card` components and optional plot embeds, providing `generate()` to populate content and `save()` to write HTML output. Four report types are included: finance, general system, logistics (with Sankey diagram), and marketing.
-
-## Key Components
-
-| File | Class | Role |
-|------|-------|------|
-| `_base.py` | `BaseReport` | Abstract base with `title`, `sections` list, `add_section()`, `render()`, `save()`, `to_dict()` |
-| `finance.py` | `FinanceReport` | Financial overview with Net Profit and Stock metrics |
-| `general.py` | `GeneralSystemReport` | Executive dashboard with Revenue, Colony Size, Connections, Progress |
-| `logistics.py` | `LogisticsReport` | Logistics report with shipment tracking and `SankeyDiagram` goods flow |
-| `marketing.py` | `MarketingReport` | Marketing analysis with Brand Awareness and User Acquisition metrics |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `_base.py` – Project file
+- `finance.py` – Project file
+- `general.py` – Project file
+- `logistics.py` – Project file
+- `marketing.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All report classes inherit from `BaseReport` and compose an internal `Dashboard` instance.
-- `generate()` populates the dashboard sections; it is idempotent (tracked via `_generated` flag).
-- `save(output_path)` calls `generate()` if not already done, then writes the dashboard HTML.
-- `BaseReport.render()` produces an `<article>` with `<h1>` title and rendered sections.
-- `BaseReport.to_dict()` returns `{"title": ..., "section_count": ...}`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `_base.py`
+- `finance.py`
+- `general.py`
+- `logistics.py`
+- `marketing.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `data_visualization.core.ui` (`Card`, `Dashboard`), `data_visualization.plots.sankey` (`SankeyDiagram` -- used by `LogisticsReport`)
-- **Used by**: Dashboard export workflows, MCP `export_dashboard` tool
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [data_visualization](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

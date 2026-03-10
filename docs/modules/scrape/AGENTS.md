@@ -1,69 +1,47 @@
-# Agent Guidelines - Scrape
+# Codomyrmex Agents — docs/modules/scrape
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Web scraping with browser automation and DOM extraction.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `TESTING.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Scraper** — High-level scraping
-- **BrowserScraper** — Browser-based scraping
-- **DOMExtractor** — Extract from DOM
-- **RateLimiter** — Respect rate limits
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `TESTING.md`
+- `USAGE_EXAMPLES.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Respect robots.txt** — Check before scraping
-2. **Rate limit** — Don't overwhelm servers
-3. **Handle failures** — Retry with backoff
-4. **Cache responses** — Avoid repeat requests
-5. **User-agent** — Set appropriate user agent
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.scrape import Scraper, BrowserScraper, DOMExtractor
-
-# Simple scraping
-scraper = Scraper()
-html = scraper.get("https://example.com")
-links = scraper.extract_links(html)
-
-# Browser for JavaScript sites
-browser = BrowserScraper()
-await browser.navigate("https://spa.example.com")
-await browser.wait_for_selector(".data")
-content = await browser.get_content()
-
-# DOM extraction
-extractor = DOMExtractor(html)
-titles = extractor.select_all("h1")
-data = extractor.extract({
-    "title": "h1",
-    "price": ".price",
-    "description": ".desc"
-})
-```
-
-## Testing Patterns
-
-```python
-# Verify extraction
-extractor = DOMExtractor("<h1>Test</h1>")
-titles = extractor.select_all("h1")
-assert len(titles) == 1
-assert titles[0].text == "Test"
-
-# Verify rate limiting
-scraper = Scraper(rate_limit=1.0)  # 1 req/sec
-start = time.time()
-scraper.get("url1")
-scraper.get("url2")
-assert time.time() - start >= 1.0
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

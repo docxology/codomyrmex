@@ -1,126 +1,53 @@
-# Agent Guidelines - Plugin System
+# Codomyrmex Agents — src/codomyrmex/plugin_system
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Extensible plugin architecture for third-party module extensions. Provides `PluginManager` for
-loading, activating, and deactivating plugins, `PluginLoader` for path-based discovery, and
-`PluginRegistry` for cross-module plugin sharing. Two MCP tools (`plugin_scan_entry_points`,
-`plugin_resolve_dependencies`) expose discovery and dependency resolution.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `PluginManager`, `PluginLoader`, `PluginRegistry`, `PluginValidator`, `Plugin`, `PluginError` |
-| `plugin_manager.py` | `PluginManager` — load, activate, deactivate, get, list plugins |
-| `plugin_loader.py` | `PluginLoader` — load plugins from filesystem paths |
-| `plugin_registry.py` | `PluginRegistry` — register and discover plugins |
-| `plugin_validator.py` | `PluginValidator` — validate plugin structure before loading |
-| `base.py` | `Plugin` — base plugin class with lifecycle hooks |
-| `mcp_tools.py` | MCP tools: `plugin_scan_entry_points`, `plugin_resolve_dependencies` |
-
-## Key Classes
-
-- **PluginManager** — Load, activate, deactivate plugins
-- **PluginLoader** — Load plugins from paths
-- **PluginRegistry** — Register and discover plugins
-- **PluginValidator** — Validate plugin structure
-- **Plugin** — Base plugin class
-
-## Agent Instructions
-
-1. **Validate before load** — Use `PluginValidator` to check plugins
-2. **Handle dependencies** — Check plugin dependencies before activation
-3. **Lifecycle order** — Always: load → activate → use → deactivate
-4. **Catch plugin errors** — Wrap plugin calls in try/except
-5. **Use registry** — Register plugins for discovery by other modules
-
-## Common Patterns
-
-```python
-from codomyrmex.plugin_system import PluginManager, PluginError
-
-manager = PluginManager()
-
-# Load all plugins
-try:
-    manager.load_plugins_from("./plugins")
-except PluginError as e:
-    log.error(f"Plugin load failed: {e}")
-
-# Use a plugin safely
-plugin = manager.get_plugin("my_plugin")
-if plugin:
-    try:
-        plugin.activate()
-        result = plugin.execute(data)
-    except PluginError as e:
-        log.error(f"Plugin error: {e}")
-    finally:
-        plugin.deactivate()
-```
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `plugin_scan_entry_points` | Scan for installed plugins via Python package entry points | SAFE |
-| `plugin_resolve_dependencies` | Resolve plugin dependencies and produce a topological load order | SAFE |
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `core/` – Directory containing core components
+- `dependency_resolver.py` – Project file
+- `discovery.py` – Project file
+- `exceptions.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `validation/` – Directory containing validation components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Always validate with `PluginValidator` before `PluginManager.load_plugins_from()` in production
-- Lifecycle order is strictly: `load()` → `activate()` → use → `deactivate()` — skipping steps raises errors
-- `PluginManager.get_plugin(name)` returns `None` if not found — always check before calling `activate()`
-- `plugin_resolve_dependencies` returns a topologically sorted list — use this order for loading
-- **DO NOT** catch `PluginError` and silently continue — always log or re-raise
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `dependency_resolver.py`
+- `discovery.py`
+- `exceptions.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## Testing Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-# Verify plugin loading
-manager = PluginManager()
-manager.load_plugins_from("tests/fixtures/plugins")
-assert len(manager.list_plugins()) > 0
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Verify plugin lifecycle
-plugin = manager.get_plugin("test_plugin")
-plugin.activate()
-assert plugin.state == PluginState.ACTIVE
-plugin.deactivate()
-assert plugin.state == PluginState.INACTIVE
-```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `plugin_scan_entry_points`, `plugin_resolve_dependencies` | TRUSTED |
-| **Architect** | Read + Design | `plugin_scan_entry_points`, `plugin_resolve_dependencies` — plugin architecture design | OBSERVED |
-| **QATester** | Validation | `plugin_scan_entry_points` — plugin discovery verification, dependency graph validation | OBSERVED |
-| **Researcher** | Read-only | `plugin_scan_entry_points`, `plugin_resolve_dependencies` — inspect plugin catalog | SAFE |
-
-### Engineer Agent
-**Use Cases**: Scanning for available plugins during OBSERVE, resolving plugin dependencies before BUILD, managing plugin registry.
-
-### Architect Agent
-**Use Cases**: Designing plugin interfaces, reviewing dependency graphs, planning plugin extension points.
-
-### QATester Agent
-**Use Cases**: Verifying plugin discovery during VERIFY, confirming dependency resolution correctness.
-
-### Researcher Agent
-**Use Cases**: Inspecting available plugin catalog and dependency resolution for research analysis.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/plugin_system.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/plugin_system.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

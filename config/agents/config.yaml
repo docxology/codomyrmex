@@ -11,3 +11,8 @@ performance:
 features:
   experimental: false
   strict_mode: true
+
+modules:
+  hermes:
+    config_file: config/agents/hermes.yaml
+    enabled: true

@@ -1,17 +1,19 @@
-# Google Mail Submodule (`gmail`)
+# gmail
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-This submodule provides the specific implementation of `EmailProvider` for Google Mail.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-It is responsible for utilizing Google API credentials via the `google-api-python-client`.
+Contains components for the src system.
 
-## Dependency
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `provider.py` – File
+- `py.typed` – File
 
-Install the email dependencies from the root:
-
-```bash
-uv sync --extra email
-```
+## Navigation
+- **Parent Directory**: [email](../README.md)
+- **Project Root**: ../../../../README.md

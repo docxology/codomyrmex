@@ -27,10 +27,11 @@ from .generics import CalendarEvent, CalendarProvider
 try:
     from .gcal import GCAL_AVAILABLE, GoogleCalendar
 
-    CALENDAR_AVAILABLE = True
+    CALENDAR_AVAILABLE = GCAL_AVAILABLE
 except ImportError:
     GCAL_AVAILABLE = False
     CALENDAR_AVAILABLE = False
+    GoogleCalendar = None  # type: ignore
 
 
 def cli_commands():

@@ -1,35 +1,49 @@
-# Telemetry Dashboard - Agentic Context
+# Codomyrmex Agents — src/codomyrmex/telemetry/dashboard
 
-**Module**: `codomyrmex.telemetry.dashboard`
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Key Components
+## Purpose
+Contains components for the src system.
 
-| Component | Purpose | Key Methods |
-|-----------|---------|-------------|
-| `DashboardManager` | Create, list, delete dashboards and query panel data | `create()`, `get()`, `list()`, `delete()`, `get_panel_data()` |
-| `MetricCollector` | Thread-safe time-series metric storage with retention-based cleanup | `record()`, `get_metrics()`, `get_latest()`, `list_metric_names()`, `cleanup_old()` |
-| `AlertManager` | Lambda-condition alert rules with active/resolved state tracking | `add_rule()`, `check()`, `get_active_alerts()`, `acknowledge()` |
-| `SLOTracker` | Service Level Objective tracking with error budget computation | `create_slo()`, `record_event()`, `get_status()`, `get_violations()` |
-| `ErrorBudgetPolicy` | Policy engine returning deployment posture based on error budget consumption | `add_policy()`, `evaluate()` returns `"normal"` / `"increase_reviews"` / `"reduce_risk"` / `"freeze_deployments"` |
-| `SLI` | Service Level Indicator: good/total event counters with percentage `value` property | `record_good()`, `record_bad()` |
-| `SLO` | Objective wrapping an SLI with target percentage and error budget calculation | `is_met`, `error_budget_remaining`, `error_budget_consumed` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `alerting.py` – Project file
+- `collector.py` – Project file
+- `dashboard.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `slo.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `DashboardManager` and `MetricCollector` use `threading.Lock` for thread safety.
-- `MetricCollector.cleanup_old()` removes metrics older than `retention_minutes` (default 60).
-- `AlertManager.check()` auto-resolves alerts when conditions no longer match; handler exceptions are caught and logged.
-- `SLOTracker.record_event()` automatically creates `SLOViolation` records when SLO drops below target.
-- `ErrorBudgetPolicy.evaluate()` uses fixed thresholds: >=100% consumed = `freeze_deployments`, >=75% = `reduce_risk`, >=50% = `increase_reviews`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `alerting.py`
+- `collector.py`
+- `dashboard.py`
+- `models.py`
+- `py.typed`
+- `slo.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **telemetry/alerting**: `AlertManager` provides dashboard-level alerting alongside module-level `AlertEvaluator` and `AlertEngine`.
-- **dashboard.models**: `Dashboard`, `Panel`, `MetricValue`, `MetricType`, `Alert`, `AlertSeverity` dataclasses.
-- All state is in-memory; no persistence layer.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Constraints
-
-- `DashboardManager.get_panel_data()` queries `MetricCollector` with time-range filtering; performance depends on metric volume.
-- `SLI.value` returns 100.0 when `total_events == 0` (vacuous truth).
+## Navigation Links
+- **📁 Parent Directory**: [telemetry](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

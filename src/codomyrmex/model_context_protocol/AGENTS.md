@@ -1,122 +1,71 @@
-# Agent Guidelines - Model Context Protocol
+# Codomyrmex Agents — src/codomyrmex/model_context_protocol
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Foundation-layer module implementing the Model Context Protocol (MCP) — the JSON-RPC communication standard between PAI agents and Codomyrmex tools. Provides Pydantic-validated schemas, `@mcp_tool` decorator for auto-discovery, full MCP server with stdio/HTTP transport, and three introspection tools for discovering and inspecting all registered tools at runtime. Every PAI-codomyrmex call flows through this module's transport layer.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `adapters/` – Directory containing adapters components
+- `compat.py` – Project file
+- `decorators.py` – Project file
+- `discovery/` – Directory containing discovery components
+- `errors.py` – Project file
+- `mcp_deprecation.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `quality/` – Directory containing quality components
+- `reliability/` – Directory containing reliability components
+- `response_helpers.py` – Project file
+- `schemas/` – Directory containing schemas components
+- `tools.py` – Project file
+- `transport/` – Directory containing transport components
+- `validators/` – Directory containing validators components
+- `versioning/` – Directory containing versioning components
+
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `__init__.py`
+- `compat.py`
+- `decorators.py`
+- `errors.py`
+- `mcp_deprecation.py`
+- `mcp_tools.py`
+- `py.typed`
+- `response_helpers.py`
+- `tools.py`
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `MCPServer`, `MCPToolRegistry`, `MCPMessage`, `MCPToolCall`, `MCPToolResult` |
-| `decorators.py` | `@mcp_tool` decorator — tag any function for auto-discovery |
-| `discovery/` | `pkgutil`-based discovery scanning all `mcp_tools.py` submodules |
-| `adapters/` | Protocol adapters for external systems |
-| `quality/` | Message validation utilities |
-| `reliability/` | Transport reliability helpers |
-| `mcp_tools.py` | Self-referential MCP introspection tools |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Key Classes
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-- **`MCPServer`** — Full MCP server with tool, resource, and prompt registration; stdio/HTTP transport
-- **`MCPToolRegistry`** — Registry mapping tool names to callables and schemas
-- **`MCPMessage`** — JSON-RPC message representation
-- **`MCPToolCall`** — Tool invocation with `tool_name` and `arguments`
-- **`MCPToolResult`** — Execution result with status validation
-- **`MCPServerConfig`** — Server name, version, transport configuration
-
-## Agent Instructions
-
-1. **Use `@mcp_tool` decorator** — Tag functions for auto-discovery; avoid manual registration
-2. **Validate input schemas** — Always use Pydantic-validated `MCPToolCall` for tool calls
-3. **Return structured dicts** — All tools must return `{"status": "ok"|"error", ...}`
-4. **Use `inspect_server` first** — Verify server health before long agent workflows
-5. **Use `list_registered_tools`** — To discover which tools are available in the current deployment
-
-## Common Patterns
-
-```python
-from codomyrmex.model_context_protocol import (
-    MCPServer, Tool, Resource, run_server
-)
-
-# Define tools
-@Tool(name="search", description="Search codebase")
-def search_code(query: str, limit: int = 10):
-    return find_matches(query, limit)
-
-# Create server
-server = MCPServer(name="codomyrmex")
-server.register_tool(search_code)
-
-# Add resources
-server.register_resource(Resource(
-    uri="file:///project",
-    name="Project Files",
-    mimeType="text/plain"
-))
-
-# Run server
-run_server(server, port=8080)
-
-# Client usage
-client = MCPClient("http://localhost:8080")
-result = client.call_tool("search", query="function")
-```
-
-## Testing Patterns
-
-```python
-# Verify tool registration
-server = MCPServer("test")
-server.register_tool(search_code)
-assert "search" in server.list_tools()
-
-# Verify tool execution
-result = server.call_tool("search", query="test")
-assert result is not None
-```
-
-## MCP Tools Available
-
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `inspect_server` | Inspect the running MCP server's configuration and state | Safe |
-| `list_registered_tools` | List all tools registered across the MCP ecosystem | Safe |
-| `get_tool_schema` | Get the JSON schema for a specific registered MCP tool | Safe |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full introspection | `inspect_server`, `list_registered_tools`, `get_tool_schema` | TRUSTED |
-| **Architect** | Tool inventory | `list_registered_tools`, `get_tool_schema` | OBSERVED |
-| **QATester** | Health + discovery | `inspect_server`, `list_registered_tools` | OBSERVED |
-| **Researcher** | Schema inspection | `list_registered_tools`, `get_tool_schema` | OBSERVED |
-
-### Engineer Agent
-**Access**: Full MCP introspection — server state, tool registry, and schema details.
-**Use Cases**: Debugging MCP bridge configuration, verifying that auto-discovered tools are registered correctly after module additions, checking tool schema validity during development.
-
-### Architect Agent
-**Access**: Tool inventory — list and inspect tools without server state access.
-**Use Cases**: Auditing the full tool surface (171 tools), designing tool groupings, verifying that new `@mcp_tool` decorators produce correct schemas, planning trust-level assignments.
-
-### QATester Agent
-**Access**: Health and discovery — server health and tool registration verification.
-**Use Cases**: Confirming MCP bridge starts and serves tools correctly, verifying that the expected number of tools (171 total) are registered after deployment, regression testing auto-discovery.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/model_context_protocol.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/model_context_protocol.cursorrules)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

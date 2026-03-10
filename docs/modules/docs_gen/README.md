@@ -1,24 +1,16 @@
-# docs_gen Module Documentation
+# docs_gen
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Documentation generation utilities for the Codomyrmex platform. Provides tools for autogenerating documentation artifacts from source code.
+Documentation files and guides.
 
-## Features
-
-- Documentation template generation
-- Source-to-docs conversion utilities
-- RASP file scaffolding
-
-## Related Modules
-
-- [documentation](../documentation/) — Website and docs generation
-- [templating](../templating/) — Template engine
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Source**: [../../src/codomyrmex/docs_gen/](../../../src/codomyrmex/docs_gen/)
-- **Parent**: [modules/](../README.md)
-- **Root**: [Project Root](../../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

@@ -1,22 +1,21 @@
 # search
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Document search and indexing operations.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Documentation files and guides.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `indexer.py` - Indexer
-- `query_builder.py` - Query Builder
-- `searcher.py` - Searcher
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `indexer.py` – File
+- `py.typed` – File
+- `query_builder.py` – File
+- `searcher.py` – File
 
 ## Navigation
-
-- **Parent Module**: [documents](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [documents](../README.md)
+- **Project Root**: ../../../../README.md

@@ -1,36 +1,39 @@
 # Codomyrmex Agents — src/codomyrmex/feature_flags/rollout
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Staged gradual rollout management for feature flags. Provides `RolloutManager` to create, advance, pause, and inspect multi-stage rollouts with a defined lifecycle (`PENDING -> ACTIVE -> PAUSED -> COMPLETED / ABORTED`). Each rollout is configured with an ordered list of percentage stages (e.g., 5%, 25%, 50%, 100%) and a minimum delay between advances.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `__init__.py` | `RolloutState` | Enum with five lifecycle states: PENDING, ACTIVE, PAUSED, COMPLETED, ABORTED |
-| `__init__.py` | `RolloutConfig` | Dataclass holding `stages` (list of percentages) and `stage_delay_seconds`; validates on init |
-| `__init__.py` | `RolloutStatus` | Dataclass snapshot: flag_name, state, current stage index, current percentage, timestamps, metadata |
-| `__init__.py` | `RolloutManager` | Manages per-flag rollout entries: create, advance through stages, pause, and query status |
-| `__init__.py` | `_RolloutEntry` | Internal mutable dataclass storing a rollout's config, state, index, and timestamps |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `RolloutConfig.stages` must contain at least one value; each stage must be in (0, 100].
-- `create_rollout` replaces any existing rollout for the same flag name.
-- `advance_rollout` moves to the next stage index; sets state to COMPLETED when all stages are exhausted.
-- `advance_rollout` and `pause_rollout` raise `RuntimeError` if the rollout is not in an advanceable or active state respectively.
-- `_get_entry` raises `KeyError` for unknown flag names.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `datetime`, `enum`, `dataclasses` (standard library only)
-- **Used by**: `feature_flags.core.FeatureManager` (to control staged percentage increases over time)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [feature_flags](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [feature_flags](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

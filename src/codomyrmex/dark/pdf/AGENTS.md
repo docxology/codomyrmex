@@ -1,24 +1,44 @@
-# Agent Guidelines — Pdf
+# Codomyrmex Agents — src/codomyrmex/dark/pdf
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Contains components for the src system.
 
-PDF dark mode filters inspired by dark-pdf.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `dark_pdf_wrapper.py` – Project file
+- `filters.py` – Project file
+- `py.typed` – Project file
+- `vendor/` – Directory containing vendor components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Maintain alignment with the parent `dark` module.
-- Follow existing code patterns and conventions.
-- Record outcomes in shared telemetry.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `dark_pdf_wrapper.py`
+- `filters.py`
+- `py.typed`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.dark.pdf import DarkPDF, DarkPDFFilter
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **📁 Parent**: [Dark Modes](../AGENTS.md)
-- **🏠 Root**: [codomyrmex](../../../../AGENTS.md)
+## Navigation Links
+- **📁 Parent Directory**: [dark](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

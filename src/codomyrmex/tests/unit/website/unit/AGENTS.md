@@ -1,34 +1,61 @@
-# Agent Guide — Website Unit Tests
+# Codomyrmex Agents — src/codomyrmex/tests/unit/website/unit
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Unit-level validation for `DataProvider`, `WebsiteGenerator`, and `WebsiteServer`. Tests run in isolation using temporary project trees and ephemeral HTTP servers.
+Test files and validation suites.
 
 ## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `test_accessibility.py` – Project file
+- `test_accessibility_coverage.py` – Project file
+- `test_api_handler.py` – Project file
+- `test_data_provider.py` – Project file
+- `test_data_provider_docs.py` – Project file
+- `test_data_provider_pai.py` – Project file
+- `test_generator.py` – Project file
+- `test_health_handler.py` – Project file
+- `test_health_mixin.py` – Project file
+- `test_mcp_tools_mixin.py` – Project file
+- `test_pai_mixin.py` – Project file
+- `test_proxy_handler.py` – Project file
+- `test_server.py` – Project file
 
-- `test_data_provider.py` — Tests for module scanning, config I/O, PAI data, health status, and security (path traversal, symlink escape)
-- `test_generator.py` — Tests for Jinja2 template rendering, asset copying, output directory management, and error handling
-- `test_server.py` — Tests for all 18 API endpoints via live HTTP requests, CORS preflight, origin validation, and Ollama proxy (mocked external)
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Testing Patterns
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `test_accessibility.py`
+- `test_accessibility_coverage.py`
+- `test_api_handler.py`
+- `test_data_provider.py`
+- `test_data_provider_docs.py`
+- `test_data_provider_pai.py`
+- `test_generator.py`
+- `test_health_handler.py`
+- `test_health_mixin.py`
+- `test_mcp_tools_mixin.py`
+- `test_pai_mixin.py`
+- `test_proxy_handler.py`
+- `test_server.py`
 
-```python
-# Live HTTP server fixture — each test gets its own server on a random port
-@pytest.fixture
-def live_server(tmp_path):
-    root = _build_project(tmp_path)
-    srv = _LiveServer(root)
-    yield srv
-    srv.shutdown()
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-# Real DataProvider — no mocking
-provider = DataProvider(tmp_path)
-assert isinstance(provider.get_modules(), list)
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [website](../README.md)
-- **🏠 Project Root**: [codomyrmex](../../../../../README.md)
+- **📁 Parent Directory**: [website](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

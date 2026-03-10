@@ -1,71 +1,41 @@
-# Agent Guidelines - Model Ops
+# Codomyrmex Agents — docs/modules/model_ops
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-ML model lifecycle: training, feature engineering, optimization, deployment, and versioning.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **ModelRegistry** — Model versioning and storage management
-- **FeatureStore** — Centralized feature and embedding management
-- **ModelEvaluator** — Comprehensive model performance verification
-- **InferenceOptimizer** — Latency and cost reduction toolkit
-- **FineTuningJob** — Managed fine-tuning orchestration
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Feature Reuse** — Always check the `FeatureStore` before regenerating embeddings or features
-2. **Mandatory Evaluation** — Run `ModelEvaluator` on all new models before registration
-3. **Optimize for Production** — Apply `InferenceOptimizer` tweaks (quantization, etc.) for high-traffic models
-4. **registry.register** — Use the registry for all model versioning to ensure reproducibility
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.model_ops import (
-    ModelRegistry, FeatureStore, ModelEvaluator, InferenceOptimizer
-)
-
-# 1. Feature Engineering
-fs = FeatureStore()
-fs.push_features("user_123", {"embedding": [0.1, 0.2, ...]})
-
-# 2. Evaluation
-evaluator = ModelEvaluator()
-results = evaluator.evaluate(model_id="v1_candidate", test_dataset=ds)
-print(f"Accuracy: {results['accuracy']}")
-
-# 3. Optimization
-optimizer = InferenceOptimizer()
-optimized_model = optimizer.optimize("v1_candidate", target="latency")
-
-# 4. Registration
-registry = ModelRegistry()
-registry.register(
-    name="production_model",
-    version="2.1.0",
-    model_path=optimized_model,
-    metadata={"eval_results": results}
-)
-```
-
-## Testing Patterns
-
-```python
-# Verify registry
-registry = ModelRegistry()
-registry.register("test", "1.0", dummy_model)
-loaded = registry.load("test", "1.0")
-assert loaded is not None
-
-# Verify experiment tracking
-with ExperimentTracker.start("test") as exp:
-    exp.log_metrics({"acc": 0.9})
-    assert exp.get_metrics()["acc"] == 0.9
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -2,6 +2,8 @@
 
 Comprehensive tests for InMemoryCache, FileBasedCache, NamespacedCache,
 CacheStats, CacheManager, TTLManager, TTL handling, eviction, and cache operations.
+
+Zero-Mock Policy: no unittest.mock, MagicMock, monkeypatch, or pytest-mock.
 """
 
 import time

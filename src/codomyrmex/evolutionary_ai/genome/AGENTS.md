@@ -1,39 +1,41 @@
-# Codomyrmex Agents -- evolutionary_ai/genome
+# Codomyrmex Agents — src/codomyrmex/evolutionary_ai/genome
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Genome representations and encoding schemes for evolutionary computation, providing both abstract and concrete genome types.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `Genome` (ABC, `__init__.py`) | Abstract base with `copy()` and `to_list() -> list` |
-| `BinaryGenome` | Fixed-length bit string with `flip(index)` mutation helper |
-| `RealValuedGenome` | Float vector with min/max bounds and `clip()` to enforce range |
-| `PermutationGenome` | Ordered element list with `swap(i, j)` for order-based mutation |
-| `Genome` (`genome.py`) | Concrete float-vector genome with `fitness`, `clone()`, `distance()`, `clamp()`, `stats()` |
-| `GenomeStats` | Dataclass: `mean`, `std`, `min_val`, `max_val`, `length` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `genome.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `__init__.py` defines the ABC hierarchy (`Genome`, `BinaryGenome`, `RealValuedGenome`, `PermutationGenome`) used by the operator ABCs in `operators/__init__.py`.
-- `genome.py` defines a separate concrete `Genome` class (float-vector) used by function-based operators in `operators/operators.py` and `population/population.py`.
-- `BinaryGenome.flip(index)` toggles bit at `index` in-place; raises `IndexError` if out of range.
-- `RealValuedGenome.clip()` clamps all values to `[min_bound, max_bound]`.
-- `PermutationGenome.swap(i, j)` exchanges elements at positions `i` and `j` in-place.
-- `Genome` (from `genome.py`) factory methods: `random(length, low, high)`, `zeros(length)`, `from_dict(data)`.
-- `Genome.distance(other)` computes Euclidean distance between two genomes.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `genome.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- ABC genomes are consumed by operator ABCs in `evolutionary_ai/operators/__init__.py`.
-- Concrete `Genome` from `genome.py` is consumed by function-based operators in `operators/operators.py` and `population/population.py`.
-- Also re-exported by `bio_simulation/genomics/__init__.py`.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README](../README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
-- Parent: [evolutionary_ai](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [evolutionary_ai](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

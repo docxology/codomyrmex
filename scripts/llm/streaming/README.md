@@ -1,38 +1,18 @@
-# Streaming Scripts
+# streaming
 
-**Module**: scripts/llm/streaming  
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Scripts for real-time streaming LLM response handling.
+Automation and utility scripts.
 
-## Scripts
-
-| Script | API Required | Description |
-|--------|-------------|-------------|
-| `streaming_demo.py` | No | Simulated streaming patterns demo |
-| `openrouter_free_example.py` | Yes | Real streaming with OpenRouter |
-
-## Quick Start
-
-```bash
-# Demo (no API key required)
-python streaming_demo.py
-
-# Live example (requires API key)
-export OPENROUTER_API_KEY='your-key-here'
-python openrouter_free_example.py
-```
-
-## Features Demonstrated
-
-- Token-by-token output
-- Buffered streaming
-- Progress indicators
-- Real-time processing
-- Error handling during streams
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `openrouter_free_example.py` – File
+- `streaming_demo.py` – File
 
 ## Navigation
-
-- **Parent**: [scripts/llm](../README.md)
+- **Parent Directory**: [llm](../README.md)
+- **Project Root**: ../../../README.md

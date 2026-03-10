@@ -1,36 +1,49 @@
 # Codomyrmex Agents — src/codomyrmex/security/secrets
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Regex and entropy-based detection of exposed secrets (API keys, tokens, passwords, private keys) in source code. Provides a `SecretScanner` with 6 built-in detection patterns and automatic redaction of matched content.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `secret_scanner.py` | `SecretFinding` | Dataclass with `file_path`, `line_number`, `secret_type`, `snippet` (redacted), `confidence`, `entropy` |
-| `secret_scanner.py` | `SecretScanner` | Main scanner: `scan_string()` and `scan_lines()` methods; configurable `min_entropy` threshold (default 3.0) |
-| `secret_scanner.py` | `_SECRET_PATTERNS` | 6 built-in patterns: `api_key` (0.9), `aws_access_key` (0.95), `private_key` (0.99), `password` (0.7), `bearer_token` (0.85), `generic_secret` (0.6) |
-| `secret_scanner.py` | `_shannon_entropy()` | Static method computing Shannon entropy for match quality assessment |
-| `secret_scanner.py` | `_redact()` | Static method showing first/last 4 characters with `***` in between |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `models.py` – Project file
+- `patterns.py` – Project file
+- `py.typed` – Project file
+- `scanner.py` – Project file
+- `secret_scanner.py` – Project file
+- `vault.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All patterns are compiled with `re.IGNORECASE` at `SecretScanner.__init__()` time.
-- `scan_string()` returns all matches across all patterns; no deduplication across pattern types for the same line.
-- Matched text is always redacted in the `snippet` field -- raw secrets are never stored in findings.
-- `_shannon_entropy()` returns 0.0 for empty strings.
-- `_redact()` returns `"***"` for strings shorter than `visible * 2` (default 8 characters).
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `models.py`
+- `patterns.py`
+- `py.typed`
+- `scanner.py`
+- `secret_scanner.py`
+- `vault.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Standard library only (`re`, `math`)
-- **Used by**: `security` parent module MCP tool `scan_secrets`, CI/CD pre-commit hooks
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [security](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [security](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

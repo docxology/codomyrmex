@@ -1,41 +1,43 @@
-# Codomyrmex Agents -- src/codomyrmex/orchestrator/observability
+# Codomyrmex Agents — src/codomyrmex/orchestrator/observability
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides orchestrator observability through typed event factories for workflow and task lifecycle transitions, plus reporting utilities for run summaries, individual script logs, and auto-generated script documentation.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `orchestrator_events.py` | `workflow_started` | Factory producing `WORKFLOW_STARTED` Event with total task count |
-| `orchestrator_events.py` | `workflow_completed` | Factory producing `WORKFLOW_COMPLETED` Event with pass/fail/skip counts and elapsed time |
-| `orchestrator_events.py` | `workflow_failed` | Factory producing `WORKFLOW_FAILED` Event (priority 2) |
-| `orchestrator_events.py` | `task_started` | Factory producing `TASK_STARTED` Event |
-| `orchestrator_events.py` | `task_completed` | Factory producing `TASK_COMPLETED` Event with execution time and attempt count |
-| `orchestrator_events.py` | `task_failed` | Factory producing `TASK_FAILED` Event (priority 2) |
-| `orchestrator_events.py` | `task_retrying` | Factory producing `TASK_RETRYING` Event with attempt, delay, and error info |
-| `reporting.py` | `save_log` | Writes individual script execution logs (stdout, stderr, errors) to disk |
-| `reporting.py` | `generate_report` | Aggregates results into a JSON summary report grouped by subdirectory |
-| `reporting.py` | `generate_script_documentation` | Auto-generates Markdown documentation for discovered scripts via `--help` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `orchestrator_events.py` – Project file
+- `py.typed` – Project file
+- `reporting.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- All event factory functions return `Event` instances from `codomyrmex.events.core.event_schema`; they do not emit events themselves.
-- Events set `source` to `orchestrator.{workflow_name}` for consistent filtering.
-- Failure events (`workflow_failed`, `task_failed`) use priority 2 for elevated handling.
-- `save_log` creates directories as needed and handles bytes-to-string decoding for stdout/stderr.
-- `generate_report` logs a `RUN_SUMMARY` event through the module logger.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `orchestrator_events.py`
+- `py.typed`
+- `reporting.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.events.core.event_schema` (Event, EventType), `codomyrmex.logging_monitoring`, `codomyrmex.utils.cli_helpers`, `orchestrator.discovery`
-- **Used by**: `orchestrator.process_orchestrator`, any workflow runner that needs structured event reporting
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [orchestrator](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [orchestrator](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

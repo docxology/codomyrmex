@@ -1,38 +1,45 @@
-# Codomyrmex Agents -- src/codomyrmex/meme/rhizome
+# Codomyrmex Agents — src/codomyrmex/meme/rhizome
 
-**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Models distributed, non-hierarchical network structures inspired by Deleuze and Guattari's rhizome concept. Provides graph construction with configurable topologies (random Erdos-Renyi, scale-free Barabasi-Albert), degree centrality analysis, resilience estimation, and influencer identification.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `engine.py` | `RhizomeEngine` | Orchestrator: initialize network, analyze resilience, find influencers |
-| `network.py` | `build_graph` | Construct graph with Erdos-Renyi (p=0.1) or Barabasi-Albert (m=2) model |
-| `network.py` | `calculate_centrality` | Compute degree centrality for all nodes |
-| `models.py` | `Node` | A node with ID, content, type, capacity, and connections |
-| `models.py` | `Edge` | A weighted connection between two nodes |
-| `models.py` | `Graph` | Graph structure with `add_node` and `add_edge` methods |
-| `models.py` | `NetworkTopology` | RANDOM, SCALE_FREE, SMALL_WORLD, LATTICE, FULLY_CONNECTED |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `engine.py` – Project file
+- `models.py` – Project file
+- `network.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Only RANDOM and SCALE_FREE topologies are implemented; others default to RANDOM.
-- Graph algorithms can be O(N^2); exercise caution with networks exceeding ~10k nodes.
-- Resilience is a heuristic (average degree / 10.0); no actual node removal simulation.
-- Edge IDs are deterministic for undirected edges (sorted source/target joined by dash).
-- `find_influencers` ranks by degree centrality (connections / (N-1)).
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `engine.py`
+- `models.py`
+- `network.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: None (standard library only: `uuid`, `random`, `dataclasses`)
-- **Used by**: `meme.swarm` (swarm agents traverse rhizome edges), `meme.ideoscape` (rhizome defines paths, ideoscape defines terrain), `meme.contagion` (network-based simulation expansion)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [meme](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [meme](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

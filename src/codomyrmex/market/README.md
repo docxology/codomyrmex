@@ -1,95 +1,27 @@
-# Market Module
+# market
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Reverse auction and demand aggregation for AI service procurement.
+## Overview
 
-## PAI Integration
+Contains components for the src system.
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | Fetch market data and auction state | Direct Python import |
-| **THINK** | Analyze market signals and bid patterns | Direct Python import |
-| **PLAN** | Make market-driven procurement decisions | Direct Python import |
-
-PAI agents access this module via direct Python import through the MCP bridge. The Architect agent imports `ReverseAuction` and `DemandAggregator` to evaluate AI service procurement options during planning phases.
-
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-Or for development:
-
-```bash
-uv sync
-```
-
-## Key Exports
-
-### Classes
-- **`DemandAggregator`** — Aggregates similar demands into a bulk auction.
-- **`Bid`** — Bid
-- **`AuctionRequest`** — AuctionRequest
-- **`ReverseAuction`** — Manages anonymous reverse auctions.
-- **`Market`** — Main class for market functionality.
-
-### Functions
-- **`create_market()`** — Create a new Market instance.
-
-## Quick Start
-
-```python
-from codomyrmex.market import ReverseAuction, Bid, AuctionRequest, DemandAggregator
-
-# Create an auction request
-request = AuctionRequest(
-    resource="llm-inference",
-    quantity=1000,
-    max_price=0.01,
-    deadline="2024-12-31"
-)
-
-# Start reverse auction (sellers compete to offer lowest price)
-auction = ReverseAuction(request)
-auction.add_bid(Bid(provider="openai", price=0.008, capacity=5000))
-auction.add_bid(Bid(provider="anthropic", price=0.007, capacity=3000))
-auction.add_bid(Bid(provider="local", price=0.005, capacity=500))
-
-winner = auction.resolve()
-print(f"Winner: {winner.provider} at ${winner.price}/request")
-
-# Aggregate demand across users
-aggregator = DemandAggregator()
-aggregator.add(user="team-a", resource="gpu-hours", quantity=100)
-aggregator.add(user="team-b", resource="gpu-hours", quantity=50)
-
-bulk_order = aggregator.consolidate("gpu-hours")
-print(f"Total demand: {bulk_order.quantity}")
-```
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `ReverseAuction` | Sellers compete to win buyer's request |
-| `Bid` | Provider bid with price and capacity |
-| `AuctionRequest` | Buyer's resource request |
-| `DemandAggregator` | Consolidate demand for bulk pricing |
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k market -v
-```
-
-## Documentation
-
-- [Module Documentation](../../../docs/modules/market/README.md)
-- [Agent Guide](../../../docs/modules/market/AGENTS.md)
-- [Specification](../../../docs/modules/market/SPEC.md)
+## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `CHANGELOG.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SECURITY.md` – File
+- `SPEC.md` – File
+- `USAGE_EXAMPLES.md` – File
+- `__init__.py` – File
+- `aggregator.py` – File
+- `auction.py` – File
+- `market.py` – File
+- `mcp_tools.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

@@ -1,38 +1,43 @@
 # Codomyrmex Agents — src/codomyrmex/agents/context
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides project-level awareness for agents by scanning directory trees, extracting Python symbols via AST parsing, building import dependency graphs, and selecting appropriate tools based on file type and task context.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `indexer.py` | `Symbol` | Dataclass representing a code symbol (function or class) with name, kind, file, line, and docstring |
-| `indexer.py` | `ImportEdge` | Dataclass representing an import dependency edge between source file and target module |
-| `indexer.py` | `RepoIndex` | Aggregated index holding lists of `Symbol` and `ImportEdge` with query helpers (`functions()`, `classes()`, `symbols_in_file()`) |
-| `indexer.py` | `RepoIndexer` | Scans Python files using `ast.parse` to extract symbols and imports; supports single-file and directory indexing |
-| `project.py` | `FileInfo` | Dataclass describing a source file with path, extension, size, and inferred module name |
-| `project.py` | `ProjectContext` | Aggregated project view: all files, top-level modules, and test file paths with filtering helpers |
-| `project.py` | `ProjectScanner` | Walks a project directory tree (respecting exclusion patterns) and builds a `ProjectContext` |
-| `project.py` | `ToolSelector` | Maps `(file_extension, task_type)` pairs to lists of recommended tool names |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `indexer.py` – Project file
+- `project.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `RepoIndexer.index_file()` silently returns an empty `RepoIndex` for non-existent files, non-`.py` files, or files with syntax errors -- no exceptions propagated.
-- `ProjectScanner` excludes `__pycache__`, `.git`, `.venv`, `node_modules`, and `*.egg-info` directories by default; override via constructor parameters.
-- `ToolSelector.select()` falls back to extension-only matching when the exact `(ext, task_type)` key is not in `_TOOL_MAP`.
-- `RepoIndexer.index_directory()` logs via `logging_monitoring` after completing a directory scan.
-- All dataclasses expose a `to_dict()` method for JSON-safe serialization.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `indexer.py`
+- `project.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring` (structured logging via `get_logger`)
-- **Used by**: Agent orchestration and task routing code that needs to understand project structure before dispatching tools
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [agents](../README.md)
-- **Root**: [Codomyrmex](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

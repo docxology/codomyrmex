@@ -1,39 +1,55 @@
-# Codomyrmex Agents -- src/codomyrmex/data_visualization/charts
+# Codomyrmex Agents — src/codomyrmex/data_visualization/charts
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Matplotlib-based chart generation providing both functional (`create_*`) and class-based (`BarChart`, `ScatterPlot`, etc.) interfaces for bar charts, line plots, pie charts, histograms, scatter plots, area charts, box plots, and heatmaps. Three of the functional creators (`create_bar_chart`, `create_line_plot`, `create_pie_chart`) are decorated with `@mcp_tool` for MCP auto-discovery.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `bar_chart.py` | `create_bar_chart()`, `BarChart` | Vertical and horizontal bar charts via `@mcp_tool` |
-| `line_plot.py` | `create_line_plot()`, `LinePlot` | Single and multi-line plots via `@mcp_tool` |
-| `pie_chart.py` | `create_pie_chart()`, `PieChart` | Pie charts with explode and autopct via `@mcp_tool` |
-| `scatter_plot.py` | `create_scatter_plot()`, `ScatterPlot` | Scatter plots with configurable size, color, and alpha |
-| `histogram.py` | `create_histogram()`, `Histogram` | Distribution histograms with configurable bins |
-| `area_chart.py` | `create_area_chart()`, `AreaChart` | Single and stacked area charts |
-| `box_plot.py` | `create_box_plot()`, `BoxPlot` | Box plots accepting lists, list-of-lists, or dicts |
-| `heatmap.py` | `create_heatmap()`, `Heatmap` | 2D heatmaps with annotation and colorbar support |
-| `plot_utils.py` | `save_plot()`, `apply_theme_to_axes()`, `get_color_palette()` | Shared utilities: logging, saving, theming, color palettes |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `area_chart.py` – Project file
+- `bar_chart.py` – Project file
+- `box_plot.py` – Project file
+- `heatmap.py` – Project file
+- `histogram.py` – Project file
+- `line_plot.py` – Project file
+- `pie_chart.py` – Project file
+- `py.typed` – Project file
+- `scatter_plot.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Every `create_*` function validates input lengths and returns `None` with a warning log on empty or mismatched data.
-- `save_plot()` auto-creates parent directories and detects file format from the extension.
-- Theme integration uses `apply_theme_to_axes()` which falls back silently if `data_visualization.themes` is unavailable.
-- All chart functions accept `output_path`, `show_plot`, and `theme` keyword arguments.
-- Errors are logged via `logging_monitoring` before returning.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `area_chart.py`
+- `bar_chart.py`
+- `box_plot.py`
+- `heatmap.py`
+- `histogram.py`
+- `line_plot.py`
+- `pie_chart.py`
+- `py.typed`
+- `scatter_plot.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `matplotlib`, `numpy`, `logging_monitoring`, `model_context_protocol.decorators` (`@mcp_tool`), `data_visualization.themes` (optional)
-- **Used by**: `data_visualization.engines.plotter` (re-exports all `create_*` functions), `data_visualization.engines.advanced_plotter`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [data_visualization](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

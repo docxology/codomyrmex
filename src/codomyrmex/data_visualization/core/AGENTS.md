@@ -1,38 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/data_visualization/core
+# Codomyrmex Agents — src/codomyrmex/data_visualization/core
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Core infrastructure for the data_visualization module: layout management (`Grid`, `Section`), theme configuration (`Theme`, `DEFAULT_THEME`, `DARK_THEME`), higher-level UI containers (`Card`, `Table`, `Dashboard`), and HTML export utilities (`render_html`).
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `layout.py` | `Section` | A titled container that renders children as HTML |
-| `layout.py` | `Grid` | CSS Grid layout with configurable columns and gap |
-| `theme.py` | `Theme` | Dataclass holding colour scheme, font, and border-radius settings |
-| `theme.py` | `DEFAULT_THEME`, `DARK_THEME` | Pre-built theme instances |
-| `ui.py` | `Card` | Card component with title, content, value, and description |
-| `ui.py` | `Table` | HTML table from headers and rows lists |
-| `ui.py` | `Dashboard` | Top-level container combining a `Grid`, `Theme`, and `render()` to full HTML |
-| `export.py` | `render_html()` | Wraps content in a complete HTML5 document with theme CSS variables |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `export.py` – Project file
+- `layout.py` – Project file
+- `py.typed` – Project file
+- `theme.py` – Project file
+- `ui.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `Theme.to_css_vars()` returns a dictionary of CSS custom properties (`--primary`, `--secondary`, `--bg`, `--text`, `--font`, `--font-size`, `--radius`).
-- `Dashboard.render()` produces a complete HTML page with embedded CSS from the active theme.
-- `Dashboard.render(output_path=...)` writes the HTML to disk if a path is provided.
-- `Grid.add_section()` computes width from column count; `full_width=True` overrides to 100%.
-- `render_html()` applies `:root` CSS variables and writes to file when `output_path` is given.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `export.py`
+- `layout.py`
+- `py.typed`
+- `theme.py`
+- `ui.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Python stdlib (`dataclasses`, `pathlib`)
-- **Used by**: `data_visualization.reports` (all report classes compose `Dashboard` + `Card`), `data_visualization.components` (can be embedded in sections)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [data_visualization](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

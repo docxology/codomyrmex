@@ -1,20 +1,14 @@
-# Examples
+# examples
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-This directory contains executable example scripts demonstrating cross-module integration patterns in Codomyrmex. Each example is a self-contained, runnable script (50–80 lines) that showcases real functionality — no mocks, no stubs.
+Example implementations and demonstrations.
 
-## Usage
+## Directory Contents
+- `README.md` – File
+- `invalid_prompt_demo.py` – File
 
-```bash
-# Run any example
-uv run python examples/<script>.py
-```
-
-## Signposting
-
-- **Parent**: [README.md](../README.md) — Project root
-- **Related**: [src/codomyrmex/examples/](../src/codomyrmex/examples/) — Module-level examples
-- **Scripts**: [scripts/examples/](../scripts/examples/) — Automation examples
+## Navigation
+- **Project Root**: ../README.md

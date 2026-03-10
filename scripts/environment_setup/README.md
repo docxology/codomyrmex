@@ -1,6 +1,6 @@
 # environment_setup
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -10,6 +10,7 @@ Automation and utility scripts.
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
+- `env_setup.py` – File
 - `examples/` – Subdirectory
 - `orchestrate.py` – File
 

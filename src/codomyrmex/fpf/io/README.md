@@ -1,23 +1,22 @@
 # io
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `io` module provides core functionality for Io..
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `exporter.py` - Exporter
-- `fetcher.py` - Fetcher
-- `section_exporter.py` - Section Exporter
-- `section_importer.py` - Section Importer
-- `section_manager.py` - Section Manager
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `exporter.py` – File
+- `fetcher.py` – File
+- `section_exporter.py` – File
+- `section_importer.py` – File
+- `section_manager.py` – File
 
 ## Navigation
-
-- **Parent Module**: [fpf](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [fpf](../README.md)
+- **Project Root**: ../../../../README.md

@@ -1,39 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/config_management/secrets
+# Codomyrmex Agents — src/codomyrmex/config_management/secrets
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Configuration files and templates.
 
-Provides secure secret storage and retrieval using Fernet symmetric encryption. Supports CRUD operations on encrypted secrets, key rotation with automatic re-encryption, and configuration-level field encryption.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `secret_manager.py` | `SecretManager` | Core secret manager using Fernet encryption for storing and retrieving secrets |
-| `secret_manager.py` | `SecretManager.store_secret` | Encrypts and stores a secret value, returning a hex secret ID |
-| `secret_manager.py` | `SecretManager.get_secret` | Retrieves and decrypts a secret by ID |
-| `secret_manager.py` | `SecretManager.get_secret_by_name` | Retrieves and decrypts a secret by its name |
-| `secret_manager.py` | `SecretManager.list_secrets` | Lists all stored secrets metadata (without values) |
-| `secret_manager.py` | `SecretManager.delete_secret` | Removes a secret by ID |
-| `secret_manager.py` | `SecretManager.rotate_key` | Generates a new encryption key and re-encrypts all existing secrets |
-| `secret_manager.py` | `manage_secrets` | Convenience function dispatching operations by name |
-| `secret_manager.py` | `encrypt_configuration` | Encrypts sensitive fields in a config dict, replacing values with `encrypted:{id}` references |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
+- `secret_manager.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Encryption key is stored at `~/.codomyrmex/secrets.key` by default; auto-generated if absent.
-- Secret IDs are generated using `secrets.token_hex(16)` (32 hex characters).
-- Key rotation re-encrypts all in-memory secrets; secrets not yet loaded from persistent storage are not rotated.
-- The `list_secrets` method never exposes decrypted values.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
+- `secret_manager.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `cryptography.fernet.Fernet`, `codomyrmex.exceptions.CodomyrmexError`, `codomyrmex.logging_monitoring.core.logger_config`
-- **Used by**: Config deployment (environment secrets), trust gateway, authentication modules
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [config_management](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

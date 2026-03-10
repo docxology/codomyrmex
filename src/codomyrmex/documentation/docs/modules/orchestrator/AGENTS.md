@@ -1,78 +1,37 @@
-# Orchestrator Module - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/orchestrator
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-The Orchestrator module provides agents with workflow DAG execution, parallel/async runners, retry policies, and CI/CD integration. Agents use it to define, validate, and execute multi-step workflows with dependency management.
-
-## Key Files
-
-| File | Class/Function | Role |
-|------|---------------|------|
-| `workflows/workflow.py` | `Workflow`, `Task`, `TaskStatus` | Core DAG-based workflow engine |
-| `workflows/workflow.py` | `chain`, `parallel`, `fan_out_fan_in` | Workflow construction helpers |
-| `execution/runner.py` | `run_script`, `run_function` | Script and function execution |
-| `execution/parallel_runner.py` | `ParallelRunner`, `BatchRunner` | Concurrent execution |
-| `execution/async_scheduler.py` | `AsyncScheduler`, `SchedulerMetrics` | Async job scheduling |
-| `resilience/retry_policy.py` | `with_retry` | Retry decorator |
-| `integration.py` | `OrchestratorBridge`, `CICDBridge`, `AgentOrchestrator` | External system bridges |
-| `thin.py` | `run`, `pipe`, `batch`, `step`, `shell` | Lightweight orchestration API |
-| `mcp_tools.py` | `get_scheduler_metrics`, `analyze_workflow_dependencies` | MCP tools |
-| `exceptions.py` | `CycleError`, `StepError`, `OrchestratorTimeoutError` | Exception hierarchy |
-
-## MCP Tools Available
-
-| Tool | Category | Description |
-|------|----------|-------------|
-| `get_scheduler_metrics` | orchestrator | Retrieve AsyncScheduler metrics (scheduled, completed, failed, cancelled) |
-| `analyze_workflow_dependencies` | orchestrator | Validate a workflow DAG for cyclic dependencies |
-
-## Agent Instructions
-
-1. Use `analyze_workflow_dependencies` to validate task dependency graphs before execution.
-2. Use `get_scheduler_metrics` to monitor running scheduler health and job completion rates.
-3. Build workflows using `Workflow`, `Task`, and `add_dependency` for complex multi-step operations.
-4. Use the thin API (`run`, `pipe`, `batch`) for simple script orchestration without DAG overhead.
-5. Apply `with_retry` decorator for fault-tolerant task execution with configurable retry policies.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `analyze_workflow_dependencies` raises `CycleError` if the DAG contains cycles; returns `{"valid_dag": True, "execution_order": [...]}` on success.
-- `get_scheduler_metrics` instantiates a fresh `AsyncScheduler` and returns its metrics layout.
-- `Workflow.execute()` runs tasks in topological order respecting all dependency edges.
-- `ParallelRunner` uses `ThreadPoolExecutor` for concurrent execution with configurable worker counts.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
 
-## Common Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.orchestrator import Workflow, Task, chain, with_retry
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Simple chained workflow
-wf = Workflow(name="pipeline")
-t1 = Task(id="step1", func=lambda: "done")
-t2 = Task(id="step2", func=lambda: "done")
-wf.add_task(t1)
-wf.add_task(t2)
-wf.add_dependency("step2", "step1")
-wf.execute()
-
-# Retry-decorated function
-@with_retry(max_retries=3, delay=1.0)
-def flaky_operation():
-    pass
-```
-
-## PAI Agent Role Access Matrix
-
-| Agent | Access Level | Primary Tools |
-|-------|-------------|---------------|
-| Engineer | Full | `Workflow`, `Task`, `run_script`, `with_retry`, all MCP tools |
-| Architect | Plan | `analyze_workflow_dependencies`, `get_scheduler_metrics` |
-| QATester | Execute | `run_script`, `run_function`, `get_scheduler_metrics` |
-
-## Navigation
-
-- [readme.md](readme.md) -- Module overview
-- [SPEC.md](SPEC.md) -- Technical specification
-- [Source Module](../../../../orchestrator/)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

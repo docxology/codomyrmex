@@ -1,33 +1,33 @@
-# Text-to-SQL Engine -- Agent Coordination
+# Codomyrmex Agents — docs/modules/text_to_sql
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides schema-aware natural language to SQL query generation. Accepts a database schema definition and converts natural language questions into SQL queries with confidence scoring and validation.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `text_to_sql_generate` | Generate a SQL query from a natural language question against a schema | Standard | text_to_sql |
-| `text_to_sql_validate` | Validate a SQL query for safety and basic syntax | Standard | text_to_sql |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| EXECUTE | Engineer Agent | Convert natural language questions to SQL queries |
-| VERIFY | QA Agent | Validate generated SQL for syntax correctness and safety |
-
-
-## Agent Instructions
-
-1. Provide tables as a dict mapping table names to column lists
-2. text_to_sql_validate checks for SQL injection patterns and basic syntax issues
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/text_to_sql/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

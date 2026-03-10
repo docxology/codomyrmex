@@ -1,22 +1,26 @@
 # gemini
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Gemini Agent Integration.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` – Module entry point
-- `gemini_client.py` – Gemini API SDK Client
-- `gemini_cli.py` – External npm `gemini-cli` agent wrapper
-- `gemini_integration.py` – Gemini Integration
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `_cache.py` – File
+- `_files.py` – File
+- `_media.py` – File
+- `_tuning_batch.py` – File
+- `gemini_cli.py` – File
+- `gemini_client.py` – File
+- `gemini_integration.py` – File
+- `mcp_tools.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent Module**: [agents](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: ../../../../README.md

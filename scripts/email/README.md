@@ -1,30 +1,16 @@
-# Email Module Demos
+# email
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demonstrates usage of the email module including GmailProvider and AgentMailProvider for sending, receiving, and managing email messages.
+Automation and utility scripts.
 
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `orchestrator.py` | Runs AgentMail and Gmail provider demos with message sending and inbox management |
-
-
-## Usage
-
-**Prerequisites:**
-```bash
-uv sync (requires AGENTMAIL_API_KEY or GMAIL credentials)
-```
-
-**Run:**
-```bash
-uv run python scripts/email/orchestrator.py
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `orchestrator.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

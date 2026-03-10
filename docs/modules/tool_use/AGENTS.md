@@ -1,81 +1,39 @@
-# Tool Use Module — Agent Coordination
+# Codomyrmex Agents — docs/modules/tool_use
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Tool Use Module
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-Registry, composition, and validation for tool-based workflows.
-Provides a central registry for managing tools, a chain abstraction
-for sequential tool pipelines, and input/output validation utilities.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Key Capabilities
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-- **`ValidationResult`** -- Result of a validation operation (valid flag + error list).
-- **`ToolEntry`** -- A registered tool with name, handler, schemas, and tags.
-- **`ToolRegistry`** -- Central registry for managing available tools.
-- **`ChainStep`** -- A single step in a tool chain pipeline.
-- **`ChainResult`** -- Result of executing an entire tool chain.
-- **`ToolChain`** -- A pipeline of tools that execute sequentially.
-- **`validate_input()`** -- Validate tool input data against a JSON-schema-like specification.
-- **`validate_output()`** -- Validate tool output data against a JSON-schema-like specification.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Agent Usage Patterns
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```python
-from codomyrmex.tool_use import ToolRegistry, ToolEntry
-
-registry = ToolRegistry()
-registry.register(ToolEntry(
-    name="greet",
-    description="Say hello",
-    handler=lambda data: {"message": f"Hello, {data['name']}!"},
-    input_schema={
-        "type": "object",
-        "required": ["name"],
-        "properties": {"name": {"type": "string"}},
-    },
-))
-
-result = registry.invoke("greet", {"name": "World"})
-assert result.ok
-print(result.data)  # {"message": "Hello, World!"}
-```
-
-## Key Components
-
-| Export | Type |
-|--------|------|
-| `ValidationResult` | Public API |
-| `validate_input` | Public API |
-| `validate_output` | Public API |
-| `ToolEntry` | Public API |
-| `ToolRegistry` | Public API |
-| `tool` | Public API |
-| `ChainStep` | Public API |
-| `ChainResult` | Public API |
-| `ToolChain` | Public API |
-
-## Source Files
-
-| File | Description |
-|------|-------------|
-| `chains.py` | Tool chain composition for sequential tool execution. |
-| `registry.py` | Tool registry for managing available tools. |
-| `validation.py` | Input/output validation for tool calls. |
-
-## Integration Points
-
-- **Docs**: [Module Documentation](../../../docs/modules/tool_use/README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k tool_use -v
-```
-
-- Always use real, functional tests — no mocks (Zero-Mock policy)
-- Verify all changes pass existing tests before submitting
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

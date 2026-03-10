@@ -1,29 +1,16 @@
-# Dark Configuration
+# dark
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-PDF dark mode utilities providing inversion, brightness, contrast, and sepia filters for PDF documents. Supports preset modes and custom filter chains.
+Configuration files and templates.
 
-## Configuration Options
-
-The dark module operates with sensible defaults and does not require environment variable configuration. Requires optional dependencies: `uv sync --extra dark`. Filter parameters (inversion level, brightness, contrast) are set per-document.
-
-## PAI Integration
-
-PAI agents interact with dark through direct Python imports. Requires optional dependencies: `uv sync --extra dark`. Filter parameters (inversion level, brightness, contrast) are set per-document.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep dark
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/dark/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

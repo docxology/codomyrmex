@@ -1,67 +1,41 @@
-# Agent Guidelines - FPF
+# Codomyrmex Agents — docs/modules/fpf
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Firewall-Proxy-Format pattern for secure AI interactions.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `FPF-Spec.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Firewall** — Input/output filtering
-- **Proxy** — Request interception
-- **Formatter** — Response formatting
-- **PolicyEngine** — Policy enforcement
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `FPF-Spec.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Filter input** — Validate all incoming data
-2. **Filter output** — Sanitize all responses
-3. **Log intercepts** — Track blocked requests
-4. **Update policies** — Keep rules current
-5. **Whitelist approach** — Allow known-good only
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.fpf import Firewall, Proxy, Formatter, PolicyEngine
-
-# Configure firewall
-firewall = Firewall()
-firewall.add_rule("block_pii", patterns=["\\d{3}-\\d{2}-\\d{4}"])
-firewall.add_rule("block_injection", patterns=["<script>"])
-
-# Proxy for interception
-proxy = Proxy(firewall)
-safe_input = proxy.filter_input(user_input)
-safe_output = proxy.filter_output(model_response)
-
-# Format responses
-formatter = Formatter()
-response = formatter.format(result, template="markdown")
-
-# Policy engine
-policy = PolicyEngine()
-policy.load("security_policies.yaml")
-if not policy.allows("action", context):
-    raise PolicyViolation()
-```
-
-## Testing Patterns
-
-```python
-# Verify firewall
-firewall = Firewall()
-firewall.add_rule("test", patterns=["blocked"])
-result = firewall.filter("contains blocked word")
-assert "blocked" not in result
-
-# Verify proxy
-proxy = Proxy(firewall)
-safe = proxy.filter_input("<script>alert()</script>")
-assert "<script>" not in safe
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

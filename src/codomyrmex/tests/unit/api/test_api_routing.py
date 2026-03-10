@@ -1,4 +1,8 @@
-"""Unit tests for API routing and REST API handler."""
+"""
+Unit tests for API routing and REST API handler.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
+"""
 
 from datetime import datetime
 

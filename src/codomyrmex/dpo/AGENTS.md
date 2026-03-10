@@ -1,55 +1,45 @@
-# Agent Guidelines -- DPO
+# Codomyrmex Agents — src/codomyrmex/dpo
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-DPO (Direct Preference Optimization) provides preference-based alignment loss computation.
-Implements the Rafailov et al. (2023) loss that directly optimizes a policy from human preference
-data without requiring a separate reward model. One MCP tool (`dpo_compute_loss`) exposes DPO
-computation to PAI agents.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `DPOLoss`, `compute_dpo_loss`, `compute_log_probs` |
-| `loss.py` | DPO loss implementation and log probability computation |
-| `mcp_tools.py` | MCP tool: `dpo_compute_loss` |
-
-## Key Classes
-
-- **DPOLoss** -- Stateful DPO loss with running history tracking
-- **compute_dpo_loss** -- Core DPO loss function (functional interface)
-- **compute_log_probs** -- Numerically stable log probability computation from logits
-
-## Agent Instructions
-
-1. **Compute log probs** -- Use `compute_log_probs(logits, labels)` to get per-token log probs
-2. **Compute DPO loss** -- Use `compute_dpo_loss(policy_w, policy_l, ref_w, ref_l, beta)`
-3. **Track history** -- Use `DPOLoss` class for stateful loss tracking across steps
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `dpo_compute_loss` | Compute DPO loss on synthetic preference data | SAFE |
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `loss.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `compute_log_probs` uses numerically stable log-softmax
-- Tokens with `ignore_index=-100` are zeroed out in log probability computation
-- `DPOLoss.history` tracks per-step scalar losses; call `reset()` to clear
-- beta > 0 is required (beta=0 degenerates the loss)
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `loss.py`
+- `mcp_tools.py`
+- `py.typed`
 
-## PAI Agent Role Access Matrix
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full computation | `dpo_compute_loss` | SAFE |
-| **Architect** | Loss analysis | `dpo_compute_loss` -- beta sensitivity | SAFE |
-| **QATester** | Verification | `dpo_compute_loss` -- accuracy checks | SAFE |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

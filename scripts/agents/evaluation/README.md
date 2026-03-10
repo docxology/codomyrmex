@@ -1,24 +1,17 @@
-# Agent Evaluation Scripts
+# evaluation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for agent evaluation, demonstrating how to benchmark agent performance, measure response quality, and compare agent providers.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `evaluation_demo.py` | Demonstrates agent evaluation workflows and quality metrics |
-
-## Usage
-
-```bash
-uv run python scripts/agents/evaluation/evaluation_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `evaluation_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: agents/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: ../../../README.md

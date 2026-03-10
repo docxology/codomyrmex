@@ -1,33 +1,33 @@
-# Model Merger -- Agent Coordination
+# Codomyrmex Agents — docs/modules/model_merger
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides SLERP interpolation and model soup techniques for merging neural network parameter sets. Supports both pairwise model merging and multi-model averaging with configurable weights.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `merge_models` | Merge two model parameter sets using SLERP or linear interpolation | Standard | model_merger |
-| `create_model_soup` | Create a model soup by averaging multiple model parameter sets | Standard | model_merger |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## PAI Integration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Merge fine-tuned model checkpoints into combined models |
-| VERIFY | QA Agent | Validate merged model parameter shapes and interpolation weights |
-
-
-## Agent Instructions
-
-1. Alpha=0.5 gives equal weight to both models; 0.0 = model A only, 1.0 = model B only
-2. model_soup accepts optional weights list; uniform averaging if omitted
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/model_merger/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

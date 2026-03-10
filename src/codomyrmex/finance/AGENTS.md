@@ -1,120 +1,55 @@
-# Agent Instructions for `codomyrmex.finance`
+# Codomyrmex Agents — src/codomyrmex/finance
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-The Finance module provides a complete double-entry bookkeeping engine with four subsystems: a general ledger that enforces balanced transactions and generates financial statements (balance sheet, income statement, trial balance); a progressive tax calculator with bracket-based computation and deduction support; a payroll processor that computes federal tax, Social Security, and Medicare withholdings and generates pay stubs; and a time-series forecaster offering moving average, exponential smoothing, and linear trend extrapolation. Agents use this module for financial modelling, tax estimation, and payroll automation within the codomyrmex ecosystem.
+Contains components for the src system.
 
 ## Active Components
-
-| Component | Type | File | Status |
-|-----------|------|------|--------|
-| `AccountType` | Enum | `ledger/ledger.py` | Active |
-| `Account` | Dataclass | `ledger/ledger.py` | Active |
-| `TransactionEntry` | Dataclass | `ledger/ledger.py` | Active |
-| `Transaction` | Dataclass | `ledger/ledger.py` | Active |
-| `Ledger` | Class | `ledger/ledger.py` | Active |
-| `LedgerError` | Exception | `ledger/ledger.py` | Active |
-| `TaxCalculator` | Class | `taxes/calculator.py` | Active |
-| `TaxResult` | Dataclass | `taxes/calculator.py` | Active |
-| `TaxError` | Exception | `taxes/calculator.py` | Active |
-| `PayrollProcessor` | Class | `payroll/processor.py` | Active |
-| `PayStub` | Dataclass | `payroll/processor.py` | Active |
-| `PayrollError` | Exception | `payroll/processor.py` | Active |
-| `Forecaster` | Class | `forecasting/forecast.py` | Active |
-| `ForecastError` | Exception | `forecasting/forecast.py` | Active |
-
-## MCP Tools
-
-The finance module does **not** expose any MCP tools. There is no `mcp_tools.py` file. All interaction is via direct Python imports.
-
-## Usage Guidelines
-
-1. **Importing**: Import from the module root for all public types.
-
-   ```python
-   from codomyrmex.finance import (
-       Ledger, Account, AccountType, Transaction, TransactionEntry, LedgerError,
-       TaxCalculator, TaxResult,
-       PayrollProcessor, PayStub,
-       Forecaster,
-   )
-   ```
-
-2. **Double-Entry Principle**: Every `Transaction` must balance -- the sum of all entry amounts must equal zero (positive = debit, negative = credit). The `Ledger.post_transaction()` method enforces this invariant and raises `LedgerError` on imbalance.
-
-3. **Account Types**: Use the five standard classifications from `AccountType`:
-   - `ASSET` and `EXPENSE` -- normal debit balance (debit increases balance)
-   - `LIABILITY`, `EQUITY`, and `REVENUE` -- normal credit balance (credit increases balance)
-
-4. **Tax Calculations**: `TaxCalculator` defaults to simplified US federal brackets (2024-era rates). Custom brackets can be supplied. Results include effective rate, marginal rate, and per-bracket breakdown.
-
-5. **Payroll Processing**: `PayrollProcessor` supports five pay cadences: weekly, biweekly, semimonthly, monthly, annual. It annualizes gross pay for federal tax computation, then pro-rates back to the period. FICA rates are 2024-standard (SS 6.2%, Medicare 1.45%).
-
-6. **Forecasting**: `Forecaster` accepts a list of historical `Decimal` values and supports:
-   - `moving_average(window)` -- simple moving average
-   - `exponential_smoothing(alpha)` -- single exponential smoothing
-   - `linear_trend()` -- OLS linear regression with R-squared and std dev
-   - `project(periods)` -- Monte Carlo projection using linear trend and volatility
-   - `risk_metrics(portfolio)` -- VaR 95% and PnL analysis
-   - `forecast(periods, method)` -- project future values using any of the above
-
-## Quick Verification
-
-```bash
-uv run python -c "from codomyrmex.finance import Ledger, AccountType, TaxCalculator, PayrollProcessor, Forecaster; print('OK')"
-uv run pytest src/codomyrmex/tests/unit/finance/ -v
-```
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `account.py` – Project file
+- `forecasting/` – Directory containing forecasting components
+- `ledger/` – Directory containing ledger components
+- `ledger.py` – Project file
+- `mcp_tools.py` – Project file
+- `payroll/` – Directory containing payroll components
+- `py.typed` – Project file
+- `taxes/` – Directory containing taxes components
+- `visualization.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `Ledger.post_transaction()` raises `LedgerError` if entries do not sum to zero or reference unknown accounts. All account IDs are UUID4 strings generated by `create_account()`.
-- `Ledger.create_account()` raises `LedgerError` on duplicate account names.
-- `TaxCalculator.calculate_tax()` raises `TaxError` for negative income.
-- `TaxCalculator.apply_deductions()` returns taxable income floored at zero.
-- `PayrollProcessor.calculate_pay()` raises `PayrollError` for negative gross salary or unknown pay period cadence.
-- `PayrollProcessor.generate_pay_stub()` raises `PayrollError` if employee dict lacks `name` or `id`.
-- `Forecaster` methods raise `ForecastError` on insufficient data or invalid parameters.
-- `Transaction.is_balanced` is a read-only property check (abs(sum) < 1e-9).
-- **Zero-Mock Policy**: Tests must use real `Ledger`, `TaxCalculator`, `PayrollProcessor`, and `Forecaster` instances with actual transactions and calculations. No mocking of financial operations or storage.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `account.py`
+- `ledger.py`
+- `mcp_tools.py`
+- `py.typed`
+- `visualization.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **visualization module**: `finance/visualization.py` provides `plot_account_balances()` and `plot_transaction_volume()` for charting ledger state. These consume `Ledger` instances directly.
-- **data_visualization module**: Finance chart data can be rendered through the general-purpose charting pipeline.
-- **logging_monitoring module**: `Ledger` uses standard `logging.getLogger(__name__)` for transaction and account creation events.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Submodule Reference
-
-| Submodule | Key Classes | Responsibility |
-|-----------|-------------|---------------|
-| `ledger/` | `Ledger`, `Account`, `AccountType`, `Transaction`, `TransactionEntry` | Double-entry bookkeeping, balance sheet, income statement, trial balance |
-| `taxes/` | `TaxCalculator`, `TaxResult` | Progressive bracket-based tax calculation with deductions |
-| `payroll/` | `PayrollProcessor`, `PayStub` | Payroll computation with federal tax, SS, Medicare withholding |
-| `forecasting/` | `Forecaster` | Moving average, exponential smoothing, linear trend forecasting |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Implements financial calculations, portfolio management, and risk analysis via Ledger, TaxCalculator, PayrollProcessor, and Forecaster classes.
-
-### Architect Agent
-**Use Cases**: Designs financial data models, reviews double-entry bookkeeping schema, and evaluates subsystem interfaces across ledger, tax, payroll, and forecasting.
-
-### QATester Agent
-**Use Cases**: Validates numerical accuracy of tax brackets, payroll withholdings, ledger balancing invariants, and forecast precision via pytest.
-
-## Navigation
-
-- Module: `src/codomyrmex/finance/`
-- PAI integration: [PAI.md](PAI.md)
-- Specification: [SPEC.md](SPEC.md)
-- Root bridge: [/PAI.md](../../../PAI.md)
-- Parent: [../AGENTS.md](../AGENTS.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,20 +1,19 @@
 # languages
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Language definitions. This submodule is scaffolded for future implementation; no exports are currently defined.
+Contains components for the src system.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `languages.py` - Languages
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `languages.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent Module**: [tree_sitter](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [tree_sitter](../README.md)
+- **Project Root**: ../../../../README.md

@@ -1,29 +1,39 @@
-# Codomyrmex Agents -- src/codomyrmex/coding/parsers/tree_sitter/queries
+# Codomyrmex Agents — src/codomyrmex/coding/parsers/tree_sitter/queries
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Placeholder sub-module for tree-sitter S-expression query patterns and a future query builder API. Currently exports nothing; query execution is handled inline by `TreeSitterParser.query()`.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `__init__.py` | _(empty exports)_ | Namespace package marker |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- When query utilities are added, they must accept and return standard tree-sitter node types.
-- Future query patterns should be stored as `.scm` files or Python constants in this package.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `tree_sitter` (external)
-- **Used by**: _(future consumers of pre-built query patterns)_
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [tree_sitter](../README.md)
-- **Root**: [Root](../../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [tree_sitter](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

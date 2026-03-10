@@ -1,70 +1,37 @@
-# git_analysis - Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/git_analysis
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides 16 MCP tools across two groups: 7 GitNexus tools for structural code analysis (requires Node.js/npx) and 9 GitPython tools for commit history analysis. GitNexus tools gracefully return error dicts when Node.js is unavailable.
-
-## Key Files
-
-| File | Role |
-|------|------|
-| `__init__.py` | Package root; exports `GitHistoryAnalyzer`, `GitNexusBridge` |
-| `mcp_tools.py` | 16 MCP tool definitions |
-| `core/history_analyzer.py` | `GitHistoryAnalyzer` (commit history, contributors, churn, topology) |
-| `core/gitnexus_bridge.py` | `GitNexusBridge` (structural analysis via Node.js subprocess) |
-
-## MCP Tools Available
-
-**GitNexus tools (require Node.js):**
-
-| Tool | Key Parameters |
-|------|---------------|
-| `git_analysis_index_repo` | `repo_path: str` |
-| `git_analysis_query` | `repo_path: str, query_text: str, limit: int` |
-| `git_analysis_symbol_context` | `repo_path: str, symbol: str` |
-| `git_analysis_impact` | `repo_path: str, symbol: str` |
-| `git_analysis_detect_changes` | `repo_path: str, diff: str (optional)` |
-| `git_analysis_cypher_query` | `repo_path: str, cypher_query: str` |
-| `git_analysis_list_indexed` | none |
-
-**GitPython tools:**
-
-| Tool | Key Parameters |
-|------|---------------|
-| `git_analysis_commit_history` | `repo_path: str, max_count: int, branch: str` |
-| `git_analysis_contributor_stats` | `repo_path: str` |
-| `git_analysis_code_churn` | `repo_path: str, top_n: int` |
-| `git_analysis_branch_topology` | `repo_path: str` |
-| `git_analysis_commit_frequency` | `repo_path: str, by: str (day/week/month)` |
-| `git_analysis_filtered_history` | `repo_path: str, max_count: int, since/until/author/branch` |
-| `git_analysis_file_history` | `repo_path: str, file_path: str, max_count: int` |
-| `git_analysis_directory_churn` | `repo_path: str, top_n: int` |
-| `git_analysis_hotspots` | `repo_path: str, top_n: int` |
-
-## Agent Instructions
-
-1. GitNexus tools require `git_analysis_index_repo` to be run first before query/context/impact tools.
-2. GitPython tools work on any valid git repository without prior indexing.
-3. The `by` parameter for `git_analysis_commit_frequency` must be one of `"day"`, `"week"`, or `"month"`.
-4. Numeric parameters (`max_count`, `top_n`, `limit`) are clamped to `[1, 10000]`.
-5. All tools return `{"status": "ok", ...}` on success or `{"status": "error", "error": "..."}` on failure.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- GitNexus tools return error dicts (not exceptions) when Node.js is unavailable.
-- `repo_path` defaults to `"."` for GitPython tools.
-- All tools are read-only and do not modify the repository.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
 
-## PAI Agent Role Access Matrix
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Agent Role | Access Level | Primary Tools |
-|-----------|-------------|---------------|
-| Engineer | Full | All 16 tools |
-| Architect | Full | Impact, symbol context, architecture tools |
-| QATester | Read | Commit history, churn, hotspots |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [Root](../../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

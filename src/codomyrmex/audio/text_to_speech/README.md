@@ -1,28 +1,21 @@
-# Text To Speech
+# text_to_speech
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.audio.text_to_speech` | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Text-to-speech (TTS) synthesis module.
+Contains components for the src system.
 
-## Key Exports
-
-- **`AudioFormat`** — Supported audio output formats.
-- **`VoiceGender`** — Voice gender classification.
-- **`VoiceInfo`** — Information about an available voice.
-- **`SynthesisResult`** — Result of text-to-speech synthesis.
-- **`TTSConfig`** — Configuration for text-to-speech synthesis.
-
-## Quick Start
-
-```python
-from codomyrmex.audio.text_to_speech import AudioFormat, VoiceGender, VoiceInfo
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `models.py` – File
+- `providers/` – Subdirectory
+- `py.typed` – File
+- `synthesizer.py` – File
 
 ## Navigation
-
-- **📁 Parent**: [Audio](../README.md)
-- **🏠 Root**: [codomyrmex](../../../../README.md)
+- **Parent Directory**: [audio](../README.md)
+- **Project Root**: ../../../../README.md

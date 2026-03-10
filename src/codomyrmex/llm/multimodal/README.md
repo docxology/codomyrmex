@@ -1,7 +1,21 @@
-# Multimodal
+# multimodal
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-This module provides comprehensive functionality for llm/multimodal.
+## Overview
 
-It is designed to be highly reliable, scalable, and fully documented in accordance with the project's rigorous documentation standards.
+Contains components for the src system.
+
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `builder.py` – File
+- `models.py` – File
+- `processors.py` – File
+- `py.typed` – File
+
+## Navigation
+- **Parent Directory**: [llm](../README.md)
+- **Project Root**: ../../../../README.md

@@ -1,24 +1,25 @@
 # static_analysis
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `static_analysis` module provides core functionality for Static Analysis..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `complexity/` - Subdirectory
-- `integration/` - Subdirectory
-- `linting/` - Subdirectory
-- `test_static_analysis.py` - Test Static Analysis
-- `test_static_analysis_comprehensive.py` - Test Static Analysis Comprehensive
-- `unit/` - Subdirectory
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `complexity/` – Subdirectory
+- `integration/` – Subdirectory
+- `linting/` – Subdirectory
+- `test_static_analysis.py` – File
+- `test_static_analysis_core.py` – File
+- `test_static_analysis_mcp_tools.py` – File
+- `test_static_analyzer_core.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

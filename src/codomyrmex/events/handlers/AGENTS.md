@@ -1,39 +1,43 @@
 # Codomyrmex Agents — src/codomyrmex/events/handlers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides event listener and logging components for the receive side of the event system: manual and automatic handler registration, one-shot subscriptions, event history with statistics, performance reporting, and log export.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `event_listener.py` | `EventListener` | Manages named handler subscriptions with `on()`, `once()` (auto-unsubscribe), `off()`, and convenience methods for analysis/build event groups |
-| `event_listener.py` | `AutoEventListener` | Extends `EventListener`; scans an object for methods decorated with `@event_handler` and auto-registers them |
-| `event_listener.py` | `event_handler` | Decorator marking methods as event handlers with `_event_types`, `_event_filter`, and `_event_priority` attributes |
-| `event_listener.py` | `create_listener()` / `create_auto_listener()` | Factory functions for `EventListener` and `AutoEventListener` |
-| `event_logger.py` | `EventLogEntry` | Wraps an `Event` with timestamp, handler count, and processing time; provides `to_dict()` for serialization |
-| `event_logger.py` | `EventLogger` | Thread-safe event logger subscribing to all events (`"*"`); maintains a bounded `deque` of entries (default 10,000), event/error count dicts, and processing time lists |
-| `event_logger.py` | `get_event_logger()` | Module-level singleton accessor for the global `EventLogger` |
-| `event_logger.py` | `get_event_stats()` / `get_recent_events()` / `generate_performance_report()` / `export_event_logs()` | Convenience functions delegating to the singleton |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `event_listener.py` – Project file
+- `event_logger.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `EventListener.once()` wraps the handler in a one-time wrapper that calls `off()` after the first invocation (via `try/finally`).
-- `AutoEventListener.register_handlers()` uses `getattr` introspection to find methods with `_is_event_handler = True` and binds them correctly.
-- `EventLogger` subscribes to pattern `"*"` (all events) on initialization and is thread-safe via `threading.Lock`.
-- `EventLogger.entries` is a bounded `deque(maxlen=max_entries)` -- oldest entries are evicted automatically.
-- `export_logs()` supports `json` and `csv` formats; writes directly to the filesystem.
-- `EventListener.enabled` flag prevents new subscriptions when set to `False`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `event_listener.py`
+- `event_logger.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `events.core.event_bus` (`EventBus`, `get_event_bus`, `subscribe_to_events`, `unsubscribe_from_events`), `events.core.event_schema` (`Event`, `EventType`), `codomyrmex.logging_monitoring`
-- **Used by**: Monitoring dashboards, debugging tools, and any module that needs to react to or record events
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [events](../README.md)
-- **Root**: [Codomyrmex](../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [events](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

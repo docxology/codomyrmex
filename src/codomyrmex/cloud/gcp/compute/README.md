@@ -1,18 +1,18 @@
-# GCP Compute Submodule
+# compute
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-GCP Compute Engine instance management.
+Contains components for the src system.
 
-## Planned Features
-
-- Instance lifecycle management
-- Instance template operations
-- Machine image management
-- Disk operations
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent**: [gcp/](../README.md)
+- **Parent Directory**: [gcp](../README.md)
+- **Project Root**: ../../../../../README.md

@@ -1,29 +1,33 @@
-# Multimodal -- Agent Coordination
+# Codomyrmex Agents — docs/modules/multimodal
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Provides multimodal processing capabilities including image generation via Google AI (Imagen 3). Handles various media types for multi-modal AI workflows.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-No MCP tools defined for this module.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
-## PAI Integration
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Algorithm Phase | Agent Role | Primary Operations |
-|----------------|-----------|-------------------|
-| BUILD | Engineer Agent | Generate images and other media as part of multimodal pipelines |
-| EXECUTE | Infrastructure Agent | Process multimodal inputs for AI model consumption |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-
-## Agent Instructions
-
-1. Requires GEMINI_API_KEY environment variable for live image generation
-2. Use ImageGenerator for text-to-image generation via Google AI
-
-
-## Navigation
-
-- [Source README](../../src/codomyrmex/multimodal/README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

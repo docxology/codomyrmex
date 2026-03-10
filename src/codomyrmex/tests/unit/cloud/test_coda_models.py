@@ -6,7 +6,7 @@ every Enum value, every None-guard branch in from_dict(), and the
 list pagination models not yet tested (PageList, TableList, ColumnList,
 RowList, FormulaList, ControlList, PermissionList).
 
-Zero-mock policy: no unittest.mock, MagicMock, or monkeypatch.
+Zero-stub policy: no unittest.stub, MagicStub, or monkeypatch.
 Pure data-model tests — no network required.
 """
 

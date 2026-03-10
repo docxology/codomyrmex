@@ -1,69 +1,48 @@
-# Agent Guidelines - Cerebrum
+# Codomyrmex Agents — docs/modules/cerebrum
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Cognitive architecture for reasoning, planning, and decision-making.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `fpf_integration.md` – Project file
+- `tutorials/` – Directory containing tutorials components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **CerebrumEngine** — Core reasoning engine
-- **WorkingMemory** — Short-term context
-- **ReasoningChain** — Chain-of-thought reasoning
-- **DecisionModule** — Decision making
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `fpf_integration.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Context management** — Update working memory as needed
-2. **Chain reasoning** — Use step-by-step reasoning
-3. **Validate decisions** — Check decision consistency
-4. **Track uncertainty** — Maintain confidence scores
-5. **Explain reasoning** — Provide rationale
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.cerebrum import (
-    CerebrumEngine, WorkingMemory, ReasoningChain
-)
-
-# Initialize engine
-engine = CerebrumEngine()
-engine.load_knowledge("domain_knowledge.json")
-
-# Working memory
-memory = WorkingMemory()
-memory.store("user_goal", "Refactor authentication")
-memory.store("constraints", ["maintain compatibility", "add tests"])
-
-# Reasoning chain
-chain = ReasoningChain()
-chain.add_step("Analyze current implementation")
-chain.add_step("Identify refactoring patterns")
-chain.add_step("Generate implementation plan")
-result = chain.execute(memory)
-
-# Decision making
-decision = engine.decide(options, criteria, context)
-print(f"Decision: {decision.choice} (confidence: {decision.confidence})")
-```
-
-## Testing Patterns
-
-```python
-# Verify reasoning
-chain = ReasoningChain()
-chain.add_step("Analyze")
-result = chain.execute(context)
-assert result.steps_completed == 1
-
-# Verify working memory
-memory = WorkingMemory()
-memory.store("key", "value")
-assert memory.retrieve("key") == "value"
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

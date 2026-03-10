@@ -1,44 +1,39 @@
-# Generators -- Agentic Context
+# Codomyrmex Agents — src/codomyrmex/testing/generators
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Test files and validation suites.
 
-Provides test data generation utilities with typed generators for common data types, composite record generators, and dataset generators with CSV export. Agents use this module to create realistic test data without external dependencies.
-
-## Key Components
-
-| Component | Source | Role |
-|-----------|--------|------|
-| `Generator` (ABC) | `__init__.py` | Base class with `generate()` and `generate_many(count)` |
-| `StringGenerator` | `__init__.py` | Random strings with configurable `min_length`, `max_length`, `charset` |
-| `IntegerGenerator` | `__init__.py` | Random integers in `[min_value, max_value]` range (default 0--1000) |
-| `FloatGenerator` | `__init__.py` | Random floats with configurable `precision` (default 2 decimal places) |
-| `BooleanGenerator` | `__init__.py` | Random booleans with configurable `true_probability` (default 0.5) |
-| `DateGenerator` | `__init__.py` | Random `datetime` between `start_date` and `end_date` |
-| `EmailGenerator` | `__init__.py` | Random emails from 4 domains: example.com, test.org, mail.net, demo.io |
-| `UUIDGenerator` | `__init__.py` | UUID-like strings (8-4-4-4-12 hex format, not RFC 4122 compliant) |
-| `NameGenerator` | `__init__.py` | Random full names from 8 first names and 8 last names |
-| `ChoiceGenerator` | `__init__.py` | Random selection from a provided list |
-| `RecordGenerator` | `__init__.py` | Composite: field-name-to-generator mapping, produces `dict[str, Any]` |
-| `DatasetGenerator` | `__init__.py` | Column-based: produces row lists with `generate(rows)` and `generate_csv(rows)` |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Generator Protocol**: All generators extend `Generator` ABC and implement `generate() -> Any`. `generate_many(count)` is inherited and calls `generate()` N times.
-2. **Composition**: `RecordGenerator.add_field(name, generator)` and `DatasetGenerator.add_column(name, generator)` accept any `Generator` subclass, enabling nested composition.
-3. **CSV Export**: `DatasetGenerator.generate_csv()` produces comma-separated output with header row. Values are stringified via `str()`.
-4. **Randomness**: All generators use `random` module (not cryptographically secure). Seed via `random.seed()` for reproducibility.
-5. **No External Dependencies**: Pure Python implementation using only `random`, `string`, `datetime` from stdlib.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **testing parent**: Part of the `testing` module alongside `chaos`, `fixtures`, and `workflow`
-- **DataType enum**: Defines 10 types (STRING, INTEGER, FLOAT, BOOLEAN, DATE, EMAIL, UUID, NAME, ADDRESS, PHONE) for schema-driven generation
-- **FieldSpec dataclass**: Structured field specification with `nullable`, `unique`, `min_value`, `max_value`, `choices`, `pattern` constraints
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [testing/](../README.md)
-- **Siblings**: [chaos/](../chaos/), [fixtures/](../fixtures/), [workflow/](../workflow/)
-- **Spec**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [testing](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

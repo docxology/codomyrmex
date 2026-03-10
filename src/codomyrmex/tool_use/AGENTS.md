@@ -1,98 +1,51 @@
-# Tool Use Module — Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/tool_use
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Tool Use Module
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `chains.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
+- `registry.py` – Project file
+- `validation.py` – Project file
 
-Registry, composition, and validation for tool-based workflows.
-Provides a central registry for managing tools, a chain abstraction
-for sequential tool pipelines, and input/output validation utilities.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Key Capabilities
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `chains.py`
+- `mcp_tools.py`
+- `py.typed`
+- `registry.py`
+- `validation.py`
 
-- **`ValidationResult`** -- Result of a validation operation (valid flag + error list).
-- **`ToolEntry`** -- A registered tool with name, handler, schemas, and tags.
-- **`ToolRegistry`** -- Central registry for managing available tools.
-- **`ChainStep`** -- A single step in a tool chain pipeline.
-- **`ChainResult`** -- Result of executing an entire tool chain.
-- **`ToolChain`** -- A pipeline of tools that execute sequentially.
-- **`validate_input()`** -- Validate tool input data against a JSON-schema-like specification.
-- **`validate_output()`** -- Validate tool output data against a JSON-schema-like specification.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Agent Usage Patterns
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```python
-from codomyrmex.tool_use import ToolRegistry, ToolEntry
-
-registry = ToolRegistry()
-registry.register(ToolEntry(
-    name="greet",
-    description="Say hello",
-    handler=lambda data: {"message": f"Hello, {data['name']}!"},
-    input_schema={
-        "type": "object",
-        "required": ["name"],
-        "properties": {"name": {"type": "string"}},
-    },
-))
-
-result = registry.invoke("greet", {"name": "World"})
-assert result.ok
-print(result.data)  # {"message": "Hello, World!"}
-```
-
-## Key Components
-
-| Export | Type |
-|--------|------|
-| `ValidationResult` | Public API |
-| `validate_input` | Public API |
-| `validate_output` | Public API |
-| `ToolEntry` | Public API |
-| `ToolRegistry` | Public API |
-| `tool` | Public API |
-| `ChainStep` | Public API |
-| `ChainResult` | Public API |
-| `ToolChain` | Public API |
-
-## Source Files
-
-| File | Description |
-|------|-------------|
-| `chains.py` | Tool chain composition for sequential tool execution. |
-| `registry.py` | Tool registry for managing available tools. |
-| `validation.py` | Input/output validation for tool calls. |
-
-## Integration Points
-
-- **Docs**: [Module Documentation](../../../docs/modules/tool_use/README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k tool_use -v
-```
-
-- Always use real, functional tests — no mocks (Zero-Mock policy)
-- Verify all changes pass existing tests before submitting
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Invoke external tools and CLIs via ToolRegistry, compose ToolChain pipelines, validate input/output schemas during BUILD/EXECUTE phases
-
-### Architect Agent
-**Use Cases**: Design tool integration patterns, define ToolEntry schemas, plan chain composition strategies
-
-### QATester Agent
-**Use Cases**: Validate tool invocation correctness, verify result parsing accuracy, test chain execution and error propagation
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

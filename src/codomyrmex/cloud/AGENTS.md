@@ -1,129 +1,55 @@
 # Codomyrmex Agents — src/codomyrmex/cloud
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Unified cloud provider integration module for AWS, GCP, Azure, Coda.io, and Infomaniak. Provides consistent interfaces for object storage, compute, and document management.
-
-## Module Architecture
-
-```
-cloud/
-├── __init__.py          # Unified Public API exports
-├── common/              # ABCs and shared models
-│   ├── StorageClient    # Unified storage interface (S3, GCS, Blob)
-│   ├── ComputeClient    # Unified compute interface
-│   ├── CloudClient      # General resource management
-│   └── CloudConfig      # Centralized credential loading
-├── aws/                 # Amazon Web Services (S3Client)
-├── gcp/                 # Google Cloud Platform (GCSClient)
-├── azure/               # Microsoft Azure (AzureBlobClient)
-├── coda_io/             # Coda.io (CodaClient)
-└── infomaniak/          # Infomaniak (OpenStack and S3 clients)
-```
-
-## Core Interfaces
-
-### StorageClient (AWS, GCP, Azure, Infomaniak S3)
-
-All storage clients implement these methods:
-
-- `list_buckets()`
-- `create_bucket(name, region=None)`
-- `delete_bucket(name)`
-- `bucket_exists(name)`
-- `upload_file(bucket, key, file_path, content_type=None)`
-- `download_file(bucket, key, file_path)`
-- `list_objects(bucket, prefix=None)`
-- `delete_object(bucket, key)`
-- `get_object_metadata(bucket, key)`
-- `generate_presigned_url(bucket, key, expires_in=3600, operation="get_object")`
-
-### CloudClient (Coda.io, Infomaniak)
-
-Standardized resource operations:
-
-- `list_resources(resource_type=None)`
-- `get_resource(resource_id)`
-- `create_resource(name, resource_type, config)`
-- `delete_resource(resource_id)`
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `aws/` – Directory containing aws components
+- `azure/` – Directory containing azure components
+- `coda_io/` – Directory containing coda_io components
+- `common/` – Directory containing common components
+- `cost_management/` – Directory containing cost_management components
+- `edge.py` – Project file
+- `gcp/` – Directory containing gcp components
+- `google_workspace/` – Directory containing google_workspace components
+- `infomaniak/` – Directory containing infomaniak components
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-### Unified Initialization
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `edge.py`
+- `mcp_tools.py`
+- `py.typed`
 
-```python
-from codomyrmex.cloud.common import CloudConfig, CloudProvider
-from codomyrmex.cloud import S3Client, CodaClient
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-# 1. From environment variables
-config = CloudConfig.from_env()
-
-# 2. Check and initialize
-if config.has_provider(CloudProvider.AWS):
-    s3 = S3Client()  # Uses boto3 defaults or config
-
-if config.has_provider(CloudProvider.CODA):
-    creds = config.get_credentials(CloudProvider.CODA)
-    coda = CodaClient(api_token=creds.access_key)
-```
-
-### Consistent Storage Usage
-
-```python
-def sync_config(storage: StorageClient, bucket: str, local_path: str):
-    """Sync a file using any StorageClient (AWS, GCP, Azure)."""
-    if storage.bucket_exists(bucket):
-        storage.upload_file(bucket, "config.json", local_path)
-```
-
-## Agent Integration Guidelines
-
-1. **Prefer ABCs**: Use `StorageClient` as a type hint for functions that work across providers.
-2. **Verify Dependencies**: Check if provider clients are available (not None) before use.
-3. **Use CloudConfig**: Leverage `CloudConfig.from_env()` to discover configured providers.
-4. **Structured Logging**: Errors are logged automatically; use `CloudError` to catch unified exceptions.
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `list_cloud_instances` | List active compute instances (Infomaniak) | SAFE |
-| `list_s3_buckets` | List S3 buckets (Infomaniak) | SAFE |
-| `upload_file_to_s3` | Upload a file to Infomaniak S3 | TRUSTED |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `list_cloud_instances`, `list_s3_buckets`, `upload_file_to_s3` | TRUSTED |
-| **Architect** | Read + Design | `list_cloud_instances`, `list_s3_buckets` — resource inventory and architecture review | OBSERVED |
-| **QATester** | Validation | `list_cloud_instances`, `list_s3_buckets` — resource availability verification | OBSERVED |
-| **Researcher** | Read-only | `list_cloud_instances`, `list_s3_buckets` — inspect cloud resource state | SAFE |
-
-### Engineer Agent
-**Use Cases**: Listing and managing cloud resources during EXECUTE, uploading artifacts to S3, infrastructure lifecycle management.
-
-### Architect Agent
-**Use Cases**: Resource inventory for architectural decisions, reviewing multi-cloud provider topology.
-
-### QATester Agent
-**Use Cases**: Verifying resource availability during VERIFY, confirming upload success.
-
-### Researcher Agent
-**Use Cases**: Inspecting cloud resource state and instance inventory for analysis.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [codomyrmex](../README.md)
-- **🏠 Project Root**: [../../../README.md](../../../README.md)
-- **📖 Specification**: [SPEC.md](SPEC.md)
-- **🔌 API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
-
-
-## Rule Reference
-
-This module is governed by the following rule file:
-
-- [`src/codomyrmex/agentic_memory/rules/modules/cloud.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/cloud.cursorrules)
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

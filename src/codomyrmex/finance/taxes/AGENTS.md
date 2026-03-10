@@ -1,39 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/finance/taxes
+# Codomyrmex Agents — src/codomyrmex/finance/taxes
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Implements progressive (marginal) tax calculation with configurable bracket definitions and deduction support. Computes total tax, effective rate, marginal rate, and per-bracket breakdown using ordinary bracket-based computation. Ships with simplified 2024-era US federal brackets as defaults.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `calculator.py` | `DEFAULT_BRACKETS` | Module-level list of 7 simplified US federal tax brackets (10% through 37%) |
-| `calculator.py` | `TaxError` | Exception raised on invalid inputs (negative income, bad bracket definitions, invalid rates) |
-| `calculator.py` | `TaxResult` | Dataclass containing gross_income, taxable_income, total_tax, effective_rate, marginal_rate, and bracket_breakdown |
-| `calculator.py` | `TaxCalculator` | Progressive tax engine with bracket-based computation and deduction application |
-| `calculator.py` | `TaxCalculator.calculate_tax` | Computes tax through all applicable brackets, returns `TaxResult` with full breakdown |
-| `calculator.py` | `TaxCalculator.apply_deductions` | Reduces gross income by deduction amounts (floor at zero), returning taxable income |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `calculator.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `TaxCalculator` validates brackets at construction: each must have `min`, `max`, and `rate` keys; rates must be between 0 and 1.
-- Brackets are automatically sorted by `min` value regardless of input order.
-- `calculate_tax` processes brackets sequentially, taxing each income slice at the bracket's marginal rate.
-- `effective_rate` is `total_tax / income` (zero if income is zero).
-- `apply_deductions` accepts a list of deduction dicts with `name`, `amount`, and optional `type`; negative amounts raise `TaxError`.
-- All monetary results are rounded to 2 decimal places; effective rates to 6 decimal places.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `calculator.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: Python stdlib only (`dataclasses`)
-- **Used by**: `finance.payroll.processor.PayrollProcessor` (imports `TaxCalculator` and `TaxResult` for federal withholding)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Siblings**: [forecasting](../forecasting/AGENTS.md) | [ledger](../ledger/AGENTS.md) | [payroll](../payroll/AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [finance](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

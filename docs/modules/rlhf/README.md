@@ -1,25 +1,15 @@
-# RLHF
+# rlhf
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Reinforcement Learning from Human Feedback pipeline and reward modeling.
+Documentation files and guides.
 
-## Source
-
-**Source code**: [`src/codomyrmex/rlhf/`](../../../src/codomyrmex/rlhf/)
-
-## MCP Tools
-
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
-
-## Related Documentation
-
-- [Source README](../../../src/codomyrmex/rlhf/README.md)
-- [API Specification](../../../src/codomyrmex/rlhf/API_SPECIFICATION.md)
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Parent**: [Module Documentation](../README.md)
-- **Root**: [docs/](../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

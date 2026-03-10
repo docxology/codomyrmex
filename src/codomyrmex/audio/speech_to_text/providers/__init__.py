@@ -9,12 +9,13 @@ from .base import STTProvider
 # Conditionally import providers based on availability
 try:
     from .whisper_provider import (
+        FASTER_WHISPER_AVAILABLE,
         SUPPORTED_FORMATS,
         WHISPER_LANGUAGES,
         WhisperProvider,
     )
 
-    WHISPER_AVAILABLE = True
+    WHISPER_AVAILABLE = FASTER_WHISPER_AVAILABLE
 except ImportError:
     WHISPER_LANGUAGES = []
     SUPPORTED_FORMATS = set()

@@ -1,70 +1,50 @@
-# Agent Guidelines - Model Context Protocol
+# Codomyrmex Agents — docs/modules/model_context_protocol
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-MCP server/client implementation for AI agent tool access.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `index.md` – Project file
+- `technical_overview.md` – Project file
+- `tutorials/` – Directory containing tutorials components
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **MCPServer** — MCP server implementation
-- **MCPClient** — Client to connect to servers
-- **Tool** — Tool definition
-- **Resource** — Resource definition
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `USAGE_EXAMPLES.md`
+- `index.md`
+- `technical_overview.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Define tools clearly** — Schema and descriptions
-2. **Validate input** — Check tool parameters
-3. **Return structured** — Consistent response format
-4. **Handle errors** — Graceful error responses
-5. **Document capabilities** — List all available tools
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.model_context_protocol import (
-    MCPServer, Tool, Resource, run_server
-)
-
-# Define tools
-@Tool(name="search", description="Search codebase")
-def search_code(query: str, limit: int = 10):
-    return find_matches(query, limit)
-
-# Create server
-server = MCPServer(name="codomyrmex")
-server.register_tool(search_code)
-
-# Add resources
-server.register_resource(Resource(
-    uri="file:///project",
-    name="Project Files",
-    mimeType="text/plain"
-))
-
-# Run server
-run_server(server, port=8080)
-
-# Client usage
-client = MCPClient("http://localhost:8080")
-result = client.call_tool("search", query="function")
-```
-
-## Testing Patterns
-
-```python
-# Verify tool registration
-server = MCPServer("test")
-server.register_tool(search_code)
-assert "search" in server.list_tools()
-
-# Verify tool execution
-result = server.call_tool("search", query="test")
-assert result is not None
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

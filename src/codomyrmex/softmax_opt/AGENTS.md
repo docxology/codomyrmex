@@ -1,57 +1,45 @@
-# Softmax Opt Module -- Agent Capabilities
+# Codomyrmex Agents — src/codomyrmex/softmax_opt
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Access Matrix
+## Purpose
+Contains components for the src system.
 
-This document defines which PAI agent types can access softmax_opt tools and at what trust level.
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `kernel.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-### Engineer Agent
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-**Access**: Full access to all tools
-**Trust Level**: TRUSTED
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `kernel.py`
+- `mcp_tools.py`
+- `py.typed`
 
-| Tool | Capabilities |
-|------|-------------|
-| `compute_softmax` | Compute softmax with all variants (standard, log, online) and temperature control |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Use Cases**: Building attention mechanisms, implementing loss functions, probability calibration.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Architect Agent
-
-**Access**: Read-only computation
-**Trust Level**: OBSERVED
-
-| Tool | Capabilities |
-|------|-------------|
-| `compute_softmax` | Evaluate numerical stability properties and entropy of distributions |
-
-**Use Cases**: Analyzing attention distributions, evaluating model confidence calibration.
-
-### QATester Agent
-
-**Access**: Correctness validation
-**Trust Level**: OBSERVED
-
-| Tool | Capabilities |
-|------|-------------|
-| `compute_softmax` | Validate sum-to-one property, numerical stability with extreme inputs |
-
-**Use Cases**: Testing softmax implementations for edge cases (large values, all-zero, single element).
-
-## Trust Levels
-
-| Level | Description |
-|-------|-------------|
-| TRUSTED | Full read/write access to all module capabilities |
-| OBSERVED | Read-only access, results logged for audit |
-| UNTRUSTED | No access |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
-| **Architect** | Read + Architecture review | Read-only | SAFE |
-| **QATester** | Validation + output verification | Read + Inspect | SAFE |
-| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

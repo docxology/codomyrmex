@@ -1,23 +1,35 @@
 # coding
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `coding` module provides core functionality for Coding..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `execution/` - Subdirectory
-- `monitoring/` - Subdirectory
-- `review/` - Subdirectory
-- `sandbox/` - Subdirectory
-- `test_debugging.py` - Test Debugging
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `execution/` – Subdirectory
+- `monitoring/` – Subdirectory
+- `parsers/` – Subdirectory
+- `review/` – Subdirectory
+- `sandbox/` – Subdirectory
+- `test_coding_exceptions.py` – File
+- `test_dashboard_mixin.py` – File
+- `test_debugging.py` – File
+- `test_debugging_extended.py` – File
+- `test_execution_core.py` – File
+- `test_generator_module.py` – File
+- `test_mcp_tools_coding.py` – File
+- `test_metrics_mixin.py` – File
+- `test_review_models.py` – File
+- `test_reviewer_analysis.py` – File
+- `test_reviewer_helpers.py` – File
+- `test_reviewer_models.py` – File
+- `test_sandbox_security.py` – File
+- `test_static_analyzer.py` – File
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

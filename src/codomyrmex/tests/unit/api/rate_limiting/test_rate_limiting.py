@@ -1,8 +1,11 @@
-"""Comprehensive tests for the codomyrmex.api.rate_limiting module.
+"""
+Comprehensive tests for the codomyrmex.api.rate_limiting module.
 
 Tests cover all public API surface: RateLimitResult, FixedWindowLimiter,
 SlidingWindowLimiter, TokenBucketLimiter, CompositeRateLimiter,
 RateLimiterMiddleware, and the create_rate_limiter factory.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
 """
 
 import time

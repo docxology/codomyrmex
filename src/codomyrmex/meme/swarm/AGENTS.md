@@ -1,40 +1,47 @@
-# Codomyrmex Agents -- src/codomyrmex/meme/swarm
+# Codomyrmex Agents — src/codomyrmex/meme/swarm
 
-**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Models swarm intelligence and collective behavior using Reynolds flocking rules (separation, alignment, cohesion). Agents operate in 3D space with position and velocity vectors. Provides consensus algorithms via state-based voting, quorum sensing for local density detection, and coherence metrics for emergent pattern tracking.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `engine.py` | `SwarmEngine` | Orchestrator: create agents, advance simulation steps, compute state metrics |
-| `flocking.py` | `update_flock` | Apply separation/alignment/cohesion forces; modifies agents in-place |
-| `consensus.py` | `reach_consensus` | Check if agents in "positive" state exceed threshold ratio |
-| `consensus.py` | `quorum_sensing` | Calculate average local neighbor density within given radius |
-| `models.py` | `SwarmAgent` | 3D agent with position, velocity, state, and integrity |
-| `models.py` | `FlockingParams` | Reynolds parameters: weights, max speed/force, perception radius |
-| `models.py` | `SwarmState` | Swarm snapshot: centroid, average velocity, coherence metric |
-| `models.py` | `EmergentPattern` | Detected collective pattern with strength and duration |
-| `models.py` | `ConsensusState` | Voting process state: proposal, round, agreed ratio, status |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `consensus.py` – Project file
+- `engine.py` – Project file
+- `flocking.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Neighbor search is O(N^2) per step; scales poorly above ~1000 agents.
-- Coherence = norm of mean normalized velocity vector (0 = disordered, 1 = fully aligned).
-- Consensus voting uses string matching (`state == "positive"` counts as yes).
-- Force limiting caps acceleration at `max_force`; speed limiting caps velocity at `max_speed`.
-- Individual agent logic should remain simple for scalability.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `consensus.py`
+- `engine.py`
+- `flocking.py`
+- `models.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `numpy` (3D vector math, distance calculations)
-- **Used by**: `meme.rhizome` (swarm agents traverse rhizome network edges), `meme.contagion` (contagion dynamics parameterize swarm panic thresholds)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [meme](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [meme](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

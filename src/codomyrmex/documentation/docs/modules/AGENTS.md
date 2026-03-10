@@ -1,122 +1,161 @@
-# Codomyrmex Modules -- Agent Integration Overview
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-This document is the top-level agent integration guide for all codomyrmex modules. Each module subdirectory contains its own `AGENTS.md` with detailed MCP tool tables, parameter schemas, and trust classifications.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `agentic_memory/` – Directory containing agentic_memory components
+- `agents/` – Directory containing agents components
+- `ai_gateway/` – Directory containing ai_gateway components
+- `aider/` – Directory containing aider components
+- `api/` – Directory containing api components
+- `audio/` – Directory containing audio components
+- `auth/` – Directory containing auth components
+- `autograd/` – Directory containing autograd components
+- `bio_simulation/` – Directory containing bio_simulation components
+- `cache/` – Directory containing cache components
+- `calendar_integration/` – Directory containing calendar_integration components
+- `cerebrum/` – Directory containing cerebrum components
+- `ci_cd_automation/` – Directory containing ci_cd_automation components
+- `cli/` – Directory containing cli components
+- `cloud/` – Directory containing cloud components
+- `coding/` – Directory containing coding components
+- `collaboration/` – Directory containing collaboration components
+- `compression/` – Directory containing compression components
+- `concurrency/` – Directory containing concurrency components
+- `config_audits/` – Directory containing config_audits components
+- `config_management/` – Directory containing config_management components
+- `config_monitoring/` – Directory containing config_monitoring components
+- `container_optimization/` – Directory containing container_optimization components
+- `containerization/` – Directory containing containerization components
+- `cost_management/` – Directory containing cost_management components
+- `crypto/` – Directory containing crypto components
+- `dark/` – Directory containing dark components
+- `data_curation/` – Directory containing data_curation components
+- `data_lineage/` – Directory containing data_lineage components
+- `data_visualization/` – Directory containing data_visualization components
+- `database_management/` – Directory containing database_management components
+- `defense/` – Directory containing defense components
+- `demos/` – Directory containing demos components
+- `dependency_injection/` – Directory containing dependency_injection components
+- `deployment/` – Directory containing deployment components
+- `distillation/` – Directory containing distillation components
+- `distributed_training/` – Directory containing distributed_training components
+- `docs_gen/` – Directory containing docs_gen components
+- `documents/` – Directory containing documents components
+- `dpo/` – Directory containing dpo components
+- `edge_computing/` – Directory containing edge_computing components
+- `email/` – Directory containing email components
+- `embodiment/` – Directory containing embodiment components
+- `encryption/` – Directory containing encryption components
+- `environment_setup/` – Directory containing environment_setup components
+- `eval_harness/` – Directory containing eval_harness components
+- `events/` – Directory containing events components
+- `evolutionary_ai/` – Directory containing evolutionary_ai components
+- `examples/` – Directory containing examples components
+- `exceptions/` – Directory containing exceptions components
+- `feature_flags/` – Directory containing feature_flags components
+- `feature_store/` – Directory containing feature_store components
+- `file_system/` – Directory containing file_system components
+- `finance/` – Directory containing finance components
+- `formal_verification/` – Directory containing formal_verification components
+- `fpf/` – Directory containing fpf components
+- `git_analysis/` – Directory containing git_analysis components
+- `git_operations/` – Directory containing git_operations components
+- `graph_rag/` – Directory containing graph_rag components
+- `ide/` – Directory containing ide components
+- `identity/` – Directory containing identity components
+- `image/` – Directory containing image components
+- `interpretability/` – Directory containing interpretability components
+- `languages/` – Directory containing languages components
+- `llm/` – Directory containing llm components
+- `logging_monitoring/` – Directory containing logging_monitoring components
+- `logistics/` – Directory containing logistics components
+- `logit_processor/` – Directory containing logit_processor components
+- `lora/` – Directory containing lora components
+- `maintenance/` – Directory containing maintenance components
+- `market/` – Directory containing market components
+- `matmul_kernel/` – Directory containing matmul_kernel components
+- `meme/` – Directory containing meme components
+- `ml_pipeline/` – Directory containing ml_pipeline components
+- `model_context_protocol/` – Directory containing model_context_protocol components
+- `model_merger/` – Directory containing model_merger components
+- `model_ops/` – Directory containing model_ops components
+- `module_template/` – Directory containing module_template components
+- `multimodal/` – Directory containing multimodal components
+- `nas/` – Directory containing nas components
+- `networking/` – Directory containing networking components
+- `networks/` – Directory containing networks components
+- `neural/` – Directory containing neural components
+- `operating_system/` – Directory containing operating_system components
+- `orchestrator/` – Directory containing orchestrator components
+- `pai_pm/` – Directory containing pai_pm components
+- `peft/` – Directory containing peft components
+- `performance/` – Directory containing performance components
+- `physical_management/` – Directory containing physical_management components
+- `plugin_system/` – Directory containing plugin_system components
+- `privacy/` – Directory containing privacy components
+- `prompt_engineering/` – Directory containing prompt_engineering components
+- `quantization/` – Directory containing quantization components
+- `quantum/` – Directory containing quantum components
+- `relations/` – Directory containing relations components
+- `release/` – Directory containing release components
+- `rlhf/` – Directory containing rlhf components
+- `scrape/` – Directory containing scrape components
+- `search/` – Directory containing search components
+- `security/` – Directory containing security components
+- `semantic_router/` – Directory containing semantic_router components
+- `serialization/` – Directory containing serialization components
+- `simulation/` – Directory containing simulation components
+- `skills/` – Directory containing skills components
+- `slm/` – Directory containing slm components
+- `softmax_opt/` – Directory containing softmax_opt components
+- `soul/` – Directory containing soul components
+- `spatial/` – Directory containing spatial components
+- `ssm/` – Directory containing ssm components
+- `static_analysis/` – Directory containing static_analysis components
+- `synthetic_data/` – Directory containing synthetic_data components
+- `system_discovery/` – Directory containing system_discovery components
+- `telemetry/` – Directory containing telemetry components
+- `templating/` – Directory containing templating components
+- `terminal_interface/` – Directory containing terminal_interface components
+- `testing/` – Directory containing testing components
+- `tests/` – Directory containing tests components
+- `text_to_sql/` – Directory containing text_to_sql components
+- `tokenizer/` – Directory containing tokenizer components
+- `tool_use/` – Directory containing tool_use components
+- `tree_sitter/` – Directory containing tree_sitter components
+- `utils/` – Directory containing utils components
+- `validation/` – Directory containing validation components
+- `vector_store/` – Directory containing vector_store components
+- `video/` – Directory containing video components
+- `vision/` – Directory containing vision components
+- `wallet/` – Directory containing wallet components
+- `website/` – Directory containing website components
 
-## Agent Access Patterns
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-Agents interact with codomyrmex modules through three channels:
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
 
-1. **MCP Tools** (primary) -- Auto-discovered via `@mcp_tool` decorators in each module's `mcp_tools.py`. Currently 141 modules expose ~474 tools.
-2. **Direct Python Import** -- For modules without MCP tools, agents import classes directly (e.g., `from codomyrmex.compression import compress`).
-3. **CLI** -- The `codomyrmex` CLI exposes module functionality as shell commands.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Trust Gateway
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-All MCP tools pass through the Trust Gateway before execution.
-
-| Trust Level | Description | Tools |
-|-------------|-------------|-------|
-| **Safe** | Read-only, no side effects | ~231 tools (majority) |
-| **Destructive** | Writes, executes, or modifies state | 4 tools: `write_file`, `run_command`, `run_tests`, `call_module_function` |
-
-Trust elevation: UNTRUSTED --> VERIFIED (`/codomyrmexVerify`) --> TRUSTED (`/codomyrmexTrust`)
-
-## MCP Tool Summary by Module
-
-### High-Tool-Count Modules (10+ tools)
-
-| Module | Tool Count | Key Tools |
-|--------|-----------|-----------|
-| [git_operations](git_operations/AGENTS.md) | 35 | git_clone, git_commit, git_push, git_pull, git_branch, git_merge, git_diff, ... |
-| [git_analysis](git_analysis/AGENTS.md) | 16 | git_analysis_commit_history, git_analysis_contributor_stats, git_analysis_file_changes, ... |
-| [email](email/AGENTS.md) | 12 | agentmail_send_message, agentmail_list_messages, gmail_send_message, gmail_list_messages, ... |
-| [formal_verification](formal_verification/AGENTS.md) | 8 | clear_model, add_item, delete_item, replace_item, get_model, solve_model, ... |
-
-### Medium-Tool-Count Modules (3-9 tools)
-
-| Module | Tool Count | Key Tools |
-|--------|-----------|-----------|
-| [skills](skills/AGENTS.md) | 7 | skills_list, skills_invoke, skills_search, ... |
-| [calendar_integration](calendar_integration/AGENTS.md) | 5 | calendar_list_events, calendar_create_event, calendar_get_event, calendar_delete_event, calendar_update_event |
-| [coding](coding/AGENTS.md) | 5 | code_execute, code_list_languages, code_review_file, code_review_project, code_debug |
-| [operating_system](operating_system/AGENTS.md) | 6 | OS-level operations across Linux, Mac, and Windows |
-| [cache](cache/AGENTS.md) | 4 | cache_get, cache_set, cache_delete, cache_stats |
-| [containerization](containerization/AGENTS.md) | 4 | container_runtime_status, container_build, container_list, container_security_scan |
-| [llm](llm/AGENTS.md) | 4 | generate_text, list_local_models, query_fabric_metadata, ... |
-| [prompt_engineering](prompt_engineering/AGENTS.md) | 4 | Prompt template CRUD |
-| [vector_store](vector_store/AGENTS.md) | 4 | Vector embedding operations |
-| [agentic_memory](agentic_memory/AGENTS.md) | 3 | memory_put, memory_get, memory_search |
-| [agents](agents/AGENTS.md) | 3 | execute_agent, list_agents, get_agent_memory |
-| [api](api/AGENTS.md) | 3 | api_list_endpoints, api_get_spec, api_health_check |
-| [auth](auth/AGENTS.md) | 3 | auth_validate_token, auth_list_permissions, auth_check_permission |
-| [ci_cd_automation](ci_cd_automation/AGENTS.md) | 3 | ci_list_pipelines, ci_trigger_pipeline, ci_get_pipeline_status |
-| [cloud](cloud/AGENTS.md) | 3 | list_cloud_instances, list_s3_buckets, upload_file_to_s3 |
-| [collaboration](collaboration/AGENTS.md) | 3 | swarm_submit_task, pool_status, list_agents |
-| [config_management](config_management/AGENTS.md) | 3 | get_config, set_config, validate_config |
-| [crypto](crypto/AGENTS.md) | 3 | hash_data, verify_hash, generate_key |
-| [database_management](database_management/AGENTS.md) | 3 | Database operations |
-| [deployment](deployment/AGENTS.md) | 3 | Deployment orchestration |
-| [documents](documents/AGENTS.md) | 3 | Document transformation |
-| [events](events/AGENTS.md) | 3 | emit_event, list_event_types, get_event_history |
-| [feature_flags](feature_flags/AGENTS.md) | 3 | Feature flag operations |
-| [model_context_protocol](model_context_protocol/AGENTS.md) | 3 | inspect_server, list_registered_tools, get_tool_schema |
-| [model_ops](model_ops/AGENTS.md) | 3 | ML model operations |
-| [search](search/AGENTS.md) | 3 | search_documents, search_index_query, search_fuzzy |
-| [security](security/AGENTS.md) | 3 | scan_vulnerabilities, scan_secrets, audit_code_security |
-| [serialization](serialization/AGENTS.md) | 3 | Serialization operations |
-| [static_analysis](static_analysis/AGENTS.md) | 3 | Static analysis tools |
-| [system_discovery](system_discovery/AGENTS.md) | 3 | health_check, list_modules, dependency_tree |
-| [terminal_interface](terminal_interface/AGENTS.md) | 3 | Terminal output operations |
-| [tree_sitter](tree_sitter/AGENTS.md) | 3 | AST parsing tools |
-| [utils](utils/AGENTS.md) | 3 | Utility operations |
-| [validation](validation/AGENTS.md) | 3 | validate_schema, validate_config, validation_summary |
-
-### Low-Tool-Count Modules (1-2 tools)
-
-| Module | Tool Count | Key Tools |
-|--------|-----------|-----------|
-| [audio](audio/AGENTS.md) | 2 | audio_get_capabilities, audio_list_voices |
-| [cerebrum](cerebrum/AGENTS.md) | 2 | query_knowledge_base, add_case_reference |
-| [cli](cli/AGENTS.md) | 2 | CLI operations |
-| [concurrency](concurrency/AGENTS.md) | 2 | Concurrency operations |
-| [data_visualization](data_visualization/AGENTS.md) | 2 | generate_chart, export_dashboard |
-| [docs_gen](docs_gen/AGENTS.md) | 2 | generate_module_docs, audit_rasp_compliance |
-| [encryption](encryption/AGENTS.md) | 2 | Encryption operations |
-| [environment_setup](environment_setup/AGENTS.md) | 2 | Environment validation |
-| [ide](ide/AGENTS.md) | 2 | IDE integration |
-| [maintenance](maintenance/AGENTS.md) | 2 | maintenance_health_check, maintenance_list_tasks |
-| [orchestrator](orchestrator/AGENTS.md) | 2 | get_scheduler_metrics, analyze_workflow_dependencies |
-| [performance](performance/AGENTS.md) | 2 | performance_check_regression, performance_compare_benchmarks |
-| [plugin_system](plugin_system/AGENTS.md) | 2 | plugin_scan_entry_points, plugin_resolve_dependencies |
-| [scrape](scrape/AGENTS.md) | 2 | scrape_extract_content, scrape_text_similarity |
-| [templating](templating/AGENTS.md) | 2 | Templating operations |
-| [testing](testing/AGENTS.md) | 2 | Test runner operations |
-| [tool_use](tool_use/AGENTS.md) | 2 | Tool operations |
-| [logging_monitoring](logging_monitoring/AGENTS.md) | 1 | logging_format_structured |
-| [relations](relations/AGENTS.md) | 1 | relations_score_strength |
-
-### No MCP Tools (direct Python import only)
-
-bio_simulation, compression, dark, defense, dependency_injection, edge_computing, embodiment, evolutionary_ai, examples, exceptions, finance, fpf, graph_rag, identity, logistics, market, meme, module_template, networking, networks, physical_management, privacy, quantum, release, simulation, spatial, telemetry, tests, video, wallet, website
-
-## PAI Phase Mapping
-
-| PAI Phase | Primary Modules |
-|-----------|----------------|
-| OBSERVE | system_discovery, git_operations, search, git_analysis |
-| THINK | cerebrum, agents (ThinkingAgent) |
-| PLAN | orchestrator, logistics |
-| BUILD | coding, agents (ai_code_editing) |
-| EXECUTE | agents (all providers), git_operations |
-| VERIFY | static_analysis, security, testing, validation |
-| LEARN | agentic_memory, logging_monitoring |
-
-## Navigation
-
-- **Module index**: [README.md](README.md)
-- **Technical specs**: [SPEC.md](SPEC.md)
-- **Source modules**: [src/codomyrmex/](../../../src/codomyrmex/)
+## Navigation Links
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

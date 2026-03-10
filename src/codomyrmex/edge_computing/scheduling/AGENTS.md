@@ -1,33 +1,41 @@
-# edge_computing/scheduling — Agent Coordination
+# Codomyrmex Agents — src/codomyrmex/edge_computing/scheduling
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides periodic and one-shot scheduling of edge function invocations. The scheduler manages job registration, due-time evaluation, and execution tracking.
-
-## Key Components
-
-| Component | Role |
-|-----------|------|
-| `ScheduleType` | Enum: `ONCE` (single execution, auto-disables), `INTERVAL` (repeating with configurable period), `CRON_LIKE` (placeholder for cron expressions) |
-| `ScheduledJob` | Job dataclass: function_id, schedule type, interval, next/last run, run count, max runs, enabled flag, args/kwargs |
-| `EdgeScheduler` | Thread-safe job registry with add/remove/list, due-job detection, and execution marking |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
+- `scheduler.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `EdgeScheduler.add_job(job_id, function_id, ...)` creates a `ScheduledJob` with `next_run` set to `datetime.now()` (immediately eligible).
-- `EdgeScheduler.get_due_jobs()` returns enabled, non-exhausted jobs whose `next_run <= now`.
-- `EdgeScheduler.mark_executed(job_id)` increments `run_count`, updates `last_run`, and: for `ONCE` jobs sets `enabled = False`; for `INTERVAL` jobs advances `next_run` by `interval_seconds`.
-- `ScheduledJob.exhausted` returns True when `run_count >= max_runs` (if `max_runs` is set).
-- All job operations are protected by `threading.Lock`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
+- `scheduler.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Core runtime**: Scheduler references function IDs that are deployed in `EdgeRuntime`. The caller is responsible for invoking `runtime.invoke()` when jobs come due.
-- **Metrics**: Invocation results from scheduled runs can be recorded in `EdgeMetrics`.
-- **Infrastructure**: Scheduled jobs can trigger periodic cache purges or sync operations.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [edge_computing README](../../edge_computing/README.md)
-- **Siblings**: [core](../core/AGENTS.md) | [infrastructure](../infrastructure/AGENTS.md)
-- **Spec**: [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [edge_computing](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

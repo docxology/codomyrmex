@@ -1,32 +1,45 @@
-# PEFT -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/peft
 
-## Module Purpose
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Provides parameter-efficient fine-tuning adapters (LoRA, Prefix Tuning, IA3) for AI agents that need to understand, compare, or demonstrate PEFT methods without requiring PyTorch.
+## Purpose
+Contains components for the src system.
 
-## MCP Tools
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `adapters.py` – Project file
+- `mcp_tools.py` – Project file
+- `py.typed` – Project file
 
-| Tool | Description | Inputs | Output |
-|------|-------------|--------|--------|
-| `peft_create_adapter` | Create a PEFT adapter and return parameter stats | `method: str`, `d_model: int`, `rank: int`, `alpha: float` | `{method, trainable_params, full_finetune_params, reduction_factor}` |
-| `peft_compare_methods` | Compare all PEFT methods for a given dimension | `d_model: int`, `rank: int` | `{full_finetune, lora, prefix, ia3}` |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Agent Use Cases
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `adapters.py`
+- `mcp_tools.py`
+- `py.typed`
 
-### Method Selection
-An agent can use `peft_compare_methods` to recommend the most parameter-efficient method for a given model size.
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Cost Estimation
-Use `peft_create_adapter` to estimate training cost reduction from PEFT vs full fine-tuning.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Educational Demonstrations
-Agents can explain PEFT concepts with concrete numbers by creating adapters and showing parameter counts.
-
-## Example Agent Workflow
-
-```
-1. Agent receives: "What's the most efficient way to fine-tune a 512-dim model?"
-2. Agent calls: peft_compare_methods(d_model=512, rank=4)
-3. Response: {"full_finetune": 262144, "lora": 4096, "prefix": 20480, "ia3": 3072}
-4. Agent explains: "IA3 is most efficient at 3072 params (85x reduction)"
-```
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

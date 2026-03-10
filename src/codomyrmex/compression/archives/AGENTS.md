@@ -1,34 +1,41 @@
-# Codomyrmex Agents -- src/codomyrmex/compression/archives
+# Codomyrmex Agents — src/codomyrmex/compression/archives
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides multi-format archive creation and extraction supporting ZIP, TAR, and TAR.GZ formats. The `ArchiveManager` class bundles files into compressed archives and extracts them, with automatic format detection based on file extension.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `archive_manager.py` | `ArchiveManager` | Creates and extracts ZIP, TAR, and TAR.GZ archives |
-| `archive_manager.py` | `ArchiveManager.create_archive` | Bundles a list of `Path` objects into an archive with a specified format |
-| `archive_manager.py` | `ArchiveManager.extract_archive` | Extracts archive contents to a target directory |
-| `archive_manager.py` | `CompressionError` | Domain-specific error raised when archive operations fail |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `archive_manager.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Archives are created using `zipfile.ZipFile` (ZIP) or `tarfile.open` (TAR/TAR.GZ) from the Python standard library.
-- Only files that exist on disk are included when creating archives; missing files are silently skipped.
-- Format detection during extraction is based on the archive file extension (`.zip`, `.tar`, `.gz`, `.tar.gz`).
-- All errors are logged via `logging_monitoring` before being re-raised as `CompressionError`.
-- The output directory for extraction is created automatically via `mkdir(parents=True, exist_ok=True)`.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `archive_manager.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.exceptions.CodomyrmexError`, `codomyrmex.logging_monitoring.core.logger_config`
-- **Used by**: Higher-level compression utilities, CI/CD artifact packaging, backup workflows
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [../AGENTS.md](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [compression](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

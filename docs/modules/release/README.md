@@ -1,26 +1,16 @@
-# release Module Documentation
+# release
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Release management utilities for the Codomyrmex platform. Provides tools for versioning, changelog generation, and release coordination.
+Documentation files and guides.
 
-## Features
-
-- Semantic versioning management
-- Changelog generation
-- Release artifact packaging
-- Version bump automation
-
-## Related Modules
-
-- [ci_cd_automation](../ci_cd_automation/) — CI/CD pipeline management
-- [deployment](../deployment/) — Deployment strategies
-- [git_operations](../git_operations/) — Git workflow automation
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Source**: [../../src/codomyrmex/release/](../../../src/codomyrmex/release/)
-- **Parent**: [modules/](../README.md)
-- **Root**: [Project Root](../../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

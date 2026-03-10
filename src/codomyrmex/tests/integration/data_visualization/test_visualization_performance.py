@@ -106,7 +106,7 @@ class TestVisualizationPerformanceWorkflow:
 
         # Test bar chart creation
         bar_data = {"categories": ["A", "B", "C"], "values": [10, 20, 15]}
-        bar_result = create_bar_chart(bar_data, "Test Bar Chart")
+        bar_result = create_bar_chart(bar_data["categories"], bar_data["values"], "Test Bar Chart")
 
         assert bar_result is not None
         assert isinstance(bar_result, mpl.figure.Figure)
@@ -194,7 +194,7 @@ class TestVisualizationPerformanceWorkflow:
                 "categories": ["Jan", "Feb", "Mar", "Apr", "May"],
                 "values": [100, 120, 140, 110, 160],
             }
-            return create_bar_chart(data, "Monthly Sales")
+            return create_bar_chart(data["categories"], data["values"], "Monthly Sales")
 
         # Profile the chart creation
         profile_result = profile_function(create_test_chart)
@@ -249,14 +249,14 @@ class TestVisualizationPerformanceWorkflow:
 
         # Test with invalid data — source returns None when required keys are missing
         invalid_data = {"invalid": "data"}
-        result = create_bar_chart(invalid_data, "Invalid Chart")
+        result = create_bar_chart([], [], "Invalid Chart")
 
         # Should handle gracefully and return None (no exception raised)
         assert result is None
 
         # Test with empty data — source returns None for empty categories/values
         empty_data = {"categories": [], "values": []}
-        result = create_bar_chart(empty_data, "Empty Chart")
+        result = create_bar_chart(empty_data["categories"], empty_data["values"], "Empty Chart")
 
         assert result is None
 
@@ -316,7 +316,7 @@ class TestVisualizationPerformanceWorkflow:
             }
             import matplotlib.figure
 
-            chart = create_bar_chart(viz_data, "Performance Chart")
+            chart = create_bar_chart(viz_data["categories"], viz_data["values"], "Performance Chart")
             assert isinstance(chart, matplotlib.figure.Figure)
 
         if PERFORMANCE_AVAILABLE:
@@ -375,7 +375,7 @@ class TestVisualizationPerformanceWorkflow:
             import matplotlib.figure
 
             # Test basic creation
-            result = create_bar_chart(data, "Format Test")
+            result = create_bar_chart(data["categories"], data["values"], "Format Test")
             assert isinstance(result, matplotlib.figure.Figure)
 
             # Could test different formats if supported
@@ -418,7 +418,7 @@ class TestVisualizationPerformanceWorkflow:
             from codomyrmex.data_visualization import create_bar_chart
 
             data = {"categories": ["X", "Y", "Z"], "values": [10, 20, 30]}
-            create_bar_chart(data, "Integration Test")
+            create_bar_chart(data["categories"], data["values"], "Integration Test")
             workflow_steps += 1
 
         # Step 2: Profile a function

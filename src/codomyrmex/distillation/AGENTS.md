@@ -1,55 +1,45 @@
-# Agent Guidelines -- Knowledge Distillation
+# Codomyrmex Agents — src/codomyrmex/distillation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Contains components for the src system.
 
-Knowledge Distillation provides teacher-student model compression via soft label transfer.
-Implements Hinton et al. (2015) with temperature-scaled softmax and combined KL/CE loss.
-One MCP tool (`distillation_compute_loss`) exposes the computation to PAI agents.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Exports `DistillationLoss`, `soft_labels`, `distillation_loss` |
-| `pipeline.py` | Core implementation (soft_labels, distillation_loss, DistillationLoss) |
-| `mcp_tools.py` | MCP tool: `distillation_compute_loss` |
-
-## Key Classes
-
-- **DistillationLoss** -- Stateful loss wrapper with temperature and alpha
-- **soft_labels** -- Temperature-scaled softmax for generating soft targets
-- **distillation_loss** -- Combined KL + CE loss function
-
-## Agent Instructions
-
-1. **Generate soft targets** -- Use `soft_labels(logits, temperature)` from teacher
-2. **Compute loss** -- Use `distillation_loss(student, teacher, labels, T, alpha)`
-3. **Tune temperature** -- Higher T = softer targets (more dark knowledge)
-4. **Tune alpha** -- Higher alpha = more weight on distillation vs hard labels
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `distillation_compute_loss` | Compute KD loss on synthetic teacher-student data | SAFE |
+## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `mcp_tools.py` – Project file
+- `pipeline.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `soft_labels` uses numerically stable softmax (max-subtraction trick)
-- `distillation_loss` with `true_labels=None` sets CE loss to 0
-- T^2 normalization is applied to the KL component (standard practice)
-- Teacher accuracy is computed as argmax match against true_labels
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `mcp_tools.py`
+- `pipeline.py`
+- `py.typed`
 
-## PAI Agent Role Access Matrix
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full computation | `distillation_compute_loss` | SAFE |
-| **Architect** | Temperature/alpha analysis | `distillation_compute_loss` | SAFE |
-| **QATester** | Verification | `distillation_compute_loss` -- loss component checks | SAFE |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,4 +1,6 @@
-"""Comprehensive unit tests for APIKeyManager and APIKey.
+"""Comprehensive zero-mock tests for APIKeyManager and APIKey.
+
+Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 
 Covers:
 - APIKey dataclass: construction, is_expired, is_valid properties

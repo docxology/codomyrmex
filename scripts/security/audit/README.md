@@ -1,24 +1,17 @@
-# Security Audit Scripts
+# audit
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for security auditing, demonstrating automated code security audits, vulnerability assessment, and compliance reporting.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `audit_demo.py` | Demonstrates security audit workflows with vulnerability reporting |
-
-## Usage
-
-```bash
-uv run python scripts/security/audit/audit_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `audit_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: security/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [security](../README.md)
+- **Project Root**: ../../../README.md

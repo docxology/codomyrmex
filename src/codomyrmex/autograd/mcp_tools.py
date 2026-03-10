@@ -38,7 +38,8 @@ def autograd_compute(expression: str, variables: dict) -> dict:
     """Evaluate a simple expression and compute its gradient.
 
     Args:
-        expression: Simple math expression like "x*x + y" using +,-,*,** ops
+        expression: Simple math expression like "x*x + y" using +,-,*,** ops.
+            Available functions: relu, tanh, sigmoid.
         variables: Dict of variable names to float values, e.g. {"x": 2.0, "y": 3.0}
 
     Returns:
@@ -46,7 +47,12 @@ def autograd_compute(expression: str, variables: dict) -> dict:
     """
     # Build Value objects for each variable
     var_values: dict[str, Value] = {}
-    namespace: dict[str, Any] = {"__builtins__": {}}
+    namespace: dict[str, Any] = {
+        "__builtins__": {},
+        "relu": relu,
+        "tanh": tanh,
+        "sigmoid": sigmoid,
+    }
 
     for name, val in variables.items():
         if not name.isidentifier():

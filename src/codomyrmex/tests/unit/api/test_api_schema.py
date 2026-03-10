@@ -1,4 +1,8 @@
-"""Unit tests for API schema definitions and OpenAPI specification generation."""
+"""
+Unit tests for API schema definitions and OpenAPI specification generation.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
+"""
 
 import json
 import os

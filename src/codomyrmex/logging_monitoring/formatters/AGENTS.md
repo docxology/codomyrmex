@@ -1,41 +1,43 @@
-# Codomyrmex Agents -- src/codomyrmex/logging_monitoring/formatters
+# Codomyrmex Agents — src/codomyrmex/logging_monitoring/formatters
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides log formatters for structured output: compact JSON, pretty-printed
-JSON for development, redacted JSON for production (auto-redacts sensitive
-fields like passwords and tokens), and a full structured formatter with
-configurable fields, correlation IDs, and stacktrace capture.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `json_formatter.py` | `JSONFormatter` | Compact JSON log formatter with include/exclude field filtering |
-| `json_formatter.py` | `PrettyJSONFormatter` | Indented JSON formatter for development and debugging |
-| `json_formatter.py` | `RedactedJSONFormatter` | Auto-redacts fields matching sensitive patterns (password, token, api_key, etc.) |
-| `structured_formatter.py` | `StructuredFormatter` | JSON-lines formatter with configurable fields, static fields, correlation IDs, and stacktrace |
-| `structured_formatter.py` | `FormatterConfig` | Configuration dataclass for StructuredFormatter (timestamp, level, module, stacktrace toggles) |
-| `structured_formatter.py` | `LogLevel` | Enum for standard log levels (DEBUG through CRITICAL) |
-| `structured_formatter.py` | `LogContext` | Contextual metadata (correlation_id, module, function, extra) |
-| `structured_formatter.py` | `StructuredLogEntry` | Single structured log entry with level, message, context, error, and fields |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `json_formatter.py` – Project file
+- `py.typed` – Project file
+- `structured_formatter.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `JSONFormatter` extends `logging.Formatter` and is compatible with Python's standard logging.
-- `RedactedJSONFormatter` recursively scans all field names against `_SENSITIVE_PATTERNS` regex.
-- `StructuredFormatter` is a standalone class (not a `logging.Formatter` subclass) -- it formats `StructuredLogEntry` objects.
-- Messages exceeding `max_message_length` are truncated with `...` suffix.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `json_formatter.py`
+- `py.typed`
+- `structured_formatter.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: stdlib `logging`, `json`, `re`, `time`, `traceback`
-- **Used by**: `logging_monitoring.core.logger_config`, `logging_monitoring.audit.audit_logger`, all modules via `setup_logging()`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [logging_monitoring](../AGENTS.md)
-- **Root**: [../../../../README.md](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [logging_monitoring](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

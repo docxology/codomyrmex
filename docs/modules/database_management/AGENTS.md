@@ -1,72 +1,41 @@
-# Agent Guidelines - Database Management
+# Codomyrmex Agents — docs/modules/database_management
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Database connections, migrations, and query execution.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **DatabaseConnection** — Connection pooling
-- **MigrationManager** — Schema migrations
-- **QueryBuilder** — Safe query construction
-- **TransactionManager** — Transaction handling
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use connection pool** — Don't create per-request
-2. **Parameterize queries** — Never string concatenation
-3. **Migrate safely** — Test migrations first
-4. **Transaction scope** — Explicit transaction boundaries
-5. **Close connections** — Use context managers
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.database_management import (
-    DatabaseConnection, QueryBuilder, MigrationManager
-)
-
-# Connection pooling
-db = DatabaseConnection(
-    host="localhost",
-    database="mydb",
-    pool_size=10
-)
-
-# Safe query execution
-with db.connection() as conn:
-    result = conn.execute(
-        "SELECT * FROM users WHERE id = ?",
-        [user_id]
-    )
-
-# Query builder
-query = QueryBuilder("users")
-query.select("id", "name").where("active", True).limit(10)
-result = db.execute(query.build())
-
-# Migrations
-migrations = MigrationManager(db)
-migrations.migrate_up()
-```
-
-## Testing Patterns
-
-```python
-# Verify connection
-db = DatabaseConnection(url="sqlite:///:memory:")
-assert db.is_connected()
-
-# Verify query builder
-query = QueryBuilder("test")
-query.select("*").where("id", 1)
-sql, params = query.build()
-assert "SELECT" in sql
-assert 1 in params
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

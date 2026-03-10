@@ -2,13 +2,6 @@ import contextlib
 from abc import ABC
 from typing import TYPE_CHECKING, Any
 
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-from matplotlib.axes import Axes
-from matplotlib.figure import Figure
-
 from codomyrmex.cerebrum.core.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization.theme import (
     VisualizationTheme,
@@ -17,14 +10,30 @@ from codomyrmex.cerebrum.visualization.theme import (
 from codomyrmex.logging_monitoring import get_logger
 
 try:
+    import matplotlib as mpl
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.axes import Axes
+    from matplotlib.figure import Figure
+
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
+    mpl = Any  # type: ignore
+    plt = Any  # type: ignore
+
+    class _MockNP:
+        def __getattr__(self, name):
+            return Any
+
+    np = _MockNP()  # type: ignore
     Figure = Any  # type: ignore
     Axes = Any  # type: ignore
 
-with contextlib.suppress(ImportError):
+try:
     import networkx as nx
+except ImportError:
+    nx = None
 
 if TYPE_CHECKING:
     pass

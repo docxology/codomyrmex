@@ -1,36 +1,43 @@
 # Codomyrmex Agents — src/codomyrmex/events/emitters
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides synchronous and asynchronous event emission components with correlation tracking, batch operations, operation lifecycle management (start/update/end), and convenience functions for error, metric, and alert events.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `emitter.py` | `AsyncEventEmitter` | Lightweight async emitter with `emit()` and `emit_later()` (delayed emission via `asyncio.sleep`) |
-| `event_emitter.py` | `EventEmitter` | Full-featured emitter with sync/async emit, batch emit, operation lifecycle (`start_operation` / `update_operation` / `end_operation`), error/metric/alert shortcuts, enable/disable toggle, correlation context, and default metadata |
-| `event_emitter.py` | `EventOperationContext` | Context manager wrapping `EventEmitter.start_operation()` / `end_operation()` with automatic duration tracking and success/failure detection |
-| `event_emitter.py` | `create_emitter()` | Factory function returning an `EventEmitter` for a given source identifier |
-| `event_emitter.py` | `emit_event()` | One-shot convenience function that creates a temporary emitter and publishes a single event |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `emitter.py` – Project file
+- `event_emitter.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `EventEmitter` respects its `enabled` flag; all emit methods are no-ops when disabled.
-- `emit()` catches `RuntimeError` and `AttributeError` from the bus and logs them without propagating.
-- `start_operation()` generates a UUID correlation ID and sets it as the default for subsequent events until `end_operation()` clears it.
-- `end_operation()` sets priority=2 (high) for failed operations.
-- `EventOperationContext.__exit__` automatically calls `end_operation` with `success=False` if an exception occurred.
-- Batch emit (`emit_batch_async`) uses `asyncio.gather` with `return_exceptions=True` to prevent one failure from blocking others.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `emitter.py`
+- `event_emitter.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `events.core.event_bus` (`EventBus`, `get_event_bus`), `events.core.event_schema` (`Event`, `EventType`), `codomyrmex.logging_monitoring`
-- **Used by**: Any module that needs to publish events; typically instantiated via `create_emitter("module_name")`
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [events](../README.md)
-- **Root**: [Codomyrmex](../../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [events](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

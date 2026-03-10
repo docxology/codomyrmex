@@ -1,22 +1,23 @@
 # environment_setup
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `environment_setup` module provides core functionality for Environment Setup..
+Test files and validation suites.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `integration/` - Subdirectory
-- `test_environment_setup.py` - Test Environment Setup
-- `test_environment_setup_comprehensive.py` - Test Environment Setup Comprehensive
-- `unit/` - Subdirectory
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `integration/` – Subdirectory
+- `test_dependency_resolver.py` – File
+- `test_env_improved.py` – File
+- `test_env_robustness.py` – File
+- `test_environment_setup.py` – File
+- `test_environment_setup_mcp_tools.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
-
-- **Parent Module**: [unit](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

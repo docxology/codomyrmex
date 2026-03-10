@@ -1,132 +1,122 @@
-# Codomyrmex Scripts — Thin Orchestrators
+# scripts
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-> [!IMPORTANT]
-> **`scripts/` is for thin orchestrators only.** All business logic, data models, and core functionality live in `src/codomyrmex/`. Scripts in this directory are entry-point wrappers that import from `src/codomyrmex/` modules and orchestrate their execution. No substantial logic should exist here.
+## Overview
 
-## Architecture
+Maintenance and automation utilities for project management.
 
-```mermaid
-graph TD
-    subgraph "scripts/ (Thin Orchestrators)"
-        S1["scripts/pai/dashboard.py"]
-        S2["scripts/pai/generate_skills.py"]
-        S3["scripts/audits/audit_rasp.py"]
-        S4["scripts/run_all_scripts.py"]
-    end
-
-    subgraph "src/codomyrmex/ (Business Logic)"
-        M1["codomyrmex.agents.pai.pm.server"]
-        M2["codomyrmex.skills.skill_generator"]
-        M3["codomyrmex.validation"]
-        M4["codomyrmex.orchestrator.core"]
-    end
-
-    S1 -->|"imports & calls"| M1
-    S2 -->|"imports & calls"| M2
-    S3 -->|"imports & calls"| M3
-    S4 -->|"imports & calls"| M4
-
-    style S1 fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style S2 fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style S3 fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style S4 fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style M1 fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style M2 fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style M3 fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style M4 fill:#0f3460,stroke:#533483,color:#e8e8e8
-```
-
-## Thin Orchestrator Pattern
-
-Every script follows the same pattern: **import from `src/codomyrmex/`, configure, invoke**. No business logic in the script itself.
-
-```python
-#!/usr/bin/env python3
-"""Thin orchestrator for <module_name>."""
-
-import sys
-from pathlib import Path
-
-# Ensure codomyrmex is importable
-try:
-    import codomyrmex  # noqa: F401
-except ImportError:
-    project_root = Path(__file__).resolve().parent.parent
-    sys.path.insert(0, str(project_root / "src"))
-
-from codomyrmex.<module>.core import main  # All logic lives in src/
-
-if __name__ == "__main__":
-    sys.exit(main())
-```
-
-## Directory Structure
-
-| Directory | Scripts | Purpose |
-|-----------|:-------:|---------|
-| `agentic_memory/` | 1 | Agent memory storage and retrieval orchestrators |
-| `agents/` | 31 | Agent subsystem demos and provider examples |
-| `api/` | 2 | API orchestration examples |
-| `audio/` | 1 | Audio processing orchestrators |
-| `audits/` | 4 | Codebase audits: documentation, exports, imports, RASP |
-| `auth/` | 2 | Authentication demo orchestrators |
-| `cache/` | 3 | Cache management orchestrators |
-| `ci_cd_automation/` | 3 | CI/CD pipeline management |
-| `docs/` | 5 | Documentation tooling orchestrators |
-| `email/` | 1 | AgentMail and Gmail integration demos |
-| `git_operations/` | 3 | Git automation orchestrators |
-| `llm/` | 3 | LLM provider examples (OpenRouter, Ollama) |
-| `maintenance/` | 8 | Stub auditing, dependency checks, RASP fixers |
-| `model_context_protocol/` | 7 | MCP server management and debugging |
-| `pai/` | 6 | PAI integration: dashboard launch, skill updates, validation |
-| `performance/` | 5 | Benchmarks and regression detection |
-| `security/` | 3 | Vulnerability scanning, secret detection |
-| `utils/` | 7 | Shared utility functions |
-| `validation/` | 4 | Schema validation orchestrators |
-| `website/` | 3 | Dashboard and website launch scripts |
-| ... | | (100+ subdirectories mirror `src/codomyrmex/` modules) |
-
-## Root Files
-
-| File | Purpose |
-|------|---------|
-| `run_all_scripts.py` | Master orchestrator — discovers and runs scripts across all subdirectories |
-| `config.yaml` | Shared script configuration |
-| `generate_config_docs.py` | Generates documentation from config directory structures |
-| `__init__.py` | Package marker (thin orchestrator module) |
-| `PAI.md` | PAI integration documentation for scripts |
-| `AGENTS.md` | Agent context for the scripts directory |
-| `SPEC.md` | Specification for the thin orchestrator pattern |
-
-## Usage
-
-```bash
-# Prerequisites
-uv sync                          # Core dependencies
-uv sync --extra <module>         # Module-specific optional deps
-
-# Run individual orchestrators
-uv run python scripts/pai/dashboard.py           # Launch both dashboards
-uv run python scripts/pai/generate_skills.py     # Generate skill manifests
-uv run python scripts/audits/audit_rasp.py       # Run RASP compliance audit
-uv run python scripts/run_all_scripts.py         # Run all scripts
-
-# Launch the dashboard
-uv run python scripts/website/launch_dashboard.py
-```
-
-## Conventions
-
-1. **Thin orchestrators only** — all business logic lives in `src/codomyrmex/`
-2. Scripts import from `src/codomyrmex/` via `sys.path` manipulation or installed package
-3. Each subdirectory has `README.md`, `AGENTS.md`, `SPEC.md`, and `PAI.md` (RASP pattern)
-4. Config-driven scripts read from `config/<module>/config.yaml`
-5. Placeholder demos raise `NotImplementedError` when the source module is not yet implemented
-6. Scripts use `codomyrmex.utils.cli_helpers` for consistent CLI output formatting
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `agentic_memory/` – Subdirectory
+- `agents/` – Subdirectory
+- `api/` – Subdirectory
+- `audio/` – Subdirectory
+- `audits/` – Subdirectory
+- `auth/` – Subdirectory
+- `bio_simulation/` – Subdirectory
+- `build_synthesis/` – Subdirectory
+- `cache/` – Subdirectory
+- `cerebrum/` – Subdirectory
+- `ci_cd_automation/` – Subdirectory
+- `cli/` – Subdirectory
+- `cloud/` – Subdirectory
+- `coding/` – Subdirectory
+- `collaboration/` – Subdirectory
+- `compression/` – Subdirectory
+- `concurrency/` – Subdirectory
+- `config.yaml` – File
+- `config_audits/` – Subdirectory
+- `config_management/` – Subdirectory
+- `config_monitoring/` – Subdirectory
+- `container_optimization/` – Subdirectory
+- `containerization/` – Subdirectory
+- `cost_management/` – Subdirectory
+- `dark/` – Subdirectory
+- `data_lineage/` – Subdirectory
+- `data_visualization/` – Subdirectory
+- `database_management/` – Subdirectory
+- `defense/` – Subdirectory
+- `demos/` – Subdirectory
+- `dependency_injection/` – Subdirectory
+- `deployment/` – Subdirectory
+- `docs/` – Subdirectory
+- `docs_gen/` – Subdirectory
+- `documentation/` – Subdirectory
+- `documents/` – Subdirectory
+- `edge_computing/` – Subdirectory
+- `email/` – Subdirectory
+- `embodiment/` – Subdirectory
+- `encryption/` – Subdirectory
+- `environment_setup/` – Subdirectory
+- `events/` – Subdirectory
+- `evolutionary_ai/` – Subdirectory
+- `examples/` – Subdirectory
+- `exceptions/` – Subdirectory
+- `exploration/` – Subdirectory
+- `feature_flags/` – Subdirectory
+- `feature_store/` – Subdirectory
+- `file_system/` – Subdirectory
+- `finance/` – Subdirectory
+- `fix_ty_ast.py` – File
+- `fix_ty_imports.py` – File
+- `fix_ty_stubborn.py` – File
+- `formal_verification/` – Subdirectory
+- `fpf/` – Subdirectory
+- `git_analysis/` – Subdirectory
+- `git_operations/` – Subdirectory
+- `graph_rag/` – Subdirectory
+- `ide/` – Subdirectory
+- `identity/` – Subdirectory
+- `index.html` – File
+- `inference_optimization/` – Subdirectory
+- `llm/` – Subdirectory
+- `logging_monitoring/` – Subdirectory
+- `logistics/` – Subdirectory
+- `maintenance/` – Subdirectory
+- `metrics/` – Subdirectory
+- `migration/` – Subdirectory
+- `model_context_protocol/` – Subdirectory
+- `model_ops/` – Subdirectory
+- `model_registry/` – Subdirectory
+- `module_template/` – Subdirectory
+- `multimodal/` – Subdirectory
+- `networking/` – Subdirectory
+- `notification/` – Subdirectory
+- `observability_dashboard/` – Subdirectory
+- `orchestrator/` – Subdirectory
+- `pai/` – Subdirectory
+- `pattern_matching/` – Subdirectory
+- `performance/` – Subdirectory
+- `physical_management/` – Subdirectory
+- `plugin_system/` – Subdirectory
+- `prompt_testing/` – Subdirectory
+- `reports/` – Subdirectory
+- `rna/` – Subdirectory
+- `run_all_scripts.py` – File
+- `scrape/` – Subdirectory
+- `security/` – Subdirectory
+- `serialization/` – Subdirectory
+- `setup_submodules.sh` – File
+- `skills/` – Subdirectory
+- `spatial/` – Subdirectory
+- `static_analysis/` – Subdirectory
+- `system_discovery/` – Subdirectory
+- `telemetry/` – Subdirectory
+- `templating/` – Subdirectory
+- `terminal_interface/` – Subdirectory
+- `tools/` – Subdirectory
+- `tree_sitter/` – Subdirectory
+- `utils/` – Subdirectory
+- `validation/` – Subdirectory
+- `verification/` – Subdirectory
+- `video/` – Subdirectory
+- `website/` – Subdirectory
+- `workflow_execution/` – Subdirectory
+- `workflow_testing/` – Subdirectory
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Project Root](../README.md) | [Source Code](../src/codomyrmex/)
+- **Project Root**: ../README.md

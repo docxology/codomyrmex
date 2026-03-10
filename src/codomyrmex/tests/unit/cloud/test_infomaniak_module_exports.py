@@ -140,13 +140,13 @@ class TestInfomaniakModuleExports:
         assert hasattr(InfomaniakOpenStackBase, "__enter__")
         assert hasattr(InfomaniakOpenStackBase, "__exit__")
 
-        mock_conn = Stub()
-        base = InfomaniakOpenStackBase(mock_conn)
+        stub_conn = Stub()
+        base = InfomaniakOpenStackBase(stub_conn)
 
         with base as ctx:
             assert ctx is base
 
-        mock_conn.close.assert_called_once()
+        stub_conn.close.assert_called_once()
 
     # -----------------------------------------------------------------
     # 4. S3Base has context manager protocol
@@ -159,8 +159,8 @@ class TestInfomaniakModuleExports:
         assert hasattr(InfomaniakS3Base, "__enter__")
         assert hasattr(InfomaniakS3Base, "__exit__")
 
-        mock_client = Stub()
-        s3_base = InfomaniakS3Base(mock_client)
+        stub_client = Stub()
+        s3_base = InfomaniakS3Base(stub_client)
 
         with s3_base as ctx:
             assert ctx is s3_base

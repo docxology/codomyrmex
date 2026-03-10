@@ -1,24 +1,17 @@
-# Orchestrator Triggers Scripts
+# triggers
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Demo scripts for workflow triggers, demonstrating event-based, schedule-based, and manual trigger configurations for orchestrated workflows.
+Automation and utility scripts.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| `triggers_demo.py` | Demonstrates trigger creation, event binding, and schedule configuration |
-
-## Usage
-
-```bash
-uv run python scripts/orchestrator/triggers/triggers_demo.py
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `triggers_demo.py` – File
 
 ## Navigation
-
-- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
-- [Parent: orchestrator/](../README.md) | [Scripts root](../../README.md)
+- **Parent Directory**: [orchestrator](../README.md)
+- **Project Root**: ../../../README.md

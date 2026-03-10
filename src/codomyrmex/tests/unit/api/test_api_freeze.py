@@ -1,7 +1,10 @@
-"""Tests for Sprint 39: API Freeze & Migration Guide.
+"""
+Tests for Sprint 39: API Freeze & Migration Guide.
 
 Covers APIContract, ContractValidator, MigrationEngine,
 and APISurface analyzer.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
 """
 
 import pytest

@@ -1,29 +1,16 @@
-# Simulation Configuration
+# simulation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Discrete event simulation and agent-based modeling. Provides simulation environments, event scheduling, and statistical analysis of simulation results.
+Configuration files and templates.
 
-## Configuration Options
-
-The simulation module operates with sensible defaults and does not require environment variable configuration. Simulation parameters (time step, duration, random seed) are set per-simulation run. Event schedulers support priority queues.
-
-## PAI Integration
-
-PAI agents interact with simulation through direct Python imports. Simulation parameters (time step, duration, random seed) are set per-simulation run. Event schedulers support priority queues.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep simulation
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/simulation/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

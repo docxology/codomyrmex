@@ -1,23 +1,22 @@
 # core
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Core document operations.. This submodule is scaffolded for future implementation; no exports are currently defined.
+Documentation files and guides.
 
 ## Directory Contents
-
-- `AGENTS.md` - Agent integration specification
-- `PAI.md` - PAI integration notes
-- `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `document_parser.py` - Document Parser
-- `document_reader.py` - Document Reader
-- `document_validator.py` - Document Validator
-- `document_writer.py` - Document Writer
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `document_parser.py` – File
+- `document_reader.py` – File
+- `document_validator.py` – File
+- `document_writer.py` – File
+- `py.typed` – File
 
 ## Navigation
-
-- **Parent Module**: [documents](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent Directory**: [documents](../README.md)
+- **Project Root**: ../../../../README.md

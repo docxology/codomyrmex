@@ -1,13 +1,14 @@
-# Soul — Documentation
+# soul
 
-> Source: [`src/codomyrmex/soul/`](../../src/codomyrmex/soul/)
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-[See module README for full documentation.](../../src/codomyrmex/soul/README.md)
+Documentation files and guides.
 
-## Key References
+## Directory Contents
+- `README.md` – File
 
-- [README](../../src/codomyrmex/soul/README.md)
-- [AGENTS.md](../../src/codomyrmex/soul/AGENTS.md)
-- [PAI.md](../../src/codomyrmex/soul/PAI.md)
+## Navigation
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

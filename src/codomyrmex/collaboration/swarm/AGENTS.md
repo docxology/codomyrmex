@@ -1,49 +1,51 @@
 # Codomyrmex Agents — src/codomyrmex/collaboration/swarm
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Implements a complete swarm orchestration layer with role-based agents (`SwarmAgent`), typed messages (`SwarmMessage`), a topic-routed message bus (`MessageBus`), capability-based agent pooling (`AgentPool`), DAG task decomposition (`TaskDecomposer`), and configurable consensus strategies (`ConsensusEngine`). Designed for complex multi-agent workflows with dependency ordering and load balancing.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `protocol.py` | `AgentRole` | Enum: CODER, REVIEWER, ARCHITECT, TESTER, DOCUMENTER, DEVOPS |
-| `protocol.py` | `MessageType` | Enum: TASK_ASSIGNMENT, REVIEW_REQUEST, APPROVAL_VOTE, STATUS_UPDATE, RESULT, ERROR |
-| `protocol.py` | `TaskStatus` | Enum: PENDING, ASSIGNED, IN_PROGRESS, REVIEW, APPROVED, REJECTED, COMPLETED, FAILED |
-| `protocol.py` | `SwarmMessage` | Typed message with sender, recipient, payload, and auto-generated ID |
-| `protocol.py` | `SwarmAgent` | Agent with role, capabilities set, load tracking, and availability check |
-| `protocol.py` | `TaskAssignment` | Task descriptor with required role, capabilities, status, and priority |
-| `pool.py` | `AgentPool` | Registers agents, assigns tasks by role+capability+load, releases slots |
-| `pool.py` | `AssignmentError` | Raised when no suitable agent is available |
-| `message_bus.py` | `MessageBus` | Topic-routed pub/sub with wildcard matching (`*` single, `#` multi-segment) |
-| `message_bus.py` | `Subscription` | Binds subscriber ID, topic pattern, and handler callback |
-| `decomposer.py` | `TaskDecomposer` | Keyword-heuristic decomposition into role-based `SubTask` DAG |
-| `decomposer.py` | `SubTask` | Decomposed sub-task with dependency edges and priority |
-| `decomposer.py` | `CyclicDependencyError` | Raised on cycle detection during topological sort |
-| `consensus.py` | `ConsensusEngine` | Resolves votes via majority, weighted, or veto strategies |
-| `consensus.py` | `Vote` | Agent vote with boolean approval, weight, and reason |
-| `consensus.py` | `ConsensusResult` | Decision outcome with approval score and strategy used |
-| `consensus.py` | `Decision` | Enum: APPROVED, REJECTED, DEADLOCK, VETOED |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `consensus.py` – Project file
+- `decomposer.py` – Project file
+- `manager.py` – Project file
+- `message_bus.py` – Project file
+- `pool.py` – Project file
+- `protocol.py` – Project file
+- `py.typed` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `AgentPool.assign()` raises `AssignmentError` when no agent matches required role and capabilities.
-- `AgentPool.release()` must be called when a task completes to free the agent's slot.
-- `MessageBus` supports `*` (single-segment) and `#` (multi-segment) wildcard patterns for topic matching.
-- `TaskDecomposer.execution_order()` uses Kahn's algorithm and raises `CyclicDependencyError` on cycles.
-- `ConsensusEngine.resolve()` returns `Decision.DEADLOCK` on empty vote lists.
-- `SwarmAgent.available` is `True` only when `active_tasks < max_concurrent`.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `consensus.py`
+- `decomposer.py`
+- `manager.py`
+- `message_bus.py`
+- `pool.py`
+- `protocol.py`
+- `py.typed`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `codomyrmex.logging_monitoring` (get_logger)
-- **Used by**: `collaboration.mcp_tools` (MCP tool surface), higher-level orchestration
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [collaboration](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [collaboration](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

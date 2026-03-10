@@ -1,69 +1,39 @@
-# Agent Guidelines - Concurrency
+# Codomyrmex Agents — docs/modules/concurrency
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Thread pools, locks, semaphores, and distributed locking.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **Lock** — Basic thread lock
-- **DistributedLock** — Cross-process locking
-- **RedisLock** — Redis-backed distributed lock
-- **Semaphore** — Counting semaphore
-- **LockManager** — Manage multiple locks
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Use context managers** — Always use `with lock:` pattern
-2. **Set timeouts** — Avoid deadlocks with lock timeouts
-3. **Prefer distributed** — Use `RedisLock` for multi-process
-4. **Limit concurrency** — Use `Semaphore` for resource limits
-5. **Name locks** — Use descriptive names for debugging
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.concurrency import Lock, Semaphore, RedisLock, LockManager
-
-# Basic locking
-lock = Lock("resource_lock")
-with lock:
-    modify_shared_resource()
-
-# Semaphore for limited concurrency
-sem = Semaphore("api_calls", limit=10)
-with sem:
-    call_rate_limited_api()
-
-# Distributed locking
-redis_lock = RedisLock("global_lock", redis_url="redis://localhost")
-with redis_lock.acquire(timeout=5.0):
-    perform_exclusive_operation()
-
-# Lock manager for multiple resources
-manager = LockManager()
-with manager.acquire_all(["lock_a", "lock_b"]):
-    modify_multiple_resources()
-```
-
-## Testing Patterns
-
-```python
-# Verify lock exclusion
-lock = Lock("test")
-lock.acquire()
-assert not lock.acquire(timeout=0.1)  # Should fail
-lock.release()
-
-# Verify semaphore counting
-sem = Semaphore("test", limit=2)
-assert sem.acquire()
-assert sem.acquire()
-assert not sem.acquire(timeout=0.1)  # At limit
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

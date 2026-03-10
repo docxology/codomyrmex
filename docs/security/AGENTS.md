@@ -1,19 +1,49 @@
-# Security Documentation — Agents
+# Codomyrmex Agents — docs/security
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Security documentation providing a layered view of security theory, digital/physical/cognitive security, AI safety, and governance. Agents should prioritize these documents when reasoning about threat models and security posture.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `ai-safety.md` – Project file
+- `cognitive-security.md` – Project file
+- `digital-security.md` – Project file
+- `index.md` – Project file
+- `physical-security.md` – Project file
+- `security-theory.md` – Project file
+- `trust-and-governance.md` – Project file
 
-## Agent Guidelines
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Ensure security recommendations are current and actionable
-- Cross-reference with the `defense`, `privacy`, `identity`, and `security` source modules
-- Validate that code examples use secure patterns
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `ai-safety.md`
+- `cognitive-security.md`
+- `digital-security.md`
+- `index.md`
+- `physical-security.md`
+- `security-theory.md`
+- `trust-and-governance.md`
 
-## Navigation
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Parent**: [docs/](../AGENTS.md)
-- **Self**: [security/AGENTS.md](AGENTS.md)
-- **Human Docs**: [README.md](README.md)
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+
+## Navigation Links
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

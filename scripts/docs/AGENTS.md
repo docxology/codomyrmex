@@ -1,26 +1,45 @@
-# Documentation Scripts -- Agent Coordination
+# Codomyrmex Agents — scripts/docs
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
+Documentation files and guides.
 
-Scripts for documentation generation, maintenance, and quality improvement including docstring fixers, architecture diagram generation, and spec file updates.
+## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `add_rule_crossref.py` – Project file
+- `fix_missing_docstrings.py` – Project file
+- `generate_architecture_diagram.py` – Project file
+- `remediate_documentation.py` – Project file
+- `update_root_docs.py` – Project file
+- `update_spec_md.py` – Project file
 
-## Scripts Available
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **fix_missing_docstrings.py**: Prepends placeholder docstrings to __init__.py files missing them
-- **generate_architecture_diagram.py**: Auto-generates Mermaid architecture diagrams from static import analysis
-- **remediate_documentation.py**: Remediates documentation quality issues identified by audit scripts
-- **update_root_docs.py**: Updates root-level documentation files with current module information
-- **update_spec_md.py**: Updates SPEC.md files across modules with current API specifications
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `README.md`
+- `SPEC.md`
+- `add_rule_crossref.py`
+- `fix_missing_docstrings.py`
+- `generate_architecture_diagram.py`
+- `remediate_documentation.py`
+- `update_root_docs.py`
+- `update_spec_md.py`
 
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-## Agent Instructions
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-1. Run scripts from the repository root directory using `uv run python scripts/docs/<script>`
-2. Ensure prerequisites are installed: `uv sync`
-3. Scripts are demonstration/utility tools and do not modify production state
-
-## Navigation
-
-- [README.md](README.md) | [SPEC.md](SPEC.md)
+## Navigation Links
+- **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

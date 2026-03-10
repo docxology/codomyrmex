@@ -1,25 +1,15 @@
-# Operating System
+# operating_system
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-OS abstraction and system call utilities for platform portability.
+Documentation files and guides.
 
-## Source
-
-**Source code**: [`src/codomyrmex/operating_system/`](../../../src/codomyrmex/operating_system/)
-
-## MCP Tools
-
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
-
-## Related Documentation
-
-- [Source README](../../../src/codomyrmex/operating_system/README.md)
-- [API Specification](../../../src/codomyrmex/operating_system/API_SPECIFICATION.md)
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Parent**: [Module Documentation](../README.md)
-- **Root**: [docs/](../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: ../../../README.md

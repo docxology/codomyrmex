@@ -1,108 +1,58 @@
-# Crypto Module — Agent Capabilities
+# Codomyrmex Agents — src/codomyrmex/crypto
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Access Matrix
+## Purpose
+Contains components for the src system.
 
-This document defines which PAI agent types can access which crypto submodules and at what trust level.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `analysis/` – Directory containing analysis components
+- `currency/` – Directory containing currency components
+- `encoding/` – Directory containing encoding components
+- `exceptions.py` – Project file
+- `graphy/` – Directory containing graphy components
+- `mcp_tools.py` – Project file
+- `protocols/` – Directory containing protocols components
+- `py.typed` – Project file
+- `random/` – Directory containing random components
+- `steganography/` – Directory containing steganography components
 
-### Engineer Agent
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-**Access**: Full access to all submodules
-**Trust Level**: TRUSTED
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `CHANGELOG.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
+- `__init__.py`
+- `exceptions.py`
+- `mcp_tools.py`
+- `py.typed`
 
-| Submodule | Capabilities |
-|---|---|
-| graphy/ | Generate keys, encrypt/decrypt, sign/verify, derive keys, manage certificates |
-| currency/ | Generate wallets, construct transactions, derive addresses |
-| encoding/ | Encode/decode all formats |
-| protocols/ | Execute key exchanges, split/reconstruct secrets |
-| random/ | Generate cryptographic random values |
-| analysis/ | Assess strength, analyze entropy |
-| steganography/ | Embed and extract hidden data |
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-**Use Cases**: Implementing cryptographic features, building secure communication channels, key management infrastructure.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Architect Agent
-
-**Access**: Read-only analysis, protocol design
-**Trust Level**: OBSERVED
-
-| Submodule | Capabilities |
-|---|---|
-| analysis/ | Full access: entropy, frequency, strength, cipher analysis |
-| protocols/ | Read specifications, no key generation |
-| graphy/ | Query algorithm availability, no key operations |
-| encoding/ | Format validation only |
-
-**Use Cases**: Security architecture review, algorithm selection, protocol design evaluation, threat modeling.
-
-### QATester Agent
-
-**Access**: Validation and verification operations
-**Trust Level**: OBSERVED
-
-| Submodule | Capabilities |
-|---|---|
-| analysis/ | Full access: verify entropy, strength, randomness |
-| random/ | Run NIST tests on provided data, no key generation |
-| encoding/ | Encode/decode for test data preparation |
-| graphy/ | Verify operations (verify_hash, verify_ecdsa, etc.) |
-| steganography/ | Detection methods only |
-
-**Use Cases**: Cryptographic correctness testing, randomness quality validation, encoding round-trip verification.
-
-### Security Agent
-
-**Access**: Full access to all submodules
-**Trust Level**: TRUSTED
-
-| Submodule | Capabilities |
-|---|---|
-| All | Full access for security assessment |
-
-**Use Cases**: Penetration testing, security auditing, vulnerability assessment, compliance verification.
-
-## Trust Level Definitions
-
-| Level | Description | Operations Permitted |
-|---|---|---|
-| UNTRUSTED | No crypto access | None |
-| OBSERVED | Read-only, analysis | Hashing, analysis, encoding, verification |
-| TRUSTED | Full access | Key generation, encryption, signing, wallet creation |
-
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `hash_data` | Compute a cryptographic hash of the input data | SAFE |
-| `verify_hash` | Verify that data matches an expected hash (constant-time comparison) | SAFE |
-| `generate_key` | Generate a cryptographic key (aes128/aes256/hmac256) | SAFE |
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | MCP Tools | Trust Level |
-|-----------|-------------|-----------|-------------|
-| **Engineer** | Full | `hash_data`, `verify_hash`, `generate_key` | TRUSTED |
-| **Architect** | Read + Design | `hash_data` — cryptographic design review, algorithm selection | OBSERVED |
-| **QATester** | Validation | `verify_hash`, `hash_data` — integrity verification, checksum validation | OBSERVED |
-| **Researcher** | Read-only | `hash_data`, `verify_hash` — hash computation and verification for analysis | SAFE |
-
-### Engineer Agent
-**Use Cases**: Generate cryptographic keys, hash sensitive data, verify data integrity during BUILD/VERIFY phases.
-
-### Architect Agent
-**Use Cases**: Review cryptographic architecture, design key rotation strategies, evaluate algorithm choices.
-
-### QATester Agent
-**Use Cases**: Verify hash integrity of artifacts, validate checksum correctness, test key generation entropy.
-
-### Researcher Agent
-**Use Cases**: Computing data hashes and verifying integrity for research data pipelines.
-
-## Security Constraints
-
-1. **No key export**: Agents at OBSERVED trust level cannot serialize or export private keys.
-2. **Audit logging**: All key generation and signing operations are logged via `logging_monitoring`.
-3. **Rate limiting**: Key generation operations are rate-limited to prevent resource exhaustion.
-4. **No hardcoded secrets**: Agents must never embed generated keys in source code or documentation.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,33 +1,41 @@
 # Codomyrmex Agents — src/codomyrmex/concurrency/semaphores
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Contains components for the src system.
 
-Resource throttling primitives for bounding concurrent access. Provides an abstract `BaseSemaphore` interface, a thread-safe `LocalSemaphore` wrapping `threading.Semaphore`, and an `AsyncLocalSemaphore` wrapping `asyncio.Semaphore` with a synchronous acquisition bridge for mixed sync/async contexts.
-
-## Key Components
-
-| File | Class / Function | Role |
-|------|-----------------|------|
-| `semaphore.py` | `BaseSemaphore` | ABC defining `acquire(timeout) -> bool` and `release()` |
-| `semaphore.py` | `LocalSemaphore` | Thread-safe semaphore wrapping `threading.Semaphore` with timeout support |
-| `semaphore.py` | `AsyncLocalSemaphore` | Asyncio-compatible semaphore with `acquire_async()` and a sync `acquire()` fallback that bridges to the event loop |
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `py.typed` – Project file
+- `semaphore.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `BaseSemaphore.initial_value` records the capacity set at construction.
-- `LocalSemaphore.acquire` delegates directly to `threading.Semaphore.acquire(timeout=)`.
-- `AsyncLocalSemaphore.acquire` detects whether a running event loop exists: if so, falls back to a sync counter with a logged warning; if not, creates a temporary event loop for the async acquire.
-- `AsyncLocalSemaphore.release` updates both the asyncio semaphore and the sync fallback counter.
-- Errors must be logged via `logging_monitoring` before re-raising.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `py.typed`
+- `semaphore.py`
 
-## Integration Points
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-- **Depends on**: `asyncio`, `threading` (standard library only)
-- **Used by**: `concurrency.workers.pool` (for bounded concurrency), any module needing resource throttling
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Parent**: [concurrency](../README.md)
-- **Root**: [Root](../../../../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [concurrency](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

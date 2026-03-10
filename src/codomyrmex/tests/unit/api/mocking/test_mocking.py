@@ -1,8 +1,11 @@
-"""Comprehensive tests for the codomyrmex.api.mocking module.
+"""
+Comprehensive tests for the codomyrmex.api.mocking module.
 
 Covers enums, dataclasses, request matching, mock server routing with
 multiple response modes, request logging, assertion helpers, response
 fixtures, and factory functions.
+
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
 """
 
 import json

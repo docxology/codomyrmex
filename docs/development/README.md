@@ -1,66 +1,22 @@
-# Development Documentation
+# development
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Guides for setting up and working in the Codomyrmex development environment. Covers environment configuration, testing strategies, documentation standards, and tooling.
+Documentation files and guides.
 
-## Contents
-
-| File | Description |
-|------|-------------|
-| [**environment-setup.md**](environment-setup.md) | Complete development environment setup |
-| [**testing-strategy.md**](testing-strategy.md) | Testing best practices and patterns |
-| [**documentation.md**](documentation.md) | Documentation standards and guidelines |
-| [**uv-usage-guide.md**](uv-usage-guide.md) | UV package manager usage guide |
-| [**google-integration.md**](google-integration.md) | Google services integration guide |
-| [AGENTS.md](AGENTS.md) | Agent coordination for development docs |
-| [SPEC.md](SPEC.md) | Development documentation specification |
-| [PAI.md](PAI.md) | Personal AI development considerations |
-| [**multi-agent-git.md**](multi-agent-git.md) | Parallel agent git lock coordination protocol |
-
-## Key Topics
-
-### Environment Setup
-
-- Python environment with `uv`
-- Dependency management
-- IDE configuration (VS Code, PyCharm)
-- Git hooks and pre-commit
-
-### Testing
-
-- Unit testing with pytest
-- Integration testing patterns
-- Test coverage requirements (≥70%)
-- Test fixtures and data generators
-
-### Documentation Standards
-
-- RASP compliance (README, AGENTS, SPEC, PAI)
-- Docstring conventions
-- API documentation generation
-
-## Quick Start
-
-```bash
-# Clone and setup
-git clone https://github.com/danielmiessler/codomyrmex.git
-cd codomyrmex
-uv sync
-
-# Run tests
-uv run pytest src/codomyrmex/tests/unit/ -v
-```
-
-## Related Documentation
-
-- [Contributing](../project/contributing.md) - Contribution guidelines
-- [Architecture](../project/architecture.md) - System design
-- [Quick Start](../getting-started/quickstart.md) - User quick start
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `documentation.md` – File
+- `environment-setup.md` – File
+- `google-integration.md` – File
+- `multi-agent-git.md` – File
+- `testing-strategy.md` – File
+- `uv-usage-guide.md` – File
 
 ## Navigation
-
-- **Parent**: [docs/](../README.md)
-- **Root**: [Project Root](../../README.md)
+- **Parent Directory**: [docs](../README.md)
+- **Project Root**: ../../README.md

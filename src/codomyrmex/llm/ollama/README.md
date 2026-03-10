@@ -1,13 +1,12 @@
 # ollama
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Ollama integration for running local LLM models with unified API access.
+Contains components for the src system.
 
 ## Directory Contents
-
 - `API_SPECIFICATION.md` – File
 - `MODEL_CONFIGS.md` – File
 - `PAI.md` – File
@@ -21,8 +20,8 @@ Ollama integration for running local LLM models with unified API access.
 - `model_runner.py` – File
 - `ollama_manager.py` – File
 - `output_manager.py` – File
+- `py.typed` – File
 
 ## Navigation
-
 - **Parent Directory**: [llm](../README.md)
 - **Project Root**: ../../../../README.md

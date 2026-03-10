@@ -1,64 +1,41 @@
-# Agent Guidelines - CI/CD Automation
+# Codomyrmex Agents — docs/modules/ci_cd_automation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Continuous integration and deployment pipeline automation.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Classes
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- **PipelineBuilder** — Build CI/CD pipelines
-- **WorkflowGenerator** — Generate GitHub Actions/GitLab CI
-- **StageRunner** — Run pipeline stages
-- **ArtifactManager** — Manage build artifacts
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Agent Instructions
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-1. **Fail fast** — Run quick checks first
-2. **Cache dependencies** — Speed up builds
-3. **Parallelize** — Run independent stages in parallel
-4. **Version artifacts** — Tag artifacts with version
-5. **Notify on failure** — Alert on failed builds
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Common Patterns
-
-```python
-from codomyrmex.ci_cd_automation import (
-    PipelineBuilder, WorkflowGenerator, ArtifactManager
-)
-
-# Build pipeline
-pipeline = PipelineBuilder("main")
-pipeline.add_stage("lint", ["ruff check ."])
-pipeline.add_stage("test", ["pytest"])
-pipeline.add_stage("build", ["python -m build"])
-pipeline.add_stage("deploy", ["./deploy.sh"], on_branch="main")
-
-# Generate GitHub Actions workflow
-generator = WorkflowGenerator("github")
-workflow = generator.from_pipeline(pipeline)
-workflow.save(".github/workflows/ci.yml")
-
-# Manage artifacts
-artifacts = ArtifactManager()
-artifacts.upload("dist/*.whl", version="1.0.0")
-```
-
-## Testing Patterns
-
-```python
-# Verify pipeline structure
-pipeline = PipelineBuilder("test")
-pipeline.add_stage("build", ["echo build"])
-assert "build" in pipeline.stages
-
-# Verify workflow generation
-generator = WorkflowGenerator("github")
-workflow = generator.from_pipeline(pipeline)
-assert "jobs" in workflow.to_dict()
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

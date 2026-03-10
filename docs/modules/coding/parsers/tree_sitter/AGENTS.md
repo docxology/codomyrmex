@@ -1,43 +1,35 @@
-# Tree-sitter Module — Agent Coordination
+# Codomyrmex Agents — docs/modules/coding/parsers/tree_sitter
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+Documentation files and guides.
 
-Tree-sitter parsing module for Codomyrmex.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Capabilities
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Tree-sitter operations and management
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
 
-## Agent Usage Patterns
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```python
-from codomyrmex.tree_sitter import *
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-# Agent uses tree-sitter capabilities
-```
-
-## Integration Points
-
-- **Source**: [src/codomyrmex/tree_sitter/](../../../src/codomyrmex/tree_sitter/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
-
-
-## Key Components
-
-
-### Submodules
-
-- `languages` — Languages
-- `parsers` — Parsers
-- `queries` — Queries
-- `transformers` — Transformers
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k tree_sitter -v
-```
-
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation Links
+- **📁 Parent Directory**: [parsers](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

@@ -1,11 +1,12 @@
-"""Supplementary tests for codomyrmex.api.pagination using direct submodule import.
+"""
+Supplementary tests for codomyrmex.api.pagination using direct submodule import.
 
 The existing test_pagination.py is skipped because importing via
 ``codomyrmex.api.pagination`` triggers the circular import in the parent
 ``codomyrmex.api.__init__``.  This file loads ``pagination/__init__.py``
 directly via importlib, bypassing the problematic chain.
 
-No mocks used.
+No mocks are used. All test doubles are real concrete subclasses or callable objects.
 """
 
 import base64

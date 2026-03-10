@@ -1,6 +1,6 @@
 # examples
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -14,5 +14,5 @@ Example implementations and demonstrations.
 - `basic_usage.py` – File
 
 ## Navigation
-- **Parent Directory**: [deployment](../README.md)
+- **Parent Directory**: [build_synthesis](../README.md)
 - **Project Root**: ../../../README.md

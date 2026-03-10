@@ -1,85 +1,46 @@
 # Codomyrmex Agents — projects/test_project
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-
-Authoritative "Mega-Seed" reference implementation demonstrating maximal, real (zero-mock) integration of Codomyrmex modules. Serves as both a validation suite and a template for new projects.
+Test files and validation suites.
 
 ## Active Components
-
-| Component | Type | Description |
-| :--- | :--- | :--- |
-| `src/main.py` | Entry point | Logging, config, events integration |
-| `src/analyzer.py` | Analysis | Static analysis and pattern matching |
-| `src/visualizer.py` | Visualization | Dashboard generation via `data_visualization` |
-| `src/reporter.py` | Reporting | Multi-format output (HTML, JSON, Markdown) via `serialization` |
-| `src/pipeline.py` | Orchestration | DAG-based workflow with `performance` profiling and structured `exceptions` |
-| `src/agent_brain.py` | Agents | `agents` + `agentic_memory` — registry, memory store, recall |
-| `src/git_workflow.py` | Version control | `git_operations` + `git_analysis` — repo inspection, history, churn |
-| `src/knowledge_search.py` | Search | `search` + `scrape` + `formal_verification` — TF-IDF, fuzzy, Z3 |
-| `src/security_audit.py` | Security | `security` + `crypto` + `maintenance` + `system_discovery` |
-| `src/mcp_explorer.py` | MCP | `model_context_protocol` + `skills` + `plugin_system` — discovery |
-| `src/llm_inference.py` | LLM | `llm` + `collaboration` — OllamaManager, SwarmManager, AgentPool |
-| `config/` | Configuration | YAML settings, modules, workflows |
-| `tests/` | Test suite | Unit tests + zero-mock integration tests (13 original + 6 new suites) |
-| `run_demo.py` | Demo | Single-entrypoint full demonstration (10 demos) |
-
-## Integrated Codomyrmex Modules
-
-### Foundation Layer
-
-- `logging_monitoring` — Structured JSON logging
-- `config_management` — Unified YAML configuration
-- `performance` — Pipeline execution profiling
-- `environment_setup` — Python version validation
-
-### Core Layer
-
-- `static_analysis` — Code quality and metrics
-- `pattern_matching` — Code pattern recognition
-- `data_visualization` — Charts and dashboards
-- `validation` — Schema-driven input validation
-
-### Service Layer
-
-- `orchestrator` — DAG-based pipeline execution
-- `documentation` — Report generation
-
-### Utility Layer
-
-- `serialization` — JSON/YAML data encoding
-- `events` — Pub/Sub event bus
-- `exceptions` — Structured error hierarchy
-
-### Extended Modules (Sprint: module expansion)
-
-- `agents` + `agentic_memory` — Agent registry, typed memory, recall (`src/agent_brain.py`)
-- `git_operations` + `git_analysis` — Repo state, commit history, churn detection (`src/git_workflow.py`)
-- `search` + `scrape` + `formal_verification` — TF-IDF index, fuzzy match, Z3 constraints (`src/knowledge_search.py`)
-- `security` + `crypto` + `maintenance` + `system_discovery` — Vulnerability scan, hash/verify, project deps, module health (`src/security_audit.py`)
-- `model_context_protocol` + `skills` + `plugin_system` — MCP tool taxonomy, skill registry, plugin discovery (`src/mcp_explorer.py`)
-- `llm` + `collaboration` — OllamaManager, SwarmManager, AgentPool, TaskDecomposer (`src/llm_inference.py`)
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `config/` – Directory containing config components
+- `data/` – Directory containing data components
+- `pyproject.toml` – Project file
+- `reports/` – Directory containing reports components
+- `run_demo.py` – Project file
+- `src/` – Directory containing src components
+- `tests/` – Directory containing tests components
+- `uv.lock` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Zero-Mock Policy**: All integrations use real module logic. No mocking, no stubs.
-2. **Quadruple Play**: Maintain README, AGENTS, SPEC, PAI at every key directory level.
-3. **Preserve Template Nature**: Changes must maintain the demonstration/reference character.
-4. **Layer Discipline**: Respect the codomyrmex layer architecture for imports.
-5. **Test Coverage**: Every new integration gets both a unit test and an integration test.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `pyproject.toml`
+- `run_demo.py`
+- `uv.lock`
 
-## Agent Workflows
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Task | Entry Point | Details |
-| :--- | :--- | :--- |
-| Run analysis | `uv run python run_demo.py` | Full demo: analyze → visualize → report → pipeline |
-| Run tests | `uv run pytest tests/ -v` | 60+ tests, all zero-mock |
-| Run pipeline only | `uv run python -m src.main --pipeline src/` | DAG-based pipeline execution |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-
-- **📁 Parent Directory**: [projects](../README.md) — Parent directory documentation
-- **🏠 Project Root**: [../../README.md](../../README.md) — Main project documentation
-- **📖 Specification**: [SPEC.md](SPEC.md) — Functional specification
-- **🤖 AI Context**: [PAI.md](PAI.md) — Personal AI Infrastructure
+- **📁 Parent Directory**: [projects](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../README.md - Main project documentation

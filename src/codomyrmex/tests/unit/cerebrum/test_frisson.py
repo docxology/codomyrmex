@@ -1,8 +1,11 @@
 """Tests for Frisson/Surprise Signals."""
 
+import pytest
+
 from codomyrmex.cerebrum.mcp_tools import evaluate_surprise_signal
 
 
+@pytest.mark.unit
 class TestFrissonSignal:
     def test_low_surprise(self):
         """Should return MONITOR recommendation for few observations."""

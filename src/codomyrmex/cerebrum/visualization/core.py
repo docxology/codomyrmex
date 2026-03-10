@@ -1,11 +1,6 @@
 import contextlib
 from typing import Any
 
-import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-from matplotlib.figure import Figure
-from matplotlib.patches import Patch
 
 from codomyrmex.cerebrum.core.cases import Case
 from codomyrmex.cerebrum.inference.bayesian import BayesianNetwork
@@ -19,14 +14,28 @@ from codomyrmex.cerebrum.visualization.theme import (
 from codomyrmex.logging_monitoring import get_logger
 
 try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.figure import Figure
+    from matplotlib.patches import Patch
+
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
+    plt = Any  # type: ignore
+
+    class _MockNP:
+        def __getattr__(self, name):
+            return Any
+
+    np = _MockNP()  # type: ignore
     Figure = Any  # type: ignore
     Patch = Any  # type: ignore
 
-with contextlib.suppress(ImportError):
+try:
     import networkx as nx
+except ImportError:
+    nx = None
 
 logger = get_logger(__name__)
 

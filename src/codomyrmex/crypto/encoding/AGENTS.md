@@ -1,61 +1,45 @@
-# crypto/encoding -- Agent Context
+# Codomyrmex Agents — src/codomyrmex/crypto/encoding
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Summary
+## Purpose
+Contains components for the src system.
 
-The `crypto/encoding` submodule provides encoding and decoding utilities commonly used in cryptographic workflows: Base64, Base58, Base32, hexadecimal, and PEM format operations.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `base.py` – Project file
+- `hex.py` – Project file
+- `pem.py` – Project file
+- `py.typed` – Project file
 
-## When to Use This Module
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- You need to encode binary data (keys, ciphertext, hashes) for text-safe transport or storage
-- You need Base58 encoding for cryptocurrency addresses or identifiers
-- You need to encode/decode PEM-formatted certificates, keys, or CSRs
-- You need to validate whether a string is valid hexadecimal
-- You need to identify the type of data inside a PEM block (certificate, private key, etc.)
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `base.py`
+- `hex.py`
+- `pem.py`
+- `py.typed`
 
-## Exports
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-| Name | Kind | Purpose |
-|------|------|---------|
-| `encode_base64` / `decode_base64` | function | Standard Base64 encode/decode |
-| `encode_base58` / `decode_base58` | function | Base58 encode/decode (Bitcoin-style) |
-| `encode_base32` / `decode_base32` | function | Base32 encode/decode |
-| `encode_hex` / `decode_hex` | function | Hex string encode/decode |
-| `is_valid_hex` | function | Validate hex string format |
-| `encode_pem` / `decode_pem` | function | PEM envelope encode/decode |
-| `identify_pem_type` | function | Detect PEM block type (CERTIFICATE, PRIVATE KEY, etc.) |
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Example Agent Usage
-
-```python
-from codomyrmex.crypto.encoding import (
-    encode_base64, decode_base64, encode_hex, is_valid_hex, identify_pem_type,
-)
-
-# Base64 round-trip
-encoded = encode_base64(b"\x00\xff\x10")
-original = decode_base64(encoded)
-
-# Hex validation
-assert is_valid_hex("deadbeef")
-assert not is_valid_hex("not-hex")
-
-# PEM type detection
-pem_data = b"-----BEGIN CERTIFICATE-----\n..."
-pem_type = identify_pem_type(pem_data)  # "CERTIFICATE"
-```
-
-## Constraints
-
-- All encode functions accept `bytes`; decode functions return `bytes`.
-- `encode_base58` / `decode_base58` use the Bitcoin alphabet (no 0, O, I, l).
-- `identify_pem_type` parses the PEM header; does not validate the enclosed data.
-
-## Relationship to Other Modules
-
-| Module | Relationship |
-|--------|-------------|
-| `crypto.graphy` | Keys and certs produced by `graphy` often need PEM/hex/base64 encoding |
-| `crypto.currency` | Bitcoin addresses use Base58 encoding |
-| `encryption.core` | `Encryptor.encrypt_string()` uses Base64 internally |
+## Navigation Links
+- **📁 Parent Directory**: [crypto](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

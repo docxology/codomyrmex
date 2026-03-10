@@ -1,29 +1,16 @@
-# Finance Configuration
+# finance
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Financial calculations, portfolio management, and market data analysis. Provides pricing models, risk assessment, and financial reporting utilities.
+Configuration files and templates.
 
-## Configuration Options
-
-The finance module operates with sensible defaults and does not require environment variable configuration. Financial model parameters (interest rates, risk factors) are set per-calculation. No global financial configuration.
-
-## PAI Integration
-
-PAI agents interact with finance through direct Python imports. Financial model parameters (interest rates, risk factors) are set per-calculation. No global financial configuration.
-
-## Validation
-
-```bash
-# Verify module is available
-codomyrmex modules | grep finance
-
-# Run module health check
-codomyrmex status
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.yaml` – File
 
 ## Navigation
-
-- [Source Module](../../src/codomyrmex/finance/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Project Root**: ../../README.md

@@ -1,4 +1,4 @@
-"""Tests for Persistent Memory."""
+"""Tests for Persistent Memory — strictly zero-mock."""
 
 import os
 import tempfile

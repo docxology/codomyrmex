@@ -1,22 +1,39 @@
-# CI/CD Automation -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/ci_cd_automation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Capabilities
+## Purpose
+Documentation files and guides.
 
-The CI/CD Automation module provides pipeline management, deployment orchestration, and rollback capabilities. MCP tools are exposed for pipeline status and execution.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
+- `security.md` – Project file
 
-## Agent Interaction Patterns
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-Engineers use this module during BUILD and EXECUTE phases to create, run, and monitor CI/CD pipelines. The QATester agent uses pipeline reports during VERIFY.
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
+- `security.md`
 
-## Trust Level
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-Pipeline execution tools require TRUSTED trust level as they can trigger deployments.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Source**: [src/codomyrmex/ci_cd_automation/](../../../../src/codomyrmex/ci_cd_automation/)
-- **Extended README**: [README.md](readme.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **Parent**: [All Modules](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

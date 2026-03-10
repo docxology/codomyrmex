@@ -1,74 +1,41 @@
-# Agent Guidelines - Encryption
+# Codomyrmex Agents — docs/modules/encryption
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Module Overview
+## Purpose
+Documentation files and guides.
 
-Cryptographic operations: symmetric, asymmetric, hashing, and key management.
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
 
-## Key Components
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Component | Description |
-|-----------|-------------|
-| `Encryptor` | Core symmetric (AES) and asymmetric (RSA) encryption |
-| `KeyManager` | Secure file-based key storage and rotation |
-| `SignatureAlgorithm` | Enumeration of supported HMAC algorithms |
-| `Signer` | Fast HMAC-based JSON and file signing |
-| `SecureDataContainer` | Encrypted storage for JSON-serializable data |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
+- `PAI.md`
+- `README.md`
+- `SECURITY.md`
+- `SPEC.md`
 
-## Usage for Agents
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-### Symmetric Encryption
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-```python
-from codomyrmex.encryption import Encryptor
-
-e = Encryptor(algorithm="AES")
-key = e.generate_key()
-# Encrypt strings directly
-ciphertext = e.encrypt_string("Secret data", key)
-plaintext = e.decrypt_string(ciphertext, key)
-```
-
-### Digital Signatures
-
-```python
-from codomyrmex.encryption import Signer
-
-signer = Signer(secret_key="my_secret")
-# Sign entire JSON objects
-signed_msg = signer.sign_json({"action": "deploy", "id": 789})
-```
-
-### Key Management
-
-```python
-from codomyrmex.encryption import KeyManager
-from pathlib import Path
-
-km = KeyManager(key_dir=Path("./agent_keys"))
-key = b"..." 
-km.store_key("main_vault", key)
-
-if km.key_exists("main_vault"):
-    key_bytes = km.get_key("main_vault")
-```
-
-## Testing Patterns
-
-```python
-# Verify encryption round-trip
-encryptor = SymmetricEncryptor()
-key = encryptor.generate_key()
-plaintext = b"secret data"
-ciphertext = encryptor.encrypt(plaintext, key)
-assert encryptor.decrypt(ciphertext, key) == plaintext
-
-# Verify different keys produce different ciphertext
-key2 = encryptor.generate_key()
-assert encryptor.encrypt(plaintext, key2) != ciphertext
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

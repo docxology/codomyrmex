@@ -1,55 +1,40 @@
-# Git Operations -- Agent Integration Guide
+# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/git_operations
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Agent Capabilities
+## Purpose
+Documentation files and guides.
 
-The Git Operations module provides specialized capabilities for AI agents within the codomyrmex platform.
+## Active Components
+- `SPEC.md` – Project file
+- `api_specification.md` – Project file
+- `docs/` – Directory containing docs components
+- `mcp_tool_specification.md` – Project file
+- `readme.md` – Project file
+- `security.md` – Project file
 
-## Available MCP Tools
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-| Tool | Description |
-|------|-------------|
-| `git_check_availability` | Git Operations operation |
-| `git_is_repo` | Git Operations operation |
-| `git_current_branch` | Git Operations operation |
-| `git_diff` | Git Operations operation |
-| `git_log` | Git Operations operation |
-| `git_init` | Git Operations operation |
-| `git_clone` | Git Operations operation |
-| `git_commit` | Git Operations operation |
-| `git_create_branch` | Git Operations operation |
-| `git_switch_branch` | Git Operations operation |
-| `git_list_branches` | Git Operations operation |
-| `git_pull` | Git Operations operation |
-| `git_push` | Git Operations operation |
-| `git_delete_branch` | Git Operations operation |
-| `git_merge` | Git Operations operation |
-| `git_rebase` | Git Operations operation |
-| `git_cherry_pick` | Git Operations operation |
-| `git_revert` | Git Operations operation |
-| `git_reset` | Git Operations operation |
-| `git_amend` | Git Operations operation |
-| `git_stash` | Git Operations operation |
-| `git_stash_apply` | Git Operations operation |
-| `git_stash_list` | Git Operations operation |
-| `git_create_tag` | Git Operations operation |
-| `git_list_tags` | Git Operations operation |
-| `git_fetch` | Git Operations operation |
-| `git_add_remote` | Git Operations operation |
-| `git_remove_remote` | Git Operations operation |
-| `git_list_remotes` | Git Operations operation |
-| `git_commit_details` | Git Operations operation |
-| `git_get_config` | Git Operations operation |
-| `git_clean` | Git Operations operation |
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `SPEC.md`
+- `api_specification.md`
+- `mcp_tool_specification.md`
+- `readme.md`
+- `security.md`
 
-## Trust Level
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-All MCP tools are classified as **Safe** unless otherwise noted.
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation
-
-- **Source**: [src/codomyrmex/git_operations/](../../../../src/codomyrmex/git_operations/)
-- **Extended README**: [README.md](readme.md)
-- **SPEC**: [SPEC.md](SPEC.md)
-- **Parent**: [All Modules](../README.md)
+## Navigation Links
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../../README.md - Main project documentation

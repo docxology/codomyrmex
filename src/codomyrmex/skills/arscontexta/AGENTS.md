@@ -1,42 +1,51 @@
-# Agent Integration — Ars Contexta
+# Codomyrmex Agents — src/codomyrmex/skills/arscontexta
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Guidelines for PAI agents consuming Ars Contexta capabilities.
+## Purpose
+Contains components for the src system.
 
-## Agent Type Mapping
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `core.py` – Project file
+- `exceptions.py` – Project file
+- `models.py` – Project file
+- `py.typed` – Project file
+- `services.py` – Project file
+- `skills.py` – Project file
+- `types.py` – Project file
 
-| PAI Agent Type | Ars Contexta Service | Use Case |
-|---------------|---------------------|----------|
-| **Engineer** | `ArsContextaManager.setup()` | Build vault infrastructure |
-| **Architect** | `KernelPrimitiveRegistry`, `DerivationEngine` | Design vault configuration |
-| **Algorithm** | `MethodologyGraph` | ISC pressure-testing with research claims |
-| **Researcher** | `MethodologyGraph.get_by_domain()` | Literature grounding |
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Delegation Patterns
+## Key Files
+- `AGENTS.md` - Agent coordination and navigation
+- `README.md` - Directory overview
+- `PAI.md`
+- `README.md`
+- `SPEC.md`
+- `__init__.py`
+- `core.py`
+- `exceptions.py`
+- `models.py`
+- `py.typed`
+- `services.py`
+- `skills.py`
+- `types.py`
 
-### Single-Agent (Standard effort)
+## Dependencies
+- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
-```
-Agent receives vault_path → setup() → health() → return config
-```
+## Development Guidelines
+- Follow the universal agent protocols defined in the root `AGENTS.md`.
+- Adhere to the Python PEP 8 style guide and project-specific linting rules.
+- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-### Multi-Agent (Extended+ effort)
-
-```
-Architect: derive_config(user_text) → select primitives → design vault layout
-Engineer:  setup(vault_path) → create templates → validate structure
-Algorithm: methodology.get_related() → pressure-test ISC against research
-```
-
-## Tool Access
-
-All 6 MCP tools are safe (read/create only, no destructive operations).
-No trust gateway gating required.
-
-## Context Requirements
-
-When delegating to agents, include:
-1. **vault_path** — target filesystem path
-2. **user_text** — raw user preferences for derivation
-3. **effort_level** — determines pipeline depth
+## Navigation Links
+- **📁 Parent Directory**: [skills](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation
