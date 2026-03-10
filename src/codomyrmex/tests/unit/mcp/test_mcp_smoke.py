@@ -63,28 +63,28 @@ class TestMCPToolsExecution:
         from codomyrmex.git_operations.mcp_tools import git_check_availability
 
         result = git_check_availability()
-        assert result["status"] == "ok"
+        assert result["status"] == "success"
         assert isinstance(result["git_available"], bool)
 
     def test_code_list_languages(self):
         from codomyrmex.coding.mcp_tools import code_list_languages
 
         result = code_list_languages()
-        assert result["status"] == "ok"
+        assert result["status"] == "success"
         assert "python" in result["languages"]
 
     def test_container_runtime_status(self):
         from codomyrmex.containerization.mcp_tools import container_runtime_status
 
         result = container_runtime_status()
-        assert result["status"] == "ok"
+        assert result["status"] == "success"
         assert isinstance(result["runtimes"], dict)
 
     def test_git_is_repo(self, tmp_path):
         from codomyrmex.git_operations.mcp_tools import git_is_repo
 
         result = git_is_repo(str(tmp_path))
-        assert result["status"] == "ok"
+        assert result["status"] == "success"
         assert result["is_git_repository"] is False
 
     def test_search_documents(self):
@@ -95,7 +95,7 @@ class TestMCPToolsExecution:
             "jumped over the lazy dog",
         ]
         result = search_documents("fox", docs)
-        assert result["status"] == "ok"
+        assert result["status"] == "success"
         assert len(result["results"]) > 0
 
 

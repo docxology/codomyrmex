@@ -12,6 +12,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Install dependencies (uv recommended)
 uv sync
 
+# Set up git submodules (run once after cloning, or after submodule updates)
+# Initializes all 5 submodules and installs hermes/evolution Python deps
+bash scripts/setup_submodules.sh
+# Or via Makefile:
+make submodules   # submodules only
+make setup        # install + submodules together
+
+# NOTE: Never run `uv sync` inside src/codomyrmex/agents/hermes/evolution/ —
+# its `darwinian` optional extra requires a non-PyPI package and will fail locking.
+# The setup script handles this correctly via `uv venv --seed` + pip.
+
 # Install with optional module dependencies
 uv sync --extra <module-name>    # e.g., uv sync --extra spatial
 uv sync --all-extras             # Install all optional dependencies
@@ -67,7 +78,7 @@ ggshield scan pre-commit
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 128 specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 129 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -110,7 +121,7 @@ Each module is self-contained with standard structure:
 - **Model Context Protocol (MCP)**: Standardized interface for AI/LLM integration across modules
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
-- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 182 files are auto-discovered.
+- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 146 files are auto-discovered.
 
 ### Extended Modules (auto-discovered via MCP)
 
@@ -147,7 +158,7 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/Personal_AI_Infrastructure) (`~/.claude/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~602 dynamic tools across 182 auto-discovered modules, with 3 resources and 10 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~474 dynamic tools across 129 auto-discovered modules, with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
@@ -246,7 +257,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (81074 symbols, 187896 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (81530 symbols, 189037 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -309,7 +320,6 @@ This project is indexed by GitNexus as **codomyrmex** (81074 symbols, 187896 rel
 ## Self-Check Before Finishing
 
 Before completing any code modification task, verify:
-
 1. `gitnexus_impact` was run for all modified symbols
 2. No HIGH/CRITICAL risk warnings were ignored
 3. `gitnexus_detect_changes()` confirms changes match expected scope
@@ -410,6 +420,13 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-No changes or facts in this session.
+Files: src/codomyrmex/tests/unit/config_audits/__init__.py (create), src/codomyrmex/validation/mcp_tools.py (edit), src/codomyrmex/tests/unit/config_audits/test_rules.py (create), src/codomyrmex/tests/unit/validation/test_validation_mcp_tools.py (edit), src/codomyrmex/tests/unit/synthetic_data/test_generator.py (create), .desloppify/external_review_sessions/ext_20260310_163817_8d543c8f/review_result.json (create)
+
+## Crash Recovery
+Last session (2026-03-10T09:40:26.494293) was not properly closed (crash/kill).
+Recorded 6 file changes before crash.
+Last changed files: .desloppify/external_review_sessions/ext_20260310_163817_8d543c8f/review_result.json, src/codomyrmex/tests/unit/synthetic_data/test_generator.py, src/codomyrmex/tests/unit/validation/test_validation_mcp_tools.py, src/codomyrmex/tests/unit/config_audits/test_rules.py, src/codomyrmex/validation/mcp_tools.py
+Bridge from previous session is valid (above).
+For details use: memory_search("changes last session")
 
 # === END COGNILAYER ===

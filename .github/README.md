@@ -434,7 +434,7 @@ sequenceDiagram
     User->>CLI: codomyrmex run --task "analyze codebase"
     CLI->>Orchestrator: Create workflow
     Orchestrator->>MCP: Register available tools
-    MCP->>Tools: Discover ~602 tools across 128 modules
+    MCP->>Tools: Discover ~474 tools across 129 modules
     Orchestrator->>Agents: Dispatch agent
     Agents->>LLM: Generate completion (Gemini 2.5 Pro)
     LLM-->>Agents: Response + tool calls
@@ -494,7 +494,7 @@ codomyrmex/
 | **Total Test Files** | 1,023+ |
 | **Documentation Files** | 1,029+ |
 | **GitHub Workflows** | 36 |
-| **MCP Tools** | 602 |
+| **MCP Tools** | 474 |
 | **Testing Policy** | Zero-Mock (100% real methods) |
 | **Default LLM** | Gemini 2.5 Pro |
 | **Package Manager** | uv |
@@ -615,7 +615,7 @@ graph TB
         Src1["agents/"]
         Src2["llm/"]
         Src3["security/"]
-        SrcDots["... 128 modules"]
+        SrcDots["..."]
     end
 
     C1 -.->|"YAML load"| S1
@@ -743,5 +743,5 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>128 modules · 3,000+ Python files · 1,023+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>129 modules · 3,000+ Python files · 1,023+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
 </p>

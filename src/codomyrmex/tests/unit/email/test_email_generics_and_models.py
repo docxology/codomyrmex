@@ -5,7 +5,7 @@ These tests exercise pure-Python data models and exception classes — no API ne
 API-dependent tests are guarded with @pytest.mark.skipif.
 """
 
-from datetime import UTC, datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 

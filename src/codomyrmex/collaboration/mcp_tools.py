@@ -12,24 +12,14 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 def _get_swarm_manager() -> Any:
-    """Lazy import SwarmManager to avoid circular imports.
-
-    Returns:
-        SwarmManager: The swarm manager instance.
-
-    """
+    """Lazy-import SwarmManager to avoid circular imports."""
     from codomyrmex.collaboration.protocols.swarm import SwarmManager
 
     return SwarmManager()
 
 
 def _get_task_decomposer() -> Any:
-    """Lazy import TaskDecomposer to avoid circular imports.
-
-    Returns:
-        Type[TaskDecomposer]: The task decomposer class.
-
-    """
+    """Lazy-import TaskDecomposer to avoid circular imports."""
     from codomyrmex.collaboration.protocols.swarm import TaskDecomposer
 
     return TaskDecomposer
@@ -54,7 +44,7 @@ def swarm_submit_task(
         Dictionary with agent names as keys and their results as values.
 
     """
-    from codomyrmex.collaboration.protocols.swarm import AgentProxy
+    from codomyrmex.collaboration.swarm import AgentProxy
 
     swarm = _get_swarm_manager()
 

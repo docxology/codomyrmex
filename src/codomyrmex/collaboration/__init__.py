@@ -54,7 +54,7 @@ from .protocols import (
 )
 
 # Legacy swarm components (for backward compatibility)
-from .protocols.swarm import AgentProxy
+from .swarm import AgentProxy
 
 # Swarm components (modern interface)
 from .swarm import (

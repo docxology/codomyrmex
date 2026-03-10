@@ -492,10 +492,11 @@ class TestRunMCPTools:
 
         result = run_mcp_tools()
         assert isinstance(result, dict)
-        assert "status_tool" in result
-        assert "execute_tool" in result
-        assert "skills_tool" in result
+        for key in ("status_tool", "execute_tool", "skills_tool",
+                    "template_list_tool", "template_render_tool", "stream_tool"):
+            assert key in result, f"missing key: {key}"
         assert result["all_have_status_key"] is True
+        assert "total_elapsed_s" in result
 
 
 # ═══════════════════════════════════════════════════════════════════════

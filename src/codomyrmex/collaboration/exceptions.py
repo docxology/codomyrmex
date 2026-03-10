@@ -74,8 +74,25 @@ class TaskDependencyError(CollaborationError):
 class ConsensusError(CollaborationError):
     """Raised when consensus cannot be reached among agents."""
 
-    def __init__(self, message: str, details: dict | None = None):
-        super().__init__(message, details or {})
+    def __init__(
+        self,
+        message: str,
+        votes_for: int | None = None,
+        votes_against: int | None = None,
+        quorum: float | None = None,
+        details: dict | None = None,
+    ):
+        """Initialize with optional vote counts and quorum threshold."""
+        vote_details = {
+            **(details or {}),
+            **({"votes_for": votes_for} if votes_for is not None else {}),
+            **({"votes_against": votes_against} if votes_against is not None else {}),
+            **({"quorum": quorum} if quorum is not None else {}),
+        }
+        super().__init__(message, vote_details)
+        self.votes_for = votes_for
+        self.votes_against = votes_against
+        self.quorum = quorum
 
 
 class ChannelError(CollaborationError):

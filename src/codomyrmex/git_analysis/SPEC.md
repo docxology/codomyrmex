@@ -54,7 +54,7 @@ Provides analytical intelligence about git repositories — not operational git 
 
 1. **Category**: All 16 tools declare `category="git_analysis"`.
 
-2. **Error shape**: On exception, tools return `{"status": "error", "error": str(exc)}`.
+2. **Error shape**: On exception, tools return `{"status": "error", "message": str(exc)}`.
     No exceptions propagate to callers.
 
 3. **Lazy imports**: `_bridge()` and `_analyzer()` helpers avoid circular imports by

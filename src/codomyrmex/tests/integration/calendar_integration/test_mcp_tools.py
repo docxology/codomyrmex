@@ -24,7 +24,7 @@ _GCAL_SKIP_REASON = "Requires a valid PAI Google Calendar token"
 
 if _TOKEN_EXISTS:
     _probe = calendar_list_events(days_ahead=1)
-    if _probe.get("status") != "ok":
+    if _probe.get("status") != "success":
         _GCAL_AVAILABLE = False
         _GCAL_SKIP_REASON = (
             f"GCal token exists but API probe failed: {_probe.get('error', 'unknown')}"
@@ -43,7 +43,7 @@ def test_calendar_mcp_flow():
     """Verify calendar mcp flow behavior."""
     # 1. List
     res = calendar_list_events(days_ahead=2)
-    assert res["status"] == "ok"
+    assert res["status"] == "success"
     assert "events" in res
 
     # 2. Create
@@ -56,12 +56,12 @@ def test_calendar_mcp_flow():
         location="Virtual",
         attendees=[_DEFAULT_ATTENDEE],
     )
-    assert res_create["status"] == "ok"
+    assert res_create["status"] == "success"
     event_id = res_create["event_id"]
 
     # 3. Get
     res_get = calendar_get_event(event_id)
-    assert res_get["status"] == "ok"
+    assert res_get["status"] == "success"
     assert res_get["event"]["summary"] == "Test MCP Agent Event"
 
     # 4. Update
@@ -74,11 +74,11 @@ def test_calendar_mcp_flow():
         location="Virtual",
         attendees=[_DEFAULT_ATTENDEE],
     )
-    assert res_update["status"] == "ok"
+    assert res_update["status"] == "success"
 
     # 5. Delete
     res_delete = calendar_delete_event(event_id)
-    assert res_delete["status"] == "ok"
+    assert res_delete["status"] == "success"
 
 
 @pytest.mark.skipif(
@@ -95,12 +95,12 @@ def test_calendar_attendee_injection():
         description="Automated attendee injection test — safe to delete",
         attendees=[],  # Intentionally empty — injection must still occur
     )
-    assert res_create["status"] == "ok", f"Create failed: {res_create.get('error')}"
+    assert res_create["status"] == "success", f"Create failed: {res_create.get('error')}"
     event_id = res_create["event_id"]
 
     try:
         res_get = calendar_get_event(event_id)
-        assert res_get["status"] == "ok", f"Get failed: {res_get.get('error')}"
+        assert res_get["status"] == "success", f"Get failed: {res_get.get('error')}"
         attendees = res_get["event"]["attendees"]
         attendees_lower = [a.lower() for a in attendees]
         assert _DEFAULT_ATTENDEE.lower() in attendees_lower, (

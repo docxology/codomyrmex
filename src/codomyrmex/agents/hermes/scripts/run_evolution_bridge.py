@@ -16,20 +16,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
+_DUMMY_PATH = Path("/tmp")
 
-def run_evolution_bridge() -> dict[str, Any]:
-    """Validate evolution submodule integration.
 
-    Exercises core data structures: ``EvolutionConfig``,
-    ``ConstraintValidator``, ``ConstraintResult``, ``FitnessScore``,
-    ``EvalExample``, ``EvalDataset``, and ``SkillModule`` helpers.
-
-    Returns:
-        Dict with test results for each component.
-    """
-    results: dict[str, Any] = {"components": {}}
-
-    # ── 1. EvolutionConfig ───────────────────────────────────────────
+def _check_evolution_config() -> dict[str, Any]:
+    """Validate EvolutionConfig instantiation and defaults."""
     try:
         from evolution.core.config import EvolutionConfig
 
@@ -38,8 +29,9 @@ def run_evolution_bridge() -> dict[str, Any]:
             population_size=3,
             max_skill_size=10_000,
             run_pytest=False,
+            hermes_agent_path=_DUMMY_PATH,
         )
-        results["components"]["config"] = {
+        return {
             "status": "ok",
             "iterations": config.iterations,
             "population_size": config.population_size,
@@ -47,57 +39,52 @@ def run_evolution_bridge() -> dict[str, Any]:
             "optimizer_model": config.optimizer_model,
         }
     except Exception as exc:
-        results["components"]["config"] = {"status": "error", "error": str(exc)}
+        return {"status": "error", "error": str(exc)}
 
-    # ── 2. ConstraintValidator ───────────────────────────────────────
+
+def _check_constraints() -> dict[str, Any]:
+    """Validate ConstraintValidator size, growth, and structure checks."""
     try:
+        from evolution.core.config import EvolutionConfig
         from evolution.core.constraints import ConstraintValidator
 
-        config_for_cv = EvolutionConfig(
+        cfg = EvolutionConfig(
             max_skill_size=100,
             max_prompt_growth=0.2,
+            hermes_agent_path=_DUMMY_PATH,
         )
-        validator = ConstraintValidator(config_for_cv)
+        validator = ConstraintValidator(cfg)
 
-        # Test size check — passing
-        small_text = "A short skill description."
-        results_pass = validator.validate_all(small_text, "skill")
-        all_passed = all(r.passed for r in results_pass)
+        size_pass = all(r.passed for r in validator.validate_all("short", "skill"))
+        size_fail = any(not r.passed for r in validator.validate_all("x" * 200, "skill"))
 
-        # Test size check — failing
-        huge_text = "x" * 200
-        results_fail = validator.validate_all(huge_text, "skill")
-        has_failure = any(not r.passed for r in results_fail)
-
-        # Test growth check
-        baseline = "short"
-        grown = "short" + " extra" * 20
-        growth_results = validator.validate_all(grown, "skill", baseline_text=baseline)
+        growth_results = validator.validate_all(
+            "short" + " extra" * 20, "skill", baseline_text="short"
+        )
         growth_blocked = any(
             not r.passed and r.constraint_name == "growth_limit"
             for r in growth_results
         )
 
-        # Test skill structure check
         valid_skill = "---\nname: test\ndescription: demo\n---\n\n# Body\nContent here."
-        struct_results = validator.validate_all(valid_skill, "skill")
         struct_ok = any(
             r.passed and r.constraint_name == "skill_structure"
-            for r in struct_results
+            for r in validator.validate_all(valid_skill, "skill")
         )
 
-        results["components"]["constraints"] = {
+        return {
             "status": "ok",
-            "size_pass": all_passed,
-            "size_fail_detected": has_failure,
+            "size_pass": size_pass,
+            "size_fail_detected": size_fail,
             "growth_blocked": growth_blocked,
             "structure_valid": struct_ok,
-            "total_checks": len(results_pass),
         }
     except Exception as exc:
-        results["components"]["constraints"] = {"status": "error", "error": str(exc)}
+        return {"status": "error", "error": str(exc)}
 
-    # ── 3. FitnessScore ──────────────────────────────────────────────
+
+def _check_fitness() -> dict[str, Any]:
+    """Validate FitnessScore composite calculation and _parse_score."""
     try:
         from evolution.core.fitness import FitnessScore, _parse_score
 
@@ -108,31 +95,26 @@ def run_evolution_bridge() -> dict[str, Any]:
             length_penalty=0.05,
             feedback="Good but slightly verbose.",
         )
-        composite = score.composite
-
-        # Verify composite calculation
         expected = max(0.0, 0.5 * 0.8 + 0.3 * 0.7 + 0.2 * 0.9 - 0.05)
-        composite_ok = abs(composite - expected) < 1e-6
-
-        # Test _parse_score with various inputs
         parse_ok = (
             _parse_score(0.5) == 0.5
             and _parse_score("0.75") == 0.75
-            and _parse_score(1.5) == 1.0  # Clamped
-            and _parse_score(-0.5) == 0.0  # Clamped
-            and _parse_score("invalid") == 0.5  # Default
+            and _parse_score(1.5) == 1.0
+            and _parse_score(-0.5) == 0.0
+            and _parse_score("invalid") == 0.5
         )
-
-        results["components"]["fitness"] = {
+        return {
             "status": "ok",
-            "composite": round(composite, 4),
-            "composite_formula_ok": composite_ok,
+            "composite": round(score.composite, 4),
+            "composite_formula_ok": abs(score.composite - expected) < 1e-6,
             "parse_score_ok": parse_ok,
         }
     except Exception as exc:
-        results["components"]["fitness"] = {"status": "error", "error": str(exc)}
+        return {"status": "error", "error": str(exc)}
 
-    # ── 4. EvalExample + EvalDataset ─────────────────────────────────
+
+def _check_dataset() -> dict[str, Any]:
+    """Validate EvalExample serialization and EvalDataset aggregation."""
     try:
         from evolution.core.dataset_builder import EvalDataset, EvalExample
 
@@ -143,67 +125,70 @@ def run_evolution_bridge() -> dict[str, Any]:
             category="security",
             source="synthetic",
         )
-        # Round-trip serialization
-        as_dict = ex.to_dict()
-        restored = EvalExample.from_dict(as_dict)
+        restored = EvalExample.from_dict(ex.to_dict())
         roundtrip_ok = (
             restored.task_input == ex.task_input
             and restored.expected_behavior == ex.expected_behavior
             and restored.difficulty == ex.difficulty
         )
-
-        # Dataset creation and split
         dataset = EvalDataset(
             train=[ex],
             val=[EvalExample(task_input="t2", expected_behavior="e2")],
             holdout=[EvalExample(task_input="t3", expected_behavior="e3")],
         )
-        all_examples = dataset.all_examples
-        dataset_ok = len(all_examples) == 3
-
-        results["components"]["dataset"] = {
+        return {
             "status": "ok",
             "roundtrip_ok": roundtrip_ok,
-            "dataset_size": len(all_examples),
-            "dataset_split_ok": dataset_ok,
+            "dataset_size": len(dataset.all_examples),
+            "dataset_split_ok": len(dataset.all_examples) == 3,
         }
     except Exception as exc:
-        results["components"]["dataset"] = {"status": "error", "error": str(exc)}
+        return {"status": "error", "error": str(exc)}
 
-    # ── 5. Skill helpers ─────────────────────────────────────────────
+
+def _check_skill_helpers() -> dict[str, Any]:
+    """Validate skill reassembly helpers."""
     try:
         from evolution.skills.skill_module import reassemble_skill
 
-        # Test reassemble
-        frontmatter = "name: test-skill\ndescription: A demo skill"
-        body = "# Instructions\n\n1. Do the thing\n2. Report results"
-        assembled = reassemble_skill(frontmatter, body)
-        has_frontmatter = assembled.startswith("---")
-        has_body = "Do the thing" in assembled
-
-        results["components"]["skill_helpers"] = {
+        assembled = reassemble_skill(
+            "name: test-skill\ndescription: A demo skill",
+            "# Instructions\n\n1. Do the thing\n2. Report results",
+        )
+        return {
             "status": "ok",
-            "reassemble_has_frontmatter": has_frontmatter,
-            "reassemble_has_body": has_body,
+            "reassemble_has_frontmatter": assembled.startswith("---"),
+            "reassemble_has_body": "Do the thing" in assembled,
             "assembled_length": len(assembled),
         }
     except Exception as exc:
-        results["components"]["skill_helpers"] = {"status": "error", "error": str(exc)}
+        return {"status": "error", "error": str(exc)}
 
-    # ── Summary ──────────────────────────────────────────────────────
-    ok_count = sum(
-        1 for c in results["components"].values() if c.get("status") == "ok"
-    )
-    total = len(results["components"])
-    results["status"] = "success" if ok_count == total else "partial"
-    results["components_ok"] = f"{ok_count}/{total}"
 
-    return results
+def run_evolution_bridge() -> dict[str, Any]:
+    """Validate evolution submodule integration.
+
+    Returns:
+        Dict with ``components`` (per-component results) and overall ``status``.
+    """
+    components = {
+        "config": _check_evolution_config(),
+        "constraints": _check_constraints(),
+        "fitness": _check_fitness(),
+        "dataset": _check_dataset(),
+        "skill_helpers": _check_skill_helpers(),
+    }
+    ok_count = sum(1 for c in components.values() if c.get("status") == "ok")
+    total = len(components)
+    return {
+        "components": components,
+        "status": "success" if ok_count == total else "partial",
+        "components_ok": f"{ok_count}/{total}",
+    }
 
 
 def main() -> None:
     """CLI entry point."""
-    # Add evolution submodule to sys.path for imports
     evo_path = Path(__file__).resolve().parent.parent / "evolution"
     if evo_path.exists():
         sys.path.insert(0, str(evo_path))

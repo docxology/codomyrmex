@@ -394,7 +394,7 @@ class TestMCPTools:
         from codomyrmex.formal_verification import mcp_tools
 
         result = mcp_tools.clear_model()
-        assert result["status"] == "ok"
+        assert result["status"] == "success"
 
     @skip_no_z3
     def test_mcp_add_and_get(self):
@@ -630,7 +630,7 @@ class TestMCPToolsExtended:
         mcp_tools.clear_model()
         mcp_tools.add_item("x = Int('x')")
         result = mcp_tools.delete_item(0)
-        assert result["status"] == "ok"
+        assert result["status"] == "success"
         assert result["removed_item"] == "x = Int('x')"
 
     @skip_no_z3
@@ -641,7 +641,7 @@ class TestMCPToolsExtended:
         mcp_tools.clear_model()
         mcp_tools.add_item("old = 1")
         result = mcp_tools.replace_item(0, "new = 2")
-        assert result["status"] == "ok"
+        assert result["status"] == "success"
         assert result["old_item"] == "old = 1"
 
     @skip_no_z3
@@ -652,7 +652,7 @@ class TestMCPToolsExtended:
         mcp_tools.clear_model()
         result = mcp_tools.delete_item(5)
         assert result["status"] == "error"
-        assert "empty" in result["error"].lower() or "range" in result["error"].lower()
+        assert "empty" in result["message"].lower() or "range" in result["message"].lower()
 
     @skip_no_z3
     def test_mcp_replace_out_of_range_error(self):
@@ -662,7 +662,7 @@ class TestMCPToolsExtended:
         mcp_tools.clear_model()
         result = mcp_tools.replace_item(5, "new = 1")
         assert result["status"] == "error"
-        assert "empty" in result["error"].lower() or "range" in result["error"].lower()
+        assert "empty" in result["message"].lower() or "range" in result["message"].lower()
 
     @skip_no_z3
     def test_mcp_solve_unsat(self):

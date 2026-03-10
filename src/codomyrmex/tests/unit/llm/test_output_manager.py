@@ -22,7 +22,7 @@ class TestOutputManagerInit:
 
     def test_creates_directory_structure(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            mgr = OutputManager(base_output_dir=tmpdir)
+            OutputManager(base_output_dir=tmpdir)
             # Should create subdirectories
             from pathlib import Path
 

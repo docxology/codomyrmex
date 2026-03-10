@@ -1056,11 +1056,11 @@ class TestQueueChannel:
         assert mgr.list_channels() == []
 
     def test_channel_manager_unknown_type_raises(self):
-        """create_channel() with unknown type raises ValueError."""
+        """create_channel() with unknown type raises ChannelError."""
         from codomyrmex.collaboration.communication.channels import ChannelManager
 
         mgr = ChannelManager()
-        with pytest.raises(ValueError):
+        with pytest.raises(ChannelError):
             mgr.create_channel("bad-ch", channel_type="ftp")
 
 
@@ -1257,9 +1257,9 @@ class TestAgentProtocols:
 
     @pytest.mark.asyncio
     async def test_capability_routing_raises_when_no_capable_agent(self):
-        """CapabilityRoutingProtocol.execute() raises ValueError when no agents provided."""
+        """CapabilityRoutingProtocol.execute() raises CollaborationError when no agents provided."""
         protocol = CapabilityRoutingProtocol(required_capability="magic")
-        with pytest.raises(ValueError, match="No agents with capability"):
+        with pytest.raises(CollaborationError, match="No agents with capability"):
             await protocol.execute("task", [])
 
 

@@ -10,6 +10,23 @@ Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 
 import pytest
 
+import codomyrmex.validation.pai as _pai_mod
+
+
+@pytest.fixture(autouse=False)
+def clean_pai_state():
+    """Reset validation.pai global error/warning lists before and after each test.
+
+    Without this, a failing assertion mid-test leaves the module-level lists
+    dirty and pollutes all subsequent tests that run in the same process.
+    """
+    _pai_mod.errors = []
+    _pai_mod.warnings = []
+    yield
+    _pai_mod.errors = []
+    _pai_mod.warnings = []
+
+
 from codomyrmex.validation.mcp_tools import (
     validate_schema,
     validation_summary,
@@ -207,14 +224,16 @@ class TestValidationSummaryMCPTool:
         result = validation_summary()
         assert "runs" in result
 
-    def test_fresh_manager_has_zero_runs(self):
-        # Each call creates a new ValidationManager, so runs will be 0
-        result = validation_summary()
-        assert result["runs"] == 0
+    def test_summary_tracks_validation_runs(self):
+        # The singleton accumulates runs across calls; run validate_schema then check count increased.
+        from codomyrmex.validation.mcp_tools import validate_schema
+        before = validation_summary().get("runs", 0)
+        validate_schema(data={"x": 1}, schema={"type": "object"})
+        after = validation_summary().get("runs", 0)
+        assert after >= before + 1
 
-    def test_summary_pass_rate_type(self):
+    def test_summary_runs_is_integer(self):
         result = validation_summary()
-        # With 0 runs, no pass_rate key per source code
         assert isinstance(result.get("runs", 0), int)
 
 
@@ -333,60 +352,32 @@ class TestResult:
 class TestValidationPaiCheck:
     """Tests for the validation.pai.check() function."""
 
-    def test_passing_condition_records_nothing(self):
-        import codomyrmex.validation.pai as pai_mod
+    def test_passing_condition_records_nothing(self, clean_pai_state):
+        _pai_mod.check(True, "should not be recorded")
 
-        original_errors = list(pai_mod.errors)
-        original_warnings = list(pai_mod.warnings)
+        assert _pai_mod.errors == []
+        assert _pai_mod.warnings == []
 
-        # Reset state
-        pai_mod.errors = []
-        pai_mod.warnings = []
+    def test_failing_condition_records_error(self, clean_pai_state):
+        _pai_mod.check(False, "something failed")
 
-        pai_mod.check(True, "should not be recorded")
+        assert len(_pai_mod.errors) == 1
+        assert "something failed" in _pai_mod.errors[0]
+        assert "FAIL" in _pai_mod.errors[0]
 
-        assert pai_mod.errors == []
-        assert pai_mod.warnings == []
+    def test_failing_condition_with_warn_records_warning(self, clean_pai_state):
+        _pai_mod.check(False, "soft warning", warn=True)
 
-        # Restore
-        pai_mod.errors = original_errors
-        pai_mod.warnings = original_warnings
+        assert len(_pai_mod.warnings) == 1
+        assert "soft warning" in _pai_mod.warnings[0]
+        assert "WARN" in _pai_mod.warnings[0]
+        assert _pai_mod.errors == []
 
-    def test_failing_condition_records_error(self):
-        import codomyrmex.validation.pai as pai_mod
+    def test_multiple_failures_accumulate(self, clean_pai_state):
+        _pai_mod.check(False, "first")
+        _pai_mod.check(False, "second")
 
-        pai_mod.errors = []
-        pai_mod.warnings = []
-
-        pai_mod.check(False, "something failed")
-
-        assert len(pai_mod.errors) == 1
-        assert "something failed" in pai_mod.errors[0]
-        assert "FAIL" in pai_mod.errors[0]
-
-    def test_failing_condition_with_warn_records_warning(self):
-        import codomyrmex.validation.pai as pai_mod
-
-        pai_mod.errors = []
-        pai_mod.warnings = []
-
-        pai_mod.check(False, "soft warning", warn=True)
-
-        assert len(pai_mod.warnings) == 1
-        assert "soft warning" in pai_mod.warnings[0]
-        assert "WARN" in pai_mod.warnings[0]
-        assert pai_mod.errors == []
-
-    def test_multiple_failures_accumulate(self):
-        import codomyrmex.validation.pai as pai_mod
-
-        pai_mod.errors = []
-        pai_mod.warnings = []
-
-        pai_mod.check(False, "first")
-        pai_mod.check(False, "second")
-
-        assert len(pai_mod.errors) == 2
+        assert len(_pai_mod.errors) == 2
 
 
 # ==============================================================================

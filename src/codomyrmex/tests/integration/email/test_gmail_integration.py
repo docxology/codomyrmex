@@ -205,7 +205,7 @@ def test_gmail_mcp_send_message() -> None:
             f"Timestamp: {int(time.time())}"
         ),
     )
-    assert result["status"] == "ok", result.get("error")
+    assert result["status"] == "success", result.get("error")
     assert result.get("message_id") is not None, (
         "gmail_send_message returned no message_id"
     )
@@ -218,7 +218,7 @@ def test_gmail_mcp_list_messages() -> None:
     from codomyrmex.email.mcp_tools import gmail_list_messages
 
     result = gmail_list_messages(max_results=5)
-    assert result["status"] == "ok", result.get("error")
+    assert result["status"] == "success", result.get("error")
     assert isinstance(result.get("messages"), list)
     assert result.get("count") == len(result["messages"])
 

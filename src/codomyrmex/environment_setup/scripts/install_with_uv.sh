@@ -96,7 +96,11 @@ install_codomyrmex() {
     
     echo -e "${CYAN}Installing Codomyrmex and dependencies...${NC}"
     uv sync
-    
+
+    echo -e "${CYAN}Setting up git submodules...${NC}"
+    bash scripts/setup_submodules.sh
+    echo -e "${GREEN}✅ Submodules initialized${NC}"
+
     echo -e "${GREEN}✅ Codomyrmex installed successfully!${NC}"
 }
 

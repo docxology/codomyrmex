@@ -11,12 +11,16 @@ from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
+_VALIDATION_MANAGER = None
+
 
 def _get_validation_manager():
-    """Lazy import ValidationManager to avoid circular imports."""
-    from codomyrmex.validation.validation_manager import ValidationManager
-
-    return ValidationManager()
+    """Return the module-level ValidationManager singleton, lazy-initialising on first call."""
+    global _VALIDATION_MANAGER
+    if _VALIDATION_MANAGER is None:
+        from codomyrmex.validation.validation_manager import ValidationManager
+        _VALIDATION_MANAGER = ValidationManager()
+    return _VALIDATION_MANAGER
 
 
 @mcp_tool(

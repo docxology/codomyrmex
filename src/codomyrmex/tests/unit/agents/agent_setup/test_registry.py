@@ -1,5 +1,7 @@
 """Tests for agents.agent_setup.registry — zero-mock policy compliant."""
 
+import os
+
 from codomyrmex.agents.agent_setup.registry import (
     AgentDescriptor,
     AgentRegistry,
@@ -40,24 +42,42 @@ class TestProbeResult:
 
 
 class TestProbeApiKeyEnv:
-    def test_key_present(self, monkeypatch):
-        monkeypatch.setenv("TEST_API_KEY_XYZ", "sk-abcdefgh")
-        result = _probe_api_key_env("testservice", "TEST_API_KEY_XYZ")
-        assert result.status == "operative"
-        assert result.name == "testservice"
-        assert result.latency_ms is not None
+    def test_key_present(self):
+        prev = os.environ.get("TEST_API_KEY_XYZ")
+        try:
+            os.environ["TEST_API_KEY_XYZ"] = "sk-abcdefgh"
+            result = _probe_api_key_env("testservice", "TEST_API_KEY_XYZ")
+            assert result.status == "operative"
+            assert result.name == "testservice"
+            assert result.latency_ms is not None
+        finally:
+            if prev is None:
+                os.environ.pop("TEST_API_KEY_XYZ", None)
+            else:
+                os.environ["TEST_API_KEY_XYZ"] = prev
 
-    def test_key_absent(self, monkeypatch):
-        monkeypatch.delenv("TEST_API_KEY_NOTSET", raising=False)
-        result = _probe_api_key_env("testservice", "TEST_API_KEY_NOTSET")
-        assert result.status == "key_missing"
-        assert result.latency_ms is None
+    def test_key_absent(self):
+        prev = os.environ.pop("TEST_API_KEY_NOTSET", None)
+        try:
+            result = _probe_api_key_env("testservice", "TEST_API_KEY_NOTSET")
+            assert result.status == "key_missing"
+            assert result.latency_ms is None
+        finally:
+            if prev is not None:
+                os.environ["TEST_API_KEY_NOTSET"] = prev
 
-    def test_key_truncated_in_detail(self, monkeypatch):
-        monkeypatch.setenv("MY_SECRET_KEY", "sk-abcdefghijklmn")
-        result = _probe_api_key_env("svc", "MY_SECRET_KEY")
-        assert "sk-a" in result.detail
-        assert "abcdefghijklmn" not in result.detail  # truncated
+    def test_key_truncated_in_detail(self):
+        prev = os.environ.get("MY_SECRET_KEY")
+        try:
+            os.environ["MY_SECRET_KEY"] = "sk-abcdefghijklmn"
+            result = _probe_api_key_env("svc", "MY_SECRET_KEY")
+            assert "sk-a" in result.detail
+            assert "abcdefghijklmn" not in result.detail  # truncated
+        finally:
+            if prev is None:
+                os.environ.pop("MY_SECRET_KEY", None)
+            else:
+                os.environ["MY_SECRET_KEY"] = prev
 
 
 class TestProbeCliBinary:
@@ -143,18 +163,29 @@ class TestAgentRegistry:
         assert result.status == "unavailable"
         assert result.name == "nonexistent_agent_xyz"
 
-    def test_probe_agent_claude_key_absent(self, monkeypatch):
-        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-        registry = AgentRegistry()
-        result = registry.probe_agent("claude")
-        assert result.name == "claude"
-        assert result.status == "key_missing"
+    def test_probe_agent_claude_key_absent(self):
+        prev = os.environ.pop("ANTHROPIC_API_KEY", None)
+        try:
+            registry = AgentRegistry()
+            result = registry.probe_agent("claude")
+            assert result.name == "claude"
+            assert result.status == "key_missing"
+        finally:
+            if prev is not None:
+                os.environ["ANTHROPIC_API_KEY"] = prev
 
-    def test_probe_agent_claude_key_present(self, monkeypatch):
-        monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-test123456")
-        registry = AgentRegistry()
-        result = registry.probe_agent("claude")
-        assert result.status == "operative"
+    def test_probe_agent_claude_key_present(self):
+        prev = os.environ.get("ANTHROPIC_API_KEY")
+        try:
+            os.environ["ANTHROPIC_API_KEY"] = "sk-ant-test123456"
+            registry = AgentRegistry()
+            result = registry.probe_agent("claude")
+            assert result.status == "operative"
+        finally:
+            if prev is None:
+                os.environ.pop("ANTHROPIC_API_KEY", None)
+            else:
+                os.environ["ANTHROPIC_API_KEY"] = prev
 
     def test_probe_all_returns_list(self):
         registry = AgentRegistry()
@@ -187,31 +218,55 @@ class TestAgentRegistry:
         assert broken.status == "unreachable"
         assert "probe exploded" in broken.detail
 
-    def test_get_operative_returns_list_of_names(self, monkeypatch):
-        monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-test123")
-        registry = AgentRegistry()
-        operative = registry.get_operative()
-        assert isinstance(operative, list)
-        # With key set, claude should be operative
-        assert "claude" in operative
+    def test_get_operative_returns_list_of_names(self):
+        prev = os.environ.get("ANTHROPIC_API_KEY")
+        try:
+            os.environ["ANTHROPIC_API_KEY"] = "sk-ant-test123"
+            registry = AgentRegistry()
+            operative = registry.get_operative()
+            assert isinstance(operative, list)
+            # With key set, claude should be operative
+            assert "claude" in operative
+        finally:
+            if prev is None:
+                os.environ.pop("ANTHROPIC_API_KEY", None)
+            else:
+                os.environ["ANTHROPIC_API_KEY"] = prev
 
-    def test_get_operative_excludes_missing_keys(self, monkeypatch):
-        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-        monkeypatch.delenv("OPENAI_API_KEY", raising=False)
-        registry = AgentRegistry()
-        operative = registry.get_operative()
-        # Without API keys, API-type agents should not appear
-        assert "claude" not in operative
+    def test_get_operative_excludes_missing_keys(self):
+        prev_ant = os.environ.pop("ANTHROPIC_API_KEY", None)
+        prev_oai = os.environ.pop("OPENAI_API_KEY", None)
+        try:
+            registry = AgentRegistry()
+            operative = registry.get_operative()
+            # Without API keys, API-type agents should not appear
+            assert "claude" not in operative
+        finally:
+            if prev_ant is not None:
+                os.environ["ANTHROPIC_API_KEY"] = prev_ant
+            if prev_oai is not None:
+                os.environ["OPENAI_API_KEY"] = prev_oai
 
-    def test_ollama_url_from_env(self, monkeypatch):
-        monkeypatch.setenv("OLLAMA_BASE_URL", "http://custom-ollama:11434")
-        registry = AgentRegistry()
-        assert registry._ollama_base_url == "http://custom-ollama:11434"
+    def test_ollama_url_from_env(self):
+        prev = os.environ.get("OLLAMA_BASE_URL")
+        try:
+            os.environ["OLLAMA_BASE_URL"] = "http://custom-ollama:11434"
+            registry = AgentRegistry()
+            assert registry._ollama_base_url == "http://custom-ollama:11434"
+        finally:
+            if prev is None:
+                os.environ.pop("OLLAMA_BASE_URL", None)
+            else:
+                os.environ["OLLAMA_BASE_URL"] = prev
 
-    def test_default_ollama_url_when_env_unset(self, monkeypatch):
-        monkeypatch.delenv("OLLAMA_BASE_URL", raising=False)
-        registry = AgentRegistry()
-        assert "11434" in registry._ollama_base_url or "localhost" in registry._ollama_base_url
+    def test_default_ollama_url_when_env_unset(self):
+        prev = os.environ.pop("OLLAMA_BASE_URL", None)
+        try:
+            registry = AgentRegistry()
+            assert "11434" in registry._ollama_base_url or "localhost" in registry._ollama_base_url
+        finally:
+            if prev is not None:
+                os.environ["OLLAMA_BASE_URL"] = prev
 
     def test_all_descriptors_have_required_fields(self):
         registry = AgentRegistry()

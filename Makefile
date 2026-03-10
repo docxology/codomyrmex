@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help dev install setup test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast
+.PHONY: help dev install setup submodules test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast
 
 # Default target
 help:
@@ -11,7 +11,8 @@ help:
 	@echo "Available targets:"
 	@echo "  dev          - Install all dependency groups"
 	@echo "  install      - Install dependencies using uv"
-	@echo "  setup        - Set up complete development environment"
+	@echo "  submodules   - Initialize git submodules and install their deps"
+	@echo "  setup        - Set up complete development environment (install + submodules)"
 	@echo "  test         - Run all tests"
 	@echo "  test-unit    - Run unit tests only"
 	@echo "  test-integration - Run integration tests only"
@@ -41,9 +42,12 @@ dev:
 	@echo "Installing all dependency groups..."
 	uv sync --all-groups
 
-setup: install
-	@echo "Setting up development environment..."
-	@echo "Development environment ready!"
+submodules:
+	@echo "Initializing and setting up git submodules..."
+	@bash scripts/setup_submodules.sh
+
+setup: install submodules
+	@echo "Development environment (including submodules) ready!"
 
 # Testing
 test:

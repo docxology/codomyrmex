@@ -1,6 +1,6 @@
 # jules - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -24,27 +24,25 @@ The `jules` submodule provides integration with Jules CLI tool. It includes a cl
 
 ## Detailed Architecture and Implementation
 
-### Design Principles
+### Architecture Principles
 
 1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+2. **Performance Optimization**: Implementation leverages chunked batching (`batch_size`) to dispatch agents.
+3. **Error Resilience**: Robust exception handling and exponential backoff retry mechanisms wrap `_execute_impl`.
+4. **Delegated Source Control**: Branching and merging functionality is natively deferred to the Jules CLI.
 
-### Technical Implementation
+### Swarm Batching Architecture
 
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+To support massive parallel execution (hundreds of targeted agents), the `JulesSwarmDispatcher` utilizes a compound prompt injection model. Instead of launching 500 individual `julius` shell processes (which risks process exhaustion or rate limits), the dispatcher groups tasks into predefined segments:
 
-## Detailed Architecture and Implementation
+- `tasks` list is spliced by `batch_size`.
+- A compound prompt combining all tasks in that batch is rendered dynamically.
+- The `julius new --parallel N` command natively interprets this batch and handles downstream concurrency.
 
-### Design Principles
+### "Merging Back In" Subsystem
 
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+Codomyrmex does not manually manage `git merge` or patch applications for Jules output. The design explicitly delegates this to the backend:
 
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
+1. `JulesClient` initiates a `julius new` or equivalent task command.
+2. Jules generates a background workspace, determines changes, and (depending on project config) issues a Pull Request.
+3. The merge action is asynchronous, finalized by human review or external CI loop.

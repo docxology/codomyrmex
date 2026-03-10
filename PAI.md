@@ -23,7 +23,7 @@ Codomyrmex is a **128-module Python development platform**. PAI agents consume c
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              128 modules of dev-platform tools
+     Algorithm + Skills + Hooks              129 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and Codomyrmex Admin Dashboard (port 8787)
-**Tools**: 9 static proxy tools + ~602 auto-discovered dynamic tools from 182 modules via `pkgutil` scan (~597 safe + 5 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces these tools for MCP exposure.
+**Tools**: 9 static proxy tools + ~474 auto-discovered dynamic tools from 129 modules via `pkgutil` scan (~469 safe + 5 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces these tools for MCP exposure.
 **Web UI**: `http://localhost:8787/` (Codomyrmex Admin Dashboard) · `http://localhost:8888/` (PAI Project Manager)
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)

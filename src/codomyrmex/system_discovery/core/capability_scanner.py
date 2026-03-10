@@ -270,10 +270,6 @@ class CapabilityScanner:
                         try:
                             if isinstance(node.value, ast.Constant):
                                 constants[target.id] = node.value.value
-                            elif isinstance(node.value, ast.Str):  # Python < 3.8
-                                constants[target.id] = node.value.s
-                            elif isinstance(node.value, ast.Num):  # Python < 3.8
-                                constants[target.id] = node.value.n
                         except Exception as _e:
                             constants[target.id] = "complex_value"
 
