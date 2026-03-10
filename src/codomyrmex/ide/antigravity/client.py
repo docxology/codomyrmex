@@ -2,7 +2,7 @@ import shutil
 import subprocess
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 from codomyrmex.ide import IDECommandResult, IDEStatus
 from codomyrmex.logging_monitoring import get_logger

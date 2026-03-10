@@ -17,7 +17,6 @@ from codomyrmex.telemetry.exporters import (
     SpanData,
 )
 
-
 # ──────────────────────────── Helpers ──────────────────────────────────────
 
 

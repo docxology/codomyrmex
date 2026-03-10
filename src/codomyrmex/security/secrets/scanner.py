@@ -3,6 +3,7 @@
 import re
 import time
 from pathlib import Path
+from typing import ClassVar
 
 from .models import DetectedSecret, ScanResult
 from .patterns import SecretPatterns

@@ -3,6 +3,7 @@
 import random
 import string
 from dataclasses import dataclass
+from typing import ClassVar
 
 
 @dataclass

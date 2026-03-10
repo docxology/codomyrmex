@@ -9,7 +9,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import Any, ClassVar
 
 from codomyrmex.logging_monitoring import get_logger
 
