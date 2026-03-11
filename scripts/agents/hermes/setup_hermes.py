@@ -39,7 +39,7 @@ def _check_imports() -> bool:
         True if all imports succeed, False otherwise.
     """
     try:
-        from codomyrmex.agents.hermes import HermesClient  # noqa: F401
+        from codomyrmex.agents.hermes import HermesClient
         print_success("  ✓ Core modules imported successfully.")
         return True
     except Exception as e:
@@ -63,9 +63,8 @@ def _check_config() -> bool:
     if _HERMES_CONFIG_PATH.exists():
         print_success(f"  ✓ Found hermes-specific config at {_HERMES_CONFIG_PATH.name}")
         return True
-    else:
-        print_error(f"  ! Missing hermes-specific config at {_HERMES_CONFIG_PATH.name}")
-        return False
+    print_error(f"  ! Missing hermes-specific config at {_HERMES_CONFIG_PATH.name}")
+    return False
 
 
 def _check_backends() -> tuple[bool, bool]:
@@ -152,9 +151,8 @@ def main() -> int:
     if hermes_client.active_backend != "none":
         print_success(f"Setup complete. Hermes Agent is READY. (Backend: {hermes_client.active_backend})")
         return 0
-    else:
-        print_error("Setup incomplete. Hermes Agent is Offline.")
-        return 1
+    print_error("Setup incomplete. Hermes Agent is Offline.")
+    return 1
 
 
 if __name__ == "__main__":

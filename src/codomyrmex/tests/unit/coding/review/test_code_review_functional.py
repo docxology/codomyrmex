@@ -7,18 +7,21 @@ No mocks.
 
 import os
 import textwrap
+
 import pytest
+
 from codomyrmex.coding.review import (
-    CodeReviewer,
-    PyscnAnalyzer,
-    AnalysisType,
-    Language,
-    SeverityLevel,
     AnalysisResult,
     AnalysisSummary,
+    AnalysisType,
+    CodeReviewer,
+    Language,
+    PyscnAnalyzer,
     QualityGateResult,
+    SeverityLevel,
 )
 from codomyrmex.coding.review.models import ToolNotFoundError
+
 
 @pytest.fixture
 def reviewer(tmp_path):
@@ -45,7 +48,7 @@ def python_file(tmp_path):
                         if i % 2 == 0:
                             print(i)
             return a + b
-            
+
         def bare_except():
             try:
                 pass
@@ -112,8 +115,8 @@ class TestPyscnAnalyzerFunctional:
             analyzer = PyscnAnalyzer()
         except ToolNotFoundError:
             pytest.skip("pyscn not installed")
-            
-        with open(python_file, "r") as f:
+
+        with open(python_file) as f:
             code = f.read()
         results = analyzer.analyze_code(code, python_file)
         assert isinstance(results, list)

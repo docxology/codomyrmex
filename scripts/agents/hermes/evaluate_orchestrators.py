@@ -163,7 +163,7 @@ def _sanitize_json_candidate(text: str) -> str:
                 result.append(text[i + 1])
                 i += 2
                 continue
-            elif ch == '"':
+            if ch == '"':
                 in_string = False
                 result.append(ch)
             elif ch in _CTRL:
@@ -257,7 +257,7 @@ def extract_json_from_response(content: str) -> dict:
                 "technical_debt": [],
                 "underlying_improvements": [],
             }
-        elif non_adheres_signals:
+        if non_adheres_signals:
             return {
                 "adherence_assessment": {
                     "adheres": False,
@@ -281,7 +281,7 @@ def extract_json_from_response(content: str) -> dict:
 def assess_script(client, script_info: dict, source_code: str) -> dict:
     """Use Hermes to assess a script based on stdout, stderr, and source code."""
     script_name = script_info["path"].name
-    
+
     prompt = f"""You are a senior principal engineer performing a code review and architectural assessment.
 
 Evaluate the following Python orchestration script based on the Codomyrmex "Thin Orchestrator" pattern.
@@ -333,14 +333,13 @@ Use exactly this schema:
         response = client.chat_session(prompt=prompt)
         if response.is_success():
             eval_data = extract_json_from_response(response.content)
-            
+
             print_success(f"=== Hermes Assessment for {script_name} ===")
             print_info(f"  Adheres to pattern: {eval_data.get('adherence_assessment', {}).get('adheres', False)}")
             print_success("=" * 60)
             return eval_data
-        else:
-            print_error(f"  Hermes failed to assess {script_name}: {response.error}")
-            return None
+        print_error(f"  Hermes failed to assess {script_name}: {response.error}")
+        return None
     except Exception as e:
         print_error(f"  Hermes evaluation error: {e}")
         return None
@@ -387,7 +386,7 @@ def main() -> int:
     trace_path: Optional[Path] = (_REPO_ROOT / trace_file_rel) if trace_file_rel else None
     if trace_path:
         trace_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
     # 1. Boot up Hermes Client
     if not args.dry_run:
         try:
@@ -403,7 +402,7 @@ def main() -> int:
     else:
         client = None
         print_info("  [DRY RUN] Hermes assessment will be skipped.")
-    
+
     print_info("═" * 60)
     print_info(f"  Hermes Script Evaluator — Target: scripts/{args.target}")
     print_info(f"  Saving outputs to: {output_path}")
@@ -480,15 +479,15 @@ def main() -> int:
                 script_path,
                 timeout=evaluator_cfg.get("script_timeout", 30),
             )
-        
+
         # Read source code
         try:
-            with open(script_path, "r", encoding="utf-8") as f:
+            with open(script_path, encoding="utf-8") as f:
                 source_code = f.read()
         except Exception as e:
             print_error(f"  Could not read source code for {script_path.name}: {e}")
             continue
-        
+
         # Assess (skip in dry-run mode)
         if args.dry_run:
             print_info(f"  [DRY RUN] Would assess {script_path.name} with Hermes.")
@@ -527,28 +526,26 @@ def main() -> int:
     report_file_path = output_path / "overall_evaluation_report.md"
     try:
         with open(report_file_path, "w", encoding="utf-8") as f:
-            f.write(f"# Evaluator Orchestrations Report\n")
+            f.write("# Evaluator Orchestrations Report\n")
             f.write(f"Target: `scripts/{args.target}`\n")
             f.write(f"Generated: {datetime.now().isoformat()}\n\n")
-            
+
             for script_name, data in all_evaluations.items():
                 f.write(f"## Script: `{script_name}`\n")
-                
+
                 adherence = data.get("adherence_assessment", {})
                 pass_fail = "✅ STRICT ADHERENCE" if adherence.get("adheres", False) else "❌ NON-COMPLIANT"
                 f.write(f"**Pattern Adherence**: {pass_fail}\n\n")
                 f.write(f"> {adherence.get('reasoning', 'No reasoning provided.')}\n\n")
-                
+
                 f.write("### Technical Debt Identified:\n")
-                for debt in data.get("technical_debt", []):
-                    f.write(f"- {debt}\n")
-                
+                f.writelines(f"- {debt}\n" for debt in data.get("technical_debt", []))
+
                 f.write("\n### Underlying Method Improvements Required:\n")
-                for imp in data.get("underlying_improvements", []):
-                    f.write(f"- {imp}\n")
-                
+                f.writelines(f"- {imp}\n" for imp in data.get("underlying_improvements", []))
+
                 f.write("\n---\n\n")
-                
+
         print_success(f"Successfully compiled overall markdown report to: {report_file_path}")
     except Exception as e:
         print_error(f"Failed to save overall evaluation report: {e}")

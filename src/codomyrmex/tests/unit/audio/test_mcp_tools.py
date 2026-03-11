@@ -12,7 +12,11 @@ from codomyrmex.audio.mcp_tools import (
     audio_transcribe,
 )
 from codomyrmex.audio.speech_to_text.providers import WHISPER_AVAILABLE
-from codomyrmex.audio.text_to_speech.providers import PYTTSX3_AVAILABLE, EDGE_TTS_AVAILABLE
+from codomyrmex.audio.text_to_speech.providers import (
+    EDGE_TTS_AVAILABLE,
+    PYTTSX3_AVAILABLE,
+)
+
 
 @pytest.fixture
 def dummy_wav_file(tmp_path: Path) -> Path:
@@ -102,7 +106,7 @@ def test_audio_batch_transcribe_invalid_files(
     result = audio_batch_transcribe(
         ["/invalid/1.wav", "/invalid/2.wav"], str(temp_output_dir), model_size="tiny"
     )
-    
+
     if WHISPER_AVAILABLE:
         assert result["success"] is True
         assert result["result"]["processed"] == 0
@@ -118,7 +122,7 @@ def test_audio_transcribe_invalid_format(dummy_wav_file: Path) -> None:
     """Test transcription with invalid format (e.g. by changing suffix)."""
     bad_format_path = dummy_wav_file.with_suffix(".txt")
     dummy_wav_file.rename(bad_format_path)
-    
+
     result = audio_transcribe(str(bad_format_path))
     assert result["success"] is False
     assert "AudioFormatError" in result["error"]["type"]

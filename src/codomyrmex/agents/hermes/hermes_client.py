@@ -286,7 +286,7 @@ class HermesClient(CLIAgentBase):
             history_text = ""
             for msg in session.messages[:-1]:  # exclude the current user prompt
                 history_text += f"[{msg['role'].upper()}]\n{msg['content']}\n\n"
-            
+
             if history_text:
                 full_prompt = (
                     f"Previous Conversation:\n{history_text}"
@@ -302,7 +302,7 @@ class HermesClient(CLIAgentBase):
             if response.is_success():
                 session.add_message("assistant", response.content)
                 store.save(session)
-                
+
             response.metadata["session_id"] = session.session_id
             return response
 

@@ -12,9 +12,9 @@ from pathlib import Path
 
 import pytest
 
-from codomyrmex.audio.speech_to_text.transcriber import Transcriber
+from codomyrmex.audio.exceptions import ProviderNotAvailableError, TranscriptionError
 from codomyrmex.audio.speech_to_text.providers import WHISPER_AVAILABLE
-from codomyrmex.audio.exceptions import TranscriptionError, ProviderNotAvailableError
+from codomyrmex.audio.speech_to_text.transcriber import Transcriber
 
 
 @pytest.mark.unit

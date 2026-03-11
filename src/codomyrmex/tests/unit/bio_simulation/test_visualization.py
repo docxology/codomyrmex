@@ -1,6 +1,7 @@
 """Tests for bio_simulation visualization."""
 
 import pytest
+
 from codomyrmex.bio_simulation import Colony as AntColony
 from codomyrmex.bio_simulation.colony import Colony as BasicColony
 from codomyrmex.bio_simulation.visualization import render_colony_state

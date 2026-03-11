@@ -132,7 +132,7 @@ class TestHermesClientSessionIntegration:
     def test_chat_session_new_and_continue(self, tmp_path) -> None:
         """Test creating a new session and appending to it."""
         db_path = tmp_path / "test_sessions.db"
-        
+
         # Use echo to simulate a fast, mock-free successful execution
         client = HermesClient(config={
             "hermes_command": "echo",
@@ -170,7 +170,7 @@ class TestHermesSessionMCPTools:
         # Patch _get_client to inject our test config
         from codomyrmex.agents.hermes import mcp_tools
         from codomyrmex.agents.hermes.hermes_client import HermesClient
-        
+
         def mock_get_client(**kwargs):
             return HermesClient(config={
                 "hermes_command": "echo",
@@ -179,9 +179,9 @@ class TestHermesSessionMCPTools:
                 "hermes_model": kwargs.get("model", "hermes3"),
                 "hermes_timeout": kwargs.get("timeout", 120),
             })
-            
+
         monkeypatch.setattr(mcp_tools, "_get_client", mock_get_client)
-        
+
         from codomyrmex.agents.hermes.mcp_tools import (
             hermes_chat_session,
             hermes_session_clear,
