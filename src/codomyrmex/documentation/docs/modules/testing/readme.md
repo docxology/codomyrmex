@@ -7,11 +7,23 @@
 Test files and validation suites.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
+- `__init__.py` – File
+- `chaos/` – Subdirectory
+- `fixture_utils.py` – File
+- `fixtures/` – Subdirectory
+- `fuzzing.py` – File
+- `generators/` – Subdirectory
+- `mcp_tools.py` – File
+- `property_testing.py` – File
+- `py.typed` – File
+- `strategies.py` – File
+- `workflow/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

@@ -4,15 +4,25 @@
 
 ## Overview
 
-Documentation files and guides.
+Contains components for the src system.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SECURITY.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
-- `security.md` – File
+- `__init__.py` – File
+- `analytics.py` – File
+- `examples/` – Subdirectory
+- `mcp_tools.py` – File
+- `models.py` – File
+- `object_manager.py` – File
+- `py.typed` – File
+- `sensor_integration.py` – File
+- `simulation_engine.py` – File
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

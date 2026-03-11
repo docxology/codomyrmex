@@ -4,15 +4,26 @@
 
 ## Overview
 
-Documentation files and guides.
+Configuration files and templates.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SECURITY.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
-- `security.md` – File
+- `__init__.py` – File
+- `core/` – Subdirectory
+- `defaults.py` – File
+- `deployment/` – Subdirectory
+- `mcp_tools.py` – File
+- `migration/` – Subdirectory
+- `monitoring/` – Subdirectory
+- `py.typed` – File
+- `secrets/` – Subdirectory
+- `validation/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

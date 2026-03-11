@@ -4,16 +4,28 @@
 
 ## Overview
 
-Documentation files and guides.
+Contains components for the src system.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `CHANGELOG.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SECURITY.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `changelog.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
-- `security.md` – File
+- `__init__.py` – File
+- `analysis/` – Subdirectory
+- `currency/` – Subdirectory
+- `encoding/` – Subdirectory
+- `exceptions.py` – File
+- `graphy/` – Subdirectory
+- `mcp_tools.py` – File
+- `protocols/` – Subdirectory
+- `py.typed` – File
+- `random/` – Subdirectory
+- `steganography/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

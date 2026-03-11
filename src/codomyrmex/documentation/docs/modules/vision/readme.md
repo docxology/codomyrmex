@@ -4,11 +4,18 @@
 
 ## Overview
 
-Documentation files and guides.
+Contains components for the src system.
 
 ## Directory Contents
-- `readme.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `annotation_extractor.py` – File
+- `models.py` – File
+- `pdf_extractor.py` – File
+- `vlm_client.py` – File
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

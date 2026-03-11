@@ -7,13 +7,28 @@
 Documentation files and guides.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SECURITY.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
-- `security.md` – File
-- `usage_examples.md` – File
+- `USAGE_EXAMPLES.md` – File
+- `__init__.py` – File
+- `chunking.py` – File
+- `config.py` – File
+- `core/` – Subdirectory
+- `exceptions.py` – File
+- `formats/` – Subdirectory
+- `mcp_tools.py` – File
+- `metadata/` – Subdirectory
+- `models/` – Subdirectory
+- `py.typed` – File
+- `search/` – Subdirectory
+- `templates/` – Subdirectory
+- `transformation/` – Subdirectory
+- `utils/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

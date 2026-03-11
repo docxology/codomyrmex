@@ -7,11 +7,23 @@
 Test files and validation suites.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `RUNNING_TESTS.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
+- `__init__.py` – File
+- `conftest.py` – File
+- `fixtures/` – Subdirectory
+- `integration/` – Subdirectory
+- `languages/` – Subdirectory
+- `orchestrator/` – Subdirectory
+- `performance/` – Subdirectory
+- `py.typed` – File
+- `unit/` – Subdirectory
+- `utils/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

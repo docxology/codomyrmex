@@ -20,4 +20,4 @@ Documentation files and guides.
 
 ## Navigation
 - **Parent Directory**: [git_operations](../README.md)
-- **Project Root**: ../../../../../../../README.md
+- **Project Root**: ../../../../README.md

@@ -4,14 +4,29 @@
 
 ## Overview
 
-Documentation files and guides.
+Contains components for the src system.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
+- `__init__.py` – File
+- `ai.py` – File
+- `analysis.py` – File
+- `base.py` – File
+- `cerebrum.py` – File
+- `config.py` – File
+- `execution.py` – File
+- `git.py` – File
+- `io.py` – File
+- `network.py` – File
+- `orchestration.py` – File
+- `py.typed` – File
+- `specialized.py` – File
+- `viz.py` – File
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

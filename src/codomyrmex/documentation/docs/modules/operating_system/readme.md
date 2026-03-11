@@ -4,13 +4,22 @@
 
 ## Overview
 
-Documentation files and guides.
+Contains components for the src system.
 
 ## Directory Contents
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
 - `SPEC.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
+- `__init__.py` – File
+- `base.py` – File
+- `detector.py` – File
+- `linux/` – Subdirectory
+- `mac/` – Subdirectory
+- `mcp_tools.py` – File
+- `py.typed` – File
+- `windows/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

@@ -4,17 +4,36 @@
 
 ## Overview
 
-Documentation files and guides.
+Contains components for the src system.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `CHANGELOG.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SECURITY.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `changelog.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
-- `security.md` – File
-- `usage_examples.md` – File
+- `USAGE_EXAMPLES.md` – File
+- `__init__.py` – File
+- `_compat.py` – File
+- `charts/` – Subdirectory
+- `components/` – Subdirectory
+- `core/` – Subdirectory
+- `dashboard_builder.py` – File
+- `dashboard_export.py` – File
+- `engines/` – Subdirectory
+- `exceptions.py` – File
+- `export.py` – File
+- `git/` – Subdirectory
+- `mcp_tools.py` – File
+- `mermaid/` – Subdirectory
+- `plots/` – Subdirectory
+- `py.typed` – File
+- `reports/` – Subdirectory
+- `themes/` – Subdirectory
+- `utils.py` – File
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

@@ -4,14 +4,27 @@
 
 ## Overview
 
-Documentation files and guides.
+Contains components for the src system.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `FPF-Spec.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
+- `__init__.py` – File
+- `analysis/` – Subdirectory
+- `constraints/` – Subdirectory
+- `core/` – Subdirectory
+- `io/` – Subdirectory
+- `mcp_tools.py` – File
+- `models/` – Subdirectory
+- `optimization/` – Subdirectory
+- `py.typed` – File
+- `reasoning/` – Subdirectory
+- `visualization/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

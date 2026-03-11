@@ -4,15 +4,33 @@
 
 ## Overview
 
-Documentation files and guides.
+Contains components for the src system.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
+- `README.md` – File
+- `SECURITY.md` – File
 - `SPEC.md` – File
-- `api_specification.md` – File
-- `mcp_tool_specification.md` – File
-- `readme.md` – File
-- `security.md` – File
+- `__init__.py` – File
+- `async_ops/` – Subdirectory
+- `backends/` – Subdirectory
+- `cache.py` – File
+- `cache_manager.py` – File
+- `distributed/` – Subdirectory
+- `exceptions.py` – File
+- `invalidation/` – Subdirectory
+- `mcp_tools.py` – File
+- `namespaced.py` – File
+- `policies/` – Subdirectory
+- `py.typed` – File
+- `replication/` – Subdirectory
+- `serializers/` – Subdirectory
+- `stats.py` – File
+- `ttl_manager.py` – File
+- `warmers/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

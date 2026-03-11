@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/git_operations/docs
+# Codomyrmex Agents — src/codomyrmex/git_operations/docs
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
@@ -46,4 +46,4 @@ Documentation files and guides.
 
 ## Navigation Links
 - **📁 Parent Directory**: [git_operations](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../../../../README.md - Main project documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation
