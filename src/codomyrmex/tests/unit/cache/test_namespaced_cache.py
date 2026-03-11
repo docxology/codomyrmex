@@ -40,7 +40,7 @@ class TestNamespacedCacheExtended:
         ns_cache.set("user:1", "a")
         ns_cache.set("user:2", "b")
         ns_cache.set("other", "c")
-        
+
         count = ns_cache.delete_pattern("user:*")
         assert count == 2
         assert ns_cache.get("user:1") is None
@@ -49,7 +49,7 @@ class TestNamespacedCacheExtended:
     def test_clear_removes_only_namespace(self, base_cache, ns_cache):
         ns_cache.set("k1", "v1")
         base_cache.set("other:k2", "v2")
-        
+
         ns_cache.clear()
         assert ns_cache.get("k1") is None
         assert base_cache.get("other:k2") == "v2"
@@ -57,7 +57,7 @@ class TestNamespacedCacheExtended:
     def test_nested_namespaces(self, base_cache):
         ns1 = NamespacedCache(base_cache, "outer")
         ns2 = NamespacedCache(ns1, "inner")
-        
+
         ns2.set("k", "v")
         assert base_cache.get("outer:inner:k") == "v"
         assert ns2.get("k") == "v"
@@ -65,13 +65,13 @@ class TestNamespacedCacheExtended:
 
     def test_namespaced_file_based_cache(self, tmp_path):
         from codomyrmex.cache.backends.file_based import FileBasedCache
-        
+
         fb_cache = FileBasedCache(cache_dir=tmp_path / "fb")
         ns_fb = NamespacedCache(fb_cache, "app")
-        
+
         ns_fb.set("config", {"theme": "dark"})
         assert ns_fb.get("config") == {"theme": "dark"}
         assert fb_cache.exists("app:config") is True
-        
+
         ns_fb.delete_pattern("*")
         assert ns_fb.get("config") is None

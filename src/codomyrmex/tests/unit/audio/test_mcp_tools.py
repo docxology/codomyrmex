@@ -102,7 +102,7 @@ def test_audio_batch_transcribe_invalid_files(
     result = audio_batch_transcribe(
         ["/invalid/1.wav", "/invalid/2.wav"], str(temp_output_dir), model_size="tiny"
     )
-    
+
     if WHISPER_AVAILABLE:
         assert result["success"] is True
         assert result["result"]["processed"] == 0
@@ -118,7 +118,7 @@ def test_audio_transcribe_invalid_format(dummy_wav_file: Path) -> None:
     """Test transcription with invalid format (e.g. by changing suffix)."""
     bad_format_path = dummy_wav_file.with_suffix(".txt")
     dummy_wav_file.rename(bad_format_path)
-    
+
     result = audio_transcribe(str(bad_format_path))
     assert result["success"] is False
     assert "AudioFormatError" in result["error"]["type"]

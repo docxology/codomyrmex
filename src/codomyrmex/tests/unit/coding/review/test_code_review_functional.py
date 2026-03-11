@@ -45,7 +45,7 @@ def python_file(tmp_path):
                         if i % 2 == 0:
                             print(i)
             return a + b
-            
+
         def bare_except():
             try:
                 pass
@@ -112,7 +112,7 @@ class TestPyscnAnalyzerFunctional:
             analyzer = PyscnAnalyzer()
         except ToolNotFoundError:
             pytest.skip("pyscn not installed")
-            
+
         with open(python_file, "r") as f:
             code = f.read()
         results = analyzer.analyze_code(code, python_file)

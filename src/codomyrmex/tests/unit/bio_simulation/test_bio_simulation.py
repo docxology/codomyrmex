@@ -149,11 +149,11 @@ def test_colony_idle_to_foraging():
     colony = Colony(population=100)
     for ant in colony.ants:
         ant.state = AntState.IDLE
-    
+
     # Run a few ticks, some should switch
     for _ in range(10):
         colony._step_tick()
-    
+
     states = [ant.state for ant in colony.ants]
     assert AntState.FORAGING in states
 

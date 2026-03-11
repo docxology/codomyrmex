@@ -20,13 +20,13 @@ class TestGoogleAuthenticator:
         with tempfile.NamedTemporaryFile() as tmp:
             client_secrets = tmp.name
             token_cache = tempfile.mktemp()
-            
+
             auth = GoogleAuthenticator(
                 client_secrets_file=client_secrets,
                 token_cache_file=token_cache,
                 scopes=["https://www.googleapis.com/auth/calendar"]
             )
-            
+
             assert auth.client_secrets_file == client_secrets
             assert auth.token_file == token_cache
             assert auth.scopes == ["https://www.googleapis.com/auth/calendar"]
