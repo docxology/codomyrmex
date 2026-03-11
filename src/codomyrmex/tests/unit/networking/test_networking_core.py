@@ -535,3 +535,771 @@ class TestNetworkingMCPTools:
     def test_list_interfaces_addresses_is_list(self):
         result = networking_list_interfaces()
         assert isinstance(result["addresses"], list)
+
+    def test_list_interfaces_each_address_has_ip_and_family(self):
+        """Each address entry must carry both ip and family keys."""
+        result = networking_list_interfaces()
+        for addr in result["addresses"]:
+            assert "ip" in addr
+            assert "family" in addr
+
+    def test_list_exceptions_count_matches_known_classes(self):
+        """All 9 exception classes must be present in the list."""
+        result = networking_list_exceptions()
+        assert len(result["exceptions"]) == 9
+
+    def test_check_connectivity_returns_success_status(self):
+        """networking_check_connectivity must return a success status key."""
+        from codomyrmex.networking.mcp_tools import networking_check_connectivity
+
+        result = networking_check_connectivity(timeout=1)
+        assert result["status"] == "success"
+
+    def test_check_connectivity_results_is_list(self):
+        """The results key holds a list of target entries."""
+        from codomyrmex.networking.mcp_tools import networking_check_connectivity
+
+        result = networking_check_connectivity(timeout=1)
+        assert isinstance(result["results"], list)
+
+    def test_check_connectivity_each_result_has_required_keys(self):
+        """Every target entry must have host, port and reachable keys."""
+        from codomyrmex.networking.mcp_tools import networking_check_connectivity
+
+        result = networking_check_connectivity(timeout=1)
+        for entry in result["results"]:
+            assert "host" in entry
+            assert "port" in entry
+            assert "reachable" in entry
+
+    def test_check_connectivity_reachable_is_bool(self):
+        """The reachable value must be a boolean, not None or a string."""
+        from codomyrmex.networking.mcp_tools import networking_check_connectivity
+
+        result = networking_check_connectivity(timeout=1)
+        for entry in result["results"]:
+            assert isinstance(entry["reachable"], bool)
+
+
+# ---------------------------------------------------------------------------
+# ServiceProxy tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(not RESILIENCE_AVAILABLE, reason="resilience module not importable")
+class TestServiceProxy:
+    """Tests for ServiceProxy combining LB + CB + RetryPolicy."""
+
+    def _make_proxy(self, service_name: str = "svc") -> ServiceProxy:
+        """Return a ServiceProxy with a fast config for testing."""
+        lb = LoadBalancer()
+        cb = CircuitBreaker(service_name, CircuitBreakerConfig(failure_threshold=10))
+        rp = RetryPolicy(max_retries=0, initial_delay=0.0, jitter=False)
+        return ServiceProxy(service_name, lb, cb, rp)
+
+    def test_call_raises_when_no_healthy_instances(self):
+        """Proxy must raise NoHealthyInstanceError when LB has no instances."""
+        proxy = self._make_proxy()
+        with pytest.raises(NoHealthyInstanceError):
+            proxy.call(lambda inst: inst)
+
+    def test_call_invokes_func_with_instance(self):
+        """Proxy passes selected instance as first argument to the callable."""
+        proxy = self._make_proxy()
+        inst = ServiceInstance(id="p1", host="h", port=1)
+        proxy.load_balancer.register(inst)
+        received = []
+        proxy.call(lambda i: received.append(i.id))
+        assert received == ["p1"]
+
+    def test_call_returns_func_result(self):
+        """Proxy propagates the return value from the callable."""
+        proxy = self._make_proxy()
+        proxy.load_balancer.register(ServiceInstance(id="p2", host="h", port=2))
+        result = proxy.call(lambda i: 42)
+        assert result == 42
+
+    def test_proxy_default_components_created_when_none_supplied(self):
+        """Without explicit components, proxy creates defaults internally."""
+        proxy = ServiceProxy("auto")
+        assert proxy.load_balancer is not None
+        assert proxy.circuit_breaker is not None
+        assert proxy.retry_policy is not None
+
+    def test_proxy_service_name_stored(self):
+        """service_name attribute must match the constructor argument."""
+        proxy = ServiceProxy("my-service")
+        assert proxy.service_name == "my-service"
+
+    def test_call_raises_circuit_open_after_cb_trips(self):
+        """Proxy propagates CircuitOpenError after the circuit trips open."""
+        lb = LoadBalancer()
+        cb = CircuitBreaker("cb-svc", CircuitBreakerConfig(failure_threshold=1, timeout_seconds=9999))
+        rp = RetryPolicy(max_retries=0, initial_delay=0.0, jitter=False)
+        proxy = ServiceProxy("cb-svc", lb, cb, rp)
+        lb.register(ServiceInstance(id="cbp", host="h", port=9))
+        # Trip the circuit breaker
+        cb.record_failure()
+        assert cb.state == CircuitState.OPEN
+        with pytest.raises(CircuitOpenError):
+            proxy.call(lambda i: i)
+
+
+# ---------------------------------------------------------------------------
+# CircuitBreaker half-open and threading edge cases
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(not RESILIENCE_AVAILABLE, reason="resilience module not importable")
+class TestCircuitBreakerHalfOpen:
+    """Tests for half-open state transitions in CircuitBreaker."""
+
+    def test_half_open_success_closes_circuit(self):
+        """Sufficient successes in half-open state must close the circuit."""
+        cfg = CircuitBreakerConfig(failure_threshold=1, success_threshold=2, timeout_seconds=0.0)
+        cb = CircuitBreaker("ho-svc", cfg)
+        cb.record_failure()
+        # Timeout of 0 means next can_execute transitions to HALF_OPEN
+        assert cb.can_execute() is True
+        assert cb.state == CircuitState.HALF_OPEN
+        cb.record_success()
+        cb.record_success()
+        assert cb.state == CircuitState.CLOSED
+
+    def test_half_open_failure_reopens_circuit(self):
+        """A failure during half-open state must re-open the circuit."""
+        cfg = CircuitBreakerConfig(failure_threshold=1, success_threshold=5, timeout_seconds=0.0)
+        cb = CircuitBreaker("ho-fail", cfg)
+        cb.record_failure()
+        cb.can_execute()  # transitions to HALF_OPEN
+        cb.record_failure()
+        assert cb.state == CircuitState.OPEN
+
+    def test_half_open_respects_max_calls_limit(self):
+        """half_open_max_calls config must cap calls in half-open state."""
+        cfg = CircuitBreakerConfig(failure_threshold=1, timeout_seconds=0.0, half_open_max_calls=2)
+        cb = CircuitBreaker("ho-limit", cfg)
+        cb.record_failure()
+        cb.can_execute()  # HALF_OPEN
+        cb.half_open_calls = 2  # simulate exhausted half-open budget
+        assert cb.can_execute() is False
+
+    def test_circuit_not_opened_below_threshold(self):
+        """Failures below the threshold must keep the circuit CLOSED."""
+        cfg = CircuitBreakerConfig(failure_threshold=5)
+        cb = CircuitBreaker("not-open", cfg)
+        for _ in range(4):
+            cb.record_failure()
+        assert cb.state == CircuitState.CLOSED
+
+
+# ---------------------------------------------------------------------------
+# Response and NetworkingError (http_client) tests
+# ---------------------------------------------------------------------------
+
+try:
+    from codomyrmex.networking.http_client import NetworkingError, Response
+
+    HTTP_CLIENT_AVAILABLE = True
+except ImportError:
+    HTTP_CLIENT_AVAILABLE = False
+
+
+@pytest.mark.skipif(not HTTP_CLIENT_AVAILABLE, reason="http_client module not importable (requests missing?)")
+class TestResponseObject:
+    """Tests for the Response dataclass from http_client.py."""
+
+    def test_status_code_stored(self):
+        """status_code field must be preserved as-is."""
+        r = Response(status_code=200, headers={}, content=b"", text="")
+        assert r.status_code == 200
+
+    def test_headers_stored(self):
+        """headers dict must be retrievable after construction."""
+        hdrs = {"Content-Type": "application/json"}
+        r = Response(status_code=200, headers=hdrs, content=b"", text="")
+        assert r.headers["Content-Type"] == "application/json"
+
+    def test_content_stored_as_bytes(self):
+        """content field holds raw bytes."""
+        r = Response(status_code=200, headers={}, content=b"raw", text="raw")
+        assert r.content == b"raw"
+
+    def test_text_stored(self):
+        """text field holds the decoded string body."""
+        r = Response(status_code=200, headers={}, content=b"hello", text="hello")
+        assert r.text == "hello"
+
+    def test_json_parses_text(self):
+        """json() must parse the text field as JSON when json_data is None."""
+        r = Response(status_code=200, headers={}, content=b'{"key": 1}', text='{"key": 1}')
+        data = r.json()
+        assert data["key"] == 1
+
+    def test_json_caches_result(self):
+        """Calling json() twice must return the same dict object."""
+        r = Response(status_code=200, headers={}, content=b'{"a": 2}', text='{"a": 2}')
+        first = r.json()
+        second = r.json()
+        assert first is second
+
+    def test_json_raises_on_invalid_text(self):
+        """json() must raise NetworkingError when text is not valid JSON."""
+        r = Response(status_code=200, headers={}, content=b"not-json", text="not-json")
+        with pytest.raises(NetworkingError):
+            r.json()
+
+    def test_json_uses_existing_json_data(self):
+        """If json_data is pre-populated, json() must return it directly."""
+        prefilled = {"pre": "filled"}
+        r = Response(status_code=200, headers={}, content=b"", text="", json_data=prefilled)
+        assert r.json() is prefilled
+
+    def test_response_200_is_not_error(self):
+        """A 200-status Response is a plain data object — not an exception."""
+        r = Response(status_code=200, headers={}, content=b"ok", text="ok")
+        assert r.status_code == 200
+
+    def test_response_500_status_stored(self):
+        """status_code=500 must be stored without alteration."""
+        r = Response(status_code=500, headers={}, content=b"err", text="err")
+        assert r.status_code == 500
+
+
+@pytest.mark.skipif(not HTTP_CLIENT_AVAILABLE, reason="http_client module not importable (requests missing?)")
+class TestNetworkingErrorFromHttpClient:
+    """Tests for NetworkingError from http_client."""
+
+    def test_networking_error_is_exception(self):
+        """NetworkingError must be raiseable as a standard exception."""
+        with pytest.raises(NetworkingError):
+            raise NetworkingError("test error")
+
+    def test_networking_error_message_preserved(self):
+        """The message string must be accessible via str()."""
+        err = NetworkingError("connection refused")
+        assert "connection refused" in str(err)
+
+
+# ---------------------------------------------------------------------------
+# Raw sockets: TCPClient, TCPServer, UDPClient, PortScanner
+# ---------------------------------------------------------------------------
+
+try:
+    from codomyrmex.networking.raw_sockets import (
+        PortScanner,
+        TCPClient,
+        TCPServer,
+        UDPClient,
+    )
+
+    RAW_SOCKETS_AVAILABLE = True
+except ImportError:
+    RAW_SOCKETS_AVAILABLE = False
+
+
+@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+class TestTCPClientConstruction:
+    """Tests for TCPClient attribute initialisation without network I/O."""
+
+    def test_host_stored(self):
+        """TCPClient must store the host argument."""
+        client = TCPClient("127.0.0.1", 9999)
+        client.close()
+        assert client.host == "127.0.0.1"
+
+    def test_port_stored(self):
+        """TCPClient must store the port argument."""
+        client = TCPClient("127.0.0.1", 9998)
+        client.close()
+        assert client.port == 9998
+
+    def test_sock_attribute_exists(self):
+        """TCPClient exposes its socket via the .sock attribute."""
+        client = TCPClient("127.0.0.1", 9997)
+        assert client.sock is not None
+        client.close()
+
+    def test_context_manager_closes_without_error(self):
+        """Using TCPClient as a context manager must not raise on exit."""
+        with TCPClient("127.0.0.1", 9996) as client:
+            assert client.host == "127.0.0.1"
+
+
+@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+class TestTCPClientServerEcho:
+    """End-to-end loopback echo test for TCPClient + TCPServer."""
+
+    def test_echo_round_trip(self):
+        """Send bytes through a real loopback and receive the echo."""
+        import socket
+        import threading
+
+        server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        server_sock.bind(("127.0.0.1", 0))
+        port = server_sock.getsockname()[1]
+        server_sock.listen(1)
+
+        def serve():
+            conn, _ = server_sock.accept()
+            data = conn.recv(1024)
+            conn.sendall(data)
+            conn.close()
+            server_sock.close()
+
+        t = threading.Thread(target=serve, daemon=True)
+        t.start()
+
+        client = TCPClient("127.0.0.1", port)
+        client.connect()
+        client.send(b"hello")
+        received = client.receive(1024)
+        client.close()
+        t.join(timeout=3)
+
+        assert received == b"hello"
+
+
+@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+class TestTCPServerAttributes:
+    """Tests for TCPServer construction and SO_REUSEADDR setup."""
+
+    def test_host_stored(self):
+        """TCPServer must store the host argument."""
+        srv = TCPServer("127.0.0.1", 0)
+        assert srv.host == "127.0.0.1"
+        srv.sock.close()
+
+    def test_port_stored(self):
+        """TCPServer must store the port argument."""
+        srv = TCPServer("127.0.0.1", 0)
+        assert srv.port == 0
+        srv.sock.close()
+
+    def test_sock_attribute_exists(self):
+        """TCPServer exposes its socket via the .sock attribute."""
+        srv = TCPServer("127.0.0.1", 0)
+        assert srv.sock is not None
+        srv.sock.close()
+
+
+@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+class TestUDPClientConstruction:
+    """Tests for UDPClient attribute initialisation without network I/O."""
+
+    def test_host_stored(self):
+        """UDPClient must store the host argument."""
+        client = UDPClient("127.0.0.1", 5000)
+        client.close()
+        assert client.host == "127.0.0.1"
+
+    def test_port_stored(self):
+        """UDPClient must store the port argument."""
+        client = UDPClient("127.0.0.1", 5001)
+        client.close()
+        assert client.port == 5001
+
+    def test_sock_attribute_exists(self):
+        """UDPClient exposes a DGRAM socket via .sock."""
+        client = UDPClient("127.0.0.1", 5002)
+        assert client.sock is not None
+        client.close()
+
+
+@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+class TestUDPClientEcho:
+    """End-to-end loopback echo for UDPClient."""
+
+    def test_send_and_receive(self):
+        """UDPClient round-trip: send bytes, receive the echo back."""
+        import socket
+        import threading
+
+        server_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        server_sock.bind(("127.0.0.1", 0))
+        port = server_sock.getsockname()[1]
+
+        def serve():
+            data, addr = server_sock.recvfrom(1024)
+            server_sock.sendto(data, addr)
+            server_sock.close()
+
+        t = threading.Thread(target=serve, daemon=True)
+        t.start()
+
+        client = UDPClient("127.0.0.1", port)
+        client.send(b"ping")
+        data, _ = client.receive(1024)
+        client.close()
+        t.join(timeout=3)
+
+        assert data == b"ping"
+
+
+@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+class TestPortScanner:
+    """Tests for PortScanner.is_port_open and scan_range."""
+
+    def test_open_port_returns_true(self):
+        """is_port_open must return True for a real listening port."""
+        import socket
+
+        srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        srv.bind(("127.0.0.1", 0))
+        port = srv.getsockname()[1]
+        srv.listen(1)
+        try:
+            assert PortScanner.is_port_open("127.0.0.1", port) is True
+        finally:
+            srv.close()
+
+    def test_closed_port_returns_false(self):
+        """is_port_open must return False for a port where nothing listens."""
+        # Port 1 requires root and will be refused on most systems
+        result = PortScanner.is_port_open("127.0.0.1", 1, timeout=0.3)
+        assert result is False
+
+    def test_scan_range_includes_open_port(self):
+        """scan_range must include the port number of a real listener."""
+        import socket
+
+        srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        srv.bind(("127.0.0.1", 0))
+        port = srv.getsockname()[1]
+        srv.listen(1)
+        try:
+            open_ports = PortScanner.scan_range("127.0.0.1", port, port, timeout=0.5)
+            assert port in open_ports
+        finally:
+            srv.close()
+
+    def test_scan_range_returns_list(self):
+        """scan_range always returns a list, even when no ports are open."""
+        result = PortScanner.scan_range("127.0.0.1", 1, 1, timeout=0.1)
+        assert isinstance(result, list)
+
+    def test_is_port_open_returns_bool(self):
+        """Return type of is_port_open must be strictly bool."""
+        result = PortScanner.is_port_open("127.0.0.1", 1, timeout=0.1)
+        assert isinstance(result, bool)
+
+
+# ---------------------------------------------------------------------------
+# WebSocketClient construction and _handle_message dispatch
+# ---------------------------------------------------------------------------
+
+try:
+    from codomyrmex.networking.websocket_client import (
+        WebSocketClient,
+    )
+    from codomyrmex.networking.websocket_client import (
+        WebSocketError as WSError,
+    )
+
+    WEBSOCKET_CLIENT_AVAILABLE = True
+except ImportError:
+    WEBSOCKET_CLIENT_AVAILABLE = False
+
+_WEBSOCKETS_LIB = False
+try:
+    import websockets
+
+    _WEBSOCKETS_LIB = True
+except ImportError:
+    pass
+
+
+@pytest.mark.skipif(
+    not WEBSOCKET_CLIENT_AVAILABLE or not _WEBSOCKETS_LIB,
+    reason="WebSocketClient or websockets library not available",
+)
+class TestWebSocketClientConstruction:
+    """Tests for WebSocketClient attribute initialisation (no network I/O)."""
+
+    def test_url_stored(self):
+        """WebSocketClient must store the url argument."""
+        client = WebSocketClient("ws://localhost:8765")
+        assert client.url == "ws://localhost:8765"
+
+    def test_default_reconnect_interval(self):
+        """Default reconnect_interval must be 1.0 seconds."""
+        client = WebSocketClient("ws://localhost:8765")
+        assert client.reconnect_interval == 1.0
+
+    def test_default_max_reconnect_delay(self):
+        """Default max_reconnect_delay must be 30.0 seconds."""
+        client = WebSocketClient("ws://localhost:8765")
+        assert client.max_reconnect_delay == 30.0
+
+    def test_custom_reconnect_interval(self):
+        """Custom reconnect_interval must override the default."""
+        client = WebSocketClient("ws://localhost:8765", reconnect_interval=5.0)
+        assert client.reconnect_interval == 5.0
+
+    def test_custom_max_reconnect_delay(self):
+        """Custom max_reconnect_delay must override the default."""
+        client = WebSocketClient("ws://localhost:8765", max_reconnect_delay=60.0)
+        assert client.max_reconnect_delay == 60.0
+
+    def test_connection_initially_none(self):
+        """connection attribute must start as None before connect() is called."""
+        client = WebSocketClient("ws://localhost:8765")
+        assert client.connection is None
+
+    def test_running_initially_false(self):
+        """_running flag must be False before connect() is called."""
+        client = WebSocketClient("ws://localhost:8765")
+        assert client._running is False
+
+    def test_headers_default_empty_dict(self):
+        """Default headers must be an empty dict."""
+        client = WebSocketClient("ws://localhost:8765")
+        assert client.headers == {}
+
+    def test_custom_headers_stored(self):
+        """Custom headers must be stored and retrievable."""
+        hdrs = {"Authorization": "Bearer tok"}
+        client = WebSocketClient("ws://localhost:8765", headers=hdrs)
+        assert client.headers["Authorization"] == "Bearer tok"
+
+    def test_on_handler_registers(self):
+        """on() must append the handler to the internal _handlers list."""
+        client = WebSocketClient("ws://localhost:8765")
+
+        def handler(msg):
+            pass
+
+        client.on(handler)
+        assert handler in client._handlers
+
+    def test_multiple_handlers_registered(self):
+        """Multiple on() calls must all be stored in order."""
+        client = WebSocketClient("ws://localhost:8765")
+        handlers = [lambda m: m, lambda m: m * 2]
+        for h in handlers:
+            client.on(h)
+        assert len(client._handlers) == 2
+
+
+@pytest.mark.skipif(
+    not WEBSOCKET_CLIENT_AVAILABLE or not _WEBSOCKETS_LIB,
+    reason="WebSocketClient or websockets library not available",
+)
+class TestWebSocketClientHandleMessage:
+    """Tests for _handle_message dispatch logic (no real websocket needed)."""
+
+    def test_handle_message_dispatches_to_sync_handler(self):
+        """Sync handlers must receive the message data."""
+        import asyncio
+
+        received = []
+        client = WebSocketClient("ws://localhost:8765")
+        client.on(received.append)
+        asyncio.run(client._handle_message('{"key": "val"}'))
+        assert received == [{"key": "val"}]
+
+    def test_handle_message_parses_json_string(self):
+        """A valid JSON string message must be parsed before dispatch."""
+        import asyncio
+
+        received = []
+        client = WebSocketClient("ws://localhost:8765")
+        client.on(received.append)
+        asyncio.run(client._handle_message('{"x": 1}'))
+        assert received[0] == {"x": 1}
+
+    def test_handle_message_passes_raw_string_when_not_json(self):
+        """A non-JSON string message must be dispatched as-is."""
+        import asyncio
+
+        received = []
+        client = WebSocketClient("ws://localhost:8765")
+        client.on(received.append)
+        asyncio.run(client._handle_message("plain text"))
+        assert received == ["plain text"]
+
+    def test_handle_message_passes_bytes_unchanged(self):
+        """Bytes messages (non-str) must be dispatched without JSON parsing."""
+        import asyncio
+
+        received = []
+        client = WebSocketClient("ws://localhost:8765")
+        client.on(received.append)
+        asyncio.run(client._handle_message(b"\x00\x01"))
+        assert received == [b"\x00\x01"]
+
+    def test_handle_message_calls_async_handler(self):
+        """Async handlers must be awaited and receive the data."""
+        import asyncio
+
+        received = []
+
+        async def async_handler(data):
+            received.append(data)
+
+        client = WebSocketClient("ws://localhost:8765")
+        client.on(async_handler)
+        asyncio.run(client._handle_message('{"async": true}'))
+        assert received == [{"async": True}]
+
+    def test_handle_message_handler_error_does_not_propagate(self):
+        """Exceptions inside a handler must be swallowed by _handle_message."""
+        import asyncio
+
+        def bad_handler(data):
+            raise RuntimeError("handler exploded")
+
+        client = WebSocketClient("ws://localhost:8765")
+        client.on(bad_handler)
+        # Must not raise — error is caught internally
+        asyncio.run(client._handle_message("data"))
+
+    def test_handle_message_no_handlers_is_safe(self):
+        """_handle_message with no registered handlers must not raise."""
+        import asyncio
+
+        client = WebSocketClient("ws://localhost:8765")
+        asyncio.run(client._handle_message("ignored"))
+
+
+@pytest.mark.skipif(
+    not WEBSOCKET_CLIENT_AVAILABLE or not _WEBSOCKETS_LIB,
+    reason="WebSocketClient or websockets library not available",
+)
+class TestWebSocketClientSendNotConnected:
+    """Tests for WebSocketClient.send() when not connected."""
+
+    def test_send_raises_when_connection_is_none(self):
+        """send() must raise WebSocketError when connection is None."""
+        import asyncio
+
+        client = WebSocketClient("ws://localhost:8765")
+        assert client.connection is None
+        with pytest.raises(WSError):
+            asyncio.run(client.send("hello"))
+
+
+@pytest.mark.skipif(not WEBSOCKET_CLIENT_AVAILABLE, reason="websocket_client not importable")
+class TestWebSocketClientImportError:
+    """Tests for WebSocketClient when websockets lib is absent."""
+
+    def test_import_error_raised_when_websockets_missing(self):
+        """Constructor must raise ImportError if websockets is not installed."""
+        import importlib
+        import sys
+
+        # Temporarily shadow websockets with a broken import
+        original = sys.modules.get("websockets")
+        # Only run this sub-test if websockets is genuinely absent
+        if _WEBSOCKETS_LIB:
+            pytest.skip("websockets IS available; cannot test import-error path")
+        try:
+            from codomyrmex.networking.websocket_client import WebSocketClient as WSC
+
+            with pytest.raises(ImportError):
+                WSC("ws://localhost")
+        finally:
+            if original is not None:
+                sys.modules["websockets"] = original
+
+
+# ---------------------------------------------------------------------------
+# WSError (websocket_client.WebSocketError) tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(not WEBSOCKET_CLIENT_AVAILABLE, reason="websocket_client not importable")
+class TestWSErrorClass:
+    """Tests for the websocket_client.WebSocketError exception class."""
+
+    def test_ws_error_is_raiseable(self):
+        """WSError must be raiseable as a standard exception."""
+        with pytest.raises(WSError):
+            raise WSError("ws broke")
+
+    def test_ws_error_message_preserved(self):
+        """Message must survive round-trip through str()."""
+        err = WSError("connection lost")
+        assert "connection lost" in str(err)
+
+
+# ---------------------------------------------------------------------------
+# Additional exception edge cases
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(not EXCEPTIONS_AVAILABLE, reason="exceptions module not importable")
+class TestExceptionEdgeCases:
+    """Additional edge-case tests for networking exception classes."""
+
+    def test_http_error_exactly_500_chars_not_truncated(self):
+        """A 500-char body must be stored without the truncation suffix."""
+        body = "z" * 500
+        err = HTTPError("boundary", response_body=body)
+        assert err.context["response_body"] == body
+        assert not err.context["response_body"].endswith("...")
+
+    def test_http_error_501_chars_gets_ellipsis(self):
+        """A 501-char body must be truncated and end with '...'."""
+        body = "z" * 501
+        err = HTTPError("over", response_body=body)
+        assert err.context["response_body"].endswith("...")
+        assert len(err.context["response_body"]) == 503  # 500 + len("...")
+
+    def test_ssl_error_stores_ssl_version(self):
+        """SSLError must store ssl_version in context when provided."""
+        err = SSLError("handshake fail", ssl_version="TLSv1.3")
+        assert err.context["ssl_version"] == "TLSv1.3"
+
+    def test_dns_error_stores_dns_server(self):
+        """DNSResolutionError must store dns_server in context when provided."""
+        err = DNSResolutionError("timeout", dns_server="8.8.8.8")
+        assert err.context["dns_server"] == "8.8.8.8"
+
+    def test_websocket_error_stores_close_reason(self):
+        """WebSocketError must store close_reason when provided."""
+        err = WebSocketError("closed", close_reason="server going away")
+        assert err.context["close_reason"] == "server going away"
+
+    def test_proxy_error_stores_target_url(self):
+        """ProxyError must store target_url in context when provided."""
+        err = ProxyError("tunnel fail", target_url="https://api.example.com")
+        assert err.context["target_url"] == "https://api.example.com"
+
+    def test_rate_limit_error_stores_limit_type(self):
+        """RateLimitError must store limit_type when provided."""
+        err = RateLimitError("limited", limit_type="per_minute")
+        assert err.context["limit_type"] == "per_minute"
+
+    def test_rate_limit_error_stores_url(self):
+        """RateLimitError must store url when provided."""
+        err = RateLimitError("limited", url="https://api.example.com/v1/data")
+        assert err.context["url"] == "https://api.example.com/v1/data"
+
+    def test_ssh_error_stores_host(self):
+        """SSHError must store host in context when provided."""
+        err = SSHError("auth fail", host="bastion.example.com")
+        assert err.context["host"] == "bastion.example.com"
+
+    def test_ssh_error_stores_port(self):
+        """SSHError must store port in context when provided."""
+        err = SSHError("auth fail", port=2222)
+        assert err.context["port"] == 2222
+
+    def test_http_error_stores_url(self):
+        """HTTPError must store url in context when provided."""
+        err = HTTPError("not found", url="https://example.com/missing")
+        assert err.context["url"] == "https://example.com/missing"
+
+    def test_network_timeout_zero_seconds_stored(self):
+        """NetworkTimeoutError must store timeout_seconds=0.0 (falsy value)."""
+        err = NetworkTimeoutError("immediate", timeout_seconds=0.0)
+        assert err.context["timeout_seconds"] == 0.0
+
+    def test_connection_error_port_zero_stored(self):
+        """ConnectionError must store port=0 (falsy int) without skipping."""
+        err = NetConnectionError("refused", port=0)
+        assert err.context["port"] == 0
