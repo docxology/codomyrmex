@@ -16,8 +16,9 @@ command: hermes
 timeout: 120
 
 # Longer timeout for dispatch operations, which include full source code in prompts
-# Set high enough to handle scripts up to ~200 lines through Ollama
-dispatch_timeout: 600
+# and require Ollama to generate full improved Python source files as output.
+# 900s handles scripts up to ~500 lines across all local Ollama inference speeds.
+dispatch_timeout: 900
 
 # SQLite session database path (~ is expanded at runtime)
 session_db: ~/.codomyrmex/hermes_sessions.db
@@ -64,3 +65,39 @@ dispatch:
   filter_failing: true
   # Always include full script source code in dispatch prompts (set false only when debugging)
   include_source: true
+  # When true, write Hermes-improved code directly back to the original source files.
+  # A .py.bak backup is created automatically. Set to true only after reviewing guidance files.
+  apply: false
+
+# Per-target evaluator overrides (keyed by the --target argument value)
+# Used by evaluate_orchestrators.py when --target matches a key here.
+target_overrides:
+  "agents/gemini":
+    # Save gemini evals to a dedicated subdirectory
+    output_dir: evaluations/gemini
+    # Both gemini scripts gracefully exit=0 without an API key — execute them.
+    no_exec_scripts: []
+    # Inject test-mode env so API-calling scripts short-circuit cleanly
+    run_env:
+      CODOMYRMEX_TEST_MODE: "1"
+  "agents/hermes":
+    output_dir: evaluations
+    no_exec_scripts:
+      - evaluate_orchestrators.py
+      - dispatch_hermes.py
+  "api":
+    # Save api evals to a dedicated subdirectory
+    output_dir: evaluations/api
+    # Demo scripts exit gracefully without live API — execute them all
+    no_exec_scripts: []
+    # Inject test-mode env to prevent any live network calls during eval
+    run_env:
+      CODOMYRMEX_TEST_MODE: "1"
+  "cli":
+    # Save cli evals to a dedicated subdirectory
+    output_dir: evaluations/cli
+    # CLI scripts exit gracefully with no args — execute them all
+    no_exec_scripts: []
+    # Inject test-mode env to prevent interactive prompts or side-effects
+    run_env:
+      CODOMYRMEX_TEST_MODE: "1"

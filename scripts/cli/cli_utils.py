@@ -17,15 +17,43 @@ except ImportError:
 
 import argparse
 import shutil
+from typing import List, Tuple, Union
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
+
+# Bootstrap path only — not needed when package is already installed
+try:
+    from codomyrmex.utils.cli_helpers import (
+        print_error,
+        print_info,
+        print_success,
+        setup_logging,
+    )
+except ImportError:
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    from codomyrmex.utils.cli_helpers import (
+        print_error,
+        print_info,
+        print_success,
+        setup_logging,
+    )
+
+# ── Module-level constants ──────
+_DEFAULT_LIMIT: int = 5
 
 
-def get_terminal_size() -> tuple:
+def get_terminal_size() -> Tuple[int, int]:
     """Get terminal dimensions."""
     size = shutil.get_terminal_size((80, 24))
     return size.columns, size.lines
 
 
-def print_table(headers: list, rows: list, widths: list | None = None):
+def print_table(
+    headers: List[Union[str, int, float]], rows: List[List[Union[str, int, float]]], widths: Union[None, List[int]] = None
+) -> None:
     """Print formatted table."""
     if not widths:
         widths = [
@@ -33,14 +61,14 @@ def print_table(headers: list, rows: list, widths: list | None = None):
             for i in range(len(headers))
         ]
 
-    header_row = "".join(h.ljust(w) for h, w in zip(headers, widths, strict=False))
+    header_row = "".join(h.ljust(w) for h, w in zip(headers, widths))
     print(header_row)
     print("-" * sum(widths))
     for row in rows:
-        print("".join(str(c).ljust(w) for c, w in zip(row, widths, strict=False)))
+        print("".join(str(c).ljust(w) for c, w in zip(row, widths)))
 
 
-def print_progress(current: int, total: int, width: int = 40):
+def print_progress(current: int, total: int, width: int = 40) -> None:
     """Print progress bar."""
     pct = current / total if total > 0 else 0
     filled = int(width * pct)
@@ -50,7 +78,7 @@ def print_progress(current: int, total: int, width: int = 40):
 
 def colorize(text: str, color: str) -> str:
     """Add ANSI color to text."""
-    colors = {
+    colors: Literal["red", "green", "yellow", "blue", "magenta", "cyan", "reset"] = {
         "red": "\033[91m",
         "green": "\033[92m",
         "yellow": "\033[93m",
@@ -62,7 +90,7 @@ def colorize(text: str, color: str) -> str:
     return f"{colors.get(color, '')}{text}{colors['reset']}"
 
 
-def main():
+def main() -> int:
     # Auto-injected: Load configuration
     from pathlib import Path
 

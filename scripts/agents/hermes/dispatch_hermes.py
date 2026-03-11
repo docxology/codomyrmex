@@ -49,6 +49,12 @@ from codomyrmex.utils.cli_helpers import (
     setup_logging,
 )
 
+try:
+    from prompt_context import build_project_context, _EXEMPLAR_SCRIPTS
+except ImportError:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from prompt_context import build_project_context, _EXEMPLAR_SCRIPTS  # type: ignore[no-redef]
+
 # ── Module-level constants ───────────────────────────────────────────────
 _REPO_ROOT: Path = Path(__file__).resolve().parent.parent.parent.parent
 _SCRIPTS_ROOT: Path = _REPO_ROOT / "scripts"
@@ -60,6 +66,7 @@ _DEFAULT_DISPATCH_AGENT: str = "hermes"
 _DEFAULT_DISPATCH_MODE: str = "prompt"
 _DEFAULT_OUTPUT_DIR: str = "dispatches"
 _DEFAULT_TIMEOUT_S: int = 600  # generous default for full-source prompts through Ollama
+_MAX_SOURCE_CHARS: int = 12_000  # truncation guard — prevents dispatch timeouts for large scripts
 
 
 def _resolve_dispatch_config() -> dict:
@@ -151,17 +158,21 @@ def _build_dispatch_prompt(
     source_path: Path,
     eval_data: dict,
     include_source: bool = True,
+    target_dir: Optional[Path] = None,
 ) -> str:
     """Compose a precise improvement prompt from an evaluation result.
 
     Includes the full script source code by default so Hermes has maximum
-    context to generate accurate, targeted improvements.
+    context to generate accurate, targeted improvements. Also injects
+    project coding standards, local AGENTS.md, and exemplary scripts so
+    Hermes writes idiomatic, modern Python 3.11+ output.
 
     Args:
         script_name: Basename of the script (e.g. 'setup_hermes.py').
         source_path: Absolute path to the script source.
         eval_data: Parsed JSON from evaluate_orchestrators.py output.
         include_source: If False, omit source code (useful for debugging only).
+        target_dir: Directory being targeted, used to load local AGENTS.md.
 
     Returns:
         A self-contained prompt string ready to send to any LLM agent.
@@ -184,18 +195,169 @@ def _build_dispatch_prompt(
             raw_source = source_path.read_text(encoding="utf-8")
         except OSError:
             raw_source = "# [source unavailable — file could not be read]"
+        if len(raw_source) > _MAX_SOURCE_CHARS:
+            raw_source = (
+                raw_source[:_MAX_SOURCE_CHARS]
+                + f"\n\n# [TRUNCATED — source exceeds {_MAX_SOURCE_CHARS} chars;\n"
+                  f"#  apply improvements to the HEAD section shown above and note\n"
+                  f"#  that the full file is longer with the same patterns continuing]\n"
+            )
         source_section = f"\n--- CURRENT SOURCE CODE ---\n{raw_source}\n----------------------------\n"
+
+    # Build rich project context: coding standards + AGENTS.md + exemplary scripts
+    project_context = build_project_context(
+        target_dir=target_dir or source_path.parent,
+        repo_root=_REPO_ROOT,
+        exemplar_paths=list(_EXEMPLAR_SCRIPTS),
+    )
 
     return (
         f"You are a senior Python engineer performing a targeted code improvement task.\n\n"
+        f"{project_context}\n\n"
         f"Script: {script_name}\n"
         f"Evaluator Assessment: {reasoning}\n\n"
         f"Technical Debt to Fix:\n{debt_items}\n\n"
         f"Architectural Improvements Required:\n{improvement_items}\n"
         f"{source_section}\n"
         f"Please implement all of the improvements above directly into the source code.\n"
-        f"Return ONLY the improved, complete Python source file. No markdown, no extra text.\n"
+        f"IMPORTANT: Return ONLY the improved, complete Python source file.\n"
+        f"Do NOT include markdown fences, explanations, or any text outside the Python code.\n"
+        f"The output will be written directly to disk — start with the shebang or import line.\n"
+        f"Follow ALL coding standards listed in the PROJECT CONTEXT above (Python 3.11+, no legacy typing imports).\n"
     )
+
+
+def _extract_python_from_response(content: str) -> str:
+    """Extract clean Python source from a Hermes response.
+
+    Handles three common response formats:
+    1. Pure Python (no fences) — returned as-is.
+    2. ```python ... ``` fenced block — inner content extracted.
+    3. ``` ... ``` generic fenced block — inner content extracted.
+
+    Args:
+        content: Raw string returned by Hermes.
+
+    Returns:
+        Clean Python source code string, stripped of leading/trailing whitespace.
+    """
+    import re as _re
+    # Try ```python ... ``` or ``` ... ``` fenced blocks first
+    fenced = _re.search(r"```(?:python)?\n(.*?)\n```", content, _re.DOTALL)
+    if fenced:
+        return fenced.group(1).strip()
+    # Fallback: strip any leading/trailing non-code prose lines
+    lines = content.strip().splitlines()
+    # Drop leading lines that are clearly prose (no Python tokens)
+    start = 0
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if stripped.startswith(("#!", "#", "import ", "from ", "def ", "class ", '"""', "'''")):
+            start = i
+            break
+    return "\n".join(lines[start:]).strip()
+
+
+def _modernize_python(code: str) -> str:
+    """Post-process Hermes-generated Python to enforce Python 3.11+ syntax.
+
+    Hermes3/Ollama tends to generate legacy ``typing`` module constructs even
+    when told not to. This function runs targeted regex passes to:
+
+    1. Replace ``Optional[X]`` with ``X | None``
+    2. Replace generic aliases ``Dict[...] → dict[...]``, ``List[...] → list[...]``,
+       ``Tuple[...] → tuple[...]``, ``Set[...] → set[...]``, ``FrozenSet[...] → frozenset[...]``
+    3. Remove legacy bare imports of now-builtin typing names (Dict, List, etc.)
+       from ``typing`` import lines, leaving only names still needed.
+    4. Remove now-empty ``from typing import ...`` lines.
+
+    The transformation is conservative — it only acts on clearly unambiguous
+    patterns and leaves complex generics (e.g. nested multi-arg tuples) intact
+    for human review.
+
+    Args:
+        code: Python source code string.
+
+    Returns:
+        Modernized Python source code.
+    """
+    import re as _re
+
+    # 1. Replace Optional[X] → X | None (handles nested brackets using a simple heuristic)
+    def _replace_optional(m: "_re.Match") -> str:
+        inner = m.group(1)
+        # Avoid double-wrapping if already 'X | None'
+        if "| None" in inner or "None |" in inner:
+            return m.group(0)
+        return f"{inner} | None"
+
+    code = _re.sub(r"Optional\[([^\[\]]+)\]", _replace_optional, code)
+    # Second pass: catches Optional[dict[str,int]] after alias substitution
+    code = _re.sub(r"Optional\[([^\[\]]+\[[^\]]*\])\]", _replace_optional, code)
+
+    # 2. Replace capitalized generic aliases with lowercase builtins
+    _alias_map = {
+        "Dict": "dict",
+        "List": "list",
+        "Tuple": "tuple",
+        "Set": "set",
+        "FrozenSet": "frozenset",
+        "Type": "type",
+    }
+    for old, new in _alias_map.items():
+        # Replace 'OldName[' → 'new[' (only when followed by '[' — i.e. generic use)
+        code = _re.sub(rf"\b{old}\[", f"{new}[", code)
+
+    # 3. Remove legacy names from 'from typing import ...' lines
+    _legacy_names = {
+        "Optional", "Dict", "List", "Tuple", "Set", "FrozenSet",
+        "Type", "Union",  # Union stays only if Literal/other types remain
+    }
+    def _clean_typing_import(m: "_re.Match") -> str:
+        prefix = m.group(1)   # 'from typing import ' or 'from typing import ('
+        names_raw = m.group(2)  # the names part
+        # Split by comma, strip whitespace and parens
+        names = [n.strip().strip("()") for n in names_raw.replace("\n", ",").split(",")]
+        kept = [n for n in names if n and n not in _legacy_names]
+        if not kept:
+            return ""  # entire import line removed
+        return f"{prefix}{', '.join(kept)}"
+
+    # Handle: from typing import X, Y, Z  (single line)
+    code = _re.sub(
+        r"(from typing import )([\w, ]+)",
+        _clean_typing_import,
+        code,
+    )
+    # Handle: from typing import (X, Y, Z)  (parenthesised, simplified)
+    code = _re.sub(
+        r"(from typing import \()([\w,\s]+)\)",
+        lambda m: _clean_typing_import(m) + (")" if _clean_typing_import(m) else ""),
+        code,
+    )
+
+    # 4. Drop any now-empty 'from typing import ' or blank lines left by step 3
+    result_lines = []
+    for line in code.splitlines():
+        stripped = line.strip()
+        # Drop lines that are just 'from typing import' with nothing after the keyword
+        if _re.match(r"^from typing import\s*$", stripped):
+            continue
+        result_lines.append(line)
+
+    # Collapse multiple consecutive blank lines to max 2
+    final: list[str] = []
+    blank_count = 0
+    for line in result_lines:
+        if line.strip() == "":
+            blank_count += 1
+            if blank_count <= 2:
+                final.append(line)
+        else:
+            blank_count = 0
+            final.append(line)
+
+    return "\n".join(final)
 
 
 def _dispatch_hermes(
@@ -203,14 +365,24 @@ def _dispatch_hermes(
     script_name: str,
     prompt: str,
     output_dir: Path,
+    apply: bool = False,
+    source_path: Optional[Path] = None,
+    backup: bool = True,
 ) -> bool:
     """Send a prompt to Hermes and save the guidance response to markdown.
+
+    When *apply* is True, the improved Python source extracted from Hermes's
+    response is also written directly back to *source_path*, with an optional
+    ``.bak`` backup of the original created first.
 
     Args:
         client: Initialized HermesClient instance.
         script_name: Name of the script being improved.
         prompt: The dispatch prompt built from eval data.
         output_dir: Directory to save the guidance file.
+        apply: If True, write improved code back to the original source file.
+        source_path: Required when apply=True — path to the script to overwrite.
+        backup: If True (default), create a .bak copy before overwriting.
 
     Returns:
         True on success, False on failure.
@@ -224,6 +396,7 @@ def _dispatch_hermes(
         response = client.chat_session(prompt=prompt)  # type: ignore[attr-defined]
         if response.is_success():
             stem = script_name.replace(".py", "")
+            # Always save guidance markdown so the improvement is visible
             guidance_path = output_dir / f"{stem}_guidance.md"
             guidance_path.write_text(
                 f"# Hermes Improvement Guidance: `{script_name}`\n\n"
@@ -232,6 +405,31 @@ def _dispatch_hermes(
                 encoding="utf-8",
             )
             print_success(f"  ✓ Guidance saved to {guidance_path}")
+
+            # Apply mode: write improved code back to the source file
+            if apply and source_path is not None:
+                python_code = _extract_python_from_response(response.content)
+                if not python_code.strip():
+                    print_error(
+                        f"  ⚠️  --apply: could not extract valid Python from Hermes response "
+                        f"for {script_name}. Guidance file written but source NOT modified."
+                    )
+                else:
+                    # Post-process: modernize to Python 3.11+ syntax
+                    modernized = _modernize_python(python_code)
+                    if modernized != python_code:
+                        delta = abs(len(modernized) - len(python_code))
+                        print_info(f"  🔧 Modernized syntax ({delta} chars changed): legacy typing → 3.11+ style")
+                    python_code = modernized
+                    # Backup original
+                    if backup and source_path.exists():
+                        bak_path = source_path.with_suffix(".py.bak")
+                        bak_path.write_bytes(source_path.read_bytes())
+                        print_info(f"  ✓ Backup written to {bak_path.name}")
+                    # Write improved + modernized code
+                    source_path.write_text(python_code + "\n", encoding="utf-8")
+                    print_success(f"  ✅ Applied improvements to {source_path}")
+
             return True
         else:
             print_error(f"  Hermes response error for {script_name}: {response.error}")
@@ -419,6 +617,23 @@ def main() -> int:
         help="Analyse and plan dispatch without writing any artefacts.",
     )
     parser.add_argument(
+        "--apply",
+        action="store_true",
+        default=dispatch_cfg.get("apply", False),
+        help=(
+            "After generating guidance, extract the improved Python code from "
+            "Hermes's response and write it directly back to the original source file. "
+            "Original file is backed up as <script>.py.bak unless --no-backup is set. "
+            "Guidance markdown is always saved regardless."
+        ),
+    )
+    parser.add_argument(
+        "--no-backup",
+        action="store_true",
+        default=False,
+        help="Skip creating .py.bak backups when --apply overwrites source files.",
+    )
+    parser.add_argument(
         "--no-source",
         action="store_true",
         default=False,
@@ -471,6 +686,9 @@ def main() -> int:
     print_info(f"  Output:     {output_dir}")
     if args.filter_failing:
         print_info("  Filter:     NON-COMPLIANT only")
+    if args.apply:
+        backup_note = " (with .bak backup)" if not args.no_backup else " (NO backup)"
+        print_info(f"  Apply:      ✅ Improved code will be written to source files{backup_note}")
     if args.dry_run:
         print_info("  [DRY RUN]   No artefacts will be written.")
     print_info("═" * 60)
@@ -525,9 +743,15 @@ def main() -> int:
         prompt = _build_dispatch_prompt(
             script_name, source_path, eval_data,
             include_source=use_source,
+            target_dir=target_dir,
         )
         prompt_chars = len(prompt)
         print_info(f"  Prompt length: {prompt_chars} chars | include_source: {use_source}")
+        if use_source and prompt_chars > _MAX_SOURCE_CHARS + 500:  # +500 for prompt overhead
+            print_info(
+                f"  ⚠️  Source was auto-truncated to {_MAX_SOURCE_CHARS} chars "
+                f"(dispatch_timeout={effective_timeout}s). Review guidance for completeness."
+            )
 
         if args.dry_run:
             print_info(
@@ -541,7 +765,15 @@ def main() -> int:
         artefact: Optional[Path] = None
 
         if args.dispatch_agent == "hermes" and args.dispatch_mode == "prompt":
-            success = _dispatch_hermes(hermes_client, script_name, prompt, output_dir)
+            success = _dispatch_hermes(
+                hermes_client,
+                script_name,
+                prompt,
+                output_dir,
+                apply=args.apply,
+                source_path=source_path,
+                backup=not args.no_backup,
+            )
             stem = script_name.replace(".py", "")
             artefact = output_dir / f"{stem}_guidance.md"
 

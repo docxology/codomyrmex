@@ -82,6 +82,7 @@ dependencies = [
     # mnemonic               → uv sync --extra crypto
     "psutil>=6.0.0",
     "email-validator>=2.3.0",
+    "mlx-lm>=0.31.1",
 ]
 
 [project.optional-dependencies]

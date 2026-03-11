@@ -84,6 +84,9 @@ class HermesClient(CLIAgentBase):
         hermes_command = self.get_config_value("hermes_command", config=cfg)
         timeout = self.get_config_value("hermes_timeout", config=cfg)
         working_dir_str = self.get_config_value("hermes_working_dir", config=cfg)
+        self._hermes_provider: str = str(
+            self.get_config_value("hermes_provider", config=cfg) or "openrouter"
+        )
 
         if hermes_command:
             self.command = hermes_command
@@ -145,9 +148,46 @@ class HermesClient(CLIAgentBase):
     # Execution
     # ------------------------------------------------------------------
 
+    def _is_cli_configured(self) -> bool:
+        """Check whether the Hermes CLI has an API key configured.
+
+        Runs ``hermes config`` briefly to detect whether any API provider
+        key is set. If not, returns False so the caller can fall back to
+        Ollama rather than hanging for the full subprocess timeout.
+
+        Returns:
+            True if at least one API key or provider is configured.
+        """
+        try:
+            import subprocess
+            result = subprocess.run(
+                [self.command, "config"],
+                capture_output=True, text=True, timeout=5,
+            )
+            output = (result.stdout + result.stderr).lower()
+            # 'not set' for all API keys → not configured
+            # If at least one key line does NOT say 'not set', we're likely OK
+            lines_with_not_set = sum(1 for ln in output.splitlines() if "not set" in ln and "api" in ln)
+            lines_with_keys = sum(1 for ln in output.splitlines() if "api" in ln)
+            if lines_with_keys > 0 and lines_with_not_set >= lines_with_keys:
+                return False
+            # Also flag if 'openrouter api' is explicitly not configured
+            if "openrouter" in output and "not configured" in output:
+                return False
+            return True
+        except Exception:
+            return True  # Assume configured if we can't check
+
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """Execute via the active backend (CLI or Ollama)."""
         if self._active_backend == "ollama":
+            return self._execute_via_ollama(request)
+        # If CLI is active but not configured (no API key), fall back gracefully
+        if not self._is_cli_configured():
+            self.logger.warning(
+                "Hermes CLI has no API key configured — falling back to Ollama. "
+                "Run 'hermes setup' in your terminal to configure an API key."
+            )
             return self._execute_via_ollama(request)
         return self._execute_via_cli(request)
 
@@ -158,7 +198,29 @@ class HermesClient(CLIAgentBase):
         hermes_args = self._build_hermes_args(prompt, context)
 
         try:
-            result = self._execute_command(args=hermes_args)
+            # Build environment for the subprocess: inherit os.environ and
+            # add any API key vars needed by the hermes CLI so it doesn't
+            # enter interactive setup mode.
+            subprocess_env = dict(os.environ)
+            for key_name in (
+                "OPENROUTER_API_KEY",
+                "HERMES_INFERENCE_PROVIDER",
+                "OPENAI_API_KEY",
+                "ANTHROPIC_API_KEY",
+            ):
+                if key_name not in subprocess_env:
+                    # Try loading from ~/.hermes/.env
+                    hermenv = os.path.expanduser("~/.hermes/.env")
+                    if os.path.exists(hermenv):
+                        with open(hermenv) as f:
+                            for line in f:
+                                line = line.strip()
+                                if line.startswith(f"{key_name}=") and len(line) > len(key_name) + 1:
+                                    subprocess_env[key_name] = line.split("=", 1)[1]
+                                    break
+            subprocess_env["NO_COLOR"] = "1"
+
+            result = self._execute_command(args=hermes_args, env=subprocess_env)
             if not result.get("success", False):
                 raise HermesError(
                     f"Hermes CLI failed (exit {result.get('exit_code')}):\n"
@@ -328,7 +390,9 @@ class HermesClient(CLIAgentBase):
             if context.get("args"):
                 args.extend(context["args"])
             return args
-        return ["chat", "-q", prompt]
+        # Non-interactive mode: -Q suppresses spinner/banner, --provider forces the
+        # configured inference provider so hermes never enters the setup wizard.
+        return ["chat", "-q", prompt, "-Q", "--provider", self._hermes_provider]
 
     # ------------------------------------------------------------------
     # Skills / Status (CLI-only — graceful fallback)

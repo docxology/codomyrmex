@@ -4,6 +4,7 @@ Submodules:
     safety: Consolidated safety capabilities.
     multimodal: Consolidated multimodal capabilities.
     - ollama: Local LLM model management via Ollama
+    - mlx: Native Apple Silicon LLM inference via MLX
     - fabric: Microsoft Fabric AI integration
     - providers: Multi-provider LLM client interfaces
     - chains: Multi-step reasoning chains
@@ -32,6 +33,7 @@ from . import (
     embeddings,
     guardrails,
     memory,
+    mlx,
     multimodal,
     prompts,
     providers,
@@ -59,6 +61,7 @@ from .mcp import (
     convert_tool_to_mcp,
     create_mcp_bridge_from_registry,
 )
+from .mlx import MLXConfig, MLXRunner
 from .ollama import ConfigManager, ModelRunner, OllamaManager, OutputManager
 
 
@@ -83,6 +86,7 @@ def cli_commands():
             "rag",
             "cost_tracking",
             "prompts",
+            "mlx",
         ]
         print("LLM provider submodules:")
         for name in submodules:
@@ -105,6 +109,9 @@ __all__ = [
     "MCPBridge",
     "MCPPrompt",
     "MCPResource",
+    # MLX Integration
+    "MLXConfig",
+    "MLXRunner",
     "ModelRunner",
     "OllamaManager",
     "OutputManager",
@@ -118,6 +125,7 @@ __all__ = [
     "get_config",
     "guardrails",
     "memory",
+    "mlx",
     "multimodal",
     "prompts",
     # Submodules

@@ -257,7 +257,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (82226 symbols, 190871 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (83654 symbols, 193957 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -420,13 +420,6 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/tests/unit/config_audits/__init__.py (create), src/codomyrmex/validation/mcp_tools.py (edit), src/codomyrmex/tests/unit/config_audits/test_rules.py (create), src/codomyrmex/tests/unit/validation/test_validation_mcp_tools.py (edit), src/codomyrmex/tests/unit/synthetic_data/test_generator.py (create), .desloppify/external_review_sessions/ext_20260310_163817_8d543c8f/review_result.json (create)
-
-## Crash Recovery
-Last session (2026-03-10T09:40:26.494293) was not properly closed (crash/kill).
-Recorded 6 file changes before crash.
-Last changed files: .desloppify/external_review_sessions/ext_20260310_163817_8d543c8f/review_result.json, src/codomyrmex/tests/unit/synthetic_data/test_generator.py, src/codomyrmex/tests/unit/validation/test_validation_mcp_tools.py, src/codomyrmex/tests/unit/config_audits/test_rules.py, src/codomyrmex/validation/mcp_tools.py
-Bridge from previous session is valid (above).
-For details use: memory_search("changes last session")
+Files: src/codomyrmex/data_visualization/engines/plotter.py (edit), src/codomyrmex/tests/unit/git_analysis/test_mcp_tools.py (edit), src/codomyrmex/tests/unit/validation/test_validation_mcp_tools.py (edit), src/codomyrmex/tests/unit/agents/agent_setup/test_registry.py (edit), src/codomyrmex/collaboration/mcp_tools.py (edit)
 
 # === END COGNILAYER ===

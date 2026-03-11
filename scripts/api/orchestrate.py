@@ -23,4 +23,5 @@ if __name__ == "__main__":
     if not any(arg.startswith("--scripts-dir") for arg in sys.argv):
         sys.argv.append(f"--scripts-dir={current_dir}")
 
+    # Execute the core method by running the discovered scripts and logging the output
     sys.exit(main())

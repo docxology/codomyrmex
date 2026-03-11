@@ -20,11 +20,12 @@ import json
 import time
 import urllib.error
 import urllib.request
+from typing import Dict, Optional
 
-
+# Thin Orchestrator Pattern Implementation
 def make_request(
-    url: str, method: str = "GET", data: dict | None = None, headers: dict | None = None
-) -> dict:
+    url: str, method: str = "GET", data: Optional[Dict] = None, headers: Optional[Dict] = None
+) -> Dict:
     """Make HTTP request."""
     headers = headers or {}
     headers.setdefault("Content-Type", "application/json")
@@ -55,15 +56,13 @@ def make_request(
     except urllib.error.URLError as e:
         return {"status": 0, "error": str(e.reason)}
 
-
 def format_json(text: str) -> str:
     """Format JSON for display."""
     try:
         data = json.loads(text)
         return json.dumps(data, indent=2)
-    except:
+    except (json.JSONDecodeError, ValueError):
         return text
-
 
 def main():
     # Auto-injected: Load configuration
@@ -155,8 +154,7 @@ def main():
         if len(lines) > 30:
             print(f"   ... ({len(lines) - 30} more lines)")
 
-    return 0 if status >= 200 and status < 400 else 1
-
+    return 0 if status >= 200 and status < 300 else 1
 
 if __name__ == "__main__":
     sys.exit(main())

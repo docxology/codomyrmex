@@ -13,12 +13,19 @@ Usage:
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+
+try:
+    import yaml as _yaml
+    _YAML_AVAILABLE = True
+except ImportError:
+    _YAML_AVAILABLE = False
 
 try:
     from codomyrmex.agents.core.config import get_config
@@ -32,18 +39,65 @@ from codomyrmex.utils.cli_helpers import (
     setup_logging,
 )
 
+try:
+    from prompt_context import build_project_context
+except ImportError:
+    # Fallback if running from outside scripts/agents/hermes/
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from prompt_context import build_project_context
+
 # Repo root, resolved once
 _REPO_ROOT: Path = Path(__file__).resolve().parent.parent.parent.parent
+# Scripts root — direct parent of all target directories
+_SCRIPTS_ROOT: Path = _REPO_ROOT / "scripts"
+
+# Exemplary COMPLIANT scripts used as positive-example context in eval prompts.
+# These are well-rated hermes orchestrators that demonstrate the pattern.
+_EXEMPLAR_SCRIPTS: list[Path] = [
+    _REPO_ROOT / "scripts" / "agents" / "hermes" / "observe_hermes.py",
+    _REPO_ROOT / "scripts" / "agents" / "hermes" / "setup_hermes.py",
+]
 
 
-def _resolve_evaluator_config() -> dict:
-    """Load hermes.yaml evaluator section, returning defaults on failure."""
+_HERMES_YAML: Path = _REPO_ROOT / "config" / "agents" / "hermes.yaml"
+
+
+def _load_hermes_yaml() -> dict:
+    """Read hermes.yaml directly and return its contents as a dict.
+
+    Uses PyYAML when available. Falls back to empty dict on any error.
+    hermes.yaml is a flat namespace (not nested under a 'hermes' key).
+    """
+    if not _YAML_AVAILABLE or not _HERMES_YAML.exists():
+        return {}
     try:
-        config = get_config()
-        hermes_cfg = config.get("hermes", {}) if isinstance(config, dict) else {}
-        return hermes_cfg.get("evaluator", {})
+        return _yaml.safe_load(_HERMES_YAML.read_text(encoding="utf-8")) or {}
     except Exception:
         return {}
+
+
+def _resolve_evaluator_config(target: Optional[str] = None) -> dict:
+    """Load hermes.yaml evaluator section, merging any target-specific overrides.
+
+    If *target* is given and a matching key exists in hermes.yaml
+    ``target_overrides``, those settings are merged on top of the base
+    evaluator config, allowing per-directory customisation of output_dir,
+    no_exec_scripts, run_env, etc.
+
+    Args:
+        target: Value of --target CLI arg (e.g. 'agents/gemini').
+
+    Returns:
+        Merged evaluator config dict.
+    """
+    hermes_cfg = _load_hermes_yaml()
+    base: dict = dict(hermes_cfg.get("evaluator", {}))
+    if target:
+        overrides: dict = hermes_cfg.get("target_overrides", {}).get(target, {})
+        if overrides:
+            base = {**base, **overrides}
+    return base
 
 
 def _resolve_assessment_timeout(evaluator_cfg: dict) -> int:
@@ -53,23 +107,27 @@ def _resolve_assessment_timeout(evaluator_cfg: dict) -> int:
     """
     if evaluator_cfg.get("assessment_timeout"):
         return int(evaluator_cfg["assessment_timeout"])
-    try:
-        config = get_config()
-        hermes_cfg = config.get("hermes", {}) if isinstance(config, dict) else {}
-        return int(hermes_cfg.get("timeout", 600))
-    except Exception:
-        return 600
+    hermes_cfg = _load_hermes_yaml()
+    return int(hermes_cfg.get("timeout", 600))
 
 
-def run_script(script_path: Path, timeout: int = 30) -> dict:
+def run_script(script_path: Path, timeout: int = 30, extra_env: Optional[dict] = None) -> dict:
     """Run a script and return its return code, stdout, and stderr.
 
     Args:
         script_path: Path to the Python script to execute.
         timeout: Maximum seconds to wait for the script. Configurable via
             evaluator.script_timeout in hermes.yaml (default: 30).
+        extra_env: Optional dict of environment variables to inject into the
+            subprocess environment. Merged on top of the current os.environ.
+            Use to pass CODOMYRMEX_TEST_MODE=1 for API-dependent scripts.
     """
     print_info(f"  Running: {script_path.name}...")
+    env = {**os.environ}
+    if extra_env:
+        env.update(extra_env)
+        env_keys = ", ".join(f"{k}={v}" for k, v in extra_env.items())
+        print_info(f"  Injecting env: {env_keys}")
     try:
         # Run it with the current python interpreter
         result = subprocess.run(
@@ -77,6 +135,7 @@ def run_script(script_path: Path, timeout: int = 30) -> dict:
             capture_output=True,
             text=True,
             timeout=timeout,
+            env=env,
         )
         return {
             "path": script_path,
@@ -278,19 +337,44 @@ def extract_json_from_response(content: str) -> dict:
 
 
 
-def assess_script(client, script_info: dict, source_code: str) -> dict:
-    """Use Hermes to assess a script based on stdout, stderr, and source code."""
+def assess_script(client, script_info: dict, source_code: str, target_dir: Optional[Path] = None) -> dict:
+    """Use Hermes to assess a script based on stdout, stderr, and source code.
+
+    Args:
+        client: Initialized Hermes client.
+        script_info: Dict with 'path', 'returncode', 'stdout', 'stderr'.
+        source_code: Full source code of the script.
+        target_dir: Directory containing the scripts being evaluated.
+            Used to load local AGENTS.md for richer project context.
+    """
     script_name = script_info["path"].name
-    
+
+    # Build rich project context: standards + AGENTS.md + exemplary scripts
+    project_context = build_project_context(
+        target_dir=target_dir or script_info["path"].parent,
+        repo_root=_REPO_ROOT,
+        exemplar_paths=_EXEMPLAR_SCRIPTS,
+    )
+
     prompt = f"""You are a senior principal engineer performing a code review and architectural assessment.
+
+{project_context}
 
 Evaluate the following Python orchestration script based on the Codomyrmex "Thin Orchestrator" pattern.
 A thin orchestrator MUST:
-1. Accept configuration transparently.
-2. Formulate dependencies cleanly (no heavy business logic/transformations in the script itself).
-3. Execute the core method.
-4. Log and format the output beautifully.
-5. Exit cleanly.
+1. Accept configuration transparently (from config files or env vars — never hardcoded values).
+2. Formulate dependencies cleanly — NO heavy business logic or data transformations in the script itself.
+3. Execute the core method by delegating to a library/module function.
+4. Log and format the output clearly using cli_helpers (print_info/print_success/print_error).
+5. Exit cleanly with sys.exit(0) on success, non-zero on failure.
+
+Common anti-patterns to flag:
+- Bare `except:` → must specify exception type(s)
+- `Optional[X]` / `Dict` / `List` from typing → use `X | None` / `dict` / `list` (Python 3.11+)
+- Hardcoded file paths → use Path(__file__).resolve() or env vars
+- Business logic in the script body → extract to library module
+- Missing sys.exit() → script must exit with explicit code
+- Bare `print()` for status → use cli_helpers instead
 
 Script Name: {script_name}
 Exit Code: {script_info['returncode']}
@@ -347,7 +431,12 @@ Use exactly this schema:
 
 
 def main() -> int:
-    evaluator_cfg = _resolve_evaluator_config()
+    # Pre-parse just --target so we can use it when resolving config
+    # (target_overrides in hermes.yaml are target-specific; we need target before argparse defaults run)
+    _pre = argparse.ArgumentParser(add_help=False)
+    _pre.add_argument("--target", default="agents/hermes")
+    _pre_args, _ = _pre.parse_known_args()
+    evaluator_cfg = _resolve_evaluator_config(target=_pre_args.target)
 
     parser = argparse.ArgumentParser(description="Hermes Script Evaluator")
     parser.add_argument(
@@ -368,7 +457,33 @@ def main() -> int:
         default=False,
         help="Discover and execute scripts but skip Hermes assessment. Useful for fast iteration.",
     )
+    parser.add_argument(
+        "--run-env",
+        nargs="*",
+        default=[],
+        metavar="KEY=VALUE",
+        help=(
+            "Environment variable(s) to inject when running target scripts. "
+            "Example: --run-env CODOMYRMEX_TEST_MODE=1 GEMINI_API_KEY=dummy. "
+            "Useful to prevent API-dependent scripts from blocking during eval."
+        ),
+    )
     args = parser.parse_args()
+
+    # Seed run_env from target_overrides.run_env in hermes.yaml (CLI flags override)
+    run_env_dict: dict[str, str] = {}
+    cfg_run_env = evaluator_cfg.get("run_env", {})
+    if isinstance(cfg_run_env, dict):
+        run_env_dict.update({str(k): str(v) for k, v in cfg_run_env.items()})
+    # CLI --run-env overrides yaml values
+    for item in (args.run_env or []):
+        if "=" in item:
+            k, _, v = item.partition("=")
+            run_env_dict[k.strip()] = v.strip()
+        else:
+            run_env_dict[item.strip()] = "1"
+    # Re-resolve config now that we have the real --target (handles case where pre-parse differs)
+    evaluator_cfg = _resolve_evaluator_config(target=args.target)
 
     setup_logging()
 
@@ -479,6 +594,7 @@ def main() -> int:
             script_info = run_script(
                 script_path,
                 timeout=evaluator_cfg.get("script_timeout", 30),
+                extra_env=run_env_dict if run_env_dict else None,
             )
         
         # Read source code
@@ -494,7 +610,7 @@ def main() -> int:
             print_info(f"  [DRY RUN] Would assess {script_path.name} with Hermes.")
             continue
 
-        eval_data = assess_script(client, script_info, source_code)
+        eval_data = assess_script(client, script_info, source_code, target_dir=target_dir)
 
         if eval_data:
             script_name = script_path.name

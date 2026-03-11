@@ -270,3 +270,4 @@ db_performance/
 # Test artifacts
 config/default.yaml
 MEMORY/
+/dispatches
