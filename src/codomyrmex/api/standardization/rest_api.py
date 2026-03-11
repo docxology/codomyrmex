@@ -154,6 +154,7 @@ class APIRouter:
         self.endpoints: dict[str, APIEndpoint] = {}
         self.sub_routers: list[APIRouter] = []
         self.middleware: list[Callable[[APIRequest], APIResponse | None]] = []
+        self._compiled_regexes: dict[str, tuple] = {}
 
     def add_endpoint(self, endpoint: APIEndpoint) -> None:
         """
@@ -291,6 +292,10 @@ class APIRouter:
         Returns:
             Tuple of (compiled_regex, parameter_names)
         """
+        # Return cached regex if available
+        if path in self._compiled_regexes:
+            return self._compiled_regexes[path]
+
         # Replace {param} with named capture groups
         param_pattern = re.compile(r"\{([^}]+)\}")
         param_names = param_pattern.findall(path)
@@ -299,7 +304,10 @@ class APIRouter:
         regex_pattern = param_pattern.sub(r"(?P<\1>[^/]+)", path)
         regex_pattern = f"^{regex_pattern}$"
 
-        return re.compile(regex_pattern), param_names
+        compiled = re.compile(regex_pattern)
+        self._compiled_regexes[path] = (compiled, param_names)
+
+        return compiled, param_names
 
     def get_all_endpoints(self) -> list[APIEndpoint]:
         """
