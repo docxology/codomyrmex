@@ -233,8 +233,9 @@ def _dispatch_hermes(
             )
             print_success(f"  ✓ Guidance saved to {guidance_path}")
             return True
-        print_error(f"  Hermes response error for {script_name}: {response.error}")
-        return False
+        else:
+            print_error(f"  Hermes response error for {script_name}: {response.error}")
+            return False
     except Exception as exc:
         print_error(f"  Dispatch exception for {script_name}: {exc}")
         return False
@@ -275,7 +276,7 @@ def _dispatch_shell(
             f"# Dispatches improvement task for: {script_name}\n"
             f"set -e\n\n"
             f"jules remote send \\\n"
-            f'  --file "{source_path}" \\\n'
+            f"  --file \"{source_path}\" \\\n"
             f"  --prompt '{escaped_prompt}'\n"
         )
         out_path = output_dir / f"{stem}_jules.sh"
@@ -286,8 +287,8 @@ def _dispatch_shell(
             f"# Dispatches improvement task for: {script_name}\n"
             f"set -e\n\n"
             f"claude -p '{escaped_prompt}' \\\n"
-            f'  --file "{source_path}" \\\n'
-            f'  --output "{source_path}"\n'
+            f"  --file \"{source_path}\" \\\n"
+            f"  --output \"{source_path}\"\n"
         )
         out_path = output_dir / f"{stem}_claude.sh"
 

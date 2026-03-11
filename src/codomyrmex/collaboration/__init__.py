@@ -54,10 +54,11 @@ from .protocols import (
 )
 
 # Legacy swarm components (for backward compatibility)
+from .swarm import AgentProxy
+
 # Swarm components (modern interface)
 from .swarm import (
     AgentPool,
-    AgentProxy,
     AgentRole,
     ConsensusResult,
     Decision,

@@ -5,10 +5,8 @@ No mocks.
 """
 
 import pytest
-
-from codomyrmex.coding.refactoring.models import RefactoringResult
 from codomyrmex.coding.refactoring.rename import RenameRefactoring
-
+from codomyrmex.coding.refactoring.models import RefactoringResult
 
 @pytest.fixture
 def sample_file(tmp_path):

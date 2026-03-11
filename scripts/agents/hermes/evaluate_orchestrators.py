@@ -163,7 +163,7 @@ def _sanitize_json_candidate(text: str) -> str:
                 result.append(text[i + 1])
                 i += 2
                 continue
-            if ch == '"':
+            elif ch == '"':
                 in_string = False
                 result.append(ch)
             elif ch in _CTRL:
@@ -257,7 +257,7 @@ def extract_json_from_response(content: str) -> dict:
                 "technical_debt": [],
                 "underlying_improvements": [],
             }
-        if non_adheres_signals:
+        elif non_adheres_signals:
             return {
                 "adherence_assessment": {
                     "adheres": False,
@@ -338,8 +338,9 @@ Use exactly this schema:
             print_info(f"  Adheres to pattern: {eval_data.get('adherence_assessment', {}).get('adheres', False)}")
             print_success("=" * 60)
             return eval_data
-        print_error(f"  Hermes failed to assess {script_name}: {response.error}")
-        return None
+        else:
+            print_error(f"  Hermes failed to assess {script_name}: {response.error}")
+            return None
     except Exception as e:
         print_error(f"  Hermes evaluation error: {e}")
         return None
@@ -482,7 +483,7 @@ def main() -> int:
 
         # Read source code
         try:
-            with open(script_path, encoding="utf-8") as f:
+            with open(script_path, "r", encoding="utf-8") as f:
                 source_code = f.read()
         except Exception as e:
             print_error(f"  Could not read source code for {script_path.name}: {e}")
@@ -526,7 +527,7 @@ def main() -> int:
     report_file_path = output_path / "overall_evaluation_report.md"
     try:
         with open(report_file_path, "w", encoding="utf-8") as f:
-            f.write("# Evaluator Orchestrations Report\n")
+            f.write(f"# Evaluator Orchestrations Report\n")
             f.write(f"Target: `scripts/{args.target}`\n")
             f.write(f"Generated: {datetime.now().isoformat()}\n\n")
 
@@ -539,10 +540,12 @@ def main() -> int:
                 f.write(f"> {adherence.get('reasoning', 'No reasoning provided.')}\n\n")
 
                 f.write("### Technical Debt Identified:\n")
-                f.writelines(f"- {debt}\n" for debt in data.get("technical_debt", []))
+                for debt in data.get("technical_debt", []):
+                    f.write(f"- {debt}\n")
 
                 f.write("\n### Underlying Method Improvements Required:\n")
-                f.writelines(f"- {imp}\n" for imp in data.get("underlying_improvements", []))
+                for imp in data.get("underlying_improvements", []):
+                    f.write(f"- {imp}\n")
 
                 f.write("\n---\n\n")
 

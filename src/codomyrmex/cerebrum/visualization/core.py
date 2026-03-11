@@ -1,6 +1,7 @@
 import contextlib
 from typing import Any
 
+
 from codomyrmex.cerebrum.core.cases import Case
 from codomyrmex.cerebrum.inference.bayesian import BayesianNetwork
 from codomyrmex.cerebrum.visualization.base import (

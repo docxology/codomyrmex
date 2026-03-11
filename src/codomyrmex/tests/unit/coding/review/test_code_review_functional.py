@@ -7,21 +7,18 @@ No mocks.
 
 import os
 import textwrap
-
 import pytest
-
 from codomyrmex.coding.review import (
+    CodeReviewer,
+    PyscnAnalyzer,
+    AnalysisType,
+    Language,
+    SeverityLevel,
     AnalysisResult,
     AnalysisSummary,
-    AnalysisType,
-    CodeReviewer,
-    Language,
-    PyscnAnalyzer,
     QualityGateResult,
-    SeverityLevel,
 )
 from codomyrmex.coding.review.models import ToolNotFoundError
-
 
 @pytest.fixture
 def reviewer(tmp_path):
@@ -116,7 +113,7 @@ class TestPyscnAnalyzerFunctional:
         except ToolNotFoundError:
             pytest.skip("pyscn not installed")
 
-        with open(python_file) as f:
+        with open(python_file, "r") as f:
             code = f.read()
         results = analyzer.analyze_code(code, python_file)
         assert isinstance(results, list)

@@ -6,10 +6,8 @@ Zero-Mock Policy: no unittest.mock, MagicMock, monkeypatch, or pytest-mock.
 from __future__ import annotations
 
 import pytest
-
 from codomyrmex.cache.backends.in_memory import InMemoryCache
 from codomyrmex.cache.namespaced import NamespacedCache
-
 
 @pytest.fixture
 def base_cache():

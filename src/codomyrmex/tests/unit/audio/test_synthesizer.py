@@ -9,12 +9,9 @@ Covers:
 
 import pytest
 
-from codomyrmex.audio.exceptions import ProviderNotAvailableError, VoiceNotFoundError
-from codomyrmex.audio.text_to_speech.providers import (
-    EDGE_TTS_AVAILABLE,
-    PYTTSX3_AVAILABLE,
-)
 from codomyrmex.audio.text_to_speech.synthesizer import Synthesizer
+from codomyrmex.audio.text_to_speech.providers import PYTTSX3_AVAILABLE, EDGE_TTS_AVAILABLE
+from codomyrmex.audio.exceptions import ProviderNotAvailableError, VoiceNotFoundError
 
 
 @pytest.mark.unit

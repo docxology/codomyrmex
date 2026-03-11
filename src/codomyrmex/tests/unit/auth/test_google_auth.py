@@ -8,11 +8,8 @@ Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 
 import os
 import tempfile
-
 import pytest
-
-from codomyrmex.auth.google.authenticator import AUTH_AVAILABLE, GoogleAuthenticator
-
+from codomyrmex.auth.google.authenticator import GoogleAuthenticator, AUTH_AVAILABLE
 
 @pytest.mark.skipif(not AUTH_AVAILABLE, reason="Google Auth dependencies not installed")
 class TestGoogleAuthenticator:
@@ -22,7 +19,7 @@ class TestGoogleAuthenticator:
         """Test initialization with custom paths."""
         with tempfile.NamedTemporaryFile() as tmp:
             client_secrets = tmp.name
-            token_cache = tempfile.NamedTemporaryFile().name
+            token_cache = tempfile.mktemp()
 
             auth = GoogleAuthenticator(
                 client_secrets_file=client_secrets,

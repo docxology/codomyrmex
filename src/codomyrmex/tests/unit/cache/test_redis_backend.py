@@ -7,11 +7,8 @@ Zero-Mock Policy: no unittest.mock, MagicMock, monkeypatch, or pytest-mock.
 from __future__ import annotations
 
 import os
-
 import pytest
-
-from codomyrmex.cache.backends.redis_backend import REDIS_AVAILABLE, RedisCache
-
+from codomyrmex.cache.backends.redis_backend import RedisCache, REDIS_AVAILABLE
 
 def is_redis_running():
     if not REDIS_AVAILABLE:

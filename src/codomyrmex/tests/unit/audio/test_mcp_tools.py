@@ -12,11 +12,7 @@ from codomyrmex.audio.mcp_tools import (
     audio_transcribe,
 )
 from codomyrmex.audio.speech_to_text.providers import WHISPER_AVAILABLE
-from codomyrmex.audio.text_to_speech.providers import (
-    EDGE_TTS_AVAILABLE,
-    PYTTSX3_AVAILABLE,
-)
-
+from codomyrmex.audio.text_to_speech.providers import PYTTSX3_AVAILABLE, EDGE_TTS_AVAILABLE
 
 @pytest.fixture
 def dummy_wav_file(tmp_path: Path) -> Path:
