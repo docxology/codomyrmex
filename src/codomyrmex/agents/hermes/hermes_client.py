@@ -65,6 +65,8 @@ class HermesClient(CLIAgentBase):
               - ``hermes_working_dir`` (str | None): working directory
               - ``hermes_backend``  (str, default ``"auto"``): ``"auto"`` | ``"cli"`` | ``"ollama"``
               - ``hermes_model``    (str, default ``"hermes3"``): Ollama model name
+              - ``fallback_model``  (str | None): fallback model on provider errors
+              - ``fallback_provider`` (str | None): fallback provider (e.g. ``"ollama"``)
         """
         cfg = config or {}
         super().__init__(
@@ -103,11 +105,22 @@ class HermesClient(CLIAgentBase):
             self.get_config_value("hermes_model", config=cfg) or self.DEFAULT_OLLAMA_MODEL
         )
 
+        # Fallback model for provider resilience (v0.2.0)
+        self._fallback_model: str | None = self.get_config_value("fallback_model", config=cfg)
+        self._fallback_provider: str | None = self.get_config_value("fallback_provider", config=cfg)
+
         db_default = Path.home() / ".codomyrmex" / "hermes_sessions.db"
         self._session_db_path = str(
             self.get_config_value("hermes_session_db", config=cfg) or db_default
         )
         Path(self._session_db_path).parent.mkdir(parents=True, exist_ok=True)
+
+        # Worktree isolation config
+        self._worktree_base = Path(
+            os.path.expanduser(
+                str(self.get_config_value("worktree_base_dir", config=cfg) or "~/.codomyrmex/worktrees")
+            )
+        )
 
         # Probe availability
         self._cli_available = self._check_command_available(check_args=["version"])
@@ -198,10 +211,24 @@ class HermesClient(CLIAgentBase):
         return False
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
-        """Execute via the active backend (CLI or Ollama)."""
+        """Execute via the active backend, with fallback on provider errors."""
+        try:
+            return self._execute_primary(request)
+        except HermesError as exc:
+            if self._fallback_model and self._should_fallback(exc):
+                self.logger.warning(
+                    "Primary provider failed (%s) — retrying with fallback model '%s'",
+                    exc, self._fallback_model,
+                )
+                return self._execute_via_ollama(
+                    request, model_override=self._fallback_model
+                )
+            raise
+
+    def _execute_primary(self, request: AgentRequest) -> AgentResponse:
+        """Execute via the primary active backend (CLI or Ollama)."""
         if self._active_backend == "ollama":
             return self._execute_via_ollama(request)
-        # If CLI is active but not configured (no API key), fall back gracefully
         if not self._is_cli_configured():
             self.logger.warning(
                 "Hermes CLI has no API key configured — falling back to Ollama. "
@@ -209,6 +236,18 @@ class HermesClient(CLIAgentBase):
             )
             return self._execute_via_ollama(request)
         return self._execute_via_cli(request)
+
+    @staticmethod
+    def _should_fallback(exc: HermesError) -> bool:
+        """Determine if the error warrants a fallback retry.
+
+        Returns True for 413 (payload too large), rate limits, and timeouts.
+        """
+        msg = str(exc).lower()
+        return any(pattern in msg for pattern in (
+            "413", "payload too large", "rate limit", "timed out", "timeout",
+            "429", "too many requests", "quota", "capacity",
+        ))
 
     def _execute_via_cli(self, request: AgentRequest) -> AgentResponse:
         """Execute via the NousResearch Hermes CLI."""
@@ -258,13 +297,21 @@ class HermesClient(CLIAgentBase):
             self.logger.error("Hermes CLI execution failed: %s", e, exc_info=True)
             raise HermesError(f"Hermes CLI failed: {e}", command=self.command) from e
 
-    def _execute_via_ollama(self, request: AgentRequest) -> AgentResponse:
-        """Execute via ``ollama run <model>``."""
-        ollama_bin = shutil.which("ollama") or "ollama"
-        prompt = request.prompt
-        cmd = [ollama_bin, "run", self._ollama_model, prompt]
+    def _execute_via_ollama(
+        self, request: AgentRequest, *, model_override: str | None = None,
+    ) -> AgentResponse:
+        """Execute via ``ollama run <model>``.
 
-        self.logger.info("Hermes via Ollama: model=%s, prompt=%s…", self._ollama_model, prompt[:60])
+        Args:
+            request: Agent request to execute.
+            model_override: Override the default Ollama model (used by fallback).
+        """
+        ollama_bin = shutil.which("ollama") or "ollama"
+        model = model_override or self._ollama_model
+        prompt = request.prompt
+        cmd = [ollama_bin, "run", model, prompt]
+
+        self.logger.info("Hermes via Ollama: model=%s, prompt=%s…", model, prompt[:60])
         start = time.time()
 
         try:
@@ -279,7 +326,7 @@ class HermesClient(CLIAgentBase):
 
             if not success:
                 raise HermesError(
-                    f"Ollama hermes3 failed (exit {proc.returncode}): {stderr or stdout}",
+                    f"Ollama {model} failed (exit {proc.returncode}): {stderr or stdout}",
                     command=" ".join(cmd),
                 )
 
@@ -288,9 +335,10 @@ class HermesClient(CLIAgentBase):
                 error=None,
                 metadata={
                     "backend": "ollama",
-                    "model": self._ollama_model,
+                    "model": model,
                     "exit_code": proc.returncode,
                     "command": " ".join(cmd),
+                    "is_fallback": model_override is not None,
                 },
                 execution_time=elapsed,
             )
@@ -526,6 +574,8 @@ class HermesClient(CLIAgentBase):
             "cli_available": self._cli_available,
             "ollama_available": self._ollama_available,
             "ollama_model": self._ollama_model,
+            "fallback_model": self._fallback_model,
+            "fallback_provider": self._fallback_provider,
         }
         if self._active_backend == "cli":
             try:
@@ -540,3 +590,62 @@ class HermesClient(CLIAgentBase):
         else:
             status["success"] = self._ollama_available
         return status
+
+    # ------------------------------------------------------------------
+    # Git Worktree Isolation (v0.2.0+)
+    # ------------------------------------------------------------------
+
+    def create_worktree(self, session_id: str) -> Path | None:
+        """Create an isolated git worktree for a session.
+
+        Args:
+            session_id: Session identifier used to name the worktree branch.
+
+        Returns:
+            Path to the worktree directory, or None if creation fails.
+        """
+        worktree_path = self._worktree_base / f"hermes-{session_id}"
+        branch_name = f"hermes/{session_id}"
+
+        try:
+            self._worktree_base.mkdir(parents=True, exist_ok=True)
+            subprocess.run(
+                ["git", "worktree", "add", "-b", branch_name, str(worktree_path)],
+                capture_output=True, text=True, timeout=30,
+                check=True,
+            )
+            self.logger.info("Created worktree at %s (branch: %s)", worktree_path, branch_name)
+            return worktree_path
+        except subprocess.CalledProcessError as e:
+            self.logger.warning("Failed to create worktree: %s", e.stderr)
+            return None
+        except Exception as e:
+            self.logger.warning("Worktree creation error: %s", e)
+            return None
+
+    def cleanup_worktree(self, session_id: str) -> bool:
+        """Remove an isolated git worktree after session completes.
+
+        Args:
+            session_id: Session identifier matching the worktree to clean up.
+
+        Returns:
+            True if cleanup succeeded.
+        """
+        worktree_path = self._worktree_base / f"hermes-{session_id}"
+        branch_name = f"hermes/{session_id}"
+
+        try:
+            subprocess.run(
+                ["git", "worktree", "remove", str(worktree_path), "--force"],
+                capture_output=True, text=True, timeout=15,
+            )
+            subprocess.run(
+                ["git", "branch", "-D", branch_name],
+                capture_output=True, text=True, timeout=10,
+            )
+            self.logger.info("Cleaned up worktree: %s", worktree_path)
+            return True
+        except Exception as e:
+            self.logger.warning("Worktree cleanup failed: %s", e)
+            return False

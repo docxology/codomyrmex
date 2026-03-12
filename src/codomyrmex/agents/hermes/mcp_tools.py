@@ -301,3 +301,133 @@ def hermes_session_clear(session_id: str) -> dict[str, Any]:
             return {"status": "success", "deleted": deleted, "message": f"Deleted session {session_id}" if deleted else f"Session {session_id} not found."}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Submit a sampling request to the Hermes agent. "
+        "Simulates server-initiated sampling where the MCP server asks Hermes "
+        "to generate a completion for a given prompt and context."
+    ),
+)
+def hermes_sampling(
+    prompt: str,
+    system_prompt: str = "",
+    max_tokens: int = 2048,
+    backend: str = "auto",
+    model: str = "hermes3",
+) -> dict[str, Any]:
+    """Server-initiated sampling via Hermes.
+
+    This implements the MCP sampling protocol where a server can request
+    the client (Hermes) to generate a completion.
+
+    Args:
+        prompt: The sampling prompt from the MCP server.
+        system_prompt: Optional system prompt to guide generation.
+        max_tokens: Maximum tokens to generate.
+        backend: ``"auto"`` (default), ``"cli"``, or ``"ollama"``.
+        model: Ollama model name (default ``hermes3``).
+
+    Returns:
+        dict with keys: status, content, model, stop_reason, usage
+    """
+    try:
+        from codomyrmex.agents.core import AgentRequest
+
+        full_prompt = f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
+        client = _get_client(backend=backend, model=model, timeout=120)
+        request = AgentRequest(prompt=full_prompt)
+        response = client.execute(request)
+
+        if response.is_success():
+            content = response.content
+            # Truncate to approximate max_tokens
+            chars_limit = max_tokens * 4  # rough chars/token
+            if len(content) > chars_limit:
+                content = content[:chars_limit]
+                stop_reason = "max_tokens"
+            else:
+                stop_reason = "end_turn"
+
+            return {
+                "status": "success",
+                "content": content,
+                "model": response.metadata.get("model", model),
+                "stop_reason": stop_reason,
+                "usage": {
+                    "prompt_chars": len(full_prompt),
+                    "completion_chars": len(content),
+                },
+            }
+        return {"status": "error", "content": "", "error": response.error}
+    except Exception as exc:
+        return {"status": "error", "content": "", "error": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Hot-reload the Hermes MCP server configuration. "
+        "Re-reads ~/.hermes/mcp_servers.json and signals Hermes to reconnect."
+    ),
+)
+def hermes_mcp_reload() -> dict[str, Any]:
+    """Hot-reload MCP server configuration.
+
+    Returns:
+        dict with keys: status, servers_loaded, output
+    """
+    try:
+        from codomyrmex.agents.hermes._provider_router import MCPBridgeManager
+        bridge = MCPBridgeManager()
+        result = bridge.reload()
+        return {"status": "success", **result}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Manage cross-session user context for the Hermes agent. "
+        "Stores and retrieves user preferences and coding observations."
+    ),
+)
+def hermes_user_context(
+    action: str = "get",
+    key: str | None = None,
+    value: str | None = None,
+) -> dict[str, Any]:
+    """Manage Hermes cross-session user model.
+
+    Args:
+        action: ``"get"`` to retrieve context, ``"set"`` to set a preference,
+            ``"observe"`` to record an observation.
+        key: Preference key (for ``"set"`` action).
+        value: Value to set or observation text.
+
+    Returns:
+        dict with keys: status, context or preference data
+    """
+    try:
+        from codomyrmex.agents.hermes._provider_router import UserModel
+        model = UserModel()
+
+        if action == "get":
+            return {
+                "status": "success",
+                "context_prompt": model.get_context_prompt(),
+                "profile": model.profile,
+            }
+        if action == "set" and key and value:
+            model.set_preference(key, value)
+            return {"status": "success", "message": f"Set {key}={value}"}
+        if action == "observe" and value:
+            model.add_observation(value)
+            return {"status": "success", "message": f"Recorded observation: {value[:60]}..."}
+        return {"status": "error", "message": f"Invalid action '{action}' or missing key/value"}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+

@@ -202,6 +202,18 @@ def main() -> int:
         default=False,
         help="Quiet mode: suppress banners/metadata, print only the raw response. For CI/CD and programmatic use.",
     )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default=None,
+        help="Override the default model (e.g. 'hermes3', 'qwen2.5-coder'). Routes through 'hermes model' for CLI.",
+    )
+    parser.add_argument(
+        "--worktree",
+        action="store_true",
+        default=False,
+        help="Run in an isolated git worktree (v0.2.0). Changes are isolated and mergeable via 'git merge'.",
+    )
     args = parser.parse_args()
 
     setup_logging()
@@ -223,6 +235,18 @@ def main() -> int:
         print_error("No backend available. Install 'hermes' CLI or 'ollama'.")
         return 1
 
+    # Worktree isolation (v0.2.0): create isolated git worktree for this session
+    worktree_path = None
+    session_id_for_worktree = args.session or args.name
+    if args.worktree and session_id_for_worktree:
+        worktree_path = hermes_client.create_worktree(session_id_for_worktree)  # type: ignore[attr-defined]
+        if worktree_path:
+            if not args.quiet:
+                print_info(f"  Worktree: {worktree_path}")
+        else:
+            if not args.quiet:
+                print_info("  Worktree creation failed; running in main tree.")
+
     result = _execute_prompt(
         hermes_client,
         args.prompt,
@@ -230,6 +254,11 @@ def main() -> int:
         session_name=args.name,
         quiet=args.quiet,
     )
+
+    # Cleanup worktree if auto_cleanup is enabled
+    if worktree_path and session_id_for_worktree:
+        hermes_client.cleanup_worktree(session_id_for_worktree)  # type: ignore[attr-defined]
+
     if result != 0:
         return result
 
@@ -241,5 +270,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-
-session_id: 20260312_124756_bed21f

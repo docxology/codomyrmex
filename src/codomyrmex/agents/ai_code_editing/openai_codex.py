@@ -2,7 +2,7 @@ import os
 import re
 import time
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, NoReturn
 
 from openai import OpenAI
 
@@ -109,7 +109,7 @@ class OpenAICodex:
         return content, tokens_used, execution_time, finish_reason
 
     @staticmethod
-    def _reraise(label: str, e: Exception) -> None:
+    def _reraise(label: str, e: Exception) -> NoReturn:
         """Log and re-raise a caught exception as RuntimeError."""
         logger.error("Error in %s: %s", label, e, exc_info=e)
         raise RuntimeError(f"{label} failed: {e}") from e

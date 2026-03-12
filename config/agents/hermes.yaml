@@ -107,3 +107,37 @@ target_overrides:
     # Inject test-mode env to prevent interactive prompts or side-effects
     run_env:
       CODOMYRMEX_TEST_MODE: "1"
+
+# ── Fallback & Resilience ─────────────────────────────────────────────
+# Fallback model used when the primary provider returns an error (413, rate-limit, timeout).
+# Set to null/empty to disable automatic fallback.
+fallback_model: hermes3
+fallback_provider: ollama
+
+# ── Git Worktree Isolation ────────────────────────────────────────────
+# When enabled via --worktree, agent sessions run in an isolated git worktree
+# to prevent concurrent modifications to the working tree.
+worktree:
+  enabled: false
+  base_dir: ~/.codomyrmex/worktrees
+  auto_cleanup: true  # Remove worktree when session ends
+
+# ── Filesystem Checkpoints ────────────────────────────────────────────
+# Auto-snapshot before destructive operations (dispatch --apply).
+checkpoint:
+  enabled: true
+  max_snapshots: 10
+  snapshot_dir: ~/.codomyrmex/checkpoints
+
+# ── MCP Bridge Configuration ─────────────────────────────────────────
+# Configure Hermes v0.2.0 native MCP client to load Codomyrmex servers.
+# These entries are written to ~/.hermes/mcp_servers.json on setup.
+mcp_bridge:
+  enabled: true
+  servers:
+    codomyrmex_tools:
+      transport: stdio
+      command: "uv"
+      args: ["run", "python", "-m", "codomyrmex.model_context_protocol.server"]
+      description: "Codomyrmex MCP tool server (474 tools)"
+

@@ -125,5 +125,3 @@ _EXEMPLAR_SCRIPTS: list[Path] = [
     _REPO_ROOT_DEFAULT / "scripts" / "agents" / "hermes" / "observe_hermes.py",
     _REPO_ROOT_DEFAULT / "scripts" / "agents" / "hermes" / "setup_hermes.py",
 ]
-
-session_id: 20260312_124417_c5752d
