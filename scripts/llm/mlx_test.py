@@ -17,7 +17,7 @@ from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
-    import codomyrmex  # noqa: F401
+    import codomyrmex
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
@@ -25,7 +25,6 @@ except ImportError:
 import argparse
 import importlib.util
 import subprocess
-
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 TEST_DIR = PROJECT_ROOT / "src" / "codomyrmex" / "tests" / "unit" / "llm"

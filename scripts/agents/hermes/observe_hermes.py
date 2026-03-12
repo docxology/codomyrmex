@@ -149,7 +149,7 @@ def main() -> int:
         print_error("  Ensure codomyrmex package is installed: uv sync")
         return 1
 
-    hermes_client: "HermesClient" = HermesClient()  # type: ignore
+    hermes_client: HermesClient = HermesClient()  # type: ignore
 
     # Priority: --db-path CLI > hermes.yaml session_db > client default
     db_path: Path = _resolve_db_path(

@@ -346,7 +346,7 @@ class TestQuantizationEdgeCases:
 
     def test_all_presets_roundtrip_via_quantizer(self):
         """All presets accessible via MLXQuantizer.get_preset."""
-        from codomyrmex.llm.mlx.quantization import MLXQuantizer, QUANTIZATION_PRESETS
+        from codomyrmex.llm.mlx.quantization import QUANTIZATION_PRESETS, MLXQuantizer
 
         for name in QUANTIZATION_PRESETS:
             preset = MLXQuantizer.get_preset(name)
@@ -386,7 +386,7 @@ class TestConfigToRunnerPipeline:
         assert stats["config"]["seed"] == 99
 
     def test_model_recommendation_to_config(self):
-        from codomyrmex.llm.mlx.config import MLXConfig, RECOMMENDED_MODELS
+        from codomyrmex.llm.mlx.config import RECOMMENDED_MODELS, MLXConfig
 
         for rec in RECOMMENDED_MODELS:
             cfg = MLXConfig(model=rec.repo_id)

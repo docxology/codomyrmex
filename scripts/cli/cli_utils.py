@@ -17,12 +17,12 @@ except ImportError:
 
 import argparse
 import shutil
-from typing import List, Tuple, Union
+from typing import Union
 
 try:
     from typing import Literal
 except ImportError:
-    from typing_extensions import Literal
+    from typing import Literal
 
 # Bootstrap path only — not needed when package is already installed
 try:
@@ -45,14 +45,14 @@ except ImportError:
 _DEFAULT_LIMIT: int = 5
 
 
-def get_terminal_size() -> Tuple[int, int]:
+def get_terminal_size() -> tuple[int, int]:
     """Get terminal dimensions."""
     size = shutil.get_terminal_size((80, 24))
     return size.columns, size.lines
 
 
 def print_table(
-    headers: List[Union[str, int, float]], rows: List[List[Union[str, int, float]]], widths: Union[None, List[int]] = None
+    headers: list[str | int | float], rows: list[list[str | int | float]], widths: None | list[int] = None
 ) -> None:
     """Print formatted table."""
     if not widths:
@@ -61,11 +61,11 @@ def print_table(
             for i in range(len(headers))
         ]
 
-    header_row = "".join(h.ljust(w) for h, w in zip(headers, widths))
+    header_row = "".join(h.ljust(w) for h, w in zip(headers, widths, strict=False))
     print(header_row)
     print("-" * sum(widths))
     for row in rows:
-        print("".join(str(c).ljust(w) for c, w in zip(row, widths)))
+        print("".join(str(c).ljust(w) for c, w in zip(row, widths, strict=False)))
 
 
 def print_progress(current: int, total: int, width: int = 40) -> None:

@@ -18,7 +18,7 @@ from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
-    import codomyrmex  # noqa: F401
+    import codomyrmex
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
@@ -123,9 +123,8 @@ def cmd_delete(model: str, cache_dir: str | None) -> int:
     if mgr.delete_model(model):
         print("✅ Deleted successfully.")
         return 0
-    else:
-        print("❌ Deletion failed.")
-        return 1
+    print("❌ Deletion failed.")
+    return 1
 
 
 def cmd_info(model: str, cache_dir: str | None) -> int:
@@ -231,14 +230,13 @@ def main():
 
     if args.list:
         return cmd_list(args.cache_dir)
-    elif args.delete:
+    if args.delete:
         return cmd_delete(args.delete, args.cache_dir)
-    elif args.info:
+    if args.info:
         return cmd_info(args.info, args.cache_dir)
-    elif args.recommend:
+    if args.recommend:
         return cmd_recommend(args.ram)
-    else:
-        return cmd_download(args.model, args.cache_dir)
+    return cmd_download(args.model, args.cache_dir)
 
 
 if __name__ == "__main__":

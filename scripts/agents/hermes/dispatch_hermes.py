@@ -50,10 +50,13 @@ from codomyrmex.utils.cli_helpers import (
 )
 
 try:
-    from prompt_context import build_project_context, _EXEMPLAR_SCRIPTS
+    from prompt_context import _EXEMPLAR_SCRIPTS, build_project_context
 except ImportError:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from prompt_context import build_project_context, _EXEMPLAR_SCRIPTS  # type: ignore[no-redef]
+    from prompt_context import (  # type: ignore[no-redef]
+        _EXEMPLAR_SCRIPTS,
+        build_project_context,
+    )
 
 # ── Module-level constants ───────────────────────────────────────────────
 _REPO_ROOT: Path = Path(__file__).resolve().parent.parent.parent.parent
@@ -431,9 +434,8 @@ def _dispatch_hermes(
                     print_success(f"  ✅ Applied improvements to {source_path}")
 
             return True
-        else:
-            print_error(f"  Hermes response error for {script_name}: {response.error}")
-            return False
+        print_error(f"  Hermes response error for {script_name}: {response.error}")
+        return False
     except Exception as exc:
         print_error(f"  Dispatch exception for {script_name}: {exc}")
         return False
@@ -474,7 +476,7 @@ def _dispatch_shell(
             f"# Dispatches improvement task for: {script_name}\n"
             f"set -e\n\n"
             f"jules remote send \\\n"
-            f"  --file \"{source_path}\" \\\n"
+            f'  --file "{source_path}" \\\n'
             f"  --prompt '{escaped_prompt}'\n"
         )
         out_path = output_dir / f"{stem}_jules.sh"
@@ -485,8 +487,8 @@ def _dispatch_shell(
             f"# Dispatches improvement task for: {script_name}\n"
             f"set -e\n\n"
             f"claude -p '{escaped_prompt}' \\\n"
-            f"  --file \"{source_path}\" \\\n"
-            f"  --output \"{source_path}\"\n"
+            f'  --file "{source_path}" \\\n'
+            f'  --output "{source_path}"\n'
         )
         out_path = output_dir / f"{stem}_claude.sh"
 
