@@ -86,7 +86,21 @@ All deliverables complete. 34/34 targeted tests pass. 5 new files.
 - **`codomyrmex test --coverage`** — Enhanced with `--coverage` flag and per-module targeting.
 - **SBOM generation** — `ci_cd_automation/sbom_generator.py`: CycloneDX 1.5 from pyproject.toml + uv.lock, purl generation, JSON export.
 
-Sovereign Cloud (SC1-SC3) deferred to v1.2.1 — requires real Infomaniak API credentials.
+Sovereign Cloud (SC1-SC3) deferred — requires Infomaniak API credentials.
+
+---
+
+## ✅ v1.2.1 — "Utilities, Skills & Codebase Awareness" (Delivered)
+
+> **Theme**: Module introspection, structured logging, dependency mapping.
+
+31/31 targeted tests pass. 6 new files.
+
+- **Module introspector** — `system_discovery/module_introspector.py`: AST-based scan of all 129 modules: file counts, LOC, classes, functions, MCP tools, doc health scoring (healthy/partial/minimal), `__all__` export extraction.
+- **Structured log context** — `logging_monitoring/log_context.py`: `LogContext` context manager with auto correlation IDs (contextvars), module/operation tags, `CorrelationFilter` for automatic log record enrichment, elapsed timing.
+- **Skill health checker** — `skills/skill_health.py`: scans skill directories for SKILL.md, `__init__.py`, scripts/, examples/, tests. Health classification: complete, functional, stub.
+- **Dependency mapper** — `system_discovery/dependency_mapper.py`: AST-based import graph across all modules, in/out degree calculation, circular dependency detection via DFS, per-module dependency/dependent queries.
+- **Enhanced retry** — `utils/retry_enhanced.py`: exponential backoff with jitter, max delay cap, retryable exception filter, on_retry callback, `retry_with_stats()` returning `(result, RetryStats)`.
 
 ---
 
