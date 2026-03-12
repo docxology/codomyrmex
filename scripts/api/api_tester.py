@@ -20,12 +20,13 @@ import json
 import time
 import urllib.error
 import urllib.request
-from typing import Dict, Optional
+from typing import Optional
+
 
 # Thin Orchestrator Pattern Implementation
 def make_request(
-    url: str, method: str = "GET", data: Optional[Dict] = None, headers: Optional[Dict] = None
-) -> Dict:
+    url: str, method: str = "GET", data: Optional[dict] = None, headers: Optional[dict] = None
+) -> dict:
     """Make HTTP request."""
     headers = headers or {}
     headers.setdefault("Content-Type", "application/json")

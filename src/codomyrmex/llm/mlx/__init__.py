@@ -22,10 +22,10 @@ Quick start::
 from .config import (
     DEFAULT_MLX_CACHE_DIR,
     DEFAULT_MLX_MODEL,
+    RECOMMENDED_MODELS,
     MLXConfig,
     MLXConfigPresets,
     ModelRecommendation,
-    RECOMMENDED_MODELS,
     get_mlx_config,
     get_models_for_ram,
     reset_mlx_config,
@@ -47,29 +47,29 @@ __all__ = [
     # Config
     "DEFAULT_MLX_CACHE_DIR",
     "DEFAULT_MLX_MODEL",
+    # Quantization
+    "DEFAULT_QUANTIZATION",
+    "QUANTIZATION_PRESETS",
+    "RECOMMENDED_MODELS",
     "MLXConfig",
     "MLXConfigPresets",
-    "ModelRecommendation",
-    "RECOMMENDED_MODELS",
-    "get_mlx_config",
-    "get_models_for_ram",
-    "reset_mlx_config",
-    "set_mlx_config",
+    # Runner
+    "MLXGenerationResult",
     # Model management
     "MLXModelInfo",
     "MLXModelManager",
-    # Runner
-    "MLXGenerationResult",
+    "MLXQuantizer",
     "MLXRunner",
     "MLXStreamChunk",
-    # Quantization
-    "DEFAULT_QUANTIZATION",
-    "MLXQuantizer",
-    "QUANTIZATION_PRESETS",
+    "ModelRecommendation",
     "QuantizationPreset",
     "estimate_model_size_gb",
     "estimate_ram_required_gb",
+    "get_mlx_config",
+    "get_models_for_ram",
     "read_quantization_info",
+    "reset_mlx_config",
+    "set_mlx_config",
 ]
 
 __version__ = "1.0.0"

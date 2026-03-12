@@ -125,15 +125,14 @@ def _execute_prompt(hermes_client: object, prompt: str, session_id: Optional[str
     print_info("─" * 60)
 
     try:
-        from codomyrmex.agents.hermes import HermesError  # noqa: F401
+        from codomyrmex.agents.hermes import HermesError
 
         response = hermes_client.chat_session(prompt=prompt, session_id=session_id)  # type: ignore[attr-defined]
 
         if response.is_success():
             return _format_response(response)
-        else:
-            print_error(f"  Error: {response.error}")
-            return 1
+        print_error(f"  Error: {response.error}")
+        return 1
 
     except ImportError as e:
         print_error(f"Cannot import HermesError: {e}")

@@ -9,11 +9,14 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Any, Generator
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .config import MLXConfig, get_mlx_config
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 logger = get_logger(__name__)
 

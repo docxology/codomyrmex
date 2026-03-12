@@ -16,14 +16,13 @@ from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
-    import codomyrmex  # noqa: F401
+    import codomyrmex
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
 import importlib.util
-
 
 PRESET_NAMES = ["creative", "precise", "fast", "comprehensive", "coding"]
 
@@ -61,7 +60,7 @@ def generate_once(config, prompt: str, stream: bool) -> int:
     runner = MLXRunner(config)
 
     if stream:
-        print("", end="", flush=True)
+        print(end="", flush=True)
         total_tokens = 0
         import time
         t0 = time.perf_counter()
@@ -91,10 +90,9 @@ def generate_once(config, prompt: str, stream: bool) -> int:
         )
         runner.unload_model()
         return 0
-    else:
-        print(f"Error: {result.error_message}", file=sys.stderr)
-        runner.unload_model()
-        return 1
+    print(f"Error: {result.error_message}", file=sys.stderr)
+    runner.unload_model()
+    return 1
 
 
 def interactive_chat(config, system_prompt: str | None) -> int:
