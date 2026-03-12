@@ -94,92 +94,14 @@ def _resolve_ollama_timeout() -> int:
         return _DEFAULT_TIMEOUT_S
 
 
-# ── Filesystem Checkpoints ───────────────────────────────────────────
-
-
-def _resolve_checkpoint_config() -> dict:
-    """Load checkpoint configuration from hermes.yaml."""
-    try:
-        config = get_config()
-        hermes_cfg: dict = config.get("hermes", {}) if isinstance(config, dict) else {}
-        return hermes_cfg.get("checkpoint", {})
-    except Exception:
-        return {}
-
-
-def _create_checkpoint(target_dir: Path, output_dir: Path) -> Path | None:
-    """Create a filesystem snapshot before destructive --apply operations.
-
-    Snapshots are stored as timestamped tar.gz archives in the configured
-    checkpoint directory (default: ``~/.codomyrmex/checkpoints``).
-
-    Args:
-        target_dir: Directory being modified by apply operations.
-        output_dir: Dispatch output directory (also checkpointed).
-
-    Returns:
-        Path to the checkpoint archive, or None on failure.
-    """
-    import shutil
-    import tarfile
-
-    cp_config = _resolve_checkpoint_config()
-    if not cp_config.get("enabled", True):
-        return None
-
-    cp_dir = Path(cp_config.get("snapshot_dir", "~/.codomyrmex/checkpoints")).expanduser()
-    cp_dir.mkdir(parents=True, exist_ok=True)
-
-    # Enforce max_snapshots limit
-    max_snapshots = int(cp_config.get("max_snapshots", 10))
-    existing = sorted(cp_dir.glob("checkpoint_*.tar.gz"))
-    while len(existing) >= max_snapshots:
-        oldest = existing.pop(0)
-        try:
-            oldest.unlink()
-        except OSError:
-            pass
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    archive_path = cp_dir / f"checkpoint_{timestamp}.tar.gz"
-
-    try:
-        with tarfile.open(archive_path, "w:gz") as tar:
-            if target_dir.exists():
-                tar.add(target_dir, arcname=f"target/{target_dir.name}")
-            if output_dir.exists():
-                tar.add(output_dir, arcname=f"output/{output_dir.name}")
-        print_success(f"  ✓ Checkpoint created: {archive_path}")
-        return archive_path
-    except Exception as exc:
-        print_error(f"  ⚠  Checkpoint failed: {exc}")
-        return None
-
-
-def _rollback_checkpoint(archive_path: Path, restore_to: Path) -> bool:
-    """Restore files from a checkpoint archive.
-
-    Args:
-        archive_path: Path to the checkpoint tar.gz archive.
-        restore_to: Base directory to extract into.
-
-    Returns:
-        True if rollback succeeded.
-    """
-    import tarfile
-
-    if not archive_path.exists():
-        print_error(f"  Checkpoint not found: {archive_path}")
-        return False
-
-    try:
-        with tarfile.open(archive_path, "r:gz") as tar:
-            tar.extractall(path=restore_to, filter="data")
-        print_success(f"  ✓ Rollback from {archive_path.name} complete")
-        return True
-    except Exception as exc:
-        print_error(f"  ⚠  Rollback failed: {exc}")
-        return False
+# Checkpoint support extracted to _dispatch_helpers.py for LOC budget
+try:
+    from _dispatch_helpers import create_checkpoint as _create_checkpoint
+    from _dispatch_helpers import rollback_checkpoint as _rollback_checkpoint
+except ImportError:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from _dispatch_helpers import create_checkpoint as _create_checkpoint  # type: ignore[no-redef]
+    from _dispatch_helpers import rollback_checkpoint as _rollback_checkpoint  # type: ignore[no-redef]
 
 
 def _validate_args(args: argparse.Namespace) -> str | None:
