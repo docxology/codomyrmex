@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.1.10 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.11 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -419,7 +419,7 @@ Before completing significant changes:
 
 ## Version History
 
-- **v1.1.10** (March 2026) — Dashboard v2 design tokens, telemetry UX, MCP call-graph, token tracking, module health API
+- **v1.1.11** (March 2026) — Hermetic distribution, MCP schema verification, config invariants, Hypothesis property tests
 - **v1.1.8** (March 2026) — Persistent memory, Obsidian sync, multi-hop Graph RAG, active inference
 - **v1.1.7** (March 2026) — Repository-wide documentation audit and consistency sweep
 - **v1.1.6** (March 2026) — Hermes dual-backend, Gemini package migration

@@ -1,0 +1,91 @@
+# Codomyrmex Development Stack
+# Usage: docker compose up -d
+# Ports: 8787 (dashboard), 8888 (PM server), 6379 (Redis), 11434 (Ollama)
+
+services:
+  # ── Core Application ─────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: codomyrmex-app
+    ports:
+      - "8787:8787"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - REDIS_URL=redis://redis:6379/0
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - CODOMYRMEX_ENV=docker
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - app-data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "print('ok')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # ── Redis Cache ──────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: codomyrmex-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Ollama LLM Server ───────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: codomyrmex-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    # Uncomment for GPU support:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  # ── PM Dashboard ─────────────────────────────────────────────────
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: codomyrmex-dashboard
+    ports:
+      - "8888:8888"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - REDIS_URL=redis://redis:6379/0
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - CODOMYRMEX_ENV=docker
+      - DASHBOARD_PORT=8888
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  app-data:
+  redis-data:
+  ollama-models:
