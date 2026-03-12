@@ -1,0 +1,360 @@
+/* Codomyrmex Design Token System — v1.1.10
+ *
+ * CSS custom properties for colors, typography, spacing, and animation.
+ * Supports both light and dark themes via prefers-color-scheme.
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="design_tokens.css">
+ *   <div class="codo-card">...</div>
+ */
+
+/* ─── Color Palette ─────────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --codo-brand-50: #eff6ff;
+  --codo-brand-100: #dbeafe;
+  --codo-brand-200: #bfdbfe;
+  --codo-brand-300: #93c5fd;
+  --codo-brand-400: #60a5fa;
+  --codo-brand-500: #3b82f6;
+  --codo-brand-600: #2563eb;
+  --codo-brand-700: #1d4ed8;
+  --codo-brand-800: #1e40af;
+  --codo-brand-900: #1e3a8a;
+
+  /* Semantic */
+  --codo-success: #22c55e;
+  --codo-success-light: #f0fdf4;
+  --codo-warning: #f59e0b;
+  --codo-warning-light: #fffbeb;
+  --codo-error: #ef4444;
+  --codo-error-light: #fef2f2;
+  --codo-info: #6366f1;
+  --codo-info-light: #eef2ff;
+
+  /* Surfaces — Light */
+  --codo-bg: #ffffff;
+  --codo-bg-secondary: #f8fafc;
+  --codo-bg-tertiary: #f1f5f9;
+  --codo-surface: #ffffff;
+  --codo-surface-elevated: #ffffff;
+  --codo-border: #e2e8f0;
+  --codo-border-subtle: #f1f5f9;
+
+  /* Text — Light */
+  --codo-text: #0f172a;
+  --codo-text-secondary: #475569;
+  --codo-text-tertiary: #94a3b8;
+  --codo-text-inverse: #ffffff;
+
+  /* ─── Typography ──────────────────────────────────────────────── */
+  --codo-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --codo-font-mono: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+
+  --codo-text-xs: 0.75rem;     /* 12px */
+  --codo-text-sm: 0.875rem;    /* 14px */
+  --codo-text-base: 1rem;      /* 16px */
+  --codo-text-lg: 1.125rem;    /* 18px */
+  --codo-text-xl: 1.25rem;     /* 20px */
+  --codo-text-2xl: 1.5rem;     /* 24px */
+  --codo-text-3xl: 1.875rem;   /* 30px */
+
+  --codo-font-normal: 400;
+  --codo-font-medium: 500;
+  --codo-font-semibold: 600;
+  --codo-font-bold: 700;
+
+  --codo-leading-tight: 1.25;
+  --codo-leading-normal: 1.5;
+  --codo-leading-relaxed: 1.75;
+
+  /* ─── Spacing ─────────────────────────────────────────────────── */
+  --codo-space-1: 0.25rem;     /* 4px */
+  --codo-space-2: 0.5rem;      /* 8px */
+  --codo-space-3: 0.75rem;     /* 12px */
+  --codo-space-4: 1rem;        /* 16px */
+  --codo-space-5: 1.25rem;     /* 20px */
+  --codo-space-6: 1.5rem;      /* 24px */
+  --codo-space-8: 2rem;        /* 32px */
+  --codo-space-10: 2.5rem;     /* 40px */
+  --codo-space-12: 3rem;       /* 48px */
+  --codo-space-16: 4rem;       /* 64px */
+
+  /* ─── Border Radius ───────────────────────────────────────────── */
+  --codo-radius-sm: 0.25rem;
+  --codo-radius-md: 0.375rem;
+  --codo-radius-lg: 0.5rem;
+  --codo-radius-xl: 0.75rem;
+  --codo-radius-2xl: 1rem;
+  --codo-radius-full: 9999px;
+
+  /* ─── Shadows ─────────────────────────────────────────────────── */
+  --codo-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --codo-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --codo-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --codo-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+
+  /* ─── Animation ───────────────────────────────────────────────── */
+  --codo-transition-fast: 150ms ease;
+  --codo-transition-base: 200ms ease;
+  --codo-transition-slow: 300ms ease;
+
+  /* ─── Layout ──────────────────────────────────────────────────── */
+  --codo-sidebar-width: 260px;
+  --codo-sidebar-collapsed: 60px;
+  --codo-header-height: 56px;
+  --codo-content-max: 1440px;
+}
+
+/* ─── Dark Theme ────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --codo-bg: #0f172a;
+    --codo-bg-secondary: #1e293b;
+    --codo-bg-tertiary: #334155;
+    --codo-surface: #1e293b;
+    --codo-surface-elevated: #334155;
+    --codo-border: #334155;
+    --codo-border-subtle: #1e293b;
+    --codo-text: #f1f5f9;
+    --codo-text-secondary: #94a3b8;
+    --codo-text-tertiary: #64748b;
+    --codo-text-inverse: #0f172a;
+    --codo-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --codo-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --codo-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* ─── Base Reset ────────────────────────────────────────────────── */
+.codo-dashboard *, .codo-dashboard *::before, .codo-dashboard *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.codo-dashboard {
+  font-family: var(--codo-font-sans);
+  font-size: var(--codo-text-base);
+  line-height: var(--codo-leading-normal);
+  color: var(--codo-text);
+  background: var(--codo-bg);
+  min-height: 100vh;
+}
+
+/* ─── Components ────────────────────────────────────────────────── */
+
+/* Card */
+.codo-card {
+  background: var(--codo-surface);
+  border: 1px solid var(--codo-border);
+  border-radius: var(--codo-radius-xl);
+  padding: var(--codo-space-5);
+  box-shadow: var(--codo-shadow-sm);
+  transition: box-shadow var(--codo-transition-base);
+}
+.codo-card:hover {
+  box-shadow: var(--codo-shadow-md);
+}
+.codo-card-header {
+  font-size: var(--codo-text-sm);
+  font-weight: var(--codo-font-semibold);
+  color: var(--codo-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--codo-space-3);
+}
+.codo-card-value {
+  font-size: var(--codo-text-2xl);
+  font-weight: var(--codo-font-bold);
+  color: var(--codo-text);
+}
+
+/* Badge */
+.codo-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--codo-space-1) var(--codo-space-2);
+  font-size: var(--codo-text-xs);
+  font-weight: var(--codo-font-medium);
+  border-radius: var(--codo-radius-full);
+  line-height: 1;
+}
+.codo-badge--success { background: var(--codo-success-light); color: #166534; }
+.codo-badge--warning { background: var(--codo-warning-light); color: #92400e; }
+.codo-badge--error   { background: var(--codo-error-light);   color: #991b1b; }
+.codo-badge--info    { background: var(--codo-info-light);    color: #3730a3; }
+
+/* Status Dot */
+.codo-status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--codo-radius-full);
+  margin-right: var(--codo-space-2);
+}
+.codo-status-dot--active    { background: var(--codo-success); }
+.codo-status-dot--warning   { background: var(--codo-warning); }
+.codo-status-dot--error     { background: var(--codo-error); }
+.codo-status-dot--inactive  { background: var(--codo-text-tertiary); }
+.codo-status-dot--pulse {
+  animation: codo-pulse 2s ease-in-out infinite;
+}
+@keyframes codo-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Table */
+.codo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--codo-text-sm);
+}
+.codo-table th {
+  text-align: left;
+  padding: var(--codo-space-3) var(--codo-space-4);
+  font-weight: var(--codo-font-semibold);
+  color: var(--codo-text-secondary);
+  border-bottom: 2px solid var(--codo-border);
+  background: var(--codo-bg-secondary);
+}
+.codo-table td {
+  padding: var(--codo-space-3) var(--codo-space-4);
+  border-bottom: 1px solid var(--codo-border-subtle);
+  color: var(--codo-text);
+}
+.codo-table tr:hover td {
+  background: var(--codo-bg-secondary);
+}
+.codo-table .codo-mono {
+  font-family: var(--codo-font-mono);
+  font-size: var(--codo-text-xs);
+}
+
+/* Progress Bar */
+.codo-progress {
+  width: 100%;
+  height: 6px;
+  background: var(--codo-bg-tertiary);
+  border-radius: var(--codo-radius-full);
+  overflow: hidden;
+}
+.codo-progress-fill {
+  height: 100%;
+  border-radius: var(--codo-radius-full);
+  background: var(--codo-brand-500);
+  transition: width var(--codo-transition-slow);
+}
+
+/* ─── Layout: Responsive Shell ──────────────────────────────────── */
+
+.codo-shell {
+  display: grid;
+  grid-template-columns: var(--codo-sidebar-width) 1fr;
+  grid-template-rows: var(--codo-header-height) 1fr;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar content";
+  min-height: 100vh;
+}
+
+.codo-header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--codo-space-6);
+  background: var(--codo-surface);
+  border-bottom: 1px solid var(--codo-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.codo-sidebar {
+  grid-area: sidebar;
+  background: var(--codo-bg-secondary);
+  border-right: 1px solid var(--codo-border);
+  padding: var(--codo-space-4);
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.codo-content {
+  grid-area: content;
+  padding: var(--codo-space-6);
+  max-width: var(--codo-content-max);
+  width: 100%;
+}
+
+/* Nav items */
+.codo-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--codo-space-3);
+  padding: var(--codo-space-2) var(--codo-space-3);
+  border-radius: var(--codo-radius-md);
+  color: var(--codo-text-secondary);
+  text-decoration: none;
+  font-size: var(--codo-text-sm);
+  font-weight: var(--codo-font-medium);
+  transition: all var(--codo-transition-fast);
+  cursor: pointer;
+}
+.codo-nav-item:hover {
+  background: var(--codo-bg-tertiary);
+  color: var(--codo-text);
+}
+.codo-nav-item--active {
+  background: var(--codo-brand-50);
+  color: var(--codo-brand-700);
+}
+
+/* Grid layouts */
+.codo-grid {
+  display: grid;
+  gap: var(--codo-space-4);
+}
+.codo-grid--2 { grid-template-columns: repeat(2, 1fr); }
+.codo-grid--3 { grid-template-columns: repeat(3, 1fr); }
+.codo-grid--4 { grid-template-columns: repeat(4, 1fr); }
+.codo-grid--auto { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+
+/* ─── Responsive ────────────────────────────────────────────────── */
+
+/* Tablet: ≤1024px */
+@media (max-width: 1024px) {
+  .codo-shell {
+    grid-template-columns: var(--codo-sidebar-collapsed) 1fr;
+  }
+  .codo-sidebar .codo-nav-label {
+    display: none;
+  }
+  .codo-grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .codo-grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile: ≤640px */
+@media (max-width: 640px) {
+  .codo-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--codo-header-height) 1fr;
+    grid-template-areas:
+      "header"
+      "content";
+  }
+  .codo-sidebar {
+    display: none;
+  }
+  .codo-content {
+    padding: var(--codo-space-4);
+  }
+  .codo-grid--2,
+  .codo-grid--3,
+  .codo-grid--4 {
+    grid-template-columns: 1fr;
+  }
+}
