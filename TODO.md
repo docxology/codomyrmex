@@ -104,6 +104,20 @@ Sovereign Cloud (SC1-SC3) deferred — requires Infomaniak API credentials.
 
 ---
 
+## ✅ v1.2.2 — "Codebase Health, API Freeze & Infrastructure" (Delivered)
+
+> **Theme**: Self-aware codebase analysis, API specification, typed events, config validation.
+
+35/35 targeted tests pass. 6 new files.
+
+- **Codebase health reporter** — `system_discovery/health_reporter.py`: combines introspector + dependency mapper into scored health report (0–100) with recommendations, markdown/JSON export. Scanned: 128 modules, 2.2M LOC, 562 MCP tools.
+- **API spec stamper** — `api/api_spec_stamper.py`: snapshots public APIs from `__all__` + AST, diffs snapshots for breaking change detection, generates versioned markdown/JSON specs.
+- **Config validator** — `config_management/config_validator.py`: declarative `ConfigSchema` with type checking, required fields, min/max constraints, choices validation, default application, schema introspection.
+- **Typed event bus** — `events/typed_event_bus.py`: priority-ordered pub/sub with wildcard pattern matching (`*`, `prefix.*`), bounded emission history, stats, exception-safe handler invocation.
+- **CLI profiler** — `performance/cli_profiler.py`: module import timing, function benchmarking (min/max/avg), CLI startup profiling, all-submodule import scan.
+
+---
+
 ## 🔮 v1.3.0+ — "Autonomous Evolution & Physical Embodiment"
 
 > **Theme**: Research-grade capabilities pushing toward autonomous systems.
