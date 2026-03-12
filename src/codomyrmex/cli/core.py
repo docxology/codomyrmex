@@ -333,9 +333,67 @@ class Cli:
             """Check applicable rules for a given file path"""
             return handle_rules_check(file)
 
-    def test(self, module_name):
-        """Run tests for a specific module"""
-        return handle_module_test(module_name)
+    class agent:
+        """Agent management subcommands"""
+
+        def list(self):
+            """List all available agents"""
+            from .handlers.agent import handle_agent_list
+
+            return handle_agent_list()
+
+        def start(self, name: str, model: str = "gemma3", port: int = 0):
+            """Start a named agent with optional model"""
+            from .handlers.agent import handle_agent_start
+
+            return handle_agent_start(name, model=model, port=port)
+
+        def health(self, name: str):
+            """Check health of a named agent"""
+            from .handlers.agent import handle_agent_health
+
+            return handle_agent_health(name)
+
+    class memory:
+        """Memory management subcommands"""
+
+        def list(self, limit: int = 20):
+            """List recent memory entries"""
+            from .handlers.memory import handle_memory_list
+
+            return handle_memory_list(limit=limit)
+
+        def index(self, vault: str = "", rebuild: bool = False):
+            """Build or rebuild memory index from Obsidian vault"""
+            from .handlers.memory import handle_memory_index
+
+            return handle_memory_index(vault=vault, rebuild=rebuild)
+
+        def search(self, query: str, limit: int = 10):
+            """Search memory entries"""
+            from .handlers.memory import handle_memory_search
+
+            return handle_memory_search(query, limit=limit)
+
+        def stats(self):
+            """Show memory store statistics"""
+            from .handlers.memory import handle_memory_stats
+
+            return handle_memory_stats()
+
+    def test(self, module_name="", coverage=False):
+        """Run tests for a specific module or all tests"""
+        if module_name:
+            return handle_module_test(module_name)
+
+        import subprocess
+
+        cmd = [sys.executable, "-m", "pytest", "src/codomyrmex/tests/"]
+        if coverage:
+            cmd.extend(["--cov=codomyrmex", "--cov-report=term-missing"])
+        print(f"🧪 Running tests{' with coverage' if coverage else ''}...")
+        subprocess.run(cmd, check=False, cwd=str(Path(__file__).resolve().parents[3]))
+        return None
 
     def demo(self, module_name):
         """Run demonstration for a specific module"""

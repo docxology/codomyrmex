@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.1.12 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -419,7 +419,7 @@ Before completing significant changes:
 
 ## Version History
 
-- **v1.1.12** (March 2026) — Autonomous CI, budget controls, live feed, pre-release audit
+- **v1.2.0** (March 2026) — Ecosystem Integration - CLI maturity, SBOM generation, agent and memory subcommands
 - **v1.1.8** (March 2026) — Persistent memory, Obsidian sync, multi-hop Graph RAG, active inference
 - **v1.1.7** (March 2026) — Repository-wide documentation audit and consistency sweep
 - **v1.1.6** (March 2026) — Hermes dual-backend, Gemini package migration
