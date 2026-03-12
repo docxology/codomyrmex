@@ -45,7 +45,7 @@ def _resolve_config() -> dict:
     try:
         config = get_config()
         return config.get("hermes", {}) if isinstance(config, dict) else {}
-    except (OSError, ImportError):
+    except (OSError, ValueError):
         return {}
 
 
@@ -70,7 +70,7 @@ def _resolve_db_path(
     return Path(raw).expanduser().resolve()
 
 
-def _load_sorted_sessions(store: object, limit: int) -> list[object]:
+def _load_sorted_sessions(store: object, limit: int) -> list:
     """Load all sessions from the store, sorted newest-first, capped at *limit*.
 
     Args:
@@ -81,7 +81,7 @@ def _load_sorted_sessions(store: object, limit: int) -> list[object]:
         List of session objects, most-recent first.
     """
     session_ids: list[str] = store.list_sessions()  # type: ignore[attr-defined]
-    all_sessions: list[object] = []
+    all_sessions: list = []
     for sid in session_ids:
         sess = store.load(sid)  # type: ignore[attr-defined]
         if sess:
@@ -204,6 +204,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-```
 
-session_id: 20260312_124303_b3c88d
+session_id: 20260312_120408_2ce77a

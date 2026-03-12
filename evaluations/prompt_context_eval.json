@@ -1,0 +1,16 @@
+{
+    "adherence_assessment": {
+        "adheres": false,
+        "reasoning": "The script prompt_context.py is a utility module, not an orchestrator script. It lacks a main function, does not accept configuration via config files or environment variables for its own execution, does not delegate to a library method for core business logic (it contains the logic itself), does not use cli_helpers for logging, and does not exit with sys.exit. While it provides useful functions for other orchestrator scripts, it does not itself follow the Thin Orchestrator pattern for executable scripts."
+    },
+    "technical_debt": [
+        "Sloppy Code: Uses deprecated typing.Optional instead of union types (Path | None and list[Path] | None) for Python 3.11+",
+        "Hardcoded Standards: The _PROJECT_STANDARDS string duplicates content that should be sourced from the project configuration or AGENTS.md to avoid drift",
+        "Magic Number: The load_agents_md function uses a hardcoded limit of 5 levels when walking up the directory tree"
+    ],
+    "underlying_improvements": [
+        "Architectural Flaw: The script is designed as a utility module but is being evaluated as an orchestrator; consider separating concerns if orchestrator functionality is needed",
+        "Configuration Dependency: The script could integrate with the project's configuration system to source standards dynamically",
+        "Refactor Opportunity: Extract the directory-walking logic into a configurable parameter to avoid magic numbers"
+    ]
+}

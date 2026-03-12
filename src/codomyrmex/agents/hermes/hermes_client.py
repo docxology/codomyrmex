@@ -82,7 +82,7 @@ class HermesClient(CLIAgentBase):
         )
 
         hermes_command = self.get_config_value("hermes_command", config=cfg)
-        timeout = self.get_config_value("hermes_timeout", config=cfg)
+        timeout = self.get_config_value("timeout", config=cfg) or self.get_config_value("hermes_timeout", config=cfg)
         working_dir_str = self.get_config_value("hermes_working_dir", config=cfg)
         self._hermes_provider: str = str(
             self.get_config_value("hermes_provider", config=cfg) or "openrouter"
@@ -151,32 +151,51 @@ class HermesClient(CLIAgentBase):
     def _is_cli_configured(self) -> bool:
         """Check whether the Hermes CLI has an API key configured.
 
-        Runs ``hermes config`` briefly to detect whether any API provider
-        key is set. If not, returns False so the caller can fall back to
-        Ollama rather than hanging for the full subprocess timeout.
+        Checks two sources:
+        1. ``hermes config`` output — looks for API key lines that show
+           actual key values (not ``(not set)``).
+        2. ``~/.hermes/.env`` — scans for a non-empty ``OPENROUTER_API_KEY=``.
 
         Returns:
-            True if at least one API key or provider is configured.
+            True if at least one API key is configured.
         """
+        # Method 1: check `hermes config` output
         try:
-            import subprocess
             result = subprocess.run(
                 [self.command, "config"],
                 capture_output=True, text=True, timeout=5,
             )
-            output = (result.stdout + result.stderr).lower()
-            # 'not set' for all API keys → not configured
-            # If at least one key line does NOT say 'not set', we're likely OK
-            lines_with_not_set = sum(1 for ln in output.splitlines() if "not set" in ln and "api" in ln)
-            lines_with_keys = sum(1 for ln in output.splitlines() if "api" in ln)
-            if lines_with_keys > 0 and lines_with_not_set >= lines_with_keys:
-                return False
-            # Also flag if 'openrouter api' is explicitly not configured
-            if "openrouter" in output and "not configured" in output:
-                return False
-            return True
+            output = result.stdout + result.stderr
+            # Parse the "◆ API Keys" section — each line looks like:
+            #   OpenRouter     sk-o...fa72      (configured)
+            #   Anthropic      (not set)        (not configured)
+            key_providers = ["openrouter", "anthropic", "openai", "zhipuai", "glm", "kimi"]
+            for line in output.splitlines():
+                lower_line = line.strip().lower()
+                for provider in key_providers:
+                    if lower_line.startswith(provider) and "(not set)" not in lower_line:
+                        # Found a provider line with an actual key value
+                        return True
         except Exception:
-            return True  # Assume configured if we can't check
+            pass  # Fall through to .env check
+
+        # Method 2: check ~/.hermes/.env directly
+        try:
+            hermenv = os.path.expanduser("~/.hermes/.env")
+            if os.path.exists(hermenv):
+                with open(hermenv) as f:
+                    for line in f:
+                        line = line.strip()
+                        if line.startswith("OPENROUTER_API_KEY=") and len(line) > len("OPENROUTER_API_KEY="):
+                            return True
+        except Exception:
+            pass
+
+        # Method 3: check environment variable
+        if os.environ.get("OPENROUTER_API_KEY"):
+            return True
+
+        return False
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """Execute via the active backend (CLI or Ollama)."""
@@ -323,24 +342,44 @@ class HermesClient(CLIAgentBase):
     # Sessions (Multi-turn Chat)
     # ------------------------------------------------------------------
 
-    def chat_session(self, prompt: str, session_id: str | None = None) -> AgentResponse:
+    def chat_session(
+        self,
+        prompt: str,
+        session_id: str | None = None,
+        session_name: str | None = None,
+    ) -> AgentResponse:
         """Execute a stateful multi-turn chat.
 
         Args:
             prompt: User prompt.
             session_id: Session ID (optional). If omitted, a new one is created.
+            session_name: Human-friendly session name (v0.2.0). If provided and
+                no session_id is given, attempts to resume by name.
 
         Returns:
             Response containing the assistant's reply and the session ID in metadata.
         """
         with SQLiteSessionStore(self._session_db_path) as store:
-            if session_id:
+            # Try to resolve session by name first (v0.2.0 feature)
+            if not session_id and session_name:
+                existing = store.find_by_name(session_name)
+                if existing:
+                    session = existing
+                    session_id = session.session_id
+                else:
+                    session = HermesSession(name=session_name)
+                    session_id = session.session_id
+            elif session_id:
                 session = store.load(session_id)
                 if not session:
-                    session = HermesSession(session_id=session_id)
+                    session = HermesSession(session_id=session_id, name=session_name)
             else:
-                session = HermesSession()
+                session = HermesSession(name=session_name)
                 session_id = session.session_id
+
+            # Update name if provided on an existing session
+            if session_name and session.name != session_name:
+                session.name = session_name
 
             session.add_message("user", prompt)
 
@@ -366,6 +405,8 @@ class HermesClient(CLIAgentBase):
                 store.save(session)
 
             response.metadata["session_id"] = session.session_id
+            if session.name:
+                response.metadata["session_name"] = session.name
             return response
 
     # ------------------------------------------------------------------
@@ -393,6 +434,67 @@ class HermesClient(CLIAgentBase):
         # Non-interactive mode: -Q suppresses spinner/banner, --provider forces the
         # configured inference provider so hermes never enters the setup wizard.
         return ["chat", "-q", prompt, "-Q", "--provider", self._hermes_provider]
+
+    # ------------------------------------------------------------------
+    # Version & Diagnostics (v0.2.0+)
+    # ------------------------------------------------------------------
+
+    def get_version(self) -> str | None:
+        """Get the installed Hermes CLI version string.
+
+        Runs ``hermes version`` and parses the output.
+
+        Returns:
+            Version string (e.g. ``"0.2.0"``) or ``None`` if unavailable.
+        """
+        if not self._cli_available:
+            return None
+        try:
+            import re as _re
+
+            result = subprocess.run(
+                [self.command, "version"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            # Parse version from output like "Hermes Agent v0.2.0" or "0.2.0"
+            output = (result.stdout + result.stderr).strip()
+            match = _re.search(r"(\d+\.\d+\.\d+)", output)
+            return match.group(1) if match else output or None
+        except Exception as e:
+            self.logger.debug("Could not get Hermes version: %s", e)
+            return None
+
+    def run_doctor(self) -> dict[str, Any]:
+        """Run ``hermes doctor`` for comprehensive health diagnostics.
+
+        Available in Hermes CLI v0.2.0+.  Returns structured results.
+
+        Returns:
+            Dict with ``success`` boolean and ``output`` or ``error``.
+        """
+        if not self._cli_available:
+            return {"success": False, "error": "Hermes CLI not available"}
+        try:
+            result = subprocess.run(
+                [self.command, "doctor"],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                env={**os.environ, "NO_COLOR": "1"},
+            )
+            return {
+                "success": result.returncode == 0,
+                "output": result.stdout.strip(),
+                "stderr": result.stderr.strip(),
+                "exit_code": result.returncode,
+            }
+        except subprocess.TimeoutExpired:
+            return {"success": False, "error": "hermes doctor timed out after 30s"}
+        except Exception as e:
+            self.logger.warning("hermes doctor failed: %s", e)
+            return {"success": False, "error": str(e)}
 
     # ------------------------------------------------------------------
     # Skills / Status (CLI-only — graceful fallback)

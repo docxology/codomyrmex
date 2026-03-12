@@ -1,16 +1,18 @@
 # Hermes Thin Orchestrators
 
-**Version**: v3.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v3.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 A suite of lightweight script orchestrators for setup, execution, and observability of the Hermes agent in your local environment. Each `main()` is a clean 5-step orchestrator delegating all meaningful work to named helper functions.
 
+Aligned with **Hermes Agent v0.2.0** (v2026.3.12) — supports provider router, named sessions, `hermes doctor`, quiet mode, and MCP client detection.
+
 ## Execution Suite
 
 ### 1. Pre-flight Setup
 
-Validates `config/agents/hermes.yaml`, binary availability (`hermes` CLI or `ollama`), and SQLite storage writability:
+Validates `config/agents/hermes.yaml`, binary availability (`hermes` CLI or `ollama`), SQLite storage writability, CLI version detection, and `hermes doctor` health check:
 
 ```bash
 uv run python scripts/agents/hermes/setup_hermes.py
@@ -23,6 +25,12 @@ Submits a prompt to the Hermes agent, logging stateful sessions to SQLite (`~/.c
 ```bash
 uv run python scripts/agents/hermes/run_hermes.py --prompt "Explain agent swarms."
 uv run python scripts/agents/hermes/run_hermes.py --prompt "Follow-up question" --session my-session-1
+
+# Named sessions (v0.2.0) — create or resume by human-friendly name
+uv run python scripts/agents/hermes/run_hermes.py --prompt "Continue task" --name "refactoring-payments"
+
+# Quiet mode — raw response only, for CI/CD pipelines
+uv run python scripts/agents/hermes/run_hermes.py --prompt "What is 2+2?" --quiet
 ```
 
 ### 3. Session Interpretability
@@ -32,6 +40,9 @@ Interrogates recent conversational states from the local SQLite store:
 ```bash
 uv run python scripts/agents/hermes/observe_hermes.py --limit 3
 uv run python scripts/agents/hermes/observe_hermes.py --limit 10 --db-path /path/to/sessions.db
+
+# Search named sessions (v0.2.0)
+uv run python scripts/agents/hermes/observe_hermes.py --search "refactoring"
 ```
 
 ### 4. AI-Powered Script Review
@@ -76,11 +87,24 @@ uv run python scripts/agents/hermes/dispatch_hermes.py --dry-run
 
 See `config/agents/hermes.yaml` for all defaults including:
 
+- `version_minimum` — minimum expected Hermes CLI version (default: `0.2.0`)
+- `provider` — default inference provider (default: `openrouter`)
 - `default_prompt` — default prompt for `run_hermes.py`
 - `session_db` — SQLite path (overridable with `--db-path`)
 - `observability.log_level` — log verbosity
 - `evaluator.output_dir`, `evaluator.script_timeout`, `evaluator.excluded_dirs`
 - `dispatch.agent`, `dispatch.mode`, `dispatch.filter_failing`, `dispatch.output_dir`
+
+## v0.2.0 Features
+
+| Feature | Script | Flag |
+| :--- | :--- | :--- |
+| Named Sessions | `run_hermes.py` | `--name "my-task"` |
+| Quiet Mode | `run_hermes.py` | `--quiet` / `-Q` |
+| Session Search | `observe_hermes.py` | `--search "query"` |
+| Version Detection | `setup_hermes.py` | Automatic |
+| Doctor Health Check | `setup_hermes.py` | Automatic |
+| MCP Config Detection | `setup_hermes.py` | Automatic |
 
 ## Navigation
 

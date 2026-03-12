@@ -46,6 +46,7 @@ class HermesSession:
     """
 
     session_id: str = field(default_factory=lambda: uuid.uuid4().hex[:12])
+    name: str | None = None
     messages: list[dict[str, str]] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
     created_at: float = field(default_factory=time.time)
@@ -137,10 +138,11 @@ class SQLiteSessionStore:
         self._init_schema()
 
     def _init_schema(self) -> None:
-        """Create the sessions table if it doesn't exist."""
+        """Create the sessions table if it doesn't exist and migrate if needed."""
         self._conn.execute("""
             CREATE TABLE IF NOT EXISTS hermes_sessions (
                 session_id TEXT PRIMARY KEY,
+                name TEXT,
                 messages TEXT NOT NULL,
                 metadata TEXT NOT NULL DEFAULT '{}',
                 created_at REAL NOT NULL,
@@ -148,6 +150,20 @@ class SQLiteSessionStore:
             )
         """)
         self._conn.commit()
+        # Migrate: add 'name' column to existing DBs that lack it
+        self._migrate_add_name_column()
+
+    def _migrate_add_name_column(self) -> None:
+        """Add 'name' column if missing (schema evolution from pre-v0.2.0)."""
+        cursor = self._conn.execute("PRAGMA table_info(hermes_sessions)")
+        columns = {row[1] for row in cursor.fetchall()}
+        if "name" not in columns:
+            try:
+                self._conn.execute("ALTER TABLE hermes_sessions ADD COLUMN name TEXT")
+                self._conn.commit()
+                logger.info("Migrated hermes_sessions schema: added 'name' column.")
+            except sqlite3.OperationalError:
+                pass  # Column already exists or DB is read-only
 
     def save(self, session: HermesSession) -> None:
         """Save or update a session.
@@ -158,11 +174,12 @@ class SQLiteSessionStore:
         self._conn.execute(
             """
             INSERT OR REPLACE INTO hermes_sessions
-            (session_id, messages, metadata, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?)
+            (session_id, name, messages, metadata, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
             (
                 session.session_id,
+                session.name,
                 json.dumps(session.messages),
                 json.dumps(session.metadata),
                 session.created_at,
@@ -181,7 +198,7 @@ class SQLiteSessionStore:
             The :class:`HermesSession` or ``None``.
         """
         cursor = self._conn.execute(
-            "SELECT session_id, messages, metadata, created_at, updated_at "
+            "SELECT session_id, name, messages, metadata, created_at, updated_at "
             "FROM hermes_sessions WHERE session_id = ?",
             (session_id,),
         )
@@ -191,11 +208,57 @@ class SQLiteSessionStore:
 
         return HermesSession(
             session_id=row[0],
-            messages=json.loads(row[1]),
-            metadata=json.loads(row[2]),
-            created_at=row[3],
-            updated_at=row[4],
+            name=row[1],
+            messages=json.loads(row[2]),
+            metadata=json.loads(row[3]),
+            created_at=row[4],
+            updated_at=row[5],
         )
+
+    def find_by_name(self, name: str) -> HermesSession | None:
+        """Find a session by its human-friendly name.
+
+        Args:
+            name: Session name to look up.
+
+        Returns:
+            The :class:`HermesSession` or ``None``.
+        """
+        cursor = self._conn.execute(
+            "SELECT session_id, name, messages, metadata, created_at, updated_at "
+            "FROM hermes_sessions WHERE name = ? ORDER BY updated_at DESC LIMIT 1",
+            (name,),
+        )
+        row = cursor.fetchone()
+        if row is None:
+            return None
+        return HermesSession(
+            session_id=row[0],
+            name=row[1],
+            messages=json.loads(row[2]),
+            metadata=json.loads(row[3]),
+            created_at=row[4],
+            updated_at=row[5],
+        )
+
+    def search_sessions(self, query: str) -> list[dict[str, Any]]:
+        """Search sessions by name substring.
+
+        Args:
+            query: Substring to match against session names.
+
+        Returns:
+            List of dicts with ``session_id``, ``name``, ``updated_at``.
+        """
+        cursor = self._conn.execute(
+            "SELECT session_id, name, updated_at FROM hermes_sessions "
+            "WHERE name LIKE ? ORDER BY updated_at DESC",
+            (f"%{query}%",),
+        )
+        return [
+            {"session_id": row[0], "name": row[1], "updated_at": row[2]}
+            for row in cursor.fetchall()
+        ]
 
     def list_sessions(self) -> list[str]:
         """List all session IDs.

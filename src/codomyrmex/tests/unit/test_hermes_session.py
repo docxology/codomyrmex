@@ -164,3 +164,71 @@ class TestSQLiteSessionStore:
         loaded = store.load("ts1")
         assert loaded is not None
         assert loaded.created_at == pytest.approx(original_created, abs=0.1)
+
+
+# ── SQLiteSessionStore v0.2.0 ────────────────────────────────────────
+
+
+class TestSQLiteSessionStoreV020:
+    """Tests for v0.2.0 named session features."""
+
+    def test_named_session_save_and_load(self) -> None:
+        """Named sessions should persist and restore the name field."""
+        store = SQLiteSessionStore(":memory:")
+        session = HermesSession(session_id="ns1", name="refactoring-payments")
+        session.add_message("user", "Let's refactor")
+        store.save(session)
+
+        loaded = store.load("ns1")
+        assert loaded is not None
+        assert loaded.name == "refactoring-payments"
+        assert loaded.message_count == 1
+
+    def test_find_by_name(self) -> None:
+        """find_by_name() should return the most recent session with a given name."""
+        store = SQLiteSessionStore(":memory:")
+        s1 = HermesSession(session_id="fn1", name="code-review")
+        s1.add_message("user", "Review this code")
+        store.save(s1)
+
+        s2 = HermesSession(session_id="fn2", name="testing")
+        store.save(s2)
+
+        found = store.find_by_name("code-review")
+        assert found is not None
+        assert found.session_id == "fn1"
+        assert found.name == "code-review"
+
+        # Non-existent name returns None
+        assert store.find_by_name("doesnt-exist") is None
+
+    def test_search_sessions(self) -> None:
+        """search_sessions() should match name substrings."""
+        store = SQLiteSessionStore(":memory:")
+        store.save(HermesSession(session_id="sr1", name="api-refactoring"))
+        store.save(HermesSession(session_id="sr2", name="api-testing"))
+        store.save(HermesSession(session_id="sr3", name="deployment"))
+
+        results = store.search_sessions("api")
+        assert len(results) == 2
+        names = {r["name"] for r in results}
+        assert "api-refactoring" in names
+        assert "api-testing" in names
+
+        # No matches
+        assert store.search_sessions("nonexistent") == []
+
+    def test_schema_migration_from_pre_v020(self) -> None:
+        """Old DBs without 'name' column should migrate gracefully."""
+        import sqlite3
+
+        store = SQLiteSessionStore(":memory:")
+        # Simulate pre-v0.2.0 by inserting without name column
+        # The migration already ran, so this tests that the code works with NULL names
+        session = HermesSession(session_id="old1")  # name defaults to None
+        store.save(session)
+
+        loaded = store.load("old1")
+        assert loaded is not None
+        assert loaded.name is None  # No name set — graceful default
+

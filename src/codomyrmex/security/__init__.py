@@ -35,8 +35,6 @@ __version__ = "0.1.0"
 # Import from digital security
 try:
     from .digital import (
-        # Certificates
-        CertificateValidator,
         # Compliance
         ComplianceChecker,
         ComplianceControl,
@@ -56,7 +54,6 @@ try:
         # Reporting
         SecurityReportGenerator,
         SecurityScanResult,
-        SSLValidationResult,
         VulnerabilityReport,
         # Vulnerability scanning
         VulnerabilityScanner,
@@ -71,7 +68,6 @@ try:
         monitor_security_events,
         scan_secrets,
         scan_vulnerabilities,
-        validate_ssl_certificates,
     )
 
     DIGITAL_AVAILABLE = True

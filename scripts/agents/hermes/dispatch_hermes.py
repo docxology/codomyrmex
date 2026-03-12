@@ -33,7 +33,6 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 # Bootstrap path only — not needed when package is already installed
 try:
@@ -95,7 +94,7 @@ def _resolve_ollama_timeout() -> int:
         return _DEFAULT_TIMEOUT_S
 
 
-def _validate_args(args: argparse.Namespace) -> Optional[str]:
+def _validate_args(args: argparse.Namespace) -> str | None:
     """Validate parsed CLI arguments before execution begins.
 
     Args:
@@ -158,7 +157,7 @@ def _build_dispatch_prompt(
     source_path: Path,
     eval_data: dict,
     include_source: bool = True,
-    target_dir: Optional[Path] = None,
+    target_dir: Path | None = None,
 ) -> str:
     """Compose a precise improvement prompt from an evaluation result.
 
@@ -366,7 +365,7 @@ def _dispatch_hermes(
     prompt: str,
     output_dir: Path,
     apply: bool = False,
-    source_path: Optional[Path] = None,
+    source_path: Path | None = None,
     backup: bool = True,
 ) -> bool:
     """Send a prompt to Hermes and save the guidance response to markdown.
@@ -534,7 +533,7 @@ def _compile_manifest(
         print_error(f"Could not write manifest: {exc}")
 
 
-def _boot_hermes_client(effective_timeout: int) -> tuple[Optional[object], int]:
+def _boot_hermes_client(effective_timeout: int) -> tuple[object | None, int]:
     """Import, initialize, and configure a HermesClient for dispatch use.
 
     Extracted from main() to separate client boot logic from orchestration.
@@ -718,7 +717,7 @@ def main() -> int:
     print_info("─" * 60)
 
     # 2. Boot Hermes client only if needed
-    hermes_client: Optional[object] = None
+    hermes_client: object | None = None
     effective_timeout = args.timeout or _resolve_ollama_timeout()
     if args.dispatch_agent == "hermes" and args.dispatch_mode == "prompt" and not args.dry_run:
         hermes_client, rc = _boot_hermes_client(effective_timeout)
@@ -762,7 +761,7 @@ def main() -> int:
             continue
 
         success: bool = False
-        artefact: Optional[Path] = None
+        artefact: Path | None = None
 
         if args.dispatch_agent == "hermes" and args.dispatch_mode == "prompt":
             success = _dispatch_hermes(

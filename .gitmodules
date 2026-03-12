@@ -14,3 +14,6 @@
 [submodule "src/codomyrmex/agents/hermes/evolution"]
 	path = src/codomyrmex/agents/hermes/evolution
 	url = https://github.com/NousResearch/hermes-agent-self-evolution.git
+[submodule "src/codomyrmex/agents/mission_control/app"]
+	path = src/codomyrmex/agents/mission_control/app
+	url = https://github.com/builderz-labs/mission-control.git

@@ -3,17 +3,23 @@
 module: hermes
 enabled: true
 
+# Minimum expected Hermes CLI version (v0.2.0+ unlocks provider router, MCP client, skills)
+version_minimum: "0.2.0"
+
 # Backend options: auto, cli, ollama
 backend: auto
 
-# The default model to use when falling back to Ollama
-model: hermes3
+# Default inference provider (used by CLI backend for --provider flag)
+provider: openrouter
+
+# The default model (matches ~/.hermes/config.yaml)
+model: nvidia/nemotron-3-super-120b-a12b:free
 
 # The command/binary name for the official NousResearch Hermes CLI
 command: hermes
 
 # Subprocess timeout in seconds for normal chat/run operations
-timeout: 120
+timeout: 600
 
 # Longer timeout for dispatch operations, which include full source code in prompts
 # and require Ollama to generate full improved Python source files as output.

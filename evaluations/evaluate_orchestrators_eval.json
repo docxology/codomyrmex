@@ -1,8 +1,20 @@
 {
     "adherence_assessment": {
-        "adheres": true,
-        "reasoning": "[Prose-extracted verdict] The provided Python script follows the Codomyrmex \"Thin Orchestrator\" pattern as follows:\n\n1. Accept configuration transparently:\n   - The script accepts configuration through command-line arguments and a configuration file (hermes.yaml). It resolves the evaluator configuration based on the provided target.\n\n2. Formulate dependencies cleanly:\n   - The script's dependencies are managed by importing them at the top of the file. There is no heavy business logic or transformation within the script itself.\n\n3. Execute the core method:\n   - The core functionality of the script is encapsulated in the main() function, which performs the evaluation process.\n\n4. Log and format the output beautifully:\n   - The script uses print statements to log information and format the output in a readable manner."
+        "adheres": false,
+        "reasoning": "The script violates several thin orchestrator principles: 1) Uses Optional[X] from typing instead of X | None (Python 3.11+) in multiple places; 2) Contains significant business logic in helper functions (_extract_json_object, _sanitize_json_candidate, extract_json_from_response) that should be delegated to a library; 3) Has hardcoded paths in _REPO_ROOT and _SCRIPTS_ROOT calculations (though using __file__ is acceptable, the depth is fragile); 4) The assess_script function builds a complex prompt with embedded standards, violating the 'no heavy business logic' rule; 5) Missing explicit type hints for some parameters (e.g., 'client' in assess_script). While it uses cli_helpers for logging and has a clean main() orchestrator, the internal logic is too heavy for a thin orchestrator."
     },
-    "technical_debt": [],
-    "underlying_improvements": []
+    "technical_debt": [
+        "Sloppy Code: Use of Optional[X] from typing instead of X | None (Python 3.11+)",
+        "Heavy Logic: JSON extraction and sanitization logic (_extract_json_object, _sanitize_json_candidate, extract_json_from_response) should be in a utility module",
+        "Hardcoded Paths: _REPO_ROOT uses parent.parent.parent.parent - fragile if script location changes",
+        "Business Logic: assess_script builds complex evaluation prompt with embedded standards - should delegate to a prompt library",
+        "Sloppy Code: Missing type hint for 'client' parameter in assess_script function"
+    ],
+    "underlying_improvements": [
+        "Refactor to use modern union types (X | None) for optional parameters",
+        "Extract JSON handling logic into codomyrmex.utils.json_helpers",
+        "Move prompt construction to codomyrmex.agents.hermes.prompts",
+        "Use configuration for path depths instead of hardcoded parent levels",
+        "Add explicit type hints for all parameters and return values"
+    ]
 }

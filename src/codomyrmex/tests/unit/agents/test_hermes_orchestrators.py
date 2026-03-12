@@ -141,6 +141,30 @@ class TestRunHermesOrchestrator:
         )
         assert "--session" in result.stdout
 
+    def test_quiet_flag_accepted(self) -> None:
+        """--quiet / -Q flag should be listed in help (v0.2.0)."""
+        result = subprocess.run(
+            [_PYTHON, str(_HERMES_SCRIPTS_DIR / "run_hermes.py"), "--help"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+            cwd=str(_REPO_ROOT),
+        )
+        assert result.returncode == 0
+        assert "--quiet" in result.stdout or "-Q" in result.stdout
+
+    def test_name_flag_accepted(self) -> None:
+        """--name flag should be listed in help (v0.2.0 named sessions)."""
+        result = subprocess.run(
+            [_PYTHON, str(_HERMES_SCRIPTS_DIR / "run_hermes.py"), "--help"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+            cwd=str(_REPO_ROOT),
+        )
+        assert result.returncode == 0
+        assert "--name" in result.stdout
+
 
 # ── _load_hermes_client helper ─────────────────────────────────────────
 
@@ -275,3 +299,22 @@ class TestDispatchHermesOrchestrator:
         assert "Magic Values" in prompt
         assert "Hardcoded Paths" in prompt
         assert "Use argparse" in prompt
+
+
+# ── observe_hermes.py v0.2.0 ──────────────────────────────────────────
+
+
+class TestObserveHermesV020Features:
+    """Tests for v0.2.0 features in observe_hermes.py."""
+
+    def test_search_flag_accepted(self) -> None:
+        """--search flag should be listed in help (v0.2.0 session search)."""
+        result = subprocess.run(
+            [_PYTHON, str(_HERMES_SCRIPTS_DIR / "observe_hermes.py"), "--help"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+            cwd=str(_REPO_ROOT),
+        )
+        assert result.returncode == 0
+        assert "--search" in result.stdout

@@ -44,6 +44,19 @@ class TestHermesClientMethods:
         status = client.get_hermes_status()
         assert isinstance(status, dict)
 
+    def test_get_version_returns_str_or_none(self) -> None:
+        """get_version() should return a version string or None (v0.2.0)."""
+        client = HermesClient()
+        version = client.get_version()
+        assert version is None or isinstance(version, str)
+
+    def test_run_doctor_returns_dict(self) -> None:
+        """run_doctor() should return a dict with 'success' key (v0.2.0)."""
+        client = HermesClient()
+        result = client.run_doctor()
+        assert isinstance(result, dict)
+        assert "success" in result
+
     @pytest.mark.skipif(
         HermesClient().active_backend == "none",
         reason="No Hermes backend available",

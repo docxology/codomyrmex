@@ -149,6 +149,12 @@ with contextlib.suppress(ImportError):
 with contextlib.suppress(ImportError):
     from .agentic_seek import AgenticSeekClient
 
+with contextlib.suppress(ImportError):
+    from .mission_control import MissionControlClient
+
+with contextlib.suppress(ImportError):
+    from .pi import PiClient
+
 
 def cli_commands():
     """Return CLI commands for the agents module."""
@@ -168,6 +174,8 @@ def cli_commands():
             "deepseek": DeepSeekClient,
             "qwen": QwenClient,
             "agentic_seek": AgenticSeekClient,
+            "mission_control": MissionControlClient,
+            "pi": PiClient,
         }
         for name, client in provider_map.items():
             status = "available" if client is not None else "not installed"
@@ -229,11 +237,15 @@ __all__ = [
     "JulesClient",
     "KnowledgeBase",
     "Message",
+    # Mission Control (lazy-loaded)
+    "MissionControlClient",
     "MistralVibeClient",
     # New submodules (lazy-loaded, may be None if not installed)
     "O1Client",
     "OpenClawClient",
     "OpenCodeClient",
+    # Pi coding agent (lazy-loaded)
+    "PiClient",
     "ParseResult",
     "QwenClient",
     "ReactiveArchitecture",

@@ -13,7 +13,6 @@ Usage:
 import argparse
 import sys
 from pathlib import Path
-from typing import Optional
 
 # Bootstrap path only — not needed when package is already installed
 try:
@@ -31,7 +30,7 @@ from codomyrmex.utils.cli_helpers import (
 
 # ── Module-level constants (overridden by hermes.yaml / CLI args) ──────
 _DEFAULT_PROMPT = "Explain what Hermes Agent is in one sentence."
-_DEFAULT_SESSION: Optional[str] = None
+_DEFAULT_SESSION: str | None = None
 
 
 def _resolve_config() -> dict:
@@ -42,13 +41,12 @@ def _resolve_config() -> dict:
     """
     try:
         config = get_config()
-        hermes_cfg: dict = config.get("hermes", {}) if isinstance(config, dict) else {}
-    except Exception:
-        hermes_cfg = {}
-    return hermes_cfg
+        return config.get("hermes", {}) if isinstance(config, dict) else {}
+    except (OSError, ImportError):
+        return {}
 
 
-def _load_hermes_client() -> Optional[object]:
+def _load_hermes_client() -> object | None:
     """Safely import and return a HermesClient instance.
 
     Decouples the HermesClient import from main() so it can be tested
@@ -84,7 +82,7 @@ def _print_client_info(hermes_client: object) -> None:
         print_info(f"  Status:    (unavailable — {exc})")
 
 
-def _format_response(response: object) -> int:
+def _format_response(response: object, quiet: bool = False) -> int:
     """Render a successful Hermes response to stdout via cli_helpers.
 
     Extracted from _execute_prompt so that response formatting stays
@@ -92,10 +90,15 @@ def _format_response(response: object) -> int:
 
     Args:
         response: A successful AgentResponse from HermesClient.
+        quiet: If True, print only the response content (no metadata).
 
     Returns:
         0 always (caller checks success before calling this).
     """
+    if quiet:
+        print(response.content)  # noqa: T201 — intentional raw output in quiet mode
+        return 0
+
     print_success("  Hermes Response:")
     for line in response.content.split("\n"):  # type: ignore[attr-defined]
         print_info(f"    {line}")
@@ -104,33 +107,51 @@ def _format_response(response: object) -> int:
     print_info(f"  Session ID:     {response.metadata.get('session_id')}")  # type: ignore[attr-defined]
     print_info(f"  Execution time: {response.execution_time:.2f}s")  # type: ignore[attr-defined]
     print_info(f"  Backend used:   {response.metadata.get('backend', 'N/A')}")  # type: ignore[attr-defined]
+    session_name = response.metadata.get('session_name')  # type: ignore[attr-defined]
+    if session_name:
+        print_info(f"  Session name:   {session_name}")
     return 0
 
 
-def _execute_prompt(hermes_client: object, prompt: str, session_id: Optional[str]) -> int:
+def _execute_prompt(
+    hermes_client: object,
+    prompt: str,
+    session_id: str | None,
+    session_name: str | None = None,
+    quiet: bool = False,
+) -> int:
     """Send a prompt to Hermes and format the response.
 
     Args:
         hermes_client: An initialized HermesClient instance.
         prompt: The user prompt to send.
         session_id: Optional session ID for stateful multi-turn conversation.
+        session_name: Optional human-friendly session name (v0.2.0 feature).
+        quiet: If True, suppress verbose output.
 
     Returns:
         0 on success, 1 on any failure.
     """
-    print_info("─" * 60)
-    print_success(f"  User Prompt: {prompt}")
-    if session_id:
-        print_info(f"  Session ID:  {session_id}")
-    print_info("─" * 60)
+    if not quiet:
+        print_info("─" * 60)
+        print_success(f"  User Prompt: {prompt}")
+        if session_id:
+            print_info(f"  Session ID:  {session_id}")
+        if session_name:
+            print_info(f"  Session Name: {session_name}")
+        print_info("─" * 60)
 
     try:
         from codomyrmex.agents.hermes import HermesError  # noqa: F401
 
-        response = hermes_client.chat_session(prompt=prompt, session_id=session_id)  # type: ignore[attr-defined]
+        response = hermes_client.chat_session(
+            prompt=prompt,
+            session_id=session_id,
+            session_name=session_name,
+        )  # type: ignore[attr-defined]
 
         if response.is_success():
-            return _format_response(response)
+            return _format_response(response, quiet=quiet)
         else:
             print_error(f"  Error: {response.error}")
             return 1
@@ -138,6 +159,14 @@ def _execute_prompt(hermes_client: object, prompt: str, session_id: Optional[str
     except ImportError as e:
         print_error(f"Cannot import HermesError: {e}")
         return 1
+    except TypeError:
+        # Fallback if chat_session doesn't accept session_name yet
+        response = hermes_client.chat_session(prompt=prompt, session_id=session_id)  # type: ignore[attr-defined]
+        if response.is_success():
+            return _format_response(response, quiet=quiet)
+        else:
+            print_error(f"  Error: {response.error}")
+            return 1
     except Exception as e:
         print_error(f"  Unexpected error during prompt execution: {e}")
         return 1
@@ -147,7 +176,6 @@ def main() -> int:
     # Load config for defaults *before* parsing so YAML values seed argparse defaults
     hermes_cfg = _resolve_config()
     config_default_prompt: str = hermes_cfg.get("default_prompt", _DEFAULT_PROMPT)
-    log_level: str = hermes_cfg.get("observability", {}).get("log_level", "INFO")
 
     parser = argparse.ArgumentParser(description="Run the Hermes Agent with a real prompt.")
     parser.add_argument(
@@ -162,32 +190,56 @@ def main() -> int:
         default=_DEFAULT_SESSION,
         help="Optional session ID for stateful multi-turn conversation.",
     )
+    parser.add_argument(
+        "--name",
+        type=str,
+        default=None,
+        help="Human-friendly session name (v0.2.0). Creates or resumes a named session.",
+    )
+    parser.add_argument(
+        "--quiet", "-Q",
+        action="store_true",
+        default=False,
+        help="Quiet mode: suppress banners/metadata, print only the raw response. For CI/CD and programmatic use.",
+    )
     args = parser.parse_args()
 
     setup_logging()
-    print_info("═" * 60)
-    print_info("  Hermes Agent — Real Execution")
-    print_info("═" * 60)
+
+    if not args.quiet:
+        print_info("═" * 60)
+        print_info("  Hermes Agent — Real Execution")
+        print_info("═" * 60)
 
     # Decouple HermesClient import via factory helper
     hermes_client = _load_hermes_client()
     if hermes_client is None:
         return 1
 
-    _print_client_info(hermes_client)
+    if not args.quiet:
+        _print_client_info(hermes_client)
 
     if hermes_client.active_backend == "none":  # type: ignore[attr-defined]
         print_error("No backend available. Install 'hermes' CLI or 'ollama'.")
         return 1
 
-    result = _execute_prompt(hermes_client, args.prompt, args.session)
+    result = _execute_prompt(
+        hermes_client,
+        args.prompt,
+        args.session,
+        session_name=args.name,
+        quiet=args.quiet,
+    )
     if result != 0:
         return result
 
-    print_info("─" * 60)
-    print_success("Hermes agent execution complete.")
+    if not args.quiet:
+        print_info("─" * 60)
+        print_success("Hermes agent execution complete.")
     return 0
 
 
 if __name__ == "__main__":
     sys.exit(main())
+
+session_id: 20260312_124756_bed21f

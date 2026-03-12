@@ -42,6 +42,8 @@ Contains components for the src system.
 - `mcp_tools.py` – Project file
 - `memory/` – Directory containing memory components
 - `meta/` – Directory containing meta components
+- `mission_control/` – Directory containing mission_control components (builderz-labs/mission-control dashboard)
+- `pi/` – Directory containing pi coding agent components (pi.dev terminal agent)
 - `mistral_vibe/` – Directory containing mistral_vibe components
 - `o1/` – Directory containing o1 components
 - `openclaw/` – Directory containing openclaw components
