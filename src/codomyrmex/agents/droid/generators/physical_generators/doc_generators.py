@@ -294,8 +294,6 @@ def generate_physical_requirements() -> str:
     return _impl()
 
 
-
-
 def generate_physical_docs_content() -> str:
     """Generate architecture documentation."""
     return """# Physical Management Module Architecture

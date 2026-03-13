@@ -250,7 +250,9 @@ class OllamaManager:
             except requests.exceptions.RequestException as e:
                 self.logger.warning("HTTP API failed, falling back to CLI: %s", e)
             except Exception as e:
-                self.logger.warning("HTTP API parsing error, falling back to CLI: %s", e)
+                self.logger.warning(
+                    "HTTP API parsing error, falling back to CLI: %s", e
+                )
 
         # Fallback to subprocess
         try:
@@ -403,13 +405,15 @@ class OllamaManager:
                                 if data.get("completed", False):
                                     completed = True
                                     self.logger.info(
-                                        "Model %s pull completed via HTTP API", model_name
+                                        "Model %s pull completed via HTTP API",
+                                        model_name,
                                     )
                                     break
                                 if data.get("status") == "success":
                                     completed = True
                                     self.logger.info(
-                                        "Model %s pull successful via HTTP API", model_name
+                                        "Model %s pull successful via HTTP API",
+                                        model_name,
                                     )
                                     break
                             except json.JSONDecodeError:
@@ -425,7 +429,8 @@ class OllamaManager:
                     for _attempt in range(5):  # More retries
                         if self.is_model_available(model_name):
                             self.logger.info(
-                                "Model %s verified as available via HTTP API", model_name
+                                "Model %s verified as available via HTTP API",
+                                model_name,
                             )
                             return True
                         time.sleep(2)  # Longer wait between retries
@@ -440,7 +445,9 @@ class OllamaManager:
                             m.name for m in models if base_name in m.name
                         ]
                         self.logger.info(
-                            "Model %s appears to be available: %s", base_name, matching_models
+                            "Model %s appears to be available: %s",
+                            base_name,
+                            matching_models,
                         )
                         # Update model name to match what's actually available
                         if matching_models:
@@ -450,11 +457,14 @@ class OllamaManager:
                     # If pull completed, assume success even if not in list yet
                     if completed:
                         self.logger.info(
-                            "Pull completed for %s, model should be available", model_name
+                            "Pull completed for %s, model should be available",
+                            model_name,
                         )
                         return True
 
-                    self.logger.warning("Pull may not have completed for %s", model_name)
+                    self.logger.warning(
+                        "Pull may not have completed for %s", model_name
+                    )
                     return False
                 error_text = response.text[:200] if response.text else "Unknown error"
                 self.logger.error(
@@ -481,7 +491,9 @@ class OllamaManager:
                 # Clear cache to force refresh
                 self._models_cache = None
             else:
-                self.logger.error("Failed to pull model %s: %s", model_name, result.stderr)
+                self.logger.error(
+                    "Failed to pull model %s: %s", model_name, result.stderr
+                )
 
             return success
 
@@ -546,7 +558,11 @@ class OllamaManager:
         if self.use_http_api:
             try:
                 # Prepare request payload
-                payload: dict[str, Any] = {"model": model_name, "prompt": prompt, "stream": False}
+                payload: dict[str, Any] = {
+                    "model": model_name,
+                    "prompt": prompt,
+                    "stream": False,
+                }
 
                 # Add options if provided
                 if options:
@@ -592,7 +608,9 @@ class OllamaManager:
                     tokens_used = data.get("eval_count")  # Approximate token count
 
                     self.logger.info(
-                        "Model %s completed successfully in %.2fs", model_name, execution_time
+                        "Model %s completed successfully in %.2fs",
+                        model_name,
+                        execution_time,
                     )
 
                     # Save output if requested
@@ -664,7 +682,9 @@ class OllamaManager:
                 success = True
 
                 self.logger.info(
-                    "Model %s completed successfully in %.2fs", model_name, execution_time
+                    "Model %s completed successfully in %.2fs",
+                    model_name,
+                    execution_time,
                 )
 
                 # Save output if requested

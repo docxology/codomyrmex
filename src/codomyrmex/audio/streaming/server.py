@@ -108,7 +108,9 @@ class AudioStreamServer:
         self._sessions.clear()
         logger.info("Audio stream server stopped")
 
-    def process_chunk(self, chunk: AudioChunk, session_id: str = "default") -> TranscriptionEvent | None:
+    def process_chunk(
+        self, chunk: AudioChunk, session_id: str = "default"
+    ) -> TranscriptionEvent | None:
         """Process an audio chunk and return a transcription event if ready.
 
         This is the core processing method used by both the WebSocket

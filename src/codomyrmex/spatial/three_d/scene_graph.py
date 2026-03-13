@@ -199,7 +199,7 @@ class SceneGraph:
     Usage::
 
         sg = SceneGraph()
-        n = SceneNode("box", bounds=AABB(Vector3D(0,0,0), Vector3D(1,1,1)))
+        n = SceneNode("box", bounds=AABB(Vector3D(0, 0, 0), Vector3D(1, 1, 1)))
         sg.add_node(n)
         hits = sg.query_point(Vector3D(0.5, 0.5, 0.5))
         assert len(hits) == 1

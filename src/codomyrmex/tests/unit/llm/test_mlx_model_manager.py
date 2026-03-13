@@ -183,7 +183,9 @@ class TestMLXModelManagerFilesystem:
         assert len(models) == 1
         assert models[0].repo_id == "org/test-model"
         assert models[0].model_type == "test"
-        assert models[0].size_bytes == 1000 + len(json.dumps({"model_type": "test", "vocab_size": 100}))
+        assert models[0].size_bytes == 1000 + len(
+            json.dumps({"model_type": "test", "vocab_size": 100})
+        )
 
     def test_is_model_cached_false(self):
         from codomyrmex.llm.mlx.model_manager import MLXModelManager
@@ -212,11 +214,13 @@ class TestMLXModelManagerFilesystem:
         model_dir = Path(self.temp_dir) / "org--found-model"
         model_dir.mkdir()
         (model_dir / "config.json").write_text(
-            json.dumps({
-                "model_type": "llama",
-                "hidden_size": 2048,
-                "quantization_config": {"bits": 4, "group_size": 64},
-            })
+            json.dumps(
+                {
+                    "model_type": "llama",
+                    "hidden_size": 2048,
+                    "quantization_config": {"bits": 4, "group_size": 64},
+                }
+            )
         )
 
         mgr = MLXModelManager(config=self.config)

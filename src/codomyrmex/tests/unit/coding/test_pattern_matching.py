@@ -15,6 +15,7 @@ from codomyrmex.coding.pattern_matching.ast_matcher import ASTMatcher
 def matcher():
     return ASTMatcher()
 
+
 @pytest.mark.unit
 class TestASTMatcher:
     """Tests for ASTMatcher pattern and anti-pattern detection."""

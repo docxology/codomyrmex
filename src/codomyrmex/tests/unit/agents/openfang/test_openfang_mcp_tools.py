@@ -103,7 +103,10 @@ class TestOpenfangExecuteGuards:
     def test_import_guard_when_not_installed(self):
         result = openfang_execute(prompt="test")
         assert result["status"] == "error"
-        assert "not found" in result["message"].lower() or "install" in result["message"].lower()
+        assert (
+            "not found" in result["message"].lower()
+            or "install" in result["message"].lower()
+        )
 
 
 class TestOpenfangSendMessageGuards:
@@ -139,7 +142,11 @@ class TestOpenfangGatewayGuards:
 
     def test_invalid_action_message_mentions_valid(self):
         result = openfang_gateway(action="restart")
-        assert "start" in result["message"] or "stop" in result["message"] or "status" in result["message"]
+        assert (
+            "start" in result["message"]
+            or "stop" in result["message"]
+            or "status" in result["message"]
+        )
 
     def test_returns_dict(self):
         result = openfang_gateway(action="invalid_xyz")
@@ -180,7 +187,9 @@ class TestAllToolsReturnDicts:
         assert isinstance(openfang_gateway(action="bad"), dict)
 
     def test_send_message_returns_dict(self):
-        assert isinstance(openfang_send_message(channel="", target="", message=""), dict)
+        assert isinstance(
+            openfang_send_message(channel="", target="", message=""), dict
+        )
 
     def test_update_returns_dict(self):
         assert isinstance(openfang_update(), dict)

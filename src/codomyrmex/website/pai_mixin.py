@@ -63,14 +63,18 @@ class PAIProviderMixin:
                         # Health data if available on the same class
                         health_data = getattr(self, "get_health_status", dict)()
 
-                        message = _json.dumps({
-                            "type": "update",
-                            "awareness": awareness_data,
-                            "health": health_data
-                        })
+                        message = _json.dumps(
+                            {
+                                "type": "update",
+                                "awareness": awareness_data,
+                                "health": health_data,
+                            }
+                        )
 
                         # Gather all sends
-                        coros = [client.send(message) for client in list(self._ws_clients)]
+                        coros = [
+                            client.send(message) for client in list(self._ws_clients)
+                        ]
                         if coros:
                             await asyncio.gather(*coros, return_exceptions=True)
                     except Exception as e:
@@ -78,16 +82,21 @@ class PAIProviderMixin:
 
         async def handler(websocket):
             import websockets
+
             self._ws_clients.add(websocket)
             try:
                 # Send immediate initial state
                 awareness_data = self.get_pai_awareness_data()
                 health_data = getattr(self, "get_health_status", dict)()
-                await websocket.send(_json.dumps({
-                    "type": "update",
-                    "awareness": awareness_data,
-                    "health": health_data
-                }))
+                await websocket.send(
+                    _json.dumps(
+                        {
+                            "type": "update",
+                            "awareness": awareness_data,
+                            "health": health_data,
+                        }
+                    )
+                )
 
                 # Keep connection alive
                 async for msg in websocket:
@@ -102,17 +111,26 @@ class PAIProviderMixin:
         async def serve():
 
             import websockets
+
             try:
                 async with websockets.serve(handler, host, port):
-                    logger.info("WebSocket push server running on ws://%s:%s", host, port)
+                    logger.info(
+                        "WebSocket push server running on ws://%s:%s", host, port
+                    )
                     await broadcast()
             except OSError as e:
-                logger.debug("Could not start WebSocket push server on %s:%s (already in use?) - %s", host, port, e)
+                logger.debug(
+                    "Could not start WebSocket push server on %s:%s (already in use?) - %s",
+                    host,
+                    port,
+                    e,
+                )
             except Exception as e:
                 logger.error("WebSocket serve error: %s", e)
 
         def run_loop():
             import asyncio
+
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             loop.run_until_complete(serve())

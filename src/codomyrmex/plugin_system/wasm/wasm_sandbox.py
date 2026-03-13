@@ -33,7 +33,9 @@ class WasmSandbox:
         self.engine = wasmtime.Engine(self.config)
         self.max_fuel = max_fuel
 
-    def execute_plugin(self, wasm_source: bytes | str, function_name: str, *args: Any) -> Any:
+    def execute_plugin(
+        self, wasm_source: bytes | str, function_name: str, *args: Any
+    ) -> Any:
         """Evaluate a WASM function securely.
 
         Args:
@@ -60,13 +62,17 @@ class WasmSandbox:
             exports = instance.exports(store)
 
             if function_name not in exports:
-                raise WasmSandboxError(f"Export '{function_name}' not found in WASM module.")
+                raise WasmSandboxError(
+                    f"Export '{function_name}' not found in WASM module."
+                )
 
             func = exports[function_name]
 
             # Ensure it is actually a callable function (not just an exported memory/global)
             if not isinstance(func, wasmtime.Func):
-                raise WasmSandboxError(f"Export '{function_name}' is not a callable function.")
+                raise WasmSandboxError(
+                    f"Export '{function_name}' is not a callable function."
+                )
 
             # Run securely within the configured limits
             return func(store, *args)

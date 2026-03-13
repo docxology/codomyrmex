@@ -5,11 +5,13 @@ required fields, type checking, value constraints, nested objects, and defaults.
 
 Example::
 
-    schema = ConfigSchema({
-        "port": SchemaField(type=int, required=True, min_val=1, max_val=65535),
-        "host": SchemaField(type=str, default="0.0.0.0"),
-        "debug": SchemaField(type=bool, default=False),
-    })
+    schema = ConfigSchema(
+        {
+            "port": SchemaField(type=int, required=True, min_val=1, max_val=65535),
+            "host": SchemaField(type=str, default="0.0.0.0"),
+            "debug": SchemaField(type=bool, default=False),
+        }
+    )
     result = schema.validate({"port": 8080})
     assert result.valid
     assert result.config["host"] == "0.0.0.0"
@@ -160,9 +162,7 @@ class ConfigSchema:
             Dict of field name to default value (excluding None defaults).
         """
         return {
-            name: f.default
-            for name, f in self._fields.items()
-            if f.default is not None
+            name: f.default for name, f in self._fields.items() if f.default is not None
         }
 
     def describe(self) -> list[dict[str, Any]]:

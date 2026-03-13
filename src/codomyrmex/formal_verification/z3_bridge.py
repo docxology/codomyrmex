@@ -52,7 +52,9 @@ class Z3Verifier:
             return self.solver.model()
         return None
 
-    def prove_invariant(self, current_state_constraints: list[Any], invariant: Any) -> bool:
+    def prove_invariant(
+        self, current_state_constraints: list[Any], invariant: Any
+    ) -> bool:
         """Prove that an invariant holds given the current state constraints.
 
         This is done by showing that the current state AND the negation of the

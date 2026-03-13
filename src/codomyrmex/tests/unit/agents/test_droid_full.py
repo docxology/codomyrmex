@@ -43,7 +43,9 @@ from codomyrmex.agents.droid.todo import (
 # ---------------------------------------------------------------------------
 
 
-def _write_todo_file(path: Path, todo_lines: list[str], completed_lines: list[str] | None = None) -> Path:
+def _write_todo_file(
+    path: Path, todo_lines: list[str], completed_lines: list[str] | None = None
+) -> Path:
     """Write a properly structured todo file."""
     parts = [TODO_HEADER]
     parts.extend(todo_lines)
@@ -804,7 +806,9 @@ class TestTaskHandlers:
         from codomyrmex.agents.droid.tasks import ensure_documentation_exists
 
         with pytest.raises(ValueError, match="documentation"):
-            ensure_documentation_exists(prompt="no relevant content here", description="test")
+            ensure_documentation_exists(
+                prompt="no relevant content here", description="test"
+            )
 
     def test_confirm_logging_integrations_returns_string(self):
         from codomyrmex.agents.droid.tasks import confirm_logging_integrations
@@ -868,7 +872,9 @@ class TestDocumentationGenerators:
             assess_readme_quality,
         )
 
-        result = assess_readme_quality("# Project\n\nInstallation and usage.", Path("README.md"))
+        result = assess_readme_quality(
+            "# Project\n\nInstallation and usage.", Path("README.md")
+        )
         assert isinstance(result, int)
         assert 0 <= result <= 100
 
@@ -894,7 +900,8 @@ class TestDocumentationGenerators:
             "## Documentation\nFull docs available.\n\n"
             "## Contributing\nSee CONTRIBUTING.md\n\n"
             "License: MIT. Version: 1.0. PyPI available.\n"
-            + "x" * 600  # pad to exceed 500 chars threshold
+            + "x"
+            * 600  # pad to exceed 500 chars threshold
         )
         result = assess_readme_quality(rich_content, Path("README.md"))
         assert result > 50  # should score well
@@ -908,7 +915,8 @@ class TestDocumentationGenerators:
         content = (
             "# Title\ninstallation usage features documentation contributing\n"
             "```python\ncode\n```\nhttp://link.com\nLicense: MIT version pypi\n"
-            + "a" * 600
+            + "a"
+            * 600
         )
         result = assess_readme_quality(content, Path("README.md"))
         assert result <= 100
@@ -918,7 +926,9 @@ class TestDocumentationGenerators:
             assess_agents_quality,
         )
 
-        result = assess_agents_quality("# Agents\nThis module has agents.", Path("AGENTS.md"))
+        result = assess_agents_quality(
+            "# Agents\nThis module has agents.", Path("AGENTS.md")
+        )
         assert isinstance(result, int)
         assert 0 <= result <= 100
 

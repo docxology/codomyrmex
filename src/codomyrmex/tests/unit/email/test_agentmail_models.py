@@ -212,74 +212,141 @@ class TestSdkMessageToEmailMessage:
 
 class TestSdkInboxToModel:
     def test_basic(self):
-        sdk = _ns(inbox_id="inbox-abc", pod_id="pod-1", display_name="My Inbox",
-                  client_id=None, created_at=None, updated_at=None)
+        sdk = _ns(
+            inbox_id="inbox-abc",
+            pod_id="pod-1",
+            display_name="My Inbox",
+            client_id=None,
+            created_at=None,
+            updated_at=None,
+        )
         inbox = _sdk_inbox_to_model(sdk)
         assert inbox.inbox_id == "inbox-abc"
         assert inbox.display_name == "My Inbox"
 
     def test_fallback_to_id(self):
-        sdk = _ns(id="inbox-id-fallback", pod_id=None, display_name=None,
-                  client_id=None, created_at=None, updated_at=None)
+        sdk = _ns(
+            id="inbox-id-fallback",
+            pod_id=None,
+            display_name=None,
+            client_id=None,
+            created_at=None,
+            updated_at=None,
+        )
         inbox = _sdk_inbox_to_model(sdk)
         assert inbox.inbox_id == "inbox-id-fallback"
 
 
 class TestSdkThreadToModel:
     def test_basic(self):
-        sdk = _ns(thread_id="t1", inbox_id="inbox-1", subject="Subject",
-                  message_count=5, labels=["unread"], created_at=None, updated_at=None)
+        sdk = _ns(
+            thread_id="t1",
+            inbox_id="inbox-1",
+            subject="Subject",
+            message_count=5,
+            labels=["unread"],
+            created_at=None,
+            updated_at=None,
+        )
         thread = _sdk_thread_to_model(sdk)
         assert thread.thread_id == "t1"
         assert thread.message_count == 5
         assert "unread" in thread.labels
 
     def test_no_labels(self):
-        sdk = _ns(thread_id="t2", inbox_id="inbox-1", subject=None,
-                  message_count=None, labels=None, created_at=None, updated_at=None)
+        sdk = _ns(
+            thread_id="t2",
+            inbox_id="inbox-1",
+            subject=None,
+            message_count=None,
+            labels=None,
+            created_at=None,
+            updated_at=None,
+        )
         thread = _sdk_thread_to_model(sdk)
         assert thread.labels == []
 
 
 class TestSdkDraftToModel:
     def test_basic(self):
-        sdk = _ns(draft_id="d1", inbox_id="inbox-1", to=["a@x.com"],
-                  cc=None, bcc=None, subject="Hello", text="Body", html=None,
-                  labels=None, created_at=None, updated_at=None)
+        sdk = _ns(
+            draft_id="d1",
+            inbox_id="inbox-1",
+            to=["a@x.com"],
+            cc=None,
+            bcc=None,
+            subject="Hello",
+            text="Body",
+            html=None,
+            labels=None,
+            created_at=None,
+            updated_at=None,
+        )
         draft = _sdk_draft_to_model(sdk)
         assert draft.draft_id == "d1"
         assert "a@x.com" in draft.to
 
     def test_inbox_id_fallback(self):
         # Object with no inbox_id attribute at all — uses the fallback param
-        sdk = _ns(id="d-fallback", to=None,
-                  cc=None, bcc=None, subject=None, text=None, html=None,
-                  labels=None, created_at=None, updated_at=None)
+        sdk = _ns(
+            id="d-fallback",
+            to=None,
+            cc=None,
+            bcc=None,
+            subject=None,
+            text=None,
+            html=None,
+            labels=None,
+            created_at=None,
+            updated_at=None,
+        )
         draft = _sdk_draft_to_model(sdk, inbox_id="fallback-inbox")
         assert draft.inbox_id == "fallback-inbox"
 
     def test_to_as_string(self):
-        sdk = _ns(draft_id="d2", inbox_id="i1", to="single@x.com",
-                  cc=None, bcc=None, subject=None, text=None, html=None,
-                  labels=None, created_at=None, updated_at=None)
+        sdk = _ns(
+            draft_id="d2",
+            inbox_id="i1",
+            to="single@x.com",
+            cc=None,
+            bcc=None,
+            subject=None,
+            text=None,
+            html=None,
+            labels=None,
+            created_at=None,
+            updated_at=None,
+        )
         draft = _sdk_draft_to_model(sdk)
         assert "single@x.com" in draft.to
 
 
 class TestSdkWebhookToModel:
     def test_basic(self):
-        sdk = _ns(webhook_id="wh1", url="https://x.com/hook",
-                  event_types=["msg.received"], inbox_ids=["i1"],
-                  pod_ids=[], created_at=None, updated_at=None)
+        sdk = _ns(
+            webhook_id="wh1",
+            url="https://x.com/hook",
+            event_types=["msg.received"],
+            inbox_ids=["i1"],
+            pod_ids=[],
+            created_at=None,
+            updated_at=None,
+        )
         wh = _sdk_webhook_to_model(sdk)
         assert wh.webhook_id == "wh1"
         assert wh.url == "https://x.com/hook"
         assert "msg.received" in wh.event_types
 
     def test_empty_lists(self):
-        sdk = _ns(webhook_id="wh2", url="http://x.com",
-                  event_types=None, inbox_ids=None, pod_ids=None,
-                  created_at=None, updated_at=None)
+        sdk = _ns(
+            webhook_id="wh2",
+            url="http://x.com",
+            event_types=None,
+            inbox_ids=None,
+            pod_ids=None,
+            created_at=None,
+            updated_at=None,
+        )
         wh = _sdk_webhook_to_model(sdk)
         assert wh.event_types == []
         assert wh.inbox_ids == []
@@ -287,35 +354,60 @@ class TestSdkWebhookToModel:
 
 class TestSdkPodToModel:
     def test_basic(self):
-        sdk = _ns(pod_id="pod-1", name="Team Pod", client_id="client-1",
-                  created_at=None, updated_at=None)
+        sdk = _ns(
+            pod_id="pod-1",
+            name="Team Pod",
+            client_id="client-1",
+            created_at=None,
+            updated_at=None,
+        )
         pod = _sdk_pod_to_model(sdk)
         assert pod.pod_id == "pod-1"
         assert pod.name == "Team Pod"
 
     def test_fallback_to_id(self):
-        sdk = _ns(id="pod-fallback", name=None, client_id=None,
-                  created_at=None, updated_at=None)
+        sdk = _ns(
+            id="pod-fallback",
+            name=None,
+            client_id=None,
+            created_at=None,
+            updated_at=None,
+        )
         pod = _sdk_pod_to_model(sdk)
         assert pod.pod_id == "pod-fallback"
 
 
 class TestSdkDomainToModel:
     def test_basic(self):
-        sdk = _ns(domain_id="dom-1", domain="example.com", verified=True,
-                  created_at=None, updated_at=None)
+        sdk = _ns(
+            domain_id="dom-1",
+            domain="example.com",
+            verified=True,
+            created_at=None,
+            updated_at=None,
+        )
         domain = _sdk_domain_to_model(sdk)
         assert domain.domain == "example.com"
         assert domain.verified is True
 
     def test_unverified_default(self):
-        sdk = _ns(domain_id="dom-2", domain="unverified.com", verified=False,
-                  created_at=None, updated_at=None)
+        sdk = _ns(
+            domain_id="dom-2",
+            domain="unverified.com",
+            verified=False,
+            created_at=None,
+            updated_at=None,
+        )
         domain = _sdk_domain_to_model(sdk)
         assert domain.verified is False
 
     def test_fallback_to_id(self):
-        sdk = _ns(id="dom-fallback", domain="test.com", verified=False,
-                  created_at=None, updated_at=None)
+        sdk = _ns(
+            id="dom-fallback",
+            domain="test.com",
+            verified=False,
+            created_at=None,
+            updated_at=None,
+        )
         domain = _sdk_domain_to_model(sdk)
         assert domain.domain_id == "dom-fallback"

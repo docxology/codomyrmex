@@ -135,7 +135,9 @@ class FPFVisualizationMixin:
                         )
                         writer.writeheader()
                         writer.writerows(case_data_rows[:20])
-                    self.logger.info("Exported case similarity raw data to %s", csv_path)
+                    self.logger.info(
+                        "Exported case similarity raw data to %s", csv_path
+                    )
         except Exception as e:
             self.logger.warning(
                 "Failed to visualize case similarity: %s", e, exc_info=True
@@ -168,7 +170,9 @@ class FPFVisualizationMixin:
                     inference_rows.append(
                         {
                             "pattern_id": pattern_id,
-                            "high_probability": result["importance_distribution"]["high"],
+                            "high_probability": result["importance_distribution"][
+                                "high"
+                            ],
                             "medium_probability": result["importance_distribution"][
                                 "medium"
                             ],

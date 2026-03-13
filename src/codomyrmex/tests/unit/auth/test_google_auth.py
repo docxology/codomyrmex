@@ -27,7 +27,7 @@ class TestGoogleAuthenticator:
             auth = GoogleAuthenticator(
                 client_secrets_file=client_secrets,
                 token_cache_file=token_cache,
-                scopes=["https://www.googleapis.com/auth/calendar"]
+                scopes=["https://www.googleapis.com/auth/calendar"],
             )
 
             assert auth.client_secrets_file == client_secrets

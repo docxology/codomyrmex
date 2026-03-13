@@ -19,6 +19,7 @@ def _get_validation_manager():
     global _VALIDATION_MANAGER
     if _VALIDATION_MANAGER is None:
         from codomyrmex.validation.validation_manager import ValidationManager
+
         _VALIDATION_MANAGER = ValidationManager()
     return _VALIDATION_MANAGER
 

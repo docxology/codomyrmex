@@ -111,10 +111,12 @@ class HierarchicalPlanner:
         agent_hi = ActiveInferenceAgent(...)
         agent_lo = ActiveInferenceAgent(...)
 
-        planner = HierarchicalPlanner(levels=[
-            PlanLevel("strategic", FreeEnergyLoop(agent_hi, max_steps=20)),
-            PlanLevel("tactical",  FreeEnergyLoop(agent_lo, max_steps=50)),
-        ])
+        planner = HierarchicalPlanner(
+            levels=[
+                PlanLevel("strategic", FreeEnergyLoop(agent_hi, max_steps=20)),
+                PlanLevel("tactical", FreeEnergyLoop(agent_lo, max_steps=50)),
+            ]
+        )
         plan = planner.plan({"strategic": {"goal": "explore"}})
 
     Args:
@@ -179,9 +181,7 @@ class HierarchicalPlanner:
 
             # The last action becomes input to the next level
             output_action = (
-                loop_result.action_history[-1]
-                if loop_result.action_history
-                else "noop"
+                loop_result.action_history[-1] if loop_result.action_history else "noop"
             )
 
             if not loop_result.converged:

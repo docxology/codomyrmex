@@ -5,7 +5,6 @@ SystemDiscoveryError, CapabilityScanError, Modeling3DError, PhysicalManagementEr
 SimulationError, and all other domain exceptions with context propagation.
 """
 
-
 from codomyrmex.exceptions.base import CodomyrmexError
 from codomyrmex.exceptions.specialized import (
     CapabilityScanError,
@@ -95,8 +94,12 @@ class TestSimulationError:
 class TestHierarchy:
     def test_all_inherit_from_codomyrmex_error(self):
         classes = [
-            PerformanceError, LoggingError, SystemDiscoveryError,
-            CapabilityScanError, Modeling3DError, PhysicalManagementError,
+            PerformanceError,
+            LoggingError,
+            SystemDiscoveryError,
+            CapabilityScanError,
+            Modeling3DError,
+            PhysicalManagementError,
             SimulationError,
         ]
         for cls in classes:
@@ -107,8 +110,12 @@ class TestHierarchy:
 
     def test_all_have_context(self):
         classes = [
-            PerformanceError, LoggingError, SystemDiscoveryError,
-            CapabilityScanError, Modeling3DError, PhysicalManagementError,
+            PerformanceError,
+            LoggingError,
+            SystemDiscoveryError,
+            CapabilityScanError,
+            Modeling3DError,
+            PhysicalManagementError,
             SimulationError,
         ]
         for cls in classes:

@@ -133,13 +133,17 @@ class ConfigInvariantChecker:
             val2, src2 = self._resolve_key(key)
 
             passed = val1 == val2 and src1 == src2
-            results.append(InvariantResult(
-                key=key,
-                passed=passed,
-                expected=val1,
-                actual=val2,
-                message=f"{key}: {src1}={val1}" if passed else f"{key}: non-deterministic ({src1}={val1} vs {src2}={val2})",
-            ))
+            results.append(
+                InvariantResult(
+                    key=key,
+                    passed=passed,
+                    expected=val1,
+                    actual=val2,
+                    message=f"{key}: {src1}={val1}"
+                    if passed
+                    else f"{key}: non-deterministic ({src1}={val1} vs {src2}={val2})",
+                )
+            )
 
         logger.info(
             "Verified %d config keys: %d passed, %d failed",
@@ -167,33 +171,39 @@ class ConfigInvariantChecker:
             if env_val is not None:
                 coerced = self._coerce(env_val, key)
                 passed = val == coerced and source == "env"
-                results.append(InvariantResult(
-                    key=key,
-                    passed=passed,
-                    expected=coerced,
-                    actual=val,
-                    message=f"{key}: env precedence {'holds' if passed else 'VIOLATED'}",
-                ))
+                results.append(
+                    InvariantResult(
+                        key=key,
+                        passed=passed,
+                        expected=coerced,
+                        actual=val,
+                        message=f"{key}: env precedence {'holds' if passed else 'VIOLATED'}",
+                    )
+                )
             # If yaml is set (and env is not), yaml must win
             elif key in self._yaml:
                 passed = val == self._yaml[key] and source == "yaml"
-                results.append(InvariantResult(
-                    key=key,
-                    passed=passed,
-                    expected=self._yaml[key],
-                    actual=val,
-                    message=f"{key}: yaml precedence {'holds' if passed else 'VIOLATED'}",
-                ))
+                results.append(
+                    InvariantResult(
+                        key=key,
+                        passed=passed,
+                        expected=self._yaml[key],
+                        actual=val,
+                        message=f"{key}: yaml precedence {'holds' if passed else 'VIOLATED'}",
+                    )
+                )
             # Otherwise default must win
             elif key in self._defaults:
                 passed = val == self._defaults[key] and source == "default"
-                results.append(InvariantResult(
-                    key=key,
-                    passed=passed,
-                    expected=self._defaults[key],
-                    actual=val,
-                    message=f"{key}: default precedence {'holds' if passed else 'VIOLATED'}",
-                ))
+                results.append(
+                    InvariantResult(
+                        key=key,
+                        passed=passed,
+                        expected=self._defaults[key],
+                        actual=val,
+                        message=f"{key}: default precedence {'holds' if passed else 'VIOLATED'}",
+                    )
+                )
 
         return results
 

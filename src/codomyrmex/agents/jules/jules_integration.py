@@ -23,7 +23,8 @@ class JulesIntegrationAdapter(AgentIntegrationAdapter):
         """
         if not response.is_success():
             self.logger.error(
-                "Jules %s failed", context,
+                "Jules %s failed",
+                context,
                 extra={
                     "agent": "jules",
                     "context": context,

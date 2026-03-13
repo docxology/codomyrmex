@@ -35,7 +35,9 @@ class TestWasmSandbox:
         """Test missing exported function raises precise error."""
         sandbox = WasmSandbox()
         wat = "(module)"
-        with pytest.raises(WasmSandboxError, match="Export 'magic' not found in WASM module"):
+        with pytest.raises(
+            WasmSandboxError, match="Export 'magic' not found in WASM module"
+        ):
             sandbox.execute_plugin(wat, "magic")
 
     def test_not_a_function(self):
@@ -62,7 +64,9 @@ class TestWasmSandbox:
             )
         )
         """
-        with pytest.raises(WasmSandboxError, match="WASM Trap or Quota Exceeded|out of fuel"):
+        with pytest.raises(
+            WasmSandboxError, match="WASM Trap or Quota Exceeded|out of fuel"
+        ):
             sandbox.execute_plugin(wat, "run_forever")
 
     def test_invalid_wat_syntax(self):
@@ -166,6 +170,7 @@ class TestGeodesicBVH:
 
         # Traverse to count leaf faces
         faces_collected = 0
+
         def traverse(node):
             nonlocal faces_collected
             if node.faces is not None:
@@ -190,7 +195,9 @@ class TestGeodesicBVH:
 
         t = ray_intersect_bvh(bvh, mesh, origin, direction)
         assert t is not None
-        assert 2.0 < t < 4.0  # Should hit approximately at x=2.0 (but offset by geometry shape)
+        assert (
+            2.0 < t < 4.0
+        )  # Should hit approximately at x=2.0 (but offset by geometry shape)
 
     def test_ray_intersect_miss(self):
         """Test ray missing the mesh fails gracefully."""

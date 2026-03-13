@@ -73,6 +73,7 @@ try:
     DIGITAL_AVAILABLE = True
 except ImportError:
     import traceback
+
     traceback.print_exc()
     DIGITAL_AVAILABLE = False
 

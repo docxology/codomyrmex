@@ -1,4 +1,5 @@
 """HandsManager — parse and manage openfang autonomous Hands."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -59,7 +60,9 @@ class HandsManager:
                     schedule=current.get("schedule", ""),
                     enabled=current.get("enabled", "true").lower() == "true",
                     tags=[
-                        t.strip() for t in current.get("tags", "").split(",") if t.strip()
+                        t.strip()
+                        for t in current.get("tags", "").split(",")
+                        if t.strip()
                     ],
                 )
             )

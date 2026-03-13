@@ -281,7 +281,9 @@ class TestFreeEnergyLoop:
         from codomyrmex.cerebrum.inference.free_energy_loop import FreeEnergyLoop
 
         agent = self._make_agent()
-        loop = FreeEnergyLoop(agent, max_steps=10, fe_threshold=100.0, convergence_window=1)
+        loop = FreeEnergyLoop(
+            agent, max_steps=10, fe_threshold=100.0, convergence_window=1
+        )
         result = loop.run({"o1": 0.9})
         assert result.steps >= 1
         assert len(result.action_history) == result.steps
@@ -291,7 +293,9 @@ class TestFreeEnergyLoop:
         from codomyrmex.cerebrum.inference.free_energy_loop import FreeEnergyLoop
 
         agent = self._make_agent()
-        loop = FreeEnergyLoop(agent, max_steps=5, fe_threshold=0.0, convergence_window=999)
+        loop = FreeEnergyLoop(
+            agent, max_steps=5, fe_threshold=0.0, convergence_window=999
+        )
         result = loop.run({"o1": 0.5})
         assert result.steps == 5
         assert not result.converged
@@ -410,9 +414,9 @@ class TestCodeChangeVerifier:
         def always_fail(proposal):
             return RuleResult(rule_name="always_fail", passed=False, message="nope")
 
-        verifier = CodeChangeVerifier(rules=[
-            InvariantRule("always_fail", "Always fails", always_fail)
-        ])
+        verifier = CodeChangeVerifier(
+            rules=[InvariantRule("always_fail", "Always fails", always_fail)]
+        )
         result = verifier.verify(ChangeProposal("f.py", "", ""))
         assert not result.passed
 

@@ -59,7 +59,8 @@ class ModuleHealth:
             "has_readme": self.has_readme,
             "has_spec": self.has_spec,
             "has_agents": self.has_agents,
-            "doc_completeness": sum([self.has_readme, self.has_spec, self.has_agents]) / 3.0,
+            "doc_completeness": sum([self.has_readme, self.has_spec, self.has_agents])
+            / 3.0,
         }
 
 
@@ -120,11 +121,7 @@ class ModuleHealthProvider:
     def _scan_module(self, name: str) -> ModuleHealth:
         """Scan a single module directory."""
         mod_dir = self._src_root / name
-        py_files = [
-            f
-            for f in mod_dir.rglob("*.py")
-            if "__pycache__" not in str(f)
-        ]
+        py_files = [f for f in mod_dir.rglob("*.py") if "__pycache__" not in str(f)]
         loc = sum(
             len(f.read_text(encoding="utf-8", errors="replace").splitlines())
             for f in py_files
@@ -200,9 +197,9 @@ class ModuleHealthProvider:
             "total_tests": sum(m.test_count for m in modules),
             "avg_doc_completeness": (
                 sum(
-                    sum([m.has_readme, m.has_spec, m.has_agents]) / 3.0
-                    for m in modules
-                ) / len(modules)
+                    sum([m.has_readme, m.has_spec, m.has_agents]) / 3.0 for m in modules
+                )
+                / len(modules)
                 if modules
                 else 0.0
             ),

@@ -93,7 +93,9 @@ class TaskPlanner:
             )
             subtasks.append(subtask)
 
-        self.logger.info("Decomposed task %s into %d subtasks", main_task.id, len(subtasks))
+        self.logger.info(
+            "Decomposed task %s into %d subtasks", main_task.id, len(subtasks)
+        )
 
         return subtasks
 

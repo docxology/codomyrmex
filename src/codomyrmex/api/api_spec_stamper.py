@@ -82,8 +82,10 @@ class APISpecStamper:
                     if isinstance(target, ast.Name) and target.id == "__all__":
                         if isinstance(node.value, ast.List):
                             api.exports = [
-                                elt.value for elt in node.value.elts
-                                if isinstance(elt, ast.Constant) and isinstance(elt.value, str)
+                                elt.value
+                                for elt in node.value.elts
+                                if isinstance(elt, ast.Constant)
+                                and isinstance(elt.value, str)
                             ]
             elif isinstance(node, ast.ClassDef) and not node.name.startswith("_"):
                 api.classes.append(node.name)
@@ -105,17 +107,23 @@ class APISpecStamper:
         modules: list[dict] = []
 
         for mod_dir in sorted(self._root.iterdir()):
-            if not mod_dir.is_dir() or mod_dir.name.startswith(("_", ".")) or mod_dir.name == "tests":
+            if (
+                not mod_dir.is_dir()
+                or mod_dir.name.startswith(("_", "."))
+                or mod_dir.name == "tests"
+            ):
                 continue
 
             api = self._scan_module_api(mod_dir)
-            modules.append({
-                "name": api.name,
-                "exports": api.exports,
-                "classes": api.classes,
-                "functions": api.functions,
-                "surface_size": api.surface_size,
-            })
+            modules.append(
+                {
+                    "name": api.name,
+                    "exports": api.exports,
+                    "classes": api.classes,
+                    "functions": api.functions,
+                    "surface_size": api.surface_size,
+                }
+            )
 
         elapsed = (time.monotonic() - start) * 1000
         return {
@@ -148,11 +156,13 @@ class APISpecStamper:
             added_exports = new_map[name] - old_map[name]
             removed_exports = old_map[name] - new_map[name]
             if added_exports or removed_exports:
-                changed.append({
-                    "module": name,
-                    "added_exports": sorted(added_exports),
-                    "removed_exports": sorted(removed_exports),
-                })
+                changed.append(
+                    {
+                        "module": name,
+                        "added_exports": sorted(added_exports),
+                        "removed_exports": sorted(removed_exports),
+                    }
+                )
 
         return {
             "old_version": old.get("version", "?"),
@@ -187,12 +197,16 @@ class APISpecStamper:
                 lines.append(f"## `{mod['name']}`")
                 if mod["exports"]:
                     lines.append("")
-                    lines.append(f"**Exports** ({len(mod['exports'])}): "
-                                 f"`{'`, `'.join(mod['exports'][:20])}`")
+                    lines.append(
+                        f"**Exports** ({len(mod['exports'])}): "
+                        f"`{'`, `'.join(mod['exports'][:20])}`"
+                    )
                 if mod["classes"]:
                     lines.append(f"**Classes**: `{'`, `'.join(mod['classes'][:10])}`")
                 if mod["functions"]:
-                    lines.append(f"**Functions**: `{'`, `'.join(mod['functions'][:10])}`")
+                    lines.append(
+                        f"**Functions**: `{'`, `'.join(mod['functions'][:10])}`"
+                    )
                 lines.append("")
 
         out = Path(output)

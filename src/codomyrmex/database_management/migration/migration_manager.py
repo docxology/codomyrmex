@@ -78,7 +78,9 @@ class MigrationManager:
     )
     """
 
-    def __init__(self, workspace_dir: str | None = None, database_url: str | None = None):
+    def __init__(
+        self, workspace_dir: str | None = None, database_url: str | None = None
+    ):
         """Initialize migration manager."""
         self.workspace_dir = Path(workspace_dir) if workspace_dir else Path.cwd()
         self.migrations_dir = self.workspace_dir / "migrations"
@@ -102,7 +104,9 @@ class MigrationManager:
     def _get_connector(self) -> DatabaseConnector:
         """Get or create database connector."""
         if not self._database_url:
-            raise CodomyrmexError("Database URL not set. Call set_database_url() first.")
+            raise CodomyrmexError(
+                "Database URL not set. Call set_database_url() first."
+            )
         if not self._connector:
             self._connector = DatabaseConnector(self._database_url)
             self._connector.connect()
@@ -123,38 +127,56 @@ class MigrationManager:
                 with open(migration_file) as f:
                     data = json.load(f)
                 migration = Migration(
-                    id=data["id"], name=data["name"],
-                    description=data.get("description", ""), sql=data["sql"],
+                    id=data["id"],
+                    name=data["name"],
+                    description=data.get("description", ""),
+                    sql=data["sql"],
                     rollback_sql=data.get("rollback_sql"),
                     dependencies=data.get("dependencies", []),
-                    created_at=datetime.fromisoformat(data.get("created_at", datetime.now().isoformat())),
+                    created_at=datetime.fromisoformat(
+                        data.get("created_at", datetime.now().isoformat())
+                    ),
                     status=data.get("status", "pending"),
                     checksum=data.get("checksum", ""),
                 )
                 self._migrations[migration.id] = migration
             except (json.JSONDecodeError, KeyError) as e:
                 logger.warning("Failed to load migration %s: %s", migration_file, e)
-        logger.info("Loaded %s migrations from %s", len(self._migrations), self.migrations_dir)
+        logger.info(
+            "Loaded %s migrations from %s", len(self._migrations), self.migrations_dir
+        )
 
     def _serialize_migration(self, migration: "Migration") -> dict[str, Any]:
         """Serialize a migration to a JSON-safe dict."""
         return {
-            "id": migration.id, "name": migration.name,
-            "description": migration.description, "sql": migration.sql,
-            "rollback_sql": migration.rollback_sql, "dependencies": migration.dependencies,
+            "id": migration.id,
+            "name": migration.name,
+            "description": migration.description,
+            "sql": migration.sql,
+            "rollback_sql": migration.rollback_sql,
+            "dependencies": migration.dependencies,
             "created_at": migration.created_at.isoformat(),
-            "status": migration.status, "checksum": migration.checksum,
+            "status": migration.status,
+            "checksum": migration.checksum,
         }
 
     def create_migration(
-        self, name: str, description: str, sql: str,
-        rollback_sql: str | None = None, dependencies: list[str] | None = None,
+        self,
+        name: str,
+        description: str,
+        sql: str,
+        rollback_sql: str | None = None,
+        dependencies: list[str] | None = None,
     ) -> "Migration":
         """Create a new migration and persist it to disk."""
         migration_id = f"migration_{int(time.time())}_{name.replace(' ', '_').lower()}"
         migration = Migration(
-            id=migration_id, name=name, description=description, sql=sql,
-            rollback_sql=rollback_sql, dependencies=dependencies or [],
+            id=migration_id,
+            name=name,
+            description=description,
+            sql=sql,
+            rollback_sql=rollback_sql,
+            dependencies=dependencies or [],
         )
         self._migrations[migration_id] = migration
         migration_file = self.migrations_dir / f"{migration_id}.json"
@@ -163,30 +185,55 @@ class MigrationManager:
         logger.info("Created migration: %s", migration_id)
         return migration
 
-    def _check_apply_preconditions(self, migration_id: str, migration: "Migration", dry_run: bool) -> "MigrationResult | None":
+    def _check_apply_preconditions(
+        self, migration_id: str, migration: "Migration", dry_run: bool
+    ) -> "MigrationResult | None":
         """Return a short-circuit MigrationResult if apply should not proceed, else None."""
         if self._is_migration_applied(migration_id):
             logger.info("Migration already applied: %s", migration_id)
-            return MigrationResult(migration_id=migration_id, success=True, execution_time=0.0, error_message="Already applied")
+            return MigrationResult(
+                migration_id=migration_id,
+                success=True,
+                execution_time=0.0,
+                error_message="Already applied",
+            )
         for dep_id in migration.dependencies:
             if not self._is_migration_applied(dep_id):
                 raise CodomyrmexError(f"Dependency migration not applied: {dep_id}")
         if dry_run:
             logger.info("[DRY RUN] Would apply migration: %s", migration_id)
-            return MigrationResult(migration_id=migration_id, success=True, execution_time=0.0, error_message="Dry run - not executed")
+            return MigrationResult(
+                migration_id=migration_id,
+                success=True,
+                execution_time=0.0,
+                error_message="Dry run - not executed",
+            )
         return None
 
-    def _record_applied(self, connector: DatabaseConnector, migration: "Migration", execution_time: float):
+    def _record_applied(
+        self,
+        connector: DatabaseConnector,
+        migration: "Migration",
+        execution_time: float,
+    ):
         """Insert migration record into tracking table and commit."""
         connector.execute(
             "INSERT INTO _migrations (id, name, description, checksum, execution_time_ms, status) VALUES (?, ?, ?, ?, ?, 'applied')",
-            (migration.id, migration.name, migration.description, migration.checksum, int(execution_time * 1000)),
+            (
+                migration.id,
+                migration.name,
+                migration.description,
+                migration.checksum,
+                int(execution_time * 1000),
+            ),
         )
         connector.commit()
         migration.applied_at = datetime.now()
         migration.status = "applied"
 
-    def apply_migration(self, migration_id: str, dry_run: bool = False) -> "MigrationResult":
+    def apply_migration(
+        self, migration_id: str, dry_run: bool = False
+    ) -> "MigrationResult":
         """Apply a migration to the database."""
         if migration_id not in self._migrations:
             raise CodomyrmexError(f"Migration not found: {migration_id}")
@@ -201,21 +248,33 @@ class MigrationManager:
             execution_time = time.time() - start_time
             self._record_applied(connector, migration, execution_time)
             result = MigrationResult(
-                migration_id=migration_id, success=True, execution_time=execution_time,
-                rows_affected=rows_affected, statements_executed=statements_executed,
+                migration_id=migration_id,
+                success=True,
+                execution_time=execution_time,
+                rows_affected=rows_affected,
+                statements_executed=statements_executed,
             )
             self._applied_migrations[migration_id] = result
             self._save_migration_history(migration, result)
-            logger.info("Applied migration %s: %s stmts, %s rows in %.3fs",
-                        migration_id, statements_executed, rows_affected, execution_time)
+            logger.info(
+                "Applied migration %s: %s stmts, %s rows in %.3fs",
+                migration_id,
+                statements_executed,
+                rows_affected,
+                execution_time,
+            )
             return result
         except Exception as e:
             connector.rollback()
             execution_time = time.time() - start_time
             migration.status = "failed"
             logger.error("Failed to apply migration %s: %s", migration_id, e)
-            return MigrationResult(migration_id=migration_id, success=False,
-                                   execution_time=execution_time, error_message=str(e))
+            return MigrationResult(
+                migration_id=migration_id,
+                success=False,
+                execution_time=execution_time,
+                error_message=str(e),
+            )
 
     def rollback_migration(self, migration_id: str) -> "MigrationResult":
         """Rollback a migration."""
@@ -225,11 +284,15 @@ class MigrationManager:
         if not migration:
             raise CodomyrmexError(f"Migration not found: {migration_id}")
         if not migration.rollback_sql:
-            raise CodomyrmexError(f"No rollback SQL defined for migration: {migration_id}")
+            raise CodomyrmexError(
+                f"No rollback SQL defined for migration: {migration_id}"
+            )
         connector = self._get_connector()
         start_time = time.time()
         try:
-            rows_affected, statements_executed = connector.execute_script(migration.rollback_sql)
+            rows_affected, statements_executed = connector.execute_script(
+                migration.rollback_sql
+            )
             execution_time = time.time() - start_time
             connector.execute("DELETE FROM _migrations WHERE id = ?", (migration_id,))
             connector.commit()
@@ -237,42 +300,68 @@ class MigrationManager:
             migration.applied_at = None
             self._applied_migrations.pop(migration_id, None)
             result = MigrationResult(
-                migration_id=f"rollback_{migration_id}", success=True, execution_time=execution_time,
-                rows_affected=rows_affected, statements_executed=statements_executed,
+                migration_id=f"rollback_{migration_id}",
+                success=True,
+                execution_time=execution_time,
+                rows_affected=rows_affected,
+                statements_executed=statements_executed,
             )
-            logger.info("Rolled back migration %s: %s stmts, %s rows in %.3fs",
-                        migration_id, statements_executed, rows_affected, execution_time)
+            logger.info(
+                "Rolled back migration %s: %s stmts, %s rows in %.3fs",
+                migration_id,
+                statements_executed,
+                rows_affected,
+                execution_time,
+            )
             return result
         except Exception as e:
             connector.rollback()
             execution_time = time.time() - start_time
             logger.error("Failed to rollback migration %s: %s", migration_id, e)
-            return MigrationResult(migration_id=f"rollback_{migration_id}", success=False,
-                                   execution_time=execution_time, error_message=str(e))
+            return MigrationResult(
+                migration_id=f"rollback_{migration_id}",
+                success=False,
+                execution_time=execution_time,
+                error_message=str(e),
+            )
 
     def _is_migration_applied(self, migration_id: str) -> bool:
         """Check if a migration has been applied."""
         try:
             connector = self._get_connector()
             _, cursor = connector.execute(
-                "SELECT 1 FROM _migrations WHERE id = ? AND status = 'applied'", (migration_id,)
+                "SELECT 1 FROM _migrations WHERE id = ? AND status = 'applied'",
+                (migration_id,),
             )
             return cursor.fetchone() is not None
         except Exception as e:
-            logger.warning("Failed to check migration applied status for %s: %s", migration_id, e)
+            logger.warning(
+                "Failed to check migration applied status for %s: %s", migration_id, e
+            )
             return False
 
-    def _save_migration_history(self, migration: "Migration", result: "MigrationResult"):
+    def _save_migration_history(
+        self, migration: "Migration", result: "MigrationResult"
+    ):
         """Save migration result to history file."""
         history_file = self.migration_history_dir / f"{migration.id}_history.json"
         with open(history_file, "w") as f:
-            json.dump({
-                "migration_id": migration.id, "name": migration.name,
-                "applied_at": migration.applied_at.isoformat() if migration.applied_at else None,
-                "success": result.success, "execution_time": result.execution_time,
-                "rows_affected": result.rows_affected, "statements_executed": result.statements_executed,
-                "error_message": result.error_message,
-            }, f, indent=2)
+            json.dump(
+                {
+                    "migration_id": migration.id,
+                    "name": migration.name,
+                    "applied_at": migration.applied_at.isoformat()
+                    if migration.applied_at
+                    else None,
+                    "success": result.success,
+                    "execution_time": result.execution_time,
+                    "rows_affected": result.rows_affected,
+                    "statements_executed": result.statements_executed,
+                    "error_message": result.error_message,
+                },
+                f,
+                indent=2,
+            )
 
     def get_migration_status(self, migration_id: str) -> dict[str, Any] | None:
         """Get status of a migration."""
@@ -281,10 +370,15 @@ class MigrationManager:
         migration = self._migrations[migration_id]
         is_applied = self._is_migration_applied(migration_id)
         return {
-            "id": migration.id, "name": migration.name, "description": migration.description,
+            "id": migration.id,
+            "name": migration.name,
+            "description": migration.description,
             "status": "applied" if is_applied else migration.status,
-            "applied_at": migration.applied_at.isoformat() if migration.applied_at else None,
-            "dependencies": migration.dependencies, "checksum": migration.checksum,
+            "applied_at": migration.applied_at.isoformat()
+            if migration.applied_at
+            else None,
+            "dependencies": migration.dependencies,
+            "checksum": migration.checksum,
         }
 
     def list_migrations(self) -> list[dict[str, Any]]:
@@ -292,19 +386,30 @@ class MigrationManager:
         migrations = []
         for migration in self._migrations.values():
             is_applied = self._is_migration_applied(migration.id)
-            migrations.append({
-                "id": migration.id, "name": migration.name, "description": migration.description,
-                "status": "applied" if is_applied else migration.status,
-                "applied_at": migration.applied_at.isoformat() if migration.applied_at else None,
-                "dependencies": migration.dependencies, "checksum": migration.checksum,
-            })
+            migrations.append(
+                {
+                    "id": migration.id,
+                    "name": migration.name,
+                    "description": migration.description,
+                    "status": "applied" if is_applied else migration.status,
+                    "applied_at": migration.applied_at.isoformat()
+                    if migration.applied_at
+                    else None,
+                    "dependencies": migration.dependencies,
+                    "checksum": migration.checksum,
+                }
+            )
         migrations.sort(key=lambda m: m["id"])
         return migrations
 
     def get_pending_migrations(self) -> list["Migration"]:
         """Get list of migrations that haven't been applied yet."""
         return sorted(
-            [m for m in self._migrations.values() if not self._is_migration_applied(m.id)],
+            [
+                m
+                for m in self._migrations.values()
+                if not self._is_migration_applied(m.id)
+            ],
             key=lambda m: m.id,
         )
 
@@ -326,7 +431,9 @@ class MigrationManager:
             self._connector = None
 
 
-def run_migrations(migration_dir: str, database_url: str, direction: str = "up") -> dict[str, Any]:
+def run_migrations(
+    migration_dir: str, database_url: str, direction: str = "up"
+) -> dict[str, Any]:
     """Run database migrations. direction is 'up' or 'down'."""
     manager = MigrationManager(workspace_dir=migration_dir, database_url=database_url)
     try:
@@ -336,24 +443,42 @@ def run_migrations(migration_dir: str, database_url: str, direction: str = "up")
             results = manager.apply_pending_migrations()
             successful = sum(1 for r in results if r.success)
             return {
-                "direction": "up", "migrations_processed": len(results),
-                "successful": successful, "failed": len(results) - successful,
+                "direction": "up",
+                "migrations_processed": len(results),
+                "successful": successful,
+                "failed": len(results) - successful,
                 "success": len(results) == successful,
-                "results": [{"migration_id": r.migration_id, "success": r.success,
-                             "execution_time": r.execution_time, "error_message": r.error_message}
-                            for r in results],
+                "results": [
+                    {
+                        "migration_id": r.migration_id,
+                        "success": r.success,
+                        "execution_time": r.execution_time,
+                        "error_message": r.error_message,
+                    }
+                    for r in results
+                ],
             }
         if direction == "down":
             applied = [m for m in all_migrations if m["status"] == "applied"]
             if not applied:
-                return {"direction": "down", "migrations_processed": 0, "success": True,
-                        "message": "No migrations to rollback"}
+                return {
+                    "direction": "down",
+                    "migrations_processed": 0,
+                    "success": True,
+                    "message": "No migrations to rollback",
+                }
             latest = max(applied, key=lambda m: m.get("applied_at") or "")
             result = manager.rollback_migration(latest["id"])
             return {
-                "direction": "down", "migrations_processed": 1, "success": result.success,
-                "result": {"migration_id": result.migration_id, "success": result.success,
-                           "execution_time": result.execution_time, "error_message": result.error_message},
+                "direction": "down",
+                "migrations_processed": 1,
+                "success": result.success,
+                "result": {
+                    "migration_id": result.migration_id,
+                    "success": result.success,
+                    "execution_time": result.execution_time,
+                    "error_message": result.error_message,
+                },
             }
         raise CodomyrmexError(f"Invalid migration direction: {direction}")
     finally:

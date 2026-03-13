@@ -29,7 +29,8 @@ def build_prompt(task: TaskNode) -> str:
     sibling_context = (
         "\nYou are one of several agents working in parallel on sibling tasks under the same parent. "
         "Do not duplicate work that sibling tasks would handle -- focus only on your specific task."
-        if task.lineage else ""
+        if task.lineage
+        else ""
     )
 
     return f"""You are a coding agent executing one task in a larger project.
@@ -49,9 +50,7 @@ INSTRUCTIONS:
 
 
 def execute_leaf_task(
-    task: TaskNode,
-    workspace_manager: WorkspaceManager,
-    provider: str = "claude"
+    task: TaskNode, workspace_manager: WorkspaceManager, provider: str = "claude"
 ) -> str:
     """Execute a single atomic task using the specified provider in a git worktree."""
     logger.info("[execute] [%s] '%s' (%s)", task.id, task.description, provider)

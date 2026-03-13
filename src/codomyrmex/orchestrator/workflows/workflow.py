@@ -95,7 +95,9 @@ class Workflow:
             except (AttributeError, TypeError, RuntimeError, ValueError) as exc:
                 self.logger.warning("EventBus publish failed: %s", exc)
 
-    def add_task(self, name: str, action: Callable[..., Any], **opts: Any) -> "Workflow":
+    def add_task(
+        self, name: str, action: Callable[..., Any], **opts: Any
+    ) -> "Workflow":
         """Add a task to the workflow. Returns self for chaining.
 
         Keyword options: dependencies, args, kwargs, timeout, retry_policy,
@@ -106,7 +108,8 @@ class Workflow:
         deps = opts.get("dependencies")
         tags = opts.get("tags")
         self.tasks[name] = Task(
-            name=name, action=action,
+            name=name,
+            action=action,
             dependencies=set(deps) if deps else set(),
             args=opts.get("args") or [],
             kwargs=opts.get("kwargs") or {},
@@ -262,9 +265,7 @@ class Workflow:
                 self.task_results[task.name] = task.get_result()
                 self.logger.error("Task '%s' failed: %s", task.name, result)
                 self._emit_progress(task.name, "failed", {"error": str(result)})
-                self._try_emit_event(
-                    "task_failed", self.name, task.name, str(result)
-                )
+                self._try_emit_event("task_failed", self.name, task.name, str(result))
                 if self.fail_fast:
                     self.logger.info("Fail-fast: stopping workflow")
                     self._cancelled = True
@@ -407,7 +408,11 @@ class Workflow:
                     delay = policy.get_delay(attempt)
                     self.logger.warning(
                         "Task '%s' failed (attempt %s/%s), retrying in %.1fs: %s",
-                        task.name, attempt, policy.max_attempts, delay, e,
+                        task.name,
+                        attempt,
+                        policy.max_attempts,
+                        delay,
+                        e,
                     )
                     task.status = TaskStatus.RETRYING
                     self._emit_progress(
@@ -418,7 +423,10 @@ class Workflow:
                     await asyncio.sleep(delay)
                 else:
                     self.logger.error(
-                        "Task '%s' failed after %s attempts: %s", task.name, policy.max_attempts, e
+                        "Task '%s' failed after %s attempts: %s",
+                        task.name,
+                        policy.max_attempts,
+                        e,
                     )
                     raise
             except Exception as _exc:

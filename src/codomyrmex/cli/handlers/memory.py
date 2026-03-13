@@ -38,10 +38,15 @@ def handle_memory_list(limit: int = 20) -> list[dict]:
 
         print(f"📋 Memory entries ({len(entries)} total, showing {len(recent)}):\n")
         for mem in recent:
-            content_preview = mem.content[:80] + "..." if len(mem.content) > 80 else mem.content
+            content_preview = (
+                mem.content[:80] + "..." if len(mem.content) > 80 else mem.content
+            )
             print(f"  [{mem.memory_type.value}] {mem.id[:8]}  {content_preview}")
 
-        return [{"id": m.id, "type": m.memory_type.value, "content": m.content[:100]} for m in recent]
+        return [
+            {"id": m.id, "type": m.memory_type.value, "content": m.content[:100]}
+            for m in recent
+        ]
     except Exception as e:
         print(f"❌ Could not list memories: {e}")
         return []
@@ -111,16 +116,16 @@ def handle_memory_search(query: str, limit: int = 10) -> list[dict]:
         all_entries = store.list_all()
 
         # Simple content search
-        matches = [
-            m for m in all_entries
-            if query.lower() in m.content.lower()
-        ][:limit]
+        matches = [m for m in all_entries if query.lower() in m.content.lower()][:limit]
 
         print(f"  Found {len(matches)} results:\n")
         for m in matches:
             print(f"  [{m.memory_type.value}] {m.id[:8]}  {m.content[:80]}")
 
-        return [{"id": m.id, "content": m.content[:100], "type": m.memory_type.value} for m in matches]
+        return [
+            {"id": m.id, "content": m.content[:100], "type": m.memory_type.value}
+            for m in matches
+        ]
     except Exception as e:
         print(f"❌ Search failed: {e}")
         return []

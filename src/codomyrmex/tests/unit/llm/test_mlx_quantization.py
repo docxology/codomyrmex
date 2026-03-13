@@ -142,9 +142,7 @@ class TestQuantizationInfoReader:
         from codomyrmex.llm.mlx.quantization import read_quantization_info
 
         with tempfile.TemporaryDirectory() as td:
-            (Path(td) / "config.json").write_text(
-                json.dumps({"quantization": "4-bit"})
-            )
+            (Path(td) / "config.json").write_text(json.dumps({"quantization": "4-bit"}))
             info = read_quantization_info(td)
             assert info["quantization"] == "4-bit"
 
@@ -153,13 +151,15 @@ class TestQuantizationInfoReader:
 
         with tempfile.TemporaryDirectory() as td:
             (Path(td) / "config.json").write_text(
-                json.dumps({
-                    "quantization_config": {
-                        "bits": 4,
-                        "group_size": 64,
-                        "quant_method": "gptq",
+                json.dumps(
+                    {
+                        "quantization_config": {
+                            "bits": 4,
+                            "group_size": 64,
+                            "quant_method": "gptq",
+                        }
                     }
-                })
+                )
             )
             info = read_quantization_info(td)
             assert info["bits"] == 4

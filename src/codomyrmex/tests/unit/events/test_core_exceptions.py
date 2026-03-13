@@ -165,7 +165,9 @@ class TestEventHandlerError:
         assert e.context["event_id"] == "evt-999"
 
     def test_original_error_stored_when_provided(self):
-        e = EventHandlerError("err", original_error="ZeroDivisionError: division by zero")
+        e = EventHandlerError(
+            "err", original_error="ZeroDivisionError: division by zero"
+        )
         assert e.context["original_error"] == "ZeroDivisionError: division by zero"
 
     def test_original_error_not_stored_when_none(self):
@@ -376,7 +378,9 @@ class TestEventQueueError:
 
     def test_raise_and_catch(self):
         with pytest.raises(EventQueueError):
-            raise EventQueueError("queue full", queue_name="main", queue_size=1000, max_size=1000)
+            raise EventQueueError(
+                "queue full", queue_name="main", queue_size=1000, max_size=1000
+            )
 
 
 # ── EventDeliveryError ────────────────────────────────────────────────
@@ -463,7 +467,9 @@ class TestInheritanceChain:
             EventQueueError,
             EventDeliveryError,
         ]:
-            assert issubclass(cls, EventError), f"{cls.__name__} must subclass EventError"
+            assert issubclass(cls, EventError), (
+                f"{cls.__name__} must subclass EventError"
+            )
 
     def test_all_are_exceptions(self):
         for cls in [

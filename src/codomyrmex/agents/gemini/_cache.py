@@ -30,9 +30,7 @@ class GeminiCacheMixin:
             config = types.CreateCachedContentConfig(
                 contents=contents, ttl=ttl, display_name=display_name
             )
-            return self.client.caches.create(
-                model=model, config=config
-            ).model_dump()
+            return self.client.caches.create(model=model, config=config).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error("Failed to create cached content: %s", e)
             raise GeminiError(f"Failed to create cached content: {e}") from e

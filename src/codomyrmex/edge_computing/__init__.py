@@ -32,6 +32,8 @@ from .infrastructure import (
     HealthMonitor,
     InvocationRecord,
 )
+from .node import AsyncEdgeNode
+from .orchestrator import AsyncEdgeOrchestrator
 from .scheduling import EdgeScheduler, ScheduledJob, ScheduleType
 
 # Shared schemas for cross-module interop
@@ -70,13 +72,13 @@ def cli_commands():
 
 
 __all__ = [
+    "AsyncEdgeNode",
+    "AsyncEdgeOrchestrator",
     "CacheEntry",
-    # Deployment strategies
     "DeploymentManager",
     "DeploymentPlan",
     "DeploymentState",
     "DeploymentStrategy",
-    # Cache
     "EdgeCache",
     "EdgeCluster",
     "EdgeExecutionError",
@@ -85,11 +87,9 @@ __all__ = [
     "EdgeNode",
     "EdgeNodeStatus",
     "EdgeRuntime",
-    # Scheduler
     "EdgeScheduler",
     "EdgeSynchronizer",
     "HealthCheck",
-    # Health monitoring
     "HealthMonitor",
     "InvocationRecord",
     "ScheduleType",

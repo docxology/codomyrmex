@@ -256,7 +256,9 @@ class TestInMemoryIndexBehavior:
         idx = InMemoryIndex()
         idx.index(Document(id="d1", content="Python is a great programming language"))
         idx.index(Document(id="d2", content="Java is another programming language"))
-        idx.index(Document(id="d3", content="Machine learning with Python and TensorFlow"))
+        idx.index(
+            Document(id="d3", content="Machine learning with Python and TensorFlow")
+        )
         return idx
 
     def test_count_reflects_indexed_documents(self):

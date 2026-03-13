@@ -1,6 +1,3 @@
-
-
-
 class PipelineValidationMixin:
     """Mixin for pipeline, stage, and job validation logic."""
 

@@ -679,7 +679,9 @@ eval(input("Enter code: "))  # Code injection
                 "categories": test_data["categories"],
                 "values": test_data["metrics"],
             }
-            chart = create_bar_chart(viz_data["categories"], viz_data["values"], "Consistency Test")
+            chart = create_bar_chart(
+                viz_data["categories"], viz_data["values"], "Consistency Test"
+            )
             results["visualization"] = chart is not None
 
         # All modules that were tested should have produced valid results

@@ -53,7 +53,9 @@ class RouterMixin:
         """Add a subnet interface to a router."""
         try:
             self._conn.network.add_interface_to_router(router_id, subnet_id=subnet_id)
-            logger.info("Added interface for subnet %s to router %s", subnet_id, router_id)
+            logger.info(
+                "Added interface for subnet %s to router %s", subnet_id, router_id
+            )
             return True
         except Exception as e:
             logger.error("Failed to add interface to router %s: %s", router_id, e)

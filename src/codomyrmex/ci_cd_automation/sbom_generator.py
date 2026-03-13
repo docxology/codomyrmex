@@ -85,7 +85,15 @@ class SBOMGenerator:
             if in_deps and stripped.startswith('"'):
                 # Parse dependency line like "click>=8.0"
                 dep = stripped.strip('",').strip()
-                name = dep.split(">=")[0].split("<=")[0].split("==")[0].split(">")[0].split("<")[0].split("!=")[0].strip()
+                name = (
+                    dep.split(">=")[0]
+                    .split("<=")[0]
+                    .split("==")[0]
+                    .split(">")[0]
+                    .split("<")[0]
+                    .split("!=")[0]
+                    .strip()
+                )
                 version = "unknown"
                 for sep in (">=", "==", "<=", ">", "<"):
                     if sep in dep:
@@ -114,11 +122,13 @@ class SBOMGenerator:
             elif stripped.startswith("version = ") and current_name:
                 current_version = stripped.split('"')[1] if '"' in stripped else ""
                 if current_name and current_version and current_name != "codomyrmex":
-                    components.append(SBOMComponent(
-                        name=current_name,
-                        version=current_version,
-                        scope="required",
-                    ))
+                    components.append(
+                        SBOMComponent(
+                            name=current_name,
+                            version=current_version,
+                            scope="required",
+                        )
+                    )
                 current_name = ""
                 current_version = ""
 

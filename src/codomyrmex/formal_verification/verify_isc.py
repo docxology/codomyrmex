@@ -324,5 +324,3 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
     # If the description contains multiple metrics, this regex approach is limited.
 
     return None
-
-

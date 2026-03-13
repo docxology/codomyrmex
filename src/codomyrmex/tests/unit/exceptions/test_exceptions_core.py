@@ -308,12 +308,16 @@ class TestNetworkExceptions:
         assert err.context["method"] == "POST"
 
     def test_validation_error_stores_field_and_rule(self):
-        err = ValidationError("invalid email", field_name="email", validation_rule="email_format")
+        err = ValidationError(
+            "invalid email", field_name="email", validation_rule="email_format"
+        )
         assert err.context["field_name"] == "email"
         assert err.context["validation_rule"] == "email_format"
 
     def test_schema_error_stores_schema_and_preview(self):
-        err = SchemaError("schema mismatch", schema_name="UserSchema", data_preview='{"name":null}')
+        err = SchemaError(
+            "schema mismatch", schema_name="UserSchema", data_preview='{"name":null}'
+        )
         assert err.context["schema_name"] == "UserSchema"
         assert err.context["data_preview"] == '{"name":null}'
 
@@ -385,7 +389,9 @@ class TestSpecializedExceptions:
         assert err.context["shell_name"] == "zsh"
 
     def test_database_error_stores_db_and_query(self):
-        err = DatabaseError("query failed", db_name="postgres", query="SELECT * FROM users")
+        err = DatabaseError(
+            "query failed", db_name="postgres", query="SELECT * FROM users"
+        )
         assert err.context["db_name"] == "postgres"
         assert err.context["query"] == "SELECT * FROM users"
 
@@ -395,7 +401,9 @@ class TestSpecializedExceptions:
         assert err.context["stage"] == "test"
 
     def test_deployment_error_stores_env_and_version(self):
-        err = DeploymentError("rollout failed", environment="production", version="2.1.0")
+        err = DeploymentError(
+            "rollout failed", environment="production", version="2.1.0"
+        )
         assert err.context["environment"] == "production"
         assert err.context["version"] == "2.1.0"
 
@@ -421,7 +429,9 @@ class TestSpecializedExceptions:
         assert err.context["coordinate_system"] == "WGS84"
 
     def test_event_error_stores_type_and_id(self):
-        err = EventError("dispatch failed", event_type="UserCreated", event_id="evt-999")
+        err = EventError(
+            "dispatch failed", event_type="UserCreated", event_id="evt-999"
+        )
         assert err.context["event_type"] == "UserCreated"
         assert err.context["event_id"] == "evt-999"
 
@@ -434,12 +444,16 @@ class TestSpecializedExceptions:
         assert err.context["template_name"] == "report.html.j2"
 
     def test_plugin_error_stores_name_and_version(self):
-        err = PluginError("load failed", plugin_name="auth-plugin", plugin_version="0.3.2")
+        err = PluginError(
+            "load failed", plugin_name="auth-plugin", plugin_version="0.3.2"
+        )
         assert err.context["plugin_name"] == "auth-plugin"
         assert err.context["plugin_version"] == "0.3.2"
 
     def test_authentication_error_stores_identity_and_mechanism(self):
-        err = AuthenticationError("denied", identity="user@example.com", mechanism="oauth2")
+        err = AuthenticationError(
+            "denied", identity="user@example.com", mechanism="oauth2"
+        )
         assert err.context["identity"] == "user@example.com"
         assert err.context["mechanism"] == "oauth2"
 
@@ -461,7 +475,9 @@ class TestSpecializedExceptions:
         assert err.context["algorithm"] == "lzma"
 
     def test_encryption_error_stores_algorithm_and_key_id(self):
-        err = EncryptionError("decrypt failed", algorithm="AES-256-GCM", key_id="key-abc")
+        err = EncryptionError(
+            "decrypt failed", algorithm="AES-256-GCM", key_id="key-abc"
+        )
         assert err.context["algorithm"] == "AES-256-GCM"
         assert err.context["key_id"] == "key-abc"
 
@@ -471,7 +487,9 @@ class TestSpecializedExceptions:
         assert err.context["backend"] == "redis"
 
     def test_serialization_error_stores_format_and_data_type(self):
-        err = SerializationError("encode failed", format_type="json", data_type="UserModel")
+        err = SerializationError(
+            "encode failed", format_type="json", data_type="UserModel"
+        )
         assert err.context["format_type"] == "json"
         assert err.context["data_type"] == "UserModel"
 

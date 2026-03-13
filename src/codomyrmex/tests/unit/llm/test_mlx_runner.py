@@ -89,9 +89,7 @@ class TestMLXGenerationResult:
     def test_metadata_default_empty(self):
         from codomyrmex.llm.mlx.runner import MLXGenerationResult
 
-        r = MLXGenerationResult(
-            model="m", prompt="p", response="r", execution_time=0.0
-        )
+        r = MLXGenerationResult(model="m", prompt="p", response="r", execution_time=0.0)
         assert r.metadata == {}
 
     def test_metadata_custom(self):
@@ -139,11 +137,13 @@ class TestMessageFormatting:
         assert result == "User: data"
 
     def test_multi_turn_separated(self):
-        result = self._format([
-            {"role": "system", "content": "sys"},
-            {"role": "user", "content": "q"},
-            {"role": "assistant", "content": "a"},
-        ])
+        result = self._format(
+            [
+                {"role": "system", "content": "sys"},
+                {"role": "user", "content": "q"},
+                {"role": "assistant", "content": "a"},
+            ]
+        )
         parts = result.split("\n\n")
         assert len(parts) == 3
 
@@ -277,9 +277,11 @@ class TestMLXRunnerIntegration:
 
         cfg = MLXConfig(max_tokens=30)
         runner = MLXRunner(cfg)
-        result = runner.chat([
-            {"role": "user", "content": "What is 2+2? Reply with just the number."},
-        ])
+        result = runner.chat(
+            [
+                {"role": "user", "content": "What is 2+2? Reply with just the number."},
+            ]
+        )
         assert result.success is True
         assert len(result.response) > 0
         runner.unload_model()

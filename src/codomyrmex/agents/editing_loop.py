@@ -167,8 +167,10 @@ class EditingOrchestrator:
 
         logger.info(
             "EditingOrchestrator initialized: planner=%s, reviewer=%s/%s, channel=%s",
-            self.config.ollama_model, self.config.review_provider,
-            self.config.review_model, channel,
+            self.config.ollama_model,
+            self.config.review_provider,
+            self.config.review_model,
+            channel,
         )
 
     # ── Public API ───────────────────────────────────────────────────
@@ -191,7 +193,9 @@ class EditingOrchestrator:
             task.iterations_used = iteration
             logger.info(
                 "[EditLoop] Task '%s' — iteration %s/%s",
-                task.description[:50], iteration, self.config.max_iterations,
+                task.description[:50],
+                iteration,
+                self.config.max_iterations,
             )
 
             # 1. Plan

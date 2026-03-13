@@ -82,7 +82,9 @@ class OllamaAsyncExecutionMixin:
                         tokens_used = data.get("eval_count")
 
                         self.logger.info(
-                            "[ASYNC] Model %s completed in %.2fs", model_name, execution_time
+                            "[ASYNC] Model %s completed in %.2fs",
+                            model_name,
+                            execution_time,
                         )
 
                         return ModelExecutionResult(
@@ -97,7 +99,9 @@ class OllamaAsyncExecutionMixin:
                         )
                     error_text = await response.text()
                     error_msg = f"HTTP {response.status}: {error_text}"
-                    self.logger.error("[ASYNC] Model %s failed: %s", model_name, error_msg)
+                    self.logger.error(
+                        "[ASYNC] Model %s failed: %s", model_name, error_msg
+                    )
 
                     return ModelExecutionResult(
                         model_name=model_name,
@@ -205,7 +209,9 @@ class OllamaAsyncExecutionMixin:
                         tokens_used = data.get("eval_count")
 
                         self.logger.info(
-                            "[ASYNC] Chat with %s completed in %.2fs", model_name, execution_time
+                            "[ASYNC] Chat with %s completed in %.2fs",
+                            model_name,
+                            execution_time,
                         )
 
                         # Format the prompt as the conversation for logging

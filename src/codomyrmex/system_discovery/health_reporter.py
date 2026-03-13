@@ -59,7 +59,9 @@ class HealthMetrics:
         """Overall health score (0.0–100.0)."""
         if self.total_modules == 0:
             return 0.0
-        doc_score = (self.healthy_count * 100 + self.partial_count * 50) / self.total_modules
+        doc_score = (
+            self.healthy_count * 100 + self.partial_count * 50
+        ) / self.total_modules
         test_penalty = min(30, self.modules_without_tests * 0.3)
         cycle_penalty = min(20, self.cycle_count * 2)
         return max(0.0, min(100.0, doc_score - test_penalty - cycle_penalty))
@@ -104,8 +106,7 @@ class HealthReporter:
         # Build metrics
         health_dist = intro_report["health_distribution"]
         modules_no_tests = [
-            m for m in intro_report["modules"]
-            if not m["has_tests"] and m["loc"] > 100
+            m for m in intro_report["modules"] if not m["has_tests"] and m["loc"] > 100
         ]
 
         metrics = HealthMetrics(
@@ -117,9 +118,12 @@ class HealthReporter:
             cycle_count=dep_report["cycle_count"],
             modules_without_tests=len(modules_no_tests),
             top_imported=dep_report["top_imported"][:5],
-            largest_modules=[(m["name"], m["loc"]) for m in sorted(
-                intro_report["modules"], key=lambda x: x["loc"], reverse=True
-            )[:10]],
+            largest_modules=[
+                (m["name"], m["loc"])
+                for m in sorted(
+                    intro_report["modules"], key=lambda x: x["loc"], reverse=True
+                )[:10]
+            ],
             mcp_tool_count=intro_report["total_mcp_tools"],
             total_classes=intro_report["total_classes"],
             total_functions=intro_report["total_functions"],
@@ -161,30 +165,38 @@ class HealthReporter:
         recs: list[dict[str, str]] = []
 
         if metrics.cycle_count > 0:
-            recs.append({
-                "severity": "warning",
-                "category": "architecture",
-                "message": f"{metrics.cycle_count} circular dependencies detected. "
-                           "Consider extracting shared interfaces.",
-            })
+            recs.append(
+                {
+                    "severity": "warning",
+                    "category": "architecture",
+                    "message": f"{metrics.cycle_count} circular dependencies detected. "
+                    "Consider extracting shared interfaces.",
+                }
+            )
 
         if metrics.modules_without_tests > 50:
-            top_untested = sorted(modules_no_tests, key=lambda m: m["loc"], reverse=True)[:5]
+            top_untested = sorted(
+                modules_no_tests, key=lambda m: m["loc"], reverse=True
+            )[:5]
             names = ", ".join(m["name"] for m in top_untested)
-            recs.append({
-                "severity": "info",
-                "category": "testing",
-                "message": f"{metrics.modules_without_tests} modules >100 LOC lack tests. "
-                           f"Priority: {names}",
-            })
+            recs.append(
+                {
+                    "severity": "info",
+                    "category": "testing",
+                    "message": f"{metrics.modules_without_tests} modules >100 LOC lack tests. "
+                    f"Priority: {names}",
+                }
+            )
 
         if metrics.healthy_count < metrics.total_modules * 0.1:
-            recs.append({
-                "severity": "info",
-                "category": "documentation",
-                "message": f"Only {metrics.healthy_count}/{metrics.total_modules} modules at "
-                           "'healthy' doc status. Add SPEC.md to boost health scores.",
-            })
+            recs.append(
+                {
+                    "severity": "info",
+                    "category": "documentation",
+                    "message": f"Only {metrics.healthy_count}/{metrics.total_modules} modules at "
+                    "'healthy' doc status. Add SPEC.md to boost health scores.",
+                }
+            )
 
         return recs
 

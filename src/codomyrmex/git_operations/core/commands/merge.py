@@ -31,7 +31,9 @@ def merge_branch(
     try:
         logger.info(
             "Merging branch '%s' into '%s' in %s",
-            source_branch, target_branch, repository_path,
+            source_branch,
+            target_branch,
+            repository_path,
         )
 
         # Switch to target branch first
@@ -46,8 +48,12 @@ def merge_branch(
         cmd.append(source_branch)
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
-        timeout=_GIT_TIMEOUT,
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Successfully merged '%s' into '%s'", source_branch, target_branch)
@@ -75,7 +81,9 @@ def rebase_branch(
         current_branch = get_current_branch(repository_path)
         logger.info(
             "Rebasing branch '%s' onto '%s' in %s",
-            current_branch, target_branch, repository_path,
+            current_branch,
+            target_branch,
+            repository_path,
         )
 
         cmd = ["git", "rebase"]
@@ -84,11 +92,17 @@ def rebase_branch(
         cmd.append(target_branch)
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
-        timeout=_GIT_TIMEOUT,
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
         )
 
-        logger.info("Successfully rebased '%s' onto '%s'", current_branch, target_branch)
+        logger.info(
+            "Successfully rebased '%s' onto '%s'", current_branch, target_branch
+        )
         return True
 
     except subprocess.CalledProcessError as e:

@@ -94,9 +94,7 @@ class TestEvent:
             source="deployer",
             data={"success": True},
         )
-        json_str = json.dumps(
-            {**original.to_dict(), "event_id": original.event_id}
-        )
+        json_str = json.dumps({**original.to_dict(), "event_id": original.event_id})
         recovered = Event.from_json(json_str)
         assert recovered.event_type == EventType.DEPLOY_COMPLETE
 
@@ -357,7 +355,9 @@ class TestEventBus:
             received.append,
             filter_func=lambda e: e.data.get("pass") is True,
         )
-        bus.publish(Event(event_type=EventType.CUSTOM, source="t", data={"pass": False}))
+        bus.publish(
+            Event(event_type=EventType.CUSTOM, source="t", data={"pass": False})
+        )
         bus.publish(Event(event_type=EventType.CUSTOM, source="t", data={"pass": True}))
         assert len(received) == 1
         assert received[0].data["pass"] is True

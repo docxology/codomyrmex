@@ -10,11 +10,14 @@ try:
         MsgpackSerializer,
         ParquetSerializer,
     )
+
     BINARY_AVAILABLE = True
 except ImportError:
     BINARY_AVAILABLE = False
 
-pytestmark = pytest.mark.skipif(not BINARY_AVAILABLE, reason="Binary formats not available")
+pytestmark = pytest.mark.skipif(
+    not BINARY_AVAILABLE, reason="Binary formats not available"
+)
 
 # JSON-compatible primitives for msgpack
 json_primitives = st.one_of(
@@ -36,12 +39,16 @@ json_values = st.recursive(
 )
 
 # Fixed schema rows for Parquet and Avro
-row_strategy = st.fixed_dictionaries({
-    "id": st.integers(min_value=1, max_value=10000),
-    "name": st.text(min_size=1, max_size=50),
-    "score": st.floats(min_value=0.0, max_value=100.0, allow_nan=False, allow_infinity=False),
-    "active": st.booleans(),
-})
+row_strategy = st.fixed_dictionaries(
+    {
+        "id": st.integers(min_value=1, max_value=10000),
+        "name": st.text(min_size=1, max_size=50),
+        "score": st.floats(
+            min_value=0.0, max_value=100.0, allow_nan=False, allow_infinity=False
+        ),
+        "active": st.booleans(),
+    }
+)
 dataset_strategy = st.lists(row_strategy, min_size=1, max_size=20)
 
 
@@ -91,7 +98,7 @@ class TestAvroFuzzing:
             {"name": "name", "type": "string"},
             {"name": "score", "type": "double"},
             {"name": "active", "type": "boolean"},
-        ]
+        ],
     }
 
     @given(dataset=dataset_strategy)

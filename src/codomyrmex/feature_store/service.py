@@ -44,7 +44,9 @@ class FeatureTransform:
                 try:
                     transformed[name] = self._transforms[name](value)
                 except Exception as e:
-                    logger.error("Error applying transform to feature '%s': %s", name, e)
+                    logger.error(
+                        "Error applying transform to feature '%s': %s", name, e
+                    )
                     transformed[name] = value
             else:
                 transformed[name] = value
@@ -118,7 +120,10 @@ class FeatureService:
                 self.store.set_value(name, entity_id, value)
             except FeatureStoreError as e:
                 logger.error(
-                    "Error ingesting feature '%s' for entity '%s': %s", name, entity_id, e
+                    "Error ingesting feature '%s' for entity '%s': %s",
+                    name,
+                    entity_id,
+                    e,
                 )
                 raise
 

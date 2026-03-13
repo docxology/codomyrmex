@@ -5,7 +5,6 @@ JulesError, ClaudeError (with is_retryable), CodexError, OpenCodeError, GeminiEr
 MistralVibeError, and all other provider-specific exceptions.
 """
 
-
 from codomyrmex.agents.core.exceptions import (
     AgentConfigurationError,
     AgentError,
@@ -209,7 +208,9 @@ class TestExceptionHierarchy:
             MistralVibeError,
         ]:
             e = exc_cls()
-            assert isinstance(e, AgentError), f"{exc_cls.__name__} should inherit AgentError"
+            assert isinstance(e, AgentError), (
+                f"{exc_cls.__name__} should inherit AgentError"
+            )
 
     def test_all_have_context_dict(self):
         """All agent exceptions should have a context attribute."""

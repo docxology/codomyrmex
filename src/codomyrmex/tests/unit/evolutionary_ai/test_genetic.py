@@ -62,7 +62,7 @@ def test_optimize_config_convergence():
     def evaluate(config: dict[str, float]) -> float:
         x = config["x"]
         y = config["y"]
-        return float(-(x - 5.0)**2 - (y - 10.0)**2 + 100.0)
+        return float(-((x - 5.0) ** 2) - (y - 10.0) ** 2 + 100.0)
 
     # Run for 30 generations
     best_chromosome = optimize_config(

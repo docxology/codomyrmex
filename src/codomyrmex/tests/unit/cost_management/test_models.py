@@ -45,8 +45,11 @@ class TestCostEntry:
 
     def test_to_dict(self):
         entry = CostEntry(
-            id="e1", amount=2.00, category=CostCategory.COMPUTE,
-            description="EC2 instance", resource_id="i-abc123"
+            id="e1",
+            amount=2.00,
+            category=CostCategory.COMPUTE,
+            description="EC2 instance",
+            resource_id="i-abc123",
         )
         d = entry.to_dict()
         assert d["id"] == "e1"
@@ -58,8 +61,11 @@ class TestCostEntry:
 
     def test_from_dict_roundtrip(self):
         entry = CostEntry(
-            id="e1", amount=3.00, category=CostCategory.STORAGE,
-            tags={"env": "prod"}, resource_id="vol-123"
+            id="e1",
+            amount=3.00,
+            category=CostCategory.STORAGE,
+            tags={"env": "prod"},
+            resource_id="vol-123",
         )
         d = entry.to_dict()
         restored = CostEntry.from_dict(d)
@@ -77,12 +83,12 @@ class TestCostEntry:
 
 class TestBudget:
     def _make_entry(self, category=CostCategory.COMPUTE, tags=None) -> CostEntry:
-        return CostEntry(
-            id="e1", amount=1.0, category=category, tags=tags or {}
-        )
+        return CostEntry(id="e1", amount=1.0, category=category, tags=tags or {})
 
     def test_construction(self):
-        b = Budget(id="b1", name="Monthly Compute", amount=1000.0, period=BudgetPeriod.MONTHLY)
+        b = Budget(
+            id="b1", name="Monthly Compute", amount=1000.0, period=BudgetPeriod.MONTHLY
+        )
         assert b.id == "b1"
         assert b.amount == 1000.0
         assert b.alert_thresholds == [0.5, 0.8, 0.9, 1.0]
@@ -93,17 +99,35 @@ class TestBudget:
         assert b.is_match(entry) is True
 
     def test_is_match_category_filter_match(self):
-        b = Budget(id="b1", name="Compute", amount=100.0, period=BudgetPeriod.DAILY, category=CostCategory.COMPUTE)
+        b = Budget(
+            id="b1",
+            name="Compute",
+            amount=100.0,
+            period=BudgetPeriod.DAILY,
+            category=CostCategory.COMPUTE,
+        )
         entry = self._make_entry(category=CostCategory.COMPUTE)
         assert b.is_match(entry) is True
 
     def test_is_match_category_filter_no_match(self):
-        b = Budget(id="b1", name="LLM", amount=100.0, period=BudgetPeriod.DAILY, category=CostCategory.LLM_INFERENCE)
+        b = Budget(
+            id="b1",
+            name="LLM",
+            amount=100.0,
+            period=BudgetPeriod.DAILY,
+            category=CostCategory.LLM_INFERENCE,
+        )
         entry = self._make_entry(category=CostCategory.COMPUTE)
         assert b.is_match(entry) is False
 
     def test_is_match_tags_filter(self):
-        b = Budget(id="b1", name="Prod", amount=100.0, period=BudgetPeriod.DAILY, tags_filter={"env": "prod"})
+        b = Budget(
+            id="b1",
+            name="Prod",
+            amount=100.0,
+            period=BudgetPeriod.DAILY,
+            tags_filter={"env": "prod"},
+        )
         entry_match = self._make_entry(tags={"env": "prod", "team": "ml"})
         entry_no_match = self._make_entry(tags={"env": "dev"})
         assert b.is_match(entry_match) is True
@@ -188,16 +212,17 @@ class TestBudgetAlert:
 
     def test_message_contains_id(self):
         alert = BudgetAlert(
-            budget_id="monthly-compute", threshold=0.9,
-            current_spend=900.0, budget_amount=1000.0
+            budget_id="monthly-compute",
+            threshold=0.9,
+            current_spend=900.0,
+            budget_amount=1000.0,
         )
         assert "monthly-compute" in alert.message
         assert "90%" in alert.message
 
     def test_message_contains_amounts(self):
         alert = BudgetAlert(
-            budget_id="b1", threshold=0.5,
-            current_spend=50.0, budget_amount=100.0
+            budget_id="b1", threshold=0.5, current_spend=50.0, budget_amount=100.0
         )
         assert "$50.00" in alert.message
         assert "$100.00" in alert.message

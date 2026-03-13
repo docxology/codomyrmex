@@ -74,7 +74,11 @@ class TestStores:
 
     def test_in_memory_store_has_methods(self) -> None:
         store = am.InMemoryStore()
-        public = [m for m in dir(store) if not m.startswith("_") and callable(getattr(store, m))]
+        public = [
+            m
+            for m in dir(store)
+            if not m.startswith("_") and callable(getattr(store, m))
+        ]
         assert len(public) > 0
 
     def test_json_file_store_callable(self) -> None:

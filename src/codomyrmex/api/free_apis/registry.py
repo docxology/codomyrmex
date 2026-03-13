@@ -125,7 +125,10 @@ class FreeAPIRegistry:
         """
         req = urllib.request.Request(
             _JSON_API_URL,
-            headers={"Accept": "application/json", "User-Agent": "codomyrmex/free_apis"},
+            headers={
+                "Accept": "application/json",
+                "User-Agent": "codomyrmex/free_apis",
+            },
         )
         with urllib.request.urlopen(req, timeout=self.timeout) as response:
             raw = response.read().decode("utf-8")
@@ -133,7 +136,9 @@ class FreeAPIRegistry:
         data: dict[str, Any] = json.loads(raw)
         raw_entries = data.get("entries")
         if not isinstance(raw_entries, list):
-            raise ValueError("Unexpected JSON shape: 'entries' key missing or not a list")
+            raise ValueError(
+                "Unexpected JSON shape: 'entries' key missing or not a list"
+            )
 
         return [APIEntry.from_dict(e) for e in raw_entries]
 
@@ -280,7 +285,13 @@ def _row_to_entry(parts: list[str], category: str) -> APIEntry | None:
     """Convert a split table row into an APIEntry, or None if invalid."""
     if len(parts) < 6:
         return None
-    name_raw, desc, auth, https_raw, cors = parts[1], parts[2], parts[3], parts[4], parts[5]
+    name_raw, desc, auth, https_raw, cors = (
+        parts[1],
+        parts[2],
+        parts[3],
+        parts[4],
+        parts[5],
+    )
     if name_raw.lower() in ("api", "name") or "---" in name_raw:
         return None
     name, link = _extract_name_and_link(name_raw)

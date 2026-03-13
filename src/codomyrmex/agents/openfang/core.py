@@ -1,4 +1,5 @@
 """OpenFangRunner — subprocess wrapper for the openfang binary."""
+
 from __future__ import annotations
 
 import shutil
@@ -19,7 +20,9 @@ class OpenFangRunner:
     This keeps the MCP tool layer consistent and agnostic to upstream CLI churn.
     """
 
-    def __init__(self, timeout: int | None = None, config: OpenFangConfig | None = None) -> None:
+    def __init__(
+        self, timeout: int | None = None, config: OpenFangConfig | None = None
+    ) -> None:
         self._config = config or get_config()
         self._timeout = timeout if timeout is not None else self._config.timeout
         self._cmd_path = self._find_openfang()
@@ -84,13 +87,26 @@ class OpenFangRunner:
     def send_message(self, channel: str, target: str, message: str) -> dict[str, str]:
         """Send a message via a channel adapter (e.g. telegram, slack)."""
         return self._run(
-            ["message", "send", "--channel", channel, "--to", target, "--message", message]
+            [
+                "message",
+                "send",
+                "--channel",
+                channel,
+                "--to",
+                target,
+                "--message",
+                message,
+            ]
         )
 
     def gateway_action(self, action: str) -> dict[str, str]:
         """Control the openfang WebSocket gateway: start | stop | status."""
         if action not in {"start", "stop", "status"}:
-            return {"stdout": "", "stderr": f"Unknown action: {action}", "returncode": "1"}
+            return {
+                "stdout": "",
+                "stderr": f"Unknown action: {action}",
+                "returncode": "1",
+            }
         return self._run(["gateway", action])
 
     def doctor(self) -> dict[str, str]:

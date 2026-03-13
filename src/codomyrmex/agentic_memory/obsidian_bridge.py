@@ -83,14 +83,16 @@ class ObsidianMemoryBridge:
 
                             # Update vector if applicable
                             if self.memory.vector_store and self.memory._embedder:
-                                embedding = self.memory._embedder.encode(content).tolist()
+                                embedding = self.memory._embedder.encode(
+                                    content
+                                ).tolist()
                                 self.memory.vector_store.add(
                                     id=mem.id,
                                     embedding=embedding,
                                     metadata={
                                         "importance": mem.importance.value,
-                                        "type": mem.memory_type.value
-                                    }
+                                        "type": mem.memory_type.value,
+                                    },
                                 )
                             stats["updated"] += 1
                         else:
@@ -103,7 +105,7 @@ class ObsidianMemoryBridge:
                             content,
                             memory_type=MemoryType.SEMANTIC,
                             importance=importance,
-                            metadata=meta
+                            metadata=meta,
                         )
                         set_frontmatter(self.vault, name, {"agentic_id": new_mem.id})
                         stats["added"] += 1
@@ -113,7 +115,7 @@ class ObsidianMemoryBridge:
                         content,
                         memory_type=MemoryType.SEMANTIC,
                         importance=importance,
-                        metadata=meta
+                        metadata=meta,
                     )
                     set_frontmatter(self.vault, name, {"agentic_id": new_mem.id})
                     stats["added"] += 1
@@ -160,8 +162,11 @@ class ObsidianMemoryBridge:
                 # We can use the first few words or ID if too short
                 words = mem.content.split()[:5]
                 if words:
-                    title_slug = "-".join(w.lower() for w in words).replace(
-                        ".", "").replace(",", "")
+                    title_slug = (
+                        "-".join(w.lower() for w in words)
+                        .replace(".", "")
+                        .replace(",", "")
+                    )
                     safe_title = f"{title_slug}-{mem.id[:6]}"
                 else:
                     safe_title = f"Memory-{mem.id[:8]}"
@@ -172,7 +177,7 @@ class ObsidianMemoryBridge:
                     "agentic_id": mem.id,
                     "importance": mem.importance.value,
                     "memory_type": mem.memory_type.value,
-                    "source": "agentic_memory"
+                    "source": "agentic_memory",
                 }
 
                 # Tags
@@ -184,12 +189,7 @@ class ObsidianMemoryBridge:
                     if k not in fm and isinstance(v, (str, int, float, bool, list)):
                         fm[k] = v
 
-                create_note(
-                    self.vault,
-                    path,
-                    content=mem.content,
-                    frontmatter=fm
-                )
+                create_note(self.vault, path, content=mem.content, frontmatter=fm)
                 stats["created"] += 1
 
             except Exception as e:
@@ -209,7 +209,4 @@ class ObsidianMemoryBridge:
         self.vault.refresh()
         ingest_stats = self.ingest_vault()
 
-        return {
-            "export": export_stats,
-            "ingest": ingest_stats
-        }
+        return {"export": export_stats, "ingest": ingest_stats}

@@ -8,6 +8,7 @@ Install openfang binary:
 Or build from vendor submodule:
     uv run python -c "from codomyrmex.agents.openfang.update import build_and_install; build_and_install()"
 """
+
 import shutil
 
 __version__ = "1.0.0"

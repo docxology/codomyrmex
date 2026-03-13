@@ -17,7 +17,6 @@ def _get_cluster():
     return EdgeCluster()
 
 
-
 @mcp_tool(
     category="edge_computing",
     description="Get edge cluster health status including node counts and function deployments.",

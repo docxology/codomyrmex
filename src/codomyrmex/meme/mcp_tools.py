@@ -153,3 +153,95 @@ def meme_synthesize(fragments: list[str], separator: str = " ") -> dict[str, Any
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="meme",
+    description="Analyze a body of text for viral meme markers, archetypes, and narrative tension.",
+)
+def analyze_narrative(corpus: str) -> dict[str, Any]:
+    """Analyzes a body of text for narrative structures and viral markers.
+
+    Uses the NarrativeEngine to extract archetypes, themes, and
+    cultural resonance from the corpus. Also flags if any known viral
+    memes are present.
+
+    Args:
+        corpus: The body of text to analyze.
+
+    Returns:
+        dict with keys: status, theme, characters, resonance, viral_matches.
+    """
+    try:
+        if not corpus or not corpus.strip():
+            return {"status": "error", "message": "corpus must not be empty"}
+
+        engine = _get_narrative_engine()
+        narrative = engine.analyze(corpus)
+
+        # Check against active viral memes
+        corpus_lower = corpus.lower()
+        matches = [
+            meme["concept"]
+            for meme in _ACTIVE_VIRAL_MEMES
+            if str(meme["concept"]).lower() in corpus_lower
+        ]
+
+        return {
+            "status": "success",
+            "title": narrative.title,
+            "theme": narrative.theme,
+            "characters": {k: str(v.name) for k, v in narrative.characters.items()},
+            "resonance": narrative.cultural_resonance,
+            "viral_matches": matches,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="meme",
+    description="Registers an informational marker propagating to narrative listeners.",
+)
+def broadcast_meme(concept: str, virulence: float = 0.5) -> dict[str, Any]:
+    """Broadcasts a meme into the global ecosystem, making it viral.
+
+    Registers the concept string as an active viral marker along with
+    its virulence weight. Narrative analysis tools will detect its presence.
+
+    Args:
+        concept: The narrative concept or phrase to broadcast.
+        virulence: The transmission probability weight (0.0 to 1.0).
+
+    Returns:
+        dict with keys: status, registered, concept, current_viral_pool_size.
+    """
+    try:
+        if not concept or not concept.strip():
+            return {"status": "error", "message": "concept must not be empty"}
+
+        virulence = max(0.0, min(1.0, virulence))
+
+        global _ACTIVE_VIRAL_MEMES
+
+        # Avoid duplicate precise strings, update virulence if exists
+        updated = False
+        for m in _ACTIVE_VIRAL_MEMES:
+            if m["concept"] == concept:
+                m["virulence"] = virulence
+                updated = True
+                break
+
+        if not updated:
+            _ACTIVE_VIRAL_MEMES.append({"concept": concept, "virulence": virulence})
+
+        return {
+            "status": "success",
+            "registered": True,
+            "updated": updated,
+            "concept": concept,
+            "virulence": virulence,
+            "current_viral_pool_size": len(_ACTIVE_VIRAL_MEMES),
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

@@ -106,7 +106,9 @@ class TestVisualizationPerformanceWorkflow:
 
         # Test bar chart creation
         bar_data = {"categories": ["A", "B", "C"], "values": [10, 20, 15]}
-        bar_result = create_bar_chart(bar_data["categories"], bar_data["values"], "Test Bar Chart")
+        bar_result = create_bar_chart(
+            bar_data["categories"], bar_data["values"], "Test Bar Chart"
+        )
 
         assert bar_result is not None
         assert isinstance(bar_result, mpl.figure.Figure)
@@ -311,7 +313,9 @@ class TestVisualizationPerformanceWorkflow:
             }
             import matplotlib.figure
 
-            chart = create_bar_chart(viz_data["categories"], viz_data["values"], "Performance Chart")
+            chart = create_bar_chart(
+                viz_data["categories"], viz_data["values"], "Performance Chart"
+            )
             assert isinstance(chart, matplotlib.figure.Figure)
 
         if PERFORMANCE_AVAILABLE:

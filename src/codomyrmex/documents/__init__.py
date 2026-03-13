@@ -18,6 +18,7 @@ Integration:
 - Uses `logging_monitoring` for all logging
 - Relies on `environment_setup` for environment validation
 """
+
 import contextlib
 
 __version__ = "0.1.0"

@@ -15,9 +15,11 @@ from codomyrmex.cache.namespaced import NamespacedCache
 def base_cache():
     return InMemoryCache()
 
+
 @pytest.fixture
 def ns_cache(base_cache):
     return NamespacedCache(base_cache, "ns")
+
 
 @pytest.mark.unit
 class TestNamespacedCacheExtended:

@@ -78,7 +78,9 @@ class NaturalRitualRecovery:
             raise RitualError("Ritual must have at least one step")
         self._rituals[user_id] = steps
         self._attempt_counts[user_id] = 0
-        logger.info("Registered natural ritual for %s with %s steps", user_id, len(steps))
+        logger.info(
+            "Registered natural ritual for %s with %s steps", user_id, len(steps)
+        )
 
     def has_ritual(self, user_id: str) -> bool:
         """Check if a user has a registered ritual.
@@ -175,7 +177,9 @@ class NaturalRitualRecovery:
         for i, (step, response) in enumerate(zip(steps, responses, strict=False)):
             response_hash = hashlib.sha256(response.encode()).hexdigest()
             if response_hash != step.expected_response_hash:
-                logger.warning("Ritual failed at step %s: 'The memory was false'", i + 1)
+                logger.warning(
+                    "Ritual failed at step %s: 'The memory was false'", i + 1
+                )
                 return False
 
         logger.info("Natural Ritual completed successfully. Access granted.")

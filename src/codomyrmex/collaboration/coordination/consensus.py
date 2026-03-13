@@ -235,7 +235,9 @@ class VotingMechanism:
         del self._votes[proposal_id]
 
         logger.info(
-            "Voting complete: %s - %s", proposal_id, "PASSED" if passed else "REJECTED",
+            "Voting complete: %s - %s",
+            proposal_id,
+            "PASSED" if passed else "REJECTED",
         )
         return result
 
@@ -364,7 +366,9 @@ class ConsensusBuilder:
 
             await asyncio.sleep(0.1)  # Brief delay between rounds
 
-        logger.warning("Consensus not reached for '%s' after %s rounds", key, max_rounds)
+        logger.warning(
+            "Consensus not reached for '%s' after %s rounds", key, max_rounds
+        )
         return None
 
 

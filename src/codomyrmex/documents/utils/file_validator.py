@@ -48,7 +48,9 @@ def check_file_size(file_path: Path) -> bool:
     max_size = get_config().max_file_size
 
     if file_size > max_size:
-        logger.warning("File %s exceeds size limit: %s > %s", file_path, file_size, max_size)
+        logger.warning(
+            "File %s exceeds size limit: %s > %s", file_path, file_size, max_size
+        )
         return False
 
     return True

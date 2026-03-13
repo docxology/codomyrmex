@@ -25,8 +25,12 @@ def stash_changes(
             cmd.extend(["push", "-m", message])
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
-        timeout=_GIT_TIMEOUT,
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Changes stashed successfully")
@@ -58,8 +62,12 @@ def apply_stash(
             cmd.append(stash_ref)
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
-        timeout=_GIT_TIMEOUT,
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Stash applied successfully")
@@ -90,7 +98,7 @@ def list_stashes(repository_path: str | None = None) -> list[dict[str, str]]:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         stashes = []

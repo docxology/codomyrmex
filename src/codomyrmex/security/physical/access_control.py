@@ -79,7 +79,9 @@ class AccessControlSystem:
                 "timestamp": datetime.now().isoformat(),
             }
         )
-        logger.info("Granted %s access to %s for %s", permission_type, user_id, resource)
+        logger.info(
+            "Granted %s access to %s for %s", permission_type, user_id, resource
+        )
         return permission
 
     def revoke_access(self, user_id: str, resource: str) -> bool:

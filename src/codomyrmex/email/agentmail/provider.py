@@ -490,7 +490,9 @@ class AgentMailProvider(
             )
         except Exception as exc:
             logger.error(
-                "Unexpected error downloading AgentMail attachment %s: %s", attachment_id, exc
+                "Unexpected error downloading AgentMail attachment %s: %s",
+                attachment_id,
+                exc,
             )
             raise EmailAPIError(
                 f"Unexpected error downloading attachment {attachment_id}: {exc}"
@@ -525,7 +527,9 @@ class AgentMailProvider(
             raise
         except Exception as exc:
             logger.error(
-                "Unexpected error fetching raw AgentMail message %s: %s", message_id, exc
+                "Unexpected error fetching raw AgentMail message %s: %s",
+                message_id,
+                exc,
             )
             raise EmailAPIError(
                 f"Unexpected error fetching raw message {message_id}: {exc}"

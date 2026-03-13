@@ -8,6 +8,7 @@ from codomyrmex.coding.review.mixins.deadcode import DeadCodeMixin
 from codomyrmex.coding.review.mixins.refactoring import RefactoringMixin
 
 
-class AnalysisPatternsMixin(ArchitectureMixin, ComplexityMixin, DeadCodeMixin, RefactoringMixin):
+class AnalysisPatternsMixin(
+    ArchitectureMixin, ComplexityMixin, DeadCodeMixin, RefactoringMixin
+):
     """AnalysisPatternsMixin mixin providing analysis capabilities."""
-

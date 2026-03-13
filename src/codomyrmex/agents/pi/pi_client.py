@@ -15,7 +15,7 @@ import subprocess
 import threading
 import time
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Self
+from typing import TYPE_CHECKING, Any, Optional, Self
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -24,6 +24,7 @@ if TYPE_CHECKING:
 # Configuration
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class PiConfig:
     """Configuration for the Pi coding agent client."""
@@ -31,15 +32,15 @@ class PiConfig:
     provider: str = "google"
     model: str = ""
     api_key: str = ""
-    thinking: str = ""            # off | minimal | low | medium | high | xhigh
+    thinking: str = ""  # off | minimal | low | medium | high | xhigh
     tools: str = "read,bash,edit,write"
     session_dir: str = ""
     no_session: bool = False
     extra_args: list[str] = field(default_factory=list)
 
     # Process control
-    pi_bin: str = ""               # Override path to `pi` binary
-    cwd: str = ""                  # Working directory for the pi process
+    pi_bin: str = ""  # Override path to `pi` binary
+    cwd: str = ""  # Working directory for the pi process
     env: dict[str, str] = field(default_factory=dict)
     startup_timeout: float = 10.0  # Seconds to wait for pi to start
 
@@ -47,6 +48,7 @@ class PiConfig:
 # ---------------------------------------------------------------------------
 # Exception hierarchy
 # ---------------------------------------------------------------------------
+
 
 class PiError(Exception):
     """Base exception for Pi client errors."""
@@ -67,6 +69,7 @@ class PiTimeoutError(PiError):
 # ---------------------------------------------------------------------------
 # Client
 # ---------------------------------------------------------------------------
+
 
 class PiClient:
     """High-level client for the pi coding agent RPC protocol.
@@ -91,8 +94,13 @@ class PiClient:
         if config is None:
             config = PiConfig()
         elif isinstance(config, dict):
-            config = PiConfig(**{k: v for k, v in config.items()
-                                 if k in PiConfig.__dataclass_fields__})
+            config = PiConfig(
+                **{
+                    k: v
+                    for k, v in config.items()
+                    if k in PiConfig.__dataclass_fields__
+                }
+            )
         self._config: PiConfig = config
         self._proc: Optional[subprocess.Popen] = None
         self._reader_thread: Optional[threading.Thread] = None
@@ -159,9 +167,7 @@ class PiClient:
 
         # Start event reader thread
         self._events = []
-        self._reader_thread = threading.Thread(
-            target=self._read_events, daemon=True
-        )
+        self._reader_thread = threading.Thread(target=self._read_events, daemon=True)
         self._reader_thread.start()
 
         return self

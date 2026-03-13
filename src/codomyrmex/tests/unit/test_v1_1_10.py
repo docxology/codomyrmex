@@ -120,10 +120,12 @@ class TestDAGExporter:
         assert "flowchart TB" in mermaid
 
     def test_synthetic_dag(self) -> None:
-        dag = ModuleDAG(nodes={
-            "a": ModuleNode(name="a", file_count=5, loc=100, imports={"b"}),
-            "b": ModuleNode(name="b", file_count=3, loc=50, imports=set()),
-        })
+        dag = ModuleDAG(
+            nodes={
+                "a": ModuleNode(name="a", file_count=5, loc=100, imports={"b"}),
+                "b": ModuleNode(name="b", file_count=3, loc=50, imports=set()),
+            }
+        )
         mermaid = render_dag_mermaid(dag)
         assert "a -->" in mermaid
         assert "b" in mermaid
@@ -284,8 +286,13 @@ class TestModuleHealthProvider:
 
     def test_to_dict(self) -> None:
         health = ModuleHealth(
-            name="test_mod", file_count=10, loc=500,
-            test_count=3, has_readme=True, has_spec=True, has_agents=False,
+            name="test_mod",
+            file_count=10,
+            loc=500,
+            test_count=3,
+            has_readme=True,
+            has_spec=True,
+            has_agents=False,
         )
         d = health.to_dict()
         assert d["name"] == "test_mod"

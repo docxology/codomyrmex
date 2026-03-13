@@ -37,6 +37,7 @@ Quick Start:
     result.save("hello.mp3")
     ```
 """
+
 import contextlib
 
 __version__ = "0.1.0"

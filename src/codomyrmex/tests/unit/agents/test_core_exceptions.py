@@ -78,7 +78,9 @@ class TestAgentConfigurationError:
 class TestJulesError:
     def test_default_message(self):
         e = JulesError()
-        assert "Jules" in str(e) or "jules" in str(e).lower() or "failed" in str(e).lower()
+        assert (
+            "Jules" in str(e) or "jules" in str(e).lower() or "failed" in str(e).lower()
+        )
 
     def test_with_command_and_exit_code(self):
         e = JulesError(command="jules run", exit_code=1)
@@ -227,7 +229,9 @@ class TestToolError:
 
 class TestContextError:
     def test_with_all_fields(self):
-        e = ContextError(context_size=5000, max_context=4096, context_type="conversation")
+        e = ContextError(
+            context_size=5000, max_context=4096, context_type="conversation"
+        )
         assert e.context["context_size"] == 5000
         assert e.context["max_context"] == 4096
         assert e.context["context_type"] == "conversation"

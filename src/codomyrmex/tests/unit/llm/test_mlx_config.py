@@ -3,7 +3,6 @@
 All tests are pure logic — they run without mlx or mlx-lm installed.
 """
 
-
 import pytest
 
 # ===========================================================================
@@ -224,8 +223,14 @@ class TestMLXConfigSerialisation:
         cfg = MLXConfig()
         d = cfg.to_dict()
         expected_keys = {
-            "model", "temperature", "max_tokens", "top_p",
-            "repetition_penalty", "max_kv_size", "cache_dir", "seed",
+            "model",
+            "temperature",
+            "max_tokens",
+            "top_p",
+            "repetition_penalty",
+            "max_kv_size",
+            "cache_dir",
+            "seed",
         }
         assert set(d.keys()) == expected_keys
 

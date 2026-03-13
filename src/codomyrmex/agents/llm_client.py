@@ -70,8 +70,16 @@ class OllamaClient:
                         tags = json.loads(resp.read().decode("utf-8"))
                         models = [m.get("name") for m in tags.get("models", [])]
                         logger.debug("Available models for debugging: %s", models)
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as debug_err:
-                logger.debug("Failed to list available Ollama models for debug: %s", debug_err)
+            except (
+                ValueError,
+                RuntimeError,
+                AttributeError,
+                OSError,
+                TypeError,
+            ) as debug_err:
+                logger.debug(
+                    "Failed to list available Ollama models for debug: %s", debug_err
+                )
             return "", f"Real Ollama Connection Failed: {e}"
 
     def execute_with_session(
@@ -157,7 +165,8 @@ def get_llm_client(identity: str = "agent") -> Any:
                 model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
                 logger.info(
                     "[%s] Using real OllamaClient (Localhost reachable, model=%s)",
-                    identity, model,
+                    identity,
+                    model,
                 )
                 return OllamaClient(model=model)
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:

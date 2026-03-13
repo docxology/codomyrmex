@@ -20,19 +20,21 @@ def clean_system():
     """Ensure a clean state for the event system before each test."""
     # Reset the singleton bus
     import codomyrmex.events.core.event_bus as bus_mod
+
     bus_mod._event_bus = None
     get_event_bus()
 
     # Reset the singleton logger
     import codomyrmex.events.handlers.event_logger as logger_mod
+
     logger_mod._logger = None
     get_event_logger()
 
     # Reset the singleton store
     import codomyrmex.events.event_store as store_mod
+
     store_mod._event_store = None
     get_event_store()
-
 
 
 @pytest.mark.unit
@@ -42,7 +44,7 @@ def test_emit_event_mcp():
         event_type="test.event",
         payload={"foo": "bar"},
         source="mcp_test",
-        priority="high"
+        priority="high",
     )
 
     assert result["status"] == "success"
@@ -113,7 +115,9 @@ def test_query_event_store_mcp():
 def test_replay_events_mcp():
     """Test replaying events via MCP tool."""
     store = get_event_store()
-    store.append(StreamEvent(topic="t1", event_type="e1", data={"id": "orig1"}, source="src1"))
+    store.append(
+        StreamEvent(topic="t1", event_type="e1", data={"id": "orig1"}, source="src1")
+    )
 
     # Track replayed events on the bus
     replayed = []

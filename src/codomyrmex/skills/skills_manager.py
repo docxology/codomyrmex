@@ -57,7 +57,9 @@ class SkillsManager:
 
         logger.info(
             "SkillsManager initialized: skills_dir=%s, upstream_repo=%s, auto_sync=%s",
-            skills_dir, upstream_repo, auto_sync,
+            skills_dir,
+            upstream_repo,
+            auto_sync,
         )
 
     def initialize(self) -> bool:

@@ -186,6 +186,7 @@ class TestAssessThreatsAllBranches:
         from codomyrmex.security.cognitive.cognitive_threat_assessment import (
             CognitiveThreatAssessor,
         )
+
         return CognitiveThreatAssessor()
 
     def test_admin_access_level_yields_high_privilege_target(self):
@@ -225,7 +226,9 @@ class TestAssessThreatsAllBranches:
 
     def test_recent_incidents_nonempty_yields_elevated_risk_period(self):
         assessor = self._assessor()
-        threats = assessor.assess_threats({"recent_incidents": ["incident-1", "incident-2"]})
+        threats = assessor.assess_threats(
+            {"recent_incidents": ["incident-1", "incident-2"]}
+        )
         types = [t.threat_type for t in threats]
         assert "elevated_risk_period" in types
 
@@ -279,6 +282,7 @@ class TestAssessThreatsAllBranches:
         from codomyrmex.security.cognitive.cognitive_threat_assessment import (
             assess_cognitive_threats,
         )
+
         result = assess_cognitive_threats({"access_level": "admin"})
         assert result["critical_count"] == 1
         assert result["total_threats"] == 1
@@ -297,6 +301,7 @@ class TestEvaluateHumanFactorsBranches:
         from codomyrmex.security.cognitive.cognitive_threat_assessment import (
             CognitiveThreatAssessor,
         )
+
         return CognitiveThreatAssessor()
 
     def test_high_stress_increases_risk_score(self):
@@ -335,7 +340,9 @@ class TestEvaluateHumanFactorsBranches:
         assessor = self._assessor()
         result = assessor.evaluate_human_factors({"access_level": "privileged"})
         recs = result["recommendations"]
-        assert any("verification" in r.lower() or "privileged" in r.lower() for r in recs)
+        assert any(
+            "verification" in r.lower() or "privileged" in r.lower() for r in recs
+        )
 
     def test_no_risk_factors_yields_default_recommendation(self):
         assessor = self._assessor()
@@ -347,18 +354,21 @@ class TestEvaluateHumanFactorsBranches:
     def test_risk_score_capped_at_one(self):
         assessor = self._assessor()
         # All risk factors active
-        result = assessor.evaluate_human_factors({
-            "training_level": "none",
-            "stress_level": "very_high",
-            "risk_tolerance": "very_high",
-            "access_level": "admin",
-        })
+        result = assessor.evaluate_human_factors(
+            {
+                "training_level": "none",
+                "stress_level": "very_high",
+                "risk_tolerance": "very_high",
+                "access_level": "admin",
+            }
+        )
         assert result["risk_score"] <= 1.0
 
     def test_module_level_evaluate_human_factors_function(self):
         from codomyrmex.security.cognitive.cognitive_threat_assessment import (
             evaluate_human_factors,
         )
+
         result = evaluate_human_factors({"stress_level": "high"})
         assert "risk_score" in result
         assert result["risk_score"] >= 0.2

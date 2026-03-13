@@ -72,8 +72,12 @@ class TestVideoInfo:
 
     def test_to_dict(self):
         info = VideoInfo(
-            file_path=Path("/v.mp4"), width=640, height=480, fps=24.0,
-            video_codec="h264", has_audio=True
+            file_path=Path("/v.mp4"),
+            width=640,
+            height=480,
+            fps=24.0,
+            video_codec="h264",
+            has_audio=True,
         )
         d = info.to_dict()
         assert d["width"] == 640
@@ -105,7 +109,7 @@ class TestProcessingResult:
             duration=60.0,
             operation="resize",
             success=True,
-            message="done"
+            message="done",
         )
         d = r.to_dict()
         assert "output_path" in d
@@ -127,7 +131,7 @@ class TestExtractionResult:
             source_path=Path("/video.mp4"),
             timestamps=[0.5, 1.0, 1.5],
             output_paths=[Path("/f1.jpg"), Path("/f2.jpg"), Path("/f3.jpg")],
-            frame_count=3
+            frame_count=3,
         )
         d = r.to_dict()
         assert d["timestamps"] == [0.5, 1.0, 1.5]
@@ -137,8 +141,7 @@ class TestExtractionResult:
 
     def test_to_dict_with_audio(self):
         r = ExtractionResult(
-            source_path=Path("/video.mp4"),
-            audio_path=Path("/audio.wav")
+            source_path=Path("/video.mp4"), audio_path=Path("/audio.wav")
         )
         d = r.to_dict()
         assert d["audio_path"] is not None
@@ -153,10 +156,7 @@ class TestExtractionResult:
 
 class TestVideoComparison:
     def test_construction(self):
-        vc = VideoComparison(
-            video1_path=Path("v1.mp4"),
-            video2_path=Path("v2.mp4")
-        )
+        vc = VideoComparison(video1_path=Path("v1.mp4"), video2_path=Path("v2.mp4"))
         assert vc.same_resolution is False
         assert vc.same_duration is False
         assert vc.duration_diff == 0.0
@@ -169,7 +169,7 @@ class TestVideoComparison:
             same_resolution=True,
             same_fps=True,
             duration_diff=0.5,
-            size_diff=1024
+            size_diff=1024,
         )
         assert vc.same_resolution is True
         assert vc.same_fps is True

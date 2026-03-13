@@ -18,6 +18,7 @@ except ImportError:
             func._mcp_tool_name = name
             func._mcp_tool_description = description
             return func
+
         return decorator
 
 
@@ -53,15 +54,17 @@ def qwen_chat(
 
     from .qwen_client import QwenClient
 
-    client = QwenClient(config={
-        "qwen_model": model,
-        "qwen_temperature": temperature,
-        "qwen_max_tokens": max_tokens,
-    })
+    client = QwenClient(
+        config={
+            "qwen_model": model,
+            "qwen_temperature": temperature,
+            "qwen_max_tokens": max_tokens,
+        }
+    )
 
     request = AgentRequest(
         prompt=message,
-        **({"context": {"system_prompt": system_prompt}} if system_prompt else {})
+        **({"context": {"system_prompt": system_prompt}} if system_prompt else {}),
     )
 
     try:
@@ -220,10 +223,12 @@ def qwen_code_review(
         "Provide specific, actionable feedback with line references."
     )
 
-    client = QwenClient(config={
-        "qwen_model": model,
-        "qwen_max_tokens": 4096,
-    })
+    client = QwenClient(
+        config={
+            "qwen_model": model,
+            "qwen_max_tokens": 4096,
+        }
+    )
 
     request = AgentRequest(
         prompt=f"""Review the following {language} code:
@@ -231,7 +236,7 @@ def qwen_code_review(
 ```{language}
 {code}
 ```""",
-        **({"context": {"system_prompt": system_prompt}} if system_prompt else {})
+        **({"context": {"system_prompt": system_prompt}} if system_prompt else {}),
     )
 
     try:

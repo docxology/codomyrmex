@@ -62,8 +62,16 @@ class ClaudeTaskPlanningMixin:
 
             execution_time = time.time() - start_time
             result_text = response.content[0].text if response.content else ""
-            input_tokens = response.usage.input_tokens if hasattr(response, "usage") and response.usage else 0
-            output_tokens = response.usage.output_tokens if hasattr(response, "usage") and response.usage else 0
+            input_tokens = (
+                response.usage.input_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
+            output_tokens = (
+                response.usage.output_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
             tokens_used = input_tokens + output_tokens
             cost = self._calculate_cost(input_tokens, output_tokens)
 
@@ -75,7 +83,9 @@ class ClaudeTaskPlanningMixin:
 
             logger.info(
                 "Decomposed task into %s subtasks in %.2fs ($%.6f)",
-                len(subtasks), execution_time, cost,
+                len(subtasks),
+                execution_time,
+                cost,
             )
 
             return {
@@ -134,8 +144,16 @@ class ClaudeTaskPlanningMixin:
 
             execution_time = time.time() - start_time
             analysis = response.content[0].text if response.content else ""
-            input_tokens = response.usage.input_tokens if hasattr(response, "usage") and response.usage else 0
-            output_tokens = response.usage.output_tokens if hasattr(response, "usage") and response.usage else 0
+            input_tokens = (
+                response.usage.input_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
+            output_tokens = (
+                response.usage.output_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
             tokens_used = input_tokens + output_tokens
             cost = self._calculate_cost(input_tokens, output_tokens)
 
@@ -147,7 +165,10 @@ class ClaudeTaskPlanningMixin:
             parsed = self._parse_analysis(analysis)
 
             logger.info(
-                "Analyzed task in %.2fs (%s tokens, $%.6f)", execution_time, tokens_used, cost
+                "Analyzed task in %.2fs (%s tokens, $%.6f)",
+                execution_time,
+                tokens_used,
+                cost,
             )
 
             return {
@@ -216,8 +237,16 @@ class ClaudeTaskPlanningMixin:
 
             execution_time = time.time() - start_time
             plan = response.content[0].text if response.content else ""
-            input_tokens = response.usage.input_tokens if hasattr(response, "usage") and response.usage else 0
-            output_tokens = response.usage.output_tokens if hasattr(response, "usage") and response.usage else 0
+            input_tokens = (
+                response.usage.input_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
+            output_tokens = (
+                response.usage.output_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
             tokens_used = input_tokens + output_tokens
             cost = self._calculate_cost(input_tokens, output_tokens)
 
@@ -226,7 +255,10 @@ class ClaudeTaskPlanningMixin:
             self._total_cost += cost
 
             logger.info(
-                "Created workflow plan in %.2fs (%s tokens, $%.6f)", execution_time, tokens_used, cost
+                "Created workflow plan in %.2fs (%s tokens, $%.6f)",
+                execution_time,
+                tokens_used,
+                cost,
             )
 
             return {

@@ -151,7 +151,9 @@ class RollbackManager:
 
         self._rollback_plans[deployment_id] = plan
         logger.info(
-            "Created rollback plan for deployment %s using %s strategy", deployment_id, strategy.value
+            "Created rollback plan for deployment %s using %s strategy",
+            deployment_id,
+            strategy.value,
         )
 
         return plan
@@ -256,7 +258,9 @@ class RollbackManager:
 
         try:
             logger.info(
-                "Starting rollback execution %s for deployment %s", execution_id, deployment_id
+                "Starting rollback execution %s for deployment %s",
+                execution_id,
+                deployment_id,
             )
 
             # Execute steps
@@ -265,7 +269,10 @@ class RollbackManager:
 
                 try:
                     logger.info(
-                        "Executing rollback step %s/%s: %s", i + 1, len(plan.steps), step.name
+                        "Executing rollback step %s/%s: %s",
+                        i + 1,
+                        len(plan.steps),
+                        step.name,
                     )
 
                     # Execute step with timeout
@@ -301,11 +308,15 @@ class RollbackManager:
             # Mark as completed or failed
             if execution.failed_steps == 0:
                 execution.status = "completed"
-                logger.info("Rollback execution %s completed successfully", execution_id)
+                logger.info(
+                    "Rollback execution %s completed successfully", execution_id
+                )
             else:
                 execution.status = "failed"
                 logger.error(
-                    "Rollback execution %s failed with %s failed steps", execution_id, execution.failed_steps
+                    "Rollback execution %s failed with %s failed steps",
+                    execution_id,
+                    execution.failed_steps,
                 )
 
         except Exception as e:

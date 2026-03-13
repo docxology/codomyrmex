@@ -38,18 +38,21 @@ class DashboardAPIHandler:
     def _get_module_provider(self) -> Any:
         if self._module_provider is None:
             from codomyrmex.website.module_health import ModuleHealthProvider
+
             self._module_provider = ModuleHealthProvider()
         return self._module_provider
 
     def _get_call_collector(self) -> Any:
         if self._call_collector is None:
             from codomyrmex.telemetry.tracing.call_graph import get_collector
+
             self._call_collector = get_collector()
         return self._call_collector
 
     def _get_token_tracker(self) -> Any:
         if self._token_tracker is None:
             from codomyrmex.telemetry.metrics.token_tracker import get_token_tracker
+
             self._token_tracker = get_token_tracker()
         return self._token_tracker
 
@@ -162,19 +165,23 @@ class DashboardAPIHandler:
         for name, module_path in agent_defs:
             try:
                 __import__(module_path)
-                agents.append({
-                    "name": name,
-                    "status": "available",
-                    "last_heartbeat": time.time(),
-                    "module": module_path,
-                })
+                agents.append(
+                    {
+                        "name": name,
+                        "status": "available",
+                        "last_heartbeat": time.time(),
+                        "module": module_path,
+                    }
+                )
             except ImportError:
-                agents.append({
-                    "name": name,
-                    "status": "unavailable",
-                    "last_heartbeat": 0,
-                    "module": module_path,
-                })
+                agents.append(
+                    {
+                        "name": name,
+                        "status": "unavailable",
+                        "last_heartbeat": 0,
+                        "module": module_path,
+                    }
+                )
 
         return {
             "agents": agents,
@@ -198,7 +205,9 @@ class DashboardAPIHandler:
 
         routes: dict[str, Any] = {
             "/api/modules": lambda: self.handle_modules(params.get("name", "")),
-            "/api/costs/summary": lambda: self.handle_costs_summary(params.get("period", "daily")),
+            "/api/costs/summary": lambda: self.handle_costs_summary(
+                params.get("period", "daily")
+            ),
             "/api/mcp-call-graph": self.handle_mcp_call_graph,
             "/api/tokens": self.handle_tokens,
             "/api/agents/status": self.handle_agents_status,

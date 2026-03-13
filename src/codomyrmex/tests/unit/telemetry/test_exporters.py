@@ -3,6 +3,7 @@
 Zero-mock policy: real instantiation only. No network calls — OTLPExporter.export() is
 not tested (requires live endpoint); only instantiation and configuration are verified.
 """
+
 import json
 import tempfile
 from datetime import datetime, timedelta
@@ -102,9 +103,19 @@ class TestSpanData:
     def test_to_dict_keys(self):
         span = _make_span()
         d = span.to_dict()
-        expected_keys = {"trace_id", "span_id", "parent_span_id", "name", "kind",
-                         "start_time", "end_time", "duration_ms", "status",
-                         "attributes", "events"}
+        expected_keys = {
+            "trace_id",
+            "span_id",
+            "parent_span_id",
+            "name",
+            "kind",
+            "start_time",
+            "end_time",
+            "duration_ms",
+            "status",
+            "attributes",
+            "events",
+        }
         assert expected_keys.issubset(d.keys())
 
     def test_to_dict_trace_id_matches(self):
@@ -422,11 +433,13 @@ class TestOTLPExporterAttributeTypes:
 
     def test_convert_attributes_multiple_types(self):
         exp = OTLPExporter()
-        attrs = exp._convert_attributes({
-            "s": "hello",
-            "i": 1,
-            "f": 1.5,
-        })
+        attrs = exp._convert_attributes(
+            {
+                "s": "hello",
+                "i": 1,
+                "f": 1.5,
+            }
+        )
         assert len(attrs) == 3
         keys = {a["key"] for a in attrs}
         assert keys == {"s", "i", "f"}
@@ -540,6 +553,7 @@ class TestBatchExporterFlush:
         batch.export(spans)
         # Shutdown after enough time for one worker cycle to complete
         import time
+
         time.sleep(0.3)  # allow worker to flush the 50ms batch
         batch.shutdown()
         with open(path) as f:
@@ -572,25 +586,30 @@ class TestCreateExporter:
 
     def test_create_console_exporter(self):
         from codomyrmex.telemetry.exporters import create_exporter
+
         exp = create_exporter("console")
         assert isinstance(exp, ConsoleExporter)
 
     def test_create_file_exporter(self, tmp_path):
         from codomyrmex.telemetry.exporters import create_exporter
+
         exp = create_exporter("file", filepath=str(tmp_path / "out.jsonl"))
         assert isinstance(exp, FileExporter)
 
     def test_create_otlp_exporter(self):
         from codomyrmex.telemetry.exporters import create_exporter
+
         exp = create_exporter("otlp")
         assert isinstance(exp, OTLPExporter)
 
     def test_create_unknown_type_raises_value_error(self):
         from codomyrmex.telemetry.exporters import create_exporter
+
         with pytest.raises(ValueError, match="Unknown exporter type"):
             create_exporter("kafka")
 
     def test_create_console_with_pretty_false(self):
         from codomyrmex.telemetry.exporters import create_exporter
+
         exp = create_exporter("console", pretty=False)
         assert exp.pretty is False

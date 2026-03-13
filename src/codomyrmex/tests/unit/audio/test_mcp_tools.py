@@ -96,9 +96,7 @@ def test_audio_synthesize_invalid_provider(temp_output_dir: Path) -> None:
 
 
 @pytest.mark.unit
-def test_audio_batch_transcribe_invalid_files(
-    temp_output_dir: Path
-) -> None:
+def test_audio_batch_transcribe_invalid_files(temp_output_dir: Path) -> None:
     """Test batch transcribe with invalid files returns failure list."""
     # If WHISPER is available, it returns success: True with failed count
     # If WHISPER is NOT available, it returns success: False with error

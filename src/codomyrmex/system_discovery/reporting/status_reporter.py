@@ -93,6 +93,7 @@ class StatusReporter:
         Keep for backward compatibility with existing tests.
         """
         from codomyrmex.system_discovery.reporting.profilers import EnvironmentProfiler
+
         return EnvironmentProfiler.is_virtual_env()
 
     def check_project_structure(self) -> dict[str, Any]:
@@ -393,7 +394,9 @@ class StatusReporter:
         print(f"   OS: {hw['os']} {hw['os_release']}")
         print(f"   Architecture: {hw['architecture']}")
         print(f"   CPU: {hw['cpu_count']} cores ({hw['cpu_threads']} threads)")
-        print(f"   RAM: {hw['total_ram_gb']} GB total ({hw['available_ram_gb']} GB available)")
+        print(
+            f"   RAM: {hw['total_ram_gb']} GB total ({hw['available_ram_gb']} GB available)"
+        )
 
         gpu = hw.get("gpu", {})
         if gpu.get("available"):

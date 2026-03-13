@@ -1,6 +1,5 @@
 """Zero-mock tests for codomyrmex.security.theory.threat_modeling."""
 
-
 from codomyrmex.security.theory.threat_modeling import (
     Threat,
     ThreatCategory,
@@ -39,9 +38,18 @@ class TestThreatSeverity:
             ThreatSeverity.MEDIUM.value: 2,
             ThreatSeverity.LOW.value: 1,
         }
-        assert severity_order[ThreatSeverity.CRITICAL.value] > severity_order[ThreatSeverity.HIGH.value]
-        assert severity_order[ThreatSeverity.HIGH.value] > severity_order[ThreatSeverity.MEDIUM.value]
-        assert severity_order[ThreatSeverity.MEDIUM.value] > severity_order[ThreatSeverity.LOW.value]
+        assert (
+            severity_order[ThreatSeverity.CRITICAL.value]
+            > severity_order[ThreatSeverity.HIGH.value]
+        )
+        assert (
+            severity_order[ThreatSeverity.HIGH.value]
+            > severity_order[ThreatSeverity.MEDIUM.value]
+        )
+        assert (
+            severity_order[ThreatSeverity.MEDIUM.value]
+            > severity_order[ThreatSeverity.LOW.value]
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -248,7 +256,9 @@ class TestThreatModelBuilder:
     def test_stride_information_disclosure_has_critical_severity(self):
         builder = ThreatModelBuilder(methodology="STRIDE")
         model = builder.create_model("App", ["confidential_records"], ["api"])
-        disclosure = next(t for t in model.threats if t.threat_type == "Information Disclosure")
+        disclosure = next(
+            t for t in model.threats if t.threat_type == "Information Disclosure"
+        )
         assert disclosure.severity == ThreatSeverity.CRITICAL.value
 
     def test_stride_dos_when_service_in_attack_surface(self):
@@ -309,8 +319,18 @@ class TestAnalyzeThreats:
     def test_has_required_keys(self):
         model = self._full_model()
         result = analyze_threats(model)
-        for key in ("total_threats", "critical_count", "high_count", "medium_count", "low_count",
-                    "threats_by_category", "average_risk_score", "risk_scores", "methodology", "threats"):
+        for key in (
+            "total_threats",
+            "critical_count",
+            "high_count",
+            "medium_count",
+            "low_count",
+            "threats_by_category",
+            "average_risk_score",
+            "risk_scores",
+            "methodology",
+            "threats",
+        ):
             assert key in result, f"Missing key: {key}"
 
     def test_total_threats_matches_model(self):
@@ -321,13 +341,20 @@ class TestAnalyzeThreats:
     def test_critical_count_counts_critical_severity(self):
         model = self._full_model()
         result = analyze_threats(model)
-        expected = sum(1 for t in model.threats if t.severity == ThreatSeverity.CRITICAL.value)
+        expected = sum(
+            1 for t in model.threats if t.severity == ThreatSeverity.CRITICAL.value
+        )
         assert result["critical_count"] == expected
 
     def test_severity_counts_sum_to_total(self):
         model = self._full_model()
         result = analyze_threats(model)
-        total = result["critical_count"] + result["high_count"] + result["medium_count"] + result["low_count"]
+        total = (
+            result["critical_count"]
+            + result["high_count"]
+            + result["medium_count"]
+            + result["low_count"]
+        )
         assert total == result["total_threats"]
 
     def test_average_risk_score_is_float(self):
@@ -370,13 +397,17 @@ class TestAnalyzeThreats:
 
 class TestPrioritizeThreats:
     def test_returns_list_of_threats(self):
-        model = create_threat_model("App", ["user_data"], ["login_endpoint", "api_service"])
+        model = create_threat_model(
+            "App", ["user_data"], ["login_endpoint", "api_service"]
+        )
         result = prioritize_threats(model)
         assert isinstance(result, list)
         assert all(isinstance(t, Threat) for t in result)
 
     def test_same_length_as_input(self):
-        model = create_threat_model("App", ["user_data"], ["login_endpoint", "api_service"])
+        model = create_threat_model(
+            "App", ["user_data"], ["login_endpoint", "api_service"]
+        )
         result = prioritize_threats(model)
         assert len(result) == len(model.threats)
 

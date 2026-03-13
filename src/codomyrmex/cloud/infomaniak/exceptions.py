@@ -4,6 +4,7 @@ Infomaniak Cloud Error Hierarchy.
 Provides structured exception types for all Infomaniak cloud operations,
 enabling precise error handling and classification.
 """
+
 import contextlib
 
 with contextlib.suppress(ImportError):

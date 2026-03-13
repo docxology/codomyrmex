@@ -210,9 +210,16 @@ def analyze_file(file_path: Path, base_path: Path) -> dict | None:
         return {"path": str(file_path.relative_to(base_path)), "error": str(e)}
 
 
-_SKIP_DIRS = frozenset({
-    "__pycache__", "node_modules", "venv", ".venv", ".git", "@output",
-})
+_SKIP_DIRS = frozenset(
+    {
+        "__pycache__",
+        "node_modules",
+        "venv",
+        ".venv",
+        ".git",
+        "@output",
+    }
+)
 _DOC_FILENAMES = ("README.md", "AGENTS.md", "SPEC.md")
 
 
@@ -279,9 +286,7 @@ def _print_console_summary(
                 )
 
     if cats["completeness"]:
-        print(
-            f"\n=== FILES WITH COMPLETENESS ISSUES ({len(cats['completeness'])}) ==="
-        )
+        print(f"\n=== FILES WITH COMPLETENESS ISSUES ({len(cats['completeness'])}) ===")
         for result in sorted(
             cats["completeness"],
             key=lambda x: len(x.get("completeness_issues", [])),
@@ -371,4 +376,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

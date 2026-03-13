@@ -354,7 +354,9 @@ async def async_add_comment(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
-    logger.info("[ASYNC] Adding comment to #%s in %s/%s", issue_number, owner, repo_name)
+    logger.info(
+        "[ASYNC] Adding comment to #%s in %s/%s", issue_number, owner, repo_name
+    )
 
     status, data = await _async_request(
         "POST",

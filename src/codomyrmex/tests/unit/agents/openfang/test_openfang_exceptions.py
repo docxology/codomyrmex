@@ -1,4 +1,5 @@
 """Tests for openfang exception hierarchy — zero-mock, real objects only."""
+
 import pytest
 
 from codomyrmex.agents.openfang.exceptions import (

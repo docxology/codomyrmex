@@ -4,7 +4,6 @@ Covers: ProbeResult, AgentDescriptor, AgentRegistry (catalog building,
 listing, probing, operative filtering).
 """
 
-
 from codomyrmex.agents.agent_setup.registry import (
     AgentDescriptor,
     AgentRegistry,

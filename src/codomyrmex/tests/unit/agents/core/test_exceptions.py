@@ -1,6 +1,5 @@
 """Tests for agents.core.exceptions."""
 
-
 from codomyrmex.agents.core.exceptions import (
     AgentConfigurationError,
     AgentError,
@@ -27,6 +26,7 @@ class TestAgentError:
 
     def test_is_codomyrmex_error(self):
         from codomyrmex.exceptions import CodomyrmexError
+
         assert issubclass(AgentError, CodomyrmexError)
 
 
@@ -145,7 +145,9 @@ class TestToolError:
 
 class TestContextError:
     def test_full_context(self):
-        e = ContextError(context_size=100000, max_context=200000, context_type="conversation")
+        e = ContextError(
+            context_size=100000, max_context=200000, context_type="conversation"
+        )
         assert e.context["context_size"] == 100000
         assert e.context["max_context"] == 200000
         assert e.context["context_type"] == "conversation"
@@ -184,9 +186,18 @@ class TestSimpleAgentErrors:
         assert e.context["session_id"] == "sess_abc"
 
     def test_all_inherit_from_agent_error(self):
-        for cls in [CodexError, OpenCodeError, GeminiError, MistralVibeError,
-                    EveryCodeError, OpenClawError, SessionError]:
-            assert issubclass(cls, AgentError), f"{cls.__name__} should inherit AgentError"
+        for cls in [
+            CodexError,
+            OpenCodeError,
+            GeminiError,
+            MistralVibeError,
+            EveryCodeError,
+            OpenClawError,
+            SessionError,
+        ]:
+            assert issubclass(cls, AgentError), (
+                f"{cls.__name__} should inherit AgentError"
+            )
 
     def test_gemini_error_with_exit_code(self):
         e = GeminiError(command="gemini run", exit_code=127)

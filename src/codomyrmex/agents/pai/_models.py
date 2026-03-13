@@ -12,6 +12,7 @@ from pathlib import Path
 # Configuration Model
 # =====================================================================
 
+
 @dataclass
 class PAIConfig:
     """Configuration and path layout for the PAI system.
@@ -99,9 +100,11 @@ class PAIConfig:
 # Data classes for structured PAI information
 # =====================================================================
 
+
 @dataclass(frozen=True)
 class PAISkillInfo:
     """Metadata about a discovered PAI skill pack."""
+
     name: str
     path: str
     has_skill_md: bool
@@ -113,6 +116,7 @@ class PAISkillInfo:
 @dataclass(frozen=True)
 class PAIToolInfo:
     """Metadata about a discovered PAI tool."""
+
     name: str
     path: str
     size_bytes: int
@@ -121,6 +125,7 @@ class PAIToolInfo:
 @dataclass(frozen=True)
 class PAIHookInfo:
     """Metadata about a discovered PAI hook."""
+
     name: str
     path: str
     size_bytes: int
@@ -130,6 +135,7 @@ class PAIHookInfo:
 @dataclass(frozen=True)
 class PAIAgentInfo:
     """Metadata about a discovered PAI agent personality."""
+
     name: str
     path: str
     size_bytes: int
@@ -138,6 +144,7 @@ class PAIAgentInfo:
 @dataclass(frozen=True)
 class PAIMemoryStore:
     """Metadata about a PAI memory store (subdirectory)."""
+
     name: str
     path: str
     item_count: int

@@ -251,11 +251,13 @@ class CodeChangeVerifier:
     Example::
 
         verifier = CodeChangeVerifier()  # uses DEFAULT_RULES
-        result = verifier.verify(ChangeProposal(
-            file_path="module.py",
-            original_source=old_code,
-            modified_source=new_code,
-        ))
+        result = verifier.verify(
+            ChangeProposal(
+                file_path="module.py",
+                original_source=old_code,
+                modified_source=new_code,
+            )
+        )
         print(result.passed, result.summary)
     """
 

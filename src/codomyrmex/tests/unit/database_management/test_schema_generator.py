@@ -61,7 +61,9 @@ class TestColumn:
         assert "UNIQUE" in sql
 
     def test_primary_key_in_sql(self):
-        col = Column(name="id", data_type="integer", primary_key=True, auto_increment=True)
+        col = Column(
+            name="id", data_type="integer", primary_key=True, auto_increment=True
+        )
         sql = col.to_sql(dialect="sqlite")
         assert "PRIMARY KEY" in sql
 

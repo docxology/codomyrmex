@@ -145,7 +145,9 @@ class RaftNode:
         if can_vote and candidate_log_ok:
             self.voted_for = candidate_id
             self._ticks_since_heartbeat = 0
-            logger.debug("%s: granted vote to %s (term %d)", self.node_id, candidate_id, term)
+            logger.debug(
+                "%s: granted vote to %s (term %d)", self.node_id, candidate_id, term
+            )
             return VoteResponse(term=self.current_term, vote_granted=True)
 
         return VoteResponse(term=self.current_term, vote_granted=False)
@@ -225,7 +227,9 @@ class RaftNode:
             RuntimeError: If this node is not the leader.
         """
         if self.state != RaftState.LEADER:
-            raise RuntimeError(f"Node {self.node_id} is not the leader (state={self.state.value})")
+            raise RuntimeError(
+                f"Node {self.node_id} is not the leader (state={self.state.value})"
+            )
 
         entry = LogEntry(
             term=self.current_term,
@@ -233,7 +237,9 @@ class RaftNode:
             command=command,
         )
         self.log.append(entry)
-        logger.info("%s: proposed entry %d (term %d)", self.node_id, entry.index, entry.term)
+        logger.info(
+            "%s: proposed entry %d (term %d)", self.node_id, entry.index, entry.term
+        )
         return entry
 
     # -- Tick ----------------------------------------------------------------
@@ -277,12 +283,18 @@ class RaftNode:
         majority = cluster_size // 2 + 1
         if len(self._votes_received) >= majority:
             self.state = RaftState.LEADER
-            logger.info("%s: became leader (term %d, single-node)", self.node_id, self.current_term)
+            logger.info(
+                "%s: became leader (term %d, single-node)",
+                self.node_id,
+                self.current_term,
+            )
             return "became_leader"
 
         return "election_started"
 
-    def receive_vote(self, response: VoteResponse, cluster_size: int, voter_id: str) -> str | None:
+    def receive_vote(
+        self, response: VoteResponse, cluster_size: int, voter_id: str
+    ) -> str | None:
         """Process a received vote response.
 
         Returns 'became_leader' if majority reached.
@@ -300,7 +312,9 @@ class RaftNode:
             if len(self._votes_received) >= majority:
                 self.state = RaftState.LEADER
                 self._ticks_since_heartbeat = 0
-                logger.info("%s: became leader (term %d)", self.node_id, self.current_term)
+                logger.info(
+                    "%s: became leader (term %d)", self.node_id, self.current_term
+                )
                 return "became_leader"
 
         return None
@@ -447,7 +461,10 @@ class RaftCluster:
             if result == "became_leader":
                 # Step down other candidates
                 for other_id, other_node in self.nodes.items():
-                    if other_id != candidate.node_id and other_node.state == RaftState.CANDIDATE:
+                    if (
+                        other_id != candidate.node_id
+                        and other_node.state == RaftState.CANDIDATE
+                    ):
                         other_node._step_down(candidate.current_term)
                 return
 
@@ -459,7 +476,9 @@ class RaftCluster:
             if nid == leader.node_id:
                 continue
             prev_log_index = entry.index - 1
-            prev_log_term = leader.log[prev_log_index - 1].term if prev_log_index > 0 else 0
+            prev_log_term = (
+                leader.log[prev_log_index - 1].term if prev_log_index > 0 else 0
+            )
 
             response = node.append_entries(
                 term=leader.current_term,

@@ -121,7 +121,9 @@ class TestBudgetManager:
         assert not mgr.can_spend(1.0)
 
     def test_warning_alert(self) -> None:
-        mgr = BudgetManager(daily_limit=100.0, warning_threshold=0.80, pause_threshold=0.95)
+        mgr = BudgetManager(
+            daily_limit=100.0, warning_threshold=0.80, pause_threshold=0.95
+        )
         mgr.record_spend("gpt-4o", 85.0)
         alerts = mgr.get_alerts()
         assert len(alerts) >= 1

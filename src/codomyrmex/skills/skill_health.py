@@ -7,7 +7,7 @@ Example::
 
     checker = SkillHealthChecker()
     report = checker.check_all()
-    for skill in report['skills']:
+    for skill in report["skills"]:
         print(f"  {skill['name']}: {skill['health']}")
 """
 
@@ -60,7 +60,13 @@ class SkillHealth:
     @property
     def completeness(self) -> float:
         """Completeness ratio (0.0–1.0)."""
-        checks = [self.has_skill_md, self.has_init, self.has_scripts, self.has_examples, self.has_tests]
+        checks = [
+            self.has_skill_md,
+            self.has_init,
+            self.has_scripts,
+            self.has_examples,
+            self.has_tests,
+        ]
         return sum(checks) / len(checks)
 
 
@@ -74,7 +80,9 @@ class SkillHealthChecker:
 
         checker = SkillHealthChecker()
         report = checker.check_all()
-        print(f"Total: {report['total_skills']}, Complete: {report['health_distribution']['complete']}")
+        print(
+            f"Total: {report['total_skills']}, Complete: {report['health_distribution']['complete']}"
+        )
     """
 
     def __init__(self, skills_root: Path | None = None) -> None:
@@ -95,9 +103,15 @@ class SkillHealthChecker:
         health.has_init = (skill_dir / "__init__.py").exists()
         health.has_scripts = (skill_dir / "scripts").is_dir()
         health.has_examples = (skill_dir / "examples").is_dir()
-        health.has_tests = bool(list(skill_dir.glob("test_*.py"))) or (skill_dir / "tests").is_dir()
+        health.has_tests = (
+            bool(list(skill_dir.glob("test_*.py"))) or (skill_dir / "tests").is_dir()
+        )
 
-        all_files = [f for f in skill_dir.rglob("*") if f.is_file() and "__pycache__" not in str(f)]
+        all_files = [
+            f
+            for f in skill_dir.rglob("*")
+            if f.is_file() and "__pycache__" not in str(f)
+        ]
         health.file_count = len(all_files)
 
         return health
@@ -116,14 +130,16 @@ class SkillHealthChecker:
                 continue
 
             health = self.check_skill(d)
-            skills.append({
-                "name": health.name,
-                "health": health.health,
-                "completeness": round(health.completeness, 2),
-                "file_count": health.file_count,
-                "has_skill_md": health.has_skill_md,
-                "has_tests": health.has_tests,
-            })
+            skills.append(
+                {
+                    "name": health.name,
+                    "health": health.health,
+                    "completeness": round(health.completeness, 2),
+                    "file_count": health.file_count,
+                    "has_skill_md": health.has_skill_md,
+                    "has_tests": health.has_tests,
+                }
+            )
 
         elapsed = (time.monotonic() - start) * 1000
         dist = {"complete": 0, "functional": 0, "stub": 0}

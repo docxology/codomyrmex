@@ -418,7 +418,9 @@ class PluginLoader:
                         )
 
                 except Exception as e:
-                    logger.warning("Error loading metadata from %s: %s", metadata_file, e)
+                    logger.warning(
+                        "Error loading metadata from %s: %s", metadata_file, e
+                    )
 
         return None
 

@@ -5,7 +5,6 @@ Covers: MigrationAction, MigrationRule, MigrationResult, ConfigMigrator
 validation, and custom migration registration).
 """
 
-
 from codomyrmex.config_management.migration.config_migrator import (
     ConfigMigrator,
     MigrationAction,

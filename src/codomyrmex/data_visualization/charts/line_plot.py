@@ -55,7 +55,9 @@ def create_line_plot(
             if len(x_data) != len(y_series):
                 logger.warning(
                     "Length mismatch for line %s: x_data (%d) and y_series (%d). Skipping this line.",
-                    line_labels[i], len(x_data), len(y_series),
+                    line_labels[i],
+                    len(x_data),
+                    len(y_series),
                 )
                 continue
             ax.plot(
@@ -66,7 +68,8 @@ def create_line_plot(
         if len(x_data) != len(y_data):
             logger.warning(
                 "Length mismatch: x_data (%d) and y_data (%d). Line plot not generated.",
-                len(x_data), len(y_data),
+                len(x_data),
+                len(y_data),
             )
             return None
         ax.plot(x_data, y_data, marker="o" if markers else None)
@@ -190,4 +193,7 @@ if __name__ == "__main__":
     # Example with show_plot (might require GUI environment)
     # create_line_plot(x_simple, y_simple, title="Test Show Line Plot", show_plot=True)
 
-    logger.info("Completed direct testing of line_plot.py. Check the '%s' directory.", test_output_dir)
+    logger.info(
+        "Completed direct testing of line_plot.py. Check the '%s' directory.",
+        test_output_dir,
+    )

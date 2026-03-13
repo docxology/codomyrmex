@@ -14,9 +14,11 @@ with contextlib.suppress(ImportError):
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
@@ -39,9 +41,15 @@ class HardwareProfiler:
 
         if psutil:
             try:
-                info["cpu_freq"] = psutil.cpu_freq()._asdict() if psutil.cpu_freq() else None
-                info["total_ram_gb"] = round(psutil.virtual_memory().total / (1024**3), 2)
-                info["available_ram_gb"] = round(psutil.virtual_memory().available / (1024**3), 2)
+                info["cpu_freq"] = (
+                    psutil.cpu_freq()._asdict() if psutil.cpu_freq() else None
+                )
+                info["total_ram_gb"] = round(
+                    psutil.virtual_memory().total / (1024**3), 2
+                )
+                info["available_ram_gb"] = round(
+                    psutil.virtual_memory().available / (1024**3), 2
+                )
             except Exception as e:
                 logger.debug("Failed to get psutil info: %s", e)
         else:
@@ -62,7 +70,11 @@ class HardwareProfiler:
         if nvidia_smi:
             try:
                 result = subprocess.run(
-                    [nvidia_smi, "--query-gpu=name,memory.total,driver_version", "--format=csv,noheader,nounits"],
+                    [
+                        nvidia_smi,
+                        "--query-gpu=name,memory.total,driver_version",
+                        "--format=csv,noheader,nounits",
+                    ],
                     capture_output=True,
                     text=True,
                     timeout=5,
@@ -73,12 +85,14 @@ class HardwareProfiler:
                         if line:
                             parts = line.split(", ")
                             if len(parts) >= 3:
-                                gpu_info["details"].append({
-                                    "vendor": "NVIDIA",
-                                    "model": parts[0],
-                                    "memory_mb": float(parts[1]),
-                                    "driver_version": parts[2]
-                                })
+                                gpu_info["details"].append(
+                                    {
+                                        "vendor": "NVIDIA",
+                                        "model": parts[0],
+                                        "memory_mb": float(parts[1]),
+                                        "driver_version": parts[2],
+                                    }
+                                )
             except Exception as e:
                 logger.debug("Failed to run nvidia-smi: %s", e)
 
@@ -96,17 +110,19 @@ class HardwareProfiler:
                     ["system_profiler", "SPDisplaysDataType", "-detailLevel", "mini"],
                     capture_output=True,
                     text=True,
-                    timeout=5
+                    timeout=5,
                 )
                 if result.returncode == 0:
                     if "Chipset Model" in result.stdout:
                         gpu_info["available"] = True
                         for line in result.stdout.split("\n"):
                             if "Chipset Model" in line:
-                                gpu_info["details"].append({
-                                    "vendor": "Apple/Other",
-                                    "model": line.split(":")[1].strip()
-                                })
+                                gpu_info["details"].append(
+                                    {
+                                        "vendor": "Apple/Other",
+                                        "model": line.split(":")[1].strip(),
+                                    }
+                                )
             except Exception as e:
                 logger.debug("Failed to run system_profiler: %s", e)
 
@@ -140,7 +156,10 @@ class EnvironmentProfiler:
             return "docker"
         if os.environ.get("KUBERNETES_SERVICE_HOST"):
             return "kubernetes"
-        if os.environ.get("WSL_DISTRO_NAME") or "microsoft-standard" in platform.release().lower():
+        if (
+            os.environ.get("WSL_DISTRO_NAME")
+            or "microsoft-standard" in platform.release().lower()
+        ):
             return "wsl"
         return "local"
 
@@ -148,9 +167,9 @@ class EnvironmentProfiler:
     def is_virtual_env() -> bool:
         """Check if running in a virtual environment."""
         return (
-            hasattr(sys, "real_prefix") or
-            (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix) or
-            os.environ.get("VIRTUAL_ENV") is not None
+            hasattr(sys, "real_prefix")
+            or (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix)
+            or os.environ.get("VIRTUAL_ENV") is not None
         )
 
     @staticmethod

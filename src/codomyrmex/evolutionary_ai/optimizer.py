@@ -44,7 +44,9 @@ def optimize_config(
 
     # Run generations
     for _ in range(generations):
-        ga.step(lambda g: fitness_fn(decode(list(g.genes))))  # evaluate on mapped floats
+        ga.step(
+            lambda g: fitness_fn(decode(list(g.genes)))
+        )  # evaluate on mapped floats
 
     # Final evaluation for the generation loop
     ga.population.evaluate(lambda g: fitness_fn(decode(list(g.genes))))

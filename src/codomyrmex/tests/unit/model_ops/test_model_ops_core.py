@@ -198,10 +198,12 @@ class TestDatasetClass:
         assert ds.validate() is False
 
     def test_mixed_valid_and_invalid_fails(self):
-        ds = Dataset(data=[
-            {"prompt": "q", "completion": "a"},
-            {"text": "bad"},
-        ])
+        ds = Dataset(
+            data=[
+                {"prompt": "q", "completion": "a"},
+                {"text": "bad"},
+            ]
+        )
         assert ds.validate() is False
 
     def test_len_reflects_data_count(self):
@@ -250,7 +252,9 @@ class TestDatasetSanitizer:
     """Tests for DatasetSanitizer static methods."""
 
     def _make_dataset(self, prompts_completions):
-        return Dataset(data=[{"prompt": p, "completion": c} for p, c in prompts_completions])
+        return Dataset(
+            data=[{"prompt": p, "completion": c} for p, c in prompts_completions]
+        )
 
     def test_filter_by_length_keeps_in_range(self):
         ds = self._make_dataset([("hello", "world")])  # 10 chars total
@@ -365,10 +369,12 @@ class TestEvaluatorClass:
         assert result["broken"] == 0.0
 
     def test_multiple_metrics_all_evaluated(self):
-        ev = Evaluator(metrics={
-            "m1": lambda p, r: 0.5,
-            "m2": lambda p, r: 0.8,
-        })
+        ev = Evaluator(
+            metrics={
+                "m1": lambda p, r: 0.5,
+                "m2": lambda p, r: 0.8,
+            }
+        )
         result = ev.evaluate(["a"], ["b"])
         assert "m1" in result
         assert "m2" in result
@@ -603,7 +609,9 @@ class TestModelOpsMCPTools:
         assert result["scores"] == {}
 
     def test_score_output_overall_is_average(self):
-        result = model_ops_score_output("hello", "hello", scorers=["exact_match", "contains"])
+        result = model_ops_score_output(
+            "hello", "hello", scorers=["exact_match", "contains"]
+        )
         scores = list(result["scores"].values())
         expected_avg = sum(scores) / len(scores)
         assert abs(result["overall"] - expected_avg) < 1e-5

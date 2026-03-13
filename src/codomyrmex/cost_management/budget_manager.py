@@ -134,10 +134,7 @@ class BudgetManager:
         """
         today_start = _start_of_day()
         with self._lock:
-            return sum(
-                r.amount for r in self._records
-                if r.timestamp >= today_start
-            )
+            return sum(r.amount for r in self._records if r.timestamp >= today_start)
 
     def get_utilization(self) -> float:
         """Get current budget utilization ratio.

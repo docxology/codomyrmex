@@ -202,7 +202,8 @@ class APIAgentBase(BaseAgent):
                     break
 
         self.logger.error(
-            "%s API error", self.name,
+            "%s API error",
+            self.name,
             extra={
                 "agent": self.name,
                 "model": getattr(self, "model", None),
@@ -222,7 +223,10 @@ class APIAgentBase(BaseAgent):
 
         # Fallback for SDKs that might not use the provided api_error_class consistently
         # but are clearly API-related errors.
-        if "api" in error.__class__.__name__.lower() or "error" in error.__class__.__name__.lower():
+        if (
+            "api" in error.__class__.__name__.lower()
+            or "error" in error.__class__.__name__.lower()
+        ):
             raise self._error_class(
                 f"{self.name} API error: {api_error_str}",
                 api_error=api_error_str,

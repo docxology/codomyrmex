@@ -68,9 +68,7 @@ class ShellForageMixin:
 
         if not matches:
             print(f"🤷 No capabilities found matching '{search_term}'")
-            print(
-                "💡 Try a broader search term or use 'forage' for random discoveries"
-            )
+            print("💡 Try a broader search term or use 'forage' for random discoveries")
             return
 
         print(f"🎯 Found {len(matches)} capabilities matching '{search_term}':\n")

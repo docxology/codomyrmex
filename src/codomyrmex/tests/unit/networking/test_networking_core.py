@@ -108,7 +108,9 @@ class TestServiceInstanceModel:
         assert inst.metadata == {}
 
     def test_custom_metadata_stored(self):
-        inst = ServiceInstance(id="s7", host="host", port=1234, metadata={"region": "us-east"})
+        inst = ServiceInstance(
+            id="s7", host="host", port=1234, metadata={"region": "us-east"}
+        )
         assert inst.metadata["region"] == "us-east"
 
     def test_healthy_can_be_false(self):
@@ -142,7 +144,9 @@ class TestCircuitBreakerConfig:
         assert cfg.half_open_max_calls == 3
 
     def test_custom_values(self):
-        cfg = CircuitBreakerConfig(failure_threshold=2, success_threshold=1, timeout_seconds=5.0)
+        cfg = CircuitBreakerConfig(
+            failure_threshold=2, success_threshold=1, timeout_seconds=5.0
+        )
         assert cfg.failure_threshold == 2
         assert cfg.success_threshold == 1
         assert cfg.timeout_seconds == 5.0
@@ -314,7 +318,9 @@ class TestRetryPolicy:
         assert d2 > d1
 
     def test_get_delay_capped_at_max(self):
-        policy = RetryPolicy(initial_delay=1.0, max_delay=5.0, exponential_base=10.0, jitter=False)
+        policy = RetryPolicy(
+            initial_delay=1.0, max_delay=5.0, exponential_base=10.0, jitter=False
+        )
         assert policy.get_delay(10) <= 5.0
 
     def test_execute_succeeds_on_first_try(self):
@@ -634,7 +640,9 @@ class TestServiceProxy:
     def test_call_raises_circuit_open_after_cb_trips(self):
         """Proxy propagates CircuitOpenError after the circuit trips open."""
         lb = LoadBalancer()
-        cb = CircuitBreaker("cb-svc", CircuitBreakerConfig(failure_threshold=1, timeout_seconds=9999))
+        cb = CircuitBreaker(
+            "cb-svc", CircuitBreakerConfig(failure_threshold=1, timeout_seconds=9999)
+        )
         rp = RetryPolicy(max_retries=0, initial_delay=0.0, jitter=False)
         proxy = ServiceProxy("cb-svc", lb, cb, rp)
         lb.register(ServiceInstance(id="cbp", host="h", port=9))
@@ -656,7 +664,9 @@ class TestCircuitBreakerHalfOpen:
 
     def test_half_open_success_closes_circuit(self):
         """Sufficient successes in half-open state must close the circuit."""
-        cfg = CircuitBreakerConfig(failure_threshold=1, success_threshold=2, timeout_seconds=0.0)
+        cfg = CircuitBreakerConfig(
+            failure_threshold=1, success_threshold=2, timeout_seconds=0.0
+        )
         cb = CircuitBreaker("ho-svc", cfg)
         cb.record_failure()
         # Timeout of 0 means next can_execute transitions to HALF_OPEN
@@ -668,7 +678,9 @@ class TestCircuitBreakerHalfOpen:
 
     def test_half_open_failure_reopens_circuit(self):
         """A failure during half-open state must re-open the circuit."""
-        cfg = CircuitBreakerConfig(failure_threshold=1, success_threshold=5, timeout_seconds=0.0)
+        cfg = CircuitBreakerConfig(
+            failure_threshold=1, success_threshold=5, timeout_seconds=0.0
+        )
         cb = CircuitBreaker("ho-fail", cfg)
         cb.record_failure()
         cb.can_execute()  # transitions to HALF_OPEN
@@ -677,7 +689,9 @@ class TestCircuitBreakerHalfOpen:
 
     def test_half_open_respects_max_calls_limit(self):
         """half_open_max_calls config must cap calls in half-open state."""
-        cfg = CircuitBreakerConfig(failure_threshold=1, timeout_seconds=0.0, half_open_max_calls=2)
+        cfg = CircuitBreakerConfig(
+            failure_threshold=1, timeout_seconds=0.0, half_open_max_calls=2
+        )
         cb = CircuitBreaker("ho-limit", cfg)
         cb.record_failure()
         cb.can_execute()  # HALF_OPEN
@@ -705,7 +719,10 @@ except ImportError:
     HTTP_CLIENT_AVAILABLE = False
 
 
-@pytest.mark.skipif(not HTTP_CLIENT_AVAILABLE, reason="http_client module not importable (requests missing?)")
+@pytest.mark.skipif(
+    not HTTP_CLIENT_AVAILABLE,
+    reason="http_client module not importable (requests missing?)",
+)
 class TestResponseObject:
     """Tests for the Response dataclass from http_client.py."""
 
@@ -732,7 +749,9 @@ class TestResponseObject:
 
     def test_json_parses_text(self):
         """json() must parse the text field as JSON when json_data is None."""
-        r = Response(status_code=200, headers={}, content=b'{"key": 1}', text='{"key": 1}')
+        r = Response(
+            status_code=200, headers={}, content=b'{"key": 1}', text='{"key": 1}'
+        )
         data = r.json()
         assert data["key"] == 1
 
@@ -752,7 +771,9 @@ class TestResponseObject:
     def test_json_uses_existing_json_data(self):
         """If json_data is pre-populated, json() must return it directly."""
         prefilled = {"pre": "filled"}
-        r = Response(status_code=200, headers={}, content=b"", text="", json_data=prefilled)
+        r = Response(
+            status_code=200, headers={}, content=b"", text="", json_data=prefilled
+        )
         assert r.json() is prefilled
 
     def test_response_200_is_not_error(self):
@@ -766,7 +787,10 @@ class TestResponseObject:
         assert r.status_code == 500
 
 
-@pytest.mark.skipif(not HTTP_CLIENT_AVAILABLE, reason="http_client module not importable (requests missing?)")
+@pytest.mark.skipif(
+    not HTTP_CLIENT_AVAILABLE,
+    reason="http_client module not importable (requests missing?)",
+)
 class TestNetworkingErrorFromHttpClient:
     """Tests for NetworkingError from http_client."""
 
@@ -798,7 +822,9 @@ except ImportError:
     RAW_SOCKETS_AVAILABLE = False
 
 
-@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+@pytest.mark.skipif(
+    not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable"
+)
 class TestTCPClientConstruction:
     """Tests for TCPClient attribute initialisation without network I/O."""
 
@@ -826,7 +852,9 @@ class TestTCPClientConstruction:
             assert client.host == "127.0.0.1"
 
 
-@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+@pytest.mark.skipif(
+    not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable"
+)
 class TestTCPClientServerEcho:
     """End-to-end loopback echo test for TCPClient + TCPServer."""
 
@@ -861,7 +889,9 @@ class TestTCPClientServerEcho:
         assert received == b"hello"
 
 
-@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+@pytest.mark.skipif(
+    not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable"
+)
 class TestTCPServerAttributes:
     """Tests for TCPServer construction and SO_REUSEADDR setup."""
 
@@ -884,7 +914,9 @@ class TestTCPServerAttributes:
         srv.sock.close()
 
 
-@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+@pytest.mark.skipif(
+    not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable"
+)
 class TestUDPClientConstruction:
     """Tests for UDPClient attribute initialisation without network I/O."""
 
@@ -907,7 +939,9 @@ class TestUDPClientConstruction:
         client.close()
 
 
-@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+@pytest.mark.skipif(
+    not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable"
+)
 class TestUDPClientEcho:
     """End-to-end loopback echo for UDPClient."""
 
@@ -937,7 +971,9 @@ class TestUDPClientEcho:
         assert data == b"ping"
 
 
-@pytest.mark.skipif(not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable")
+@pytest.mark.skipif(
+    not RAW_SOCKETS_AVAILABLE, reason="raw_sockets module not importable"
+)
 class TestPortScanner:
     """Tests for PortScanner.is_port_open and scan_range."""
 
@@ -1182,7 +1218,9 @@ class TestWebSocketClientSendNotConnected:
             asyncio.run(client.send("hello"))
 
 
-@pytest.mark.skipif(not WEBSOCKET_CLIENT_AVAILABLE, reason="websocket_client not importable")
+@pytest.mark.skipif(
+    not WEBSOCKET_CLIENT_AVAILABLE, reason="websocket_client not importable"
+)
 class TestWebSocketClientImportError:
     """Tests for WebSocketClient when websockets lib is absent."""
 
@@ -1210,7 +1248,9 @@ class TestWebSocketClientImportError:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not WEBSOCKET_CLIENT_AVAILABLE, reason="websocket_client not importable")
+@pytest.mark.skipif(
+    not WEBSOCKET_CLIENT_AVAILABLE, reason="websocket_client not importable"
+)
 class TestWSErrorClass:
     """Tests for the websocket_client.WebSocketError exception class."""
 

@@ -44,10 +44,42 @@ _NETWORK = os.getenv("CODOMYRMEX_NETWORK_TESTS", "").lower() in ("1", "true", "y
 
 SAMPLE_ENTRIES = [
     APIEntry("DogCEO", "Dog breeds", "", True, "yes", "https://dog.ceo/api", "Animals"),
-    APIEntry("CatFacts", "Facts about cats", "apiKey", True, "no", "https://catfact.ninja", "Animals"),
-    APIEntry("Frankfurter", "Exchange rates", "", True, "yes", "https://frankfurter.app", "Finance"),
-    APIEntry("CoinGecko", "Crypto prices", "", False, "yes", "https://coingecko.com/api", "Finance"),
-    APIEntry("OpenWeather", "Weather data", "apiKey", True, "no", "https://openweathermap.org", "Weather"),
+    APIEntry(
+        "CatFacts",
+        "Facts about cats",
+        "apiKey",
+        True,
+        "no",
+        "https://catfact.ninja",
+        "Animals",
+    ),
+    APIEntry(
+        "Frankfurter",
+        "Exchange rates",
+        "",
+        True,
+        "yes",
+        "https://frankfurter.app",
+        "Finance",
+    ),
+    APIEntry(
+        "CoinGecko",
+        "Crypto prices",
+        "",
+        False,
+        "yes",
+        "https://coingecko.com/api",
+        "Finance",
+    ),
+    APIEntry(
+        "OpenWeather",
+        "Weather data",
+        "apiKey",
+        True,
+        "no",
+        "https://openweathermap.org",
+        "Weather",
+    ),
 ]
 
 
@@ -59,6 +91,7 @@ def registry() -> FreeAPIRegistry:
 # ---------------------------------------------------------------------------
 # APIEntry model
 # ---------------------------------------------------------------------------
+
 
 class TestAPIEntry:
     def test_fields_stored_correctly(self):
@@ -86,7 +119,15 @@ class TestAPIEntry:
     def test_to_dict_contains_all_keys(self):
         e = APIEntry("X", "d", "apiKey", False, "no", "https://x.com", "Tech")
         d = e.to_dict()
-        assert set(d.keys()) == {"name", "description", "auth", "https", "cors", "link", "category"}
+        assert set(d.keys()) == {
+            "name",
+            "description",
+            "auth",
+            "https",
+            "cors",
+            "link",
+            "category",
+        }
 
     def test_to_dict_values_match_fields(self):
         e = APIEntry("A", "B", "C", True, "yes", "https://a.com", "Z")
@@ -96,15 +137,29 @@ class TestAPIEntry:
         assert d["category"] == "Z"
 
     def test_from_dict_maps_api_key(self):
-        raw = {"API": "Foo", "Description": "bar", "Auth": "apiKey",
-               "HTTPS": True, "Cors": "yes", "Link": "https://foo.com", "Category": "Test"}
+        raw = {
+            "API": "Foo",
+            "Description": "bar",
+            "Auth": "apiKey",
+            "HTTPS": True,
+            "Cors": "yes",
+            "Link": "https://foo.com",
+            "Category": "Test",
+        }
         e = APIEntry.from_dict(raw)
         assert e.name == "Foo"
         assert e.auth == "apiKey"
         assert e.https is True
 
     def test_from_dict_uses_category_fallback(self):
-        raw = {"API": "X", "Description": "", "Auth": "", "HTTPS": False, "Cors": "no", "Link": ""}
+        raw = {
+            "API": "X",
+            "Description": "",
+            "Auth": "",
+            "HTTPS": False,
+            "Cors": "no",
+            "Link": "",
+        }
         e = APIEntry.from_dict(raw, category="Fallback")
         assert e.category == "Fallback"
 
@@ -122,6 +177,7 @@ class TestAPIEntry:
 # ---------------------------------------------------------------------------
 # APICategory model
 # ---------------------------------------------------------------------------
+
 
 class TestAPICategory:
     def test_name_and_count(self):
@@ -143,6 +199,7 @@ class TestAPICategory:
 # APISource enum
 # ---------------------------------------------------------------------------
 
+
 class TestAPISource:
     def test_values(self):
         assert APISource.JSON_API.value == "json_api"
@@ -154,9 +211,16 @@ class TestAPISource:
 # APICallResult model
 # ---------------------------------------------------------------------------
 
+
 class TestAPICallResult:
     def test_fields(self):
-        r = APICallResult("https://x.com", "GET", 200, {"Content-Type": "application/json"}, '{"ok":true}')
+        r = APICallResult(
+            "https://x.com",
+            "GET",
+            200,
+            {"Content-Type": "application/json"},
+            '{"ok":true}',
+        )
         assert r.url == "https://x.com"
         assert r.method == "GET"
         assert r.status_code == 200
@@ -181,6 +245,7 @@ class TestAPICallResult:
 # APICallError
 # ---------------------------------------------------------------------------
 
+
 class TestAPICallError:
     def test_is_exception(self):
         err = APICallError("bad", url="https://x.com")
@@ -200,6 +265,7 @@ class TestAPICallError:
 # ---------------------------------------------------------------------------
 # FreeAPIRegistry — filter / search / categories (in-memory, no network)
 # ---------------------------------------------------------------------------
+
 
 class TestFreeAPIRegistryFromEntries:
     def test_entries_property_returns_copy(self, registry):
@@ -288,6 +354,7 @@ class TestFreeAPIRegistryFromEntries:
 # FreeAPIRegistry — cache TTL behaviour (no network)
 # ---------------------------------------------------------------------------
 
+
 class TestFreeAPIRegistryCache:
     def test_cache_is_fresh_after_from_entries(self):
         r = FreeAPIRegistry.from_entries(SAMPLE_ENTRIES)
@@ -299,7 +366,7 @@ class TestFreeAPIRegistryCache:
         assert not r._is_cache_fresh()
 
     def test_cache_not_fresh_when_ttl_zero(self):
-        r = FreeAPIRegistry.from_entries(SAMPLE_ENTRIES )
+        r = FreeAPIRegistry.from_entries(SAMPLE_ENTRIES)
         r.cache_ttl_seconds = 0
         assert not r._is_cache_fresh()
 
@@ -307,6 +374,7 @@ class TestFreeAPIRegistryCache:
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
 
 class TestAppendParams:
     def test_no_params_returns_url(self):
@@ -385,7 +453,15 @@ class TestNormalizeAuth:
 
 class TestRowToEntry:
     def test_valid_row(self):
-        parts = ["", "[DogCEO](https://dog.ceo)", "Random dog images", "", "Yes", "yes", ""]
+        parts = [
+            "",
+            "[DogCEO](https://dog.ceo)",
+            "Random dog images",
+            "",
+            "Yes",
+            "yes",
+            "",
+        ]
         e = _row_to_entry(parts, "Animals")
         assert e is not None
         assert e.name == "DogCEO"
@@ -473,6 +549,7 @@ class TestParseReadmeMarkdown:
 # FreeAPIClient unit behaviour (no network)
 # ---------------------------------------------------------------------------
 
+
 class TestFreeAPIClientInit:
     def test_default_timeout(self):
         c = FreeAPIClient()
@@ -495,7 +572,10 @@ class TestFreeAPIClientInit:
 # Network tests — only run when CODOMYRMEX_NETWORK_TESTS=1
 # ---------------------------------------------------------------------------
 
-@pytest.mark.skipif(not _NETWORK, reason="Network tests disabled; set CODOMYRMEX_NETWORK_TESTS=1")
+
+@pytest.mark.skipif(
+    not _NETWORK, reason="Network tests disabled; set CODOMYRMEX_NETWORK_TESTS=1"
+)
 class TestFreeAPIRegistryNetwork:
     def test_fetch_returns_entries(self):
         r = FreeAPIRegistry(cache_ttl_seconds=0)
@@ -509,7 +589,9 @@ class TestFreeAPIRegistryNetwork:
         assert len(cats) > 5
 
 
-@pytest.mark.skipif(not _NETWORK, reason="Network tests disabled; set CODOMYRMEX_NETWORK_TESTS=1")
+@pytest.mark.skipif(
+    not _NETWORK, reason="Network tests disabled; set CODOMYRMEX_NETWORK_TESTS=1"
+)
 class TestFreeAPIClientNetwork:
     def test_get_dog_api(self):
         c = FreeAPIClient()
@@ -673,7 +755,15 @@ class TestFreeApiSearch:
     def test_entries_are_dicts_with_required_keys(self):
         result = _mcp_module.free_api_search()
         for entry in result["entries"]:
-            assert set(entry.keys()) == {"name", "description", "auth", "https", "cors", "link", "category"}
+            assert set(entry.keys()) == {
+                "name",
+                "description",
+                "auth",
+                "https",
+                "cors",
+                "link",
+                "category",
+            }
 
 
 # ---------------------------------------------------------------------------
@@ -742,7 +832,9 @@ class TestFetchFromJsonApiParsing:
         raw_entries = data.get("entries")
         with pytest.raises(ValueError, match="entries"):
             if not isinstance(raw_entries, list):
-                raise ValueError("Unexpected JSON shape: 'entries' key missing or not a list")
+                raise ValueError(
+                    "Unexpected JSON shape: 'entries' key missing or not a list"
+                )
 
     def test_from_dict_constructs_entry_from_json_api_payload(self):
         """Simulate one entry as returned by the JSON API."""

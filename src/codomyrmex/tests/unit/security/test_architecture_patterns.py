@@ -4,7 +4,6 @@ Covers: PatternCategory, SecurityPattern, get_security_patterns,
 get_pattern, get_patterns_by_category, apply_pattern, validate_pattern_application.
 """
 
-
 from codomyrmex.security.theory.architecture_patterns import (
     PatternCategory,
     SecurityPattern,

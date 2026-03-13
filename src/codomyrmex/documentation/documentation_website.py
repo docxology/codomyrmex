@@ -301,7 +301,9 @@ def build_static_site(package_manager="npm"):
 
 def serve_static_site(package_manager="npm"):
     """Serves the built static Docusaurus site."""
-    logger.info("Attempting to serve the built static site using %s...", package_manager)
+    logger.info(
+        "Attempting to serve the built static site using %s...", package_manager
+    )
     build_dir = os.path.join(DOCUSAURUS_ROOT_DIR, "build")
     if not os.path.exists(build_dir) or not os.listdir(build_dir):
         logger.error(

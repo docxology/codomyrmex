@@ -55,8 +55,16 @@ class ClaudeTaskExecutionMixin:
 
             execution_time = time.time() - start_time
             result_text = response.content[0].text if response.content else ""
-            input_tokens = response.usage.input_tokens if hasattr(response, "usage") and response.usage else 0
-            output_tokens = response.usage.output_tokens if hasattr(response, "usage") and response.usage else 0
+            input_tokens = (
+                response.usage.input_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
+            output_tokens = (
+                response.usage.output_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
             tokens_used = input_tokens + output_tokens
             cost = self._calculate_cost(input_tokens, output_tokens)
 
@@ -66,7 +74,11 @@ class ClaudeTaskExecutionMixin:
 
             logger.info(
                 "Executed task %s using %s in %.2fs (%s tokens, $%.6f)",
-                task_id, self.model, execution_time, tokens_used, cost,
+                task_id,
+                self.model,
+                execution_time,
+                tokens_used,
+                cost,
             )
 
             return {
@@ -187,8 +199,16 @@ class ClaudeTaskExecutionMixin:
 
             execution_time = time.time() - start_time
             result_text = response.content[0].text if response.content else ""
-            input_tokens = response.usage.input_tokens if hasattr(response, "usage") and response.usage else 0
-            output_tokens = response.usage.output_tokens if hasattr(response, "usage") and response.usage else 0
+            input_tokens = (
+                response.usage.input_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
+            output_tokens = (
+                response.usage.output_tokens
+                if hasattr(response, "usage") and response.usage
+                else 0
+            )
             tokens_used = input_tokens + output_tokens
             cost = self._calculate_cost(input_tokens, output_tokens)
 

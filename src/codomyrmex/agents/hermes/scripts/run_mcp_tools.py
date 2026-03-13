@@ -85,13 +85,17 @@ def run_mcp_tools(*, prompt: str = "Say hello in one sentence.") -> dict[str, An
     start = time.time()
     results: dict[str, Any] = {**_probe_core(prompt), **_probe_templates(prompt)}
     results["total_elapsed_s"] = round(time.time() - start, 3)
-    results["all_have_status_key"] = all("status" in results[k] for k in results if k.endswith("_tool"))
+    results["all_have_status_key"] = all(
+        "status" in results[k] for k in results if k.endswith("_tool")
+    )
     return results
 
 
 def main() -> None:
     """CLI entry point."""
-    prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "Say hello in one sentence."
+    prompt = (
+        " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "Say hello in one sentence."
+    )
     print(json.dumps(run_mcp_tools(prompt=prompt), indent=2, default=str))
 
 

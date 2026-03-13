@@ -3,6 +3,7 @@
 Zero-mock policy: real class instantiation and arithmetic assertions only.
 All expected values computed by hand for verifiability.
 """
+
 import math
 
 import pytest
@@ -68,9 +69,7 @@ class TestEvaluationResult:
         assert "metadata" in d
 
     def test_to_dict_task_type_is_string(self):
-        er = EvaluationResult(
-            metrics={}, task_type=TaskType.REGRESSION, sample_count=0
-        )
+        er = EvaluationResult(metrics={}, task_type=TaskType.REGRESSION, sample_count=0)
         assert isinstance(er.to_dict()["task_type"], str)
 
     def test_metadata_defaults_empty(self):
@@ -79,7 +78,9 @@ class TestEvaluationResult:
 
     def test_metadata_can_be_set(self):
         er = EvaluationResult(
-            metrics={}, task_type=TaskType.REGRESSION, sample_count=0,
+            metrics={},
+            task_type=TaskType.REGRESSION,
+            sample_count=0,
             metadata={"dataset": "test_set"},
         )
         assert er.metadata["dataset"] == "test_set"

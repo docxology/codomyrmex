@@ -167,7 +167,15 @@ class EveryCodeClient(CLIAgentBase):
                     else code_input,
                 },
             )
-        except (AgentTimeoutError, AgentError, ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except (
+            AgentTimeoutError,
+            AgentError,
+            ValueError,
+            RuntimeError,
+            AttributeError,
+            OSError,
+            TypeError,
+        ) as e:
             self._wrap_execute_error(e)
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
@@ -193,7 +201,9 @@ class EveryCodeClient(CLIAgentBase):
         try:
             # Prevent directory traversal / shell injection attempts
             if ".." in path_str or ";" in path_str or "|" in path_str:
-                self.logger.warning("Suspicious path detected and ignored: %s", path_str)
+                self.logger.warning(
+                    "Suspicious path detected and ignored: %s", path_str
+                )
                 return None
 
             path = Path(path_str).resolve()
@@ -289,7 +299,8 @@ class EveryCodeClient(CLIAgentBase):
             TypeError,
         ) as e:
             self.logger.warning(
-                "Failed to get Every Code help: %s", e,
+                "Failed to get Every Code help: %s",
+                e,
                 extra={"command": self.command, "error": str(e)},
             )
             return {
@@ -324,7 +335,8 @@ class EveryCodeClient(CLIAgentBase):
             TypeError,
         ) as e:
             self.logger.warning(
-                "Failed to get Every Code version: %s", e,
+                "Failed to get Every Code version: %s",
+                e,
                 extra={"command": self.command, "error": str(e)},
             )
             return {

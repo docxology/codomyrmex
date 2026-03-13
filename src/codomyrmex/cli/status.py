@@ -28,10 +28,13 @@ def get_system_vitals() -> dict:
     # Check logs size in /tmp/ or local
     log_dir = Path("logs")
     if log_dir.exists():
-        total_size = sum(f.stat().st_size for f in log_dir.glob("**/*.log") if f.is_file())
+        total_size = sum(
+            f.stat().st_size for f in log_dir.glob("**/*.log") if f.is_file()
+        )
         vitals["logs_size_mb"] = round(total_size / (1024 * 1024), 2)
 
     return vitals
+
 
 def print_status_report():
     """Print the formatted /codomyrmexStatus report."""
@@ -48,6 +51,8 @@ def print_status_report():
     # Add some environment vitals
     print("\nEnvironment Constraints:")
     print(f"UV_PROJECT_ENV:     {os.environ.get('UV_PROJECT_ENV', 'Not set')}")
-    print(f"ANTHROPIC_API_KEY:  {'Set' if 'ANTHROPIC_API_KEY' in os.environ else 'Not set'}")
+    print(
+        f"ANTHROPIC_API_KEY:  {'Set' if 'ANTHROPIC_API_KEY' in os.environ else 'Not set'}"
+    )
 
     print("==================================================")

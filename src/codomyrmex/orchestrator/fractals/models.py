@@ -8,12 +8,14 @@ from pydantic import BaseModel, Field
 
 class TaskKind(StrEnum):
     """The kind of a task."""
+
     ATOMIC = "atomic"
     COMPOSITE = "composite"
 
 
 class TaskStatus(StrEnum):
     """The execution status of a task."""
+
     PENDING = "pending"
     DECOMPOSING = "decomposing"
     READY = "ready"
@@ -24,6 +26,7 @@ class TaskStatus(StrEnum):
 
 class TaskNode(BaseModel):
     """A node in the recursive task tree."""
+
     id: str
     description: str
     depth: int = 0
@@ -53,6 +56,9 @@ class TaskNode(BaseModel):
             return self.status == TaskStatus.DONE
         return all(child.is_subtree_done() for child in self.children)
 
+
 # Needed for self-referential type inference in Pydantic v1,
 # harmless in v2 if not needed.
-TaskNode.model_rebuild() if hasattr(TaskNode, "model_rebuild") else TaskNode.update_forward_refs()
+TaskNode.model_rebuild() if hasattr(
+    TaskNode, "model_rebuild"
+) else TaskNode.update_forward_refs()

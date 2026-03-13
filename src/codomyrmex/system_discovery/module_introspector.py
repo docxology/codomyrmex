@@ -8,7 +8,7 @@ Example::
     introspector = ModuleIntrospector()
     report = introspector.scan_all()
     print(f"Modules: {report['total_modules']}")
-    for m in report['modules'][:3]:
+    for m in report["modules"][:3]:
         print(f"  {m['name']}: {m['file_count']} files, {m['loc']} LOC")
 """
 
@@ -89,7 +89,7 @@ class ModuleIntrospector:
 
         intro = ModuleIntrospector()
         report = intro.scan_all()
-        healthy = [m for m in report['modules'] if m['health'] == 'healthy']
+        healthy = [m for m in report["modules"] if m["health"] == "healthy"]
     """
 
     def __init__(self, src_root: Path | None = None) -> None:
@@ -154,16 +154,21 @@ class ModuleIntrospector:
                             if isinstance(target, ast.Name) and target.id == "__all__":
                                 if isinstance(node.value, ast.List):
                                     info.exports = [
-                                        elt.value for elt in node.value.elts
-                                        if isinstance(elt, ast.Constant) and isinstance(elt.value, str)
+                                        elt.value
+                                        for elt in node.value.elts
+                                        if isinstance(elt, ast.Constant)
+                                        and isinstance(elt.value, str)
                                     ]
             except Exception:
                 pass
 
         # Submodule counting
         info.submodule_count = sum(
-            1 for d in mod_dir.iterdir()
-            if d.is_dir() and (d / "__init__.py").exists() and not d.name.startswith("_")
+            1
+            for d in mod_dir.iterdir()
+            if d.is_dir()
+            and (d / "__init__.py").exists()
+            and not d.name.startswith("_")
         )
 
         return info
@@ -179,23 +184,29 @@ class ModuleIntrospector:
         modules: list[dict] = []
 
         for mod_dir in sorted(self._root.iterdir()):
-            if not mod_dir.is_dir() or mod_dir.name.startswith(("_", ".")) or mod_dir.name == "tests":
+            if (
+                not mod_dir.is_dir()
+                or mod_dir.name.startswith(("_", "."))
+                or mod_dir.name == "tests"
+            ):
                 continue
 
             info = self.scan_module(mod_dir)
-            modules.append({
-                "name": info.name,
-                "file_count": info.file_count,
-                "loc": info.loc,
-                "classes": info.classes,
-                "functions": info.functions,
-                "mcp_tools": info.mcp_tool_count,
-                "submodules": info.submodule_count,
-                "exports": len(info.exports),
-                "doc_score": round(info.doc_score, 2),
-                "health": info.health,
-                "has_tests": info.has_tests,
-            })
+            modules.append(
+                {
+                    "name": info.name,
+                    "file_count": info.file_count,
+                    "loc": info.loc,
+                    "classes": info.classes,
+                    "functions": info.functions,
+                    "mcp_tools": info.mcp_tool_count,
+                    "submodules": info.submodule_count,
+                    "exports": len(info.exports),
+                    "doc_score": round(info.doc_score, 2),
+                    "health": info.health,
+                    "has_tests": info.has_tests,
+                }
+            )
 
         elapsed = (time.monotonic() - start) * 1000
         health_dist = {"healthy": 0, "partial": 0, "minimal": 0}

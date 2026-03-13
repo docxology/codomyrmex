@@ -149,12 +149,18 @@ class TestCalculateRiskScore:
         for likelihood in ("low", "medium", "high"):
             for impact in ("low", "medium", "high", "critical"):
                 score = calculate_risk_score(likelihood, impact)
-                assert 0.0 <= score <= 1.0, f"Out of range for {likelihood}/{impact}: {score}"
+                assert 0.0 <= score <= 1.0, (
+                    f"Out of range for {likelihood}/{impact}: {score}"
+                )
 
     def test_case_insensitive_lookup(self):
         """Source calls .lower() on inputs before lookup."""
-        assert calculate_risk_score("HIGH", "CRITICAL") == calculate_risk_score("high", "critical")
-        assert calculate_risk_score("Low", "Medium") == calculate_risk_score("low", "medium")
+        assert calculate_risk_score("HIGH", "CRITICAL") == calculate_risk_score(
+            "high", "critical"
+        )
+        assert calculate_risk_score("Low", "Medium") == calculate_risk_score(
+            "low", "medium"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -386,7 +392,13 @@ class TestRiskAssessor:
     def test_calculate_overall_risk_above_0_75_is_critical(self):
         assessor = RiskAssessor()
         risks = [
-            Risk(risk_id="r1", description="d", likelihood="high", impact="critical", risk_score=0.8)
+            Risk(
+                risk_id="r1",
+                description="d",
+                likelihood="high",
+                impact="critical",
+                risk_score=0.8,
+            )
         ]
         level = assessor._calculate_overall_risk(risks)
         assert level == RiskLevel.CRITICAL.value
@@ -394,7 +406,13 @@ class TestRiskAssessor:
     def test_calculate_overall_risk_above_0_5_is_high(self):
         assessor = RiskAssessor()
         risks = [
-            Risk(risk_id="r1", description="d", likelihood="high", impact="high", risk_score=0.562)
+            Risk(
+                risk_id="r1",
+                description="d",
+                likelihood="high",
+                impact="high",
+                risk_score=0.562,
+            )
         ]
         level = assessor._calculate_overall_risk(risks)
         assert level == RiskLevel.HIGH.value
@@ -402,7 +420,13 @@ class TestRiskAssessor:
     def test_calculate_overall_risk_above_0_25_is_medium(self):
         assessor = RiskAssessor()
         risks = [
-            Risk(risk_id="r1", description="d", likelihood="medium", impact="high", risk_score=0.375)
+            Risk(
+                risk_id="r1",
+                description="d",
+                likelihood="medium",
+                impact="high",
+                risk_score=0.375,
+            )
         ]
         level = assessor._calculate_overall_risk(risks)
         assert level == RiskLevel.MEDIUM.value
@@ -410,7 +434,13 @@ class TestRiskAssessor:
     def test_calculate_overall_risk_at_or_below_0_25_is_low(self):
         assessor = RiskAssessor()
         risks = [
-            Risk(risk_id="r1", description="d", likelihood="low", impact="medium", risk_score=0.125)
+            Risk(
+                risk_id="r1",
+                description="d",
+                likelihood="low",
+                impact="medium",
+                risk_score=0.125,
+            )
         ]
         level = assessor._calculate_overall_risk(risks)
         assert level == RiskLevel.LOW.value
@@ -422,7 +452,12 @@ class TestRiskAssessor:
 
     def test_existing_controls_cause_residual_risk_to_be_set(self):
         assessor = RiskAssessor()
-        result = assessor.assess({"assets": ["data_store"], "existing_controls": ["encryption", "access_control"]})
+        result = assessor.assess(
+            {
+                "assets": ["data_store"],
+                "existing_controls": ["encryption", "access_control"],
+            }
+        )
         for risk in result.risks:
             if risk.existing_controls:
                 assert risk.residual_risk is not None
@@ -480,7 +515,13 @@ class TestCalculateAggregateRisk:
 
     def test_total_risks_count(self):
         risks = [
-            Risk(risk_id=f"r{i}", description="d", likelihood="medium", impact="high", risk_score=0.375)
+            Risk(
+                risk_id=f"r{i}",
+                description="d",
+                likelihood="medium",
+                impact="high",
+                risk_score=0.375,
+            )
             for i in range(3)
         ]
         result = calculate_aggregate_risk(risks)
@@ -488,8 +529,20 @@ class TestCalculateAggregateRisk:
 
     def test_average_risk_score_is_correct(self):
         risks = [
-            Risk(risk_id="r1", description="d", likelihood="low", impact="low", risk_score=0.062),
-            Risk(risk_id="r2", description="d", likelihood="high", impact="critical", risk_score=0.75),
+            Risk(
+                risk_id="r1",
+                description="d",
+                likelihood="low",
+                impact="low",
+                risk_score=0.062,
+            ),
+            Risk(
+                risk_id="r2",
+                description="d",
+                likelihood="high",
+                impact="critical",
+                risk_score=0.75,
+            ),
         ]
         result = calculate_aggregate_risk(risks)
         expected_avg = round((0.062 + 0.75) / 2, 3)
@@ -497,18 +550,54 @@ class TestCalculateAggregateRisk:
 
     def test_max_risk_score_is_correct(self):
         risks = [
-            Risk(risk_id="r1", description="d", likelihood="low", impact="low", risk_score=0.062),
-            Risk(risk_id="r2", description="d", likelihood="high", impact="critical", risk_score=0.75),
+            Risk(
+                risk_id="r1",
+                description="d",
+                likelihood="low",
+                impact="low",
+                risk_score=0.062,
+            ),
+            Risk(
+                risk_id="r2",
+                description="d",
+                likelihood="high",
+                impact="critical",
+                risk_score=0.75,
+            ),
         ]
         result = calculate_aggregate_risk(risks)
         assert result["max_risk_score"] == pytest.approx(0.75, abs=1e-3)
 
     def test_risk_distribution_counts_by_impact(self):
         risks = [
-            Risk(risk_id="r1", description="d", likelihood="high", impact="critical", risk_score=0.75),
-            Risk(risk_id="r2", description="d", likelihood="medium", impact="high", risk_score=0.375),
-            Risk(risk_id="r3", description="d", likelihood="low", impact="medium", risk_score=0.125),
-            Risk(risk_id="r4", description="d", likelihood="low", impact="low", risk_score=0.062),
+            Risk(
+                risk_id="r1",
+                description="d",
+                likelihood="high",
+                impact="critical",
+                risk_score=0.75,
+            ),
+            Risk(
+                risk_id="r2",
+                description="d",
+                likelihood="medium",
+                impact="high",
+                risk_score=0.375,
+            ),
+            Risk(
+                risk_id="r3",
+                description="d",
+                likelihood="low",
+                impact="medium",
+                risk_score=0.125,
+            ),
+            Risk(
+                risk_id="r4",
+                description="d",
+                likelihood="low",
+                impact="low",
+                risk_score=0.062,
+            ),
         ]
         result = calculate_aggregate_risk(risks)
         dist = result["risk_distribution"]

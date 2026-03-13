@@ -89,6 +89,7 @@ class TestMemoryCLI:
 
 # ── CL3: Dashboard CLI ───────────────────────────────────────────
 
+
 class TestDashboardCLI:
     """Verify dashboard CLI method exists."""
 
@@ -110,6 +111,7 @@ class TestDashboardCLI:
 
 
 # ── CL4: Test CLI ────────────────────────────────────────────────
+
 
 class TestTestCLI:
     """Verify test CLI improvements."""
@@ -185,6 +187,7 @@ class TestSBOMGenerator:
 
 
 # ── CLI Wiring ────────────────────────────────────────────────────
+
 
 class TestCLIWiring:
     """Verify new subcommands are wired into the CLI."""

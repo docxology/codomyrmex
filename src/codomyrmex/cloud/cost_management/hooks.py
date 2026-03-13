@@ -13,9 +13,9 @@ Example::
 
     auto = AutoCostTracker(tracker, pricing)
 
+
     @cost_tracked(auto, provider="openai", model="gpt-4o")
-    def call_llm(prompt: str) -> str:
-        ...
+    def call_llm(prompt: str) -> str: ...
 """
 
 from __future__ import annotations
@@ -352,9 +352,7 @@ def cost_tracked(
 
         @functools.wraps(fn)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            with auto_tracker.track(
-                provider, op, model=model, category=category
-            ):
+            with auto_tracker.track(provider, op, model=model, category=category):
                 return fn(*args, **kwargs)
 
         return wrapper  # type: ignore[return-value]

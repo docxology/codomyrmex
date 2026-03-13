@@ -187,7 +187,9 @@ class FrameExtractor:
                 cap.set(cv2.CAP_PROP_POS_FRAMES, int(current_time * fps))
                 ret, frame = cap.read()
                 if ret:
-                    frames.append(Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)))
+                    frames.append(
+                        Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+                    )
                 current_time += interval
         finally:
             cap.release()
@@ -202,7 +204,9 @@ class FrameExtractor:
             effective_end = end if end is not None else clip.duration
             current_time = start
             while current_time <= effective_end:
-                frames.append(Image.fromarray(clip.get_frame(current_time).astype("uint8")))
+                frames.append(
+                    Image.fromarray(clip.get_frame(current_time).astype("uint8"))
+                )
                 current_time += interval
         return frames
 
@@ -276,7 +280,9 @@ class FrameExtractor:
         if timestamp is None:
             if OPENCV_AVAILABLE:
                 cap = cv2.VideoCapture(str(path))
-                duration = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) / cap.get(cv2.CAP_PROP_FPS)
+                duration = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) / cap.get(
+                    cv2.CAP_PROP_FPS
+                )
                 cap.release()
             elif MOVIEPY_AVAILABLE:
                 with VideoFileClip(str(path)) as clip:
@@ -295,13 +301,19 @@ class FrameExtractor:
         try:
             with VideoFileClip(str(path)) as clip:
                 if clip.audio is None:
-                    raise AudioExtractionError("Video has no audio track", video_path=path)
-                clip.audio.write_audiofile(str(output), bitrate=bitrate, verbose=False, logger=None)
+                    raise AudioExtractionError(
+                        "Video has no audio track", video_path=path
+                    )
+                clip.audio.write_audiofile(
+                    str(output), bitrate=bitrate, verbose=False, logger=None
+                )
         except AudioExtractionError:
             raise
         except Exception as e:
             raise AudioExtractionError(
-                f"Audio extraction failed: {e}", video_path=path, audio_format=audio_format
+                f"Audio extraction failed: {e}",
+                video_path=path,
+                audio_format=audio_format,
             ) from e
 
     def extract_audio(
@@ -326,9 +338,15 @@ class FrameExtractor:
             AudioExtractionError: If extraction fails
         """
         path = validate_video_path(video_path)
-        output = Path(output_path) if output_path else path.parent / f"{path.stem}.{audio_format}"
+        output = (
+            Path(output_path)
+            if output_path
+            else path.parent / f"{path.stem}.{audio_format}"
+        )
         if not MOVIEPY_AVAILABLE:
-            raise AudioExtractionError("moviepy required for audio extraction", video_path=path)
+            raise AudioExtractionError(
+                "moviepy required for audio extraction", video_path=path
+            )
         self._write_audio_file(path, output, bitrate, audio_format)
         return output
 

@@ -39,6 +39,7 @@ class PerplexityClient(APIAgentBase):
         import requests
 
         from codomyrmex.agents.core import AgentCapabilities
+
         super().__init__(
             name="perplexity",
             capabilities=[
@@ -56,8 +57,14 @@ class PerplexityClient(APIAgentBase):
             error_class=PerplexityError,
             config=config,
         )
-        self.api_key = self._extract_config_value("perplexity_api_key", default=os.environ.get("PERPLEXITY_API_KEY"), config=config)
-        self.timeout = self._extract_config_value("perplexity_timeout", default=120, config=config)
+        self.api_key = self._extract_config_value(
+            "perplexity_api_key",
+            default=os.environ.get("PERPLEXITY_API_KEY"),
+            config=config,
+        )
+        self.timeout = self._extract_config_value(
+            "perplexity_timeout", default=120, config=config
+        )
         self.api_base = "https://api.perplexity.ai/chat/completions"
         self.default_model = "sonar"
 
@@ -201,7 +208,11 @@ class PerplexityClient(APIAgentBase):
                                 break
                             try:
                                 chunk = json.loads(data_str)
-                                content = chunk.get("choices", [{}])[0].get("delta", {}).get("content", "")
+                                content = (
+                                    chunk.get("choices", [{}])[0]
+                                    .get("delta", {})
+                                    .get("content", "")
+                                )
                                 if content:
                                     yield content
                             except json.JSONDecodeError:
@@ -210,5 +221,3 @@ class PerplexityClient(APIAgentBase):
         except requests.exceptions.RequestException as e:
             error_msg = str(e)
             yield f"\n[Stream Error: {error_msg}]"
-
-

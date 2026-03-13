@@ -81,7 +81,12 @@ class Cache(ABC):
     def get_stats(self) -> CacheStats:
         """Deprecated: use .stats property instead."""
         import warnings
-        warnings.warn("get_stats() is deprecated, use .stats property", DeprecationWarning, stacklevel=2)
+
+        warnings.warn(
+            "get_stats() is deprecated, use .stats property",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.stats
 
     def delete_pattern(self, pattern: str) -> int:

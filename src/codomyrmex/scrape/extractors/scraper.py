@@ -142,7 +142,9 @@ class Scraper(BaseScraper):
         logger.info("Starting crawl from URL: %s", url)
         try:
             result = self.adapter.crawl(url, options)
-            logger.info("Crawl job %s created, status: %s", result.job_id, result.status)
+            logger.info(
+                "Crawl job %s created, status: %s", result.job_id, result.status
+            )
             return result
         except ScrapeError:
             raise

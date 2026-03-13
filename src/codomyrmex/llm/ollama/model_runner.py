@@ -84,7 +84,9 @@ class StreamingChunk:
     token_count: int | None = None
 
 
-class ModelRunner(OllamaExecutionMixin, OllamaAsyncExecutionMixin, OllamaEvaluationMixin):
+class ModelRunner(
+    OllamaExecutionMixin, OllamaAsyncExecutionMixin, OllamaEvaluationMixin
+):
     """
     Advanced model execution engine for Codomyrmex.
 

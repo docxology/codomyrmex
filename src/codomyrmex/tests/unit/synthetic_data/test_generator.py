@@ -4,6 +4,7 @@ SyntheticDataGenerator.
 Zero-mock policy: real class instantiation + stdlib only.
 Skip guard: generate_classification uses numpy — skipped if absent.
 """
+
 import pytest
 
 from codomyrmex.synthetic_data.generator import (
@@ -175,9 +176,7 @@ class TestGenerateStructured:
             assert len(record["s"]) == 8
 
     def test_str_field_custom_length(self):
-        schema = DataSchema(
-            fields={"s": {"type": "str", "length": 4}}, n_samples=5
-        )
+        schema = DataSchema(fields={"s": {"type": "str", "length": 4}}, n_samples=5)
         for record in self._gen().generate_structured(schema):
             assert len(record["s"]) == 4
 
@@ -228,9 +227,7 @@ class TestGenerateStructured:
             assert isinstance(record["t"], str)
 
     def test_text_field_has_words(self):
-        schema = DataSchema(
-            fields={"t": {"type": "text", "n_words": 3}}, n_samples=10
-        )
+        schema = DataSchema(fields={"t": {"type": "text", "n_words": 3}}, n_samples=10)
         for record in self._gen().generate_structured(schema):
             assert len(record["t"].split()) >= 1  # at least 1 word
 
@@ -326,9 +323,7 @@ class TestGenerateClassification:
         assert len(labels) == 20
 
     def test_feature_vectors_have_correct_dimension(self):
-        features, _ = self._gen().generate_classification(
-            n_samples=10, n_features=5
-        )
+        features, _ = self._gen().generate_classification(n_samples=10, n_features=5)
         for fv in features:
             assert len(fv) == 5
 

@@ -263,7 +263,10 @@ class TestAgentRegistry:
         prev = os.environ.pop("OLLAMA_BASE_URL", None)
         try:
             registry = AgentRegistry()
-            assert "11434" in registry._ollama_base_url or "localhost" in registry._ollama_base_url
+            assert (
+                "11434" in registry._ollama_base_url
+                or "localhost" in registry._ollama_base_url
+            )
         finally:
             if prev is not None:
                 os.environ["OLLAMA_BASE_URL"] = prev
@@ -273,6 +276,8 @@ class TestAgentRegistry:
         for desc in registry.list_agents():
             assert desc.name, "Agent descriptor missing name"
             assert desc.display_name, f"{desc.name}: missing display_name"
-            assert desc.agent_type in ("api", "cli", "local"), f"{desc.name}: invalid type"
+            assert desc.agent_type in ("api", "cli", "local"), (
+                f"{desc.name}: invalid type"
+            )
             assert desc.env_var, f"{desc.name}: missing env_var"
             assert callable(desc.probe), f"{desc.name}: probe not callable"

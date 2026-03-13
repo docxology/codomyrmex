@@ -1,4 +1,5 @@
 """Tests for OpenFangConfig — zero-mock, env-var driven."""
+
 import os
 from pathlib import Path
 

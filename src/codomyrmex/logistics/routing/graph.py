@@ -10,7 +10,9 @@ class DijkstraRouting:
     def __init__(self) -> None:
         self.graph: dict[str, dict[str, float]] = {}
 
-    def add_edge(self, from_id: str, to_id: str, distance: float, bidirectional: bool = True) -> None:
+    def add_edge(
+        self, from_id: str, to_id: str, distance: float, bidirectional: bool = True
+    ) -> None:
         self.graph.setdefault(from_id, {})[to_id] = distance
         if bidirectional:
             self.graph.setdefault(to_id, {})[from_id] = distance

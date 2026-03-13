@@ -12,7 +12,7 @@ from codomyrmex.languages.base import BaseLanguageManager
 logger = logging.getLogger(__name__)
 from codomyrmex.languages.javascript.manager import JavaScriptManager
 
-_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_FAST = 10  # seconds for version checks
 _TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 
@@ -50,12 +50,30 @@ class TypeScriptManager(BaseLanguageManager):
             os.makedirs(path, exist_ok=True)
 
             if self._has_cmd("bun"):
-                subprocess.run(["bun", "init", "-y"], cwd=path, check=True, capture_output=True, timeout=_TIMEOUT_SLOW)
+                subprocess.run(
+                    ["bun", "init", "-y"],
+                    cwd=path,
+                    check=True,
+                    capture_output=True,
+                    timeout=_TIMEOUT_SLOW,
+                )
                 return True
 
             # Fallback npm and tsc
-            subprocess.run(["npm", "init", "-y"], cwd=path, check=True, capture_output=True, timeout=_TIMEOUT_SLOW)
-            subprocess.run(["npx", "tsc", "--init"], cwd=path, check=True, capture_output=True, timeout=_TIMEOUT_SLOW)
+            subprocess.run(
+                ["npm", "init", "-y"],
+                cwd=path,
+                check=True,
+                capture_output=True,
+                timeout=_TIMEOUT_SLOW,
+            )
+            subprocess.run(
+                ["npx", "tsc", "--init"],
+                cwd=path,
+                check=True,
+                capture_output=True,
+                timeout=_TIMEOUT_SLOW,
+            )
             return True
         except (OSError, subprocess.SubprocessError) as e:
             logger.warning("Failed to setup TS project: %s", e)
@@ -84,7 +102,7 @@ class TypeScriptManager(BaseLanguageManager):
                 cwd=dir_path,
                 capture_output=True,
                 text=True,
-            timeout=_TIMEOUT_SLOW,
+                timeout=_TIMEOUT_SLOW,
             )
             self._cleanup([script_path])
             return result.stdout + result.stderr
@@ -98,7 +116,7 @@ class TypeScriptManager(BaseLanguageManager):
                 [*cmd, temp_path],
                 capture_output=True,
                 text=True,
-            timeout=_TIMEOUT_SLOW,
+                timeout=_TIMEOUT_SLOW,
             )
             return result.stdout + result.stderr
         finally:
@@ -106,7 +124,12 @@ class TypeScriptManager(BaseLanguageManager):
 
     def _has_cmd(self, cmd: str) -> bool:
         try:
-            subprocess.run([cmd, "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=_TIMEOUT_FAST)
+            subprocess.run(
+                [cmd, "--version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                timeout=_TIMEOUT_FAST,
+            )
             return True
         except FileNotFoundError:
             return False

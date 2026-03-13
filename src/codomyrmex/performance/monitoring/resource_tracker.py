@@ -158,7 +158,9 @@ class ResourceTracker:
 
         if operation != self._operation:
             logger.warning(
-                "Operation name mismatch: expected %s, got %s", self._operation, operation
+                "Operation name mismatch: expected %s, got %s",
+                self._operation,
+                operation,
             )
 
         self._tracking = False
@@ -173,7 +175,9 @@ class ResourceTracker:
         logger.info("Stopped resource tracking for operation: %s", operation)
         logger.info(
             "Tracking summary: %.3fs, peak memory: %.1fMB, avg CPU: %.1f%%",
-            result.duration, result.peak_memory_rss_mb, result.average_cpu_percent,
+            result.duration,
+            result.peak_memory_rss_mb,
+            result.average_cpu_percent,
         )
 
         return result
@@ -232,24 +236,38 @@ class ResourceTracker:
         memory_delta = snaps[-1].memory_rss_mb - snaps[0].memory_rss_mb
         return peak_rss, peak_vms, avg_cpu, total_cpu_time, memory_delta
 
-    def _build_result_summary(self, avg_cpu: float, memory_delta: float, end_snapshot: object) -> dict:
+    def _build_result_summary(
+        self, avg_cpu: float, memory_delta: float, end_snapshot: object
+    ) -> dict:
         """Build the summary dict for a ResourceTrackingResult."""
         return {
             "total_snapshots": len(self._snapshots),
             "sample_interval": self.sample_interval,
-            "memory_trend": "increasing" if memory_delta > 1.0 else "stable" if abs(memory_delta) < 1.0 else "decreasing",
-            "cpu_intensity": "high" if avg_cpu > 50 else "medium" if avg_cpu > 20 else "low",
+            "memory_trend": "increasing"
+            if memory_delta > 1.0
+            else "stable"
+            if abs(memory_delta) < 1.0
+            else "decreasing",
+            "cpu_intensity": "high"
+            if avg_cpu > 50
+            else "medium"
+            if avg_cpu > 20
+            else "low",
             "thread_count": end_snapshot.num_threads,
             "tracking_quality": "good" if len(self._snapshots) > 10 else "limited",
         }
 
-    def _calculate_results(self, operation: str, end_time: float) -> ResourceTrackingResult:
+    def _calculate_results(
+        self, operation: str, end_time: float
+    ) -> ResourceTrackingResult:
         """Calculate tracking results from snapshots."""
         if not self._snapshots:
             return self._create_empty_result(operation)
         start_snapshot = self._snapshots[0]
         end_snapshot = self._snapshots[-1]
-        peak_rss, peak_vms, avg_cpu, total_cpu_time, memory_delta = self._snapshot_stats()
+        peak_rss, peak_vms, avg_cpu, total_cpu_time, memory_delta = (
+            self._snapshot_stats()
+        )
         summary = self._build_result_summary(avg_cpu, memory_delta, end_snapshot)
         return ResourceTrackingResult(
             operation=operation,
@@ -323,8 +341,10 @@ def track_memory_usage(func: Callable):
 
             logger.info(
                 "Memory tracking for %s: duration=%.3fs, peak_memory=%.1fMB, memory_delta=%+.1fMB",
-                func.__name__, tracking_result.duration,
-                tracking_result.peak_memory_rss_mb, tracking_result.memory_delta_mb,
+                func.__name__,
+                tracking_result.duration,
+                tracking_result.peak_memory_rss_mb,
+                tracking_result.memory_delta_mb,
             )
 
     yield wrapper
@@ -341,9 +361,13 @@ def _report_summary(results: list[ResourceTrackingResult]) -> dict[str, Any]:
         "total_duration_seconds": total_duration,
         "average_duration_seconds": total_duration / n if n else 0,
         "max_peak_memory_mb": max(peak_memories) if peak_memories else 0,
-        "average_peak_memory_mb": sum(peak_memories) / len(peak_memories) if peak_memories else 0,
+        "average_peak_memory_mb": sum(peak_memories) / len(peak_memories)
+        if peak_memories
+        else 0,
         "max_cpu_usage_percent": max(cpu_usages) if cpu_usages else 0,
-        "average_cpu_usage_percent": sum(cpu_usages) / len(cpu_usages) if cpu_usages else 0,
+        "average_cpu_usage_percent": sum(cpu_usages) / len(cpu_usages)
+        if cpu_usages
+        else 0,
     }
 
 
@@ -352,11 +376,15 @@ def _report_top_consumers(results: list[ResourceTrackingResult]) -> dict[str, An
     return {
         "memory_hogs": [
             {"operation": r.operation, "peak_memory_mb": r.peak_memory_rss_mb}
-            for r in sorted(results, key=lambda r: r.peak_memory_rss_mb, reverse=True)[:5]
+            for r in sorted(results, key=lambda r: r.peak_memory_rss_mb, reverse=True)[
+                :5
+            ]
         ],
         "cpu_hogs": [
             {"operation": r.operation, "avg_cpu_percent": r.average_cpu_percent}
-            for r in sorted(results, key=lambda r: r.average_cpu_percent, reverse=True)[:5]
+            for r in sorted(results, key=lambda r: r.average_cpu_percent, reverse=True)[
+                :5
+            ]
         ],
         "slow_operations": [
             {"operation": r.operation, "duration_seconds": r.duration}
@@ -377,7 +405,9 @@ def create_resource_report(results: list[ResourceTrackingResult]) -> dict[str, A
     }
 
 
-def _benchmark_metrics(results: list[ResourceTrackingResult], iterations: int) -> dict[str, Any]:
+def _benchmark_metrics(
+    results: list[ResourceTrackingResult], iterations: int
+) -> dict[str, Any]:
     """Compute duration and memory stats for a benchmark run."""
     durations = [r.duration for r in results]
     memory_peaks = [r.peak_memory_rss_mb for r in results]
@@ -385,8 +415,11 @@ def _benchmark_metrics(results: list[ResourceTrackingResult], iterations: int) -
     return {
         "iterations": iterations,
         "duration_stats": {
-            "min": min(durations), "max": max(durations), "mean": mean_d,
-            "std_dev": (sum((d - mean_d) ** 2 for d in durations) / len(durations)) ** 0.5,
+            "min": min(durations),
+            "max": max(durations),
+            "mean": mean_d,
+            "std_dev": (sum((d - mean_d) ** 2 for d in durations) / len(durations))
+            ** 0.5,
         },
         "memory_stats": {
             "min_peak": min(memory_peaks),
@@ -396,7 +429,9 @@ def _benchmark_metrics(results: list[ResourceTrackingResult], iterations: int) -
     }
 
 
-def benchmark_resource_usage(func: Callable, iterations: int = 10, *args, **kwargs) -> dict[str, Any]:
+def benchmark_resource_usage(
+    func: Callable, iterations: int = 10, *args, **kwargs
+) -> dict[str, Any]:
     """Benchmark resource usage of a function over multiple iterations."""
     tracker = ResourceTracker(sample_interval=0.05)
     results = []

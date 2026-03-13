@@ -393,7 +393,9 @@ class TestAudioExceptionHierarchy:
             ProviderNotAvailableError,
             VoiceNotFoundError,
         ]:
-            assert issubclass(cls, AudioError), f"{cls.__name__} must inherit AudioError"
+            assert issubclass(cls, AudioError), (
+                f"{cls.__name__} must inherit AudioError"
+            )
 
     def test_all_inherit_from_codomyrmex_error(self):
         for cls in [

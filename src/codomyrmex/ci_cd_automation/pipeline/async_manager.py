@@ -113,7 +113,10 @@ class AsyncPipelineManager:
             AsyncPipelineResult with trigger status
         """
         logger.info(
-            "[ASYNC] Triggering pipeline %s for %s/%s", pipeline_name, repo_owner, repo_name
+            "[ASYNC] Triggering pipeline %s for %s/%s",
+            pipeline_name,
+            repo_owner,
+            repo_name,
         )
 
         url = f"{self.base_url}/repos/{repo_owner}/{repo_name}/actions/workflows/{workflow_id}/dispatches"
@@ -257,7 +260,9 @@ class AsyncPipelineManager:
 
                         logger.info(
                             "[ASYNC] Pipeline status: %s (GitHub: %s/%s)",
-                            status.value, gh_status, gh_conclusion,
+                            status.value,
+                            gh_status,
+                            gh_conclusion,
                         )
 
                         return AsyncPipelineResult(
@@ -334,7 +339,9 @@ class AsyncPipelineManager:
             AsyncPipelineResult with final pipeline status
         """
         logger.info(
-            "[ASYNC] Waiting for pipeline %s to complete (timeout: %ss)", run_id, timeout
+            "[ASYNC] Waiting for pipeline %s to complete (timeout: %ss)",
+            run_id,
+            timeout,
         )
 
         start_time = time.time()
@@ -357,7 +364,9 @@ class AsyncPipelineManager:
 
             # Log status changes
             if current_status != last_status:
-                logger.info("[ASYNC] Pipeline %s status: %s", run_id, current_status.value)
+                logger.info(
+                    "[ASYNC] Pipeline %s status: %s", run_id, current_status.value
+                )
                 last_status = current_status
 
             # Check for terminal states
@@ -369,7 +378,9 @@ class AsyncPipelineManager:
                 elapsed = time.time() - start_time
                 logger.info(
                     "[ASYNC] Pipeline %s completed with status %s after %.1fs",
-                    run_id, current_status.value, elapsed,
+                    run_id,
+                    current_status.value,
+                    elapsed,
                 )
                 return result
 
@@ -379,7 +390,9 @@ class AsyncPipelineManager:
         elapsed = time.time() - start_time
         logger.warning(
             "[ASYNC] Pipeline %s did not complete within %ss (waited %.1fs)",
-            run_id, timeout, elapsed,
+            run_id,
+            timeout,
+            elapsed,
         )
         return AsyncPipelineResult(
             pipeline_id=str(run_id),

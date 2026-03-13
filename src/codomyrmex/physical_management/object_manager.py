@@ -642,4 +642,4 @@ __all__ = [
     "PhysicalObjectManager",
     "SpatialIndex",
 ]
-  # type: ignore
+# type: ignore

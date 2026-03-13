@@ -106,9 +106,7 @@ class SchemaVerifier:
         logger.info("Scanned %d MCP tools", len(tools))
         return tools
 
-    def _extract_tools(
-        self, tree: ast.Module, file_path: Path
-    ) -> list[ToolSchemaInfo]:
+    def _extract_tools(self, tree: ast.Module, file_path: Path) -> list[ToolSchemaInfo]:
         """Extract tool definitions from an AST."""
         tools: list[ToolSchemaInfo] = []
         rel_path = file_path.relative_to(self._src_root.parent)
@@ -141,19 +139,17 @@ class SchemaVerifier:
                 continue
 
             # Extract function parameters (skip 'self')
-            func_params = [
-                arg.arg
-                for arg in node.args.args
-                if arg.arg != "self"
-            ]
+            func_params = [arg.arg for arg in node.args.args if arg.arg != "self"]
 
-            tools.append(ToolSchemaInfo(
-                name=tool_name,
-                module_path=module_path,
-                file_path=str(file_path),
-                function_name=node.name,
-                function_params=func_params,
-            ))
+            tools.append(
+                ToolSchemaInfo(
+                    name=tool_name,
+                    module_path=module_path,
+                    file_path=str(file_path),
+                    function_name=node.name,
+                    function_params=func_params,
+                )
+            )
 
         return tools
 
@@ -193,26 +189,30 @@ class SchemaVerifier:
                 ):
                     docstring = ast.get_docstring(node)
                     if not docstring:
-                        violations.append(SchemaViolation(
-                            tool_name=tool.name,
-                            module_path=tool.module_path,
-                            violation_type="missing_docstring",
-                            message=f"MCP tool '{tool.name}' ({tool.function_name}) has no docstring",
-                            severity="warning",
-                        ))
+                        violations.append(
+                            SchemaViolation(
+                                tool_name=tool.name,
+                                module_path=tool.module_path,
+                                violation_type="missing_docstring",
+                                message=f"MCP tool '{tool.name}' ({tool.function_name}) has no docstring",
+                                severity="warning",
+                            )
+                        )
                     break
         except Exception:
             pass
 
         # Check: function name should be snake_case
         if not tool.function_name.replace("_", "").isalpha():
-            violations.append(SchemaViolation(
-                tool_name=tool.name,
-                module_path=tool.module_path,
-                violation_type="naming_convention",
-                message=f"Function '{tool.function_name}' contains non-alpha characters",
-                severity="warning",
-            ))
+            violations.append(
+                SchemaViolation(
+                    tool_name=tool.name,
+                    module_path=tool.module_path,
+                    violation_type="naming_convention",
+                    message=f"Function '{tool.function_name}' contains non-alpha characters",
+                    severity="warning",
+                )
+            )
 
         return violations
 

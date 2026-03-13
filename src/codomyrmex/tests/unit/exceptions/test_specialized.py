@@ -3,6 +3,7 @@
 Zero-mock policy: real exception instantiation. Each class is a simple
 exception subclass with optional context fields — straightforward to test.
 """
+
 import pytest
 
 from codomyrmex.exceptions.base import CodomyrmexError
@@ -353,30 +354,69 @@ class TestCacheError:
 class TestAllExceptionsHaveMessage:
     """All exceptions must store their message accessible via .message and str()."""
 
-    @pytest.mark.parametrize("exc_cls", [
-        PerformanceError, LoggingError, SystemDiscoveryError, CapabilityScanError,
-        Modeling3DError, PhysicalManagementError, SimulationError, TerminalError,
-        InteractiveShellError, DatabaseError, CICDError, DeploymentError,
-        ResourceError, SpatialError, EventError, SkillError, TemplateError,
-        PluginError, AuthenticationError, CircuitOpenError, BulkheadFullError,
-        CompressionError, EncryptionError, IDEError, IDEConnectionError,
-        CommandExecutionError, SessionError, ArtifactError, CacheError,
-    ])
+    @pytest.mark.parametrize(
+        "exc_cls",
+        [
+            PerformanceError,
+            LoggingError,
+            SystemDiscoveryError,
+            CapabilityScanError,
+            Modeling3DError,
+            PhysicalManagementError,
+            SimulationError,
+            TerminalError,
+            InteractiveShellError,
+            DatabaseError,
+            CICDError,
+            DeploymentError,
+            ResourceError,
+            SpatialError,
+            EventError,
+            SkillError,
+            TemplateError,
+            PluginError,
+            AuthenticationError,
+            CircuitOpenError,
+            BulkheadFullError,
+            CompressionError,
+            EncryptionError,
+            IDEError,
+            IDEConnectionError,
+            CommandExecutionError,
+            SessionError,
+            ArtifactError,
+            CacheError,
+        ],
+    )
     def test_message_attribute(self, exc_cls):
         e = exc_cls("test message")
         assert e.message == "test message"
 
-    @pytest.mark.parametrize("exc_cls", [
-        PerformanceError, AuthenticationError, DatabaseError, CacheError,
-    ])
+    @pytest.mark.parametrize(
+        "exc_cls",
+        [
+            PerformanceError,
+            AuthenticationError,
+            DatabaseError,
+            CacheError,
+        ],
+    )
     def test_error_code_defaults_to_class_name(self, exc_cls):
         e = exc_cls("err")
         assert e.error_code == exc_cls.__name__
 
-    @pytest.mark.parametrize("exc_cls", [
-        PerformanceError, LoggingError, TerminalError, InteractiveShellError,
-        IDEError, IDEConnectionError, ResourceError,
-    ])
+    @pytest.mark.parametrize(
+        "exc_cls",
+        [
+            PerformanceError,
+            LoggingError,
+            TerminalError,
+            InteractiveShellError,
+            IDEError,
+            IDEConnectionError,
+            ResourceError,
+        ],
+    )
     def test_to_dict_has_required_keys(self, exc_cls):
         e = exc_cls("test")
         d = e.to_dict()

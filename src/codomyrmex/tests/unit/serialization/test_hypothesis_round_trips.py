@@ -16,7 +16,12 @@ from hypothesis import strategies as st
 
 # Import serializer directly, bypassing serialization/__init__.py
 # which pulls in binary_formats (requiring fastavro)
-_serializer_path = pathlib.Path(__file__).resolve().parents[4] / "codomyrmex" / "serialization" / "serializer.py"
+_serializer_path = (
+    pathlib.Path(__file__).resolve().parents[4]
+    / "codomyrmex"
+    / "serialization"
+    / "serializer.py"
+)
 _spec = importlib.util.spec_from_file_location("serializer_direct", _serializer_path)
 _mod = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_mod)
@@ -34,6 +39,7 @@ def deserialize(data, format="json", target_type=None):
     """Thin wrapper using Serializer directly (avoids binary_formats import)."""
     fmt = SerializationFormat(format) if isinstance(format, str) else format
     return Serializer(default_format=fmt).deserialize(data, target_type=target_type)
+
 
 # --- Strategies ---
 
@@ -72,7 +78,11 @@ class TestSerializationRoundTrips:
         result = deserialize(serialized, format="json")
         assert result == data
 
-    @given(data=st.dictionaries(st.text(min_size=1, max_size=20), json_primitives, max_size=10))
+    @given(
+        data=st.dictionaries(
+            st.text(min_size=1, max_size=20), json_primitives, max_size=10
+        )
+    )
     @settings(max_examples=50, deadline=2000)
     def test_json_round_trip_flat_dicts(self, data):
         """Flat dictionaries with string keys survive JSON round-trip."""
@@ -109,18 +119,21 @@ class TestSerializationRoundTrips:
         result = deserialize(serialized, format="pickle")
         assert result == data
 
+
 @dataclass
 class DummyDataClass:
     name: str
     value: int
     flag: bool
 
+
 dummy_dataclass_strategy = st.builds(
     DummyDataClass,
     name=st.text(max_size=50),
     value=st.integers(min_value=-1000, max_value=1000),
-    flag=st.booleans()
+    flag=st.booleans(),
 )
+
 
 class TestDataclassRoundTrips:
     @given(data=dummy_dataclass_strategy)
@@ -151,7 +164,11 @@ class TestSerializerFormat:
         result = s.serialize(data)
         assert isinstance(result, bytes)
 
-    @given(data=st.dictionaries(st.text(min_size=1, max_size=10), st.integers(), max_size=5))
+    @given(
+        data=st.dictionaries(
+            st.text(min_size=1, max_size=10), st.integers(), max_size=5
+        )
+    )
     @settings(max_examples=30, deadline=2000)
     def test_serializer_json_is_utf8(self, data):
         """JSON serialization produces valid UTF-8."""
@@ -161,8 +178,16 @@ class TestSerializerFormat:
         assert isinstance(decoded, str)
 
     @given(
-        fmt=st.sampled_from([SerializationFormat.JSON, SerializationFormat.YAML, SerializationFormat.PICKLE]),
-        data=st.dictionaries(st.text(min_size=1, max_size=10), st.integers(), max_size=5),
+        fmt=st.sampled_from(
+            [
+                SerializationFormat.JSON,
+                SerializationFormat.YAML,
+                SerializationFormat.PICKLE,
+            ]
+        ),
+        data=st.dictionaries(
+            st.text(min_size=1, max_size=10), st.integers(), max_size=5
+        ),
     )
     @settings(max_examples=30, deadline=2000)
     def test_format_consistency(self, fmt, data):

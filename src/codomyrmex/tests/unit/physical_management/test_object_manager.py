@@ -1039,16 +1039,20 @@ class TestObjectRegistry:
 
     def test_remove_event_handler(self):
         reg = self._fresh_registry()
+
         def handler(e):
             return None
+
         reg.add_event_handler(EventType.CREATED, handler)
         assert reg.remove_event_handler(EventType.CREATED, handler) is True
         assert reg.remove_event_handler(EventType.CREATED, handler) is False
 
     def test_remove_event_handler_not_registered(self):
         reg = self._fresh_registry()
+
         def handler(e):
             return None
+
         assert reg.remove_event_handler(EventType.DESTROYED, handler) is False
 
     def test_event_history_limit(self):

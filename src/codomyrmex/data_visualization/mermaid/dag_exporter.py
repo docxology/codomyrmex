@@ -108,11 +108,7 @@ def build_module_dag(src_root: Path | None = None) -> ModuleDAG:
     known = {d.name for d in module_dirs}
 
     for mod_dir in module_dirs:
-        py_files = [
-            f
-            for f in mod_dir.rglob("*.py")
-            if "__pycache__" not in str(f)
-        ]
+        py_files = [f for f in mod_dir.rglob("*.py") if "__pycache__" not in str(f)]
         loc = sum(
             len(f.read_text(encoding="utf-8", errors="replace").splitlines())
             for f in py_files
@@ -136,9 +132,36 @@ def build_module_dag(src_root: Path | None = None) -> ModuleDAG:
 
 def _classify_module(name: str) -> str:
     """Return a Mermaid style class for the module layer."""
-    foundation = {"logging_monitoring", "environment_setup", "model_context_protocol", "terminal_interface", "exceptions"}
-    core = {"agents", "static_analysis", "coding", "data_visualization", "search", "git_operations", "security", "llm", "performance", "git_analysis"}
-    service = {"deployment", "documentation", "api", "ci_cd_automation", "containerization", "database_management", "orchestrator", "config_management", "website"}
+    foundation = {
+        "logging_monitoring",
+        "environment_setup",
+        "model_context_protocol",
+        "terminal_interface",
+        "exceptions",
+    }
+    core = {
+        "agents",
+        "static_analysis",
+        "coding",
+        "data_visualization",
+        "search",
+        "git_operations",
+        "security",
+        "llm",
+        "performance",
+        "git_analysis",
+    }
+    service = {
+        "deployment",
+        "documentation",
+        "api",
+        "ci_cd_automation",
+        "containerization",
+        "database_management",
+        "orchestrator",
+        "config_management",
+        "website",
+    }
     if name in foundation:
         return "foundation"
     if name in core:
@@ -178,9 +201,8 @@ def render_dag_mermaid(
     filtered = {
         name: node
         for name, node in dag.nodes.items()
-        if len(node.imports) >= min_imports or any(
-            name in other.imports for other in dag.nodes.values()
-        )
+        if len(node.imports) >= min_imports
+        or any(name in other.imports for other in dag.nodes.values())
     }
 
     for name, node in sorted(filtered.items()):

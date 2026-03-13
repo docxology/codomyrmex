@@ -234,7 +234,9 @@ class TestRangeValidationError:
         assert err.context["min_value"] == 0
 
     def test_stores_field_and_value_together(self):
-        err = RangeValidationError("range error", field="age", value=150, min_value=0, max_value=120)
+        err = RangeValidationError(
+            "range error", field="age", value=150, min_value=0, max_value=120
+        )
         assert err.context["field"] == "age"
         assert err.context["min_value"] == 0
         assert err.context["max_value"] == 120

@@ -290,7 +290,9 @@ class BaseAgent(AgentInterface):
             for cap in request.capabilities:
                 if cap not in self.capabilities:
                     self.logger.warning(
-                        "Request requires capability %s not supported by agent %s", cap, self.name
+                        "Request requires capability %s not supported by agent %s",
+                        cap,
+                        self.name,
                     )
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:

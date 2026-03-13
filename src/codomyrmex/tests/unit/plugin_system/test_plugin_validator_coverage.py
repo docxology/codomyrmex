@@ -135,8 +135,7 @@ class TestCheckPluginDependencies:
     def test_missing_dependency_with_available_list(self):
         validator = PluginValidator()
         result = validator.check_plugin_dependencies(
-            ["plugin_a", "plugin_b"],
-            available_plugins=["plugin_a"]
+            ["plugin_a", "plugin_b"], available_plugins=["plugin_a"]
         )
         assert result.valid is False
         messages = [i["message"] for i in result.issues]
@@ -145,8 +144,7 @@ class TestCheckPluginDependencies:
     def test_all_dependencies_available(self):
         validator = PluginValidator()
         result = validator.check_plugin_dependencies(
-            ["plugin_a"],
-            available_plugins=["plugin_a", "plugin_b"]
+            ["plugin_a"], available_plugins=["plugin_a", "plugin_b"]
         )
         assert result.valid is True
         assert result.issues == []
@@ -161,8 +159,7 @@ class TestCheckPluginDependencies:
     def test_missing_dep_severity_is_error(self):
         validator = PluginValidator()
         result = validator.check_plugin_dependencies(
-            ["missing_dep"],
-            available_plugins=[]
+            ["missing_dep"], available_plugins=[]
         )
         for issue in result.issues:
             assert issue["severity"] == "error"

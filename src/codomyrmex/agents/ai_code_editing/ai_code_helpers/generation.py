@@ -170,7 +170,10 @@ def generate_code_snippet(
 
         logger.info(
             "Generated %s code snippet using %s/%s in %.2fs",
-            language, provider, model, execution_time,
+            language,
+            provider,
+            model,
+            execution_time,
         )
         return result
 
@@ -183,19 +186,24 @@ def generate_code_snippet(
         raise RuntimeError(f"Code generation failed: {e}") from None
 
 
-
 def _dispatch_document(client, provider: str, model: str, prompt: str, **kwargs):
     """Call the provider API for documentation and return (documentation, tokens_used)."""
     if provider == "openai":
         response = client.chat.completions.create(
             model=model, messages=[{"role": "user", "content": prompt}], **kwargs
         )
-        return response.choices[0].message.content, (response.usage.total_tokens if response.usage else None)
+        return response.choices[0].message.content, (
+            response.usage.total_tokens if response.usage else None
+        )
     if provider == "anthropic":
         response = client.messages.create(
             model=model, messages=[{"role": "user", "content": prompt}], **kwargs
         )
-        tokens = (response.usage.input_tokens + response.usage.output_tokens) if response.usage else None
+        tokens = (
+            (response.usage.input_tokens + response.usage.output_tokens)
+            if response.usage
+            else None
+        )
         return response.content[0].text, tokens
     if provider == "google":
         model_instance = client.GenerativeModel(model)
@@ -207,26 +215,38 @@ def _dispatch_document(client, provider: str, model: str, prompt: str, **kwargs)
     raise ValueError(f"Unsupported provider: {provider}")
 
 
-def _make_error_result(language, request_language, e: Exception) -> "CodeGenerationResult":
+def _make_error_result(
+    language, request_language, e: Exception
+) -> "CodeGenerationResult":
     """Return a failed CodeGenerationResult for batch processing."""
     return CodeGenerationResult(
-        generated_code="", language=request_language,
-        metadata={"error": str(e)}, execution_time=0.0,
+        generated_code="",
+        language=request_language,
+        metadata={"error": str(e)},
+        execution_time=0.0,
     )
 
 
-def _process_single_request(request: CodeGenerationRequest, provider, model_name, **kwargs) -> CodeGenerationResult:
+def _process_single_request(
+    request: CodeGenerationRequest, provider, model_name, **kwargs
+) -> CodeGenerationResult:
     """Process one CodeGenerationRequest, returning a result or an error result."""
     try:
         result = generate_code_snippet(
-            prompt=request.prompt, language=request.language.value,
-            provider=provider, model_name=model_name,
-            context=request.context, max_length=request.max_length,
-            temperature=request.temperature, **kwargs,
+            prompt=request.prompt,
+            language=request.language.value,
+            provider=provider,
+            model_name=model_name,
+            context=request.context,
+            max_length=request.max_length,
+            temperature=request.temperature,
+            **kwargs,
         )
         return CodeGenerationResult(
-            generated_code=result["generated_code"], language=request.language,
-            metadata=result["metadata"], execution_time=result["execution_time"],
+            generated_code=result["generated_code"],
+            language=request.language,
+            metadata=result["metadata"],
+            execution_time=result["execution_time"],
             tokens_used=result.get("tokens_used"),
         )
     except Exception as e:
@@ -235,14 +255,22 @@ def _process_single_request(request: CodeGenerationRequest, provider, model_name
 
 
 def _run_parallel_batch(
-    requests: list[CodeGenerationRequest], max_workers: int, provider, model_name, **kwargs
+    requests: list[CodeGenerationRequest],
+    max_workers: int,
+    provider,
+    model_name,
+    **kwargs,
 ) -> list[CodeGenerationResult]:
     """Execute a batch of requests in parallel, preserving original order."""
-    logger.info("Processing %s requests in parallel with %s workers", len(requests), max_workers)
+    logger.info(
+        "Processing %s requests in parallel with %s workers", len(requests), max_workers
+    )
     results_dict: dict[int, CodeGenerationResult] = {}
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_index = {
-            executor.submit(_process_single_request, req, provider, model_name, **kwargs): idx
+            executor.submit(
+                _process_single_request, req, provider, model_name, **kwargs
+            ): idx
             for idx, req in enumerate(requests)
         }
         for future in as_completed(future_to_index):
@@ -268,11 +296,17 @@ def generate_code_batch(
     if not requests:
         raise ValueError("Requests list cannot be empty")
     if parallel and len(requests) > 1:
-        return _run_parallel_batch(requests, max_workers, provider, model_name, **kwargs)
-    return [_process_single_request(req, provider, model_name, **kwargs) for req in requests]
+        return _run_parallel_batch(
+            requests, max_workers, provider, model_name, **kwargs
+        )
+    return [
+        _process_single_request(req, provider, model_name, **kwargs) for req in requests
+    ]
 
 
-def _build_doc_prompt(language: str, doc_type: str, code: str, context: str | None) -> str:
+def _build_doc_prompt(
+    language: str, doc_type: str, code: str, context: str | None
+) -> str:
     """Build the documentation generation prompt."""
     doc_prompts = {
         "comprehensive": f"Generate comprehensive documentation for the following {language} code, including overview, function descriptions, parameters, return values, and usage examples:",
@@ -303,11 +337,17 @@ def generate_code_documentation(
     try:
         client, model = get_llm_client(provider, model_name)
         prompt = _build_doc_prompt(language, doc_type, code, context)
-        documentation, tokens_used = _dispatch_document(client, provider, model, prompt, **kwargs)
+        documentation, tokens_used = _dispatch_document(
+            client, provider, model, prompt, **kwargs
+        )
         execution_time = time.time() - start_time
         logger.info(
             "Generated %s documentation for %s code using %s/%s in %.2fs",
-            doc_type, language, provider, model, execution_time,
+            doc_type,
+            language,
+            provider,
+            model,
+            execution_time,
         )
         return {
             "code": code,

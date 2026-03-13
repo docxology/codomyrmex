@@ -19,6 +19,7 @@ class QuantizationConfig:
               If 16, falls back to raw fp16 without quantization.
         group_size: Group size for quantization parameters (default 64).
     """
+
     bits: int = 4
     group_size: int = 64
 

@@ -230,4 +230,3 @@ class TestSQLiteSessionStoreV020:
         loaded = store.load("old1")
         assert loaded is not None
         assert loaded.name is None  # No name set — graceful default
-

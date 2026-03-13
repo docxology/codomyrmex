@@ -8,7 +8,7 @@ Example::
     mapper = DependencyMapper()
     graph = mapper.build_graph()
     print(f"Edges: {graph['total_edges']}")
-    for cycle in graph['cycles']:
+    for cycle in graph["cycles"]:
         print(f"  Circular: {' → '.join(cycle)}")
 """
 
@@ -95,7 +95,11 @@ class DependencyMapper:
         modules: set[str] = set()
 
         for mod_dir in sorted(self._root.iterdir()):
-            if not mod_dir.is_dir() or mod_dir.name.startswith(("_", ".")) or mod_dir.name == "tests":
+            if (
+                not mod_dir.is_dir()
+                or mod_dir.name.startswith(("_", "."))
+                or mod_dir.name == "tests"
+            ):
                 continue
 
             modules.add(mod_dir.name)
@@ -106,10 +110,12 @@ class DependencyMapper:
                 for imp in imports:
                     if (imp != mod_dir.name and imp in modules) or self._is_module(imp):
                         adjacency[mod_dir.name].add(imp)
-                        edges.append({
-                            "source": mod_dir.name,
-                            "target": imp,
-                        })
+                        edges.append(
+                            {
+                                "source": mod_dir.name,
+                                "target": imp,
+                            }
+                        )
 
         # Calculate degrees
         in_degree: dict[str, int] = defaultdict(int)
@@ -128,8 +134,12 @@ class DependencyMapper:
             "total_edges": len(edges),
             "cycles": cycles,
             "cycle_count": len(cycles),
-            "top_imported": sorted(in_degree.items(), key=lambda x: x[1], reverse=True)[:10],
-            "top_importers": sorted(out_degree.items(), key=lambda x: x[1], reverse=True)[:10],
+            "top_imported": sorted(in_degree.items(), key=lambda x: x[1], reverse=True)[
+                :10
+            ],
+            "top_importers": sorted(
+                out_degree.items(), key=lambda x: x[1], reverse=True
+            )[:10],
             "scan_duration_ms": round(elapsed, 1),
         }
 
@@ -202,7 +212,11 @@ class DependencyMapper:
         dependents: set[str] = set()
 
         for mod_dir in self._root.iterdir():
-            if not mod_dir.is_dir() or mod_dir.name.startswith(("_", ".")) or mod_dir.name == "tests":
+            if (
+                not mod_dir.is_dir()
+                or mod_dir.name.startswith(("_", "."))
+                or mod_dir.name == "tests"
+            ):
                 continue
             if mod_dir.name == module:
                 continue

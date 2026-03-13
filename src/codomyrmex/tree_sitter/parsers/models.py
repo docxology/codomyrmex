@@ -94,7 +94,10 @@ class ASTNode:
             "type": self.type,
             "text": self.text[:100] if len(self.text) > 100 else self.text,
             "range": {
-                "start": {"line": self.range.start.line, "column": self.range.start.column},
+                "start": {
+                    "line": self.range.start.line,
+                    "column": self.range.start.column,
+                },
                 "end": {"line": self.range.end.line, "column": self.range.end.column},
             },
             "children": [c.to_dict() for c in self.children],

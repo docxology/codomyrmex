@@ -7,22 +7,27 @@ swarm orchestrators, and external MCP clients can invoke Pi programmatically.
 from __future__ import annotations
 
 import shutil
-from typing import Any, Dict
+from typing import Any
 
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**_kw):  # type: ignore[misc]
         """Fallback no-op decorator when MCP framework not available."""
+
         def _wrap(fn):  # type: ignore[misc]
             return fn
+
         return _wrap
+
 
 from .pi_client import PiClient, PiConfig, PiError
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _get_client(**overrides: Any) -> PiClient:
     """Build a PiClient from keyword overrides."""
@@ -34,6 +39,7 @@ def _get_client(**overrides: Any) -> PiClient:
 # ---------------------------------------------------------------------------
 # Tools
 # ---------------------------------------------------------------------------
+
 
 @mcp_tool(
     name="pi_status",
@@ -47,10 +53,13 @@ def pi_status() -> dict[str, Any]:
         return {"status": "not_installed", "message": "pi CLI not found on PATH"}
 
     import subprocess
+
     try:
         result = subprocess.run(
             [pi_bin, "--version"],
-            capture_output=True, text=True, timeout=10,
+            capture_output=True,
+            text=True,
+            timeout=10,
         )
         version = result.stdout.strip()
         return {"status": "installed", "version": version, "path": pi_bin}
@@ -99,6 +108,7 @@ def pi_list_models(
 ) -> dict[str, Any]:
     """Run ``pi --list-models [search]`` and return output."""
     import subprocess
+
     pi_bin = shutil.which("pi") or "pi"
     cmd = [pi_bin, "--list-models"]
     if search:
@@ -108,9 +118,14 @@ def pi_list_models(
 
     try:
         result = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=15,
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=15,
         )
-        lines = [line.strip() for line in result.stdout.strip().split("\n") if line.strip()]
+        lines = [
+            line.strip() for line in result.stdout.strip().split("\n") if line.strip()
+        ]
         return {"status": "success", "models": lines, "count": len(lines)}
     except FileNotFoundError:
         return {"status": "error", "message": "pi CLI not found"}
@@ -160,15 +175,21 @@ def pi_start_rpc(
 def pi_install_package(source: str) -> dict[str, Any]:
     """Run ``pi install <source>``."""
     import subprocess
+
     pi_bin = shutil.which("pi") or "pi"
     try:
         result = subprocess.run(
             [pi_bin, "install", source],
-            capture_output=True, text=True, timeout=60,
+            capture_output=True,
+            text=True,
+            timeout=60,
         )
         if result.returncode == 0:
             return {"status": "success", "output": result.stdout.strip()}
-        return {"status": "error", "message": result.stderr.strip() or result.stdout.strip()}
+        return {
+            "status": "error",
+            "message": result.stderr.strip() or result.stdout.strip(),
+        }
     except FileNotFoundError:
         return {"status": "error", "message": "pi CLI not found"}
     except Exception as exc:
@@ -183,11 +204,14 @@ def pi_install_package(source: str) -> dict[str, Any]:
 def pi_list_packages() -> dict[str, Any]:
     """Run ``pi list``."""
     import subprocess
+
     pi_bin = shutil.which("pi") or "pi"
     try:
         result = subprocess.run(
             [pi_bin, "list"],
-            capture_output=True, text=True, timeout=15,
+            capture_output=True,
+            text=True,
+            timeout=15,
         )
         return {"status": "success", "output": result.stdout.strip()}
     except FileNotFoundError:

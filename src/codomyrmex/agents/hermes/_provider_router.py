@@ -90,7 +90,11 @@ class ProviderRouter:
                             key = key.strip()
                             value = value.strip().strip("\"'")
                             for provider, env_var in key_map.items():
-                                if key == env_var and value and provider not in self._credentials:
+                                if (
+                                    key == env_var
+                                    and value
+                                    and provider not in self._credentials
+                                ):
                                     self._credentials[provider] = value
             except OSError:
                 pass
@@ -103,6 +107,7 @@ class ProviderRouter:
     def _is_ollama_available() -> bool:
         """Check if the ollama binary is on PATH."""
         import shutil
+
         return bool(shutil.which("ollama"))
 
     def has_credentials(self, provider: str) -> bool:
@@ -123,7 +128,8 @@ class ProviderRouter:
         if self.fallback_provider and self.has_credentials(self.fallback_provider):
             logger.info(
                 "Primary provider '%s' has no credentials; using fallback '%s'",
-                self.primary_provider, self.fallback_provider,
+                self.primary_provider,
+                self.fallback_provider,
             )
             return self.fallback_provider
         # Try all known providers
@@ -165,24 +171,31 @@ class ProviderRouter:
             if self.fallback_provider and resolved_provider != self.fallback_provider:
                 logger.warning(
                     "Provider '%s' failed (%s); trying fallback '%s'",
-                    resolved_provider, primary_exc, self.fallback_provider,
+                    resolved_provider,
+                    primary_exc,
+                    self.fallback_provider,
                 )
                 try:
                     result = self._dispatch(
-                        prompt, self.fallback_provider, self.fallback_model, timeout,
+                        prompt,
+                        self.fallback_provider,
+                        self.fallback_model,
+                        timeout,
                     )
                     result["is_fallback"] = True
                     return result
                 except Exception as fallback_exc:
                     return {
-                        "success": False, "content": "",
+                        "success": False,
+                        "content": "",
                         "provider": self.fallback_provider,
                         "model": self.fallback_model,
                         "is_fallback": True,
                         "error": f"Primary: {primary_exc}; Fallback: {fallback_exc}",
                     }
             return {
-                "success": False, "content": "",
+                "success": False,
+                "content": "",
                 "provider": resolved_provider,
                 "model": resolved_model,
                 "is_fallback": False,
@@ -190,7 +203,11 @@ class ProviderRouter:
             }
 
     def _dispatch(
-        self, prompt: str, provider: str, model: str, timeout: int,
+        self,
+        prompt: str,
+        provider: str,
+        model: str,
+        timeout: int,
     ) -> dict[str, Any]:
         """Dispatch a prompt to the specified provider.
 
@@ -212,10 +229,14 @@ class ProviderRouter:
     def _call_ollama(prompt: str, model: str, timeout: int) -> dict[str, Any]:
         """Call Ollama directly."""
         import shutil
+
         ollama_bin = shutil.which("ollama") or "ollama"
         cmd = [ollama_bin, "run", model, prompt]
         proc = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=timeout,
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
             env={**os.environ, "NO_COLOR": "1"},
         )
         if proc.returncode != 0 or not proc.stdout.strip():
@@ -234,16 +255,24 @@ class ProviderRouter:
 
     @staticmethod
     def _call_hermes_cli(
-        prompt: str, provider: str, model: str, timeout: int,
+        prompt: str,
+        provider: str,
+        model: str,
+        timeout: int,
     ) -> dict[str, Any]:
         """Call via the Hermes CLI with a specific provider."""
         import shutil
+
         hermes_bin = shutil.which("hermes") or "hermes"
         cmd = [hermes_bin, "chat", "-q", prompt, "-Q", "--provider", provider]
         env = {**os.environ, "NO_COLOR": "1"}
 
         proc = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=timeout, env=env,
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            env=env,
         )
         stdout = proc.stdout.strip()
         if proc.returncode != 0 or not stdout:
@@ -373,7 +402,9 @@ class UserModel:
 
         parts: list[str] = []
         if prefs:
-            parts.append("User preferences: " + "; ".join(f"{k}={v}" for k, v in prefs.items()))
+            parts.append(
+                "User preferences: " + "; ".join(f"{k}={v}" for k, v in prefs.items())
+            )
         if obs:
             parts.append("Observations: " + "; ".join(obs[-10:]))
         if history:
@@ -411,7 +442,9 @@ class ContextCompressor:
     # Rough chars-per-token estimate for English text
     CHARS_PER_TOKEN = 4
 
-    def __init__(self, max_tokens: int = 100_000, compression_ratio: float = 0.5) -> None:
+    def __init__(
+        self, max_tokens: int = 100_000, compression_ratio: float = 0.5
+    ) -> None:
         """Initialize context compressor.
 
         Args:
@@ -463,7 +496,8 @@ class ContextCompressor:
 
         logger.info(
             "Context compression triggered: %d tokens (limit: %d)",
-            self.estimate_tokens(messages), self.max_tokens,
+            self.estimate_tokens(messages),
+            self.max_tokens,
         )
 
         # Step 1: Deduplicate identical consecutive messages
@@ -473,7 +507,7 @@ class ContextCompressor:
         target_msgs = max(4, int(len(deduped) * self.compression_ratio))
         if len(deduped) > target_msgs:
             head = deduped[:2]
-            tail = deduped[-(target_msgs - 2):]
+            tail = deduped[-(target_msgs - 2) :]
             middle_count = len(deduped) - len(head) - len(tail)
             summary_msg = {
                 "role": "system",
@@ -492,8 +526,10 @@ class ContextCompressor:
 
         logger.info(
             "Compressed: %d → %d messages (%d → %d est. tokens)",
-            len(messages), len(result),
-            self.estimate_tokens(messages), self.estimate_tokens(result),
+            len(messages),
+            len(result),
+            self.estimate_tokens(messages),
+            self.estimate_tokens(result),
         )
         return result
 
@@ -512,7 +548,9 @@ class ContextCompressor:
         result = [messages[0]]
         for msg in messages[1:]:
             prev = result[-1]
-            if msg.get("content") != prev.get("content") or msg.get("role") != prev.get("role"):
+            if msg.get("content") != prev.get("content") or msg.get("role") != prev.get(
+                "role"
+            ):
                 result.append(msg)
         return result
 
@@ -617,12 +655,15 @@ class MCPBridgeManager:
 
         # Signal Hermes CLI to reload if possible (v0.2.0 `hermes mcp reload`)
         import shutil
+
         hermes_bin = shutil.which("hermes")
         if hermes_bin:
             try:
                 result = subprocess.run(
                     [hermes_bin, "mcp", "reload"],
-                    capture_output=True, text=True, timeout=10,
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
                 )
                 return {
                     "success": result.returncode == 0,
@@ -630,9 +671,15 @@ class MCPBridgeManager:
                     "output": result.stdout.strip(),
                 }
             except Exception as exc:
-                logger.debug("MCP reload via CLI failed (may not be supported): %s", exc)
+                logger.debug(
+                    "MCP reload via CLI failed (may not be supported): %s", exc
+                )
 
-        return {"success": True, "servers_loaded": server_count, "output": "Config reloaded (CLI signal skipped)"}
+        return {
+            "success": True,
+            "servers_loaded": server_count,
+            "output": "Config reloaded (CLI signal skipped)",
+        }
 
     @property
     def servers(self) -> dict[str, dict[str, Any]]:
@@ -645,7 +692,4 @@ class MCPBridgeManager:
         Returns:
             List of server info dicts with ``name``, ``command``, ``transport``.
         """
-        return [
-            {"name": name, **config}
-            for name, config in self._servers.items()
-        ]
+        return [{"name": name, **config} for name, config in self._servers.items()]

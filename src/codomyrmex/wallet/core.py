@@ -159,7 +159,11 @@ class WalletManager:
             self._wallets[user_id] = new_wallet_id
             self._created_at[user_id] = datetime.now(UTC).isoformat()
             logger.info(
-                "Rotated keys for user %s: %s -> %s (%s)", user_id, old_id, new_wallet_id, reason
+                "Rotated keys for user %s: %s -> %s (%s)",
+                user_id,
+                old_id,
+                new_wallet_id,
+                reason,
             )
             return new_wallet_id
         raise WalletKeyError(f"Failed to store new key for user {user_id}")

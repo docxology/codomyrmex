@@ -97,7 +97,9 @@ class ConfigValidator:
         )
 
         logger.info(
-            "Validation complete. %s/%s files valid.", self.validation_results["valid_files"], self.validation_results["total_files"]
+            "Validation complete. %s/%s files valid.",
+            self.validation_results["valid_files"],
+            self.validation_results["total_files"],
         )
         return self.validation_results
 

@@ -120,7 +120,7 @@ class MCPCallGraphCollector:
         with self._lock:
             self._history.append(call)
             if len(self._history) > self._max_history:
-                self._history = self._history[-self._max_history:]
+                self._history = self._history[-self._max_history :]
 
             self._tool_counts[tool_name] += 1
             self._tool_latencies[tool_name].append(latency_ms)
@@ -158,32 +158,36 @@ class MCPCallGraphCollector:
             for tool, count in sorted(self._tool_counts.items()):
                 latencies = self._tool_latencies.get(tool, [])
                 avg = sum(latencies) / len(latencies) if latencies else 0.0
-                nodes.append({
-                    "id": f"tool:{tool}",
-                    "name": tool,
-                    "type": "tool",
-                    "call_count": count,
-                    "avg_latency_ms": round(avg, 2),
-                    "error_count": self._tool_errors.get(tool, 0),
-                })
+                nodes.append(
+                    {
+                        "id": f"tool:{tool}",
+                        "name": tool,
+                        "type": "tool",
+                        "call_count": count,
+                        "avg_latency_ms": round(avg, 2),
+                        "error_count": self._tool_errors.get(tool, 0),
+                    }
+                )
 
             # Caller nodes and edges
             for caller, tools in sorted(self._caller_tools.items()):
-                caller_total = sum(
-                    self._tool_counts.get(t, 0) for t in tools
+                caller_total = sum(self._tool_counts.get(t, 0) for t in tools)
+                nodes.append(
+                    {
+                        "id": f"caller:{caller}",
+                        "name": caller,
+                        "type": "caller",
+                        "call_count": caller_total,
+                    }
                 )
-                nodes.append({
-                    "id": f"caller:{caller}",
-                    "name": caller,
-                    "type": "caller",
-                    "call_count": caller_total,
-                })
                 for tool in sorted(tools):
-                    edges.append({
-                        "source": f"caller:{caller}",
-                        "target": f"tool:{tool}",
-                        "weight": self._tool_counts.get(tool, 0),
-                    })
+                    edges.append(
+                        {
+                            "source": f"caller:{caller}",
+                            "target": f"tool:{tool}",
+                            "weight": self._tool_counts.get(tool, 0),
+                        }
+                    )
 
             return {"nodes": nodes, "edges": edges}
 
@@ -208,9 +212,7 @@ class MCPCallGraphCollector:
                 "unique_tools": len(self._tool_counts),
                 "unique_callers": len(self._caller_tools),
                 "error_rate": errors / total if total else 0.0,
-                "top_tools": [
-                    {"name": name, "count": count} for name, count in top
-                ],
+                "top_tools": [{"name": name, "count": count} for name, count in top],
             }
 
     def get_recent(self, limit: int = 50) -> list[dict[str, Any]]:

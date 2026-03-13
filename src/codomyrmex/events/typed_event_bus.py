@@ -145,7 +145,7 @@ class TypedEventBus:
         self._emit_count += 1
         self._history.append(event)
         if len(self._history) > self._max_history:
-            self._history = self._history[-self._max_history:]
+            self._history = self._history[-self._max_history :]
 
         handler_count = 0
         for sub in self._subscriptions:

@@ -97,6 +97,7 @@ def test_calendar_attendee_injection(monkeypatch):
     # won't change mcp_tools._DEFAULT_ATTENDEE because it was evaluated at import.
     # We must patch mcp_tools._DEFAULT_ATTENDEE directly!
     import codomyrmex.calendar_integration.mcp_tools as mcp_tools_mod
+
     monkeypatch.setattr(mcp_tools_mod, "_DEFAULT_ATTENDEE", test_attendee)
 
     now = datetime.now(UTC)

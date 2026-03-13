@@ -97,7 +97,9 @@ class TestAlert:
         assert a.duration == timedelta(minutes=5)
 
     def test_to_dict(self):
-        a = Alert(id="a1", name="Disk", message="Disk full", severity=AlertSeverity.CRITICAL)
+        a = Alert(
+            id="a1", name="Disk", message="Disk full", severity=AlertSeverity.CRITICAL
+        )
         d = a.to_dict()
         assert d["id"] == "a1"
         assert d["severity"] == "critical"
@@ -120,7 +122,9 @@ class TestPanel:
         assert p.position == {"x": 0, "y": 0, "w": 6, "h": 4}
 
     def test_to_dict(self):
-        p = Panel(id="p1", title="Requests", panel_type=PanelType.STAT, metrics=["req_count"])
+        p = Panel(
+            id="p1", title="Requests", panel_type=PanelType.STAT, metrics=["req_count"]
+        )
         d = p.to_dict()
         assert d["id"] == "p1"
         assert d["title"] == "Requests"
@@ -159,7 +163,9 @@ class TestDashboard:
         assert dash.get_panel("missing") is None
 
     def test_to_dict(self):
-        dash = Dashboard(id="d1", name="My Dashboard", description="desc", tags=["prod"])
+        dash = Dashboard(
+            id="d1", name="My Dashboard", description="desc", tags=["prod"]
+        )
         d = dash.to_dict()
         assert d["id"] == "d1"
         assert d["name"] == "My Dashboard"

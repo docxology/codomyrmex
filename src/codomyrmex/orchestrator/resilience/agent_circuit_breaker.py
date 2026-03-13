@@ -146,7 +146,8 @@ class CircuitBreaker:
             health.opened_at = time.time()
             logger.warning(
                 "Circuit OPEN for %s (%s consecutive failures)",
-                agent_id, health.consecutive_failures,
+                agent_id,
+                health.consecutive_failures,
             )
 
     def get_health(self, agent_id: str) -> AgentHealth | None:

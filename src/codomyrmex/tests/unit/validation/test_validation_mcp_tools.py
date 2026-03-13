@@ -7,7 +7,6 @@ plus validation.schemas (Result, ResultStatus) and validation.pai
 Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 """
 
-
 import pytest
 
 import codomyrmex.validation.pai as _pai_mod
@@ -200,9 +199,7 @@ class TestValidateConfigMCPTool:
         assert "database_url" in result["errors"][0]["message"]
 
     def test_multiple_missing_keys(self):
-        result = validation_validate_config(
-            config={}, required_keys=["a", "b", "c"]
-        )
+        result = validation_validate_config(config={}, required_keys=["a", "b", "c"])
         assert result["is_valid"] is False
         assert len(result["missing_keys"]) == 3
 
@@ -227,6 +224,7 @@ class TestValidationSummaryMCPTool:
     def test_summary_tracks_validation_runs(self):
         # The singleton accumulates runs across calls; run validate_schema then check count increased.
         from codomyrmex.validation.mcp_tools import validate_schema
+
         before = validation_summary().get("runs", 0)
         validate_schema(data={"x": 1}, schema={"type": "object"})
         after = validation_summary().get("runs", 0)

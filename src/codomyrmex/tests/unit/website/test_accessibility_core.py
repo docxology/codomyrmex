@@ -342,7 +342,9 @@ class TestA11yCheckerFocusVisible:
 
     def test_nonfocusable_with_no_style_still_passes(self):
         checker = A11yChecker(level=WCAGLevel.AA)
-        report = checker.check_elements([{"focusable": False, "has_focus_style": False}])
+        report = checker.check_elements(
+            [{"focusable": False, "has_focus_style": False}]
+        )
         codes = [i.code for i in report.issues]
         assert "focus-visible" not in codes
 

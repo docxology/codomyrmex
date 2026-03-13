@@ -153,9 +153,7 @@ class TestMultiStageBuild:
         assert build.metadata == {}
 
     def test_to_dockerfile_contains_header_comment(self):
-        build = MultiStageBuild(
-            stages=[BuildStage(name="a", base_image="alpine:3.18")]
-        )
+        build = MultiStageBuild(stages=[BuildStage(name="a", base_image="alpine:3.18")])
         output = build.to_dockerfile()
         assert "# Auto-generated multi-stage Dockerfile" in output
 
@@ -168,9 +166,7 @@ class TestMultiStageBuild:
         assert "myapp" in output
 
     def test_unknown_project_name_fallback(self):
-        build = MultiStageBuild(
-            stages=[BuildStage(name="a", base_image="alpine:3.18")]
-        )
+        build = MultiStageBuild(stages=[BuildStage(name="a", base_image="alpine:3.18")])
         output = build.to_dockerfile()
         assert "unknown" in output
 
@@ -237,7 +233,9 @@ class TestMultiStageBuild:
 
 class TestBuildScript:
     def test_instantiation_defaults(self):
-        script = BuildScript(name="my-app", dockerfile_path="Dockerfile", context_path=".")
+        script = BuildScript(
+            name="my-app", dockerfile_path="Dockerfile", context_path="."
+        )
         assert script.name == "my-app"
         assert script.build_args == {}
         assert script.tags == []

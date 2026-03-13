@@ -124,10 +124,12 @@ class TestConfigValidator:
     """Verify config schema validation."""
 
     def test_valid_config(self) -> None:
-        schema = ConfigSchema({
-            "port": SchemaField(type=int, required=True, min_val=1, max_val=65535),
-            "host": SchemaField(type=str, default="0.0.0.0"),
-        })
+        schema = ConfigSchema(
+            {
+                "port": SchemaField(type=int, required=True, min_val=1, max_val=65535),
+                "host": SchemaField(type=str, default="0.0.0.0"),
+            }
+        )
         result = schema.validate({"port": 8080})
         assert result.valid
         assert result.config["host"] == "0.0.0.0"
@@ -161,14 +163,18 @@ class TestConfigValidator:
         assert any("Unknown" in w for w in result.warnings)
 
     def test_defaults(self) -> None:
-        schema = ConfigSchema({
-            "a": SchemaField(type=int, default=42),
-            "b": SchemaField(type=str, default="hello"),
-        })
+        schema = ConfigSchema(
+            {
+                "a": SchemaField(type=int, default=42),
+                "b": SchemaField(type=str, default="hello"),
+            }
+        )
         assert schema.get_defaults() == {"a": 42, "b": "hello"}
 
     def test_describe(self) -> None:
-        schema = ConfigSchema({"port": SchemaField(type=int, description="Listen port")})
+        schema = ConfigSchema(
+            {"port": SchemaField(type=int, description="Listen port")}
+        )
         desc = schema.describe()
         assert desc[0]["name"] == "port"
         assert desc[0]["description"] == "Listen port"

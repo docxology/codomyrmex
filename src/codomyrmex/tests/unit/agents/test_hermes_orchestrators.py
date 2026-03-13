@@ -21,17 +21,24 @@ if TYPE_CHECKING:
     import pytest
 
 # Resolve the scripts directory so we can import helpers from the scripts themselves
-_HERMES_SCRIPTS_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / "scripts" / "agents" / "hermes"
+_HERMES_SCRIPTS_DIR = (
+    Path(__file__).resolve().parent.parent.parent.parent.parent.parent
+    / "scripts"
+    / "agents"
+    / "hermes"
+)
 _REPO_ROOT = _HERMES_SCRIPTS_DIR.parent.parent.parent.parent
 _PYTHON = sys.executable
 
 
 # ── Helper: synthetic session database ────────────────────────────────
 
+
 def _create_synthetic_db(db_path: Path) -> None:
     """Write a minimal SQLite hermes_sessions DB with one session row."""
     import json
     import time
+
     conn = sqlite3.connect(str(db_path))
     conn.execute("""
         CREATE TABLE IF NOT EXISTS hermes_sessions (
@@ -43,10 +50,12 @@ def _create_synthetic_db(db_path: Path) -> None:
         )
     """)
     now = time.time()
-    messages = json.dumps([
-        {"role": "user", "content": "What is entropy?"},
-        {"role": "assistant", "content": "Entropy is a measure of disorder."},
-    ])
+    messages = json.dumps(
+        [
+            {"role": "user", "content": "What is entropy?"},
+            {"role": "assistant", "content": "Entropy is a measure of disorder."},
+        ]
+    )
     # session_id must be exactly 12 chars to match HermesSession default
     conn.execute(
         "INSERT INTO hermes_sessions VALUES (?, ?, ?, ?, ?)",
@@ -68,8 +77,14 @@ class TestObserveHermesOrchestrator:
         _create_synthetic_db(db)
 
         result = subprocess.run(
-            [_PYTHON, str(_HERMES_SCRIPTS_DIR / "observe_hermes.py"),
-             "--limit", "5", "--db-path", str(db)],
+            [
+                _PYTHON,
+                str(_HERMES_SCRIPTS_DIR / "observe_hermes.py"),
+                "--limit",
+                "5",
+                "--db-path",
+                str(db),
+            ],
             capture_output=True,
             text=True,
             timeout=30,
@@ -84,8 +99,14 @@ class TestObserveHermesOrchestrator:
         _create_synthetic_db(db)
 
         result = subprocess.run(
-            [_PYTHON, str(_HERMES_SCRIPTS_DIR / "observe_hermes.py"),
-             "--limit", "1", "--db-path", str(db)],
+            [
+                _PYTHON,
+                str(_HERMES_SCRIPTS_DIR / "observe_hermes.py"),
+                "--limit",
+                "1",
+                "--db-path",
+                str(db),
+            ],
             capture_output=True,
             text=True,
             timeout=30,
@@ -99,15 +120,21 @@ class TestObserveHermesOrchestrator:
     def test_missing_db_returns_error(self, tmp_path: Path) -> None:
         """observe_hermes should return exit code 1 for a non-existent DB."""
         result = subprocess.run(
-            [_PYTHON, str(_HERMES_SCRIPTS_DIR / "observe_hermes.py"),
-             "--db-path", str(tmp_path / "nonexistent.db")],
+            [
+                _PYTHON,
+                str(_HERMES_SCRIPTS_DIR / "observe_hermes.py"),
+                "--db-path",
+                str(tmp_path / "nonexistent.db"),
+            ],
             capture_output=True,
             text=True,
             timeout=30,
             cwd=str(_REPO_ROOT),
         )
         assert result.returncode == 1
-        assert "not found" in result.stdout.lower() or "not found" in result.stderr.lower()
+        assert (
+            "not found" in result.stdout.lower() or "not found" in result.stderr.lower()
+        )
 
 
 # ── run_hermes.py ─────────────────────────────────────────────────────
@@ -176,6 +203,7 @@ class TestLoadHermesClientFactory:
         # Perform direct import of the helper
         sys.path.insert(0, str(_HERMES_SCRIPTS_DIR.parent.parent.parent.parent / "src"))
         import importlib.util
+
         spec = importlib.util.spec_from_file_location(
             "run_hermes", str(_HERMES_SCRIPTS_DIR / "run_hermes.py")
         )
@@ -183,7 +211,9 @@ class TestLoadHermesClientFactory:
         spec.loader.exec_module(module)
         client = module._load_hermes_client()
         # It should return a HermesClient or None — never raise
-        assert client is not None or client is None  # No exception is the critical assertion
+        assert (
+            client is not None or client is None
+        )  # No exception is the critical assertion
 
 
 # ── _print_session helper ──────────────────────────────────────────────
@@ -208,7 +238,9 @@ class TestPrintSessionHelper:
             created_at=1700000000.0,
             updated_at=1700000100.0,
             message_count=2,
-            messages=[{"role": "user", "content": "Hello there, long message content!"}],
+            messages=[
+                {"role": "user", "content": "Hello there, long message content!"}
+            ],
             metadata={"backend": "ollama"},
         )
         # Should not raise
@@ -237,11 +269,16 @@ class TestDispatchHermesOrchestrator:
         # Write matching eval JSON
         eval_json = eval_dir / "stub_script_eval.json"
         eval_json.write_text(
-            json.dumps({
-                "adherence_assessment": {"adheres": False, "reasoning": "needs work."},
-                "technical_debt": ["Issue A"],
-                "underlying_improvements": ["Fix A"],
-            }),
+            json.dumps(
+                {
+                    "adherence_assessment": {
+                        "adheres": False,
+                        "reasoning": "needs work.",
+                    },
+                    "technical_debt": ["Issue A"],
+                    "underlying_improvements": ["Fix A"],
+                }
+            ),
             encoding="utf-8",
         )
         result = subprocess.run(
@@ -249,8 +286,10 @@ class TestDispatchHermesOrchestrator:
                 _PYTHON,
                 str(_HERMES_SCRIPTS_DIR / "dispatch_hermes.py"),
                 "--dry-run",
-                "--eval-dir", str(eval_dir),
-                "--output-dir", str(dispatches_dir),
+                "--eval-dir",
+                str(eval_dir),
+                "--output-dir",
+                str(dispatches_dir),
             ],
             capture_output=True,
             text=True,

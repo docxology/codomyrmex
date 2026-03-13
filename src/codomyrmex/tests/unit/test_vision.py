@@ -153,14 +153,16 @@ class TestAnnotationExtractor:
 
     def test_parse_valid_json_response(self) -> None:
         extractor = AnnotationExtractor()
-        annotations_json = json.dumps([
-            {
-                "label": "cat",
-                "confidence": 0.95,
-                "position": {"x": 0.1, "y": 0.2, "width": 0.3, "height": 0.4},
-                "attributes": {"color": "orange"},
-            }
-        ])
+        annotations_json = json.dumps(
+            [
+                {
+                    "label": "cat",
+                    "confidence": 0.95,
+                    "position": {"x": 0.1, "y": 0.2, "width": 0.3, "height": 0.4},
+                    "attributes": {"color": "orange"},
+                }
+            ]
+        )
         response = VLMResponse(text=annotations_json)
         result = extractor._parse_annotations(response)
         assert len(result) == 1
@@ -179,9 +181,9 @@ class TestAnnotationExtractor:
 
     def test_parse_markdown_wrapped_json(self) -> None:
         extractor = AnnotationExtractor()
-        json_content = json.dumps([
-            {"label": "logo", "confidence": 0.8, "position": {}, "attributes": {}}
-        ])
+        json_content = json.dumps(
+            [{"label": "logo", "confidence": 0.8, "position": {}, "attributes": {}}]
+        )
         response = VLMResponse(text=f"```json\n{json_content}\n```")
         result = extractor._parse_annotations(response)
         assert len(result) == 1

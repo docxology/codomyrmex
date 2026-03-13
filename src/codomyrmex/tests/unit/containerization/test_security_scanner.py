@@ -88,7 +88,9 @@ class TestVulnerabilityDataclass:
 # ---------------------------------------------------------------------------
 
 
-def _make_vuln(severity: VulnerabilitySeverity, vuln_id: str = "V-001") -> Vulnerability:
+def _make_vuln(
+    severity: VulnerabilitySeverity, vuln_id: str = "V-001"
+) -> Vulnerability:
     return Vulnerability(
         id=vuln_id,
         severity=severity,

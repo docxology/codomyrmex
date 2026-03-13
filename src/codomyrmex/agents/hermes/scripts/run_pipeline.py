@@ -92,7 +92,10 @@ def run_pipeline(
             "Give a Python example.",
         ]
     session_result = run_session(
-        session_prompts, db_path=db_path, backend=backend, model=model,
+        session_prompts,
+        db_path=db_path,
+        backend=backend,
+        model=model,
     )
     results["stages"]["session"] = {
         "status": session_result["status"],

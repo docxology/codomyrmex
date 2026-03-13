@@ -4,7 +4,6 @@ Uses real ErrorAnalyzer, PatchGenerator, and Debugger with real internal
 components instead of mocking them.
 """
 
-
 import pytest
 
 from codomyrmex.coding.debugging import (
@@ -148,5 +147,3 @@ class TestDebugger:
         result = self.debugger.debug("print('ok')", "ok", "", 0)
         # Should handle gracefully when there is no error to debug
         assert result is None or isinstance(result, dict)
-
-

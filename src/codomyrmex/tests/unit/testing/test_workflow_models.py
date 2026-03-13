@@ -47,8 +47,10 @@ class TestWorkflowStep:
 
     def test_to_dict(self):
         step = WorkflowStep(
-            id="s1", name="Check", step_type=WorkflowStepType.ASSERTION,
-            config={"expected": 200}
+            id="s1",
+            name="Check",
+            step_type=WorkflowStepType.ASSERTION,
+            config={"expected": 200},
         )
         d = step.to_dict()
         assert d["id"] == "s1"
@@ -69,7 +71,12 @@ class TestStepResult:
         assert r.passed is True
 
     def test_passed_property_false(self):
-        for status in [StepStatus.FAILED, StepStatus.SKIPPED, StepStatus.ERROR, StepStatus.PENDING]:
+        for status in [
+            StepStatus.FAILED,
+            StepStatus.SKIPPED,
+            StepStatus.ERROR,
+            StepStatus.PENDING,
+        ]:
             r = StepResult(step_id="s1", status=status)
             assert r.passed is False
 
@@ -180,7 +187,9 @@ class TestWorkflow:
 
     def test_add_assertion(self):
         wf = Workflow(id="wf1", name="Flow")
-        wf.add_assertion(id="a1", name="Check status", assertion_type="equals", expected=200)
+        wf.add_assertion(
+            id="a1", name="Check status", assertion_type="equals", expected=200
+        )
         assert len(wf.steps) == 1
         step = wf.steps[0]
         assert step.step_type == WorkflowStepType.ASSERTION

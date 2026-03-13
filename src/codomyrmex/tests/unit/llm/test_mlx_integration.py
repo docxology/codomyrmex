@@ -136,7 +136,10 @@ class TestGenerationResultEdgeCases:
         from codomyrmex.llm.mlx.runner import MLXGenerationResult
 
         r = MLXGenerationResult(
-            model="m", prompt="p", response="", execution_time=0.5,
+            model="m",
+            prompt="p",
+            response="",
+            execution_time=0.5,
             success=True,
         )
         assert r.response == ""
@@ -146,8 +149,11 @@ class TestGenerationResultEdgeCases:
         from codomyrmex.llm.mlx.runner import MLXGenerationResult
 
         r = MLXGenerationResult(
-            model="m", prompt="日本語のテスト", response="こんにちは 🎉",
-            execution_time=1.0, success=True,
+            model="m",
+            prompt="日本語のテスト",
+            response="こんにちは 🎉",
+            execution_time=1.0,
+            success=True,
         )
         assert "🎉" in r.response
         assert "日本語" in r.prompt
@@ -157,8 +163,11 @@ class TestGenerationResultEdgeCases:
 
         long_text = "a" * 100_000
         r = MLXGenerationResult(
-            model="m", prompt=long_text, response=long_text,
-            execution_time=10.0, tokens_generated=25000,
+            model="m",
+            prompt=long_text,
+            response=long_text,
+            execution_time=10.0,
+            tokens_generated=25000,
         )
         assert len(r.response) == 100_000
 
@@ -197,7 +206,10 @@ class TestConfigEdgeCases:
         from codomyrmex.llm.mlx.config import MLXConfig
 
         original = MLXConfig(
-            model="test/model", temperature=0.42, max_tokens=777, seed=99,
+            model="test/model",
+            temperature=0.42,
+            max_tokens=777,
+            seed=99,
         )
         d = original.to_dict()
         restored = MLXConfig(
@@ -332,10 +344,12 @@ class TestQuantizationEdgeCases:
 
         with tempfile.TemporaryDirectory() as td:
             (Path(td) / "config.json").write_text(
-                json.dumps({
-                    "quantization": "4-bit",
-                    "quantization_config": {"bits": 4, "group_size": 64},
-                })
+                json.dumps(
+                    {
+                        "quantization": "4-bit",
+                        "quantization_config": {"bits": 4, "group_size": 64},
+                    }
+                )
             )
             info = read_quantization_info(td)
             assert info["quantization"] == "4-bit"
@@ -453,19 +467,23 @@ class TestMLXWorkflow:
         cfg = MLXConfig(max_tokens=30)
         runner = MLXRunner(cfg)
 
-        result = runner.chat([
-            {"role": "system", "content": "Answer in one word only."},
-            {"role": "user", "content": "What color is the sky?"},
-        ])
+        result = runner.chat(
+            [
+                {"role": "system", "content": "Answer in one word only."},
+                {"role": "user", "content": "What color is the sky?"},
+            ]
+        )
         assert result.success is True
         assert len(result.response) > 0
 
-        result2 = runner.chat([
-            {"role": "system", "content": "Answer in one word only."},
-            {"role": "user", "content": "What color is the sky?"},
-            {"role": "assistant", "content": result.response},
-            {"role": "user", "content": "And grass?"},
-        ])
+        result2 = runner.chat(
+            [
+                {"role": "system", "content": "Answer in one word only."},
+                {"role": "user", "content": "What color is the sky?"},
+                {"role": "assistant", "content": result.response},
+                {"role": "user", "content": "And grass?"},
+            ]
+        )
         assert result2.success is True
         runner.unload_model()
 

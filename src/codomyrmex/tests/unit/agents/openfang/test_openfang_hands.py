@@ -87,7 +87,9 @@ class TestHandsManagerParseSingle:
 
 class TestHandsManagerParseMultiple:
     def test_two_hands_separated_by_blank_line(self):
-        raw = "hand-one\ndescription: First hand\n\nhand-two\ndescription: Second hand\n"
+        raw = (
+            "hand-one\ndescription: First hand\n\nhand-two\ndescription: Second hand\n"
+        )
         result = HandsManager.parse_list_output(raw)
         assert len(result) == 2
         assert result[0].name == "hand-one"

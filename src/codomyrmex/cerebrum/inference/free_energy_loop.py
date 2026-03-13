@@ -171,9 +171,7 @@ class FreeEnergyLoop:
             try:
                 result = self.step(observation, step_idx=i)
             except Exception as exc:
-                raise ActiveInferenceError(
-                    f"Agent error at step {i}: {exc}"
-                ) from exc
+                raise ActiveInferenceError(f"Agent error at step {i}: {exc}") from exc
 
             step_results.append(result)
             action_history.append(result.action)

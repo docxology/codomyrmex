@@ -30,7 +30,6 @@ class ItemCreate(ItemBase):
     """Model for creating a new item."""
 
 
-
 class ItemResponse(ItemBase):
     """Model for item response."""
 

@@ -40,7 +40,10 @@ class TestAgentSpec:
 
     def test_with_custom_model(self):
         spec = AgentSpec(
-            identity="Coder", persona="Expert coder", provider="ollama", model="qwen2.5-coder"
+            identity="Coder",
+            persona="Expert coder",
+            provider="ollama",
+            model="qwen2.5-coder",
         )
         assert spec.model == "qwen2.5-coder"
 
@@ -97,7 +100,9 @@ class TestExtractTodoItems:
 
 class TestConversationLog:
     def test_create(self):
-        log = ConversationLog(channel_id="test-channel", started_at="2026-03-08T12:00:00Z")
+        log = ConversationLog(
+            channel_id="test-channel", started_at="2026-03-08T12:00:00Z"
+        )
         assert log.channel_id == "test-channel"
         assert log.status == "running"
 
@@ -117,8 +122,13 @@ class TestConversationLog:
             started_at="2026-03-08T12:00:00Z",
             turns=[
                 ConversationTurn(
-                    turn_number=1, speaker="A", provider="ollama", model="q",
-                    content="Hello", timestamp="2026-03-08T12:00:01Z", elapsed_seconds=1.0,
+                    turn_number=1,
+                    speaker="A",
+                    provider="ollama",
+                    model="q",
+                    content="Hello",
+                    timestamp="2026-03-08T12:00:01Z",
+                    elapsed_seconds=1.0,
                 ),
             ],
         )

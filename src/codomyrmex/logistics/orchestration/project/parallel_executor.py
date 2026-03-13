@@ -177,7 +177,9 @@ class ParallelExecutor:
             # Handle timeout
             if len(completed) < len(tasks):
                 logger.warning(
-                    "Execution timed out. Completed %s/%s tasks", len(completed), len(tasks)
+                    "Execution timed out. Completed %s/%s tasks",
+                    len(completed),
+                    len(tasks),
                 )
                 for task_name in task_dict:
                     if task_name not in completed:

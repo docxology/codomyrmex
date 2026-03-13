@@ -207,7 +207,9 @@ class GitChartsMixin:
             return mermaid_content
 
         except Exception as e:
-            logger.error("Error creating Git tree Mermaid diagram: %s", e, exc_info=True)
+            logger.error(
+                "Error creating Git tree Mermaid diagram: %s", e, exc_info=True
+            )
             return ""
 
     def visualize_commit_activity_png(

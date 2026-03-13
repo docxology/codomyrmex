@@ -75,7 +75,9 @@ class OllamaEvaluationMixin:
         }
 
         self.logger.info(
-            "Benchmark completed: %s/%s successful", len(successful_runs), len(test_prompts)
+            "Benchmark completed: %s/%s successful",
+            len(successful_runs),
+            len(test_prompts),
         )
         return benchmark_summary
 

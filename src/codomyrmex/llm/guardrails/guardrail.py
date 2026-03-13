@@ -25,7 +25,9 @@ class OutputValidator:
         max_len = max_length or self.config.max_output_length
 
         if len(output) > max_len:
-            threats_detected.append(f"Output exceeds max length ({len(output)} > {max_len})")
+            threats_detected.append(
+                f"Output exceeds max length ({len(output)} > {max_len})"
+            )
 
         if expected_format == "json":
             try:

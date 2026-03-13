@@ -664,17 +664,13 @@ class TestValidationSummary:
         assert len(result) == 5
 
     def test_filter_by_severity(self):
-        s = ValidationSummary(
-            [_issue(severity="error"), _issue(severity="warning")]
-        )
+        s = ValidationSummary([_issue(severity="error"), _issue(severity="warning")])
         errors = s.filter(severity="error")
         assert len(errors) == 1
         assert errors[0].severity == "error"
 
     def test_filter_by_field(self):
-        s = ValidationSummary(
-            [_issue(field="email"), _issue(field="name")]
-        )
+        s = ValidationSummary([_issue(field="email"), _issue(field="name")])
         result = s.filter(field="email")
         assert len(result) == 1
         assert result[0].field == "email"
@@ -963,8 +959,10 @@ class TestValidationManagerValidators:
     def test_register_overwrites_existing(self):
         mgr = ValidationManager()
         mgr.register_validator("v", lambda d, s: True)
+
         def new_fn(d, s):
             return False
+
         mgr.register_validator("v", new_fn)
         assert mgr.get_validator("v") is new_fn
 

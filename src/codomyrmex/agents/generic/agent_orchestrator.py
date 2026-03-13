@@ -114,7 +114,9 @@ class AgentOrchestrator:
         if not agents_to_use:
             raise AgentError("No agents available for orchestration")
 
-        self.logger.info("Executing sequential request on %s agents", len(agents_to_use))
+        self.logger.info(
+            "Executing sequential request on %s agents", len(agents_to_use)
+        )
 
         responses = []
         for agent in agents_to_use:
@@ -123,7 +125,9 @@ class AgentOrchestrator:
                 responses.append(response)
 
                 if stop_on_success and response.is_success():
-                    self.logger.info("Stopping after successful response from %s", agent)
+                    self.logger.info(
+                        "Stopping after successful response from %s", agent
+                    )
                     break
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 self.logger.error("Agent %s failed: %s", agent, e)

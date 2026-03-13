@@ -1,6 +1,5 @@
 """Tests for collaboration.exceptions module."""
 
-
 from codomyrmex.collaboration.exceptions import (
     AgentBusyError,
     AgentNotFoundError,
@@ -116,12 +115,22 @@ class TestCoordinationErrors:
 class TestExceptionHierarchy:
     def test_all_inherit_collaboration_error(self):
         classes = [
-            AgentNotFoundError, AgentBusyError, TaskExecutionError, TaskNotFoundError,
-            TaskDependencyError, ConsensusError, ChannelError, MessageDeliveryError,
-            CoordinationError, LeaderElectionError, CapabilityMismatchError,
+            AgentNotFoundError,
+            AgentBusyError,
+            TaskExecutionError,
+            TaskNotFoundError,
+            TaskDependencyError,
+            ConsensusError,
+            ChannelError,
+            MessageDeliveryError,
+            CoordinationError,
+            LeaderElectionError,
+            CapabilityMismatchError,
         ]
         for cls in classes:
-            assert issubclass(cls, CollaborationError), f"{cls.__name__} must inherit CollaborationError"
+            assert issubclass(cls, CollaborationError), (
+                f"{cls.__name__} must inherit CollaborationError"
+            )
 
     def test_all_inherit_exception(self):
         assert issubclass(CollaborationError, Exception)

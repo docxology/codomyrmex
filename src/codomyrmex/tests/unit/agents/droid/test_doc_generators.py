@@ -6,7 +6,6 @@ generate_physical_requirements, generate_physical_docs_content.
 All functions return large documentation/code strings.
 """
 
-
 from codomyrmex.agents.droid.generators.physical_generators.doc_generators import (
     generate_physical_api_spec,
     generate_physical_docs_content,

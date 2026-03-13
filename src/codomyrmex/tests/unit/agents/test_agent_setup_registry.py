@@ -96,7 +96,9 @@ class TestAgentDescriptor:
             env_var="JULES_COMMAND",
             config_key="jules_command",
             default_model="n/a",
-            probe=lambda: ProbeResult(name="jules", status="unavailable", detail="not found"),
+            probe=lambda: ProbeResult(
+                name="jules", status="unavailable", detail="not found"
+            ),
         )
         assert desc.agent_type == "cli"
 
@@ -108,7 +110,9 @@ class TestAgentDescriptor:
             env_var="OLLAMA_BASE_URL",
             config_key="ollama_base_url",
             default_model="llama3.2",
-            probe=lambda: ProbeResult(name="ollama", status="unreachable", detail="no server"),
+            probe=lambda: ProbeResult(
+                name="ollama", status="unreachable", detail="no server"
+            ),
         )
         assert desc.agent_type == "local"
 

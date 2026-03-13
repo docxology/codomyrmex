@@ -49,10 +49,12 @@ def run_session(
             "Now explain it for a 5-year-old.",
         ]
 
-    client = HermesClient(config={
-        "hermes_backend": backend,
-        "hermes_model": model,
-    })
+    client = HermesClient(
+        config={
+            "hermes_backend": backend,
+            "hermes_model": model,
+        }
+    )
 
     session = HermesSession(metadata={"backend": client.active_backend})
     store = SQLiteSessionStore(db_path=db_path)
@@ -64,7 +66,11 @@ def run_session(
             try:
                 request = AgentRequest(prompt=prompt_text)
                 response = client.execute(request)
-                content = response.content if response.is_success() else f"[error] {response.error}"
+                content = (
+                    response.content
+                    if response.is_success()
+                    else f"[error] {response.error}"
+                )
             except HermesError as exc:
                 content = f"[error] {exc}"
 

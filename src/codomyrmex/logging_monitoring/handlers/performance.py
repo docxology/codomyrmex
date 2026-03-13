@@ -67,7 +67,8 @@ class PerformanceLogger:
         """
         self._timers[operation] = time.time()
         self.logger.debug(
-            "Started timing: %s", operation,
+            "Started timing: %s",
+            operation,
             extra={"operation": operation, "context": context or {}},
         )
 
@@ -95,7 +96,8 @@ class PerformanceLogger:
         start_time = self._timers.pop(operation)
         duration = time.time() - start_time
         self.logger.info(
-            "Operation completed: %s", operation,
+            "Operation completed: %s",
+            operation,
             extra={
                 "operation": operation,
                 "duration_seconds": duration,

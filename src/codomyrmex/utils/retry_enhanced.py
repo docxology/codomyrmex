@@ -69,7 +69,11 @@ def retry(
 
     Example::
 
-        @retry(max_attempts=5, base_delay=0.5, retryable_exceptions=(ConnectionError, TimeoutError))
+        @retry(
+            max_attempts=5,
+            base_delay=0.5,
+            retryable_exceptions=(ConnectionError, TimeoutError),
+        )
         def fetch_data(url):
             return requests.get(url, timeout=10).json()
     """
@@ -147,6 +151,7 @@ def retry_with_stats(
         @retry_with_stats(max_attempts=3)
         def unreliable():
             return 42
+
 
         result, stats = unreliable()
         print(f"Took {stats.attempts} attempts")

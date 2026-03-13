@@ -130,7 +130,11 @@ def analyze_code_quality(
         }
 
         logger.info(
-            "Analyzed %s code using %s/%s in %.2fs", language, provider, model, execution_time
+            "Analyzed %s code using %s/%s in %.2fs",
+            language,
+            provider,
+            model,
+            execution_time,
         )
         return result
 
@@ -258,7 +262,11 @@ Please analyze:
         }
 
         logger.info(
-            "Compared %s code versions using %s/%s in %.2fs", language, provider, model, execution_time
+            "Compared %s code versions using %s/%s in %.2fs",
+            language,
+            provider,
+            model,
+            execution_time,
         )
         return result
 

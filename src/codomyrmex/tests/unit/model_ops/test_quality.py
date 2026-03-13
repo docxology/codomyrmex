@@ -6,7 +6,6 @@ _score_coherence, _score_relevance, _score_completeness, _score_conciseness,
 _score_accuracy), and helper functions _tokenize, _split_sentences.
 """
 
-
 from codomyrmex.model_ops.evaluation.quality import (
     DimensionScore,
     QualityAnalyzer,
@@ -117,7 +116,9 @@ class TestQualityAnalyzer:
 
     def test_analyze_returns_report(self):
         analyzer = QualityAnalyzer()
-        report = analyzer.analyze("This is a well-structured response with clear information.")
+        report = analyzer.analyze(
+            "This is a well-structured response with clear information."
+        )
         assert isinstance(report, QualityReport)
         assert 0.0 <= report.overall_score <= 1.0
 
@@ -169,7 +170,9 @@ class TestQualityAnalyzer:
 
     def test_to_dict_round_trip(self):
         analyzer = QualityAnalyzer()
-        report = analyzer.analyze("A comprehensive and well-structured technical document.")
+        report = analyzer.analyze(
+            "A comprehensive and well-structured technical document."
+        )
         d = report.to_dict()
         assert "scores" in d
         assert "overall_score" in d

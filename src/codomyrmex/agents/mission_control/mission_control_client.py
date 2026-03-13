@@ -50,9 +50,7 @@ class MissionControlConfig:
         if not self.auth_pass:
             self.auth_pass = os.environ.get("MC_AUTH_PASS", "")
         if not self.app_path:
-            self.app_path = str(
-                Path(__file__).parent / "app"
-            )
+            self.app_path = str(Path(__file__).parent / "app")
         # Strip trailing slash from base_url
         self.base_url = self.base_url.rstrip("/")
 
@@ -145,9 +143,7 @@ class MissionControlClient:
         )
 
         try:
-            with urllib.request.urlopen(
-                req, timeout=self._config.timeout
-            ) as resp:
+            with urllib.request.urlopen(req, timeout=self._config.timeout) as resp:
                 # Capture session cookie if present
                 set_cookie = resp.headers.get("Set-Cookie", "")
                 if "mc-session" in set_cookie:
@@ -186,10 +182,14 @@ class MissionControlClient:
         Raises:
             MissionControlError: On auth failure.
         """
-        return self._request("POST", "/api/auth/login", {
-            "username": self._config.auth_user,
-            "password": self._config.auth_pass,
-        })
+        return self._request(
+            "POST",
+            "/api/auth/login",
+            {
+                "username": self._config.auth_user,
+                "password": self._config.auth_pass,
+            },
+        )
 
     # ── Status ───────────────────────────────────────────────────
 
@@ -438,13 +438,9 @@ class MissionControlClient:
                 "pid": self._server_process.pid,
             }
         except FileNotFoundError:
-            raise MissionControlError(
-                "pnpm not found. Install it: npm install -g pnpm"
-            )
+            raise MissionControlError("pnpm not found. Install it: npm install -g pnpm")
         except Exception as exc:
-            raise MissionControlError(
-                f"Failed to start server: {exc}"
-            ) from exc
+            raise MissionControlError(f"Failed to start server: {exc}") from exc
 
     def stop_server(self) -> dict[str, Any]:
         """Stop the running Mission Control dev server.
@@ -461,9 +457,7 @@ class MissionControlClient:
 
         try:
             # Send SIGTERM to the process group
-            os.killpg(
-                os.getpgid(self._server_process.pid), signal.SIGTERM
-            )
+            os.killpg(os.getpgid(self._server_process.pid), signal.SIGTERM)
             self._server_process.wait(timeout=10)
             pid = self._server_process.pid
             self._server_process = None

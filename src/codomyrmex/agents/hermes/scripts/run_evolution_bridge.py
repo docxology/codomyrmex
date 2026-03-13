@@ -56,14 +56,15 @@ def _check_constraints() -> dict[str, Any]:
         validator = ConstraintValidator(cfg)
 
         size_pass = all(r.passed for r in validator.validate_all("short", "skill"))
-        size_fail = any(not r.passed for r in validator.validate_all("x" * 200, "skill"))
+        size_fail = any(
+            not r.passed for r in validator.validate_all("x" * 200, "skill")
+        )
 
         growth_results = validator.validate_all(
             "short" + " extra" * 20, "skill", baseline_text="short"
         )
         growth_blocked = any(
-            not r.passed and r.constraint_name == "growth_limit"
-            for r in growth_results
+            not r.passed and r.constraint_name == "growth_limit" for r in growth_results
         )
 
         valid_skill = "---\nname: test\ndescription: demo\n---\n\n# Body\nContent here."

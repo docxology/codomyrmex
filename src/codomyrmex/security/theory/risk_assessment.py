@@ -121,7 +121,9 @@ class RiskAssessor:
         )
 
         logger.info(
-            "Completed risk assessment with %s risks, overall level: %s", len(risks), overall_risk
+            "Completed risk assessment with %s risks, overall level: %s",
+            len(risks),
+            overall_risk,
         )
         return assessment
 

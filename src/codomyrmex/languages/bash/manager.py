@@ -10,7 +10,7 @@ import tempfile
 from codomyrmex.languages.base import BaseLanguageManager
 
 logger = logging.getLogger(__name__)
-_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_FAST = 10  # seconds for version checks
 _TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 

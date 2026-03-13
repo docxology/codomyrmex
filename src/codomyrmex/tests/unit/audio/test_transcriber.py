@@ -8,7 +8,6 @@ Covers:
 - Batch transcription interface
 """
 
-
 import pytest
 
 from codomyrmex.audio.exceptions import ProviderNotAvailableError, TranscriptionError
@@ -32,7 +31,9 @@ class TestTranscriberInterface:
             assert transcriber is not None
             assert transcriber._provider_name == "whisper"
         except ProviderNotAvailableError:
-            pytest.fail("Whisper is reported as available but raised ProviderNotAvailableError")
+            pytest.fail(
+                "Whisper is reported as available but raised ProviderNotAvailableError"
+            )
         except Exception as e:
             # Model loading might fail for other reasons (memory, etc.)
             pytest.skip(f"Could not load Whisper model: {e}")

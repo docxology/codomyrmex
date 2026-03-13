@@ -221,7 +221,9 @@ class TestTransactionEntry:
         assert e.amount == Decimal("100.00")
 
     def test_with_description(self):
-        e = TransactionEntry(account_id="a", amount=Decimal("-50.00"), description="Credit leg")
+        e = TransactionEntry(
+            account_id="a", amount=Decimal("-50.00"), description="Credit leg"
+        )
         assert e.description == "Credit leg"
 
     def test_default_description_empty(self):
@@ -395,48 +397,58 @@ class TestValidationSchemas:
 
     def test_import(self):
         from codomyrmex.validation.schemas import Result, ResultStatus
+
         assert Result is not None
         assert ResultStatus is not None
 
     def test_result_status_has_success(self):
         from codomyrmex.validation.schemas import ResultStatus
+
         assert ResultStatus.SUCCESS.value == "success"
 
     def test_result_status_has_failure(self):
         from codomyrmex.validation.schemas import ResultStatus
+
         assert ResultStatus.FAILURE.value == "failure"
 
     def test_result_status_has_skipped(self):
         from codomyrmex.validation.schemas import ResultStatus
+
         assert ResultStatus.SKIPPED.value == "skipped"
 
     def test_result_ok_when_success(self):
         from codomyrmex.validation.schemas import Result, ResultStatus
+
         r = Result(status=ResultStatus.SUCCESS)
         assert r.ok is True
 
     def test_result_not_ok_when_failure(self):
         from codomyrmex.validation.schemas import Result, ResultStatus
+
         r = Result(status=ResultStatus.FAILURE, message="Something failed")
         assert r.ok is False
 
     def test_result_not_ok_when_partial(self):
         from codomyrmex.validation.schemas import Result, ResultStatus
+
         r = Result(status=ResultStatus.PARTIAL)
         assert r.ok is False
 
     def test_result_with_data(self):
         from codomyrmex.validation.schemas import Result, ResultStatus
+
         r = Result(status=ResultStatus.SUCCESS, data={"key": "value"})
         assert r.data == {"key": "value"}
 
     def test_result_with_errors(self):
         from codomyrmex.validation.schemas import Result, ResultStatus
+
         r = Result(status=ResultStatus.FAILURE, errors=["err1", "err2"])
         assert len(r.errors) == 2
 
     def test_result_independent_default_errors(self):
         from codomyrmex.validation.schemas import Result, ResultStatus
+
         r1 = Result(status=ResultStatus.SUCCESS)
         r2 = Result(status=ResultStatus.SUCCESS)
         r1.errors.append("x")
@@ -444,6 +456,7 @@ class TestValidationSchemas:
 
     def test_result_to_dict(self):
         from codomyrmex.validation.schemas import Result, ResultStatus
+
         r = Result(status=ResultStatus.SUCCESS, message="ok")
         d = r.to_dict()
         assert d["status"] == "success"

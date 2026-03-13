@@ -207,9 +207,13 @@ class WorkflowManager:
                     )
 
                 self.workflows[workflow_name] = steps
-                logger.info("Loaded workflow '%s' from %s", workflow_name, workflow_file)
+                logger.info(
+                    "Loaded workflow '%s' from %s", workflow_name, workflow_file
+                )
             except Exception as exc:
-                logger.warning("Failed to load workflow from %s: %s", workflow_file, exc)
+                logger.warning(
+                    "Failed to load workflow from %s: %s", workflow_file, exc
+                )
 
     # ------------------------------------------------------------------
     # DAG & dependency helpers
@@ -313,7 +317,8 @@ class WorkflowManager:
         """Legacy wrapper to get performance summary."""
         return {
             "total_executions": len(self.executions),
-            "average_duration": sum(e.duration or 0 for e in self.executions.values()) / max(1, len(self.executions)),
+            "average_duration": sum(e.duration or 0 for e in self.executions.values())
+            / max(1, len(self.executions)),
         }
 
 

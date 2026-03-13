@@ -69,7 +69,9 @@ def free_api_search(
             entries = [e for e in entries if e.https]
         if query:
             q = query.lower()
-            entries = [e for e in entries if q in e.name.lower() or q in e.description.lower()]
+            entries = [
+                e for e in entries if q in e.name.lower() or q in e.description.lower()
+            ]
 
         return {
             "status": "success",
@@ -104,9 +106,13 @@ def free_api_call(
     """
     try:
         parsed_params = _parse_kv_pairs(params, ",", "=") if params.strip() else None
-        parsed_headers = _parse_kv_pairs(headers, ";", ": ") if headers.strip() else None
+        parsed_headers = (
+            _parse_kv_pairs(headers, ";", ": ") if headers.strip() else None
+        )
         client = FreeAPIClient(default_timeout=timeout)
-        result = client.call(url, method=method, params=parsed_params, headers=parsed_headers)
+        result = client.call(
+            url, method=method, params=parsed_params, headers=parsed_headers
+        )
         return {
             "status": "success",
             "status_code": result.status_code,

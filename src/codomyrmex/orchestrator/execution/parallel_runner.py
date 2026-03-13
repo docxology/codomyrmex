@@ -297,7 +297,9 @@ class BatchRunner:
         results = []
 
         for i, batch in enumerate(batches):
-            logger.info("Running batch %s/%s (%s scripts)", i + 1, len(batches), len(batch))
+            logger.info(
+                "Running batch %s/%s (%s scripts)", i + 1, len(batches), len(batch)
+            )
 
             result = self.parallel_runner.run_scripts(
                 scripts=batch, timeout=timeout, cwd=cwd

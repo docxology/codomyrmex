@@ -23,7 +23,7 @@ def init_submodules(repository_path: str | None = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:
@@ -50,7 +50,7 @@ def update_submodules(repository_path: str | None = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:

@@ -18,6 +18,7 @@ def is_redis_running():
         return False
     try:
         import redis
+
         host = os.getenv("REDIS_HOST", "localhost")
         port = int(os.getenv("REDIS_PORT", "6379"))
         client = redis.Redis(host=host, port=port, socket_connect_timeout=1)
@@ -25,10 +26,11 @@ def is_redis_running():
     except Exception:
         return False
 
+
 skip_if_no_redis = pytest.mark.skipif(
-    not is_redis_running(),
-    reason="Redis server not running or redis package missing"
+    not is_redis_running(), reason="Redis server not running or redis package missing"
 )
+
 
 @pytest.fixture
 def redis_cache():
@@ -36,6 +38,7 @@ def redis_cache():
     cache.clear()
     yield cache
     cache.clear()
+
 
 @pytest.mark.unit
 @skip_if_no_redis
@@ -77,6 +80,7 @@ class TestRedisCache:
 
     def test_ttl(self, redis_cache):
         import time
+
         redis_cache.set("temp", "val", ttl=1)
         assert redis_cache.get("temp") == "val"
         time.sleep(1.1)

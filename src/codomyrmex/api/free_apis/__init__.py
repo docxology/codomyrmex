@@ -12,7 +12,7 @@ Quick start::
     from codomyrmex.api.free_apis import FreeAPIRegistry, FreeAPIClient
 
     registry = FreeAPIRegistry()
-    registry.fetch()                         # loads ~1400 entries
+    registry.fetch()  # loads ~1400 entries
     animals = registry.filter_by_category("Animals")
     print(animals[0].to_dict())
 

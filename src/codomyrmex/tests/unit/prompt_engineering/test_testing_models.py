@@ -107,9 +107,7 @@ class TestTestResult:
 @pytest.mark.unit
 class TestTestSuiteResult:
     def _suite_with_results(self, results):
-        return TestSuiteResult(
-            suite_id="s1", prompt_version="v1.0", results=results
-        )
+        return TestSuiteResult(suite_id="s1", prompt_version="v1.0", results=results)
 
     def test_empty_suite(self):
         suite = self._suite_with_results([])

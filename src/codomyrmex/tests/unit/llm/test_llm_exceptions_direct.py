@@ -48,7 +48,9 @@ class TestLLMErrorHierarchy:
 
 class TestLLMConnectionError:
     def test_with_provider_and_endpoint(self):
-        e = LLMConnectionError("Failed", provider="openai", endpoint="https://api.openai.com")
+        e = LLMConnectionError(
+            "Failed", provider="openai", endpoint="https://api.openai.com"
+        )
         assert e.context["provider"] == "openai"
         assert e.context["endpoint"] == "https://api.openai.com"
 
@@ -74,7 +76,9 @@ class TestLLMAuthenticationError:
 
 class TestLLMRateLimitError:
     def test_with_all_fields(self):
-        e = LLMRateLimitError("Rate limited", provider="openai", retry_after=30.0, limit_type="rpm")
+        e = LLMRateLimitError(
+            "Rate limited", provider="openai", retry_after=30.0, limit_type="rpm"
+        )
         assert e.context["provider"] == "openai"
         assert e.context["retry_after"] == 30.0
         assert e.context["limit_type"] == "rpm"
@@ -102,7 +106,9 @@ class TestLLMTimeoutError:
 
 class TestPromptTooLongError:
     def test_with_all_fields(self):
-        e = PromptTooLongError("Too long", token_count=5000, max_tokens=4096, model="gpt-4")
+        e = PromptTooLongError(
+            "Too long", token_count=5000, max_tokens=4096, model="gpt-4"
+        )
         assert e.context["token_count"] == 5000
         assert e.context["max_tokens"] == 4096
         assert e.context["model"] == "gpt-4"
@@ -144,7 +150,9 @@ class TestResponseParsingError:
 
 class TestContentFilterError:
     def test_with_filter_type_and_category(self):
-        e = ContentFilterError("Blocked", filter_type="hate_speech", category="violence")
+        e = ContentFilterError(
+            "Blocked", filter_type="hate_speech", category="violence"
+        )
         assert e.context["filter_type"] == "hate_speech"
         assert e.context["category"] == "violence"
 
@@ -172,7 +180,9 @@ class TestModelNotFoundError:
 
 class TestTokenLimitError:
     def test_with_token_counts(self):
-        e = TokenLimitError("Limit exceeded", requested_tokens=5000, available_tokens=4096)
+        e = TokenLimitError(
+            "Limit exceeded", requested_tokens=5000, available_tokens=4096
+        )
         assert e.context["requested_tokens"] == 5000
         assert e.context["available_tokens"] == 4096
 
@@ -202,7 +212,9 @@ class TestStreamingError:
 
 class TestContextWindowError:
     def test_with_all_fields(self):
-        e = ContextWindowError("Too big", context_length=200000, max_context=128000, model="claude")
+        e = ContextWindowError(
+            "Too big", context_length=200000, max_context=128000, model="claude"
+        )
         assert e.context["context_length"] == 200000
         assert e.context["max_context"] == 128000
         assert e.context["model"] == "claude"

@@ -42,7 +42,9 @@ class TestWorkflowTrust:
         trust_gateway.reset_trust()  # Ensure clean state
         result = trust_gateway.trust_all()
         assert isinstance(result, dict)
-        assert trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.TRUSTED
+        assert (
+            trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.TRUSTED
+        )
 
     def test_trusted_call_tool_succeeds_when_trusted(self):
         """After trust_all, trusted_call_tool succeeds for safe tools."""
@@ -62,10 +64,15 @@ class TestWorkflowTrust:
         from codomyrmex.agents.pai import trust_gateway
 
         trust_gateway.trust_all()
-        assert trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.TRUSTED
+        assert (
+            trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.TRUSTED
+        )
 
         trust_gateway.reset_trust()
-        assert trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.UNTRUSTED
+        assert (
+            trust_gateway.get_current_trust_level()
+            == trust_gateway.TrustLevel.UNTRUSTED
+        )
 
     def test_full_lifecycle(self):
         """Complete trust lifecycle: verify → trust → reset."""
@@ -88,7 +95,10 @@ class TestWorkflowTrust:
 
         # Step 4: Reset
         trust_gateway.reset_trust()
-        assert trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.UNTRUSTED
+        assert (
+            trust_gateway.get_current_trust_level()
+            == trust_gateway.TrustLevel.UNTRUSTED
+        )
 
     def test_audit_log_populated_after_trust(self):
         """Audit log captures at least trust operations."""

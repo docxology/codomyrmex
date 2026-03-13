@@ -73,10 +73,12 @@ class TestHermesClientExecution:
     @pytest.mark.skipif(HAS_HERMES, reason="hermes CLI is installed")
     def test_hermes_missing_error(self) -> None:
         """Test that missing hermes command returns an error response."""
-        client = HermesClient(config={
-            "hermes_command": "nonexistent_hermes_binary",
-            "hermes_backend": "cli",
-        })
+        client = HermesClient(
+            config={
+                "hermes_command": "nonexistent_hermes_binary",
+                "hermes_backend": "cli",
+            }
+        )
         request = AgentRequest(prompt="test")
         response = client.execute(request)
         assert not response.is_success()
@@ -134,10 +136,9 @@ class TestHermesClientSessionIntegration:
         db_path = tmp_path / "test_sessions.db"
 
         # Use echo to simulate a fast, mock-free successful execution
-        client = HermesClient(config={
-            "hermes_command": "echo",
-            "hermes_session_db": str(db_path)
-        })
+        client = HermesClient(
+            config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
+        )
 
         # Turn 1
         response1 = client.chat_session(prompt="hello session")
@@ -152,6 +153,7 @@ class TestHermesClientSessionIntegration:
 
         # Verify the history buildup from SQLite directly
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
         with SQLiteSessionStore(db_path) as store:
             session = store.load(session_id)
             assert session is not None
@@ -172,13 +174,15 @@ class TestHermesSessionMCPTools:
         from codomyrmex.agents.hermes.hermes_client import HermesClient
 
         def mock_get_client(**kwargs):
-            return HermesClient(config={
-                "hermes_command": "echo",
-                "hermes_session_db": str(db_path),
-                "hermes_backend": kwargs.get("backend", "auto"),
-                "hermes_model": kwargs.get("model", "hermes3"),
-                "hermes_timeout": kwargs.get("timeout", 120),
-            })
+            return HermesClient(
+                config={
+                    "hermes_command": "echo",
+                    "hermes_session_db": str(db_path),
+                    "hermes_backend": kwargs.get("backend", "auto"),
+                    "hermes_model": kwargs.get("model", "hermes3"),
+                    "hermes_timeout": kwargs.get("timeout", 120),
+                }
+            )
 
         monkeypatch.setattr(mcp_tools, "_get_client", mock_get_client)
 
@@ -207,4 +211,3 @@ class TestHermesSessionMCPTools:
         # 4. Verify cleared
         list_after = hermes_session_list()
         assert session_id not in list_after["sessions"]
-

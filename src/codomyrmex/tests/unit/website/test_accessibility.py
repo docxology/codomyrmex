@@ -284,16 +284,16 @@ class TestA11ycheckerDefaultRules:
         assert "color-contrast" not in codes
 
     def test_focusable_without_focus_style_fails(self, checker_aa):
-        report = checker_aa.check_elements([
-            {"focusable": True, "has_focus_style": False}
-        ])
+        report = checker_aa.check_elements(
+            [{"focusable": True, "has_focus_style": False}]
+        )
         codes = [i.code for i in report.issues]
         assert "focus-visible" in codes
 
     def test_focusable_with_focus_style_passes(self, checker_aa):
-        report = checker_aa.check_elements([
-            {"focusable": True, "has_focus_style": True}
-        ])
+        report = checker_aa.check_elements(
+            [{"focusable": True, "has_focus_style": True}]
+        )
         codes = [i.code for i in report.issues]
         assert "focus-visible" not in codes
 
@@ -304,9 +304,9 @@ class TestA11ycheckerDefaultRules:
 
     def test_level_a_skips_aa_rules(self, checker_a):
         # color-contrast is AA, focus-visible is AA — should be skipped
-        report = checker_a.check_elements([
-            {"contrast_ratio": 1.0, "focusable": True, "has_focus_style": False}
-        ])
+        report = checker_a.check_elements(
+            [{"contrast_ratio": 1.0, "focusable": True, "has_focus_style": False}]
+        )
         codes = [i.code for i in report.issues]
         assert "color-contrast" not in codes
         assert "focus-visible" not in codes
@@ -318,16 +318,20 @@ class TestA11ycheckerDefaultRules:
         assert report.passed == 0
 
     def test_passed_count_increments(self, checker_aa):
-        report = checker_aa.check_elements([
-            {"tag": "img", "alt": "ok"},
-            {"tag": "a", "text": "click"},
-        ])
+        report = checker_aa.check_elements(
+            [
+                {"tag": "img", "alt": "ok"},
+                {"tag": "a", "text": "click"},
+            ]
+        )
         assert report.passed > 0
 
     def test_errors_count_increments(self, checker_aa):
-        report = checker_aa.check_elements([
-            {"tag": "img"},  # no alt — should fire img-alt
-        ])
+        report = checker_aa.check_elements(
+            [
+                {"tag": "img"},  # no alt — should fire img-alt
+            ]
+        )
         assert report.errors > 0
 
     def test_report_type(self, checker_aa):
@@ -350,7 +354,7 @@ class TestA11ycheckerDefaultRules:
 
     def test_multiple_elements_aggregated(self, checker_aa):
         elements = [
-            {"tag": "img"},       # fails img-alt
+            {"tag": "img"},  # fails img-alt
             {"tag": "img", "alt": "logo"},  # passes img-alt
         ]
         report = checker_aa.check_elements(elements)
@@ -409,7 +413,14 @@ class TestAccessibilityReporter:
     def test_to_dict_keys(self, report_with_issues):
         reporter = AccessibilityReporter(report_with_issues)
         d = reporter.to_dict()
-        assert set(d.keys()) == {"url", "score", "passed", "errors", "warnings", "issues"}
+        assert set(d.keys()) == {
+            "url",
+            "score",
+            "passed",
+            "errors",
+            "warnings",
+            "issues",
+        }
 
     def test_to_dict_url(self, report_with_issues):
         reporter = AccessibilityReporter(report_with_issues)

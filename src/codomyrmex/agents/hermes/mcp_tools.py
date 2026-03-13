@@ -25,11 +25,13 @@ def _get_client(
     """
     from codomyrmex.agents.hermes.hermes_client import HermesClient
 
-    return HermesClient(config={
-        "hermes_backend": backend,
-        "hermes_model": model,
-        "hermes_timeout": timeout,
-    })
+    return HermesClient(
+        config={
+            "hermes_backend": backend,
+            "hermes_model": model,
+            "hermes_timeout": timeout,
+        }
+    )
 
 
 @mcp_tool(
@@ -108,7 +110,10 @@ def hermes_skills_list() -> dict[str, Any]:
         result = client.list_skills()
         if result.get("success"):
             return {"status": "success", "output": result.get("output", "")}
-        return {"status": "error", "message": result.get("error", "Skills require CLI backend")}
+        return {
+            "status": "error",
+            "message": result.get("error", "Skills require CLI backend"),
+        }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -257,7 +262,13 @@ def hermes_chat_session(
             "metadata": response.metadata,
         }
     except Exception as exc:
-        return {"status": "error", "content": "", "session_id": None, "error": str(exc), "metadata": {}}
+        return {
+            "status": "error",
+            "content": "",
+            "session_id": None,
+            "error": str(exc),
+            "metadata": {},
+        }
 
 
 @mcp_tool(
@@ -272,6 +283,7 @@ def hermes_session_list() -> dict[str, Any]:
     """
     try:
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
         client = _get_client()
         with SQLiteSessionStore(client._session_db_path) as store:
             sessions = store.list_sessions()
@@ -295,10 +307,17 @@ def hermes_session_clear(session_id: str) -> dict[str, Any]:
     """
     try:
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
         client = _get_client()
         with SQLiteSessionStore(client._session_db_path) as store:
             deleted = store.delete(session_id)
-            return {"status": "success", "deleted": deleted, "message": f"Deleted session {session_id}" if deleted else f"Session {session_id} not found."}
+            return {
+                "status": "success",
+                "deleted": deleted,
+                "message": f"Deleted session {session_id}"
+                if deleted
+                else f"Session {session_id} not found.",
+            }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -381,6 +400,7 @@ def hermes_mcp_reload() -> dict[str, Any]:
     """
     try:
         from codomyrmex.agents.hermes._provider_router import MCPBridgeManager
+
         bridge = MCPBridgeManager()
         result = bridge.reload()
         return {"status": "success", **result}
@@ -413,6 +433,7 @@ def hermes_user_context(
     """
     try:
         from codomyrmex.agents.hermes._provider_router import UserModel
+
         model = UserModel()
 
         if action == "get":
@@ -426,8 +447,14 @@ def hermes_user_context(
             return {"status": "success", "message": f"Set {key}={value}"}
         if action == "observe" and value:
             model.add_observation(value)
-            return {"status": "success", "message": f"Recorded observation: {value[:60]}..."}
-        return {"status": "error", "message": f"Invalid action '{action}' or missing key/value"}
+            return {
+                "status": "success",
+                "message": f"Recorded observation: {value[:60]}...",
+            }
+        return {
+            "status": "error",
+            "message": f"Invalid action '{action}' or missing key/value",
+        }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -571,7 +598,9 @@ def hermes_honcho_status() -> dict[str, Any]:
 
         result = subprocess.run(
             [hermes_bin, "honcho", "status"],
-            capture_output=True, text=True, timeout=15,
+            capture_output=True,
+            text=True,
+            timeout=15,
             env={**os.environ, "NO_COLOR": "1"},
         )
         return {
@@ -613,7 +642,9 @@ def hermes_insights(days: int = 30) -> dict[str, Any]:
 
         result = subprocess.run(
             [hermes_bin, "insights", "--days", str(days)],
-            capture_output=True, text=True, timeout=30,
+            capture_output=True,
+            text=True,
+            timeout=30,
             env={**os.environ, "NO_COLOR": "1"},
         )
         return {
@@ -648,4 +679,3 @@ def hermes_provider_status() -> dict[str, Any]:
         return {"status": "success", "providers": router.get_provider_status()}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
-

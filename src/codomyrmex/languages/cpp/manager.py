@@ -10,7 +10,7 @@ import tempfile
 from codomyrmex.languages.base import BaseLanguageManager
 
 logger = logging.getLogger(__name__)
-_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_FAST = 10  # seconds for version checks
 _TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 
@@ -59,10 +59,20 @@ class CppManager(BaseLanguageManager):
         """Write, compile and execute a C++ file."""
         cmd = "g++"
         try:
-            subprocess.run(["g++", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+            subprocess.run(
+                ["g++", "--version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                timeout=10,
+            )
         except FileNotFoundError:
             try:
-                subprocess.run(["clang++", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+                subprocess.run(
+                    ["clang++", "--version"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    timeout=10,
+                )
                 cmd = "clang++"
             except FileNotFoundError:
                 return "Error: Neither g++ nor clang++ found."
@@ -102,4 +112,3 @@ class CppManager(BaseLanguageManager):
 
         with tempfile.TemporaryDirectory() as temp_dir:
             return self.use_script(script_content, temp_dir)
-

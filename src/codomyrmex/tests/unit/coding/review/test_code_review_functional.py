@@ -30,11 +30,13 @@ def reviewer(tmp_path):
         # but the current CodeReviewer.__init__ calls PyscnAnalyzer() which raises.
         pytest.skip("pyscn not installed, skipping CodeReviewer tests")
 
+
 @pytest.fixture
 def python_file(tmp_path):
     """Create a sample Python file with some issues."""
     p = tmp_path / "sample.py"
-    p.write_text(textwrap.dedent("""\
+    p.write_text(
+        textwrap.dedent("""\
         import os
         import sys # unused
 
@@ -51,8 +53,10 @@ def python_file(tmp_path):
                 pass
             except:
                 pass
-    """))
+    """)
+    )
     return str(p)
+
 
 @pytest.mark.unit
 class TestCodeReviewerFunctional:
@@ -75,24 +79,29 @@ class TestCodeReviewerFunctional:
 
     def test_check_quality_gates(self, reviewer):
         # Manually add a result to test gate
-        reviewer.results.append(AnalysisResult(
-            file_path="test.py",
-            line_number=1,
-            column_number=1,
-            severity=SeverityLevel.ERROR,
-            message="Too complex",
-            rule_id="PYSCN_COMPLEXITY",
-            category="complexity"
-        ))
+        reviewer.results.append(
+            AnalysisResult(
+                file_path="test.py",
+                line_number=1,
+                column_number=1,
+                severity=SeverityLevel.ERROR,
+                message="Too complex",
+                rule_id="PYSCN_COMPLEXITY",
+                category="complexity",
+            )
+        )
         gate_result = reviewer.check_quality_gates(thresholds={"max_complexity": 0})
         assert isinstance(gate_result, QualityGateResult)
         assert gate_result.passed is False
         assert gate_result.failed_checks > 0
 
     def test_clear_results(self, reviewer):
-        reviewer.results.append(AnalysisResult("a.py", 1, 1, SeverityLevel.INFO, "m", "R", "c"))
+        reviewer.results.append(
+            AnalysisResult("a.py", 1, 1, SeverityLevel.INFO, "m", "R", "c")
+        )
         reviewer.clear_results()
         assert len(reviewer.results) == 0
+
 
 @pytest.mark.unit
 class TestPyscnAnalyzerFunctional:
@@ -103,7 +112,7 @@ class TestPyscnAnalyzerFunctional:
         try:
             PyscnAnalyzer()
         except ToolNotFoundError:
-            pass # Expected if not installed
+            pass  # Expected if not installed
         except Exception as e:
             pytest.fail(f"Unexpected exception: {e}")
 

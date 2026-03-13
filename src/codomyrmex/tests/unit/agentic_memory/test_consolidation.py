@@ -119,6 +119,7 @@ class TestMemoryConsolidator:
 
         class _RealRuleEngine:
             """A simple, real (zero-mock) rule engine for testing."""
+
             def get_applicable_rules(self, file_path=None, module_name=None):
                 if file_path == "important.py":
                     return RuleSet(

@@ -27,8 +27,12 @@ def create_tag(
             cmd.append(tag_name)
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
-        timeout=_GIT_TIMEOUT,
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Tag '%s' created successfully", tag_name)
@@ -59,7 +63,7 @@ def list_tags(repository_path: str | None = None) -> list[str]:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         tags = [tag.strip() for tag in result.stdout.strip().split("\n") if tag.strip()]

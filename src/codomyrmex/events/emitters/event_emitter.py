@@ -133,7 +133,9 @@ class EventEmitter:
 
         try:
             await self.event_bus.publish_async(event)
-            logger.debug("Emitted async event: %s from %s", event_type.value, self.source)
+            logger.debug(
+                "Emitted async event: %s from %s", event_type.value, self.source
+            )
         except (RuntimeError, AttributeError) as e:
             logger.error("Failed to emit async event %s: %s", event_type.value, e)
 
@@ -181,7 +183,9 @@ class EventEmitter:
         if tasks:
             try:
                 await asyncio.gather(*tasks, return_exceptions=True)
-                logger.debug("Emitted %s events in batch from %s", len(tasks), self.source)
+                logger.debug(
+                    "Emitted %s events in batch from %s", len(tasks), self.source
+                )
             except (RuntimeError, AttributeError) as e:
                 logger.error("Failed to emit batch events: %s", e)
 

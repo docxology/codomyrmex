@@ -169,7 +169,9 @@ class ConfigurationDeployer:
 
         except Exception as e:
             deployment.status = DeploymentStatus.FAILED
-            logger.error("Failed to deploy configuration to %s: %s", environment_name, e)
+            logger.error(
+                "Failed to deploy configuration to %s: %s", environment_name, e
+            )
             raise
 
         finally:

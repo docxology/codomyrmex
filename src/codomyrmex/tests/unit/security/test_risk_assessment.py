@@ -5,7 +5,6 @@ RiskAssessor (qualitative methodology), assess_risk, calculate_risk_score,
 prioritize_risks, calculate_aggregate_risk.
 """
 
-
 from codomyrmex.security.theory.risk_assessment import (
     ImpactLevel,
     LikelihoodLevel,
@@ -176,9 +175,27 @@ class TestPrioritizeRisks:
 
     def test_prioritize_sorts_by_score(self):
         risks = [
-            Risk(risk_id="R-1", description="Low", likelihood="low", impact="low", risk_score=0.1),
-            Risk(risk_id="R-2", description="High", likelihood="high", impact="high", risk_score=0.9),
-            Risk(risk_id="R-3", description="Med", likelihood="medium", impact="medium", risk_score=0.5),
+            Risk(
+                risk_id="R-1",
+                description="Low",
+                likelihood="low",
+                impact="low",
+                risk_score=0.1,
+            ),
+            Risk(
+                risk_id="R-2",
+                description="High",
+                likelihood="high",
+                impact="high",
+                risk_score=0.9,
+            ),
+            Risk(
+                risk_id="R-3",
+                description="Med",
+                likelihood="medium",
+                impact="medium",
+                risk_score=0.5,
+            ),
         ]
         sorted_risks = prioritize_risks(risks)
         assert sorted_risks[0].risk_score >= sorted_risks[-1].risk_score
@@ -191,8 +208,20 @@ class TestCalculateAggregateRisk:
 
     def test_aggregate_with_risks(self):
         risks = [
-            Risk(risk_id="R-1", description="A", likelihood="high", impact="high", risk_score=0.8),
-            Risk(risk_id="R-2", description="B", likelihood="low", impact="low", risk_score=0.2),
+            Risk(
+                risk_id="R-1",
+                description="A",
+                likelihood="high",
+                impact="high",
+                risk_score=0.8,
+            ),
+            Risk(
+                risk_id="R-2",
+                description="B",
+                likelihood="low",
+                impact="low",
+                risk_score=0.2,
+            ),
         ]
         result = calculate_aggregate_risk(risks)
         assert isinstance(result, dict)

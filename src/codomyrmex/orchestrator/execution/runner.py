@@ -80,10 +80,17 @@ def _execute_subprocess(
     memory_limit_mb: int | None,
 ) -> dict[str, Any]:
     """Run subprocess and return status/output dict."""
-    partial: dict[str, Any] = {"exit_code": None, "stdout": "", "stderr": "", "status": "unknown", "error": None}
+    partial: dict[str, Any] = {
+        "exit_code": None,
+        "stdout": "",
+        "stderr": "",
+        "status": "unknown",
+        "error": None,
+    }
     try:
         preexec = None
         if memory_limit_mb and RESOURCE_LIMIT_AVAILABLE:
+
             def preexec():
                 return _set_memory_limit(memory_limit_mb)
 
@@ -100,9 +107,13 @@ def _execute_subprocess(
         partial["exit_code"] = process.returncode
         partial["stdout"] = process.stdout
         partial["stderr"] = process.stderr
-        partial["status"] = "passed" if process.returncode in allowed_exit_codes else "failed"
+        partial["status"] = (
+            "passed" if process.returncode in allowed_exit_codes else "failed"
+        )
         if partial["status"] == "passed" and process.returncode != 0:
-            partial["stdout"] += f"\n[INFO] Script exited with code {process.returncode} (ALLOWED)"
+            partial["stdout"] += (
+                f"\n[INFO] Script exited with code {process.returncode} (ALLOWED)"
+            )
     except subprocess.TimeoutExpired as e:
         partial["status"] = "timeout"
         partial["error"] = f"Script timed out after {timeout}s"
@@ -147,15 +158,26 @@ def run_script(
     logger.info(
         "Script execution started: %s",
         script_path.name,
-        extra={"event": "SCRIPT_START", "script": str(script_path), "subdirectory": script_path.parent.name},
+        extra={
+            "event": "SCRIPT_START",
+            "script": str(script_path),
+            "subdirectory": script_path.parent.name,
+        },
     )
 
     start_time = time.time()
     run_env = _build_run_env(env, script_config, script_path)
     cmd = [sys.executable, str(script_path), *script_config.get("args", [])]
-    result.update(_execute_subprocess(
-        cmd, timeout, cwd or script_path.parent, run_env, allowed_exit_codes, memory_limit_mb
-    ))
+    result.update(
+        _execute_subprocess(
+            cmd,
+            timeout,
+            cwd or script_path.parent,
+            run_env,
+            allowed_exit_codes,
+            memory_limit_mb,
+        )
+    )
     result["execution_time"] = time.time() - start_time
     result["end_time"] = datetime.now().isoformat()
 
@@ -185,7 +207,9 @@ def _target_wrapper(q, f, a, k, memory_limit_mb):
         q.put(("error", traceback.format_exc()))
 
 
-def _collect_queue_result(queue: multiprocessing.Queue, p: multiprocessing.Process) -> dict[str, Any]:
+def _collect_queue_result(
+    queue: multiprocessing.Queue, p: multiprocessing.Process
+) -> dict[str, Any]:
     """Read the result placed by _target_wrapper into queue."""
     partial: dict[str, Any] = {"status": "unknown", "result": None, "error": None}
     try:

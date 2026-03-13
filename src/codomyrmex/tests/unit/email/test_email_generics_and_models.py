@@ -320,9 +320,7 @@ class TestAgentMailWebhook:
     """Test AgentMailWebhook model."""
 
     def test_webhook_stores_id_and_url(self):
-        webhook = AgentMailWebhook(
-            webhook_id="wh-1", url="https://example.com/webhook"
-        )
+        webhook = AgentMailWebhook(webhook_id="wh-1", url="https://example.com/webhook")
         assert webhook.webhook_id == "wh-1"
         assert webhook.url == "https://example.com/webhook"
 

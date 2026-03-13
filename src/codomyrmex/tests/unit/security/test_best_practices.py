@@ -5,7 +5,6 @@ get_practice, get_practices_by_priority, check_compliance_with_practices,
 get_practices_for_category, and prioritize_practices.
 """
 
-
 from codomyrmex.security.theory.best_practices import (
     PracticeCategory,
     PracticePriority,
@@ -166,7 +165,12 @@ class TestCheckCompliance:
         context = {"system_type": "api"}
         result = check_compliance_with_practices(context)
         # Should have some indication of pass/fail
-        assert "recommendations" in result or "results" in result or "status" in result or len(result) > 0
+        assert (
+            "recommendations" in result
+            or "results" in result
+            or "status" in result
+            or len(result) > 0
+        )
 
 
 # ---------------------------------------------------------------------------

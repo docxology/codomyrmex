@@ -57,11 +57,13 @@ class LogContext:
             self.correlation_id = uuid.uuid4().hex[:12]
         self._start_time = time.monotonic()
         _correlation_id.set(self.correlation_id)
-        _log_tags.set({
-            "module": self.module,
-            "operation": self.operation,
-            **self.tags,
-        })
+        _log_tags.set(
+            {
+                "module": self.module,
+                "operation": self.operation,
+                **self.tags,
+            }
+        )
         return self
 
     def __exit__(self, *args: Any) -> None:

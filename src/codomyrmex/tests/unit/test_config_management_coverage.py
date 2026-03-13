@@ -85,7 +85,9 @@ class TestConfigurationManager:
     def test_manager_has_methods(self) -> None:
         mgr = cm.ConfigurationManager()
         # Should have load/save/get/set-like methods
-        public_methods = [m for m in dir(mgr) if not m.startswith("_") and callable(getattr(mgr, m))]
+        public_methods = [
+            m for m in dir(mgr) if not m.startswith("_") and callable(getattr(mgr, m))
+        ]
         assert len(public_methods) > 0
 
     def test_get_set_config(self, tmp_path: Path) -> None:

@@ -101,7 +101,9 @@ class OllamaExecutionMixin:
         max_concurrent: int = 3,
     ) -> list[ModelExecutionResult]:
         """Run multiple prompts in batch with concurrency control."""
-        self.logger.info("Running batch of %s prompts with %s", len(prompts), model_name)
+        self.logger.info(
+            "Running batch of %s prompts with %s", len(prompts), model_name
+        )
 
         async def run_batch_async() -> list[ModelExecutionResult]:
             semaphore = asyncio.Semaphore(max_concurrent)

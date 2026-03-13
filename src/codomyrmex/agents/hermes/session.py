@@ -154,11 +154,18 @@ class SQLiteSessionStore:
 
     def __init__(self, db_path: str | Path = ":memory:") -> None:
         self._db_path = str(db_path)
-        self._conn = sqlite3.connect(self._db_path, check_same_thread=False)
+        # Increase the default timeout to 5000ms to allow concurrent lockers to wait
+        self._conn = sqlite3.connect(self._db_path, check_same_thread=False, timeout=5.0)
         self._init_schema()
 
     def _init_schema(self) -> None:
         """Create the sessions table if it doesn't exist and migrate if needed."""
+        # Enable Write-Ahead Logging (WAL) for safer cross-process concurrency
+        self._conn.execute("PRAGMA journal_mode=WAL;")
+        self._conn.execute("PRAGMA synchronous=NORMAL;")
+        # Set busy timeout (this is somewhat redundant with timeout=5.0, but explicit)
+        self._conn.execute("PRAGMA busy_timeout=5000;")
+        
         self._conn.execute("""
             CREATE TABLE IF NOT EXISTS hermes_sessions (
                 session_id TEXT PRIMARY KEY,
@@ -181,7 +188,10 @@ class SQLiteSessionStore:
 
         migrations = [
             ("name", "ALTER TABLE hermes_sessions ADD COLUMN name TEXT"),
-            ("parent_session_id", "ALTER TABLE hermes_sessions ADD COLUMN parent_session_id TEXT"),
+            (
+                "parent_session_id",
+                "ALTER TABLE hermes_sessions ADD COLUMN parent_session_id TEXT",
+            ),
         ]
 
         for col_name, sql in migrations:
@@ -189,7 +199,9 @@ class SQLiteSessionStore:
                 try:
                     self._conn.execute(sql)
                     self._conn.commit()
-                    logger.info("Migrated hermes_sessions schema: added '%s' column.", col_name)
+                    logger.info(
+                        "Migrated hermes_sessions schema: added '%s' column.", col_name
+                    )
                 except sqlite3.OperationalError:
                     pass  # Column already exists or DB is read-only
 

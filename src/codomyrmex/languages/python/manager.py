@@ -10,7 +10,7 @@ import tempfile
 from codomyrmex.languages.base import BaseLanguageManager
 
 logger = logging.getLogger(__name__)
-_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_FAST = 10  # seconds for version checks
 _TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 
@@ -27,7 +27,7 @@ class PythonManager(BaseLanguageManager):
                         [cmd, "--version"],
                         check=True,
                         capture_output=True,
-                    timeout=_TIMEOUT_FAST,
+                        timeout=_TIMEOUT_FAST,
                     )
                     return True
                 except FileNotFoundError:
@@ -66,7 +66,7 @@ class PythonManager(BaseLanguageManager):
                     cwd=path,
                     check=True,
                     capture_output=True,
-                timeout=_TIMEOUT_SLOW,
+                    timeout=_TIMEOUT_SLOW,
                 )
                 return True
             except FileNotFoundError:
@@ -77,7 +77,7 @@ class PythonManager(BaseLanguageManager):
                     cwd=path,
                     check=True,
                     capture_output=True,
-                timeout=_TIMEOUT_SLOW,
+                    timeout=_TIMEOUT_SLOW,
                 )
                 return True
         except (OSError, subprocess.SubprocessError) as e:
@@ -98,7 +98,7 @@ class PythonManager(BaseLanguageManager):
                 cwd=dir_path,
                 capture_output=True,
                 text=True,
-            timeout=_TIMEOUT_SLOW,
+                timeout=_TIMEOUT_SLOW,
             )
             # Clean up immediately after run
             self._cleanup([script_path])
@@ -114,7 +114,7 @@ class PythonManager(BaseLanguageManager):
                 [cmd, temp_path],
                 capture_output=True,
                 text=True,
-            timeout=_TIMEOUT_SLOW,
+                timeout=_TIMEOUT_SLOW,
             )
             return result.stdout + result.stderr
         finally:
@@ -122,7 +122,12 @@ class PythonManager(BaseLanguageManager):
 
     def _has_cmd(self, cmd: str) -> bool:
         try:
-            subprocess.run([cmd, "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=_TIMEOUT_FAST)
+            subprocess.run(
+                [cmd, "--version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                timeout=_TIMEOUT_FAST,
+            )
             return True
         except FileNotFoundError:
             return False

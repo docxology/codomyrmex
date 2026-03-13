@@ -23,7 +23,10 @@ class CircuitBreaker:
     def is_open(self) -> bool:
         with self._lock:
             if self._state == "open":
-                if self._last_failure_time and time.time() - self._last_failure_time > self.reset_timeout_s:
+                if (
+                    self._last_failure_time
+                    and time.time() - self._last_failure_time > self.reset_timeout_s
+                ):
                     self._state = "half_open"
                     return False
                 return True

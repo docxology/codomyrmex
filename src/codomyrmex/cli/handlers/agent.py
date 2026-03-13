@@ -32,7 +32,11 @@ def handle_agent_list() -> list[str]:
     agents = []
     if _AGENT_DIR.exists():
         for d in sorted(_AGENT_DIR.iterdir()):
-            if d.is_dir() and (d / "__init__.py").exists() and not d.name.startswith("_"):
+            if (
+                d.is_dir()
+                and (d / "__init__.py").exists()
+                and not d.name.startswith("_")
+            ):
                 agents.append(d.name)
 
     print(f"📋 Available agents ({len(agents)}):\n")
@@ -111,12 +115,22 @@ def handle_agent_health(name: str) -> dict:
     status = {
         "agent": name,
         "exists": agent_path.exists(),
-        "has_init": (agent_path / "__init__.py").exists() if agent_path.exists() else False,
-        "has_readme": (agent_path / "README.md").exists() if agent_path.exists() else False,
-        "has_tests": bool(list(agent_path.glob("test_*.py"))) if agent_path.exists() else False,
+        "has_init": (agent_path / "__init__.py").exists()
+        if agent_path.exists()
+        else False,
+        "has_readme": (agent_path / "README.md").exists()
+        if agent_path.exists()
+        else False,
+        "has_tests": bool(list(agent_path.glob("test_*.py")))
+        if agent_path.exists()
+        else False,
     }
 
-    health = "healthy" if all([status["exists"], status["has_init"], status["has_readme"]]) else "degraded"
+    health = (
+        "healthy"
+        if all([status["exists"], status["has_init"], status["has_readme"]])
+        else "degraded"
+    )
     status["health"] = health
 
     icon = "✅" if health == "healthy" else "⚠️"

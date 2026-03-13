@@ -3,6 +3,7 @@ Notification Module
 
 Multi-channel notification system with templates and routing.
 """
+
 import contextlib
 
 __version__ = "0.1.0"
@@ -54,6 +55,7 @@ def cli_commands():
             return
         provider = ConsoleProvider()
         import uuid
+
         notification = Notification(
             id=str(uuid.uuid4()),
             subject="CLI Notification",

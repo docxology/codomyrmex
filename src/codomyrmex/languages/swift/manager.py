@@ -10,7 +10,7 @@ import tempfile
 from codomyrmex.languages.base import BaseLanguageManager
 
 logger = logging.getLogger(__name__)
-_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_FAST = 10  # seconds for version checks
 _TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 
@@ -34,7 +34,11 @@ class SwiftManager(BaseLanguageManager):
 
     def setup_project(self, path: str) -> bool:
         """Initialize a new Swift project."""
-        return self._setup_command(path, ["swift", "package", "init", "--type", "executable"], lang_name="Swift")
+        return self._setup_command(
+            path,
+            ["swift", "package", "init", "--type", "executable"],
+            lang_name="Swift",
+        )
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:
         """Write and execute a Swift script."""
@@ -50,13 +54,15 @@ class SwiftManager(BaseLanguageManager):
                 cwd=dir_path,
                 capture_output=True,
                 text=True,
-            timeout=_TIMEOUT_SLOW,
+                timeout=_TIMEOUT_SLOW,
             )
 
             self._cleanup([script_path])
             return result.stdout + result.stderr
 
-        with tempfile.NamedTemporaryFile(suffix=".swift", mode="w", delete=False) as temp:
+        with tempfile.NamedTemporaryFile(
+            suffix=".swift", mode="w", delete=False
+        ) as temp:
             temp.write(script_content)
             temp_path = temp.name
 
@@ -65,7 +71,7 @@ class SwiftManager(BaseLanguageManager):
                 ["swift", temp_path],
                 capture_output=True,
                 text=True,
-            timeout=_TIMEOUT_SLOW,
+                timeout=_TIMEOUT_SLOW,
             )
             return result.stdout + result.stderr
         finally:

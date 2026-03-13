@@ -46,10 +46,14 @@ class OllamaConfig:
 
     # Model preferences
     default_model: str = "llama3.1:latest"  # Default model to use
-    preferred_models: list[str] = None  # List of preferred models (fallback order)  # type: ignore
+    preferred_models: list[str] = (
+        None  # List of preferred models (fallback order)  # type: ignore
+    )
 
     # Execution defaults
-    default_options: ExecutionOptions = None  # Default execution options  # type: ignore
+    default_options: ExecutionOptions = (
+        None  # Default execution options  # type: ignore
+    )
 
     # Integration settings
     enable_logging: bool = True  # Enable logging integration
@@ -213,7 +217,9 @@ class ConfigManager:
                 with open(model_config_file, encoding="utf-8") as f:
                     return json.load(f)
             except Exception as e:
-                self.logger.warning("Error loading model config for %s: %s", model_name, e)
+                self.logger.warning(
+                    "Error loading model config for %s: %s", model_name, e
+                )
 
         return None
 
@@ -322,7 +328,9 @@ class ConfigManager:
                                         )
                                 except Exception as e:
                                     self.logger.warning(
-                                        "Error reading model config for %s: %s", model_dir.name, e
+                                        "Error reading model config for %s: %s",
+                                        model_dir.name,
+                                        e,
                                     )
 
             with open(export_file, "w", encoding="utf-8") as f:

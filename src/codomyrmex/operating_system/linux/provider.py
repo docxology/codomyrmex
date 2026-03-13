@@ -44,7 +44,9 @@ class LinuxProvider(OSProviderBase):
         kernel_version = run_shell("uname -r") or platform.release()
 
         # Memory from /proc/meminfo
-        mem_raw = run_shell("grep MemTotal /proc/meminfo 2>/dev/null | awk '{print $2}'")
+        mem_raw = run_shell(
+            "grep MemTotal /proc/meminfo 2>/dev/null | awk '{print $2}'"
+        )
         try:
             memory_total = int(mem_raw) * 1024  # /proc/meminfo reports in kB
         except (ValueError, TypeError):
@@ -71,7 +73,9 @@ class LinuxProvider(OSProviderBase):
     # ── Processes ───────────────────────────────────────────────────
 
     def list_processes(self, limit: int = 50) -> list[ProcessInfo]:
-        raw = run_shell(f"ps -eo pid,stat,user,%cpu,rss,comm --no-headers | head -n {limit}")
+        raw = run_shell(
+            f"ps -eo pid,stat,user,%cpu,rss,comm --no-headers | head -n {limit}"
+        )
         processes: list[ProcessInfo] = []
         for line in raw.splitlines():
             parts = line.split(None, 5)

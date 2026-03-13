@@ -126,7 +126,7 @@ def render_sparkline(
         f'<svg xmlns="http://www.w3.org/2000/svg" '
         f'width="{cfg.width}" height="{cfg.height}" '
         f'viewBox="0 0 {cfg.width} {cfg.height}"'
-        f'{title_attr}>'
+        f"{title_attr}>"
     )
 
     if cfg.title:
@@ -139,8 +139,7 @@ def render_sparkline(
             f" {points[0][0]},{cfg.height - cfg.padding}"
         )
         parts.append(
-            f'<polygon points="{fill_points}" '
-            f'fill="{cfg.fill_color}" opacity="0.15" />'
+            f'<polygon points="{fill_points}" fill="{cfg.fill_color}" opacity="0.15" />'
         )
 
     # Polyline
@@ -185,13 +184,17 @@ def render_sparkline_html(
         HTML string with the sparkline and label.
     """
     result = render_sparkline(values, config)
-    label_html = f'<span style="font-size:12px;color:#888;margin-right:4px">{html.escape(label)}</span>' if label else ""
+    label_html = (
+        f'<span style="font-size:12px;color:#888;margin-right:4px">{html.escape(label)}</span>'
+        if label
+        else ""
+    )
     return (
         f'<span style="display:inline-flex;align-items:center;gap:4px">'
-        f'{label_html}{result.svg}'
+        f"{label_html}{result.svg}"
         f'<span style="font-size:11px;color:#666">'
-        f'{result.min_value:.0f}–{result.max_value:.0f}</span>'
-        f'</span>'
+        f"{result.min_value:.0f}–{result.max_value:.0f}</span>"
+        f"</span>"
     )
 
 

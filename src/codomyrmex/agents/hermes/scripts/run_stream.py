@@ -36,11 +36,13 @@ def run_stream(
         Dict with keys: ``status``, ``lines``, ``line_count``,
         ``elapsed_s``, ``backend``.
     """
-    client = HermesClient(config={
-        "hermes_backend": backend,
-        "hermes_model": model,
-        "hermes_timeout": timeout,
-    })
+    client = HermesClient(
+        config={
+            "hermes_backend": backend,
+            "hermes_model": model,
+            "hermes_timeout": timeout,
+        }
+    )
 
     lines: list[str] = []
     start = time.time()
@@ -75,7 +77,9 @@ def main() -> None:
     result = run_stream(prompt)
     for line in result["lines"]:
         print(line)
-    print(f"\n--- {result['line_count']} lines in {result['elapsed_s']}s ({result['backend']}) ---")
+    print(
+        f"\n--- {result['line_count']} lines in {result['elapsed_s']}s ({result['backend']}) ---"
+    )
     sys.exit(0 if result["status"] == "success" else 1)
 
 

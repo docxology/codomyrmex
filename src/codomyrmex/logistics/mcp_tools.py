@@ -17,7 +17,6 @@ def _get_queue():
     return Queue
 
 
-
 def _get_schedule_manager():
     """Lazy import of ScheduleManager."""
     from codomyrmex.logistics.schedule import ScheduleManager

@@ -102,14 +102,16 @@ class FlakyTestQuarantine:
             passed: Whether the test passed.
             duration_ms: Test duration.
         """
-        self._runs[test_id].append(TestRunResult(
-            test_id=test_id,
-            passed=passed,
-            duration_ms=duration_ms,
-        ))
+        self._runs[test_id].append(
+            TestRunResult(
+                test_id=test_id,
+                passed=passed,
+                duration_ms=duration_ms,
+            )
+        )
         # Keep only the last window_size runs
         if len(self._runs[test_id]) > self._window_size:
-            self._runs[test_id] = self._runs[test_id][-self._window_size:]
+            self._runs[test_id] = self._runs[test_id][-self._window_size :]
 
         # Auto-detect flakiness
         self._check_flaky(test_id)
@@ -120,7 +122,7 @@ class FlakyTestQuarantine:
         if len(runs) < self._fail_threshold:
             return
 
-        recent = runs[-self._window_size:]
+        recent = runs[-self._window_size :]
         failures = sum(1 for r in recent if not r.passed)
         passes = sum(1 for r in recent if r.passed)
 
@@ -134,7 +136,11 @@ class FlakyTestQuarantine:
                     fail_rate=fail_rate,
                     total_runs=len(recent),
                 )
-                logger.warning("Quarantined flaky test: %s (%.0f%% fail rate)", test_id, fail_rate * 100)
+                logger.warning(
+                    "Quarantined flaky test: %s (%.0f%% fail rate)",
+                    test_id,
+                    fail_rate * 100,
+                )
 
     def is_flaky(self, test_id: str) -> bool:
         """Check if a test is quarantined as flaky."""
@@ -176,7 +182,9 @@ class FlakyTestQuarantine:
         lines = ["import pytest\n\n# Auto-generated flaky test markers\n"]
         for entry in sorted(self._quarantined.values(), key=lambda e: e.test_id):
             lines.append(f"# {entry.reason}")
-            lines.append(f'# Quarantined at: {time.strftime("%Y-%m-%d %H:%M", time.localtime(entry.quarantined_at))}')
+            lines.append(
+                f"# Quarantined at: {time.strftime('%Y-%m-%d %H:%M', time.localtime(entry.quarantined_at))}"
+            )
             lines.append(f"pytest.mark.flaky(reruns=3)  # {entry.test_id}\n")
         return "\n".join(lines)
 

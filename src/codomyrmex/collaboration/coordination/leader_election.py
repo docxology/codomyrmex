@@ -110,15 +110,20 @@ class LeaderElection(ABC):
         """
         if not agents:
             return [], ElectionResult(
-                leader_id=None, success=False, round_count=0,
-                participants=[], error="No agents to elect from",
+                leader_id=None,
+                success=False,
+                round_count=0,
+                participants=[],
+                error="No agents to elect from",
             )
         self._state = ElectionState.IN_PROGRESS
         self._participants = {a.agent_id for a in agents}
         healthy = self._filter_healthy(agents)
         if not healthy:
             return [], ElectionResult(
-                leader_id=None, success=False, round_count=1,
+                leader_id=None,
+                success=False,
+                round_count=1,
                 participants=list(self._participants),
                 error="No healthy agents available",
             )

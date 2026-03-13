@@ -38,6 +38,7 @@ requires_backend = pytest.mark.skipif(
 # 1. Status
 # ═══════════════════════════════════════════════════════════════════════
 
+
 class TestRunStatus:
     """Tests for ``run_status``."""
 
@@ -62,6 +63,7 @@ class TestRunStatus:
 # ═══════════════════════════════════════════════════════════════════════
 # 2. Chat
 # ═══════════════════════════════════════════════════════════════════════
+
 
 class TestRunChat:
     """Tests for ``run_chat``."""
@@ -98,6 +100,7 @@ class TestRunChat:
 # 3. Stream
 # ═══════════════════════════════════════════════════════════════════════
 
+
 class TestRunStream:
     """Tests for ``run_stream``."""
 
@@ -115,6 +118,7 @@ class TestRunStream:
 # ═══════════════════════════════════════════════════════════════════════
 # 4. Session
 # ═══════════════════════════════════════════════════════════════════════
+
 
 class TestRunSession:
     """Tests for ``run_session`` — uses in-memory SQLite."""
@@ -200,6 +204,7 @@ class TestRunSession:
 # 5. Templates
 # ═══════════════════════════════════════════════════════════════════════
 
+
 class TestTemplates:
     """Tests for template rendering and the TemplateLibrary."""
 
@@ -280,6 +285,7 @@ class TestTemplates:
 # 6. Pipeline
 # ═══════════════════════════════════════════════════════════════════════
 
+
 class TestRunPipeline:
     """Tests for ``run_pipeline``."""
 
@@ -302,6 +308,7 @@ class TestRunPipeline:
 # 7. Evolution Bridge
 # ═══════════════════════════════════════════════════════════════════════
 
+
 class TestRunEvolutionBridge:
     """Tests for ``run_evolution_bridge``."""
 
@@ -311,7 +318,8 @@ class TestRunEvolutionBridge:
             from evolution.core.config import EvolutionConfig
 
             config = EvolutionConfig(
-                iterations=3, population_size=2,
+                iterations=3,
+                population_size=2,
                 hermes_agent_path=Path("/tmp"),
             )
             assert config.iterations == 3
@@ -400,7 +408,8 @@ class TestRunEvolutionBridge:
             from evolution.core.constraints import ConstraintValidator
 
             config = EvolutionConfig(
-                max_skill_size=10_000, max_prompt_growth=0.1,
+                max_skill_size=10_000,
+                max_prompt_growth=0.1,
                 hermes_agent_path=Path("/tmp"),
             )
             validator = ConstraintValidator(config)
@@ -415,13 +424,17 @@ class TestRunEvolutionBridge:
             # Valid skill structure
             valid = "---\nname: x\ndescription: y\n---\n\nBody"
             results = validator.validate_all(valid, "skill")
-            struct_r = next(r for r in results if r.constraint_name == "skill_structure")
+            struct_r = next(
+                r for r in results if r.constraint_name == "skill_structure"
+            )
             assert struct_r.passed
 
             # Invalid structure (no frontmatter)
             invalid = "Just a body with no frontmatter"
             results = validator.validate_all(invalid, "skill")
-            struct_r = next(r for r in results if r.constraint_name == "skill_structure")
+            struct_r = next(
+                r for r in results if r.constraint_name == "skill_structure"
+            )
             assert not struct_r.passed
         except ImportError:
             pytest.skip("evolution submodule not available")
@@ -461,6 +474,7 @@ class TestRunEvolutionBridge:
 # 8. MCP Tools
 # ═══════════════════════════════════════════════════════════════════════
 
+
 class TestRunMCPTools:
     """Tests for ``run_mcp_tools``."""
 
@@ -492,8 +506,14 @@ class TestRunMCPTools:
 
         result = run_mcp_tools()
         assert isinstance(result, dict)
-        for key in ("status_tool", "execute_tool", "skills_tool",
-                    "template_list_tool", "template_render_tool", "stream_tool"):
+        for key in (
+            "status_tool",
+            "execute_tool",
+            "skills_tool",
+            "template_list_tool",
+            "template_render_tool",
+            "stream_tool",
+        ):
             assert key in result, f"missing key: {key}"
         assert result["all_have_status_key"] is True
         assert "total_elapsed_s" in result
@@ -502,6 +522,7 @@ class TestRunMCPTools:
 # ═══════════════════════════════════════════════════════════════════════
 # 9. HermesClient Direct
 # ═══════════════════════════════════════════════════════════════════════
+
 
 class TestHermesClientDirect:
     """Direct tests for HermesClient construction and properties."""
@@ -516,7 +537,9 @@ class TestHermesClientDirect:
     def test_client_backend_override(self) -> None:
         from codomyrmex.agents.hermes.hermes_client import HermesClient
 
-        client = HermesClient(config={"hermes_backend": "ollama", "hermes_model": "test-model"})
+        client = HermesClient(
+            config={"hermes_backend": "ollama", "hermes_model": "test-model"}
+        )
         assert client.ollama_model == "test-model"
 
     def test_hermes_error_has_command(self) -> None:
@@ -541,6 +564,7 @@ class TestHermesClientDirect:
 # 10. New MCP Tools
 # ═══════════════════════════════════════════════════════════════════════
 
+
 class TestNewMCPTools:
     """Tests for hermes_template_list, hermes_template_render, hermes_stream."""
 
@@ -561,7 +585,11 @@ class TestNewMCPTools:
 
         result = hermes_template_render(
             template_name="code_review",
-            variables={"language": "python", "code": "x = 1", "focus_areas": "correctness"},
+            variables={
+                "language": "python",
+                "code": "x = 1",
+                "focus_areas": "correctness",
+            },
         )
         assert result["status"] == "success"
         assert result["template_name"] == "code_review"
@@ -581,7 +609,10 @@ class TestNewMCPTools:
         )
         assert result["status"] == "success"
         # Unreplaced variables stay as {placeholder}
-        assert "{code}" in result["rendered_prompt"] or "{focus_areas}" in result["rendered_prompt"]
+        assert (
+            "{code}" in result["rendered_prompt"]
+            or "{focus_areas}" in result["rendered_prompt"]
+        )
 
     def test_template_render_unknown_returns_error(self) -> None:
         """hermes_template_render returns error status for unknown template."""

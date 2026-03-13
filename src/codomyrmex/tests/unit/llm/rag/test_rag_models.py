@@ -108,23 +108,36 @@ class TestChunk:
 
     def test_length_property(self):
         c = Chunk(
-            id="c", content="hello", document_id="d",
-            sequence=0, start_char=0, end_char=5
+            id="c",
+            content="hello",
+            document_id="d",
+            sequence=0,
+            start_char=0,
+            end_char=5,
         )
         assert c.length == 5
 
     def test_embedding_default_none(self):
         c = Chunk(
-            id="c", content="text", document_id="d",
-            sequence=0, start_char=0, end_char=4
+            id="c",
+            content="text",
+            document_id="d",
+            sequence=0,
+            start_char=0,
+            end_char=4,
         )
         assert c.embedding is None
 
     def test_with_embedding(self):
         emb = [0.1, 0.2, 0.3]
         c = Chunk(
-            id="c", content="text", document_id="d",
-            sequence=0, start_char=0, end_char=4, embedding=emb
+            id="c",
+            content="text",
+            document_id="d",
+            sequence=0,
+            start_char=0,
+            end_char=4,
+            embedding=emb,
         )
         assert c.embedding == [0.1, 0.2, 0.3]
 
@@ -132,8 +145,12 @@ class TestChunk:
 class TestRetrievalResult:
     def _make_chunk(self) -> Chunk:
         return Chunk(
-            id="c-1", content="Retrieved content.", document_id="d-1",
-            sequence=0, start_char=0, end_char=18
+            id="c-1",
+            content="Retrieved content.",
+            document_id="d-1",
+            sequence=0,
+            start_char=0,
+            end_char=18,
         )
 
     def test_construction(self):
@@ -158,8 +175,12 @@ class TestRetrievalResult:
 class TestGenerationContext:
     def _make_result(self, content: str, score: float) -> RetrievalResult:
         chunk = Chunk(
-            id="c", content=content, document_id="d",
-            sequence=0, start_char=0, end_char=len(content)
+            id="c",
+            content=content,
+            document_id="d",
+            sequence=0,
+            start_char=0,
+            end_char=len(content),
         )
         return RetrievalResult(chunk=chunk, score=score)
 

@@ -1,4 +1,5 @@
 """Tests for OpenFangRunner — zero-mock, uses env var to control binary detection."""
+
 import os
 
 import pytest
@@ -56,6 +57,7 @@ class TestGetOpenfangVersion:
             # Need to reload the module-level HAS_OPENFANG check
 
             import codomyrmex.agents.openfang.core as core_mod
+
             result = core_mod.get_openfang_version()
             assert isinstance(result, str)
         finally:

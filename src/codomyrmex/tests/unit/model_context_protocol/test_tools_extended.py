@@ -5,6 +5,7 @@ checksum_file, git_status, git_diff.
 Zero-mock policy: real filesystem + subprocess operations only.
 Skip guards: git tests skipped when git binary absent.
 """
+
 import shutil
 
 import pytest
@@ -46,7 +47,10 @@ class TestSearchCodebase:
     def test_case_insensitive_by_default(self, tmp_path):
         (tmp_path / "test.py").write_text("UPPERCASE_TOKEN = 1\n")
         result = search_codebase(
-            "uppercase_token", path=str(tmp_path), file_types=[".py"], case_sensitive=False
+            "uppercase_token",
+            path=str(tmp_path),
+            file_types=[".py"],
+            case_sensitive=False,
         )
         assert result["success"] is True
         assert result["total_matches"] >= 1
@@ -54,7 +58,10 @@ class TestSearchCodebase:
     def test_case_sensitive_miss(self, tmp_path):
         (tmp_path / "test.py").write_text("UPPERCASE_TOKEN = 1\n")
         result = search_codebase(
-            "uppercase_token", path=str(tmp_path), file_types=[".py"], case_sensitive=True
+            "uppercase_token",
+            path=str(tmp_path),
+            file_types=[".py"],
+            case_sensitive=True,
         )
         assert result["success"] is True
         assert result["total_matches"] == 0
@@ -69,7 +76,9 @@ class TestSearchCodebase:
 
     def test_no_match_returns_empty_list(self, tmp_path):
         (tmp_path / "empty.py").write_text("x = 1\n")
-        result = search_codebase("XYZZY_NOTFOUND", path=str(tmp_path), file_types=[".py"])
+        result = search_codebase(
+            "XYZZY_NOTFOUND", path=str(tmp_path), file_types=[".py"]
+        )
         assert result["success"] is True
         assert result["total_matches"] == 0
         assert result["matches"] == []
@@ -103,7 +112,9 @@ class TestSearchCodebase:
     def test_files_searched_count_returned(self, tmp_path):
         (tmp_path / "a.py").write_text("a = 1\n")
         (tmp_path / "b.py").write_text("b = 2\n")
-        result = search_codebase("anything_not_here", path=str(tmp_path), file_types=[".py"])
+        result = search_codebase(
+            "anything_not_here", path=str(tmp_path), file_types=[".py"]
+        )
         assert result["success"] is True
         assert "files_searched" in result
         assert result["files_searched"] >= 2
@@ -152,7 +163,10 @@ class TestRunShellCommand:
     def test_timeout_triggers_error(self):
         result = run_shell_command("sleep 10", timeout=1)
         assert result["success"] is False
-        assert "timed out" in result["error"].lower() or "timeout" in result["error"].lower()
+        assert (
+            "timed out" in result["error"].lower()
+            or "timeout" in result["error"].lower()
+        )
 
     def test_cwd_changes_working_directory(self, tmp_path):
         result = run_shell_command("pwd", cwd=str(tmp_path))
@@ -160,7 +174,9 @@ class TestRunShellCommand:
         assert str(tmp_path) in result["stdout"] or result["exit_code"] == 0
 
     def test_env_variable_passed(self):
-        result = run_shell_command("echo $MY_TEST_VAR", env={"MY_TEST_VAR": "hello_from_env"})
+        result = run_shell_command(
+            "echo $MY_TEST_VAR", env={"MY_TEST_VAR": "hello_from_env"}
+        )
         assert result["success"] is True
         assert "hello_from_env" in result["stdout"]
 

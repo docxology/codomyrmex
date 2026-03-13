@@ -325,7 +325,14 @@ class TestConfigurationExtra:
     def test_to_dict_has_required_keys(self):
         config = Configuration(data={"k": "v"}, source="file.yaml", environment="test")
         d = config.to_dict()
-        for key in ("data", "source", "loaded_at", "environment", "version", "metadata"):
+        for key in (
+            "data",
+            "source",
+            "loaded_at",
+            "environment",
+            "version",
+            "metadata",
+        ):
             assert key in d
 
     def test_to_dict_loaded_at_is_iso_string(self):
@@ -651,7 +658,9 @@ class TestConfigurationDeployer:
         assert data["type"] == "staging"
 
     def test_get_environment_config(self, deployer, tmp_path):
-        deployer.create_environment("prod", EnvironmentType.PRODUCTION, config_path=str(tmp_path))
+        deployer.create_environment(
+            "prod", EnvironmentType.PRODUCTION, config_path=str(tmp_path)
+        )
         env = deployer.get_environment_config("prod")
         assert env is not None
         assert env.type == EnvironmentType.PRODUCTION
@@ -660,8 +669,12 @@ class TestConfigurationDeployer:
         assert deployer.get_environment_config("nonexistent") is None
 
     def test_list_environments_after_creation(self, deployer, tmp_path):
-        deployer.create_environment("e1", EnvironmentType.DEVELOPMENT, config_path=str(tmp_path))
-        deployer.create_environment("e2", EnvironmentType.TESTING, config_path=str(tmp_path))
+        deployer.create_environment(
+            "e1", EnvironmentType.DEVELOPMENT, config_path=str(tmp_path)
+        )
+        deployer.create_environment(
+            "e2", EnvironmentType.TESTING, config_path=str(tmp_path)
+        )
         envs = deployer.list_environments()
         names = [e.name for e in envs]
         assert "e1" in names
@@ -672,7 +685,9 @@ class TestConfigurationDeployer:
         cfg_file.write_text("key: value\n")
         dest = tmp_path / "dest"
         dest.mkdir()
-        deployer.create_environment("test", EnvironmentType.TESTING, config_path=str(dest))
+        deployer.create_environment(
+            "test", EnvironmentType.TESTING, config_path=str(dest)
+        )
         deployment = deployer.deploy_configuration(
             "test", [str(cfg_file)], deployed_by="pytest"
         )
@@ -685,7 +700,9 @@ class TestConfigurationDeployer:
         cfg_file.write_text("x: 1\n")
         dest = tmp_path / "dest2"
         dest.mkdir()
-        deployer.create_environment("qa", EnvironmentType.TESTING, config_path=str(dest))
+        deployer.create_environment(
+            "qa", EnvironmentType.TESTING, config_path=str(dest)
+        )
         deployment = deployer.deploy_configuration("qa", [str(cfg_file)])
         dep_file = tmp_path / "config_deployments" / f"{deployment.deployment_id}.json"
         assert dep_file.exists()
@@ -701,7 +718,9 @@ class TestConfigurationDeployer:
         cfg_file.write_text("a: b\n")
         dest = tmp_path / "d3"
         dest.mkdir()
-        deployer.create_environment("s3", EnvironmentType.STAGING, config_path=str(dest))
+        deployer.create_environment(
+            "s3", EnvironmentType.STAGING, config_path=str(dest)
+        )
         dep = deployer.deploy_configuration("s3", [str(cfg_file)])
         fetched = deployer.get_deployment_status(dep.deployment_id)
         assert fetched is not None
@@ -715,7 +734,9 @@ class TestConfigurationDeployer:
         cfg_file.write_text("z: 1\n")
         dest = tmp_path / "d4"
         dest.mkdir()
-        deployer.create_environment("filter_env", EnvironmentType.TESTING, config_path=str(dest))
+        deployer.create_environment(
+            "filter_env", EnvironmentType.TESTING, config_path=str(dest)
+        )
         deployer.deploy_configuration("filter_env", [str(cfg_file)])
         all_deps = deployer.list_deployments()
         filtered = deployer.list_deployments(environment="filter_env")
@@ -728,7 +749,9 @@ class TestConfigurationDeployer:
         cfg_file.write_text("rollback: true\n")
         dest = tmp_path / "d5"
         dest.mkdir()
-        deployer.create_environment("rb_env", EnvironmentType.TESTING, config_path=str(dest))
+        deployer.create_environment(
+            "rb_env", EnvironmentType.TESTING, config_path=str(dest)
+        )
         dep = deployer.deploy_configuration("rb_env", [str(cfg_file)])
         rollback_dep = deployer.rollback_deployment(dep.deployment_id)
         assert rollback_dep.status == DeploymentStatus.SUCCESS
@@ -844,7 +867,9 @@ class TestPredefinedSchemas:
 
     def test_validate_config_schema_convenience_function_valid(self):
         schema = get_logging_config_schema()
-        valid, errors = validate_config_schema({"level": "DEBUG", "format": "JSON"}, schema)
+        valid, errors = validate_config_schema(
+            {"level": "DEBUG", "format": "JSON"}, schema
+        )
         assert valid is True
         assert errors == []
 
@@ -865,9 +890,7 @@ class TestConstraintValidation:
 
     def test_min_length_string_violation(self):
         validator = ConfigValidator()
-        issues = validator.validate_values(
-            {"name": "ab"}, {"name": {"min_length": 5}}
-        )
+        issues = validator.validate_values({"name": "ab"}, {"name": {"min_length": 5}})
         assert len(issues) > 0
 
     def test_min_length_string_ok(self):
@@ -887,7 +910,8 @@ class TestConstraintValidation:
     def test_pattern_constraint_match(self):
         validator = ConfigValidator()
         issues = validator.validate_values(
-            {"email": "user@example.com"}, {"email": {"pattern": r"^[^@]+@[^@]+\.[^@]+$"}}
+            {"email": "user@example.com"},
+            {"email": {"pattern": r"^[^@]+@[^@]+\.[^@]+$"}},
         )
         assert len(issues) == 0
 
@@ -901,14 +925,16 @@ class TestConstraintValidation:
     def test_enum_constraint_valid(self):
         validator = ConfigValidator()
         issues = validator.validate_values(
-            {"env": "production"}, {"env": {"enum": ["development", "staging", "production"]}}
+            {"env": "production"},
+            {"env": {"enum": ["development", "staging", "production"]}},
         )
         assert len(issues) == 0
 
     def test_enum_constraint_invalid(self):
         validator = ConfigValidator()
         issues = validator.validate_values(
-            {"env": "unknown"}, {"env": {"enum": ["development", "staging", "production"]}}
+            {"env": "unknown"},
+            {"env": {"enum": ["development", "staging", "production"]}},
         )
         assert len(issues) > 0
 
@@ -1161,7 +1187,10 @@ class TestCustomValidatorIntegration:
 
         def strict_validator(config):
             result = ValidationResult(is_valid=True)
-            if config.get("debug") is True and config.get("environment") == "production":
+            if (
+                config.get("debug") is True
+                and config.get("environment") == "production"
+            ):
                 result.add_issue(
                     ValidationIssue(
                         field_path="debug",

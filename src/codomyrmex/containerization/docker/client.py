@@ -21,7 +21,10 @@ class DockerClient:
     def _verify_docker(self) -> None:
         try:
             result = subprocess.run(
-                [self.docker_path, "version"], capture_output=True, text=True, timeout=10
+                [self.docker_path, "version"],
+                capture_output=True,
+                text=True,
+                timeout=10,
             )
             if result.returncode != 0:
                 raise RuntimeError("Docker not available")
@@ -32,7 +35,10 @@ class DockerClient:
         self, args: list[str], timeout: float | None = None, capture_output: bool = True
     ) -> subprocess.CompletedProcess:
         return subprocess.run(
-            [self.docker_path, *args], capture_output=capture_output, text=True, timeout=timeout
+            [self.docker_path, *args],
+            capture_output=capture_output,
+            text=True,
+            timeout=timeout,
         )
 
     def build(
@@ -62,7 +68,9 @@ class DockerClient:
             raise RuntimeError(f"Build failed: {result.stderr}")
         return result.stdout
 
-    def run(self, config: ContainerConfig, detach: bool = True, remove: bool = False) -> str:
+    def run(
+        self, config: ContainerConfig, detach: bool = True, remove: bool = False
+    ) -> str:
         args = ["run"]
         if detach:
             args.append("-d")
@@ -88,14 +96,19 @@ class DockerClient:
         if result.returncode != 0:
             raise RuntimeError(f"Remove failed: {result.stderr}")
 
-    def logs(self, container_id: str, follow: bool = False, tail: int | None = None) -> Iterator[str]:
+    def logs(
+        self, container_id: str, follow: bool = False, tail: int | None = None
+    ) -> Iterator[str]:
         args = ["logs"]
         if tail:
             args.extend(["--tail", str(tail)])
         args.append(container_id)
         if follow:
             process = subprocess.Popen(
-                [self.docker_path, *args], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+                [self.docker_path, *args],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
             )
             for line in process.stdout:  # type: ignore
                 yield line.rstrip()

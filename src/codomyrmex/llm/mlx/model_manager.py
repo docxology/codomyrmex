@@ -151,9 +151,7 @@ class MLXModelManager:
             logger.info("Download complete: %s", dest)
             return dest
         except Exception as exc:
-            raise RuntimeError(
-                f"Failed to download model {repo_id}: {exc}"
-            ) from exc
+            raise RuntimeError(f"Failed to download model {repo_id}: {exc}") from exc
 
     # ------------------------------------------------------------------
     # List

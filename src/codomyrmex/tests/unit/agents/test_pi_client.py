@@ -26,6 +26,7 @@ from codomyrmex.agents.pi.pi_client import PiStartupError, PiTimeoutError
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _pi_available() -> bool:
     """Return True if pi CLI is on PATH."""
     return shutil.which("pi") is not None
@@ -37,6 +38,7 @@ _skip_no_pi = unittest.skipUnless(_pi_available(), "pi CLI not installed")
 # ---------------------------------------------------------------------------
 # Configuration tests
 # ---------------------------------------------------------------------------
+
 
 class TestPiConfig(unittest.TestCase):
     """Test PiConfig defaults and overrides."""
@@ -93,6 +95,7 @@ class TestPiConfig(unittest.TestCase):
 # Client initialization
 # ---------------------------------------------------------------------------
 
+
 class TestPiClientInit(unittest.TestCase):
     """Test PiClient construction."""
 
@@ -128,6 +131,7 @@ class TestPiClientInit(unittest.TestCase):
 # ---------------------------------------------------------------------------
 # Command construction
 # ---------------------------------------------------------------------------
+
 
 class TestPiCommandConstruction(unittest.TestCase):
     """Test that RPC commands are constructed correctly."""
@@ -177,6 +181,7 @@ class TestPiCommandConstruction(unittest.TestCase):
 # Event parsing
 # ---------------------------------------------------------------------------
 
+
 class TestPiEventParsing(unittest.TestCase):
     """Test event drain and parsing mechanics."""
 
@@ -222,6 +227,7 @@ class TestPiEventParsing(unittest.TestCase):
 # Error handling
 # ---------------------------------------------------------------------------
 
+
 class TestPiErrors(unittest.TestCase):
     """Test error hierarchy."""
 
@@ -247,6 +253,7 @@ class TestPiErrors(unittest.TestCase):
 # ---------------------------------------------------------------------------
 # Lifecycle
 # ---------------------------------------------------------------------------
+
 
 class TestPiLifecycle(unittest.TestCase):
     """Test start/stop lifecycle without a real pi process."""
@@ -274,6 +281,7 @@ class TestPiLifecycle(unittest.TestCase):
 # Print mode
 # ---------------------------------------------------------------------------
 
+
 class TestPiPrintMode(unittest.TestCase):
     """Test pn -p (print mode) execution."""
 
@@ -288,7 +296,10 @@ class TestPiPrintMode(unittest.TestCase):
         # This is a lightweight test that just confirms the binary runs
         pi_bin = shutil.which("pi")
         result = subprocess.run(
-            [pi_bin, "--version"], capture_output=True, text=True, timeout=10,
+            [pi_bin, "--version"],
+            capture_output=True,
+            text=True,
+            timeout=10,
         )
         assert result.returncode == 0
         assert re.search(r"\d+\.\d+", result.stdout.strip())
@@ -298,12 +309,14 @@ class TestPiPrintMode(unittest.TestCase):
 # MCP tools
 # ---------------------------------------------------------------------------
 
+
 class TestPiMCPTools(unittest.TestCase):
     """Test MCP tool wrappers."""
 
     @_skip_no_pi
     def test_status_tool(self):
         from codomyrmex.agents.pi.mcp_tools import pi_status
+
         result = pi_status()
         assert result["status"] == "installed"
         assert "version" in result
@@ -312,6 +325,7 @@ class TestPiMCPTools(unittest.TestCase):
     def test_status_tool_structure(self):
         """Verify status returns a dict with expected keys."""
         from codomyrmex.agents.pi.mcp_tools import pi_status
+
         result = pi_status()
         assert isinstance(result, dict)
         assert "status" in result
@@ -319,6 +333,7 @@ class TestPiMCPTools(unittest.TestCase):
     def test_prompt_tool_error_no_pi(self):
         """If pi binary is missing, pi_prompt should return error."""
         from codomyrmex.agents.pi.mcp_tools import pi_prompt
+
         # Use an impossible binary path by setting env
         orig = os.environ.get("PATH", "")
         try:
@@ -331,6 +346,7 @@ class TestPiMCPTools(unittest.TestCase):
     @_skip_no_pi
     def test_list_models_tool(self):
         from codomyrmex.agents.pi.mcp_tools import pi_list_models
+
         result = pi_list_models()
         assert result["status"] == "success"
         assert "models" in result
@@ -339,18 +355,21 @@ class TestPiMCPTools(unittest.TestCase):
     @_skip_no_pi
     def test_list_packages_tool(self):
         from codomyrmex.agents.pi.mcp_tools import pi_list_packages
+
         result = pi_list_packages()
         assert isinstance(result, dict)
         assert "status" in result
 
     def test_get_client_helper(self):
         from codomyrmex.agents.pi.mcp_tools import _get_client
+
         client = _get_client(provider="openai", model="gpt-4o")
         assert client._config.provider == "openai"
         assert client._config.model == "gpt-4o"
 
     def test_get_client_ignores_empty(self):
         from codomyrmex.agents.pi.mcp_tools import _get_client
+
         client = _get_client(provider="", model="")
         # Empty values should not override defaults
         assert client._config.provider == "google"
@@ -364,6 +383,7 @@ class TestPiMCPTools(unittest.TestCase):
             pi_start_rpc,
             pi_status,
         )
+
         assert callable(pi_status)
         assert callable(pi_prompt)
         assert callable(pi_list_models)
@@ -373,8 +393,10 @@ class TestPiMCPTools(unittest.TestCase):
 
     def test_tool_count(self):
         from codomyrmex.agents.pi import mcp_tools
+
         tool_names = [
-            n for n in dir(mcp_tools)
+            n
+            for n in dir(mcp_tools)
             if n.startswith("pi_") and callable(getattr(mcp_tools, n))
         ]
         assert len(tool_names) == 6
@@ -384,23 +406,28 @@ class TestPiMCPTools(unittest.TestCase):
 # Module imports
 # ---------------------------------------------------------------------------
 
+
 class TestPiModuleImports(unittest.TestCase):
     """Test module import structure."""
 
     def test_init_exports_client(self):
         from codomyrmex.agents.pi import PiClient
+
         assert callable(PiClient)
 
     def test_init_exports_config(self):
         from codomyrmex.agents.pi import PiConfig
+
         assert hasattr(PiConfig, "__dataclass_fields__")
 
     def test_init_exports_error(self):
         from codomyrmex.agents.pi import PiError
+
         assert issubclass(PiError, Exception)
 
     def test_all_list_complete(self):
         import codomyrmex.agents.pi as mod
+
         all_names = mod.__all__
         assert "PiClient" in all_names
         assert "PiConfig" in all_names
@@ -409,6 +436,7 @@ class TestPiModuleImports(unittest.TestCase):
     def test_parent_module_access(self):
         """Verify pi module is importable from parent."""
         import codomyrmex.agents.pi
+
         assert hasattr(codomyrmex.agents.pi, "PiClient")
 
 

@@ -197,6 +197,7 @@ def create_vector_store(backend: str = "memory", **kwargs) -> VectorStore:
     if backend == "chroma":
         try:
             from .chroma import ChromaVectorStore
+
             return ChromaVectorStore(**kwargs)
         except ImportError:
             raise ValueError("Chroma backend requires chromadb package")

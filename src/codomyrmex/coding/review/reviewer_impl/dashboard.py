@@ -15,7 +15,14 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-class DashboardMixin(CodeSmellsMixin, MetricsMixin, ComplexityMixin, DeadCodeMixin, PerformanceMixin, RefactoringMixin):
+class DashboardMixin(
+    CodeSmellsMixin,
+    MetricsMixin,
+    ComplexityMixin,
+    DeadCodeMixin,
+    PerformanceMixin,
+    RefactoringMixin,
+):
     """DashboardMixin mixin providing dashboard capabilities."""
 
     def _count_total_files(self) -> int:
@@ -25,7 +32,15 @@ class DashboardMixin(CodeSmellsMixin, MetricsMixin, ComplexityMixin, DeadCodeMix
             dirs[:] = [
                 d
                 for d in dirs
-                if d not in {".git", "__pycache__", "node_modules", ".venv", "venv", ".pyscn"}
+                if d
+                not in {
+                    ".git",
+                    "__pycache__",
+                    "node_modules",
+                    ".venv",
+                    "venv",
+                    ".pyscn",
+                }
             ]
             count += len([f for f in files if f.endswith(".py")])
         return count
@@ -37,7 +52,15 @@ class DashboardMixin(CodeSmellsMixin, MetricsMixin, ComplexityMixin, DeadCodeMix
             dirs[:] = [
                 d
                 for d in dirs
-                if d not in {".git", "__pycache__", "node_modules", ".venv", "venv", ".pyscn"}
+                if d
+                not in {
+                    ".git",
+                    "__pycache__",
+                    "node_modules",
+                    ".venv",
+                    "venv",
+                    ".pyscn",
+                }
             ]
             for file in files:
                 if file.endswith(".py"):

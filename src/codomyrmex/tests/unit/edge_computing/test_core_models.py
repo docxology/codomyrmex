@@ -141,16 +141,14 @@ class TestEdgeFunction:
     def test_can_run_on_with_matching_capabilities(self):
         node = EdgeNode(id="n1", name="n1", capabilities=["gpu", "fast-storage"])
         fn = EdgeFunction(
-            id="f1", name="fn", handler=lambda: None,
-            required_capabilities=["gpu"]
+            id="f1", name="fn", handler=lambda: None, required_capabilities=["gpu"]
         )
         assert fn.can_run_on(node) is True
 
     def test_cannot_run_on_missing_capability(self):
         node = EdgeNode(id="n1", name="n1", capabilities=["cpu"])
         fn = EdgeFunction(
-            id="f1", name="fn", handler=lambda: None,
-            required_capabilities=["gpu"]
+            id="f1", name="fn", handler=lambda: None, required_capabilities=["gpu"]
         )
         assert fn.can_run_on(node) is False
 

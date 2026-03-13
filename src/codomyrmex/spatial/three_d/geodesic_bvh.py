@@ -166,7 +166,11 @@ def ray_intersect_bvh(
         closest_t = float("inf")
         for f in bvh.faces:
             face = mesh.faces[f]
-            v0, v1, v2 = mesh.vertices[face[0]], mesh.vertices[face[1]], mesh.vertices[face[2]]
+            v0, v1, v2 = (
+                mesh.vertices[face[0]],
+                mesh.vertices[face[1]],
+                mesh.vertices[face[2]],
+            )
             t = ray_triangle_intersect(origin, direction, v0, v1, v2)
             if t is not None and t < closest_t:
                 closest_t = t
@@ -174,7 +178,9 @@ def ray_intersect_bvh(
 
     # 3. Recursive branch traversal
     t_left = ray_intersect_bvh(bvh.left, mesh, origin, direction) if bvh.left else None
-    t_right = ray_intersect_bvh(bvh.right, mesh, origin, direction) if bvh.right else None
+    t_right = (
+        ray_intersect_bvh(bvh.right, mesh, origin, direction) if bvh.right else None
+    )
 
     if t_left is not None and t_right is not None:
         return min(t_left, t_right)

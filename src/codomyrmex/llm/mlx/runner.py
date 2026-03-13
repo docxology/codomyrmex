@@ -155,16 +155,12 @@ class MLXRunner:
             self._model, self._tokenizer = mlx_load(model_name)
             self._loaded_model_name = model_name
             self._load_time = time.perf_counter() - t0
-            logger.info(
-                "Model %s loaded in %.2f s", model_name, self._load_time
-            )
+            logger.info("Model %s loaded in %.2f s", model_name, self._load_time)
         except Exception as exc:
             self._model = None
             self._tokenizer = None
             self._loaded_model_name = None
-            raise RuntimeError(
-                f"Failed to load MLX model {model_name}: {exc}"
-            ) from exc
+            raise RuntimeError(f"Failed to load MLX model {model_name}: {exc}") from exc
 
     def unload_model(self) -> None:
         """Release the currently loaded model and free memory."""

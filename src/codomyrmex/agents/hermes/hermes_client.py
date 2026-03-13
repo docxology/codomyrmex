@@ -84,7 +84,9 @@ class HermesClient(CLIAgentBase):
         )
 
         hermes_command = self.get_config_value("hermes_command", config=cfg)
-        timeout = self.get_config_value("timeout", config=cfg) or self.get_config_value("hermes_timeout", config=cfg)
+        timeout = self.get_config_value("timeout", config=cfg) or self.get_config_value(
+            "hermes_timeout", config=cfg
+        )
         working_dir_str = self.get_config_value("hermes_working_dir", config=cfg)
         self._hermes_provider: str = str(
             self.get_config_value("hermes_provider", config=cfg) or "openrouter"
@@ -102,17 +104,26 @@ class HermesClient(CLIAgentBase):
             self.get_config_value("hermes_backend", config=cfg) or "auto"
         ).lower()
         self._ollama_model: str = str(
-            self.get_config_value("hermes_model", config=cfg) or self.DEFAULT_OLLAMA_MODEL
+            self.get_config_value("hermes_model", config=cfg)
+            or self.DEFAULT_OLLAMA_MODEL
         )
 
         # Fallback model for provider resilience (v0.2.0)
-        self._fallback_model: str | None = self.get_config_value("fallback_model", config=cfg)
-        self._fallback_provider: str | None = self.get_config_value("fallback_provider", config=cfg)
+        self._fallback_model: str | None = self.get_config_value(
+            "fallback_model", config=cfg
+        )
+        self._fallback_provider: str | None = self.get_config_value(
+            "fallback_provider", config=cfg
+        )
 
         # CLI flags (v0.2.0+)
         self._yolo: bool = bool(self.get_config_value("yolo", config=cfg))
-        self._continue_session: str | None = self.get_config_value("continue_session", config=cfg)
-        self._pass_session_id: bool = bool(self.get_config_value("pass_session_id", config=cfg))
+        self._continue_session: str | None = self.get_config_value(
+            "continue_session", config=cfg
+        )
+        self._pass_session_id: bool = bool(
+            self.get_config_value("pass_session_id", config=cfg)
+        )
 
         db_default = Path.home() / ".codomyrmex" / "hermes_sessions.db"
         self._session_db_path = str(
@@ -123,14 +134,20 @@ class HermesClient(CLIAgentBase):
         # Worktree isolation config
         self._worktree_base = Path(
             os.path.expanduser(
-                str(self.get_config_value("worktree_base_dir", config=cfg) or "~/.codomyrmex/worktrees")
+                str(
+                    self.get_config_value("worktree_base_dir", config=cfg)
+                    or "~/.codomyrmex/worktrees"
+                )
             )
         )
 
         # Context compression for long conversations
         from codomyrmex.agents.hermes._provider_router import ContextCompressor
+
         self._compressor = ContextCompressor(
-            max_tokens=int(self.get_config_value("max_context_tokens", config=cfg) or 100_000),
+            max_tokens=int(
+                self.get_config_value("max_context_tokens", config=cfg) or 100_000
+            ),
         )
 
         # Probe availability
@@ -187,17 +204,29 @@ class HermesClient(CLIAgentBase):
         try:
             result = subprocess.run(
                 [self.command, "config"],
-                capture_output=True, text=True, timeout=5,
+                capture_output=True,
+                text=True,
+                timeout=5,
             )
             output = result.stdout + result.stderr
             # Parse the "◆ API Keys" section — each line looks like:
             #   OpenRouter     sk-o...fa72      (configured)
             #   Anthropic      (not set)        (not configured)
-            key_providers = ["openrouter", "anthropic", "openai", "zhipuai", "glm", "kimi"]
+            key_providers = [
+                "openrouter",
+                "anthropic",
+                "openai",
+                "zhipuai",
+                "glm",
+                "kimi",
+            ]
             for line in output.splitlines():
                 lower_line = line.strip().lower()
                 for provider in key_providers:
-                    if lower_line.startswith(provider) and "(not set)" not in lower_line:
+                    if (
+                        lower_line.startswith(provider)
+                        and "(not set)" not in lower_line
+                    ):
                         # Found a provider line with an actual key value
                         return True
         except Exception:
@@ -210,7 +239,9 @@ class HermesClient(CLIAgentBase):
                 with open(hermenv) as f:
                     for line in f:
                         line = line.strip()
-                        if line.startswith("OPENROUTER_API_KEY=") and len(line) > len("OPENROUTER_API_KEY="):
+                        if line.startswith("OPENROUTER_API_KEY=") and len(line) > len(
+                            "OPENROUTER_API_KEY="
+                        ):
                             return True
         except Exception:
             pass
@@ -229,7 +260,8 @@ class HermesClient(CLIAgentBase):
             if self._fallback_model and self._should_fallback(exc):
                 self.logger.warning(
                     "Primary provider failed (%s) — retrying with fallback model '%s'",
-                    exc, self._fallback_model,
+                    exc,
+                    self._fallback_model,
                 )
                 return self._execute_via_ollama(
                     request, model_override=self._fallback_model
@@ -255,10 +287,20 @@ class HermesClient(CLIAgentBase):
         Returns True for 413 (payload too large), rate limits, and timeouts.
         """
         msg = str(exc).lower()
-        return any(pattern in msg for pattern in (
-            "413", "payload too large", "rate limit", "timed out", "timeout",
-            "429", "too many requests", "quota", "capacity",
-        ))
+        return any(
+            pattern in msg
+            for pattern in (
+                "413",
+                "payload too large",
+                "rate limit",
+                "timed out",
+                "timeout",
+                "429",
+                "too many requests",
+                "quota",
+                "capacity",
+            )
+        )
 
     def _execute_via_cli(self, request: AgentRequest) -> AgentResponse:
         """Execute via the NousResearch Hermes CLI."""
@@ -284,7 +326,10 @@ class HermesClient(CLIAgentBase):
                         with open(hermenv) as f:
                             for line in f:
                                 line = line.strip()
-                                if line.startswith(f"{key_name}=") and len(line) > len(key_name) + 1:
+                                if (
+                                    line.startswith(f"{key_name}=")
+                                    and len(line) > len(key_name) + 1
+                                ):
                                     subprocess_env[key_name] = line.split("=", 1)[1]
                                     break
             subprocess_env["NO_COLOR"] = "1"
@@ -297,11 +342,17 @@ class HermesClient(CLIAgentBase):
                     command=self.command,
                 )
             return self._build_response_from_result(
-                result, request,
-                additional_metadata={"backend": "cli", "command_full": " ".join([self.command, *hermes_args])},
+                result,
+                request,
+                additional_metadata={
+                    "backend": "cli",
+                    "command_full": " ".join([self.command, *hermes_args]),
+                },
             )
         except AgentTimeoutError as e:
-            raise HermesError(f"Hermes CLI timed out after {self.timeout}s: {e}", command=self.command) from e
+            raise HermesError(
+                f"Hermes CLI timed out after {self.timeout}s: {e}", command=self.command
+            ) from e
         except AgentError as e:
             raise HermesError(f"Hermes CLI failed: {e}", command=self.command) from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -309,7 +360,10 @@ class HermesClient(CLIAgentBase):
             raise HermesError(f"Hermes CLI failed: {e}", command=self.command) from e
 
     def _execute_via_ollama(
-        self, request: AgentRequest, *, model_override: str | None = None,
+        self,
+        request: AgentRequest,
+        *,
+        model_override: str | None = None,
     ) -> AgentResponse:
         """Execute via ``ollama run <model>``.
 
@@ -327,7 +381,10 @@ class HermesClient(CLIAgentBase):
 
         try:
             proc = subprocess.run(
-                cmd, capture_output=True, text=True, timeout=self.timeout,
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
                 env={**os.environ, "NO_COLOR": "1"},
             )
             elapsed = time.time() - start
@@ -362,7 +419,9 @@ class HermesClient(CLIAgentBase):
             raise
         except Exception as e:
             self.logger.error("Ollama execution failed: %s", e, exc_info=True)
-            raise HermesError(f"Ollama execution failed: {e}", command=" ".join(cmd)) from e
+            raise HermesError(
+                f"Ollama execution failed: {e}", command=" ".join(cmd)
+            ) from e
 
     # ------------------------------------------------------------------
     # Streaming
@@ -385,8 +444,11 @@ class HermesClient(CLIAgentBase):
 
         try:
             process = subprocess.Popen(
-                cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                text=True, bufsize=1,
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                bufsize=1,
                 env={**os.environ, "NO_COLOR": "1"},
             )
             for line in iter(process.stdout.readline, ""):
@@ -448,7 +510,9 @@ class HermesClient(CLIAgentBase):
                 history_messages = self._compressor.compress(history_messages)
                 self.logger.info(
                     "Session %s: compressed %d → %d history messages",
-                    session.session_id, len(session.messages) - 1, len(history_messages),
+                    session.session_id,
+                    len(session.messages) - 1,
+                    len(history_messages),
                 )
 
             # Build full prompt containing history
@@ -585,7 +649,10 @@ class HermesClient(CLIAgentBase):
             return {"success": False, "error": "Skills listing requires the Hermes CLI"}
         try:
             result = self._execute_command(args=["skills", "list"])
-            return {"success": result.get("success", False), "output": result.get("stdout", "")}
+            return {
+                "success": result.get("success", False),
+                "output": result.get("stdout", ""),
+            }
         except Exception as e:
             self.logger.warning("Failed to list Hermes skills: %s", e)
             return {"success": False, "error": str(e)}
@@ -607,11 +674,13 @@ class HermesClient(CLIAgentBase):
         if self._active_backend == "cli":
             try:
                 result = self._execute_command(args=["status"], timeout=10)
-                status.update({
-                    "success": result.get("success", False),
-                    "output": result.get("stdout", ""),
-                    "exit_code": result.get("exit_code", 0),
-                })
+                status.update(
+                    {
+                        "success": result.get("success", False),
+                        "output": result.get("stdout", ""),
+                        "exit_code": result.get("exit_code", 0),
+                    }
+                )
             except Exception as e:
                 status.update({"success": False, "error": str(e), "exit_code": -1})
         else:
@@ -638,10 +707,14 @@ class HermesClient(CLIAgentBase):
             self._worktree_base.mkdir(parents=True, exist_ok=True)
             subprocess.run(
                 ["git", "worktree", "add", "-b", branch_name, str(worktree_path)],
-                capture_output=True, text=True, timeout=30,
+                capture_output=True,
+                text=True,
+                timeout=30,
                 check=True,
             )
-            self.logger.info("Created worktree at %s (branch: %s)", worktree_path, branch_name)
+            self.logger.info(
+                "Created worktree at %s (branch: %s)", worktree_path, branch_name
+            )
             return worktree_path
         except subprocess.CalledProcessError as e:
             self.logger.warning("Failed to create worktree: %s", e.stderr)
@@ -665,11 +738,15 @@ class HermesClient(CLIAgentBase):
         try:
             subprocess.run(
                 ["git", "worktree", "remove", str(worktree_path), "--force"],
-                capture_output=True, text=True, timeout=15,
+                capture_output=True,
+                text=True,
+                timeout=15,
             )
             subprocess.run(
                 ["git", "branch", "-D", branch_name],
-                capture_output=True, text=True, timeout=10,
+                capture_output=True,
+                text=True,
+                timeout=10,
             )
             self.logger.info("Cleaned up worktree: %s", worktree_path)
             return True

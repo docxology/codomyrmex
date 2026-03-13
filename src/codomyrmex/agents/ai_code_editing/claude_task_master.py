@@ -224,7 +224,10 @@ class ClaudeTaskMaster(ClaudeTaskExecutionMixin, ClaudeTaskPlanningMixin):
 
                 logger.warning(
                     "Retryable error, attempt %s/%s, retrying in %.1fs: %s",
-                    attempt + 1, self.max_retries + 1, delay, e,
+                    attempt + 1,
+                    self.max_retries + 1,
+                    delay,
+                    e,
                 )
                 time.sleep(delay)
 

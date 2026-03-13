@@ -93,7 +93,9 @@ class TestSceneGraph:
 
     def test_hierarchy_depth(self):
         sg = SceneGraph()
-        parent = SceneNode("parent", bounds=AABB(Vector3D(0, 0, 0), Vector3D(10, 10, 10)))
+        parent = SceneNode(
+            "parent", bounds=AABB(Vector3D(0, 0, 0), Vector3D(10, 10, 10))
+        )
         child = SceneNode("child", bounds=AABB(Vector3D(1, 1, 1), Vector3D(3, 3, 3)))
         sg.add_node(parent)
         sg.add_node(child, parent=parent)
@@ -111,8 +113,12 @@ class TestSceneGraph:
 
     def test_ray_cast(self):
         sg = SceneGraph()
-        sg.add_node(SceneNode("near", bounds=AABB(Vector3D(1, -1, -1), Vector3D(3, 1, 1))))
-        sg.add_node(SceneNode("far", bounds=AABB(Vector3D(5, -1, -1), Vector3D(7, 1, 1))))
+        sg.add_node(
+            SceneNode("near", bounds=AABB(Vector3D(1, -1, -1), Vector3D(3, 1, 1)))
+        )
+        sg.add_node(
+            SceneNode("far", bounds=AABB(Vector3D(5, -1, -1), Vector3D(7, 1, 1)))
+        )
         hits = sg.ray_cast(Vector3D(0, 0, 0), Vector3D(1, 0, 0))
         assert len(hits) == 2
         assert hits[0].node.name == "near"
@@ -128,7 +134,9 @@ class TestSceneGraph:
 
     def test_node_with_object(self):
         obj = Object3D(name="cube")
-        n = SceneNode("cube_node", obj=obj, bounds=AABB(Vector3D(0, 0, 0), Vector3D(1, 1, 1)))
+        n = SceneNode(
+            "cube_node", obj=obj, bounds=AABB(Vector3D(0, 0, 0), Vector3D(1, 1, 1))
+        )
         sg = SceneGraph()
         sg.add_node(n)
         found = sg.get_node("cube_node")
@@ -224,7 +232,11 @@ class TestGatedRewrite:
             modified=modified,
         )
         assert not decision.approved
-        failed_rules = [r.rule_name for r in decision.verification_result.rule_results if not r.passed]
+        failed_rules = [
+            r.rule_name
+            for r in decision.verification_result.rule_results
+            if not r.passed
+        ]
         assert "no_removed_parameters" in failed_rules
 
     def test_gate_decision_serialization(self):
@@ -400,7 +412,9 @@ class TestHierarchicalPlanner:
     def test_two_level_planning(self):
         planner = HierarchicalPlanner(
             levels=[
-                PlanLevel("strategic", FreeEnergyLoop(self._make_agent(), max_steps=10)),
+                PlanLevel(
+                    "strategic", FreeEnergyLoop(self._make_agent(), max_steps=10)
+                ),
                 PlanLevel("tactical", FreeEnergyLoop(self._make_agent(), max_steps=10)),
             ],
         )

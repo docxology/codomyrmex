@@ -27,9 +27,7 @@ try:
 except ImportError:
     _YAML_AVAILABLE = False
 
-_SKIP_YAML = pytest.mark.skipif(
-    not _YAML_AVAILABLE, reason="PyYAML not installed"
-)
+_SKIP_YAML = pytest.mark.skipif(not _YAML_AVAILABLE, reason="PyYAML not installed")
 
 
 # ===========================================================================
@@ -677,9 +675,7 @@ class TestCliCommands:
         from codomyrmex.serialization import cli_commands
 
         data = {"hello": "world"}
-        with tempfile.NamedTemporaryFile(
-            suffix=".json", delete=False, mode="wb"
-        ) as f:
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False, mode="wb") as f:
             f.write(json.dumps(data).encode())
             path = f.name
         try:
@@ -700,9 +696,7 @@ class TestCliCommands:
         from codomyrmex.serialization import cli_commands
 
         data = {"service": "test", "port": 8080}
-        with tempfile.NamedTemporaryFile(
-            suffix=".json", delete=False, mode="wb"
-        ) as f:
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False, mode="wb") as f:
             f.write(json.dumps(data).encode())
             path = f.name
         try:

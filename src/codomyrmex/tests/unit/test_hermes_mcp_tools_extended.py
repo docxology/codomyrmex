@@ -112,10 +112,12 @@ class TestHermesSessionSearch:
             store.save(HermesSession(session_id="s3", name="deployment"))
 
         def patched_get_client(**kwargs):
-            return HermesClient(config={
-                "hermes_command": "echo",
-                "hermes_session_db": str(db_path),
-            })
+            return HermesClient(
+                config={
+                    "hermes_command": "echo",
+                    "hermes_session_db": str(db_path),
+                }
+            )
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
         result = hermes_session_search(query="api")
@@ -220,11 +222,13 @@ class TestHermesClientCLIFlags:
     def test_all_flags_combined(self) -> None:
         from codomyrmex.agents.hermes.hermes_client import HermesClient
 
-        client = HermesClient(config={
-            "yolo": True,
-            "continue_session": "proj",
-            "pass_session_id": True,
-        })
+        client = HermesClient(
+            config={
+                "yolo": True,
+                "continue_session": "proj",
+                "pass_session_id": True,
+            }
+        )
         args = client._build_hermes_args("test", {})
         assert "--yolo" in args
         assert "--continue" in args

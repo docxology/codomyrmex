@@ -16,6 +16,7 @@ def sample_file(tmp_path):
     p.write_text("def foo():\n    x = 1\n    return x + foo()\n")
     return str(p)
 
+
 @pytest.mark.unit
 class TestRenameRefactoring:
     """Tests for RenameRefactoring."""

@@ -427,9 +427,7 @@ class APIHandler:
         return {
             "modules": raw.get("modules", {}).get("total", 0),
             "tools_total": raw.get("tools", {}).get("total", 0),
-            "promoted": len(
-                raw.get("trust", {}).get("promoted_to_verified", [])
-            ),
+            "promoted": len(raw.get("trust", {}).get("promoted_to_verified", [])),
         }
 
     def _pai_trust(self, _data: dict) -> dict:
@@ -461,11 +459,7 @@ class APIHandler:
     def _pai_analyze(self, _data: dict) -> dict:
         """Execute PAI system analysis."""
         modules = self.data_provider.get_modules() if self.data_provider else []
-        summary = (
-            self.data_provider.get_system_summary()
-            if self.data_provider
-            else {}
-        )
+        summary = self.data_provider.get_system_summary() if self.data_provider else {}
         active = sum(1 for m in modules if m.get("status") == "Active")
         error_count = sum(
             1 for m in modules if m.get("status") not in ("Active", "Unknown")
@@ -631,7 +625,6 @@ class APIHandler:
                 return
 
             try:
-
                 from codomyrmex.agents.orchestrator import ConversationOrchestrator
 
                 if todo_path:

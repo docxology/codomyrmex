@@ -134,7 +134,13 @@ skipif_no_hypothesis = pytest.mark.skipif(
 class TestPropertyBased:
     """Property-based tests using Hypothesis."""
 
-    @given(st.lists(st.floats(min_value=-1e6, max_value=1e6, allow_nan=False), min_size=1, max_size=500))
+    @given(
+        st.lists(
+            st.floats(min_value=-1e6, max_value=1e6, allow_nan=False),
+            min_size=1,
+            max_size=500,
+        )
+    )
     @settings(max_examples=50, deadline=None)
     def test_sparkline_round_trip(self, values: list[float]) -> None:
         """Sparklines produce valid SVG for any float sequence."""
@@ -156,12 +162,14 @@ class TestPropertyBased:
         deserialized = json.loads(serialized)
         assert deserialized["content"] == content
 
-    @given(st.dictionaries(
-        keys=st.from_regex(r"[a-z]{1,10}", fullmatch=True),
-        values=st.one_of(st.integers(), st.booleans(), st.text(max_size=50)),
-        min_size=1,
-        max_size=20,
-    ))
+    @given(
+        st.dictionaries(
+            keys=st.from_regex(r"[a-z]{1,10}", fullmatch=True),
+            values=st.one_of(st.integers(), st.booleans(), st.text(max_size=50)),
+            min_size=1,
+            max_size=20,
+        )
+    )
     @settings(max_examples=50, deadline=None)
     def test_config_determinism_always_holds(self, defaults: dict) -> None:
         """Config resolution is deterministic for any default dict."""
@@ -183,7 +191,9 @@ class TestPropertyBased:
         assert stats["total_calls"] == len(tool_names)
         assert stats["unique_tools"] == len(set(tool_names))
 
-    @given(st.lists(st.integers(min_value=0, max_value=10000), min_size=2, max_size=100))
+    @given(
+        st.lists(st.integers(min_value=0, max_value=10000), min_size=2, max_size=100)
+    )
     @settings(max_examples=30, deadline=None)
     def test_token_tracker_aggregation(self, tokens: list[int]) -> None:
         """Token tracker aggregates correctly across calls."""
@@ -199,6 +209,7 @@ class TestPropertyBased:
 
 
 # ── H1: Dockerfile Existence ─────────────────────────────────────
+
 
 class TestHermeticDistribution:
     """Verify distribution artifacts exist and are valid."""

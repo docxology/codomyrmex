@@ -40,13 +40,19 @@ def _write_module_files(module_path: Path) -> list[str]:
         (module_path / filename).write_text(content)
         files_created.append(filename)
 
-    (module_path / "examples" / "basic_usage.py").write_text(generate_physical_examples())
+    (module_path / "examples" / "basic_usage.py").write_text(
+        generate_physical_examples()
+    )
     files_created.append("examples/basic_usage.py")
 
-    (module_path / "tests" / "test_object_manager.py").write_text(generate_physical_tests())
+    (module_path / "tests" / "test_object_manager.py").write_text(
+        generate_physical_tests()
+    )
     files_created.append("tests/test_object_manager.py")
 
-    (module_path / "docs" / "architecture.md").write_text(generate_physical_docs_content())
+    (module_path / "docs" / "architecture.md").write_text(
+        generate_physical_docs_content()
+    )
     files_created.append("docs/architecture.md")
 
     return files_created

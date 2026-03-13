@@ -382,7 +382,10 @@ def run_command(
         prepared_env = _prepare_environment(env, inherit_env)
 
         logger.debug(
-            "Running command: %s", prepared_command if isinstance(prepared_command, str) else " ".join(prepared_command)
+            "Running command: %s",
+            prepared_command
+            if isinstance(prepared_command, str)
+            else " ".join(prepared_command),
         )
 
         process_result = subprocess.run(
@@ -411,7 +414,9 @@ def run_command(
             else f"Command exited with code {process_result.returncode}",
         )
         logger.debug(
-            "Command completed with return code %s in %.3fs", result.return_code, duration
+            "Command completed with return code %s in %.3fs",
+            result.return_code,
+            duration,
         )
         if check:
             result.raise_on_error()
@@ -434,27 +439,38 @@ def run_command(
                 original_exception=e,
             ) from e
         return SubprocessResult(
-            stdout=stdout, stderr=stderr, return_code=-1, duration=duration,
-            command=command, timed_out=True, error_message=error_msg,
+            stdout=stdout,
+            stderr=stderr,
+            return_code=-1,
+            duration=duration,
+            command=command,
+            timed_out=True,
+            error_message=error_msg,
         )
 
     except FileNotFoundError as e:
         duration = time.perf_counter() - start_time
         error_msg = f"Command not found: {e.filename or command}"
         logger.error(error_msg)
-        return _handle_error(check, error_msg, CommandErrorType.FILE_NOT_FOUND, command, duration, e)
+        return _handle_error(
+            check, error_msg, CommandErrorType.FILE_NOT_FOUND, command, duration, e
+        )
 
     except PermissionError as e:
         duration = time.perf_counter() - start_time
         error_msg = f"Permission denied: {e}"
         logger.error(error_msg)
-        return _handle_error(check, error_msg, CommandErrorType.PERMISSION_DENIED, command, duration, e)
+        return _handle_error(
+            check, error_msg, CommandErrorType.PERMISSION_DENIED, command, duration, e
+        )
 
     except subprocess.SubprocessError as e:
         duration = time.perf_counter() - start_time
         error_msg = f"Subprocess error: {e}"
         logger.error(error_msg)
-        return _handle_error(check, error_msg, CommandErrorType.SUBPROCESS_ERROR, command, duration, e)
+        return _handle_error(
+            check, error_msg, CommandErrorType.SUBPROCESS_ERROR, command, duration, e
+        )
 
     except CommandError:
         raise  # Re-raise without wrapping (from raise_on_error)
@@ -463,7 +479,9 @@ def run_command(
         duration = time.perf_counter() - start_time
         error_msg = f"Unexpected error executing command: {e}"
         logger.error(error_msg, exc_info=True)
-        return _handle_error(check, error_msg, CommandErrorType.UNKNOWN, command, duration, e)
+        return _handle_error(
+            check, error_msg, CommandErrorType.UNKNOWN, command, duration, e
+        )
 
 
 async def run_command_async(
@@ -571,7 +589,9 @@ async def run_command_async(
         )
 
         logger.debug(
-            "Async command completed with return code %s in %.3fs", result.return_code, duration
+            "Async command completed with return code %s in %.3fs",
+            result.return_code,
+            duration,
         )
 
         return result

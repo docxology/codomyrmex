@@ -134,14 +134,20 @@ class FreeAPIClient:
         """
         eff_timeout = timeout if timeout is not None else self.default_timeout
         full_url = _append_params(url, params)
-        req = _build_request(full_url, method, {**self.default_headers, **(headers or {})}, body)
+        req = _build_request(
+            full_url, method, {**self.default_headers, **(headers or {})}, body
+        )
         return _execute_request(req, full_url, method, eff_timeout)
 
-    def get(self, url: str, params: dict | None = None, timeout: int | None = None) -> APICallResult:
+    def get(
+        self, url: str, params: dict | None = None, timeout: int | None = None
+    ) -> APICallResult:
         """Convenience GET request."""
         return self.call(url, method="GET", params=params, timeout=timeout)
 
-    def post(self, url: str, body: str | bytes | None = None, timeout: int | None = None) -> APICallResult:
+    def post(
+        self, url: str, body: str | bytes | None = None, timeout: int | None = None
+    ) -> APICallResult:
         """Convenience POST request."""
         return self.call(url, method="POST", body=body, timeout=timeout)
 

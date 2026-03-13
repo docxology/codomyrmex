@@ -144,7 +144,11 @@ class CLIProfiler:
         results: list[ProfileResult] = []
 
         for mod_dir in sorted(src_root.iterdir()):
-            if not mod_dir.is_dir() or mod_dir.name.startswith(("_", ".")) or mod_dir.name == "tests":
+            if (
+                not mod_dir.is_dir()
+                or mod_dir.name.startswith(("_", "."))
+                or mod_dir.name == "tests"
+            ):
                 continue
 
             module_name = f"{package}.{mod_dir.name}"

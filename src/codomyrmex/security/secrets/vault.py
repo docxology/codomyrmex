@@ -97,7 +97,9 @@ def mask_secret(value: str, show_chars: int = 4) -> str:
     """Mask a secret for display."""
     if len(value) <= show_chars * 2:
         return "*" * len(value)
-    return value[:show_chars] + "*" * (len(value) - show_chars * 2) + value[-show_chars:]
+    return (
+        value[:show_chars] + "*" * (len(value) - show_chars * 2) + value[-show_chars:]
+    )
 
 
 def generate_secret(length: int = 32, include_special: bool = True) -> str:

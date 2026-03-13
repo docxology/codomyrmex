@@ -256,7 +256,9 @@ def apply_framework(framework_name: str, context: dict[str, Any]) -> dict[str, A
         }
 
     logger.info(
-        "Applying framework '%s' version %s to context", framework.name, framework.version
+        "Applying framework '%s' version %s to context",
+        framework.name,
+        framework.version,
     )
 
     # Generate recommendations based on framework

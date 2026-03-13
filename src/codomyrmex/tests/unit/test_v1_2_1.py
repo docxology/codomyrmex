@@ -38,7 +38,10 @@ class TestModuleIntrospector:
         intro = ModuleIntrospector()
         report = intro.scan_all()
         dist = report["health_distribution"]
-        assert dist["healthy"] + dist["partial"] + dist["minimal"] == report["total_modules"]
+        assert (
+            dist["healthy"] + dist["partial"] + dist["minimal"]
+            == report["total_modules"]
+        )
 
     def test_scan_single_module(self) -> None:
         from pathlib import Path

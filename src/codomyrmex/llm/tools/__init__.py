@@ -280,7 +280,8 @@ def create_calculator_tool() -> Tool:
             return float(node.value)
         if isinstance(node, ast.BinOp) and type(node.op) in _MATH_OPS:
             return _MATH_OPS[type(node.op)](
-                _safe_eval(node.left), _safe_eval(node.right)  # type: ignore
+                _safe_eval(node.left),
+                _safe_eval(node.right),  # type: ignore
             )
         if isinstance(node, ast.UnaryOp) and type(node.op) in _MATH_OPS:
             return _MATH_OPS[type(node.op)](_safe_eval(node.operand))  # type: ignore

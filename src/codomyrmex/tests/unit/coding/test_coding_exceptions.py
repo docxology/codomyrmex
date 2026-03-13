@@ -5,7 +5,6 @@ SandboxResourceError, DebuggerError, BreakpointError, CodeReviewError,
 ReviewCommentError, MonitoringError, ProfilingError, TracingError, RuntimeError.
 """
 
-
 from codomyrmex.coding.exceptions import (
     BreakpointError,
     CodeReviewError,
@@ -54,7 +53,11 @@ class TestSandboxSecurityError:
         assert isinstance(e, SandboxError)
 
     def test_with_context(self):
-        e = SandboxSecurityError("Forbidden", violation_type="file_access", attempted_action="read /etc/passwd")
+        e = SandboxSecurityError(
+            "Forbidden",
+            violation_type="file_access",
+            attempted_action="read /etc/passwd",
+        )
         assert e.context.get("violation_type") == "file_access"
 
 
@@ -126,14 +129,26 @@ class TestCodingRuntimeError:
         assert isinstance(e, CodeExecutionError)
 
     def test_with_context(self):
-        e = CodingRuntimeError("Error", error_type="NameError", traceback="Traceback...")
+        e = CodingRuntimeError(
+            "Error", error_type="NameError", traceback="Traceback..."
+        )
         assert e.context.get("error_type") == "NameError"
 
 
 class TestExceptionHierarchy:
     def test_all_inherit_codomyrmex_error(self):
-        for cls in [ExecutionTimeoutError, MemoryLimitError, SandboxSecurityError,
-                     SandboxResourceError, DebuggerError, BreakpointError,
-                     CodeReviewError, ReviewCommentError, MonitoringError,
-                     ProfilingError, TracingError, CodingRuntimeError]:
+        for cls in [
+            ExecutionTimeoutError,
+            MemoryLimitError,
+            SandboxSecurityError,
+            SandboxResourceError,
+            DebuggerError,
+            BreakpointError,
+            CodeReviewError,
+            ReviewCommentError,
+            MonitoringError,
+            ProfilingError,
+            TracingError,
+            CodingRuntimeError,
+        ]:
             assert issubclass(cls, CodomyrmexError)

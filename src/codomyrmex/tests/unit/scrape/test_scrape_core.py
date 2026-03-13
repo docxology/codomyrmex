@@ -813,7 +813,14 @@ class TestScrapeMcpTools:
 
     def test_extract_content_has_required_fields(self):
         result = scrape_extract_content("<html><h1>Heading</h1></html>")
-        for key in ("status", "title", "headings", "paragraph_count", "link_count", "word_count"):
+        for key in (
+            "status",
+            "title",
+            "headings",
+            "paragraph_count",
+            "link_count",
+            "word_count",
+        ):
             assert key in result
 
     def test_extract_content_headings_list(self):

@@ -110,14 +110,25 @@ class DemoRegistry:
                 category="script",
             )
 
-    def _execute_target(self, info: "DemoInfo", **kwargs: Any) -> tuple[bool, str, str | None]:
+    def _execute_target(
+        self, info: "DemoInfo", **kwargs: Any
+    ) -> tuple[bool, str, str | None]:
         """Execute a demo target and return (success, output, error)."""
         if isinstance(info.target, Path):
             res = thin.run(info.target, **kwargs)
-            success = res.get("success") if "success" in res else (res.get("status") == "passed")
-            return success, res.get("stdout", ""), res.get("stderr") if not success else None
+            success = (
+                res.get("success")
+                if "success" in res
+                else (res.get("status") == "passed")
+            )
+            return (
+                success,
+                res.get("stdout", ""),
+                res.get("stderr") if not success else None,
+            )
         if inspect.iscoroutinefunction(info.target):
             import asyncio
+
             val = asyncio.run(info.target(**kwargs))
         else:
             val = info.target(**kwargs)
@@ -128,19 +139,31 @@ class DemoRegistry:
         """Run a registered demonstration."""
         info = self.get_demo(name)
         if not info:
-            return DemoResult(name=name, success=False, error=f"Demo '{name}' not found.")
+            return DemoResult(
+                name=name, success=False, error=f"Demo '{name}' not found."
+            )
 
         start_time = time.time()
         logger.info("Starting demo: %s", name)
         try:
             success, output, error = self._execute_target(info, **kwargs)
             elapsed = time.time() - start_time
-            logger.info("Demo '%s' finished in %.2fs (success=%s)", name, elapsed, success)
-            return DemoResult(name=name, success=success, output=output, error=error, execution_time=elapsed)
+            logger.info(
+                "Demo '%s' finished in %.2fs (success=%s)", name, elapsed, success
+            )
+            return DemoResult(
+                name=name,
+                success=success,
+                output=output,
+                error=error,
+                execution_time=elapsed,
+            )
         except Exception as e:
             elapsed = time.time() - start_time
             logger.error("Demo '%s' failed: %s", name, e, exc_info=True)
-            return DemoResult(name=name, success=False, error=str(e), execution_time=elapsed)
+            return DemoResult(
+                name=name, success=False, error=str(e), execution_time=elapsed
+            )
 
     def run_all(self, **kwargs: Any) -> list[DemoResult]:
         """Run all registered demos."""

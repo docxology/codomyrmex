@@ -115,12 +115,16 @@ class TestBaseLanguageManager:
         # Instantiate with all abstract-like methods stubbed so we can call
         # the base one directly.
         with pytest.raises(NotImplementedError):
-            BaseLanguageManager.install_instructions(object.__new__(BaseLanguageManager))
+            BaseLanguageManager.install_instructions(
+                object.__new__(BaseLanguageManager)
+            )
 
     def test_setup_project_raises_not_implemented(self):
         """BaseLanguageManager.setup_project() raises NotImplementedError."""
         with pytest.raises(NotImplementedError):
-            BaseLanguageManager.setup_project(object.__new__(BaseLanguageManager), "/tmp/x")
+            BaseLanguageManager.setup_project(
+                object.__new__(BaseLanguageManager), "/tmp/x"
+            )
 
     def test_use_script_raises_not_implemented(self):
         """BaseLanguageManager.use_script() raises NotImplementedError."""
@@ -158,26 +162,36 @@ _ALL_MANAGERS: list[tuple[str, type[BaseLanguageManager]]] = [
 class TestAllManagersContract:
     """Parametrized tests that every concrete manager must satisfy."""
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_instantiation_requires_no_args(self, name, cls):
         """Every manager must be constructable with zero arguments."""
         instance = cls()
         assert instance is not None
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_is_subclass_of_base(self, name, cls):
         """Every manager must inherit from BaseLanguageManager."""
         assert issubclass(cls, BaseLanguageManager)
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_install_instructions_returns_str(self, name, cls):
         """install_instructions() must return a non-empty string."""
         mgr = cls()
         result = mgr.install_instructions()
-        assert isinstance(result, str), f"{name}.install_instructions() did not return str"
+        assert isinstance(result, str), (
+            f"{name}.install_instructions() did not return str"
+        )
         assert len(result) > 0, f"{name}.install_instructions() returned empty string"
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_install_instructions_contains_install_keyword(self, name, cls):
         """install_instructions() text must mention installation guidance."""
         mgr = cls()
@@ -188,7 +202,9 @@ class TestAllManagersContract:
             f"{name}.install_instructions() contains no install guidance. Got: {text[:200]}"
         )
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_is_installed_returns_bool(self, name, cls):
         """is_installed() must return a plain bool regardless of toolchain presence."""
         mgr = cls()
@@ -197,7 +213,9 @@ class TestAllManagersContract:
             f"{name}.is_installed() returned {type(result).__name__}, expected bool"
         )
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_setup_project_signature(self, name, cls):
         """setup_project(path) must accept a single positional 'path' argument."""
         sig = inspect.signature(cls.setup_project)
@@ -205,24 +223,34 @@ class TestAllManagersContract:
         # params = ['self', 'path']
         assert "path" in params, f"{name}.setup_project() has no 'path' parameter"
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_use_script_signature(self, name, cls):
         """use_script(script_content, dir_path=None) must have expected signature."""
         sig = inspect.signature(cls.use_script)
         params = list(sig.parameters.keys())
-        assert "script_content" in params, f"{name}.use_script() missing 'script_content'"
+        assert "script_content" in params, (
+            f"{name}.use_script() missing 'script_content'"
+        )
         assert "dir_path" in params, f"{name}.use_script() missing 'dir_path'"
         # dir_path should be optional (default None)
         default = sig.parameters["dir_path"].default
-        assert default is None, f"{name}.use_script(dir_path) default should be None, got {default!r}"
+        assert default is None, (
+            f"{name}.use_script(dir_path) default should be None, got {default!r}"
+        )
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_cleanup_empty_list_no_error(self, name, cls):
         """_cleanup([]) must not raise for any manager."""
         mgr = cls()
         mgr._cleanup([])
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_cleanup_nonexistent_paths_no_error(self, name, cls):
         """_cleanup() must silently ignore missing files for every manager."""
         mgr = cls()
@@ -563,7 +591,7 @@ class TestCppManager:
     def test_use_script_hello_world(self):
         mgr = CppManager()
         script = (
-            '#include <iostream>\n'
+            "#include <iostream>\n"
             'int main() { std::cout << "cpp_test_marker" << std::endl; return 0; }\n'
         )
         output = mgr.use_script(script)
@@ -605,13 +633,17 @@ class TestCSharpManager:
 class TestCheckCommandsClassAttributes:
     """Verify _check_commands values are structurally correct list-of-lists."""
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_check_commands_is_list(self, name, cls):
         assert isinstance(cls._check_commands, list), (
             f"{name}._check_commands is not a list"
         )
 
-    @pytest.mark.parametrize(("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS])
+    @pytest.mark.parametrize(
+        ("name", "cls"), _ALL_MANAGERS, ids=[n for n, _ in _ALL_MANAGERS]
+    )
     def test_check_commands_entries_are_lists_of_strings(self, name, cls):
         for entry in cls._check_commands:
             assert isinstance(entry, list), (

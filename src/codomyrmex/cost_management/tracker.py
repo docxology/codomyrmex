@@ -96,7 +96,9 @@ class CostTracker:
         )
         return entry
 
-    def _resolve_start(self, period: BudgetPeriod | None, start: datetime | None) -> datetime:
+    def _resolve_start(
+        self, period: BudgetPeriod | None, start: datetime | None
+    ) -> datetime:
         """Return start datetime, deriving from period if needed."""
         if start is not None:
             return start
@@ -136,7 +138,9 @@ class CostTracker:
         entries = self.store.get_entries(
             start=start, end=end, category=category, tags_filter=tags_filter
         )
-        summary = CostSummary(entry_count=len(entries), period_start=start, period_end=end)
+        summary = CostSummary(
+            entry_count=len(entries), period_start=start, period_end=end
+        )
         for entry in entries:
             self._accumulate_entry(summary, entry)
         return summary
@@ -286,7 +290,9 @@ class BudgetManager:
             if amount > remaining:
                 logger.warning(
                     "Spend blocked by budget '%s': Need $%.4f, only $%.4f remaining.",
-                    budget.id, amount, remaining,
+                    budget.id,
+                    amount,
+                    remaining,
                 )
                 return False
 

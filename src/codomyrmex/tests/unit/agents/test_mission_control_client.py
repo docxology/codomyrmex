@@ -41,10 +41,12 @@ from codomyrmex.agents.mission_control.mission_control_client import (
 @pytest.fixture
 def unreachable_client() -> MissionControlClient:
     """Client configured against an unreachable port."""
-    return MissionControlClient(config={
-        "base_url": "http://localhost:59999",
-        "timeout": 2,
-    })
+    return MissionControlClient(
+        config={
+            "base_url": "http://localhost:59999",
+            "timeout": 2,
+        }
+    )
 
 
 @pytest.fixture
@@ -156,10 +158,12 @@ class TestMissionControlClientInit:
 
     def test_dict_config(self) -> None:
         """Client accepts a config dict."""
-        client = MissionControlClient(config={
-            "base_url": "http://mc.test:9000",
-            "api_key": "dict-key",
-        })
+        client = MissionControlClient(
+            config={
+                "base_url": "http://mc.test:9000",
+                "api_key": "dict-key",
+            }
+        )
         assert client.base_url == "http://mc.test:9000"
 
     def test_config_object(self) -> None:
@@ -200,9 +204,7 @@ class TestMissionControlClientHeaders:
         assert headers["Content-Type"] == "application/json"
         assert headers["Accept"] == "application/json"
 
-    def test_headers_with_api_key(
-        self, keyed_client: MissionControlClient
-    ) -> None:
+    def test_headers_with_api_key(self, keyed_client: MissionControlClient) -> None:
         """x-api-key header is set when configured."""
         headers = keyed_client._build_headers()
         assert headers["x-api-key"] == "test-key-42"
@@ -216,26 +218,20 @@ class TestMissionControlClientHeaders:
         headers = default_client._build_headers()
         assert "x-api-key" not in headers
 
-    def test_session_cookie_header(
-        self, default_client: MissionControlClient
-    ) -> None:
+    def test_session_cookie_header(self, default_client: MissionControlClient) -> None:
         """Session cookie is included when set."""
         default_client._session_cookie = "mc-session=abc123"
         headers = default_client._build_headers()
         assert headers["Cookie"] == "mc-session=abc123"
 
-    def test_both_api_key_and_cookie(
-        self, keyed_client: MissionControlClient
-    ) -> None:
+    def test_both_api_key_and_cookie(self, keyed_client: MissionControlClient) -> None:
         """Both API key and cookie coexist."""
         keyed_client._session_cookie = "__Host-mc-session=xyz"
         headers = keyed_client._build_headers()
         assert headers["x-api-key"] == "test-key-42"
         assert headers["Cookie"] == "__Host-mc-session=xyz"
 
-    def test_no_cookie_when_not_set(
-        self, default_client: MissionControlClient
-    ) -> None:
+    def test_no_cookie_when_not_set(self, default_client: MissionControlClient) -> None:
         """No Cookie header when _session_cookie is None."""
         headers = default_client._build_headers()
         assert "Cookie" not in headers
@@ -251,9 +247,11 @@ class TestMissionControlURLBuilding:
 
     def test_list_tasks_no_filters(self) -> None:
         """list_tasks with no filters hits /api/tasks."""
-        MissionControlClient(config={
-            "base_url": "http://mc:3000",
-        })
+        MissionControlClient(
+            config={
+                "base_url": "http://mc:3000",
+            }
+        )
         # We can't call _request directly (server not running),
         # but we can verify the query param assembly by inspecting
         # the path construction logic.
@@ -316,9 +314,7 @@ def _server_available() -> bool:
     try:
         import urllib.request
 
-        urllib.request.urlopen(
-            "http://localhost:3000/api/auth/me", timeout=3
-        )
+        urllib.request.urlopen("http://localhost:3000/api/auth/me", timeout=3)
         return True
     except Exception:
         return False
@@ -394,9 +390,7 @@ class TestMissionControlClientHTTP:
         """is_running returns False for an unreachable server."""
         assert unreachable_client.is_running() is False
 
-    def test_status_not_running(
-        self, unreachable_client: MissionControlClient
-    ) -> None:
+    def test_status_not_running(self, unreachable_client: MissionControlClient) -> None:
         """status returns error dict for unreachable server."""
         result = unreachable_client.status()
         assert result["running"] is False
@@ -581,10 +575,12 @@ class TestMissionControlLogin:
 
     def test_login_payload(self) -> None:
         """login sends correct credentials."""
-        client = MissionControlClient(config={
-            "auth_user": "myuser",
-            "auth_pass": "mypass",
-        })
+        client = MissionControlClient(
+            config={
+                "auth_user": "myuser",
+                "auth_pass": "mypass",
+            }
+        )
         captured: dict[str, Any] = {}
 
         def fake_request(method: str, path: str, data: Any = None) -> dict:
@@ -682,9 +678,11 @@ class TestMissionControlServerLifecycle:
 
     def test_start_server_missing_app_dir(self, tmp_path: Path) -> None:
         """start_server raises when app directory does not exist."""
-        client = MissionControlClient(config={
-            "app_path": str(tmp_path / "nonexistent"),
-        })
+        client = MissionControlClient(
+            config={
+                "app_path": str(tmp_path / "nonexistent"),
+            }
+        )
         with pytest.raises(MissionControlError, match="not found"):
             client.start_server()
 
@@ -692,9 +690,11 @@ class TestMissionControlServerLifecycle:
         """start_server raises when package.json is missing."""
         app_dir = tmp_path / "app"
         app_dir.mkdir()
-        client = MissionControlClient(config={
-            "app_path": str(app_dir),
-        })
+        client = MissionControlClient(
+            config={
+                "app_path": str(app_dir),
+            }
+        )
         with pytest.raises(MissionControlError, match="No package.json"):
             client.start_server()
 
@@ -725,9 +725,11 @@ class TestMissionControlServerLifecycle:
         app_dir = tmp_path / "app"
         app_dir.mkdir()
         (app_dir / "package.json").write_text("{}")
-        client = MissionControlClient(config={
-            "app_path": str(app_dir),
-        })
+        client = MissionControlClient(
+            config={
+                "app_path": str(app_dir),
+            }
+        )
         # Simulate a long-running process using sleep
         proc = subprocess.Popen(
             ["sleep", "60"],
@@ -752,9 +754,11 @@ class TestMissionControlServerLifecycle:
         app_dir = tmp_path / "app"
         app_dir.mkdir()
         (app_dir / "package.json").write_text("{}")
-        client = MissionControlClient(config={
-            "app_path": str(app_dir),
-        })
+        client = MissionControlClient(
+            config={
+                "app_path": str(app_dir),
+            }
+        )
         # Patch Popen to simulate pnpm not found
 
         def fake_popen(*args: Any, **kwargs: Any) -> None:

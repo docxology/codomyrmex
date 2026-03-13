@@ -83,7 +83,9 @@ class AudioStreamClient:
         """All transcription events received."""
         return list(self._events_received)
 
-    async def connect(self, server_capabilities: CodecCapabilities | None = None) -> NegotiationResult:
+    async def connect(
+        self, server_capabilities: CodecCapabilities | None = None
+    ) -> NegotiationResult:
         """Connect to the streaming server and negotiate codec.
 
         Args:
@@ -133,9 +135,7 @@ class AudioStreamClient:
             event: The transcription event.
         """
         self._events_received.append(event)
-        logger.debug(
-            "Received event: %s (final=%s)", event.text[:50], event.is_final
-        )
+        logger.debug("Received event: %s (final=%s)", event.text[:50], event.is_final)
 
     async def disconnect(self) -> None:
         """Disconnect from the server."""

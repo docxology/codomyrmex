@@ -63,7 +63,9 @@ class VLMClient:
             req = urllib.request.Request(f"{self.base_url}/api/tags")
             with urllib.request.urlopen(req, timeout=5) as resp:
                 data = json.loads(resp.read())
-                models = [m.get("name", "").split(":")[0] for m in data.get("models", [])]
+                models = [
+                    m.get("name", "").split(":")[0] for m in data.get("models", [])
+                ]
                 return self._config.model_name in models
         except Exception as _exc:
             return False

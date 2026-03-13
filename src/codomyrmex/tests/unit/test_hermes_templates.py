@@ -70,7 +70,9 @@ class TestBuiltinTemplates:
         assert CODE_REVIEW.name == "code_review"
         assert "language" in CODE_REVIEW.variables
         assert "code" in CODE_REVIEW.variables
-        result = CODE_REVIEW.render(language="python", code="x = 1", focus_areas="style")
+        result = CODE_REVIEW.render(
+            language="python", code="x = 1", focus_areas="style"
+        )
         assert "python" in result
 
     def test_task_decomposition_template(self) -> None:

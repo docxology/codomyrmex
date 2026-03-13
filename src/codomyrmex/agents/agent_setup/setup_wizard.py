@@ -204,7 +204,11 @@ def run_setup_wizard(
             print(f"  {_DIM}Skipped saving.{_RESET}")
 
     print(f"\n{_BOLD}Phase 4: Environment Template{_RESET}")
-    env_choice = input("  Generate standard .env template with all API variables/URLs? [y/N] ").strip().lower()
+    env_choice = (
+        input("  Generate standard .env template with all API variables/URLs? [y/N] ")
+        .strip()
+        .lower()
+    )
     if env_choice in ("y", "yes"):
         try:
             target = generate_env_template()

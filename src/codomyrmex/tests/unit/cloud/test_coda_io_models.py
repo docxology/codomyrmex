@@ -190,7 +190,11 @@ class TestIcon:
         assert icon.browser_link is None
 
     def test_from_dict_full(self):
-        data = {"name": "folder", "type": "system", "browserLink": "https://coda.io/icon/folder"}
+        data = {
+            "name": "folder",
+            "type": "system",
+            "browserLink": "https://coda.io/icon/folder",
+        }
         icon = Icon.from_dict(data)
         assert icon is not None
         assert icon.name == "folder"
@@ -226,7 +230,12 @@ class TestIcon:
 
 class TestImage:
     def test_direct_construction_with_dimensions(self):
-        img = Image(browser_link="https://img.example.com/photo.jpg", type="image", width=1280, height=720)
+        img = Image(
+            browser_link="https://img.example.com/photo.jpg",
+            type="image",
+            width=1280,
+            height=720,
+        )
         assert img.width == 1280
         assert img.height == 720
 
@@ -237,7 +246,12 @@ class TestImage:
         assert img.height is None
 
     def test_from_dict_full(self):
-        data = {"browserLink": "https://img.example.com/x.png", "type": "image", "width": 800, "height": 600}
+        data = {
+            "browserLink": "https://img.example.com/x.png",
+            "type": "image",
+            "width": 800,
+            "height": 600,
+        }
         img = Image.from_dict(data)
         assert img is not None
         assert img.browser_link == "https://img.example.com/x.png"
@@ -589,7 +603,11 @@ class TestDoc:
 
     def test_from_dict_nested_doc_size(self):
         data = dict(self._minimal_dict())
-        data["docSize"] = {"totalRowCount": 200, "tableAndViewCount": 3, "pageCount": 10}
+        data["docSize"] = {
+            "totalRowCount": 200,
+            "tableAndViewCount": 3,
+            "pageCount": 10,
+        }
         doc = Doc.from_dict(data)
         assert doc.doc_size is not None
         assert isinstance(doc.doc_size, DocSize)
@@ -716,7 +734,9 @@ class TestPage:
 
     def test_from_dict_with_children(self):
         data = dict(self._minimal_page_dict())
-        data["children"] = [{"id": "pg-2", "name": "Sub", "type": "page", "href": "/pages/pg-2"}]
+        data["children"] = [
+            {"id": "pg-2", "name": "Sub", "type": "page", "href": "/pages/pg-2"}
+        ]
         page = Page.from_dict(data)
         assert len(page.children) == 1
         assert isinstance(page.children[0], PageReference)
@@ -771,7 +791,9 @@ class TestPageList:
 
 class TestPageContentItem:
     def test_from_dict_basic(self):
-        item = PageContentItem.from_dict({"id": "ci-1", "type": "paragraph", "text": "Hello"})
+        item = PageContentItem.from_dict(
+            {"id": "ci-1", "type": "paragraph", "text": "Hello"}
+        )
         assert item.id == "ci-1"
         assert item.type == "paragraph"
         assert item.text == "Hello"
@@ -788,7 +810,10 @@ class TestPageContentItem:
 
 class TestSort:
     def test_from_dict_with_column(self):
-        data = {"column": {"id": "col-1", "href": "/columns/col-1"}, "direction": "ascending"}
+        data = {
+            "column": {"id": "col-1", "href": "/columns/col-1"},
+            "direction": "ascending",
+        }
         s = Sort.from_dict(data)
         assert s.direction == "ascending"
         assert isinstance(s.column, ColumnReference)
@@ -944,7 +969,14 @@ class TestRow:
         assert row.values["col-b"] == 42
 
     def test_from_dict_default_values(self):
-        data = {"id": "row-2", "type": "row", "href": "/r/row-2", "name": "R", "index": 1, "browserLink": ""}
+        data = {
+            "id": "row-2",
+            "type": "row",
+            "href": "/r/row-2",
+            "name": "R",
+            "index": 1,
+            "browserLink": "",
+        }
         row = Row.from_dict(data)
         assert row.values == {}
 
@@ -1024,7 +1056,13 @@ class TestRowEdit:
 
 class TestFormula:
     def test_from_dict_basic(self):
-        data = {"id": "f-1", "type": "formula", "href": "/formulas/f-1", "name": "Total", "value": 42}
+        data = {
+            "id": "f-1",
+            "type": "formula",
+            "href": "/formulas/f-1",
+            "name": "Total",
+            "value": 42,
+        }
         f = Formula.from_dict(data)
         assert f.id == "f-1"
         assert f.name == "Total"
@@ -1225,7 +1263,14 @@ class TestUser:
         assert user.workspace is None
 
     def test_from_dict_maps_login_id(self):
-        data = {"name": "Bob", "loginId": "bob@example.com", "type": "user", "scoped": True, "tokenName": "t", "href": "/"}
+        data = {
+            "name": "Bob",
+            "loginId": "bob@example.com",
+            "type": "user",
+            "scoped": True,
+            "tokenName": "t",
+            "href": "/",
+        }
         user = User.from_dict(data)
         assert user.login_id == "bob@example.com"
 

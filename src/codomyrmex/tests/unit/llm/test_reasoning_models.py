@@ -206,7 +206,9 @@ class TestReasoningTrace:
 
     def test_to_dict_with_conclusion(self):
         trace = ReasoningTrace()
-        trace.set_conclusion(Conclusion(action="Done", justification="j", confidence=0.9))
+        trace.set_conclusion(
+            Conclusion(action="Done", justification="j", confidence=0.9)
+        )
         d = trace.to_dict()
         assert d["is_complete"] is True
         assert "conclusion" in d
@@ -215,7 +217,9 @@ class TestReasoningTrace:
     def test_from_dict_roundtrip(self):
         trace = ReasoningTrace(prompt="Test", depth=ThinkingDepth.DEEP)
         trace.add_step(ReasoningStep(thought="step1", confidence=0.75))
-        trace.set_conclusion(Conclusion(action="OK", justification="all good", confidence=0.8))
+        trace.set_conclusion(
+            Conclusion(action="OK", justification="all good", confidence=0.8)
+        )
         d = trace.to_dict()
         restored = ReasoningTrace.from_dict(d)
         assert restored.prompt == "Test"

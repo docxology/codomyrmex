@@ -109,7 +109,7 @@ class TokenTracker:
         with self._lock:
             self._history.append(usage)
             if len(self._history) > self._max_history:
-                self._history = self._history[-self._max_history:]
+                self._history = self._history[-self._max_history :]
 
             self._model_input[model] += input_tokens
             self._model_output[model] += output_tokens
@@ -126,7 +126,11 @@ class TokenTracker:
 
         logger.debug(
             "Token usage: %s in=%d out=%d (%s/%s)",
-            model, input_tokens, output_tokens, provider, operation,
+            model,
+            input_tokens,
+            output_tokens,
+            provider,
+            operation,
         )
         return usage
 
@@ -146,7 +150,8 @@ class TokenTracker:
                 model: {
                     "input_tokens": self._model_input[model],
                     "output_tokens": self._model_output[model],
-                    "total_tokens": self._model_input[model] + self._model_output[model],
+                    "total_tokens": self._model_input[model]
+                    + self._model_output[model],
                     "calls": self._model_calls[model],
                 }
                 for model in sorted(self._model_calls)
@@ -173,7 +178,8 @@ class TokenTracker:
             return {
                 "input_tokens": self._model_input.get(model, 0),
                 "output_tokens": self._model_output.get(model, 0),
-                "total_tokens": self._model_input.get(model, 0) + self._model_output.get(model, 0),
+                "total_tokens": self._model_input.get(model, 0)
+                + self._model_output.get(model, 0),
                 "calls": self._model_calls.get(model, 0),
             }
 

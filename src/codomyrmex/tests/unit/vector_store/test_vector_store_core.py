@@ -128,7 +128,14 @@ class TestVectorEntry:
         """ISC-10: to_dict has expected keys."""
         entry = VectorEntry(id="d1", embedding=[1.0, 2.0], metadata={"x": 1})
         d = entry.to_dict()
-        assert set(d.keys()) == {"id", "embedding", "metadata", "dimension", "magnitude", "created_at"}
+        assert set(d.keys()) == {
+            "id",
+            "embedding",
+            "metadata",
+            "dimension",
+            "magnitude",
+            "created_at",
+        }
 
     def test_to_dict_values(self) -> None:
         entry = VectorEntry(id="d1", embedding=[3.0, 4.0], metadata={"tag": "t"})
@@ -225,7 +232,9 @@ class TestDistanceMetric:
 
     def test_dot_product_known_value(self) -> None:
         """ISC-19: dot product returns correct scalar."""
-        assert DistanceMetric.dot_product([1.0, 2.0, 3.0], [4.0, 5.0, 6.0]) == pytest.approx(32.0)
+        assert DistanceMetric.dot_product(
+            [1.0, 2.0, 3.0], [4.0, 5.0, 6.0]
+        ) == pytest.approx(32.0)
 
     def test_dot_product_orthogonal_zero(self) -> None:
         assert DistanceMetric.dot_product([1.0, 0.0], [0.0, 1.0]) == pytest.approx(0.0)
@@ -235,7 +244,9 @@ class TestDistanceMetric:
 
     def test_manhattan_known_distance(self) -> None:
         """ISC-20: manhattan distance is sum of absolute differences."""
-        assert DistanceMetric.manhattan([1.0, 2.0, 3.0], [4.0, 2.0, 1.0]) == pytest.approx(5.0)
+        assert DistanceMetric.manhattan(
+            [1.0, 2.0, 3.0], [4.0, 2.0, 1.0]
+        ) == pytest.approx(5.0)
 
     def test_manhattan_identical_vectors(self) -> None:
         assert DistanceMetric.manhattan([1.0, 2.0], [1.0, 2.0]) == pytest.approx(0.0)
@@ -246,7 +257,9 @@ class TestDistanceMetric:
 
     def test_chebyshev_known_distance(self) -> None:
         """ISC-21: chebyshev distance is max of absolute differences."""
-        assert DistanceMetric.chebyshev([1.0, 5.0, 3.0], [4.0, 2.0, 3.0]) == pytest.approx(3.0)
+        assert DistanceMetric.chebyshev(
+            [1.0, 5.0, 3.0], [4.0, 2.0, 3.0]
+        ) == pytest.approx(3.0)
 
     def test_chebyshev_identical_vectors(self) -> None:
         assert DistanceMetric.chebyshev([1.0, 2.0], [1.0, 2.0]) == pytest.approx(0.0)
@@ -418,7 +431,9 @@ class TestInMemoryVectorStore:
         assert entry.embedding == [1.0, 0.0]
         assert entry.metadata == {"tag": "first"}
 
-    def test_add_batch_none_metadata_defaults_to_empty(self, store: InMemoryVectorStore) -> None:
+    def test_add_batch_none_metadata_defaults_to_empty(
+        self, store: InMemoryVectorStore
+    ) -> None:
         store.add_batch([("b2", [1.0], None)])
         entry = store.get("b2")
         assert entry is not None
@@ -431,26 +446,36 @@ class TestInMemoryVectorStore:
         assert entry is not None
         assert entry.embedding == [0.0, 1.0]
 
-    def test_search_returns_top_k_by_cosine(self, populated_store: InMemoryVectorStore) -> None:
+    def test_search_returns_top_k_by_cosine(
+        self, populated_store: InMemoryVectorStore
+    ) -> None:
         """ISC-36: search with query [1,0,0] returns 'a' first."""
         results = populated_store.search([1.0, 0.0, 0.0], k=3)
         assert len(results) == 3
         assert results[0].id == "a"
         assert results[0].score == pytest.approx(1.0)
 
-    def test_search_k_limits_results(self, populated_store: InMemoryVectorStore) -> None:
+    def test_search_k_limits_results(
+        self, populated_store: InMemoryVectorStore
+    ) -> None:
         results = populated_store.search([1.0, 0.0, 0.0], k=1)
         assert len(results) == 1
 
-    def test_search_k_larger_than_store_returns_all(self, populated_store: InMemoryVectorStore) -> None:
+    def test_search_k_larger_than_store_returns_all(
+        self, populated_store: InMemoryVectorStore
+    ) -> None:
         results = populated_store.search([1.0, 0.0, 0.0], k=100)
         assert len(results) == 3
 
-    def test_search_empty_store_returns_empty_list(self, store: InMemoryVectorStore) -> None:
+    def test_search_empty_store_returns_empty_list(
+        self, store: InMemoryVectorStore
+    ) -> None:
         results = store.search([1.0, 0.0], k=5)
         assert results == []
 
-    def test_search_with_filter_fn_excludes_non_matching(self, populated_store: InMemoryVectorStore) -> None:
+    def test_search_with_filter_fn_excludes_non_matching(
+        self, populated_store: InMemoryVectorStore
+    ) -> None:
         """ISC-37: filter_fn excludes entries whose metadata doesn't match."""
         results = populated_store.search(
             [1.0, 0.0, 0.0],
@@ -460,7 +485,9 @@ class TestInMemoryVectorStore:
         assert len(results) == 1
         assert results[0].id == "a"
 
-    def test_search_filter_fn_no_match_returns_empty(self, populated_store: InMemoryVectorStore) -> None:
+    def test_search_filter_fn_no_match_returns_empty(
+        self, populated_store: InMemoryVectorStore
+    ) -> None:
         results = populated_store.search(
             [1.0, 0.0, 0.0],
             k=10,
@@ -468,7 +495,9 @@ class TestInMemoryVectorStore:
         )
         assert results == []
 
-    def test_search_result_has_metadata(self, populated_store: InMemoryVectorStore) -> None:
+    def test_search_result_has_metadata(
+        self, populated_store: InMemoryVectorStore
+    ) -> None:
         results = populated_store.search([1.0, 0.0, 0.0], k=1)
         assert results[0].metadata == {"tag": "alpha"}
 
@@ -500,7 +529,9 @@ class TestInMemoryVectorStore:
         def add_vector(idx: int) -> None:
             store.add(f"t{idx}", [float(idx)])
 
-        threads = [threading.Thread(target=add_vector, args=(i,)) for i in range(n_threads)]
+        threads = [
+            threading.Thread(target=add_vector, args=(i,)) for i in range(n_threads)
+        ]
         for t in threads:
             t.start()
         for t in threads:
@@ -674,7 +705,10 @@ class TestCreateVectorStore:
         with pytest.raises(ValueError, match="Unknown backend"):
             create_vector_store("faiss")
 
-    @pytest.mark.skipif(_CHROMADB_AVAILABLE, reason="chromadb IS installed — chroma backend would succeed")
+    @pytest.mark.skipif(
+        _CHROMADB_AVAILABLE,
+        reason="chromadb IS installed — chroma backend would succeed",
+    )
     def test_chroma_backend_raises_without_chromadb(self) -> None:
         """ISC-51: chroma backend raises ValueError when chromadb is not installed."""
         with pytest.raises(ValueError, match="chromadb"):

@@ -652,7 +652,9 @@ class TestMCPToolsExtended:
         mcp_tools.clear_model()
         result = mcp_tools.delete_item(5)
         assert result["status"] == "error"
-        assert "empty" in result["message"].lower() or "range" in result["message"].lower()
+        assert (
+            "empty" in result["message"].lower() or "range" in result["message"].lower()
+        )
 
     @skip_no_z3
     def test_mcp_replace_out_of_range_error(self):
@@ -662,7 +664,9 @@ class TestMCPToolsExtended:
         mcp_tools.clear_model()
         result = mcp_tools.replace_item(5, "new = 1")
         assert result["status"] == "error"
-        assert "empty" in result["message"].lower() or "range" in result["message"].lower()
+        assert (
+            "empty" in result["message"].lower() or "range" in result["message"].lower()
+        )
 
     @skip_no_z3
     def test_mcp_solve_unsat(self):

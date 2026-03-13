@@ -27,6 +27,7 @@ Quick Start:
     apply_dark_mode("input.pdf", "output.pdf", inversion=0.85, contrast=1.2)
     ```
 """
+
 import contextlib
 
 __version__ = "0.1.0"

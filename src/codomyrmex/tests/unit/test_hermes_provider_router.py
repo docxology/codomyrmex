@@ -30,7 +30,9 @@ class TestProviderRouter:
 
     def test_resolve_provider_with_ollama_available(self) -> None:
         """resolve_provider() should return *something* — either the primary or a fallback."""
-        router = ProviderRouter(primary_provider="openrouter", fallback_provider="ollama")
+        router = ProviderRouter(
+            primary_provider="openrouter", fallback_provider="ollama"
+        )
         # Even without an API key, it should either resolve or raise
         try:
             provider = router.resolve_provider()
@@ -59,7 +61,9 @@ class TestProviderRouter:
             assert "is_fallback" in status[provider]
 
     def test_custom_primary_marked_correctly(self) -> None:
-        router = ProviderRouter(primary_provider="anthropic", fallback_provider="ollama")
+        router = ProviderRouter(
+            primary_provider="anthropic", fallback_provider="ollama"
+        )
         status = router.get_provider_status()
         assert status["anthropic"]["is_primary"] is True
         assert status["ollama"]["is_fallback"] is True
@@ -106,8 +110,7 @@ class TestContextCompressor:
     def test_compress_returns_shorter_list(self) -> None:
         c = ContextCompressor(max_tokens=10, compression_ratio=0.5)
         msgs = [
-            {"role": "user", "content": f"Message {i} " + "x" * 100}
-            for i in range(20)
+            {"role": "user", "content": f"Message {i} " + "x" * 100} for i in range(20)
         ]
         compressed = c.compress(msgs)
         assert len(compressed) < len(msgs)
@@ -115,8 +118,7 @@ class TestContextCompressor:
     def test_compress_preserves_head_and_tail(self) -> None:
         c = ContextCompressor(max_tokens=10, compression_ratio=0.5)
         msgs = [
-            {"role": "user", "content": f"Message {i} " + "x" * 100}
-            for i in range(20)
+            {"role": "user", "content": f"Message {i} " + "x" * 100} for i in range(20)
         ]
         compressed = c.compress(msgs)
         # Should have head + summary + tail (at least 3 entries)

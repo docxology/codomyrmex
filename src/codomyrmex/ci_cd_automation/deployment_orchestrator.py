@@ -309,7 +309,9 @@ class DeploymentOrchestrator:
                 deployment.status = DeploymentStatus.SUCCESS
                 logger.info("Deployment %s completed successfully", deployment_name)
             else:
-                logger.warning("Health checks failed for deployment %s", deployment_name)
+                logger.warning(
+                    "Health checks failed for deployment %s", deployment_name
+                )
                 if deployment.rollback_on_failure:
                     self._rollback_deployment(deployment)
                     deployment.status = DeploymentStatus.ROLLED_BACK
@@ -642,7 +644,8 @@ class DeploymentOrchestrator:
         """Rollback a failed deployment."""
         logger.info(
             "Rolling back deployment: %s (strategy: %s)",
-            deployment.name, deployment.strategy,
+            deployment.name,
+            deployment.strategy,
         )
 
         try:
@@ -695,7 +698,8 @@ class DeploymentOrchestrator:
     def _rollback_blue_green(self, deployment: Deployment):
         """Rollback blue-green deployment."""
         logger.info(
-            "Rolling back blue-green deployment to version %s", deployment.previous_version
+            "Rolling back blue-green deployment to version %s",
+            deployment.previous_version,
         )
         # Typically involves switching a load balancer or service selector back
         if self.k8s_client:

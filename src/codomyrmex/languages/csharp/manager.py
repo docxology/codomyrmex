@@ -8,7 +8,7 @@ import tempfile
 
 from codomyrmex.languages.base import BaseLanguageManager
 
-_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_FAST = 10  # seconds for version checks
 _TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 
@@ -50,7 +50,7 @@ class CSharpManager(BaseLanguageManager):
                 cwd=dir_path,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
-            timeout=_TIMEOUT_SLOW,
+                timeout=_TIMEOUT_SLOW,
             )
 
             script_path = os.path.join(dir_path, "Program.cs")
@@ -62,7 +62,7 @@ class CSharpManager(BaseLanguageManager):
                 cwd=dir_path,
                 capture_output=True,
                 text=True,
-            timeout=_TIMEOUT_SLOW,
+                timeout=_TIMEOUT_SLOW,
             )
 
             return result.stdout + result.stderr
