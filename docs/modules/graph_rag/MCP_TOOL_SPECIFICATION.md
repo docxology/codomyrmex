@@ -1,6 +1,6 @@
 # MCP_TOOL_SPECIFICATION.md
 
-**Version**: v1.1.9 | **Status**: Draft | **Last Updated**: February 2026
+**Version**: v1.2.2 | **Status**: Draft | **Last Updated**: March 2026
 
 ## Module: graph_rag
 

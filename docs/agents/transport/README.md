@@ -1,44 +1,36 @@
-# Agent Transport & Serialization
+# Agent Transport
 
 **Module**: `codomyrmex.agents.transport` | **Category**: Infrastructure | **Last Updated**: March 2026
 
 ## Overview
 
-Portable agent state serialization, HMAC-verified deserialization, wire-format messaging protocol, and durable checkpoint persistence. Enables agent state transfer across process boundaries.
+Portable agent state serialization, HMAC-verified deserialization, wire-format protocol, and durable checkpointing. Enables agent state to be saved, transmitted, and restored across sessions and machines.
 
-## Purpose
+## Key Classes
 
-Portable agent state serialization, HMAC-verified deserialization, wire-format messaging protocol, and durable checkpoint persistence. Enables agent state to be saved, transmitted, verified, and restored across process boundaries.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/transport/`](../../../../src/codomyrmex/agents/transport/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [checkpoint.py](../../../../src/codomyrmex/agents/transport/checkpoint.py) |  ⭐ |
-| [deserializer.py](../../../../src/codomyrmex/agents/transport/deserializer.py) |  ⭐ |
-| [protocol.py](../../../../src/codomyrmex/agents/transport/protocol.py) |  ⭐ |
-| [serializer.py](../../../../src/codomyrmex/agents/transport/serializer.py) |  ⭐ |
+| `AgentSerializer` | Serialize agent state to portable format |
+| `AgentDeserializer` | Deserialize with HMAC integrity verification |
+| `AgentSnapshot` | Complete agent state snapshot |
+| `Checkpoint` | Durable checkpoint with delta tracking |
+| `StateDelta` | Incremental state changes |
+| `TransportMessage` | Wire-format message container |
+| `MessageHeader` | Message metadata (type, timestamp, hmac) |
+| `MessageType` | Message type enum (snapshot, delta, command) |
+| `IntegrityError` | HMAC verification failure |
 
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.transport import TransportClient
+from codomyrmex.agents.transport import AgentSerializer
 
-client = TransportClient()
+client = AgentSerializer()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [transport/README.md](../../../../src/codomyrmex/agents/transport/README.md) |
-| SPEC | [transport/SPEC.md](../../../../src/codomyrmex/agents/transport/SPEC.md) |
-| AGENTS | [transport/AGENTS.md](../../../../src/codomyrmex/agents/transport/AGENTS.md) |
-| PAI | [transport/PAI.md](../../../../src/codomyrmex/agents/transport/PAI.md) |
+Source: [`src/codomyrmex/agents/transport/`](../../../../src/codomyrmex/agents/transport/)
 
 ## Navigation
 

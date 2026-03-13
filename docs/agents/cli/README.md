@@ -1,37 +1,29 @@
-# Agent CLI Framework
+# CLI Handler Framework
 
 **Module**: `codomyrmex.agents.cli` | **Category**: Infrastructure | **Last Updated**: March 2026
 
 ## Overview
 
-Common CLI handler framework shared across agent modules. Provides standardized argument parsing, output formatting, and error handling for agent command-line interfaces.
+Common CLI handler framework shared by all CLI-based agents. Provides subprocess management, output parsing, timeout handling, and structured response extraction.
 
-## Source Module Structure
+## Key Classes
 
-Source: [`src/codomyrmex/agents/cli/`](../../../../src/codomyrmex/agents/cli/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [handlers.py](../../../../src/codomyrmex/agents/cli/handlers.py) |  ⭐ |
+| `CLIHandler` | Generic subprocess wrapper for CLI agents |
+| `CLIConfig` | CLI execution configuration |
 
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.cli import CliClient
+from codomyrmex.agents.cli import CLIHandler
 
-client = CliClient()
+client = CLIHandler()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [cli/README.md](../../../../src/codomyrmex/agents/cli/README.md) |
-| SPEC | [cli/SPEC.md](../../../../src/codomyrmex/agents/cli/SPEC.md) |
-| AGENTS | [cli/AGENTS.md](../../../../src/codomyrmex/agents/cli/AGENTS.md) |
-| PAI | [cli/PAI.md](../../../../src/codomyrmex/agents/cli/PAI.md) |
+Source: [`src/codomyrmex/agents/cli/`](../../../../src/codomyrmex/agents/cli/)
 
 ## Navigation
 

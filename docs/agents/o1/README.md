@@ -4,33 +4,19 @@
 
 ## Overview
 
-OpenAI o1/o3 reasoning model integration. Supports extended thinking with chain-of-thought, reasoning token tracking, and superior multi-step problem solving.
+OpenAI o1 and o3 reasoning model integration for advanced multi-step reasoning tasks. These models use internal chain-of-thought to solve complex problems before producing a final answer.
 
-## Purpose
+## Key Classes
 
-OpenAI o1/o3 reasoning model integration for advanced multi-step reasoning tasks
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/o1/`](../../../../src/codomyrmex/agents/o1/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [mcp_tools.py](../../../../src/codomyrmex/agents/o1/mcp_tools.py) |  ⭐ |
-| [o1_client.py](../../../../src/codomyrmex/agents/o1/o1_client.py) |  ⭐ |
+| `O1Client` | API client for o1/o3 reasoning models |
 
 ## Configuration
 
-**Required API Key**: `OPENAI_API_KEY`
+**Required**: `OPENAI_API_KEY`
 
-```bash
-# Add to your .env or environment
-OPENAI_API_KEY=your-key-here
-```
-
-## Quick Start
+## Usage
 
 ```python
 from codomyrmex.agents.o1 import O1Client
@@ -38,14 +24,9 @@ from codomyrmex.agents.o1 import O1Client
 client = O1Client()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [o1/README.md](../../../../src/codomyrmex/agents/o1/README.md) |
-| SPEC | [o1/SPEC.md](../../../../src/codomyrmex/agents/o1/SPEC.md) |
-| AGENTS | [o1/AGENTS.md](../../../../src/codomyrmex/agents/o1/AGENTS.md) |
-| PAI | [o1/PAI.md](../../../../src/codomyrmex/agents/o1/PAI.md) |
+Source: [`src/codomyrmex/agents/o1/`](../../../../src/codomyrmex/agents/o1/)
 
 ## Navigation
 

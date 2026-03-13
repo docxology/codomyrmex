@@ -1,45 +1,29 @@
-# Agent Setup & Discovery
+# Agent Setup
 
 **Module**: `codomyrmex.agents.agent_setup` | **Category**: Infrastructure | **Last Updated**: March 2026
 
 ## Overview
 
-Validates the local environment, discovers which agent CLIs are installed, and reports agent readiness. Provides the `--status-only` command to see which agents are operative.
+Environment validation and agent discovery infrastructure. Validates binary availability, API keys, config files, and backend capabilities for all agent frameworks.
 
-## Purpose
+## Key Classes
 
-Provide a single entry point for discovering, validating, and configuring all
-agent integrations in the Codomyrmex ecosystem.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/agent_setup/`](../../../../src/codomyrmex/agents/agent_setup/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [__main__.py](../../../../src/codomyrmex/agents/agent_setup/__main__.py) |  |
-| [config_file.py](../../../../src/codomyrmex/agents/agent_setup/config_file.py) |  |
-| [registry.py](../../../../src/codomyrmex/agents/agent_setup/registry.py) |  |
-| [setup_wizard.py](../../../../src/codomyrmex/agents/agent_setup/setup_wizard.py) |  |
+| `AgentSetupValidator` | Environment validation for agent dependencies |
+| `AgentDiscovery` | Auto-discovery of available agent backends |
 
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.agent_setup import AgentSetupClient
+from codomyrmex.agents.agent_setup import AgentSetupValidator
 
-client = AgentSetupClient()
+client = AgentSetupValidator()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [agent_setup/README.md](../../../../src/codomyrmex/agents/agent_setup/README.md) |
-| SPEC | [agent_setup/SPEC.md](../../../../src/codomyrmex/agents/agent_setup/SPEC.md) |
-| AGENTS | [agent_setup/AGENTS.md](../../../../src/codomyrmex/agents/agent_setup/AGENTS.md) |
-| PAI | [agent_setup/PAI.md](../../../../src/codomyrmex/agents/agent_setup/PAI.md) |
+Source: [`src/codomyrmex/agents/agent_setup/`](../../../../src/codomyrmex/agents/agent_setup/)
 
 ## Navigation
 

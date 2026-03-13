@@ -1,27 +1,23 @@
-# Perplexity
+# Perplexity AI
 
 **Module**: `codomyrmex.agents.perplexity` | **Category**: API-based | **Last Updated**: March 2026
 
 ## Overview
 
-Perplexity AI integration for research-augmented generation. Web-grounded answers with citations, real-time information retrieval, and source verification.
+Search-augmented generation using the Perplexity Sonar API. Combines web search with LLM inference for real-time, citation-backed responses. Used for research queries, fact-checking, and up-to-date information retrieval.
 
-## Purpose
+## Key Classes
 
-To provide a concrete implementation of `APIAgentBase` targeting the Perplexity Search-Augmented Chat Completions API.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/perplexity/`](../../../../src/codomyrmex/agents/perplexity/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [mcp_tools.py](../../../../src/codomyrmex/agents/perplexity/mcp_tools.py) |  ⭐ |
-| [perplexity_client.py](../../../../src/codomyrmex/agents/perplexity/perplexity_client.py) |  ⭐ |
+| `PerplexityClient` | Sonar API client for search-augmented queries |
+| `PerplexityError` | Error handling for API failures |
 
-## Quick Start
+## Configuration
+
+**Required**: `PERPLEXITY_API_KEY`
+
+## Usage
 
 ```python
 from codomyrmex.agents.perplexity import PerplexityClient
@@ -29,14 +25,9 @@ from codomyrmex.agents.perplexity import PerplexityClient
 client = PerplexityClient()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [perplexity/README.md](../../../../src/codomyrmex/agents/perplexity/README.md) |
-| SPEC | [perplexity/SPEC.md](../../../../src/codomyrmex/agents/perplexity/SPEC.md) |
-| AGENTS | [perplexity/AGENTS.md](../../../../src/codomyrmex/agents/perplexity/AGENTS.md) |
-| PAI | [perplexity/PAI.md](../../../../src/codomyrmex/agents/perplexity/PAI.md) |
+Source: [`src/codomyrmex/agents/perplexity/`](../../../../src/codomyrmex/agents/perplexity/)
 
 ## Navigation
 

@@ -4,49 +4,41 @@
 
 ## Overview
 
-OpenAI Codex integration for code-focused models. Supports code completion, editing, and analysis via the OpenAI API with streaming and temperature control.
+OpenAI Codex CLI integration for autonomous coding tasks. Codex authenticates via device-code flow (browser OAuth), runs tasks in sandboxed environments, and supports project-wide code generation and editing.
 
-## Purpose
+## Key Classes
 
-The `codex` submodule provides integration with OpenAI Codex API. It includes a client for interacting with Codex API and integration adapters for Codomyrmex modules.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/codex/`](../../../../src/codomyrmex/agents/codex/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [codex_client.py](../../../../src/codomyrmex/agents/codex/codex_client.py) |  ⭐ |
-| [codex_integration.py](../../../../src/codomyrmex/agents/codex/codex_integration.py) |  |
-| [mcp_tools.py](../../../../src/codomyrmex/agents/codex/mcp_tools.py) |  ⭐ |
+| `CodexClient` | CLI wrapper for the `codex` command |
+| `CodexIntegrationAdapter` | Bridges Codex with other Codomyrmex modules |
 
-## Configuration
-
-**Required API Key**: `OPENAI_API_KEY`
-
-```bash
-# Add to your .env or environment
-OPENAI_API_KEY=your-key-here
-```
-
-## Quick Start
+## Usage
 
 ```python
 from codomyrmex.agents.codex import CodexClient
 
 client = CodexClient()
+response = client.execute(AgentRequest(prompt="Add error handling to parser.py"))
 ```
 
-## Source Documentation
+## Configuration
 
-| Document | Path |
+**Auth**: Device-code flow — no API key needed. Credentials stored at `~/.codex/auth.json`.
+
+```bash
+codex login   # Opens browser for OAuth
+```
+
+## Source Module
+
+Source: [`src/codomyrmex/agents/codex/`](../../../../src/codomyrmex/agents/codex/)
+
+| File | Purpose |
 |:---|:---|
-| README | [codex/README.md](../../../../src/codomyrmex/agents/codex/README.md) |
-| SPEC | [codex/SPEC.md](../../../../src/codomyrmex/agents/codex/SPEC.md) |
-| AGENTS | [codex/AGENTS.md](../../../../src/codomyrmex/agents/codex/AGENTS.md) |
-| PAI | [codex/PAI.md](../../../../src/codomyrmex/agents/codex/PAI.md) |
+| `codex_client.py` | CLI wrapper, task submission, response parsing |
+| `codex_integration.py` | Integration adapter |
+| `mcp_tools.py` | MCP tool definitions |
 
 ## Navigation
 

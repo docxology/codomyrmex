@@ -1,33 +1,44 @@
 # Pi Coding Agent
 
-**Module**: `codomyrmex.agents.pi` | **Category**: CLI-based | **Last Updated**: March 2026
+**Module**: `codomyrmex.agents.pi` | **Category**: CLI-based | **Version**: v1.0.0 | **Last Updated**: March 2026
 
 ## Overview
 
-Integration with the pi-coding-agent npm package. RPC-based programmatic interaction for code analysis, generation, and editing tasks.
+Wraps the [Pi coding agent](https://pi.dev/) CLI for programmatic use via its RPC (JSON-over-stdin/stdout) protocol. Provides high-level task submission, project analysis, and code generation.
 
-## Purpose
+## Key Classes
 
-Integrate the pi coding agent (`pi.dev`) into Codomyrmex as a programmable agent, enabling multi-provider LLM interactions through a Python RPC client and MCP tool interface.
+| Class | Purpose |
+|:---|:---|
+| `PiClient` | High-level RPC client for the pi coding agent |
+| `PiConfig` | Configuration dataclass |
+| `PiError` | Exception hierarchy |
 
-## Source Module Structure
+## Usage
+
+```python
+from codomyrmex.agents.pi import PiClient, PiConfig
+
+client = PiClient(config=PiConfig(working_dir="/path/to/project"))
+response = client.execute(AgentRequest(prompt="Analyze the parser module"))
+```
+
+## Configuration
+
+**Required**: `pi` CLI installed via npm.
+
+```bash
+npm install -g @anthropic/pi-coding-agent
+```
+
+## Source Module
 
 Source: [`src/codomyrmex/agents/pi/`](../../../../src/codomyrmex/agents/pi/)
 
-### Key Files
-
 | File | Purpose |
 |:---|:---|
-| [mcp_tools.py](../../../../src/codomyrmex/agents/pi/mcp_tools.py) |  ⭐ |
-| [pi_client.py](../../../../src/codomyrmex/agents/pi/pi_client.py) |  ⭐ |
-
-## Quick Start
-
-```python
-from codomyrmex.agents.pi import PiClient
-
-client = PiClient()
-```
+| `pi_client.py` | RPC client, task submission, response parsing |
+| `mcp_tools.py` | MCP tool definitions |
 
 ## Source Documentation
 
@@ -35,8 +46,8 @@ client = PiClient()
 |:---|:---|
 | README | [pi/README.md](../../../../src/codomyrmex/agents/pi/README.md) |
 | SPEC | [pi/SPEC.md](../../../../src/codomyrmex/agents/pi/SPEC.md) |
-| AGENTS | [pi/AGENTS.md](../../../../src/codomyrmex/agents/pi/AGENTS.md) |
-| PAI | [pi/PAI.md](../../../../src/codomyrmex/agents/pi/PAI.md) |
+| API Spec | [pi/API_SPECIFICATION.md](../../../../src/codomyrmex/agents/pi/API_SPECIFICATION.md) |
+| MCP Tools | [pi/MCP_TOOL_SPECIFICATION.md](../../../../src/codomyrmex/agents/pi/MCP_TOOL_SPECIFICATION.md) |
 
 ## Navigation
 

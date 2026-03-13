@@ -4,34 +4,37 @@
 
 ## Overview
 
-Mistral AI integration via the vibe CLI tool (`vibe`, `vibe-acp`). Supports Mistral models with API key authentication and streaming.
+Mistral's open-source AI coding CLI powered by Devstral 2 models. Conversational codebase exploration, code generation/refactoring, test/lint running, and terminal-first scriptable workflows. Supports watch mode for file changes.
 
-## Purpose
+**Upstream**: [mistral-vibe](https://github.com/mistralai/mistral-vibe)
 
-The `mistral_vibe` submodule provides integration with Mistral Vibe CLI tool. It includes a client wrapper for executing vibe commands and integration adapters for Codomyrmex modules.
+## Key Classes
 
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/mistral_vibe/`](../../../../src/codomyrmex/agents/mistral_vibe/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [mcp_tools.py](../../../../src/codomyrmex/agents/mistral_vibe/mcp_tools.py) |  ⭐ |
-| [mistral_vibe_client.py](../../../../src/codomyrmex/agents/mistral_vibe/mistral_vibe_client.py) |  ⭐ |
-| [mistral_vibe_integration.py](../../../../src/codomyrmex/agents/mistral_vibe/mistral_vibe_integration.py) |  |
+| `MistralVibeClient` | CLI wrapper for the `vibe` command |
+| `MistralVibeIntegrationAdapter` | Cross-module integration bridge |
+
+## Installation
+
+```bash
+curl -LsSf https://mistral.ai/vibe/install.sh | bash
+# or: pip install mistral-vibe-cli
+```
+
+## CLI Commands
+
+| Command | Purpose |
+|:---|:---|
+| `vibe` | Launch interactive coding session |
+| `vibe -h` | Show help and available commands |
+| Slash commands | Configure model, lock files, set themes |
 
 ## Configuration
 
-**Required API Key**: `MISTRAL_API_KEY`
+**Required**: `MISTRAL_API_KEY` from console.mistral.ai
 
-```bash
-# Add to your .env or environment
-MISTRAL_API_KEY=your-key-here
-```
-
-## Quick Start
+## Usage
 
 ```python
 from codomyrmex.agents.mistral_vibe import MistralVibeClient
@@ -39,14 +42,9 @@ from codomyrmex.agents.mistral_vibe import MistralVibeClient
 client = MistralVibeClient()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [mistral_vibe/README.md](../../../../src/codomyrmex/agents/mistral_vibe/README.md) |
-| SPEC | [mistral_vibe/SPEC.md](../../../../src/codomyrmex/agents/mistral_vibe/SPEC.md) |
-| AGENTS | [mistral_vibe/AGENTS.md](../../../../src/codomyrmex/agents/mistral_vibe/AGENTS.md) |
-| PAI | [mistral_vibe/PAI.md](../../../../src/codomyrmex/agents/mistral_vibe/PAI.md) |
+Source: [`src/codomyrmex/agents/mistral_vibe/`](../../../../src/codomyrmex/agents/mistral_vibe/)
 
 ## Navigation
 

@@ -1,17 +1,17 @@
-# rules
+# Agent Rules
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Module**: `codomyrmex.agents.rules` | **Category**: Governance | **Last Updated**: March 2026
 
 ## Overview
 
-Documentation files and guides.
+Behavioral rules and operating guidelines for all AI agents within the Codomyrmex ecosystem. Defines constraints, protocols, and coordination patterns.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `general.md` – File
+## Source Module
+
+Source: [`src/codomyrmex/agents/rules/`](../../../../src/codomyrmex/agents/rules/)
 
 ## Navigation
-- **Parent Directory**: [agents](../README.md)
-- **Project Root**: ../../../README.md
+
+- **Parent**: [docs/agents/](../README.md)
+- **Source**: [src/codomyrmex/agents/rules/](../../../../src/codomyrmex/agents/rules/)
+- **Project Root**: [README.md](../../../README.md)

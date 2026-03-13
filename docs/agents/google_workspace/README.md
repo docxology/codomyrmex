@@ -1,40 +1,32 @@
-# Google Workspace Agent
+# Google Workspace
 
 **Module**: `codomyrmex.agents.google_workspace` | **Category**: Specialized | **Last Updated**: March 2026
 
 ## Overview
 
-Agent for interacting with Google Workspace services (Docs, Sheets, Drive, Calendar). Provides document creation, spreadsheet manipulation, and calendar management.
+Integration with Google Workspace APIs — Docs, Sheets, Drive, Calendar. Provides programmatic document creation, spreadsheet manipulation, file management, and calendar scheduling.
 
-## Source Module Structure
+## Key Classes
 
-Source: [`src/codomyrmex/agents/google_workspace/`](../../../../src/codomyrmex/agents/google_workspace/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [config.py](../../../../src/codomyrmex/agents/google_workspace/config.py) |  |
-| [core.py](../../../../src/codomyrmex/agents/google_workspace/core.py) |  |
-| [exceptions.py](../../../../src/codomyrmex/agents/google_workspace/exceptions.py) |  |
-| [mcp_tools.py](../../../../src/codomyrmex/agents/google_workspace/mcp_tools.py) |  |
+| `WorkspaceClient` | Google Workspace API client |
 
-## Quick Start
+## Configuration
+
+**Required**: Google OAuth credentials or service account.
+
+## Usage
 
 ```python
-from codomyrmex.agents.google_workspace import GoogleWorkspaceClient
+from codomyrmex.agents.google_workspace import WorkspaceClient
 
-client = GoogleWorkspaceClient()
+client = WorkspaceClient()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [google_workspace/README.md](../../../../src/codomyrmex/agents/google_workspace/README.md) |
-| SPEC | [google_workspace/SPEC.md](../../../../src/codomyrmex/agents/google_workspace/SPEC.md) |
-| AGENTS | [google_workspace/AGENTS.md](../../../../src/codomyrmex/agents/google_workspace/AGENTS.md) |
-| PAI | [google_workspace/PAI.md](../../../../src/codomyrmex/agents/google_workspace/PAI.md) |
+Source: [`src/codomyrmex/agents/google_workspace/`](../../../../src/codomyrmex/agents/google_workspace/)
 
 ## Navigation
 

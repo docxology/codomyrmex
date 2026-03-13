@@ -620,7 +620,7 @@ eval(input("Enter code: "))  # Code injection
             from codomyrmex.data_visualization import create_bar_chart
 
             data = {"categories": ["A"], "values": [1]}
-            chart = create_bar_chart(data, "Test")
+            chart = create_bar_chart(data["categories"], data["values"], "Test")
             assert chart is not None
             steps_completed += 1
 
@@ -679,7 +679,7 @@ eval(input("Enter code: "))  # Code injection
                 "categories": test_data["categories"],
                 "values": test_data["metrics"],
             }
-            chart = create_bar_chart(viz_data, "Consistency Test")
+            chart = create_bar_chart(viz_data["categories"], viz_data["values"], "Consistency Test")
             results["visualization"] = chart is not None
 
         # All modules that were tested should have produced valid results

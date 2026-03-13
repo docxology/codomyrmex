@@ -1,44 +1,14 @@
-# Meta-Agent System
+# Meta-Agents
 
 **Module**: `codomyrmex.agents.meta` | **Category**: Core Infrastructure | **Last Updated**: March 2026
 
 ## Overview
 
-Meta-level agent capabilities including self-reflection, capability assessment, strategy selection, and meta-cognitive monitoring. Agents that reason about agents.
+Meta-agent capabilities — self-reflection, strategy selection, and agent-about-agent reasoning. Enables agents to reason about their own capabilities and optimize execution strategies.
 
-## Purpose
-
-Self-improving meta-agent subsystem that tracks agent task outcomes across four dimensions and evolves strategy selection using success-rate tracking and A/B testing. Designed as a pluggable wrapper around any task function.
-
-## Source Module Structure
+## Source Module
 
 Source: [`src/codomyrmex/agents/meta/`](../../../../src/codomyrmex/agents/meta/)
-
-### Key Files
-
-| File | Purpose |
-|:---|:---|
-| [ab_testing.py](../../../../src/codomyrmex/agents/meta/ab_testing.py) |  |
-| [meta_agent.py](../../../../src/codomyrmex/agents/meta/meta_agent.py) |  ⭐ |
-| [scoring.py](../../../../src/codomyrmex/agents/meta/scoring.py) |  |
-| [strategies.py](../../../../src/codomyrmex/agents/meta/strategies.py) |  |
-
-## Quick Start
-
-```python
-from codomyrmex.agents.meta import MetaClient
-
-client = MetaClient()
-```
-
-## Source Documentation
-
-| Document | Path |
-|:---|:---|
-| README | [meta/README.md](../../../../src/codomyrmex/agents/meta/README.md) |
-| SPEC | [meta/SPEC.md](../../../../src/codomyrmex/agents/meta/SPEC.md) |
-| AGENTS | [meta/AGENTS.md](../../../../src/codomyrmex/agents/meta/AGENTS.md) |
-| PAI | [meta/PAI.md](../../../../src/codomyrmex/agents/meta/PAI.md) |
 
 ## Navigation
 

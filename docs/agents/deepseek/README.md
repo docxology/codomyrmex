@@ -1,51 +1,42 @@
 # DeepSeek
 
-**Module**: `codomyrmex.agents.deepseek` | **Category**: API-based | **Last Updated**: March 2026
+**Module**: `codomyrmex.agents.deepseek` | **Category**: API-based | **Version**: v1.2.2 | **Last Updated**: March 2026
 
 ## Overview
 
-DeepSeek Coder integration for cost-effective code generation. Supports fill-in-the-middle completion, strong code performance at lower cost, and competitive open-weight models.
+DeepSeek Coder integration for code generation and analysis. Provides API access to DeepSeek's code-specialized models with OpenAI-compatible interface.
 
-## Purpose
+## Key Classes
 
-DeepSeek Coder integration for code generation and analysis
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/deepseek/`](../../../../src/codomyrmex/agents/deepseek/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [deepseek_client.py](../../../../src/codomyrmex/agents/deepseek/deepseek_client.py) |  ⭐ |
-| [mcp_tools.py](../../../../src/codomyrmex/agents/deepseek/mcp_tools.py) |  ⭐ |
+| `DeepSeekClient` | API client for DeepSeek code models |
+
+## Usage
+
+```python
+from codomyrmex.agents.deepseek import DeepSeekClient
+
+client = DeepSeekClient()
+response = client.execute(AgentRequest(prompt="Generate a Python parser"))
+```
 
 ## Configuration
 
 **Required API Key**: `DEEPSEEK_API_KEY`
 
 ```bash
-# Add to your .env or environment
-DEEPSEEK_API_KEY=your-key-here
+export DEEPSEEK_API_KEY=your-key-here
 ```
 
-## Quick Start
+## Source Module
 
-```python
-from codomyrmex.agents.deepseek import DeepseekClient
+Source: [`src/codomyrmex/agents/deepseek/`](../../../../src/codomyrmex/agents/deepseek/)
 
-client = DeepseekClient()
-```
-
-## Source Documentation
-
-| Document | Path |
+| File | Purpose |
 |:---|:---|
-| README | [deepseek/README.md](../../../../src/codomyrmex/agents/deepseek/README.md) |
-| SPEC | [deepseek/SPEC.md](../../../../src/codomyrmex/agents/deepseek/SPEC.md) |
-| AGENTS | [deepseek/AGENTS.md](../../../../src/codomyrmex/agents/deepseek/AGENTS.md) |
-| PAI | [deepseek/PAI.md](../../../../src/codomyrmex/agents/deepseek/PAI.md) |
+| `deepseek_client.py` | OpenAI-compatible API client |
+| `mcp_tools.py` | MCP tool definitions |
 
 ## Navigation
 

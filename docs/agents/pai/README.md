@@ -1,54 +1,37 @@
-# Personal AI Infrastructure
+# PAI Bridge
 
 **Module**: `codomyrmex.agents.pai` | **Category**: Core Infrastructure | **Last Updated**: March 2026
 
 ## Overview
 
-Integration layer between agents and the Personal AI Infrastructure (PAI). Provides dashboard coordination, dual-interface orchestration (Python admin + Bun PM), and WebSocket push for real-time updates.
+Comprehensive integration between Codomyrmex and the Personal AI Infrastructure (PAI). Provides MCP bridge exposing all Codomyrmex modules to PAI, trust-gated tool access, and programmatic access to all PAI subsystems — Algorithm, Skills, Tools, Hooks, Agents, Memory, Security, TELOS, and Settings.
 
-## Purpose
+## Key Classes
 
-Comprehensive bridge to the PAI (Personal AI Infrastructure) system. Provides programmatic access to all PAI subsystems at `~/.claude/PAI/` (v4+; v3 legacy: `~/.claude/skills/PAI/`).
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/pai/`](../../../../src/codomyrmex/agents/pai/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [_models.py](../../../../src/codomyrmex/agents/pai/_models.py) |  |
-| [_modules.py](../../../../src/codomyrmex/agents/pai/_modules.py) |  |
-| [_systems.py](../../../../src/codomyrmex/agents/pai/_systems.py) |  |
-| [_verification.py](../../../../src/codomyrmex/agents/pai/_verification.py) |  |
-| [mcp_bridge.py](../../../../src/codomyrmex/agents/pai/mcp_bridge.py) |  |
-| [pai_bridge.py](../../../../src/codomyrmex/agents/pai/pai_bridge.py) |  ⭐ |
-| [pai_client.py](../../../../src/codomyrmex/agents/pai/pai_client.py) |  |
-| [pai_webhook.py](../../../../src/codomyrmex/agents/pai/pai_webhook.py) |  |
-| [trust_gateway.py](../../../../src/codomyrmex/agents/pai/trust_gateway.py) |  |
+| `PAIBridge` | Main bridge connecting Codomyrmex to PAI |
+| `PAIConfig` | Configuration for PAI integration |
+| `call_tool(name)` | MCP tool invocation |
+| `create_codomyrmex_mcp_server()` | Create MCP server exposing all modules |
+| `verify_capabilities()` | Verify available MCP tools |
+| `trust_all()` | Grant trust to all discoverable tools |
 
-### Subdirectories
+## Configuration
 
-- `mcp/`
-- `pm/`
+**Optional**: PAI installation at https://github.com/danielmiessler/Personal_AI_Infrastructure
 
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.pai import PaiClient
+from codomyrmex.agents.pai import PAIBridge
 
-client = PaiClient()
+client = PAIBridge()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [pai/README.md](../../../../src/codomyrmex/agents/pai/README.md) |
-| SPEC | [pai/SPEC.md](../../../../src/codomyrmex/agents/pai/SPEC.md) |
-| AGENTS | [pai/AGENTS.md](../../../../src/codomyrmex/agents/pai/AGENTS.md) |
-| PAI | [pai/PAI.md](../../../../src/codomyrmex/agents/pai/PAI.md) |
+Source: [`src/codomyrmex/agents/pai/`](../../../../src/codomyrmex/agents/pai/)
 
 ## Navigation
 

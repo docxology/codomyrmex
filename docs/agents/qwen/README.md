@@ -1,52 +1,71 @@
 # Qwen (Alibaba)
 
-**Module**: `codomyrmex.agents.qwen` | **Category**: API-based | **Last Updated**: March 2026
+**Module**: `codomyrmex.agents.qwen` | **Category**: API-based | **Version**: v1.2.2 | **Last Updated**: March 2026
 
 ## Overview
 
-Qwen model integration via DashScope API. Supports Qwen-Coder models, native qwen-agent framework, tool/function calling, and multi-agent orchestration.
+Comprehensive Qwen model integration supporting DashScope API via OpenAI-compatible client, native `qwen-agent` framework (Assistant, WebUI, MCP), 14 model variants, and tool/function calling with multi-turn loops.
 
-## Purpose
+## Key Classes
 
-Comprehensive Qwen model integration providing DashScope API access, native qwen-agent framework support, tool/function calling, MCP tool exposure, and multi-agent orchestration for the Codomyrmex ecosystem.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/qwen/`](../../../../src/codomyrmex/agents/qwen/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [mcp_tools.py](../../../../src/codomyrmex/agents/qwen/mcp_tools.py) |  ⭐ |
-| [qwen_agent_wrapper.py](../../../../src/codomyrmex/agents/qwen/qwen_agent_wrapper.py) |  ⭐ |
-| [qwen_client.py](../../../../src/codomyrmex/agents/qwen/qwen_client.py) |  ⭐ |
+| `QwenClient` | DashScope API client (OpenAI-compatible) |
+| `QWEN_MODELS` | Registry of 14 model variants |
+| `DEFAULT_MODEL` | Default model identifier |
+
+## Qwen-Agent Framework (Lazy Import)
+
+| Function | Purpose |
+|:---|:---|
+| `create_assistant()` | Create a Qwen assistant |
+| `create_codomyrmex_assistant()` | Project-aware assistant |
+| `launch_webui()` | Launch interactive web UI |
+| `run_assistant(prompt)` | Single-turn assistant execution |
+| `stream_assistant(prompt)` | Streaming assistant execution |
+
+## Model Variants
+
+- **Qwen3-Max** — Flagship reasoning model
+- **Qwen-Coder** — Code-specialized models
+- **Qwen-VL** — Vision-language models
+- **Qwen-Audio** — Audio understanding
+- 10+ additional variants
+
+## Usage
+
+```python
+from codomyrmex.agents.qwen import QwenClient, QWEN_MODELS
+
+# Basic usage
+client = QwenClient()
+response = client.execute(AgentRequest(prompt="Explain this code"))
+
+# With specific model
+client = QwenClient(model="qwen3-max")
+
+# Native framework (lazy import)
+from codomyrmex.agents.qwen import create_codomyrmex_assistant
+assistant = create_codomyrmex_assistant()
+```
 
 ## Configuration
 
 **Required API Key**: `DASHSCOPE_API_KEY`
 
 ```bash
-# Add to your .env or environment
-DASHSCOPE_API_KEY=your-key-here
+export DASHSCOPE_API_KEY=your-key-here
 ```
 
-## Quick Start
+## Source Module
 
-```python
-from codomyrmex.agents.qwen import QwenClient
+Source: [`src/codomyrmex/agents/qwen/`](../../../../src/codomyrmex/agents/qwen/)
 
-client = QwenClient()
-```
-
-## Source Documentation
-
-| Document | Path |
+| File | Purpose |
 |:---|:---|
-| README | [qwen/README.md](../../../../src/codomyrmex/agents/qwen/README.md) |
-| SPEC | [qwen/SPEC.md](../../../../src/codomyrmex/agents/qwen/SPEC.md) |
-| AGENTS | [qwen/AGENTS.md](../../../../src/codomyrmex/agents/qwen/AGENTS.md) |
-| PAI | [qwen/PAI.md](../../../../src/codomyrmex/agents/qwen/PAI.md) |
+| `qwen_client.py` | DashScope API client, model registry |
+| `qwen_agent_wrapper.py` | Native qwen-agent framework wrapper |
+| `mcp_tools.py` | 5 MCP tools for agent consumption |
 
 ## Navigation
 

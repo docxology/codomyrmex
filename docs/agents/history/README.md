@@ -1,43 +1,29 @@
-# Agent History & Audit
+# Interaction History
 
 **Module**: `codomyrmex.agents.history` | **Category**: Infrastructure | **Last Updated**: March 2026
 
 ## Overview
 
-Agent interaction history tracking, audit logging, and replay support. Records all agent requests, responses, tool calls, and outcomes for analysis and debugging.
+Interaction history and audit logging for all agent sessions. Provides replay capabilities, telemetry export, and cross-agent session correlation.
 
-## Purpose
+## Key Classes
 
-Conversation and context persistence for stateful interactions
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/history/`](../../../../src/codomyrmex/agents/history/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [manager.py](../../../../src/codomyrmex/agents/history/manager.py) |  |
-| [models.py](../../../../src/codomyrmex/agents/history/models.py) |  |
-| [stores.py](../../../../src/codomyrmex/agents/history/stores.py) |  |
+| `HistoryManager` | Session history storage and retrieval |
+| `AuditLogger` | Structured audit logging |
 
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.history import HistoryClient
+from codomyrmex.agents.history import HistoryManager
 
-client = HistoryClient()
+client = HistoryManager()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [history/README.md](../../../../src/codomyrmex/agents/history/README.md) |
-| SPEC | [history/SPEC.md](../../../../src/codomyrmex/agents/history/SPEC.md) |
-| AGENTS | [history/AGENTS.md](../../../../src/codomyrmex/agents/history/AGENTS.md) |
-| PAI | [history/PAI.md](../../../../src/codomyrmex/agents/history/PAI.md) |
+Source: [`src/codomyrmex/agents/history/`](../../../../src/codomyrmex/agents/history/)
 
 ## Navigation
 

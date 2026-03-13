@@ -13,14 +13,14 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 def _get_swarm_manager() -> Any:
     """Lazy-import SwarmManager to avoid circular imports."""
-    from codomyrmex.collaboration.protocols.swarm import SwarmManager
+    from codomyrmex.collaboration.swarm import SwarmManager
 
     return SwarmManager()
 
 
 def _get_task_decomposer() -> Any:
     """Lazy-import TaskDecomposer to avoid circular imports."""
-    from codomyrmex.collaboration.protocols.swarm import TaskDecomposer
+    from codomyrmex.collaboration.swarm import TaskDecomposer
 
     return TaskDecomposer
 

@@ -4,38 +4,26 @@
 
 ## Overview
 
-Git-aware agent that understands repository structure, branch management, merge conflict resolution, and commit message generation. Integrates with git_operations module.
+Git-aware operations for agent workflows. Provides structured commit generation, branch management, conflict resolution, and PR creation with AI-generated descriptions.
 
-## Purpose
+## Key Classes
 
-The `git_agent` module provides a `GitAgent` class that wraps Git and GitHub operations behind the standard `BaseAgent` interface. It parses structured command prompts and dispatches them to the `git_operations` module, enabling automated repository management within agentic workflows.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/git_agent/`](../../../../src/codomyrmex/agents/git_agent/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [agent.py](../../../../src/codomyrmex/agents/git_agent/agent.py) |  |
+| `GitAgent` | Git-aware agent operations |
+| `ConflictResolver` | AI-assisted merge conflict resolution |
 
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.git_agent import GitAgentClient
+from codomyrmex.agents.git_agent import GitAgent
 
-client = GitAgentClient()
+client = GitAgent()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [git_agent/README.md](../../../../src/codomyrmex/agents/git_agent/README.md) |
-| SPEC | [git_agent/SPEC.md](../../../../src/codomyrmex/agents/git_agent/SPEC.md) |
-| AGENTS | [git_agent/AGENTS.md](../../../../src/codomyrmex/agents/git_agent/AGENTS.md) |
-| PAI | [git_agent/PAI.md](../../../../src/codomyrmex/agents/git_agent/PAI.md) |
+Source: [`src/codomyrmex/agents/git_agent/`](../../../../src/codomyrmex/agents/git_agent/)
 
 ## Navigation
 

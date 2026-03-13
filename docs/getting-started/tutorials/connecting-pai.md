@@ -1,6 +1,6 @@
 # Connecting PAI to Codomyrmex
 
-**Difficulty**: Intermediate | **Time**: 30 min | **Last Updated**: February 2026
+**Difficulty**: Intermediate | **Time**: 30 min | **Last Updated**: March 2026
 
 ## Overview
 

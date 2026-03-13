@@ -1,31 +1,36 @@
-# agenticSeek Agent
+# agenticSeek
 
 **Module**: `codomyrmex.agents.agentic_seek` | **Category**: CLI-based | **Last Updated**: March 2026
 
 ## Overview
 
-Integration with the agenticSeek autonomous browser-capable agent. Supports local-first execution with autonomous web browsing, research, and code generation.
+Fully-local, privacy-first autonomous agent system with multi-agent routing, web browsing, multi-language code execution, and task planning. Runs entirely on local hardware with no cloud dependency.
 
-## Purpose
+**Upstream**: [agenticSeek](https://github.com/Fosowl/agenticSeek)
 
-Integration with the [agenticSeek](https://github.com/Fosowl/agenticSeek) framework—a fully-local autonomous agent system providing multi-agent routing, web browsing, multi-language code execution, and task planning.
+## Key Classes
 
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/agentic_seek/`](../../../../src/codomyrmex/agents/agentic_seek/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [agent_router.py](../../../../src/codomyrmex/agents/agentic_seek/agent_router.py) |  |
-| [agent_types.py](../../../../src/codomyrmex/agents/agentic_seek/agent_types.py) |  |
-| [agentic_seek_client.py](../../../../src/codomyrmex/agents/agentic_seek/agentic_seek_client.py) |  ⭐ |
-| [browser_automation.py](../../../../src/codomyrmex/agents/agentic_seek/browser_automation.py) |  |
-| [code_execution.py](../../../../src/codomyrmex/agents/agentic_seek/code_execution.py) |  |
-| [task_planner.py](../../../../src/codomyrmex/agents/agentic_seek/task_planner.py) |  |
+| `AgenticSeekClient` | Main CLI-based agent client |
+| `AgenticSeekConfig` | Typed config.ini representation |
+| `AgenticSeekAgentType` | Agent specialization enum |
+| `AgenticSeekRouter` | Heuristic query-to-agent classifier |
+| `AgenticSeekTaskPlanner` | JSON plan parsing and ordering |
+| `AgenticSeekCodeExecutor` | Code block extraction and command building |
+| `AgenticSeekBrowserConfig` | Browser automation settings |
 
-## Quick Start
+## Installation
+
+```bash
+git clone https://github.com/Fosowl/agenticSeek && cd agenticSeek && pip install -e .
+```
+
+## Configuration
+
+Configured via `config.ini`. Fully local — no API keys needed.
+
+## Usage
 
 ```python
 from codomyrmex.agents.agentic_seek import AgenticSeekClient
@@ -33,14 +38,9 @@ from codomyrmex.agents.agentic_seek import AgenticSeekClient
 client = AgenticSeekClient()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [agentic_seek/README.md](../../../../src/codomyrmex/agents/agentic_seek/README.md) |
-| SPEC | [agentic_seek/SPEC.md](../../../../src/codomyrmex/agents/agentic_seek/SPEC.md) |
-| AGENTS | [agentic_seek/AGENTS.md](../../../../src/codomyrmex/agents/agentic_seek/AGENTS.md) |
-| PAI | [agentic_seek/PAI.md](../../../../src/codomyrmex/agents/agentic_seek/PAI.md) |
+Source: [`src/codomyrmex/agents/agentic_seek/`](../../../../src/codomyrmex/agents/agentic_seek/)
 
 ## Navigation
 

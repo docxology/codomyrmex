@@ -18,9 +18,10 @@ class TestWorkflowTrust:
 
     def test_initial_state_untrusted(self):
         """Trust starts at UNTRUSTED."""
-        from codomyrmex.agents.pai.trust_gateway import TrustLevel, _trust_level
+        from codomyrmex.agents.pai.trust_gateway import TrustLevel, get_current_trust_level, reset_trust
 
-        assert _trust_level == TrustLevel.UNTRUSTED
+        reset_trust()  # Ensure clean state
+        assert get_current_trust_level() == TrustLevel.UNTRUSTED
 
     def test_verify_capabilities_returns_report(self):
         """verify_capabilities returns a structured report."""
@@ -34,9 +35,10 @@ class TestWorkflowTrust:
         """trust_all() promotes to TRUSTED level."""
         from codomyrmex.agents.pai import trust_gateway
 
+        trust_gateway.reset_trust()  # Ensure clean state
         result = trust_gateway.trust_all()
         assert isinstance(result, dict)
-        assert trust_gateway._trust_level == trust_gateway.TrustLevel.TRUSTED
+        assert trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.TRUSTED
 
     def test_trusted_call_tool_succeeds_when_trusted(self):
         """After trust_all, trusted_call_tool succeeds for safe tools."""
@@ -56,10 +58,10 @@ class TestWorkflowTrust:
         from codomyrmex.agents.pai import trust_gateway
 
         trust_gateway.trust_all()
-        assert trust_gateway._trust_level == trust_gateway.TrustLevel.TRUSTED
+        assert trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.TRUSTED
 
         trust_gateway.reset_trust()
-        assert trust_gateway._trust_level == trust_gateway.TrustLevel.UNTRUSTED
+        assert trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.UNTRUSTED
 
     def test_full_lifecycle(self):
         """Complete trust lifecycle: verify → trust → reset."""
@@ -82,7 +84,7 @@ class TestWorkflowTrust:
 
         # Step 4: Reset
         trust_gateway.reset_trust()
-        assert trust_gateway._trust_level == trust_gateway.TrustLevel.UNTRUSTED
+        assert trust_gateway.get_current_trust_level() == trust_gateway.TrustLevel.UNTRUSTED
 
     def test_audit_log_populated_after_trust(self):
         """Audit log captures at least trust operations."""

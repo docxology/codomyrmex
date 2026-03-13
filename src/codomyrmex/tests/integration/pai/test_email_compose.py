@@ -245,6 +245,17 @@ def run_compose_all_templates(backend: str) -> dict:
 
 def test_pytest_compose_integration():
     """Pytest entrypoint for running integration compose tests."""
+    # Skip if PMServer is not running — avoids 30s+ timeout trying to connect
+    import socket
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        sock.settimeout(2)
+        sock.connect(("localhost", 8888))
+        sock.close()
+    except (ConnectionRefusedError, OSError, socket.timeout):
+        pytest.skip("PMServer not running on :8888 — skipping LLM compose tests")
+
     results = run_compose_all_templates("ollama")
     assert all(results.values()), f"Some LLM email compose templates failed: {results}"
 

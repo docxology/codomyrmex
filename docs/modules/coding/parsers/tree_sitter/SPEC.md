@@ -1,7 +1,7 @@
 # Tree-sitter — Functional Specification
 
 **Module**: `codomyrmex.tree_sitter`  
-**Version**: v1.1.9  
+**Version**: v1.2.2  
 **Status**: Active
 
 ## 1. Overview

@@ -4,40 +4,32 @@
 
 ## Overview
 
-Open-source agentic CLI framework integration. Extensible, community-driven agent with plugin support and custom tool definitions.
+Open-source agentic CLI for autonomous coding tasks. Provides sandboxed execution, file editing, and project analysis.
 
-## Purpose
+## Key Classes
 
-The `openclaw` module integrates the OpenClaw autonomous AI agent framework into Codomyrmex's agent subsystem. OpenClaw runs as a personal AI assistant on local devices, supporting 15+ messaging channels via a Gateway/WebSocket architecture.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/openclaw/`](../../../../src/codomyrmex/agents/openclaw/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [mcp_tools.py](../../../../src/codomyrmex/agents/openclaw/mcp_tools.py) |  ⭐ |
-| [openclaw_client.py](../../../../src/codomyrmex/agents/openclaw/openclaw_client.py) |  ⭐ |
-| [openclaw_integration.py](../../../../src/codomyrmex/agents/openclaw/openclaw_integration.py) |  |
+| `OpenClawClient` | CLI wrapper for openclaw commands |
+| `OpenClawIntegrationAdapter` | Cross-module integration bridge |
 
-## Quick Start
+## Installation
 
-```python
-from codomyrmex.agents.openclaw import OpenclawClient
-
-client = OpenclawClient()
+```bash
+See upstream repository for installation
 ```
 
-## Source Documentation
+## Usage
 
-| Document | Path |
-|:---|:---|
-| README | [openclaw/README.md](../../../../src/codomyrmex/agents/openclaw/README.md) |
-| SPEC | [openclaw/SPEC.md](../../../../src/codomyrmex/agents/openclaw/SPEC.md) |
-| AGENTS | [openclaw/AGENTS.md](../../../../src/codomyrmex/agents/openclaw/AGENTS.md) |
-| PAI | [openclaw/PAI.md](../../../../src/codomyrmex/agents/openclaw/PAI.md) |
+```python
+from codomyrmex.agents.openclaw import OpenClawClient
+
+client = OpenClawClient()
+```
+
+## Source Module
+
+Source: [`src/codomyrmex/agents/openclaw/`](../../../../src/codomyrmex/agents/openclaw/)
 
 ## Navigation
 

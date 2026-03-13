@@ -1,12 +1,21 @@
 """Unit tests for collaboration module."""
 
+import warnings
+
 import pytest
 
-from codomyrmex.collaboration.protocols.swarm import (
-    AgentProxy,
-    SwarmManager,
-    TaskDecomposer,
-)
+# Import from the new canonical path (not the deprecated protocols.swarm)
+from codomyrmex.collaboration.swarm import SwarmManager as _NewSwarmManager
+from codomyrmex.collaboration.swarm import TaskDecomposer as _NewTaskDecomposer
+
+# Legacy AgentProxy still lives in the compatibility shim; import with suppression
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", DeprecationWarning)
+    from codomyrmex.collaboration.protocols.swarm import (
+        AgentProxy,
+        SwarmManager,
+        TaskDecomposer,
+    )
 
 
 @pytest.mark.unit

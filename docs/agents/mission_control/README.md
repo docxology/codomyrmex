@@ -4,28 +4,23 @@
 
 ## Overview
 
-High-level mission orchestration and monitoring dashboard. Coordinates multiple agents on complex multi-step missions with progress visualization, rollback, and convergence detection.
+Integration with the builderz-labs/mission-control open-source dashboard for AI agent orchestration. Communicates via REST API for agent management, task tracking, cost monitoring, and real-time workflow orchestration.
 
-## Purpose
+**Upstream**: [mission-control](https://github.com/builderz-labs/mission-control)
 
-To integrate the builderz-labs/mission-control open-source agent orchestration dashboard within the Codomyrmex agent ecosystem. This module provides a Python client that communicates with the dashboard's REST API for agent fleet management, task orchestration, and cost monitoring.
+## Key Classes
 
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/mission_control/`](../../../../src/codomyrmex/agents/mission_control/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [mcp_tools.py](../../../../src/codomyrmex/agents/mission_control/mcp_tools.py) |  |
-| [mission_control_client.py](../../../../src/codomyrmex/agents/mission_control/mission_control_client.py) |  |
+| `MissionControlClient` | REST API client for the Mission Control dashboard |
+| `MissionControlConfig` | Configuration dataclass (API URL, auth, timeouts) |
+| `MissionControlError` | Error handling for API failures |
 
-### Subdirectories
+## Configuration
 
-- `app/`
+**Required**: Mission Control dashboard URL (default: `http://localhost:3000`)
 
-## Quick Start
+## Usage
 
 ```python
 from codomyrmex.agents.mission_control import MissionControlClient
@@ -33,14 +28,9 @@ from codomyrmex.agents.mission_control import MissionControlClient
 client = MissionControlClient()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [mission_control/README.md](../../../../src/codomyrmex/agents/mission_control/README.md) |
-| SPEC | [mission_control/SPEC.md](../../../../src/codomyrmex/agents/mission_control/SPEC.md) |
-| AGENTS | [mission_control/AGENTS.md](../../../../src/codomyrmex/agents/mission_control/AGENTS.md) |
-| PAI | [mission_control/PAI.md](../../../../src/codomyrmex/agents/mission_control/PAI.md) |
+Source: [`src/codomyrmex/agents/mission_control/`](../../../../src/codomyrmex/agents/mission_control/)
 
 ## Navigation
 

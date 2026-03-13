@@ -1,46 +1,49 @@
-# OpenFang
+# OpenFang — Agent Operating System
 
 **Module**: `codomyrmex.agents.openfang` | **Category**: CLI-based | **Last Updated**: March 2026
 
 ## Overview
 
-Open-source agent framework with extensive tool support, plugin architecture, and multi-model routing. Designed for security-conscious deployment.
+Security-conscious agent operating system built in Rust. Wraps the openfang binary via subprocess. Tracks upstream via `vendor/openfang` git submodule. Features hands management and sandboxed execution.
 
-## Source Module Structure
+**Upstream**: [openfang](https://github.com/RightNow-AI/openfang)
 
-Source: [`src/codomyrmex/agents/openfang/`](../../../../src/codomyrmex/agents/openfang/)
+## Key Classes
 
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [config.py](../../../../src/codomyrmex/agents/openfang/config.py) |  |
-| [core.py](../../../../src/codomyrmex/agents/openfang/core.py) |  |
-| [exceptions.py](../../../../src/codomyrmex/agents/openfang/exceptions.py) |  |
-| [hands.py](../../../../src/codomyrmex/agents/openfang/hands.py) |  |
-| [mcp_tools.py](../../../../src/codomyrmex/agents/openfang/mcp_tools.py) |  ⭐ |
-| [update.py](../../../../src/codomyrmex/agents/openfang/update.py) |  |
+| `OpenFangRunner` | Core runner wrapping the Rust binary |
+| `OpenFangConfig` | Configuration dataclass |
+| `HandsManager` | Manages openfang 'hands' (tool capabilities) |
+| `OpenFangError` | Base exception |
+| `OpenFangNotInstalledError` | Binary not found |
+| `OpenFangTimeoutError` | Execution timeout |
+| `OpenFangBuildError` | Build from source error |
+| `OpenFangConfigError` | Configuration validation error |
 
-### Subdirectories
+## Installation
 
-- `vendor/`
-
-## Quick Start
-
-```python
-from codomyrmex.agents.openfang import OpenfangClient
-
-client = OpenfangClient()
+```bash
+curl -fsSL https://openfang.sh/install.sh | sh
+# or build from vendor submodule:
+uv run python -c "from codomyrmex.agents.openfang.update import build_and_install; build_and_install()"
 ```
 
-## Source Documentation
+## Configuration
 
-| Document | Path |
-|:---|:---|
-| README | [openfang/README.md](../../../../src/codomyrmex/agents/openfang/README.md) |
-| SPEC | [openfang/SPEC.md](../../../../src/codomyrmex/agents/openfang/SPEC.md) |
-| AGENTS | [openfang/AGENTS.md](../../../../src/codomyrmex/agents/openfang/AGENTS.md) |
-| PAI | [openfang/PAI.md](../../../../src/codomyrmex/agents/openfang/PAI.md) |
+Binary auto-detected via `shutil.which('openfang')`. `HAS_OPENFANG` flag reports availability.
+
+## Usage
+
+```python
+from codomyrmex.agents.openfang import OpenFangRunner
+
+client = OpenFangRunner()
+```
+
+## Source Module
+
+Source: [`src/codomyrmex/agents/openfang/`](../../../../src/codomyrmex/agents/openfang/)
 
 ## Navigation
 

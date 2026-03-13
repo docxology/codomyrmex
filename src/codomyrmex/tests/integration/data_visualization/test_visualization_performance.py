@@ -247,18 +247,13 @@ class TestVisualizationPerformanceWorkflow:
         """Test error handling in visualization components."""
         from codomyrmex.data_visualization import create_bar_chart
 
-        # Test with invalid data — source returns None when required keys are missing
-        invalid_data = {"invalid": "data"}
-        result = create_bar_chart([], [], "Invalid Chart")
+        # create_bar_chart raises ValueError for empty inputs (by design)
+        with pytest.raises(ValueError, match="non-empty"):
+            create_bar_chart([], [], "Invalid Chart")
 
-        # Should handle gracefully and return None (no exception raised)
-        assert result is None
-
-        # Test with empty data — source returns None for empty categories/values
-        empty_data = {"categories": [], "values": []}
-        result = create_bar_chart(empty_data["categories"], empty_data["values"], "Empty Chart")
-
-        assert result is None
+        # Also raises for empty categories/values
+        with pytest.raises(ValueError, match="non-empty"):
+            create_bar_chart([], [], "Empty Chart")
 
     @pytest.mark.skipif(
         not PERFORMANCE_AVAILABLE, reason="Performance module not available"

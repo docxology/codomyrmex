@@ -4,45 +4,25 @@
 
 ## Overview
 
-Online learning and self-improvement system for agents. Includes feedback loops, skill extraction, performance tracking, and adaptive behavior modification.
+Self-improvement mechanisms for agents via reflection, skill acquisition, and feedback integration. Provides the learning loop that enables agents to improve over time.
 
-## Purpose
+## Key Classes
 
-Agent learning module that models reusable capabilities as `Skill` objects stored in a `SkillLibrary`. Provides tag-based search and a visualization function that charts skill distribution across tags.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/learning/`](../../../../src/codomyrmex/agents/learning/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [skills.py](../../../../src/codomyrmex/agents/learning/skills.py) |  |
-| [visualization.py](../../../../src/codomyrmex/agents/learning/visualization.py) |  |
+| `Skill` | Learnable skill representation |
 
-### Subdirectories
-
-- `curriculum/`
-- `reflection/`
-- `skills/`
-
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.learning import LearningClient
+from codomyrmex.agents.learning import Skill
 
-client = LearningClient()
+client = Skill()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [learning/README.md](../../../../src/codomyrmex/agents/learning/README.md) |
-| SPEC | [learning/SPEC.md](../../../../src/codomyrmex/agents/learning/SPEC.md) |
-| AGENTS | [learning/AGENTS.md](../../../../src/codomyrmex/agents/learning/AGENTS.md) |
-| PAI | [learning/PAI.md](../../../../src/codomyrmex/agents/learning/PAI.md) |
+Source: [`src/codomyrmex/agents/learning/`](../../../../src/codomyrmex/agents/learning/)
 
 ## Navigation
 

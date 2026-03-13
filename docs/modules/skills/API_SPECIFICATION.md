@@ -1,6 +1,6 @@
 # Skills Module API Specification
 
-**Version**: v1.1.9 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v1.2.2 | **Status**: Stable | **Last Updated**: March 2026
 
 ## 1. Overview
 

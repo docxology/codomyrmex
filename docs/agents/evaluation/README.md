@@ -4,40 +4,26 @@
 
 ## Overview
 
-Agent quality evaluation framework. Provides benchmark runners, scoring rubrics, comparative assessment, and regression testing for agent outputs.
+Quality evaluation and benchmarking infrastructure. Provides metrics collection, response quality scoring, and comparative agent benchmarks.
 
-## Purpose
+## Key Classes
 
-Agent benchmarking, quality metrics, and performance comparison
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/evaluation/`](../../../../src/codomyrmex/agents/evaluation/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [benchmark.py](../../../../src/codomyrmex/agents/evaluation/benchmark.py) |  |
-| [models.py](../../../../src/codomyrmex/agents/evaluation/models.py) |  |
-| [scorers.py](../../../../src/codomyrmex/agents/evaluation/scorers.py) |  |
+| `Evaluator` | Response quality scoring |
+| `BenchmarkRunner` | Comparative agent benchmark suite |
 
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.evaluation import EvaluationClient
+from codomyrmex.agents.evaluation import Evaluator
 
-client = EvaluationClient()
+client = Evaluator()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [evaluation/README.md](../../../../src/codomyrmex/agents/evaluation/README.md) |
-| SPEC | [evaluation/SPEC.md](../../../../src/codomyrmex/agents/evaluation/SPEC.md) |
-| AGENTS | [evaluation/AGENTS.md](../../../../src/codomyrmex/agents/evaluation/AGENTS.md) |
-| PAI | [evaluation/PAI.md](../../../../src/codomyrmex/agents/evaluation/PAI.md) |
+Source: [`src/codomyrmex/agents/evaluation/`](../../../../src/codomyrmex/agents/evaluation/)
 
 ## Navigation
 

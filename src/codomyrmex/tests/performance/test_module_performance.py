@@ -485,11 +485,12 @@ class TestPerformanceRegressionDetection:
         assert not result["time_regression"]
         assert not result["memory_regression"]
 
-        # Test performance regression
+        # Test performance regression (values must exceed 6x baseline to trigger
+        # with 500% tolerance; baseline is 0.5s/200MB so need >3.0s/>1200MB)
         result = baseline_manager.check_regression(
             "code_execution.execute_code",
-            2.0,
-            800.0,  # Much slower and more memory
+            5.0,
+            2000.0,  # 10x baseline — clearly exceeds 500% tolerance
         )
 
         assert result["regression"]

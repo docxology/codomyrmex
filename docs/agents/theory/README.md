@@ -1,42 +1,35 @@
 # Agent Theory
 
-**Module**: `codomyrmex.agents.theory` | **Category**: Research | **Last Updated**: March 2026
+**Module**: `codomyrmex.agents.theory` | **Category**: Specialized | **Last Updated**: March 2026
 
 ## Overview
 
-Theoretical foundations for agentic systems. Agent architecture patterns (reactive, deliberative, hybrid) and reasoning models (symbolic, neural, hybrid).
+Theoretical foundations for agentic systems. Provides formal agent architecture types (reactive, deliberative, hybrid) and reasoning model types (symbolic, neural, hybrid) as typed classes.
 
-## Purpose
+## Key Classes
 
-The `theory` submodule provides theoretical foundations for agentic systems. It includes agent architecture patterns (reactive, deliberative, hybrid) and reasoning models (symbolic, neural, hybrid).
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/theory/`](../../../../src/codomyrmex/agents/theory/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [agent_architectures.py](../../../../src/codomyrmex/agents/theory/agent_architectures.py) |  ⭐ |
-| [reasoning_models.py](../../../../src/codomyrmex/agents/theory/reasoning_models.py) |  ⭐ |
+| `AgentArchitecture` | Base architecture type |
+| `ReactiveArchitecture` | Stimulus-response agents |
+| `DeliberativeArchitecture` | Planning/reasoning agents |
+| `HybridArchitecture` | Combined reactive + deliberative |
+| `ReasoningModel` | Base reasoning model type |
+| `SymbolicReasoningModel` | Logic/rule-based reasoning |
+| `NeuralReasoningModel` | Neural network-based reasoning |
+| `HybridReasoningModel` | Combined symbolic + neural |
 
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.theory import TheoryClient
+from codomyrmex.agents.theory import AgentArchitecture
 
-client = TheoryClient()
+client = AgentArchitecture()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [theory/README.md](../../../../src/codomyrmex/agents/theory/README.md) |
-| SPEC | [theory/SPEC.md](../../../../src/codomyrmex/agents/theory/SPEC.md) |
-| AGENTS | [theory/AGENTS.md](../../../../src/codomyrmex/agents/theory/AGENTS.md) |
-| PAI | [theory/PAI.md](../../../../src/codomyrmex/agents/theory/PAI.md) |
+Source: [`src/codomyrmex/agents/theory/`](../../../../src/codomyrmex/agents/theory/)
 
 ## Navigation
 

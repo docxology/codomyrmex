@@ -4,48 +4,27 @@
 
 ## Overview
 
-Core code editing abstractions used by all agents. Provides diff-based editing, code transformation pipelines, and structured code modification protocols.
+Diff-based code editing infrastructure. Provides structured code transforms, unified diff generation, and AI-guided file modifications across all agent backends.
 
-## Purpose
+## Key Classes
 
-The `ai_code_editing` module serves as the semantic intelligence layer of Codomyrmex. It abstracts the complexity of interacting with various LLM providers (OpenAI, Anthropic, Google, **Ollama**) to provide high-level code manipulation capabilities: generation, refactoring, analysis, and documentation.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/ai_code_editing/`](../../../../src/codomyrmex/agents/ai_code_editing/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [_execution.py](../../../../src/codomyrmex/agents/ai_code_editing/_execution.py) |  |
-| [_planning.py](../../../../src/codomyrmex/agents/ai_code_editing/_planning.py) |  |
-| [claude_task_master.py](../../../../src/codomyrmex/agents/ai_code_editing/claude_task_master.py) |  |
-| [code_editor.py](../../../../src/codomyrmex/agents/ai_code_editing/code_editor.py) |  |
-| [droid_manager.py](../../../../src/codomyrmex/agents/ai_code_editing/droid_manager.py) |  |
-| [openai_codex.py](../../../../src/codomyrmex/agents/ai_code_editing/openai_codex.py) |  |
-| [prompt_composition.py](../../../../src/codomyrmex/agents/ai_code_editing/prompt_composition.py) |  |
+| `CodeEditor` | Structured code editing with diff tracking |
+| `DiffGenerator` | Unified diff generation |
+| `EditOperation` | Typed edit operation dataclass |
 
-### Subdirectories
-
-- `ai_code_helpers/`
-
-## Quick Start
+## Usage
 
 ```python
-from codomyrmex.agents.ai_code_editing import AiCodeEditingClient
+from codomyrmex.agents.ai_code_editing import CodeEditor
 
-client = AiCodeEditingClient()
+client = CodeEditor()
 ```
 
-## Source Documentation
+## Source Module
 
-| Document | Path |
-|:---|:---|
-| README | [ai_code_editing/README.md](../../../../src/codomyrmex/agents/ai_code_editing/README.md) |
-| SPEC | [ai_code_editing/SPEC.md](../../../../src/codomyrmex/agents/ai_code_editing/SPEC.md) |
-| AGENTS | [ai_code_editing/AGENTS.md](../../../../src/codomyrmex/agents/ai_code_editing/AGENTS.md) |
-| PAI | [ai_code_editing/PAI.md](../../../../src/codomyrmex/agents/ai_code_editing/PAI.md) |
+Source: [`src/codomyrmex/agents/ai_code_editing/`](../../../../src/codomyrmex/agents/ai_code_editing/)
 
 ## Navigation
 

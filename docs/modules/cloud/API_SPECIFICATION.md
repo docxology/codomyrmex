@@ -1,6 +1,6 @@
 # Cloud Module API Specification
 
-**Version**: v0.2.0 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Stable | **Last Updated**: March 2026
 
 ## 1. Overview
 

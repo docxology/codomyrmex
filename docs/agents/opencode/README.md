@@ -4,40 +4,48 @@
 
 ## Overview
 
-Open-source coding agent alternative. CLI-based execution with no API key requirements for basic operation. Supports local model execution.
+Open-source AI coding CLI built with a client/server architecture. Features context-aware code scanning, plugin-based actions/skills system, multi-file refactoring, Plan/Build mode switching, and multi-provider model support (OpenAI, Anthropic, Ollama). 26k+ GitHub stars.
 
-## Purpose
+**Upstream**: [opencode](https://github.com/opencode-ai/opencode)
 
-The `opencode` submodule provides integration with OpenCode CLI tool. It includes a client for interacting with OpenCode CLI and integration adapters for Codomyrmex modules.
+## Key Classes
 
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/opencode/`](../../../../src/codomyrmex/agents/opencode/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [mcp_tools.py](../../../../src/codomyrmex/agents/opencode/mcp_tools.py) |  ⭐ |
-| [opencode_client.py](../../../../src/codomyrmex/agents/opencode/opencode_client.py) |  ⭐ |
-| [opencode_integration.py](../../../../src/codomyrmex/agents/opencode/opencode_integration.py) |  |
+| `OpenCodeClient` | CLI wrapper for the `opencode` command |
+| `OpenCodeIntegrationAdapter` | Cross-module integration bridge |
 
-## Quick Start
+## Installation
 
-```python
-from codomyrmex.agents.opencode import OpencodeClient
-
-client = OpencodeClient()
+```bash
+npm install -g opencode
 ```
 
-## Source Documentation
+## CLI Commands
 
-| Document | Path |
+| Command | Purpose |
 |:---|:---|
-| README | [opencode/README.md](../../../../src/codomyrmex/agents/opencode/README.md) |
-| SPEC | [opencode/SPEC.md](../../../../src/codomyrmex/agents/opencode/SPEC.md) |
-| AGENTS | [opencode/AGENTS.md](../../../../src/codomyrmex/agents/opencode/AGENTS.md) |
-| PAI | [opencode/PAI.md](../../../../src/codomyrmex/agents/opencode/PAI.md) |
+| `opencode` | Launch interactive session |
+| `/init` | Analyze repo, generate agents.md |
+| `/plan` | Create implementation plan (iterate with feedback) |
+| `/build` | Switch to build mode — execute planned changes |
+| `model` | Switch LLM provider/model |
+
+## Configuration
+
+Supports OpenAI, Anthropic, Ollama providers. Configure via `/init` flow.
+
+## Usage
+
+```python
+from codomyrmex.agents.opencode import OpenCodeClient
+
+client = OpenCodeClient()
+```
+
+## Source Module
+
+Source: [`src/codomyrmex/agents/opencode/`](../../../../src/codomyrmex/agents/opencode/)
 
 ## Navigation
 

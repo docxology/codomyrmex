@@ -561,7 +561,7 @@ codomyrmex docs generate --module agents --format markdown
 ---
 
 **Version**: 0.1.0
-**Last Updated**: February 2026
+**Last Updated**: March 2026
 **API Stability**: See individual module documentation for stability guarantees
 
 ## Navigation Links

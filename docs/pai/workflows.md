@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Workflows
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v1.2.2 | **Last Updated**: March 2026
 
 ## Overview
 
