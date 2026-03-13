@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Quantum computing algorithms, circuit simulation, and quantum machine learning primitives.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

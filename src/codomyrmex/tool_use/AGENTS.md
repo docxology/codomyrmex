@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Tool use framework for structured function calling and tool orchestration.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

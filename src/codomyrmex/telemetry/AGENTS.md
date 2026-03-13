@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Metrics collection, tracing, dashboards, and observability. OpenTelemetry integration with StatsD client and token tracking.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+LLM provider integrations and agent implementations for Claude, Codex, Gemini, OpenAI, and other AI providers. Handles API communication, tool orchestration, and provider-specific features.
 
 ## Active Components
 - `AGENT_COMPARISON.md` – Project file

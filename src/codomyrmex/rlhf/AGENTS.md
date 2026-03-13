@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Reinforcement learning from human feedback with reward modeling and policy optimization.
 
 ## Active Components
 - `MCP_TOOL_SPECIFICATION.md` – Project file

@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Docker and Kubernetes orchestration with image optimization, container registry management, and security scanning.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

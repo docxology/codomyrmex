@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Speech-to-text, text-to-speech, audio streaming, and voice activity detection.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

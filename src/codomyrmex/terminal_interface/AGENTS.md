@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Terminal rendering, shell integration, and interactive CLI components.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Image analysis, VLM clients, PDF extraction, and visual document processing.
 
 ## Active Components
 - `PAI.md` – Project file

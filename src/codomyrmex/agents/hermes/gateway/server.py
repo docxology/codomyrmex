@@ -18,7 +18,9 @@ class GatewayRunner:
 
     def __init__(self, replace: bool = False, home_dir: str | None = None) -> None:
         self.replace = replace
-        self.home_dir = Path(home_dir) if home_dir else Path.home() / ".codomyrmex" / "hermes"
+        self.home_dir = (
+            Path(home_dir) if home_dir else Path.home() / ".codomyrmex" / "hermes"
+        )
         self.pid_file = self.home_dir / "gateway.pid"
         self._running = False
         self._stop_event = asyncio.Event()
@@ -45,14 +47,18 @@ class GatewayRunner:
         except ProcessLookupError:
             pass  # Process is dead
         except PermissionError:
-            is_alive = True # Process alive but we don't own it
+            is_alive = True  # Process alive but we don't own it
 
         if is_alive:
             if not self.replace:
-                logger.error(f"Gateway already running at PID {pid}. Refusing to start.")
+                logger.error(
+                    f"Gateway already running at PID {pid}. Refusing to start."
+                )
                 sys.exit(0)
             else:
-                logger.warning(f"Killing existing gateway PID {pid} due to --replace flag.")
+                logger.warning(
+                    f"Killing existing gateway PID {pid} due to --replace flag."
+                )
                 try:
                     os.kill(pid, signal.SIGTERM)
                     # Graceful wait
@@ -63,13 +69,17 @@ class GatewayRunner:
                         except ProcessLookupError:
                             break
                     else:
-                        logger.warning(f"PID {pid} did not exit gracefully. Sending SIGKILL.")
+                        logger.warning(
+                            f"PID {pid} did not exit gracefully. Sending SIGKILL."
+                        )
                         os.kill(pid, signal.SIGKILL)
                 except Exception as e:
                     logger.error(f"Failed to kill prior instance {pid}: {e}")
                     sys.exit(1)
         elif not self.replace:
-            logger.error(f"Found stale gateway.pid for {pid}. Refusing to start without --replace.")
+            logger.error(
+                f"Found stale gateway.pid for {pid}. Refusing to start without --replace."
+            )
             sys.exit(0)
         else:
             logger.info(f"Clearing stale gateway.pid {pid}.")
@@ -92,6 +102,7 @@ class GatewayRunner:
         # Initialize platform adapters here in future iterations
 
         from .cron import CronTicker
+
         self.cron = CronTicker()
         self.cron.start()
 
@@ -118,7 +129,9 @@ class GatewayRunner:
             if hasattr(self, "cron"):
                 self.cron.stop()
             try:
-                if self.pid_file.exists() and self.pid_file.read_text().strip() == str(os.getpid()):
+                if self.pid_file.exists() and self.pid_file.read_text().strip() == str(
+                    os.getpid()
+                ):
                     self.pid_file.unlink()
             except Exception:
                 pass

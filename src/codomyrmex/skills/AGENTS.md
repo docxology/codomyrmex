@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Skill discovery, loading, health monitoring, and lifecycle management. Enables modular capability extension through pluggable skill packages with MCP tool integration.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

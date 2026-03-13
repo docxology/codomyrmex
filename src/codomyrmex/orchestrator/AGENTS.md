@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Task orchestration with fractal execution, parallel runners, workflow management, and scheduling. Coordinates multi-step agent workflows with resilience patterns.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

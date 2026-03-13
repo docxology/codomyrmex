@@ -3,44 +3,32 @@
 
 **Version**: v1.5.0 | **Date**: 2026-03-13 | **Modules**: 129 | **Sprint**: 33
 
-> v1.5.0 "The Superorganism Horizon" delivered. All 33,000+ tests natively passing.
+> v1.5.3 "Session Routing & Inference" delivered. Cross-platform identity resolution, tool sandboxing, and token streaming completed.
 
 Authoritative project backlog. Upcoming work only; completed items removed.
 
 ---
 
-## 🚀 v1.5.1 — Hermes Gateway Hardening
+## 🚀 v1.5.4 — Multimodal Media Handlers
 
-> **Theme**: Daemon robustness, PID lifecycle, and crash recovery.
+> **Theme**: Audio, Image, and Document processing pipelines over channels.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
-| D1 | **Daemon Lifecycle & Auto-Replace** | `agents/hermes/` | Refine the startup sequence (`hermes gateway run --replace`) to safely kill stale PIDs and gracefully transfer socket bindings without dropping inflight messages. |
-| D2 | **Multi-Instance Coordination** | `agents/hermes/` | Upgrade `state.db` concurrency controls to allow multiple gateway instances across different terminal multiplexers to share channel directories safely without SQLite WAL locks. |
-| D3 | **Chron & Event Loop Opt** | `agents/hermes/` | Optimize the 60s cron ticker and main event loop to use native `asyncio` task groupings, preventing blocking during heavy platform adapter I/O. |
+| D1 | **Voice/Audio Transcoding** | `agents/hermes/` | Integrate `audio/` primitives (e.g. Whisper STT) to transcribe voice notes received natively across messaging adapters before LLM routing. |
+| D2 | **VLM Image Descriptions** | `agents/hermes/` | Route incoming media attachments through a local Ollama VLM (via `vision/`) to generate descriptive alt-text appended natively into the session prompt. |
+| D3 | **Document Extraction** | `agents/hermes/` | Parse incoming PDF/TXT files utilizing `documents/` extracting the raw text and injecting it cleanly into the active session context window. |
 
 ---
 
-## 🚀 v1.5.2 — Platform Adapter Context & Compression
+## 🚀 v1.5.5 — Advanced Agent Automation
 
-> **Theme**: Token efficiency and multi-channel scale.
-
-| # | Deliverable | Module | Concrete Scope |
-| :--- | :--- | :--- | :--- |
-| D1 | **Telegram/WhatsApp Latency** | `agents/hermes/` | Implement per-message latency metrics in platform adapters (`telegram.py`, `whatsapp.py`) to trace delay from raw receive to LLM inference via OpenRouter. |
-| D2 | **Deep Context Compression** | `agents/hermes/` | Integrate the new `context_compressor.py` deeper into the gateway adapter loop to dynamically summarize session state if the token window per `session_id = f"{platform}_{user_id}"` exceeds thresholds. |
-| D3 | **Channel Directory Sync** | `agents/hermes/` | Automate real-time `channel_directory.json` diffing so that dynamic group/DM arrivals are exposed to Codomyrmex analytics panels. |
-
----
-
-## 🚀 v1.5.3 — Session Routing & Inference
-
-> **Theme**: State persistence and seamless handoffs.
+> **Theme**: Tool orchestration, memory retrieval, and sequential tasking.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
-| D1 | **Cross-Platform Handoff** | `agents/hermes/` | Allow identity resolution matching Telegram `user_id` mapped identities to Discord/Slack handles, sharing session prompts seamlessly across platforms. |
-| D2 | **Tool Execution Sandboxing** | `agents/hermes/` | Harden `prompt_builder.py` and tool-call returns inside the gateway so that malicious external messages cannot trigger destructive file system commands during inference. |
+| D1 | **Long-Term Memory Search** | `agents/hermes/` | Expose the `agentic_memory/` vector search as a native tool, allowing the agent to recall deeply archived session interactions. |
+| D2 | **Automated Task Execution** | `agents/hermes/` | Enable the agent to formulate step-by-step checklists internally via a `task_manager` without requiring external prompts for multi-step goals over chat. |
 
 ---
 

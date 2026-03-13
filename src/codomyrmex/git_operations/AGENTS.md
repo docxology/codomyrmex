@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Git workflow automation including commits, branching, merging, stash, submodules, tags, and GitHub API integration for issues, PRs, and repos.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

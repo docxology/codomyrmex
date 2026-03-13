@@ -28,7 +28,7 @@ async def test_cron_ticker_async_fire_and_forget() -> None:
 
     # The ticker should have immediately returned to its wait loop (not blocked by the 0.5s sleep)
     tick_start = time.time()
-    await asyncio.sleep(0.1) # Simulate main loop doing other things
+    await asyncio.sleep(0.1)  # Simulate main loop doing other things
     tick_elapsed = time.time() - tick_start
 
     # If the ticker had blocked us, tick_elapsed would be > 0.5s.

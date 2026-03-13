@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Project management integration with task tracking and milestone management.
 
 ## Active Components
 - `PAI.md` – Project file

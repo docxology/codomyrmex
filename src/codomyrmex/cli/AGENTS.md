@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Command-line interface for Codomyrmex with status reporting, agent management, memory operations, and orchestration controls.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

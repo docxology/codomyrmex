@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Centralized exception hierarchy with domain-specific error types and error handling utilities.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

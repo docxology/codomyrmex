@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Template engines supporting Jinja2-like and Mustache syntax for code generation.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

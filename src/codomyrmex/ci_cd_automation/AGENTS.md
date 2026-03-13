@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Continuous integration and deployment with pipeline management, flaky test quarantine, SBOM generation, and deployment orchestration.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Image processing, transformation, and manipulation utilities.
 
 ## Active Components
 - `PAI.md` – Project file

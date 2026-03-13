@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Data compression with multiple algorithms, streaming support, and adaptive compression strategies.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

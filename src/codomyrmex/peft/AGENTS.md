@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Parameter-efficient fine-tuning with LoRA, QLoRA, and adapter management.
 
 ## Active Components
 - `MCP_TOOL_SPECIFICATION.md` – Project file

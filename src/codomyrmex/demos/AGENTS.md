@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Example implementations and demonstration scripts for Codomyrmex features.
 
 ## Active Components
 - `PAI.md` – Project file

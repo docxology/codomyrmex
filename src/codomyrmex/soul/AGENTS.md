@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Agent personality, behavior configuration, and self-modeling systems.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

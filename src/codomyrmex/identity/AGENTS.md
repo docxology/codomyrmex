@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Identity management with user profiles, authentication, and access control.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

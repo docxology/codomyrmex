@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Chart generation (bar, line, pie, scatter, sparkline), Mermaid diagrams, and interactive dashboards.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

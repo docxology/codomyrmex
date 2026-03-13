@@ -14,7 +14,10 @@ import logging
 import os
 import subprocess
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
 
 logger = logging.getLogger(__name__)
 
@@ -201,6 +204,66 @@ class ProviderRouter:
                 "is_fallback": False,
                 "error": str(primary_exc),
             }
+
+    async def call_llm_stream(
+        self,
+        prompt: str,
+        *,
+        provider: str | None = None,
+        model: str | None = None,
+        timeout: int = 120,
+    ) -> AsyncIterator[str]:
+        """Unified LLM streaming invocation.
+
+        Yields tokens/chunks as they arrive asynchronously to reduce Time-to-First-Token.
+        """
+        resolved_provider = provider or self.resolve_provider()
+        resolved_model = model or self.model
+
+        import asyncio
+        import shutil
+
+        env = {**os.environ, "NO_COLOR": "1"}
+        if resolved_provider == "ollama":
+            bin_path = shutil.which("ollama") or "ollama"
+            cmd = [bin_path, "run", resolved_model, prompt]
+        else:
+            bin_path = shutil.which("hermes") or "hermes"
+            cmd = [
+                bin_path,
+                "chat",
+                "-q",
+                prompt,
+                "-Q",
+                "--provider",
+                resolved_provider,
+            ]
+
+        proc = await asyncio.create_subprocess_exec(
+            *cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            env=env,
+        )
+
+        if proc.stdout is None or proc.stderr is None:
+            return
+
+        yielded_any = False
+        while True:
+            chunk = await proc.stdout.read(64)  # read small chunks to force rapid yield
+            if not chunk:
+                break
+            yielded_any = True
+            yield chunk.decode("utf-8", errors="replace")
+
+        await proc.wait()
+
+        if proc.returncode != 0 and not yielded_any:
+            err = await proc.stderr.read()
+            raise RuntimeError(
+                f"Streaming failed (exit {proc.returncode}): {err.decode().strip()}"
+            )
 
     def _dispatch(
         self,

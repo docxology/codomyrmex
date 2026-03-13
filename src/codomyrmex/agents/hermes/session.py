@@ -155,7 +155,9 @@ class SQLiteSessionStore:
     def __init__(self, db_path: str | Path = ":memory:") -> None:
         self._db_path = str(db_path)
         # Increase the default timeout to 5000ms to allow concurrent lockers to wait
-        self._conn = sqlite3.connect(self._db_path, check_same_thread=False, timeout=5.0)
+        self._conn = sqlite3.connect(
+            self._db_path, check_same_thread=False, timeout=5.0
+        )
         self._init_schema()
 
     def _init_schema(self) -> None:
@@ -165,7 +167,7 @@ class SQLiteSessionStore:
         self._conn.execute("PRAGMA synchronous=NORMAL;")
         # Set busy timeout (this is somewhat redundant with timeout=5.0, but explicit)
         self._conn.execute("PRAGMA busy_timeout=5000;")
-        
+
         self._conn.execute("""
             CREATE TABLE IF NOT EXISTS hermes_sessions (
                 session_id TEXT PRIMARY KEY,

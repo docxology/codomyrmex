@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Multi-format serialization supporting JSON, YAML, MessagePack, protobuf, and binary formats with validation.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
