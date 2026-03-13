@@ -18,6 +18,8 @@ def _get_engine():
     return MemeticEngine()
 
 
+def _get_meme():
+    """Lazy import of Meme model."""
     from codomyrmex.meme.memetics.models import Meme
 
     return Meme
