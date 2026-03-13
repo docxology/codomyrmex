@@ -105,6 +105,7 @@ Each Telegram bot token can only have **one** `getUpdates` poller. If two gatewa
 ### Shared Runtime, Separate Data
 
 All instances share the same Python runtime at `~/.hermes/hermes-agent/venv/`. Only the **data directory** (`HERMES_HOME`) differs. This means:
+
 - ✅ Updating Hermes updates all instances
 - ⚠️ A bad Hermes update breaks all instances simultaneously
 
@@ -131,12 +132,12 @@ tail -f ~/.hermes/logs/gateway.log ~/hermes-bot2/.hermes/logs/gateway.log
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|:---|:---|:---|
-| 409 Conflict errors | Two instances using same bot token | Ensure unique tokens per instance |
-| "Gateway already running" | Stale PID file | `HERMES_HOME=... hermes gateway stop` |
-| Bot uses wrong personality | HERMES_HOME not set correctly | Check env var in service definition |
-| Config changes not applied | Gateway not restarted | `launchctl stop` then `start` |
+| Symptom                    | Cause                              | Fix                                   |
+| :------------------------- | :--------------------------------- | :------------------------------------ |
+| 409 Conflict errors        | Two instances using same bot token | Ensure unique tokens per instance     |
+| "Gateway already running"  | Stale PID file                     | `HERMES_HOME=... hermes gateway stop` |
+| Bot uses wrong personality | HERMES_HOME not set correctly      | Check env var in service definition   |
+| Config changes not applied | Gateway not restarted              | `launchctl stop` then `start`         |
 
 ## Related Documents
 

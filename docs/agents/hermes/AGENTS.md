@@ -9,54 +9,60 @@ Agent coordination document for the Hermes documentation subfolder. Guides AI ag
 ## Documentation Files (19)
 
 ### Getting Started
-| File | Description |
-|:---|:---|
-| `README.md` | Index, overview, and quick start |
-| `setup_guide.md` | Complete new-instance setup (from official docs) |
-| `cli_reference.md` | All CLI commands and slash commands |
+
+| File               | Description                                      |
+| :----------------- | :----------------------------------------------- |
+| `README.md`        | Index, overview, and quick start                 |
+| `setup_guide.md`   | Complete new-instance setup (from official docs) |
+| `cli_reference.md` | All CLI commands and slash commands              |
 
 ### Architecture & Configuration
-| File | Description |
-|:---|:---|
-| `architecture.md` | Core agent loop, components, structured reasoning |
-| `configuration.md` | config.yaml reference, YAML pitfalls |
-| `environment.md` | HERMES_HOME, .env, API key management |
-| `models.md` | Model selection, OpenRouter, providers |
-| `personalities.md` | Personality system and custom personas |
+
+| File                        | Description                                       |
+| :-------------------------- | :------------------------------------------------ |
+| `architecture.md`           | Core agent loop, components, structured reasoning |
+| `codomyrmex_integration.md` | Deep dive into Codomyrmex interfaces and MCP      |
+| `configuration.md`          | config.yaml reference, YAML pitfalls              |
+| `environment.md`            | HERMES_HOME, .env, API key management             |
+| `models.md`                 | Model selection, OpenRouter, providers            |
+| `personalities.md`          | Personality system and custom personas            |
 
 ### Platform Integration
-| File | Description |
-|:---|:---|
-| `gateway.md` | Gateway daemon, platform adapters |
-| `telegram.md` | Telegram bot setup, 409 Conflict fixes |
-| `launchd.md` | macOS launchd service management |
-| `multi_instance.md` | Multi-bot deployment patterns |
+
+| File                | Description                            |
+| :------------------ | :------------------------------------- |
+| `gateway.md`        | Gateway daemon, platform adapters      |
+| `telegram.md`       | Telegram bot setup, 409 Conflict fixes |
+| `launchd.md`        | macOS launchd service management       |
+| `multi_instance.md` | Multi-bot deployment patterns          |
 
 ### Agent Capabilities
-| File | Description |
-|:---|:---|
-| `sessions.md` | Session lifecycle, state.db, FTS5 |
-| `skills.md` | Self-improving skills, agentskills.io |
-| `tools.md` | Tool registry, MCP integration |
-| `cron.md` | Scheduled jobs, proactive messaging |
+
+| File          | Description                           |
+| :------------ | :------------------------------------ |
+| `sessions.md` | Session lifecycle, state.db, FTS5     |
+| `skills.md`   | Self-improving skills, agentskills.io |
+| `tools.md`    | Tool registry, MCP integration        |
+| `cron.md`     | Scheduled jobs, proactive messaging   |
 
 ### Operations
-| File | Description |
-|:---|:---|
+
+| File                 | Description                           |
+| :------------------- | :------------------------------------ |
 | `troubleshooting.md` | 9 issue patterns with diagnosis/fixes |
-| `security.md` | API key hygiene, access control |
+| `security.md`        | API key hygiene, access control       |
 
 ## Scripts (`scripts/agents/hermes/`)
 
-| Script | Purpose |
-|:---|:---|
-| `new_instance.py` | Create fully-configured new Hermes instances |
-| `setup_hermes.py` | Validate environment, config, backends |
-| `run_hermes.py` | Send prompt, get response |
-| `dispatch_hermes.py` | Sweep-and-dispatch orchestrator |
-| `observe_hermes.py` | Session observability |
-| `evaluate_orchestrators.py` | Thin orchestrator evaluation |
-| `prompt_context.py` | Project-aware context builder |
+| Script                      | Purpose                                      |
+| :-------------------------- | :------------------------------------------- |
+| `new_instance.py`           | Create fully-configured new Hermes instances |
+| `setup_hermes.py`           | Validate environment, config, backends       |
+| `run_hermes.py`             | Send prompt, get response                    |
+| `dispatch_hermes.py`        | Sweep-and-dispatch orchestrator              |
+| `observe_hermes.py`         | Session observability                        |
+| `evaluate_orchestrators.py` | Thin orchestrator evaluation                 |
+| `prompt_context.py`         | Project-aware context builder                |
 
 ## Operating Contracts
 

@@ -1,6 +1,6 @@
 # CEREBRUM - API Specification
 
-**Version**: v1.1.9 | **Last Updated**: February 2026
+**Version**: v1.3.0 | **Last Updated**: March 2026
 
 ## Overview
 
@@ -421,6 +421,55 @@ Configuration for CEREBRUM engine.
 - `TransformationError`: Transformation errors
 - `VisualizationError`: Visualization errors
 
+
+
+## Free-Energy Loop (v1.3.0)
+
+### FreeEnergyLoop
+
+Closed-loop free-energy minimization runner for active inference agents.
+
+#### Constructor
+
+##### `__init__(agent: ActiveInferenceAgent, max_steps: int = 50, fe_threshold: float = 0.1, convergence_window: int = 3) -> None`
+
+**Parameters:**
+- `agent` (ActiveInferenceAgent): Active inference agent to run
+- `max_steps` (int): Maximum perception-action cycles
+- `fe_threshold` (float): Free energy convergence threshold
+- `convergence_window` (int): Consecutive steps below threshold needed for convergence
+
+#### Methods
+
+##### `run(observation: dict[str, Any]) -> LoopResult`
+
+Run the free-energy minimization loop.
+
+**Parameters:**
+- `observation` (dict[str, Any]): Initial observation
+
+**Returns:** `LoopResult` - Result of the loop execution
+
+### StepResult
+
+Result of a single perception-action cycle.
+
+#### Attributes
+- `step` (int): Step number
+- `free_energy` (float): Free energy at this step
+- `action` (str): Action selected
+- `beliefs` (dict[str, float]): Belief state after update
+
+### LoopResult
+
+Result of the full free-energy loop execution.
+
+#### Attributes
+- `converged` (bool): Whether the loop converged
+- `steps` (int): Total steps taken
+- `final_free_energy` (float): Final free energy value
+- `action_history` (list[str]): Sequence of actions taken
+- `step_results` (list[StepResult]): Per-step detail
 
 
 ## Navigation Links

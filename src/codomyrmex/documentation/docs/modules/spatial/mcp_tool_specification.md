@@ -1,16 +1,54 @@
-# Spatial - MCP Tool Specification
+# Spatial — MCP Tool Specification
 
-This document outlines the specification for tools within the Spatial module that are intended to be integrated with the Model Context Protocol (MCP).
+**Version**: v1.3.0 | **Last Updated**: March 2026
 
-## Current Status: No MCP Tools Defined
+Tools are registered via `@mcp_tool(category="spatial")` and auto-discovered by the PAI MCP bridge.
 
-The Spatial module provides spatial modeling capabilities including 3D modeling, 4D modeling (Synergetics/tetravolumes), world models, coordinate system transformations (Cartesian, spherical, cylindrical, geographic), rendering, and physics simulation for internal use by other Codomyrmex modules. These functions are primarily for programmatic integration within the application lifecycle and are not suited for exposure as Model Context Protocol (MCP) tools.
+---
 
-MCP tools are typically designed for discrete, invocable actions or queries that an external agent (like an LLM) would trigger. The internal spatial modeling, coordinate transformation, and rendering mechanisms do not fit this paradigm.
+## Tool: `spatial_generate_geodesic_mesh`
 
-If future enhancements to this module introduce features that are appropriate for MCP (e.g., performing coordinate transformations on demand, or generating spatial visualizations from structured input), this document will be updated accordingly.
+Generate an icosahedral geodesic mesh at the given subdivision frequency.
 
-For details on how to use the spatial functionalities within your Python code, please refer to the module's `README.md` and `API_SPECIFICATION.md`.
+- **Category**: spatial
+- **Parameters**:
+  - `frequency` (integer, optional, default 2): Subdivision frequency (1 = base icosahedron).
+  - `radius` (float, optional, default 1.0): Sphere radius.
+- **Returns**: `{"status": "success", "vertex_count": <int>, "face_count": <int>, "frequency": <int>}`
+
+---
+
+## Tool: `spatial_rotate_point`
+
+Rotate a 3D point using quaternion rotation (axis-angle input).
+
+- **Category**: spatial
+- **Parameters**:
+  - `x`, `y`, `z` (float, required): Point coordinates.
+  - `axis_x`, `axis_y`, `axis_z` (float, required): Rotation axis components.
+  - `angle` (float, required): Rotation angle in radians.
+- **Returns**: `{"status": "success", "x": <float>, "y": <float>, "z": <float>}`
+
+---
+
+## Tool: `spatial_geodesic_distance`
+
+Compute geodesic (great-circle) distance between two points on a sphere.
+
+- **Category**: spatial
+- **Parameters**:
+  - `x1`, `y1`, `z1` (float, required): First point coordinates.
+  - `x2`, `y2`, `z2` (float, required): Second point coordinates.
+  - `radius` (float, optional, default 1.0): Sphere radius.
+- **Returns**: `{"status": "success", "geodesic_distance": <float>}`
+
+---
+
+## Error Handling
+
+All tools return `{"status": "error", "message": "<message>"}` on failure.
+
+For additional spatial tools (coordinate transformations, point distance), see `mcp_tools.py`.
 
 ## Navigation Links
 

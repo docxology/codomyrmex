@@ -102,12 +102,12 @@ For running a second (or third, etc.) Hermes bot on the same machine:
 
 ## Key Differences for Additional Instances
 
-| Setting | Primary | Additional Instance |
-|:---|:---|:---|
-| **Label** | `ai.hermes.gateway` | `ai.hermes.gateway.instance-name` |
-| **HERMES_HOME** | Not set (defaults to `~/.hermes/`) | Must be explicitly set via `EnvironmentVariables` |
-| **`--replace` flag** | Optional | **Recommended** — prevents stale PID deadlocks |
-| **Log paths** | `~/.hermes/logs/` | Instance-specific log directory |
+| Setting              | Primary                            | Additional Instance                               |
+| :------------------- | :--------------------------------- | :------------------------------------------------ |
+| **Label**            | `ai.hermes.gateway`                | `ai.hermes.gateway.instance-name`                 |
+| **HERMES_HOME**      | Not set (defaults to `~/.hermes/`) | Must be explicitly set via `EnvironmentVariables` |
+| **`--replace` flag** | Optional                           | **Recommended** — prevents stale PID deadlocks    |
+| **Log paths**        | `~/.hermes/logs/`                  | Instance-specific log directory                   |
 
 ## Installing a Plist
 

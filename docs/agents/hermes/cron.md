@@ -39,9 +39,9 @@ Jobs are stored in `$HERMES_HOME/cron/` as YAML/JSON files:
 
 ```yaml
 # Example cron job structure
-schedule: "0 9 * * *"        # cron expression: daily at 9 AM
+schedule: "0 9 * * *" # cron expression: daily at 9 AM
 prompt: "Summarize overnight activity and pending tasks"
-target: telegram_user123     # delivery target
+target: telegram_user123 # delivery target
 ```
 
 ### Cron Expression Format
@@ -59,6 +59,7 @@ Standard 5-field cron format: `minute hour day month weekday`
 ```
 
 **Examples**:
+
 - `0 9 * * *` — Daily at 9:00 AM
 - `*/30 * * * *` — Every 30 minutes
 - `0 9 * * 1-5` — Weekdays at 9:00 AM

@@ -679,3 +679,233 @@ def hermes_provider_status() -> dict[str, Any]:
         return {"status": "success", "providers": router.get_provider_status()}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Parse an Obsidian Canvas (.canvas) file into a structured dictionary "
+        "of textual nodes and connections, useful for reading architecture diagrams."
+    ),
+)
+def hermes_parse_canvas(vault_path: str, canvas_name: str) -> dict[str, Any]:
+    """Parse an Obsidian Canvas into a readable node graph.
+
+    Args:
+        vault_path: Path to the Obsidian vault root directory.
+        canvas_name: Name or relative path of the .canvas file.
+
+    Returns:
+        dict with keys: status, nodes (list), edges (list), error (if any)
+    """
+    try:
+        import os
+        from pathlib import Path
+
+        from codomyrmex.agentic_memory.obsidian.canvas import parse_canvas
+        from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
+
+        expanded = Path(os.path.expanduser(vault_path)).resolve()
+        vault = ObsidianVault(expanded)
+
+        if not canvas_name.endswith(".canvas"):
+            canvas_name += ".canvas"
+
+        canvas_path = vault.path / canvas_name
+        if not canvas_path.exists():
+            return {"status": "error", "message": f"Canvas not found at {canvas_path}"}
+
+        canvas = parse_canvas(canvas_path)
+
+        # Format the nodes and edges for LLM consumption
+        nodes = []
+        for node in canvas.nodes:
+            if node.type == "text":
+                nodes.append({"id": node.id, "type": "text", "content": node.text})
+            elif node.type == "file":
+                nodes.append({"id": node.id, "type": "file", "file": node.file})
+            elif node.type == "link":
+                nodes.append({"id": node.id, "type": "link", "url": node.url})
+
+        edges = []
+        for edge in canvas.edges:
+            edges.append(
+                {
+                    "id": edge.id,
+                    "fromNode": edge.fromNode,
+                    "toNode": edge.toNode,
+                    "label": edge.label or "",
+                }
+            )
+
+        return {
+            "status": "success",
+            "nodes": nodes,
+            "edges": edges,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Search the Obsidian Vault for historical sessions, context, or facts "
+        "using full-text indexing or optional regex. Useful for long-term RAG."
+    ),
+)
+def hermes_search_vault(
+    vault_path: str, query: str, use_regex: bool = False
+) -> dict[str, Any]:
+    """Search the specified Obsidian vault.
+
+    Args:
+        vault_path: Path to the Obsidian vault root directory.
+        query: Search string or regex pattern.
+        use_regex: Set to True to treat the query as a regular expression.
+
+    Returns:
+        dict with keys: status, results (list of snippets), count, error (if any)
+    """
+    try:
+        import os
+        from pathlib import Path
+
+        from codomyrmex.agentic_memory.obsidian.search import search_regex, search_vault
+        from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
+
+        expanded = Path(os.path.expanduser(vault_path)).resolve()
+        vault = ObsidianVault(expanded)
+
+        if use_regex:
+            results = search_regex(vault, query)
+        else:
+            results = search_vault(vault, query)
+
+        formatted = []
+        for res in results:
+            formatted.append({"note": res.note.title, "matches": res.context})
+
+        return {
+            "status": "success",
+            "results": formatted,
+            "count": len(formatted),
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Create a stateful workflow task for this session. "
+        "Allows Hermes to break down complex instructions into explicit checklists."
+    ),
+)
+def hermes_create_task(
+    session_id: str,
+    name: str,
+    description: str,
+    depends_on: list[str] | None = None,
+) -> dict[str, Any]:
+    """Create an internal orchestration task.
+
+    Args:
+        session_id: The current Hermes session ID.
+        name: A short unique identifier for the task (e.g., "setup_db").
+        description: Details of the task to be performed.
+        depends_on: Optional list of task names this task depends on.
+
+    Returns:
+        dict with keys: status, task
+    """
+    try:
+        from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
+        client = _get_client()
+        with SQLiteSessionStore(client._session_db_path) as store:
+            session = store.load(session_id)
+            if not session:
+                return {
+                    "status": "error",
+                    "message": f"Session {session_id} not found.",
+                }
+
+            tasks = session.metadata.get("workflow_tasks", {})
+
+            if name in tasks:
+                return {"status": "error", "message": f"Task '{name}' already exists."}
+
+            new_task = {
+                "name": name,
+                "description": description,
+                "depends_on": depends_on or [],
+                "status": "pending",
+                "result": None,
+                "error": "",
+            }
+            tasks[name] = new_task
+            session.metadata["workflow_tasks"] = tasks
+
+            store.save(session)
+            return {"status": "success", "task": new_task}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Update the status of a stateful workflow task. "
+        "Use this as you progress through your self-created checklist."
+    ),
+)
+def hermes_update_task_status(
+    session_id: str,
+    name: str,
+    status: str,
+    result: str = "",
+    error: str = "",
+) -> dict[str, Any]:
+    """Update a task's status in the current session workflow.
+
+    Args:
+        session_id: The current Hermes session ID.
+        name: The task identifier to update.
+        status: The new status (e.g., "running", "completed", "failed").
+        result: Optional result summary to store.
+        error: Optional error message if failed.
+
+    Returns:
+        dict with keys: status, task, message
+    """
+    try:
+        from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
+        client = _get_client()
+        with SQLiteSessionStore(client._session_db_path) as store:
+            session = store.load(session_id)
+            if not session:
+                return {
+                    "status": "error",
+                    "message": f"Session {session_id} not found.",
+                }
+
+            tasks = session.metadata.get("workflow_tasks", {})
+
+            if name not in tasks:
+                return {"status": "error", "message": f"Task '{name}' not found."}
+
+            task = tasks[name]
+            task["status"] = status
+            if result:
+                task["result"] = result
+            if error:
+                task["error"] = error
+
+            session.metadata["workflow_tasks"] = tasks
+            store.save(session)
+
+            return {"status": "success", "task": task}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

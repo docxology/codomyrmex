@@ -54,17 +54,17 @@ Hermes uses XML-tagged structured outputs for transparent reasoning:
 
 ## Key Implementation Files
 
-| File | Purpose |
-|:---|:---|
-| `hermes_cli/config.py` | HERMES_HOME resolution, config loading |
-| `hermes_cli/main.py` | CLI entrypoint |
-| `gateway/run.py` | `GatewayRunner` — multi-platform daemon |
-| `gateway/session.py` | Session routing and context management |
-| `agent/run_agent.py` | Core `AIAgent` conversation loop |
-| `agent/prompt_builder.py` | System prompt assembly |
-| `agent/context_compressor.py` | LLM-based context summarization |
-| `tools/registry.py` | Central tool schema/handler registry |
-| `hermes_state.py` | SQLite + FTS5 state persistence |
+| File                          | Purpose                                 |
+| :---------------------------- | :-------------------------------------- |
+| `hermes_cli/config.py`        | HERMES_HOME resolution, config loading  |
+| `hermes_cli/main.py`          | CLI entrypoint                          |
+| `gateway/run.py`              | `GatewayRunner` — multi-platform daemon |
+| `gateway/session.py`          | Session routing and context management  |
+| `agent/run_agent.py`          | Core `AIAgent` conversation loop        |
+| `agent/prompt_builder.py`     | System prompt assembly                  |
+| `agent/context_compressor.py` | LLM-based context summarization         |
+| `tools/registry.py`           | Central tool schema/handler registry    |
+| `hermes_state.py`             | SQLite + FTS5 state persistence         |
 
 ## HERMES_HOME Resolution
 
@@ -80,14 +80,14 @@ This single line determines where **all** data is read from: `.env`, `config.yam
 
 Hermes supports 6 execution backends for tool commands:
 
-| Backend | Use Case |
-|:---|:---|
-| **local** | Direct terminal execution (default) |
-| **Docker** | Isolated container execution |
-| **SSH** | Remote server execution |
-| **Daytona** | Serverless with hibernation |
-| **Singularity** | HPC/research environments |
-| **Modal** | Cloud-native serverless |
+| Backend         | Use Case                            |
+| :-------------- | :---------------------------------- |
+| **local**       | Direct terminal execution (default) |
+| **Docker**      | Isolated container execution        |
+| **SSH**         | Remote server execution             |
+| **Daytona**     | Serverless with hibernation         |
+| **Singularity** | HPC/research environments           |
+| **Modal**       | Cloud-native serverless             |
 
 ## Related Documents
 

@@ -11,35 +11,35 @@ Hermes supports a flexible personality system that lets you define custom person
 ```yaml
 # config.yaml
 agent:
-  personality: civic_technical_analyst   # active personality name
-  personalities:
-    civic_technical_analyst: |
-      You are a technical expert with strong civic awareness
-      and intelligence‑analyst skills. Provide detailed, accurate
-      technical information while considering societal implications
-      and applying analytical rigor.
+    personality: civic_technical_analyst # active personality name
+    personalities:
+        civic_technical_analyst: |
+            You are a technical expert with strong civic awareness
+            and intelligence‑analyst skills. Provide detailed, accurate
+            technical information while considering societal implications
+            and applying analytical rigor.
 ```
 
 ## Built-in Personalities
 
 Hermes ships with several built-in personalities:
 
-| Name | Style |
-|:---|:---|
-| `helpful` | Friendly, general-purpose assistant |
-| `concise` | Brief, to-the-point responses |
-| `technical` | Detailed, accurate technical information |
-| `creative` | Innovative, outside-the-box thinking |
-| `teacher` | Patient explanations with examples |
-| `philosopher` | Contemplative, examining deeper meaning |
-| `noir` | Hard-boiled detective voice |
-| `pirate` | Nautical terminology and flair |
-| `shakespeare` | Elizabethan prose and dramatic flair |
-| `surfer` | Laid-back, California vibes |
-| `hype` | Maximum enthusiasm and energy |
-| `kawaii` | Cute expressions with kaomoji |
-| `catgirl` | Anime catgirl persona (nya~!) |
-| `uwu` | Soft, playful internet culture |
+| Name          | Style                                    |
+| :------------ | :--------------------------------------- |
+| `helpful`     | Friendly, general-purpose assistant      |
+| `concise`     | Brief, to-the-point responses            |
+| `technical`   | Detailed, accurate technical information |
+| `creative`    | Innovative, outside-the-box thinking     |
+| `teacher`     | Patient explanations with examples       |
+| `philosopher` | Contemplative, examining deeper meaning  |
+| `noir`        | Hard-boiled detective voice              |
+| `pirate`      | Nautical terminology and flair           |
+| `shakespeare` | Elizabethan prose and dramatic flair     |
+| `surfer`      | Laid-back, California vibes              |
+| `hype`        | Maximum enthusiasm and energy            |
+| `kawaii`      | Cute expressions with kaomoji            |
+| `catgirl`     | Anime catgirl persona (nya~!)            |
+| `uwu`         | Soft, playful internet culture           |
 
 ## Creating Custom Personalities
 
@@ -47,9 +47,9 @@ Hermes ships with several built-in personalities:
 
 ```yaml
 agent:
-  personality: researcher
-  personalities:
-    researcher: You are a meticulous researcher. Cite sources, verify claims, and present findings objectively.
+    personality: researcher
+    personalities:
+        researcher: You are a meticulous researcher. Cite sources, verify claims, and present findings objectively.
 ```
 
 ### Multi-Line Personality
@@ -58,17 +58,17 @@ Use YAML block scalars (`|`) for complex personas:
 
 ```yaml
 agent:
-  personalities:
-    civic_technical_analyst: |
-      You are a technical expert with strong civic awareness
-      and intelligence-analyst skills.
+    personalities:
+        civic_technical_analyst: |
+            You are a technical expert with strong civic awareness
+            and intelligence-analyst skills.
 
-      Core behaviors:
-      - Provide detailed, accurate technical information
-      - Consider societal implications of technology
-      - Apply analytical rigor to all assessments
-      - Balance technical depth with accessibility
-      - Flag potential risks and ethical concerns
+            Core behaviors:
+            - Provide detailed, accurate technical information
+            - Consider societal implications of technology
+            - Apply analytical rigor to all assessments
+            - Balance technical depth with accessibility
+            - Flag potential risks and ethical concerns
 ```
 
 ### Multiple Personalities
@@ -77,17 +77,17 @@ Define several and switch between them by changing the `personality` field:
 
 ```yaml
 agent:
-  personality: morning_briefer   # currently active
-  personalities:
-    morning_briefer: |
-      Create concise morning briefings summarizing
-      overnight activity, news, and pending tasks.
-    deep_researcher: |
-      Conduct thorough research with source verification.
-      Always provide citations and confidence levels.
-    code_reviewer: |
-      Review code with focus on security, performance,
-      and maintainability. Use a constructive tone.
+    personality: morning_briefer # currently active
+    personalities:
+        morning_briefer: |
+            Create concise morning briefings summarizing
+            overnight activity, news, and pending tasks.
+        deep_researcher: |
+            Conduct thorough research with source verification.
+            Always provide citations and confidence levels.
+        code_reviewer: |
+            Review code with focus on security, performance,
+            and maintainability. Use a constructive tone.
 ```
 
 ## Per-Instance Personalities

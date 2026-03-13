@@ -12,52 +12,52 @@ Hermes configuration lives in `$HERMES_HOME/config.yaml`. This file controls mod
 # =============================================================================
 # Model / Provider
 # =============================================================================
-model: nvidia/nemotron-3-super-120b-a12b:free   # OpenRouter model string
+model: nvidia/nemotron-3-super-120b-a12b:free # OpenRouter model string
 
 # =============================================================================
 # Toolsets
 # =============================================================================
 toolsets:
-  - all                # enable all tool categories
+    - all # enable all tool categories
 
 # =============================================================================
 # Agent behavior & personalities
 # =============================================================================
 agent:
-  max_turns: 150           # max tool-calling turns per conversation
-  verbose: false           # show internal reasoning in logs
-  reasoning_effort: medium # low | medium | high
-  personality: helpful     # active personality name (must exist below)
-  personalities:
-    helpful: You are a helpful, friendly AI assistant.
-    technical: You are a technical expert. Provide detailed, accurate information.
-    custom_name: |
-      Multi-line personality definition.
-      Supports any character or formatting.
+    max_turns: 150 # max tool-calling turns per conversation
+    verbose: false # show internal reasoning in logs
+    reasoning_effort: medium # low | medium | high
+    personality: helpful # active personality name (must exist below)
+    personalities:
+        helpful: You are a helpful, friendly AI assistant.
+        technical: You are a technical expert. Provide detailed, accurate information.
+        custom_name: |
+            Multi-line personality definition.
+            Supports any character or formatting.
 
 # =============================================================================
 # Terminal backend
 # =============================================================================
 terminal:
-  backend: local           # local | docker | ssh | daytona | singularity | modal
-  cwd: .                   # working directory for commands
-  timeout: 180             # command timeout in seconds
+    backend: local # local | docker | ssh | daytona | singularity | modal
+    cwd: . # working directory for commands
+    timeout: 180 # command timeout in seconds
 
 # =============================================================================
 # Context compression
 # =============================================================================
 compression:
-  enabled: true
-  threshold: 0.85          # compress when context reaches 85% of model limit
-  summary_model: google/gemini-3-flash-preview  # model for summarization
-  summary_provider: auto
+    enabled: true
+    threshold: 0.85 # compress when context reaches 85% of model limit
+    summary_model: google/gemini-3-flash-preview # model for summarization
+    summary_provider: auto
 
 # =============================================================================
 # Telegram
 # =============================================================================
 telegram:
-  require_mention: true        # only respond when @mentioned
-  free_response_channels: ""   # channel IDs for auto-response (empty = none)
+    require_mention: true # only respond when @mentioned
+    free_response_channels: "" # channel IDs for auto-response (empty = none)
 ```
 
 ## Critical YAML Pitfalls
@@ -81,10 +81,10 @@ agent:
 ```yaml
 # ✅ GOOD: single agent: block with all settings
 agent:
-  max_turns: 150
-  personality: technical
-  personalities:
-    technical: You are a technical expert.
+    max_turns: 150
+    personality: technical
+    personalities:
+        technical: You are a technical expert.
 ```
 
 > **Lesson learned**: Always validate your YAML after editing. Use `python3 -c "import yaml; print(yaml.safe_load(open('config.yaml')))"` to see what the parser actually reads.

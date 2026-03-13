@@ -17,24 +17,24 @@ The model string follows OpenRouter's `provider/model-name` format.
 
 ## Providers
 
-| Provider | Config Key | Notes |
-|:---|:---|:---|
-| **OpenRouter** | `OPENROUTER_API_KEY` | Recommended — access to 100+ models |
-| **Nous Portal** | Auth via `hermes model` | Native Nous models |
-| **OpenAI** | `OPENAI_API_KEY` | Direct OpenAI access |
-| **Any OpenAI-compatible** | Custom endpoint | Ollama, vLLM, etc. |
+| Provider                  | Config Key              | Notes                               |
+| :------------------------ | :---------------------- | :---------------------------------- |
+| **OpenRouter**            | `OPENROUTER_API_KEY`    | Recommended — access to 100+ models |
+| **Nous Portal**           | Auth via `hermes model` | Native Nous models                  |
+| **OpenAI**                | `OPENAI_API_KEY`        | Direct OpenAI access                |
+| **Any OpenAI-compatible** | Custom endpoint         | Ollama, vLLM, etc.                  |
 
 ### OpenRouter Setup
 
 1. Get an API key at [openrouter.ai/keys](https://openrouter.ai/keys)
 2. Add to `.env`:
-   ```bash
-   OPENROUTER_API_KEY=sk-or-v1-...
-   ```
+    ```bash
+    OPENROUTER_API_KEY=sk-or-v1-...
+    ```
 3. Set model in `config.yaml`:
-   ```yaml
-   model: nousresearch/hermes-3-llama-3.1-405b
-   ```
+    ```yaml
+    model: nousresearch/hermes-3-llama-3.1-405b
+    ```
 
 ### Listing Available Models
 
@@ -80,14 +80,14 @@ compression:
 
 ```yaml
 agent:
-  reasoning_effort: medium   # low | medium | high
+    reasoning_effort: medium # low | medium | high
 ```
 
-| Level | Behavior |
-|:---|:---|
-| **low** | Quick responses, minimal planning |
-| **medium** | Balanced reasoning and tool use |
-| **high** | Deep reasoning with scratchpads and multi-step plans |
+| Level      | Behavior                                             |
+| :--------- | :--------------------------------------------------- |
+| **low**    | Quick responses, minimal planning                    |
+| **medium** | Balanced reasoning and tool use                      |
+| **high**   | Deep reasoning with scratchpads and multi-step plans |
 
 Higher reasoning effort adds structured thinking tags (`<SCRATCHPAD>`, `<PLAN>`) to the prompt, encouraging the model to think more carefully.
 
@@ -109,6 +109,7 @@ Vision Model (if configured)
 ## Rate Limiting
 
 OpenRouter has per-model rate limits. If you hit limits:
+
 - Switch to a less popular model
 - Add retry logic (Hermes handles this internally)
 - Use multiple OpenRouter keys across instances

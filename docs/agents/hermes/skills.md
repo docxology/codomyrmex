@@ -50,15 +50,15 @@ $HERMES_HOME/skills/
 name: Example Skill
 description: A reusable skill for doing X
 prompt: |
-  You are an expert in X. When asked to perform Y,
-  follow these steps:
-  1. Step one
-  2. Step two
-  3. Step three
+    You are an expert in X. When asked to perform Y,
+    follow these steps:
+    1. Step one
+    2. Step two
+    3. Step three
 tools:
-  - web_search
-  - code_execution
-  - file_operations
+    - web_search
+    - code_execution
+    - file_operations
 ```
 
 ## CLI Commands
@@ -85,11 +85,11 @@ Hermes integrates with [agentskills.io](https://agentskills.io) for community sh
 
 ## Key Implementation Files
 
-| File | Purpose |
-|:---|:---|
-| `tools/skills_hub.py` | Skills Hub CLI handler and sync |
-| `tools/skills_tool.py` | In-conversation skill invocation |
-| `tools/skill_manager_tool.py` | CRUD operations on skills |
+| File                          | Purpose                          |
+| :---------------------------- | :------------------------------- |
+| `tools/skills_hub.py`         | Skills Hub CLI handler and sync  |
+| `tools/skills_tool.py`        | In-conversation skill invocation |
+| `tools/skill_manager_tool.py` | CRUD operations on skills        |
 
 ## Related Documents
 

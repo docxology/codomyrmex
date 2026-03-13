@@ -13,16 +13,14 @@ def test_context_compressor_deduplicates_and_truncates() -> None:
     compressor = ContextCompressor(max_tokens=100, compression_ratio=0.5)
 
     messages: list[dict[str, Any]] = [
-        {"role": "user", "content": "Hello!"},
-        {"role": "assistant", "content": "Hi there."},
         {"role": "user", "content": "What's up?"},
         {"role": "user", "content": "What's up?"},  # Exact duplicate
+        {"role": "assistant", "content": "I see..."},
     ]
 
     # Add a massive block exceeding 400 chars easily
     huge_block = "A" * 600
     messages.append({"role": "user", "content": huge_block})
-    messages.append({"role": "assistant", "content": "I see..."})
     messages.append({"role": "user", "content": "And finally, bye!"})
 
     # Verify it needs compression

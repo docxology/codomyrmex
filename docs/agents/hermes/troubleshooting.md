@@ -25,6 +25,7 @@ launchctl list | grep hermes
 ### 1. Telegram 409 Conflict
 
 **Error**:
+
 ```
 telegram.error.Conflict: Conflict: terminated by other getUpdates request;
 make sure that only one bot instance is running
@@ -33,6 +34,7 @@ make sure that only one bot instance is running
 **Cause**: Two processes are polling `getUpdates` with the same bot token. Telegram only permits one consumer per token.
 
 **Diagnosis**:
+
 ```bash
 # Find all hermes processes
 ps aux | grep hermes | grep -v grep
@@ -46,6 +48,7 @@ grep "bot[0-9]*:" ~/.hermes/logs/gateway.log | tail -1
 ```
 
 **Fix**:
+
 1. Ensure each bot token is used by exactly one process
 2. Kill the duplicate: `kill <PID>`
 3. If multi-instance, verify each instance has a unique HERMES_HOME with unique bot token
@@ -55,6 +58,7 @@ grep "bot[0-9]*:" ~/.hermes/logs/gateway.log | tail -1
 ### 2. "Gateway Already Running" (Stale PID)
 
 **Error**:
+
 ```
 Another gateway instance is already running (PID 5519, HERMES_HOME=...).
 Use 'hermes gateway restart' to replace it, or 'hermes gateway stop' first.
@@ -63,6 +67,7 @@ Use 'hermes gateway restart' to replace it, or 'hermes gateway stop' first.
 **Cause**: `gateway.pid` contains a PID from a previous process that crashed without cleanup.
 
 **Fix**:
+
 ```bash
 # Option 1: Stop via hermes CLI
 HERMES_HOME=/path/to/.hermes hermes gateway stop
@@ -82,6 +87,7 @@ hermes gateway run
 ### 3. Invalid Command: `hermes telegram`
 
 **Error**:
+
 ```
 hermes: error: argument command: invalid choice: 'telegram'
 ```
@@ -91,6 +97,7 @@ hermes: error: argument command: invalid choice: 'telegram'
 **Fix**: Use `hermes gateway run` instead.
 
 **Valid commands**:
+
 ```
 chat, model, gateway, setup, whatsapp, login, logout, status,
 cron, doctor, config, pairing, skills, tools, sessions, insights,
@@ -106,6 +113,7 @@ claw, version, update, uninstall
 **Cause**: YAML has duplicate top-level keys. The parser silently takes the last one and discards earlier ones.
 
 **Diagnosis**:
+
 ```bash
 python3 -c "
 import yaml
@@ -138,6 +146,7 @@ Compare the output against the raw file. Missing keys = they were in a duplicate
 **Cause**: `HERMES_HOME` is not set correctly, causing the gateway to load `.env` from the default `~/.hermes/` path.
 
 **Diagnosis**:
+
 ```bash
 # Check which token is in the log
 grep "api.telegram.org/bot" $HERMES_HOME/logs/gateway.log | tail -1
@@ -151,6 +160,7 @@ grep "api.telegram.org/bot" $HERMES_HOME/logs/gateway.log | tail -1
 ### 7. Bot Not Responding (Silent)
 
 **Checklist**:
+
 1. ✅ Is the gateway process running? (`ps aux | grep hermes`)
 2. ✅ Is it polling successfully? (`grep getUpdates $HERMES_HOME/logs/gateway.log | tail -3`)
 3. ✅ Is your username in `TELEGRAM_ALLOWED_USERS`?
@@ -167,6 +177,7 @@ grep "api.telegram.org/bot" $HERMES_HOME/logs/gateway.log | tail -1
 **Cause**: Large session histories and/or many concurrent sessions.
 
 **Fix**:
+
 - Enable compression: `compression.enabled: true`
 - Lower threshold: `compression.threshold: 0.75`
 - Periodically restart the gateway
@@ -178,6 +189,7 @@ grep "api.telegram.org/bot" $HERMES_HOME/logs/gateway.log | tail -1
 **Symptom**: `401 Unauthorized` or `403 Forbidden` in logs.
 
 **Diagnosis**:
+
 ```bash
 # Check configured keys
 hermes status
@@ -185,6 +197,7 @@ hermes status
 ```
 
 **Fix**:
+
 1. Verify the key is valid: `curl -H "Authorization: Bearer $KEY" https://openrouter.ai/api/v1/models`
 2. Check `.env` for typos or trailing whitespace
 3. Ensure the key has sufficient credits
@@ -193,13 +206,13 @@ hermes status
 
 ## Diagnostic Commands Reference
 
-| Command | Purpose |
-|:---|:---|
-| `hermes doctor` | Full system diagnostics |
-| `hermes status` | Quick service overview |
-| `hermes version` | Version and Python info |
-| `hermes config` | Show effective configuration |
-| `hermes sessions` | List active sessions |
+| Command           | Purpose                      |
+| :---------------- | :--------------------------- |
+| `hermes doctor`   | Full system diagnostics      |
+| `hermes status`   | Quick service overview       |
+| `hermes version`  | Version and Python info      |
+| `hermes config`   | Show effective configuration |
+| `hermes sessions` | List active sessions         |
 
 ## Related Documents
 

@@ -23,6 +23,7 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
 This handles **everything**: Python, uv, Node.js, ripgrep, ffmpeg, repo clone, venv, global `hermes` command, and provider config.
 
 After completion:
+
 ```bash
 source ~/.zshrc   # or ~/.bashrc
 hermes             # start chatting
@@ -113,31 +114,31 @@ model: nvidia/nemotron-3-super-120b-a12b:free
 
 # Tool categories
 toolsets:
-  - all
+    - all
 
 # Agent behavior
 agent:
-  max_turns: 150
-  reasoning_effort: medium
-  personality: helpful
-  personalities:
-    helpful: You are a helpful, friendly AI assistant.
+    max_turns: 150
+    reasoning_effort: medium
+    personality: helpful
+    personalities:
+        helpful: You are a helpful, friendly AI assistant.
 
 # Context compression
 compression:
-  enabled: true
-  threshold: 0.85
-  summary_model: google/gemini-3-flash-preview
+    enabled: true
+    threshold: 0.85
+    summary_model: google/gemini-3-flash-preview
 
 # Terminal backend
 terminal:
-  backend: local
-  timeout: 180
+    backend: local
+    timeout: 180
 
 # Telegram (fill in after gateway setup)
 telegram:
-  require_mention: true
-  free_response_channels: ""
+    require_mention: true
+    free_response_channels: ""
 ```
 
 ### .env API Keys
@@ -249,99 +250,99 @@ See [multi_instance.md](multi_instance.md) and [launchd.md](launchd.md) for comp
 
 ### Core
 
-| Command | Description |
-|:---|:---|
-| `hermes` | Start interactive chat |
-| `hermes chat -q "..."` | One-shot query |
-| `hermes chat --continue` | Resume last session |
-| `hermes chat --resume <id>` | Resume specific session |
-| `hermes chat --model <name>` | Override model |
-| `hermes chat --provider <name>` | Override provider |
-| `hermes chat --toolsets "web,terminal"` | Limit tools |
+| Command                                 | Description             |
+| :-------------------------------------- | :---------------------- |
+| `hermes`                                | Start interactive chat  |
+| `hermes chat -q "..."`                  | One-shot query          |
+| `hermes chat --continue`                | Resume last session     |
+| `hermes chat --resume <id>`             | Resume specific session |
+| `hermes chat --model <name>`            | Override model          |
+| `hermes chat --provider <name>`         | Override provider       |
+| `hermes chat --toolsets "web,terminal"` | Limit tools             |
 
 ### Provider & Model
 
-| Command | Description |
-|:---|:---|
-| `hermes model` | Interactive model selection |
-| `hermes login` | Auth with Nous Portal |
-| `hermes logout` | Clear Nous Portal auth |
+| Command         | Description                 |
+| :-------------- | :-------------------------- |
+| `hermes model`  | Interactive model selection |
+| `hermes login`  | Auth with Nous Portal       |
+| `hermes logout` | Clear Nous Portal auth      |
 
 ### Configuration
 
-| Command | Description |
-|:---|:---|
-| `hermes setup` | Full interactive wizard |
-| `hermes config` | View current config |
-| `hermes config edit` | Open config in editor |
-| `hermes config set KEY VAL` | Set a value |
-| `hermes config check` | Check for missing options |
-| `hermes config migrate` | Add missing options |
-| `hermes tools` | Manage toolsets |
-| `hermes status` | Quick status summary |
-| `hermes doctor` | Full diagnostics |
+| Command                     | Description               |
+| :-------------------------- | :------------------------ |
+| `hermes setup`              | Full interactive wizard   |
+| `hermes config`             | View current config       |
+| `hermes config edit`        | Open config in editor     |
+| `hermes config set KEY VAL` | Set a value               |
+| `hermes config check`       | Check for missing options |
+| `hermes config migrate`     | Add missing options       |
+| `hermes tools`              | Manage toolsets           |
+| `hermes status`             | Quick status summary      |
+| `hermes doctor`             | Full diagnostics          |
 
 ### Gateway
 
-| Command | Description |
-|:---|:---|
-| `hermes gateway` | Gateway status |
-| `hermes gateway setup` | Configure platforms |
-| `hermes gateway install` | Install as system service |
-| `hermes gateway start` | Start the service |
-| `hermes gateway stop` | Stop the service |
-| `hermes gateway restart` | Restart the service |
-| `hermes gateway uninstall` | Remove system service |
-| `hermes whatsapp` | WhatsApp pairing |
+| Command                    | Description               |
+| :------------------------- | :------------------------ |
+| `hermes gateway`           | Gateway status            |
+| `hermes gateway setup`     | Configure platforms       |
+| `hermes gateway install`   | Install as system service |
+| `hermes gateway start`     | Start the service         |
+| `hermes gateway stop`      | Stop the service          |
+| `hermes gateway restart`   | Restart the service       |
+| `hermes gateway uninstall` | Remove system service     |
+| `hermes whatsapp`          | WhatsApp pairing          |
 
 ### Skills
 
-| Command | Description |
-|:---|:---|
-| `hermes skills browse` | Browse Skills Hub |
-| `hermes skills search <q>` | Search skills |
-| `hermes skills install <id>` | Install a skill |
-| `hermes skills list` | List installed skills |
-| `hermes skills list --source hub` | List Hub skills |
-| `hermes skills audit` | Audit installed skills |
-| `hermes skills uninstall <name>` | Remove a skill |
-| `hermes skills publish <path>` | Publish to GitHub |
-| `hermes skills tap add <repo>` | Add skill tap |
+| Command                           | Description            |
+| :-------------------------------- | :--------------------- |
+| `hermes skills browse`            | Browse Skills Hub      |
+| `hermes skills search <q>`        | Search skills          |
+| `hermes skills install <id>`      | Install a skill        |
+| `hermes skills list`              | List installed skills  |
+| `hermes skills list --source hub` | List Hub skills        |
+| `hermes skills audit`             | Audit installed skills |
+| `hermes skills uninstall <name>`  | Remove a skill         |
+| `hermes skills publish <path>`    | Publish to GitHub      |
+| `hermes skills tap add <repo>`    | Add skill tap          |
 
 ### Sessions & Insights
 
-| Command | Description |
-|:---|:---|
-| `hermes sessions list` | List sessions |
-| `hermes sessions stats` | Session statistics |
-| `hermes sessions export <id>` | Export a session |
-| `hermes sessions delete <id>` | Delete a session |
-| `hermes sessions prune` | Clean old sessions |
-| `hermes insights` | Usage analytics |
-| `hermes insights --days 7` | Last 7 days |
-| `hermes insights --source telegram` | Platform filter |
+| Command                             | Description        |
+| :---------------------------------- | :----------------- |
+| `hermes sessions list`              | List sessions      |
+| `hermes sessions stats`             | Session statistics |
+| `hermes sessions export <id>`       | Export a session   |
+| `hermes sessions delete <id>`       | Delete a session   |
+| `hermes sessions prune`             | Clean old sessions |
+| `hermes insights`                   | Usage analytics    |
+| `hermes insights --days 7`          | Last 7 days        |
+| `hermes insights --source telegram` | Platform filter    |
 
 ### Maintenance
 
-| Command | Description |
-|:---|:---|
-| `hermes update` | Self-update |
-| `hermes version` | Show version |
+| Command            | Description    |
+| :----------------- | :------------- |
+| `hermes update`    | Self-update    |
+| `hermes version`   | Show version   |
 | `hermes uninstall` | Full uninstall |
 
 ## Part 7: Codomyrmex Scripts
 
 Thin orchestrator scripts in [`scripts/agents/hermes/`](../../../scripts/agents/hermes/):
 
-| Script | Purpose |
-|:---|:---|
-| `setup_hermes.py` | Validate environment, config, backends |
-| `run_hermes.py` | Send prompt, get response (CLI or Ollama fallback) |
-| `dispatch_hermes.py` | Sweep-and-dispatch improvement orchestrator |
-| `observe_hermes.py` | Session observability and telemetry viewer |
-| `prompt_context.py` | Project-aware context builder for prompts |
+| Script                      | Purpose                                            |
+| :-------------------------- | :------------------------------------------------- |
+| `setup_hermes.py`           | Validate environment, config, backends             |
+| `run_hermes.py`             | Send prompt, get response (CLI or Ollama fallback) |
+| `dispatch_hermes.py`        | Sweep-and-dispatch improvement orchestrator        |
+| `observe_hermes.py`         | Session observability and telemetry viewer         |
+| `prompt_context.py`         | Project-aware context builder for prompts          |
 | `evaluate_orchestrators.py` | Evaluate scripts against thin orchestrator pattern |
-| `new_instance.py` | Create and configure a new Hermes instance |
+| `new_instance.py`           | Create and configure a new Hermes instance         |
 
 ## Related Documents
 

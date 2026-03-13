@@ -122,60 +122,60 @@ hermes insights --source telegram   # Platform-specific analytics
 
 ### Navigation & Control
 
-| Command | Description |
-|:---|:---|
-| `/help` | Show all commands |
-| `/exit` or `/quit` | End chat |
-| `/new` | Start new session |
-| `/save` | Save current session |
-| `/load <id>` | Load a session |
-| `/undo` | Undo last message |
+| Command            | Description          |
+| :----------------- | :------------------- |
+| `/help`            | Show all commands    |
+| `/exit` or `/quit` | End chat             |
+| `/new`             | Start new session    |
+| `/save`            | Save current session |
+| `/load <id>`       | Load a session       |
+| `/undo`            | Undo last message    |
 
 ### Tools & Configuration
 
-| Command | Description |
-|:---|:---|
-| `/tools` | List available tools |
-| `/toolsets` | Manage active tool categories |
-| `/model <name>` | Switch model |
-| `/provider <name>` | Switch provider |
-| `/verbose` | Toggle verbose mode |
-| `/reasoning <level>` | Set reasoning effort |
+| Command              | Description                   |
+| :------------------- | :---------------------------- |
+| `/tools`             | List available tools          |
+| `/toolsets`          | Manage active tool categories |
+| `/model <name>`      | Switch model                  |
+| `/provider <name>`   | Switch provider               |
+| `/verbose`           | Toggle verbose mode           |
+| `/reasoning <level>` | Set reasoning effort          |
 
 ### Conversation
 
-| Command | Description |
-|:---|:---|
-| `/clear` | Clear conversation history |
-| `/summary` | Summarize current context |
-| `/context` | Show context window usage |
-| `/branch` | Branch conversation |
+| Command    | Description                |
+| :--------- | :------------------------- |
+| `/clear`   | Clear conversation history |
+| `/summary` | Summarize current context  |
+| `/context` | Show context window usage  |
+| `/branch`  | Branch conversation        |
 
 ### Media & Input
 
-| Command | Description |
-|:---|:---|
+| Command         | Description                    |
+| :-------------- | :----------------------------- |
 | `/image <path>` | Send image for vision analysis |
-| `/file <path>` | Attach file to context |
-| `/voice` | Start voice input |
-| `/speak` | Toggle TTS output |
+| `/file <path>`  | Attach file to context         |
+| `/voice`        | Start voice input              |
+| `/speak`        | Toggle TTS output              |
 
 ### Skills & Scheduling
 
-| Command | Description |
-|:---|:---|
-| `/skills` | List/manage skills |
-| `/skill <name>` | Run a skill |
-| `/cron` | Manage scheduled tasks |
-| `/delegate <task>` | Spawn subagent |
+| Command            | Description            |
+| :----------------- | :--------------------- |
+| `/skills`          | List/manage skills     |
+| `/skill <name>`    | Run a skill            |
+| `/cron`            | Manage scheduled tasks |
+| `/delegate <task>` | Spawn subagent         |
 
 ### Gateway-Only
 
-| Command | Description |
-|:---|:---|
-| `/pair` | Start pairing flow |
-| `/unpair` | Remove pairing |
-| `/status` | Bot status |
+| Command   | Description        |
+| :-------- | :----------------- |
+| `/pair`   | Start pairing flow |
+| `/unpair` | Remove pairing     |
+| `/status` | Bot status         |
 
 ## Navigation
 

@@ -31,6 +31,7 @@ Ensure `.env` files are excluded from version control:
 ### Key Rotation
 
 Rotate keys immediately if:
+
 - A key appears in logs, error messages, or git history
 - The `.env` file was accidentally committed
 - A team member's access is revoked
@@ -38,6 +39,7 @@ Rotate keys immediately if:
 ### Separate Keys Per Instance
 
 Each Hermes instance should use unique API keys where possible:
+
 - **OpenRouter**: Use separate API keys for budgeting and isolation
 - **Telegram**: Each bot requires its own unique token from @BotFather
 - **Other services**: Shared keys are acceptable if usage tracking isn't needed
@@ -62,7 +64,7 @@ TELEGRAM_ALLOWED_USERS=username1,username2
 ```yaml
 # config.yaml
 telegram:
-  require_mention: true
+    require_mention: true
 ```
 
 When `true`, the bot only processes messages that @mention it. This prevents accidental responses in group chats.
@@ -70,6 +72,7 @@ When `true`, the bot only processes messages that @mention it. This prevents acc
 ### Bot Visibility
 
 Consider setting your bot's privacy mode via @BotFather:
+
 - **Privacy mode ON** (default): Bot only sees messages that @mention it in groups
 - **Privacy mode OFF**: Bot sees all messages in groups it's added to
 
@@ -78,11 +81,13 @@ Consider setting your bot's privacy mode via @BotFather:
 ### Log Hygiene
 
 Gateway logs may contain:
+
 - Bot token prefixes (not full tokens)
 - User IDs and usernames
 - Message content summaries
 
 **Best practices**:
+
 - Set `verbose: false` in production
 - Restrict log file permissions: `chmod 600 $HERMES_HOME/logs/*.log`
 - Rotate logs periodically
@@ -90,6 +95,7 @@ Gateway logs may contain:
 ### Process Isolation
 
 When running multiple instances:
+
 - Each instance has its own `state.db` with conversation history
 - Session files contain full message content
 - Restrict directory permissions per instance

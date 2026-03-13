@@ -128,6 +128,41 @@ Store intelligence context directly into the CaseBase. Creates a new case with a
 
 ---
 
+## Tool: `cerebrum_run_free_energy_loop`
+
+### 1. Tool Purpose and Description
+
+Run a free-energy minimization loop with an active inference agent. Creates a default 2-state generative model and iterates until variational free energy converges or the step limit is reached.
+
+### 2. Invocation Name
+
+`cerebrum_run_free_energy_loop`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `observation` | `object` | Yes | Initial observation dict | `{"sensor": 0.5}` |
+| `max_steps` | `integer` | No | Max perception-action cycles (default: 50) | `100` |
+| `threshold` | `number` | No | Free energy convergence threshold (default: 0.1) | `0.05` |
+| `convergence_window` | `integer` | No | Consecutive steps below threshold (default: 3) | `5` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description |
+| :--- | :--- | :--- |
+| `status` | `string` | `"success"` or `"error"` |
+| `converged` | `boolean` | Whether the loop converged |
+| `steps` | `integer` | Number of steps taken |
+| `final_free_energy` | `number` | Final variational free energy |
+| `action_history` | `array` | Sequence of actions selected |
+
+### 5. Idempotency
+
+- **Idempotent**: Yes (for the same observation and parameters)
+
+---
+
 ## Navigation Links
 
 - **Parent**: [Module README](./README.md)

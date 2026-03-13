@@ -3,32 +3,75 @@
 
 **Version**: v1.5.0 | **Date**: 2026-03-13 | **Modules**: 129 | **Sprint**: 33
 
-> v1.5.3 "Session Routing & Inference" delivered. Cross-platform identity resolution, tool sandboxing, and token streaming completed.
+> v1.5.5 "Obsidian Vault Memory & Archival" delivered. Session context is natively dumped to local Obsidian Vaults; parsing and regex/history vault search RAG MCP capabilities added.
 
 Authoritative project backlog. Upcoming work only; completed items removed.
 
 ---
 
-## 🚀 v1.5.4 — Multimodal Media Handlers
+## 🚀 v1.5.6 — Task Orchestration & Scheduling
 
-> **Theme**: Audio, Image, and Document processing pipelines over channels.
+> **Theme**: Internalizing step-by-step reasoning via explicit checklist states.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
-| D1 | **Voice/Audio Transcoding** | `agents/hermes/` | Integrate `audio/` primitives (e.g. Whisper STT) to transcribe voice notes received natively across messaging adapters before LLM routing. |
-| D2 | **VLM Image Descriptions** | `agents/hermes/` | Route incoming media attachments through a local Ollama VLM (via `vision/`) to generate descriptive alt-text appended natively into the session prompt. |
-| D3 | **Document Extraction** | `agents/hermes/` | Parse incoming PDF/TXT files utilizing `documents/` extracting the raw text and injecting it cleanly into the active session context window. |
+| D1 | **Internal TaskScheduler** | `agents/hermes/` | Map agent execution logic directly to the `orchestrator.TaskScheduler`. Expose tools for agents to natively break down their own instructions into checkable tasks. |
+| D2 | **Workflow Mapping** | `agents/hermes/` | Add `WorkflowEngine` bindings allowing the agent to submit its own multi-step task list to an internal executor loop instead of returning to the user immediately. |
 
 ---
 
-## 🚀 v1.5.5 — Advanced Agent Automation
+## 🚀 v1.5.7 — Error-Correction Handoffs
 
-> **Theme**: Tool orchestration, memory retrieval, and sequential tasking.
+> **Theme**: Subprocess self-healing and proactive error containment.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
-| D1 | **Long-Term Memory Search** | `agents/hermes/` | Expose the `agentic_memory/` vector search as a native tool, allowing the agent to recall deeply archived session interactions. |
-| D2 | **Automated Task Execution** | `agents/hermes/` | Enable the agent to formulate step-by-step checklists internally via a `task_manager` without requiring external prompts for multi-step goals over chat. |
+| D1 | **Recursive Retry Loop** | `agents/hermes/` | If an executed subprocess (e.g. bash or python script) fails, intercept the stderr stack trace and automatically feed it back into an active retry block before alerting the user natively. |
+| D2 | **Recovery Prompting** | `agents/hermes/` | Structure system prompts during failure domains specifically focusing on trace analysis rather than feature generation. |
+
+---
+
+## 🚀 v1.5.8 — Delegation Primitive
+
+> **Theme**: Multi-agent Swarm routing.
+
+| # | Deliverable | Module | Concrete Scope |
+| :--- | :--- | :--- | :--- |
+| D1 | **Sub-Agent Deferral** | `agents/hermes/` | Expose a `delegate_task` MCP wrapper that executes `CodexClient` or `ClaudeClient` instances for isolated logic operations. |
+| D2 | **Context Filtering** | `agents/hermes/` | Pass only minimal context bounds to sub-agents (preventing context bloat when deferring single file functions). |
+
+---
+
+## 🚀 v1.5.9 — Context Summarization & Archival
+
+> **Theme**: Infinite-length sessions & Token Optimization.
+
+| # | Deliverable | Module | Concrete Scope |
+| :--- | :--- | :--- | :--- |
+| D1 | **Rolling Summary Pipeline** | `agents/hermes/` | As a session window nears 8k tokens, strip early conversational chat nodes and replace them with a background LLM-generated summary token. |
+| D2 | **Fact Extraction** | `agents/hermes/` | Inject specific user preferences learned during the trimmed conversation directly back into the system `UserModel` preference map instead of losing them in summary nodes. |
+
+---
+
+## 🚀 v1.5.10 — Semantic Deduplication
+
+> **Theme**: Optimizing repetitive text streams.
+
+| # | Deliverable | Module | Concrete Scope |
+| :--- | :--- | :--- | :--- |
+| D1 | **Trace Compression** | `agents/hermes/` | Scan large incoming stack trace objects and use AST or semantic grouping to strip repetitive loop errors, shrinking payload overhead to OpenRouter. |
+| D2 | **Log Referencing** | `agents/hermes/` | Redirect 10,000+ line logs into an ephemeral tmp file and prompt the agent to explicitly search the text payload dynamically, rather than dumping it natively. |
+
+---
+
+## 🚀 v1.5.11 — Resource Monitoring Integration
+
+> **Theme**: Hardware-aware local scaling.
+
+| # | Deliverable | Module | Concrete Scope |
+| :--- | :--- | :--- | :--- |
+| D1 | **HealthChecker Scaling** | `agents/hermes/` | Tie active session loads into `system_discovery.HealthChecker` dynamically surfacing VLM / Local STT RAM pressure. |
+| D2 | **Dynamic Fallbacks** | `agents/hermes/` | Auto-failback to lighter Ollama models (`qwen2.5:0.5b`) or upstream providers if the system is thrashing heavily on swap memory natively. |
 
 ---
 

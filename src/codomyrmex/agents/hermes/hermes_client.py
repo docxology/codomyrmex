@@ -141,6 +141,11 @@ class HermesClient(CLIAgentBase):
             )
         )
 
+        # Obsidian vault long-term memory config (v1.5.5)
+        self._obsidian_vault: str | None = self.get_config_value(
+            "obsidian_vault", config=cfg
+        )
+
         # Context compression for long conversations
         from codomyrmex.agents.hermes._provider_router import ContextCompressor
 
@@ -502,44 +507,102 @@ class HermesClient(CLIAgentBase):
             if session_name and session.name != session_name:
                 session.name = session_name
 
-            session.add_message("user", prompt)
+            store.save(session)
 
-            # Auto-compress history if it exceeds token limits
-            history_messages = session.messages[:-1]  # exclude the current user prompt
-            if self._compressor.needs_compression(history_messages):
-                history_messages = self._compressor.compress(history_messages)
-                self.logger.info(
-                    "Session %s: compressed %d → %d history messages",
-                    session.session_id,
-                    len(session.messages) - 1,
-                    len(history_messages),
+            current_prompt = prompt
+            role = "user"
+            autonomous_turns = 0
+            max_turns = 10
+            final_response = None
+
+            while autonomous_turns < max_turns:
+                session.add_message(role, current_prompt)
+
+                # Auto-compress history if it exceeds token limits
+                history_messages = session.messages[:-1]  # exclude the current prompt
+                if self._compressor.needs_compression(history_messages):
+                    history_messages = self._compressor.compress(history_messages)
+                    self.logger.info(
+                        "Session %s: compressed %d → %d history messages",
+                        session.session_id,
+                        len(session.messages) - 1,
+                        len(history_messages),
+                    )
+
+                # Build full prompt containing history
+                history_text = ""
+                for msg in history_messages:
+                    history_text += f"[{msg['role'].upper()}]\n{msg['content']}\n\n"
+
+                system_directives = (
+                    f"You are the Hermes agent. Your current session ID is '{session.session_id}'.\n"
+                    "For complex, multi-step requests, you MUST break them down into an internal checklist "
+                    "using the `hermes_create_task` and `hermes_update_task_status` MCP tools. "
+                    "Create tasks first, then execute them iteratively. Update their status to 'completed' or 'failed' as you go."
                 )
 
-            # Build full prompt containing history
-            history_text = ""
-            for msg in history_messages:
-                history_text += f"[{msg['role'].upper()}]\n{msg['content']}\n\n"
+                if history_text:
+                    full_prompt = (
+                        f"{system_directives}\n\n"
+                        f"Previous Conversation:\n{history_text}"
+                        f"[{session.messages[-1]['role'].upper()}]\n{current_prompt}\n\n"
+                        f"Please respond."
+                    )
+                else:
+                    full_prompt = f"{system_directives}\n\nUser: {current_prompt}"
 
-            if history_text:
-                full_prompt = (
-                    f"Previous Conversation:\n{history_text}"
-                    f"[{session.messages[-1]['role'].upper()}]\n{prompt}\n\n"
-                    f"Please respond to the user's latest message."
+                request = AgentRequest(prompt=full_prompt)
+                response = self.execute(request)
+                final_response = response
+
+                if response.is_success():
+                    # Reload session FIRST to get latest metadata changes from MCP tools
+                    latest_session = store.load(session_id)
+                    if latest_session:
+                        session.metadata = latest_session.metadata
+
+                    session.add_message("assistant", response.content)
+                    store.save(session)
+
+                    tasks = session.metadata.get("workflow_tasks", {})
+
+                    has_pending = any(
+                        t.get("status") in ("pending", "running")
+                        for t in tasks.values()
+                    )
+                    if has_pending:
+                        autonomous_turns += 1
+                        current_prompt = "System: You have pending tasks in your workflow checklist. Please execute the next logical task, use necessary tools, and update its status when done."
+                        role = "user"
+                    else:
+                        break  # All tasks completed, or no tasks created
+                else:
+                    break  # Error executing, break loop
+
+            # Sync securely to Obsidian Vault if configured (D1 implementation)
+            if self._obsidian_vault and final_response and final_response.is_success():
+                try:
+                    from codomyrmex.agents.hermes.gateway.memory import (
+                        sync_session_to_vault,
+                    )
+
+                    sync_session_to_vault(session, self._obsidian_vault)
+                except Exception as e:
+                    self.logger.error("Error executing vault sync hook: %s", e)
+
+            if final_response:
+                final_response.metadata["session_id"] = session.session_id
+                if session.name:
+                    final_response.metadata["session_name"] = session.name
+                final_response.metadata["workflow_tasks"] = session.metadata.get(
+                    "workflow_tasks", {}
                 )
-            else:
-                full_prompt = prompt
+                final_response.metadata["autonomous_turns"] = autonomous_turns
+                return final_response
 
-            request = AgentRequest(prompt=full_prompt)
-            response = self.execute(request)
+            from codomyrmex.agents.core import AgentResponse
 
-            if response.is_success():
-                session.add_message("assistant", response.content)
-                store.save(session)
-
-            response.metadata["session_id"] = session.session_id
-            if session.name:
-                response.metadata["session_name"] = session.name
-            return response
+            return AgentResponse(content="", error="Execution loop failed", metadata={})
 
     # ------------------------------------------------------------------
     # Helpers

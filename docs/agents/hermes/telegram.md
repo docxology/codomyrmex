@@ -28,8 +28,8 @@ TELEGRAM_HOME_CHANNEL=YourUsername     # for cron/proactive messages
 
 ```yaml
 telegram:
-  require_mention: true        # only respond when @bot_name is mentioned
-  free_response_channels: ""   # channel IDs where bot responds without mention
+    require_mention: true # only respond when @bot_name is mentioned
+    free_response_channels: "" # channel IDs where bot responds without mention
 ```
 
 ### 4. Start the Gateway
@@ -70,6 +70,7 @@ The Telegram adapter uses the Bot API's `getUpdates` endpoint with long polling:
 ```
 
 The adapter:
+
 1. Calls `getUpdates` with a long-poll timeout (~10 seconds)
 2. Receives any new messages since last offset
 3. Routes each message to the gateway runner
@@ -87,6 +88,7 @@ make sure that only one bot instance is running
 **Cause**: Two processes are polling `getUpdates` with the same bot token. Telegram only allows **one** long-polling consumer per bot token.
 
 **Diagnosis**:
+
 ```bash
 # Check for multiple hermes processes
 ps aux | grep hermes | grep -v grep
@@ -96,6 +98,7 @@ grep -r "TELEGRAM_BOT_TOKEN" ~/.hermes/.env ~/other-hermes-dir/.env
 ```
 
 **Fix**:
+
 1. Ensure each bot token is used by exactly one gateway process
 2. Kill duplicate processes: `kill <PID>`
 3. If running multiple bots, use different `HERMES_HOME` directories with different bot tokens
@@ -107,13 +110,14 @@ grep -r "TELEGRAM_BOT_TOKEN" ~/.hermes/.env ~/other-hermes-dir/.env
 3. **Check logs**: `tail -f $HERMES_HOME/logs/gateway.log`
 4. **Check process**: `ps aux | grep hermes`
 5. **Verify token**: Send a test with `curl`:
-   ```bash
-   curl https://api.telegram.org/bot<TOKEN>/getMe
-   ```
+    ```bash
+    curl https://api.telegram.org/bot<TOKEN>/getMe
+    ```
 
 ### Bot Responds via Wrong Bot
 
 If you have multiple bots on the same machine, verify each gateway is using the correct token. The gateway log shows the token prefix:
+
 ```
 HTTP Request: POST https://api.telegram.org/bot8754235534:***/getUpdates
 ```

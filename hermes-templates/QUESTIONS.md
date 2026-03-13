@@ -77,7 +77,7 @@ Define cron jobs for the agent:
 
 ## 9. Advanced (Optional)
 
-- **agent.max_turns**: Max conversation turns (default: 150)
+- **agent.max_turns**: Max conversation turns (default: 300)
 - **agent.reasoning_effort**: `low`, `medium`, `high` (default: medium)
 - **terminal.timeout**: Command timeout in seconds (default: 180)
 - **human_delay.mode**: `off`, `typing`, `random` (default: off)

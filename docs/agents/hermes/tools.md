@@ -10,28 +10,29 @@ Hermes provides a rich set of built-in tools organized into categories. Tools ar
 
 ```yaml
 toolsets:
-  - all          # enable everything
+    - all # enable everything
 ```
 
 Available toolset presets:
+
 - `all` — all tool categories enabled
 - Individual categories can be specified for restricted access
 
 ## Tool Categories
 
-| Category | Key Tools | Description |
-|:---|:---|:---|
-| **Terminal** | `terminal_tool.py` | Execute shell commands via configurable backends (local, Docker, SSH, etc.) |
-| **Browser** | `web_tools.py` | `web_search`, `web_extract` — browse, extract, and analyze web content |
-| **File Operations** | `file_operations.py`, `file_tools.py` | Read, write, search, and patch files |
-| **Code Execution** | `code_execution_tool.py` | Sandboxed Python code execution |
-| **Memory** | `session_search_tool.py`, `memory_tool.py` | FTS5 cross-session recall and long-term storage |
-| **Skills** | `skills_tool.py`, `skill_manager_tool.py` | Invoke, create, and manage reusable skills |
-| **Delegation** | `delegate_tool.py` | Spawn isolated subagents for parallel work |
-| **Cron** | `cronjob_tools.py` | Create and manage scheduled jobs |
-| **Checkpoint** | `checkpoint_manager.py` | Save and restore conversation states |
-| **Vision** | Part of `web_tools.py` | Image analysis and OCR |
-| **TTS/Audio** | Voice tools | Text-to-speech and audio processing |
+| Category            | Key Tools                                  | Description                                                                 |
+| :------------------ | :----------------------------------------- | :-------------------------------------------------------------------------- |
+| **Terminal**        | `terminal_tool.py`                         | Execute shell commands via configurable backends (local, Docker, SSH, etc.) |
+| **Browser**         | `web_tools.py`                             | `web_search`, `web_extract` — browse, extract, and analyze web content      |
+| **File Operations** | `file_operations.py`, `file_tools.py`      | Read, write, search, and patch files                                        |
+| **Code Execution**  | `code_execution_tool.py`                   | Sandboxed Python code execution                                             |
+| **Memory**          | `session_search_tool.py`, `memory_tool.py` | FTS5 cross-session recall and long-term storage                             |
+| **Skills**          | `skills_tool.py`, `skill_manager_tool.py`  | Invoke, create, and manage reusable skills                                  |
+| **Delegation**      | `delegate_tool.py`                         | Spawn isolated subagents for parallel work                                  |
+| **Cron**            | `cronjob_tools.py`                         | Create and manage scheduled jobs                                            |
+| **Checkpoint**      | `checkpoint_manager.py`                    | Save and restore conversation states                                        |
+| **Vision**          | Part of `web_tools.py`                     | Image analysis and OCR                                                      |
+| **TTS/Audio**       | Voice tools                                | Text-to-speech and audio processing                                         |
 
 ## Tool Registration
 
@@ -69,21 +70,21 @@ Hermes supports Model Context Protocol (MCP) servers for tool extension:
 ```yaml
 # In config.yaml (if supported)
 mcp_servers:
-  - url: http://localhost:8080
-    name: custom_tools
+    - url: http://localhost:8080
+      name: custom_tools
 ```
 
 ## Key Implementation Files
 
-| File | Purpose |
-|:---|:---|
-| `tools/registry.py` | Central tool schema/handler registry |
-| `model_tools.py` | Thin dispatch layer for tool execution |
-| `tools/terminal_tool.py` | Terminal command execution |
-| `tools/web_tools.py` | Web search and browsing |
-| `tools/file_operations.py` | File system operations |
-| `tools/code_execution_tool.py` | Sandboxed code execution |
-| `tools/approval.py` | Safety approval system |
+| File                           | Purpose                                |
+| :----------------------------- | :------------------------------------- |
+| `tools/registry.py`            | Central tool schema/handler registry   |
+| `model_tools.py`               | Thin dispatch layer for tool execution |
+| `tools/terminal_tool.py`       | Terminal command execution             |
+| `tools/web_tools.py`           | Web search and browsing                |
+| `tools/file_operations.py`     | File system operations                 |
+| `tools/code_execution_tool.py` | Sandboxed code execution               |
+| `tools/approval.py`            | Safety approval system                 |
 
 ## Related Documents
 

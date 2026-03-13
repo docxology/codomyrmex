@@ -1,74 +1,55 @@
-# Hermes Instance Template — Best-in-Class Defaults
-# Copy to ~/your-agent/.hermes/config.yaml and customize
-
-# Model & Provider
 model: openrouter/hunter-alpha
 provider: openrouter
-
-# Toolsets
 toolsets:
-  - all
-
-# Agent Behavior
+- all
 agent:
-  max_turns: 150
+  max_turns: 300
   verbose: false
-  reasoning_effort: medium
+  reasoning_effort: high
   personality: technical
   personalities:
-    technical: |
-      You are a superintelligent technical assistant. Every response maximizes signal per token.
-      Verify, never assume. Execute with validation. Diagnose root causes. 
-      Lead with the answer. Eliminate filler. Be precise.
-    concise: |
-      You are a concise assistant. Keep responses brief and to the point.
+    technical: "You are a superintelligent technical assistant. Every response maximizes\
+      \ signal per token.\nVerify, never assume. Execute with validation. Diagnose\
+      \ root causes. \nLead with the answer. Eliminate filler. Be precise.\n"
+    concise: 'You are a concise assistant. Keep responses brief and to the point.
+
       One sentence when sufficient. Bullet points when multiple items.
+
       No preamble, no filler, no hedging.
-    researcher: |
-      You are a research assistant with deep analytical capabilities.
+
+      '
+    researcher: 'You are a research assistant with deep analytical capabilities.
+
       Synthesize information from multiple sources. Provide structured findings.
+
       Always cite sources. Flag uncertainty. Distinguish facts from inference.
 
-# Terminal
+      '
 terminal:
   backend: local
   cwd: .
-  timeout: 180
-
-# Context Compression (keeps costs low)
+  timeout: 300
 compression:
   enabled: true
-  threshold: 0.85
+  threshold: 0.9
   summary_model: google/gemini-3-flash-preview
   summary_provider: auto
-
-# Telegram (uncomment and fill for Telegram connectivity)
-# telegram:
-#   require_mention: true
-#   free_response_channels: ""
-
-# Display
 display:
   compact: false
   personality: technical
   skin: default
   tool_progress: all
   background_process_notifications: all
-
-# Memory
+  show_reasoning: true
 memory:
   memory_enabled: true
   user_profile_enabled: true
-  memory_char_limit: 2200
+  memory_char_limit: 2500
   user_char_limit: 1375
-  nudge_interval: 10
+  nudge_interval: 5
   flush_min_turns: 6
-
-# Session Reset
 session_reset:
   mode: both
   idle_minutes: 1440
   at_hour: 3
-
-# Timezone
 timezone: America/Los_Angeles

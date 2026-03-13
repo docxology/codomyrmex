@@ -35,6 +35,7 @@ Hermes maintains persistent conversation state across sessions using a combinati
 The primary state database, stored at `$HERMES_HOME/state.db`. Uses SQLite's FTS5 extension for fast full-text search across conversation history.
 
 **Key capabilities**:
+
 - Cross-session recall via FTS5 search
 - LLM reranking of search results for relevance
 - User modeling (Honcho dialectic) across conversations
@@ -57,6 +58,7 @@ These serve as human-readable backups and are useful for debugging.
 ### WAL (Write-Ahead Logging)
 
 SQLite uses WAL mode for concurrent read/write:
+
 ```
 state.db          # main database
 state.db-shm      # shared memory file
@@ -73,10 +75,10 @@ When a conversation approaches the model's context window limit, Hermes automati
 
 ```yaml
 compression:
-  enabled: true
-  threshold: 0.85               # compress at 85% of model context
-  summary_model: google/gemini-3-flash-preview
-  summary_provider: auto
+    enabled: true
+    threshold: 0.85 # compress at 85% of model context
+    summary_model: google/gemini-3-flash-preview
+    summary_provider: auto
 ```
 
 ### How It Works
@@ -97,6 +99,7 @@ compression:
 ### Choosing a Summary Model
 
 Use a fast, inexpensive model for compression:
+
 - `google/gemini-3-flash-preview` — fast and effective
 - `anthropic/claude-3-haiku` — good summarization
 - Any model available via OpenRouter

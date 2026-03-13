@@ -15,45 +15,46 @@ This documentation suite captures architecture, operational patterns, troublesho
 
 ### Getting Started
 
-| Document | Description |
-|:---|:---|
-| [setup_guide.md](setup_guide.md) | **Complete new-instance setup** — installation, config, gateway, multi-bot |
-| [cli_reference.md](cli_reference.md) | All CLI commands and slash commands (from official docs) |
+| Document                             | Description                                                                |
+| :----------------------------------- | :------------------------------------------------------------------------- |
+| [setup_guide.md](setup_guide.md)     | **Complete new-instance setup** — installation, config, gateway, multi-bot |
+| [cli_reference.md](cli_reference.md) | All CLI commands and slash commands (from official docs)                   |
 
 ### Architecture & Configuration
 
-| Document | Description |
-|:---|:---|
-| [architecture.md](architecture.md) | Core agent loop, components, structured reasoning |
-| [configuration.md](configuration.md) | `config.yaml` structure, YAML pitfalls, precedence |
-| [environment.md](environment.md) | `.env` file, `HERMES_HOME`, API key management |
-| [models.md](models.md) | Model selection, OpenRouter, provider config |
-| [personalities.md](personalities.md) | Personality system and custom personas |
+| Document                                               | Description                                                                  |
+| :----------------------------------------------------- | :--------------------------------------------------------------------------- |
+| [architecture.md](architecture.md)                     | Core agent loop, components, structured reasoning                            |
+| [codomyrmex_integration.md](codomyrmex_integration.md) | **Deep dive into Codomyrmex bidirectional interfaces and MCP augmentations** |
+| [configuration.md](configuration.md)                   | `config.yaml` structure, YAML pitfalls, precedence                           |
+| [environment.md](environment.md)                       | `.env` file, `HERMES_HOME`, API key management                               |
+| [models.md](models.md)                                 | Model selection, OpenRouter, provider config                                 |
+| [personalities.md](personalities.md)                   | Personality system and custom personas                                       |
 
 ### Platform Integration
 
-| Document | Description |
-|:---|:---|
-| [gateway.md](gateway.md) | Gateway system, platform adapters, message routing |
-| [telegram.md](telegram.md) | Telegram bot setup, polling, troubleshooting |
-| [launchd.md](launchd.md) | macOS launchd service management |
-| [multi_instance.md](multi_instance.md) | Running multiple Hermes bots on one machine |
+| Document                               | Description                                        |
+| :------------------------------------- | :------------------------------------------------- |
+| [gateway.md](gateway.md)               | Gateway system, platform adapters, message routing |
+| [telegram.md](telegram.md)             | Telegram bot setup, polling, troubleshooting       |
+| [launchd.md](launchd.md)               | macOS launchd service management                   |
+| [multi_instance.md](multi_instance.md) | Running multiple Hermes bots on one machine        |
 
 ### Agent Capabilities
 
-| Document | Description |
-|:---|:---|
+| Document                   | Description                                      |
+| :------------------------- | :----------------------------------------------- |
 | [sessions.md](sessions.md) | Session lifecycle, `state.db`, FTS5, compression |
-| [skills.md](skills.md) | Skills system, self-improvement, agentskills.io |
-| [tools.md](tools.md) | Tool registry, categories, MCP integration |
-| [cron.md](cron.md) | Scheduled jobs, cron ticker, proactive messaging |
+| [skills.md](skills.md)     | Skills system, self-improvement, agentskills.io  |
+| [tools.md](tools.md)       | Tool registry, categories, MCP integration       |
+| [cron.md](cron.md)         | Scheduled jobs, cron ticker, proactive messaging |
 
 ### Operations
 
-| Document | Description |
-|:---|:---|
+| Document                                 | Description                                    |
+| :--------------------------------------- | :--------------------------------------------- |
 | [troubleshooting.md](troubleshooting.md) | 9 common issue patterns with diagnosis & fixes |
-| [security.md](security.md) | API key hygiene, access control, hardening |
+| [security.md](security.md)               | API key hygiene, access control, hardening     |
 
 ## Quick Start
 
@@ -89,13 +90,13 @@ hermes gateway run
 
 Thin orchestrator scripts in [`scripts/agents/hermes/`](../../../scripts/agents/hermes/):
 
-| Script | Purpose |
-|:---|:---|
-| `new_instance.py` | **Create and configure new Hermes instances** |
-| `setup_hermes.py` | Validate environment, config, and backends |
-| `run_hermes.py` | Send prompt, get response (CLI or Ollama fallback) |
-| `dispatch_hermes.py` | Sweep-and-dispatch improvement orchestrator |
-| `observe_hermes.py` | Session observability and telemetry viewer |
+| Script                      | Purpose                                            |
+| :-------------------------- | :------------------------------------------------- |
+| `new_instance.py`           | **Create and configure new Hermes instances**      |
+| `setup_hermes.py`           | Validate environment, config, and backends         |
+| `run_hermes.py`             | Send prompt, get response (CLI or Ollama fallback) |
+| `dispatch_hermes.py`        | Sweep-and-dispatch improvement orchestrator        |
+| `observe_hermes.py`         | Session observability and telemetry viewer         |
 | `evaluate_orchestrators.py` | Evaluate scripts against thin orchestrator pattern |
 
 ## Navigation

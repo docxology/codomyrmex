@@ -15,17 +15,17 @@ return Path(os.getenv("HERMES_HOME", Path.home() / ".hermes"))
 
 ### What It Controls
 
-| Path | Purpose |
-|:---|:---|
-| `$HERMES_HOME/.env` | API keys and secrets |
-| `$HERMES_HOME/config.yaml` | Agent configuration |
-| `$HERMES_HOME/state.db` | SQLite session/memory database |
-| `$HERMES_HOME/sessions/` | Session JSON backups |
-| `$HERMES_HOME/skills/` | Loaded skills |
-| `$HERMES_HOME/memories/` | Agent memory storage |
-| `$HERMES_HOME/logs/` | Gateway and error logs |
-| `$HERMES_HOME/cron/` | Scheduled job definitions |
-| `$HERMES_HOME/gateway.pid` | Gateway process ID file |
+| Path                       | Purpose                        |
+| :------------------------- | :----------------------------- |
+| `$HERMES_HOME/.env`        | API keys and secrets           |
+| `$HERMES_HOME/config.yaml` | Agent configuration            |
+| `$HERMES_HOME/state.db`    | SQLite session/memory database |
+| `$HERMES_HOME/sessions/`   | Session JSON backups           |
+| `$HERMES_HOME/skills/`     | Loaded skills                  |
+| `$HERMES_HOME/memories/`   | Agent memory storage           |
+| `$HERMES_HOME/logs/`       | Gateway and error logs         |
+| `$HERMES_HOME/cron/`       | Scheduled job definitions      |
+| `$HERMES_HOME/gateway.pid` | Gateway process ID file        |
 
 ### Setting HERMES_HOME
 
@@ -105,6 +105,7 @@ EMAIL_PASSWORD=...
 ### .env Not Being Loaded
 
 If the gateway starts but uses wrong credentials, verify:
+
 ```bash
 # Check which HERMES_HOME is active
 echo $HERMES_HOME

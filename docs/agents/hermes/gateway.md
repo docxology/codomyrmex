@@ -71,13 +71,13 @@ hermes status
 
 Each platform has a dedicated adapter in `gateway/platforms/`:
 
-| Platform | Adapter | Connection Method |
-| :--- | :--- | :--- |
+| Platform | Adapter       | Connection Method        |
+| :------- | :------------ | :----------------------- |
 | Telegram | `telegram.py` | Long polling via Bot API |
-| WhatsApp | `whatsapp.py` | Node.js Baileys bridge |
-| Discord | `discord.py` | WebSocket gateway |
-| Slack | `slack.py` | Socket Mode |
-| CLI | Built-in | Direct stdin/stdout |
+| WhatsApp | `whatsapp.py` | Node.js Baileys bridge   |
+| Discord  | `discord.py`  | WebSocket gateway        |
+| Slack    | `slack.py`    | Socket Mode              |
+| CLI      | Built-in      | Direct stdin/stdout      |
 
 ## Session Routing
 
@@ -99,15 +99,13 @@ The gateway maintains a `channel_directory.json` file mapping known users/channe
 
 ```json
 {
-  "updated_at": "2026-03-12T16:38:52",
-  "platforms": {
-    "telegram": [
-      {"id": "544419050", "name": "docxology", "type": "dm"}
-    ],
-    "whatsapp": [],
-    "signal": [],
-    "email": []
-  }
+    "updated_at": "2026-03-12T16:38:52",
+    "platforms": {
+        "telegram": [{ "id": "544419050", "name": "docxology", "type": "dm" }],
+        "whatsapp": [],
+        "signal": [],
+        "email": []
+    }
 }
 ```
 
@@ -123,11 +121,11 @@ The gateway writes its PID to `$HERMES_HOME/gateway.pid` on startup. On subseque
 
 ## Logs
 
-| Log File | Content |
-| :--- | :--- |
-| `$HERMES_HOME/logs/gateway.log` | Gateway startup, platform connections, HTTP requests |
-| `$HERMES_HOME/logs/errors.log` | Error tracebacks and exceptions |
-| `$HERMES_HOME/logs/gateway.error.log` | stderr (if using launchd) |
+| Log File                              | Content                                              |
+| :------------------------------------ | :--------------------------------------------------- |
+| `$HERMES_HOME/logs/gateway.log`       | Gateway startup, platform connections, HTTP requests |
+| `$HERMES_HOME/logs/errors.log`        | Error tracebacks and exceptions                      |
+| `$HERMES_HOME/logs/gateway.error.log` | stderr (if using launchd)                            |
 
 ## Related Documents
 
