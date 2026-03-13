@@ -1,110 +1,124 @@
-"""Unit tests for embodiment module."""
+"""Unit tests for the Physical Embodiment Bridge and Telemetry.
+
+Zero-Mock Policy: Uses `websockets` package to instantiate real
+local network ingress servers and genuine payload parsers to
+validate agent-to-hardware communication natively.
+"""
 
 import asyncio
-import math
+import json
 
 import pytest
 
-from codomyrmex.embodiment import ROS2Bridge, Transform3D
-from codomyrmex.embodiment.actuators import ActuatorCommand, MockActuator
-from codomyrmex.embodiment.sensors import MockSensor
+try:
+    import websockets
+except ImportError:
+    websockets = None  # type: ignore
+
+from codomyrmex.embodiment.bridge import EmbodimentBridge
+from codomyrmex.embodiment.telemetry import SensorPayload, TelemetryStream
+
+
+@pytest.mark.unit
+def test_parse_valid_sensor_payload():
+    """Test standard hardware sensor payload parses cleanly."""
+    raw = json.dumps(
+        {
+            "node_id": "rover-01",
+            "timestamp": 12345.6,
+            "sensor_type": "lidar",
+            "readings": {"distance": 5.4, "angle": 45.0},
+            "metadata": {"battery": "good"},
+        }
+    )
+    payload = SensorPayload.parse_payload(raw)
+    assert payload.node_id == "rover-01"
+    assert payload.timestamp == 12345.6
+    assert payload.sensor_type == "lidar"
+    assert payload.readings["distance"] == 5.4
+    assert payload.readings["angle"] == 45.0
+    assert payload.metadata["battery"] == "good"
+
+
+@pytest.mark.unit
+def test_parse_invalid_payload_raises_value_error():
+    """Test malformed hardware payload throws predictable error."""
+    raw = json.dumps({"missing": "required_keys"})
+    with pytest.raises(ValueError, match="Invalid sensor payload"):
+        SensorPayload.parse_payload(raw)
+
+
+@pytest.mark.unit
+def test_telemetry_stream_aggregation():
+    """Test telemetry stream correctly scopes payloads by node."""
+    stream = TelemetryStream()
+    p1 = SensorPayload("node1", 1.0, "temp", {"c": 20}, {})
+    p2 = SensorPayload("node2", 2.0, "temp", {"c": 21}, {})
+    p3 = SensorPayload("node1", 3.0, "temp", {"c": 22}, {})
+
+    stream.ingest(p1)
+    stream.ingest(p2)
+    stream.ingest(p3)
+
+    latest1 = stream.get_latest("node1")
+    assert latest1 is not None and latest1.timestamp == 3.0
+
+    latest2 = stream.get_latest("node2")
+    assert latest2 is not None and latest2.timestamp == 2.0
+
+    assert stream.get_latest("unknown") is None
 
 
 @pytest.mark.asyncio
-@pytest.mark.unit
-async def test_ros_bridge_pub_sub():
-    """Test the basic pub/sub orchestration of the bridge."""
-    bridge = ROS2Bridge("test_node")
-    await bridge.connect()
+@pytest.mark.skipif(
+    websockets is None, reason="websockets library required for real async testing"
+)
+async def test_embodiment_bridge_telemetry_flow():
+    """Test full async lifecycle of hardware connecting and streaming telemetry."""
+    bridge = EmbodimentBridge()
 
-    # Track messages received
+    # Capture outputs via subscriber
     received = []
+    bridge.subscribe(received.append)
 
-    def callback(msg):
-        received.append(msg)
+    # Start the real server
+    server = await bridge.start_server(host="127.0.0.1", port=8766)
 
-    await bridge.subscribe("/sensor/data", callback)
+    try:
+        # Simulate local hardware connecting natively over WS
+        async with websockets.connect("ws://127.0.0.1:8766") as ws:
+            # 1. Handshake
+            await ws.send(json.dumps({"node_id": "drone-99"}))
 
-    # Simulate an incoming message
-    test_msg = {"value": 42}
-    bridge.simulate_message("/sensor/data", test_msg)
+            # Allow brief asyncio context switch for server to register connection
+            await asyncio.sleep(0.1)
 
-    # Wait for async delivery if needed (though simulate_message is currently sync or async-tasked)
-    await asyncio.sleep(0.01)
+            assert "drone-99" in bridge._connected_nodes
 
-    assert len(received) == 1
-    assert received[0].payload == test_msg
+            # 2. Transmit real telemetry
+            telemetry = {
+                "node_id": "drone-99",
+                "timestamp": 100.0,
+                "sensor_type": "altimeter",
+                "readings": {"z": 10.5},
+            }
+            await ws.send(json.dumps(telemetry))
 
+            # Allow processing
+            await asyncio.sleep(0.1)
 
-@pytest.mark.asyncio
-@pytest.mark.unit
-async def test_bridge_publishing():
-    """Test publishing interface."""
-    bridge = ROS2Bridge("test_node")
-    await bridge.connect()
-    msg = await bridge.publish("/cmd_vel", {"speed": 1.0})
-    assert msg is not None
-    assert msg.topic == "/cmd_vel"
-    assert msg.payload == {"speed": 1.0}
+            # Verification
+            assert len(received) == 1
+            assert received[0].node_id == "drone-99"
+            assert received[0].readings["z"] == 10.5
 
+            # 3. Server sends actuator command back to node
+            success = await bridge.send_command("drone-99", {"action": "ascend"})
+            assert success is True
 
-@pytest.mark.unit
-def test_transform_3d():
-    """Test 3D transformation logic."""
-    tf = Transform3D(translation=(1, 2, 3))
-    point = (0, 0, 0)
-    transformed = tf.transform_point(point)
-    assert transformed == (1, 2, 3)
+            response = await ws.recv()
+            assert json.loads(response)["action"] == "ascend"
 
-    # Test apply (alias)
-    assert tf.apply(point) == (1, 2, 3)
-
-    # Rotation test (90 deg yaw)
-    tf_yaw = Transform3D.from_rotation(0, 0, math.pi / 2)
-    p = (1, 0, 0)
-    p_trans = tf_yaw.apply(p)
-    assert abs(p_trans[0]) < 1e-9
-    assert abs(p_trans[1] - 1.0) < 1e-9
-    assert abs(p_trans[2]) < 1e-9
-
-    assert Transform3D.deg_to_rad(180) == math.pi
-
-
-@pytest.mark.unit
-def test_sensors():
-    """Test sensor interface and mock sensor."""
-    sensor = MockSensor("temp_1", default_value=25.0)
-    assert not sensor.is_connected
-
-    with pytest.raises(RuntimeError):
-        sensor.read()
-
-    sensor.connect()
-    assert sensor.is_connected
-
-    data = sensor.read()
-    assert data.sensor_id == "temp_1"
-    assert data.data["value"] == 25.0
-
-    sensor.disconnect()
-    assert not sensor.is_connected
-
-
-@pytest.mark.unit
-def test_actuators():
-    """Test actuator interface and mock actuator."""
-    actuator = MockActuator("motor_1")
-    assert not actuator.is_connected
-
-    cmd = ActuatorCommand("motor_1", "move", {"target": 10.0})
-    assert not actuator.execute(cmd)
-
-    actuator.connect()
-    assert actuator.is_connected
-
-    assert actuator.execute(cmd)
-    status = actuator.get_status()
-    assert status.feedback["position"] == 10.0
-
-    actuator.disconnect()
-    assert not actuator.is_connected
+    finally:
+        server.close()
+        await server.wait_closed()

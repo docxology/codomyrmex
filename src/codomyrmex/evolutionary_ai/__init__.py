@@ -15,6 +15,7 @@ from .fitness.fitness import (
     MultiObjectiveFitness,
     ScalarFitness,
 )
+from .genetic import Chromosome, GeneticAlgorithm
 from .genome.genome import Genome, GenomeStats, Individual
 from .operators.operators import (
     BitFlipMutation,
@@ -28,6 +29,7 @@ from .operators.operators import (
     TwoPointCrossover,
     UniformCrossover,
 )
+from .optimizer import optimize_config
 from .population.population import GenerationStats, Population
 from .selection.selection import (
     RankSelection,
@@ -46,6 +48,7 @@ __all__ = [
     "FitnessResult",
     "GaussianMutation",
     "GenerationStats",
+    "GeneticAlgorithm",
     "Genome",
     "GenomeStats",
     # Core types
@@ -65,6 +68,7 @@ __all__ = [
     "TournamentSelection",
     "TwoPointCrossover",
     "UniformCrossover",
+    "optimize_config",
 ]
 
 __version__ = "1.1.0"

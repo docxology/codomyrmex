@@ -1,35 +1,35 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.3.3 | **Date**: 2026-03-13 | **Modules**: 129 | **Sprint**: 31
+**Version**: v1.4.0 | **Date**: 2026-03-13 | **Modules**: 129 | **Sprint**: 32
 
-> v1.3.2 "Execution Capabilities & Distillation" delivered. All 33,000+ tests natively passing.
+> v1.3.3 "Resilience & Abstract Reasoning" delivered. All 33,000+ tests natively passing.
 
 Authoritative project backlog. Upcoming work only; completed items removed.
 
 ---
 
-## 🚀 v1.3.3 — "Resilience & Abstract Reasoning"
+## 🚀 v1.4.0 — "Embedded Operations & Emergent Swarms"
 
-> **Theme**: Formal verifications, hierarchical planning, and robust consensus.
+> **Theme**: Physical abstraction bridging, evolutionary logic, and narrative transmission.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
-| D1 | **Z3 Formal Verifier** | `formal_verification/` | Concrete Z3 solver integration for mathematically proving state invariants |
-| D2 | **Hierarchical Planner** | `orchestrator/` | HTN (Hierarchical Task Network) multi-scale planner for temporal abstraction |
-| D3 | **PBFT Consensus** | `collaboration/` | Practical Byzantine Fault Tolerance mechanism for robust multi-agent voting |
+| D1 | **Physical Embodiment** | `embodiment/` | Implement WebSocket-based physical abstraction bridge for hardware telemetry and sensor input |
+| D2 | **Evolutionary Synthesis** | `evolutionary_ai/` | Develop genetic algorithms for self-optimizing prompt templates and config tuning generation |
+| D3 | **Information Dynamics** | `meme/` | Expose meme transmission and narrative engines as a robust MCP toolset for complex swarm signaling |
 
 ---
 
-## 🔭 v1.4.0+ — Research Horizon
+## 🔭 v1.5.0+ — Research Horizon
 
-> **Theme**: Embedded operations & emergent swarms.
+> **Theme**: Quantum heuristics, bio-computation, and peer-to-peer mesh.
 
 | # | Direction | Builds On | Concrete Next Step |
 | :--- | :--- | :--- | :--- |
-| R1 | **Physical Embodiment** | `embodiment/` | WebSocket-based physical abstraction bridge for drone/rover telemetry |
-| R2 | **Evolutionary Synthesis** | `evolutionary_ai/` | Genetic algorithm for self-optimizing prompt templates and config tuning |
-| R3 | **Information Dynamics** | `meme/` | Exposing meme transmission and narrative engines as an MCP toolset |
+| R1 | **Quantum Logic** | `quantum/` | Simulating quantum circuits or interfaces for specialized probability interference |
+| R2 | **Bio-Simulation** | `bio_simulation/` | Native Python bio-system modeling algorithms building on MetaInformAnt foundations |
+| R3 | **Edge Computing Mesh** | `edge_computing/` | Peer-to-peer decentralized execution nodes for the `collaboration` module |
 
 ---
 
