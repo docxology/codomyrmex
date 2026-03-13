@@ -75,7 +75,7 @@ class HermesSession:
         """Return the most recent message, or None."""
         return self.messages[-1] if self.messages else None
 
-    def fork(self, new_name: str | None = None) -> "HermesSession":
+    def fork(self, new_name: str | None = None) -> HermesSession:
         """Fork a child session inheriting this session's history.
 
         Args:

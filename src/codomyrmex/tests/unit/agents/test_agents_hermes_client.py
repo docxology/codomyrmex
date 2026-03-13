@@ -38,7 +38,7 @@ class TestHermesClientArgBuilder:
         """Test default single-turn chat arg builder."""
         client = HermesClient()
         args = client._build_hermes_args(prompt="test task", context={})
-        assert args == ["chat", "-q", "test task"]
+        assert args == ["chat", "-q", "test task", "-Q", "--provider", "openrouter"]
 
     def test_build_args_specialized_command(self) -> None:
         """Test specialized command via context bypass."""

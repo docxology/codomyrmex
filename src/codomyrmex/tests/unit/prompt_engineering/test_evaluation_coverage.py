@@ -318,7 +318,8 @@ class TestPromptEvaluator:
         assert len(result.scores) == 1
 
     def test_evaluate_weighted_score_calculation(self):
-        fixed_scorer = lambda p, r: 1.0
+        def fixed_scorer(p, r):
+            return 1.0
         criteria = [
             EvaluationCriteria(name="a", weight=0.6, scorer_fn=fixed_scorer),
             EvaluationCriteria(name="b", weight=0.4, scorer_fn=fixed_scorer),

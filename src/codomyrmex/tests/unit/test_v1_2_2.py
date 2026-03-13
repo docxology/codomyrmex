@@ -5,8 +5,6 @@ Zero-Mock: All tests use real implementations.
 
 from __future__ import annotations
 
-import pytest
-
 # ── Health Reporter ───────────────────────────────────────────────
 from codomyrmex.system_discovery.health_reporter import (
     HealthMetrics,
@@ -119,7 +117,6 @@ class TestAPISpecStamper:
 from codomyrmex.config_management.config_validator import (
     ConfigSchema,
     SchemaField,
-    ValidationResult,
 )
 
 

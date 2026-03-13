@@ -155,3 +155,40 @@ N/A - Task submission may be subject to swarm capacity limits.
 ## Versioning
 
 This API follows semantic versioning. Breaking changes will be documented in the changelog.
+
+## Cryptographic Attestation (v1.3.0)
+
+### Class: `AttestationAuthority`
+
+- **Description**: Creates and verifies HMAC-SHA256 signed attestations for completed tasks.
+- **Constructor**:
+    - `secret_key` (bytes, optional): HMAC secret key. Auto-generated if omitted.
+
+#### `attest(task_id: str, agent_id: str, result_data: bytes) -> TaskAttestation`
+
+- **Description**: Create a signed attestation binding task, agent, and result data.
+- **Parameters**:
+    - `task_id` (str): Completed task identifier.
+    - `agent_id` (str): Attesting agent identifier.
+    - `result_data` (bytes): Result data to bind.
+- **Returns**: `TaskAttestation` — Signed attestation.
+
+#### `verify(attestation: TaskAttestation, result_data: bytes) -> bool`
+
+- **Description**: Verify an attestation's signature against result data.
+- **Parameters**:
+    - `attestation` (TaskAttestation): Attestation to verify.
+    - `result_data` (bytes): Original result data.
+- **Returns**: `bool` — True if valid.
+
+### Model: `TaskAttestation`
+
+- `task_id` (str): Task identifier.
+- `agent_id` (str): Agent identifier.
+- `result_hash` (str): SHA-256 hash of result data.
+- `timestamp` (str): ISO 8601 timestamp.
+- `signature` (str): HMAC-SHA256 hex signature.
+
+#### `to_dict() -> dict[str, str]`
+
+Serialize attestation to dictionary.

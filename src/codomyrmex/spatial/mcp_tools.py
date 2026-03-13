@@ -131,3 +131,128 @@ def spatial_point_distance(
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="spatial",
+    description="Generate an icosahedral geodesic mesh at the given subdivision frequency.",
+)
+def spatial_generate_geodesic_mesh(
+    frequency: int = 2,
+    radius: float = 1.0,
+) -> dict[str, Any]:
+    """Generate a geodesic sphere mesh via icosahedral subdivision.
+
+    Args:
+        frequency: Subdivision frequency (1 = base icosahedron, higher = finer mesh).
+        radius: Sphere radius. Default 1.0.
+
+    Returns:
+        dict with keys: status, vertex_count, face_count, frequency
+    """
+    try:
+        from codomyrmex.spatial.coordinates.geodesic import (
+            generate_icosahedron,
+            subdivide_mesh,
+        )
+
+        mesh = generate_icosahedron(radius)
+        if frequency > 1:
+            mesh = subdivide_mesh(mesh, frequency, radius)
+        return {
+            "status": "success",
+            "vertex_count": mesh.vertex_count,
+            "face_count": mesh.face_count,
+            "frequency": mesh.frequency,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="spatial",
+    description="Rotate a 3D point using quaternion rotation (axis-angle input).",
+)
+def spatial_rotate_point(
+    x: float,
+    y: float,
+    z: float,
+    axis_x: float,
+    axis_y: float,
+    axis_z: float,
+    angle: float,
+) -> dict[str, Any]:
+    """Rotate a 3D point by the given axis-angle rotation.
+
+    Args:
+        x: X coordinate of the point.
+        y: Y coordinate of the point.
+        z: Z coordinate of the point.
+        axis_x: X component of the rotation axis.
+        axis_y: Y component of the rotation axis.
+        axis_z: Z component of the rotation axis.
+        angle: Rotation angle in radians.
+
+    Returns:
+        dict with keys: status, x, y, z (rotated point coordinates)
+    """
+    try:
+        from codomyrmex.spatial.coordinates import Point3D
+        from codomyrmex.spatial.coordinates.quaternion import Quaternion
+
+        q = Quaternion.from_axis_angle((axis_x, axis_y, axis_z), angle)
+        point = Point3D(x, y, z)
+        rotated = q.rotate_point(point)
+        return {
+            "status": "success",
+            "x": rotated.x,
+            "y": rotated.y,
+            "z": rotated.z,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="spatial",
+    description="Compute geodesic (great-circle) distance between two points on a sphere.",
+)
+def spatial_geodesic_distance(
+    x1: float,
+    y1: float,
+    z1: float,
+    x2: float,
+    y2: float,
+    z2: float,
+    radius: float = 1.0,
+) -> dict[str, Any]:
+    """Compute geodesic distance between two 3D points on a sphere.
+
+    Both points are projected onto the sphere surface before computing
+    the arc-length distance.
+
+    Args:
+        x1: X coordinate of first point.
+        y1: Y coordinate of first point.
+        z1: Z coordinate of first point.
+        x2: X coordinate of second point.
+        y2: Y coordinate of second point.
+        z2: Z coordinate of second point.
+        radius: Sphere radius. Default 1.0.
+
+    Returns:
+        dict with keys: status, geodesic_distance
+    """
+    try:
+        from codomyrmex.spatial.coordinates import Point3D
+        from codomyrmex.spatial.coordinates.geodesic import geodesic_distance
+
+        p1 = Point3D(x1, y1, z1)
+        p2 = Point3D(x2, y2, z2)
+        dist = geodesic_distance(p1, p2, radius)
+        return {
+            "status": "success",
+            "geodesic_distance": dist,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

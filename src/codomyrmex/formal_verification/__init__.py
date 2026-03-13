@@ -21,10 +21,16 @@ References:
     - PAI Discussion: https://github.com/danielmiessler/Personal_AI_Infrastructure/discussions/707
 """
 
-__version__ = "0.1.0"
+__version__ = "0.3.0"
 
 # Lazy imports for optional backends
 from .backends.base import SolverBackend, SolverResult, SolverStatus
+from .code_change_verifier import (
+    ChangeProposal,
+    CodeChangeVerifier,
+    RuleResult,
+    VerificationResult,
+)
 from .exceptions import (
     BackendNotAvailableError,
     InvalidConstraintError,
@@ -33,17 +39,28 @@ from .exceptions import (
     SolverTimeoutError,
     UnsatisfiableError,
 )
+from .gated_rewrite import GateDecision, GatedRewriter, RewriteGate, RewriteProposal
 from .mcp_tools import pop, push
 from .solver import ConstraintSolver
 from .verify_isc import ISCVerificationResult, verify_criteria_consistency
+from .z3_bridge import Z3Verifier
 
 __all__ = [
     "BackendNotAvailableError",
+    # Code-change verification (v1.3.0)
+    "ChangeProposal",
+    "CodeChangeVerifier",
     # Core API
     "ConstraintSolver",
+    # Gated self-rewrite (v1.3.1)
+    "GateDecision",
+    "GatedRewriter",
     "ISCVerificationResult",
     "InvalidConstraintError",
     "ModelBuildError",
+    "RewriteGate",
+    "RewriteProposal",
+    "RuleResult",
     # Backend abstractions
     "SolverBackend",
     # Exceptions
@@ -52,6 +69,8 @@ __all__ = [
     "SolverStatus",
     "SolverTimeoutError",
     "UnsatisfiableError",
+    "VerificationResult",
+    "Z3Verifier",
     "__version__",
     "pop",
     "push",

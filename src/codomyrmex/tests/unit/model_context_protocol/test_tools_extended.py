@@ -5,7 +5,6 @@ checksum_file, git_status, git_diff.
 Zero-mock policy: real filesystem + subprocess operations only.
 Skip guards: git tests skipped when git binary absent.
 """
-import json
 import shutil
 
 import pytest

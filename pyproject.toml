@@ -83,6 +83,7 @@ dependencies = [
     "psutil>=6.0.0",
     "email-validator>=2.3.0",
     "mlx-lm>=0.31.1",
+    "wasmtime>=42.0.0",
 ]
 
 [project.optional-dependencies]

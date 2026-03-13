@@ -14,8 +14,6 @@ import pytest
 # ── C1: Flaky Test Quarantine ─────────────────────────────────────
 from codomyrmex.ci_cd_automation.flaky_quarantine import (
     FlakyTestQuarantine,
-    QuarantineEntry,
-    TestRunResult,
 )
 
 
@@ -96,7 +94,6 @@ class TestFlakyQuarantine:
 # ── B1: Budget Manager ───────────────────────────────────────────
 
 from codomyrmex.cost_management.budget_manager import (
-    BudgetAlert,
     BudgetManager,
     SpendRecord,
     get_budget_manager,

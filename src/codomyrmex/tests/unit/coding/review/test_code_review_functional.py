@@ -5,7 +5,6 @@ Handles environments where pyscn is not installed.
 No mocks.
 """
 
-import os
 import textwrap
 
 import pytest
@@ -13,9 +12,7 @@ import pytest
 from codomyrmex.coding.review import (
     AnalysisResult,
     AnalysisSummary,
-    AnalysisType,
     CodeReviewer,
-    Language,
     PyscnAnalyzer,
     QualityGateResult,
     SeverityLevel,

@@ -1188,7 +1188,6 @@ class TestWebSocketClientImportError:
 
     def test_import_error_raised_when_websockets_missing(self):
         """Constructor must raise ImportError if websockets is not installed."""
-        import importlib
         import sys
 
         # Temporarily shadow websockets with a broken import

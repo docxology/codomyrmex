@@ -16,7 +16,6 @@ All tests use real objects, real file I/O, and real behavior.
 
 import json
 import os
-import tempfile
 
 import pytest
 import yaml
@@ -29,7 +28,6 @@ from codomyrmex.config_management.core.config_loader import (
     resolve_env_vars,
 )
 from codomyrmex.config_management.deployment.config_deployer import (
-    ConfigDeployment,
     ConfigurationDeployer,
     DeploymentStatus,
     Environment,
@@ -609,9 +607,9 @@ class TestSecretManager:
     def test_key_persists_to_file(self, tmp_path):
         key_file = str(tmp_path / "persistent.key")
         mgr1 = SecretManager(key_file=key_file)
-        sid = mgr1.store_secret("persist", "persist_val")
+        mgr1.store_secret("persist", "persist_val")
         # Load key from file and decrypt
-        mgr2 = SecretManager(key_file=key_file)
+        SecretManager(key_file=key_file)
         # mgr2 has same key so can decrypt if we copy secrets
         assert os.path.exists(key_file)
 

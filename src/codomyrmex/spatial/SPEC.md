@@ -59,6 +59,24 @@ graph TD
 - Physics simulation
 - Agent-environment interaction
 
+### Coordinates (coordinates/) — v1.3.0
+
+#### Geodesic Mesh Generation (`geodesic.py`)
+
+- `IcosahedralMesh` — Dataclass holding vertices (`list[Point3D]`), faces (`list[tuple[int,int,int]]`), and subdivision frequency
+- `generate_icosahedron(radius)` — Golden-ratio construction of a base icosahedron (12 vertices, 20 faces)
+- `subdivide_mesh(mesh, frequency, radius)` — Recursive edge-midpoint subdivision projected onto sphere surface
+- `geodesic_distance(p1, p2, radius)` — Great-circle arc length via `acos(dot(normalize(p1), normalize(p2))) * radius`
+
+#### Quaternion Rotations (`quaternion.py`)
+
+- `Quaternion(w, x, y, z)` — Immutable frozen dataclass for unit quaternions
+- Construction: `identity()`, `from_axis_angle(axis, angle)`, `from_euler(roll, pitch, yaw)` (ZYX convention)
+- Operations: `normalize()`, `conjugate()`, `inverse()`, Hamilton product (`__mul__`), `dot()`
+- Application: `rotate_point(Point3D)` — Implements `p' = q * p * q⁻¹`
+- Interpolation: `slerp(other, t)` — Spherical linear interpolation with shortest-path guarantee
+- Conversion: `to_axis_angle()`, `to_rotation_matrix()` → `Matrix4x4`, `to_tuple()`, `to_dict()`
+
 ## Navigation Links
 
 - **Human Documentation**: [README.md](README.md)

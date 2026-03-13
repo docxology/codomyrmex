@@ -31,9 +31,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypedDict
 
-from codomyrmex.agents.pai.mcp.discovery import discover_dynamic_tools
 from codomyrmex.agents.pai.mcp_bridge import (
-    create_codomyrmex_mcp_server,
     get_tool_registry,
 )
 from codomyrmex.logging_monitoring import get_logger

@@ -7,8 +7,6 @@ Zero-Mock: All tests use real implementations.
 from __future__ import annotations
 
 import json
-import os
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -60,7 +58,6 @@ class TestSchemaVerifier:
 
 from codomyrmex.formal_verification.config_invariants import (
     ConfigInvariantChecker,
-    InvariantResult,
 )
 
 
@@ -152,7 +149,6 @@ class TestPropertyBased:
     @settings(max_examples=50, deadline=None)
     def test_memory_entry_json_roundtrip(self, content: str) -> None:
         """Memory entries survive JSON serialization."""
-        from codomyrmex.agentic_memory.sqlite_store import SQLiteStore
 
         # JSON roundtrip check
         data = {"role": "user", "content": content}

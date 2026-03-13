@@ -33,7 +33,7 @@ class TestVaultSpace:
 
 class TestKernelLayer:
     def test_all_values(self):
-        values = {l.value for l in KernelLayer}
+        values = {layer.value for layer in KernelLayer}
         assert "foundation" in values
         assert "convention" in values
         assert "automation" in values

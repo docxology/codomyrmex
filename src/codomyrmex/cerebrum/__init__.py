@@ -82,6 +82,13 @@ from .inference import (
     PriorBuilder,
     VariationalFreeEnergy,
 )
+from .inference.free_energy_loop import FreeEnergyLoop, LoopResult, StepResult
+from .inference.hierarchical_planner import (
+    HierarchicalPlan,
+    HierarchicalPlanner,
+    LevelResult,
+    PlanLevel,
+)
 from .visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
 
 # FPF integration (optional)
@@ -142,11 +149,18 @@ __all__ = [
     "Decision",
     "DecisionModule",
     "Distribution",
+    # Free-energy loop (v1.3.0)
+    "FreeEnergyLoop",
+    # Hierarchical planner (v1.3.1)
+    "HierarchicalPlan",
+    "HierarchicalPlanner",
     "InferenceEngine",
     "InferenceError",
     "InferenceVisualizer",
     "InvalidCaseError",
     "LearningTransformer",
+    "LevelResult",
+    "LoopResult",
     # Models
     "Model",
     "ModelBase",
@@ -157,11 +171,13 @@ __all__ = [
     # Visualization
     "ModelVisualizer",
     "NetworkStructureError",
+    "PlanLevel",
     "PolicySelector",
     "PriorBuilder",
     "ReasoningChain",
     "ReasoningEngine",
     "ReasoningResult",
+    "StepResult",
     "TransformationError",
     "TransformationManager",
     "VariationalFreeEnergy",
@@ -181,4 +197,4 @@ __all__ = [
 if _HAS_FPF:
     __all__.extend(["FPFCombinatoricsAnalyzer", "FPFOrchestrator"])
 
-__version__ = "0.1.0"
+__version__ = "0.3.0"

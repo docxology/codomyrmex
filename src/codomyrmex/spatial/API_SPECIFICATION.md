@@ -1,10 +1,10 @@
 # Spatial Module API Specification
 
-**Version**: v1.1.9 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v1.3.0 | **Status**: Stable | **Last Updated**: March 2026
 
 ## 1. Overview
 
-The `spatial` module provides advanced modeling capabilities for 3D and 4D environments, including support for Synergetics-based geometry, coordinate transformations, and world models. It exposes six submodules covering conventional 3D, 4D/Synergetics, coordinate systems, world models, physics, and rendering.
+The `spatial` module provides advanced modeling capabilities for 3D and 4D environments, including support for Synergetics-based geometry, coordinate transformations, geodesic mesh generation, quaternion rotations, and world models. It exposes six submodules covering conventional 3D, 4D/Synergetics, coordinate systems, world models, physics, and rendering.
 
 ## 2. Core Components
 
@@ -162,6 +162,57 @@ class CoordinateTransformer:
     def degrees_to_radians(degrees: float) -> float: ...
     @staticmethod
     def radians_to_degrees(radians: float) -> float: ...
+```
+
+### 3.8 `Quaternion` (v1.3.0)
+
+```python
+@dataclass
+class Quaternion:
+    w: float    # scalar component
+    x: float    # i component
+    y: float    # j component
+    z: float    # k component
+
+    @classmethod
+    def identity(cls) -> 'Quaternion': ...
+    @classmethod
+    def from_axis_angle(cls, axis: tuple[float, float, float], angle: float) -> 'Quaternion': ...
+    @classmethod
+    def from_euler(cls, roll: float, pitch: float, yaw: float) -> 'Quaternion': ...
+
+    def normalize(self) -> 'Quaternion': ...
+    def conjugate(self) -> 'Quaternion': ...
+    def inverse(self) -> 'Quaternion': ...
+    def rotate_point(self, point: Point3D) -> Point3D: ...
+    def to_rotation_matrix(self) -> list[list[float]]: ...  # 3×3
+    def to_axis_angle(self) -> tuple[tuple[float, float, float], float]: ...
+    def slerp(self, other: 'Quaternion', t: float) -> 'Quaternion': ...
+    def to_dict(self) -> dict[str, float]: ...
+```
+
+### 3.9 `IcosahedralMesh` (v1.3.0)
+
+```python
+@dataclass
+class IcosahedralMesh:
+    vertices: list[Point3D]
+    faces: list[tuple[int, int, int]]
+    frequency: int
+
+    @property
+    def vertex_count(self) -> int: ...
+    @property
+    def face_count(self) -> int: ...
+    def to_dict(self) -> dict[str, Any]: ...
+```
+
+### 3.10 Geodesic Functions (v1.3.0)
+
+```python
+def generate_icosahedron(radius: float = 1.0) -> IcosahedralMesh: ...
+def subdivide_mesh(mesh: IcosahedralMesh, frequency: int, radius: float = 1.0) -> IcosahedralMesh: ...
+def geodesic_distance(p1: Point3D, p2: Point3D, radius: float = 1.0) -> float: ...
 ```
 
 ## 4. `three_d` Submodule

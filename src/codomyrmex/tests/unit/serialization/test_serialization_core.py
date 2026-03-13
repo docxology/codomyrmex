@@ -781,7 +781,6 @@ class TestModulePublicApi:
 
     @_SKIP_YAML
     def test_module_serialize_yaml_string_format(self):
-        import yaml
 
         from codomyrmex.serialization import deserialize, serialize
 

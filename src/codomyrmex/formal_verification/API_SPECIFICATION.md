@@ -63,3 +63,48 @@ class SolverResult:
     statistics: dict[str, Any]        # Solver statistics
     error_message: str | None         # Error details
 ```
+
+## Code-Change Verification (v1.3.0)
+
+### ChangeProposal
+
+```python
+@dataclass
+class ChangeProposal:
+    file_path: str          # Path to the file being changed
+    original_source: str    # Original Python source code
+    modified_source: str    # Modified Python source code
+```
+
+### CodeChangeVerifier
+
+```python
+class CodeChangeVerifier:
+    def verify(self, proposal: ChangeProposal) -> VerificationResult: ...
+```
+
+Checks three built-in invariant rules:
+1. **no_public_function_deletion** — public functions must not be removed.
+2. **no_parameter_removal** — parameters must not be removed from public signatures.
+3. **parameter_order_preserved** — existing parameter order must be maintained.
+
+### VerificationResult
+
+```python
+@dataclass
+class VerificationResult:
+    passed: bool                    # True if all rules pass
+    summary: str                    # Human-readable summary
+    rule_results: list[RuleResult]  # Per-rule detail
+```
+
+### RuleResult
+
+```python
+@dataclass
+class RuleResult:
+    rule_name: str       # Name of the rule
+    passed: bool         # True if rule passed
+    message: str         # Human-readable message
+    details: dict | None # Rule-specific details
+```

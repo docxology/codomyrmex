@@ -33,7 +33,7 @@ def test_task_node_leaf_collection() -> None:
     # Leaves should be GC1, GC2, and Child2
     leaves = root.get_leaves()
     assert len(leaves) == 3
-    assert {l.id for l in leaves} == {"1.1.1", "1.1.2", "1.2"}
+    assert {leaf.id for leaf in leaves} == {"1.1.1", "1.1.2", "1.2"}
 
 
 def test_is_subtree_done() -> None:

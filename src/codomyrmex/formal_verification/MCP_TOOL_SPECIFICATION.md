@@ -67,3 +67,21 @@ All tools return `{"status": "error", "error": "<message>"}` when:
 ## Integration
 
 Tools are registered via `@mcp_tool(category="formal_verification")` decorator and auto-discovered by the PAI MCP bridge.
+
+---
+
+### verify_code_change
+
+Verify that a code change preserves structural invariants (public functions, parameters, signature order).
+
+- **Category**: formal_verification
+- **Parameters**:
+  - `file_path` (string, required): Path to the file being changed (for reporting).
+  - `original_source` (string, required): Original Python source code.
+  - `modified_source` (string, required): Modified Python source code.
+- **Returns**: `{"status": "success", "passed": <bool>, "summary": <string>, "rule_results": [{"rule_name": <string>, "passed": <bool>, "message": <string>, "details": <object>}]}`
+- **Rules checked**:
+  1. **no_public_function_deletion** — No public functions were deleted.
+  2. **no_parameter_removal** — No parameters removed from public functions.
+  3. **parameter_order_preserved** — Existing parameter ordering is maintained.
+- **Idempotent**: Yes

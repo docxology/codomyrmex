@@ -139,3 +139,87 @@ def collaboration_list_agents() -> dict[str, Any]:
         },
         "decomposer": "TaskDecomposer",
     }
+
+
+# Module-level authority instance for stateful attestation across MCP calls
+_attestation_authority: Any = None
+
+
+def _get_authority() -> Any:
+    """Lazy-init a shared AttestationAuthority."""
+    global _attestation_authority
+    if _attestation_authority is None:
+        from codomyrmex.collaboration.coordination.attestation import (
+            AttestationAuthority,
+        )
+
+        _attestation_authority = AttestationAuthority()
+    return _attestation_authority
+
+
+@mcp_tool(
+    category="collaboration",
+    description="Create a cryptographic attestation proving an agent completed a task.",
+)
+def collaboration_attest_task(
+    task_id: str,
+    agent_id: str,
+    result_data: str,
+) -> dict[str, Any]:
+    """Create an HMAC-SHA256 signed attestation for a completed task.
+
+    Args:
+        task_id: Identifier of the completed task.
+        agent_id: Identifier of the attesting agent.
+        result_data: Result data string to bind into the attestation.
+
+    Returns:
+        dict with keys: status, attestation (serialized TaskAttestation)
+    """
+    try:
+        authority = _get_authority()
+        attestation = authority.attest(task_id, agent_id, result_data.encode())
+        return {
+            "status": "success",
+            "attestation": attestation.to_dict(),
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="collaboration",
+    description="Verify a cryptographic task attestation against result data.",
+)
+def collaboration_verify_attestation(
+    attestation_dict: dict[str, Any],
+    result_data: str,
+) -> dict[str, Any]:
+    """Verify an HMAC-SHA256 attestation against result data.
+
+    Args:
+        attestation_dict: Serialized attestation (as returned by collaboration_attest_task).
+        result_data: The original result data string.
+
+    Returns:
+        dict with keys: status, valid, task_id
+    """
+    try:
+        from codomyrmex.collaboration.coordination.attestation import TaskAttestation
+
+        authority = _get_authority()
+        attestation = TaskAttestation(
+            task_id=attestation_dict["task_id"],
+            agent_id=attestation_dict["agent_id"],
+            result_hash=attestation_dict["result_hash"],
+            timestamp=attestation_dict["timestamp"],
+            signature=attestation_dict["signature"],
+        )
+        valid = authority.verify(attestation, result_data.encode())
+        return {
+            "status": "success",
+            "valid": valid,
+            "task_id": attestation.task_id,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

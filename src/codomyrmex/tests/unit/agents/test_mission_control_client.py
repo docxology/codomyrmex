@@ -22,11 +22,10 @@ Test matrix:
 
 from __future__ import annotations
 
-import json
 import subprocess
 from pathlib import Path
 from typing import Any
-from unittest.mock import patch
+from unittest.mock import patch  # noqa: TID251
 
 import pytest
 
@@ -39,7 +38,7 @@ from codomyrmex.agents.mission_control.mission_control_client import (
 # ── Fixtures ─────────────────────────────────────────────────────
 
 
-@pytest.fixture()
+@pytest.fixture
 def unreachable_client() -> MissionControlClient:
     """Client configured against an unreachable port."""
     return MissionControlClient(config={
@@ -48,13 +47,13 @@ def unreachable_client() -> MissionControlClient:
     })
 
 
-@pytest.fixture()
+@pytest.fixture
 def default_client() -> MissionControlClient:
     """Client with default configuration."""
     return MissionControlClient()
 
 
-@pytest.fixture()
+@pytest.fixture
 def keyed_client() -> MissionControlClient:
     """Client with an API key configured."""
     return MissionControlClient(config={"api_key": "test-key-42"})
@@ -252,7 +251,7 @@ class TestMissionControlURLBuilding:
 
     def test_list_tasks_no_filters(self) -> None:
         """list_tasks with no filters hits /api/tasks."""
-        client = MissionControlClient(config={
+        MissionControlClient(config={
             "base_url": "http://mc:3000",
         })
         # We can't call _request directly (server not running),
@@ -449,7 +448,7 @@ class TestMissionControlTaskPayloads:
             return {"id": "new-task-1"}
 
         client._request = fake_request  # type: ignore[assignment]
-        result = client.create_task(title="Test Task")
+        client.create_task(title="Test Task")
         assert captured["method"] == "POST"
         assert captured["path"] == "/api/tasks"
         assert captured["data"]["title"] == "Test Task"
@@ -757,7 +756,6 @@ class TestMissionControlServerLifecycle:
             "app_path": str(app_dir),
         })
         # Patch Popen to simulate pnpm not found
-        original_popen = subprocess.Popen
 
         def fake_popen(*args: Any, **kwargs: Any) -> None:
             raise FileNotFoundError("pnpm")

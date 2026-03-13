@@ -18,8 +18,11 @@ Example::
 from __future__ import annotations
 
 import html
-from dataclasses import dataclass, field
-from collections.abc import Sequence
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 @dataclass(frozen=True)

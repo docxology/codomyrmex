@@ -1,9 +1,9 @@
 # Codomyrmex Agents — src/codomyrmex/cerebrum
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Cognitive modeling layer integrating case-based reasoning, Bayesian inference, and active inference with free-energy minimization.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
@@ -23,6 +23,7 @@ Contains components for the src system.
 - `drift_tracker.py` – Project file
 - `fpf/` – Directory containing fpf components
 - `inference/` – Directory containing inference components
+- `inference/free_energy_loop.py` – Closed-loop free-energy minimization runner (v1.3.0)
 - `mcp_tools.py` – Project file
 - `py.typed` – Project file
 - `visualization/` – Directory containing visualization components

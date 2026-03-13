@@ -345,7 +345,7 @@ class TestContainerSecurityScannerInit:
     def test_get_scan_history_returns_copy(self):
         scanner = ContainerSecurityScanner()
         h1 = scanner.get_scan_history()
-        h2 = scanner.get_scan_history()
+        scanner.get_scan_history()
         # Mutating one should not affect the internal state
         h1.append("spurious")
         assert len(scanner.get_scan_history()) == 0

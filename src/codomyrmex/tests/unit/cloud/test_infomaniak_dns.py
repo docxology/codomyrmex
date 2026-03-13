@@ -12,7 +12,6 @@ Tests cover:
 Total: 24 tests in a single TestInfomaniakDNS class.
 """
 
-import pytest
 from _stubs import Stub, make_stub_zone
 
 

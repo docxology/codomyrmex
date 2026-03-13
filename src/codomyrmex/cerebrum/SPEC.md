@@ -133,6 +133,16 @@ graph TD
 - `TransformationManager`: Model transformation
 - `ModelVisualizer`, `CaseVisualizer`, `InferenceVisualizer`: Visualization
 
+### Free-Energy Minimization Loop (v1.3.0)
+
+New in v1.3.0, `inference/free_energy_loop.py` provides a closed-loop runner that orchestrates an `ActiveInferenceAgent` through repeated observe → infer → act cycles:
+
+- `FreeEnergyLoop(agent, max_steps, fe_threshold, convergence_window, observation_fn)` — Main runner
+- `StepResult(step, action, free_energy, beliefs)` — Per-cycle result
+- `LoopResult(steps, converged, final_free_energy, action_history, belief_trajectory, step_results)` — Full run summary
+
+Convergence is declared when free energy stays below `fe_threshold` for `convergence_window` consecutive steps. The optional `observation_fn` callable generates new observations from each action.
+
 ### Dependencies
 
 - `codomyrmex.logging_monitoring`: For structured logging

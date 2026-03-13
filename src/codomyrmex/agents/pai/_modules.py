@@ -7,7 +7,6 @@ and TELOS subsystems within PAI. Extracted from pai_bridge.py.
 from __future__ import annotations
 
 import itertools
-from typing import TYPE_CHECKING
 
 from codomyrmex.logging_monitoring import get_logger
 

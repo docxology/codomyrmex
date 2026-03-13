@@ -14,7 +14,6 @@ import json
 import sqlite3
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING
 

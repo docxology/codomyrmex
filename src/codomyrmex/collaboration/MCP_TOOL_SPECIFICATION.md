@@ -1,16 +1,41 @@
-# Collaboration - MCP Tool Specification
+# Collaboration — MCP Tool Specification
 
-This document outlines the specification for tools within the Collaboration module that are intended to be integrated with the Model Context Protocol (MCP).
+**Version**: v1.3.0 | **Last Updated**: March 2026
 
-## Current Status: No MCP Tools Defined
+Tools are registered via `@mcp_tool(category="collaboration")` and auto-discovered by the PAI MCP bridge.
 
-The Collaboration module provides multi-agent collaboration capabilities for internal use by other Codomyrmex modules, including agent management (workers, supervisors, registry), communication (channels, broadcasting, direct messaging), coordination (task management, consensus, leader election), and protocols (message passing, swarm behavior, round-robin routing). These functions are primarily for programmatic integration within the application lifecycle and are not suited for exposure as Model Context Protocol (MCP) tools.
+---
 
-MCP tools are typically designed for discrete, invocable actions or queries that an external agent (like an LLM) would trigger. The internal multi-agent coordination mechanisms do not fit this paradigm.
+## Tool: `collaboration_attest_task`
 
-If future enhancements to this module introduce features that are appropriate for MCP (e.g., dispatching a task to a specific agent, or querying swarm consensus status), this document will be updated accordingly.
+Create a cryptographic attestation proving an agent completed a task.
 
-For details on how to use the collaboration functionalities within your Python code, please refer to the module's `README.md` and `API_SPECIFICATION.md`.
+- **Category**: collaboration
+- **Parameters**:
+  - `task_id` (string, required): Identifier of the completed task.
+  - `agent_id` (string, required): Identifier of the attesting agent.
+  - `result_data` (string, required): Result data string to bind into the attestation.
+- **Returns**: `{"status": "success", "attestation": {"task_id": <string>, "agent_id": <string>, "result_hash": <string>, "timestamp": <string>, "signature": <string>}}`
+
+---
+
+## Tool: `collaboration_verify_attestation`
+
+Verify a cryptographic task attestation against result data.
+
+- **Category**: collaboration
+- **Parameters**:
+  - `attestation_dict` (object, required): Serialized attestation (as returned by `collaboration_attest_task`).
+  - `result_data` (string, required): The original result data string.
+- **Returns**: `{"status": "success", "valid": <bool>, "task_id": <string>}`
+
+---
+
+## Error Handling
+
+All tools return `{"status": "error", "message": "<message>"}` on failure.
+
+For additional collaboration tools (swarm management, agent listing), see `mcp_tools.py`.
 
 ## Navigation Links
 

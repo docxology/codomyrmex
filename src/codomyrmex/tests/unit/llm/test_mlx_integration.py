@@ -241,7 +241,6 @@ class TestModelManagerEdgeCases:
 
     def test_list_with_regular_file_in_cache(self):
         """Files (not directories) in cache should be silently ignored."""
-        import shutil
 
         from codomyrmex.llm.mlx.config import MLXConfig
         from codomyrmex.llm.mlx.model_manager import MLXModelManager
@@ -262,7 +261,6 @@ class TestModelManagerEdgeCases:
 
     def test_multiple_models_sorted(self):
         """Models should be returned in sorted order by directory name."""
-        import shutil
 
         from codomyrmex.llm.mlx.config import MLXConfig
         from codomyrmex.llm.mlx.model_manager import MLXModelManager
@@ -294,7 +292,7 @@ class TestModelManagerEdgeCases:
             assert not nested.exists()
 
             cfg = MLXConfig(cache_dir=str(nested))
-            mgr = MLXModelManager(cfg)
+            MLXModelManager(cfg)
             assert nested.is_dir()
 
 
@@ -346,7 +344,7 @@ class TestQuantizationEdgeCases:
 
     def test_all_presets_roundtrip_via_quantizer(self):
         """All presets accessible via MLXQuantizer.get_preset."""
-        from codomyrmex.llm.mlx.quantization import MLXQuantizer, QUANTIZATION_PRESETS
+        from codomyrmex.llm.mlx.quantization import QUANTIZATION_PRESETS, MLXQuantizer
 
         for name in QUANTIZATION_PRESETS:
             preset = MLXQuantizer.get_preset(name)
@@ -386,7 +384,7 @@ class TestConfigToRunnerPipeline:
         assert stats["config"]["seed"] == 99
 
     def test_model_recommendation_to_config(self):
-        from codomyrmex.llm.mlx.config import MLXConfig, RECOMMENDED_MODELS
+        from codomyrmex.llm.mlx.config import RECOMMENDED_MODELS, MLXConfig
 
         for rec in RECOMMENDED_MODELS:
             cfg = MLXConfig(model=rec.repo_id)

@@ -1,6 +1,5 @@
 """Zero-mock tests for codomyrmex.security.theory.threat_modeling."""
 
-import pytest
 
 from codomyrmex.security.theory.threat_modeling import (
     Threat,
@@ -351,7 +350,6 @@ class TestAnalyzeThreats:
             assert "mitigation" in t
 
     def test_empty_threat_model_average_risk_is_zero(self):
-        from datetime import datetime
 
         model = ThreatModel(
             model_id="empty",
@@ -384,7 +382,6 @@ class TestPrioritizeThreats:
 
     def test_higher_risk_score_appears_first(self):
         """A threat with high/critical impact should outrank low/low in prioritization."""
-        from codomyrmex.security.theory.risk_assessment import calculate_risk_score
 
         t_low = Threat(
             threat_id="t-low",
@@ -404,7 +401,6 @@ class TestPrioritizeThreats:
             likelihood="high",
             impact="critical",
         )
-        from datetime import datetime
 
         model = ThreatModel(
             model_id="test",

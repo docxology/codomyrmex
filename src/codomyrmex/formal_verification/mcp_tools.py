@@ -173,3 +173,58 @@ def pop(n: int = 1) -> dict[str, str]:
         return err
     solver.pop(n)
     return {"status": "success", "message": f"Popped {n} scope(s)"}
+
+
+@mcp_tool(
+    category="formal_verification",
+    description="Verify that a code change preserves structural invariants (public functions, parameters, signature order).",
+)
+def verify_code_change(
+    file_path: str,
+    original_source: str,
+    modified_source: str,
+) -> dict[str, Any]:
+    """Run AST-based invariant rules against a proposed code change.
+
+    Checks that:
+    1. No public functions were deleted.
+    2. No parameters were removed from public functions.
+    3. Existing parameter ordering is preserved.
+
+    Args:
+        file_path: Path to the file being changed (for reporting).
+        original_source: Original Python source code.
+        modified_source: Modified Python source code.
+
+    Returns:
+        dict with keys: status, passed, summary, rule_results
+    """
+    try:
+        from .code_change_verifier import (
+            ChangeProposal,
+            CodeChangeVerifier,
+        )
+
+        proposal = ChangeProposal(
+            file_path=file_path,
+            original_source=original_source,
+            modified_source=modified_source,
+        )
+        verifier = CodeChangeVerifier()
+        result = verifier.verify(proposal)
+        return {
+            "status": "success",
+            "passed": result.passed,
+            "summary": result.summary,
+            "rule_results": [
+                {
+                    "rule_name": r.rule_name,
+                    "passed": r.passed,
+                    "message": r.message,
+                    "details": r.details,
+                }
+                for r in result.rule_results
+            ],
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

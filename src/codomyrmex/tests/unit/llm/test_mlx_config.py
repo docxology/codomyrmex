@@ -3,11 +3,8 @@
 All tests are pure logic — they run without mlx or mlx-lm installed.
 """
 
-import os
-from dataclasses import asdict
 
 import pytest
-
 
 # ===========================================================================
 # 1. MLXConfig defaults

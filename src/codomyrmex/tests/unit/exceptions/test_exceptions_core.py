@@ -10,7 +10,6 @@ import pytest
 
 from codomyrmex.exceptions import (
     AIProviderError,
-    APIDocumentationError,
     APIError,
     ArtifactError,
     AuthenticationError,
@@ -18,11 +17,9 @@ from codomyrmex.exceptions import (
     CacheError,
     CapabilityScanError,
     CaseError,
-    CaseNotFoundError,
     CerebrumError,
     CICDError,
     CircuitOpenError,
-    CodeEditingError,
     CodeExecutionError,
     CodeGenerationError,
     CodomyrmexError,
@@ -48,7 +45,6 @@ from codomyrmex.exceptions import (
     LoggingError,
     MemoryError,
     ModelContextError,
-    ModelError,
     Modeling3DError,
     NetworkError,
     NetworkStructureError,

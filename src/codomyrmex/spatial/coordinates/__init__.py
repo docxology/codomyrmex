@@ -363,12 +363,25 @@ class CoordinateTransformer:
         return math.degrees(radians)
 
 
+from .geodesic import (
+    IcosahedralMesh,
+    generate_icosahedron,
+    geodesic_distance,
+    subdivide_mesh,
+)
+from .quaternion import Quaternion
+
 __all__ = [
     "CoordinateSystem",
     "CoordinateTransformer",
     "CylindricalCoord",
     "GeographicCoord",
+    "IcosahedralMesh",
     "Matrix4x4",
     "Point3D",
+    "Quaternion",
     "SphericalCoord",
+    "generate_icosahedron",
+    "geodesic_distance",
+    "subdivide_mesh",
 ]

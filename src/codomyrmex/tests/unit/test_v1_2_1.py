@@ -212,7 +212,6 @@ class TestDependencyMapper:
 # ── D1: Enhanced Retry ────────────────────────────────────────────
 
 from codomyrmex.utils.retry_enhanced import (
-    RetryStats,
     retry,
     retry_with_stats,
 )

@@ -431,3 +431,221 @@ def hermes_user_context(
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
+@mcp_tool(
+    category="hermes",
+    description="Run hermes doctor for comprehensive health diagnostics (CLI v0.2.0+).",
+)
+def hermes_doctor() -> dict[str, Any]:
+    """Run Hermes health diagnostics.
+
+    Returns:
+        dict with keys: status, output, stderr, exit_code
+    """
+    try:
+        client = _get_client()
+        result = client.run_doctor()
+        return {"status": "success" if result.get("success") else "error", **result}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description="Get the installed Hermes CLI version string.",
+)
+def hermes_version() -> dict[str, Any]:
+    """Get Hermes CLI version.
+
+    Returns:
+        dict with keys: status, version
+    """
+    try:
+        client = _get_client()
+        version = client.get_version()
+        return {
+            "status": "success" if version else "unavailable",
+            "version": version,
+            "cli_available": client._cli_available,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Create an isolated git worktree for a Hermes session, "
+        "enabling parallel agent execution without branch conflicts."
+    ),
+)
+def hermes_worktree_create(session_id: str) -> dict[str, Any]:
+    """Create an isolated git worktree for a session.
+
+    Args:
+        session_id: Session identifier for the worktree branch name.
+
+    Returns:
+        dict with keys: status, worktree_path, branch_name
+    """
+    try:
+        client = _get_client()
+        path = client.create_worktree(session_id)
+        if path:
+            return {
+                "status": "success",
+                "worktree_path": str(path),
+                "branch_name": f"hermes/{session_id}",
+            }
+        return {"status": "error", "message": "Failed to create worktree"}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description="Remove an isolated git worktree after a session completes.",
+)
+def hermes_worktree_cleanup(session_id: str) -> dict[str, Any]:
+    """Clean up a git worktree for a session.
+
+    Args:
+        session_id: Session identifier matching the worktree.
+
+    Returns:
+        dict with keys: status, cleaned
+    """
+    try:
+        client = _get_client()
+        cleaned = client.cleanup_worktree(session_id)
+        return {"status": "success" if cleaned else "error", "cleaned": cleaned}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description="Search Hermes sessions by name substring.",
+)
+def hermes_session_search(query: str) -> dict[str, Any]:
+    """Search sessions by name.
+
+    Args:
+        query: Substring to match against session names.
+
+    Returns:
+        dict with keys: status, sessions, count
+    """
+    try:
+        from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
+        client = _get_client()
+        with SQLiteSessionStore(client._session_db_path) as store:
+            results = store.search_sessions(query)
+            return {"status": "success", "sessions": results, "count": len(results)}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Check the status of the Honcho AI memory integration. "
+        "Honcho provides persistent cross-session memory for Hermes."
+    ),
+)
+def hermes_honcho_status() -> dict[str, Any]:
+    """Check Honcho memory integration status.
+
+    Returns:
+        dict with keys: status, output, exit_code
+    """
+    try:
+        import os
+        import shutil
+        import subprocess
+
+        hermes_bin = shutil.which("hermes")
+        if not hermes_bin:
+            return {"status": "error", "message": "Hermes CLI not available"}
+
+        result = subprocess.run(
+            [hermes_bin, "honcho", "status"],
+            capture_output=True, text=True, timeout=15,
+            env={**os.environ, "NO_COLOR": "1"},
+        )
+        return {
+            "status": "success" if result.returncode == 0 else "error",
+            "output": result.stdout.strip(),
+            "stderr": result.stderr.strip(),
+            "exit_code": result.returncode,
+        }
+    except subprocess.TimeoutExpired:
+        return {"status": "error", "message": "honcho status timed out"}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Show Hermes usage insights and analytics — token usage, costs, "
+        "tool patterns, and activity trends."
+    ),
+)
+def hermes_insights(days: int = 30) -> dict[str, Any]:
+    """Get Hermes usage insights.
+
+    Args:
+        days: Number of days to analyze (default 30).
+
+    Returns:
+        dict with keys: status, output, exit_code
+    """
+    try:
+        import os
+        import shutil
+        import subprocess
+
+        hermes_bin = shutil.which("hermes")
+        if not hermes_bin:
+            return {"status": "error", "message": "Hermes CLI not available"}
+
+        result = subprocess.run(
+            [hermes_bin, "insights", "--days", str(days)],
+            capture_output=True, text=True, timeout=30,
+            env={**os.environ, "NO_COLOR": "1"},
+        )
+        return {
+            "status": "success" if result.returncode == 0 else "error",
+            "output": result.stdout.strip(),
+            "stderr": result.stderr.strip(),
+            "exit_code": result.returncode,
+        }
+    except subprocess.TimeoutExpired:
+        return {"status": "error", "message": "insights timed out"}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Get the credential and availability status for all configured "
+        "inference providers (OpenRouter, Ollama, Anthropic, etc.)."
+    ),
+)
+def hermes_provider_status() -> dict[str, Any]:
+    """Check multi-provider credential status.
+
+    Returns:
+        dict with keys: status, providers (dict per provider)
+    """
+    try:
+        from codomyrmex.agents.hermes._provider_router import ProviderRouter
+
+        router = ProviderRouter()
+        return {"status": "success", "providers": router.get_provider_status()}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+

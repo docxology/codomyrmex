@@ -7,7 +7,6 @@ advanced features (streaming, async, connection pooling).
 
 from __future__ import annotations
 
-import socket
 import urllib.error
 import urllib.parse
 import urllib.request

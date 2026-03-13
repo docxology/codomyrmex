@@ -109,6 +109,11 @@ class HermesClient(CLIAgentBase):
         self._fallback_model: str | None = self.get_config_value("fallback_model", config=cfg)
         self._fallback_provider: str | None = self.get_config_value("fallback_provider", config=cfg)
 
+        # CLI flags (v0.2.0+)
+        self._yolo: bool = bool(self.get_config_value("yolo", config=cfg))
+        self._continue_session: str | None = self.get_config_value("continue_session", config=cfg)
+        self._pass_session_id: bool = bool(self.get_config_value("pass_session_id", config=cfg))
+
         db_default = Path.home() / ".codomyrmex" / "hermes_sessions.db"
         self._session_db_path = str(
             self.get_config_value("hermes_session_db", config=cfg) or db_default
@@ -120,6 +125,12 @@ class HermesClient(CLIAgentBase):
             os.path.expanduser(
                 str(self.get_config_value("worktree_base_dir", config=cfg) or "~/.codomyrmex/worktrees")
             )
+        )
+
+        # Context compression for long conversations
+        from codomyrmex.agents.hermes._provider_router import ContextCompressor
+        self._compressor = ContextCompressor(
+            max_tokens=int(self.get_config_value("max_context_tokens", config=cfg) or 100_000),
         )
 
         # Probe availability
@@ -431,9 +442,18 @@ class HermesClient(CLIAgentBase):
 
             session.add_message("user", prompt)
 
+            # Auto-compress history if it exceeds token limits
+            history_messages = session.messages[:-1]  # exclude the current user prompt
+            if self._compressor.needs_compression(history_messages):
+                history_messages = self._compressor.compress(history_messages)
+                self.logger.info(
+                    "Session %s: compressed %d → %d history messages",
+                    session.session_id, len(session.messages) - 1, len(history_messages),
+                )
+
             # Build full prompt containing history
             history_text = ""
-            for msg in session.messages[:-1]:  # exclude the current user prompt
+            for msg in history_messages:
                 history_text += f"[{msg['role'].upper()}]\n{msg['content']}\n\n"
 
             if history_text:
@@ -481,7 +501,14 @@ class HermesClient(CLIAgentBase):
             return args
         # Non-interactive mode: -Q suppresses spinner/banner, --provider forces the
         # configured inference provider so hermes never enters the setup wizard.
-        return ["chat", "-q", prompt, "-Q", "--provider", self._hermes_provider]
+        args = ["chat", "-q", prompt, "-Q", "--provider", self._hermes_provider]
+        if self._yolo:
+            args.append("--yolo")
+        if self._continue_session:
+            args.extend(["--continue", self._continue_session])
+        if self._pass_session_id:
+            args.append("--pass-session-id")
+        return args
 
     # ------------------------------------------------------------------
     # Version & Diagnostics (v0.2.0+)

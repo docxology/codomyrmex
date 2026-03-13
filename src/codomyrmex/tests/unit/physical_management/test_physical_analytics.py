@@ -253,7 +253,8 @@ class TestDataStreamOperations:
 
     def test_unsubscribe_stops_delivery(self):
         received = []
-        cb = lambda dp: received.append(dp.value)
+        def cb(dp):
+            return received.append(dp.value)
         stream = DataStream("ds-unsub", buffer_size=100, window_duration=600)
         stream.subscribe(cb)
         stream.add_data_point(1.0, source_id="s")
@@ -352,7 +353,8 @@ class TestStreamingAnalyticsManager:
     def test_add_and_remove_processor(self):
         sa = StreamingAnalytics()
         captured = []
-        proc = lambda sid, dp: captured.append((sid, dp.value))
+        def proc(sid, dp):
+            return captured.append((sid, dp.value))
         sa.add_processor(proc)
         sa.create_stream("proc-test")
         sa.add_data("proc-test", 5.0, "s")

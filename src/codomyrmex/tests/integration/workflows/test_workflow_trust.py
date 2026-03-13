@@ -18,7 +18,11 @@ class TestWorkflowTrust:
 
     def test_initial_state_untrusted(self):
         """Trust starts at UNTRUSTED."""
-        from codomyrmex.agents.pai.trust_gateway import TrustLevel, get_current_trust_level, reset_trust
+        from codomyrmex.agents.pai.trust_gateway import (
+            TrustLevel,
+            get_current_trust_level,
+            reset_trust,
+        )
 
         reset_trust()  # Ensure clean state
         assert get_current_trust_level() == TrustLevel.UNTRUSTED

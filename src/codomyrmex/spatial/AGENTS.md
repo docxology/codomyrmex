@@ -1,9 +1,9 @@
 # Codomyrmex Agents — src/codomyrmex/spatial
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Spatial modeling module providing 3D/4D coordinates, geodesic mesh generation, quaternion rotations, and world model capabilities.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
@@ -13,6 +13,8 @@ Contains components for the src system.
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
 - `coordinates/` – Directory containing coordinates components
+- `coordinates/geodesic.py` – Icosahedral mesh generator and geodesic distance (v1.3.0)
+- `coordinates/quaternion.py` – Quaternion rotations, slerp, axis-angle/matrix conversion (v1.3.0)
 - `four_d/` – Directory containing four_d components
 - `mcp_tools.py` – Project file
 - `physics/` – Directory containing physics components

@@ -8,7 +8,7 @@ import textwrap
 
 import pytest
 
-from codomyrmex.coding.pattern_matching.ast_matcher import ASTMatcher, ASTMatchResult
+from codomyrmex.coding.pattern_matching.ast_matcher import ASTMatcher
 
 
 @pytest.fixture

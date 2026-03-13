@@ -13,7 +13,6 @@ from codomyrmex.audio.mcp_tools import (
 )
 from codomyrmex.audio.speech_to_text.providers import WHISPER_AVAILABLE
 from codomyrmex.audio.text_to_speech.providers import (
-    EDGE_TTS_AVAILABLE,
     PYTTSX3_AVAILABLE,
 )
 

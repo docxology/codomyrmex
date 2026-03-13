@@ -65,6 +65,29 @@ class MessageBus:
 - Swarm size limited by in-process messaging overhead and event loop capacity.
 - Results must be published back to `results.agent.{agent_id}` for the `SwarmManager` to aggregate them.
 
+## Cryptographic Task Attestation (v1.3.0)
+
+New in v1.3.0, `coordination/attestation.py` provides HMAC-SHA256 signed attestations for proving agent task completion.
+
+### Classes
+
+- `TaskAttestation(task_id, agent_id, result_hash, timestamp, signature)` — Frozen dataclass; `to_dict()` for serialization
+- `AttestationAuthority(secret_key?)` — Issues and verifies attestations; generates a 32-byte random key if none provided
+
+### Operations
+
+| Method | Description |
+| :--- | :--- |
+| `attest(task_id, agent_id, result_data, timestamp?)` | Create a signed attestation binding a SHA-256 hash of `result_data` to the task identity |
+| `verify(attestation, result_data)` | Verify both the result hash and HMAC signature |
+| `batch_verify(attestations, results)` | Verify multiple attestations; returns `dict[task_id, bool]` |
+
+### Security Model
+
+- Signatures bind `task_id:agent_id:result_hash:timestamp` via HMAC-SHA256
+- Result integrity verified via SHA-256 hash comparison using `hmac.compare_digest` (constant-time)
+- Key material is never serialized or logged
+
 ## Testing
 
 ```bash

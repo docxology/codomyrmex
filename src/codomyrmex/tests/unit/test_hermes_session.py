@@ -220,7 +220,6 @@ class TestSQLiteSessionStoreV020:
 
     def test_schema_migration_from_pre_v020(self) -> None:
         """Old DBs without 'name' column should migrate gracefully."""
-        import sqlite3
 
         store = SQLiteSessionStore(":memory:")
         # Simulate pre-v0.2.0 by inserting without name column

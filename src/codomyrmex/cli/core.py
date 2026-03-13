@@ -387,6 +387,7 @@ class Cli:
             return handle_module_test(module_name)
 
         import subprocess
+        from pathlib import Path
 
         cmd = [sys.executable, "-m", "pytest", "src/codomyrmex/tests/"]
         if coverage:

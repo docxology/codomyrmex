@@ -175,7 +175,7 @@ class {class_name}:
         Returns:
             Processed data
         """
-        logger.debug("Processing data: {type(data).__name__}")
+        logger.debug("Processing data: %s", type(data).__name__)
         raise NotImplementedError("scaffold.process() requires implementation by consuming module")  # ABC: intentional
 
 

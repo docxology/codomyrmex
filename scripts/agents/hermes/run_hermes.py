@@ -96,7 +96,7 @@ def _format_response(response: object, quiet: bool = False) -> int:
         0 always (caller checks success before calling this).
     """
     if quiet:
-        print(response.content)  # noqa: T201 — intentional raw output in quiet mode
+        print(response.content)
         return 0
 
     print_success("  Hermes Response:")
@@ -107,7 +107,7 @@ def _format_response(response: object, quiet: bool = False) -> int:
     print_info(f"  Session ID:     {response.metadata.get('session_id')}")  # type: ignore[attr-defined]
     print_info(f"  Execution time: {response.execution_time:.2f}s")  # type: ignore[attr-defined]
     print_info(f"  Backend used:   {response.metadata.get('backend', 'N/A')}")  # type: ignore[attr-defined]
-    session_name = response.metadata.get('session_name')  # type: ignore[attr-defined]
+    session_name = response.metadata.get("session_name")  # type: ignore[attr-defined]
     if session_name:
         print_info(f"  Session name:   {session_name}")
     return 0
@@ -142,7 +142,7 @@ def _execute_prompt(
         print_info("─" * 60)
 
     try:
-        from codomyrmex.agents.hermes import HermesError  # noqa: F401
+        from codomyrmex.agents.hermes import HermesError
 
         response = hermes_client.chat_session(
             prompt=prompt,
@@ -152,9 +152,8 @@ def _execute_prompt(
 
         if response.is_success():
             return _format_response(response, quiet=quiet)
-        else:
-            print_error(f"  Error: {response.error}")
-            return 1
+        print_error(f"  Error: {response.error}")
+        return 1
 
     except ImportError as e:
         print_error(f"Cannot import HermesError: {e}")
@@ -164,9 +163,8 @@ def _execute_prompt(
         response = hermes_client.chat_session(prompt=prompt, session_id=session_id)  # type: ignore[attr-defined]
         if response.is_success():
             return _format_response(response, quiet=quiet)
-        else:
-            print_error(f"  Error: {response.error}")
-            return 1
+        print_error(f"  Error: {response.error}")
+        return 1
     except Exception as e:
         print_error(f"  Unexpected error during prompt execution: {e}")
         return 1
@@ -243,9 +241,8 @@ def main() -> int:
         if worktree_path:
             if not args.quiet:
                 print_info(f"  Worktree: {worktree_path}")
-        else:
-            if not args.quiet:
-                print_info("  Worktree creation failed; running in main tree.")
+        elif not args.quiet:
+            print_info("  Worktree creation failed; running in main tree.")
 
     result = _execute_prompt(
         hermes_client,

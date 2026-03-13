@@ -628,7 +628,7 @@ class TestPrometheusExporter:
         assert PrometheusExporter is None or callable(PrometheusExporter)
 
     @pytest.mark.skipif(
-        metrics.PrometheusExporter is None, reason="prometheus_client not installed"
+        getattr(metrics, "PrometheusExporter", None) is None, reason="prometheus_client not installed"
     )
     def test_prometheus_exporter_creation(self):
         """Test PrometheusExporter creation without starting server."""

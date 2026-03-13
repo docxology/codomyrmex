@@ -8,8 +8,6 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-import pytest
-
 if TYPE_CHECKING:
     from pathlib import Path
 
@@ -214,7 +212,7 @@ class TestCLIWiring:
         """Verify the CLI class can be introspected by fire."""
         from codomyrmex.cli.core import Cli
 
-        cli = Cli()
+        Cli()
         # Check all subcommand classes are instantiable
         agent = Cli.agent()
         memory = Cli.memory()

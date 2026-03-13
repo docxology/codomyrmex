@@ -4,8 +4,6 @@ Uses real ErrorAnalyzer, PatchGenerator, and Debugger with real internal
 components instead of mocking them.
 """
 
-import textwrap
-from pathlib import Path
 
 import pytest
 

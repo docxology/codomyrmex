@@ -5,7 +5,6 @@ Extracted from client.py.
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any
 
 from .models import Artifact, ArtifactError, ConversationContext

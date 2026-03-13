@@ -8,7 +8,6 @@ Covers:
 - Batch transcription interface
 """
 
-from pathlib import Path
 
 import pytest
 

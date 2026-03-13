@@ -215,7 +215,7 @@ class TestDatasetClass:
         try:
             ds.to_jsonl(path)
             with open(path) as f:
-                lines = [l for l in f if l.strip()]
+                lines = [line for line in f if line.strip()]
             assert len(lines) == 1
             parsed = json.loads(lines[0])
             assert parsed["prompt"] == "hello"

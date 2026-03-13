@@ -12,15 +12,15 @@ Zero-mock test suite covering:
 
 from __future__ import annotations
 
-import json
 import os
 import shutil
 import subprocess
 import unittest
 
+import pytest
+
 from codomyrmex.agents.pi import PiClient, PiConfig, PiError
 from codomyrmex.agents.pi.pi_client import PiStartupError, PiTimeoutError
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -43,50 +43,50 @@ class TestPiConfig(unittest.TestCase):
 
     def test_defaults(self):
         cfg = PiConfig()
-        self.assertEqual(cfg.provider, "google")
-        self.assertEqual(cfg.model, "")
-        self.assertEqual(cfg.tools, "read,bash,edit,write")
-        self.assertFalse(cfg.no_session)
-        self.assertEqual(cfg.startup_timeout, 10.0)
-        self.assertEqual(cfg.extra_args, [])
+        assert cfg.provider == "google"
+        assert cfg.model == ""
+        assert cfg.tools == "read,bash,edit,write"
+        assert not cfg.no_session
+        assert cfg.startup_timeout == 10.0
+        assert cfg.extra_args == []
 
     def test_custom_provider(self):
         cfg = PiConfig(provider="anthropic", model="claude-sonnet")
-        self.assertEqual(cfg.provider, "anthropic")
-        self.assertEqual(cfg.model, "claude-sonnet")
+        assert cfg.provider == "anthropic"
+        assert cfg.model == "claude-sonnet"
 
     def test_no_session(self):
         cfg = PiConfig(no_session=True)
-        self.assertTrue(cfg.no_session)
+        assert cfg.no_session
 
     def test_extra_args(self):
         cfg = PiConfig(extra_args=["--verbose", "--offline"])
-        self.assertEqual(cfg.extra_args, ["--verbose", "--offline"])
+        assert cfg.extra_args == ["--verbose", "--offline"]
 
     def test_env_dict(self):
         cfg = PiConfig(env={"ANTHROPIC_API_KEY": "test-key"})
-        self.assertEqual(cfg.env["ANTHROPIC_API_KEY"], "test-key")
+        assert cfg.env["ANTHROPIC_API_KEY"] == "test-key"
 
     def test_pi_bin_override(self):
         cfg = PiConfig(pi_bin="/usr/local/bin/pi")
-        self.assertEqual(cfg.pi_bin, "/usr/local/bin/pi")
+        assert cfg.pi_bin == "/usr/local/bin/pi"
 
     def test_cwd(self):
         cfg = PiConfig(cwd="/tmp/project")
-        self.assertEqual(cfg.cwd, "/tmp/project")
+        assert cfg.cwd == "/tmp/project"
 
     def test_thinking_levels(self):
         for level in ["off", "minimal", "low", "medium", "high", "xhigh"]:
             cfg = PiConfig(thinking=level)
-            self.assertEqual(cfg.thinking, level)
+            assert cfg.thinking == level
 
     def test_session_dir(self):
         cfg = PiConfig(session_dir="/tmp/sessions")
-        self.assertEqual(cfg.session_dir, "/tmp/sessions")
+        assert cfg.session_dir == "/tmp/sessions"
 
     def test_api_key(self):
         cfg = PiConfig(api_key="sk-test-123")
-        self.assertEqual(cfg.api_key, "sk-test-123")
+        assert cfg.api_key == "sk-test-123"
 
 
 # ---------------------------------------------------------------------------
@@ -98,31 +98,31 @@ class TestPiClientInit(unittest.TestCase):
 
     def test_default_config(self):
         client = PiClient()
-        self.assertIsInstance(client._config, PiConfig)
-        self.assertFalse(client.is_running)
+        assert isinstance(client._config, PiConfig)
+        assert not client.is_running
 
     def test_dict_config(self):
         client = PiClient(config={"provider": "openai", "model": "gpt-4o"})
-        self.assertEqual(client._config.provider, "openai")
-        self.assertEqual(client._config.model, "gpt-4o")
+        assert client._config.provider == "openai"
+        assert client._config.model == "gpt-4o"
 
     def test_dataclass_config(self):
         cfg = PiConfig(provider="anthropic")
         client = PiClient(config=cfg)
-        self.assertEqual(client._config.provider, "anthropic")
+        assert client._config.provider == "anthropic"
 
     def test_dict_ignores_unknown_keys(self):
         client = PiClient(config={"provider": "google", "unknown_key": True})
-        self.assertEqual(client._config.provider, "google")
+        assert client._config.provider == "google"
 
     def test_repr_stopped(self):
         client = PiClient(PiConfig(provider="openai"))
-        self.assertIn("openai", repr(client))
-        self.assertIn("stopped", repr(client))
+        assert "openai" in repr(client)
+        assert "stopped" in repr(client)
 
     def test_not_running_initially(self):
         client = PiClient()
-        self.assertFalse(client.is_running)
+        assert not client.is_running
 
 
 # ---------------------------------------------------------------------------
@@ -138,12 +138,12 @@ class TestPiCommandConstruction(unittest.TestCase):
         # Inject a request_id
         client._request_id = 0
         rid = client._next_id()
-        self.assertEqual(rid, "req-1")
+        assert rid == "req-1"
 
     def test_next_id_increments(self):
         client = PiClient()
         ids = [client._next_id() for _ in range(5)]
-        self.assertEqual(ids, ["req-1", "req-2", "req-3", "req-4", "req-5"])
+        assert ids == ["req-1", "req-2", "req-3", "req-4", "req-5"]
 
     def test_cli_args_built_correctly(self):
         """Verify the CLI args that would be passed to subprocess."""
@@ -155,22 +155,22 @@ class TestPiCommandConstruction(unittest.TestCase):
             no_session=True,
             extra_args=["--verbose"],
         )
-        client = PiClient(config=cfg)
+        PiClient(config=cfg)
         # We can inspect what start() would use by checking cfg fields
-        self.assertEqual(cfg.provider, "anthropic")
-        self.assertEqual(cfg.model, "sonnet")
-        self.assertEqual(cfg.thinking, "high")
-        self.assertEqual(cfg.tools, "read,bash")
-        self.assertTrue(cfg.no_session)
-        self.assertIn("--verbose", cfg.extra_args)
+        assert cfg.provider == "anthropic"
+        assert cfg.model == "sonnet"
+        assert cfg.thinking == "high"
+        assert cfg.tools == "read,bash"
+        assert cfg.no_session
+        assert "--verbose" in cfg.extra_args
 
     def test_session_dir_arg(self):
         cfg = PiConfig(session_dir="/tmp/pi-sessions")
-        self.assertEqual(cfg.session_dir, "/tmp/pi-sessions")
+        assert cfg.session_dir == "/tmp/pi-sessions"
 
     def test_api_key_arg(self):
         cfg = PiConfig(api_key="test-key-123")
-        self.assertEqual(cfg.api_key, "test-key-123")
+        assert cfg.api_key == "test-key-123"
 
 
 # ---------------------------------------------------------------------------
@@ -183,14 +183,14 @@ class TestPiEventParsing(unittest.TestCase):
     def test_drain_empty(self):
         client = PiClient()
         events = client._drain_events()
-        self.assertEqual(events, [])
+        assert events == []
 
     def test_drain_returns_and_clears(self):
         client = PiClient()
         client._events = [{"type": "agent_start"}, {"type": "agent_end"}]
         drained = client._drain_events()
-        self.assertEqual(len(drained), 2)
-        self.assertEqual(client._events, [])
+        assert len(drained) == 2
+        assert client._events == []
 
     def test_message_update_structure(self):
         """Verify expected message_update event shape."""
@@ -202,8 +202,8 @@ class TestPiEventParsing(unittest.TestCase):
             },
         }
         ae = event.get("assistantMessageEvent", {})
-        self.assertEqual(ae["type"], "text_delta")
-        self.assertEqual(ae["delta"], "Hello!")
+        assert ae["type"] == "text_delta"
+        assert ae["delta"] == "Hello!"
 
     def test_tool_execution_event(self):
         event = {
@@ -211,11 +211,11 @@ class TestPiEventParsing(unittest.TestCase):
             "tool": "bash",
             "input": {"command": "ls"},
         }
-        self.assertEqual(event["tool"], "bash")
+        assert event["tool"] == "bash"
 
     def test_agent_end_event(self):
         event = {"type": "agent_end"}
-        self.assertEqual(event["type"], "agent_end")
+        assert event["type"] == "agent_end"
 
 
 # ---------------------------------------------------------------------------
@@ -226,22 +226,22 @@ class TestPiErrors(unittest.TestCase):
     """Test error hierarchy."""
 
     def test_base_error(self):
-        self.assertTrue(issubclass(PiError, Exception))
+        assert issubclass(PiError, Exception)
 
     def test_startup_error(self):
-        self.assertTrue(issubclass(PiStartupError, PiError))
+        assert issubclass(PiStartupError, PiError)
 
     def test_timeout_error(self):
-        self.assertTrue(issubclass(PiTimeoutError, PiError))
+        assert issubclass(PiTimeoutError, PiError)
 
     def test_send_raises_when_not_running(self):
         client = PiClient()
-        with self.assertRaises(PiError):
+        with pytest.raises(PiError):
             client._send({"type": "prompt", "message": "test"})
 
     def test_startup_error_message(self):
         err = PiStartupError("pi not found")
-        self.assertIn("pi not found", str(err))
+        assert "pi not found" in str(err)
 
 
 # ---------------------------------------------------------------------------
@@ -254,18 +254,18 @@ class TestPiLifecycle(unittest.TestCase):
     def test_stop_not_running(self):
         client = PiClient()
         result = client.stop()
-        self.assertEqual(result["status"], "not_running")
-        self.assertIsNone(result["pid"])
+        assert result["status"] == "not_running"
+        assert result["pid"] is None
 
     def test_start_bad_binary(self):
         client = PiClient(PiConfig(pi_bin="/nonexistent/pi-binary"))
-        with self.assertRaises(PiStartupError):
+        with pytest.raises(PiStartupError):
             client.start()
 
     def test_context_manager(self):
         """Context manager should not raise even if start fails."""
         client = PiClient(PiConfig(pi_bin="/nonexistent/pi"))
-        with self.assertRaises(PiStartupError):
+        with pytest.raises(PiStartupError):
             with client:
                 pass
 
@@ -279,7 +279,7 @@ class TestPiPrintMode(unittest.TestCase):
 
     def test_print_bad_binary(self):
         client = PiClient(PiConfig(pi_bin="/nonexistent/pi"))
-        with self.assertRaises(PiStartupError):
+        with pytest.raises(PiStartupError):
             client.run_print("test")
 
     @_skip_no_pi
@@ -290,8 +290,8 @@ class TestPiPrintMode(unittest.TestCase):
         result = subprocess.run(
             [pi_bin, "--version"], capture_output=True, text=True, timeout=10,
         )
-        self.assertEqual(result.returncode, 0)
-        self.assertRegex(result.stdout.strip(), r"\d+\.\d+")
+        assert result.returncode == 0
+        assert re.search(r"\d+\.\d+", result.stdout.strip())
 
 
 # ---------------------------------------------------------------------------
@@ -305,16 +305,16 @@ class TestPiMCPTools(unittest.TestCase):
     def test_status_tool(self):
         from codomyrmex.agents.pi.mcp_tools import pi_status
         result = pi_status()
-        self.assertEqual(result["status"], "installed")
-        self.assertIn("version", result)
-        self.assertIn("path", result)
+        assert result["status"] == "installed"
+        assert "version" in result
+        assert "path" in result
 
     def test_status_tool_structure(self):
         """Verify status returns a dict with expected keys."""
         from codomyrmex.agents.pi.mcp_tools import pi_status
         result = pi_status()
-        self.assertIsInstance(result, dict)
-        self.assertIn("status", result)
+        assert isinstance(result, dict)
+        assert "status" in result
 
     def test_prompt_tool_error_no_pi(self):
         """If pi binary is missing, pi_prompt should return error."""
@@ -324,7 +324,7 @@ class TestPiMCPTools(unittest.TestCase):
         try:
             os.environ["PATH"] = "/nonexistent"
             result = pi_prompt("test", provider="test")
-            self.assertEqual(result["status"], "error")
+            assert result["status"] == "error"
         finally:
             os.environ["PATH"] = orig
 
@@ -332,44 +332,44 @@ class TestPiMCPTools(unittest.TestCase):
     def test_list_models_tool(self):
         from codomyrmex.agents.pi.mcp_tools import pi_list_models
         result = pi_list_models()
-        self.assertEqual(result["status"], "success")
-        self.assertIn("models", result)
-        self.assertIn("count", result)
+        assert result["status"] == "success"
+        assert "models" in result
+        assert "count" in result
 
     @_skip_no_pi
     def test_list_packages_tool(self):
         from codomyrmex.agents.pi.mcp_tools import pi_list_packages
         result = pi_list_packages()
-        self.assertIsInstance(result, dict)
-        self.assertIn("status", result)
+        assert isinstance(result, dict)
+        assert "status" in result
 
     def test_get_client_helper(self):
         from codomyrmex.agents.pi.mcp_tools import _get_client
         client = _get_client(provider="openai", model="gpt-4o")
-        self.assertEqual(client._config.provider, "openai")
-        self.assertEqual(client._config.model, "gpt-4o")
+        assert client._config.provider == "openai"
+        assert client._config.model == "gpt-4o"
 
     def test_get_client_ignores_empty(self):
         from codomyrmex.agents.pi.mcp_tools import _get_client
         client = _get_client(provider="", model="")
         # Empty values should not override defaults
-        self.assertEqual(client._config.provider, "google")
+        assert client._config.provider == "google"
 
     def test_all_tools_importable(self):
         from codomyrmex.agents.pi.mcp_tools import (
-            pi_status,
-            pi_prompt,
-            pi_list_models,
-            pi_start_rpc,
             pi_install_package,
+            pi_list_models,
             pi_list_packages,
+            pi_prompt,
+            pi_start_rpc,
+            pi_status,
         )
-        self.assertTrue(callable(pi_status))
-        self.assertTrue(callable(pi_prompt))
-        self.assertTrue(callable(pi_list_models))
-        self.assertTrue(callable(pi_start_rpc))
-        self.assertTrue(callable(pi_install_package))
-        self.assertTrue(callable(pi_list_packages))
+        assert callable(pi_status)
+        assert callable(pi_prompt)
+        assert callable(pi_list_models)
+        assert callable(pi_start_rpc)
+        assert callable(pi_install_package)
+        assert callable(pi_list_packages)
 
     def test_tool_count(self):
         from codomyrmex.agents.pi import mcp_tools
@@ -377,7 +377,7 @@ class TestPiMCPTools(unittest.TestCase):
             n for n in dir(mcp_tools)
             if n.startswith("pi_") and callable(getattr(mcp_tools, n))
         ]
-        self.assertEqual(len(tool_names), 6)
+        assert len(tool_names) == 6
 
 
 # ---------------------------------------------------------------------------
@@ -389,27 +389,27 @@ class TestPiModuleImports(unittest.TestCase):
 
     def test_init_exports_client(self):
         from codomyrmex.agents.pi import PiClient
-        self.assertTrue(callable(PiClient))
+        assert callable(PiClient)
 
     def test_init_exports_config(self):
         from codomyrmex.agents.pi import PiConfig
-        self.assertTrue(hasattr(PiConfig, "__dataclass_fields__"))
+        assert hasattr(PiConfig, "__dataclass_fields__")
 
     def test_init_exports_error(self):
         from codomyrmex.agents.pi import PiError
-        self.assertTrue(issubclass(PiError, Exception))
+        assert issubclass(PiError, Exception)
 
     def test_all_list_complete(self):
         import codomyrmex.agents.pi as mod
         all_names = mod.__all__
-        self.assertIn("PiClient", all_names)
-        self.assertIn("PiConfig", all_names)
-        self.assertIn("PiError", all_names)
+        assert "PiClient" in all_names
+        assert "PiConfig" in all_names
+        assert "PiError" in all_names
 
     def test_parent_module_access(self):
         """Verify pi module is importable from parent."""
         import codomyrmex.agents.pi
-        self.assertTrue(hasattr(codomyrmex.agents.pi, "PiClient"))
+        assert hasattr(codomyrmex.agents.pi, "PiClient")
 
 
 # ---------------------------------------------------------------------------
@@ -430,10 +430,10 @@ class TestPiLiveIntegration(unittest.TestCase):
         """Start and stop an RPC session."""
         client = PiClient(PiConfig(no_session=True))
         client.start()
-        self.assertTrue(client.is_running)
+        assert client.is_running
         result = client.stop()
-        self.assertEqual(result["status"], "stopped")
-        self.assertFalse(client.is_running)
+        assert result["status"] == "stopped"
+        assert not client.is_running
 
 
 if __name__ == "__main__":

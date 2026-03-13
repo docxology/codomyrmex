@@ -15,8 +15,10 @@ import subprocess
 import threading
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, Generator, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Self
 
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -33,12 +35,12 @@ class PiConfig:
     tools: str = "read,bash,edit,write"
     session_dir: str = ""
     no_session: bool = False
-    extra_args: List[str] = field(default_factory=list)
+    extra_args: list[str] = field(default_factory=list)
 
     # Process control
     pi_bin: str = ""               # Override path to `pi` binary
     cwd: str = ""                  # Working directory for the pi process
-    env: Dict[str, str] = field(default_factory=dict)
+    env: dict[str, str] = field(default_factory=dict)
     startup_timeout: float = 10.0  # Seconds to wait for pi to start
 
 
@@ -94,7 +96,7 @@ class PiClient:
         self._config: PiConfig = config
         self._proc: Optional[subprocess.Popen] = None
         self._reader_thread: Optional[threading.Thread] = None
-        self._events: List[dict] = []
+        self._events: list[dict] = []
         self._lock = threading.Lock()
         self._request_id = 0
 
@@ -105,7 +107,7 @@ class PiClient:
         """Return True if the pi subprocess is alive."""
         return self._proc is not None and self._proc.poll() is None
 
-    def start(self) -> "PiClient":
+    def start(self) -> PiClient:
         """Launch the pi RPC subprocess.
 
         Returns self for chaining.
@@ -116,7 +118,7 @@ class PiClient:
 
         pi_bin = self._config.pi_bin or shutil.which("pi") or "pi"
 
-        cmd: List[str] = [pi_bin, "--mode", "rpc"]
+        cmd: list[str] = [pi_bin, "--mode", "rpc"]
 
         if self._config.provider:
             cmd += ["--provider", self._config.provider]
@@ -217,7 +219,7 @@ class PiClient:
         except (ValueError, OSError):
             pass  # Process closed
 
-    def _drain_events(self) -> List[dict]:
+    def _drain_events(self) -> list[dict]:
         """Drain and return buffered events (thread-safe)."""
         with self._lock:
             evts, self._events = self._events[:], []
@@ -227,7 +229,7 @@ class PiClient:
         self,
         message: str,
         *,
-        images: Optional[List[dict]] = None,
+        images: Optional[list[dict]] = None,
         streaming_behavior: Optional[str] = None,
         timeout: float = 120.0,
     ) -> Generator[dict, None, None]:
@@ -242,7 +244,7 @@ class PiClient:
         Yields:
             Each RPC event dict (message_update, tool_execution_*, agent_end, etc).
         """
-        cmd: Dict[str, Any] = {
+        cmd: dict[str, Any] = {
             "id": self._next_id(),
             "type": "prompt",
             "message": message,
@@ -255,16 +257,16 @@ class PiClient:
         self._send(cmd)
         yield from self._wait_for_agent_end(timeout)
 
-    def steer(self, message: str, *, images: Optional[List[dict]] = None) -> None:
+    def steer(self, message: str, *, images: Optional[list[dict]] = None) -> None:
         """Send a steering message (interrupts current tool chain)."""
-        cmd: Dict[str, Any] = {"type": "steer", "message": message}
+        cmd: dict[str, Any] = {"type": "steer", "message": message}
         if images:
             cmd["images"] = images
         self._send(cmd)
 
-    def follow_up(self, message: str, *, images: Optional[List[dict]] = None) -> None:
+    def follow_up(self, message: str, *, images: Optional[list[dict]] = None) -> None:
         """Queue a follow-up message (runs after agent finishes)."""
-        cmd: Dict[str, Any] = {"type": "follow_up", "message": message}
+        cmd: dict[str, Any] = {"type": "follow_up", "message": message}
         if images:
             cmd["images"] = images
         self._send(cmd)
@@ -275,7 +277,7 @@ class PiClient:
 
     def new_session(self, parent_session: Optional[str] = None) -> None:
         """Start a fresh session."""
-        cmd: Dict[str, Any] = {"type": "new_session"}
+        cmd: dict[str, Any] = {"type": "new_session"}
         if parent_session:
             cmd["parentSession"] = parent_session
         self._send(cmd)
@@ -321,7 +323,7 @@ class PiClient:
 
         Collects all ``text_delta`` events and concatenates them.
         """
-        parts: List[str] = []
+        parts: list[str] = []
         for event in self.prompt(message, timeout=timeout):
             if event.get("type") == "message_update":
                 ae = event.get("assistantMessageEvent", {})
@@ -378,7 +380,7 @@ class PiClient:
 
     # -- Context methods -----------------------------------------------------
 
-    def __enter__(self) -> "PiClient":
+    def __enter__(self) -> Self:
         self.start()
         return self
 

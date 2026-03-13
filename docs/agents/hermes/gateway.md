@@ -10,7 +10,7 @@ The Hermes gateway (`hermes gateway run`) is a unified daemon that routes messag
 
 ### Startup Sequence
 
-```
+```text
 hermes gateway run
   │
   ├── 1. Resolve HERMES_HOME (config.py:37)
@@ -30,7 +30,7 @@ hermes gateway run
 
 ### Message Flow
 
-```
+```text
 User Message (Telegram/WhatsApp/etc.)
   │
   ├── Platform Adapter receives message
@@ -72,7 +72,7 @@ hermes status
 Each platform has a dedicated adapter in `gateway/platforms/`:
 
 | Platform | Adapter | Connection Method |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | Telegram | `telegram.py` | Long polling via Bot API |
 | WhatsApp | `whatsapp.py` | Node.js Baileys bridge |
 | Discord | `discord.py` | WebSocket gateway |
@@ -83,11 +83,12 @@ Each platform has a dedicated adapter in `gateway/platforms/`:
 
 The gateway routes messages to sessions using a composite key:
 
-```
+```text
 session_id = f"{platform}_{user_id}"
 ```
 
 Sessions are managed by `gateway/session.py`, which maintains:
+
 - Per-session context prompts
 - Reset policies
 - Cross-platform continuity (shared `state.db`)
@@ -123,7 +124,7 @@ The gateway writes its PID to `$HERMES_HOME/gateway.pid` on startup. On subseque
 ## Logs
 
 | Log File | Content |
-|:---|:---|
+| :--- | :--- |
 | `$HERMES_HOME/logs/gateway.log` | Gateway startup, platform connections, HTTP requests |
 | `$HERMES_HOME/logs/errors.log` | Error tracebacks and exceptions |
 | `$HERMES_HOME/logs/gateway.error.log` | stderr (if using launchd) |

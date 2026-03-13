@@ -15,7 +15,7 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .config import DEFAULT_MLX_CACHE_DIR, MLXConfig, get_mlx_config
+from .config import MLXConfig, get_mlx_config
 
 logger = get_logger(__name__)
 

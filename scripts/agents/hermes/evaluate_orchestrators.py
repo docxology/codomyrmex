@@ -218,6 +218,4 @@ def assess_script(client, script_info: dict, source_code: str, target_dir: Path 
                 "reasoning": f"Hermes client error: {e}",
             },
             "technical_debt": ["Hermes client error"],
-            "underlying_improvements
 
-session_id: 20260312_124207_9c7c3e

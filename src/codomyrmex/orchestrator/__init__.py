@@ -61,6 +61,7 @@ from .execution.parallel_runner import (
     run_parallel_async,
 )
 from .execution.runner import run_function, run_script
+from .htn_planner import HTNPlanner, Method, Operator, State
 from .integration import (
     AgentOrchestrator,
     CICDBridge,
@@ -140,6 +141,9 @@ __all__ = [
     "CycleError",
     "DependencyResolutionError",
     "ExecutionResult",
+    "HTNPlanner",
+    "Method",
+    "Operator",
     # ── integration ────────────────────────────────────────────────────────────
     "OrchestratorBridge",
     "OrchestratorTimeoutError",
@@ -148,6 +152,7 @@ __all__ = [
     "RetryPolicy",
     "SchedulerMetrics",
     "StageConfig",
+    "State",
     "StateError",
     # ── exceptions ─────────────────────────────────────────────────────────────
     "StepError",

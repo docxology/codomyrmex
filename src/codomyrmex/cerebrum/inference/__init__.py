@@ -12,3 +12,4 @@ from .bayesian import (
     InferenceEngine,
     PriorBuilder,
 )
+from .free_energy_loop import FreeEnergyLoop, LoopResult, StepResult

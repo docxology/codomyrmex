@@ -13,6 +13,7 @@ Provides multi-agent collaboration capabilities including:
 import contextlib
 
 from . import agents, communication, coordination, protocols, swarm
+from .coordination.attestation import AttestationAuthority, TaskAttestation
 
 # Exceptions
 from .exceptions import (
@@ -39,6 +40,7 @@ from .models import (
 )
 
 # Protocol classes (existing)
+from .pbft_consensus import PBFTNetwork, PBFTNode
 from .protocols import (
     AgentCapability,
     AgentCoordinator,
@@ -117,6 +119,8 @@ __all__ = [
     # Protocol classes
     "AgentState",
     "AgentStatus",
+    # Attestation (v1.3.0)
+    "AttestationAuthority",
     "BaseAgent",
     "BroadcastProtocol",
     "CapabilityMismatchError",
@@ -133,6 +137,8 @@ __all__ = [
     "MessageBus",
     "MessageDeliveryError",
     "MessageType",
+    "PBFTNetwork",
+    "PBFTNode",
     "RoundRobinProtocol",
     "SwarmAgent",
     # Swarm components
@@ -143,6 +149,8 @@ __all__ = [
     "SwarmVote",
     "Task",
     "TaskAssignment",
+    # Attestation (v1.3.0)
+    "TaskAttestation",
     "TaskDecomposer",
     "TaskDependencyError",
     "TaskExecutionError",
@@ -161,4 +169,4 @@ __all__ = [
     "swarm",
 ]
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"

@@ -727,11 +727,9 @@ class TestFetchFromJsonApiParsing:
 
     def test_json_shape_missing_entries_key_raises(self):
         """The registry should raise ValueError when 'entries' key is absent."""
-        import io
         import json
-        import urllib.request
 
-        registry = FreeAPIRegistry()
+        FreeAPIRegistry()
 
         # Build raw JSON without 'entries' key
         bad_payload = json.dumps({"count": 0}).encode()

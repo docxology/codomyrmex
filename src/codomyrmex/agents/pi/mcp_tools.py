@@ -7,7 +7,7 @@ swarm orchestrators, and external MCP clients can invoke Pi programmatically.
 from __future__ import annotations
 
 import shutil
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -20,14 +20,13 @@ except ImportError:
 
 from .pi_client import PiClient, PiConfig, PiError
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
 def _get_client(**overrides: Any) -> PiClient:
     """Build a PiClient from keyword overrides."""
-    cfg_keys = {k for k in PiConfig.__dataclass_fields__}
+    cfg_keys = set(PiConfig.__dataclass_fields__)
     cfg = {k: v for k, v in overrides.items() if k in cfg_keys and v}
     return PiClient(config=cfg)
 
@@ -41,7 +40,7 @@ def _get_client(**overrides: Any) -> PiClient:
     description="Check whether the pi coding agent CLI is installed and report its version.",
     category="pi",
 )
-def pi_status() -> Dict[str, Any]:
+def pi_status() -> dict[str, Any]:
     """Return installation status and version of pi."""
     pi_bin = shutil.which("pi")
     if not pi_bin:
@@ -72,10 +71,10 @@ def pi_prompt(
     tools: str = "read,bash,edit,write",
     cwd: str = "",
     timeout: float = 120.0,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run ``pi -p <message>`` and return the result."""
     try:
-        cfg: Dict[str, Any] = {"provider": provider, "tools": tools}
+        cfg: dict[str, Any] = {"provider": provider, "tools": tools}
         if model:
             cfg["model"] = model
         if thinking:
@@ -97,7 +96,7 @@ def pi_prompt(
 def pi_list_models(
     search: str = "",
     provider: str = "",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run ``pi --list-models [search]`` and return output."""
     import subprocess
     pi_bin = shutil.which("pi") or "pi"
@@ -111,7 +110,7 @@ def pi_list_models(
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=15,
         )
-        lines = [l.strip() for l in result.stdout.strip().split("\n") if l.strip()]
+        lines = [line.strip() for line in result.stdout.strip().split("\n") if line.strip()]
         return {"status": "success", "models": lines, "count": len(lines)}
     except FileNotFoundError:
         return {"status": "error", "message": "pi CLI not found"}
@@ -128,14 +127,14 @@ def pi_start_rpc(
     provider: str = "google",
     model: str = "",
     no_session: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Start a pi RPC subprocess and return a session handle.
 
     Note: In practice the caller should use PiClient directly for
     multi-turn interaction.  This tool is primarily informational.
     """
     try:
-        cfg: Dict[str, Any] = {
+        cfg: dict[str, Any] = {
             "provider": provider,
             "no_session": no_session,
         }
@@ -158,7 +157,7 @@ def pi_start_rpc(
     description="Install a pi package from npm or git.",
     category="pi",
 )
-def pi_install_package(source: str) -> Dict[str, Any]:
+def pi_install_package(source: str) -> dict[str, Any]:
     """Run ``pi install <source>``."""
     import subprocess
     pi_bin = shutil.which("pi") or "pi"
@@ -181,7 +180,7 @@ def pi_install_package(source: str) -> Dict[str, Any]:
     description="List installed pi packages.",
     category="pi",
 )
-def pi_list_packages() -> Dict[str, Any]:
+def pi_list_packages() -> dict[str, Any]:
     """Run ``pi list``."""
     import subprocess
     pi_bin = shutil.which("pi") or "pi"

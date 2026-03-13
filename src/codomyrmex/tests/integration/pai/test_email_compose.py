@@ -253,7 +253,7 @@ def test_pytest_compose_integration():
         sock.settimeout(2)
         sock.connect(("localhost", 8888))
         sock.close()
-    except (ConnectionRefusedError, OSError, socket.timeout):
+    except (TimeoutError, ConnectionRefusedError, OSError):
         pytest.skip("PMServer not running on :8888 — skipping LLM compose tests")
 
     results = run_compose_all_templates("ollama")

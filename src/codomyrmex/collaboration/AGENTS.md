@@ -1,9 +1,9 @@
 # Codomyrmex Agents — src/codomyrmex/collaboration
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Multi-agent collaboration with swarm management, pub/sub messaging, consensus protocols, and cryptographic task attestation.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
@@ -16,6 +16,7 @@ Contains components for the src system.
 - `agents/` – Directory containing agents components
 - `communication/` – Directory containing communication components
 - `coordination/` – Directory containing coordination components
+- `coordination/attestation.py` – HMAC-SHA256 cryptographic task attestation (v1.3.0)
 - `exceptions.py` – Project file
 - `knowledge/` – Directory containing knowledge components
 - `mcp_tools.py` – Project file

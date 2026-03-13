@@ -165,7 +165,8 @@ class TestHealthCheckDataclass:
         assert hc.critical is True
 
     def test_check_fn_is_callable(self):
-        fn = lambda: (HealthStatus.HEALTHY, "OK", {})
+        def fn():
+            return (HealthStatus.HEALTHY, "OK", {})
         hc = HealthCheck(name="x", description="y", check_fn=fn)
         assert callable(hc.check_fn)
 

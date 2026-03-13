@@ -1,143 +1,47 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.1.11 | **Date**: 2026-03-12 | **Modules**: 129 | **Sprint**: 29
+**Version**: v1.3.3 | **Date**: 2026-03-13 | **Modules**: 129 | **Sprint**: 31
 
-> v1.1.10 released. Dashboard v2, Telemetry UX, and all Cloud & Auth items delivered.
+> v1.3.2 "Execution Capabilities & Distillation" delivered. All 33,000+ tests natively passing.
 
-Authoritative project backlog. Completed items removed; see git history.
-
----
-
-## Codebase Snapshot (2026-03-12)
-
-| Metric | Value |
-| :--- | :--- |
-| Source modules | **129** |
-| Source files | **2,075** |
-| Test files | **1,125** |
-| Tests collected | **33,583** |
-| Ruff violations | **0** ✅ |
-| ty diagnostics | **0** errors |
-| Coverage | `fail_under=75`; actual **75.10%** ✅ |
-| MCP tools | **474** `@mcp_tool` decorators |
-| RASP docs | **129/129** ✅ |
-| Oversized files | **0** (all 18 decomposed) ✅ |
+Authoritative project backlog. Upcoming work only; completed items removed.
 
 ---
 
-## ✅ v1.1.10 — "Dashboard v2 & Telemetry UX" (Fully Delivered)
+## 🚀 v1.3.3 — "Resilience & Abstract Reasoning"
 
-> **Theme**: Production-grade observability, dashboard rebuild, real-time UX.
+> **Theme**: Formal verifications, hierarchical planning, and robust consensus.
 
-All deliverables complete. 41/41 targeted tests pass. 8 new files, ~2,100 LOC.
-
-- **Design Tokens**: `website/static/design_tokens.css` — 250+ CSS custom properties (colors, typography, spacing, shadows, animations), dark mode support, responsive shell layout (sidebar + header + content, 480px–1440px breakpoints).
-- **Component Library**: Card, Badge, StatusDot, Table, ProgressBar, NavItem, Grid — all using design tokens, responsive across breakpoints.
-- **Sparkline Renderer**: `data_visualization/charts/sparkline.py` — inline SVG sparklines with `SparklineConfig`, fill areas, endpoint dots, HTML wrapper.
-- **Module DAG Exporter**: `data_visualization/mermaid/dag_exporter.py` — scans source imports, builds `ModuleDAG`, renders layer-styled Mermaid flowcharts.
-- **MCP Call-Graph Collector**: `telemetry/tracing/call_graph.py` — `MCPCallGraphCollector` with auto-timed `trace()` context manager, DAG builder, singleton registry.
-- **Token Consumption Tracker**: `telemetry/metrics/token_tracker.py` — `TokenTracker` with per-model aggregates, StatsD emission, `get_stats()`/`get_recent()` API.
-- **Module Health Provider**: `website/module_health.py` — `ModuleHealthProvider` scanning 129 modules for file count, LOC, test count, doc completeness.
-- **Dashboard API**: `website/handlers/dashboard_api.py` — 5 JSON endpoints: `/api/modules`, `/api/costs/summary`, `/api/mcp-call-graph`, `/api/tokens`, `/api/agents/status`.
+| # | Deliverable | Module | Concrete Scope |
+| :--- | :--- | :--- | :--- |
+| D1 | **Z3 Formal Verifier** | `formal_verification/` | Concrete Z3 solver integration for mathematically proving state invariants |
+| D2 | **Hierarchical Planner** | `orchestrator/` | HTN (Hierarchical Task Network) multi-scale planner for temporal abstraction |
+| D3 | **PBFT Consensus** | `collaboration/` | Practical Byzantine Fault Tolerance mechanism for robust multi-agent voting |
 
 ---
 
-## ✅ v1.1.11 — "Hermetic Distribution & System Verification" (Fully Delivered)
+## 🔭 v1.4.0+ — Research Horizon
 
-> **Theme**: Package the system for distribution; formal verification foundations.
+> **Theme**: Embedded operations & emergent swarms.
 
-All deliverables complete. 24/24 targeted tests pass. 5 new files.
-
-- **Multi-stage Dockerfile** — Python 3.13-slim base, uv sync, non-root user (`codo`), health check, <200MB image target.
-- **Docker Compose stack** — 4 services: app, Redis 7 (Alpine), Ollama LLM, PM dashboard. Health checks, named volumes, GPU-ready Ollama.
-- **CLI entry point** — `codomyrmex = "codomyrmex.cli:main"` in pyproject.toml (pre-existing, verified).
-- **GitHub Actions CI** — Pre-existing `ci.yml` and `release.yml` verified functional.
-- **MCP Schema Boundary Verifier** — `formal_verification/schema_verifier.py` scans @mcp_tool decorators via AST, verifies function signatures.
-- **Config Invariant Checker** — `formal_verification/config_invariants.py` verifies env→yaml→default cascade determinism and precedence.
-- **Property-Based Tests** — 5 Hypothesis properties: sparkline round-trip, JSON serialization, config determinism, call-graph consistency, token tracker aggregation.
-- **SQLite Session Store** — Pre-existing `agentic_memory/sqlite_store.py` (144 LOC) verified with CRUD tests.
-- **GitHub Actions CI** — `ci.yml` and `release.yml` verified present and functional.
+| # | Direction | Builds On | Concrete Next Step |
+| :--- | :--- | :--- | :--- |
+| R1 | **Physical Embodiment** | `embodiment/` | WebSocket-based physical abstraction bridge for drone/rover telemetry |
+| R2 | **Evolutionary Synthesis** | `evolutionary_ai/` | Genetic algorithm for self-optimizing prompt templates and config tuning |
+| R3 | **Information Dynamics** | `meme/` | Exposing meme transmission and narrative engines as an MCP toolset |
 
 ---
 
-## ✅ v1.1.12 — "Pre-1.2.0 Polish & Agentic CI" (Fully Delivered)
-
-> **Theme**: Autonomous CI, budget controls, final integration sweep.
-
-All deliverables complete. 34/34 targeted tests pass. 5 new files.
-
-- **Flaky test quarantine** — `ci_cd_automation/flaky_quarantine.py`: sliding window detector, auto-quarantine, pytest marker generation.
-- **Dynamic budget manager** — `cost_management/budget_manager.py`: real-time spending enforcement, warning at 80%, auto-pause at 90%, per-model breakdown, webhook registration.
-- **WebSocket live feed** — `website/live_feed.py`: typed FeedEvent emissions, bounded deque buffer, timestamp+source+type filtering, system state snapshots.
-- **Pre-release audit** — `scripts/maintenance/release_audit.py`: 6 automated quality gate checks (version consistency, Dockerfile, docs, module README coverage, release tests, FIXME markers).
-
----
-
-## ✅ v1.2.0 — "Ecosystem Integration & Codomyrmex Prime" (Delivered)
-
-> **Theme**: CLI maturity, SBOM generation, ecosystem integration.
-
-25/25 targeted tests pass. 4 new files.
-
-- **`codomyrmex agent start|list|health`** — `cli/handlers/agent.py`: agent discovery, dynamic import + start, health checks (init/readme/tests).
-- **`codomyrmex memory list|index|search|stats`** — `cli/handlers/memory.py`: SQLiteStore CRUD, Obsidian vault indexing, content search, type distribution stats.
-- **`codomyrmex dashboard --port 8787`** — Pre-existing, verified with port/host/open params.
-- **`codomyrmex test --coverage`** — Enhanced with `--coverage` flag and per-module targeting.
-- **SBOM generation** — `ci_cd_automation/sbom_generator.py`: CycloneDX 1.5 from pyproject.toml + uv.lock, purl generation, JSON export.
-
-Sovereign Cloud (SC1-SC3) deferred — requires Infomaniak API credentials.
-
----
-
-## ✅ v1.2.1 — "Utilities, Skills & Codebase Awareness" (Delivered)
-
-> **Theme**: Module introspection, structured logging, dependency mapping.
-
-31/31 targeted tests pass. 6 new files.
-
-- **Module introspector** — `system_discovery/module_introspector.py`: AST-based scan of all 129 modules: file counts, LOC, classes, functions, MCP tools, doc health scoring (healthy/partial/minimal), `__all__` export extraction.
-- **Structured log context** — `logging_monitoring/log_context.py`: `LogContext` context manager with auto correlation IDs (contextvars), module/operation tags, `CorrelationFilter` for automatic log record enrichment, elapsed timing.
-- **Skill health checker** — `skills/skill_health.py`: scans skill directories for SKILL.md, `__init__.py`, scripts/, examples/, tests. Health classification: complete, functional, stub.
-- **Dependency mapper** — `system_discovery/dependency_mapper.py`: AST-based import graph across all modules, in/out degree calculation, circular dependency detection via DFS, per-module dependency/dependent queries.
-- **Enhanced retry** — `utils/retry_enhanced.py`: exponential backoff with jitter, max delay cap, retryable exception filter, on_retry callback, `retry_with_stats()` returning `(result, RetryStats)`.
-
----
-
-## ✅ v1.2.2 — "Codebase Health, API Freeze & Infrastructure" (Delivered)
-
-> **Theme**: Self-aware codebase analysis, API specification, typed events, config validation.
-
-35/35 targeted tests pass. 6 new files.
-
-- **Codebase health reporter** — `system_discovery/health_reporter.py`: combines introspector + dependency mapper into scored health report (0–100) with recommendations, markdown/JSON export. Scanned: 128 modules, 2.2M LOC, 562 MCP tools.
-- **API spec stamper** — `api/api_spec_stamper.py`: snapshots public APIs from `__all__` + AST, diffs snapshots for breaking change detection, generates versioned markdown/JSON specs.
-- **Config validator** — `config_management/config_validator.py`: declarative `ConfigSchema` with type checking, required fields, min/max constraints, choices validation, default application, schema introspection.
-- **Typed event bus** — `events/typed_event_bus.py`: priority-ordered pub/sub with wildcard pattern matching (`*`, `prefix.*`), bounded emission history, stats, exception-safe handler invocation.
-- **CLI profiler** — `performance/cli_profiler.py`: module import timing, function benchmarking (min/max/avg), CLI startup profiling, all-submodule import scan.
-
----
-
-## 🔮 v1.3.0+ — "Autonomous Evolution & Physical Embodiment"
-
-> **Theme**: Research-grade capabilities pushing toward autonomous systems.
-
-| # | Direction | Module(s) | Concrete Deliverable | Readiness |
-| :--- | :--- | :--- | :--- | :--- |
-| R1 | **Spatial Reasoning** | `spatial/` (1.2k LOC, 26 classes) | Geodesic transforms, icosahedral mesh generation, 4D rotation quaternions | Foundation exists |
-| R2 | **Physical Embodiment** | `embodiment/` (736 LOC, 12 classes) | ROS2 `rclpy` bridge: publish/subscribe topics, service calls, TF2 transforms | Bridge stubbed |
-| R3 | **Cerebrum Active Inference** | `cerebrum/` (8.5k LOC, 69 classes) | Free-energy minimization loop, belief revision with Bayesian updates, hierarchical planning | Core engine exists |
-| R4 | **Edge Distillation** | new: `quantization/` | INT8/INT4 MLX quantization wrappers; offline inference with <2GB models | Not started |
-| R5 | **Decentralized Consensus** | `collaboration/` (6k LOC, 91 classes) | Raft consensus protocol, cryptographic task attestation, distributed agent voting | Collab framework exists |
-| R6 | **Plugin Marketplace** | `plugin_system/` (2.3k LOC, 27 classes) | WASM sandbox for untrusted plugins, zero-trust capability vetting, marketplace API | Plugin loader exists |
-| R7 | **Bounded Self-Modification** | `security/`, `formal_verification/` | Z3-gated self-rewrite: agent proposes code changes, formal verifier approves | Z3 solver exists |
-
----
-
-## Quality Gate
+## Release Criteria
 
 > [!IMPORTANT]
-> Every method must satisfy: **Real** (no mocks) · **Tested** (zero-mock) · **Validated** (pytest green, lint-free) · **Documented** (docstrings + README/SPEC)
+> **Strict Delivery Requirements**:
+>
+> - **Zero-Mock Policy**: All tests must use 100% real dependencies and functional components.
+> - **Full Test Pass**: All 33,000+ unit and integration tests passing natively (`uv run pytest`).
+> - **Code Health**: No backwards or legacy methods, no technical debt, and 100% lint compliance.
+> - **Documentation**: Complete API documentation and signposting (`AGENTS.md`) for all new capabilities.
 
 ---
 
@@ -149,4 +53,4 @@ Sovereign Cloud (SC1-SC3) deferred — requires Infomaniak API credentials.
 
 ---
 
-*Last updated: 2026-03-12 — Sprint 29.*
+*Last updated: 2026-03-13 — Sprint 31.*

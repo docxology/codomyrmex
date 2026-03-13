@@ -1,7 +1,6 @@
 """Shell Explore Mixin for InteractiveShell."""
 
 import random
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -25,7 +24,7 @@ class ShellExploreMixin:
         """
         # Note: foraging_messages is defined in InteractiveShell.__init__
         if hasattr(self, "foraging_messages"):
-            print(random.choice(getattr(self, "foraging_messages")))
+            print(random.choice(self.foraging_messages))
         print()
 
         self.session_data["commands_run"] += 1

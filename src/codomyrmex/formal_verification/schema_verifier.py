@@ -13,7 +13,6 @@ Example::
 from __future__ import annotations
 
 import ast
-import inspect
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path

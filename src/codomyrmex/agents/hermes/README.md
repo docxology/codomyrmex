@@ -1,10 +1,10 @@
 # Hermes Agent Module
 
-**Version**: v2.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v2.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The Hermes Agent Module integrates NousResearch's Hermes capabilities deeply into the Codomyrmex ecosystem. Designed for maximum reliability and local-first execution, it provides dual-backend scaling, persistent multi-turn chat, and specialized prompt templating.
+The Hermes Agent Module integrates NousResearch's Hermes capabilities deeply into the Codomyrmex ecosystem. Designed for maximum reliability and local-first execution, it provides dual-backend scaling, persistent multi-turn chat, provider-agnostic routing, context compression, and specialized prompt templating.
 
 ## Core Features
 
@@ -14,19 +14,35 @@ The Hermes Agent Module integrates NousResearch's Hermes capabilities deeply int
 2. **Persistent Stateful Chat**:
    Using `SQLiteSessionStore`, the module tracks multi-turn conversational history natively. Both local Python scripts and remote MCP agents can append to ongoing conversational threads without needing to juggle context windows manually.
 
-3. **Evolutionary Submodule**:
-   The `evolution/` directory contains the `hermes-agent-self-evolution` submodule, implementing DSPy-based Genetic-Pareto (GEPA) optimization to continuously harden and improve the agent's prompts and skills based on real execution traces.
+3. **Provider Router**:
+   `ProviderRouter` provides a unified `call_llm()` abstraction across multiple providers (OpenRouter, Ollama, Anthropic, OpenAI, z.ai, Nous). Credentials are auto-resolved from environment and `~/.hermes/.env`.
 
-4. **MCP Tool Suite**:
-   Provides 9 comprehensive Model Context Protocol tools, granting Claude and other swarm agents full capability to invoke, manage, and trace Hermes operations.
+4. **Context Compression**:
+   `ContextCompressor` auto-compresses conversation context when it exceeds token limits using progressive deduplication, summarization, and truncation strategies.
+
+5. **Cross-Session User Model**:
+   `UserModel` persists user preferences, coding style observations, and session summaries across sessions — enabling contextual continuity.
+
+6. **MCP Bridge (Hot-Reload)**:
+   `MCPBridgeManager` manages MCP server configurations with hot-reload support — no session restart required.
+
+7. **Git Worktree Isolation**:
+   Create isolated git worktrees per session for parallel agent execution without branch conflicts.
+
+8. **Evolutionary Submodule**:
+   The `evolution/` directory contains the `hermes-agent-self-evolution` submodule, implementing DSPy-based Genetic-Pareto (GEPA) optimization.
+
+9. **MCP Tool Suite**:
+   Provides 20 comprehensive Model Context Protocol tools (see SPEC.md for the full inventory).
 
 ## Directory Structure
 
-- `hermes_client.py`: The `HermesClient` concrete agent subclass.
+- `hermes_client.py`: The `HermesClient` concrete agent subclass (dual-backend, sessions, worktrees, CLI flags).
+- `_provider_router.py`: `ProviderRouter`, `UserModel`, `ContextCompressor`, `MCPBridgeManager`.
 - `session.py`: Persistent SQLite tracking (`HermesSession`, `SQLiteSessionStore`).
-- `mcp_tools.py`: Model Context Protocol tools, e.g., `hermes_chat_session`.
-- `templates/`: Built-in template registries (System Prompts, Debugging, Code Review).
-- `scripts/`: Operational scripts (`run_hermes.py`).
+- `mcp_tools.py`: 20 Model Context Protocol tools.
+- `templates/`: Built-in template registries (code review, debugging, documentation, task decomposition).
+- `scripts/`: Operational scripts (`run_chat.py`, `run_session.py`, etc.).
 - `evolution/`: Genetic self-improvement subsystem.
 
 ## Navigation

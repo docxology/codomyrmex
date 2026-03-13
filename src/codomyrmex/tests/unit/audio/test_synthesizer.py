@@ -11,7 +11,6 @@ import pytest
 
 from codomyrmex.audio.exceptions import ProviderNotAvailableError, VoiceNotFoundError
 from codomyrmex.audio.text_to_speech.providers import (
-    EDGE_TTS_AVAILABLE,
     PYTTSX3_AVAILABLE,
 )
 from codomyrmex.audio.text_to_speech.synthesizer import Synthesizer

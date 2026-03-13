@@ -963,7 +963,8 @@ class TestValidationManagerValidators:
     def test_register_overwrites_existing(self):
         mgr = ValidationManager()
         mgr.register_validator("v", lambda d, s: True)
-        new_fn = lambda d, s: False
+        def new_fn(d, s):
+            return False
         mgr.register_validator("v", new_fn)
         assert mgr.get_validator("v") is new_fn
 

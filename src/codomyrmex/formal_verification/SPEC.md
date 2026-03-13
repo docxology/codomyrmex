@@ -57,3 +57,27 @@ Provide deterministic constraint solving capabilities via Z3 SMT solver, impleme
 - ISC verification is advisory (never blocks on UNSAT)
 - MCP tools are stateful within a session, stateless across sessions
 - Solver timeout is configurable (default 30s)
+
+## Code-Change Verification (v1.3.0)
+
+New in v1.3.0, `code_change_verifier.py` provides AST-based verification that proposed code changes preserve structural invariants.
+
+### Classes
+
+- `ChangeProposal(file_path, original_source, modified_source)` — Input to the verifier
+- `CodeChangeVerifier(rules?)` — Runs all invariant rules against a proposal; defaults to `DEFAULT_RULES`
+- `InvariantRule(name, description, check_fn)` — Pluggable rule definition
+- `RuleResult(rule_name, passed, message, details)` — Per-rule outcome
+- `VerificationResult(passed, rule_results, summary)` — Aggregate result
+
+### Built-in Rules
+
+| Rule | Description |
+| :--- | :--- |
+| `NO_DELETED_PUBLIC_FUNCTIONS` | Ensures no public functions are removed |
+| `NO_REMOVED_PARAMETERS` | Ensures no parameters are removed from public function signatures |
+| `SIGNATURE_COMPAT` | Ensures existing parameter ordering is preserved |
+
+### Extension
+
+Custom rules can be added via `verifier.add_rule(InvariantRule(...))`. The `check_fn` receives a `ChangeProposal` and returns a `RuleResult`.

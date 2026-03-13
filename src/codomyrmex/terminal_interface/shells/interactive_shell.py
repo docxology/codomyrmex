@@ -8,7 +8,6 @@ structured nest.
 
 import cmd
 import logging
-import random
 from typing import TypedDict
 
 from codomyrmex.logging_monitoring import get_logger

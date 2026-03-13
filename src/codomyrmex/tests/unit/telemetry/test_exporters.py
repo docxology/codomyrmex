@@ -342,7 +342,7 @@ class TestConsoleExporterPrettyFalse:
         exp.export([span])
         out = capsys.readouterr().out
         # Each line is one JSON object; compact mode should be single-line JSON
-        lines = [l for l in out.splitlines() if l.strip()]
+        lines = [line for line in out.splitlines() if line.strip()]
         assert len(lines) == 1
         # Valid JSON on that line
         data = json.loads(lines[0])
@@ -362,7 +362,7 @@ class TestConsoleExporterPrettyFalse:
         result = exp.export(spans)
         assert result is True
         out = capsys.readouterr().out
-        lines = [l for l in out.splitlines() if l.strip()]
+        lines = [line for line in out.splitlines() if line.strip()]
         assert len(lines) == 3
 
 

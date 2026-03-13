@@ -5,8 +5,6 @@ import warnings
 import pytest
 
 # Import from the new canonical path (not the deprecated protocols.swarm)
-from codomyrmex.collaboration.swarm import SwarmManager as _NewSwarmManager
-from codomyrmex.collaboration.swarm import TaskDecomposer as _NewTaskDecomposer
 
 # Legacy AgentProxy still lives in the compatibility shim; import with suppression
 with warnings.catch_warnings():

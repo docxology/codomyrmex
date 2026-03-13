@@ -6,7 +6,7 @@ Optimized for Mac Mini M4 (16GB unified memory).
 """
 
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 

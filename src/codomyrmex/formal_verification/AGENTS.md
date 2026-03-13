@@ -1,9 +1,9 @@
 # Codomyrmex Agents — src/codomyrmex/formal_verification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Formal verification via Z3 SMT solver and AST-based code-change invariant checking.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
@@ -20,6 +20,7 @@ Contains components for the src system.
 - `py.typed` – Project file
 - `solver.py` – Project file
 - `vendor/` – Directory containing vendor components
+- `code_change_verifier.py` – AST-based code-change invariant checking (v1.3.0)
 - `verify_isc.py` – Project file
 
 ## Operating Contracts
@@ -42,6 +43,7 @@ Contains components for the src system.
 - `mcp_tools.py`
 - `py.typed`
 - `solver.py`
+- `code_change_verifier.py`
 - `verify_isc.py`
 
 ## Dependencies
