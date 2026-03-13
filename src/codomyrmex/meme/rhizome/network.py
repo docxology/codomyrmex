@@ -35,6 +35,7 @@ def build_graph(num_nodes: int, topology: NetworkTopology) -> Graph:
         m = 2  # New edges per node
         # Initial core
         initial_count = max(m + 1, 5)
+        repeated_nodes = []
         for i in range(initial_count):
             for j in range(i + 1, initial_count):
                 src, tgt = node_ids[i], node_ids[j]
@@ -42,26 +43,22 @@ def build_graph(num_nodes: int, topology: NetworkTopology) -> Graph:
                 g.edges.append(edge)
                 g.nodes[src].connections.add(tgt)
                 g.nodes[tgt].connections.add(src)
+                repeated_nodes.extend([src, tgt])
 
         # Add remaining nodes
         for i in range(initial_count, num_nodes):
             targets = set()
-            # Probability proportional to degree
-            # Simplified: just pick from existing list weighted by degree
-            existing = node_ids[:i]
-            # Since strict PA is expensive O(N^2), use random sample approximation
-            # or just pick m nodes if small
-            candidates = random.sample(existing, min(len(existing), m * 2))
-            # Sort by degree
-            candidates.sort(key=lambda nid: len(g.nodes[nid].connections), reverse=True)
-            targets = set(candidates[:m])
+            src = node_ids[i]
 
-            for t in targets:
-                src, tgt = node_ids[i], t
+            while len(targets) < m:
+                targets.add(random.choice(repeated_nodes))
+
+            for tgt in targets:
                 edge = Edge(source=src, target=tgt)
                 g.edges.append(edge)
                 g.nodes[src].connections.add(tgt)
                 g.nodes[tgt].connections.add(src)
+                repeated_nodes.extend([src, tgt])
 
     return g
 
