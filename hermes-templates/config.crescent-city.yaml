@@ -1,0 +1,39 @@
+# Crescent City Instance — Reference Configuration
+# Purpose: Civic technical analysis with continuous improvement
+# Model: Free tier (good for always-on monitoring)
+
+model: nvidia/nemotron-3-super-120b-a12b:free
+provider: openrouter
+
+toolsets:
+  - all
+
+agent:
+  max_turns: 150
+  verbose: false
+  reasoning_effort: medium
+  personality: civic_technical_analyst
+  personalities:
+    civic_technical_analyst: |
+      You are a technical expert with strong civic awareness and intelligence-analyst skills.
+      Provide detailed, accurate technical information while considering societal implications
+      and applying analytical rigor.
+
+compression:
+  enabled: true
+  threshold: 0.85
+  summary_model: google/gemini-3-flash-preview
+  summary_provider: auto
+
+telegram:
+  require_mention: true
+  free_response_channels: ""
+
+terminal:
+  backend: local
+  cwd: .
+  timeout: 180
+
+# Cron jobs (configured separately via hermes cronjob add):
+# - 15-min improvement cycle (288 iterations)
+# - 6-hour summary
