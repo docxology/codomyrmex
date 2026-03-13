@@ -106,8 +106,27 @@ See `config/agents/hermes.yaml` for all defaults including:
 | Doctor Health Check | `setup_hermes.py` | Automatic |
 | MCP Config Detection | `setup_hermes.py` | Automatic |
 
+### 6. New Instance Creator
+
+Creates a fully configured new Hermes agent instance with its own `HERMES_HOME`, `config.yaml`, `.env`, `SOUL.md`, and optional launchd plist:
+
+```bash
+# Basic instance
+uv run python scripts/agents/hermes/new_instance.py --name crescent-city
+
+# Full config with Telegram
+uv run python scripts/agents/hermes/new_instance.py \
+  --name my-bot \
+  --openrouter-key sk-or-v1-xxx \
+  --telegram-token 123:AAxx \
+  --telegram-user ActiveInference \
+  --personality "You are a coding expert." \
+  --create-launchd
+```
+
 ## Navigation
 
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: [../../../../README.md](../../../../README.md)
+- **Hermes Docs**: [docs/agents/hermes/](../../../../docs/agents/hermes/)
 - **Tests**: [test_hermes_orchestrators.py](../../../../src/codomyrmex/tests/unit/agents/test_hermes_orchestrators.py)

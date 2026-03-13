@@ -1,17 +1,24 @@
-# compliance
+# Compliance & Audit
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Documentation files and guides.
+Regulatory compliance documentation, audit frameworks, and policy templates for data governance.
 
-## Directory Contents
-- `MOCK_AUDIT.md` – File
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
+## Contents
+
+| Document | Description |
+|:---|:---|
+| [MOCK_AUDIT.md](MOCK_AUDIT.md) | Sample audit report template and compliance checklist |
+
+## Coordination
+
+- [AGENTS.md](AGENTS.md) — Agent coordination for this section
+- [SPEC.md](SPEC.md) — Functional specification
+- [PAI.md](PAI.md) — PAI infrastructure integration
 
 ## Navigation
-- **Parent Directory**: [docs](../README.md)
-- **Project Root**: ../../README.md
+
+- **Parent**: [docs/](../README.md)
+- **Project Root**: [README.md](../../README.md)

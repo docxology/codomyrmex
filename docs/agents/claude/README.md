@@ -4,44 +4,71 @@
 
 ## Overview
 
-Anthropic Claude integration for high-quality code generation, complex reasoning, and production use. Supports Claude 3 Opus/Sonnet/Haiku models with streaming and multi-turn conversations.
+Anthropic Claude integration for high-quality code generation, complex reasoning, and agentic coding workflows. Supports Claude 3 Opus/Sonnet/Haiku models with streaming, multi-turn conversations, tool use, and session management.
 
-## Purpose
+## Key Classes
 
-The `claude` submodule provides comprehensive integration with Anthropic's Claude API for AI-assisted coding. Includes full-featured API client, integration adapters, and Claude Code capabilities for agentic coding workflows.
-
-## Source Module Structure
-
-Source: [`src/codomyrmex/agents/claude/`](../../../../src/codomyrmex/agents/claude/)
-
-### Key Files
-
-| File | Purpose |
+| Class | Purpose |
 |:---|:---|
-| [claude_client.py](../../../../src/codomyrmex/agents/claude/claude_client.py) |  ⭐ |
-| [claude_integration.py](../../../../src/codomyrmex/agents/claude/claude_integration.py) |  |
-| [mcp_tools.py](../../../../src/codomyrmex/agents/claude/mcp_tools.py) |  ⭐ |
+| `ClaudeClient` | Full-featured API client with retry logic, tool use, and sessions |
+| `ClaudeIntegrationAdapter` | Bridges Claude with other Codomyrmex modules |
 
-### Subdirectories
+## Claude Code Capabilities (v0.2.0)
 
-- `mixins/`
+| Method | Purpose |
+|:---|:---|
+| `edit_file(path, instruction)` | Apply AI-guided edits to files |
+| `create_file(path, description)` | Generate new files from descriptions |
+| `review_code(code)` | AI-powered code review |
+| `scan_directory(path)` | Project context scanning |
+| `generate_diff(before, after)` | Unified diff generation |
+
+## Usage
+
+```python
+from codomyrmex.agents.claude import ClaudeClient, ClaudeIntegrationAdapter
+
+# Basic usage
+client = ClaudeClient()
+response = client.execute(AgentRequest(prompt="Hello, Claude!"))
+
+# With session management
+session = client.create_session()
+response = client.execute_with_session(request, session=session)
+
+# With tool use
+client.register_tool(
+    name="get_weather",
+    description="Get weather for a location",
+    input_schema={"type": "object", "properties": {"location": {"type": "string"}}},
+    handler=get_weather_fn,
+)
+response = client.execute_with_tools(request)
+
+# Claude Code methods
+result = client.edit_file("/path/to/file.py", "Add type hints")
+review = client.review_code("def add(a, b): return a + b")
+structure = client.scan_directory("/path/to/project")
+```
 
 ## Configuration
 
 **Required API Key**: `ANTHROPIC_API_KEY`
 
 ```bash
-# Add to your .env or environment
-ANTHROPIC_API_KEY=your-key-here
+export ANTHROPIC_API_KEY=your-key-here
 ```
 
-## Quick Start
+## Source Module
 
-```python
-from codomyrmex.agents.claude import ClaudeClient
+Source: [`src/codomyrmex/agents/claude/`](../../../../src/codomyrmex/agents/claude/)
 
-client = ClaudeClient()
-```
+| File | Purpose |
+|:---|:---|
+| `claude_client.py` | API client with retry, streaming, tool use, sessions |
+| `claude_integration.py` | Integration adapter for cross-module bridging |
+| `mcp_tools.py` | MCP tool definitions for agent consumption |
+| `mixins/` | Composable capability mixins |
 
 ## Source Documentation
 
@@ -49,8 +76,8 @@ client = ClaudeClient()
 |:---|:---|
 | README | [claude/README.md](../../../../src/codomyrmex/agents/claude/README.md) |
 | SPEC | [claude/SPEC.md](../../../../src/codomyrmex/agents/claude/SPEC.md) |
-| AGENTS | [claude/AGENTS.md](../../../../src/codomyrmex/agents/claude/AGENTS.md) |
-| PAI | [claude/PAI.md](../../../../src/codomyrmex/agents/claude/PAI.md) |
+| API Spec | [claude/API_SPECIFICATION.md](../../../../src/codomyrmex/agents/claude/API_SPECIFICATION.md) |
+| MCP Tools | [claude/MCP_TOOL_SPECIFICATION.md](../../../../src/codomyrmex/agents/claude/MCP_TOOL_SPECIFICATION.md) |
 
 ## Navigation
 

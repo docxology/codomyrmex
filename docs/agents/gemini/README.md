@@ -4,41 +4,61 @@
 
 ## Overview
 
-Google Gemini CLI integration. Supports OAuth and API key authentication, slash commands (/model, /settings, /chat), @ file operations, and session management with save/resume.
+Google Gemini integration with both CLI wrapper (`gemini` command) and API client. Supports file operations, media handling, tuning/batch workflows, and caching for cost optimization.
 
-## Source Module Structure
+## Key Classes
+
+| Class | Purpose |
+|:---|:---|
+| `GeminiClient` | API client for Gemini models (chat, generate, embed) |
+| `GeminiCLIWrapper` | CLI wrapper for `gemini` command-line tool |
+| `GeminiIntegrationAdapter` | Bridges Gemini with other Codomyrmex modules |
+
+## Extended Modules
+
+| Module | Purpose |
+|:---|:---|
+| `_files.py` | File upload/download for context |
+| `_media.py` | Media handling (images, audio, video) |
+| `_cache.py` | Response caching for cost optimization |
+| `_tuning_batch.py` | Fine-tuning and batch processing |
+
+## Usage
+
+```python
+from codomyrmex.agents.gemini import GeminiClient, GeminiCLIWrapper
+
+# API client
+client = GeminiClient()
+response = client.execute(AgentRequest(prompt="Explain this code"))
+
+# CLI wrapper
+cli = GeminiCLIWrapper()
+result = cli.run("Analyze this project", working_dir="/path/to/project")
+```
+
+## Configuration
+
+**Required API Key**: `GEMINI_API_KEY` or `GOOGLE_API_KEY`
+
+```bash
+export GEMINI_API_KEY=your-key-here
+```
+
+## Source Module
 
 Source: [`src/codomyrmex/agents/gemini/`](../../../../src/codomyrmex/agents/gemini/)
 
-### Key Files
-
 | File | Purpose |
 |:---|:---|
-| [_cache.py](../../../../src/codomyrmex/agents/gemini/_cache.py) |  |
-| [_files.py](../../../../src/codomyrmex/agents/gemini/_files.py) |  |
-| [_media.py](../../../../src/codomyrmex/agents/gemini/_media.py) |  |
-| [_tuning_batch.py](../../../../src/codomyrmex/agents/gemini/_tuning_batch.py) |  |
-| [gemini_cli.py](../../../../src/codomyrmex/agents/gemini/gemini_cli.py) |  |
-| [gemini_client.py](../../../../src/codomyrmex/agents/gemini/gemini_client.py) |  ⭐ |
-| [gemini_integration.py](../../../../src/codomyrmex/agents/gemini/gemini_integration.py) |  |
-| [mcp_tools.py](../../../../src/codomyrmex/agents/gemini/mcp_tools.py) |  ⭐ |
-
-## Quick Start
-
-```python
-from codomyrmex.agents.gemini import GeminiClient
-
-client = GeminiClient()
-```
-
-## Source Documentation
-
-| Document | Path |
-|:---|:---|
-| README | [gemini/README.md](../../../../src/codomyrmex/agents/gemini/README.md) |
-| SPEC | [gemini/SPEC.md](../../../../src/codomyrmex/agents/gemini/SPEC.md) |
-| AGENTS | [gemini/AGENTS.md](../../../../src/codomyrmex/agents/gemini/AGENTS.md) |
-| PAI | [gemini/PAI.md](../../../../src/codomyrmex/agents/gemini/PAI.md) |
+| `gemini_client.py` | API client for chat, generation, embedding |
+| `gemini_cli.py` | CLI wrapper for the `gemini` command |
+| `gemini_integration.py` | Integration adapter |
+| `mcp_tools.py` | MCP tool definitions |
+| `_files.py` | File upload/download operations |
+| `_media.py` | Image/audio/video handling |
+| `_cache.py` | Response caching |
+| `_tuning_batch.py` | Fine-tuning and batch workflows |
 
 ## Navigation
 

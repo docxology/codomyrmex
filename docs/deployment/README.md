@@ -1,17 +1,24 @@
-# deployment
+# Deployment Guide
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Documentation files and guides.
+Production deployment documentation covering containerization, CI/CD pipelines, and cloud deployment strategies.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `production.md` – File
+## Contents
+
+| Document | Description |
+|:---|:---|
+| [production.md](production.md) | Production deployment checklist and best practices |
+
+## Coordination
+
+- [AGENTS.md](AGENTS.md) — Agent coordination for this section
+- [SPEC.md](SPEC.md) — Functional specification
+- [PAI.md](PAI.md) — PAI infrastructure integration
 
 ## Navigation
-- **Parent Directory**: [docs](../README.md)
-- **Project Root**: ../../README.md
+
+- **Parent**: [docs/](../README.md)
+- **Project Root**: [README.md](../../README.md)

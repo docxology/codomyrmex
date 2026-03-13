@@ -1,22 +1,29 @@
-# development
+# Development Guide
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Documentation files and guides.
+Developer-facing documentation covering environment setup, testing strategy, coding standards, multi-agent Git workflows, and uv package management.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `documentation.md` – File
-- `environment-setup.md` – File
-- `google-integration.md` – File
-- `multi-agent-git.md` – File
-- `testing-strategy.md` – File
-- `uv-usage-guide.md` – File
+## Contents
+
+| Document | Description |
+|:---|:---|
+| [documentation.md](documentation.md) | Documentation standards, AGENTS/README/SPEC parity |
+| [environment-setup.md](environment-setup.md) | Development environment prerequisites and configuration |
+| [google-integration.md](google-integration.md) | Google Cloud and Workspace integration for development |
+| [multi-agent-git.md](multi-agent-git.md) | Git workflows for concurrent multi-agent development |
+| [testing-strategy.md](testing-strategy.md) | Zero-Mock testing philosophy, coverage targets (≥35%), test organization |
+| [uv-usage-guide.md](uv-usage-guide.md) | uv package manager usage for Python dependency management |
+
+## Coordination
+
+- [AGENTS.md](AGENTS.md) — Agent coordination for this section
+- [SPEC.md](SPEC.md) — Functional specification
+- [PAI.md](PAI.md) — PAI infrastructure integration
 
 ## Navigation
-- **Parent Directory**: [docs](../README.md)
-- **Project Root**: ../../README.md
+
+- **Parent**: [docs/](../README.md)
+- **Project Root**: [README.md](../../README.md)

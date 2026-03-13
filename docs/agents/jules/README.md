@@ -4,31 +4,62 @@
 
 ## Overview
 
-Google Jules CLI integration for command-based code generation. Simple interface with fast execution. Supports swarm orchestration for distributing tasks across multiple Jules sessions.
+Google Jules integration for cloud-based AI coding tasks. Jules runs asynchronous coding tasks in sandboxed cloud VMs, with support for swarm orchestration (113+ concurrent sessions), remote session management, and patch extraction.
 
-## Purpose
+## Key Classes
 
-The `jules` submodule provides integration with Jules CLI tool. It includes a client wrapper for executing jules commands and integration adapters for Codomyrmex modules.
+| Class | Purpose |
+|:---|:---|
+| `JulesClient` | CLI wrapper for `jules` command — task submission, session tracking |
+| `JulesSwarmDispatcher` | Swarm orchestration — concurrent multi-session dispatch |
+| `JulesIntegrationAdapter` | Bridges Jules with other Codomyrmex modules |
 
-## Source Module Structure
+## Key Features
+
+- **Asynchronous execution**: Submit tasks and check status later
+- **Swarm dispatch**: Parallelize work across 100+ concurrent sessions
+- **Patch extraction**: Pull completed diffs back to local repo
+- **Session management**: List, inspect, and resume remote sessions
+
+## Usage
+
+```python
+from codomyrmex.agents.jules import JulesClient, JulesSwarmDispatcher
+
+# Submit a task
+client = JulesClient()
+session_id = client.submit_task("Fix all type errors in src/utils/")
+
+# Check status
+status = client.get_session_status(session_id)
+
+# Swarm dispatch
+dispatcher = JulesSwarmDispatcher()
+dispatcher.dispatch_batch(prompts=[...], repo="docxology/codomyrmex")
+```
+
+## CLI Commands
+
+```bash
+jules create "Fix bug in parser"     # Create new task
+jules list                           # List sessions
+jules remote list --session          # List remote sessions with details
+jules remote pull <session-id>       # Pull completed patches
+```
+
+## Configuration
+
+**Required**: Google Cloud account with Jules access.
+
+## Source Module
 
 Source: [`src/codomyrmex/agents/jules/`](../../../../src/codomyrmex/agents/jules/)
 
-### Key Files
-
 | File | Purpose |
 |:---|:---|
-| [jules_client.py](../../../../src/codomyrmex/agents/jules/jules_client.py) |  ⭐ |
-| [jules_integration.py](../../../../src/codomyrmex/agents/jules/jules_integration.py) |  |
-| [mcp_tools.py](../../../../src/codomyrmex/agents/jules/mcp_tools.py) |  ⭐ |
-
-## Quick Start
-
-```python
-from codomyrmex.agents.jules import JulesClient
-
-client = JulesClient()
-```
+| `jules_client.py` | CLI wrapper, task submission, swarm dispatch |
+| `jules_integration.py` | Integration adapter for cross-module use |
+| `mcp_tools.py` | MCP tool definitions |
 
 ## Source Documentation
 
@@ -36,8 +67,6 @@ client = JulesClient()
 |:---|:---|
 | README | [jules/README.md](../../../../src/codomyrmex/agents/jules/README.md) |
 | SPEC | [jules/SPEC.md](../../../../src/codomyrmex/agents/jules/SPEC.md) |
-| AGENTS | [jules/AGENTS.md](../../../../src/codomyrmex/agents/jules/AGENTS.md) |
-| PAI | [jules/PAI.md](../../../../src/codomyrmex/agents/jules/PAI.md) |
 
 ## Navigation
 

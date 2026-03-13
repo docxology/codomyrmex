@@ -1,21 +1,28 @@
-# skills
+# Agent Skills
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Documentation files and guides.
+Documentation for the agent skills system — creation, discovery, testing, lifecycle management, and marketplace governance.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `composition-and-testing.md` – File
-- `discovery-and-execution.md` – File
-- `index.md` – File
-- `marketplace-and-governance.md` – File
-- `skill-lifecycle.md` – File
+## Contents
+
+| Document | Description |
+|:---|:---|
+| [composition-and-testing.md](composition-and-testing.md) | Skill composition patterns and testing strategies |
+| [discovery-and-execution.md](discovery-and-execution.md) | How agents discover and invoke skills |
+| [index.md](index.md) | Skills system overview and hub navigation |
+| [marketplace-and-governance.md](marketplace-and-governance.md) | Skills Hub (agentskills.io) governance and publishing |
+| [skill-lifecycle.md](skill-lifecycle.md) | Skill creation, versioning, and deprecation lifecycle |
+
+## Coordination
+
+- [AGENTS.md](AGENTS.md) — Agent coordination for this section
+- [SPEC.md](SPEC.md) — Functional specification
+- [PAI.md](PAI.md) — PAI infrastructure integration
 
 ## Navigation
-- **Parent Directory**: [docs](../README.md)
-- **Project Root**: ../../README.md
+
+- **Parent**: [docs/](../README.md)
+- **Project Root**: [README.md](../../README.md)

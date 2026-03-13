@@ -1,61 +1,64 @@
-# Codomyrmex Agents — docs
+# Codomyrmex Agents — docs/
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation components and guides for the Codomyrmex platform.
 
-## Active Components
-- `ARCHITECTURE.md` – Project file
-- `DEPENDENCIES.md` – Project file
-- `PAI.md` – Project file
-- `PAI_DASHBOARD.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `agents/` – Directory containing agents components
-- `agi/` – Directory containing agi components
-- `assets/` – Directory containing assets components
-- `bio/` – Directory containing bio components
-- `cognitive/` – Directory containing cognitive components
-- `compliance/` – Directory containing compliance components
-- `deployment/` – Directory containing deployment components
-- `development/` – Directory containing development components
-- `examples/` – Directory containing examples components
-- `getting-started/` – Directory containing getting-started components
-- `index.md` – Project file
-- `integration/` – Directory containing integration components
-- `modules/` – Directory containing modules components
-- `pai/` – Directory containing pai components
-- `plans/` – Directory containing plans components
-- `project/` – Directory containing project components
-- `project_orchestration/` – Directory containing project_orchestration components
-- `reference/` – Directory containing reference components
-- `security/` – Directory containing security components
-- `skills/` – Directory containing skills components
+Agent coordination document for the `docs/` directory. Guides AI agents navigating the documentation surface of the Codomyrmex ecosystem.
+
+## Documentation Architecture
+
+The `docs/` directory is organized into **19 thematic sections** containing **200+ markdown files**:
+
+### Core References (Top Level)
+
+| File | Purpose | Lines |
+|:---|:---|---:|
+| `ARCHITECTURE.md` | System architecture, layers, module graph | 448 |
+| `DEPENDENCIES.md` | Dependency compatibility guide | 116 |
+| `PAI.md` | Personal AI Infrastructure hub | 127 |
+| `PAI_DASHBOARD.md` | Dashboard functionality matrix | 38 |
+| `SPEC.md` | Functional specification | 178 |
+| `index.md` | Documentation site entry point | 50 |
+
+### Thematic Sections
+
+| Section | Focus | Key Content |
+|:---|:---|:---|
+| `agents/` | AI agent integrations | 38 agent subfolders, Hermes deep-dive (19 docs) |
+| `agi/` | AGI theory | Essays on emergence, category theory, agency |
+| `bio/` | Biological simulation | BioSimulator, genetic algorithms |
+| `cognitive/` | Cognitive systems | Cerebrum, Bayesian networks, active inference |
+| `compliance/` | Regulatory | Audit frameworks, data governance |
+| `deployment/` | DevOps | CI/CD, containers, cloud deployment |
+| `development/` | Developer guides | Environment setup, testing, coding standards |
+| `examples/` | Tutorials | Executable demos and integration examples |
+| `getting-started/` | Onboarding | Quickstart, installation, learning path |
+| `integration/` | Cross-module | Integration patterns, MCP bridges |
+| `modules/` | Module docs | 126 module subdirectories |
+| `pai/` | PAI system | Dashboard, skills, memory, dispatch |
+| `plans/` | Roadmap | Release plans, version targets |
+| `project/` | Standards | Contributing, architecture, coding style |
+| `project_orchestration/` | Workflows | Multi-agent coordination, orchestration |
+| `reference/` | API docs | CLI tools, configuration reference |
+| `security/` | Security | Threat models, audit, secret management |
+| `skills/` | Agent skills | Skill creation, registry, testing |
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `ARCHITECTURE.md`
-- `DEPENDENCIES.md`
-- `PAI.md`
-- `PAI_DASHBOARD.md`
-- `README.md`
-- `SPEC.md`
-- `index.md`
+1. **Docs mirror src/**: The `docs/agents/` structure mirrors `src/codomyrmex/agents/` with a documentation subfolder for each agent framework
+2. **Navigation consistency**: Every document must have Navigation section with links to parent, siblings, and root
+3. **Version stamping**: All top-level docs must have version/status/date header
+4. **Real content only**: No placeholder or auto-generated boilerplate — every file must contain substantive documentation
 
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+## Key Patterns
 
-## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+- **Signposting**: Parent/child/sibling links in every document
+- **Cross-references**: Source docs link to doc docs and vice versa via relative paths
+- **Hierarchical AGENTS.md**: Root → `docs/AGENTS.md` → `docs/agents/AGENTS.md` → per-agent `AGENTS.md`
 
-## Navigation Links
-- **🏠 Project Root**: ../README.md - Main project documentation
+## Navigation
+
+- **Parent**: [AGENTS.md](../AGENTS.md) — Root agent coordination
+- **Project Root**: [README.md](../README.md) — Project overview
+- **Source**: [src/codomyrmex/](../src/codomyrmex/) — Source code

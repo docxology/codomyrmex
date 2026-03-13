@@ -1,8 +1,8 @@
 # Codomyrmex
 
-**A Modular, Extensible Coding Workspace** — v1.1.9
+**A Modular, Extensible Coding Workspace** — v1.2.2
 
-Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides for a production-grade ecosystem with **130 deeply integrated modules**.
+Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides for a production-grade ecosystem with **129 deeply integrated modules** and **38 AI agent integrations**.
 
 ## Quick Start
 
@@ -28,8 +28,9 @@ just build
 
 ## Key Features
 
-- **130 auto-discovered modules** covering AI agents, code analysis, security, cloud, and more
+- **129 auto-discovered modules** covering AI agents, code analysis, security, cloud, and more
 - **474 dynamic MCP tools** for AI agent integration
+- **38 AI agent integrations** — Claude, Gemini, Jules, Hermes, Codex, and 33 more
 - **Zero-Mock testing** policy — all tests use real functional verification (21,000+ collected)
 - **PAI integration** — Personal AI bridge with 15-tab SPA dashboard + WebSocket push
 - **Ruff Zero** — 119,498 → 0 violations with 155 documented rule ignores
@@ -39,12 +40,19 @@ just build
 ## Documentation Sections
 
 | Section | Description |
-|---------|-------------|
+|:---|:---|
 | [Getting Started](getting-started/quickstart.md) | Installation, setup, and tutorials |
 | [Architecture](ARCHITECTURE.md) | System design and module layout |
-| [Module Docs](modules/) | Per-module README, SPEC, AGENTS docs |
-| [Reference](reference/) | API reference and troubleshooting |
-| [Development](development/) | Contributing, testing, CI/CD |
-| [PAI](pai/) | Personal AI infrastructure |
-| [Security](security/) | Security policy and threat model |
-| [Examples](examples/) | Code examples and patterns |
+| [Agent Integrations](agents/) | 38 AI agent frameworks with deep-dive Hermes docs |
+| [Module Docs](modules/) | Per-module README, SPEC, AGENTS docs (126 modules) |
+| [Reference](reference/) | API reference, CLI, changelog, troubleshooting |
+| [Development](development/) | Contributing, testing, CI/CD, uv usage |
+| [PAI](pai/) | Personal AI infrastructure and dashboard |
+| [Security](security/) | Security policy, threat model, trust governance |
+| [Integration](integration/) | CI/CD, cloud, database, monitoring patterns |
+| [Project Orchestration](project_orchestration/) | Workflow coordination and dispatch |
+| [AGI Theory](agi/) | Theoretical foundations and emergence models |
+| [Bio](bio/) | Biological inspiration — myrmecology, swarm intelligence |
+| [Cognitive](cognitive/) | Active inference, cognitive modeling |
+| [Examples](examples/) | Code examples and tutorials |
+| [Skills](skills/) | Agent skill lifecycle and marketplace |
