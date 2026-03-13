@@ -6,21 +6,21 @@
 Project orchestration, resource management, task scheduling, and workflow coordination.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `mcp_tools.py` – Project file
-- `optimization/` – Directory containing optimization components
-- `orchestration/` – Directory containing orchestration components
-- `py.typed` – Project file
-- `resources/` – Directory containing resources components
-- `routing/` – Directory containing routing components
-- `schedule/` – Directory containing schedule components
-- `task/` – Directory containing task components
-- `tracking/` – Directory containing tracking components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `optimization/` – optimization module implementation
+- `orchestration/` – orchestration module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `resources/` – resources module implementation
+- `routing/` – routing module implementation
+- `schedule/` – schedule module implementation
+- `task/` – task module implementation
+- `tracking/` – tracking module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

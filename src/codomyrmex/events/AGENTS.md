@@ -6,26 +6,34 @@
 Typed event bus with emitter patterns, notification systems, and integration bus for cross-module communication.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `core/` – Directory containing core components
-- `dead_letter.py` – Project file
-- `emitters/` – Directory containing emitters components
-- `event_store.py` – Project file
-- `handlers/` – Directory containing handlers components
-- `integration_bus.py` – Project file
-- `mcp_tools.py` – Project file
-- `notification/` – Directory containing notification components
-- `projections.py` – Project file
-- `py.typed` – Project file
-- `replay.py` – Project file
-- `replayer.py` – Project file
-- `streaming/` – Directory containing streaming components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `core/` – Core abstractions and base classes
+- `dead_letter.py` – Internal implementation module
+- `emitters/` – emitters module implementation
+- `event_store.py` – Internal implementation module
+- `handlers/` – Request/event handlers
+- `integration_bus.py` – Internal implementation module
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `notification/` – notification module implementation
+- `projections.py` – Projections implementation
+- `py.typed` – PEP 561 marker for typed package
+- `replay.py` – Replay implementation
+- `replayer.py` – Replayer implementation
+- `streaming/` – streaming module implementation
+
+
+## Key Interfaces
+
+- `typed_event_bus.py — Type-safe event publishing and subscription`
+- `emitters/event_emitter.py — Event emission with filtering`
+- `integration_bus.py — Cross-module event routing`
+- `notification/ — Alert and notification systems`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

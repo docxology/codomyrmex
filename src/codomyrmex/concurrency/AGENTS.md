@@ -6,20 +6,20 @@
 Concurrency primitives including semaphores, locks, and parallel execution utilities.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `dead_letter.py` – Project file
-- `locks/` – Directory containing locks components
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
-- `result_aggregator.py` – Project file
-- `semaphores/` – Directory containing semaphores components
-- `tasks/` – Directory containing tasks components
-- `workers/` – Directory containing workers components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `dead_letter.py` – Internal implementation module
+- `locks/` – locks module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `result_aggregator.py` – Internal implementation module
+- `semaphores/` – semaphores module implementation
+- `tasks/` – tasks module implementation
+- `workers/` – workers module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

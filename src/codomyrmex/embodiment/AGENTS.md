@@ -6,18 +6,18 @@
 Agent embodiment with physical/virtual body representation and sensor integration.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `DEPRECATED.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `actuators/` – Directory containing actuators components
-- `py.typed` – Project file
-- `ros/` – Directory containing ros components
-- `sensors/` – Directory containing sensors components
-- `transformation/` – Directory containing transformation components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `DEPRECATED.md` – Deprecated implementation
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `actuators/` – actuators module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `ros/` – ros module implementation
+- `sensors/` – sensors module implementation
+- `transformation/` – transformation module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

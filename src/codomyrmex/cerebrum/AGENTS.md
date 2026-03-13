@@ -6,27 +6,27 @@
 Cognitive modeling layer integrating case-based reasoning, Bayesian inference, and active inference with free-energy minimization.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `agent_prompts.py` – Project file
-- `anti_patterns.py` – Project file
-- `code_reviewer.py` – Project file
-- `core/` – Directory containing core components
-- `distillation.py` – Project file
-- `drift_tracker.py` – Project file
-- `fpf/` – Directory containing fpf components
-- `inference/` – Directory containing inference components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `CHANGELOG.md` – Version history and release notes
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `USAGE_EXAMPLES.md` – Usage Examples implementation
+- `__init__.py` – Python package entry point — exports and initialization
+- `agent_prompts.py` – Internal implementation module
+- `anti_patterns.py` – Internal implementation module
+- `code_reviewer.py` – Internal implementation module
+- `core/` – Core abstractions and base classes
+- `distillation.py` – Distillation implementation
+- `drift_tracker.py` – Internal implementation module
+- `fpf/` – fpf module implementation
+- `inference/` – inference module implementation
 - `inference/free_energy_loop.py` – Closed-loop free-energy minimization runner (v1.3.0)
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
-- `visualization/` – Directory containing visualization components
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `visualization/` – visualization module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

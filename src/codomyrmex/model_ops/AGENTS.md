@@ -6,22 +6,22 @@
 Model operations including evaluation, fine-tuning, optimization, and deployment.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `datasets/` – Directory containing datasets components
-- `evaluation/` – Directory containing evaluation components
-- `feature_store/` – Directory containing feature_store components
-- `fine_tuning/` – Directory containing fine_tuning components
-- `mcp_tools.py` – Project file
-- `optimization/` – Directory containing optimization components
-- `py.typed` – Project file
-- `registry/` – Directory containing registry components
-- `training/` – Directory containing training components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `datasets/` – datasets module implementation
+- `evaluation/` – evaluation module implementation
+- `feature_store/` – feature store module implementation
+- `fine_tuning/` – fine tuning module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `optimization/` – optimization module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `registry/` – registry module implementation
+- `training/` – training module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

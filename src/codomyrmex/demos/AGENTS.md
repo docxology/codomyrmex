@@ -6,12 +6,12 @@
 Example implementations and demonstration scripts for Codomyrmex features.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `py.typed` – Project file
-- `registry.py` – Project file
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `py.typed` – PEP 561 marker for typed package
+- `registry.py` – Registry implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

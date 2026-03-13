@@ -6,33 +6,33 @@
 Documentation files and guides.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `bug_taxonomy.md` – Project file
-- `coverage_assessment.md` – Project file
-- `docs/` – Directory containing docs components
-- `documentation_website.py` – Project file
-- `docusaurus.config.js` – Project file
-- `education/` – Directory containing education components
-- `maintenance.py` – Project file
-- `mcp_tools.py` – Project file
-- `package-lock.json` – Project file
-- `package.json` – Project file
-- `pai.py` – Project file
-- `py.typed` – Project file
-- `quality/` – Directory containing quality components
-- `scripts/` – Directory containing scripts components
-- `sidebars.js` – Project file
-- `src/` – Directory containing src components
-- `static/` – Directory containing static components
-- `yarn.lock` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `CHANGELOG.md` – Version history and release notes
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `USAGE_EXAMPLES.md` – Usage Examples implementation
+- `__init__.py` – Python package entry point — exports and initialization
+- `bug_taxonomy.md` – Bug Taxonomy implementation
+- `coverage_assessment.md` – Coverage Assessment implementation
+- `docs/` – Documentation files
+- `documentation_website.py` – Internal implementation module
+- `docusaurus.config.js` – Docusaurus.Config implementation
+- `education/` – education module implementation
+- `maintenance.py` – Maintenance implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `package-lock.json` – Package Lock implementation
+- `package.json` – Package implementation
+- `pai.py` – Pai implementation
+- `py.typed` – PEP 561 marker for typed package
+- `quality/` – quality module implementation
+- `scripts/` – Automation and utility scripts
+- `sidebars.js` – Sidebars implementation
+- `src/` – src module implementation
+- `static/` – static module implementation
+- `yarn.lock` – Yarn implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

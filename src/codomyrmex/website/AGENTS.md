@@ -6,27 +6,27 @@
 Web framework with API handlers, dashboard generation, and module health reporting.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `accessibility/` – Directory containing accessibility components
-- `architecture_layers.yaml` – Project file
-- `assets/` – Directory containing assets components
-- `data_provider.py` – Project file
-- `generator.py` – Project file
-- `handlers/` – Directory containing handlers components
-- `health_mixin.py` – Project file
-- `pai_mixin.py` – Project file
-- `py.typed` – Project file
-- `requirements.template.txt` – Project file
-- `server.py` – Project file
-- `templates/` – Directory containing templates components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `CHANGELOG.md` – Version history and release notes
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `USAGE_EXAMPLES.md` – Usage Examples implementation
+- `__init__.py` – Python package entry point — exports and initialization
+- `accessibility/` – accessibility module implementation
+- `architecture_layers.yaml` – Architecture Layers implementation
+- `assets/` – Static assets and resources
+- `data_provider.py` – Service provider implementation
+- `generator.py` – Generator implementation
+- `handlers/` – Request/event handlers
+- `health_mixin.py` – Internal implementation module
+- `pai_mixin.py` – Internal implementation module
+- `py.typed` – PEP 561 marker for typed package
+- `requirements.template.txt` – Requirements.Template implementation
+- `server.py` – Server implementation
+- `templates/` – Template files and schemas
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

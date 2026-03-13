@@ -6,14 +6,14 @@
 Image analysis, VLM clients, PDF extraction, and visual document processing.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `annotation_extractor.py` – Project file
-- `models.py` – Project file
-- `pdf_extractor.py` – Project file
-- `vlm_client.py` – Project file
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `annotation_extractor.py` – Internal implementation module
+- `models.py` – Data models and schemas
+- `pdf_extractor.py` – Internal implementation module
+- `vlm_client.py` – Client implementation for external service integration
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

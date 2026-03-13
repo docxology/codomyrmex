@@ -6,19 +6,19 @@
 Plugin loading, validation, and lifecycle management including WebAssembly sandboxing.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `core/` – Directory containing core components
-- `dependency_resolver.py` – Project file
-- `discovery.py` – Project file
-- `exceptions.py` – Project file
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
-- `validation/` – Directory containing validation components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `core/` – Core abstractions and base classes
+- `dependency_resolver.py` – Internal implementation module
+- `discovery.py` – Discovery implementation
+- `exceptions.py` – Custom exceptions and error types
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `validation/` – validation module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

@@ -6,19 +6,19 @@
 Evolutionary algorithms with genetic programming, fitness optimization, and population management.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `fitness/` – Directory containing fitness components
-- `genome/` – Directory containing genome components
-- `mcp_tools.py` – Project file
-- `operators/` – Directory containing operators components
-- `population/` – Directory containing population components
-- `py.typed` – Project file
-- `selection/` – Directory containing selection components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `fitness/` – fitness module implementation
+- `genome/` – genome module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `operators/` – operators module implementation
+- `population/` – population module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `selection/` – selection module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

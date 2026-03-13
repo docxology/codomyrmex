@@ -6,26 +6,34 @@
 Metrics collection, tracing, dashboards, and observability. OpenTelemetry integration with StatsD client and token tracking.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `agent_hooks.py` – Project file
-- `alerting/` – Directory containing alerting components
-- `context/` – Directory containing context components
-- `dashboard/` – Directory containing dashboard components
-- `exporters/` – Directory containing exporters components
-- `mcp_tools.py` – Project file
-- `metric_aggregator.py` – Project file
-- `metrics/` – Directory containing metrics components
-- `otel.py` – Project file
-- `pipeline.py` – Project file
-- `py.typed` – Project file
-- `sampling/` – Directory containing sampling components
-- `spans/` – Directory containing spans components
-- `tracing/` – Directory containing tracing components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `agent_hooks.py` – Internal implementation module
+- `alerting/` – alerting module implementation
+- `context/` – context module implementation
+- `dashboard/` – dashboard module implementation
+- `exporters/` – exporters module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `metric_aggregator.py` – Internal implementation module
+- `metrics/` – metrics module implementation
+- `otel.py` – Otel implementation
+- `pipeline.py` – Pipeline implementation
+- `py.typed` – PEP 561 marker for typed package
+- `sampling/` – sampling module implementation
+- `spans/` – spans module implementation
+- `tracing/` – tracing module implementation
+
+
+## Key Interfaces
+
+- `metrics/statsd_client.py — StatsD metrics collection`
+- `metrics/token_tracker.py — LLM token usage tracking`
+- `tracing/call_graph.py — Function call tracing and visualization`
+- `otel.py — OpenTelemetry integration`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

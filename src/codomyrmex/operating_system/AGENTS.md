@@ -6,18 +6,18 @@
 OS-level operations with Linux provider for system management.
 
 ## Active Components
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `base.py` – Project file
-- `detector.py` – Project file
-- `linux/` – Directory containing linux components
-- `mac/` – Directory containing mac components
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
-- `windows/` – Directory containing windows components
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `base.py` – Base implementation
+- `detector.py` – Detector implementation
+- `linux/` – linux module implementation
+- `mac/` – mac module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `windows/` – windows module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

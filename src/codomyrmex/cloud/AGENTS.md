@@ -6,23 +6,23 @@
 Cloud provider integrations including Infomaniak with identity, networking, storage, and security management.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `aws/` – Directory containing aws components
-- `azure/` – Directory containing azure components
-- `coda_io/` – Directory containing coda_io components
-- `common/` – Directory containing common components
-- `cost_management/` – Directory containing cost_management components
-- `edge.py` – Project file
-- `gcp/` – Directory containing gcp components
-- `google_workspace/` – Directory containing google_workspace components
-- `infomaniak/` – Directory containing infomaniak components
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `aws/` – aws module implementation
+- `azure/` – azure module implementation
+- `coda_io/` – coda io module implementation
+- `common/` – common module implementation
+- `cost_management/` – cost management module implementation
+- `edge.py` – Edge implementation
+- `gcp/` – gcp module implementation
+- `google_workspace/` – google workspace module implementation
+- `infomaniak/` – infomaniak module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

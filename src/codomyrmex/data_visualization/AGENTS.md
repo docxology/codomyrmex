@@ -6,32 +6,32 @@
 Chart generation (bar, line, pie, scatter, sparkline), Mermaid diagrams, and interactive dashboards.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `_compat.py` – Project file
-- `charts/` – Directory containing charts components
-- `components/` – Directory containing components components
-- `core/` – Directory containing core components
-- `dashboard_builder.py` – Project file
-- `dashboard_export.py` – Project file
-- `engines/` – Directory containing engines components
-- `exceptions.py` – Project file
-- `export.py` – Project file
-- `git/` – Directory containing git components
-- `mcp_tools.py` – Project file
-- `mermaid/` – Directory containing mermaid components
-- `plots/` – Directory containing plots components
-- `py.typed` – Project file
-- `reports/` – Directory containing reports components
-- `themes/` – Directory containing themes components
-- `utils.py` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `CHANGELOG.md` – Version history and release notes
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `USAGE_EXAMPLES.md` – Usage Examples implementation
+- `__init__.py` – Python package entry point — exports and initialization
+- `_compat.py` – Internal implementation module
+- `charts/` – charts module implementation
+- `components/` – components module implementation
+- `core/` – Core abstractions and base classes
+- `dashboard_builder.py` – Internal implementation module
+- `dashboard_export.py` – Internal implementation module
+- `engines/` – Processing engines and execution logic
+- `exceptions.py` – Custom exceptions and error types
+- `export.py` – Export implementation
+- `git/` – git module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `mermaid/` – mermaid module implementation
+- `plots/` – plots module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `reports/` – reports module implementation
+- `themes/` – themes module implementation
+- `utils.py` – Utility functions and helpers
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

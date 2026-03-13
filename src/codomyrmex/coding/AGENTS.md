@@ -6,32 +6,41 @@
 Code generation, review, debugging, refactoring, pattern matching, and sandbox execution. Static analysis integration and security scanning capabilities.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `MIGRATION_COMPLETE.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `_lang_utils.py` – Project file
-- `analysis/` – Directory containing analysis components
-- `debugging/` – Directory containing debugging components
-- `exceptions.py` – Project file
-- `execution/` – Directory containing execution components
-- `generation/` – Directory containing generation components
-- `generator.py` – Project file
-- `mcp_tools.py` – Project file
-- `monitoring/` – Directory containing monitoring components
-- `parsers/` – Directory containing parsers components
-- `pattern_matching/` – Directory containing pattern_matching components
-- `py.typed` – Project file
-- `refactoring/` – Directory containing refactoring components
-- `review/` – Directory containing review components
-- `sandbox/` – Directory containing sandbox components
-- `static_analysis/` – Directory containing static_analysis components
-- `test_generator.py` – Project file
-- `testing/` – Directory containing testing components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `MIGRATION_COMPLETE.md` – Migration Complete implementation
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `_lang_utils.py` – Internal implementation module
+- `analysis/` – analysis module implementation
+- `debugging/` – debugging module implementation
+- `exceptions.py` – Custom exceptions and error types
+- `execution/` – execution module implementation
+- `generation/` – generation module implementation
+- `generator.py` – Generator implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `monitoring/` – monitoring module implementation
+- `parsers/` – parsers module implementation
+- `pattern_matching/` – pattern matching module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `refactoring/` – refactoring module implementation
+- `review/` – review module implementation
+- `sandbox/` – sandbox module implementation
+- `static_analysis/` – static analysis module implementation
+- `test_generator.py` – Internal implementation module
+- `testing/` – testing module implementation
+
+
+## Key Interfaces
+
+- `review/analyzer.py — Code quality analysis`
+- `debugging/debugger.py — Debug assistance and error analysis`
+- `refactoring/ — Extract, inline, rename operations`
+- `sandbox/container.py — Sandboxed code execution`
+- `static_analysis/ — Code quality scanning`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

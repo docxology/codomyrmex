@@ -6,20 +6,20 @@
 Deployment automation with health checks, rollback management, and multi-environment support.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `canary.py` – Project file
-- `gitops/` – Directory containing gitops components
-- `health_checks/` – Directory containing health_checks components
-- `manager/` – Directory containing manager components
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
-- `rollback/` – Directory containing rollback components
-- `strategies/` – Directory containing strategies components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `canary.py` – Canary implementation
+- `gitops/` – gitops module implementation
+- `health_checks/` – health checks module implementation
+- `manager/` – manager module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `rollback/` – rollback module implementation
+- `strategies/` – strategies module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

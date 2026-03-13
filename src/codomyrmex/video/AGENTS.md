@@ -6,22 +6,22 @@
 Video processing, frame extraction, and video analysis pipelines.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `_validation.py` – Project file
-- `analysis/` – Directory containing analysis components
-- `config.py` – Project file
-- `exceptions.py` – Project file
-- `extraction/` – Directory containing extraction components
-- `generation/` – Directory containing generation components
-- `mcp_tools.py` – Project file
-- `models.py` – Project file
-- `processing/` – Directory containing processing components
-- `py.typed` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `_validation.py` – Internal implementation module
+- `analysis/` – analysis module implementation
+- `config.py` – Configuration management and settings
+- `exceptions.py` – Custom exceptions and error types
+- `extraction/` – extraction module implementation
+- `generation/` – generation module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `models.py` – Data models and schemas
+- `processing/` – processing module implementation
+- `py.typed` – PEP 561 marker for typed package
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

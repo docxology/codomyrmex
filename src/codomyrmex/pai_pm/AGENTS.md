@@ -6,16 +6,16 @@
 Project management integration with task tracking and milestone management.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `client.py` – Project file
-- `config.py` – Project file
-- `exceptions.py` – Project file
-- `mcp_tools.py` – Project file
-- `server/` – Directory containing server components
-- `server_manager.py` – Project file
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `client.py` – Client implementation for external service integration
+- `config.py` – Configuration management and settings
+- `exceptions.py` – Custom exceptions and error types
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `server/` – server module implementation
+- `server_manager.py` – Internal implementation module
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

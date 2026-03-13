@@ -6,25 +6,25 @@
 Agent memory systems with SQLite persistence, Obsidian integration, and memory consolidation.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `cognilayer_bridge.py` – Project file
-- `consolidation.py` – Project file
-- `mcp_tools.py` – Project file
-- `memory.py` – Project file
-- `models.py` – Project file
-- `obsidian/` – Directory containing obsidian components
-- `obsidian_bridge.py` – Project file
-- `py.typed` – Project file
-- `rules/` – Directory containing rules components
-- `sqlite_store.py` – Project file
-- `stores.py` – Project file
-- `tests/` – Directory containing tests components
-- `user_profile.py` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `cognilayer_bridge.py` – Internal implementation module
+- `consolidation.py` – Consolidation implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `memory.py` – Memory implementation
+- `models.py` – Data models and schemas
+- `obsidian/` – obsidian module implementation
+- `obsidian_bridge.py` – Internal implementation module
+- `py.typed` – PEP 561 marker for typed package
+- `rules/` – rules module implementation
+- `sqlite_store.py` – Internal implementation module
+- `stores.py` – Stores implementation
+- `tests/` – Test suite — unit and integration tests
+- `user_profile.py` – Internal implementation module
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

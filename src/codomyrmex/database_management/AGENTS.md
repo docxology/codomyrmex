@@ -6,25 +6,25 @@
 Database connection pooling, migration management, schema generation, and multi-database abstraction layer.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `audit/` – Directory containing audit components
-- `backup/` – Directory containing backup components
-- `connections/` – Directory containing connections components
-- `db_manager.py` – Project file
-- `lineage/` – Directory containing lineage components
-- `mcp_tools.py` – Project file
-- `migration/` – Directory containing migration components
-- `performance_monitor.py` – Project file
-- `py.typed` – Project file
-- `replication/` – Directory containing replication components
-- `schema_generator.py` – Project file
-- `sharding/` – Directory containing sharding components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `audit/` – audit module implementation
+- `backup/` – backup module implementation
+- `connections/` – connections module implementation
+- `db_manager.py` – Internal implementation module
+- `lineage/` – lineage module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `migration/` – migration module implementation
+- `performance_monitor.py` – Internal implementation module
+- `py.typed` – PEP 561 marker for typed package
+- `replication/` – replication module implementation
+- `schema_generator.py` – Internal implementation module
+- `sharding/` – sharding module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

@@ -6,17 +6,17 @@
 Data compression with multiple algorithms, streaming support, and adaptive compression strategies.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `archives/` – Directory containing archives components
-- `core/` – Directory containing core components
-- `engines/` – Directory containing engines components
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `archives/` – archives module implementation
+- `core/` – Core abstractions and base classes
+- `engines/` – Processing engines and execution logic
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

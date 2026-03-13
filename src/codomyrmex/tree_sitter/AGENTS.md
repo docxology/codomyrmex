@@ -6,18 +6,18 @@
 AST parsing and code analysis using tree-sitter for Python, JavaScript, and other languages.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `languages/` – Directory containing languages components
-- `mcp_tools.py` – Project file
-- `parsers/` – Directory containing parsers components
-- `py.typed` – Project file
-- `queries/` – Directory containing queries components
-- `transformers/` – Directory containing transformers components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `languages/` – languages module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `parsers/` – parsers module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `queries/` – queries module implementation
+- `transformers/` – transformers module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

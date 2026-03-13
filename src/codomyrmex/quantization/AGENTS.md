@@ -6,16 +6,16 @@
 Model quantization with MLX quantizer and multi-backend support.
 
 ## Active Components
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `fp4.py` – Project file
-- `int8.py` – Project file
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
-- `utils.py` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `fp4.py` – Fp4 implementation
+- `int8.py` – Int8 implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `utils.py` – Utility functions and helpers
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

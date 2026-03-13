@@ -6,38 +6,47 @@
 Task orchestration with fractal execution, parallel runners, workflow management, and scheduling. Coordinates multi-step agent workflows with resilience patterns.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `agent_supervisor.py` – Project file
-- `config.py` – Project file
-- `core.py` – Project file
-- `discovery.py` – Project file
-- `engines/` – Directory containing engines components
-- `exceptions.py` – Project file
-- `execution/` – Directory containing execution components
-- `fractals/` – Directory containing fractals components
-- `heartbeat.py` – Project file
-- `integration.py` – Project file
-- `mcp_tools.py` – Project file
-- `module_connector.py` – Project file
-- `monitors/` – Directory containing monitors components
-- `observability/` – Directory containing observability components
-- `pipelines/` – Directory containing pipelines components
-- `process_orchestrator.py` – Project file
-- `py.typed` – Project file
-- `resilience/` – Directory containing resilience components
-- `scheduler/` – Directory containing scheduler components
-- `schedulers/` – Directory containing schedulers components
-- `state/` – Directory containing state components
-- `templates/` – Directory containing templates components
-- `thin.py` – Project file
-- `triage_engine.py` – Project file
-- `triggers/` – Directory containing triggers components
-- `workflows/` – Directory containing workflows components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `agent_supervisor.py` – Internal implementation module
+- `config.py` – Configuration management and settings
+- `core.py` – Core implementation
+- `discovery.py` – Discovery implementation
+- `engines/` – Processing engines and execution logic
+- `exceptions.py` – Custom exceptions and error types
+- `execution/` – execution module implementation
+- `fractals/` – fractals module implementation
+- `heartbeat.py` – Heartbeat implementation
+- `integration.py` – Integration layer for external services
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `module_connector.py` – Internal implementation module
+- `monitors/` – monitors module implementation
+- `observability/` – observability module implementation
+- `pipelines/` – pipelines module implementation
+- `process_orchestrator.py` – Internal implementation module
+- `py.typed` – PEP 561 marker for typed package
+- `resilience/` – resilience module implementation
+- `scheduler/` – scheduler module implementation
+- `schedulers/` – schedulers module implementation
+- `state/` – state module implementation
+- `templates/` – Template files and schemas
+- `thin.py` – Thin implementation
+- `triage_engine.py` – Internal implementation module
+- `triggers/` – triggers module implementation
+- `workflows/` – workflows module implementation
+
+
+## Key Interfaces
+
+- `engines/parallel.py — Parallel execution engine`
+- `execution/runner.py — Sequential task runner`
+- `fractals/executor.py — Fractal task decomposition`
+- `scheduler/ — Cron and interval-based scheduling`
+- `workflows/workflow.py — Workflow definition and execution`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

@@ -6,20 +6,20 @@
 Privacy-preserving computation, data anonymization, and PII detection.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `crumbs.py` – Project file
-- `mcp_tools.py` – Project file
-- `mixnet.py` – Project file
-- `privacy.py` – Project file
-- `py.typed` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `CHANGELOG.md` – Version history and release notes
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `USAGE_EXAMPLES.md` – Usage Examples implementation
+- `__init__.py` – Python package entry point — exports and initialization
+- `crumbs.py` – Crumbs implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `mixnet.py` – Mixnet implementation
+- `privacy.py` – Privacy implementation
+- `py.typed` – PEP 561 marker for typed package
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

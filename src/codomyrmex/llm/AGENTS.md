@@ -6,38 +6,47 @@
 LLM inference, chain orchestration, RAG pipelines, guardrails, and multi-provider abstraction layer. Supports Ollama, MLX, fabric, and custom model runners.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `chain_of_thought.py` – Project file
-- `chains/` – Directory containing chains components
-- `config.py` – Project file
-- `context_manager.py` – Project file
-- `cost_tracking/` – Directory containing cost_tracking components
-- `embeddings/` – Directory containing embeddings components
-- `exceptions.py` – Project file
-- `fabric/` – Directory containing fabric components
-- `guardrails/` – Directory containing guardrails components
-- `mcp.py` – Project file
-- `mcp_tools.py` – Project file
-- `memory/` – Directory containing memory components
-- `models/` – Directory containing models components
-- `multimodal/` – Directory containing multimodal components
-- `ollama/` – Directory containing ollama components
-- `outputs/` – Directory containing outputs components
-- `prompt_templates/` – Directory containing prompt_templates components
-- `prompts/` – Directory containing prompts components
-- `providers/` – Directory containing providers components
-- `py.typed` – Project file
-- `rag/` – Directory containing rag components
-- `router.py` – Project file
-- `safety.py` – Project file
-- `streaming/` – Directory containing streaming components
-- `tools/` – Directory containing tools components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `chain_of_thought.py` – Internal implementation module
+- `chains/` – chains module implementation
+- `config.py` – Configuration management and settings
+- `context_manager.py` – Internal implementation module
+- `cost_tracking/` – cost tracking module implementation
+- `embeddings/` – embeddings module implementation
+- `exceptions.py` – Custom exceptions and error types
+- `fabric/` – fabric module implementation
+- `guardrails/` – guardrails module implementation
+- `mcp.py` – Mcp implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `memory/` – memory module implementation
+- `models/` – Data models and schemas
+- `multimodal/` – multimodal module implementation
+- `ollama/` – ollama module implementation
+- `outputs/` – outputs module implementation
+- `prompt_templates/` – prompt templates module implementation
+- `prompts/` – prompts module implementation
+- `providers/` – Provider implementations and adapters
+- `py.typed` – PEP 561 marker for typed package
+- `rag/` – rag module implementation
+- `router.py` – Router implementation
+- `safety.py` – Safety implementation
+- `streaming/` – streaming module implementation
+- `tools/` – Tool implementations and utilities
+
+
+## Key Interfaces
+
+- `mcp_tools.py — MCP tool definitions for LLM operations`
+- `fabric/fabric_manager.py — Fabric pattern orchestration`
+- `ollama/ollama_manager.py — Ollama model management`
+- `mlx/model_manager.py — MLX model loading and inference`
+- `providers/ — Anthropic, OpenAI provider implementations`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

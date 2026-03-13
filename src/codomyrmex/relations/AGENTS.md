@@ -6,20 +6,20 @@
 Entity relationship tracking and graph-based knowledge management.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `crm/` – Directory containing crm components
-- `mcp_tools.py` – Project file
-- `network_analysis/` – Directory containing network_analysis components
-- `py.typed` – Project file
-- `social_media/` – Directory containing social_media components
-- `strength_scoring.py` – Project file
-- `uor/` – Directory containing uor components
-- `visualization.py` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `crm/` – crm module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `network_analysis/` – network analysis module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `social_media/` – social media module implementation
+- `strength_scoring.py` – Internal implementation module
+- `uor/` – uor module implementation
+- `visualization.py` – Visualization implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

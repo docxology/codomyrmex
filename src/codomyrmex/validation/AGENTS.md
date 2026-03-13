@@ -6,26 +6,26 @@
 Schema validation, data quality checks, MCP tool validation, and assertion frameworks.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `contextual.py` – Project file
-- `examples_validator.py` – Project file
-- `exceptions.py` – Project file
-- `mcp_tools.py` – Project file
-- `pai.py` – Project file
-- `parser.py` – Project file
-- `py.typed` – Project file
-- `rules/` – Directory containing rules components
-- `sanitizers/` – Directory containing sanitizers components
-- `schemas/` – Directory containing schemas components
-- `schemas.py` – Project file
-- `summary.py` – Project file
-- `validation_manager.py` – Project file
-- `validator.py` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `contextual.py` – Contextual implementation
+- `examples_validator.py` – Internal implementation module
+- `exceptions.py` – Custom exceptions and error types
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `pai.py` – Pai implementation
+- `parser.py` – Parser implementation
+- `py.typed` – PEP 561 marker for typed package
+- `rules/` – rules module implementation
+- `sanitizers/` – sanitizers module implementation
+- `schemas/` – Data validation schemas
+- `schemas.py` – Data validation schemas
+- `summary.py` – Summary implementation
+- `validation_manager.py` – Internal implementation module
+- `validator.py` – Validator implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

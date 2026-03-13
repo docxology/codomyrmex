@@ -6,27 +6,27 @@
 Documentation files and guides.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `chunking.py` – Project file
-- `config.py` – Project file
-- `core/` – Directory containing core components
-- `exceptions.py` – Project file
-- `formats/` – Directory containing formats components
-- `mcp_tools.py` – Project file
-- `metadata/` – Directory containing metadata components
-- `models/` – Directory containing models components
-- `py.typed` – Project file
-- `search/` – Directory containing search components
-- `templates/` – Directory containing templates components
-- `transformation/` – Directory containing transformation components
-- `utils/` – Directory containing utils components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `USAGE_EXAMPLES.md` – Usage Examples implementation
+- `__init__.py` – Python package entry point — exports and initialization
+- `chunking.py` – Chunking implementation
+- `config.py` – Configuration management and settings
+- `core/` – Core abstractions and base classes
+- `exceptions.py` – Custom exceptions and error types
+- `formats/` – formats module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `metadata/` – metadata module implementation
+- `models/` – Data models and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `search/` – search module implementation
+- `templates/` – Template files and schemas
+- `transformation/` – transformation module implementation
+- `utils/` – Utility functions and helpers
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

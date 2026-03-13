@@ -6,29 +6,29 @@
 Distributed caching with namespace support, Redis backend, and cache warming strategies.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `async_ops/` – Directory containing async_ops components
-- `backends/` – Directory containing backends components
-- `cache.py` – Project file
-- `cache_manager.py` – Project file
-- `distributed/` – Directory containing distributed components
-- `exceptions.py` – Project file
-- `invalidation/` – Directory containing invalidation components
-- `mcp_tools.py` – Project file
-- `namespaced.py` – Project file
-- `policies/` – Directory containing policies components
-- `py.typed` – Project file
-- `replication/` – Directory containing replication components
-- `serializers/` – Directory containing serializers components
-- `stats.py` – Project file
-- `ttl_manager.py` – Project file
-- `warmers/` – Directory containing warmers components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `async_ops/` – async ops module implementation
+- `backends/` – Backend service implementations
+- `cache.py` – Cache implementation
+- `cache_manager.py` – Internal implementation module
+- `distributed/` – distributed module implementation
+- `exceptions.py` – Custom exceptions and error types
+- `invalidation/` – invalidation module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `namespaced.py` – Namespaced implementation
+- `policies/` – policies module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `replication/` – replication module implementation
+- `serializers/` – serializers module implementation
+- `stats.py` – Stats implementation
+- `ttl_manager.py` – Internal implementation module
+- `warmers/` – warmers module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

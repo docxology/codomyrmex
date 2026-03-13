@@ -6,26 +6,26 @@
 Command-line interface for Codomyrmex with status reporting, agent management, memory operations, and orchestration controls.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `__main__.py` – Project file
-- `commands.py` – Project file
-- `completion.py` – Project file
-- `completions/` – Directory containing completions components
-- `core.py` – Project file
-- `doctor.py` – Project file
-- `formatters/` – Directory containing formatters components
-- `handlers/` – Directory containing handlers components
-- `mcp_tools.py` – Project file
-- `parsers/` – Directory containing parsers components
-- `py.typed` – Project file
-- `status.py` – Project file
-- `themes/` – Directory containing themes components
-- `utils.py` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `__main__.py` – Internal implementation module
+- `commands.py` – Commands implementation
+- `completion.py` – Completion implementation
+- `completions/` – completions module implementation
+- `core.py` – Core implementation
+- `doctor.py` – Doctor implementation
+- `formatters/` – formatters module implementation
+- `handlers/` – Request/event handlers
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `parsers/` – parsers module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `status.py` – Status implementation
+- `themes/` – themes module implementation
+- `utils.py` – Utility functions and helpers
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

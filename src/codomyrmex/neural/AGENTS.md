@@ -6,18 +6,18 @@
 Neural network primitives, layer implementations, and activation functions.
 
 ## Active Components
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `activations.py` – Project file
-- `attention.py` – Project file
-- `flash_attention.py` – Project file
-- `layers.py` – Project file
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
-- `transformer.py` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `activations.py` – Activations implementation
+- `attention.py` – Attention implementation
+- `flash_attention.py` – Internal implementation module
+- `layers.py` – Layers implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `transformer.py` – Transformer implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

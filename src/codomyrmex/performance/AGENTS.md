@@ -6,22 +6,22 @@
 Performance profiling, benchmarking, monitoring, and optimization tools.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `analysis/` – Directory containing analysis components
-- `benchmarking/` – Directory containing benchmarking components
-- `caching/` – Directory containing caching components
-- `load_tester.py` – Project file
-- `mcp_tools.py` – Project file
-- `monitoring/` – Directory containing monitoring components
-- `optimization/` – Directory containing optimization components
-- `profiling/` – Directory containing profiling components
-- `py.typed` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `analysis/` – analysis module implementation
+- `benchmarking/` – benchmarking module implementation
+- `caching/` – caching module implementation
+- `load_tester.py` – Internal implementation module
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `monitoring/` – monitoring module implementation
+- `optimization/` – optimization module implementation
+- `profiling/` – profiling module implementation
+- `py.typed` – PEP 561 marker for typed package
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

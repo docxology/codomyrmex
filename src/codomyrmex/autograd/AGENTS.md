@@ -6,15 +6,15 @@
 Automatic differentiation engine for gradient computation and neural network training.
 
 ## Active Components
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `engine.py` – Project file
-- `mcp_tools.py` – Project file
-- `ops.py` – Project file
-- `py.typed` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `engine.py` – Engine implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `ops.py` – Ops implementation
+- `py.typed` – PEP 561 marker for typed package
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

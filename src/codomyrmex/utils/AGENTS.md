@@ -6,23 +6,23 @@
 Shared utility functions for process management, retry logic, and common operations.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `cli_helpers.py` – Project file
-- `graph.py` – Project file
-- `hashing.py` – Project file
-- `i18n/` – Directory containing i18n components
-- `integration.py` – Project file
-- `mcp_tools.py` – Project file
-- `metrics.py` – Project file
-- `process/` – Directory containing process components
-- `py.typed` – Project file
-- `refined.py` – Project file
-- `retry.py` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `cli_helpers.py` – Internal implementation module
+- `graph.py` – Graph implementation
+- `hashing.py` – Hashing implementation
+- `i18n/` – i18n module implementation
+- `integration.py` – Integration layer for external services
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `metrics.py` – Metrics implementation
+- `process/` – process module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `refined.py` – Refined implementation
+- `retry.py` – Retry implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

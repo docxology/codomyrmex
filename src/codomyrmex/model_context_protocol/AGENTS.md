@@ -6,31 +6,37 @@
 MCP server and client implementation for tool discovery, registration, and invocation. Enables standardized tool communication across agents.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `adapters/` – Directory containing adapters components
-- `compat.py` – Project file
-- `decorators.py` – Project file
-- `discovery/` – Directory containing discovery components
-- `errors.py` – Project file
-- `mcp_deprecation.py` – Project file
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
-- `quality/` – Directory containing quality components
-- `reliability/` – Directory containing reliability components
-- `response_helpers.py` – Project file
-- `schemas/` – Directory containing schemas components
-- `tools.py` – Project file
-- `transport/` – Directory containing transport components
-- `validators/` – Directory containing validators components
-- `versioning/` – Directory containing versioning components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `CHANGELOG.md` – Version history and release notes
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `USAGE_EXAMPLES.md` – Usage Examples implementation
+- `__init__.py` – Python package entry point — exports and initialization
+- `adapters/` – adapters module implementation
+- `compat.py` – Compat implementation
+- `decorators.py` – Decorators implementation
+- `discovery/` – discovery module implementation
+- `errors.py` – Errors implementation
+- `mcp_deprecation.py` – Internal implementation module
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `quality/` – quality module implementation
+- `reliability/` – reliability module implementation
+- `response_helpers.py` – Internal implementation module
+- `schemas/` – Data validation schemas
+- `tools.py` – Tools implementation
+- `transport/` – transport module implementation
+- `validators/` – validators module implementation
+- `versioning/` – versioning module implementation
+
+
+## Key Interfaces
+
+- `transport/main.py — MCP transport layer (stdio/HTTP)`
+- `response_helpers.py — MCP response formatting`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

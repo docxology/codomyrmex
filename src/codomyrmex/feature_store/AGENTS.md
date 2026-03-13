@@ -6,16 +6,16 @@
 Feature store for ML feature engineering, versioning, and serving.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `exceptions.py` – Project file
-- `mcp_tools.py` – Project file
-- `models.py` – Project file
-- `py.typed` – Project file
-- `service.py` – Project file
-- `store.py` – Project file
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `exceptions.py` – Custom exceptions and error types
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `models.py` – Data models and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `service.py` – Service implementation
+- `store.py` – Store implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

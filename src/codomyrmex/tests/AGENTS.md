@@ -6,22 +6,22 @@
 Test files and validation suites.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `RUNNING_TESTS.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `conftest.py` – Project file
-- `fixtures/` – Directory containing fixtures components
-- `integration/` – Directory containing integration components
-- `languages/` – Directory containing languages components
-- `orchestrator/` – Directory containing orchestrator components
-- `performance/` – Directory containing performance components
-- `py.typed` – Project file
-- `unit/` – Directory containing unit components
-- `utils/` – Directory containing utils components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `RUNNING_TESTS.md` – Running Tests implementation
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `conftest.py` – Pytest configuration and shared fixtures
+- `fixtures/` – fixtures module implementation
+- `integration/` – integration module implementation
+- `languages/` – languages module implementation
+- `orchestrator/` – orchestrator module implementation
+- `performance/` – performance module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `unit/` – unit module implementation
+- `utils/` – Utility functions and helpers
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

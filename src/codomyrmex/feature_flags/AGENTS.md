@@ -6,21 +6,21 @@
 Feature flag management with percentage rollouts and A/B testing support.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `core/` – Directory containing core components
-- `evaluation/` – Directory containing evaluation components
-- `experiments.py` – Project file
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
-- `rollout/` – Directory containing rollout components
-- `storage/` – Directory containing storage components
-- `strategies/` – Directory containing strategies components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `core/` – Core abstractions and base classes
+- `evaluation/` – evaluation module implementation
+- `experiments.py` – Experiments implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
+- `rollout/` – rollout module implementation
+- `storage/` – storage module implementation
+- `strategies/` – strategies module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

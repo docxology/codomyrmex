@@ -6,27 +6,27 @@
 Multi-language runtime management for Python, Rust, JavaScript, Go, Java, and more.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `base.py` – Project file
-- `bash/` – Directory containing bash components
-- `cpp/` – Directory containing cpp components
-- `csharp/` – Directory containing csharp components
-- `elixir/` – Directory containing elixir components
-- `go/` – Directory containing go components
-- `java/` – Directory containing java components
-- `javascript/` – Directory containing javascript components
-- `mcp_tools.py` – Project file
-- `php/` – Directory containing php components
-- `py.typed` – Project file
-- `python/` – Directory containing python components
-- `r/` – Directory containing r components
-- `ruby/` – Directory containing ruby components
-- `rust/` – Directory containing rust components
-- `swift/` – Directory containing swift components
-- `typescript/` – Directory containing typescript components
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `base.py` – Base implementation
+- `bash/` – bash module implementation
+- `cpp/` – cpp module implementation
+- `csharp/` – csharp module implementation
+- `elixir/` – elixir module implementation
+- `go/` – go module implementation
+- `java/` – java module implementation
+- `javascript/` – javascript module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `php/` – php module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `python/` – python module implementation
+- `r/` – r module implementation
+- `ruby/` – ruby module implementation
+- `rust/` – rust module implementation
+- `swift/` – swift module implementation
+- `typescript/` – typescript module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

@@ -6,22 +6,22 @@
 Continuous integration and deployment with pipeline management, flaky test quarantine, SBOM generation, and deployment orchestration.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `dependency_scan.py` – Project file
-- `deployment_orchestrator.py` – Project file
-- `exceptions.py` – Project file
-- `mcp_tools.py` – Project file
-- `performance_optimizer.py` – Project file
-- `pipeline/` – Directory containing pipeline components
-- `py.typed` – Project file
-- `rollback_manager.py` – Project file
-- `sbom.py` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `dependency_scan.py` – Internal implementation module
+- `deployment_orchestrator.py` – Internal implementation module
+- `exceptions.py` – Custom exceptions and error types
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `performance_optimizer.py` – Internal implementation module
+- `pipeline/` – pipeline module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `rollback_manager.py` – Internal implementation module
+- `sbom.py` – Sbom implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

@@ -6,30 +6,30 @@
 API gateway, mocking, pagination, standardization, and circuit breakers. OpenAPI spec generation and validation.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `api_contract.py` – Project file
-- `api_surface.py` – Project file
-- `authentication/` – Directory containing authentication components
-- `circuit_breaker/` – Directory containing circuit_breaker components
-- `documentation/` – Directory containing documentation components
-- `health.py` – Project file
-- `mcp_tools.py` – Project file
-- `migration_engine.py` – Project file
-- `mocking/` – Directory containing mocking components
-- `openapi_documentation_generator.py` – Project file
-- `openapi_generator.py` – Project file
-- `openapi_standardization_generator.py` – Project file
-- `pagination/` – Directory containing pagination components
-- `py.typed` – Project file
-- `rate_limiting/` – Directory containing rate_limiting components
-- `standardization/` – Directory containing standardization components
-- `webhooks/` – Directory containing webhooks components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `api_contract.py` – Internal implementation module
+- `api_surface.py` – Internal implementation module
+- `authentication/` – authentication module implementation
+- `circuit_breaker/` – circuit breaker module implementation
+- `documentation/` – documentation module implementation
+- `health.py` – Health implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `migration_engine.py` – Internal implementation module
+- `mocking/` – mocking module implementation
+- `openapi_documentation_generator.py` – Internal implementation module
+- `openapi_generator.py` – Internal implementation module
+- `openapi_standardization_generator.py` – Internal implementation module
+- `pagination/` – pagination module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `rate_limiting/` – rate limiting module implementation
+- `standardization/` – standardization module implementation
+- `webhooks/` – webhooks module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

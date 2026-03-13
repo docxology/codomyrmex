@@ -6,23 +6,23 @@
 Free energy principle computations and active inference implementations.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `FPF-Spec.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `analysis/` – Directory containing analysis components
-- `constraints/` – Directory containing constraints components
-- `core/` – Directory containing core components
-- `io/` – Directory containing io components
-- `mcp_tools.py` – Project file
-- `models/` – Directory containing models components
-- `optimization/` – Directory containing optimization components
-- `py.typed` – Project file
-- `reasoning/` – Directory containing reasoning components
-- `visualization/` – Directory containing visualization components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `FPF-Spec.md` – Fpf Spec implementation
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `analysis/` – analysis module implementation
+- `constraints/` – constraints module implementation
+- `core/` – Core abstractions and base classes
+- `io/` – io module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `models/` – Data models and schemas
+- `optimization/` – optimization module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `reasoning/` – reasoning module implementation
+- `visualization/` – visualization module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

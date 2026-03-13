@@ -6,25 +6,25 @@
 Example implementations and demonstrations.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `agent_orchestration_demo.py` – Project file
-- `api_endpoint_example.py` – Project file
-- `config_validation_report.json` – Project file
-- `fastapi_endpoint.py` – Project file
-- `fastapi_endpoint_example.py` – Project file
-- `generated_api_endpoint.py` – Project file
-- `invalid_prompt_demo.py` – Project file
-- `invalid_prompt_failure.py` – Project file
-- `link_check_report.json` – Project file
-- `new_item_endpoint.py` – Project file
-- `py.typed` – Project file
-- `simple_endpoint.py` – Project file
-- `test_fastapi_endpoint.py` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `agent_orchestration_demo.py` – Internal implementation module
+- `api_endpoint_example.py` – Internal implementation module
+- `config_validation_report.json` – Config Validation Report implementation
+- `fastapi_endpoint.py` – Internal implementation module
+- `fastapi_endpoint_example.py` – Internal implementation module
+- `generated_api_endpoint.py` – Internal implementation module
+- `invalid_prompt_demo.py` – Internal implementation module
+- `invalid_prompt_failure.py` – Internal implementation module
+- `link_check_report.json` – Link Check Report implementation
+- `new_item_endpoint.py` – Internal implementation module
+- `py.typed` – PEP 561 marker for typed package
+- `simple_endpoint.py` – Internal implementation module
+- `test_fastapi_endpoint.py` – Internal implementation module
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

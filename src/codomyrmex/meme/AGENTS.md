@@ -6,27 +6,27 @@
 Memetic evolution and propagation analysis for information spread modeling.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `contagion/` – Directory containing contagion components
-- `cultural_dynamics/` – Directory containing cultural_dynamics components
-- `cybernetic/` – Directory containing cybernetic components
-- `epistemic/` – Directory containing epistemic components
-- `hyperreality/` – Directory containing hyperreality components
-- `ideoscape/` – Directory containing ideoscape components
-- `mcp_tools.py` – Project file
-- `memetics/` – Directory containing memetics components
-- `narrative/` – Directory containing narrative components
-- `neurolinguistic/` – Directory containing neurolinguistic components
-- `py.typed` – Project file
-- `rhizome/` – Directory containing rhizome components
-- `semiotic/` – Directory containing semiotic components
-- `swarm/` – Directory containing swarm components
-- `verify_all.py` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `contagion/` – contagion module implementation
+- `cultural_dynamics/` – cultural dynamics module implementation
+- `cybernetic/` – cybernetic module implementation
+- `epistemic/` – epistemic module implementation
+- `hyperreality/` – hyperreality module implementation
+- `ideoscape/` – ideoscape module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `memetics/` – memetics module implementation
+- `narrative/` – narrative module implementation
+- `neurolinguistic/` – neurolinguistic module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `rhizome/` – rhizome module implementation
+- `semiotic/` – semiotic module implementation
+- `swarm/` – swarm module implementation
+- `verify_all.py` – Internal implementation module
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

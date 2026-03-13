@@ -6,24 +6,24 @@
 Multi-agent collaboration with swarm management, pub/sub messaging, consensus protocols, and cryptographic task attestation.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `agents/` – Directory containing agents components
-- `communication/` – Directory containing communication components
-- `coordination/` – Directory containing coordination components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `agents/` – agents module implementation
+- `communication/` – communication module implementation
+- `coordination/` – coordination module implementation
 - `coordination/attestation.py` – HMAC-SHA256 cryptographic task attestation (v1.3.0)
-- `exceptions.py` – Project file
-- `knowledge/` – Directory containing knowledge components
-- `mcp_tools.py` – Project file
-- `models.py` – Project file
-- `protocols/` – Directory containing protocols components
-- `py.typed` – Project file
-- `swarm/` – Directory containing swarm components
+- `exceptions.py` – Custom exceptions and error types
+- `knowledge/` – knowledge module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `models.py` – Data models and schemas
+- `protocols/` – protocols module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `swarm/` – swarm module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

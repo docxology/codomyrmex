@@ -6,28 +6,36 @@
 Secrets scanning, vulnerability assessment, certificate validation, threat modeling, and access control across digital and physical domains.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `ai_safety/` – Directory containing ai_safety components
-- `audit/` – Directory containing audit components
-- `cognitive/` – Directory containing cognitive components
-- `compliance/` – Directory containing compliance components
-- `compliance_report.py` – Project file
-- `dashboard.py` – Project file
-- `digital/` – Directory containing digital components
-- `governance/` – Directory containing governance components
-- `mcp_tools.py` – Project file
-- `permissions.py` – Project file
-- `physical/` – Directory containing physical components
-- `py.typed` – Project file
-- `sbom.py` – Project file
-- `scanning/` – Directory containing scanning components
-- `secrets/` – Directory containing secrets components
-- `theory/` – Directory containing theory components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `ai_safety/` – ai safety module implementation
+- `audit/` – audit module implementation
+- `cognitive/` – cognitive module implementation
+- `compliance/` – compliance module implementation
+- `compliance_report.py` – Internal implementation module
+- `dashboard.py` – Dashboard implementation
+- `digital/` – digital module implementation
+- `governance/` – governance module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `permissions.py` – Permissions implementation
+- `physical/` – physical module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `sbom.py` – Sbom implementation
+- `scanning/` – scanning module implementation
+- `secrets/` – secrets module implementation
+- `theory/` – theory module implementation
+
+
+## Key Interfaces
+
+- `secrets/scanner.py — Secret detection and validation`
+- `digital/vulnerability_scanner.py — CVE and dependency scanning`
+- `digital/certificate_validator.py — SSL/TLS validation`
+- `theory/risk_assessment.py — Security risk modeling`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

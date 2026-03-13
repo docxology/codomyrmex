@@ -6,22 +6,22 @@
 Web scraping with content extraction, anti-bot handling, and structured data parsing.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `TESTING.md` – Project file
-- `__init__.py` – Project file
-- `config.py` – Project file
-- `core.py` – Project file
-- `exceptions.py` – Project file
-- `extractors/` – Directory containing extractors components
-- `firecrawl/` – Directory containing firecrawl components
-- `mcp_tools.py` – Project file
-- `py.typed` – Project file
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `CHANGELOG.md` – Version history and release notes
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `TESTING.md` – Testing implementation
+- `__init__.py` – Python package entry point — exports and initialization
+- `config.py` – Configuration management and settings
+- `core.py` – Core implementation
+- `exceptions.py` – Custom exceptions and error types
+- `extractors/` – extractors module implementation
+- `firecrawl/` – firecrawl module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `py.typed` – PEP 561 marker for typed package
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

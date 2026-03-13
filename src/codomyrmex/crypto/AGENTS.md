@@ -6,24 +6,24 @@
 Cryptographic utilities for encryption, hashing, and secure data handling.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `analysis/` – Directory containing analysis components
-- `currency/` – Directory containing currency components
-- `encoding/` – Directory containing encoding components
-- `exceptions.py` – Project file
-- `graphy/` – Directory containing graphy components
-- `mcp_tools.py` – Project file
-- `protocols/` – Directory containing protocols components
-- `py.typed` – Project file
-- `random/` – Directory containing random components
-- `steganography/` – Directory containing steganography components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `CHANGELOG.md` – Version history and release notes
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SECURITY.md` – Security considerations and vulnerability reporting
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `analysis/` – analysis module implementation
+- `currency/` – currency module implementation
+- `encoding/` – encoding module implementation
+- `exceptions.py` – Custom exceptions and error types
+- `graphy/` – graphy module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `protocols/` – protocols module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `random/` – random module implementation
+- `steganography/` – steganography module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

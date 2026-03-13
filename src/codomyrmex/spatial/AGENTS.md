@@ -6,22 +6,22 @@
 Spatial modeling module providing 3D/4D coordinates, geodesic mesh generation, quaternion rotations, and world model capabilities.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `coordinates/` – Directory containing coordinates components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
+- `PAI.md` – Public API Interface — integration patterns and usage guidelines
+- `README.md` – Module overview — quick start, features, and usage examples
+- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
+- `__init__.py` – Python package entry point — exports and initialization
+- `coordinates/` – coordinates module implementation
 - `coordinates/geodesic.py` – Icosahedral mesh generator and geodesic distance (v1.3.0)
 - `coordinates/quaternion.py` – Quaternion rotations, slerp, axis-angle/matrix conversion (v1.3.0)
-- `four_d/` – Directory containing four_d components
-- `mcp_tools.py` – Project file
-- `physics/` – Directory containing physics components
-- `py.typed` – Project file
-- `rendering/` – Directory containing rendering components
-- `three_d/` – Directory containing three_d components
-- `world_models/` – Directory containing world_models components
+- `four_d/` – four d module implementation
+- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `physics/` – physics module implementation
+- `py.typed` – PEP 561 marker for typed package
+- `rendering/` – rendering module implementation
+- `three_d/` – three d module implementation
+- `world_models/` – world models module implementation
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
