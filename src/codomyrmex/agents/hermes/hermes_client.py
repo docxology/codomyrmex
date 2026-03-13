@@ -40,6 +40,11 @@ class HermesError(AgentError):
         self.command = command
 
 
+class AutoRetryException(Exception):
+    """Exception raised internally to trigger the autonomous error-correction loop."""
+    pass
+
+
 class HermesClient(CLIAgentBase):
     """Client for interacting with the Hermes Agent.
 
@@ -577,7 +582,29 @@ class HermesClient(CLIAgentBase):
                     else:
                         break  # All tasks completed, or no tasks created
                 else:
-                    break  # Error executing, break loop
+                    exit_code = response.metadata.get("exit_code", 0)
+                    if exit_code != 0 and autonomous_turns < max_turns:
+                        autonomous_turns += 1
+                        error_trace = response.error or response.metadata.get("stderr", "Unknown error")
+                        self.logger.warning("Subprocess execution failed (exit_code=%s). Initiating recovery loop via AutoRetryException logic.", exit_code)
+                        
+                        template_path = Path(__file__).parent / "templates" / "recovery_prompt.txt"
+                        if template_path.exists():
+                            recovery_text = template_path.read_text(encoding="utf-8").format(failed_trace=error_trace)
+                        else:
+                            recovery_text = f"System: Tool failed with trace:\n<FAILED_TRACE>\n{error_trace}\n</FAILED_TRACE>\nFix the error and proceed."
+                            
+                        if response.content:
+                            session.add_message("assistant", f"{response.content}\n[Execution Interrupted]")
+                            
+                        current_prompt = recovery_text
+                        role = "system"
+                        # Reload session to ensure we don't drop state
+                        store.save(session)
+                        continue
+                    else:
+                        break  # Error executing, and we are out of retry turns
+
 
             # Sync securely to Obsidian Vault if configured (D1 implementation)
             if self._obsidian_vault and final_response and final_response.is_success():

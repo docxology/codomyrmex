@@ -8,24 +8,32 @@ Hermes maintains persistent conversation state across sessions using a combinati
 
 ## Session Lifecycle
 
-```
-1. New Message Arrives
-   │
-2. Session Lookup (platform + user_id)
-   ├── Existing session → load context
-   └── New session → create entry in state.db
-   │
-3. Agent Processing
-   ├── Prompt built with session context + memory
-   ├── LLM inference
-   └── Tool execution (if needed)
-   │
-4. State Persistence
-   ├── Messages appended to state.db
-   ├── Session JSON file updated
-   └── Compression check (if near context limit)
-   │
-5. Session Continues or Closes
+```mermaid
+flowchart TD
+    NewMsg([1. New Message Arrives]) --> Lookup{2. Session Lookup<br/>platform + user_id}
+    Lookup -->|Existing session| Load[load context]
+    Lookup -->|New session| Create[create entry in state.db]
+    
+    Load --> Process[3. Agent Processing]
+    Create --> Process
+    
+    subgraph Processing Steps
+        direction TB
+        P1[Prompt built with session context + memory] --> P2[LLM inference]
+        P2 --> P3[Tool execution]
+    end
+    Process --> ProcessingSteps
+    
+    ProcessingSteps --> Persist[4. State Persistence]
+    
+    subgraph Persistence Steps
+        direction TB
+        S1[Messages appended to state.db] --> S2[Session JSON file updated]
+        S2 --> S3[Compression check]
+    end
+    Persist --> PersistenceSteps
+    
+    PersistenceSteps --> End([5. Session Continues or Closes])
 ```
 
 ## Storage Components
@@ -45,7 +53,7 @@ The primary state database, stored at `$HERMES_HOME/state.db`. Uses SQLite's FTS
 
 Per-session JSON files in `$HERMES_HOME/sessions/`:
 
-```
+```text
 sessions/
 ├── session_20260312_135547_8afa58.json    (84KB)
 ├── session_20260312_135604_6038e5.json    (85KB)
@@ -59,7 +67,7 @@ These serve as human-readable backups and are useful for debugging.
 
 SQLite uses WAL mode for concurrent read/write:
 
-```
+```text
 state.db          # main database
 state.db-shm      # shared memory file
 state.db-wal       # write-ahead log
@@ -88,12 +96,21 @@ compression:
 3. The summary model generates a condensed version of older messages
 4. The compressed history replaces the full history, preserving recent messages
 
-```
-[old msg 1] [old msg 2] ... [old msg N] [recent msgs]
-                    │
-         context_compressor.summarize()
-                    │
-[compressed summary] [recent msgs]
+```mermaid
+flowchart LR
+    subgraph Before Compression
+        O1[(Old Msg 1)] -.- O2[(Old Msg 2)] -.- ON[(Old Msg N)] -.- RM1[(Recent Msgs)]
+    end
+    
+    Compressor[[context_compressor.summarize]]
+    
+    Before Compression --> Compressor
+    
+    subgraph After Compression
+        OSumm[(Compressed Summary)] -.- RM2[(Recent Msgs)]
+    end
+    
+    Compressor --> After Compression
 ```
 
 ### Choosing a Summary Model

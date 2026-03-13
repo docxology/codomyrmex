@@ -8,28 +8,42 @@ Hermes employs a modular architecture centered on a core agent loop that integra
 
 ## Component Diagram
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│                        HERMES AGENT                            │
-│                                                                │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
-│  │  Gateway      │  │  Agent Loop  │  │  Tool Registry       │  │
-│  │  (gateway/)   │──│  (run_agent) │──│  (tools/)            │  │
-│  │              │  │              │  │  - terminal_tool      │  │
-│  │  Platforms:  │  │  - prompt    │  │  - web_tools          │  │
-│  │  - telegram  │  │    builder   │  │  - file_operations    │  │
-│  │  - whatsapp  │  │  - context   │  │  - code_execution     │  │
-│  │  - discord   │  │    compress  │  │  - delegate_tool      │  │
-│  │  - slack     │  │  - tool      │  │  - memory_tool        │  │
-│  │  - cli       │  │    dispatch  │  │  - skills_tool        │  │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
-│                                                                │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
-│  │  Sessions    │  │  Skills      │  │  Memory              │  │
-│  │  (state.db)  │  │  (skills/)   │  │  (memories/)         │  │
-│  │  FTS5 index  │  │  Auto-learn  │  │  FTS5 recall         │  │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
-└────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    classDef platform fill:#2E8B57,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef core fill:#4682B4,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef storage fill:#8B4513,stroke:#fff,stroke-width:2px,color:#fff;
+
+    subgraph "HERMES AGENT"
+        Gateway[Gateway<br/>gateway/]:::core
+        AgentLoop[Agent Loop<br/>run_agent.py]:::core
+        ToolRegistry[Tool Registry<br/>tools/]:::core
+        
+        Gateway <--> AgentLoop
+        AgentLoop <--> ToolRegistry
+        
+        Sessions[(Sessions<br/>state.db)]:::storage
+        Skills[Skills<br/>skills/]:::storage
+        Memory[(Memory<br/>memories/)]:::storage
+        
+        AgentLoop <--> Sessions
+        AgentLoop <--> Skills
+        AgentLoop <--> Memory
+    end
+    
+    subgraph "Platforms"
+        TG([Telegram]):::platform
+        WA([WhatsApp]):::platform
+        DC([Discord]):::platform
+        SL([Slack]):::platform
+        CLI([CLI]):::platform
+    end
+    
+    TG --> Gateway
+    WA --> Gateway
+    DC --> Gateway
+    SL --> Gateway
+    CLI --> Gateway
 ```
 
 ## Core Agent Loop

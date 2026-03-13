@@ -9,25 +9,15 @@ Authoritative project backlog. Upcoming work only; completed items removed.
 
 ---
 
-## 🚀 v1.5.6 — Task Orchestration & Scheduling
-
-> **Theme**: Internalizing step-by-step reasoning via explicit checklist states.
-
-| # | Deliverable | Module | Concrete Scope |
-| :--- | :--- | :--- | :--- |
-| D1 | **Internal TaskScheduler** | `agents/hermes/` | Map agent execution logic directly to the `orchestrator.TaskScheduler`. Expose tools for agents to natively break down their own instructions into checkable tasks. |
-| D2 | **Workflow Mapping** | `agents/hermes/` | Add `WorkflowEngine` bindings allowing the agent to submit its own multi-step task list to an internal executor loop instead of returning to the user immediately. |
-
----
-
 ## 🚀 v1.5.7 — Error-Correction Handoffs
 
 > **Theme**: Subprocess self-healing and proactive error containment.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
-| D1 | **Recursive Retry Loop** | `agents/hermes/` | If an executed subprocess (e.g. bash or python script) fails, intercept the stderr stack trace and automatically feed it back into an active retry block before alerting the user natively. |
-| D2 | **Recovery Prompting** | `agents/hermes/` | Structure system prompts during failure domains specifically focusing on trace analysis rather than feature generation. |
+| D1 | **Recursive Retry Loop** | `agents/hermes/` | Embed an `AutoRetryException` handler in `hermes_client.chat_session()`. If tool calls like `execute_code` fail, intercept the `stderr`, block the user notification, and autonomously prompt the LLM to fix the trace. |
+| D2 | **Recovery Prompt Templates** | `agents/hermes/` | Implement a distinct `templates/recovery_prompt.txt` that dynamically shifts the system role to 'Deep Debugger' when `<FAILED_TRACE>` boundaries are injected into the context window. |
+| D3 | **Zero-Mock Verification** | `tests/integration/` | Implement `test_gateway_error_recovery.py`. Simulate a failing `sys.exit(1)` script, assert the engine intercepts the trace, prompts the model for a fix, and successfully passes on the second loop. |
 
 ---
 
@@ -37,8 +27,8 @@ Authoritative project backlog. Upcoming work only; completed items removed.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
-| D1 | **Sub-Agent Deferral** | `agents/hermes/` | Expose a `delegate_task` MCP wrapper that executes `CodexClient` or `ClaudeClient` instances for isolated logic operations. |
-| D2 | **Context Filtering** | `agents/hermes/` | Pass only minimal context bounds to sub-agents (preventing context bloat when deferring single file functions). |
+| D1 | **Sub-Agent Deferral** | `agents/hermes/` | Expose `delegate_task` MCP tool. Allows Hermes to spin up ephemeral `JulesClient` or `ClaudeClient` instances for isolated heavy reasoning (e.g. \"analyze this 500-line file while I wait\"). |
+| D2 | **Context Filtering** | `agents/hermes/` | Implement aggressive context pruning on the payload sent to the delegated agent, packaging only the explicit directive and single-file payload, shielding it from the parent's conversational state. |
 
 ---
 

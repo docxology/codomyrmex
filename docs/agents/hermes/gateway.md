@@ -10,42 +10,46 @@ The Hermes gateway (`hermes gateway run`) is a unified daemon that routes messag
 
 ### Startup Sequence
 
-```text
-hermes gateway run
-  │
-  ├── 1. Resolve HERMES_HOME (config.py:37)
-  ├── 2. Load .env (python-dotenv)
-  ├── 3. Parse config.yaml
-  ├── 4. Check gateway.pid for existing instance
-  ├── 5. Write own PID to gateway.pid
-  ├── 6. Initialize platform adapters
-  │     ├── Telegram (if TELEGRAM_BOT_TOKEN set)
-  │     ├── WhatsApp (if WHATSAPP_ENABLED=true)
-  │     ├── Discord (if DISCORD_TOKEN set)
-  │     └── Slack (if SLACK_BOT_TOKEN set)
-  ├── 7. Start cron ticker (60s interval)
-  ├── 8. Build channel directory
-  └── 9. Enter main event loop
+```mermaid
+flowchart TD
+    Start([hermes gateway run]) --> Step1[1. Resolve HERMES_HOME config.py:37]
+    Step1 --> Step2[2. Load .env python-dotenv]
+    Step2 --> Step3[3. Parse config.yaml]
+    Step3 --> Step4{4. Check gateway.pid}
+    Step4 -->|PID missing or stale| Step5[5. Write own PID to gateway.pid]
+    Step5 --> Step6[6. Initialize platform adapters]
+    
+    Step6 --> P1[Telegram]
+    Step6 --> P2[WhatsApp]
+    Step6 --> P3[Discord]
+    Step6 --> P4[Slack]
+    
+    P1 --> Step7
+    P2 --> Step7
+    P3 --> Step7
+    P4 --> Step7
+    
+    Step7[7. Start cron ticker 60s interval] --> Step8[8. Build channel directory]
+    Step8 --> End([9. Enter main event loop])
 ```
 
 ### Message Flow
 
-```text
-User Message (Telegram/WhatsApp/etc.)
-  │
-  ├── Platform Adapter receives message
-  │   └── telegram.py / whatsapp.py / discord.py
-  │
-  ├── GatewayRunner routes to session
-  │   └── session.py: lookup by platform + user_id
-  │
-  ├── AIAgent processes message
-  │   ├── prompt_builder.py: assembly system prompt
-  │   ├── LLM inference via OpenRouter
-  │   ├── Tool execution (if tool_calls returned)
-  │   └── context_compressor.py (if context too long)
-  │
-  └── Response sent back via platform adapter
+```mermaid
+flowchart TD
+    User([User Message]) --> Adapter[Platform Adapter<br/>telegram.py / discord.py]
+    Adapter --> Router[GatewayRunner routing<br/>session.py: lookup by platform + user_id]
+    Router --> Agent[AIAgent Processes Message]
+    
+    subgraph Agent Processing
+        direction TB
+        PBuild[prompt_builder.py: assembly system prompt] --> Inference[LLM inference via OpenRouter]
+        Inference --> Tools[Tool execution if tool_calls returned]
+        Tools --> Compress[context_compressor.py if context too long]
+    end
+    
+    Agent --> AgentProcessing
+    AgentProcessing --> Response([Response sent back via platform adapter])
 ```
 
 ## Gateway Commands

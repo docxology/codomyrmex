@@ -6,6 +6,16 @@
 ![Codomyrmex Hermes Integration Overview](./assets/codomyrmex_hermes_hero.png)
 _(Screenshot: Terminal view of the Hermes Gateway successfully routing a multi-turn session with MCP tool execution.)_
 
+```mermaid
+graph TD
+    User([End User]) <--> |Telegram/CLI| Gateway[Multi-Platform Gateway]
+    Gateway <--> |Unified Router| HermesCore[Hermes Core Binary / Ollama]
+    Agent[Other Swarm Agents] <--> |MCP Tools| CodomyrmexBridge[Codomyrmex MCP Bridge]
+    CodomyrmexBridge <--> |Controls & Reads| HermesCore
+    HermesCore -.-> |Session Sync| LocalVault[(Obsidian Vault)]
+    HermesCore <--> |State| SQLite[(SQLite state.db)]
+```
+
 The baseline [Hermes Agent](https://github.com/NousResearch/hermes-agent) provides an incredible foundation for autonomous skill creation and dialectic user modeling. However, deploying Hermes in a production-ready, multi-layered agentic swarm requires deep systemic integrations.
 
 The **Codomyrmex repository** wraps the core Hermes binaries (`hermes` CLI and `ollama` fallbacks) into a highly resilient, stateful, and provider-agnostic bridge. This document serves as a comprehensive deep-dive into the **bidirectional interfaces** between Codomyrmex and Hermes, detailing exactly how the repo augments baseline agent functionality.
@@ -18,6 +28,25 @@ At the core of the bridge is the `HermesClient`, which dynamically wraps the und
 
 ![Dual Backend Execution Engine](./assets/dual_backend_flow.png)
 _(Screenshot: Codomyrmex falling back from remote OpenRouter endpoints to a localized Ollama payload seamlessly.)_
+
+```mermaid
+sequenceDiagram
+    participant App as Codomyrmex HermesClient
+    participant Router as ProviderRouter
+    participant Remote as OpenRouter(API)
+    participant Local as Ollama(Local)
+    
+    App->>Router: Execute Prompt
+    Router->>Remote: Attempt Network Call
+    alt Remote Fails or Timeout
+        Remote-->>Router: Error (e.g. 502)
+        Router->>Local: Fallback to Local Model
+        Local-->>Router: Token Stream
+    else Remote Succeeds
+        Remote-->>Router: Token Stream
+    end
+    Router-->>App: Sub-100ms Async Iterator Yields
+```
 
 ### Dual-Backend Augmentations
 
@@ -55,7 +84,22 @@ Codomyrmex binds Hermes into the broader swarm ecosystem by exposing **20 native
 ![MCP Tools Inspector](./assets/mcp_tools_inspector.png)
 _(Screenshot: `hermes_create_task` and `hermes_chat_session` tools registered in the MCP Inspector.)_
 
-### Select Interfaces:
+```mermaid
+graph LR
+    SwarmProxy[Jules / Claude] --> |Action Request| MCP[Codomyrmex MCP Server]
+    
+    subgraph Codomyrmex Tools
+        MCP --> Tools(hermes_update_task_status)
+        MCP --> Chat(hermes_chat_session)
+        MCP --> Search(hermes_session_search)
+        MCP --> Status(hermes_provider_status)
+    end
+    
+    Tools -.-> |Update Metadata| DB[(state.db)]
+    Chat --> |Direct Exec| HermesCli[Hermes Executable]
+```
+
+### Select Interfaces
 
 - `hermes_chat_session`: Sends multi-turn prompts logically without breaking context threads.
 - `hermes_status` / `hermes_provider_status`: Verifies binary health and backend fallbacks dynamically.
@@ -90,6 +134,18 @@ The `GatewayRunner` daemon is what truly bridges Hermes to the outside world, pi
 ![Multi Platform Gateway Console](./assets/gateway_multibot_console.png)
 _(Screenshot: Gateway daemon multiplexing a single Hermes AI across Telegram and Discord simultaneously.)_
 
+```mermaid
+graph TD
+    TG([Telegram]) --> |Webhook/Poll| Auth[Gateway Tool Sandbox]
+    Discord([Discord]) --> |WebSocket| Auth
+    Web([Web UI]) --> |REST| Auth
+    
+    Auth --> |Identity Handoff| ID[Identity Resolver mapping to usr_UUID]
+    
+    ID --> |Execute via CLI| Exec[Gateway Runner]
+    Exec --> CLI[Hermes Client]
+```
+
 ### Multimodal Augmentations
 
 - **Global Identity Handoff**: `IdentityResolver` securely maps disparate platform connection IDs to a unified global `usr_UUID`, ensuring memory carries over regardless of which device the user texts from.
@@ -106,7 +162,7 @@ _(Screenshot: Gateway daemon multiplexing a single Hermes AI across Telegram and
 
 To support varied messenger platform payloads natively, Codomyrmex bridges media interpretation pipelines directly into the Hermes prompt builder.
 
-### Key Augmentations:
+### Key Augmentations
 
 - **Voice/Audio Transcoding**: Incoming `.ogg`/`.wav` voice notes are shunted to local Whisper (STT) models to extract highly accurate transcripts prior to LLM routing.
 - **VLM Image Descriptions**: Image payloads trigger local `llama3.2-vision` interactions, injecting rich visual alt-text into the user's textual prompt context automatically.
