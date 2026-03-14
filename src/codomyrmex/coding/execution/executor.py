@@ -212,6 +212,7 @@ def execute_code(
     # Memory pre-check
     try:
         from codomyrmex.agents.hermes.monitoring import _get_system_metrics
+
         metrics = _get_system_metrics()
         if metrics.get("ram_usage_percent", 0) > 95.0:
             return {
@@ -234,8 +235,6 @@ def execute_code(
             "status": "setup_error",
             "error_message": "Docker is required but not available or not running",
         }
-
-
 
     # Prepare files for execution
     temp_dir = None

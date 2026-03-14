@@ -660,23 +660,27 @@ class HermesClient(CLIAgentBase):
                         error_trace = response.error or response.metadata.get(
                             "stderr", "Unknown error"
                         )
-                        
+
                         # 1.5.13 Dependency Healing Interception
                         import re
-                        missing_pkg_match = re.search(r"(?:ModuleNotFoundError|ImportError): No module named '([^']+)'", error_trace)
+
+                        missing_pkg_match = re.search(
+                            r"(?:ModuleNotFoundError|ImportError): No module named '([^']+)'",
+                            error_trace,
+                        )
                         if missing_pkg_match:
                             missing_pkg = missing_pkg_match.group(1)
                             self.logger.warning(
                                 f"Detected missing dependency '{missing_pkg}'. Initiating autonomous healing."
                             )
                             heal_result = self._heal_environment(missing_pkg)
-                            
+
                             attempts = session.metadata.get("heal_attempts", 0) + 1
                             session.metadata["heal_attempts"] = attempts
                             successes = session.metadata.get("heal_success_rate", 0)
                             if heal_result["success"]:
                                 session.metadata["heal_success_rate"] = successes + 1
-                                
+
                             error_trace += f"\n\n[SYSTEM AUTO-HEAL]: Attempted to install missing package '{missing_pkg}'. Result: {heal_result['output']}"
 
                         self.logger.warning(
@@ -777,7 +781,7 @@ class HermesClient(CLIAgentBase):
         try:
             # We enforce a strict mapping to hyphenated strings just in case
             safe_pkg = package_name.replace("_", "-").split(".")[0]
-            
+
             # Subprocess to uv add the package into the current active environment/workspace
             result = subprocess.run(
                 ["uv", "add", safe_pkg],
@@ -786,17 +790,85 @@ class HermesClient(CLIAgentBase):
                 timeout=30,
                 # cwd self.working_dir or root
             )
-            
+
             if result.returncode == 0:
                 self.logger.info(f"Successfully auto-healed dependency: {safe_pkg}")
-                return {"success": True, "output": f"Successfully installed {safe_pkg} via uv add."}
-            else:
-                self.logger.error(f"Auto-heal failed for {safe_pkg}: {result.stderr}")
-                return {"success": False, "output": f"Failed to install {safe_pkg}. Stderr: {result.stderr}"}
-                
+                return {
+                    "success": True,
+                    "output": f"Successfully installed {safe_pkg} via uv add.",
+                }
+            self.logger.error(f"Auto-heal failed for {safe_pkg}: {result.stderr}")
+            return {
+                "success": False,
+                "output": f"Failed to install {safe_pkg}. Stderr: {result.stderr}",
+            }
+
         except Exception as e:
             self.logger.error(f"Auto-heal exception for {package_name}: {e}")
-            return {"success": False, "output": f"Exception during uv add: {str(e)}"}
+            return {"success": False, "output": f"Exception during uv add: {e!s}"}
+
+    def _run_coverage_loop(
+        self, target_path: str, max_turns: int = 5
+    ) -> dict[str, Any]:
+        """Autonomous testing loop (Red/Green/Refactor).
+
+        Repeatedly executes pytest against the target_path. If failures occur,
+        forwards the stack traces to a nested Hermes session for automated repair
+        until the tests pass or max_turns is exhausted.
+        """
+        import subprocess
+
+        turn = 0
+        while turn < max_turns:
+            run = subprocess.run(
+                ["uv", "run", "pytest", target_path, "-v", "--tb=short"],
+                capture_output=True,
+                text=True,
+                timeout=120,
+            )
+
+            if run.returncode == 0:
+                self.logger.info(
+                    f"Coverage loop complete: {target_path} is fully green."
+                )
+                return {"status": "success", "turns": turn, "output": run.stdout}
+
+            turn += 1
+            self.logger.warning(
+                f"Coverage loop test failure ({turn}/{max_turns}). Initiating heal."
+            )
+
+            # Extract relevant traceback lines to fit within reasonable context lengths
+            trace = (run.stdout + "\n" + run.stderr).strip()
+            # Feed it right back into a nested chat_session to fix the code
+            repair_prompt = (
+                f"You are the autonomous Coverage Loop agent.\n"
+                f"I just ran pytest on {target_path} and it failed with the following traceback:\n\n"
+                f"```text\n{trace}\n```\n\n"
+                f"Please analyze the failure, utilize any file-editing MCP tools you have to fix "
+                f"EITHER the test file OR the source file to resolve this failure correctly. "
+                f"Do not use mock objects; ensure the code functionally passes."
+            )
+
+            # Spawn a distinct auto-session to resolve it
+            session_id = f"coverage_loop_{Path(target_path).stem}_{turn}"
+            response = self.chat_session(prompt=repair_prompt, session_name=session_id)
+
+            if not response.is_success():
+                self.logger.error(
+                    "Coverage loop repair agent failed to respond cleanly."
+                )
+                return {
+                    "status": "error",
+                    "message": "Repair agent failed.",
+                    "trace": trace,
+                }
+
+        return {
+            "status": "failed",
+            "message": f"Did not achieve green tests after {max_turns} turns.",
+            "trace": trace,
+        }
 
     # ------------------------------------------------------------------
     # Version & Diagnostics (v0.2.0+)

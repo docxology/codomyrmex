@@ -3,7 +3,6 @@
 **Target Audience**: The Hermes Open Source Community
 **Status**: Active | **Version**: v2.1.0
 
-
 ```mermaid
 graph TD
     User([End User]) <--> |Telegram/CLI| Gateway[Multi-Platform Gateway]
@@ -23,7 +22,6 @@ The **Codomyrmex repository** wraps the core Hermes binaries (`hermes` CLI and `
 ## 🏗️ 1. The Dual-Backend Execution Engine
 
 At the core of the bridge is the `HermesClient`, which dynamically wraps the underlying CLI subprocesses to provide a unified programmatic interface while preserving local execution benefits.
-
 
 ```mermaid
 sequenceDiagram
@@ -77,7 +75,6 @@ Hermes natively supports sessions, but Codomyrmex elevates this into a globally 
 
 Codomyrmex binds Hermes into the broader swarm ecosystem by exposing **20 native MCP tools**. This allows other agents (like Claude or Jules) to spin up Hermes instances, query its status, and read its memory transparently.
 
-
 ```mermaid
 graph LR
     SwarmProxy[Jules / Claude] --> |Action Request| MCP[Codomyrmex MCP Server]
@@ -124,7 +121,6 @@ A major interface addition is the native ability for Hermes to act autonomously 
 ## 🌐 5. The Multi-Platform Gateway & Security
 
 The `GatewayRunner` daemon is what truly bridges Hermes to the outside world, piping in messages from Telegram, Discord, Slack, and WhatsApp concurrently.
-
 
 ```mermaid
 graph TD

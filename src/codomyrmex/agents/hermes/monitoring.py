@@ -9,6 +9,7 @@ from typing import Any
 
 import psutil
 
+
 def _get_system_metrics() -> dict[str, float]:
     """Gather live hardware usage metrics.
 
@@ -17,7 +18,7 @@ def _get_system_metrics() -> dict[str, float]:
     """
     memory = psutil.virtual_memory()
     swap = psutil.swap_memory()
-    
+
     return {
         "cpu_percent": psutil.cpu_percent(interval=0.1),
         "ram_usage_percent": memory.percent,

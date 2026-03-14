@@ -47,6 +47,7 @@ class AgentRequest:
     def __post_init__(self) -> None:
         """Set default optional fields to empty collections."""
         import uuid
+
         if self.context is None:
             self.context = {}
         if self.capabilities is None:

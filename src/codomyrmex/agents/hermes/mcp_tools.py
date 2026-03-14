@@ -98,13 +98,14 @@ def hermes_check_dependencies(package_name: str) -> dict[str, Any]:
     """
     try:
         from codomyrmex.environment_setup.lockfile import LockfileParser
+
         parser = LockfileParser()
         exists = parser.check_dependency(package_name)
         return {
             "status": "success",
             "package": package_name,
             "exists": exists,
-            "message": f"Package '{package_name}' is {'present' if exists else 'missing'} in the uv.lock"
+            "message": f"Package '{package_name}' is {'present' if exists else 'missing'} in the uv.lock",
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
@@ -229,6 +230,31 @@ def hermes_template_render(
         }
     except KeyError as exc:
         return {"status": "error", "message": str(exc)}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Initiate an autonomous red/green/refactor coverage loop on a target filepath. "
+        "The system will repeatedly run pytest and repair the codebase until the tests pass."
+    ),
+)
+def hermes_run_coverage_loop(target_filepath: str) -> dict[str, Any]:
+    """Autonomous pytest healing loop.
+
+    Args:
+        target_filepath: The path to the test file or directory to verify.
+
+    Returns:
+        dict containing status, number of turns taken, and output trace.
+    """
+    try:
+        # Load the client explicitly configured for the current repository
+        client = _get_client()
+        result = client._run_coverage_loop(target_filepath)
+        return result
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -891,7 +917,9 @@ def hermes_create_task(
             if name in tasks:
                 return {"status": "error", "message": f"Task '{name}' already exists."}
 
-            from codomyrmex.logging_monitoring.core.correlation import get_correlation_id
+            from codomyrmex.logging_monitoring.core.correlation import (
+                get_correlation_id,
+            )
 
             new_task = {
                 "name": name,
@@ -1036,6 +1064,7 @@ def hermes_delegate_task(
 
         request = AgentRequest(prompt=full_prompt)
         from codomyrmex.logging_monitoring.core.correlation import get_correlation_id
+
         parent_cid = get_correlation_id()
         if parent_cid:
             request.metadata["parent_trace_id"] = parent_cid
