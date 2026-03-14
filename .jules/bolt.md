@@ -1,0 +1,3 @@
+## 2026-03-XX - O(N^2) Bottleneck in Scale-Free Graph Generation
+**Learning:** The naive implementation of Barabási–Albert preferential attachment by calculating degrees and sorting all candidate nodes on every step leads to an O(N^2) complexity, severely bottling large network generation (e.g., in `codomyrmex/meme/rhizome/network.py`).
+**Action:** Replaced the sorting approach with the "roulette wheel" (node repetition array) method. Maintaining a flat list of node IDs repeated proportional to their degree allows O(m) weighted random choice per node, drastically reducing generation time for large N. Also discovered that care must be taken to safely handle edge cases like N < 5 or drawing more nodes than exist in the network.
