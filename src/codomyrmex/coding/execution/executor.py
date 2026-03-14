@@ -209,6 +209,22 @@ def execute_code(
     timeout = validate_timeout(timeout)
     session_id = validate_session_id(session_id)
 
+    # Memory pre-check
+    try:
+        from codomyrmex.agents.hermes.monitoring import _get_system_metrics
+        metrics = _get_system_metrics()
+        if metrics.get("ram_usage_percent", 0) > 95.0:
+            return {
+                "stdout": "",
+                "stderr": "Operation aborted. System memory is at critical capacity (>95%). Repeating this action may crash the environment. Please clear memory or restart processes before proceeding.",
+                "exit_code": -1,
+                "execution_time": 0,
+                "status": "setup_error",
+                "error_message": "System memory constraint exceeded",
+            }
+    except ImportError:
+        pass
+
     if not check_docker_available():
         return {
             "stdout": "",
@@ -218,6 +234,8 @@ def execute_code(
             "status": "setup_error",
             "error_message": "Docker is required but not available or not running",
         }
+
+
 
     # Prepare files for execution
     temp_dir = None

@@ -58,6 +58,31 @@ def hermes_status() -> dict[str, Any]:
 @mcp_tool(
     category="hermes",
     description=(
+        "Check live system resource metrics (RAM, CPU, Swap). "
+        "Use this proactively to check if the host has enough memory before dispatching heavy tasks."
+    ),
+)
+def hermes_system_health() -> dict[str, Any]:
+    """Retrieve realtime hardware usage metrics.
+
+    Returns:
+        dict with keys: status, metrics (cpu_percent, ram_usage_percent, swap_usage_percent)
+    """
+    try:
+        from codomyrmex.agents.hermes.monitoring import _get_system_metrics
+
+        metrics = _get_system_metrics()
+        return {
+            "status": "success",
+            "metrics": metrics,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
         "Execute a single-turn chat with the Hermes agent. "
         "Uses the Hermes CLI if available, otherwise Ollama hermes3."
     ),

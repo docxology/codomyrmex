@@ -9,17 +9,6 @@ Authoritative project backlog. Upcoming work only; completed items removed.
 
 ---
 
-## 🚀 v1.5.10 — Semantic Deduplication
-
-> **Theme**: Optimizing repetitive text streams.
-
-| # | Deliverable | Module | Concrete Scope |
-| :--- | :--- | :--- | :--- |
-| D1 | **Trace Compression Tool** | `agents/hermes/` | Implement `_compress_trace` pre-processor in `coding/execution/` or Hermes' tool handler that scans large incoming stack trace objects and uses string-distance grouping to strip repetitive loop errors (e.g., shrinking 500 identical warning lines to `[Warning repeated 500 times]`). |
-| D2 | **Log Pagination Tool** | `agents/hermes/` | Enhance the file reading MCP tools (`read_file`, `grep_search`) to automatically redirect 10,000+ line read attempts into an ephemeral tmp file and expose a `read_log_chunk` interface forcing Hermes to explicitly paginate the text payload dynamically instead of blowing out the context window. |
-
----
-
 ## 🚀 v1.5.11 — Resource Monitoring Integration
 
 > **Theme**: Hardware-aware local scaling.
@@ -50,6 +39,17 @@ Authoritative project backlog. Upcoming work only; completed items removed.
 | :--- | :--- | :--- | :--- |
 | D1 | **Lockfile Parser** | `environment_setup/` | Implement an MCP tool capable of reading and interpreting `uv.lock` output to safely determine if package collisions are blocking task executions. |
 | D2 | **Resolution Agent** | `agents/hermes/` | When an `ImportError` or `ModuleNotFoundError` is caught during code execution, trigger an automated secondary loop (`_heal_environment`) attempting to map the missing local package to `pyproject.toml` and injecting it automatically via `uv add`. |
+
+---
+
+## 🚀 v1.5.14 — Interactive Test Discovery
+
+> **Theme**: Agent-Initiated Test Creation.
+
+| # | Deliverable | Module | Concrete Scope |
+| :--- | :--- | :--- | :--- |
+| D1 | **Missing Test Detection** | `agents/hermes/` | Integrate with `pytest --collect-only` or coverage readouts to actively scan a targeted directory and surface undocumented/untested functions immediately to the agent session as a structured JSON object. |
+| D2 | **Zero-Mock Test Scaffolding Tool** | `agents/hermes/` | Add an MCP tool `hermes_scaffold_test` that generates the boilerplate pytest framework strictly mapping real execution dependencies so Hermes can seamlessly populate test coverage. |
 
 ---
 
