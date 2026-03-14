@@ -36,6 +36,78 @@ MAX_TIMEOUT = 300
 MIN_TIMEOUT = 1
 
 
+def _compress_trace(text: str) -> str:
+    """Compress repetitive stack trace blocks to prevent token limit blowouts."""
+    if not text:
+        return text
+    lines = text.splitlines()
+    if len(lines) < 10:
+        return text
+
+    compressed = []
+    i = 0
+    limit = len(lines)
+    while i < limit:
+        # Check single line repeats
+        repeats = 1
+        while i + repeats < limit and lines[i] == lines[i + repeats]:
+            repeats += 1
+
+        if repeats > 5:
+            compressed.append(lines[i])
+            compressed.append(f"... [Line repeated {repeats - 1} more times] ...")
+            i += repeats
+            continue
+
+        # Check block repeats (sizes 2 to 20)
+        found_block = False
+        for b in range(2, 21):
+            if i + b * 2 <= limit:
+                block = lines[i : i + b]
+                if lines[i + b : i + b * 2] == block:
+                    b_repeats = 1
+                    while (
+                        i + (b_repeats + 1) * b <= limit
+                        and lines[i + b_repeats * b : i + (b_repeats + 1) * b] == block
+                    ):
+                        b_repeats += 1
+                    if b_repeats > 2:
+                        compressed.extend(block)
+                        compressed.append(
+                            f"... [Above block of {b} lines repeated {b_repeats - 1} more times] ..."
+                        )
+                        i += b_repeats * b
+                        found_block = True
+                        break
+
+        if found_block:
+            continue
+
+        compressed.append(lines[i])
+        i += 1
+
+    return "\n".join(compressed)
+
+
+def _paginate_output(text: str) -> str:
+    """Truncate outputs exceeding 5000 lines and cache them for pagination."""
+    if not text:
+        return text
+
+    lines = text.splitlines()
+    if len(lines) <= 5000:
+        return text
+
+    import tempfile
+
+    fd, path = tempfile.mkstemp(prefix="hermes_trace_", suffix=".log", text=True)
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        f.write(text)
+
+    preview = "\n".join(lines[:500])
+    return f"{preview}\n\n[Output truncated {len(lines)} lines total. File cached at {path}. Use hermes_read_log_chunk(file_path='{path}', offset=500, length=500) to paginate further.]"
+
+
 def validate_timeout(timeout: int | None) -> int:
     """Validate and normalize a timeout value to be within allowed bounds.
 
@@ -165,6 +237,11 @@ def execute_code(
             timeout=timeout,
             session_id=session_id,
         )
+
+        if result.get("stdout"):
+            result["stdout"] = _paginate_output(_compress_trace(result["stdout"]))
+        if result.get("stderr"):
+            result["stderr"] = _paginate_output(_compress_trace(result["stderr"]))
 
         return result
 

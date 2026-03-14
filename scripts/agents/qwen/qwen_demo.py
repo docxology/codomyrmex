@@ -75,7 +75,13 @@ def demo_mcp_tools_offline() -> None:
         qwen_create_agent,
     )
 
-    for tool in [qwen_chat, qwen_chat_with_tools, qwen_list_models, qwen_create_agent, qwen_code_review]:
+    for tool in [
+        qwen_chat,
+        qwen_chat_with_tools,
+        qwen_list_models,
+        qwen_create_agent,
+        qwen_code_review,
+    ]:
         name = getattr(tool, "_mcp_tool_name", "unknown")
         print_success(f"  @mcp_tool: {name}")
 
@@ -198,7 +204,9 @@ def demo_tool_calling(model: str) -> None:
         role = msg.get("role", "?")
         content = msg.get("content", "")[:100]
         if msg.get("tool_calls"):
-            print_info(f"  [{role}] → tool_calls: {[tc['function']['name'] for tc in msg['tool_calls']]}")
+            print_info(
+                f"  [{role}] → tool_calls: {[tc['function']['name'] for tc in msg['tool_calls']]}"
+            )
         elif role == "tool":
             print_info(f"  [{role}] {content}")
         else:
@@ -217,7 +225,9 @@ def demo_code_review(model: str) -> None:
                 lst[i], lst[j] = lst[j], lst[i]
     return lst"""
 
-    result = qwen_code_review(code=code, language="python", focus="performance", model=model)
+    result = qwen_code_review(
+        code=code, language="python", focus="performance", model=model
+    )
     if result["status"] == "success":
         print_success(f"Review ({result['model']}, focus={result['focus']}):")
         print(result["review"][:400])
@@ -228,7 +238,9 @@ def demo_code_review(model: str) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Qwen Agent Comprehensive Demo")
     parser.add_argument("--model", default="qwen-coder-turbo", help="Model to use")
-    parser.add_argument("--offline", action="store_true", help="Offline mode (no API calls)")
+    parser.add_argument(
+        "--offline", action="store_true", help="Offline mode (no API calls)"
+    )
     args = parser.parse_args()
 
     setup_logging()
@@ -250,7 +262,9 @@ def main() -> int:
     api_key = os.getenv("DASHSCOPE_API_KEY") or os.getenv("QWEN_API_KEY")
     if not api_key:
         print_warning("\nNo DASHSCOPE_API_KEY set — skipping API demos")
-        print_info("Set DASHSCOPE_API_KEY to run chat, streaming, tool calling, and code review demos")
+        print_info(
+            "Set DASHSCOPE_API_KEY to run chat, streaming, tool calling, and code review demos"
+        )
         return 0
 
     try:

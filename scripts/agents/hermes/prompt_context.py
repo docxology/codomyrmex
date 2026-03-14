@@ -45,7 +45,9 @@ def load_agents_md(directory: Path) -> str:
     return ""
 
 
-def load_exemplary_scripts(paths: list[Path], max_chars: int = _MAX_EXEMPLAR_CHARS) -> str:
+def load_exemplary_scripts(
+    paths: list[Path], max_chars: int = _MAX_EXEMPLAR_CHARS
+) -> str:
     """Load one or more exemplary (COMPLIANT) scripts as positive examples.
 
     Content is concatenated and truncated to *max_chars* total.
@@ -110,7 +112,9 @@ def build_project_context(
         exemplar_content = load_exemplary_scripts(exemplar_paths)
         if exemplar_content:
             sections.append("")
-            sections.append("## EXEMPLARY SCRIPTS (these are COMPLIANT — model your output on these)")
+            sections.append(
+                "## EXEMPLARY SCRIPTS (these are COMPLIANT — model your output on these)"
+            )
             sections.append("=" * 60)
             sections.append(exemplar_content)
 

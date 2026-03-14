@@ -17,7 +17,7 @@ except ImportError:
 
 import argparse
 import shutil
-from typing import List, Tuple, Union
+from typing import Union
 
 try:
     from typing import Literal
@@ -33,7 +33,9 @@ try:
         setup_logging,
     )
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
     from codomyrmex.utils.cli_helpers import (
         print_error,
         print_info,
@@ -52,7 +54,9 @@ def get_terminal_size() -> tuple[int, int]:
 
 
 def print_table(
-    headers: list[str | int | float], rows: list[list[str | int | float]], widths: None | list[int] = None
+    headers: list[str | int | float],
+    rows: list[list[str | int | float]],
+    widths: None | list[int] = None,
 ) -> None:
     """Print formatted table."""
     if not widths:

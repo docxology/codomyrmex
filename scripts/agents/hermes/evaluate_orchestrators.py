@@ -22,6 +22,7 @@ from pathlib import Path
 
 try:
     import yaml as _yaml
+
     _YAML_AVAILABLE = True
 except ImportError:
     _YAML_AVAILABLE = False
@@ -29,24 +30,29 @@ except ImportError:
 try:
     from codomyrmex.agents.core.config import get_config
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
     from codomyrmex.agents.core.config import get_config
+from codomyrmex.agents.hermes.prompts import build_assessment_prompt
+from codomyrmex.utils.json_helpers import extract_json_from_response
+
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
     print_success,
     setup_logging,
 )
-from codomyrmex.utils.json_helpers import extract_json_from_response
-from codomyrmex.agents.hermes.prompts import build_assessment_prompt
 
 try:
     from prompt_context import build_project_context
 except ImportError:
     # Fallback if running from outside scripts/agents/hermes/
     import sys as _sys
+
     _sys.path.insert(0, str(Path(__file__).resolve().parent))
     from prompt_context import build_project_context
+
 
 # Find repository root by locating pyproject.toml
 def _find_repository_root() -> Path:
@@ -60,6 +66,7 @@ def _find_repository_root() -> Path:
         return current
     # Last resort: use parent.parent.parent.parent (original behavior)
     return current.parent.parent.parent.parent
+
 
 _REPO_ROOT: Path = _find_repository_root()
 # Scripts root — direct parent of all target directories
@@ -124,7 +131,9 @@ def _resolve_assessment_timeout(evaluator_cfg: dict) -> int:
     return int(hermes_cfg.get("timeout", 600))
 
 
-def run_script(script_path: Path, timeout: int = 30, extra_env: dict | None = None) -> dict:
+def run_script(
+    script_path: Path, timeout: int = 30, extra_env: dict | None = None
+) -> dict:
     """Run a script and return its return code, stdout, and stderr.
 
     Args:
@@ -164,7 +173,7 @@ def run_script(script_path: Path, timeout: int = 30, extra_env: dict | None = No
             "stderr": f"Execution timed out after {timeout} seconds.",
         }
     except Exception as e:
-         return {
+        return {
             "path": script_path,
             "returncode": -1,
             "stdout": "",
@@ -172,7 +181,9 @@ def run_script(script_path: Path, timeout: int = 30, extra_env: dict | None = No
         }
 
 
-def assess_script(client, script_info: dict, source_code: str, target_dir: Path | None = None) -> dict:
+def assess_script(
+    client, script_info: dict, source_code: str, target_dir: Path | None = None
+) -> dict:
     """Use Hermes to assess a script based on stdout, stderr, and source code.
 
     Args:
@@ -191,11 +202,16 @@ def assess_script(client, script_info: dict, source_code: str, target_dir: Path 
         exemplar_snippets = []
         for script in _EXEMPLAR_SCRIPTS[:2]:  # Limit to avoid token overflow
             try:
-                exemplar_snippets.append(f"# From {script.relative_to(_REPO_ROOT)}:\n{script.read_text()}")
+                exemplar_snippets.append(
+                    f"# From {script.relative_to(_REPO_ROOT)}:\n{script.read_text()}"
+                )
             except OSError:
                 pass
         if exemplar_snippets:
-            exemplar_context = "\n\n---\n\nEXEMPLARY SCRIPTS (REFERENCE):\n\n" + "\n\n---\n\n".join(exemplar_snippets)
+            exemplar_context = (
+                "\n\n---\n\nEXEMPLARY SCRIPTS (REFERENCE):\n\n"
+                + "\n\n---\n\n".join(exemplar_snippets)
+            )
 
     # Compose prompt for Hermes
     prompt = build_assessment_prompt(
@@ -209,7 +225,9 @@ def assess_script(client, script_info: dict, source_code: str, target_dir: Path 
     print_info(f"  Asking Hermes to assess {script_name}...")
     try:
         response = client.chat(prompt)
-        content = response.get("content", "") if isinstance(response, dict) else str(response)
+        content = (
+            response.get("content", "") if isinstance(response, dict) else str(response)
+        )
     except Exception as e:
         print_error(f"  Hermes assessment failed: {e}")
         return {
@@ -218,4 +236,4 @@ def assess_script(client, script_info: dict, source_code: str, target_dir: Path 
                 "reasoning": f"Hermes client error: {e}",
             },
             "technical_debt": ["Hermes client error"],
-
+        }

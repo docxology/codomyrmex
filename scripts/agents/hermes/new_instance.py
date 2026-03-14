@@ -25,7 +25,9 @@ try:
         setup_logging,
     )
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
     from codomyrmex.utils.cli_helpers import (
         print_error,
         print_info,
@@ -204,7 +206,11 @@ def create_instance(args: argparse.Namespace) -> int:
         Exit code (0 success, 1 failure).
     """
     name: str = args.name
-    base_dir = Path(args.base_dir).expanduser().resolve() if args.base_dir else Path.home() / f"hermes-{name}"
+    base_dir = (
+        Path(args.base_dir).expanduser().resolve()
+        if args.base_dir
+        else Path.home() / f"hermes-{name}"
+    )
     hermes_home = base_dir / ".hermes"
 
     print_info("═" * 60)
@@ -262,7 +268,9 @@ def create_instance(args: argparse.Namespace) -> int:
     if sys.platform == "darwin" and args.create_launchd:
         print_info("\n  Generating launchd plist...")
         plist_content = _generate_launchd_plist(name, hermes_home, hermes_bin)
-        plist_path = Path.home() / "Library/LaunchAgents" / f"ai.hermes.gateway.{name}.plist"
+        plist_path = (
+            Path.home() / "Library/LaunchAgents" / f"ai.hermes.gateway.{name}.plist"
+        )
         plist_path.write_text(plist_content)
         print_success(f"    ✓ {plist_path.name}")
         print_info(f"    Install: launchctl load {plist_path}")
@@ -301,20 +309,43 @@ Examples:
   %(prog)s --name researcher --personality "You are a research assistant." --model nousresearch/hermes-3-llama-3.1-405b-moe
         """,
     )
-    parser.add_argument("--name", required=True, help="Instance name (e.g., crescent-city)")
+    parser.add_argument(
+        "--name", required=True, help="Instance name (e.g., crescent-city)"
+    )
     parser.add_argument("--base-dir", help="Base directory (default: ~/hermes-<name>)")
     parser.add_argument("--openrouter-key", help="OpenRouter API key")
     parser.add_argument("--telegram-token", help="Telegram bot token from @BotFather")
-    parser.add_argument("--telegram-user", default="", help="Telegram username for access control")
-    parser.add_argument("--model", default=_DEFAULT_MODEL, help=f"LLM model (default: {_DEFAULT_MODEL})")
-    parser.add_argument("--summary-model", default=_DEFAULT_SUMMARY_MODEL, help="Model for compression")
-    parser.add_argument("--personality", default="You are a helpful, intelligent AI assistant.", help="Personality prompt")
-    parser.add_argument("--personality-name", default="helpful", help="Personality config key name")
+    parser.add_argument(
+        "--telegram-user", default="", help="Telegram username for access control"
+    )
+    parser.add_argument(
+        "--model", default=_DEFAULT_MODEL, help=f"LLM model (default: {_DEFAULT_MODEL})"
+    )
+    parser.add_argument(
+        "--summary-model", default=_DEFAULT_SUMMARY_MODEL, help="Model for compression"
+    )
+    parser.add_argument(
+        "--personality",
+        default="You are a helpful, intelligent AI assistant.",
+        help="Personality prompt",
+    )
+    parser.add_argument(
+        "--personality-name", default="helpful", help="Personality config key name"
+    )
     parser.add_argument("--soul", help="SOUL.md content (global persona)")
     parser.add_argument("--max-turns", type=int, default=150, help="Max agent turns")
-    parser.add_argument("--reasoning-effort", choices=["low", "medium", "high"], default="medium", help="Reasoning effort")
-    parser.add_argument("--create-launchd", action="store_true", help="Create macOS launchd plist")
-    parser.add_argument("--force", action="store_true", help="Overwrite existing instance")
+    parser.add_argument(
+        "--reasoning-effort",
+        choices=["low", "medium", "high"],
+        default="medium",
+        help="Reasoning effort",
+    )
+    parser.add_argument(
+        "--create-launchd", action="store_true", help="Create macOS launchd plist"
+    )
+    parser.add_argument(
+        "--force", action="store_true", help="Overwrite existing instance"
+    )
     args = parser.parse_args()
     return create_instance(args)
 

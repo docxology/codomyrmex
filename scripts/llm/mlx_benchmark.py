@@ -53,7 +53,9 @@ def run_benchmark(
             config.model = model
             config.max_tokens = max_tokens
         else:
-            config = MLXConfig(model=model, max_tokens=max_tokens, temperature=temperature)
+            config = MLXConfig(
+                model=model, max_tokens=max_tokens, temperature=temperature
+            )
     else:
         config = MLXConfig(model=model, max_tokens=max_tokens, temperature=temperature)
 
@@ -82,7 +84,7 @@ def run_benchmark(
 
         for i, prompt in enumerate(prompts):
             short_prompt = prompt[:50] + ("..." if len(prompt) > 50 else "")
-            print(f"  [{i+1}/{len(prompts)}] {short_prompt}")
+            print(f"  [{i + 1}/{len(prompts)}] {short_prompt}")
 
             result = runner.generate(prompt, config=config)
 
@@ -115,10 +117,7 @@ def run_benchmark(
         if r["success"] and r["tokens_per_second"]
     ]
     all_times = [
-        r["execution_time"]
-        for run in results["runs"]
-        for r in run
-        if r["success"]
+        r["execution_time"] for run in results["runs"] for r in run if r["success"]
     ]
 
     if all_tps:
@@ -160,7 +159,7 @@ def measure_latency(model: str, num_trials: int = 5) -> dict:
                 latencies.append(first_token_time)
                 break
 
-        print(f"  Trial {i+1}: {latencies[-1]*1000:.1f}ms")
+        print(f"  Trial {i + 1}: {latencies[-1] * 1000:.1f}ms")
 
     runner.unload_model()
 
@@ -168,15 +167,21 @@ def measure_latency(model: str, num_trials: int = 5) -> dict:
         "model": model,
         "trials": num_trials,
         "latencies_ms": [round(l * 1000, 1) for l in latencies],
-        "avg_latency_ms": round(sum(latencies) / len(latencies) * 1000, 1) if latencies else None,
+        "avg_latency_ms": round(sum(latencies) / len(latencies) * 1000, 1)
+        if latencies
+        else None,
         "min_latency_ms": round(min(latencies) * 1000, 1) if latencies else None,
         "max_latency_ms": round(max(latencies) * 1000, 1) if latencies else None,
-        "p50_latency_ms": round(sorted(latencies)[len(latencies) // 2] * 1000, 1) if latencies else None,
+        "p50_latency_ms": round(sorted(latencies)[len(latencies) // 2] * 1000, 1)
+        if latencies
+        else None,
     }
     return results
 
 
-def sweep_tokens(model: str, token_counts: list[int], prompt: str | None = None) -> dict:
+def sweep_tokens(
+    model: str, token_counts: list[int], prompt: str | None = None
+) -> dict:
     """Sweep max_tokens to find throughput at different generation lengths."""
     from codomyrmex.llm.mlx.config import MLXConfig
     from codomyrmex.llm.mlx.runner import MLXRunner
@@ -243,21 +248,15 @@ def main():
     parser.add_argument(
         "--prompt", default=None, help="Custom prompt (overrides defaults)"
     )
-    parser.add_argument(
-        "--runs", type=int, default=1, help="Number of benchmark runs"
-    )
-    parser.add_argument(
-        "--temperature", type=float, default=0.7, help="Temperature"
-    )
+    parser.add_argument("--runs", type=int, default=1, help="Number of benchmark runs")
+    parser.add_argument("--temperature", type=float, default=0.7, help="Temperature")
     parser.add_argument(
         "--preset",
         choices=["creative", "precise", "fast", "comprehensive", "coding"],
         default=None,
         help="Use a config preset",
     )
-    parser.add_argument(
-        "--output", default=None, help="Save results to JSON file"
-    )
+    parser.add_argument("--output", default=None, help="Save results to JSON file")
     parser.add_argument(
         "--latency", action="store_true", help="Measure first-token latency"
     )
@@ -311,8 +310,12 @@ def main():
         print()
 
         results = run_benchmark(
-            args.model, args.max_tokens, prompts, args.runs,
-            temperature=args.temperature, preset=args.preset,
+            args.model,
+            args.max_tokens,
+            prompts,
+            args.runs,
+            temperature=args.temperature,
+            preset=args.preset,
         )
         print_summary(results)
 

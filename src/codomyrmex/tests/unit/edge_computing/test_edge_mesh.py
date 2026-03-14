@@ -66,4 +66,4 @@ async def test_async_edge_orchestrator_bulk_gather():
     assert results[0] == 1  # 0 + 1 = 1
     assert results[1] == 2  # 1 * 2 = 2
     assert results[98] == 99  # 98 + 1 = 99
-    assert results[99] == 198 # 99 * 2 = 198
+    assert results[99] == 198  # 99 * 2 = 198

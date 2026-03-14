@@ -18,7 +18,9 @@ from pathlib import Path
 try:
     from codomyrmex.agents.core.config import get_config
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
     from codomyrmex.agents.core.config import get_config
 
 from codomyrmex.utils.cli_helpers import (
@@ -108,7 +110,9 @@ def _print_session(index: int, session: object) -> None:
 
     if session.message_count > 0:  # type: ignore[attr-defined]
         first_content: str = session.messages[0]["content"]  # type: ignore[attr-defined]
-        preview: str = first_content[:60] + "..." if len(first_content) > 60 else first_content
+        preview: str = (
+            first_content[:60] + "..." if len(first_content) > 60 else first_content
+        )
         print_info(f"    Initial Prompt: {preview}")
 
     print_info("")
@@ -159,7 +163,9 @@ def main() -> int:
 
     # Priority: --db-path CLI > hermes.yaml session_db > client default
     db_path: Path = _resolve_db_path(
-        args.db_path, config_db_path, hermes_client._session_db_path  # type: ignore[attr-defined]
+        args.db_path,
+        config_db_path,
+        hermes_client._session_db_path,  # type: ignore[attr-defined]
     )
 
     if not db_path.exists():
@@ -180,7 +186,7 @@ def main() -> int:
                 return 0
             print_success(f"Found {len(matches)} session(s) matching '{args.search}':")
             print_info("─" * 60)
-            for i, match in enumerate(matches[:args.limit], 1):
+            for i, match in enumerate(matches[: args.limit], 1):
                 sess = store.load(match["session_id"])  # type: ignore[attr-defined]
                 if sess:
                     _print_session(i, sess)
@@ -204,4 +210,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

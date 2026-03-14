@@ -13,7 +13,9 @@ from pathlib import Path
 try:
     import codomyrmex
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
 
 from codomyrmex.utils.cli_helpers import (
     print_error,
@@ -37,6 +39,7 @@ def main() -> int:
         return 1
 
     import shutil
+
     ec_bin = shutil.which("every-code") or shutil.which("everycode")
     if ec_bin:
         print_success(f"  every-code CLI found: {ec_bin}")
@@ -48,6 +51,7 @@ def main() -> int:
     print_info(f"  Adapter: {EveryCodeIntegrationAdapter.__name__}")
     print_success("Every Code probe complete.")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

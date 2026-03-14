@@ -92,7 +92,9 @@ def cmd_list(cache_dir: str | None) -> int:
         print(f"  📦 {m.repo_id}")
         print(f"     {size_gb:.2f} GB | {quant} | {model_type}")
         if m.vocab_size:
-            print(f"     vocab={m.vocab_size} hidden={m.hidden_size} layers={m.num_layers}")
+            print(
+                f"     vocab={m.vocab_size} hidden={m.hidden_size} layers={m.num_layers}"
+            )
         print()
 
     total_gb = total_size / (1024**3)
@@ -194,12 +196,12 @@ def cmd_recommend(ram_gb: int | None) -> int:
     print()
 
     for rec in recs:
-        est_ram = MLXModelManager.estimate_memory_gb(
-            rec.approx_size_gb * 2, bits=4
-        )
+        est_ram = MLXModelManager.estimate_memory_gb(rec.approx_size_gb * 2, bits=4)
         print(f"  🏷️  {rec.label}")
         print(f"     {rec.repo_id}")
-        print(f"     Download: ~{rec.approx_size_gb} GB | Runtime RAM: ~{est_ram:.1f} GB")
+        print(
+            f"     Download: ~{rec.approx_size_gb} GB | Runtime RAM: ~{est_ram:.1f} GB"
+        )
         print(f"     {rec.notes}")
         print()
 
@@ -219,8 +221,12 @@ def main():
     parser.add_argument("--list", action="store_true", help="List all cached models")
     parser.add_argument("--delete", metavar="MODEL", help="Delete a cached model")
     parser.add_argument("--info", metavar="MODEL", help="Show model details")
-    parser.add_argument("--recommend", action="store_true", help="Show model recommendations")
-    parser.add_argument("--ram", type=int, default=None, help="RAM in GB for recommendations")
+    parser.add_argument(
+        "--recommend", action="store_true", help="Show model recommendations"
+    )
+    parser.add_argument(
+        "--ram", type=int, default=None, help="RAM in GB for recommendations"
+    )
 
     args = parser.parse_args()
 

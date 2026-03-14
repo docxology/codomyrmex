@@ -42,7 +42,6 @@ class HermesError(AgentError):
 
 class AutoRetryException(Exception):
     """Exception raised internally to trigger the autonomous error-correction loop."""
-    pass
 
 
 class HermesClient(CLIAgentBase):
@@ -473,6 +472,69 @@ class HermesClient(CLIAgentBase):
     # Sessions (Multi-turn Chat)
     # ------------------------------------------------------------------
 
+    def _summarize_context(self, session: Any) -> None:
+        """Summarize and archive the oldest half of the session's messages."""
+        messages = session.messages
+        half = len(messages) // 2
+        if half < 2:
+            return
+
+        oldest = messages[:half]
+        latest = messages[half:]
+
+        hist_text = ""
+        for m in oldest:
+            hist_text += f"[{m['role'].upper()}]\n{m['content']}\n\n"
+
+        # 1. Pipeline Summary
+        summary_prompt = (
+            "Summarize the core facts, exact constraints, and key context from the following "
+            "conversation excerpt securely. Format your output strictly as a dense timeline or list.\n\n"
+            f"<EXCERPT>\n{hist_text}\n</EXCERPT>"
+        )
+
+        from codomyrmex.agents.core import AgentRequest
+
+        self.logger.info(
+            "Triggering context summarization for session %s (compressing %d messages)",
+            session.session_id,
+            len(oldest),
+        )
+        summary_resp = self.execute(AgentRequest(prompt=summary_prompt))
+        summary = (
+            summary_resp.content
+            if summary_resp.is_success()
+            else "(Summarization failed)"
+        )
+
+        # 2. Fact Extraction
+        fact_prompt = (
+            "Extract any permanent user preferences, structural facts, or environmental constraints "
+            "from this excerpt. Return ONLY a bulleted list of facts, nothing else. If none, return exactly 'NONE'.\n\n"
+            f"<EXCERPT>\n{hist_text}\n</EXCERPT>"
+        )
+        fact_resp = self.execute(AgentRequest(prompt=fact_prompt))
+        if fact_resp.is_success() and "NONE" not in fact_resp.content.strip().upper():
+            existing_facts = session.metadata.get("extracted_facts", "")
+            session.metadata["extracted_facts"] = (
+                existing_facts + "\n" + fact_resp.content.strip()
+            ).strip()
+
+        # Fold existing summary if present into the new one (if the first message is already a summary)
+        if (
+            oldest
+            and oldest[0].get("role") == "system"
+            and "<SESSION_SUMMARY>" in oldest[0].get("content", "")
+        ):
+            prior_summary = oldest[0]["content"]
+            summary = f"{prior_summary}\n\n[Continuance]:\n{summary}"
+
+        summary_msg = {
+            "role": "system",
+            "content": f"<SESSION_SUMMARY>\n{summary}\n</SESSION_SUMMARY>",
+        }
+        session.messages = [summary_msg, *latest]
+
     def chat_session(
         self,
         prompt: str,
@@ -523,6 +585,11 @@ class HermesClient(CLIAgentBase):
             while autonomous_turns < max_turns:
                 session.add_message(role, current_prompt)
 
+                max_session_msgs = self.config.get("max_session_messages", 20)
+                if len(session.messages) > max_session_msgs:
+                    self._summarize_context(session)
+                    store.save(session)
+
                 # Auto-compress history if it exceeds token limits
                 history_messages = session.messages[:-1]  # exclude the current prompt
                 if self._compressor.needs_compression(history_messages):
@@ -547,8 +614,13 @@ class HermesClient(CLIAgentBase):
                 )
 
                 if history_text:
+                    extra_facts = ""
+                    extracted_facts = session.metadata.get("extracted_facts", "")
+                    if extracted_facts:
+                        extra_facts = f"\n\nRetained Long-Term Facts / Preferences:\n{extracted_facts}\n"
+
                     full_prompt = (
-                        f"{system_directives}\n\n"
+                        f"{system_directives}{extra_facts}\n\n"
                         f"Previous Conversation:\n{history_text}"
                         f"[{session.messages[-1]['role'].upper()}]\n{current_prompt}\n\n"
                         f"Please respond."
@@ -585,26 +657,36 @@ class HermesClient(CLIAgentBase):
                     exit_code = response.metadata.get("exit_code", 0)
                     if exit_code != 0 and autonomous_turns < max_turns:
                         autonomous_turns += 1
-                        error_trace = response.error or response.metadata.get("stderr", "Unknown error")
-                        self.logger.warning("Subprocess execution failed (exit_code=%s). Initiating recovery loop via AutoRetryException logic.", exit_code)
-                        
-                        template_path = Path(__file__).parent / "templates" / "recovery_prompt.txt"
+                        error_trace = response.error or response.metadata.get(
+                            "stderr", "Unknown error"
+                        )
+                        self.logger.warning(
+                            "Subprocess execution failed (exit_code=%s). Initiating recovery loop via AutoRetryException logic.",
+                            exit_code,
+                        )
+
+                        template_path = (
+                            Path(__file__).parent / "templates" / "recovery_prompt.txt"
+                        )
                         if template_path.exists():
-                            recovery_text = template_path.read_text(encoding="utf-8").format(failed_trace=error_trace)
+                            recovery_text = template_path.read_text(
+                                encoding="utf-8"
+                            ).format(failed_trace=error_trace)
                         else:
                             recovery_text = f"System: Tool failed with trace:\n<FAILED_TRACE>\n{error_trace}\n</FAILED_TRACE>\nFix the error and proceed."
-                            
+
                         if response.content:
-                            session.add_message("assistant", f"{response.content}\n[Execution Interrupted]")
-                            
+                            session.add_message(
+                                "assistant",
+                                f"{response.content}\n[Execution Interrupted]",
+                            )
+
                         current_prompt = recovery_text
                         role = "system"
                         # Reload session to ensure we don't drop state
                         store.save(session)
                         continue
-                    else:
-                        break  # Error executing, and we are out of retry turns
-
+                    break  # Error executing, and we are out of retry turns
 
             # Sync securely to Obsidian Vault if configured (D1 implementation)
             if self._obsidian_vault and final_response and final_response.is_success():

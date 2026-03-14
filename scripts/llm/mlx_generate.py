@@ -34,7 +34,10 @@ def _build_config(args):
     if args.preset:
         preset_fn = getattr(MLXConfigPresets, args.preset, None)
         if preset_fn is None:
-            print(f"❌ Unknown preset '{args.preset}'. Valid: {', '.join(PRESET_NAMES)}", file=sys.stderr)
+            print(
+                f"❌ Unknown preset '{args.preset}'. Valid: {', '.join(PRESET_NAMES)}",
+                file=sys.stderr,
+            )
             sys.exit(1)
         config = preset_fn()
         # Override model/temperature/max-tokens if explicitly provided
@@ -63,6 +66,7 @@ def generate_once(config, prompt: str, stream: bool) -> int:
         print(end="", flush=True)
         total_tokens = 0
         import time
+
         t0 = time.perf_counter()
         for chunk in runner.stream_generate(prompt, config=config):
             if chunk.done:
@@ -103,7 +107,9 @@ def interactive_chat(config, system_prompt: str | None) -> int:
 
     print(f"💬 MLX Chat — {config.model}")
     if system_prompt:
-        print(f"📋 System: {system_prompt[:60]}{'...' if len(system_prompt) > 60 else ''}")
+        print(
+            f"📋 System: {system_prompt[:60]}{'...' if len(system_prompt) > 60 else ''}"
+        )
     print("Type 'quit' or Ctrl-C to exit.\n")
 
     messages: list[dict[str, str]] = []
@@ -163,7 +169,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=f"Available presets: {', '.join(PRESET_NAMES)}",
     )
-    parser.add_argument("prompt", nargs="?", default=None, help="Prompt to generate from")
+    parser.add_argument(
+        "prompt", nargs="?", default=None, help="Prompt to generate from"
+    )
     parser.add_argument(
         "--model",
         default="mlx-community/Llama-3.2-3B-Instruct-4bit",
@@ -171,14 +179,20 @@ def main():
     )
     parser.add_argument("--max-tokens", type=int, default=500, help="Max tokens")
     parser.add_argument("--temperature", type=float, default=0.7, help="Temperature")
-    parser.add_argument("--preset", choices=PRESET_NAMES, help="Use a named config preset")
-    parser.add_argument("--stream", action="store_true", help="Stream output token-by-token")
+    parser.add_argument(
+        "--preset", choices=PRESET_NAMES, help="Use a named config preset"
+    )
+    parser.add_argument(
+        "--stream", action="store_true", help="Stream output token-by-token"
+    )
     parser.add_argument("--chat", action="store_true", help="Interactive chat mode")
     parser.add_argument("--system", default=None, help="System prompt for chat mode")
     args = parser.parse_args()
 
     if not importlib.util.find_spec("mlx"):
-        print("❌ MLX is not installed. Install with: pip install mlx-lm", file=sys.stderr)
+        print(
+            "❌ MLX is not installed. Install with: pip install mlx-lm", file=sys.stderr
+        )
         return 1
 
     config = _build_config(args)

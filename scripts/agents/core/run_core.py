@@ -13,7 +13,9 @@ from pathlib import Path
 try:
     import codomyrmex
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
 
 from codomyrmex.utils.cli_helpers import (
     print_error,
@@ -61,6 +63,7 @@ def main() -> int:
 
     print_success("Core infrastructure probe complete.")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

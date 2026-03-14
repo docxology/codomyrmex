@@ -14,7 +14,10 @@ try:
     from codomyrmex.agents.core.config import get_config
 except ImportError:
     import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
     from codomyrmex.agents.core.config import get_config
 
 from codomyrmex.utils.cli_helpers import print_error, print_success
@@ -55,7 +58,9 @@ def create_checkpoint(target_dir: Path, output_dir: Path) -> Path | None:
     if not cp_config.get("enabled", True):
         return None
 
-    cp_dir = Path(cp_config.get("snapshot_dir", "~/.codomyrmex/checkpoints")).expanduser()
+    cp_dir = Path(
+        cp_config.get("snapshot_dir", "~/.codomyrmex/checkpoints")
+    ).expanduser()
     cp_dir.mkdir(parents=True, exist_ok=True)
 
     # Enforce max_snapshots limit

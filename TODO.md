@@ -9,48 +9,14 @@ Authoritative project backlog. Upcoming work only; completed items removed.
 
 ---
 
-## 🚀 v1.5.7 — Error-Correction Handoffs
-
-> **Theme**: Subprocess self-healing and proactive error containment.
-
-| # | Deliverable | Module | Concrete Scope |
-| :--- | :--- | :--- | :--- |
-| D1 | **Recursive Retry Loop** | `agents/hermes/` | Embed an `AutoRetryException` handler in `hermes_client.chat_session()`. If tool calls like `execute_code` fail, intercept the `stderr`, block the user notification, and autonomously prompt the LLM to fix the trace. |
-| D2 | **Recovery Prompt Templates** | `agents/hermes/` | Implement a distinct `templates/recovery_prompt.txt` that dynamically shifts the system role to 'Deep Debugger' when `<FAILED_TRACE>` boundaries are injected into the context window. |
-| D3 | **Zero-Mock Verification** | `tests/integration/` | Implement `test_gateway_error_recovery.py`. Simulate a failing `sys.exit(1)` script, assert the engine intercepts the trace, prompts the model for a fix, and successfully passes on the second loop. |
-
----
-
-## 🚀 v1.5.8 — Delegation Primitive
-
-> **Theme**: Multi-agent Swarm routing.
-
-| # | Deliverable | Module | Concrete Scope |
-| :--- | :--- | :--- | :--- |
-| D1 | **Sub-Agent Deferral** | `agents/hermes/` | Expose `delegate_task` MCP tool. Allows Hermes to spin up ephemeral `JulesClient` or `ClaudeClient` instances for isolated heavy reasoning (e.g. \"analyze this 500-line file while I wait\"). |
-| D2 | **Context Filtering** | `agents/hermes/` | Implement aggressive context pruning on the payload sent to the delegated agent, packaging only the explicit directive and single-file payload, shielding it from the parent's conversational state. |
-
----
-
-## 🚀 v1.5.9 — Context Summarization & Archival
-
-> **Theme**: Infinite-length sessions & Token Optimization.
-
-| # | Deliverable | Module | Concrete Scope |
-| :--- | :--- | :--- | :--- |
-| D1 | **Rolling Summary Pipeline** | `agents/hermes/` | As a session window nears 8k tokens, strip early conversational chat nodes and replace them with a background LLM-generated summary token. |
-| D2 | **Fact Extraction** | `agents/hermes/` | Inject specific user preferences learned during the trimmed conversation directly back into the system `UserModel` preference map instead of losing them in summary nodes. |
-
----
-
 ## 🚀 v1.5.10 — Semantic Deduplication
 
 > **Theme**: Optimizing repetitive text streams.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
-| D1 | **Trace Compression** | `agents/hermes/` | Scan large incoming stack trace objects and use AST or semantic grouping to strip repetitive loop errors, shrinking payload overhead to OpenRouter. |
-| D2 | **Log Referencing** | `agents/hermes/` | Redirect 10,000+ line logs into an ephemeral tmp file and prompt the agent to explicitly search the text payload dynamically, rather than dumping it natively. |
+| D1 | **Trace Compression Tool** | `agents/hermes/` | Implement `_compress_trace` pre-processor in `coding/execution/` or Hermes' tool handler that scans large incoming stack trace objects and uses string-distance grouping to strip repetitive loop errors (e.g., shrinking 500 identical warning lines to `[Warning repeated 500 times]`). |
+| D2 | **Log Pagination Tool** | `agents/hermes/` | Enhance the file reading MCP tools (`read_file`, `grep_search`) to automatically redirect 10,000+ line read attempts into an ephemeral tmp file and expose a `read_log_chunk` interface forcing Hermes to explicitly paginate the text payload dynamically instead of blowing out the context window. |
 
 ---
 
@@ -60,8 +26,30 @@ Authoritative project backlog. Upcoming work only; completed items removed.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
-| D1 | **HealthChecker Scaling** | `agents/hermes/` | Tie active session loads into `system_discovery.HealthChecker` dynamically surfacing VLM / Local STT RAM pressure. |
-| D2 | **Dynamic Fallbacks** | `agents/hermes/` | Auto-failback to lighter Ollama models (`qwen2.5:0.5b`) or upstream providers if the system is thrashing heavily on swap memory natively. |
+| D1 | **Health-Aware Execution** | `agents/hermes/` | Tie active session loads into `system_discovery.HealthChecker`. Dynamically surface RAM/VRAM pressure via native `psutil` integration or macOS APIs. |
+| D2 | **Dynamic Fallbacks** | `agents/hermes/` | Auto-failback to lighter Ollama models or reject heavy tasks with a clear out-of-memory warning if the system is thrashing heavily on swap memory natively. |
+
+---
+
+## 🚀 v1.5.12 — Unified Agent Traceability
+
+> **Theme**: Deep Observability for Multi-Agent Dispatch.
+
+| # | Deliverable | Module | Concrete Scope |
+| :--- | :--- | :--- | :--- |
+| D1 | **Trace IDs** | `telemetry/` | Append unique X-Trace-ID tags across the sub-agent boundary, tying `hermes_delegate_task` executions directly to parent events in the unified log structure. |
+| D2 | **Dispatch Metrics** | `dashboard/` | Expose active delegated tasks natively across the real-time websocket PAI dashboard to visualize swarm depth. |
+
+---
+
+## 🚀 v1.5.13 — Automated Dependency Healing
+
+> **Theme**: Self-Maintaining Workspaces.
+
+| # | Deliverable | Module | Concrete Scope |
+| :--- | :--- | :--- | :--- |
+| D1 | **Lockfile Parser** | `environment_setup/` | Implement an MCP tool capable of reading and interpreting `uv.lock` output to safely determine if package collisions are blocking task executions. |
+| D2 | **Resolution Agent** | `agents/hermes/` | When an `ImportError` or `ModuleNotFoundError` is caught during code execution, trigger an automated secondary loop (`_heal_environment`) attempting to map the missing local package to `pyproject.toml` and injecting it automatically via `uv add`. |
 
 ---
 

@@ -119,7 +119,9 @@ def get_module_info(mod_name):
                 ):
                     sub_doc = sub_tree.body[0].value.value.strip().split("\n")[0]
             except Exception as e:
-                logger.debug("Could not parse submodule __init__.py for %s: %s", child, e)
+                logger.debug(
+                    "Could not parse submodule __init__.py for %s: %s", child, e
+                )
             info["submodules"].append(
                 (child, sub_doc or child.replace("_", " ").title())
             )

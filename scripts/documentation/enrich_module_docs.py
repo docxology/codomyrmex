@@ -203,7 +203,9 @@ def extract_module_info(module_dir: Path) -> dict:
                     )
                     sub_doc = raw.strip().split("\n")[0]
             except (SyntaxError, Exception) as e:
-                logger.debug("Could not parse submodule __init__.py for %s: %s", child.name, e)
+                logger.debug(
+                    "Could not parse submodule __init__.py for %s: %s", child.name, e
+                )
             info["submodules"].append({"name": child.name, "doc": sub_doc})
 
     # Find all .py files

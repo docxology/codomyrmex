@@ -18,7 +18,9 @@ from pathlib import Path
 try:
     from codomyrmex.agents.core.config import get_config
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
     from codomyrmex.agents.core.config import get_config
 
 from codomyrmex.utils.cli_helpers import (
@@ -57,6 +59,7 @@ def _load_hermes_client() -> object | None:
     """
     try:
         from codomyrmex.agents.hermes import HermesClient
+
         return HermesClient()
     except ImportError as e:
         print_error(f"Import failed — cannot load HermesClient: {e}")
@@ -175,7 +178,9 @@ def main() -> int:
     hermes_cfg = _resolve_config()
     config_default_prompt: str = hermes_cfg.get("default_prompt", _DEFAULT_PROMPT)
 
-    parser = argparse.ArgumentParser(description="Run the Hermes Agent with a real prompt.")
+    parser = argparse.ArgumentParser(
+        description="Run the Hermes Agent with a real prompt."
+    )
     parser.add_argument(
         "--prompt",
         type=str,
@@ -195,7 +200,8 @@ def main() -> int:
         help="Human-friendly session name (v0.2.0). Creates or resumes a named session.",
     )
     parser.add_argument(
-        "--quiet", "-Q",
+        "--quiet",
+        "-Q",
         action="store_true",
         default=False,
         help="Quiet mode: suppress banners/metadata, print only the raw response. For CI/CD and programmatic use.",

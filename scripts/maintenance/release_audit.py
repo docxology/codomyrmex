@@ -90,8 +90,12 @@ class ReleaseAuditor:
 
         elapsed = (time.monotonic() - start) * 1000
         if agents_ok:
-            return AuditCheck("version_consistency", True, f"v{version} consistent", elapsed)
-        return AuditCheck("version_consistency", False, f"AGENTS.md missing v{version}", elapsed)
+            return AuditCheck(
+                "version_consistency", True, f"v{version} consistent", elapsed
+            )
+        return AuditCheck(
+            "version_consistency", False, f"AGENTS.md missing v{version}", elapsed
+        )
 
     def check_dockerfile(self) -> AuditCheck:
         """Verify Dockerfile exists and is valid."""
@@ -120,8 +124,12 @@ class ReleaseAuditor:
         elapsed = (time.monotonic() - start) * 1000
 
         if missing:
-            return AuditCheck("documentation", False, f"Missing: {', '.join(missing)}", elapsed)
-        return AuditCheck("documentation", True, f"All {len(required)} docs present", elapsed)
+            return AuditCheck(
+                "documentation", False, f"Missing: {', '.join(missing)}", elapsed
+            )
+        return AuditCheck(
+            "documentation", True, f"All {len(required)} docs present", elapsed
+        )
 
     def check_module_docs(self) -> AuditCheck:
         """Verify each module has README.md."""

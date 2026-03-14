@@ -34,7 +34,9 @@ TEST_FILES = sorted(TEST_DIR.glob("test_mlx_*.py"))
 def run_pytest(markers: str | None = None, verbose: bool = True) -> int:
     """Run pytest on the MLX test files."""
     cmd = [
-        sys.executable, "-m", "pytest",
+        sys.executable,
+        "-m",
+        "pytest",
         *[str(f) for f in TEST_FILES],
         "--tb=short",
         "--no-cov",
@@ -70,6 +72,7 @@ def smoke_test() -> int:
             MLXRunner,
             MLXStreamChunk,
         )
+
         print("   ✅ All imports successful")
     except ImportError as exc:
         print(f"   ❌ Import failed: {exc}")
@@ -114,11 +117,15 @@ def smoke_test() -> int:
 
     print("5️⃣  Generating text...")
     gen_config = MLXConfig(model=config.model, max_tokens=30, temperature=0.5)
-    result = runner.generate("What is 2+2? Answer with just the number.", config=gen_config)
+    result = runner.generate(
+        "What is 2+2? Answer with just the number.", config=gen_config
+    )
     if result.success:
         response_preview = result.response[:100].replace("\n", " ")
         print(f"   ✅ Response: {response_preview}")
-        print(f"   ✅ {result.tokens_generated} tokens, {result.tokens_per_second:.1f} tok/s")
+        print(
+            f"   ✅ {result.tokens_generated} tokens, {result.tokens_per_second:.1f} tok/s"
+        )
     else:
         print(f"   ❌ Generation failed: {result.error_message}")
         runner.unload_model()
@@ -188,6 +195,7 @@ def full_validate() -> int:
     print("🔗 Checking import chain...")
     try:
         from codomyrmex.llm import mlx as mlx_mod
+
         exports = dir(mlx_mod)
         expected = ["MLXConfig", "MLXRunner", "MLXModelManager", "MLXQuantizer"]
         for name in expected:
@@ -227,10 +235,14 @@ def full_validate() -> int:
 
 def main():
     parser = argparse.ArgumentParser(description="MLX submodule test suite runner")
-    parser.add_argument("--integration", action="store_true", help="Include integration tests")
+    parser.add_argument(
+        "--integration", action="store_true", help="Include integration tests"
+    )
     parser.add_argument("--smoke", action="store_true", help="Quick smoke test only")
     parser.add_argument("--validate", action="store_true", help="Full validation suite")
-    parser.add_argument("-v", "--verbose", action="store_true", default=True, help="Verbose output")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", default=True, help="Verbose output"
+    )
     args = parser.parse_args()
 
     if args.smoke:

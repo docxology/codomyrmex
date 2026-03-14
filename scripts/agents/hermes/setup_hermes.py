@@ -17,7 +17,9 @@ from pathlib import Path
 try:
     from codomyrmex.agents.core.config import get_config
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
     from codomyrmex.agents.core.config import get_config
     from codomyrmex.agents.hermes import HermesClient
 
@@ -54,6 +56,7 @@ def _check_imports() -> bool:
     """
     try:
         from codomyrmex.agents.hermes import HermesClient
+
         print_success("  ✓ Core modules imported successfully.")
         return True
     except Exception as e:
@@ -140,13 +143,19 @@ def _check_hermes_version(hermes_client: object) -> str | None:
         try:
             parts = [int(x) for x in version.split(".")[:3]]
             if parts >= [0, 2, 0]:
-                print_success("  ✓ v0.2.0+ detected — provider router, MCP client, skills ecosystem available")
+                print_success(
+                    "  ✓ v0.2.0+ detected — provider router, MCP client, skills ecosystem available"
+                )
             else:
-                print_info(f"  ℹ️  Version {version} detected. Consider upgrading: hermes update")
+                print_info(
+                    f"  ℹ️  Version {version} detected. Consider upgrading: hermes update"
+                )
         except (ValueError, IndexError):
             print_info(f"  ℹ️  Version string '{version}' could not be parsed.")
     else:
-        print_info("  ℹ️  Version not available (CLI not installed or version command not supported).")
+        print_info(
+            "  ℹ️  Version not available (CLI not installed or version command not supported)."
+        )
     return version
 
 
@@ -248,7 +257,13 @@ def _check_skills(hermes_client: object) -> bool:
     result: dict = hermes_client.list_skills()  # type: ignore[attr-defined]
     if result.get("success"):
         output = result.get("output", "")
-        skill_count = len([line for line in output.splitlines() if line.strip() and not line.startswith(" ")])
+        skill_count = len(
+            [
+                line
+                for line in output.splitlines()
+                if line.strip() and not line.startswith(" ")
+            ]
+        )
         print_success(f"  ✓ {skill_count} skills available")
         return True
     error = result.get("error", "")
@@ -287,6 +302,7 @@ def main() -> int:
     # 5. Initialize Hermes client for version/doctor checks
     try:
         from codomyrmex.agents.hermes import HermesClient
+
         hermes_client = HermesClient()
     except Exception as exc:
         print_error(f"  ✗ Failed to initialize HermesClient: {exc}")
@@ -306,7 +322,9 @@ def main() -> int:
 
     print_info("─" * 60)
     if hermes_client.active_backend != "none":
-        print_success(f"Setup complete. Hermes Agent is READY. (Backend: {hermes_client.active_backend})")
+        print_success(
+            f"Setup complete. Hermes Agent is READY. (Backend: {hermes_client.active_backend})"
+        )
         return 0
     print_error("Setup incomplete. Hermes Agent is Offline.")
     return 1

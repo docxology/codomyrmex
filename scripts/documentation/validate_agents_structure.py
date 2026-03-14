@@ -101,11 +101,30 @@ def validate_agents_structure(
 
     # Directories to completely ignore during validation
     IGNORE_DIRS = {
-        ".git", "node_modules", "output", "build", "dist",
-        ".venv", "venv", "__pycache__", ".pytest_cache", ".mypy_cache",
-        ".cursor", ".vscode", ".cache", "vendor", ".claude", ".gitnexus",
-        ".sisyphus", ".benchmarks", ".pipelines", ".workflows",
-        ".github", ".docusaurus", "@output", ".codomyrmex"
+        ".git",
+        "node_modules",
+        "output",
+        "build",
+        "dist",
+        ".venv",
+        "venv",
+        "__pycache__",
+        ".pytest_cache",
+        ".mypy_cache",
+        ".cursor",
+        ".vscode",
+        ".cache",
+        "vendor",
+        ".claude",
+        ".gitnexus",
+        ".sisyphus",
+        ".benchmarks",
+        ".pipelines",
+        ".workflows",
+        ".github",
+        ".docusaurus",
+        "@output",
+        ".codomyrmex",
     }
 
     # Find all AGENTS.md files

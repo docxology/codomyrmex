@@ -21,7 +21,9 @@ from pathlib import Path
 try:
     from codomyrmex.agents.core.config import get_config
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
     from codomyrmex.agents.core.config import get_config
 
 from codomyrmex.utils.cli_helpers import (
@@ -51,7 +53,9 @@ _DEFAULT_DISPATCH_AGENT: str = "hermes"
 _DEFAULT_DISPATCH_MODE: str = "prompt"
 _DEFAULT_OUTPUT_DIR: str = "dispatches"
 _DEFAULT_TIMEOUT_S: int = 600  # generous default for full-source prompts through Ollama
-_MAX_SOURCE_CHARS: int = 12_000  # truncation guard — prevents dispatch timeouts for large scripts
+_MAX_SOURCE_CHARS: int = (
+    12_000  # truncation guard — prevents dispatch timeouts for large scripts
+)
 
 
 def _resolve_dispatch_config() -> dict:
@@ -74,7 +78,9 @@ def _resolve_ollama_timeout() -> int:
         config = get_config()
         hermes_cfg: dict = config.get("hermes", {}) if isinstance(config, dict) else {}
         return int(
-            hermes_cfg.get("dispatch_timeout", hermes_cfg.get("timeout", _DEFAULT_TIMEOUT_S))
+            hermes_cfg.get(
+                "dispatch_timeout", hermes_cfg.get("timeout", _DEFAULT_TIMEOUT_S)
+            )
         )
     except Exception:
         return _DEFAULT_TIMEOUT_S
@@ -198,8 +204,8 @@ def _build_dispatch_prompt(
             raw_source = (
                 raw_source[:_MAX_SOURCE_CHARS]
                 + f"\n\n# [TRUNCATED — source exceeds {_MAX_SOURCE_CHARS} chars;\n"
-                  f"#  apply improvements to the HEAD section shown above and note\n"
-                  f"#  that the full file is longer with the same patterns continuing]\n"
+                f"#  apply improvements to the HEAD section shown above and note\n"
+                f"#  that the full file is longer with the same patterns continuing]\n"
             )
         source_section = f"\n--- CURRENT SOURCE CODE ---\n{raw_source}\n----------------------------\n"
 
@@ -241,6 +247,7 @@ def _extract_python_from_response(content: str) -> str:
         Clean Python source code string, stripped of leading/trailing whitespace.
     """
     import re as _re
+
     # Try ```python ... ``` or ``` ... ``` fenced blocks first
     fenced = _re.search(r"```(?:python)?\n(.*?)\n```", content, _re.DOTALL)
     if fenced:
@@ -251,7 +258,9 @@ def _extract_python_from_response(content: str) -> str:
     start = 0
     for i, line in enumerate(lines):
         stripped = line.strip()
-        if stripped.startswith(("#!", "#", "import ", "from ", "def ", "class ", '"""', "'''")):
+        if stripped.startswith(
+            ("#!", "#", "import ", "from ", "def ", "class ", '"""', "'''")
+        ):
             start = i
             break
     return "\n".join(lines[start:]).strip()
@@ -309,11 +318,18 @@ def _modernize_python(code: str) -> str:
 
     # 3. Remove legacy names from 'from typing import ...' lines
     _legacy_names = {
-        "Optional", "Dict", "List", "Tuple", "Set", "FrozenSet",
-        "Type", "Union",  # Union stays only if Literal/other types remain
+        "Optional",
+        "Dict",
+        "List",
+        "Tuple",
+        "Set",
+        "FrozenSet",
+        "Type",
+        "Union",  # Union stays only if Literal/other types remain
     }
+
     def _clean_typing_import(m: "_re.Match") -> str:
-        prefix = m.group(1)   # 'from typing import ' or 'from typing import ('
+        prefix = m.group(1)  # 'from typing import ' or 'from typing import ('
         names_raw = m.group(2)  # the names part
         # Split by comma, strip whitespace and parens
         names = [n.strip().strip("()") for n in names_raw.replace("\n", ",").split(",")]
@@ -418,7 +434,9 @@ def _dispatch_hermes(
                     modernized = _modernize_python(python_code)
                     if modernized != python_code:
                         delta = abs(len(modernized) - len(python_code))
-                        print_info(f"  🔧 Modernized syntax ({delta} chars changed): legacy typing → 3.11+ style")
+                        print_info(
+                            f"  🔧 Modernized syntax ({delta} chars changed): legacy typing → 3.11+ style"
+                        )
                     python_code = modernized
                     # Backup original
                     if backup and source_path.exists():
@@ -457,7 +475,9 @@ def _dispatch_shell(
         True on success, False on failure.
     """
     if agent not in ("jules", "claude"):
-        print_error(f"  Unsupported shell dispatch agent: '{agent}'. Use 'jules' or 'claude'.")
+        print_error(
+            f"  Unsupported shell dispatch agent: '{agent}'. Use 'jules' or 'claude'."
+        )
         return False
 
     stem = script_name.replace(".py", "")
@@ -547,6 +567,7 @@ def _boot_hermes_client(effective_timeout: int) -> tuple[object | None, int]:
     """
     try:
         from codomyrmex.agents.hermes import HermesClient
+
         client = HermesClient()
     except ImportError as exc:
         print_error(f"Cannot load HermesClient: {exc}")
@@ -554,7 +575,9 @@ def _boot_hermes_client(effective_timeout: int) -> tuple[object | None, int]:
 
     # Always apply the dispatch-specific (generous) timeout
     client.timeout = effective_timeout  # type: ignore[attr-defined]
-    print_info(f"  Hermes timeout set to {effective_timeout}s for full-source dispatch prompts.")
+    print_info(
+        f"  Hermes timeout set to {effective_timeout}s for full-source dispatch prompts."
+    )
 
     if client.active_backend == "none":  # type: ignore[attr-defined]
         print_error("No Hermes backend available. Install 'hermes' CLI or 'ollama'.")
@@ -686,7 +709,9 @@ def main() -> int:
         print_info("  Filter:     NON-COMPLIANT only")
     if args.apply:
         backup_note = " (with .bak backup)" if not args.no_backup else " (NO backup)"
-        print_info(f"  Apply:      ✅ Improved code will be written to source files{backup_note}")
+        print_info(
+            f"  Apply:      ✅ Improved code will be written to source files{backup_note}"
+        )
     if args.dry_run:
         print_info("  [DRY RUN]   No artefacts will be written.")
     print_info("═" * 60)
@@ -694,8 +719,12 @@ def main() -> int:
     # 1. Load evaluation results
     eval_results = _load_eval_results(eval_dir, target_dir)
     if not eval_results:
-        print_error(f"No evaluation files found in {eval_dir} matching scripts in {target_dir}.")
-        print_info("  Hint: run evaluate_orchestrators.py first to generate eval JSON files.")
+        print_error(
+            f"No evaluation files found in {eval_dir} matching scripts in {target_dir}."
+        )
+        print_info(
+            "  Hint: run evaluate_orchestrators.py first to generate eval JSON files."
+        )
         return 1
 
     # Filter to non-compliant if requested
@@ -718,7 +747,11 @@ def main() -> int:
     # 2. Boot Hermes client only if needed
     hermes_client: object | None = None
     effective_timeout = args.timeout or _resolve_ollama_timeout()
-    if args.dispatch_agent == "hermes" and args.dispatch_mode == "prompt" and not args.dry_run:
+    if (
+        args.dispatch_agent == "hermes"
+        and args.dispatch_mode == "prompt"
+        and not args.dry_run
+    ):
         hermes_client, rc = _boot_hermes_client(effective_timeout)
         if rc != 0:
             return rc
@@ -733,19 +766,27 @@ def main() -> int:
         print_info(f"\n  Script: {script_name}")
         debt_count = len(eval_data.get("technical_debt", []))
         improvement_count = len(eval_data.get("underlying_improvements", []))
-        print_info(f"  Debt items: {debt_count}  |  Improvement items: {improvement_count}")
+        print_info(
+            f"  Debt items: {debt_count}  |  Improvement items: {improvement_count}"
+        )
 
         # include_source: default True (full context), overridden by --no-source
         # Also honour dispatch.include_source from hermes.yaml if not overridden on CLI
         use_source = not args.no_source
         prompt = _build_dispatch_prompt(
-            script_name, source_path, eval_data,
+            script_name,
+            source_path,
+            eval_data,
             include_source=use_source,
             target_dir=target_dir,
         )
         prompt_chars = len(prompt)
-        print_info(f"  Prompt length: {prompt_chars} chars | include_source: {use_source}")
-        if use_source and prompt_chars > _MAX_SOURCE_CHARS + 500:  # +500 for prompt overhead
+        print_info(
+            f"  Prompt length: {prompt_chars} chars | include_source: {use_source}"
+        )
+        if (
+            use_source and prompt_chars > _MAX_SOURCE_CHARS + 500
+        ):  # +500 for prompt overhead
             print_info(
                 f"  ⚠️  Source was auto-truncated to {_MAX_SOURCE_CHARS} chars "
                 f"(dispatch_timeout={effective_timeout}s). Review guidance for completeness."
@@ -779,10 +820,14 @@ def main() -> int:
             stem = script_name.replace(".py", "")
             artefact = output_dir / f"{stem}_guidance.md"
 
-        elif args.dispatch_agent in ("jules", "claude") or args.dispatch_mode == "issue":
+        elif (
+            args.dispatch_agent in ("jules", "claude") or args.dispatch_mode == "issue"
+        ):
             # When dispatch_mode=issue with hermes agent, fall back to claude shell
             agent = args.dispatch_agent if args.dispatch_agent != "hermes" else "claude"
-            success = _dispatch_shell(agent, script_name, prompt, output_dir, source_path)
+            success = _dispatch_shell(
+                agent, script_name, prompt, output_dir, source_path
+            )
             stem = script_name.replace(".py", "")
             artefact = output_dir / f"{stem}_{agent}.sh"
 

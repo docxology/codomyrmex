@@ -13,7 +13,9 @@ from pathlib import Path
 try:
     import codomyrmex
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
 
 from codomyrmex.utils.cli_helpers import (
     print_error,
@@ -25,7 +27,11 @@ from codomyrmex.utils.cli_helpers import (
 
 def main() -> int:
     setup_logging()
-    repo_path = sys.argv[1] if len(sys.argv) > 1 else str(Path(__file__).resolve().parent.parent.parent.parent)
+    repo_path = (
+        sys.argv[1]
+        if len(sys.argv) > 1
+        else str(Path(__file__).resolve().parent.parent.parent.parent)
+    )
     print_info(f"Git Agent — analyzing {repo_path}...")
 
     try:
@@ -46,6 +52,7 @@ def main() -> int:
 
     print_success("Git agent probe complete.")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
