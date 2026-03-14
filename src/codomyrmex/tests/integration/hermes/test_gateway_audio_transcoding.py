@@ -1,9 +1,8 @@
 """Integration tests for Gateway Audio Transcoding (D1)."""
 
-import math
-import struct
 import wave
-
+import struct
+import math
 import pytest
 
 from codomyrmex.agents.hermes.gateway.platforms.media import AudioTranscriber
@@ -14,7 +13,7 @@ def _generate_sine_wave(freq: float = 440.0, duration: float = 0.5, rate: int = 
     import io
     bio = io.BytesIO()
 
-    with wave.open(bio, "wb") as wav:
+    with wave.open(bio, 'wb') as wav:
         wav.setnchannels(1)
         wav.setsampwidth(2)
         wav.setframerate(rate)
@@ -26,7 +25,7 @@ def _generate_sine_wave(freq: float = 440.0, duration: float = 0.5, rate: int = 
 
         for i in range(n_frames):
             value = int(math.sin(2 * math.pi * freq * (i / rate)) * 32767.0)
-            data = struct.pack("<h", value)
+            data = struct.pack('<h', value)
             wav.writeframesraw(data)
 
     return bio.getvalue()

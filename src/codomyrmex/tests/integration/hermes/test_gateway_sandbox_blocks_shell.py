@@ -2,10 +2,7 @@
 
 import pytest
 
-from codomyrmex.agents.hermes.gateway.sandbox import (
-    GatewayToolSandbox,
-    SandboxViolation,
-)
+from codomyrmex.agents.hermes.gateway.sandbox import GatewayToolSandbox, SandboxViolation
 
 
 def mock_executor(name: str, args: dict) -> str:

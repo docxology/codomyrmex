@@ -1,14 +1,9 @@
 """Integration tests for Hermes internal task scheduling MCP tools."""
 
 import pytest
-
+from codomyrmex.agents.hermes.mcp_tools import hermes_create_task, hermes_update_task_status
+from codomyrmex.agents.hermes.session import SQLiteSessionStore, HermesSession
 from codomyrmex.agents.hermes.hermes_client import HermesClient
-from codomyrmex.agents.hermes.mcp_tools import (
-    hermes_create_task,
-    hermes_update_task_status,
-)
-from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
-
 
 @pytest.fixture
 def test_client(tmp_path):

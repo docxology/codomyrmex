@@ -1,10 +1,8 @@
 """Integration tests for Hermes Error-Correction Handoffs."""
 
 import pytest
-
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.hermes.hermes_client import HermesClient
-
 
 class TestFailedHermesClient(HermesClient):
     """Test implementation of HermesClient simulating a recovered subprocess failure."""
@@ -22,11 +20,11 @@ class TestFailedHermesClient(HermesClient):
             # First turn: LLM attempts something, but we simulate a subprocess failure
             return AgentResponse(
                 content="<tool_call>execute_script.py</tool_call>",
-                error='Traceback (most recent call last):\n  File "script.py", line 2\n    sys.exit(1)\nSystemExit: 1',
-                metadata={"exit_code": 1, "stderr": 'Traceback (most recent call last):\n  File "script.py", line 2\n    sys.exit(1)\nSystemExit: 1'}
+                error="Traceback (most recent call last):\n  File \"script.py\", line 2\n    sys.exit(1)\nSystemExit: 1",
+                metadata={"exit_code": 1, "stderr": "Traceback (most recent call last):\n  File \"script.py\", line 2\n    sys.exit(1)\nSystemExit: 1"}
             )
 
-        if self.call_count == 2:
+        elif self.call_count == 2:
             # Second turn: LLM should have received the <FAILED_TRACE> in the prompt
             assert "<FAILED_TRACE>" in request.prompt
             assert "SystemExit: 1" in request.prompt

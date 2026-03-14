@@ -1,11 +1,9 @@
 """Integration tests for Hermes Workflow Engine Loop."""
 
 import pytest
-
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.hermes.hermes_client import HermesClient
-from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
-
+from codomyrmex.agents.hermes.session import SQLiteSessionStore, HermesSession
 
 class TestHermesClient(HermesClient):
     """Test implementation of HermesClient simulating task orchestration."""
@@ -18,10 +16,7 @@ class TestHermesClient(HermesClient):
         self.call_count += 1
 
         # We need to simulate the side-effects of tool calls by calling the MCP tools directly
-        from codomyrmex.agents.hermes.mcp_tools import (
-            hermes_create_task,
-            hermes_update_task_status,
-        )
+        from codomyrmex.agents.hermes.mcp_tools import hermes_create_task, hermes_update_task_status
 
         session_id = None
         # Extract session_id from system prompt
@@ -39,12 +34,12 @@ class TestHermesClient(HermesClient):
             hermes_create_task(session_id, "step2", "Second step", ["step1"])
             return AgentResponse(content="Created tasks.", error=None, metadata={})
 
-        if self.call_count == 2:
+        elif self.call_count == 2:
             # Second turn: complete step 1
             hermes_update_task_status(session_id, "step1", "completed", "Done step 1")
             return AgentResponse(content="Completed step 1.", error=None, metadata={})
 
-        if self.call_count == 3:
+        elif self.call_count == 3:
             # Third turn: complete step 2
             hermes_update_task_status(session_id, "step2", "completed", "Done step 2")
             return AgentResponse(content="Completed step 2.", error=None, metadata={})

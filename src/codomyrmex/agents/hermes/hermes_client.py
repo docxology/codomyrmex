@@ -42,6 +42,7 @@ class HermesError(AgentError):
 
 class AutoRetryException(Exception):
     """Exception raised internally to trigger the autonomous error-correction loop."""
+    pass
 
 
 class HermesClient(CLIAgentBase):
@@ -601,7 +602,8 @@ class HermesClient(CLIAgentBase):
                         # Reload session to ensure we don't drop state
                         store.save(session)
                         continue
-                    break  # Error executing, and we are out of retry turns
+                    else:
+                        break  # Error executing, and we are out of retry turns
 
 
             # Sync securely to Obsidian Vault if configured (D1 implementation)

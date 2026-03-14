@@ -1,9 +1,8 @@
 """Integration tests for Gateway Document Extraction (D3)."""
 
-import os
-import tempfile
-
 import pytest
+import tempfile
+import os
 
 from codomyrmex.agents.hermes.gateway.platforms.media import DocumentParser
 from codomyrmex.documents import write_pdf
