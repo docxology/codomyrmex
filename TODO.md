@@ -9,28 +9,6 @@ Authoritative project backlog. Upcoming work only; completed items removed.
 
 ---
 
-## 🚀 v1.5.11 — Resource Monitoring Integration
-
-> **Theme**: Hardware-aware local scaling.
-
-| # | Deliverable | Module | Concrete Scope |
-| :--- | :--- | :--- | :--- |
-| D1 | **Health-Aware Execution** | `agents/hermes/` | Tie active session loads into `system_discovery.HealthChecker`. Dynamically surface RAM/VRAM pressure via native `psutil` integration or macOS APIs. |
-| D2 | **Dynamic Fallbacks** | `agents/hermes/` | Auto-failback to lighter Ollama models or reject heavy tasks with a clear out-of-memory warning if the system is thrashing heavily on swap memory natively. |
-
----
-
-## 🚀 v1.5.12 — Unified Agent Traceability
-
-> **Theme**: Deep Observability for Multi-Agent Dispatch.
-
-| # | Deliverable | Module | Concrete Scope |
-| :--- | :--- | :--- | :--- |
-| D1 | **Trace IDs** | `telemetry/` | Append unique X-Trace-ID tags across the sub-agent boundary, tying `hermes_delegate_task` executions directly to parent events in the unified log structure. |
-| D2 | **Dispatch Metrics** | `dashboard/` | Expose active delegated tasks natively across the real-time websocket PAI dashboard to visualize swarm depth. |
-
----
-
 ## 🚀 v1.5.13 — Automated Dependency Healing
 
 > **Theme**: Self-Maintaining Workspaces.
@@ -39,17 +17,31 @@ Authoritative project backlog. Upcoming work only; completed items removed.
 | :--- | :--- | :--- | :--- |
 | D1 | **Lockfile Parser** | `environment_setup/` | Implement an MCP tool capable of reading and interpreting `uv.lock` output to safely determine if package collisions are blocking task executions. |
 | D2 | **Resolution Agent** | `agents/hermes/` | When an `ImportError` or `ModuleNotFoundError` is caught during code execution, trigger an automated secondary loop (`_heal_environment`) attempting to map the missing local package to `pyproject.toml` and injecting it automatically via `uv add`. |
+| D3 | **Healing Metrics** | `telemetry/` | Track `heal_attempts` and `heal_success_rate` in the Hermes session metadata, emitting structured logs for continuous monitoring. |
 
 ---
 
-## 🚀 v1.5.14 — Interactive Test Discovery
+## 🚀 v1.5.14 — Interactive Test Discovery & Scaffolding
 
 > **Theme**: Agent-Initiated Test Creation.
 
 | # | Deliverable | Module | Concrete Scope |
 | :--- | :--- | :--- | :--- |
 | D1 | **Missing Test Detection** | `agents/hermes/` | Integrate with `pytest --collect-only` or coverage readouts to actively scan a targeted directory and surface undocumented/untested functions immediately to the agent session as a structured JSON object. |
-| D2 | **Zero-Mock Test Scaffolding Tool** | `agents/hermes/` | Add an MCP tool `hermes_scaffold_test` that generates the boilerplate pytest framework strictly mapping real execution dependencies so Hermes can seamlessly populate test coverage. |
+| D2 | **Zero-Mock Scaffolding Tool** | `agents/hermes/` | Add an MCP tool `hermes_scaffold_test` that generates the boilerplate pytest framework strictly mapping real execution dependencies so Hermes can seamlessly populate test coverage. |
+| D3 | **Coverage Loop** | `agents/hermes/` | Introduce an autonomous loop that writes a test, runs `pytest`, captures failure traces, and iteratively fixes the test or the source code until the test passes. |
+
+---
+
+## 🚀 v1.5.15 — Advanced Context Archival & Search
+
+> **Theme**: Scaling Agentic Memory.
+
+| # | Deliverable | Module | Concrete Scope |
+| :--- | :--- | :--- | :--- |
+| D1 | **Cross-Session Retrieval** | `agents/hermes/` | Enhance the `SQLiteSessionStore` with FTS5 BM25 querying, exposing a `hermes_recall` MCP tool that allows the agent to semantically search its own past sessions for relevant context. |
+| D2 | **Graph Mapping** | `agentic_memory/` | Expand the Obsidian Vault integration to automatically infer links (`[[concept]]`) between entities extracted during `_summarize_context`, building a dense knowledge graph. |
+| D3 | **Memory Garbage Collection** | `agents/hermes/` | Implement background routines to softly archive older SQLite sessions into compressed JSON blobs, maintaining strict maximum DB size limits for high-frequency deployment. |
 
 ---
 

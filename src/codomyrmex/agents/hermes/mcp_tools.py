@@ -83,6 +83,36 @@ def hermes_system_health() -> dict[str, Any]:
 @mcp_tool(
     category="hermes",
     description=(
+        "Check if a dependency is present in the project's lockfile (`uv.lock`). "
+        "Use this to verify if uninstalled packages are causing execution failures."
+    ),
+)
+def hermes_check_dependencies(package_name: str) -> dict[str, Any]:
+    """Check for package presence in the environment lockfile.
+
+    Args:
+        package_name: The name of the PyPI package to check (e.g. 'requests').
+
+    Returns:
+        dict with status, exists boolean, and message.
+    """
+    try:
+        from codomyrmex.environment_setup.lockfile import LockfileParser
+        parser = LockfileParser()
+        exists = parser.check_dependency(package_name)
+        return {
+            "status": "success",
+            "package": package_name,
+            "exists": exists,
+            "message": f"Package '{package_name}' is {'present' if exists else 'missing'} in the uv.lock"
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
         "Execute a single-turn chat with the Hermes agent. "
         "Uses the Hermes CLI if available, otherwise Ollama hermes3."
     ),
@@ -861,6 +891,8 @@ def hermes_create_task(
             if name in tasks:
                 return {"status": "error", "message": f"Task '{name}' already exists."}
 
+            from codomyrmex.logging_monitoring.core.correlation import get_correlation_id
+
             new_task = {
                 "name": name,
                 "description": description,
@@ -868,6 +900,7 @@ def hermes_create_task(
                 "status": "pending",
                 "result": None,
                 "error": "",
+                "parent_trace_id": get_correlation_id(),
             }
             tasks[name] = new_task
             session.metadata["workflow_tasks"] = tasks
@@ -1002,6 +1035,11 @@ def hermes_delegate_task(
             }
 
         request = AgentRequest(prompt=full_prompt)
+        from codomyrmex.logging_monitoring.core.correlation import get_correlation_id
+        parent_cid = get_correlation_id()
+        if parent_cid:
+            request.metadata["parent_trace_id"] = parent_cid
+
         response = sub_agent.execute(request)
 
         return {

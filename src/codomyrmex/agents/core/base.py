@@ -42,15 +42,19 @@ class AgentRequest:
     timeout: int | None = None
     metadata: dict[str, Any] | None = None
     id: str | None = None
+    trace_id: str | None = None
 
     def __post_init__(self) -> None:
         """Set default optional fields to empty collections."""
+        import uuid
         if self.context is None:
             self.context = {}
         if self.capabilities is None:
             self.capabilities = []
         if self.metadata is None:
             self.metadata = {}
+        if self.trace_id is None:
+            self.trace_id = str(uuid.uuid4())
 
 
 @dataclass
@@ -64,6 +68,7 @@ class AgentResponse:
     tokens_used: int | None = None
     cost: float | None = None
     request_id: str | None = None
+    trace_id: str | None = None
 
     def __post_init__(self) -> None:
         """Set default optional fields to empty collections."""
@@ -244,8 +249,13 @@ class BaseAgent(AgentInterface):
             Agent response
         """
         try:
+            from codomyrmex.logging_monitoring.core.correlation import with_correlation
+
             self._validate_request(request)
-            return self._execute_impl(request)
+            with with_correlation(request.trace_id):
+                response = self._execute_impl(request)
+                response.trace_id = request.trace_id
+                return response
         except Exception as e:
             self.logger.exception("Error executing %s request", self.name)
             return AgentResponse(
@@ -266,8 +276,11 @@ class BaseAgent(AgentInterface):
             Response chunks
         """
         try:
+            from codomyrmex.logging_monitoring.core.correlation import with_correlation
+
             self._validate_request(request)
-            yield from self._stream_impl(request)
+            with with_correlation(request.trace_id):
+                yield from self._stream_impl(request)
         except Exception as e:
             self.logger.exception("Error streaming %s response", self.name)
             yield f"Error: {e!s}"

@@ -660,6 +660,25 @@ class HermesClient(CLIAgentBase):
                         error_trace = response.error or response.metadata.get(
                             "stderr", "Unknown error"
                         )
+                        
+                        # 1.5.13 Dependency Healing Interception
+                        import re
+                        missing_pkg_match = re.search(r"(?:ModuleNotFoundError|ImportError): No module named '([^']+)'", error_trace)
+                        if missing_pkg_match:
+                            missing_pkg = missing_pkg_match.group(1)
+                            self.logger.warning(
+                                f"Detected missing dependency '{missing_pkg}'. Initiating autonomous healing."
+                            )
+                            heal_result = self._heal_environment(missing_pkg)
+                            
+                            attempts = session.metadata.get("heal_attempts", 0) + 1
+                            session.metadata["heal_attempts"] = attempts
+                            successes = session.metadata.get("heal_success_rate", 0)
+                            if heal_result["success"]:
+                                session.metadata["heal_success_rate"] = successes + 1
+                                
+                            error_trace += f"\n\n[SYSTEM AUTO-HEAL]: Attempted to install missing package '{missing_pkg}'. Result: {heal_result['output']}"
+
                         self.logger.warning(
                             "Subprocess execution failed (exit_code=%s). Initiating recovery loop via AutoRetryException logic.",
                             exit_code,
@@ -745,6 +764,39 @@ class HermesClient(CLIAgentBase):
         if self._pass_session_id:
             args.append("--pass-session-id")
         return args
+
+    def _heal_environment(self, package_name: str) -> dict[str, Any]:
+        """Attempt to automatically install a missing package using uv.
+
+        Args:
+            package_name: The name of the package that triggered the ImportError.
+
+        Returns:
+            Dict containing success boolean and the subprocess output.
+        """
+        try:
+            # We enforce a strict mapping to hyphenated strings just in case
+            safe_pkg = package_name.replace("_", "-").split(".")[0]
+            
+            # Subprocess to uv add the package into the current active environment/workspace
+            result = subprocess.run(
+                ["uv", "add", safe_pkg],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                # cwd self.working_dir or root
+            )
+            
+            if result.returncode == 0:
+                self.logger.info(f"Successfully auto-healed dependency: {safe_pkg}")
+                return {"success": True, "output": f"Successfully installed {safe_pkg} via uv add."}
+            else:
+                self.logger.error(f"Auto-heal failed for {safe_pkg}: {result.stderr}")
+                return {"success": False, "output": f"Failed to install {safe_pkg}. Stderr: {result.stderr}"}
+                
+        except Exception as e:
+            self.logger.error(f"Auto-heal exception for {package_name}: {e}")
+            return {"success": False, "output": f"Exception during uv add: {str(e)}"}
 
     # ------------------------------------------------------------------
     # Version & Diagnostics (v0.2.0+)
