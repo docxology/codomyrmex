@@ -31,14 +31,15 @@ try:
 except ImportError:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
     from codomyrmex.agents.core.config import get_config
+from codomyrmex.agents.hermes.prompts import build_assessment_prompt
+from codomyrmex.utils.json_helpers import extract_json_from_response
+
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
     print_success,
     setup_logging,
 )
-from codomyrmex.utils.json_helpers import extract_json_from_response
-from codomyrmex.agents.hermes.prompts import build_assessment_prompt
 
 try:
     from prompt_context import build_project_context
@@ -219,3 +220,5 @@ def assess_script(client, script_info: dict, source_code: str, target_dir: Path 
             },
             "technical_debt": ["Hermes client error"],
 
+        }
+    return {"adherence_assessment": {"adheres": False, "reasoning": "Could not parse."}}

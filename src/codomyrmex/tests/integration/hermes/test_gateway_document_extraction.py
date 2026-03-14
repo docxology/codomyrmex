@@ -1,8 +1,9 @@
 """Integration tests for Gateway Document Extraction (D3)."""
 
-import pytest
-import tempfile
 import os
+import tempfile
+
+import pytest
 
 from codomyrmex.agents.hermes.gateway.platforms.media import DocumentParser
 from codomyrmex.documents import write_pdf
@@ -19,7 +20,7 @@ def _generate_synthetic_pdf() -> bytes:
             pdf_bytes = f.read()
     finally:
         os.remove(temp_path)
-        
+
     return pdf_bytes
 
 
@@ -28,7 +29,7 @@ async def test_document_parser_txt_integration() -> None:
     """Verify that TXT bytes correctly extract cleanly."""
     parser = DocumentParser()
     txt_bytes = b"Hello from TXT extraction."
-    
+
     text = await parser.extract_text(txt_bytes, "test.txt")
     assert "Hello from TXT extraction" in text
 
@@ -37,7 +38,7 @@ async def test_document_parser_txt_integration() -> None:
 async def test_document_parser_pdf_integration() -> None:
     """Verify that a raw PDF payload safely escapes as standard strings."""
     parser = DocumentParser()
-    
+
     try:
         pdf_bytes = _generate_synthetic_pdf()
         text = await parser.extract_text(pdf_bytes, "synthetic_test.pdf")
@@ -45,7 +46,7 @@ async def test_document_parser_pdf_integration() -> None:
         assert "Hello Codomyrmex Integration Test" in text
     except Exception as e:
         # FPDF / PyPDF2 / reportlab might not be installed in raw baremetal CI environments.
-        # Fallback to catching typical ImportError from the document module for zero-mock bridging 
+        # Fallback to catching typical ImportError from the document module for zero-mock bridging
         # (Zero mock asserts we *tried* to use the underlying binary module correctly)
         if "libraries not available" in str(e).lower() or "install with" in str(e).lower() or "failed to write pdf" in str(e).lower():
             pass
