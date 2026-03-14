@@ -36,6 +36,7 @@
             if (models.length === 0) {
                 sel.innerHTML = '<option value="">No models found</option>';
                 const banner = document.createElement('div');
+                banner.setAttribute('role', 'alert');
                 banner.style.cssText = 'padding: 0.75rem 1rem; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; margin-bottom: 1rem; color: #f87171; font-size: 0.85rem;';
                 banner.innerHTML = '⚠️ <strong>Ollama not available</strong> — No models found. Start Ollama with <code style="font-size:0.8rem">ollama serve</code> and pull a model.';
                 document.querySelector('.chat-container').prepend(banner);
@@ -51,6 +52,7 @@
         } catch (e) {
             document.getElementById('model-select').innerHTML = '<option value="">Ollama offline</option>';
             const banner = document.createElement('div');
+            banner.setAttribute('role', 'alert');
             banner.style.cssText = 'padding: 0.75rem 1rem; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; margin-bottom: 1rem; color: #f87171; font-size: 0.85rem;';
             banner.innerHTML = '⚠️ <strong>Ollama offline</strong> — Cannot connect to the LLM backend. Start Ollama with <code style="font-size:0.8rem">ollama serve</code>.';
             document.querySelector('.chat-container').prepend(banner);
