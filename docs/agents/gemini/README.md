@@ -39,10 +39,22 @@ result = cli.run("Analyze this project", working_dir="/path/to/project")
 
 ## Configuration
 
-**Required API Key**: `GEMINI_API_KEY` or `GOOGLE_API_KEY`
+**API Key Authentication**: `GEMINI_API_KEY` or `GOOGLE_API_KEY`
 
 ```bash
 export GEMINI_API_KEY=your-key-here
+```
+
+**Vertex AI Enterprise Authentication**:
+
+To use Gemini Advanced with 1M+ token context caching and enterprise IAM, configure Vertex AI. Run the provided setup script:
+`./scripts/gcp_vertex_setup.sh`
+
+Then, set your Codomyrmex configuration:
+```yaml
+use_vertex_ai: true
+vertex_project: "your-gcp-project-id"
+vertex_location: "us-central1"
 ```
 
 ## Source Module

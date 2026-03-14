@@ -31,6 +31,38 @@ from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
+# Packages allowed for automatic installation by the auto-heal system.
+# Only these well-known, commonly-safe packages may be installed without
+# explicit user approval.
+AUTO_HEAL_ALLOWLIST: set[str] = {
+    "requests",
+    "numpy",
+    "pandas",
+    "httpx",
+    "pydantic",
+    "rich",
+    "click",
+    "psutil",
+    "pillow",
+    "cryptography",
+    "pyyaml",
+    "toml",
+    "jinja2",
+    "sqlalchemy",
+    "redis",
+    "celery",
+    "fastapi",
+    "uvicorn",
+    "gunicorn",
+    "flask",
+    "boto3",
+    "paramiko",
+    "websockets",
+    "aiohttp",
+    "beautifulsoup4",
+    "lxml",
+}
+
 
 class HermesError(AgentError):
     """Exception raised when Hermes execution fails."""
@@ -567,11 +599,12 @@ class HermesClient(CLIAgentBase):
             from codomyrmex.agentic_memory.obsidian.crud import create_note
             from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
-            # Simple discovery of Obsidian Vault in workspace
-            workspace_root = Path(os.path.abspath(".")).resolve()
-            vault_path = (
-                workspace_root / "docs" / "brain"
-            )  # Assuming a docs/brain vault pattern
+            # Use configured vault path if set, otherwise discover in workspace
+            if self._obsidian_vault:
+                vault_path = Path(os.path.expanduser(self._obsidian_vault)).resolve()
+            else:
+                workspace_root = Path(os.path.abspath(".")).resolve()
+                vault_path = workspace_root / "docs" / "brain"
 
             # If the vault exists, write natively
             if vault_path.exists() and vault_path.is_dir():
@@ -834,6 +867,10 @@ class HermesClient(CLIAgentBase):
     def _heal_environment(self, package_name: str) -> dict[str, Any]:
         """Attempt to automatically install a missing package using uv.
 
+        Only packages in the ``AUTO_HEAL_ALLOWLIST`` set are eligible for
+        automatic installation.  All other packages must be installed
+        manually by the user.
+
         Args:
             package_name: The name of the package that triggered the ImportError.
 
@@ -843,6 +880,17 @@ class HermesClient(CLIAgentBase):
         try:
             # We enforce a strict mapping to hyphenated strings just in case
             safe_pkg = package_name.replace("_", "-").split(".")[0]
+
+            # Check allowlist before attempting installation
+            if safe_pkg not in AUTO_HEAL_ALLOWLIST:
+                self.logger.warning(
+                    f"Package '{safe_pkg}' not in auto-heal allowlist. "
+                    f"Install manually with: uv add {safe_pkg}"
+                )
+                return {
+                    "success": False,
+                    "output": f"Package {safe_pkg} not in auto-heal allowlist. Install manually with: uv add {safe_pkg}",
+                }
 
             # Subprocess to uv add the package into the current active environment/workspace
             result = subprocess.run(

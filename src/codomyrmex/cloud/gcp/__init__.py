@@ -5,6 +5,7 @@ from typing import Any, Optional
 from google.cloud import storage
 
 from codomyrmex.cloud.common import StorageClient
+from codomyrmex.cloud.gcp.vertex_ai import VertexAIClient
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -153,3 +154,5 @@ class GCSClient(StorageClient):
         if self.bucket_exists(bucket_name):
             return True
         return self.create_bucket(bucket_name, region=location)
+
+__all__ = ["GCSClient", "VertexAIClient"]

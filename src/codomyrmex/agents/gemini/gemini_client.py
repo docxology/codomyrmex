@@ -70,20 +70,35 @@ class GeminiClient(
         if genai is None:
             raise ImportError("google-genai package not found. Please install it.")
 
+        self.use_vertex = self.get_config_value("use_vertex_ai", default=False, config=config)
+        self.vertex_project = self.get_config_value("vertex_project", config=config)
+        self.vertex_location = self.get_config_value("vertex_location", default="us-central1", config=config)
+        
         self.api_key = self.get_config_value(
             "gemini_api_key", config=config
         ) or os.getenv("GEMINI_API_KEY")
+        
         self.client = None
-        if not self.api_key:
-            logger.warning("No GEMINI_API_KEY found. Some operations will fail.")
-        else:
-            try:
-                client_kwargs = {"api_key": self.api_key}
-                (config or {}).get("max_retries", 3)
+        
+        try:
+            if self.use_vertex:
+                client_kwargs = {"vertexai": True}
+                if self.vertex_project:
+                    client_kwargs["project"] = self.vertex_project
+                if self.vertex_location:
+                    client_kwargs["location"] = self.vertex_location
                 self.client = genai.Client(**client_kwargs)
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                logger.error("Failed to initialize Gemini Client: %s", e)
-                raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e
+                logger.debug("Initialized Gemini Client with Vertex AI")
+            else:
+                if not self.api_key:
+                    logger.warning("No GEMINI_API_KEY found. Some operations will fail.")
+                else:
+                    client_kwargs = {"api_key": self.api_key}
+                    self.client = genai.Client(**client_kwargs)
+                    logger.debug("Initialized Gemini Client with API Key")
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            logger.error("Failed to initialize Gemini Client: %s", e)
+            raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e
 
         self.default_model = self.get_config_value(
             "gemini_model", default="gemini-3.1-pro-preview", config=config
