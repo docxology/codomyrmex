@@ -160,11 +160,17 @@ def recall_memory(
         except sqlite3.OperationalError:
             # Fallback to LIKE search
             search_terms = [f"%{word}%" for word in query.split()]
-            where_clauses = " OR ".join(["content LIKE ?"] * len(search_terms))
-            rows = conn.execute(
-                f"SELECT * FROM memories WHERE {where_clauses} LIMIT ?",
-                [*search_terms, top_k],
-            ).fetchall()
+            if not search_terms:
+                rows = conn.execute(
+                    "SELECT * FROM memories LIMIT ?",
+                    (top_k,),
+                ).fetchall()
+            else:
+                where_clauses = " OR ".join(["content LIKE ?"] * len(search_terms))
+                rows = conn.execute(
+                    f"SELECT * FROM memories WHERE {where_clauses} LIMIT ?",
+                    [*search_terms, top_k],
+                ).fetchall()
 
         results = []
         for row in rows:
