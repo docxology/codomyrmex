@@ -17,7 +17,7 @@ except ImportError:
 
 import argparse
 import shutil
-from typing import List, Tuple, Union
+from typing import Union
 
 try:
     from typing import Literal

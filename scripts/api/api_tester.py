@@ -20,7 +20,7 @@ import json
 import time
 import urllib.error
 import urllib.request
-from typing import Dict, Optional
+from typing import Optional
 
 
 # Thin Orchestrator Pattern Implementation
