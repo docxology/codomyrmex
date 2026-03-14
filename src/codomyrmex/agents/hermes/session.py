@@ -18,11 +18,13 @@ Example::
 
 from __future__ import annotations
 
+import gzip
 import json
+import os
 import sqlite3
 import time
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from typing import TYPE_CHECKING, Any, Protocol, Self, runtime_checkable
 
 from codomyrmex.logging_monitoring import get_logger
@@ -179,9 +181,64 @@ class SQLiteSessionStore:
                 updated_at REAL NOT NULL
             )
         """)
+
+        # FTS5 virtual table for semantic retrieval
+        self._conn.execute("""
+            CREATE VIRTUAL TABLE IF NOT EXISTS hermes_sessions_fts USING fts5(
+                session_id UNINDEXED,
+                name,
+                messages,
+                content='hermes_sessions',
+                content_rowid='rowid',
+                tokenize='porter'
+            )
+        """)
+
+        # Sync triggers for FTS5
+        self._conn.execute("""
+            CREATE TRIGGER IF NOT EXISTS hermes_sessions_ai AFTER INSERT ON hermes_sessions BEGIN
+                INSERT INTO hermes_sessions_fts(rowid, session_id, name, messages)
+                VALUES (new.rowid, new.session_id, new.name, new.messages);
+            END;
+        """)
+        self._conn.execute("""
+            CREATE TRIGGER IF NOT EXISTS hermes_sessions_ad AFTER DELETE ON hermes_sessions BEGIN
+                INSERT INTO hermes_sessions_fts(hermes_sessions_fts, rowid, session_id, name, messages)
+                VALUES('delete', old.rowid, old.session_id, old.name, old.messages);
+            END;
+        """)
+        self._conn.execute("""
+            CREATE TRIGGER IF NOT EXISTS hermes_sessions_au AFTER UPDATE ON hermes_sessions BEGIN
+                INSERT INTO hermes_sessions_fts(hermes_sessions_fts, rowid, session_id, name, messages)
+                VALUES('delete', old.rowid, old.session_id, old.name, old.messages);
+                INSERT INTO hermes_sessions_fts(rowid, session_id, name, messages)
+                VALUES (new.rowid, new.session_id, new.name, new.messages);
+            END;
+        """)
+
         self._conn.commit()
         # Migrate: add columns for existing DBs that lack them
         self._migrate_add_columns()
+        self._migrate_fts()
+
+    def _migrate_fts(self) -> None:
+        """Populate the FTS table with any existing records that are missing."""
+        try:
+            cursor = self._conn.execute("SELECT rowid FROM hermes_sessions LIMIT 1")
+            has_data = cursor.fetchone() is not None
+
+            if has_data:
+                # To see if FTS5 has indexed anything, check the shadow table
+                c2 = self._conn.execute(
+                    "SELECT COUNT(*) FROM hermes_sessions_fts_docsize"
+                )
+                if c2.fetchone()[0] == 0:
+                    self._conn.execute(
+                        "INSERT INTO hermes_sessions_fts(hermes_sessions_fts) VALUES('rebuild')"
+                    )
+                    self._conn.commit()
+        except sqlite3.OperationalError:
+            pass
 
     def _migrate_add_columns(self) -> None:
         """Add missing columns for schema evolution (pre-v0.2.0 → v0.2.0)."""
@@ -304,6 +361,88 @@ class SQLiteSessionStore:
             {"session_id": row[0], "name": row[1], "updated_at": row[2]}
             for row in cursor.fetchall()
         ]
+
+    def search_fts(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
+        """Perform a full-text search over session contents using FTS5.
+
+        Args:
+            query: The FTS MATCH query.
+            limit: Maximum number of results to return.
+
+        Returns:
+            List of dicts with ``session_id``, ``name``, ``messages_snippet``, and ``rank``.
+        """
+        cursor = self._conn.execute(
+            "SELECT session_id, name, snippet(hermes_sessions_fts, 2, '<b>', '</b>', '...', 64), rank "
+            "FROM hermes_sessions_fts WHERE hermes_sessions_fts MATCH ? ORDER BY rank LIMIT ?",
+            (query, limit),
+        )
+        return [
+            {
+                "session_id": row[0],
+                "name": row[1],
+                "messages_snippet": row[2],
+                "rank": row[3],
+            }
+            for row in cursor.fetchall()
+        ]
+
+    def prune_old_sessions(self, days_old: int = 30) -> int:
+        """Archive and delete sessions older than the specified number of days.
+
+        Archived sessions are written as gzipped JSON files in a `sessions_archive`
+        directory adjacent to the database file.
+
+        Args:
+            days_old: Number of days before a session is pruned.
+
+        Returns:
+            The number of sessions archived and deleted.
+        """
+        import gzip
+        import time
+        from dataclasses import asdict
+        from pathlib import Path
+
+        threshold = time.time() - (days_old * 86400)
+        cursor = self._conn.execute(
+            "SELECT session_id, name, parent_session_id, messages, metadata, created_at, updated_at "
+            "FROM hermes_sessions WHERE updated_at < ?",
+            (threshold,),
+        )
+
+        rows = cursor.fetchall()
+        if not rows:
+            return 0
+
+        archive_dir = Path(self._db_path).parent / "sessions_archive"
+        archive_dir.mkdir(parents=True, exist_ok=True)
+
+        deleted_count = 0
+        for row in rows:
+            session = HermesSession(
+                session_id=row[0],
+                name=row[1],
+                parent_session_id=row[2],
+                messages=json.loads(row[3]),
+                metadata=json.loads(row[4]),
+                created_at=row[5],
+                updated_at=row[6],
+            )
+
+            # Serialize and compress
+            archive_path = archive_dir / f"{session.session_id}.json.gz"
+            with gzip.open(archive_path, "wt", encoding="utf-8") as f:
+                json.dump(asdict(session), f)
+
+            # Delete from DB
+            self.delete(session.session_id)
+            deleted_count += 1
+
+        # Reclaim space
+        self._conn.execute("VACUUM;")
+
+        return deleted_count
 
     def list_sessions(self) -> list[str]:
         """List all session IDs.

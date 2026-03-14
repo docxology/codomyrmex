@@ -37,6 +37,13 @@ def test_hermes_context_summarization_integration(tmp_path, monkeypatch):
                 content="FACT: User likes short tests.", error=None, metadata={}
             )
 
+        if "You are an Obsidian notes semantic linker." in prompt:
+            return AgentResponse(
+                content="SUMMARY_GENERATED: The user is testing. [[MockLink]]",
+                error=None,
+                metadata={},
+            )
+
         return AgentResponse(content=f"ACK: {prompt[-20:]}", error=None, metadata={})
 
     monkeypatch.setattr(client, "execute", mock_execute)

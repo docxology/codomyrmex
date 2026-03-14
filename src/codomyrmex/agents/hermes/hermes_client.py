@@ -526,14 +526,76 @@ class HermesClient(CLIAgentBase):
             and oldest[0].get("role") == "system"
             and "<SESSION_SUMMARY>" in oldest[0].get("content", "")
         ):
-            prior_summary = oldest[0]["content"]
+            prior_summary = (
+                oldest[0]["content"]
+                .replace("<SESSION_SUMMARY>", "")
+                .replace("</SESSION_SUMMARY>", "")
+                .strip()
+            )
             summary = f"{prior_summary}\n\n[Continuance]:\n{summary}"
+
+        # 3. Automated Graph Link Inference
+        graph_prompt = (
+            "You are an Obsidian notes semantic linker. Take the following summary text and strictly "
+            "wrap any core architectural concepts, languages, frameworks, or significant domain entities "
+            "with Obsidian-style double brackets (e.g., [[Concept]]). Do not change the text other than adding brackets. "
+            f"Here is the text:\n\n{summary}"
+        )
+        graph_resp = self.execute(AgentRequest(prompt=graph_prompt))
+        if graph_resp.is_success():
+            summary = graph_resp.content.strip()
 
         summary_msg = {
             "role": "system",
             "content": f"<SESSION_SUMMARY>\n{summary}\n</SESSION_SUMMARY>",
         }
         session.messages = [summary_msg, *latest]
+
+        # 4. Export to Obsidian natively
+        self._export_to_obsidian(
+            session_id=session.session_id, name=session.name, content=summary
+        )
+
+    def _export_to_obsidian(
+        self, session_id: str, name: str | None, content: str
+    ) -> None:
+        """Export a semantic session summary to the Obsidian Vault if configured."""
+        try:
+            import os
+            from pathlib import Path
+
+            from codomyrmex.agentic_memory.obsidian.crud import create_note
+            from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
+
+            # Simple discovery of Obsidian Vault in workspace
+            workspace_root = Path(os.path.abspath(".")).resolve()
+            vault_path = (
+                workspace_root / "docs" / "brain"
+            )  # Assuming a docs/brain vault pattern
+
+            # If the vault exists, write natively
+            if vault_path.exists() and vault_path.is_dir():
+                vault = ObsidianVault(vault_path)
+                safe_title = (
+                    (name or f"session-{session_id}")[:50]
+                    .replace("/", "-")
+                    .replace("\\", "-")
+                )
+                note_path = f"Sessions/{safe_title}.md"
+                fm = {
+                    "agentic_id": session_id,
+                    "importance": "high",
+                    "memory_type": "semantic",
+                    "source": "hermes_context_compression",
+                }
+                create_note(vault, note_path, content=content, frontmatter=fm)
+                self.logger.info(
+                    "Exported session %s context to Obsidian Vault: %s",
+                    session_id,
+                    note_path,
+                )
+        except Exception as e:
+            self.logger.warning("Failed to export summary to Obsidian: %s", e)
 
     def chat_session(
         self,

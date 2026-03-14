@@ -69,7 +69,10 @@ class MockCoverageRepairClient(HermesClient):
         self.src_file = src_file
 
     def chat_session(
-        self, prompt: str, session_id: str | None = None, session_name: str | None = None
+        self,
+        prompt: str,
+        session_id: str | None = None,
+        session_name: str | None = None,
     ) -> AgentResponse:
         self.call_count += 1
         # The agent receives a traceback about `test_add_correctly` failing because a - b is used

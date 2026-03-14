@@ -181,7 +181,7 @@ class TestA11yCheckerWarningsPath:
                 issue.issue_type = IssueType.WARNING
             return issue
 
-        warning_rule.check = patched_check
+        warning_rule.check = patched_check  # type: ignore
         checker.add_rule(warning_rule)
 
         report = checker.check_elements([{"tag": "div"}])
@@ -204,7 +204,7 @@ class TestA11yCheckerWarningsPath:
                 issue.issue_type = IssueType.WARNING
             return issue
 
-        warning_rule.check = patched_check
+        warning_rule.check = patched_check  # type: ignore
         checker.add_rule(warning_rule)
         errors_before = 0
 
@@ -229,7 +229,7 @@ class TestA11yCheckerWarningsPath:
                 issue.issue_type = IssueType.NOTICE
             return issue
 
-        notice_rule.check = patched_check
+        notice_rule.check = patched_check  # type: ignore
         checker.add_rule(notice_rule)
 
         report = checker.check_elements([{"tag": "p"}])

@@ -11,6 +11,44 @@ from typing import Any
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Search the agentic memory (SQLite FTS5) for past conversational context. "
+        "Use this when you need to recall past decisions or specific topics discussed previously."
+    ),
+)
+def hermes_recall_memory(query: str, limit: int = 10) -> dict[str, Any]:
+    """Search for past session text using FTS BM25 ranking.
+
+    Args:
+        query: Full-text search string (supports SQLite MATCH syntax).
+        limit: Number of results to return (default 10).
+
+    Returns:
+        dict with status, and results list containing matched snippets.
+    """
+    try:
+        import os
+        from pathlib import Path
+
+        from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
+        # Load the DB path the same way the client does
+        WORKSPACE_ROOT = Path(os.path.abspath(".")).resolve()
+        db_path = WORKSPACE_ROOT / ".codomyrmex" / "hermes_sessions.db"
+
+        with SQLiteSessionStore(db_path) as store:
+            results = store.search_fts(query, limit)
+            return {
+                "status": "success",
+                "count": len(results),
+                "results": results,
+            }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc), "results": []}
+
+
 def _get_client(
     backend: str = "auto",
     model: str = "hermes3",
