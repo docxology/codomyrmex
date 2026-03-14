@@ -6,6 +6,7 @@ and real InMemorySessionStore.
 
 from __future__ import annotations
 
+import sqlite3
 import time
 
 import pytest
@@ -230,3 +231,139 @@ class TestSQLiteSessionStoreV020:
         loaded = store.load("old1")
         assert loaded is not None
         assert loaded.name is None  # No name set — graceful default
+
+
+# ── HermesSession.fork() ──────────────────────────────────────────────
+
+
+class TestHermesSessionFork:
+    """Verify session forking behavior."""
+
+    def test_fork_creates_child_with_parent_id(self) -> None:
+        parent = HermesSession(session_id="parent1", name="original")
+        parent.add_message("user", "start task")
+        child = parent.fork("child-task")
+
+        assert child.session_id != parent.session_id
+        assert child.parent_session_id == "parent1"
+        assert child.name == "child-task"
+
+    def test_fork_inherits_messages(self) -> None:
+        parent = HermesSession(session_id="p1")
+        parent.add_message("user", "msg1")
+        parent.add_message("assistant", "reply1")
+
+        child = parent.fork()
+        assert child.message_count == 2
+        assert child.messages == parent.messages
+
+    def test_fork_messages_are_independent(self) -> None:
+        parent = HermesSession(session_id="p2")
+        parent.add_message("user", "original")
+
+        child = parent.fork()
+        child.add_message("user", "child-only")
+
+        assert parent.message_count == 1
+        assert child.message_count == 2
+
+    def test_fork_metadata_includes_forked_from(self) -> None:
+        parent = HermesSession(session_id="p3", metadata={"key": "value"})
+        child = parent.fork()
+
+        assert child.metadata["key"] == "value"
+        assert child.metadata["forked_from"] == "p3"
+
+    def test_fork_default_name(self) -> None:
+        parent = HermesSession(session_id="p4", name="parent-name")
+        child = parent.fork()
+
+        assert child.name is None  # default is None when not specified
+
+
+# ── SQLiteSessionStore.search_fts() ───────────────────────────────────
+
+
+class TestSQLiteSearchFts:
+    """Verify full-text search over session contents."""
+
+    def test_search_fts_finds_matching_content(self) -> None:
+        store = SQLiteSessionStore(":memory:")
+        s1 = HermesSession(session_id="fts1", name="refactoring")
+        s1.add_message("user", "Let's refactor the payment module")
+        s1.add_message("assistant", "I see several issues")
+        store.save(s1)
+
+        s2 = HermesSession(session_id="fts2", name="testing")
+        s2.add_message("user", "Write unit tests for auth")
+        store.save(s2)
+
+        results = store.search_fts("refactor")
+        assert len(results) >= 1
+        assert any(r["session_id"] == "fts1" for r in results)
+
+    def test_search_fts_no_match(self) -> None:
+        store = SQLiteSessionStore(":memory:")
+        s1 = HermesSession(session_id="fts3", name="coding")
+        s1.add_message("user", "Hello world")
+        store.save(s1)
+
+        results = store.search_fts("nonexistent_term_xyz")
+        assert results == []
+
+    def test_search_fts_respects_limit(self) -> None:
+        store = SQLiteSessionStore(":memory:")
+        for i in range(5):
+            s = HermesSession(session_id=f"ftsl{i}", name=f"session-{i}")
+            s.add_message("user", "deploy the application to production")
+            store.save(s)
+
+        results = store.search_fts("deploy", limit=2)
+        assert len(results) <= 2
+
+    def test_search_fts_returns_snippet_and_rank(self) -> None:
+        store = SQLiteSessionStore(":memory:")
+        s = HermesSession(session_id="fts4", name="debugging")
+        s.add_message("user", "The authentication module has a bug")
+        store.save(s)
+
+        results = store.search_fts("authentication")
+        assert len(results) >= 1
+        assert "session_id" in results[0]
+        assert "messages_snippet" in results[0]
+        assert "rank" in results[0]
+
+
+# ── SQLiteSessionStore context manager ────────────────────────────────
+
+
+class TestSQLiteContextManager:
+    """Verify context manager protocol."""
+
+    def test_context_manager_enters_and_exits(self) -> None:
+        with SQLiteSessionStore(":memory:") as store:
+            store.save(HermesSession(session_id="ctx1"))
+            assert store.load("ctx1") is not None
+        # Connection should be closed after exiting — accessing it would error
+        # (we can't easily test this without trying to use the closed conn)
+
+    def test_context_manager_returns_self(self) -> None:
+        store = SQLiteSessionStore(":memory:")
+        result = store.__enter__()
+        assert result is store
+        store.__exit__()
+
+
+# ── SQLiteSessionStore.close() ────────────────────────────────────────
+
+
+class TestSQLiteClose:
+    """Verify close() behavior."""
+
+    def test_close_connection(self) -> None:
+        store = SQLiteSessionStore(":memory:")
+        store.save(HermesSession(session_id="c1"))
+        store.close()
+        # After close, operations should fail
+        with pytest.raises(sqlite3.ProgrammingError):
+            store.load("c1")
