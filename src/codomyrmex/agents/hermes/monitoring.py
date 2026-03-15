@@ -5,7 +5,6 @@ metrics natively via psutil, allowing Hermes to proactively abort actions
 that could cause Out-Of-Memory cascades.
 """
 
-from typing import Any
 
 import psutil
 

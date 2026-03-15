@@ -6,7 +6,6 @@ import signal
 import sys
 import time
 from pathlib import Path
-from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 

@@ -18,13 +18,11 @@ Example::
 
 from __future__ import annotations
 
-import gzip
 import json
-import os
 import sqlite3
 import time
 import uuid
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Protocol, Self, runtime_checkable
 
 from codomyrmex.logging_monitoring import get_logger
