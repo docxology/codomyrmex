@@ -132,6 +132,6 @@ class GatewayRunner:
                     os.getpid()
                 ):
                     self.pid_file.unlink()
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.debug("Failed to clean up PID file: %s", exc)
             logger.info("Gateway shutdown complete.")
