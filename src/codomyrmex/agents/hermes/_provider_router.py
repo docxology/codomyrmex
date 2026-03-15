@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import shutil
 import subprocess
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -112,8 +113,6 @@ class ProviderRouter:
     @staticmethod
     def _is_ollama_available() -> bool:
         """Check if the ollama binary is on PATH."""
-        import shutil
-
         return bool(shutil.which("ollama"))
 
     def has_credentials(self, provider: str) -> bool:
@@ -278,7 +277,6 @@ class ProviderRouter:
         resolved_model = model or self.model
 
         import asyncio
-        import shutil
 
         env = {**os.environ, "NO_COLOR": "1"}
         if resolved_provider == "ollama":
@@ -348,8 +346,6 @@ class ProviderRouter:
     @staticmethod
     def _call_ollama(prompt: str, model: str, timeout: int) -> dict[str, Any]:
         """Call Ollama directly."""
-        import shutil
-
         ollama_bin = shutil.which("ollama") or "ollama"
         cmd = [ollama_bin, "run", model, prompt]
         
@@ -410,8 +406,6 @@ class ProviderRouter:
         timeout: int,
     ) -> dict[str, Any]:
         """Call via the Hermes CLI with a specific provider."""
-        import shutil
-
         hermes_bin = shutil.which("hermes") or "hermes"
         cmd = [hermes_bin, "chat", "-q", prompt, "-Q", "--provider", provider]
         env = {**os.environ, "NO_COLOR": "1"}
@@ -803,8 +797,6 @@ class MCPBridgeManager:
         logger.info("Hot-reloaded MCP config: %d servers", server_count)
 
         # Signal Hermes CLI to reload if possible (v0.2.0 `hermes mcp reload`)
-        import shutil
-
         hermes_bin = shutil.which("hermes")
         if hermes_bin:
             try:

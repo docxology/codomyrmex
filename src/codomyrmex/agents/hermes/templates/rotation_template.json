@@ -1,0 +1,34 @@
+{
+  "comment": "Free OpenRouter models for rotation. 'cooldown_seconds' determines how long to skip a model after an error.",
+  "rotation_models": [
+    {
+      "provider": "openrouter",
+      "model": "google/gemini-flash-1.5-free",
+      "priority": 1,
+      "cooldown_seconds": 60
+    },
+    {
+      "provider": "openrouter",
+      "model": "meta-llama/llama-3.3-70b-instruct:free",
+      "priority": 2,
+      "cooldown_seconds": 60
+    },
+    {
+      "provider": "openrouter",
+      "model": "deepseek/deepseek-chat:free",
+      "priority": 3,
+      "cooldown_seconds": 60
+    },
+    {
+      "provider": "openrouter",
+      "model": "google/learnlm-1.5-pro-experimental:free",
+      "priority": 4,
+      "cooldown_seconds": 60
+    }
+  ],
+  "ollama_models": [
+    "hermes3",
+    "llama3.2",
+    "phi3"
+  ]
+}

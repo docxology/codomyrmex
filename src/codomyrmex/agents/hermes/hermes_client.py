@@ -16,6 +16,7 @@ import os
 import shutil
 import subprocess
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -293,10 +294,10 @@ class HermesClient(CLIAgentBase):
 
         return False
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute via the active backend, with fallback on provider errors."""
         try:
-            return self._execute_primary(request)
+            return self._execute_primary(request, max_tokens=max_tokens)
         except HermesError as exc:
             if self._fallback_model and self._should_fallback(exc):
                 self.logger.warning(
@@ -309,17 +310,17 @@ class HermesClient(CLIAgentBase):
                 )
             raise
 
-    def _execute_primary(self, request: AgentRequest) -> AgentResponse:
+    def _execute_primary(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute via the primary active backend (CLI or Ollama)."""
         if self._active_backend == "ollama":
-            return self._execute_via_ollama(request)
+            return self._execute_via_ollama(request, max_tokens=max_tokens)
         if not self._is_cli_configured():
             self.logger.warning(
                 "Hermes CLI has no API key configured — falling back to Ollama. "
                 "Run 'hermes setup' in your terminal to configure an API key."
             )
-            return self._execute_via_ollama(request)
-        return self._execute_via_cli(request)
+            return self._execute_via_ollama(request, max_tokens=max_tokens)
+        return self._execute_via_cli(request, max_tokens=max_tokens)
 
     @staticmethod
     def _should_fallback(exc: HermesError) -> bool:
@@ -343,7 +344,7 @@ class HermesClient(CLIAgentBase):
             )
         )
 
-    def _execute_via_cli(self, request: AgentRequest) -> AgentResponse:
+    def _execute_via_cli(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute via the NousResearch Hermes CLI."""
         prompt = request.prompt
         context = request.context or {}
@@ -405,6 +406,7 @@ class HermesClient(CLIAgentBase):
         request: AgentRequest,
         *,
         model_override: str | None = None,
+        max_tokens: int | None = None,
     ) -> AgentResponse:
         """Execute via ``ollama run <model>``.
 
@@ -415,7 +417,16 @@ class HermesClient(CLIAgentBase):
         ollama_bin = shutil.which("ollama") or "ollama"
         model = model_override or self._ollama_model
         prompt = request.prompt
-        cmd = [ollama_bin, "run", model, prompt]
+        cmd = [ollama_bin, "run", model]
+        if max_tokens:
+            # Note: This is an approximation/best effort for the CLI backend.
+            # Real token limiting is usually handled at the provider level for OpenAI/OpenRouter types.
+            # For local ollama run, we inject it into the prompt or hope the backend supports it.
+            # However, for pure Ollama API use we would use options.
+            # Here we wrap the prompt with a limit instruction.
+            prompt = f"(Limit response to {max_tokens} tokens)\n{prompt}"
+        
+        cmd.append(prompt)
 
         self.logger.info("Hermes via Ollama: model=%s, prompt=%s…", model, prompt[:60])
         start = time.time()
@@ -525,8 +536,6 @@ class HermesClient(CLIAgentBase):
             f"<EXCERPT>\n{hist_text}\n</EXCERPT>"
         )
 
-        from codomyrmex.agents.core import AgentRequest
-
         self.logger.info(
             "Triggering context summarization for session %s (compressing %d messages)",
             session.session_id,
@@ -593,9 +602,6 @@ class HermesClient(CLIAgentBase):
     ) -> None:
         """Export a semantic session summary to the Obsidian Vault if configured."""
         try:
-            import os
-            from pathlib import Path
-
             from codomyrmex.agentic_memory.obsidian.crud import create_note
             from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
@@ -635,6 +641,7 @@ class HermesClient(CLIAgentBase):
         prompt: str,
         session_id: str | None = None,
         session_name: str | None = None,
+        max_tokens: int | None = None,
     ) -> AgentResponse:
         """Execute a stateful multi-turn chat.
 
@@ -724,7 +731,7 @@ class HermesClient(CLIAgentBase):
                     full_prompt = f"{system_directives}\n\nUser: {current_prompt}"
 
                 request = AgentRequest(prompt=full_prompt)
-                response = self.execute(request)
+                response = self.execute(request, max_tokens=max_tokens)
                 final_response = response
 
                 if response.is_success():
@@ -1315,4 +1322,50 @@ class HermesClient(CLIAgentBase):
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             return store.get_detail(session_id)
+
+    def session_merge(
+        self, target_id: str, source_ids: list[str], deduplicate: bool = True
+    ) -> bool:
+        """Merge multiple source sessions into a target session.
+
+        Args:
+            target_id: Destination session identifier. Created if missing.
+            source_ids: List of session identifiers to pull messages from.
+            deduplicate: If True, exact duplicate consecutive messages are skipped.
+
+        Returns:
+            ``True`` if at least one session was merged successfully.
+        """
+        with SQLiteSessionStore(self._session_db_path) as store:
+            target = store.load(target_id)
+            if not target:
+                target = HermesSession(session_id=target_id)
+                store.save(target)
+
+            merged_any = False
+            for src_id in source_ids:
+                src = store.load(src_id)
+                if not src:
+                    self.logger.warning("Merge source session '%s' not found.", src_id)
+                    continue
+
+                for msg in src.messages:
+                    # Skip system prompts from sources if target already has messages
+                    if msg.get("role") == "system" and target.messages:
+                        continue
+                    
+                    if deduplicate and target.messages:
+                        last = target.messages[-1]
+                        if (
+                            msg.get("role") == last.get("role")
+                            and msg.get("content") == last.get("content")
+                        ):
+                            continue
+                    
+                    target.add_message(msg["role"], msg["content"])
+                    merged_any = True
+            
+            if merged_any:
+                store.save(target)
+            return merged_any
 

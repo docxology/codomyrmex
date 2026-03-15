@@ -1384,3 +1384,112 @@ def hermes_prune_sessions(days_old: int = 30) -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Check the current model rotation state, including health, priorities, "
+        "and active cooldown periods for free OpenRouter models."
+    ),
+)
+def hermes_rotation_status() -> dict[str, Any]:
+    """Check LLM rotation configuration and health.
+
+    Returns:
+        dict with keys: status, rotation_models, active_cooldowns
+    """
+    try:
+        client = _get_client()
+        router = client._router
+        models = router.get_rotation_models()
+        import time
+
+        now = time.time()
+        cooldowns = {
+            m_id: f"{int(expiry - now)}s remaining"
+            for m_id, expiry in router._cooldowns.items()
+            if expiry > now
+        }
+        return {
+            "status": "success",
+            "rotation_models": models,
+            "active_cooldowns": cooldowns,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Merge multiple source sessions into a destination session. "
+        "Useful for consolidating research or combining context from parallel tasks."
+    ),
+)
+def hermes_session_merge(
+    target_id: str,
+    source_ids: list[str],
+    deduplicate: bool = True,
+) -> dict[str, Any]:
+    """Consolidate multiple sessions into one.
+
+    Args:
+        target_id: Destination session ID (created if missing).
+        source_ids: List of session IDs to pull messages from.
+        deduplicate: Skip exact back-to-back duplicates (default True).
+
+    Returns:
+        dict with status, message
+    """
+    try:
+        client = _get_client()
+        ok = client.session_merge(target_id, source_ids, deduplicate=deduplicate)
+        return {
+            "status": "success" if ok else "error",
+            "message": f"Merged sources into {target_id}" if ok else "Merge failed or no sessions found",
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Perform a comprehensive health check of the Hermes agent subsystem. "
+        "Verifies CLI binary, Ollama backend, API keys, and session database integrity."
+    ),
+)
+def hermes_health_check() -> dict[str, Any]:
+    """Deep diagnostic check for Hermes.
+
+    Returns:
+        dict with diagnostic report
+    """
+    try:
+        client = _get_client()
+        status = client.get_hermes_status()
+        
+        # Check sessions DB
+        from codomyrmex.agents.hermes.session import SQLiteSessionStore
+        with SQLiteSessionStore(client._session_db_path) as store:
+            db_stats = store.get_stats()
+            
+        # Check rotation models
+        models = client._router.get_rotation_models()
+        
+        return {
+            "status": "success",
+            "backends": status,
+            "database": db_stats,
+            "rotation_config": {
+                "active_models": len(models),
+                "path": client._router._rotation_path,
+            },
+            "environment": {
+                "python_version": sys.version.split()[0],
+                "platform": sys.platform,
+            }
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
