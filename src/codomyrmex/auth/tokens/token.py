@@ -8,6 +8,7 @@ This module provides token functionality including:
 
 from __future__ import annotations
 
+import secrets
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -67,7 +68,7 @@ class TokenManager:
         Args:
             secret: Secret key for token signing
         """
-        self.secret = secret or "default_secret_change_in_production"
+        self.secret = secret or secrets.token_urlsafe(32)
         self.validator = TokenValidator(self.secret)
         self._tokens: dict[str, Token] = {}
         self._revoked_tokens: set[str] = set()
