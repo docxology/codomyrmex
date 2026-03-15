@@ -35,6 +35,7 @@ class RuleSection:
     content: str
 
     def to_dict(self) -> dict[str, Any]:
+        """Serialize this section to a plain dictionary."""
         return {"number": self.number, "title": self.title, "content": self.content}
 
 
@@ -56,6 +57,7 @@ class Rule:
         return None
 
     def to_dict(self) -> dict[str, Any]:
+        """Serialize this rule to a plain dictionary with resolved paths."""
         return {
             "name": self.name,
             "priority": self.priority.name,
@@ -76,4 +78,5 @@ class RuleSet:
         return sorted(self.rules, key=lambda r: r.priority.value)
 
     def to_dict(self) -> list[dict[str, Any]]:
+        """Serialize all rules as a list of dicts, sorted by priority."""
         return [r.to_dict() for r in self.resolved()]
