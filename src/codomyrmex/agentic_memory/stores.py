@@ -69,7 +69,7 @@ class JSONFileStore:
     # ── internal ─────────────────────────────────────────────────
 
     def _flush(self) -> None:
-        """Flush."""
+        """Write the full in-memory dataset to the JSON file on disk."""
         self._path.parent.mkdir(parents=True, exist_ok=True)
         with open(self._path, "w") as fh:
             json.dump(list(self._data.values()), fh, indent=2)
@@ -77,13 +77,13 @@ class JSONFileStore:
     # ── public API ───────────────────────────────────────────────
 
     def save(self, memory: Memory) -> None:
-        """Save data to the specified destination."""
+        """Persist a Memory entry to the JSON file, keyed by its ID."""
         with self._lock:
             self._data[memory.id] = memory.to_dict()
             self._flush()
 
     def get(self, memory_id: str) -> Memory | None:
-        """Return the requested value."""
+        """Retrieve a Memory by ID, or return None if not found."""
         with self._lock:
             raw = self._data.get(memory_id)
         if raw is None:
@@ -91,7 +91,7 @@ class JSONFileStore:
         return Memory.from_dict(raw)
 
     def delete(self, memory_id: str) -> bool:
-        """Delete the specified resource."""
+        """Remove a Memory by ID. Returns True if it existed and was deleted."""
         with self._lock:
             if memory_id in self._data:
                 del self._data[memory_id]
@@ -100,5 +100,6 @@ class JSONFileStore:
             return False
 
     def list_all(self) -> list[Memory]:
+        """Return all stored Memory objects, reconstructed from disk."""
         with self._lock:
             return [Memory.from_dict(v) for v in self._data.values()]
