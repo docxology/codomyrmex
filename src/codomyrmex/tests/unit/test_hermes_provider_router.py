@@ -5,6 +5,7 @@ Zero-Mock: All tests use real objects with filesystem I/O (tmp_path).
 
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING
 
 from codomyrmex.agents.hermes._provider_router import (
@@ -255,3 +256,131 @@ class TestMCPBridgeManager:
         config = tmp_path / "nonexistent" / "mcp_servers.json"
         mgr = MCPBridgeManager(config_path=str(config))
         assert mgr.list_servers() == []
+
+    def test_servers_returns_copy(self, tmp_path: Path) -> None:
+        """Mutating the servers dict should not affect internal state."""
+        config = tmp_path / "mcp_servers.json"
+        mgr = MCPBridgeManager(config_path=str(config))
+        mgr.register_server("s1", command="echo")
+        servers = mgr.servers
+        servers["s1"]["command"] = "mutated"
+        assert mgr.servers["s1"]["command"] == "echo"
+
+    def test_save_config_creates_parent_dirs(self, tmp_path: Path) -> None:
+        """save_config should create intermediate directories."""
+        config = tmp_path / "deep" / "nested" / "mcp_servers.json"
+        mgr = MCPBridgeManager(config_path=str(config))
+        mgr.register_server("s1", command="echo")
+        assert config.exists()
+        data = json.loads(config.read_text())
+        assert "s1" in data
+
+
+# ── ProviderRouter.get_rotation_models ──────────────────────────────
+
+
+class TestProviderRouterRotation:
+    """Verify rotation model reading logic."""
+
+    def test_get_rotation_models_nonexistent(self, tmp_path: Path) -> None:
+        """Should return empty list when no rotation config exists."""
+        router = ProviderRouter(
+            env_path=str(tmp_path / "nonexistent.env"),
+        )
+        # Point to a nonexistent rotation file
+        router._rotation_path = str(tmp_path / "no_rotation.json")
+        assert router.get_rotation_models() == []
+
+    def test_get_rotation_models_returns_sorted(self, tmp_path: Path) -> None:
+        """Models should be sorted by priority."""
+        rotation_file = tmp_path / "rotation.json"
+        rotation_file.write_text(json.dumps({
+            "rotation_models": [
+                {"model": "low-pri", "priority": 10},
+                {"model": "high-pri", "priority": 1},
+                {"model": "mid-pri", "priority": 5},
+            ]
+        }))
+        router = ProviderRouter(env_path=str(tmp_path / ".env"))
+        router._rotation_path = str(rotation_file)
+        models = router.get_rotation_models()
+        assert len(models) == 3
+        assert models[0]["model"] == "high-pri"
+        assert models[1]["model"] == "mid-pri"
+        assert models[2]["model"] == "low-pri"
+
+    def test_get_rotation_models_malformed_json(self, tmp_path: Path) -> None:
+        """Should return empty list on invalid JSON, not crash."""
+        rotation_file = tmp_path / "bad_rotation.json"
+        rotation_file.write_text("{not valid json")
+        router = ProviderRouter(env_path=str(tmp_path / ".env"))
+        router._rotation_path = str(rotation_file)
+        assert router.get_rotation_models() == []
+
+    def test_get_rotation_models_missing_key(self, tmp_path: Path) -> None:
+        """Should return empty list when rotation_models key is absent."""
+        rotation_file = tmp_path / "rotation.json"
+        rotation_file.write_text(json.dumps({"other_key": []}))
+        router = ProviderRouter(env_path=str(tmp_path / ".env"))
+        router._rotation_path = str(rotation_file)
+        assert router.get_rotation_models() == []
+
+    def test_get_rotation_models_missing_priority_defaults(self, tmp_path: Path) -> None:
+        """Models without priority should sort to end (default 99)."""
+        rotation_file = tmp_path / "rotation.json"
+        rotation_file.write_text(json.dumps({
+            "rotation_models": [
+                {"model": "no-priority"},
+                {"model": "has-priority", "priority": 1},
+            ]
+        }))
+        router = ProviderRouter(env_path=str(tmp_path / ".env"))
+        router._rotation_path = str(rotation_file)
+        models = router.get_rotation_models()
+        assert models[0]["model"] == "has-priority"
+        assert models[1]["model"] == "no-priority"
+
+
+# ── ContextCompressor edge cases ────────────────────────────────────
+
+
+class TestContextCompressorEdgeCases:
+    """Verify edge cases in context compression."""
+
+    def test_deduplicate_empty(self) -> None:
+        """Empty list should return empty list."""
+        assert ContextCompressor._deduplicate([]) == []
+
+    def test_deduplicate_single_message(self) -> None:
+        """Single message should pass through unchanged."""
+        msg = [{"role": "user", "content": "hello"}]
+        assert ContextCompressor._deduplicate(msg) == msg
+
+    def test_deduplicate_all_identical(self) -> None:
+        """All identical consecutive messages should reduce to one."""
+        msgs = [{"role": "user", "content": "same"}] * 5
+        result = ContextCompressor._deduplicate(msgs)
+        assert len(result) == 1
+
+    def test_estimate_tokens_missing_content_key(self) -> None:
+        """Messages without 'content' key should not crash."""
+        c = ContextCompressor()
+        msgs = [{"role": "system"}]
+        assert c.estimate_tokens(msgs) == 0
+
+    def test_compress_no_content_key(self) -> None:
+        """Compressing messages without content key should not crash."""
+        c = ContextCompressor(max_tokens=10)
+        msgs = [{"role": "system"}] * 30
+        result = c.compress(msgs)
+        assert isinstance(result, list)
+
+    def test_compress_truncates_long_messages(self) -> None:
+        """Individual messages should be truncated if too long."""
+        c = ContextCompressor(max_tokens=100, compression_ratio=0.5)
+        msgs = [{"role": "user", "content": "x" * 10000} for _ in range(10)]
+        result = c.compress(msgs)
+        # All remaining messages should be shorter
+        for msg in result:
+            if msg.get("role") != "system":
+                assert "[...truncated]" in msg.get("content", "") or len(msg.get("content", "")) < 10000

@@ -64,8 +64,11 @@ class ProviderRouter:
         self.model = model
         self.fallback_model = fallback_model or model
         self._env_path = env_path or os.path.expanduser("~/.hermes/.env")
+        self._rotation_path = os.path.expanduser("~/.hermes/rotation.json")
         self._credentials: dict[str, str] = {}
+        self._cooldowns: dict[str, float] = {}  # model_id -> end_time
         self._load_credentials()
+        self._ensure_rotation_config()
 
     def _load_credentials(self) -> None:
         """Load API credentials from environment and .env file."""
@@ -142,6 +145,37 @@ class ProviderRouter:
                 return provider
         raise RuntimeError("No provider has valid credentials. Run 'hermes setup'.")
 
+    def _ensure_rotation_config(self) -> None:
+        """Ensure rotation.json exists, creating it from template if needed."""
+        if not os.path.exists(self._rotation_path):
+            try:
+                template_path = (
+                    Path(__file__).parent / "templates" / "rotation_template.json"
+                )
+                if template_path.exists():
+                    os.makedirs(os.path.dirname(self._rotation_path), exist_ok=True)
+                    shutil.copy(template_path, self._rotation_path)
+                    logger.info("Created rotation config from template: %s", self._rotation_path)
+            except Exception as exc:
+                logger.warning("Failed to create rotation config: %s", exc)
+
+    def get_rotation_models(self) -> list[dict[str, Any]]:
+        """Read rotation models from config.
+
+        Returns:
+            List of model config dicts, sorted by priority.
+        """
+        if not os.path.exists(self._rotation_path):
+            return []
+        try:
+            with open(self._rotation_path) as f:
+                data = json.load(f)
+                models = data.get("rotation_models", [])
+                return sorted(models, key=lambda x: x.get("priority", 99))
+        except (json.JSONDecodeError, OSError) as exc:
+            logger.warning("Failed to read rotation config: %s", exc)
+            return []
+
     def call_llm(
         self,
         prompt: str,
@@ -167,6 +201,29 @@ class ProviderRouter:
         """
         resolved_provider = provider or self.resolve_provider()
         resolved_model = model or self.model
+
+        import time
+
+        # Check if we should rotate
+        if resolved_provider == "openrouter" and not model:
+            rotation_models = self.get_rotation_models()
+            for r_model in rotation_models:
+                m_id = r_model["model"]
+                if self._cooldowns.get(m_id, 0) > time.time():
+                    continue
+
+                logger.info("Attempting rotated model: %s", m_id)
+                try:
+                    res = self._dispatch(prompt, "openrouter", m_id, timeout)
+                    if res["success"]:
+                        return res
+                except Exception as exc:
+                    # If 429 specifically, add to cooldown
+                    if "429" in str(exc) or "Rate limit" in str(exc):
+                        cooldown = r_model.get("cooldown_seconds", 60)
+                        self._cooldowns[m_id] = time.time() + cooldown
+                        logger.warning("Model %s rate limited. Cooldown: %ds", m_id, cooldown)
+                    continue
 
         try:
             return self._dispatch(prompt, resolved_provider, resolved_model, timeout)
@@ -295,13 +352,42 @@ class ProviderRouter:
 
         ollama_bin = shutil.which("ollama") or "ollama"
         cmd = [ollama_bin, "run", model, prompt]
-        proc = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-            env={**os.environ, "NO_COLOR": "1"},
-        )
+        
+        try:
+            proc = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                env={**os.environ, "NO_COLOR": "1"},
+            )
+        except subprocess.TimeoutExpired:
+            raise RuntimeError(f"Ollama {model} timed out after {timeout}s")
+
+        if proc.returncode != 0:
+            stderr = proc.stderr.strip()
+            # Check if model needs to be pulled
+            if "pull" in stderr or "not found" in stderr.lower():
+                logger.info("Model '%s' not found. Attempting 'ollama pull'...", model)
+                try:
+                    subprocess.run(
+                        [ollama_bin, "pull", model],
+                        capture_output=True,
+                        text=True,
+                        timeout=300,  # Longer timeout for pull
+                        check=True,
+                    )
+                    # Retry once
+                    proc = subprocess.run(
+                        cmd,
+                        capture_output=True,
+                        text=True,
+                        timeout=timeout,
+                        env={**os.environ, "NO_COLOR": "1"},
+                    )
+                except Exception as pull_exc:
+                    raise RuntimeError(f"Ollama pull failed for model '{model}': {pull_exc}")
+
         if proc.returncode != 0 or not proc.stdout.strip():
             raise RuntimeError(
                 f"Ollama {model} failed (exit {proc.returncode}): "
@@ -746,8 +832,9 @@ class MCPBridgeManager:
 
     @property
     def servers(self) -> dict[str, dict[str, Any]]:
-        """Return current server configurations."""
-        return dict(self._servers)
+        """Return current server configurations (deep copy)."""
+        import copy
+        return copy.deepcopy(self._servers)
 
     def list_servers(self) -> list[dict[str, Any]]:
         """List all configured MCP servers.
