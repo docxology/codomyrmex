@@ -1253,6 +1253,7 @@ class HermesClient(CLIAgentBase):
             self.timeout = timeout
 
         def _execute_one(prompt: str) -> dict[str, Any]:
+            """Execute a single prompt and return a normalized result dict."""
             try:
                 resp = self.execute(AgentRequest(prompt=prompt))
                 return {
