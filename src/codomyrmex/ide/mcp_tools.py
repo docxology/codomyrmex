@@ -28,6 +28,88 @@ def ide_get_active_file() -> dict:
 
 
 @mcp_tool(category="ide")
+def ide_list_integrations() -> dict:
+    """List available IDE integrations.
+
+    Returns the names of the supported IDE integrations that can be connected to.
+
+    Returns:
+        Dictionary with a list of available IDE integrations.
+    """
+    return {
+        "status": "success",
+        "integrations": ["antigravity", "cursor", "vscode"],
+    }
+
+
+def _get_client(integration: str):
+    """Helper to get the corresponding IDE client."""
+    if integration == "antigravity":
+        from codomyrmex.ide.antigravity.client import AntigravityClient
+
+        return AntigravityClient()
+    elif integration == "cursor":
+        from codomyrmex.ide.cursor import CursorClient
+
+        return CursorClient()
+    elif integration == "vscode":
+        from codomyrmex.ide.vscode import VSCodeClient
+
+        return VSCodeClient()
+    else:
+        raise ValueError(f"Unknown IDE integration: {integration}")
+
+
+@mcp_tool(category="ide")
+def ide_get_status(integration: str) -> dict:
+    """Get the connection status of a specified IDE integration.
+
+    Args:
+        integration: The name of the IDE integration ("antigravity", "cursor", "vscode").
+
+    Returns:
+        Dictionary with the connection status or error.
+    """
+    try:
+        client = _get_client(integration)
+        client.connect()
+        return {
+            "status": "success",
+            "integration": integration,
+            "connection_status": client.status.value,
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
+@mcp_tool(category="ide")
+def ide_execute_command(
+    integration: str, command: str, args: dict | None = None
+) -> dict:
+    """Execute an IDE command on a specified integration.
+
+    Args:
+        integration: The name of the IDE integration ("antigravity", "cursor", "vscode").
+        command: The command to execute.
+        args: Optional arguments for the command.
+
+    Returns:
+        Dictionary with the execution result or error.
+    """
+    try:
+        client = _get_client(integration)
+        client.connect()
+        result = client.execute_command_safe(command, args=args)
+        return {
+            "status": "success",
+            "integration": integration,
+            "result": result.to_dict(),
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
+@mcp_tool(category="ide")
 def ide_list_tools() -> dict:
     """List all available Antigravity IDE tools.
 
