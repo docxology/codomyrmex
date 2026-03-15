@@ -157,7 +157,10 @@ class ProviderRouter:
                 if template_path.exists():
                     os.makedirs(os.path.dirname(self._rotation_path), exist_ok=True)
                     shutil.copy(template_path, self._rotation_path)
-                    logger.info("Created rotation config from template: %s", self._rotation_path)
+                    logger.info(
+                        "Created rotation config: %s",
+                        self._rotation_path,
+                    )
             except Exception as exc:
                 logger.warning("Failed to create rotation config: %s", exc)
 
@@ -226,7 +229,11 @@ class ProviderRouter:
                     if "429" in str(exc) or "Rate limit" in str(exc):
                         cooldown = r_model.get("cooldown_seconds", 60)
                         self._cooldowns[m_id] = time.time() + cooldown
-                        logger.warning("Model %s rate limited. Cooldown: %ds", m_id, cooldown)
+                        logger.warning(
+                            "Model %s rate limited. Cooldown: %ds",
+                            m_id,
+                            cooldown,
+                        )
                     continue
 
         try:
@@ -354,7 +361,7 @@ class ProviderRouter:
         """Call Ollama directly."""
         ollama_bin = shutil.which("ollama") or "ollama"
         cmd = [ollama_bin, "run", model, prompt]
-        
+
         try:
             proc = subprocess.run(
                 cmd,
@@ -388,7 +395,9 @@ class ProviderRouter:
                         env={**os.environ, "NO_COLOR": "1"},
                     )
                 except Exception as pull_exc:
-                    raise RuntimeError(f"Ollama pull failed for model '{model}': {pull_exc}")
+                    raise RuntimeError(
+                        f"Ollama pull failed for model '{model}': {pull_exc}"
+                    )
 
         if proc.returncode != 0 or not proc.stdout.strip():
             raise RuntimeError(
