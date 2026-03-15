@@ -126,6 +126,7 @@ def test_coverage_loop_repairs_failing_code(temp_workspace, monkeypatch):
             env = kwargs.get("env", os.environ).copy()
             src_base = str(workspace_root / "src")
             env["PYTHONPATH"] = f"{src_base}:{env.get('PYTHONPATH', '')}"
+            env["PYTHONDONTWRITEBYTECODE"] = "1"
             kwargs["env"] = env
 
             result = original_run(mapped_cmd, *args, **kwargs)

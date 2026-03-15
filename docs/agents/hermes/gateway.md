@@ -139,7 +139,7 @@ The upstream `60cce9c` update (March 2026) added full Discord **voice channel** 
 | :------ | :----- |
 | **RTP capture** | Decrypts NaCl-encrypted RTP packets per-user via Discord's DAVE E2EE protocol |
 | **Opus → PCM** | Decodes Opus audio to PCM; buffers per-user with silence detection |
-| **Voice mode** | `/voice [on|off|tts|channel|leave|status]` per-chat toggle command |
+| **Voice mode** | `/voice [on\|off\|tts\|channel\|leave\|status]` per-chat toggle command |
 | **Voice persistence** | State saved to `$HERMES_HOME/gateway_voice_mode.json` across restarts |
 | **Voice timeout** | Bot auto-disconnects after 5 minutes of channel inactivity |
 | **Diagnostic script** | `discord-voice-doctor.py` — checks packages, permissions, Opus codec |

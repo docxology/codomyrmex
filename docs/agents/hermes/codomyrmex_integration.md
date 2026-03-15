@@ -268,3 +268,4 @@ The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent.
 | Markdown export | ❌ | ✅ |
 | System prompt management | ❌ | ✅ |
 
+```mermaid
