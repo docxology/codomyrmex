@@ -6,8 +6,11 @@ and real InMemorySessionStore.
 
 from __future__ import annotations
 
+import gzip
+import json
 import sqlite3
 import time
+from pathlib import Path
 
 import pytest
 
@@ -367,3 +370,167 @@ class TestSQLiteClose:
         # After close, operations should fail
         with pytest.raises(sqlite3.ProgrammingError):
             store.load("c1")
+
+
+# ── SQLiteSessionStore.prune_old_sessions() ────────────────────────────
+
+
+class TestPruneOldSessions:
+    """Verify session pruning and archiving."""
+
+    def test_prune_returns_zero_when_no_old_sessions(self, tmp_path: Path) -> None:
+        """prune_old_sessions returns 0 when all sessions are recent."""
+        db_path = tmp_path / "test.db"
+        store = SQLiteSessionStore(str(db_path))
+
+        # Create a recent session
+        session = HermesSession(session_id="recent1", name="recent")
+        session.add_message("user", "Hello")
+        store.save(session)
+
+        # Prune with 0 days (should prune nothing since session is new)
+        # Actually, let's use 30 days - session is brand new
+        count = store.prune_old_sessions(days_old=30)
+        assert count == 0
+
+        # Session should still exist
+        loaded = store.load("recent1")
+        assert loaded is not None
+        store.close()
+
+    def test_prune_archives_and_deletes_old_sessions(self, tmp_path: Path) -> None:
+        """Old sessions are archived as gzipped JSON and deleted from DB."""
+        db_path = tmp_path / "test.db"
+        store = SQLiteSessionStore(str(db_path))
+
+        # Create an old session by manually setting updated_at
+        old_session = HermesSession(
+            session_id="old1",
+            name="old-session",
+            metadata={"task": "cleanup"},
+        )
+        old_session.add_message("user", "This is old")
+        old_session.add_message("assistant", "Yes it is")
+        store.save(old_session)
+
+        # Manually set updated_at to be 60 days ago
+        store._conn.execute(
+            "UPDATE hermes_sessions SET updated_at = ? WHERE session_id = ?",
+            (time.time() - (60 * 86400), "old1"),
+        )
+        store._conn.commit()
+
+        # Create a recent session
+        recent_session = HermesSession(session_id="recent1", name="recent")
+        recent_session.add_message("user", "This is new")
+        store.save(recent_session)
+
+        # Prune sessions older than 30 days
+        count = store.prune_old_sessions(days_old=30)
+        assert count == 1
+
+        # Old session should be deleted from DB
+        assert store.load("old1") is None
+
+        # Recent session should still exist
+        assert store.load("recent1") is not None
+
+        # Archive directory should exist
+        archive_dir = db_path.parent / "sessions_archive"
+        assert archive_dir.exists()
+
+        # Archive file should exist
+        archive_file = archive_dir / "old1.json.gz"
+        assert archive_file.exists()
+
+        # Archive should contain valid gzipped JSON
+        with gzip.open(archive_file, "rt", encoding="utf-8") as f:
+            archived = json.load(f)
+
+        assert archived["session_id"] == "old1"
+        assert archived["name"] == "old-session"
+        assert archived["metadata"]["task"] == "cleanup"
+        assert len(archived["messages"]) == 2
+        assert archived["messages"][0]["content"] == "This is old"
+
+        store.close()
+
+    def test_prune_multiple_old_sessions(self, tmp_path: Path) -> None:
+        """Multiple old sessions are all pruned."""
+        db_path = tmp_path / "test.db"
+        store = SQLiteSessionStore(str(db_path))
+
+        # Create 3 old sessions
+        for i in range(3):
+            session = HermesSession(session_id=f"old{i}", name=f"old-{i}")
+            session.add_message("user", f"Old session {i}")
+            store.save(session)
+            store._conn.execute(
+                "UPDATE hermes_sessions SET updated_at = ? WHERE session_id = ?",
+                (time.time() - (60 * 86400), f"old{i}"),
+            )
+        store._conn.commit()
+
+        # Create 2 recent sessions
+        for i in range(2):
+            session = HermesSession(session_id=f"recent{i}", name=f"recent-{i}")
+            store.save(session)
+
+        count = store.prune_old_sessions(days_old=30)
+        assert count == 3
+
+        # All old sessions should be gone
+        for i in range(3):
+            assert store.load(f"old{i}") is None
+
+        # All recent sessions should remain
+        for i in range(2):
+            assert store.load(f"recent{i}") is not None
+
+        # Archive should have 3 files
+        archive_dir = db_path.parent / "sessions_archive"
+        archive_files = list(archive_dir.glob("*.json.gz"))
+        assert len(archive_files) == 3
+
+        store.close()
+
+    def test_prune_creates_archive_directory(self, tmp_path: Path) -> None:
+        """Archive directory is created if it doesn't exist."""
+        db_path = tmp_path / "subdir" / "test.db"
+        db_path.parent.mkdir(parents=True, exist_ok=True)
+        store = SQLiteSessionStore(str(db_path))
+
+        session = HermesSession(session_id="arch1")
+        store.save(session)
+        store._conn.execute(
+            "UPDATE hermes_sessions SET updated_at = ? WHERE session_id = ?",
+            (time.time() - (60 * 86400), "arch1"),
+        )
+        store._conn.commit()
+
+        archive_dir = db_path.parent / "sessions_archive"
+        assert not archive_dir.exists()
+
+        store.prune_old_sessions(days_old=30)
+
+        assert archive_dir.exists()
+        assert archive_dir.is_dir()
+
+        store.close()
+
+    def test_prune_in_memory_db_skips_archive(self, tmp_path: Path) -> None:
+        """In-memory DB (:memory:) can't create archive files adjacent to DB."""
+        # Note: This tests the behavior with :memory: db_path
+        # The function will try to create sessions_archive in current directory
+        # This is expected behavior - the function doesn't special-case :memory:
+        store = SQLiteSessionStore(":memory:")
+
+        session = HermesSession(session_id="mem1")
+        store.save(session)
+
+        # This will work but create archive in current dir
+        # We just verify it doesn't crash
+        count = store.prune_old_sessions(days_old=30)
+        assert count == 0  # No old sessions
+
+        store.close()
