@@ -16,6 +16,7 @@ from codomyrmex.agents.core.exceptions import (
     MistralVibeError,
     OpenClawError,
     OpenCodeError,
+    PaperclipError,
     SessionError,
     ToolError,
 )
@@ -240,3 +241,36 @@ class TestContextError:
         e = ContextError()
         assert "context_size" not in e.context
         assert "max_context" not in e.context
+
+
+class TestPaperclipError:
+    """Tests for PaperclipError — the Paperclip CLI/API exception."""
+
+    def test_is_agent_error(self):
+        assert issubclass(PaperclipError, AgentError)
+
+    def test_default_message(self):
+        e = PaperclipError()
+        assert "Paperclip" in str(e) or "failed" in str(e).lower()
+
+    def test_with_command_and_exit_code(self):
+        e = PaperclipError(command="paperclip run", exit_code=1)
+        assert e.context["command"] == "paperclip run"
+        assert e.context["exit_code"] == 1
+
+    def test_without_command(self):
+        e = PaperclipError("Paperclip failed")
+        assert "command" not in e.context
+        assert "exit_code" not in e.context
+
+    def test_exit_code_zero_stored(self):
+        e = PaperclipError(exit_code=0)
+        assert e.context["exit_code"] == 0
+
+    def test_is_raiseable(self):
+        with pytest.raises(PaperclipError):
+            raise PaperclipError("crash!")
+
+    def test_inherits_context_from_agent_error(self):
+        e = PaperclipError(command="test", exit_code=42)
+        assert isinstance(e.context, dict)
