@@ -6,9 +6,12 @@ Automatically uses Ollama hermes3 when the Hermes CLI is unavailable.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+
+if TYPE_CHECKING:
+    from codomyrmex.agents.hermes.hermes_client import HermesClient
 
 
 @mcp_tool(
@@ -53,7 +56,7 @@ def _get_client(
     backend: str = "auto",
     model: str = "hermes3",
     timeout: int = 120,
-) -> Any:
+) -> HermesClient:
     """Lazy-instantiate HermesClient with the given configuration.
 
     Args:
