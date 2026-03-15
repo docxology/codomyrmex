@@ -6,6 +6,7 @@ Automatically uses Ollama hermes3 when the Hermes CLI is unavailable.
 
 from __future__ import annotations
 
+import sys
 from typing import TYPE_CHECKING, Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
