@@ -137,10 +137,9 @@ class RaftNode:
 
         can_vote = self.voted_for is None or self.voted_for == candidate_id
 
-        # Log completeness check
-        last_log_term = self.log[-1].term if self.log else 0
-        last_log_index = len(self.log)
-        candidate_log_ok = True  # Simplified: accept if term >= ours
+        # Log completeness check (simplified: accept if term >= ours)
+        # TODO: Implement full Raft log comparison using last_log_term and last_log_index
+        candidate_log_ok = True
 
         if can_vote and candidate_log_ok:
             self.voted_for = candidate_id
