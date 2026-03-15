@@ -119,7 +119,7 @@ class QwenClient(APIAgentBase):
 
     # --- Core chat completion ---
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute Qwen API request with optional tool calling."""
         start_time = time.time()
 

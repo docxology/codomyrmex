@@ -20,7 +20,7 @@ def test_hermes_delegate_task_mcp_tool(tmp_path, monkeypatch):
     from codomyrmex.agents.core import AgentResponse
     from codomyrmex.agents.jules import JulesClient
 
-    def mock_execute_impl(self, request):
+    def mock_execute_impl(self, request, max_tokens=None):
         # Echo back the prompt to verify it received the directive and the file payload
         return AgentResponse(content=f"ECHO: {request.prompt}", error=None, metadata={})
 

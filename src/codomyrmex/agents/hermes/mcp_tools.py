@@ -31,6 +31,7 @@ def hermes_recall_memory(query: str, limit: int = 10) -> dict[str, Any]:
 
     Returns:
         dict with status, and results list containing matched snippets.
+
     """
     try:
         import os
@@ -64,6 +65,7 @@ def _get_client(
         backend: ``"auto"`` | ``"cli"`` | ``"ollama"``
         model: Ollama model name (default ``hermes3``)
         timeout: Subprocess timeout in seconds
+
     """
     from codomyrmex.agents.hermes.hermes_client import HermesClient
 
@@ -88,6 +90,7 @@ def hermes_status() -> dict[str, Any]:
 
     Returns:
         dict with active_backend, cli_available, ollama_available, ollama_model
+
     """
     try:
         client = _get_client()
@@ -109,6 +112,7 @@ def hermes_system_health() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, metrics (cpu_percent, ram_usage_percent, swap_usage_percent)
+
     """
     try:
         from codomyrmex.agents.hermes.monitoring import _get_system_metrics
@@ -137,6 +141,7 @@ def hermes_check_dependencies(package_name: str) -> dict[str, Any]:
 
     Returns:
         dict with status, exists boolean, and message.
+
     """
     try:
         from codomyrmex.environment_setup.lockfile import LockfileParser
@@ -176,6 +181,7 @@ def hermes_execute(
 
     Returns:
         dict with keys: status, content, error, metadata
+
     """
     try:
         from codomyrmex.agents.core import AgentRequest
@@ -202,6 +208,7 @@ def hermes_skills_list() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, output, or error info
+
     """
     try:
         client = _get_client(timeout=10)
@@ -225,6 +232,7 @@ def hermes_template_list() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, templates (list of names), count
+
     """
     try:
         from codomyrmex.agents.hermes.templates import TemplateLibrary
@@ -256,6 +264,7 @@ def hermes_template_render(
 
     Returns:
         dict with keys: status, template_name, rendered_prompt, system_prompt, variables_used
+
     """
     try:
         from codomyrmex.agents.hermes.templates import TemplateLibrary
@@ -291,6 +300,7 @@ def hermes_run_coverage_loop(target_filepath: str) -> dict[str, Any]:
 
     Returns:
         dict containing status, number of turns taken, and output trace.
+
     """
     try:
         # Load the client explicitly configured for the current repository
@@ -324,6 +334,7 @@ def hermes_stream(
 
     Returns:
         dict with keys: status, lines (list of str), line_count, backend
+
     """
     try:
         from codomyrmex.agents.core import AgentRequest
@@ -373,6 +384,7 @@ def hermes_chat_session(
 
     Returns:
         dict with keys: status, content, session_id, error, metadata
+
     """
     try:
         client = _get_client(backend=backend, model=model, timeout=timeout)
@@ -403,6 +415,7 @@ def hermes_session_list() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, sessions (list of str), count
+
     """
     try:
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
@@ -427,6 +440,7 @@ def hermes_session_clear(session_id: str) -> dict[str, Any]:
 
     Returns:
         dict with keys: status, deleted, message
+
     """
     try:
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
@@ -474,6 +488,7 @@ def hermes_sampling(
 
     Returns:
         dict with keys: status, content, model, stop_reason, usage
+
     """
     try:
         from codomyrmex.agents.core import AgentRequest
@@ -520,6 +535,7 @@ def hermes_mcp_reload() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, servers_loaded, output
+
     """
     try:
         from codomyrmex.agents.hermes._provider_router import MCPBridgeManager
@@ -553,6 +569,7 @@ def hermes_user_context(
 
     Returns:
         dict with keys: status, context or preference data
+
     """
     try:
         from codomyrmex.agents.hermes._provider_router import UserModel
@@ -591,6 +608,7 @@ def hermes_doctor() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, output, stderr, exit_code
+
     """
     try:
         client = _get_client()
@@ -609,6 +627,7 @@ def hermes_version() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, version
+
     """
     try:
         client = _get_client()
@@ -637,6 +656,7 @@ def hermes_worktree_create(session_id: str) -> dict[str, Any]:
 
     Returns:
         dict with keys: status, worktree_path, branch_name
+
     """
     try:
         client = _get_client()
@@ -664,6 +684,7 @@ def hermes_worktree_cleanup(session_id: str) -> dict[str, Any]:
 
     Returns:
         dict with keys: status, cleaned
+
     """
     try:
         client = _get_client()
@@ -685,6 +706,7 @@ def hermes_session_search(query: str) -> dict[str, Any]:
 
     Returns:
         dict with keys: status, sessions, count
+
     """
     try:
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
@@ -709,6 +731,7 @@ def hermes_honcho_status() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, output, exit_code
+
     """
     try:
         import os
@@ -753,6 +776,7 @@ def hermes_insights(days: int = 30) -> dict[str, Any]:
 
     Returns:
         dict with keys: status, output, exit_code
+
     """
     try:
         import os
@@ -794,6 +818,7 @@ def hermes_provider_status() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, providers (dict per provider)
+
     """
     try:
         from codomyrmex.agents.hermes._provider_router import ProviderRouter
@@ -820,6 +845,7 @@ def hermes_parse_canvas(vault_path: str, canvas_name: str) -> dict[str, Any]:
 
     Returns:
         dict with keys: status, nodes (list), edges (list), error (if any)
+
     """
     try:
         import os
@@ -889,6 +915,7 @@ def hermes_search_vault(
 
     Returns:
         dict with keys: status, results (list of snippets), count, error (if any)
+
     """
     try:
         import os
@@ -941,6 +968,7 @@ def hermes_create_task(
 
     Returns:
         dict with keys: status, task
+
     """
     try:
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
@@ -1006,6 +1034,7 @@ def hermes_update_task_status(
 
     Returns:
         dict with keys: status, task, message
+
     """
     try:
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
@@ -1061,6 +1090,7 @@ def hermes_delegate_task(
 
     Returns:
         dict with keys: status, sub_agent_response, execution_time_seconds
+
     """
     import time
     from pathlib import Path
@@ -1144,6 +1174,7 @@ def hermes_read_log_chunk(
 
     Returns:
         dict with keys: status, content, total_lines, eof
+
     """
     import os
 
@@ -1188,6 +1219,7 @@ def hermes_session_stats() -> dict[str, Any]:
     Returns:
         dict with keys: status, session_count, db_size_bytes,
         oldest_session_at, newest_session_at
+
     """
     try:
         client = _get_client()
@@ -1216,6 +1248,7 @@ def hermes_session_fork(
 
     Returns:
         dict with keys: status, child_session_id, name, parent_session_id
+
     """
     try:
         client = _get_client()
@@ -1247,6 +1280,7 @@ def hermes_session_export_md(session_id: str) -> dict[str, Any]:
 
     Returns:
         dict with keys: status, markdown, session_id
+
     """
     try:
         client = _get_client()
@@ -1281,6 +1315,7 @@ def hermes_batch_execute(
 
     Returns:
         dict with keys: status, results (list of {prompt, status, content, error}), count
+
     """
     try:
         client = _get_client(backend=backend, timeout=timeout)
@@ -1315,6 +1350,7 @@ def hermes_set_system_prompt(
 
     Returns:
         dict with keys: status, session_id, message
+
     """
     try:
         client = _get_client()
@@ -1344,6 +1380,7 @@ def hermes_session_detail(session_id: str) -> dict[str, Any]:
     Returns:
         dict with keys: status, session_id, name, message_count, last_message,
         has_system_prompt, metadata, created_at, updated_at
+
     """
     try:
         client = _get_client()
@@ -1370,6 +1407,7 @@ def hermes_prune_sessions(days_old: int = 30) -> dict[str, Any]:
 
     Returns:
         dict with keys: status, pruned_count, message
+
     """
     try:
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
@@ -1398,6 +1436,7 @@ def hermes_rotation_status() -> dict[str, Any]:
 
     Returns:
         dict with keys: status, rotation_models, active_cooldowns
+
     """
     try:
         client = _get_client()
@@ -1441,6 +1480,7 @@ def hermes_session_merge(
 
     Returns:
         dict with status, message
+
     """
     try:
         client = _get_client()
@@ -1465,6 +1505,7 @@ def hermes_health_check() -> dict[str, Any]:
 
     Returns:
         dict with diagnostic report
+
     """
     try:
         client = _get_client()

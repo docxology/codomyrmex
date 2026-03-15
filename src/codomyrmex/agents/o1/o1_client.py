@@ -51,7 +51,7 @@ class O1Client(APIAgentBase):
             config=config,
         )
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:  # type: ignore
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:  # type: ignore
         """Execute O1 API request."""
         start_time = time.time()
 

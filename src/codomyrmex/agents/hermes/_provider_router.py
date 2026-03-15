@@ -39,6 +39,7 @@ class ProviderRouter:
         providers: Ordered list of provider names to try.
         active_provider: The currently resolved provider.
         credentials: Cached credential lookups.
+
     """
 
     SUPPORTED_PROVIDERS = ("openrouter", "nous", "ollama", "zai", "openai", "anthropic")
@@ -59,6 +60,7 @@ class ProviderRouter:
             model: Primary model name.
             fallback_model: Fallback model name.
             env_path: Path to .env file for credential lookup.
+
         """
         self.primary_provider = primary_provider
         self.fallback_provider = fallback_provider
@@ -127,6 +129,7 @@ class ProviderRouter:
 
         Raises:
             RuntimeError: If no provider has valid credentials.
+
         """
         if self.has_credentials(self.primary_provider):
             return self.primary_provider
@@ -163,6 +166,7 @@ class ProviderRouter:
 
         Returns:
             List of model config dicts, sorted by priority.
+
         """
         if not os.path.exists(self._rotation_path):
             return []
@@ -197,6 +201,7 @@ class ProviderRouter:
         Returns:
             Dict with keys: ``success``, ``content``, ``provider``, ``model``,
             ``is_fallback``, ``error``.
+
         """
         resolved_provider = provider or self.resolve_provider()
         resolved_model = model or self.model
@@ -337,6 +342,7 @@ class ProviderRouter:
 
         Returns:
             Structured result dict.
+
         """
         if provider == "ollama":
             return self._call_ollama(prompt, model, timeout)
@@ -459,6 +465,7 @@ class UserModel:
         user_id: Identifier for the user profile.
         preferences: Accumulated user preferences.
         observations: Coding style and behavior observations.
+
     """
 
     def __init__(self, storage_dir: str | None = None) -> None:
@@ -466,6 +473,7 @@ class UserModel:
 
         Args:
             storage_dir: Directory for user model files.
+
         """
         self._storage_dir = Path(
             storage_dir or os.path.expanduser("~/.codomyrmex/user_model")
@@ -503,6 +511,7 @@ class UserModel:
         Args:
             session_id: Session identifier.
             summary: Brief summary of the session outcome.
+
         """
         history = self._profile.setdefault("session_history", [])
         history.append({"session_id": session_id, "summary": summary})
@@ -516,6 +525,7 @@ class UserModel:
 
         Args:
             observation: Text description of observed user behavior.
+
         """
         observations = self._profile.setdefault("observations", [])
         observations.append(observation)
@@ -529,6 +539,7 @@ class UserModel:
         Args:
             key: Preference key (e.g., ``"language"``, ``"style"``).
             value: Preference value.
+
         """
         self._profile.setdefault("preferences", {})[key] = value
         self.save()
@@ -538,6 +549,7 @@ class UserModel:
 
         Returns:
             A system-level context string summarizing user preferences.
+
         """
         prefs = self._profile.get("preferences", {})
         obs = self._profile.get("observations", [])
@@ -580,6 +592,7 @@ class ContextCompressor:
     Attributes:
         max_tokens: Maximum token estimate before compression triggers.
         compression_ratio: Target compression ratio (0.0–1.0).
+
     """
 
     # Rough chars-per-token estimate for English text
@@ -593,6 +606,7 @@ class ContextCompressor:
         Args:
             max_tokens: Token threshold for triggering compression.
             compression_ratio: Target ratio (0.5 = compress to 50% of original).
+
         """
         self.max_tokens = max_tokens
         self.compression_ratio = compression_ratio
@@ -605,6 +619,7 @@ class ContextCompressor:
 
         Returns:
             Estimated token count.
+
         """
         total_chars = sum(len(m.get("content", "")) for m in messages)
         return total_chars // self.CHARS_PER_TOKEN
@@ -617,6 +632,7 @@ class ContextCompressor:
 
         Returns:
             True if compression is recommended.
+
         """
         return self.estimate_tokens(messages) > self.max_tokens
 
@@ -633,6 +649,7 @@ class ContextCompressor:
 
         Returns:
             Compressed message list.
+
         """
         if not self.needs_compression(messages):
             return messages
@@ -685,6 +702,7 @@ class ContextCompressor:
 
         Returns:
             Messages with consecutive duplicates removed.
+
         """
         if not messages:
             return []
@@ -713,6 +731,7 @@ class MCPBridgeManager:
     Attributes:
         config_path: Path to the MCP servers config file.
         servers: Currently configured server definitions.
+
     """
 
     def __init__(self, config_path: str | None = None) -> None:
@@ -720,6 +739,7 @@ class MCPBridgeManager:
 
         Args:
             config_path: Path to MCP servers JSON config.
+
         """
         self._config_path = Path(
             config_path or os.path.expanduser("~/.hermes/mcp_servers.json")
@@ -758,6 +778,7 @@ class MCPBridgeManager:
             args: Optional command arguments.
             transport: Transport mechanism (``"stdio"`` or ``"http"``).
             description: Human-readable description.
+
         """
         self._servers[name] = {
             "command": command,
@@ -776,6 +797,7 @@ class MCPBridgeManager:
 
         Returns:
             True if the server was found and removed.
+
         """
         if name in self._servers:
             del self._servers[name]
@@ -791,6 +813,7 @@ class MCPBridgeManager:
 
         Returns:
             Dict with ``success`` and ``servers_loaded`` count.
+
         """
         self._load_config()
         server_count = len(self._servers)
@@ -833,5 +856,6 @@ class MCPBridgeManager:
 
         Returns:
             List of server info dicts with ``name``, ``command``, ``transport``.
+
         """
         return [{"name": name, **config} for name, config in self._servers.items()]

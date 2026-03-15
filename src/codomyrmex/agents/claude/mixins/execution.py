@@ -27,7 +27,7 @@ CLAUDE_PRICING = {
 class ExecutionMixin:
     """ExecutionMixin class."""
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:  # type: ignore
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:  # type: ignore
         """Execute Claude API request.
 
         Args:

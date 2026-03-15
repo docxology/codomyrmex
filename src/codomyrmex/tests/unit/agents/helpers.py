@@ -86,6 +86,7 @@ OPENCLAW_AVAILABLE = check_tool_available("openclaw")
 OPENCODE_AVAILABLE = check_tool_available("opencode")
 VIBE_AVAILABLE = check_tool_available("vibe")
 EVERY_CODE_AVAILABLE = check_tool_available("code") or check_tool_available("coder")
+PAPERCLIPAI_AVAILABLE = check_tool_available("paperclipai")
 
 
 def get_tool_version(command: str) -> str | None:

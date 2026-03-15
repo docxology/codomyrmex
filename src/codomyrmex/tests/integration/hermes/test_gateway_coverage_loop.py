@@ -31,7 +31,7 @@ class MockCoverageClient(HermesClient):
         super().__init__(*args, **kwargs)
         self.execute_call_count = 0
 
-    def execute(self, request: AgentRequest) -> AgentResponse:
+    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         self.execute_call_count += 1
         return AgentResponse(
             content="Fixed the issue.",

@@ -55,7 +55,7 @@ class DeepSeekClient(APIAgentBase):
             config=config,
         )
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:  # type: ignore
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:  # type: ignore
         """Execute DeepSeek API request."""
         start_time = time.time()
 

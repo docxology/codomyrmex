@@ -24,6 +24,7 @@ from .exceptions import (
     MistralVibeError,
     OpenClawError,
     OpenCodeError,
+    PaperclipError,
     SessionError,
     ToolError,
 )
@@ -73,6 +74,7 @@ __all__ = [
     "MistralVibeError",
     "OpenClawError",
     "OpenCodeError",
+    "PaperclipError",
     "ParseResult",
     # ReAct
     "ReActAgent",

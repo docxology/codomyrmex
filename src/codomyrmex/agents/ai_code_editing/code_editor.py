@@ -36,7 +36,7 @@ class CodeEditor(BaseAgent):
             config=config,
         )
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """
         Execute code editing request.
         For now, this is a simplified wrapper that assumes the prompt is a generation request.

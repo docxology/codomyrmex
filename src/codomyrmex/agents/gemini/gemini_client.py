@@ -113,7 +113,7 @@ class GeminiClient(
     # Core Agent Interface
     # =========================================================================
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute Gemini API request."""
         import time
 

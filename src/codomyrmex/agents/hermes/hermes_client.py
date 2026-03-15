@@ -30,6 +30,7 @@ from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
+    from .mcp_tools import reload_mcp_config
 
 # Packages allowed for automatic installation by the auto-heal system.
 # Only these well-known, commonly-safe packages may be installed without
@@ -103,6 +104,7 @@ class HermesClient(CLIAgentBase):
               - ``hermes_model``    (str, default ``"hermes3"``): Ollama model name
               - ``fallback_model``  (str | None): fallback model on provider errors
               - ``fallback_provider`` (str | None): fallback provider (e.g. ``"ollama"``)
+
         """
         cfg = config or {}
         super().__init__(
@@ -240,6 +242,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             True if at least one API key is configured.
+
         """
         # Method 1: check `hermes config` output
         try:
@@ -412,6 +415,7 @@ class HermesClient(CLIAgentBase):
         Args:
             request: Agent request to execute.
             model_override: Override the default Ollama model (used by fallback).
+
         """
         ollama_bin = shutil.which("ollama") or "ollama"
         model = model_override or self._ollama_model
@@ -652,6 +656,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             Response containing the assistant's reply and the session ID in metadata.
+
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             # Try to resolve session by name first (v0.2.0 feature)
@@ -852,6 +857,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             Argument list suitable for subprocess call.
+
         """
         if context.get("command"):
             cmd = context["command"]
@@ -882,6 +888,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             Dict containing success boolean and the subprocess output.
+
         """
         try:
             # We enforce a strict mapping to hyphenated strings just in case
@@ -1006,6 +1013,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             Version string (e.g. ``"0.2.0"``) or ``None`` if unavailable.
+
         """
         if not self._cli_available:
             return None
@@ -1033,6 +1041,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             Dict with ``success`` boolean and ``output`` or ``error``.
+
         """
         if not self._cli_available:
             return {"success": False, "error": "Hermes CLI not available"}
@@ -1065,6 +1074,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             Dict with ``success`` boolean and ``output`` or ``error``.
+
         """
         if self._active_backend != "cli":
             return {"success": False, "error": "Skills listing requires the Hermes CLI"}
@@ -1083,6 +1093,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             Dict with diagnostic information including the active backend.
+
         """
         status: dict[str, Any] = {
             "active_backend": self._active_backend,
@@ -1120,6 +1131,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             Path to the worktree directory, or None if creation fails.
+
         """
         worktree_path = self._worktree_base / f"hermes-{session_id}"
         branch_name = f"hermes/{session_id}"
@@ -1152,6 +1164,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             True if cleanup succeeded.
+
         """
         worktree_path = self._worktree_base / f"hermes-{session_id}"
         branch_name = f"hermes/{session_id}"
@@ -1185,6 +1198,7 @@ class HermesClient(CLIAgentBase):
         Returns:
             dict with keys: ``session_count``, ``db_size_bytes``,
             ``oldest_session_at``, ``newest_session_at``.
+
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             return store.get_stats()
@@ -1201,6 +1215,7 @@ class HermesClient(CLIAgentBase):
         Returns:
             The new :class:`~codomyrmex.agents.hermes.session.HermesSession`
             with all parent messages copied, or ``None`` if the source is missing.
+
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             parent = store.load(session_id)
@@ -1225,6 +1240,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             Markdown string, or ``None`` if session not found.
+
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             return store.export_markdown(session_id)
@@ -1248,6 +1264,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             List of dicts with keys ``prompt``, ``status``, ``content``, ``error``.
+
         """
         from codomyrmex.agents.core import AgentRequest
 
@@ -1302,6 +1319,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             ``True`` on success.
+
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             # Create session if it doesn't exist
@@ -1318,6 +1336,7 @@ class HermesClient(CLIAgentBase):
         Returns:
             dict with all session fields plus ``message_count``, ``last_message``,
             ``has_system_prompt``, or ``None`` if not found.
+
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             return store.get_detail(session_id)
@@ -1334,6 +1353,7 @@ class HermesClient(CLIAgentBase):
 
         Returns:
             ``True`` if at least one session was merged successfully.
+
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             target = store.load(target_id)

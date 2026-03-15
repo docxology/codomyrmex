@@ -204,6 +204,23 @@ class OpenClawError(AgentError):
             self.context["exit_code"] = exit_code
 
 
+class PaperclipError(AgentError):
+    """Raised when Paperclip CLI or API operations fail."""
+
+    def __init__(
+        self,
+        message: str = "Paperclip operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
+        super().__init__(message, **kwargs)
+        if command:
+            self.context["command"] = command
+        if exit_code is not None:
+            self.context["exit_code"] = exit_code
+
+
 class SessionError(AgentError):
     """Raised when agent session operations fail."""
 

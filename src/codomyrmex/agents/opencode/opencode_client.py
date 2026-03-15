@@ -58,7 +58,7 @@ class OpenCodeClient(CLIAgentBase):
                 extra={"command": self.command},
             )
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute OpenCode command."""
         prompt = request.prompt
         context = request.context or {}

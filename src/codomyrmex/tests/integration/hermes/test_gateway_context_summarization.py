@@ -23,7 +23,7 @@ def test_hermes_context_summarization_integration(tmp_path, monkeypatch):
 
     from codomyrmex.agents.core import AgentResponse
 
-    def mock_execute(request):
+    def mock_execute(request, max_tokens=None):
         prompt = request.prompt
         if "Format your output strictly as a dense timeline or list" in prompt:
             return AgentResponse(

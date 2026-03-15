@@ -141,7 +141,7 @@ class EveryCodeClient(CLIAgentBase):
             f"Every Code command failed: {e!s}", command=self.command
         ) from e
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """
         Execute Every Code command.
 
