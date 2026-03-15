@@ -63,6 +63,7 @@ class AgentMemory:
 
     @property
     def memory_count(self) -> int:
+        """Return the total number of memories in the store."""
         return len(self.store.list_all())
 
     # -- remember / add -----------------------------------------------
@@ -154,7 +155,7 @@ class AgentMemory:
     # -- forget -------------------------------------------------------
 
     def forget(self, memory_id: str) -> bool:
-        """Forget."""
+        """Delete a memory by its ID. Returns True if the memory existed and was removed."""
         return self.store.delete(memory_id)
 
     # -- context ------------------------------------------------------
@@ -290,6 +291,16 @@ class ConversationMemory:
         *,
         turn_number: int = 0,
     ) -> Memory:
+        """Record a conversation turn with the given role and content.
+
+        Args:
+            role: Speaker role (e.g. "user", "assistant", "system").
+            content: The text content of this turn.
+            turn_number: Optional turn index for ordering.
+
+        Returns:
+            The persisted Memory object.
+        """
         return self._agent.remember(
             content,
             memory_type=MemoryType.EPISODIC,
@@ -311,6 +322,15 @@ class KnowledgeMemory:
         fact: str,
         source: str = "",
     ) -> Memory:
+        """Store a factual knowledge item with high importance.
+
+        Args:
+            fact: The factual content to store.
+            source: Optional source attribution (e.g. URL, document name).
+
+        Returns:
+            The persisted Memory object with SEMANTIC type and HIGH importance.
+        """
         return self._agent.remember(
             fact,
             memory_type=MemoryType.SEMANTIC,
