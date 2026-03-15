@@ -13,12 +13,15 @@ Functions:
 from __future__ import annotations
 
 import json
+import logging
 import sqlite3
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from codomyrmex.agentic_memory.models import MemoryImportance, MemoryType
+
+logger = logging.getLogger(__name__)
 
 # CogniLayer default paths
 COGNILAYER_HOME = Path.home() / ".cognilayer"
@@ -90,6 +93,7 @@ def store_memory(
                 ),
             )
         except sqlite3.OperationalError:
+            logger.debug("memories table missing, creating fallback table")
             # Fallback: create a simple memories table if it doesn't exist
             conn.execute(
                 """CREATE TABLE IF NOT EXISTS memories (
@@ -120,6 +124,7 @@ def store_memory(
             )
 
         conn.commit()
+        logger.info("Stored memory id=%s key=%s", cursor.lastrowid, key)
         return {
             "id": cursor.lastrowid,
             "key": key,
@@ -127,6 +132,9 @@ def store_memory(
             "tags": tags or [],
             "stored_at": now,
         }
+    except sqlite3.Error:
+        logger.exception("Failed to store memory key=%s", key)
+        raise
     finally:
         conn.close()
 
@@ -159,8 +167,10 @@ def recall_memory(
                 """SELECT * FROM memories_fts WHERE memories_fts MATCH ? LIMIT ?""",
                 (query, top_k),
             ).fetchall()
+            logger.debug("FTS5 search returned %d rows for query=%r", len(rows), query)
         except sqlite3.OperationalError:
             # Fallback to LIKE search
+            logger.debug("FTS5 unavailable, falling back to LIKE search")
             search_terms = [f"%{word}%" for word in query.split()]
             if not search_terms:
                 rows = conn.execute(
@@ -183,7 +193,11 @@ def recall_memory(
                     continue
             results.append(entry)
 
+        logger.info("Recall query=%r returned %d results", query, len(results))
         return results[:top_k]
+    except sqlite3.Error:
+        logger.exception("Failed to recall memories for query=%r", query)
+        raise
     finally:
         conn.close()
 
@@ -202,6 +216,7 @@ def consolidate_memories() -> dict[str, Any]:
     try:
         # Count before
         total_before = conn.execute("SELECT COUNT(*) FROM memories").fetchone()[0]
+        logger.debug("Consolidation starting with %d memories", total_before)
 
         # Remove exact duplicates (same key, keep latest)
         conn.execute(
@@ -212,12 +227,26 @@ def consolidate_memories() -> dict[str, Any]:
         conn.commit()
 
         total_after = conn.execute("SELECT COUNT(*) FROM memories").fetchone()[0]
+        removed = total_before - total_after
+        logger.info("Consolidation complete: removed %d duplicates", removed)
         return {
             "before": total_before,
             "after": total_after,
-            "removed": total_before - total_after,
+            "removed": removed,
             "timestamp": datetime.now(UTC).isoformat(),
         }
+    except sqlite3.OperationalError as exc:
+        logger.warning("Cannot consolidate — memories table missing: %s", exc)
+        return {
+            "before": 0,
+            "after": 0,
+            "removed": 0,
+            "error": str(exc),
+            "timestamp": datetime.now(UTC).isoformat(),
+        }
+    except sqlite3.Error:
+        logger.exception("Failed to consolidate memories")
+        raise
     finally:
         conn.close()
 
@@ -253,6 +282,10 @@ def get_memory_stats() -> dict[str, Any]:
                 "SELECT COUNT(*) FROM memories"
             ).fetchone()[0]
 
+        logger.debug("Memory stats: %d tables, %s", len(tables), stats.get("total_memories", "N/A"))
         return stats
+    except sqlite3.Error:
+        logger.exception("Failed to get memory stats")
+        return {"installed": True, "error": "Failed to read database stats"}
     finally:
         conn.close()
