@@ -20,6 +20,7 @@ class MemoryType(enum.Enum):
     EPISODIC = "episodic"
     SEMANTIC = "semantic"
     PROCEDURAL = "procedural"
+    KNOWLEDGE = "knowledge"
 
 
 class MemoryImportance(enum.Enum):
