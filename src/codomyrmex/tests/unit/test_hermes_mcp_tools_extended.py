@@ -16,6 +16,9 @@ from codomyrmex.agents.hermes.mcp_tools import (
     hermes_insights,
     hermes_provider_status,
     hermes_session_search,
+    hermes_system_health,
+    hermes_template_list,
+    hermes_template_render,
     hermes_version,
     hermes_worktree_cleanup,
     hermes_worktree_create,
@@ -233,3 +236,124 @@ class TestHermesClientCLIFlags:
         assert "--yolo" in args
         assert "--continue" in args
         assert "--pass-session-id" in args
+
+
+# ── hermes_template_list ──────────────────────────────────────────────
+
+
+class TestHermesTemplateList:
+    """Verify hermes_template_list MCP tool."""
+
+    def test_returns_dict_with_status(self) -> None:
+        result = hermes_template_list()
+        assert isinstance(result, dict)
+        assert "status" in result
+
+    def test_success_returns_templates(self) -> None:
+        result = hermes_template_list()
+        assert result["status"] == "success"
+        assert "templates" in result
+        assert isinstance(result["templates"], list)
+        assert "count" in result
+        assert result["count"] == len(result["templates"])
+
+    def test_builtin_templates_present(self) -> None:
+        result = hermes_template_list()
+        templates = result["templates"]
+        assert "code_review" in templates
+        assert "task_decomposition" in templates
+        assert "documentation" in templates
+        assert "debugging" in templates
+
+    def test_templates_sorted_alphabetically(self) -> None:
+        result = hermes_template_list()
+        templates = result["templates"]
+        assert templates == sorted(templates)
+
+
+# ── hermes_template_render ─────────────────────────────────────────────
+
+
+class TestHermesTemplateRender:
+    """Verify hermes_template_render MCP tool."""
+
+    def test_returns_dict_with_status(self) -> None:
+        result = hermes_template_render("code_review")
+        assert isinstance(result, dict)
+        assert "status" in result
+
+    def test_render_with_all_variables(self) -> None:
+        result = hermes_template_render(
+            "code_review",
+            variables={
+                "language": "python",
+                "code": "def foo(): pass",
+                "focus_areas": "style",
+            },
+        )
+        assert result["status"] == "success"
+        assert "rendered_prompt" in result
+        assert "python" in result["rendered_prompt"]
+        assert "def foo(): pass" in result["rendered_prompt"]
+
+    def test_render_system_prompt_included(self) -> None:
+        result = hermes_template_render("code_review")
+        assert result["status"] == "success"
+        assert "system_prompt" in result
+        assert len(result["system_prompt"]) > 0
+
+    def test_render_missing_template_returns_error(self) -> None:
+        result = hermes_template_render("nonexistent_template_xyz")
+        assert result["status"] == "error"
+        assert "message" in result
+
+    def test_render_safe_with_partial_variables(self) -> None:
+        result = hermes_template_render(
+            "code_review",
+            variables={"language": "rust"},
+        )
+        assert result["status"] == "success"
+        rendered = result["rendered_prompt"]
+        assert "rust" in rendered
+        # Missing variables should appear as {placeholders}
+        assert "{code}" in rendered
+        assert "{focus_areas}" in rendered
+
+    def test_render_no_variables_uses_safe_mode(self) -> None:
+        result = hermes_template_render("debugging")
+        assert result["status"] == "success"
+        rendered = result["rendered_prompt"]
+        # All variables should be placeholders
+        assert "{error_message}" in rendered
+        assert "{language}" in rendered
+
+    def test_variables_used_tracked(self) -> None:
+        result = hermes_template_render(
+            "documentation",
+            variables={"doc_type": "API", "component_name": "Auth"},
+        )
+        assert result["status"] == "success"
+        assert "variables_used" in result
+        assert "doc_type" in result["variables_used"]
+        assert "component_name" in result["variables_used"]
+
+
+# ── hermes_system_health ───────────────────────────────────────────────
+
+
+class TestHermesSystemHealth:
+    """Verify hermes_system_health MCP tool."""
+
+    def test_returns_dict_with_status(self) -> None:
+        result = hermes_system_health()
+        assert isinstance(result, dict)
+        assert "status" in result
+
+    def test_success_includes_metrics(self) -> None:
+        result = hermes_system_health()
+        if result["status"] == "success":
+            assert "metrics" in result
+            metrics = result["metrics"]
+            assert isinstance(metrics, dict)
+            # Should have cpu and ram at minimum
+            assert "cpu_percent" in metrics or "ram_usage_percent" in metrics
