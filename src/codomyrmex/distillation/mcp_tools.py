@@ -5,7 +5,10 @@ import numpy as np
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
-@mcp_tool(category="distillation")
+@mcp_tool(
+    category="distillation",
+    description="Compute knowledge distillation loss on synthetic teacher-student data.",
+)
 def distillation_compute_loss(
     num_classes: int = 10,
     batch_size: int = 4,
