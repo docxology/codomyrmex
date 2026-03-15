@@ -22,34 +22,47 @@ class _DiGraph:
         self._adj: dict[str, set[str]] = {}
 
     def add_node(self, n: str) -> None:
+        """Add a node to the graph if it doesn't already exist."""
         self._adj.setdefault(n, set())
 
     def add_edge(self, u: str, v: str) -> None:
+        """Add a directed edge from node *u* to node *v*.
+
+        Both nodes are created if they don't already exist.
+        """
         self._adj.setdefault(u, set()).add(v)
         self._adj.setdefault(v, set())
 
     def number_of_nodes(self) -> int:
+        """Return the total number of nodes in the graph."""
         return len(self._adj)
 
     def number_of_edges(self) -> int:
+        """Return the total number of directed edges in the graph."""
         return sum(len(v) for v in self._adj.values())
 
     def is_directed(self) -> bool:
+        """Return True since this is always a directed graph."""
         return True
 
     def successors(self, n: str) -> list[str]:
+        """Return a list of nodes that *n* points to (outgoing neighbors)."""
         return list(self._adj.get(n, set()))
 
     def predecessors(self, n: str) -> list[str]:
+        """Return a list of nodes that point to *n* (incoming neighbors)."""
         return [u for u, vs in self._adj.items() if n in vs]
 
     def nodes(self) -> list[str]:
+        """Return a list of all node identifiers in the graph."""
         return list(self._adj.keys())
 
     def has_node(self, n: str) -> bool:
+        """Return True if node *n* exists in the graph."""
         return n in self._adj
 
     def has_edge(self, u: str, v: str) -> bool:
+        """Return True if a directed edge exists from *u* to *v*."""
         return v in self._adj.get(u, set())
 
     def in_degree(self, n: str) -> int:
