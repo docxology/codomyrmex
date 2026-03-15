@@ -117,14 +117,51 @@ class RaftNode:
         # Election tracking
         self._votes_received: set[str] = set()
 
+    @property
+    def last_log_term(self) -> int:
+        """Return the term of the last log entry, or 0 if log is empty."""
+        return self.log[-1].term if self.log else 0
+
+    @property
+    def last_log_index(self) -> int:
+        """Return the index of the last log entry, or 0 if log is empty."""
+        return self.log[-1].index if self.log else 0
+
     # -- RequestVote RPC -----------------------------------------------------
 
-    def request_vote(self, term: int, candidate_id: str) -> VoteResponse:
+    def _is_candidate_log_up_to_date(
+        self, candidate_last_log_term: int, candidate_last_log_index: int
+    ) -> bool:
+        """Check if candidate's log is at least as up-to-date as this node's.
+
+        Per Raft §5.4.1: a log is more up-to-date if:
+        1. Its last entry has a higher term, or
+        2. The terms are equal and the log is at least as long.
+        """
+        my_last_log_term = self.last_log_term
+        my_last_log_index = self.last_log_index
+
+        if candidate_last_log_term != my_last_log_term:
+            return candidate_last_log_term > my_last_log_term
+        return candidate_last_log_index >= my_last_log_index
+
+    def request_vote(
+        self,
+        term: int,
+        candidate_id: str,
+        last_log_term: int = 0,
+        last_log_index: int = 0,
+    ) -> VoteResponse:
         """Handle a RequestVote RPC.
+
+        Implements Raft §5.4.1 log comparison: a voter grants a vote only if
+        the candidate's log is at least as up-to-date as its own.
 
         Args:
             term: Candidate's current term.
             candidate_id: Who is requesting the vote.
+            last_log_term: Term of the candidate's last log entry.
+            last_log_index: Index of the candidate's last log entry.
 
         Returns:
             VoteResponse indicating whether vote was granted.
@@ -137,9 +174,12 @@ class RaftNode:
 
         can_vote = self.voted_for is None or self.voted_for == candidate_id
 
-        # Log completeness check (simplified: accept if term >= ours)
-        # TODO: Implement full Raft log comparison using last_log_term and last_log_index
-        candidate_log_ok = True
+        # Raft §5.4.1: candidate's log must be at least as up-to-date as voter's.
+        # A log is more up-to-date if its last entry has a higher term,
+        # or if the terms are equal, the longer log wins.
+        candidate_log_ok = self._is_candidate_log_up_to_date(
+            last_log_term, last_log_index
+        )
 
         if can_vote and candidate_log_ok:
             self.voted_for = candidate_id
@@ -455,6 +495,8 @@ class RaftCluster:
             response = node.request_vote(
                 term=candidate.current_term,
                 candidate_id=candidate.node_id,
+                last_log_term=candidate.last_log_term,
+                last_log_index=candidate.last_log_index,
             )
             result = candidate.receive_vote(response, self._cluster_size, nid)
             if result == "became_leader":
