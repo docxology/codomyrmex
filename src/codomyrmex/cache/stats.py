@@ -53,6 +53,7 @@ class CacheStats:
 
     @property
     def miss_rate(self) -> float:
+        """Overall miss rate (0.0–1.0)."""
         if self.total_requests == 0:
             return 0.0
         return self.misses / self.total_requests

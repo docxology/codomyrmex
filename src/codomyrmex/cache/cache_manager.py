@@ -118,10 +118,12 @@ class CacheManager:
 
     @property
     def cache_count(self) -> int:
+        """Return the number of managed cache instances."""
         return len(self._caches)
 
     @property
     def default_backend(self) -> str:
+        """Return the default backend name for new caches."""
         return self._default_backend
 
     def summary(self) -> dict[str, Any]:

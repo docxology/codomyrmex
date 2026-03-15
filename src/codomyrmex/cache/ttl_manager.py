@@ -18,13 +18,13 @@ class TTLManager:
         self._stop_event = threading.Event()
         self._thread: threading.Thread | None = None
 
-    def register_cache(self, cache: Any):
+    def register_cache(self, cache: Any) -> None:
         """Register a cache instance for periodic cleanup."""
         self._cache_registry.add(cache)
         if self._thread is None:
             self.start()
 
-    def start(self):
+    def start(self) -> None:
         """Start the cleanup thread."""
         if self._thread and self._thread.is_alive():
             return
@@ -33,7 +33,7 @@ class TTLManager:
         self._thread = threading.Thread(target=self._run, daemon=True)
         self._thread.start()
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop the cleanup thread."""
         self._stop_event.set()
         if self._thread:

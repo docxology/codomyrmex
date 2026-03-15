@@ -42,4 +42,13 @@ class NamespacedCache(Cache):
         return self.cache.stats
 
     def delete_pattern(self, pattern: str) -> int:
+        """Delete all keys matching the given pattern within this namespace.
+
+        Args:
+            pattern: Glob-style pattern (e.g. ``"user_*"``).
+
+        Returns:
+            Number of keys deleted.
+
+        """
         return self.cache.delete_pattern(f"{self.namespace}:{pattern}")
