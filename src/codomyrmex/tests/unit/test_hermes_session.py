@@ -534,3 +534,206 @@ class TestPruneOldSessions:
         assert count == 0  # No old sessions
 
         store.close()
+
+
+# ── SQLiteSessionStore.get_stats() ────────────────────────────────────
+
+
+class TestGetStats:
+    """Verify get_stats() returns correct summary statistics."""
+
+    def test_get_stats_empty_db(self) -> None:
+        """Stats for an empty database should show zero sessions."""
+        store = SQLiteSessionStore(":memory:")
+        stats = store.get_stats()
+
+        assert stats["session_count"] == 0
+        assert stats["db_size_bytes"] == 0  # :memory: has no file
+        assert stats["oldest_session_at"] is None
+        assert stats["newest_session_at"] is None
+        store.close()
+
+    def test_get_stats_with_sessions(self) -> None:
+        """Stats should reflect session count and timestamps."""
+        store = SQLiteSessionStore(":memory:")
+
+        s1 = HermesSession(session_id="st1", name="first")
+        s1.add_message("user", "hello")
+        store.save(s1)
+
+        s2 = HermesSession(session_id="st2", name="second")
+        s2.add_message("user", "hi")
+        store.save(s2)
+
+        stats = store.get_stats()
+
+        assert stats["session_count"] == 2
+        assert stats["oldest_session_at"] is not None
+        assert stats["newest_session_at"] is not None
+        assert stats["newest_session_at"] >= stats["oldest_session_at"]
+        store.close()
+
+    def test_get_stats_file_db_reports_size(self, tmp_path: Path) -> None:
+        """File-backed DB should report non-zero db_size_bytes."""
+        db_path = tmp_path / "stats_test.db"
+        store = SQLiteSessionStore(str(db_path))
+
+        store.save(HermesSession(session_id="fs1"))
+        stats = store.get_stats()
+
+        assert stats["session_count"] == 1
+        assert stats["db_size_bytes"] > 0
+        store.close()
+
+
+# ── SQLiteSessionStore.export_markdown() ───────────────────────────────
+
+
+class TestExportMarkdown:
+    """Verify export_markdown() produces correct Markdown output."""
+
+    def test_export_existing_session(self) -> None:
+        """Export should include session ID, messages, and metadata."""
+        store = SQLiteSessionStore(":memory:")
+        session = HermesSession(
+            session_id="md1",
+            name="my-review",
+            metadata={"priority": "high"},
+        )
+        session.add_message("user", "Review this code")
+        session.add_message("assistant", "Looks good")
+        store.save(session)
+
+        md = store.export_markdown("md1")
+        assert md is not None
+        assert "# Session: my-review" in md
+        assert "`md1`" in md
+        assert "## User" in md
+        assert "Review this code" in md
+        assert "## Assistant" in md
+        assert "Looks good" in md
+        assert "## Metadata" in md
+        assert "priority" in md
+        assert "high" in md
+        store.close()
+
+    def test_export_nonexistent_session(self) -> None:
+        """Export should return None for missing sessions."""
+        store = SQLiteSessionStore(":memory:")
+        assert store.export_markdown("nope") is None
+        store.close()
+
+    def test_export_includes_parent_when_set(self) -> None:
+        """Export should show parent session ID when present."""
+        store = SQLiteSessionStore(":memory:")
+        parent = HermesSession(session_id="parent-x")
+        child = parent.fork("child-y")
+        store.save(child)
+
+        md = store.export_markdown(child.session_id)
+        assert md is not None
+        assert "Parent" in md
+        assert "parent-x" in md
+        store.close()
+
+    def test_export_without_name_uses_id(self) -> None:
+        """Export should fall back to session_id as title when name is None."""
+        store = SQLiteSessionStore(":memory:")
+        session = HermesSession(session_id="no-name")
+        store.save(session)
+
+        md = store.export_markdown("no-name")
+        assert md is not None
+        assert "# Session: no-name" in md
+        store.close()
+
+
+# ── SQLiteSessionStore.update_system_prompt() ──────────────────────────
+
+
+class TestUpdateSystemPrompt:
+    """Verify update_system_prompt() upserts system messages correctly."""
+
+    def test_insert_system_prompt_into_empty_session(self) -> None:
+        """System prompt should be inserted at index 0."""
+        store = SQLiteSessionStore(":memory:")
+        session = HermesSession(session_id="sp1")
+        session.add_message("user", "Hello")
+        store.save(session)
+
+        assert store.update_system_prompt("sp1", "You are helpful") is True
+
+        loaded = store.load("sp1")
+        assert loaded is not None
+        assert loaded.messages[0]["role"] == "system"
+        assert loaded.messages[0]["content"] == "You are helpful"
+        assert loaded.message_count == 2  # system + original user
+        store.close()
+
+    def test_replace_existing_system_prompt(self) -> None:
+        """Existing system prompt should be replaced, not appended."""
+        store = SQLiteSessionStore(":memory:")
+        session = HermesSession(session_id="sp2")
+        session.add_message("system", "Old prompt")
+        session.add_message("user", "Hello")
+        store.save(session)
+
+        assert store.update_system_prompt("sp2", "New prompt") is True
+
+        loaded = store.load("sp2")
+        assert loaded is not None
+        assert loaded.message_count == 2  # replaced, not added
+        assert loaded.messages[0]["content"] == "New prompt"
+        store.close()
+
+    def test_update_system_prompt_nonexistent_session(self) -> None:
+        """Should return False for non-existent sessions."""
+        store = SQLiteSessionStore(":memory:")
+        assert store.update_system_prompt("nope", "prompt") is False
+        store.close()
+
+
+# ── SQLiteSessionStore.get_detail() ────────────────────────────────────
+
+
+class TestGetDetail:
+    """Verify get_detail() returns rich session information."""
+
+    def test_get_detail_full_session(self) -> None:
+        """Detail should include all session fields plus computed ones."""
+        store = SQLiteSessionStore(":memory:")
+        session = HermesSession(session_id="det1", name="detail-test")
+        session.add_message("system", "Be helpful")
+        session.add_message("user", "Hello")
+        session.add_message("assistant", "Hi there")
+        store.save(session)
+
+        detail = store.get_detail("det1")
+        assert detail is not None
+        assert detail["session_id"] == "det1"
+        assert detail["name"] == "detail-test"
+        assert detail["message_count"] == 3
+        assert detail["last_message"] == {"role": "assistant", "content": "Hi there"}
+        assert detail["has_system_prompt"] is True
+        assert detail["metadata"] == {}
+        assert "created_at" in detail
+        assert "updated_at" in detail
+        store.close()
+
+    def test_get_detail_no_system_prompt(self) -> None:
+        """has_system_prompt should be False when first message is not system."""
+        store = SQLiteSessionStore(":memory:")
+        session = HermesSession(session_id="det2")
+        session.add_message("user", "Hello")
+        store.save(session)
+
+        detail = store.get_detail("det2")
+        assert detail is not None
+        assert detail["has_system_prompt"] is False
+        store.close()
+
+    def test_get_detail_nonexistent(self) -> None:
+        """Should return None for missing sessions."""
+        store = SQLiteSessionStore(":memory:")
+        assert store.get_detail("nope") is None
+        store.close()
