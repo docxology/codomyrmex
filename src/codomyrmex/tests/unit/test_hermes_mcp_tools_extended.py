@@ -11,14 +11,18 @@ import shutil
 import pytest
 
 from codomyrmex.agents.hermes.mcp_tools import (
+    hermes_check_dependencies,
+    hermes_create_task,
     hermes_doctor,
     hermes_honcho_status,
     hermes_insights,
     hermes_provider_status,
+    hermes_read_log_chunk,
     hermes_session_search,
     hermes_system_health,
     hermes_template_list,
     hermes_template_render,
+    hermes_update_task_status,
     hermes_version,
     hermes_worktree_cleanup,
     hermes_worktree_create,
@@ -357,3 +361,287 @@ class TestHermesSystemHealth:
             assert isinstance(metrics, dict)
             # Should have cpu and ram at minimum
             assert "cpu_percent" in metrics or "ram_usage_percent" in metrics
+
+
+# ── hermes_read_log_chunk ─────────────────────────────────────────────────
+
+
+class TestHermesReadLogChunk:
+    """Verify hermes_read_log_chunk MCP tool."""
+
+    def test_returns_dict_with_status(self, tmp_path) -> None:
+        log_file = tmp_path / "test.log"
+        log_file.write_text("line 1\nline 2\nline 3\n")
+        result = hermes_read_log_chunk(str(log_file))
+        assert isinstance(result, dict)
+        assert "status" in result
+
+    def test_reads_entire_file(self, tmp_path) -> None:
+        log_file = tmp_path / "test.log"
+        log_file.write_text("alpha\nbeta\ngamma\n")
+        result = hermes_read_log_chunk(str(log_file))
+        assert result["status"] == "success"
+        assert "alpha" in result["content"]
+        assert "beta" in result["content"]
+        assert "gamma" in result["content"]
+        assert result["total_lines"] == 3
+        assert result["eof"] is True
+
+    def test_reads_with_offset(self, tmp_path) -> None:
+        log_file = tmp_path / "test.log"
+        log_file.write_text("line0\nline1\nline2\nline3\n")
+        result = hermes_read_log_chunk(str(log_file), offset=2)
+        assert result["status"] == "success"
+        assert "line0" not in result["content"]
+        assert "line1" not in result["content"]
+        assert "line2" in result["content"]
+        assert "line3" in result["content"]
+
+    def test_reads_with_offset_and_length(self, tmp_path) -> None:
+        log_file = tmp_path / "test.log"
+        log_file.write_text("a\nb\nc\nd\ne\n")
+        result = hermes_read_log_chunk(str(log_file), offset=1, length=2)
+        assert result["status"] == "success"
+        assert result["content"] == "b\nc\n"
+        assert result["eof"] is False
+
+    def test_file_not_found(self) -> None:
+        result = hermes_read_log_chunk("/nonexistent/path/file.log")
+        assert result["status"] == "error"
+        assert "not found" in result["message"].lower()
+
+    def test_length_capped_at_5000(self, tmp_path) -> None:
+        log_file = tmp_path / "big.log"
+        log_file.write_text("x\n" * 100)
+        result = hermes_read_log_chunk(str(log_file), length=99999)
+        assert result["status"] == "success"
+        # length should be capped to 5000, but file only has 100 lines
+        assert result["total_lines"] == 100
+        assert result["eof"] is True
+
+    def test_empty_file(self, tmp_path) -> None:
+        log_file = tmp_path / "empty.log"
+        log_file.write_text("")
+        result = hermes_read_log_chunk(str(log_file))
+        assert result["status"] == "success"
+        assert result["content"] == ""
+        assert result["total_lines"] == 0
+        assert result["eof"] is True
+
+
+# ── hermes_create_task / hermes_update_task_status ───────────────────────
+
+
+class TestHermesCreateTask:
+    """Verify hermes_create_task MCP tool."""
+
+    def test_returns_dict_with_status(self, monkeypatch, tmp_path) -> None:
+        from codomyrmex.agents.hermes import mcp_tools
+        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+
+        db_path = tmp_path / "task_test.db"
+        with SQLiteSessionStore(str(db_path)) as store:
+            store.save(HermesSession(session_id="sess-1"))
+
+        def patched_get_client(**kwargs):
+            return HermesClient(
+                config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
+            )
+
+        monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
+        result = hermes_create_task(
+            session_id="sess-1", name="setup", description="Set up the environment"
+        )
+        assert isinstance(result, dict)
+        assert "status" in result
+
+    def test_create_task_success(self, monkeypatch, tmp_path) -> None:
+        from codomyrmex.agents.hermes import mcp_tools
+        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+
+        db_path = tmp_path / "task_test2.db"
+        with SQLiteSessionStore(str(db_path)) as store:
+            store.save(HermesSession(session_id="sess-2"))
+
+        def patched_get_client(**kwargs):
+            return HermesClient(
+                config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
+            )
+
+        monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
+        result = hermes_create_task(
+            session_id="sess-2",
+            name="build",
+            description="Build the project",
+            depends_on=["setup"],
+        )
+        assert result["status"] == "success"
+        assert result["task"]["name"] == "build"
+        assert result["task"]["description"] == "Build the project"
+        assert result["task"]["status"] == "pending"
+        assert result["task"]["depends_on"] == ["setup"]
+
+    def test_create_duplicate_task(self, monkeypatch, tmp_path) -> None:
+        from codomyrmex.agents.hermes import mcp_tools
+        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+
+        db_path = tmp_path / "task_test3.db"
+        with SQLiteSessionStore(str(db_path)) as store:
+            store.save(HermesSession(session_id="sess-3"))
+
+        def patched_get_client(**kwargs):
+            return HermesClient(
+                config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
+            )
+
+        monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
+        hermes_create_task(
+            session_id="sess-3", name="task-a", description="First task"
+        )
+        result = hermes_create_task(
+            session_id="sess-3", name="task-a", description="Duplicate"
+        )
+        assert result["status"] == "error"
+        assert "already exists" in result["message"]
+
+    def test_create_task_missing_session(self, monkeypatch, tmp_path) -> None:
+        from codomyrmex.agents.hermes import mcp_tools
+        from codomyrmex.agents.hermes.hermes_client import HermesClient
+
+        db_path = tmp_path / "task_test4.db"
+
+        def patched_get_client(**kwargs):
+            return HermesClient(
+                config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
+            )
+
+        monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
+        result = hermes_create_task(
+            session_id="nonexistent", name="x", description="y"
+        )
+        assert result["status"] == "error"
+        assert "not found" in result["message"].lower()
+
+
+class TestHermesUpdateTaskStatus:
+    """Verify hermes_update_task_status MCP tool."""
+
+    def test_returns_dict_with_status(self, monkeypatch, tmp_path) -> None:
+        from codomyrmex.agents.hermes import mcp_tools
+        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+
+        db_path = tmp_path / "update_test.db"
+        with SQLiteSessionStore(str(db_path)) as store:
+            sess = HermesSession(session_id="sess-u1")
+            sess.metadata["workflow_tasks"] = {
+                "t1": {
+                    "name": "t1",
+                    "description": "test",
+                    "depends_on": [],
+                    "status": "pending",
+                    "result": None,
+                    "error": "",
+                    "parent_trace_id": None,
+                }
+            }
+            store.save(sess)
+
+        def patched_get_client(**kwargs):
+            return HermesClient(
+                config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
+            )
+
+        monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
+        result = hermes_update_task_status(
+            session_id="sess-u1", name="t1", status="completed"
+        )
+        assert isinstance(result, dict)
+        assert result["status"] == "success"
+        assert result["task"]["status"] == "completed"
+
+    def test_update_with_result_and_error(self, monkeypatch, tmp_path) -> None:
+        from codomyrmex.agents.hermes import mcp_tools
+        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+
+        db_path = tmp_path / "update_test2.db"
+        with SQLiteSessionStore(str(db_path)) as store:
+            sess = HermesSession(session_id="sess-u2")
+            sess.metadata["workflow_tasks"] = {
+                "build": {
+                    "name": "build",
+                    "description": "build",
+                    "depends_on": [],
+                    "status": "running",
+                    "result": None,
+                    "error": "",
+                    "parent_trace_id": None,
+                }
+            }
+            store.save(sess)
+
+        def patched_get_client(**kwargs):
+            return HermesClient(
+                config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
+            )
+
+        monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
+        result = hermes_update_task_status(
+            session_id="sess-u2",
+            name="build",
+            status="failed",
+            error="Missing dependency",
+        )
+        assert result["status"] == "success"
+        assert result["task"]["status"] == "failed"
+        assert result["task"]["error"] == "Missing dependency"
+
+    def test_update_nonexistent_task(self, monkeypatch, tmp_path) -> None:
+        from codomyrmex.agents.hermes import mcp_tools
+        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+
+        db_path = tmp_path / "update_test3.db"
+        with SQLiteSessionStore(str(db_path)) as store:
+            store.save(HermesSession(session_id="sess-u3"))
+
+        def patched_get_client(**kwargs):
+            return HermesClient(
+                config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
+            )
+
+        monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
+        result = hermes_update_task_status(
+            session_id="sess-u3", name="nope", status="done"
+        )
+        assert result["status"] == "error"
+        assert "not found" in result["message"].lower()
+
+
+# ── hermes_check_dependencies ─────────────────────────────────────────────
+
+
+class TestHermesCheckDependencies:
+    """Verify hermes_check_dependencies MCP tool."""
+
+    def test_returns_dict_with_status(self) -> None:
+        result = hermes_check_dependencies("requests")
+        assert isinstance(result, dict)
+        assert "status" in result
+
+    def test_error_on_missing_lockfile(self, monkeypatch, tmp_path) -> None:
+        """Should return error when lockfile doesn't exist."""
+        import codomyrmex.environment_setup.lockfile as lockfile_mod
+
+        class BrokenParser:
+            def check_dependency(self, name):
+                raise FileNotFoundError("uv.lock not found")
+
+        monkeypatch.setattr(lockfile_mod, "LockfileParser", lambda: BrokenParser())
+        result = hermes_check_dependencies("some-package")
+        assert result["status"] == "error"
+        assert "not found" in result["message"].lower() or "uv.lock" in result["message"]
