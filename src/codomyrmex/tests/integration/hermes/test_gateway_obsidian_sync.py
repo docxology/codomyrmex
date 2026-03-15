@@ -1,6 +1,5 @@
 """Integration tests for Hermes session syncing to Obsidian Vaults."""
 
-import os
 from pathlib import Path
 
 from codomyrmex.agentic_memory.obsidian import ObsidianVault

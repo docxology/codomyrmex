@@ -1,7 +1,6 @@
 """Unit tests for executor helper functions: _compress_trace, _paginate_output, validate_session_id."""
 
 import os
-import tempfile
 
 import pytest
 

@@ -1,6 +1,5 @@
 """Integration tests for Hermes Error-Correction Handoffs."""
 
-import pytest
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.hermes.hermes_client import HermesClient

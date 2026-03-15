@@ -1,11 +1,7 @@
 """Tests for agentic_memory.user_profile module."""
 
-import json
-import os
-import tempfile
 from pathlib import Path
 
-import pytest
 
 from codomyrmex.agentic_memory.user_profile import UserProfile
 

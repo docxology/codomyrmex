@@ -3,7 +3,6 @@
 import asyncio
 import time
 
-import pytest
 
 from codomyrmex.agents.hermes.gateway.cron import CronTicker
 

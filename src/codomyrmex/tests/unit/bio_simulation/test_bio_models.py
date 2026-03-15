@@ -1,7 +1,7 @@
 """Unit tests for the metabolic and cellular bio-simulation systems."""
 
 from codomyrmex.bio_simulation.cellular import CellularAutomaton
-from codomyrmex.bio_simulation.reactor import BioReactor, Metabolite, Reaction
+from codomyrmex.bio_simulation.reactor import BioReactor, Reaction
 
 
 def test_cellular_automaton_glider():

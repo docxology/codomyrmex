@@ -14,7 +14,7 @@ import pytest
 # D1: AABB Scene Graph
 # ---------------------------------------------------------------------------
 from codomyrmex.spatial.three_d.engine_3d import Object3D, Vector3D
-from codomyrmex.spatial.three_d.scene_graph import AABB, RayHit, SceneGraph, SceneNode
+from codomyrmex.spatial.three_d.scene_graph import AABB, SceneGraph, SceneNode
 
 
 class TestAABB:
@@ -150,10 +150,7 @@ class TestSceneGraph:
 # ---------------------------------------------------------------------------
 
 from codomyrmex.formal_verification.gated_rewrite import (
-    GateDecision,
     GatedRewriter,
-    RewriteGate,
-    RewriteProposal,
 )
 
 
@@ -390,9 +387,7 @@ class TestRaftCluster:
 from codomyrmex.cerebrum import ActiveInferenceAgent
 from codomyrmex.cerebrum.inference.free_energy_loop import FreeEnergyLoop
 from codomyrmex.cerebrum.inference.hierarchical_planner import (
-    HierarchicalPlan,
     HierarchicalPlanner,
-    LevelResult,
     PlanLevel,
 )
 

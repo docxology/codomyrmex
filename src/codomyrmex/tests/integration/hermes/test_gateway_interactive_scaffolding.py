@@ -1,12 +1,10 @@
-import os
 import subprocess
 from pathlib import Path
 
 import pytest
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse
+from codomyrmex.agents.core import AgentResponse
 from codomyrmex.agents.hermes.hermes_client import HermesClient
-from codomyrmex.agents.hermes.session import SQLiteSessionStore
 
 
 @pytest.fixture

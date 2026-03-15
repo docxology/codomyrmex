@@ -1,8 +1,6 @@
 """Integration tests for Hermes gateway lifecycle and PID management."""
 
 import multiprocessing
-import os
-import signal
 import time
 from pathlib import Path
 

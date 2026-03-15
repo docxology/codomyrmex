@@ -1,10 +1,8 @@
 """Integration tests for Hermes Workflow Engine Loop."""
 
-import pytest
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.hermes.hermes_client import HermesClient
-from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
 
 class TestHermesClient(HermesClient):

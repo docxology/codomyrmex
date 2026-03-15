@@ -3,7 +3,6 @@
 import asyncio
 from pathlib import Path
 
-import pytest
 
 from codomyrmex.agents.hermes.gateway.directory import ChannelDirectorySync
 

@@ -11,8 +11,8 @@ Builds on:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import UTC, datetime, timezone
-from typing import TYPE_CHECKING, Any
+from datetime import UTC, datetime
+from typing import Any
 
 from codomyrmex.collaboration.coordination.attestation import (
     AttestationAuthority,

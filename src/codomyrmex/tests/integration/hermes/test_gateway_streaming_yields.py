@@ -1,6 +1,5 @@
 """Integration tests for Async Streaming Yields (D3)."""
 
-import asyncio
 import time
 
 import pytest

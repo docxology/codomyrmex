@@ -1,9 +1,7 @@
 """Integration tests for Cross-Platform Identity Resolution (D1)."""
 
-import asyncio
 from pathlib import Path
 
-import pytest
 
 from codomyrmex.agents.hermes.gateway.identity import IdentityResolver
 

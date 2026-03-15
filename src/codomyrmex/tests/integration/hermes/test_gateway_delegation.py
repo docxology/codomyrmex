@@ -1,6 +1,5 @@
 """Integration tests for Hermes Sub-Agent Delegation."""
 
-import pytest
 
 from codomyrmex.agents.hermes.mcp_tools import hermes_delegate_task
 

@@ -2,7 +2,6 @@
 
 from typing import Any
 
-import pytest
 
 from codomyrmex.agents.hermes._provider_router import ContextCompressor
 
