@@ -44,10 +44,15 @@ class TestSuite:
 
     @property
     def test_count(self) -> int:
+        """Return the number of generated tests in this suite."""
         return len(self.tests)
 
     def render(self) -> str:
-        """Render."""
+        """Render the test suite as a complete Python test file string.
+
+        Returns:
+            A string containing the full test file with imports and test functions.
+        """
         lines = ['"""Auto-generated tests."""', "", "import pytest", ""]
         lines.extend(self.imports)
         lines.append("")
@@ -97,6 +102,14 @@ class TestGenerator:
         return suite
 
     def _generate_function_test(self, node: ast.FunctionDef) -> GeneratedTest:
+        """Generate a test stub for a single function definition.
+
+        Args:
+            node: The AST FunctionDef node to generate a test for.
+
+        Returns:
+            A GeneratedTest with a TODO placeholder body.
+        """
         args = [a.arg for a in node.args.args if a.arg != "self"]
         name = f"test_{node.name}"
 
@@ -108,6 +121,15 @@ class TestGenerator:
         return GeneratedTest(name=name, body=body, target=node.name)
 
     def _generate_class_tests(self, node: ast.ClassDef) -> list[GeneratedTest]:
+        """Generate test stubs for a class definition and its public methods.
+
+        Args:
+            node: The AST ClassDef node to generate tests for.
+
+        Returns:
+            A list of GeneratedTest instances — one for instantiation plus
+            one per public method.
+        """
         tests = []
         class_name = node.name
 
