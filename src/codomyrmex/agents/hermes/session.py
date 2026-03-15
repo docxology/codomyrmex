@@ -562,7 +562,7 @@ class SQLiteSessionStore:
         else:
             session.messages.insert(0, system_msg)
 
-        session.updated_at = __import__("time").time()
+        session.updated_at = time.time()
         self.save(session)
         return True
 
