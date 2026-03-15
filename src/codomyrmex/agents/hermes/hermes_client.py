@@ -270,8 +270,8 @@ class HermesClient(CLIAgentBase):
                     ):
                         # Found a provider line with an actual key value
                         return True
-        except Exception:
-            pass  # Fall through to .env check
+        except Exception as exc:
+            self.logger.debug("Failed to parse `hermes config` output: %s", exc)  # Fall through to .env check
 
         # Method 2: check ~/.hermes/.env directly
         try:
@@ -284,8 +284,8 @@ class HermesClient(CLIAgentBase):
                             "OPENROUTER_API_KEY="
                         ):
                             return True
-        except Exception:
-            pass
+        except Exception as exc:
+            self.logger.debug("Failed to read ~/.hermes/.env: %s", exc)
 
         # Method 3: check environment variable
         if os.environ.get("OPENROUTER_API_KEY"):
@@ -929,13 +929,22 @@ class HermesClient(CLIAgentBase):
         import subprocess
 
         turn = 0
+        trace = ""
         while turn < max_turns:
-            run = subprocess.run(
-                ["uv", "run", "pytest", target_path, "-v", "--tb=short"],
-                capture_output=True,
-                text=True,
-                timeout=120,
-            )
+            try:
+                run = subprocess.run(
+                    ["uv", "run", "pytest", target_path, "-v", "--tb=short"],
+                    capture_output=True,
+                    text=True,
+                    timeout=120,
+                )
+            except subprocess.TimeoutExpired as exc:
+                self.logger.error("pytest timed out after %s seconds", 120)
+                return {
+                    "status": "error",
+                    "message": f"pytest execution timed out: {exc}",
+                    "trace": "",
+                }
 
             if run.returncode == 0:
                 self.logger.info(
@@ -1159,3 +1168,150 @@ class HermesClient(CLIAgentBase):
         except Exception as e:
             self.logger.warning("Worktree cleanup failed: %s", e)
             return False
+
+    # ------------------------------------------------------------------
+    # Session Management Helpers (v1.5.x+)
+    # ------------------------------------------------------------------
+
+    def get_session_stats(self) -> dict[str, Any]:
+        """Return summary statistics for the session database.
+
+        Returns:
+            dict with keys: ``session_count``, ``db_size_bytes``,
+            ``oldest_session_at``, ``newest_session_at``.
+        """
+        with SQLiteSessionStore(self._session_db_path) as store:
+            return store.get_stats()
+
+    def fork_session(
+        self, session_id: str, new_name: str | None = None
+    ) -> HermesSession | None:
+        """Fork an existing session into an independent child session.
+
+        Args:
+            session_id: Source session to fork from.
+            new_name: Human-friendly name for the child session.
+
+        Returns:
+            The new :class:`~codomyrmex.agents.hermes.session.HermesSession`
+            with all parent messages copied, or ``None`` if the source is missing.
+        """
+        with SQLiteSessionStore(self._session_db_path) as store:
+            parent = store.load(session_id)
+            if parent is None:
+                self.logger.warning("Cannot fork unknown session: %s", session_id)
+                return None
+            child = parent.fork(new_name=new_name)
+            store.save(child)
+            self.logger.info(
+                "Forked session %s → %s (name=%s)",
+                session_id,
+                child.session_id,
+                child.name,
+            )
+            return child
+
+    def export_session_markdown(self, session_id: str) -> str | None:
+        """Export a session as formatted Markdown.
+
+        Args:
+            session_id: Session identifier.
+
+        Returns:
+            Markdown string, or ``None`` if session not found.
+        """
+        with SQLiteSessionStore(self._session_db_path) as store:
+            return store.export_markdown(session_id)
+
+    def batch_execute(
+        self,
+        prompts: list[str],
+        parallel: bool = False,
+        backend: str | None = None,
+        timeout: int | None = None,
+    ) -> list[dict[str, Any]]:
+        """Execute a list of prompts, returning a list of result dicts.
+
+        Args:
+            prompts: List of prompt strings.
+            parallel: If ``True``, use a :class:`~concurrent.futures.ThreadPoolExecutor`
+                to submit all prompts concurrently.  Defaults to ``False`` (sequential).
+            backend: Override the active backend (``\"cli\"`` | ``\"ollama\"``).
+                If ``None``, uses the currently configured backend.
+            timeout: Per-request timeout in seconds.  If ``None``, uses the client default.
+
+        Returns:
+            List of dicts with keys ``prompt``, ``status``, ``content``, ``error``.
+        """
+        from codomyrmex.agents.core import AgentRequest
+
+        if backend:
+            orig_backend = self._active_backend
+            self._active_backend = backend
+        if timeout:
+            orig_timeout = self.timeout
+            self.timeout = timeout
+
+        def _execute_one(prompt: str) -> dict[str, Any]:
+            try:
+                resp = self.execute(AgentRequest(prompt=prompt))
+                return {
+                    "prompt": prompt,
+                    "status": "success" if resp.is_success() else "error",
+                    "content": resp.content,
+                    "error": resp.error,
+                }
+            except Exception as exc:
+                return {
+                    "prompt": prompt,
+                    "status": "error",
+                    "content": "",
+                    "error": str(exc),
+                }
+
+        try:
+            if parallel:
+                from concurrent.futures import ThreadPoolExecutor
+
+                with ThreadPoolExecutor(max_workers=min(len(prompts), 8)) as ex:
+                    results = list(ex.map(_execute_one, prompts))
+            else:
+                results = [_execute_one(p) for p in prompts]
+        finally:
+            if backend:
+                self._active_backend = orig_backend  # type: ignore[possibly-undefined]
+            if timeout:
+                self.timeout = orig_timeout  # type: ignore[possibly-undefined]
+
+        return results
+
+    def set_system_prompt(self, session_id: str, prompt: str) -> bool:
+        """Prepend (or replace) a persistent system message in a session.
+
+        Args:
+            session_id: Session identifier.  If the session does not exist it
+                will be created.
+            prompt: System instruction text.
+
+        Returns:
+            ``True`` on success.
+        """
+        with SQLiteSessionStore(self._session_db_path) as store:
+            # Create session if it doesn't exist
+            if not store.load(session_id):
+                store.save(HermesSession(session_id=session_id))
+            return store.update_system_prompt(session_id, prompt)
+
+    def get_session_detail(self, session_id: str) -> dict[str, Any] | None:
+        """Return a rich detail dictionary for a session.
+
+        Args:
+            session_id: Session identifier.
+
+        Returns:
+            dict with all session fields plus ``message_count``, ``last_message``,
+            ``has_system_prompt``, or ``None`` if not found.
+        """
+        with SQLiteSessionStore(self._session_db_path) as store:
+            return store.get_detail(session_id)
+

@@ -53,7 +53,7 @@ The LLM receives tool schemas as JSON in the `<tools>` section of the prompt. Wh
 
 Dangerous operations (file writes, terminal commands) go through `approval.py`:
 
-```
+```text
 Tool Call → approval.py check
   ├── Auto-approved (safe operations)
   └── Requires approval (destructive operations)
@@ -86,8 +86,69 @@ mcp_servers:
 | `tools/code_execution_tool.py` | Sandboxed code execution               |
 | `tools/approval.py`            | Safety approval system                 |
 
+## Codomyrmex MCP Tools (v1.5.x+)
+
+Hermes is exposed to other agents through a set of `@mcp_tool` decorated functions in
+`src/codomyrmex/agents/hermes/mcp_tools.py`. These tools bridge internal Hermes capabilities
+to the broader PAI ecosystem.
+
+### Session Management Tools
+
+| Tool | Description |
+| :--- | :---------- |
+| `hermes_session_list` | List all session IDs |
+| `hermes_session_stats` | DB stats: count, size, oldest/newest timestamps |
+| `hermes_session_fork` | Fork a session into an independent child |
+| `hermes_session_export_md` | Export a session as formatted Markdown |
+| `hermes_session_detail` | Rich session detail: `message_count`, `has_system_prompt`, etc. |
+| `hermes_session_clear` | Delete a session by ID |
+| `hermes_session_search` | Substring search by session name |
+| `hermes_set_system_prompt` | Upsert a persistent system message at position 0 |
+| `hermes_prune_sessions` | Archive+delete sessions older than N days |
+| `hermes_recall_memory` | FTS5 BM25-ranked full-text search across all sessions |
+
+### Execution Tools
+
+| Tool | Description |
+| :--- | :---------- |
+| `hermes_execute` | Single-turn prompt execution |
+| `hermes_stream` | Streaming prompt execution |
+| `hermes_chat_session` | Stateful multi-turn session |
+| `hermes_batch_execute` | Submit a list of prompts; sequential or parallel |
+| `hermes_sampling` | Server-initiated MCP sampling protocol |
+| `hermes_run_coverage_loop` | Autonomous pytest heal-and-retry loop |
+
+### Diagnostics & Utility Tools
+
+| Tool | Description |
+| :--- | :---------- |
+| `hermes_status` | Backend availability check |
+| `hermes_version` | CLI version string |
+| `hermes_doctor` | Full `hermes doctor` output |
+| `hermes_system_health` | CPU/RAM/Swap realtime metrics |
+| `hermes_insights` | Usage analytics (token cost, tool patterns) |
+| `hermes_provider_status` | Multi-provider credential status |
+| `hermes_mcp_reload` | Hot-reload MCP server configuration |
+
+### Script Orchestrations
+
+```bash
+# Batch execution from file
+uv run python -m codomyrmex.agents.hermes.scripts.run_batch --file prompts.txt
+
+# Session export (list all)
+uv run python -m codomyrmex.agents.hermes.scripts.run_session_export --list
+
+# Export specific session to markdown
+uv run python -m codomyrmex.agents.hermes.scripts.run_session_export --session-id abc123
+
+# Prune old sessions (dry run)
+uv run python -m codomyrmex.agents.hermes.scripts.run_prune --days 30 --dry-run
+```
+
 ## Related Documents
 
 - [Architecture](architecture.md) — Tool dispatch in agent loop
 - [Skills](skills.md) — Skill-based tools
 - [Configuration](configuration.md) — Toolset configuration
+- [Sessions](sessions.md) — Session management and storage

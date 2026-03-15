@@ -469,6 +469,134 @@ class SQLiteSessionStore:
         self._conn.commit()
         return cursor.rowcount > 0
 
+    def get_stats(self) -> dict[str, Any]:
+        """Return summary statistics about the session database.
+
+        Returns:
+            dict with keys: ``session_count``, ``db_size_bytes``,
+            ``oldest_session_at``, ``newest_session_at``.
+        """
+        import os
+
+        cursor = self._conn.execute(
+            "SELECT COUNT(*), MIN(created_at), MAX(updated_at) FROM hermes_sessions"
+        )
+        row = cursor.fetchone()
+        count = row[0] or 0
+        oldest = row[1]
+        newest = row[2]
+
+        size = 0
+        if self._db_path != ":memory:":
+            try:
+                size = os.path.getsize(self._db_path)
+            except OSError:
+                pass
+
+        return {
+            "session_count": count,
+            "db_size_bytes": size,
+            "oldest_session_at": oldest,
+            "newest_session_at": newest,
+        }
+
+    def export_markdown(self, session_id: str) -> str | None:
+        """Export a session as clean Markdown text.
+
+        Args:
+            session_id: Session identifier.
+
+        Returns:
+            Markdown string, or ``None`` if the session does not exist.
+        """
+        session = self.load(session_id)
+        if session is None:
+            return None
+
+        lines: list[str] = []
+        title = session.name or session.session_id
+        lines.append(f"# Session: {title}\n")
+        lines.append(f"**ID**: `{session.session_id}`  ")
+        if session.parent_session_id:
+            lines.append(f"**Parent**: `{session.parent_session_id}`  ")
+        import datetime
+        lines.append(
+            f"**Created**: {datetime.datetime.fromtimestamp(session.created_at).isoformat()}  "
+        )
+        lines.append(
+            f"**Updated**: {datetime.datetime.fromtimestamp(session.updated_at).isoformat()}\n"
+        )
+
+        for msg in session.messages:
+            role = msg.get("role", "unknown").capitalize()
+            content = msg.get("content", "")
+            lines.append(f"\n## {role}\n\n{content}\n")
+
+        if session.metadata:
+            lines.append("\n---\n\n## Metadata\n")
+            for k, v in session.metadata.items():
+                lines.append(f"- **{k}**: {v}")
+
+        return "\n".join(lines)
+
+    def update_system_prompt(self, session_id: str, prompt: str) -> bool:
+        """Upsert a persistent system message at index 0 of the session.
+
+        If the first message is already a ``system`` role, it will be replaced;
+        otherwise the new system message is prepended.
+
+        Args:
+            session_id: Session identifier.
+            prompt: The system prompt text.
+
+        Returns:
+            ``True`` if the session was updated.
+        """
+        session = self.load(session_id)
+        if session is None:
+            return False
+
+        system_msg = {"role": "system", "content": prompt}
+        if session.messages and session.messages[0].get("role") == "system":
+            session.messages[0] = system_msg
+        else:
+            session.messages.insert(0, system_msg)
+
+        session.updated_at = __import__("time").time()
+        self.save(session)
+        return True
+
+    def get_detail(self, session_id: str) -> dict[str, Any] | None:
+        """Return a rich detail dictionary for a session.
+
+        Args:
+            session_id: Session identifier.
+
+        Returns:
+            dict with all session fields plus ``message_count``, ``last_message``,
+            ``has_system_prompt``, or ``None`` if not found.
+        """
+        session = self.load(session_id)
+        if session is None:
+            return None
+
+        last = session.last_message
+        has_system = bool(
+            session.messages and session.messages[0].get("role") == "system"
+        )
+
+        return {
+            "session_id": session.session_id,
+            "name": session.name,
+            "parent_session_id": session.parent_session_id,
+            "message_count": session.message_count,
+            "last_message": last,
+            "has_system_prompt": has_system,
+            "metadata": session.metadata,
+            "created_at": session.created_at,
+            "updated_at": session.updated_at,
+        }
+
     def close(self) -> None:
         """Close the database connection."""
         self._conn.close()

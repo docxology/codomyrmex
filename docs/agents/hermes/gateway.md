@@ -131,6 +131,49 @@ The gateway writes its PID to `$HERMES_HOME/gateway.pid` on startup. On subseque
 | `$HERMES_HOME/logs/errors.log`        | Error tracebacks and exceptions                      |
 | `$HERMES_HOME/logs/gateway.error.log` | stderr (if using launchd)                            |
 
+## Discord Voice Channels (v60cce9c+)
+
+The upstream `60cce9c` update (March 2026) added full Discord **voice channel** support via `VoiceReceiver`:
+
+| Feature | Detail |
+| :------ | :----- |
+| **RTP capture** | Decrypts NaCl-encrypted RTP packets per-user via Discord's DAVE E2EE protocol |
+| **Opus → PCM** | Decodes Opus audio to PCM; buffers per-user with silence detection |
+| **Voice mode** | `/voice [on|off|tts|channel|leave|status]` per-chat toggle command |
+| **Voice persistence** | State saved to `$HERMES_HOME/gateway_voice_mode.json` across restarts |
+| **Voice timeout** | Bot auto-disconnects after 5 minutes of channel inactivity |
+| **Diagnostic script** | `discord-voice-doctor.py` — checks packages, permissions, Opus codec |
+
+### Voice Mode Commands
+
+```bash
+/voice on      # Enable voice replies (TTS) in this chat
+/voice off     # Disable voice replies
+/voice tts     # Send all replies as voice-only audio
+/voice channel # Join the user's current voice channel (listen + TTS)
+/voice status  # Show current voice mode
+```
+
+### Required Dependencies
+
+```bash
+# Install discord.py with voice support
+pip install discord.py[voice]  # includes PyNaCl + Opus bindings
+
+# Or inside the Hermes virtualenv
+cd ~/.hermes/hermes-agent && .venv/bin/pip install discord.py[voice]
+
+# Run the diagnostic tool
+python scripts/discord-voice-doctor.py
+```
+
+### .env Configuration
+
+```bash
+DISCORD_BOT_TOKEN=your_bot_token_here
+DISCORD_ALLOWED_USER_IDS=123456789,987654321  # optional allow-list
+```
+
 ## Related Documents
 
 - [Telegram](telegram.md) — Telegram-specific setup

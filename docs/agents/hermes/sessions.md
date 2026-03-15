@@ -134,6 +134,67 @@ hermes --resume SESSION_ID chat
 hermes --continue chat
 ```
 
+## Python API Reference (v1.5.x+)
+
+The `HermesClient` exposes rich session management methods available directly from Python:
+
+| Method | Description |
+| :----- | :---------- |
+| `get_session_stats()` | Returns `session_count`, `db_size_bytes`, `oldest_session_at` |
+| `fork_session(session_id, new_name)` | Forks a session into independent child; child inherits full history |
+| `export_session_markdown(session_id)` | Exports conversation as formatted Markdown string |
+| `set_system_prompt(session_id, text)` | Prepends or replaces the persistent system message |
+| `get_session_detail(session_id)` | Returns rich detail dict with `message_count`, `has_system_prompt` |
+| `batch_execute(prompts, parallel=False)` | Executes a list of prompts sequentially or via ThreadPoolExecutor |
+
+### Session Forking
+
+Sessions can be independently forked to create parallel conversation threads:
+
+```python
+from codomyrmex.agents.hermes.hermes_client import HermesClient
+
+client = HermesClient()
+child = client.fork_session("parent_session_id", new_name="experiment-branch")
+# child.parent_session_id == "parent_session_id"
+```
+
+### Markdown Export
+
+```python
+md = client.export_session_markdown("session_id")
+# Returns full conversation as "# Session: name\n\n## User\n\nhello\n..."
+```
+
+### Session Statistics
+
+```python
+stats = client.get_session_stats()
+# {"session_count": 42, "db_size_bytes": 819200, "oldest_session_at": 1710000000.0, ...}
+```
+
+### Pruning Old Sessions
+
+Use the CLI script or Python API to archive sessions older than N days:
+
+```bash
+# Dry run
+uv run python -m codomyrmex.agents.hermes.scripts.run_prune --days 30 --dry-run
+
+# Execute
+uv run python -m codomyrmex.agents.hermes.scripts.run_prune --days 30
+```
+
+```python
+from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
+with SQLiteSessionStore("/path/to/hermes_sessions.db") as store:
+    n = store.prune_old_sessions(days_old=30)
+    print(f"Archived {n} sessions")
+```
+
+Archived sessions are stored as gzip-compressed JSON in `sessions_archive/` next to the database.
+
 ## Related Documents
 
 - [Architecture](architecture.md) — Core agent loop

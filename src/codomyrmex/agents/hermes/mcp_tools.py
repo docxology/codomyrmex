@@ -1167,3 +1167,220 @@ def hermes_read_log_chunk(
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
+
+# ---------------------------------------------------------------------------
+# New session management tools (v1.5.x+)
+# ---------------------------------------------------------------------------
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Return summary statistics about the Hermes session database: "
+        "session count, disk size, and timestamps of oldest and newest sessions."
+    ),
+)
+def hermes_session_stats() -> dict[str, Any]:
+    """Get Hermes session database statistics.
+
+    Returns:
+        dict with keys: status, session_count, db_size_bytes,
+        oldest_session_at, newest_session_at
+    """
+    try:
+        client = _get_client()
+        stats = client.get_session_stats()
+        return {"status": "success", **stats}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Fork an existing Hermes session into an independent child session. "
+        "The child inherits the full message history and can diverge independently."
+    ),
+)
+def hermes_session_fork(
+    session_id: str,
+    new_name: str | None = None,
+) -> dict[str, Any]:
+    """Fork a Hermes session.
+
+    Args:
+        session_id: Source session to fork.
+        new_name: Optional name for the child session.
+
+    Returns:
+        dict with keys: status, child_session_id, name, parent_session_id
+    """
+    try:
+        client = _get_client()
+        child = client.fork_session(session_id, new_name=new_name)
+        if child is None:
+            return {"status": "error", "message": f"Session {session_id!r} not found"}
+        return {
+            "status": "success",
+            "child_session_id": child.session_id,
+            "name": child.name,
+            "parent_session_id": child.parent_session_id,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Export a Hermes session as formatted Markdown text. "
+        "Useful for archiving conversations or sharing context with other agents."
+    ),
+)
+def hermes_session_export_md(session_id: str) -> dict[str, Any]:
+    """Export a Hermes session as Markdown.
+
+    Args:
+        session_id: Session to export.
+
+    Returns:
+        dict with keys: status, markdown, session_id
+    """
+    try:
+        client = _get_client()
+        md = client.export_session_markdown(session_id)
+        if md is None:
+            return {"status": "error", "message": f"Session {session_id!r} not found"}
+        return {"status": "success", "session_id": session_id, "markdown": md}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Submit a list of prompts to the Hermes agent and collect all results. "
+        "Optionally runs prompts in parallel for faster throughput."
+    ),
+)
+def hermes_batch_execute(
+    prompts: list[str],
+    parallel: bool = False,
+    backend: str = "auto",
+    timeout: int = 120,
+) -> dict[str, Any]:
+    """Execute a batch of prompts with the Hermes agent.
+
+    Args:
+        prompts: List of prompt strings to process.
+        parallel: Submit all prompts concurrently (default False).
+        backend: ``"auto"`` (default), ``"cli"``, or ``"ollama"``.
+        timeout: Per-prompt timeout in seconds (default 120).
+
+    Returns:
+        dict with keys: status, results (list of {prompt, status, content, error}), count
+    """
+    try:
+        client = _get_client(backend=backend, timeout=timeout)
+        results = client.batch_execute(prompts, parallel=parallel)
+        total_err = sum(1 for r in results if r["status"] == "error")
+        return {
+            "status": "success" if total_err == 0 else "partial",
+            "results": results,
+            "count": len(results),
+            "errors": total_err,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc), "results": [], "count": 0}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Set or replace the persistent system prompt for a Hermes session. "
+        "The system prompt is always the first message and guides agent behaviour."
+    ),
+)
+def hermes_set_system_prompt(
+    session_id: str,
+    prompt: str,
+) -> dict[str, Any]:
+    """Set the system prompt for a Hermes session.
+
+    Args:
+        session_id: Session to update (will be created if missing).
+        prompt: System instruction text.
+
+    Returns:
+        dict with keys: status, session_id, message
+    """
+    try:
+        client = _get_client()
+        ok = client.set_system_prompt(session_id, prompt)
+        return {
+            "status": "success" if ok else "error",
+            "session_id": session_id,
+            "message": "System prompt set" if ok else "Failed to set system prompt",
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Retrieve full detail about a specific Hermes session, including "
+        "message count, last message, system prompt flag, and all metadata."
+    ),
+)
+def hermes_session_detail(session_id: str) -> dict[str, Any]:
+    """Get detailed information about a Hermes session.
+
+    Args:
+        session_id: Session to describe.
+
+    Returns:
+        dict with keys: status, session_id, name, message_count, last_message,
+        has_system_prompt, metadata, created_at, updated_at
+    """
+    try:
+        client = _get_client()
+        detail = client.get_session_detail(session_id)
+        if detail is None:
+            return {"status": "error", "message": f"Session {session_id!r} not found"}
+        return {"status": "success", **detail}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Archive and delete Hermes sessions older than the specified number of days. "
+        "Archived sessions are gzip-compressed and saved to sessions_archive/ next to the DB."
+    ),
+)
+def hermes_prune_sessions(days_old: int = 30) -> dict[str, Any]:
+    """Archive and prune old Hermes sessions.
+
+    Args:
+        days_old: Remove sessions not updated within this many days (default 30).
+
+    Returns:
+        dict with keys: status, pruned_count, message
+    """
+    try:
+        from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
+        client = _get_client()
+        with SQLiteSessionStore(client._session_db_path) as store:
+            count = store.prune_old_sessions(days_old=days_old)
+        return {
+            "status": "success",
+            "pruned_count": count,
+            "message": f"Archived and deleted {count} sessions older than {days_old} days.",
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+

@@ -38,13 +38,18 @@ def _generate_sine_wave(
 @pytest.mark.asyncio
 async def test_audio_transcriber_integration() -> None:
     """Verify that raw bytes seamlessly route through the transcriber pipeline."""
-    transcriber = AudioTranscriber()
+    try:
+        transcriber = AudioTranscriber()
 
-    wav_bytes = _generate_sine_wave(duration=0.5)
+        wav_bytes = _generate_sine_wave(duration=0.5)
 
-    # We await the async wrapper. We expect successful execution without crashing on subprocesses.
-    # The output from a pure sine wave will be an empty string typically.
-    transcript = await transcriber.transcribe_bytes(wav_bytes, "synthetic_test.wav")
+        # We await the async wrapper. We expect successful execution without crashing on subprocesses.
+        # The output from a pure sine wave will be an empty string typically.
+        transcript = await transcriber.transcribe_bytes(wav_bytes, "synthetic_test.wav")
 
-    # Assert return type and successful pipeline execution
-    assert isinstance(transcript, str)
+        # Assert return type and successful pipeline execution
+        assert isinstance(transcript, str)
+    except Exception as e:
+        if "ProviderNotAvailableError" in type(e).__name__:
+            pytest.skip("Audio Provider Unavailable")
+        raise
