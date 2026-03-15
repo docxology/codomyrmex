@@ -8,6 +8,7 @@ import multiprocessing
 import resource
 import threading
 import time
+from collections.abc import Generator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any
@@ -23,7 +24,7 @@ except ImportError:
     class _DummyPSUtil:
         """No-op psutil stub used when psutil is not installed; all metrics return zero."""
 
-        def cpu_percent(self, interval=None):
+        def cpu_percent(self, interval: float | None = None) -> float:
             return 0.0
 
         class NoSuchProcess(Exception):
@@ -48,7 +49,7 @@ class ExecutionLimits:
     cpu_limit: float = 0.5  # CPU cores
     max_output_chars: int = 100000  # Maximum output size
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Validate limits after initialization."""
         if self.time_limit < 1 or self.time_limit > MAX_TIMEOUT:
             raise ValueError(f"Time limit must be between 1 and {MAX_TIMEOUT} seconds")
@@ -61,7 +62,7 @@ class ExecutionLimits:
 
 
 @contextmanager
-def resource_limits_context(limits: ExecutionLimits):
+def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, None]:
     """Context manager to set and restore resource limits."""
     old_limits = {}
 
@@ -142,7 +143,7 @@ def execute_with_limits(
         result = execute_code(language, code, stdin, limits.time_limit, session_id)
 
         # Update monitoring during execution (in a separate thread for better tracking)
-        def monitoring_thread():
+        def monitoring_thread() -> None:
             """Background thread to monitor resource usage."""
             while True:
                 monitor.update_monitoring()
@@ -196,7 +197,7 @@ def sandbox_process_isolation(
         Dictionary with execution results
     """
 
-    def execute_in_subprocess(queue):
+    def execute_in_subprocess(queue: multiprocessing.Queue) -> None:
         """Execute code in a subprocess with resource limits."""
         try:
             # Set resource limits in the subprocess
