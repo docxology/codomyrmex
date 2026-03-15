@@ -56,16 +56,19 @@ class ModelStats:
 
     @property
     def avg_latency_ms(self) -> float:
+        """Average request latency in milliseconds across success and failure."""
         total = self.success_count + self.failure_count
         return self.total_latency_ms / total if total > 0 else 0.0
 
     @property
     def success_rate(self) -> float:
+        """Ratio of successful requests to total requests (0.0–1.0)."""
         total = self.success_count + self.failure_count
         return self.success_count / total if total > 0 else 1.0
 
     @property
     def total_cost(self) -> float:
+        """Total estimated API cost for this model (USD)."""
         # Simplified cost calculation
         return 0.0
 
