@@ -215,7 +215,7 @@ class ProviderRouter:
     ) -> AsyncIterator[str]:
         """Unified LLM streaming invocation.
 
-        Yields tokens/chunks as they arrive asynchronously to reduce Time-to-First-Token.
+        Yields tokens/chunks as they arrive to reduce Time-to-First-Token.
         """
         resolved_provider = provider or self.resolve_provider()
         resolved_model = model or self.model
@@ -574,7 +574,7 @@ class ContextCompressor:
             middle_count = len(deduped) - len(head) - len(tail)
             summary_msg = {
                 "role": "system",
-                "content": f"[{middle_count} earlier messages compressed for context limits]",
+                "content": f"[{middle_count} earlier messages compressed]",
             }
             deduped = [*head, summary_msg, *tail]
 
