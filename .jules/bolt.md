@@ -1,0 +1,3 @@
+## 2026-03-03 - [O(N^2) Neighbor Search Bottleneck]
+**Learning:** Naive O(N^2) neighbor checks in agent-based models (like swarm flocking) severely limit scaling. For 10,000 agents, the pairwise distance calculation dominates execution time, creating a fundamental performance ceiling. Relying solely on NumPy broadcasting for pairwise distances still fundamentally allocates O(N^2) memory or processing overhead which becomes untenable at high agent counts.
+**Action:** Replace naive distance loops with spatial hashing grids (bucketing agents into cells based on perception radius). This reduces the search space to O(1) expected time per agent, only evaluating distances against adjacent cells, providing massive speedups as N scales.
