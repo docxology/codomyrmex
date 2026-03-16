@@ -37,9 +37,11 @@ class CodeBundle:
 
     @property
     def line_count(self) -> int:
+        """Return the number of non-empty lines in the generated source code."""
         return len(self.source.strip().splitlines())
 
     def to_dict(self) -> dict[str, Any]:
+        """Serialize the bundle metadata to a JSON-friendly dictionary."""
         return {
             "filename": self.filename,
             "language": self.language,
