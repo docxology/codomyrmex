@@ -84,7 +84,11 @@ class SQLiteStore:
                 )
 
     def get(self, memory_id: str) -> Memory | None:
-        """Return a memory by id or ``None``."""
+        """Return a memory by id or ``None``.
+
+        Handles corrupted JSON fields gracefully by falling back to
+        empty defaults rather than raising ``JSONDecodeError``.
+        """
         with self._lock:
             with self._get_connection() as conn:
                 row = conn.execute(
@@ -94,13 +98,23 @@ class SQLiteStore:
         if not row:
             return None
 
+        try:
+            metadata = json.loads(row["metadata"])
+        except (json.JSONDecodeError, TypeError):
+            metadata = {}
+
+        try:
+            tags = json.loads(row["tags"])
+        except (json.JSONDecodeError, TypeError):
+            tags = []
+
         mem = Memory(
             id=row["id"],
             content=row["content"],
             memory_type=MemoryType(row["memory_type"]),
             importance=MemoryImportance(row["importance"]),
-            metadata=json.loads(row["metadata"]),
-            tags=json.loads(row["tags"]),
+            metadata=metadata,
+            tags=tags,
             created_at=row["created_at"],
             access_count=row["access_count"],
             last_accessed=row["last_accessed"],
@@ -134,14 +148,24 @@ class SQLiteStore:
                 ).fetchall()
 
         for row in rows:
+            try:
+                metadata = json.loads(row["metadata"])
+            except (json.JSONDecodeError, TypeError):
+                metadata = {}
+
+            try:
+                tags = json.loads(row["tags"])
+            except (json.JSONDecodeError, TypeError):
+                tags = []
+
             memories.append(
                 Memory(
                     id=row["id"],
                     content=row["content"],
                     memory_type=MemoryType(row["memory_type"]),
                     importance=MemoryImportance(row["importance"]),
-                    metadata=json.loads(row["metadata"]),
-                    tags=json.loads(row["tags"]),
+                    metadata=metadata,
+                    tags=tags,
                     created_at=row["created_at"],
                     access_count=row["access_count"],
                     last_accessed=row["last_accessed"],
