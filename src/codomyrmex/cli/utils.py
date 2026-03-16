@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import importlib.util
 from typing import Any
 
 try:
@@ -6,14 +9,11 @@ try:
     TERMINAL_INTERFACE_AVAILABLE = True
 except ImportError:
     TERMINAL_INTERFACE_AVAILABLE = False
-    TerminalFormatter = None
+    TerminalFormatter = None  # type: ignore[assignment, misc]
 
-try:
-    from codomyrmex.performance import monitoring
-
-    PERFORMANCE_MONITORING_AVAILABLE = True
-except ImportError:
-    PERFORMANCE_MONITORING_AVAILABLE = False
+PERFORMANCE_MONITORING_AVAILABLE = (
+    importlib.util.find_spec("codomyrmex.performance.monitoring") is not None
+)
 
 
 def get_formatter() -> Any | None:
