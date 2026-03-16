@@ -427,7 +427,7 @@ class HermesClient(CLIAgentBase):
             # However, for pure Ollama API use we would use options.
             # Here we wrap the prompt with a limit instruction.
             prompt = f"(Limit response to {max_tokens} tokens)\n{prompt}"
-        
+
         cmd.append(prompt)
 
         self.logger.info("Hermes via Ollama: model=%s, prompt=%s…", model, prompt[:60])
@@ -1371,7 +1371,7 @@ class HermesClient(CLIAgentBase):
                     # Skip system prompts from sources if target already has messages
                     if msg.get("role") == "system" and target.messages:
                         continue
-                    
+
                     if deduplicate and target.messages:
                         last = target.messages[-1]
                         if (
@@ -1379,10 +1379,10 @@ class HermesClient(CLIAgentBase):
                             and msg.get("content") == last.get("content")
                         ):
                             continue
-                    
+
                     target.add_message(msg["role"], msg["content"])
                     merged_any = True
-            
+
             if merged_any:
                 store.save(target)
             return merged_any

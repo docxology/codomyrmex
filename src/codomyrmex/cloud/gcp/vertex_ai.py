@@ -20,7 +20,7 @@ class VertexAIClient:
 
     def __init__(self, project: str | None = None, location: str = "us-central1"):
         """Initialize Vertex AI.
-        
+
         Args:
             project: GCP Project ID. If None, uses application default credentials.
             location: GCP region (e.g., 'us-central1').
@@ -48,11 +48,11 @@ class VertexAIClient:
         system_instruction: str | list[str] | None = None,
     ) -> Any:
         """Get a GenerativeModel instance for Gemini.
-        
+
         Args:
             model_name: Name of the model.
             system_instruction: Optional system instructions.
-            
+
         Returns:
             GenerativeModel instance or None if not available.
         """
@@ -77,13 +77,13 @@ class VertexAIClient:
         system_instruction: str | list[str] | None = None,
     ) -> Any:
         """Generate content using Vertex AI.
-        
+
         Args:
             model_name: Name of the model (e.g., 'gemini-1.5-pro-001').
             contents: Prompt content (string or list of parts).
             generation_config: Configuration dictionary (temperature, max_output_tokens, etc.).
             system_instruction: Optional system instruction.
-            
+
         Returns:
             The generation response.
         """

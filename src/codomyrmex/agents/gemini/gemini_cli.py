@@ -62,20 +62,20 @@ class GeminiCLIWrapper(BaseAgent):
 
         if context.get("yolo"):
             cmd.append("--yolo")
-            
+
         if context.get("headless"):
             cmd.append("--headless")
-            
+
         if context.get("continue_session"):
             cmd.append("--continue")
-            
+
         if "pass_session_id" in context:
             val = context["pass_session_id"]
             if val is True:
                 cmd.append("--pass-session-id")
             elif isinstance(val, str):
                 cmd.extend(["--pass-session-id", val])
-                
+
         if "system_instruction" in context:
             cmd.extend(["--system", context["system_instruction"]])
 

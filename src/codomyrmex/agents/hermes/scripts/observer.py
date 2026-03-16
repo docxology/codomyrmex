@@ -44,19 +44,19 @@ class CodebaseObserver:
     def get_capability_context(self) -> str:
         """Retrieve context about available tools and skills."""
         context = ["## Available Codomyrmex Capabilities"]
-        
+
         # Skill categories
         skills_dir = Path("src/codomyrmex/skills/skills/upstream")
         if skills_dir.exists():
             categories = sorted([d.name for d in skills_dir.iterdir() if d.is_dir() and not d.name.startswith(".")])
             context.append(f"- **Skill Categories**: {', '.join(categories)}")
-            
+
         # Core MCP tools
         context.append("- **Core MCP Tools**: read_file, write_file, list_directory, analyze_python_file, search_codebase, git_status, git_diff, run_shell_command, gitnexus, desloppify")
-        
+
         # Standards
         context.append("- **Standards**: Zero-Mock policy, modular separation (Foundation, Core, Service, Specialized), desloppify scoring.")
-        
+
         return "\n".join(context)
 
     def run_cycle(self) -> None:
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     observer = CodebaseObserver(model=args.model)
-    
+
     if args.loop:
         throttle = max(1, args.interval)
         print(f"[{datetime.datetime.now()}] Sentinel starting in loop mode (throttle: {throttle}s)...")

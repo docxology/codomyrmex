@@ -1510,15 +1510,15 @@ def hermes_health_check() -> dict[str, Any]:
     try:
         client = _get_client()
         status = client.get_hermes_status()
-        
+
         # Check sessions DB
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
         with SQLiteSessionStore(client._session_db_path) as store:
             db_stats = store.get_stats()
-            
+
         # Check rotation models
         models = client._router.get_rotation_models()
-        
+
         return {
             "status": "success",
             "backends": status,

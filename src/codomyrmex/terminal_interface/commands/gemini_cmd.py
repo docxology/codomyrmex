@@ -11,15 +11,15 @@ logger = get_logger(__name__)
 
 def run_gemini_cli(*args: str) -> int:
     """Run the Gemini CLI natively.
-    
+
     Args:
         args: Command line arguments to pass to the gemini executable.
-        
+
     Returns:
         Exit code from the gemini CLI execution.
     """
     cli_path = shutil.which("gemini")
-    
+
     if not cli_path:
         sys.stderr.write(
             "gemini CLI not found. Please install with `npm install -g @google/gemini-cli`\n"
@@ -27,7 +27,7 @@ def run_gemini_cli(*args: str) -> int:
         return 1
 
     cmd = [cli_path] + list(args)
-    
+
     try:
         logger.debug("Executing gemini terminal command: %s", " ".join(cmd))
         result = subprocess.run(cmd)

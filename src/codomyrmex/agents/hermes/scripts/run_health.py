@@ -4,7 +4,7 @@ from codomyrmex.agents.hermes.hermes_client import HermesClient
 def main():
     client = HermesClient()
     print("=== Hermes Health Check ===")
-    
+
     # Check status
     try:
         status = client.get_hermes_status()
