@@ -4,7 +4,6 @@ Hermes Codebase Observer (Sentinel)
 Uses Llama 3.2 to observe git history and surface recommendations.
 """
 
-import os
 import subprocess
 import datetime
 from pathlib import Path

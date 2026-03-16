@@ -4,12 +4,9 @@ TDD regression tests for P3 CodeQL overly-permissive chmod remediation.
 Zero-Mock compliant — uses real file operations.
 """
 
-import os
-import stat
 
 import pytest
 
-from codomyrmex.ci_cd_automation.pipeline.artifact_manager import ArtifactManager
 
 
 @pytest.mark.unit

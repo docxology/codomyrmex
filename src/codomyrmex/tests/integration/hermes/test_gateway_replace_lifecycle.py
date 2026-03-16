@@ -6,7 +6,6 @@ from pathlib import Path
 
 import pytest
 
-from codomyrmex.agents.hermes.gateway.server import GatewayRunner
 
 def _run_gateway_process(home_dir: str, replace: bool) -> subprocess.Popen:
     """Helper to run the gateway in a subprocess to test PID behavior."""

@@ -1,7 +1,6 @@
-import os
 import time
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from codomyrmex.agents.hermes._provider_router import ProviderRouter
 
 @pytest.fixture

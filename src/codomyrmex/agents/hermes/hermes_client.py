@@ -30,7 +30,6 @@ from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
-    from .mcp_tools import reload_mcp_config
 
 # Packages allowed for automatic installation by the auto-heal system.
 # Only these well-known, commonly-safe packages may be installed without

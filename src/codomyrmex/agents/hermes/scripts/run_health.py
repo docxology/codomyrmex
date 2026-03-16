@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-import json
-import sys
 from codomyrmex.agents.hermes.hermes_client import HermesClient
 
 def main():
