@@ -33,8 +33,19 @@ except ImportError:
 
 
 def _relevance(query: str, content: str) -> float:
-    """Token-overlap relevance scorer (simple but real)."""
-    if not query:
+    """Token-overlap relevance scorer (simple but real).
+
+    Computes the fraction of query tokens that also appear in content.
+    Returns 0.0 if either string is empty or has no tokenizable words.
+
+    Args:
+        query: The search query string.
+        content: The memory content to score against.
+
+    Returns:
+        A float between 0.0 and 1.0 representing token overlap ratio.
+    """
+    if not query or not content:
         return 0.0
     q_tokens = set(query.lower().split())
     c_tokens = set(content.lower().split())
