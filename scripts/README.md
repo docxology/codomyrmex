@@ -117,6 +117,7 @@ Maintenance and automation utilities for project management.
 - `website/` – Subdirectory
 - `workflow_execution/` – Subdirectory
 - `workflow_testing/` – Subdirectory
+- `sair/` – SAIR Mathematics Distillation submodule (Equational Theories)
 
 ## Navigation
 - **Project Root**: ../README.md

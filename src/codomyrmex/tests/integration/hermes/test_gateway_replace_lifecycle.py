@@ -117,7 +117,7 @@ def test_gateway_replace_kills_old_pid(temp_home: str) -> None:
         p1.wait(timeout=2.0)
     except subprocess.TimeoutExpired:
         pass
-    
+
     # the old process should be dead because the new one killed it via SIGTERM
     assert p1.poll() is not None
 

@@ -36,11 +36,11 @@ def test_rotation_on_429(mock_router):
 def test_rotation_cooldown(mock_router):
     """Verify that a model in cooldown is skipped."""
     mock_router._cooldowns["model-1"] = time.time() + 10
-    
+
     with patch.object(mock_router, "_dispatch") as mock_dispatch:
         mock_dispatch.return_value = {"success": True, "content": "Success", "provider": "openrouter", "model": "model-2"}
         res = mock_router.call_llm("hello")
-        
+
         assert res["model"] == "model-2"
         # Verify model-1 was NEVER called
         for call in mock_dispatch.call_args_list:
