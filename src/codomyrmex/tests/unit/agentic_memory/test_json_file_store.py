@@ -248,6 +248,44 @@ class TestJSONFileStoreEdgeCases:
             assert retrieved is not None
             assert retrieved.content == "In nested dir"
 
+    def test_malformed_json_starts_empty(self):
+        """Should start with empty data when JSON file is corrupted."""
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tf:
+            path = tf.name
+        try:
+            with open(path, "w") as f:
+                f.write("{not valid json at all!!!")
+            store = JSONFileStore(path)
+            assert store.list_all() == []
+            # Should be usable after recovery
+            store.save(Memory(id="after-corrupt", content="Still works"))
+            retrieved = store.get("after-corrupt")
+            assert retrieved is not None
+            assert retrieved.content == "Still works"
+        finally:
+            os.remove(path)
+
+    def test_list_entries_missing_id_key(self):
+        """Should skip list entries that lack an 'id' key."""
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tf:
+            path = tf.name
+        try:
+            with open(path, "w") as f:
+                json.dump(
+                    [
+                        {"id": "valid", "content": "OK"},
+                        {"content": "no id field"},  # missing id
+                        "not a dict",  # wrong type
+                    ],
+                    f,
+                )
+            store = JSONFileStore(path)
+            all_mems = store.list_all()
+            assert len(all_mems) == 1
+            assert all_mems[0].id == "valid"
+        finally:
+            os.remove(path)
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

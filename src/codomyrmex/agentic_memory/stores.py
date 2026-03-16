@@ -7,12 +7,15 @@ Both stores expose the same CRUD surface: ``save``, ``get``, ``delete``,
 from __future__ import annotations
 
 import json
+import logging
 import threading
 from pathlib import Path
 from typing import Any
 
 from codomyrmex.agentic_memory.models import Memory
 from codomyrmex.agentic_memory.sqlite_store import SQLiteStore
+
+logger = logging.getLogger(__name__)
 
 __all__ = ["InMemoryStore", "JSONFileStore", "SQLiteStore"]
 
@@ -58,13 +61,22 @@ class JSONFileStore:
         self._lock = threading.Lock()
         self._data: dict[str, dict[str, Any]] = {}
         if self._path.exists():
-            with open(self._path) as fh:
-                raw = json.load(fh)
-                if isinstance(raw, list):
-                    for entry in raw:
-                        self._data[entry["id"]] = entry
-                elif isinstance(raw, dict):
-                    self._data = raw
+            try:
+                with open(self._path) as fh:
+                    raw = json.load(fh)
+                    if isinstance(raw, list):
+                        for entry in raw:
+                            if isinstance(entry, dict) and "id" in entry:
+                                self._data[entry["id"]] = entry
+                    elif isinstance(raw, dict):
+                        self._data = raw
+            except (json.JSONDecodeError, OSError, ValueError) as exc:
+                logger.warning(
+                    "Failed to load JSON store from %s, starting empty: %s",
+                    self._path,
+                    exc,
+                )
+                self._data = {}
 
     # ── internal ─────────────────────────────────────────────────
 
