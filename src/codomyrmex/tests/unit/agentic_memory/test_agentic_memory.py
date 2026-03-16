@@ -182,8 +182,8 @@ class TestKnowledgeMemory:
 class TestRetrievalResult:
     """Tests for RetrievalResult."""
 
-    def test_combined_score(self):
-        """Should compute combined score."""
+    def test_combined_score_basic(self):
+        """Should compute weighted combined score correctly."""
         m = Memory(id="1", content="Test")
         r = RetrievalResult(
             memory=m,
@@ -193,7 +193,62 @@ class TestRetrievalResult:
         )
 
         score = r.combined_score
+        # Formula: 0.5 * relevance + 0.3 * recency + 0.2 * importance
+        # = 0.5*0.8 + 0.3*0.5 + 0.2*0.7 = 0.4 + 0.15 + 0.14 = 0.69
+        assert score == pytest.approx(0.69)
         assert 0 <= score <= 1
+
+    def test_combined_score_all_max(self):
+        """Should clamp to 1.0 when weighted sum equals 1."""
+        m = Memory(id="1", content="Test")
+        r = RetrievalResult(
+            memory=m,
+            relevance_score=1.0,
+            recency_score=1.0,
+            importance_score=1.0,
+        )
+
+        # Raw = 0.5 + 0.3 + 0.2 = 1.0
+        assert r.combined_score == 1.0
+
+    def test_combined_score_all_zero(self):
+        """Should return 0.0 when all scores are zero."""
+        m = Memory(id="1", content="Test")
+        r = RetrievalResult(
+            memory=m,
+            relevance_score=0.0,
+            recency_score=0.0,
+            importance_score=0.0,
+        )
+
+        assert r.combined_score == 0.0
+
+    def test_combined_score_clamp_lower(self):
+        """Should clamp to 0.0 for negative input scores."""
+        m = Memory(id="1", content="Test")
+        r = RetrievalResult(
+            memory=m,
+            relevance_score=-1.0,
+            recency_score=-1.0,
+            importance_score=-1.0,
+        )
+
+        assert r.combined_score == 0.0
+
+    def test_combined_score_weights(self):
+        """Should apply correct weights (50% relevance, 30% recency, 20% importance)."""
+        m = Memory(id="1", content="Test")
+        # Only relevance set
+        r_rel = RetrievalResult(memory=m, relevance_score=1.0, recency_score=0.0, importance_score=0.0)
+        assert r_rel.combined_score == pytest.approx(0.5)
+
+        # Only recency set
+        r_rec = RetrievalResult(memory=m, relevance_score=0.0, recency_score=1.0, importance_score=0.0)
+        assert r_rec.combined_score == pytest.approx(0.3)
+
+        # Only importance set
+        r_imp = RetrievalResult(memory=m, relevance_score=0.0, recency_score=0.0, importance_score=1.0)
+        assert r_imp.combined_score == pytest.approx(0.2)
 
 
 if __name__ == "__main__":
