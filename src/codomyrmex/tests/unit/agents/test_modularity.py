@@ -41,7 +41,7 @@ class StubAgent(BaseAgent):
         self.should_succeed = should_succeed
         self.execution_count = 0
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         self.execution_count += 1
         if self.should_succeed:
             return AgentResponse(

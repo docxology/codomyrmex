@@ -27,7 +27,7 @@ from codomyrmex.agents.core.base import (
 class _EchoAgent(BaseAgent):
     """Minimal concrete agent that echoes the prompt back."""
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         return AgentResponse(
             content=f"echo: {request.prompt}",
             request_id=request.id,
@@ -40,7 +40,7 @@ class _EchoAgent(BaseAgent):
 class _RaisingAgent(BaseAgent):
     """Concrete agent that always raises an exception."""
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         raise RuntimeError("intentional test failure")
 
     def _stream_impl(self, request: AgentRequest):
