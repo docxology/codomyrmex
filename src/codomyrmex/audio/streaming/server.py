@@ -12,6 +12,7 @@ Example::
 
 from __future__ import annotations
 
+import importlib.util
 import logging
 from typing import Any
 
@@ -89,11 +90,9 @@ class AudioStreamServer:
             msg = "Server is already running"
             raise RuntimeError(msg)
 
-        try:
-            import websockets
-        except ImportError as exc:
+        if importlib.util.find_spec("websockets") is None:
             msg = "websockets package required: uv add websockets"
-            raise ImportError(msg) from exc
+            raise ImportError(msg)
 
         self._state = StreamState.STREAMING
         logger.info(
