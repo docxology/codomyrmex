@@ -11,14 +11,14 @@ from typing import Any
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
-def _get_execute_code():
+def _get_execute_code() -> Any:
     """Lazy import to avoid circular import with coding.__init__."""
     from .execution import execute_code
 
     return execute_code
 
 
-def _get_supported_languages():
+def _get_supported_languages() -> dict[str, Any]:
     """Lazy import to avoid circular import with coding.__init__."""
     from .execution import SUPPORTED_LANGUAGES
 
