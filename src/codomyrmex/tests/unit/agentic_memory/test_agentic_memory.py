@@ -47,6 +47,24 @@ class TestMemory:
         assert m.id == "1"
         assert m.memory_type == MemoryType.SEMANTIC
 
+    def test_from_dict_invalid_memory_type(self):
+        """Should fall back to EPISODIC for unknown memory_type string."""
+        d = {"id": "1", "content": "Test", "memory_type": "invalid_type"}
+        m = Memory.from_dict(d)
+        assert m.memory_type == MemoryType.EPISODIC
+
+    def test_from_dict_invalid_importance_int(self):
+        """Should fall back to MEDIUM for out-of-range importance int."""
+        d = {"id": "1", "content": "Test", "importance": 99}
+        m = Memory.from_dict(d)
+        assert m.importance == MemoryImportance.MEDIUM
+
+    def test_from_dict_invalid_importance_str(self):
+        """Should fall back to MEDIUM for unknown importance string."""
+        d = {"id": "1", "content": "Test", "importance": "super_critical"}
+        m = Memory.from_dict(d)
+        assert m.importance == MemoryImportance.MEDIUM
+
 
 class TestInMemoryStore:
     """Tests for InMemoryStore."""

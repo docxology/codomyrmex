@@ -71,16 +71,30 @@ class Memory:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Memory:
-        """Reconstruct a ``Memory`` from a dict (reverse of :meth:`to_dict`)."""
+        """Reconstruct a ``Memory`` from a dict (reverse of :meth:`to_dict`).
+
+        Handles corrupted or unknown enum values gracefully by falling back
+        to sensible defaults (``EPISODIC`` for memory type, ``MEDIUM`` for
+        importance).
+        """
         memory_type = data.get("memory_type", "episodic")
         if isinstance(memory_type, str):
-            memory_type = MemoryType(memory_type)
+            try:
+                memory_type = MemoryType(memory_type)
+            except ValueError:
+                memory_type = MemoryType.EPISODIC
 
         importance = data.get("importance", 2)
         if isinstance(importance, int):
-            importance = MemoryImportance(importance)
+            try:
+                importance = MemoryImportance(importance)
+            except ValueError:
+                importance = MemoryImportance.MEDIUM
         elif isinstance(importance, str):
-            importance = MemoryImportance[importance.upper()]
+            try:
+                importance = MemoryImportance[importance.upper()]
+            except (KeyError, ValueError):
+                importance = MemoryImportance.MEDIUM
 
         return cls(
             id=data.get("id", str(uuid.uuid4())),
