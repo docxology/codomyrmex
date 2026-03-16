@@ -48,6 +48,22 @@ class ExtractFunctionRefactoring(Refactoring):
         return f"def {self.function_name}({params_str}):\n{body}{suffix}"
 
     def analyze(self) -> list[str]:
+        """Validate the refactoring parameters and return any warnings.
+
+        Checks that the function name is a valid Python identifier and that
+        the specified line range falls within the file's bounds.
+
+        Returns:
+            List of warning messages. Empty if all checks pass.
+
+        Example:
+            >>> refactoring = ExtractFunctionRefactoring(
+            ...     "example.py", 10, 20, "extracted_func"
+            ... )
+            >>> warnings = refactoring.analyze()
+            >>> if not warnings:
+            ...     print("All checks passed")
+        """
         warnings = []
         if not self.function_name.isidentifier():
             warnings.append(f"'{self.function_name}' is not a valid function name")
@@ -99,6 +115,24 @@ class ExtractFunctionRefactoring(Refactoring):
             )
 
     def preview(self) -> str:
+        """Generate a preview of the extraction operation.
+
+        Executes the refactoring analysis and returns a human-readable
+        summary of what would be extracted.
+
+        Returns:
+            A formatted string describing the extraction operation,
+            including the target function name, line range, and parameters.
+
+        Example:
+            >>> refactoring = ExtractFunctionRefactoring(
+            ...     "example.py", 10, 20, "extracted_func", ["x", "y"]
+            ... )
+            >>> print(refactoring.preview())
+            Extract Function: extracted_func
+            Lines: 10-20
+            Parameters: x, y
+        """
         self.execute()
         return (
             f"Extract Function: {self.function_name}\n"
