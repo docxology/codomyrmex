@@ -86,7 +86,6 @@ def test_pbft_adversary_broadcasts_conflicting_payload():
     network = PBFTNetwork(node_count=4)
     network.nodes["node_3"].is_adversarial = True
 
-    primary_node = network.nodes["node_0"]
     seq = 1
 
     # Manual leader broadcast bypassing client strictness
