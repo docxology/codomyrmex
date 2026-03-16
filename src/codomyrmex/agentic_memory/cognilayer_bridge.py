@@ -79,8 +79,10 @@ def store_memory(
         # Try CogniLayer's memories table first
         try:
             cursor = conn.execute(
-                """INSERT INTO memories (key, content, tags, importance, type, metadata, created_at, updated_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                "INSERT INTO memories "
+                "(key, content, tags, importance, type, metadata, "
+                "created_at, updated_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     key,
                     content,
@@ -109,8 +111,10 @@ def store_memory(
                 )"""
             )
             cursor = conn.execute(
-                """INSERT OR REPLACE INTO memories (key, content, tags, importance, type, metadata, created_at, updated_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                "INSERT OR REPLACE INTO memories "
+                "(key, content, tags, importance, type, metadata, "
+                "created_at, updated_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     key,
                     content,
@@ -282,7 +286,8 @@ def get_memory_stats() -> dict[str, Any]:
                 "SELECT COUNT(*) FROM memories"
             ).fetchone()[0]
 
-        logger.debug("Memory stats: %d tables, %s", len(tables), stats.get("total_memories", "N/A"))
+        total = stats.get("total_memories", "N/A")
+        logger.debug("Memory stats: %d tables, %s", len(tables), total)
         return stats
     except sqlite3.Error:
         logger.exception("Failed to get memory stats")
