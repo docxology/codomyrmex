@@ -97,5 +97,7 @@ class TestRecencyScore:
 
     def test_zero_age_with_any_half_life(self) -> None:
         """Zero age (created now) always returns 1.0 regardless of half_life."""
+        # Note: rel=1e-3 accounts for timing jitter between the time.time() call
+        # here and inside _recency_score; with half_life=1.0 even microseconds matter.
         score = _recency_score(time.time(), half_life=1.0)
-        assert score == pytest.approx(1.0, rel=1e-6)
+        assert score == pytest.approx(1.0, rel=1e-3)
