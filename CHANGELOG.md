@@ -6,6 +6,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.3] - 2026-03-16 — "Coherence Release"
+
+Repo-wide structural coherence audit and reconciliation.
+
+### Fixed
+
+- **Version sync**: Reconciled version mismatch — `pyproject.toml` (1.2.2), `__init__.py` (1.1.9), `README.md` (1.1.9), `SPEC.md` (1.1.9) → all aligned to **1.2.3**
+- **Module registration**: 39 modules existed on disk but were missing from `__init__.py` `_submodules` and `__all__` — now all 129 registered and lazy-importable
+- **Coverage config**: Reconciled contradictory `fail_under` values (75 in `[tool.coverage.report]`, 40 in pytest addopts, 33% in README, 35% in AGENTS.md) → unified to **40%**
+- **Python classifier**: Removed misleading `Python :: 3.10` classifier (project requires `>=3.11`)
+- **Spurious files**: Removed git-tracked junk files at repo root (`Any`, `dict[str,`) created by buggy type-annotation script
+- **Sub-level versions**: Updated `src/README.md` (v0.1.0 → v1.2.3) and `src/codomyrmex/AGENTS.md` (v0.1.0 → v1.2.3)
+
+### Metrics
+
+| Metric | v1.2.2 | v1.2.3 |
+|--------|--------|--------|
+| **Registered modules** | 90 | **129** (39 added) |
+| **Version files synced** | 1 | **7** |
+| **Coverage gate** | 75/40/33% (inconsistent) | **40%** (unified) |
+| **Spurious root files** | 3 | **0** |
+
+---
+
 ## [Unreleased] — Google Affordances & Auth Unification
 
 ### Added

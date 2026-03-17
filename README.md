@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.1.9"><img src="https://img.shields.io/badge/release-v1.1.9-blueviolet?style=flat-square" alt="Release"></a>
+  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.2.3"><img src="https://img.shields.io/badge/release-v1.2.3-blueviolet?style=flat-square" alt="Release"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License: MIT"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
@@ -20,7 +20,7 @@
   <a href="docs/getting-started/GETTING_STARTED_WITH_AGENTS.md">Agent Guide</a> •
   <a href="docs/">Documentation</a> •
   <a href="CONTRIBUTING.md">Contributing</a> •
-  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.1.9">v1.1.9 Release</a>
+  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.2.3">v1.2.3 Release</a>
 </p>
 
 ---
@@ -151,7 +151,7 @@ uv run mutmut run                                # 6-file mutation suite
 | Modules | **129** |
 | MCP tools | **474** dynamically discovered |
 | Test suite | **21,000+** tests |
-| Coverage | ~33% (gate: 33%, target: 40%) |
+| Coverage | ~35% (gate: 40%, target: 45%) |
 | `@mcp_tool` decorators | **474** |
 | Ruff violations | **0** |
 | PAI skills | **81** installed |

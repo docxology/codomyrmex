@@ -236,6 +236,8 @@ pytest_output.txt
 /@output
 /~
 /git_analysis/
+/Any
+/dict[str,
 
 # Stale analysis/test artifacts
 missing_docs*.txt
