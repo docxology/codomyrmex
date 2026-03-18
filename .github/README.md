@@ -4,8 +4,9 @@
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml/badge.svg" alt="Auto-Merge"></a>
   <br>
-  <img src="https://img.shields.io/badge/Codomyrmex-v1.1.9-blue?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/Modules-128-green?style=for-the-badge" alt="Modules">
+  <img src="https://img.shields.io/badge/Codomyrmex-v1.2.3-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Modules-129-green?style=for-the-badge" alt="Modules">
+  <img src="https://img.shields.io/badge/MCP_Tools-474-orange?style=for-the-badge" alt="MCP Tools">
   <img src="https://img.shields.io/badge/Workflows-36-purple?style=for-the-badge" alt="Workflows">
   <img src="https://img.shields.io/badge/Zero--Mock-100%25-brightgreen?style=for-the-badge" alt="Zero Mock">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
@@ -18,13 +19,60 @@
   <img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/code%20style-ruff-D7FF64?style=flat-square&logo=ruff&logoColor=black" alt="Ruff">
   <img src="https://img.shields.io/badge/types-ty-blue?style=flat-square" alt="ty">
+  <img src="https://img.shields.io/badge/tests-21%2C000%2B-brightgreen?style=flat-square" alt="Tests">
 </p>
 
 # 🐜 Codomyrmex
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **128 deeply integrated modules** spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem includes **3,000+ Python files**, **1,023+ test files**, **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
+Codomyrmex is a production-grade library of **129 deeply integrated modules** spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **474 MCP tools** for Claude, Gemini, GPT, and any Model Context Protocol client. It includes **3,000+ Python files**, **21,000+ tests**, **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
+
+```bash
+# Install
+git clone https://github.com/docxology/codomyrmex.git && cd codomyrmex
+uv sync --all-groups
+
+# Verify
+uv run codomyrmex doctor --all
+```
+
+---
+
+## 📋 Table of Contents
+
+- [Documentation Hub](#-documentation-hub)
+- [System Architecture](#-system-architecture)
+- [Module Inventory](#️-complete-module-inventory)
+- [Module Dependency Architecture](#-module-dependency-architecture)
+- [Agent Orchestration Pipeline](#-agent-orchestration-pipeline)
+- [Project Structure](#️-project-structure)
+- [Aggregate Statistics](#-aggregate-statistics)
+- [LLM Provider Matrix](#-llm-provider-matrix)
+- [Agent Dispatch Architecture](#-agent-dispatch-architecture)
+- [Testing Philosophy](#-testing-philosophy)
+- [Configuration Architecture](#️-configuration-architecture)
+- [Personal AI Dashboard](#️-personal-ai-dashboard)
+- [Quick Start](#-quick-start)
+- [Documentation Standards](#-documentation-standards)
+- [GitHub Actions Workflows](#-githubbr-directory-overview)
+- [License](#-license)
+
+---
+
+## ✨ Why Codomyrmex?
+
+| | |
+|---|---|
+| 🧩 **129 Self-Contained Modules** | Every module is composable, independently versioned, and zero-mock tested |
+| 🤖 **474 MCP Tools** | Claude, Gemini, GPT, and any MCP client can invoke all capabilities natively |
+| 🧪 **21,000+ Real Tests** | Zero-mock policy — `unittest.mock` is banned; every test exercises real code paths |
+| 🔒 **Security First** | GitGuardian, SBOM, GGSHIELD pre-commit, detect-secrets integration |
+| 🎛️ **13+ Agent Providers** | Claude, Gemini, GPT-4o, DeepSeek, Mistral, Jules, Codex, Pi, and more |
+| 🔬 **ML Research Ready** | LoRA, RLHF, DPO, distillation, quantization, NAS, Mamba SSM, autograd |
+| 🏠 **Personal AI Infrastructure** | Email, calendar, finance, wallet, dashboard — full PAI toolbox |
+| 📦 **PyPI Ready** | `uv build` + `twine check` verified, Python 3.11–3.14 |
+| 🦎 **Zero Config to Start** | `uv sync` → `codomyrmex doctor` → done |
 
 ---
 
@@ -161,6 +209,7 @@ graph TB
 ## 🗂️ Complete Module Inventory
 
 > Every module links directly to its **source**, **docs**, **config**, and **scripts** directories.
+> 129 modules total across 10 capability layers — from foundation utilities to ML training primitives.
 
 ### 🧠 Core Intelligence Modules
 
@@ -489,16 +538,21 @@ codomyrmex/
 
 | Metric | Value |
 |:---|:---:|
-| **Total Modules** | 128 |
+| **Total Modules** | 129 |
 | **Total Python Files** | 3,000+ |
-| **Total Test Files** | 1,023+ |
+| **Total Test Files** | 21,000+ |
 | **Documentation Files** | 1,029+ |
 | **GitHub Workflows** | 36 |
 | **MCP Tools** | 474 |
+| **`@mcp_tool` Decorators** | 474 |
+| **PAI Skills** | 81 installed |
+| **RASP Doc Compliance** | 129/129 |
+| **Ruff Violations** | 0 |
 | **Testing Policy** | Zero-Mock (100% real methods) |
+| **Coverage Gate** | ≥35% (target: 45%) |
 | **Default LLM** | Gemini 2.5 Pro |
 | **Package Manager** | uv |
-| **Python Version** | ≥3.11 |
+| **Python Version** | 3.11 – 3.14 |
 
 ---
 
@@ -514,6 +568,10 @@ codomyrmex/
 | **OpenRouter** | Google Gemma 3 | ✅ | ✅ | ✅ | ✅ |
 | **Anthropic** | Claude 3.5 Sonnet | ✅ | ❌ | ✅ | ✅ |
 | **OpenAI** | GPT-4o | ✅ | ❌ | ✅ | ✅ |
+| **OpenAI** | o1 / o3-mini | ✅ | ❌ | ✅ | ✅ |
+| **Perplexity** | sonar-pro | ✅ | ❌ | ✅ | — |
+| **Ollama** | any local model | ✅ | ✅ | ✅ | ✅ |
+| **Claude 3.7** | claude-3-7-sonnet | ✅ | ❌ | ✅ | ✅ |
 
 ---
 
@@ -664,29 +722,37 @@ graph LR
 ## ⚡ Quick Start
 
 ```bash
-# Clone
+# 1. Clone
 git clone https://github.com/docxology/codomyrmex.git && cd codomyrmex
 
-# Install (all dev dependencies)
+# 2. Install (all dev dependencies via uv)
 uv sync --all-groups
 
-# Set up environment
-cp .env.example .env   # Edit with your API keys
+# 3. Configure environment
+cp .env.example .env   # Add GEMINI_API_KEY, ANTHROPIC_API_KEY, etc.
 
-# Run CLI
+# 4. Verify installation
+uv run codomyrmex doctor --all
+
+# 5. Explore
 uv run codomyrmex --help
+uv run codomyrmex modules        # List all 129 modules
+uv run codomyrmex status         # Live system status
 
-# Run tests
-uv run pytest src/codomyrmex/tests/ -v
+# 6. Run tests
+uv run pytest src/codomyrmex/tests/ -v --tb=short
 
-# Lint & format
-uv run ruff check . && uv run ruff format .
+# 7. Lint & type-check
+uv run ruff check . && uv run ruff format . && uv run ty check src/
 
-# Dispatch Jules agents
+# 8. Start PAI dashboard
+uv run python scripts/pai/dashboard.py
+
+# 9. Dispatch AI agents
 uv run python scripts/agents/mega_swarm_dispatcher.py
 ```
 
-> See [docs/getting-started/](docs/getting-started/) for the full guide.
+> **New here?** Start with the [Quick Start Guide](docs/getting-started/quickstart.md) or dive into [Agent Operations](docs/getting-started/GETTING_STARTED_WITH_AGENTS.md).
 
 ---
 
@@ -735,13 +801,30 @@ Every module follows the **RASP** documentation pattern:
 
 ---
 
+## 🤝 Contributing
+
+We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for standards, the Zero-Mock testing policy, PR workflow, and coding guidelines.
+
+**Key requirements:**
+
+- All tests must use real implementations (Zero-Mock policy — no `unittest.mock` or `MagicMock`)
+- Coverage must not drop below 35%
+- All new modules need `README.md`, `AGENTS.md`, `SPEC.md`, and `PAI.md` (RASP pattern)
+- Run `uv run ruff check .` and `uv run ty check src/` before submitting
+
+---
+
 ## 📜 License
 
 MIT License — see [LICENSE](LICENSE) for details.
+
+Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://github.com/docxology))
 
 ---
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>129 modules · 3,000+ Python files · 1,023+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>129 modules · 474 MCP tools · 21,000+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
 </p>
+
+<!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->
