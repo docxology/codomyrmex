@@ -9,12 +9,9 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-try:
-    import PIL
+import importlib.util
 
-    PIL_AVAILABLE = True
-except ImportError:
-    PIL_AVAILABLE = False
+PIL_AVAILABLE = importlib.util.find_spec("PIL") is not None
 
 
 class FilterType(Enum):
