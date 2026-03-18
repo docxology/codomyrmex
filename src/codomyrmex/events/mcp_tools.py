@@ -212,3 +212,78 @@ def replay_events(
         }
     except Exception as e:
         return {"status": "error", "message": f"Failed to replay events: {e!s}"}
+
+
+@mcp_tool(category="events")
+def events_send_to_agent(
+    agent_id: str,
+    message: dict[str, Any],
+    source: str = "mcp",
+) -> dict[str, Any]:
+    """Send a direct message to a specific agent's inbox via the IntegrationBus.
+
+    The message is stored in the agent's in-memory mailbox and also emitted
+    as an integration event (topic ``agent.inbox.<agent_id>``) so that any
+    subscriber can react to incoming messages.
+
+    Args:
+        agent_id: Destination agent identifier (e.g. ``"reviewer"``).
+        message: Arbitrary payload dict to deliver.
+        source: Sender identifier string.
+
+    Returns:
+        dict with status, event_id, and agent_id.
+    """
+    try:
+        from codomyrmex.events.integration_bus import IntegrationBus
+
+        bus = IntegrationBus()
+        event_id = bus.send_to_agent(agent_id, message, source=source)
+        return {
+            "status": "success",
+            "event_id": event_id,
+            "agent_id": agent_id,
+            "message": f"Message delivered to agent '{agent_id}' inbox.",
+        }
+    except Exception as e:
+        return {"status": "error", "message": f"Failed to send message: {e!s}"}
+
+
+@mcp_tool(category="events")
+def events_agent_inbox(
+    agent_id: str,
+    timeout: float = 0.0,
+    drain: bool = False,
+) -> dict[str, Any]:
+    """Read messages from an agent's inbox.
+
+    By default returns the **oldest** single message (FIFO).  Set *drain=True*
+    to atomically drain all pending messages at once.
+
+    Args:
+        agent_id: Recipient agent identifier.
+        timeout: Seconds to wait if inbox is empty (0 = no wait).
+        drain: If True, return all pending messages at once.
+
+    Returns:
+        dict with status, messages list, and count.
+    """
+    try:
+        from codomyrmex.events.integration_bus import IntegrationBus
+
+        bus = IntegrationBus()
+        if drain:
+            messages = bus.drain_inbox(agent_id)
+        else:
+            msg = bus.receive(agent_id, timeout=timeout)
+            messages = [msg] if msg is not None else []
+
+        return {
+            "status": "success",
+            "agent_id": agent_id,
+            "messages": messages,
+            "count": len(messages),
+        }
+    except Exception as e:
+        return {"status": "error", "message": f"Failed to read inbox: {e!s}"}
+

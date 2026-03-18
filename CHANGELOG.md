@@ -30,24 +30,72 @@ Repo-wide structural coherence audit and reconciliation.
 
 ---
 
-## [Unreleased] — Google Affordances & Auth Unification
+## [Unreleased]
+
+### Added — v1.3.0 (Graph Link Inference)
+
+- **`hermes_build_memory_graph`** MCP tool: Scans all Hermes sessions for `[[WikiLink]]`
+  references and returns a directed concept graph `{nodes, edges, weight}`.
+
+### Added — v1.4.0 (Autonomous Knowledge Codification)
+
+- **`KnowledgeMemory.store(title, body, tags, source_session_id)`**: Structured KI
+  persistence backed by real `SQLiteStore`.
+- **`KnowledgeMemory.recall(query, k)`**: Token-overlap ranked semantic recall filtered
+  to `SEMANTIC` memory type.
+- **`KnowledgeMemory.merge_duplicates(threshold)`**: Fold near-duplicate KIs into their
+  older counterpart as dated `## Update` sections.
+- **`hermes_extract_ki`** MCP tool: Crystallises assistant turns from a Hermes session
+  into a persisted `KnowledgeMemory` entry.
+- **`hermes_search_knowledge_items`** MCP tool: Ranked KI recall by topic.
+- **`hermes_deduplicate_ki`** MCP tool: Cleans the knowledge base by merging near-duplicate
+  items.
+
+### Added — v1.5.0 (Multi-Agent Swarm Orchestration)
+
+- **`SwarmTopology`** (`orchestrator/swarm_topology.py`): First-class Fan-Out, Fan-In,
+  Pipeline, and Broadcast primitives over stdlib `concurrent.futures`.  No new deps.
+- **`AgentOrchestrator.capability_profile`** + **`filter_tools`** + **`spawn_agent`**:
+  Dynamic tool routing by declared capability roles.
+- **`hermes_spawn_agent`** MCP tool: Dispatch a scoped task to a capability-matched agent.
+- **`orchestrator_run_dag`** MCP tool: Unified swarm topology dispatcher.
+- **`IntegrationBus.send_to_agent / receive / drain_inbox`**: P2P agent mailbox with
+  FIFO semantics, timeout polling, and event emission.
+- **`events_send_to_agent`** / **`events_agent_inbox`** MCP tools: Expose P2P agent
+  messaging over MCP.
+
+---
+
+## [1.2.4] - 2026-03-18 — "Google Affordances & Auth Unification"
+
+Unified OAuth2 env var pattern across all Google integrations. PAI can now send Gmail and manage Google Calendar without a credentials file.
 
 ### Added
 
 - **email/gmail**: `GmailProvider.from_env()` — OAuth2 env var constructor (`GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`) with ADC fallback
 - **email/mcp_tools**: 4 Gmail MCP tools — `gmail_send_message`, `gmail_list_messages`, `gmail_get_message`, `gmail_create_draft`; PAI can now send Gmail directly via <FristonBlanket@gmail.com>
-- **calendar_integration/gcal**: `GoogleCalendar.from_env()` — same unified OAuth2 env var pattern as GmailProvider
-- **tests/integration/email**: 11-test integration suite (9 skip without live creds); tests cover send/list/get/retrieve and MCP tool layer
+- **calendar_integration/gcal**: `GoogleCalendar.from_env()` — same unified OAuth2 env var pattern as `GmailProvider`
+- **tests/integration/email**: 11-test integration suite (9 skip without live creds); covers send/list/get/retrieve and MCP tool layer
 
 ### Changed
 
-- **calendar_integration/mcp_tools**: `_get_provider()` now prefers `GOOGLE_REFRESH_TOKEN` env vars (token file falls back as legacy path)
+- **calendar_integration/mcp_tools**: `_get_provider()` now prefers `GOOGLE_REFRESH_TOKEN` env vars (token-file path is legacy fallback)
+- **TODO.md**: Versioned forward roadmap aligned to actual codebase (`v1.5.0→v1.2.4`, `Sprint 33→34`, `fail_under 75→40`). Re-labelled speculative milestones to `v1.3.0/1.4.0/1.5.0/2.0.0+`. Added gap analysis grounded in module scan.
 
 ### Fixed
 
 - `calendar_integration/README.md`: Wrong default attendee email corrected (`danielarifriedman@gmail.com` → `FristonBlanket@gmail.com`)
 - `email/API_SPECIFICATION.md`: Wrong env var corrected (`GOOGLE_CREDENTIALS` → `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`)
 - `email/PAI.md`: Now documents all 12 MCP tools (8 AgentMail + 4 Gmail)
+- `TODO.md reference section`: `fail_under=75` corrected to `fail_under=40` (matches `pyproject.toml`)
+
+### Metrics
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Gmail MCP tools | 0 | **4** |
+| Google auth pattern | per-provider ad hoc | **unified `from_env()` OAuth2** |
+| Email integration tests | 0 | **11** (9 skip without live creds) |
 
 ---
 

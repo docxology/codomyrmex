@@ -1,7 +1,7 @@
 # Codomyrmex Integration: Supercharging the Hermes Agent
 
 **Target Audience**: The Hermes Open Source Community
-**Status**: Active | **Version**: v2.2.0
+**Status**: Active | **Version**: v2.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ```mermaid
 graph TD
@@ -45,7 +45,8 @@ sequenceDiagram
 
 ### Dual-Backend Augmentations
 
-- **Unified Provider Routing**: The `ProviderRouter` automatically cascades through credentials (environment → `.env` → auto-discovery) across 6 different providers, never failing silently.
+- **Unified Provider Routing**: The `ProviderRouter` automatically cascades through credentials (environment → `.env` → auto-discovery) across 6+ different providers, never failing silently.
+- **Copilot ACP Backend (v0.3.0)**: `CopilotACPClient` bridges Hermes to GitHub Copilot via `copilot --acp --stdio` (JSON-RPC 2.0). Uses your existing GitHub Copilot subscription — no additional API cost. Note: structured tool calls are not supported; complex agentic tasks should use OpenRouter instead.
 - **Context Compression**: Built-in `ContextCompressor` actively monitors context windows. If a session approaches token limits (e.g., >100K tokens), it progressively applies deduplication, older-turn summarization, and deep truncation.
 - **Streaming Token Yields**: Codomyrmex dismantles block-generation latency spikes for long conversational outputs by mapping subprocess async generators. It yields sub-100ms async iterator bytes dynamically pushing token output fragments down the routing chains.
 - **Batch Execution** *(v1.5.x)*: `HermesClient.batch_execute(prompts, parallel=False)` processes a list of prompts sequentially or via `ThreadPoolExecutor`. Results are returned as a structured list with per-prompt status and content, ideal for automated evaluation or bulk processing.
@@ -257,15 +258,15 @@ The v1.5.x sprint added **50 new integration tests** (across `test_gateway_sessi
 
 The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent. By establishing permanent multi-platform routing, bulletproof execution sandboxes, persistent memory syncs, session lifecycle management, batch execution, and 33 native MCP tools, Codomyrmex transforms Hermes from a singular personal assistant into a highly integrated node capable of operating safely and autonomously within complex programmatic ecosystems.
 
-| Capability | v2.1.0 | v2.2.0 (Sprint) |
+| Capability | v2.2.0 | v2.3.0 (73-commit update) |
 | :--------- | :-----: | :-------------: |
-| MCP tools | 26 | **33** |
-| Session methods | 6 | **12** |
-| Script orchestrations | 4 | **7** |
-| Integration tests | 28 | **78** |
-| Batch execution | ❌ | ✅ |
-| Session forking | ❌ | ✅ |
-| Markdown export | ❌ | ✅ |
-| System prompt management | ❌ | ✅ |
+| MCP tools | 33 | **36** |
+| Session methods | 12 | **12** |
+| Script orchestrations | 7 | **7** |
+| Integration tests | 78 | **80+** |
+| Copilot ACP backend | ❌ | ✅ |
+| Smart model routing | ❌ | ✅ |
+| Tirith security engine | ❌ | ✅ |
+| New bundled skills | 0 | **2** (huggingface-hub, hermes-agent-setup) |
 
 ```mermaid

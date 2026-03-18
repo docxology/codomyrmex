@@ -1,6 +1,6 @@
 # Hermes Setup Guide — Complete New Instance
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 > **Official Docs**: [hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs/)
 > **GitHub**: [github.com/NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
@@ -110,7 +110,7 @@ After setup, `~/.hermes/` contains:
 
 ```yaml
 # Model (OpenRouter format: provider/model-name)
-model: nousresearch/hermes-3-llama-3.1-405b:free
+model: nousresearch/hermes-3-llama-3.1-405b-instruct:free
 
 # Tool categories
 toolsets:

@@ -1,6 +1,6 @@
 # Running Multiple Hermes Instances
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Overview
 
@@ -11,20 +11,26 @@ You can run multiple Hermes bots on the same machine, each with its own identity
 ```text
 Machine
 ├── ~/.hermes/                          (Instance 1: Primary)
-│   ├── .env                            BOT_TOKEN=1111...
-│   ├── config.yaml                     personality: helpful
+│   ├── .env                            BOT_TOKEN=8626408153:AAFky...
+│   ├── config.yaml                     model: hermes-3-llama-3.1-405b-instruct:free
 │   ├── state.db, sessions/, skills/
 │   └── gateway.pid
 │
 ├── ~/hermes-crescent-city/.hermes/     (Instance 2: Crescent City)
-│   ├── .env                            BOT_TOKEN=2222...
+│   ├── .env                            BOT_TOKEN=8754235534:AAHFa...
 │   ├── config.yaml                     personality: civic_analyst
 │   ├── state.db, sessions/, skills/
 │   └── gateway.pid
 │
-└── ~/hermes-template-bot/.hermes/      (Instance 3: Template Bot)
-    ├── .env                            BOT_TOKEN=3333...
-    ├── config.yaml                     personality: template_architect
+├── ~/hermes-template-bot/.hermes/      (Instance 3: Template Bot)
+│   ├── .env                            BOT_TOKEN=unique_token_3
+│   ├── config.yaml                     personality: template_architect
+│   ├── state.db, sessions/, skills/
+│   └── gateway.pid
+│
+└── ~/help/.hermes/                     (Instance 4: Help Bot)
+    ├── .env                            BOT_TOKEN=unique_token_4
+    ├── config.yaml                     personality: technical
     ├── state.db, sessions/, skills/
     └── gateway.pid
 ```
@@ -53,7 +59,7 @@ chmod 600 ~/hermes-bot2/.hermes/.env
 
 ```bash
 cat > ~/hermes-bot2/.hermes/config.yaml << 'EOF'
-model: nousresearch/hermes-3-llama-3.1-405b:free
+model: nousresearch/hermes-3-llama-3.1-405b-instruct:free
 toolsets:
   - all
 agent:
@@ -84,9 +90,17 @@ hermes status    # verify config is loaded
 hermes gateway run  # test that it connects
 ```
 
-### 5. Create a Service (macOS)
+### 5. Install as launchd Service (macOS)
 
-See [launchd.md](launchd.md) for the complete plist template.
+```bash
+# Install and start the service (recommended — persists across reboots)
+HERMES_HOME=~/hermes-bot2/.hermes hermes gateway install
+
+# Or manually: see launchd.md for the plist template
+```
+
+The `hermes gateway install` command auto-generates the launchd plist, loads it, and
+starts the service. The `--replace` flag is included automatically.
 
 ## Critical Rules
 

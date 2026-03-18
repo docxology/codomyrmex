@@ -1,6 +1,6 @@
 # Hermes Agent Documentation
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Status**: Active | **Last Updated**: March 2026 (73-commit update)
 
 > **Official Docs**: [hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs/)
 > **GitHub**: [github.com/NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
@@ -24,11 +24,12 @@ This documentation suite captures architecture, operational patterns, troublesho
 
 | Document                                               | Description                                                                  |
 | :----------------------------------------------------- | :--------------------------------------------------------------------------- |
-| [architecture.md](architecture.md)                     | Core agent loop, components, structured reasoning                            |
+| [architecture.md](architecture.md)                     | Core agent loop, components, LLM provider backends                           |
+| [copilot_acp.md](copilot_acp.md)                       | **GitHub Copilot ACP backend** — free GPT-4o via Copilot subscription        |
 | [codomyrmex_integration.md](codomyrmex_integration.md) | **Deep dive into Codomyrmex bidirectional interfaces and MCP augmentations** |
 | [configuration.md](configuration.md)                   | `config.yaml` structure, YAML pitfalls, precedence                           |
 | [environment.md](environment.md)                       | `.env` file, `HERMES_HOME`, API key management                               |
-| [models.md](models.md)                                 | Model selection, OpenRouter, provider config                                 |
+| [models.md](models.md)                                 | Model selection, OpenRouter, provider config, rate limits                    |
 | [personalities.md](personalities.md)                   | Personality system and custom personas                                       |
 
 ### Platform Integration
@@ -66,6 +67,9 @@ source ~/.zshrc
 # Configure provider
 hermes model
 
+# (Optional) Use GitHub Copilot as backend (free with subscription)
+hermes copilot login
+
 # Run interactive chat
 hermes
 
@@ -85,6 +89,9 @@ hermes gateway run
 - **Sessions**: Persistent conversation state with FTS5-indexed SQLite and LLM summarization
 - **Terminal Backends**: 6 execution environments — local, Docker, SSH, Daytona, Singularity, Modal
 - **Honcho**: Dialectic user modeling for personalized interactions
+- **Smart Routing**: Auto-routes simple messages to cheap model; complex tasks to strong model
+- **Copilot ACP**: GitHub Copilot as an LLM backend (free with GitHub subscription) via `copilot --acp --stdio`
+- **Pairing**: Dynamic user access management without gateway restart
 
 ## Codomyrmex Scripts
 

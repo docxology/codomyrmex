@@ -1,6 +1,6 @@
 # Hermes Telegram Integration
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Overview
 
@@ -60,7 +60,7 @@ The channel/user where cron job results and proactive messages are delivered.
 
 The Telegram adapter uses the Bot API's `getUpdates` endpoint with long polling:
 
-```
+```text
 ┌─────────────┐         ┌──────────────────┐
 │  Hermes     │  POST   │  Telegram API    │
 │  telegram.py│────────▶│  /getUpdates     │
@@ -80,7 +80,7 @@ The adapter:
 
 ### 409 Conflict Error
 
-```
+```text
 telegram.error.Conflict: Conflict: terminated by other getUpdates request;
 make sure that only one bot instance is running
 ```
@@ -110,6 +110,7 @@ grep -r "TELEGRAM_BOT_TOKEN" ~/.hermes/.env ~/other-hermes-dir/.env
 3. **Check logs**: `tail -f $HERMES_HOME/logs/gateway.log`
 4. **Check process**: `ps aux | grep hermes`
 5. **Verify token**: Send a test with `curl`:
+
     ```bash
     curl https://api.telegram.org/bot<TOKEN>/getMe
     ```
@@ -118,7 +119,7 @@ grep -r "TELEGRAM_BOT_TOKEN" ~/.hermes/.env ~/other-hermes-dir/.env
 
 If you have multiple bots on the same machine, verify each gateway is using the correct token. The gateway log shows the token prefix:
 
-```
+```text
 HTTP Request: POST https://api.telegram.org/bot8754235534:***/getUpdates
 ```
 

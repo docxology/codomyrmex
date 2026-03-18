@@ -1,6 +1,6 @@
 # Hermes Cron & Scheduling
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Overview
 
@@ -12,7 +12,7 @@ Hermes includes a built-in cron scheduler that runs within the gateway process. 
 
 The gateway starts a background cron ticker with a 60-second interval:
 
-```
+```text
 gateway.run: Cron ticker started (interval=60s)
 ```
 
@@ -20,7 +20,7 @@ Every 60 seconds, the ticker checks for due jobs and spawns isolated agent execu
 
 ### Job Lifecycle
 
-```
+```text
 Cron Ticker (60s interval)
   │
   ├── Check schedule for due jobs
@@ -35,13 +35,18 @@ Cron Ticker (60s interval)
 
 ## Configuration
 
-Jobs are stored in `$HERMES_HOME/cron/` as YAML/JSON files:
+Jobs are stored in `$HERMES_HOME/cron/` as YAML files. The `cron/scheduler.py` manages
+the ticker, and `cron/jobs.py` handles job loading, validation, and execution (both expanded
+significantly in the v0.3.0 update).
 
 ```yaml
-# Example cron job structure
-schedule: "0 9 * * *" # cron expression: daily at 9 AM
+# $HERMES_HOME/cron/daily_summary.yaml
+schedule: "0 9 * * *"      # cron expression: daily at 9:00 AM
 prompt: "Summarize overnight activity and pending tasks"
-target: telegram_user123 # delivery target
+target: telegram_user123    # delivery target (Telegram username or channel)
+enabled: true               # toggle without deleting the file
+timezone: America/Los_Angeles  # job-level timezone override
+max_turns: 20               # limit turn count for cron agents
 ```
 
 ### Cron Expression Format
@@ -77,11 +82,16 @@ TELEGRAM_HOME_CHANNEL=ActiveInference   # cron results go here
 ## CLI Commands
 
 ```bash
-# View scheduled jobs
-hermes cron
+hermes cron list          # list all scheduled jobs with next-run times
+hermes cron status        # show cron system status (enabled jobs, next tick)
+hermes cron tick          # manually trigger a cron tick (run all due jobs now)
+```
 
-# Manage jobs (from within a conversation)
-# The agent can create/modify/delete cron jobs using cronjob_tools
+Jobs can also be created and edited via natural language inside a chat session:
+
+```
+User: Schedule a daily 9am summary of my outstanding tasks
+Hermes: Created cron job: daily_summary.yaml → runs at 09:00 America/Los_Angeles
 ```
 
 ## Monitoring

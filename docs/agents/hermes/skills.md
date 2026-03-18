@@ -1,6 +1,6 @@
 # Hermes Skills System
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Overview
 
@@ -17,7 +17,7 @@ Hermes features an autonomous, self-improving skills system. Skills are portable
 
 ### Self-Improvement Loop
 
-```
+```text
 User Interaction
       │
       ├── Agent identifies reusable pattern
@@ -32,7 +32,7 @@ User Interaction
 
 ## Skills Directory Structure
 
-```
+```text
 $HERMES_HOME/skills/
 ├── bundled/               # built-in skills (from installation)
 │   ├── web_research.yaml
@@ -83,13 +83,29 @@ Hermes integrates with [agentskills.io](https://agentskills.io) for community sh
 - **Share your skills** by publishing to the hub
 - **Portable format** works across Hermes instances
 
+## Newly Bundled Skills (March 2026)
+
+The 73-commit update added 2 new bundled skills synced via `hermes update`:
+
+| Skill | Path | Purpose |
+| :---- | :--- | :------ |
+| **huggingface-hub** | `skills/mlops/huggingface-hub/SKILL.md` | Hugging Face `hf` CLI — search/download/upload models & datasets, manage repos, SQL queries via DuckDB, deploy inference endpoints, manage Spaces |
+| **hermes-agent-setup** | `skills/dogfood/hermes-agent-setup/SKILL.md` | Self-documentation skill — Hermes can now help users configure itself, set up voice/TTS/STT, manage tools, and troubleshoot |
+
+Install/verify with:
+
+```bash
+hermes skills list  # should show both new skills
+```
+
 ## Key Implementation Files
 
-| File                          | Purpose                          |
-| :---------------------------- | :------------------------------- |
-| `tools/skills_hub.py`         | Skills Hub CLI handler and sync  |
-| `tools/skills_tool.py`        | In-conversation skill invocation |
-| `tools/skill_manager_tool.py` | CRUD operations on skills        |
+| File                          | Purpose                                          |
+| :---------------------------- | :----------------------------------------------- |
+| `tools/skills_hub.py`         | Skills Hub CLI handler and sync                  |
+| `tools/skills_tool.py`        | In-conversation skill invocation                 |
+| `tools/skill_manager_tool.py` | CRUD operations on skills                        |
+| `tools/skills_guard.py`       | Safety guard: blocks dangerous skill ops         |
 
 ## Related Documents
 

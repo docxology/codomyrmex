@@ -59,6 +59,8 @@ class IntegrationBus:
             str, list[tuple[Callable[[IntegrationEvent], None], int]]
         ] = defaultdict(list)
         self._history: list[IntegrationEvent] = []
+        # Per-agent mailboxes for P2P direct messaging
+        self._mailboxes: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
     def subscribe(
         self,
@@ -137,6 +139,88 @@ class IntegrationBus:
 
     def clear_history(self) -> None:
         self._history.clear()
+
+    # ── P2P agent mailbox ───────────────────────────────────────────
+
+    def send_to_agent(
+        self,
+        agent_id: str,
+        message: dict[str, Any],
+        *,
+        source: str = "",
+    ) -> str:
+        """Post a direct message to an agent's inbox.
+
+        The message is appended to the in-memory mailbox for *agent_id* and
+        also emitted as an integration event (topic ``agent.inbox.<agent_id>``)
+        so any subscribers can react.
+
+        Args:
+            agent_id: Destination agent identifier.
+            message: Arbitrary message payload dict.
+            source: Sender identifier.
+
+        Returns:
+            The ``event_id`` of the emitted integration event.
+        """
+        envelope: dict[str, Any] = {
+            "agent_id": agent_id,
+            "message": message,
+            "source": source,
+            "timestamp": time.time(),
+        }
+        self._mailboxes[agent_id].append(envelope)
+        event = self.emit(
+            f"agent.inbox.{agent_id}",
+            source=source,
+            payload=envelope,
+        )
+        logger.debug(
+            "Sent message to agent '%s' (event_id=%s)", agent_id, event.event_id
+        )
+        return event.event_id
+
+    def receive(self, agent_id: str, timeout: float = 0.0) -> dict[str, Any] | None:
+        """Return the oldest unread message from *agent_id*'s mailbox.
+
+        If the mailbox is empty, polls every 50 ms up to *timeout* seconds
+        before returning ``None``.
+
+        Args:
+            agent_id: Recipient agent identifier.
+            timeout: Maximum seconds to wait for a message (0 = no wait).
+
+        Returns:
+            The oldest message envelope, or ``None`` if the mailbox is empty
+            after *timeout*.
+        """
+        import time as _time
+
+        deadline = _time.time() + timeout
+        while True:
+            if self._mailboxes[agent_id]:
+                return self._mailboxes[agent_id].pop(0)
+            if _time.time() >= deadline:
+                return None
+            _time.sleep(0.05)  # 50 ms poll interval
+
+    def drain_inbox(self, agent_id: str) -> list[dict[str, Any]]:
+        """Return **all** pending messages for *agent_id* atomically.
+
+        Args:
+            agent_id: Recipient agent identifier.
+
+        Returns:
+            List of message envelopes (may be empty).
+        """
+        messages = list(self._mailboxes[agent_id])
+        self._mailboxes[agent_id].clear()
+        return messages
+
+    @property
+    def mailbox_size(self) -> int:
+        """Total messages across all agent mailboxes."""
+        return sum(len(msgs) for msgs in self._mailboxes.values())
 
 
 __all__ = ["IntegrationBus", "IntegrationEvent"]

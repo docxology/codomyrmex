@@ -1,6 +1,6 @@
 # Hermes Troubleshooting Guide
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Quick Diagnostics
 
@@ -26,7 +26,7 @@ launchctl list | grep hermes
 
 **Error**:
 
-```
+```text
 telegram.error.Conflict: Conflict: terminated by other getUpdates request;
 make sure that only one bot instance is running
 ```
@@ -59,7 +59,7 @@ grep "bot[0-9]*:" ~/.hermes/logs/gateway.log | tail -1
 
 **Error**:
 
-```
+```text
 Another gateway instance is already running (PID 5519, HERMES_HOME=...).
 Use 'hermes gateway restart' to replace it, or 'hermes gateway stop' first.
 ```
@@ -88,7 +88,7 @@ hermes gateway run
 
 **Error**:
 
-```
+```text
 hermes: error: argument command: invalid choice: 'telegram'
 ```
 
@@ -98,8 +98,8 @@ hermes: error: argument command: invalid choice: 'telegram'
 
 **Valid commands**:
 
-```
-chat, model, gateway, setup, whatsapp, login, logout, status,
+```text
+chat, model, gateway, setup, whatsapp, copilot, login, logout, status,
 cron, doctor, config, pairing, skills, tools, sessions, insights,
 claw, version, update, uninstall
 ```
@@ -204,6 +204,58 @@ hermes status
 
 ---
 
+---
+
+### 10. Copilot ACP Errors (v0.3.0)
+
+**Symptom**: `Could not start Copilot ACP command 'copilot'` or `Copilot ACP did not return a sessionId`.
+
+**Cause**: GitHub Copilot CLI is not installed or not authenticated.
+
+**Fix**:
+
+```bash
+# 1. Install Copilot CLI extension
+gh extension install github/gh-copilot
+
+# 2. Authenticate Hermes with Copilot
+hermes copilot login
+
+# 3. Verify
+copilot --version
+```
+
+> **Note**: Copilot ACP does not support structured tool calls. For agentic tasks, use OpenRouter instead.
+
+---
+
+### 11. Rate Limit Exceeded (429 from OpenRouter)
+
+**Symptom**: `429 Too Many Requests` — free tier is 50 req/day with < $10 balance.
+
+**Fix options**:
+
+1. **Add $10 credits** → bumps free quota to 1,000 req/day: [openrouter.ai/settings/credits](https://openrouter.ai/settings/credits)
+2. **Enable smart model routing** to route simple messages to a different model:
+
+   ```yaml
+   smart_model_routing:
+     enabled: true
+     cheap_model:
+       provider: openrouter
+       model: google/gemini-2.0-flash
+   ```
+
+3. **Add fallback models** to `config.yaml`:
+
+   ```yaml
+   fallback_models:
+     - meta-llama/llama-3.1-70b-instruct:free
+     - google/gemini-2.0-flash:free
+   ```
+
+4. **Check current usage**: `curl https://openrouter.ai/api/v1/key -H "Authorization: Bearer $OPENROUTER_API_KEY"`
+
 ## Diagnostic Commands Reference
 
 | Command           | Purpose                      |
@@ -220,3 +272,4 @@ hermes status
 - [Multi-Instance](multi_instance.md) — Token conflicts
 - [launchd](launchd.md) — Service management
 - [Environment](environment.md) — `.env` loading
+- [Copilot ACP](copilot_acp.md) — Copilot backend issues

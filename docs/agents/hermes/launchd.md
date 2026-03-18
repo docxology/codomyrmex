@@ -1,6 +1,6 @@
 # Hermes launchd Service Management (macOS)
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Overview
 

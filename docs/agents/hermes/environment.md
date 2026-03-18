@@ -1,6 +1,6 @@
 # Hermes Environment & API Keys
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## HERMES_HOME
 
@@ -60,11 +60,12 @@ TELEGRAM_BOT_TOKEN=1234567890:AAxxxxxxxxxxxxxxxxx
 TELEGRAM_ALLOWED_USERS=username1,username2   # comma-separated Telegram usernames
 TELEGRAM_HOME_CHANNEL=channel_name           # for cron/proactive messages
 
-# WhatsApp
+# WhatsApp (via Baileys bridge)
 WHATSAPP_ENABLED=false
 
 # Discord
-DISCORD_TOKEN=...
+DISCORD_BOT_TOKEN=your_bot_token_here
+DISCORD_ALLOWED_USER_IDS=123456789,987654321  # optional allow-list of user IDs
 
 # Slack
 SLACK_BOT_TOKEN=xoxb-...
@@ -75,21 +76,48 @@ EMAIL_ADDRESS=bot@example.com
 EMAIL_PASSWORD=...
 ```
 
+### LLM Provider Keys
+
+```bash
+OPENROUTER_API_KEY=sk-or-v1-...   # OpenRouter (recommended)
+ANTHROPIC_API_KEY=sk-ant-...      # Direct Anthropic (BYOK)
+OPENAI_API_KEY=sk-...             # Direct OpenAI (BYOK)
+ZAI_API_KEY=...                   # Z.AI / GLM
+KIMI_API_KEY=...                  # Kimi / Moonshot
+MINIMAX_API_KEY=...               # MiniMax
+```
+
+### Copilot ACP Keys (v0.3.0)
+
+```bash
+# GitHub Copilot ACP backend
+HERMES_COPILOT_ACP_COMMAND=copilot    # path to copilot binary (default: copilot)
+COPILOT_CLI_PATH=~/.local/bin/copilot # alternative path
+HERMES_COPILOT_ACP_ARGS=--acp --stdio # override default CLI args
+GITHUB_TOKEN=ghp_...                  # GitHub auth token (set by hermes copilot login)
+```
+
 ### Optional Service Keys
 
 ```bash
-# Additional LLM providers
-# ANTHROPIC_API_KEY=sk-ant-...
-# OPENAI_API_KEY=sk-...
-
-# Tool integrations
+# Web & browser tools
 # FIRECRAWL_API_KEY=...        # web scraping
-# FAL_KEY=...                   # image generation
-# BROWSERBASE_API_KEY=...       # browser automation
-# VOICE_TOOLS_OPENAI_KEY=...    # TTS/STT
-# GITHUB_TOKEN=ghp_...          # GitHub access
-# WANDB_API_KEY=...             # experiment tracking
-# HONCHO_API_KEY=...            # user modeling
+# TAVILY_API_KEY=...           # web search
+# BROWSERBASE_API_KEY=...      # browser automation
+
+# Media & generation
+# FAL_KEY=...                  # image generation
+
+# Voice / STT / TTS
+# GROQ_API_KEY=...             # Groq Whisper STT (free tier)
+# VOICE_TOOLS_OPENAI_KEY=...   # OpenAI TTS/STT
+# ELEVENLABS_API_KEY=...       # ElevenLabs TTS
+# FISH_AUDIO_API_KEY=...       # Fish Audio TTS
+
+# Other integrations
+# WANDB_API_KEY=...            # experiment tracking (W&B)
+# HONCHO_API_KEY=...           # user modeling (Honcho)
+# TINKER_API_KEY=...           # Tinker tool
 ```
 
 ## Security Best Practices

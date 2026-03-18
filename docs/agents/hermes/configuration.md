@@ -1,6 +1,6 @@
 # Hermes Configuration Reference
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Overview
 
@@ -12,52 +12,119 @@ Hermes configuration lives in `$HERMES_HOME/config.yaml`. This file controls mod
 # =============================================================================
 # Model / Provider
 # =============================================================================
-model: nousresearch/hermes-3-llama-3.1-405b:free # OpenRouter model string
+model: nousresearch/hermes-3-llama-3.1-405b-instruct:free
+provider: openrouter   # openrouter | nous | zai | kimi-coding | minimax
+fallback_models:
+  - meta-llama/llama-3.1-70b-instruct:free
+  - google/gemini-2.0-flash:free
 
 # =============================================================================
 # Toolsets
 # =============================================================================
 toolsets:
-    - all # enable all tool categories
+  - all   # enable all tool categories
 
 # =============================================================================
 # Agent behavior & personalities
 # =============================================================================
 agent:
-    max_turns: 150 # max tool-calling turns per conversation
-    verbose: false # show internal reasoning in logs
-    reasoning_effort: medium # low | medium | high
-    personality: helpful # active personality name (must exist below)
-    personalities:
-        helpful: You are a helpful, friendly AI assistant.
-        technical: You are a technical expert. Provide detailed, accurate information.
-        custom_name: |
-            Multi-line personality definition.
-            Supports any character or formatting.
+  max_turns: 150           # max tool-calling turns per conversation
+  verbose: false           # show internal reasoning in logs
+  reasoning_effort: medium # low | medium | high
+  personality: helpful     # active personality name (must exist below)
+  personalities:
+    helpful: You are a helpful, friendly AI assistant.
+    technical: You are a technical expert. Provide detailed, accurate information.
 
 # =============================================================================
 # Terminal backend
 # =============================================================================
 terminal:
-    backend: local # local | docker | ssh | daytona | singularity | modal
-    cwd: . # working directory for commands
-    timeout: 180 # command timeout in seconds
+  backend: local           # local | docker | ssh | daytona | singularity | modal
+  cwd: .                   # working directory for commands
+  timeout: 180             # command timeout in seconds
 
 # =============================================================================
 # Context compression
 # =============================================================================
 compression:
-    enabled: true
-    threshold: 0.85 # compress when context reaches 85% of model limit
-    summary_model: google/gemini-3-flash-preview # model for summarization
-    summary_provider: auto
+  enabled: true
+  threshold: 0.85          # compress when context reaches 85% of model limit
+  summary_model: google/gemini-2.0-flash
+  summary_provider: auto
 
 # =============================================================================
-# Telegram
+# Smart Model Routing (v0.3.0)
+# Route short/simple messages to a cheap model
+# =============================================================================
+smart_model_routing:
+  enabled: false
+  max_simple_chars: 160
+  max_simple_words: 28
+  cheap_model:
+    provider: openrouter
+    model: google/gemini-2.0-flash
+
+# =============================================================================
+# Security (v0.3.0)
+# =============================================================================
+security:
+  redact_secrets: true     # mask API keys in logs/responses
+  tirith_enabled: true     # enable Tirith policy engine
+  tirith_path: tirith      # path to tirith binary
+  tirith_timeout: 5        # timeout in seconds before fail-open
+  tirith_fail_open: true   # allow if Tirith times out
+  website_blocklist:
+    enabled: false
+    domains: []
+
+# =============================================================================
+# Session auto-reset
+# =============================================================================
+session_reset:
+  mode: both               # off | idle | daily | both
+  idle_minutes: 1440       # reset after N minutes of inactivity
+  at_hour: 3               # daily reset at this hour (local time)
+
+# =============================================================================
+# Display
+# =============================================================================
+display:
+  compact: false
+  personality: technical   # display personality name
+  resume_display: full     # full | compact
+  bell_on_complete: false
+  show_reasoning: true
+  streaming: false
+  show_cost: false
+  skin: default            # default | minimal | rich
+  tool_progress: all       # all | errors | none
+  background_process_notifications: all
+
+# =============================================================================
+# Delegation (subagent spawning)
+# =============================================================================
+delegation:
+  model: ""                # override model for subagents
+  provider: ""
+  max_iterations: 75
+  default_toolsets:
+    - terminal
+    - file
+    - web
+
+# =============================================================================
+# Telegram platform
 # =============================================================================
 telegram:
-    require_mention: true # only respond when @mentioned
-    free_response_channels: "" # channel IDs for auto-response (empty = none)
+  require_mention: true    # only respond when @mentioned
+  free_response_channels: "" # channel IDs for auto-response (empty = none)
+
+# =============================================================================
+# Approvals
+# =============================================================================
+approvals:
+  mode: manual             # manual | auto | off
 ```
 
 ## Critical YAML Pitfalls

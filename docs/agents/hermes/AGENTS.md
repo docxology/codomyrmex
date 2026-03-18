@@ -1,12 +1,12 @@
 # Hermes Documentation — Agent Coordination
 
-**Module**: `docs/agents/hermes/` | **Version**: v0.2.0 | **Last Updated**: March 2026
+**Module**: `docs/agents/hermes/` | **Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Purpose
 
 Agent coordination document for the Hermes documentation subfolder. Guides AI agents navigating Hermes-related documentation and scripts.
 
-## Documentation Files (19)
+## Documentation Files (21)
 
 ### Getting Started
 
@@ -18,14 +18,15 @@ Agent coordination document for the Hermes documentation subfolder. Guides AI ag
 
 ### Architecture & Configuration
 
-| File                        | Description                                       |
-| :-------------------------- | :------------------------------------------------ |
-| `architecture.md`           | Core agent loop, components, structured reasoning |
-| `codomyrmex_integration.md` | Deep dive into Codomyrmex interfaces and MCP      |
-| `configuration.md`          | config.yaml reference, YAML pitfalls              |
-| `environment.md`            | HERMES_HOME, .env, API key management             |
-| `models.md`                 | Model selection, OpenRouter, providers            |
-| `personalities.md`          | Personality system and custom personas            |
+| File                        | Description                                        |
+| :-------------------------- | :------------------------------------------------- |
+| `architecture.md`           | Core agent loop, components, LLM provider backends |
+| `codomyrmex_integration.md` | Deep dive into Codomyrmex interfaces and MCP       |
+| `configuration.md`          | config.yaml reference, YAML pitfalls               |
+| `copilot_acp.md`            | GitHub Copilot ACP backend (v0.3.0)                |
+| `environment.md`            | HERMES_HOME, .env, API key management              |
+| `models.md`                 | Model selection, OpenRouter, providers             |
+| `personalities.md`          | Personality system and custom personas             |
 
 ### Platform Integration
 
@@ -68,9 +69,12 @@ Agent coordination document for the Hermes documentation subfolder. Guides AI ag
 
 1. **Official Source of Truth**: [hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs/)
 2. **HERMES_HOME Isolation**: Each instance must have its own `HERMES_HOME` directory
-3. **Secret Hygiene**: API keys in `.env` only, `chmod 600`, never commit
-4. **Zero Duplicate YAML Keys**: `config.yaml` must never have duplicate top-level keys
-5. **`--replace` Flag**: Always use in launchd plists for PID management
+3. **Unique Bot Tokens**: Each Telegram/Discord/WhatsApp gateway must use a unique token
+4. **Secret Hygiene**: API keys in `.env` only, `chmod 600`, never commit
+5. **Zero Duplicate YAML Keys**: `config.yaml` must never have duplicate top-level keys
+6. **`--replace` Flag**: Always use in launchd plists for PID management
+7. **`security.redact_secrets: true`**: Always set in production
+8. **Tirith Policy Engine**: Enable `tirith_enabled: true` for production deployments
 
 ## Navigation
 

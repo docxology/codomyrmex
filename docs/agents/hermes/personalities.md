@@ -1,6 +1,6 @@
 # Hermes Personality System
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Overview
 
@@ -94,7 +94,7 @@ agent:
 
 When running [multiple instances](multi_instance.md), each can have its own personality:
 
-```
+```text
 ~/.hermes/config.yaml
   personality: helpful              # Primary: general assistant
 

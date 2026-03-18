@@ -323,7 +323,11 @@ class ConversationMemory:
 
 
 class KnowledgeMemory:
-    """Specialised memory for factual knowledge."""
+    """Specialised memory for factual knowledge and Knowledge Items (KIs).
+
+    Provides structured storage, ranked recall, and deduplication of
+    semantic knowledge items built on top of :class:`AgentMemory`.
+    """
 
     def __init__(self, store: InMemoryStore | None = None) -> None:
         self._agent = AgentMemory(store)
@@ -348,3 +352,125 @@ class KnowledgeMemory:
             importance=MemoryImportance.HIGH,
             metadata={"source": source},
         )
+
+    def store(
+        self,
+        title: str,
+        body: str,
+        *,
+        tags: list[str] | None = None,
+        source_session_id: str = "",
+        source: str = "",
+    ) -> Memory:
+        """Persist a structured Knowledge Item (KI).
+
+        The combined ``title + body`` text is stored as the memory content
+        so that ``recall()`` can rank by token overlap against both fields.
+
+        Args:
+            title: Short descriptive title for the KI.
+            body: Markdown body of the KI.
+            tags: Optional list of topic tags.
+            source_session_id: Hermes session ID that generated this KI.
+            source: Optional external source attribution.
+
+        Returns:
+            The persisted :class:`Memory` object.
+        """
+        import time as _time
+
+        content = f"{title}\n\n{body}"
+        return self._agent.remember(
+            content,
+            memory_type=MemoryType.SEMANTIC,
+            importance=MemoryImportance.HIGH,
+            metadata={
+                "title": title,
+                "tags": tags or [],
+                "source_session_id": source_session_id,
+                "source": source,
+                "ki_stored_at": _time.time(),
+            },
+        )
+
+    def recall(
+        self,
+        query: str,
+        k: int = 10,
+    ) -> list[RetrievalResult]:
+        """Return the top-*k* semantically-ranked KIs matching *query*.
+
+        Filters to ``SEMANTIC`` memory type only so episodic memories
+        stored in the same underlying store are excluded.
+
+        Args:
+            query: Natural language search string.
+            k: Maximum results to return.
+
+        Returns:
+            List of :class:`RetrievalResult` sorted by combined score.
+        """
+        return self._agent.recall(
+            query,
+            k=k,
+            memory_type=MemoryType.SEMANTIC,
+        )
+
+    def merge_duplicates(self, threshold: float = 0.85) -> int:
+        """Fold near-duplicate KIs into their older counterpart.
+
+        Uses token-overlap similarity (``_relevance``) to compute pairwise
+        cosine-like similarity between all SEMANTIC memories.  When a newer
+        memory exceeds *threshold* similarity to an older one, its body is
+        appended as a dated ``## Update`` section and the newer record is
+        deleted.
+
+        Args:
+            threshold: Similarity threshold (0.0–1.0). Default 0.85.
+
+        Returns:
+            Number of memories merged (deleted).
+        """
+        import datetime
+
+        all_memories = self._agent.store.list_all()
+        semantic = [
+            m for m in all_memories if m.memory_type == MemoryType.SEMANTIC
+        ]
+        # Sort oldest first so we always keep the canonical older copy
+        semantic.sort(key=lambda m: m.created_at)
+
+        merged = 0
+        deleted_ids: set[str] = set()
+
+        for i, base in enumerate(semantic):
+            if base.id in deleted_ids:
+                continue
+            for candidate in semantic[i + 1 :]:
+                if candidate.id in deleted_ids:
+                    continue
+                sim = _relevance(base.content, candidate.content)
+                if sim >= threshold:
+                    # Append candidate body as an Update section to base
+                    now_str = datetime.datetime.fromtimestamp(
+                        candidate.created_at
+                    ).strftime("%Y-%m-%d")
+                    update_text = (
+                        f"\n\n## Update ({now_str})\n\n{candidate.content}"
+                    )
+                    base.content += update_text
+                    self._agent.store.save(base)
+                    # Remove the duplicate
+                    self._agent.store.delete(candidate.id)
+                    deleted_ids.add(candidate.id)
+                    merged += 1
+
+        return merged
+
+
+__all__ = [
+    "AgentMemory",
+    "ConversationMemory",
+    "KnowledgeMemory",
+    "VectorStoreMemory",
+]

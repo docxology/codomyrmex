@@ -2,7 +2,7 @@
 
 **Source**: [hermes-agent.nousresearch.com/docs/reference/cli-commands](https://hermes-agent.nousresearch.com/docs/reference/cli-commands)
 
-> Verified against official Hermes docs, March 2026.
+> Verified against official Hermes docs and 73-commit update, March 2026.
 
 ## Terminal Commands
 
@@ -29,6 +29,16 @@ hermes model                        # Interactive model selection
 hermes login                        # Auth with Nous Portal (OAuth)
 hermes logout                       # Clear Nous Portal auth
 ```
+
+### Copilot ACP (v0.3.0)
+
+```bash
+hermes copilot login                # Authenticate GitHub Copilot (device flow)
+hermes copilot logout               # Clear Copilot credentials
+hermes copilot status               # Show Copilot auth state
+```
+
+> After login, select **GitHub Copilot (ACP)** in `hermes model` to use Copilot as the backend.
 
 ### Configuration
 

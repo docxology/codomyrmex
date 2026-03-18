@@ -1,6 +1,6 @@
 # Hermes Architecture
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
 
 ## Overview
 
@@ -13,24 +13,29 @@ graph TD
     classDef platform fill:#2E8B57,stroke:#fff,stroke-width:2px,color:#fff;
     classDef core fill:#4682B4,stroke:#fff,stroke-width:2px,color:#fff;
     classDef storage fill:#8B4513,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef provider fill:#6A0572,stroke:#fff,stroke-width:2px,color:#fff;
 
     subgraph "HERMES AGENT"
         Gateway[Gateway<br/>gateway/]:::core
         AgentLoop[Agent Loop<br/>run_agent.py]:::core
         ToolRegistry[Tool Registry<br/>tools/]:::core
-        
+        AuxClient[Auxiliary Client<br/>agent/auxiliary_client.py]:::core
+        SmartRoute[Smart Routing<br/>agent/smart_model_routing.py]:::core
+
         Gateway <--> AgentLoop
         AgentLoop <--> ToolRegistry
-        
+        AgentLoop --> SmartRoute
+        SmartRoute --> AuxClient
+
         Sessions[(Sessions<br/>state.db)]:::storage
         Skills[Skills<br/>skills/]:::storage
         Memory[(Memory<br/>memories/)]:::storage
-        
+
         AgentLoop <--> Sessions
         AgentLoop <--> Skills
         AgentLoop <--> Memory
     end
-    
+
     subgraph "Platforms"
         TG([Telegram]):::platform
         WA([WhatsApp]):::platform
@@ -38,12 +43,23 @@ graph TD
         SL([Slack]):::platform
         CLI([CLI]):::platform
     end
-    
+
+    subgraph "LLM Providers"
+        OR([OpenRouter]):::provider
+        NP([Nous Portal]):::provider
+        CP([Copilot ACP]):::provider
+        OA([OpenAI/BYOK]):::provider
+    end
+
     TG --> Gateway
     WA --> Gateway
     DC --> Gateway
     SL --> Gateway
     CLI --> Gateway
+    AuxClient --> OR
+    AuxClient --> NP
+    AuxClient --> CP
+    AuxClient --> OA
 ```
 
 ## Core Agent Loop
@@ -68,17 +84,23 @@ Hermes uses XML-tagged structured outputs for transparent reasoning:
 
 ## Key Implementation Files
 
-| File                          | Purpose                                 |
-| :---------------------------- | :-------------------------------------- |
-| `hermes_cli/config.py`        | HERMES_HOME resolution, config loading  |
-| `hermes_cli/main.py`          | CLI entrypoint                          |
-| `gateway/run.py`              | `GatewayRunner` — multi-platform daemon |
-| `gateway/session.py`          | Session routing and context management  |
-| `agent/run_agent.py`          | Core `AIAgent` conversation loop        |
-| `agent/prompt_builder.py`     | System prompt assembly                  |
-| `agent/context_compressor.py` | LLM-based context summarization         |
-| `tools/registry.py`           | Central tool schema/handler registry    |
-| `hermes_state.py`             | SQLite + FTS5 state persistence         |
+| File                              | Purpose                                       |
+| :-------------------------------- | :-------------------------------------------- |
+| `hermes_cli/config.py`            | HERMES_HOME resolution, config loading        |
+| `hermes_cli/main.py`              | CLI entrypoint (+410 lines in v0.3.0)         |
+| `gateway/run.py`                  | `GatewayRunner` — multi-platform daemon       |
+| `gateway/session.py`              | Session routing and context management        |
+| `run_agent.py`                    | Core `AIAgent` conversation loop              |
+| `agent/prompt_builder.py`         | System prompt assembly                        |
+| `agent/context_compressor.py`     | LLM-based context summarization               |
+| `agent/auxiliary_client.py`       | Auxiliary LLM client (vision, compression)    |
+| `agent/smart_model_routing.py`    | Automatic cheap/strong model routing          |
+| `agent/model_metadata.py`         | Model capability/context/pricing metadata     |
+| `agent/usage_pricing.py`          | Token cost tracking and budget management     |
+| `agent/copilot_acp_client.py`     | GitHub Copilot ACP backend adapter (v0.3.0)   |
+| `hermes_cli/copilot_auth.py`      | Copilot OAuth device-flow authentication      |
+| `tools/registry.py`               | Central tool schema/handler registry          |
+| `hermes_state.py`                 | SQLite + FTS5 state persistence               |
 
 ## HERMES_HOME Resolution
 
@@ -89,6 +111,34 @@ return Path(os.getenv("HERMES_HOME", Path.home() / ".hermes"))
 ```
 
 This single line determines where **all** data is read from: `.env`, `config.yaml`, `state.db`, `sessions/`, `skills/`, `memories/`, `logs/`, and `gateway.pid`.
+
+## LLM Provider Backends (v0.3.0)
+
+Hermes supports multiple LLM backends via a unified `auxiliary_client.py` facade:
+
+| Backend | Config | Auth | Notes |
+| :--- | :--- | :--- | :--- |
+| **OpenRouter** | `OPENROUTER_API_KEY` | API key | Recommended; 200+ models |
+| **Nous Portal** | OAuth | `hermes login` | Native Hermes models |
+| **GitHub Copilot ACP** | `HERMES_COPILOT_ACP_COMMAND` | `hermes copilot login` | No structured tool calls |
+| **OpenAI (BYOK)** | `OPENAI_API_KEY` | API key | Direct; full rate limits |
+| **Anthropic (BYOK)** | `ANTHROPIC_API_KEY` | API key | Direct; full rate limits |
+| **Z.AI / GLM** | `ZAI_API_KEY` | API key | — |
+| **Kimi/Moonshot** | `KIMI_API_KEY` | API key | — |
+
+### Smart Model Routing
+
+The `smart_model_routing.py` module can automatically route short/simple messages to a cheaper model:
+
+```yaml
+smart_model_routing:
+  enabled: true
+  max_simple_chars: 160
+  max_simple_words: 28
+  cheap_model:
+    provider: openrouter
+    model: google/gemini-2.0-flash
+```
 
 ## Deployment Backends
 
@@ -109,3 +159,4 @@ Hermes supports 6 execution backends for tool commands:
 - [Sessions](sessions.md) — State persistence and compression
 - [Tools](tools.md) — Tool registry and categories
 - [Configuration](configuration.md) — `config.yaml` reference
+- [Copilot ACP](copilot_acp.md) — GitHub Copilot backend
