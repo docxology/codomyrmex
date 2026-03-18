@@ -23,7 +23,7 @@ import sqlite3
 import time
 import uuid
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Protocol, Self, runtime_checkable
+from typing import TYPE_CHECKING, Any, Callable, Protocol, Self, runtime_checkable
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -45,6 +45,9 @@ class HermesSession:
         metadata: Session metadata.
         created_at: Creation timestamp.
         updated_at: Last update timestamp.
+        on_close: Optional callback fired when :meth:`close` is called.  Receives
+            this session as its only argument.  Use this hook to trigger KI
+            extraction or other lifecycle actions.
     """
 
     session_id: str = field(default_factory=lambda: uuid.uuid4().hex[:12])
@@ -54,6 +57,9 @@ class HermesSession:
     metadata: dict[str, Any] = field(default_factory=dict)
     created_at: float = field(default_factory=time.time)
     updated_at: float = field(default_factory=time.time)
+    on_close: Callable[[HermesSession], None] | None = field(
+        default=None, repr=False, compare=False
+    )
 
     def add_message(self, role: str, content: str) -> None:
         """Add a message to the conversation history.
@@ -64,6 +70,32 @@ class HermesSession:
         """
         self.messages.append({"role": role, "content": content})
         self.updated_at = time.time()
+
+    def close(self) -> None:
+        """Mark the session as closed and fire any registered :attr:`on_close` callback.
+
+        The callback is invoked with ``self`` as the sole argument.  Typical
+        use-case: trigger KI extraction when a high-quality session finishes::
+
+            def extract_ki(session: HermesSession) -> None:
+                if session.message_count >= 3:
+                    hermes_extract_ki(session_id=session.session_id)
+
+            sess = HermesSession(on_close=extract_ki)
+
+        The callback is called at most once; after :meth:`close` the
+        ``on_close`` attribute is set to ``None``.
+        """
+        if self.on_close is not None:
+            try:
+                self.on_close(self)
+            except Exception:
+                logger.exception(
+                    "HermesSession.close() callback failed for session '%s'.",
+                    self.session_id,
+                )
+            finally:
+                self.on_close = None
 
     @property
     def message_count(self) -> int:

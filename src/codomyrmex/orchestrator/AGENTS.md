@@ -1,12 +1,13 @@
 # Codomyrmex Agents — src/codomyrmex/orchestrator
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026 (Sprint 34)
 
 ## Purpose
-Task orchestration with fractal execution, parallel runners, workflow management, and scheduling. Coordinates multi-step agent workflows with resilience patterns.
+
+Task orchestration with fractal execution, parallel runners, workflow management, and scheduling. Sprint 34 adds **SwarmTopology** (Fan-Out, Fan-In, Pipeline, Broadcast), **capability-based agent routing** via `AgentOrchestrator.spawn_agent`, and the `orchestrator_run_dag` MCP tool for external swarm control.
 
 ## Active Components
-- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+
 - `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
 - `PAI.md` – Public API Interface — integration patterns and usage guidelines
 - `README.md` – Module overview — quick start, features, and usage examples
@@ -39,21 +40,34 @@ Task orchestration with fractal execution, parallel runners, workflow management
 - `triggers/` – triggers module implementation
 - `workflows/` – workflows module implementation
 
-
 ## Key Interfaces
 
-- `engines/parallel.py — Parallel execution engine`
-- `execution/runner.py — Sequential task runner`
-- `fractals/executor.py — Fractal task decomposition`
-- `scheduler/ — Cron and interval-based scheduling`
-- `workflows/workflow.py — Workflow definition and execution`
+- `engines/parallel.py` — Parallel execution engine
+- `execution/runner.py` — Sequential task runner
+- `fractals/executor.py` — Fractal task decomposition
+- `scheduler/` — Cron and interval-based scheduling
+- `workflows/workflow.py` — Workflow definition and execution
+- **`swarm_topology.py`** (Sprint 34) — `SwarmTopology`, `TaskSpec`, `TaskResult`, `TopologyMode` (StrEnum: fan_out/fan_in/pipeline/broadcast)
+- **`integration.py`** — `AgentOrchestrator` with `capability_profile`, `filter_tools`, `spawn_agent`, `register_agent`;
+- **`mcp_tools.py`** — `orchestrator_run_dag(topology, tasks)` MCP tool
 
 ## Operating Contracts
+
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- **Zero-Mock Policy**: all swarm topology tests use real `concurrent.futures.ThreadPoolExecutor` and real callable tasks.
+- **Capability Profile Contract**: every `register_agent(role, fn)` call must use a role string that matches at least one key in the active `capability_profile` dict before `spawn_agent` will route to it.
+
+## Agent Workflow Guidance (Sprint 34)
+
+- Use `orchestrator_run_dag(topology="fan_out", tasks=[...])` to dispatch independent tasks concurrently.
+- Use `orchestrator_run_dag(topology="pipeline", tasks=[...])` to chain tasks where each step receives the previous output.
+- Use `orchestrator_run_dag(topology="broadcast", tasks=[...])` to inject a single input into all agents simultaneously.
+- Use `AgentOrchestrator(capability_profile={"role": ["prefix_"]})` to restrict which MCP tools each spawned agent can see.
 
 ## Key Files
+
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview
 - `API_SPECIFICATION.md`
@@ -77,13 +91,16 @@ Task orchestration with fractal execution, parallel runners, workflow management
 - `triage_engine.py`
 
 ## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+
+Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
 ## Development Guidelines
+
 - Follow the universal agent protocols defined in the root `AGENTS.md`.
 - Adhere to the Python PEP 8 style guide and project-specific linting rules.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- **🏠 Project Root**: [../../../README.md](../../../README.md) - Main project documentation

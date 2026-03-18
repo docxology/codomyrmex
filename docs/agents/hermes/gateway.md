@@ -174,6 +174,66 @@ DISCORD_BOT_TOKEN=your_bot_token_here
 DISCORD_ALLOWED_USER_IDS=123456789,987654321  # optional allow-list
 ```
 
+## Sprint 34 — Swarm Orchestration and Knowledge Codification
+
+The gateway participates as a first-class node in the Codomyrmex multi-agent swarm ecology via the nine new Sprint 34 MCP tools.
+
+### Session Lifecycle → Knowledge Items
+
+When a gateway-routed conversation closes (e.g., the user leaves a channel or the gateway session times out), the `HermesSession.close()` lifecycle hook fires any registered `on_close` callback. This enables **automatic KI extraction**:
+
+```python
+from codomyrmex.agents.hermes.session import HermesSession
+from codomyrmex.agents.hermes.mcp_tools import hermes_extract_ki
+
+def _auto_ki(sess: HermesSession) -> None:
+    if sess.message_count >= 3:
+        hermes_extract_ki(
+            session_id=sess.session_id,
+            title=f"Gateway session: {sess.name or sess.session_id[:8]}",
+        )
+
+session = HermesSession(on_close=_auto_ki)
+```
+
+The extracted KIs are indexed by `KnowledgeMemory` and can be recalled across all gateway platforms via `hermes_search_knowledge_items`.
+
+### Gateway Swarm Participation
+
+The gateway daemon can act as a swarm peer by connecting its platform sessions to the `IntegrationBus`:
+
+```python
+from codomyrmex.events.integration_bus import IntegrationBus
+from codomyrmex.events.event_store import EventStore
+
+# Create a crash-durable bus for the gateway process
+bus = IntegrationBus(event_store=EventStore())
+
+# Receive tasks dispatched to "gateway" agent role
+tasks = bus.drain_inbox("gateway")
+for task in tasks:
+    # ... handle task, route to platform adapter
+    pass
+```
+
+External agents can dispatch tasks to the gateway via:
+
+```python
+# From any MCP context
+events_send_to_agent(agent_id="gateway", message={"action": "send_dm", "user": "docxology", "text": "Done."})
+```
+
+### Size-based Memory GC
+
+Use `hermes_archive_sessions` periodically to keep the gateway session DB lean:
+
+```bash
+# Archive sessions older than 14 days once the DB exceeds 100 MB
+hermes_archive_sessions --max-size-mb 100 --days-old 14
+```
+
+When the DB is under the threshold, the tool returns immediately without deleting anything. Add `--dry-run` to preview what would be pruned.
+
 ## Related Documents
 
 - [Telegram](telegram.md) — Telegram-specific setup

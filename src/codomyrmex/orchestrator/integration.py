@@ -275,11 +275,22 @@ class CICDBridge:
 
 
 class AgentOrchestrator:
-    """Orchestrator for agent tasks."""
+    """Orchestrator for agent tasks with optional capability-profile routing.
 
-    def __init__(self):
+    Args:
+        capability_profile: Optional dict mapping capability names to lists of
+            tool/module names that agent variants must support.  When provided,
+            :meth:`spawn_agent` uses this to select only tools matching the
+            requested role.
+    """
+
+    def __init__(
+        self,
+        capability_profile: dict[str, list[str]] | None = None,
+    ) -> None:
         """Initialize agent orchestrator."""
         self._agents: dict[str, Any] = {}
+        self.capability_profile = capability_profile or {}
 
     def register_agent(self, name: str, agent: Any):
         """Register an agent.
@@ -300,6 +311,77 @@ class AgentOrchestrator:
             Agent instance if found
         """
         return self._agents.get(name)
+
+    @staticmethod
+    def filter_tools(
+        all_tools: list[str],
+        profile: dict[str, list[str]],
+        role: str,
+    ) -> list[str]:
+        """Return the subset of *all_tools* matching a capability role.
+
+        Args:
+            all_tools: Complete list of available tool names.
+            profile: Capability profile mapping role → allowed tool patterns.
+            role: Role key to look up in *profile*.
+
+        Returns:
+            Filtered list — or *all_tools* unchanged if *role* not in *profile*.
+        """
+        allowed = profile.get(role)
+        if allowed is None:
+            return all_tools
+        return [t for t in all_tools if any(t.startswith(p) for p in allowed)]
+
+    def spawn_agent(
+        self,
+        role: str,
+        task: str,
+        *,
+        extra_kwargs: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Synchronously run a capabity-scoped task using the given role.
+
+        Resolves the allowed tool list from :attr:`capability_profile` for
+        *role*, then dispatches to the first registered agent that matches, or
+        falls back to a direct ``run_agent_task`` call.
+
+        Args:
+            role: Capability role (key in :attr:`capability_profile`).
+            task: Task description string to pass to the agent.
+            extra_kwargs: Optional additional kwargs forwarded to the agent.
+
+        Returns:
+            dict with status, role, task, and either result or error.
+        """
+        allowed_tools = self.filter_tools(
+            list(self._agents.keys()), self.capability_profile, role
+        )
+        agent_name = next(
+            (name for name in allowed_tools if name in self._agents),
+            next(iter(self._agents), None),
+        )
+
+        if agent_name is None:
+            return {
+                "status": "error",
+                "role": role,
+                "task": task,
+                "error": f"No agents registered for role '{role}'.",
+            }
+
+        agent = self._agents[agent_name]
+        try:
+            # Prefer synchronous callables to avoid imposing async in a
+            # synchronous orchestration context.
+            if callable(agent):
+                result = agent(task, **(extra_kwargs or {}))
+            else:
+                result = {"raw": str(agent)}
+            return {"status": "success", "role": role, "agent": agent_name, "result": result}
+        except Exception as exc:
+            logger.warning("spawn_agent error for role '%s': %s", role, exc)
+            return {"status": "error", "role": role, "agent": agent_name, "error": str(exc)}
 
     async def run_agent_task(
         self, agent_name: str, task: str, **kwargs

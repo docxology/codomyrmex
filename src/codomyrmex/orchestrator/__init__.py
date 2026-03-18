@@ -32,6 +32,7 @@ from . import (
     triggers,
     workflows,
 )
+from .swarm_topology import SwarmTopology, TaskResult as SwarmTaskResult, TaskSpec, TopologyMode
 from .config import get_script_config, load_config
 from .core import main as run_orchestrator
 from .discovery import discover_scripts
@@ -208,4 +209,9 @@ __all__ = [
     "with_retry",
     "workflow",
     "workflows",
+    # ── swarm topology ─────────────────────────────────────────────────────────
+    "SwarmTopology",
+    "SwarmTaskResult",
+    "TaskSpec",
+    "TopologyMode",
 ]

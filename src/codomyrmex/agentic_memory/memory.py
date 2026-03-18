@@ -397,24 +397,82 @@ class KnowledgeMemory:
         self,
         query: str,
         k: int = 10,
+        *,
+        use_ollama: bool = True,
+        ollama_model: str = "nomic-embed-text",
     ) -> list[RetrievalResult]:
         """Return the top-*k* semantically-ranked KIs matching *query*.
 
         Filters to ``SEMANTIC`` memory type only so episodic memories
         stored in the same underlying store are excluded.
 
+        When *use_ollama* is ``True``, attempts to re-rank the initial
+        token-overlap candidates using cosine similarity over
+        ``nomic-embed-text`` embeddings from the local Ollama server
+        (``http://localhost:11434``).  If Ollama is unreachable or returns an
+        error the method falls back to pure token-overlap ordering silently.
+
         Args:
             query: Natural language search string.
             k: Maximum results to return.
+            use_ollama: Enable Ollama embedding re-ranking (default: True).
+            ollama_model: Ollama embedding model name.
 
         Returns:
             List of :class:`RetrievalResult` sorted by combined score.
         """
-        return self._agent.recall(
+        # Phase 1: token-overlap recall (always works, no external deps)
+        base_results = self._agent.recall(
             query,
-            k=k,
+            k=min(k * 3, 30),
             memory_type=MemoryType.SEMANTIC,
         )
+
+        if not use_ollama or not base_results:
+            return base_results[:k]
+
+        # Phase 2: Ollama embedding re-rank (best-effort, silently skipped)
+        try:
+            import json as _json
+            import urllib.request as _req
+
+            def _embed(text: str) -> list[float]:
+                payload = _json.dumps(
+                    {"model": ollama_model, "input": text}
+                ).encode()
+                request = _req.Request(
+                    "http://localhost:11434/api/embed",
+                    data=payload,
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+                with _req.urlopen(request, timeout=2.0) as resp:
+                    data = _json.loads(resp.read())
+                return data["embeddings"][0]
+
+            def _cosine(a: list[float], b: list[float]) -> float:
+                dot = sum(x * y for x, y in zip(a, b))
+                norm_a = sum(x * x for x in a) ** 0.5
+                norm_b = sum(x * x for x in b) ** 0.5
+                return dot / (norm_a * norm_b + 1e-9)
+
+            q_vec = _embed(query)
+            scored: list[tuple[float, RetrievalResult]] = []
+            for rr in base_results:
+                try:
+                    doc_vec = _embed(rr.memory.content[:512])
+                    sim = _cosine(q_vec, doc_vec)
+                    blended = 0.7 * sim + 0.3 * rr.relevance
+                    scored.append((blended, rr))
+                except Exception:
+                    scored.append((rr.relevance, rr))
+
+            scored.sort(key=lambda x: x[0], reverse=True)
+            return [rr for _, rr in scored[:k]]
+
+        except Exception:
+            # Ollama unavailable — fall back to token scoring
+            return base_results[:k]
 
     def merge_duplicates(self, threshold: float = 0.85) -> int:
         """Fold near-duplicate KIs into their older counterpart.

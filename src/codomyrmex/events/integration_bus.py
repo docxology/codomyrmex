@@ -15,6 +15,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from codomyrmex.events.event_store import EventStore
 
 logger = get_logger(__name__)
 
@@ -45,22 +46,35 @@ class IntegrationEvent:
 
 
 class IntegrationBus:
-    """Cross-module event bus.
+    """Cross-module event bus with optional append-only P2P durability.
+
+    Args:
+        event_store: Optional :class:`~codomyrmex.events.event_store.EventStore`
+            instance.  When supplied, every :meth:`send_to_agent` call is also
+            appended to the store under topic ``"agent.mailbox.{agent_id}"``,
+            giving crash-durability and auditability to P2P messages.
 
     Usage::
 
         bus = IntegrationBus()
         bus.subscribe("build.complete", my_handler)
         bus.emit("build.complete", "ci_module", {"status": "ok"})
+
+        # With durable mailboxes:
+        from codomyrmex.events.event_store import EventStore
+        bus = IntegrationBus(event_store=EventStore())
+        bus.send_to_agent("worker", {"task": "analyze"})
     """
 
-    def __init__(self) -> None:
+    def __init__(self, event_store: EventStore | None = None) -> None:
         self._handlers: dict[
             str, list[tuple[Callable[[IntegrationEvent], None], int]]
         ] = defaultdict(list)
         self._history: list[IntegrationEvent] = []
         # Per-agent mailboxes for P2P direct messaging
         self._mailboxes: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        # Optional append-only EventStore for durable P2P records
+        self._event_store = event_store
 
     def subscribe(
         self,
@@ -170,6 +184,20 @@ class IntegrationBus:
             "timestamp": time.time(),
         }
         self._mailboxes[agent_id].append(envelope)
+
+        # Persist to EventStore when available
+        if self._event_store is not None:
+            from codomyrmex.events.event_store import StreamEvent
+
+            self._event_store.append(
+                StreamEvent(
+                    topic=f"agent.mailbox.{agent_id}",
+                    event_type="p2p_message",
+                    data=envelope,
+                    source=source,
+                )
+            )
+
         event = self.emit(
             f"agent.inbox.{agent_id}",
             source=source,
@@ -221,6 +249,25 @@ class IntegrationBus:
     def mailbox_size(self) -> int:
         """Total messages across all agent mailboxes."""
         return sum(len(msgs) for msgs in self._mailboxes.values())
+
+    def replay_from_store(self, agent_id: str) -> list[dict[str, Any]]:
+        """Replay persisted P2P messages for *agent_id* from the EventStore.
+
+        Returns all messages that were previously sent to *agent_id* and recorded
+        in the backing :class:`~codomyrmex.events.event_store.EventStore`.  Does not
+        modify the in-memory mailbox; use :meth:`drain_inbox` for consumption.
+
+        Args:
+            agent_id: Recipient agent identifier.
+
+        Returns:
+            List of persisted message envelopes in append order, or ``[]`` if
+            no EventStore is attached.
+        """
+        if self._event_store is None:
+            return []
+        events = self._event_store.read_by_topic(f"agent.mailbox.{agent_id}")
+        return [e.data for e in events]
 
 
 __all__ = ["IntegrationBus", "IntegrationEvent"]

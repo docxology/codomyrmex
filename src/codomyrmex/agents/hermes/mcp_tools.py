@@ -1836,3 +1836,99 @@ def hermes_spawn_agent(
         return orch.spawn_agent(role, task)
     except Exception as exc:
         return {"status": "error", "role": role, "message": str(exc)}
+
+
+# ── v1.3.0 D3: Size-Based Memory GC ──────────────────────────────────
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Archive and prune Hermes sessions when the database exceeds a size threshold. "
+        "Sessions are compressed to .json.gz files in a sessions_archive/ directory "
+        "adjacent to the DB, then removed from SQLite to keep the store lean. "
+        "Set dry_run=True to see what would be pruned without deleting anything."
+    ),
+)
+def hermes_archive_sessions(
+    max_size_mb: float = 50.0,
+    days_old: int = 7,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Prune Hermes sessions by DB size and age, archiving to .json.gz.
+
+    Runs GC only when ``db_size_bytes / 1_048_576 >= max_size_mb``.  Deletes
+    sessions older than *days_old* days to bring the store back under threshold.
+
+    Args:
+        max_size_mb: Trigger threshold in megabytes (default 50).
+        days_old: Age cutoff in days for sessions to archive (default 7).
+        dry_run: If True, return stats without modifying the DB.
+
+    Returns:
+        dict with status, db_size_mb, threshold_mb, pruned_count, and
+        archived_dir path.
+    """
+    try:
+        import os
+        from pathlib import Path
+
+        from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
+        WORKSPACE_ROOT = Path(os.path.abspath(".")).resolve()
+        db_path = WORKSPACE_ROOT / ".codomyrmex" / "hermes_sessions.db"
+
+        stats: dict[str, Any] = {
+            "status": "ok",
+            "threshold_mb": max_size_mb,
+            "db_size_mb": 0.0,
+            "pruned_count": 0,
+            "archived_dir": str(db_path.parent / "sessions_archive"),
+            "dry_run": dry_run,
+        }
+
+        if not db_path.exists():
+            stats["message"] = "Session DB not found; nothing to archive."
+            return stats
+
+        size_bytes = os.path.getsize(db_path)
+        size_mb = size_bytes / 1_048_576
+        stats["db_size_mb"] = round(size_mb, 3)
+
+        if size_mb < max_size_mb:
+            stats["message"] = (
+                f"DB is {size_mb:.2f} MB — under threshold {max_size_mb} MB. "
+                "No pruning needed."
+            )
+            return stats
+
+        if dry_run:
+            # Count sessions that would be pruned without touching anything
+            import sqlite3
+            import time
+
+            threshold = time.time() - (days_old * 86400)
+            conn = sqlite3.connect(str(db_path))
+            try:
+                cursor = conn.execute(
+                    "SELECT COUNT(*) FROM hermes_sessions WHERE updated_at < ?",
+                    (threshold,),
+                )
+                would_prune = cursor.fetchone()[0]
+            finally:
+                conn.close()
+            stats["pruned_count"] = would_prune
+            stats["message"] = f"Dry run: would prune {would_prune} session(s)."
+            return stats
+
+        with SQLiteSessionStore(db_path) as store:
+            pruned = store.prune_old_sessions(days_old=days_old)
+            stats["pruned_count"] = pruned
+            stats["message"] = (
+                f"Pruned {pruned} session(s) older than {days_old} day(s). "
+                f"DB was {size_mb:.2f} MB (threshold: {max_size_mb} MB)."
+            )
+        return stats
+
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

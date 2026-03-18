@@ -110,33 +110,38 @@ client.set_system_prompt("session-id", "You are an expert Python reviewer.")
 
 ---
 
-## 🧩 3. 33 Model Context Protocol (MCP) Tools
+## 🧩 3. 41 Model Context Protocol (MCP) Tools
 
-Codomyrmex binds Hermes into the broader swarm ecosystem by exposing **33 native MCP tools**. This allows other agents (like Claude or Jules) to spin up Hermes instances, query its status, fork sessions, and read its memory transparently.
+Codomyrmex binds Hermes into the broader swarm ecosystem by exposing **41 native MCP tools**. This allows other agents (like Claude or Jules) to spin up Hermes instances, query its status, fork sessions, read its memory, extract knowledge items, and participate in multi-agent swarms transparently.
 
 ```mermaid
 graph LR
     SwarmProxy[Jules / Claude] --> |Action Request| MCP[Codomyrmex MCP Server]
     
     subgraph Codomyrmex Tools
-        MCP --> SessionMgmt(Session: fork, export, stats, prune)
+        MCP --> SessionMgmt(Session: fork, export, stats, prune, archive)
         MCP --> Chat(hermes_chat_session / hermes_batch_execute)
         MCP --> Search(hermes_recall_memory / hermes_session_search)
         MCP --> Status(hermes_status / hermes_provider_status)
         MCP --> TaskOrch(hermes_create_task / hermes_update_task_status)
+        MCP --> KnowledgeTools("hermes_build_memory_graph<br/>hermes_extract_ki<br/>hermes_search_knowledge_items<br/>hermes_deduplicate_ki")
+        MCP --> SwarmTools("hermes_spawn_agent<br/>orchestrator_run_dag<br/>events_send_to_agent<br/>events_agent_inbox")
     end
     
     SessionMgmt -.-> DB[(state.db)]
     Chat --> |Direct Exec| HermesCli[Hermes Executable]
+    KnowledgeTools -.-> KnowledgeDB[(agentic_memory)]
 ```
 
 ### Key Tool Groups
 
 | Group | Representative Tools |
 | :---- | :------------------- |
-| **Session Lifecycle** | `hermes_session_stats`, `hermes_session_fork`, `hermes_session_export_md`, `hermes_session_detail`, `hermes_prune_sessions` |
+| **Session Lifecycle** | `hermes_session_stats`, `hermes_session_fork`, `hermes_session_export_md`, `hermes_session_detail`, `hermes_prune_sessions`, `hermes_archive_sessions` |
 | **Execution** | `hermes_execute`, `hermes_stream`, `hermes_chat_session`, `hermes_batch_execute` |
-| **Memory** | `hermes_recall_memory`, `hermes_session_search`, `hermes_set_system_prompt` |
+| **Memory & FTS5** | `hermes_recall_memory` (BM25), `hermes_session_search`, `hermes_set_system_prompt` |
+| **Knowledge Codification** *(Sprint 34)* | `hermes_build_memory_graph`, `hermes_extract_ki`, `hermes_search_knowledge_items`, `hermes_deduplicate_ki` |
+| **Swarm Orchestration** *(Sprint 34)* | `hermes_spawn_agent`, `orchestrator_run_dag`, `events_send_to_agent`, `events_agent_inbox` |
 | **Diagnostics** | `hermes_status`, `hermes_provider_status`, `hermes_doctor`, `hermes_version`, `hermes_system_health` |
 | **Workflow** | `hermes_create_task`, `hermes_update_task_status`, `hermes_delegate_task` |
 | **Utilities** | `hermes_read_log_chunk`, `hermes_parse_canvas`, `hermes_search_vault`, `hermes_honcho_status` |
@@ -145,6 +150,88 @@ graph LR
 
 - 🔗 **MCP Protocol Bridge**: [`src/codomyrmex/agents/hermes/mcp_tools.py`](../../../src/codomyrmex/agents/hermes/mcp_tools.py)
 - 🔗 **New MCP Tool Tests**: [`src/codomyrmex/tests/integration/hermes/test_gateway_mcp_new_tools.py`](../../../src/codomyrmex/tests/integration/hermes/test_gateway_mcp_new_tools.py)
+
+---
+
+## 🧠 3a. Knowledge Codification Tools *(Sprint 34 — v1.4.0)*
+
+Hermes sessions now automatically feed a persistent **Knowledge Item** (KI) database. KIs are structured memory entries (title, tags, body, source session) that agents can recall, search, and deduplicate, forming a self-tending knowledge graph.
+
+```mermaid
+sequenceDiagram
+    participant Hermes as HermesSession
+    participant KmTool as hermes_extract_ki
+    participant KM as KnowledgeMemory (SQLite)
+    participant Search as hermes_search_knowledge_items
+
+    Hermes->>KmTool: session_id
+    KmTool->>KM: KnowledgeMemory.store(title, body, tags)
+    Note over KM: SEMANTIC memory stored
+    Search->>KM: KnowledgeMemory.recall(query, k=5)
+    KM-->>Search: Ranked list of KIs
+```
+
+### Knowledge Tool Usage
+
+```python
+# Extract KI from a completed coding session
+result = hermes_extract_ki(session_id="sess-abc", title="OAuth2 Pattern")
+# → {"status": "success", "ki_id": "mem-xyz", "title": "OAuth2 Pattern"}
+
+# Search the knowledge base
+hits = hermes_search_knowledge_items(topic="OAuth2 refresh token", limit=3)
+# → {"status": "success", "results": [{"title": ..., "snippet": ..., "score": 0.84}]}
+
+# Keep the KB clean
+merged = hermes_deduplicate_ki(threshold=0.85)
+# → {"status": "success", "merged_count": 2}
+
+# Build a concept graph from WikiLink references
+graph = hermes_build_memory_graph()
+# → {"nodes": ["BM25", "FTS5", "OAuth2"], "edges": [{"from": "BM25", "to": "FTS5", "weight": 3}]}
+```
+
+---
+
+## 🐝 3b. Swarm Orchestration Tools *(Sprint 34 — v1.5.0)*
+
+Hermes can now participate in and coordinate multi-agent swarms through four new interfaces:
+
+| Tool | Topology | Description |
+| :--- | :--- | :--- |
+| `hermes_spawn_agent` | Dynamic | Route a task to a capability-matched agent role |
+| `orchestrator_run_dag` | Fan-Out / Fan-In / Pipeline / Broadcast | Dispatch parallel agent tasks |
+| `events_send_to_agent` | P2P | Send a direct message to any agent's inbox |
+| `events_agent_inbox` | P2P | Read or drain an agent's message inbox |
+
+```python
+# Spawn a specialist agent by capability role
+result = hermes_spawn_agent(
+    role="code_reviewer",
+    task="Review the OAuth2 implementation in hermes_client.py.",
+    capability_profile={"code_reviewer": ["read_", "run_test"]},
+)
+
+# Fan-out a batch of analyses then fan-in results
+dag_result = orchestrator_run_dag(
+    topology="fan_out",
+    tasks=[
+        {"task_id": "a1", "fn": "codomyrmex.static_analysis.analyze_file", "args": ["src/x.py"]},
+        {"task_id": "a2", "fn": "codomyrmex.static_analysis.analyze_file", "args": ["src/y.py"]},
+    ],
+)
+
+# Send a message to a peer agent
+events_send_to_agent(agent_id="summariser", message={"report": dag_result})
+
+# Collect the reply
+inbox = events_agent_inbox(agent_id="orchestrator", mode="drain")
+```
+
+**Deep Links**:
+
+- 🔗 **SwarmTopology**: [`src/codomyrmex/orchestrator/swarm_topology.py`](../../../src/codomyrmex/orchestrator/swarm_topology.py)
+- 🔗 **IntegrationBus P2P**: [`src/codomyrmex/events/integration_bus.py`](../../../src/codomyrmex/events/integration_bus.py)
 
 ---
 
@@ -258,15 +345,17 @@ The v1.5.x sprint added **50 new integration tests** (across `test_gateway_sessi
 
 The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent. By establishing permanent multi-platform routing, bulletproof execution sandboxes, persistent memory syncs, session lifecycle management, batch execution, and 33 native MCP tools, Codomyrmex transforms Hermes from a singular personal assistant into a highly integrated node capable of operating safely and autonomously within complex programmatic ecosystems.
 
-| Capability | v2.2.0 | v2.3.0 (73-commit update) |
-| :--------- | :-----: | :-------------: |
-| MCP tools | 33 | **36** |
-| Session methods | 12 | **12** |
-| Script orchestrations | 7 | **7** |
-| Integration tests | 78 | **80+** |
-| Copilot ACP backend | ❌ | ✅ |
-| Smart model routing | ❌ | ✅ |
-| Tirith security engine | ❌ | ✅ |
-| New bundled skills | 0 | **2** (huggingface-hub, hermes-agent-setup) |
+| Capability | v2.2.0 | v2.3.0 (73-commit update) | v2.4.0 (Sprint 34) |
+| :--------- | :-----: | :-------------: | :-------------: |
+| MCP tools | 33 | **36** | **41** |
+| Session methods | 12 | **12** | **12** |
+| Script orchestrations | 7 | **7** | **7** |
+| Integration tests | 78 | **80+** | **98+** |
+| Copilot ACP backend | ❌ | ✅ | ✅ |
+| Smart model routing | ❌ | ✅ | ✅ |
+| Knowledge codification | ❌ | ❌ | ✅ |
+| Swarm orchestration | ❌ | ❌ | ✅ |
+| EventStore P2P mailbox | ❌ | ❌ | ✅ |
+| New bundled skills | 0 | **2** (huggingface-hub, hermes-agent-setup) | **2** |
 
 ```mermaid

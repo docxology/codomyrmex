@@ -1,10 +1,10 @@
 # Codomyrmex Agents — src/codomyrmex/agents/hermes
 
-**Version**: v2.2.1 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v2.4.0 | **Status**: Active | **Last Updated**: March 2026 (Sprint 34)
 
 ## Purpose
 
-This document coordinates operations for the Hermes agent module within the Codomyrmex ecosystem. The `hermes` module provides dual-backend scaled execution (CLI + Ollama fallback), provider-agnostic routing, context compression, and stateful, multi-turn conversational persistence for the NousResearch Hermes architecture. v2.2.1 adds LLM rotation for free models, cooldown tracking, and session merging.
+This document coordinates operations for the Hermes agent module within the Codomyrmex ecosystem. The `hermes` module provides dual-backend scaled execution (CLI + Ollama fallback), provider-agnostic routing, context compression, and stateful, multi-turn conversational persistence — now extended in v2.4.0 with **Knowledge Codification** (KI extraction / search / dedup), **Swarm Orchestration** (capability-based agent spawning, DAG topologies), and **P2P agent messaging** via `IntegrationBus`.
 
 ## Operating Contracts
 
@@ -23,25 +23,28 @@ Universal protocols specific to this module:
 - **Provider Router** (`_provider_router.py`): Unified `call_llm()` abstraction across 6 providers, with automatic credential resolution and fallback.
 - **Context Compressor** (`_provider_router.py`): Progressive conversation compression triggered at configurable token thresholds.
 - **User Model** (`_provider_router.py`): Cross-session user context persistence — preferences, observations, session summaries backed by JSON.
-- **MCP Bridge** (`_provider_router.py`): Hot-reload MCP server configuration without session restart.
-- **Database Engine** (`session.py`): `InMemorySessionStore` and `SQLiteSessionStore` for persistent chat memory, named sessions, session search, and fork lineage.
-- **Protocol Bridge** (`mcp_tools.py`): 37+ MCP tools exposed to Claude and swarm orchestrators.
+- **MCP Bridge** (`mcp_tools.py`): **41 MCP tools** exposed to Claude and swarm orchestrators, including Sprint 34 knowledge codification and swarm orchestration tools.
+- **Session Engine** (`session.py`): `InMemorySessionStore`, `SQLiteSessionStore` (FTS5 BM25), session `close()` KI lifecycle hook.
+- **Knowledge Codification** (Sprint 34): `hermes_build_memory_graph`, `hermes_extract_ki`, `hermes_search_knowledge_items`, `hermes_deduplicate_ki`, `hermes_archive_sessions`.
+- **Swarm Orchestration** (Sprint 34): `hermes_spawn_agent` (capability profile routing), backed by `AgentOrchestrator.spawn_agent` + `filter_tools`.
 - **Template Library** (`templates/`): Parameterized prompt templates for code review, debugging, documentation, and task decomposition.
 - **Evolution Engine** (`evolution/`): Linked Git submodule containing DSPy GEPA optimization logic for prompt mutations.
-- **Discord Gateway** (`gateway/`): Native voice gateway with RTP capture, Opus decoding, and DAVE E2EE E2EE support.
+- **Discord Gateway** (`gateway/`): Native voice gateway with RTP capture, Opus decoding, and DAVE E2EE support.
 
 ## Agent Workflows
 
 When coordinating with Hermes via MCP:
 
 - Swarm agents should prefer `hermes_chat_session` when dealing with multi-step logical operations (to retain contextual thread history without re-submitting large texts).
-- Swarm agents must use `hermes_status` heavily before attempting to use CLI-specific tools (`hermes_skills_list`), to determine if the local system is functioning on the standard binaries or the Ollama fallback.
+- Swarm agents must use `hermes_status` before attempting CLI-specific tools to determine if the system runs on binaries or the Ollama fallback.
 - Use `hermes_session_fork` to branch long-running tasks into isolated sub-threads without polluting the primary session.
 - Use `hermes_session_export_md` for human-readable handoffs or archiving long-running complex traces.
 - Use `hermes_batch_execute` for massive parallel data processing or unit test generation swarms.
-- Use `hermes_session_stats` to monitor disk usage and trigger `hermes_prune_sessions` if the SQLite file exceeds architectural limits (>10GB).
+- Use `hermes_session_stats` to monitor disk usage and trigger `hermes_archive_sessions` when the SQLite file grows over the configured threshold.
 - Use `hermes_session_merge` to consolidate multiple research sessions into a single context for final synthesis.
 - Use `hermes_rotation_status` to check the health of free LLM providers and monitor cooldown windows.
+- **Knowledge Codification** (Sprint 34): use `hermes_extract_ki(session_id)` after high-quality sessions to persist insights; use `hermes_search_knowledge_items(topic)` to recall; use `hermes_deduplicate_ki()` periodically to keep the KI store clean; use `hermes_build_memory_graph()` to visualise concept relationships.
+- **Swarm Orchestration** (Sprint 34): use `hermes_spawn_agent(role, task, capability_profile)` to dispatch tasks to specialist agents; combine with `orchestrator_run_dag` for Fan-Out / Fan-In / Pipeline / Broadcast topologies; use `events_send_to_agent` / `events_agent_inbox` for direct P2P messaging between agents.
 
 ## Dependencies
 

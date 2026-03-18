@@ -1,9 +1,9 @@
 # Codomyrmex Agents — src/codomyrmex/events
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026 (Sprint 34)
 
 ## Purpose
-Typed event bus with emitter patterns, notification systems, and integration bus for cross-module communication.
+Typed event bus with emitter patterns, notification systems, and integration bus for cross-module communication. Sprint 34 adds **P2P agent mailboxes** (`send_to_agent`, `receive`, `drain_inbox`) backed by optional **EventStore** durability (`replay_from_store`), plus `events_send_to_agent` and `events_agent_inbox` MCP tools.
 
 ## Active Components
 - `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
@@ -30,10 +30,22 @@ Typed event bus with emitter patterns, notification systems, and integration bus
 
 ## Key Interfaces
 
-- `typed_event_bus.py — Type-safe event publishing and subscription`
-- `emitters/event_emitter.py — Event emission with filtering`
-- `integration_bus.py — Cross-module event routing`
-- `notification/ — Alert and notification systems`
+- `typed_event_bus.py` — Type-safe event publishing and subscription
+- `emitters/event_emitter.py` — Event emission with filtering
+- `integration_bus.py` — Cross-module event routing + **P2P agent mailbox** (Sprint 34)
+  - `send_to_agent(agent_id, message, source)` → posts to in-memory mailbox + optional EventStore
+  - `receive(agent_id, timeout)` → FIFO pop with polling
+  - `drain_inbox(agent_id)` → atomic drain of all pending messages
+  - `replay_from_store(agent_id)` → replay from durable EventStore (requires `event_store=` init arg)
+- `event_store.py` — `EventStore` append-only stream with `get_event_store()` module singleton
+- `notification/` — Alert and notification systems
+- `mcp_tools.py` — `events_send_to_agent` + `events_agent_inbox` MCP tools (Sprint 34)
+
+## Agent Workflow Guidance (Sprint 34)
+- Set `IntegrationBus(event_store=EventStore())` for crash-durable P2P mailboxes; use `replay_from_store(agent_id)` to recover after restart.
+- Use `events_send_to_agent(agent_id, message)` from any MCP-capable agent to enqueue a task for a peer.
+- Use `events_agent_inbox(agent_id, mode="drain")` to atomically collect all pending work.
+- Use `events_agent_inbox(agent_id, mode="peek")` for non-destructive monitoring of queue depth.
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
