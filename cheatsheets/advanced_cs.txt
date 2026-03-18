@@ -1,9 +1,0 @@
-### TECHNIQUES
-- Algebraic manipulation: Try to apply thepremise to target terms.
-- Counterexamples: Test with small finite magmas (size 2-4).
-- Linear Models: Test if x*y = ax + by + c holds for some coefficients.
-- Symmetries: Remember left-right duality.
-- Invariants: Look for properties preserved by the operation.
-
-### KEY RULES
-- Magmas are sets with a single binary operation.
