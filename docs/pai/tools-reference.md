@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Tools Reference
 
-**Version**: v1.2.2 | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Last Updated**: March 2026
 
 ## Overview
 

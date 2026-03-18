@@ -1,6 +1,6 @@
 # Qwen (Alibaba)
 
-**Module**: `codomyrmex.agents.qwen` | **Category**: API-based | **Version**: v1.2.2 | **Last Updated**: March 2026
+**Module**: `codomyrmex.agents.qwen` | **Category**: API-based | **Version**: v1.2.3 | **Last Updated**: March 2026
 
 ## Overview
 

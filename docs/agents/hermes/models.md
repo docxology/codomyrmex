@@ -10,7 +10,7 @@ Hermes is model-agnostic and routes LLM calls through configurable providers. Op
 
 ```yaml
 # config.yaml
-model: nvidia/nemotron-3-super-120b-a12b:free
+model: nousresearch/hermes-3-llama-3.1-405b:free
 ```
 
 The model string follows OpenRouter's `provider/model-name` format.
@@ -49,7 +49,7 @@ hermes model
 ```yaml
 model: nvidia/nemotron-3-super-120b-a12b:free
 model: google/gemma-2-9b-it:free
-model: meta-llama/llama-3.1-8b-instruct:free
+model: nousresearch/hermes-3-llama-3.1-8b:free
 ```
 
 ### Recommended for Production

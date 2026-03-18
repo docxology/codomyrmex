@@ -21,7 +21,7 @@ Repo-wide structural coherence audit and reconciliation.
 
 ### Metrics
 
-| Metric | v1.2.2 | v1.2.3 |
+| Metric | v1.2.3 | v1.2.3 |
 |--------|--------|--------|
 | **Registered modules** | 90 | **129** (39 added) |
 | **Version files synced** | 1 | **7** |

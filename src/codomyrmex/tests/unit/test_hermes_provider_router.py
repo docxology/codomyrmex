@@ -6,6 +6,7 @@ Zero-Mock: All tests use real objects with filesystem I/O (tmp_path).
 from __future__ import annotations
 
 import json
+import pytest
 from typing import TYPE_CHECKING
 
 from codomyrmex.agents.hermes._provider_router import (
@@ -384,3 +385,137 @@ class TestContextCompressorEdgeCases:
         for msg in result:
             if msg.get("role") != "system":
                 assert "[...truncated]" in msg.get("content", "") or len(msg.get("content", "")) < 10000
+
+
+# ── ProviderRouter Execution (Zero-Mock Shims) ────────────────────────
+
+
+class TestProviderRouterExecution:
+    """Verify execution logic using subprocess shims (zero-mock)."""
+
+    @pytest.fixture
+    def shim_bin_dir(self, tmp_path: Path, monkeypatch) -> Path:
+        """Create a temporary directory for shim binaries and add it to PATH."""
+        import os
+        bin_dir = tmp_path / "bin"
+        bin_dir.mkdir()
+        monkeypatch.setenv("PATH", f"{bin_dir}:{os.environ.get('PATH', '')}")
+        return bin_dir
+
+    def test_call_ollama_success(self, shim_bin_dir: Path) -> None:
+        """Test _call_ollama with a successful shim."""
+        import stat
+        ollama_bin = shim_bin_dir / "ollama"
+        ollama_bin.write_text("#!/bin/sh\necho 'ollama success'\nexit 0\n")
+        ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
+
+        router = ProviderRouter()
+        result = router._call_ollama("test prompt", "hermes3", 5)
+        assert result["success"] is True
+        assert result["content"] == "ollama success"
+        assert result["provider"] == "ollama"
+
+    def test_call_ollama_failure(self, shim_bin_dir: Path) -> None:
+        """Test _call_ollama with a failing shim."""
+        import stat
+        import pytest
+        ollama_bin = shim_bin_dir / "ollama"
+        ollama_bin.write_text("#!/bin/sh\necho 'compile error' >&2\nexit 1\n")
+        ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
+
+        router = ProviderRouter()
+        with pytest.raises(RuntimeError) as exc:
+            router._call_ollama("test prompt", "hermes3", 5)
+        assert "compile error" in str(exc.value)
+
+    def test_call_hermes_cli_success(self, shim_bin_dir: Path) -> None:
+        """Test _call_hermes_cli with a successful shim."""
+        import stat
+        hermes_bin = shim_bin_dir / "hermes"
+        hermes_bin.write_text("#!/bin/sh\necho 'cli success'\nexit 0\n")
+        hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
+
+        router = ProviderRouter()
+        result = router._call_hermes_cli("test prompt", "openrouter", "hermes3", 5)
+        assert result["success"] is True
+        assert result["content"] == "cli success"
+        assert result["provider"] == "openrouter"
+
+    def test_call_hermes_cli_failure(self, shim_bin_dir: Path) -> None:
+        """Test _call_hermes_cli with a failing shim."""
+        import stat
+        import pytest
+        hermes_bin = shim_bin_dir / "hermes"
+        hermes_bin.write_text("#!/bin/sh\necho 'api error' >&2\nexit 1\n")
+        hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
+
+        router = ProviderRouter()
+        with pytest.raises(RuntimeError) as exc:
+            router._call_hermes_cli("test prompt", "openrouter", "hermes3", 5)
+        assert "api error" in str(exc.value)
+
+    def test_call_llm_routes_to_ollama(self, shim_bin_dir: Path) -> None:
+        """Test call_llm routing to ollama."""
+        import stat
+        ollama_bin = shim_bin_dir / "ollama"
+        ollama_bin.write_text("#!/bin/sh\necho 'routed to ollama'\nexit 0\n")
+        ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
+
+        router = ProviderRouter(primary_provider="ollama")
+        result = router.call_llm("test prompt", provider="ollama")
+        assert result["success"] is True
+        assert result["content"] == "routed to ollama"
+
+    def test_call_llm_routes_to_cli(self, shim_bin_dir: Path) -> None:
+        """Test call_llm routing to cli providers."""
+        import stat
+        hermes_bin = shim_bin_dir / "hermes"
+        hermes_bin.write_text("#!/bin/sh\necho 'routed to cli'\nexit 0\n")
+        hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
+
+        router = ProviderRouter(primary_provider="openrouter")
+        # Ensure it has credentials so it doesn't fail early
+        router._credentials["openrouter"] = "key"
+        result = router.call_llm("test prompt", provider="openrouter")
+        assert result["success"] is True
+        assert result["content"] == "routed to cli"
+
+    def test_call_llm_fallback(self, shim_bin_dir: Path) -> None:
+        """Test call_llm fallback logic."""
+        import stat
+        # Setup failing primary (hermes CLI)
+        hermes_bin = shim_bin_dir / "hermes"
+        hermes_bin.write_text("#!/bin/sh\necho 'primary failed' >&2\nexit 1\n")
+        hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
+
+        # Setup passing fallback (ollama)
+        ollama_bin = shim_bin_dir / "ollama"
+        ollama_bin.write_text("#!/bin/sh\necho 'fallback succeeded'\nexit 0\n")
+        ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
+
+        router = ProviderRouter(primary_provider="openrouter", fallback_provider="ollama")
+        router._credentials["openrouter"] = "key"
+        router._credentials["ollama"] = "local"
+
+        result = router.call_llm("test prompt", provider="openrouter")
+        assert result["success"] is True
+        assert result["content"] == "fallback succeeded"
+        assert result["is_fallback"] is True
+
+    @pytest.mark.asyncio
+    async def test_call_llm_stream_cli(self, shim_bin_dir: Path) -> None:
+        """Test call_llm_stream using hermes CLI shim."""
+        import stat
+        hermes_bin = shim_bin_dir / "hermes"
+        hermes_bin.write_text("#!/bin/sh\necho 'chunk1'\nsleep 0.1\necho 'chunk2'\nexit 0\n")
+        hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
+
+        router = ProviderRouter(primary_provider="openrouter")
+        router._credentials["openrouter"] = "key"
+        chunks = []
+        async for chunk in router.call_llm_stream("test prompt", provider="openrouter"):
+            chunks.append(chunk)
+
+        full_text = "".join(chunks)
+        assert "chunk1" in full_text
+        assert "chunk2" in full_text

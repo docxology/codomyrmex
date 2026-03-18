@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -420,7 +420,7 @@ Before completing significant changes:
 
 ## Version History
 
-- **v1.2.2** (March 2026) — Codebase Health, API Freeze, Config Validation, Typed Events, Performance Profiling
+- **v1.2.3** (March 2026) — Codebase Health, API Freeze, Config Validation, Typed Events, Performance Profiling
 - **v1.1.8** (March 2026) — Persistent memory, Obsidian sync, multi-hop Graph RAG, active inference
 - **v1.1.7** (March 2026) — Repository-wide documentation audit and consistency sweep
 - **v1.1.6** (March 2026) — Hermes dual-backend, Gemini package migration

@@ -1,6 +1,6 @@
 # Scrape Module API Specification
 
-**Version**: v1.2.2 | **Status**: Stable | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Stable | **Last Updated**: March 2026
 
 ## 1. Overview
 The `scrape` module provides capabilities for extracting data from web sources. It features a modular architecture supporting different scraping backends (e.g., Firecrawl).

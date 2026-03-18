@@ -1,6 +1,6 @@
 # Bio-Inspired Design — Functional Specification
 
-**Section**: `docs/bio` | **Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
+**Section**: `docs/bio` | **Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## 1. Purpose & Scope
 

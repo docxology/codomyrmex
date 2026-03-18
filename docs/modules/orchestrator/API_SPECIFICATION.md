@@ -1,6 +1,6 @@
 # Orchestrator Module API Specification
 
-**Version**: v1.2.2 | **Status**: Stable | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Stable | **Last Updated**: March 2026
 
 ## 1. Overview
 The `orchestrator` module provides a flexible way to discover, configure, and execute Python scripts in the project. It abstracts script execution into a managed "orchestration" layer.

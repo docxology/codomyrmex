@@ -80,7 +80,7 @@ hermes chat -q "Hello! What tools do you have available?"
 
 After setup, `~/.hermes/` contains:
 
-```
+```text
 ~/.hermes/
 ├── config.yaml       # Settings (model, terminal, TTS, compression, etc.)
 ├── .env              # API keys and secrets
@@ -110,7 +110,7 @@ After setup, `~/.hermes/` contains:
 
 ```yaml
 # Model (OpenRouter format: provider/model-name)
-model: nvidia/nemotron-3-super-120b-a12b:free
+model: nousresearch/hermes-3-llama-3.1-405b:free
 
 # Tool categories
 toolsets:
@@ -197,7 +197,7 @@ Or manual plist — see [launchd.md](launchd.md).
 
 ## Part 5: New Instance (Multi-Bot)
 
-To create a second bot with its own identity:
+To create a second bot with its own identity (e.g., `crescent-city`):
 
 ```bash
 # 1. Create instance directory
@@ -215,23 +215,24 @@ chmod 600 ~/hermes-${INSTANCE_NAME}/.hermes/.env
 
 # 3. Create config.yaml (customize personality)
 cat > ~/hermes-${INSTANCE_NAME}/.hermes/config.yaml << 'EOF'
-model: nvidia/nemotron-3-super-120b-a12b:free
+model: meta-llama/llama-3.3-70b-instruct:free
+fallback_models:
+  - "google/gemini-2.0-flash-exp:free"
+  - "microsoft/phi-4-reasoning:free"
+  - "openrouter/hunter-alpha"
 toolsets:
   - all
 agent:
   max_turns: 150
   reasoning_effort: medium
-  personality: custom_persona
+  personality: civic_technical_analyst
   personalities:
-    custom_persona: |
-      You are a specialized assistant for...
-compression:
-  enabled: true
-  threshold: 0.85
-  summary_model: google/gemini-3-flash-preview
+    civic_technical_analyst: "You are a technical expert with strong civic awareness and intelligence-analyst skills. Provide detailed, accurate technical information while considering societal implications and applying analytical rigor."
 terminal:
   backend: local
   timeout: 180
+compression:
+  enabled: true
 telegram:
   require_mention: true
   free_response_channels: ""

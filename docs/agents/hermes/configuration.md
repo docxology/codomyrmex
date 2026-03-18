@@ -12,7 +12,7 @@ Hermes configuration lives in `$HERMES_HOME/config.yaml`. This file controls mod
 # =============================================================================
 # Model / Provider
 # =============================================================================
-model: nvidia/nemotron-3-super-120b-a12b:free # OpenRouter model string
+model: nousresearch/hermes-3-llama-3.1-405b:free # OpenRouter model string
 
 # =============================================================================
 # Toolsets

@@ -36,7 +36,6 @@ from scripts.sair.generate_cheatsheet import (
 # ---------- utils -----------------------------------------------------------
 from scripts.sair.utils import (
     compute_hash,
-    ensure_dir,
     load_jsonl,
     save_jsonl,
     save_json,

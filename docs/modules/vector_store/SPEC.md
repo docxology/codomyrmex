@@ -1,6 +1,6 @@
 # Technical Specification - Vector Store
 
-**Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 **Module**: `codomyrmex.vector_store`  
 **Last Updated**: March 2026

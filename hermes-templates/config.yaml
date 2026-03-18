@@ -1,5 +1,4 @@
-model: openrouter/hunter-alpha
-provider: openrouter
+model: nvidia/nemotron-3-nano-30b-a3b:free
 toolsets:
 - all
 agent:
@@ -8,39 +7,128 @@ agent:
   reasoning_effort: high
   personality: technical
   personalities:
-    technical: "You are a superintelligent technical assistant. Every response maximizes\
-      \ signal per token.\nVerify, never assume. Execute with validation. Diagnose\
-      \ root causes. \nLead with the answer. Eliminate filler. Be precise.\n"
-    concise: 'You are a concise assistant. Keep responses brief and to the point.
-
-      One sentence when sufficient. Bullet points when multiple items.
-
-      No preamble, no filler, no hedging.
-
-      '
-    researcher: 'You are a research assistant with deep analytical capabilities.
-
-      Synthesize information from multiple sources. Provide structured findings.
-
-      Always cite sources. Flag uncertainty. Distinguish facts from inference.
-
-      '
+    technical: "You are a superintelligent technical assistant. Every response maximizes signal per token. \nVerify, never assume. Execute with validation. Diagnose root causes. \nLead with the answer. Eliminate filler. Be precise."
+    concise: "You are a concise assistant. Keep responses brief and to the point.\nOne sentence when sufficient. Bullet points when multiple items.\nNo preamble, no filler, no hedging."
+    researcher: "You are a research assistant with deep analytical capabilities.\nSynthesize information from multiple sources. Provide structured findings.\nAlways cite sources. Flag uncertainty. Distinguish facts from inference."
 terminal:
   backend: local
   cwd: .
   timeout: 300
+  docker_image: nikolaik/python-nodejs:python3.11-nodejs20
+  docker_forward_env: []
+  singularity_image: docker://nikolaik/python-nodejs:python3.11-nodejs20
+  modal_image: nikolaik/python-nodejs:python3.11-nodejs20
+  daytona_image: nikolaik/python-nodejs:python3.11-nodejs20
+  container_cpu: 1
+  container_memory: 5120
+  container_disk: 51200
+  container_persistent: true
+  docker_volumes: []
+  docker_mount_cwd_to_workspace: false
+  persistent_shell: true
+browser:
+  inactivity_timeout: 120
+  record_sessions: false
+checkpoints:
+  enabled: true
+  max_snapshots: 50
 compression:
   enabled: true
   threshold: 0.9
   summary_model: google/gemini-3-flash-preview
   summary_provider: auto
+  summary_base_url: null
+smart_model_routing:
+  enabled: false
+  max_simple_chars: 160
+  max_simple_words: 28
+  cheap_model: {}
+auxiliary:
+  vision:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+  web_extract:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+  compression:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+  session_search:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+  skills_hub:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+  approval:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+  mcp:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+  flush_memories:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
 display:
   compact: false
   personality: technical
+  resume_display: full
+  bell_on_complete: false
+  show_reasoning: true
+  streaming: false
+  show_cost: false
   skin: default
   tool_progress: all
   background_process_notifications: all
-  show_reasoning: true
+privacy:
+  redact_pii: false
+tts:
+  provider: edge
+  edge:
+    voice: en-US-AriaNeural
+  elevenlabs:
+    voice_id: pNInz6obpgDQGcFmaJgB
+    model_id: eleven_multilingual_v2
+  openai:
+    model: gpt-4o-mini-tts
+    voice: alloy
+  neutts:
+    ref_audio: ''
+    ref_text: ''
+    model: neuphonic/neutts-air-q4-gguf
+    device: cpu
+stt:
+  enabled: true
+  provider: local
+  local:
+    model: base
+  openai:
+    model: whisper-1
+voice:
+  record_key: ctrl+b
+  max_recording_seconds: 120
+  auto_tts: false
+  silence_threshold: 200
+  silence_duration: 3.0
+human_delay:
+  mode: 'off'
+  min_ms: 800
+  max_ms: 2500
 memory:
   memory_enabled: true
   user_profile_enabled: true
@@ -48,8 +136,77 @@ memory:
   user_char_limit: 1375
   nudge_interval: 5
   flush_min_turns: 6
+delegation:
+  model: ''
+  provider: ''
+  base_url: ''
+  api_key: ''
+prefill_messages_file: ''
+honcho: {}
+timezone: America/Los_Angeles
+discord:
+  require_mention: true
+  free_response_channels: ''
+  auto_thread: true
+whatsapp: {}
+approvals:
+  mode: manual
+command_allowlist: []
+quick_commands: {}
+personalities: {}
+security:
+  redact_secrets: true
+  tirith_enabled: true
+  tirith_path: tirith
+  tirith_timeout: 5
+  tirith_fail_open: true
+  website_blocklist:
+    enabled: false
+    domains: []
+    shared_files: []
+_config_version: 10
+provider: openrouter
+fallback_models:
+- google/gemini-2.0-flash-exp:free
+- nvidia/nemotron-3-super-120b-a12b:free
+- microsoft/phi-4-reasoning:free
+telegram:
+  require_mention: true
+  free_response_channels: ''
 session_reset:
   mode: both
   idle_minutes: 1440
   at_hour: 3
-timezone: America/Los_Angeles
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes login) — OpenAI Codex
+#   nous         (OAuth — hermes login) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#
+# For custom OpenAI-compatible endpoints, add base_url and api_key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4
+#
+# ── Smart Model Routing ────────────────────────────────────────────────
+# Optional cheap-vs-strong routing for simple turns.
+# Keeps the primary model for complex work, but can route short/simple
+# messages to a cheaper model across providers.
+#
+# smart_model_routing:
+#   enabled: true
+#   max_simple_chars: 160
+#   max_simple_words: 28
+#   cheap_model:
+#     provider: openrouter
+#     model: google/gemini-2.5-flash

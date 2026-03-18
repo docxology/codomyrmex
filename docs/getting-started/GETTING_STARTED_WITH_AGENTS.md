@@ -1,6 +1,6 @@
 # Getting Started with Agents
 
-**Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **130 Python modules**, **~474 MCP tools**, **81 PAI skills**, and **15 Antigravity workflows**.
 

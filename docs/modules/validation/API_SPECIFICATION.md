@@ -1,6 +1,6 @@
 # Validation Module API Specification
 
-**Version**: v1.2.2 | **Status**: Stable | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Stable | **Last Updated**: March 2026
 
 ## 1. Overview
 The `validation` module provides a unified framework for validating data structures against schemas, supporting JSON Schema and Pydantic.

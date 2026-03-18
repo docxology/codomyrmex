@@ -123,7 +123,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 └── claude_desktop_config.json      # MCP server registrations
 
 codomyrmex/                         # SHARED (this repo, committed)
-├── src/codomyrmex/                 # 128 Python modules
+├── src/codomyrmex/                 # 129 Python modules
 ├── scripts/model_context_protocol/ # MCP server runner
 ├── PAI.md                          # THIS FILE (bridge doc)
 └── docs/                           # Documentation

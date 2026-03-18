@@ -1,6 +1,6 @@
 # Finance — Specification
 
-**Version**: v1.2.2 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 

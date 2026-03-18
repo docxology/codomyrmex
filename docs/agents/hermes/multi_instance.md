@@ -8,7 +8,7 @@ You can run multiple Hermes bots on the same machine, each with its own identity
 
 ## Architecture
 
-```
+```text
 Machine
 ├── ~/.hermes/                          (Instance 1: Primary)
 │   ├── .env                            BOT_TOKEN=1111...
@@ -22,9 +22,9 @@ Machine
 │   ├── state.db, sessions/, skills/
 │   └── gateway.pid
 │
-└── ~/hermes-research/.hermes/          (Instance 3: Research)
+└── ~/hermes-template-bot/.hermes/      (Instance 3: Template Bot)
     ├── .env                            BOT_TOKEN=3333...
-    ├── config.yaml                     personality: researcher
+    ├── config.yaml                     personality: template_architect
     ├── state.db, sessions/, skills/
     └── gateway.pid
 ```
@@ -53,7 +53,7 @@ chmod 600 ~/hermes-bot2/.hermes/.env
 
 ```bash
 cat > ~/hermes-bot2/.hermes/config.yaml << 'EOF'
-model: nvidia/nemotron-3-super-120b-a12b:free
+model: nousresearch/hermes-3-llama-3.1-405b:free
 toolsets:
   - all
 agent:
@@ -94,7 +94,7 @@ See [launchd.md](launchd.md) for the complete plist template.
 
 Each Telegram bot token can only have **one** `getUpdates` poller. If two gateway processes use the same token, both get `409 Conflict` errors and neither receives messages reliably.
 
-```
+```text
 ✅ Instance 1: token_AAA → @bot_one
 ✅ Instance 2: token_BBB → @bot_two
 
@@ -127,7 +127,9 @@ ps aux | grep "hermes.*gateway" | grep -v grep
 launchctl list | grep hermes
 
 # Tail all logs simultaneously
-tail -f ~/.hermes/logs/gateway.log ~/hermes-bot2/.hermes/logs/gateway.log
+tail -f ~/.hermes/logs/gateway.log \
+        ~/hermes-crescent-city/.hermes/logs/gateway.log \
+        ~/hermes-template-bot/.hermes/logs/gateway.log
 ```
 
 ## Troubleshooting

@@ -336,6 +336,63 @@ SKILL_DESCRIPTIONS: dict[str, str] = {
         "'what can codomyrmex do', 'codomyrmex capabilities', or uses any 'codomyrmex' "
         "automation tools."
     ),
+    "CodomyrmexGemini": (
+        "Gemini LLM operations and executions via Codomyrmex. "
+        "USE WHEN user wants gemini operations, wants to run a prompt through Gemini, "
+        "or uses any codomyrmex gemini tools."
+    ),
+    "CodomyrmexO1": (
+        "O1 LLM operations and reasoning traces via Codomyrmex. "
+        "USE WHEN user wants o1 operations, advanced mathematical or coding reasoning, "
+        "or uses any codomyrmex o1 tools."
+    ),
+    "CodomyrmexOpenclaw": (
+        "Openclaw orchestration and agentic tool operations via Codomyrmex. "
+        "USE WHEN user wants openclaw operations, or uses any codomyrmex openclaw tools."
+    ),
+    "CodomyrmexDeepseek": (
+        "Deepseek programmatic coding and reasoning operations via Codomyrmex. "
+        "USE WHEN user wants deepseek operations, deepseek coder executions, "
+        "or uses any codomyrmex deepseek tools."
+    ),
+    "CodomyrmexCli": (
+        "Direct Command Line Interface (CLI) execution environment via Codomyrmex. "
+        "USE WHEN user wants cli operations, terminal execution, shell commands, "
+        "or uses any codomyrmex cli tools."
+    ),
+    "CodomyrmexMistralVibe": (
+        "Mistral Vibe specific model operations and processing via Codomyrmex. "
+        "USE WHEN user wants mistralvibe operations, Mistral large parameter execution, "
+        "or uses any codomyrmex mistralvibe tools."
+    ),
+    "CodomyrmexEveryCode": (
+        "EveryCode language-agnostic code transformation and translation via Codomyrmex. "
+        "USE WHEN user wants everycode operations, code interpretation, "
+        "or uses any codomyrmex everycode tools."
+    ),
+    "CodomyrmexPi": (
+        "Inflection Pi style conversational and pedagogical assistance via Codomyrmex. "
+        "USE WHEN user wants pi operations, or uses any codomyrmex pi tools."
+    ),
+    "CodomyrmexPaperclip": (
+        "Paperclip resource extraction and unbounded capability agent via Codomyrmex. "
+        "USE WHEN user wants paperclip operations, objective maximization loops, "
+        "or uses any codomyrmex paperclip tools."
+    ),
+    "CodomyrmexOpenfang": (
+        "Openfang specialized LLM capability interface via Codomyrmex. "
+        "USE WHEN user wants openfang operations, or uses any codomyrmex openfang tools."
+    ),
+    "CodomyrmexHermes": (
+        "Hermes model family integration (NousResearch) via Codomyrmex. "
+        "USE WHEN user wants hermes operations, tool-calling optimizations, "
+        "fine-tuned agentic models, or uses any codomyrmex hermes tools."
+    ),
+    "CodomyrmexCodex": (
+        "Codex execution for autocompletion and rapid drafting via Codomyrmex. "
+        "USE WHEN user wants codex operations, code completion tasks, "
+        "or uses any codomyrmex codex tools."
+    ),
 }
 
 # ---------------------------------------------------------------------------

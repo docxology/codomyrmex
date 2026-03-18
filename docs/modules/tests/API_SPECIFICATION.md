@@ -1,6 +1,6 @@
 # Tests Module API Specification
 
-**Version**: v1.2.2 | **Status**: Stable | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Stable | **Last Updated**: March 2026
 
 ## 1. Overview
 The `tests` module provides shared testing infrastructure, fixtures, and utility functions used across the test suite. This document defines the interface for test helpers and common fixtures.

@@ -598,7 +598,7 @@ Once installed successfully:
 
 ---
 
-**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: March 2026* | *Maintained by: Codomyrmex Documentation Team* | *Version: v1.2.2*
+**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: March 2026* | *Maintained by: Codomyrmex Documentation Team* | *Version: v1.2.3*
 
 ## Navigation Links
 

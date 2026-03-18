@@ -1,6 +1,6 @@
 # API_SPECIFICATION.md
 
-**Version**: v1.2.2 | **Status**: Draft | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Draft | **Last Updated**: March 2026
 
 ## Module: graph_rag
 

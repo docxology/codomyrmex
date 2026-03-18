@@ -49,9 +49,9 @@ The default Hermes gateway plist installed by `hermes setup`:
 </plist>
 ```
 
-## Additional Instance Plist Template
+## Additional Instance Plist Example
 
-For running a second (or third, etc.) Hermes bot on the same machine:
+For running additional Hermes bots (like `crescent-city` or `template-bot`) on the same machine, create a plist like this:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -60,7 +60,7 @@ For running a second (or third, etc.) Hermes bot on the same machine:
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>ai.hermes.gateway.YOUR-INSTANCE-NAME</string>
+    <string>ai.hermes.gateway.crescent-city</string>
 
     <key>ProgramArguments</key>
     <array>
@@ -76,7 +76,7 @@ For running a second (or third, etc.) Hermes bot on the same machine:
     <key>EnvironmentVariables</key>
     <dict>
         <key>HERMES_HOME</key>
-        <string>/Users/mini/hermes-YOUR-INSTANCE/.hermes</string>
+        <string>/Users/mini/hermes-crescent-city/.hermes</string>
     </dict>
 
     <key>WorkingDirectory</key>
@@ -92,19 +92,21 @@ For running a second (or third, etc.) Hermes bot on the same machine:
     </dict>
 
     <key>StandardOutPath</key>
-    <string>/Users/mini/hermes-YOUR-INSTANCE/.hermes/logs/gateway.log</string>
+    <string>/Users/mini/hermes-crescent-city/.hermes/logs/gateway.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/mini/hermes-YOUR-INSTANCE/.hermes/logs/gateway.error.log</string>
+    <string>/Users/mini/hermes-crescent-city/.hermes/logs/gateway.error.log</string>
 </dict>
 </plist>
 ```
+
+*(You would repeat this pattern for `template-bot` inside `ai.hermes.gateway.template-bot.plist` and `~/hermes-template-bot/.hermes`)*
 
 ## Key Differences for Additional Instances
 
 | Setting              | Primary                            | Additional Instance                               |
 | :------------------- | :--------------------------------- | :------------------------------------------------ |
-| **Label**            | `ai.hermes.gateway`                | `ai.hermes.gateway.instance-name`                 |
+| **Label**            | `ai.hermes.gateway`                | `ai.hermes.gateway.crescent-city`                 |
 | **HERMES_HOME**      | Not set (defaults to `~/.hermes/`) | Must be explicitly set via `EnvironmentVariables` |
 | **`--replace` flag** | Optional                           | **Recommended** — prevents stale PID deadlocks    |
 | **Log paths**        | `~/.hermes/logs/`                  | Instance-specific log directory                   |
@@ -113,10 +115,10 @@ For running a second (or third, etc.) Hermes bot on the same machine:
 
 ```bash
 # 1. Create the plist file
-vim ~/Library/LaunchAgents/ai.hermes.gateway.my-bot.plist
+vim ~/Library/LaunchAgents/ai.hermes.gateway.crescent-city.plist
 
 # 2. Load (register) the service
-launchctl load ~/Library/LaunchAgents/ai.hermes.gateway.my-bot.plist
+launchctl load ~/Library/LaunchAgents/ai.hermes.gateway.crescent-city.plist
 
 # 3. Verify it's registered
 launchctl list | grep hermes
@@ -126,17 +128,17 @@ launchctl list | grep hermes
 
 ```bash
 # Start the service
-launchctl start ai.hermes.gateway.my-bot
+launchctl start ai.hermes.gateway.crescent-city
 
 # Stop the service
-launchctl stop ai.hermes.gateway.my-bot
+launchctl stop ai.hermes.gateway.crescent-city
 
 # Unload (unregister) the service
-launchctl unload ~/Library/LaunchAgents/ai.hermes.gateway.my-bot.plist
+launchctl unload ~/Library/LaunchAgents/ai.hermes.gateway.crescent-city.plist
 
 # Reload after plist changes
-launchctl unload ~/Library/LaunchAgents/ai.hermes.gateway.my-bot.plist
-launchctl load ~/Library/LaunchAgents/ai.hermes.gateway.my-bot.plist
+launchctl unload ~/Library/LaunchAgents/ai.hermes.gateway.crescent-city.plist
+launchctl load ~/Library/LaunchAgents/ai.hermes.gateway.crescent-city.plist
 ```
 
 ## The `--replace` Flag

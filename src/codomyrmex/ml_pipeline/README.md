@@ -1,6 +1,6 @@
 # ml_pipeline
 
-**Version**: v1.2.2 | **Status**: Stub | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Stub | **Last Updated**: March 2026
 
 ## Overview
 

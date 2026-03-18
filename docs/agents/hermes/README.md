@@ -7,7 +7,7 @@
 
 ## Overview
 
-Hermes is an open-source, self-improving AI agent developed by [Nous Research](https://nousresearch.com). It features autonomous skill creation, cross-session memory recall, multi-platform messaging gateways (Telegram, WhatsApp, Discord, Slack), and flexible model routing through OpenRouter, Nous Portal, or direct providers.
+Hermes 3.0 is an open-source, self-improving AI agent developed by [Nous Research](https://nousresearch.com). It features autonomous skill creation, cross-session memory recall, multi-platform messaging gateways (Telegram, WhatsApp, Discord, Slack), and flexible model routing through OpenRouter, Nous Portal, or direct providers. Hermes 3.0 brings advanced reasoning, agentic autonomy, multi-turn interactions and 40+ built-in tools.
 
 This documentation suite captures architecture, operational patterns, troubleshooting, and first-hand deployment learnings from running Hermes in production at Codomyrmex.
 

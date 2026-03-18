@@ -1,6 +1,6 @@
 # External Skills & Slash Commands
 
-**Version**: v1.2.2 | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Last Updated**: March 2026
 
 > This document covers **external Claude Code skills** — markdown-prompt-based capabilities that extend Claude Code sessions. These are distinct from [Codomyrmex MCP tools](tools-reference.md) (Python modules exposed over the Model Context Protocol).
 
