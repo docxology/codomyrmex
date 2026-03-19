@@ -1,5 +1,5 @@
-import subprocess
 import os
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -9,12 +9,12 @@ import pytest
 
 def _run_gateway_process(home_dir: str, replace: bool) -> subprocess.Popen:
     """Helper to run the gateway in a subprocess to test PID behavior."""
-    script = f'''
+    script = f"""
 import sys
 from codomyrmex.agents.hermes.gateway.server import GatewayRunner
 runner = GatewayRunner(replace={replace}, home_dir="{home_dir}")
 runner.run()
-'''
+"""
     env = os.environ.copy()
     _root = str(Path(__file__).parent.parent.parent.parent.parent.resolve())
     if "PYTHONPATH" in env:

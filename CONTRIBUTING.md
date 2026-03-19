@@ -6,7 +6,7 @@ Thank you for your interest in contributing to Codomyrmex! This document provide
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.11+
 - [UV](https://github.com/astral-sh/uv) package manager
 - Git
 
@@ -64,8 +64,8 @@ uv run pytest
 
 ## Code Style
 
-- **Python**: We follow PEP 8 with Black formatting
-- **Linting**: Ruff for linting, Black for formatting
+- **Python**: We follow PEP 8 with Ruff formatting
+- **Linting**: Ruff for linting and formatting (replaces Black + flake8)
 - **Type hints**: Required for all public functions
 - **Docstrings**: Google-style docstrings for all modules, classes, and functions
 
@@ -80,7 +80,7 @@ uv run pre-commit install
 ## Testing
 
 - Write tests for all new features
-- Maintain test coverage above the project gate (≥31%, ratcheting upward)
+- Maintain test coverage above the project gate (≥40%, ratcheting upward)
 - Place unit tests in `src/codomyrmex/tests/unit/`
 - Place integration tests in `src/codomyrmex/tests/integration/`
 

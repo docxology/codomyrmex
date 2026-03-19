@@ -55,7 +55,7 @@ graph TB
         EVENTS["EventBus<br/>phase transitions"]
     end
 
-    subgraph MODULES["🐜 Codomyrmex (130 modules)"]
+    subgraph MODULES["🐜 Codomyrmex (129 modules)"]
         direction LR
         SKILLS_MOD["Skills<br/>81 installed"]
         MEMORY_MOD["Agentic Memory<br/>rules + obsidian"]
@@ -353,7 +353,7 @@ flowchart LR
 | **PAI Bridge** | `pai_bridge.py` | Discovery, validation — reads PAI's filesystem (read-only) |
 | **Trust Gateway** | `trust_gateway.py` | 3-tier security gating for tool execution |
 | **MCP Bridge** | `mcp_bridge.py` | JSON-RPC protocol for tool invocation |
-| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers 130 modules with `mcp_tools.py` |
+| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers 129 modules with `mcp_tools.py` |
 | **PAI Webhook** | `pai_webhook.py` | FastAPI router for bidirectional PAI ↔ Codomyrmex |
 | **PAI Client** | `pai_client.py` | HTTP client to push events to PAI |
 
@@ -422,7 +422,7 @@ sequenceDiagram
 
 ## 5. MCP Tool Integration
 
-Every module exposes functionality through `mcp_tools.py` files. **130 modules** provide **~474 dynamically-discovered tools** plus 20 static tools.
+Every module exposes functionality through `mcp_tools.py` files. **129 modules** provide **~474 dynamically-discovered tools** plus 20 static tools.
 
 ```mermaid
 pie title MCP Tool Distribution (~447 Total)
@@ -527,7 +527,7 @@ Skills are also accessible as **Claude Code plugins** via `~/.claude/skills/` an
 | Skill | Source | Version | Slash Commands |
 |-------|--------|---------|---------------|
 | **visual-explainer** | [nicobailon/visual-explainer](https://github.com/nicobailon/visual-explainer) | v0.4.4 | `/generate-web-diagram`, `/generate-visual-plan`, `/generate-slides`, `/diff-review`, `/plan-review`, `/project-recap`, `/fact-check` |
-| **Codomyrmex** | This repo | v1.1.9 | `/codomyrmexVerify`, `/codomyrmexTrust`, `/codomyrmexAnalyze`, `/codomyrmexSearch`, `/codomyrmexDocs`, `/codomyrmexStatus`, `/codomyrmexMemory` |
+| **Codomyrmex** | This repo | v1.2.3 | `/codomyrmexVerify`, `/codomyrmexTrust`, `/codomyrmexAnalyze`, `/codomyrmexSearch`, `/codomyrmexDocs`, `/codomyrmexStatus`, `/codomyrmexMemory` |
 
 ---
 

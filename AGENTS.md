@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 

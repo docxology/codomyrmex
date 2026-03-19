@@ -4,14 +4,15 @@ Hermes Codebase Observer (Sentinel)
 Uses Llama 3.2 to observe git history and surface recommendations.
 """
 
-import subprocess
-import datetime
-from pathlib import Path
-from codomyrmex.agents.hermes.hermes_client import HermesClient
-from codomyrmex.agents import AgentRequest
-
 import argparse
+import datetime
+import subprocess
 import time
+from pathlib import Path
+
+from codomyrmex.agents import AgentRequest
+from codomyrmex.agents.hermes.hermes_client import HermesClient
+
 
 class CodebaseObserver:
     """Perpetual codebase observer using Ollama for analysis."""

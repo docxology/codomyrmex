@@ -1,6 +1,6 @@
 # Codomyrmex Project Index
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 > [!TIP]
 > Master index for the Codomyrmex project. Use this as the entry point for navigating the entire repository.
@@ -11,8 +11,8 @@
 |:--------------|:------------|
 | Run the CLI | `codomyrmex --help` → [cli/](src/codomyrmex/cli/) |
 | Understand PAI integration | [PAI.md](PAI.md) — algorithm phase ↔ module mapping |
-| Browse all 130 modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
-| MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — ~474 tools across 141 modules |
+| Browse all 129 modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
+| MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — ~474 tools across 129 modules |
 | Check system health | `codomyrmex status` or `codomyrmex check` |
 | Run tests | `uv run pytest` |
 | Install dependencies | `uv sync` |
@@ -22,14 +22,14 @@
 
 | Metric | Value | Source |
 |:-------|:------|:-------|
-| Python modules | 127 (some require optional SDK deps) | [src/codomyrmex/](src/codomyrmex/) |
+| Python modules | 129 | [src/codomyrmex/](src/codomyrmex/) |
 | `@mcp_tool` decorators | 474 | `grep -r '@mcp_tool' src/` |
-| Auto-discovered modules | 127 (via `@mcp_tool` decorator) | [src/codomyrmex/agents/pai/mcp_bridge.py](src/codomyrmex/agents/pai/mcp_bridge.py) |
+| Auto-discovered modules | 129 (via `@mcp_tool` decorator) | [src/codomyrmex/agents/pai/mcp_bridge.py](src/codomyrmex/agents/pai/mcp_bridge.py) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | Tests collected | 21,000+ | `uv run pytest --co -q` |
-| RASP doc coverage | 100% (127/127) | [AGENTS.md](AGENTS.md) |
-| Version | v1.1.0 | [pyproject.toml](pyproject.toml) |
+| RASP doc coverage | 100% (129/129) | [AGENTS.md](AGENTS.md) |
+| Version | v1.2.3 | [pyproject.toml](pyproject.toml) |
 
 ## Module Layer Browser
 
@@ -64,7 +64,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 | Directory | Description |
 | :--- | :--- |
 | [src/](src/INDEX.md) | Source root — namespace package |
-| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **130 modules** across 4 layers |
+| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **129 modules** across 4 layers |
 
 ### Infrastructure
 
@@ -97,7 +97,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 ```
 INDEX.md                           ← You are here
 ├── src/INDEX.md                   ← Source directory index
-│   └── src/codomyrmex/INDEX.md    ← 128-module catalog by layer
+│   └── src/codomyrmex/INDEX.md    ← 129-module catalog by layer
 └── docs/                          ← Documentation site
 ```
 

@@ -4,12 +4,11 @@ This module defines the core data structures used for video information,
 processing results, and extraction results.
 """
 
+import importlib.util
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
-import importlib.util
 
 PIL_AVAILABLE = importlib.util.find_spec("PIL") is not None
 

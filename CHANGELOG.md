@@ -6,63 +6,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.3] - 2026-03-16 — "Coherence Release"
+## [Unreleased]
 
-Repo-wide structural coherence audit and reconciliation.
-
-### Fixed
-
-- **Version sync**: Reconciled version mismatch — `pyproject.toml` (1.2.2), `__init__.py` (1.1.9), `README.md` (1.1.9), `SPEC.md` (1.1.9) → all aligned to **1.2.3**
-- **Module registration**: 39 modules existed on disk but were missing from `__init__.py` `_submodules` and `__all__` — now all 129 registered and lazy-importable
-- **Coverage config**: Reconciled contradictory `fail_under` values (75 in `[tool.coverage.report]`, 40 in pytest addopts, 33% in README, 35% in AGENTS.md) → unified to **40%**
-- **Python classifier**: Removed misleading `Python :: 3.10` classifier (project requires `>=3.11`)
-- **Spurious files**: Removed git-tracked junk files at repo root (`Any`, `dict[str,`) created by buggy type-annotation script
-- **Sub-level versions**: Updated `src/README.md` (v0.1.0 → v1.2.3) and `src/codomyrmex/AGENTS.md` (v0.1.0 → v1.2.3)
-
-### Metrics
-
-| Metric | v1.2.3 | v1.2.3 |
-|--------|--------|--------|
-| **Registered modules** | 90 | **129** (39 added) |
-| **Version files synced** | 1 | **7** |
-| **Coverage gate** | 75/40/33% (inconsistent) | **40%** (unified) |
-| **Spurious root files** | 3 | **0** |
+*(No unreleased changes yet.)*
 
 ---
 
-## [Unreleased]
+## [1.2.7] - 2026-03-19 — "Multi-Agent Swarm Orchestration"
 
-### Added — v1.3.0 (Graph Link Inference)
+> **Sprint 34.** First-class swarm topology primitives, dynamic capability routing, and crash-durable P2P agent mailboxes over stdlib `concurrent.futures`.
 
-- **`hermes_build_memory_graph`** MCP tool: Scans all Hermes sessions for `[[WikiLink]]`
-  references and returns a directed concept graph `{nodes, edges, weight}`.
+### Added
 
-### Added — v1.4.0 (Autonomous Knowledge Codification)
+- **`SwarmTopology`** (`orchestrator/swarm_topology.py`): Fan-Out, Fan-In, Pipeline, and Broadcast topology primitives. No new runtime deps.
+- **`AgentOrchestrator.capability_profile`** + **`filter_tools`** + **`spawn_agent`**: Dynamic tool routing by declared capability roles.
+- **`hermes_spawn_agent`** MCP tool: Dispatch a scoped task to a capability-matched agent; uses real `HermesClient` when the `hermes` binary is available, stubbed delegate for testing.
+- **`orchestrator_run_dag`** MCP tool: Unified swarm DAG dispatcher.
+- **`IntegrationBus.send_to_agent / receive / drain_inbox`**: P2P agent mailbox with FIFO semantics, timeout polling, and event emission.
+- **`IntegrationBus(event_store=EventStore())`** + **`replay_from_store(agent_id)`**: Crash-durable mailboxes backed by append-only `EventStore`.
+- **`events_send_to_agent`** / **`events_agent_inbox`** MCP tools: Expose P2P agent messaging over MCP.
 
-- **`KnowledgeMemory.store(title, body, tags, source_session_id)`**: Structured KI
-  persistence backed by real `SQLiteStore`.
-- **`KnowledgeMemory.recall(query, k)`**: Token-overlap ranked semantic recall filtered
-  to `SEMANTIC` memory type.
-- **`KnowledgeMemory.merge_duplicates(threshold)`**: Fold near-duplicate KIs into their
-  older counterpart as dated `## Update` sections.
-- **`hermes_extract_ki`** MCP tool: Crystallises assistant turns from a Hermes session
-  into a persisted `KnowledgeMemory` entry.
+### Tests
+
+- 30 new zero-mock tests: `test_agent_orchestrator_extended.py` (18), `test_integration_bus_p2p.py` (12).
+
+### Documentation
+
+- `orchestrator/AGENTS.md`: SwarmTopology, DAG tool, capability routing.
+- `events/AGENTS.md`: P2P mailbox API, EventStore durability, replay semantics.
+
+---
+
+## [1.2.6] - 2026-03-19 — "Autonomous Knowledge Codification"
+
+> **Sprint 34.** Self-tending knowledge base: TF-IDF indexing, Ollama embedding re-ranking, structured KI persistence, and session-close lifecycle hooks.
+
+### Added
+
+- **`KnowledgeItemIndex`** (`agentic_memory/ki_index.py`): Dependency-free incremental TF-IDF index. `add / remove / search / snippet` API with per-doc IDF weighting. Exported from `codomyrmex.agentic_memory`.
+- **`KnowledgeMemory.store(title, body, tags, source_session_id)`**: Structured KI persistence backed by real `SQLiteStore`.
+- **`KnowledgeMemory.recall(query, k, use_ollama, ollama_model)`**: Token-overlap ranked recall with optional Ollama `nomic-embed-text` re-ranking (70% cosine + 30% token-overlap, 2 s timeout, silent fallback).
+- **`KnowledgeMemory.merge_duplicates(threshold)`**: Fold near-duplicate KIs into their older counterpart as dated `## Update` sections.
+- **`hermes_extract_ki`** MCP tool: Crystallise assistant turns from a Hermes session into a persisted `KnowledgeMemory` entry.
 - **`hermes_search_knowledge_items`** MCP tool: Ranked KI recall by topic.
-- **`hermes_deduplicate_ki`** MCP tool: Cleans the knowledge base by merging near-duplicate
-  items.
+- **`hermes_deduplicate_ki`** MCP tool: Merge near-duplicate items in the knowledge base.
+- **`HermesSession.on_close`** callback + **`HermesSession.close()`**: Fires once (exception-safe) on session close to enable KI extraction.
 
-### Added — v1.5.0 (Multi-Agent Swarm Orchestration)
+### Tests
 
-- **`SwarmTopology`** (`orchestrator/swarm_topology.py`): First-class Fan-Out, Fan-In,
-  Pipeline, and Broadcast primitives over stdlib `concurrent.futures`.  No new deps.
-- **`AgentOrchestrator.capability_profile`** + **`filter_tools`** + **`spawn_agent`**:
-  Dynamic tool routing by declared capability roles.
-- **`hermes_spawn_agent`** MCP tool: Dispatch a scoped task to a capability-matched agent.
-- **`orchestrator_run_dag`** MCP tool: Unified swarm topology dispatcher.
-- **`IntegrationBus.send_to_agent / receive / drain_inbox`**: P2P agent mailbox with
-  FIFO semantics, timeout polling, and event emission.
-- **`events_send_to_agent`** / **`events_agent_inbox`** MCP tools: Expose P2P agent
-  messaging over MCP.
+- 34 new zero-mock tests: `test_ki_index.py` (19), `test_knowledge_memory.py` (9), `test_hermes_graph_ki_tools.py` (8), `test_hermes_session_close.py` (8).
+
+### Documentation
+
+- `agentic_memory/AGENTS.md`: `KnowledgeItemIndex`, Ollama fallback re-ranking.
+- `gateway.md` (Hermes): KI lifecycle hook, deduplication workflow.
+
+---
+
+## [1.2.5] - 2026-03-19 — "Advanced Context Archival & Search"
+
+> **Sprint 34.** WikiLink-based memory graph inference and size-based session GC archival.
+
+### Added
+
+- **`hermes_build_memory_graph`** MCP tool: Scans all Hermes sessions for `[[WikiLink]]` references → directed concept graph `{nodes, edges, weight}`.
+- **`hermes_archive_sessions(max_size_mb, days_old, dry_run)`** MCP tool: Size-based GC pruning sessions to `.json.gz` archives; `dry_run` previews candidates without mutation.
+
+### Documentation
+
+- `gateway.md`: Sprint 34 section — memory graph, size-based GC archival.
 
 ---
 
@@ -75,19 +87,17 @@ Unified OAuth2 env var pattern across all Google integrations. PAI can now send 
 - **email/gmail**: `GmailProvider.from_env()` — OAuth2 env var constructor (`GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`) with ADC fallback
 - **email/mcp_tools**: 4 Gmail MCP tools — `gmail_send_message`, `gmail_list_messages`, `gmail_get_message`, `gmail_create_draft`; PAI can now send Gmail directly via <FristonBlanket@gmail.com>
 - **calendar_integration/gcal**: `GoogleCalendar.from_env()` — same unified OAuth2 env var pattern as `GmailProvider`
-- **tests/integration/email**: 11-test integration suite (9 skip without live creds); covers send/list/get/retrieve and MCP tool layer
+- **tests/integration/email**: 11-test integration suite (9 skip without live creds); covers send/list/get/retrieve and MCP tool layer end-to-end
 
 ### Changed
 
 - **calendar_integration/mcp_tools**: `_get_provider()` now prefers `GOOGLE_REFRESH_TOKEN` env vars (token-file path is legacy fallback)
-- **TODO.md**: Versioned forward roadmap aligned to actual codebase (`v1.5.0→v1.2.4`, `Sprint 33→34`, `fail_under 75→40`). Re-labelled speculative milestones to `v1.3.0/1.4.0/1.5.0/2.0.0+`. Added gap analysis grounded in module scan.
 
 ### Fixed
 
 - `calendar_integration/README.md`: Wrong default attendee email corrected (`danielarifriedman@gmail.com` → `FristonBlanket@gmail.com`)
 - `email/API_SPECIFICATION.md`: Wrong env var corrected (`GOOGLE_CREDENTIALS` → `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`)
 - `email/PAI.md`: Now documents all 12 MCP tools (8 AgentMail + 4 Gmail)
-- `TODO.md reference section`: `fail_under=75` corrected to `fail_under=40` (matches `pyproject.toml`)
 
 ### Metrics
 
@@ -96,6 +106,30 @@ Unified OAuth2 env var pattern across all Google integrations. PAI can now send 
 | Gmail MCP tools | 0 | **4** |
 | Google auth pattern | per-provider ad hoc | **unified `from_env()` OAuth2** |
 | Email integration tests | 0 | **11** (9 skip without live creds) |
+
+
+---
+
+## [1.2.3] - 2026-03-16 — "Coherence Release"
+
+Repo-wide structural coherence audit and reconciliation.
+
+### Fixed
+
+- **Version sync**: Reconciled version mismatch — `pyproject.toml` (1.2.2), `__init__.py` (1.1.9), `README.md` (1.1.9), `SPEC.md` (1.1.9) → all aligned to **1.2.3**
+- **Module registration**: 39 modules existed on disk but were missing from `__init__.py` `_submodules` and `__all__` — now all 129 registered and lazy-importable
+- **Coverage config**: Reconciled contradictory `fail_under` values (75/40/33%) → unified to **40%**
+- **Python classifier**: Removed misleading `Python :: 3.10` classifier (project requires `>=3.11`)
+- **Spurious files**: Removed git-tracked junk files at repo root created by buggy type-annotation script
+- **Sub-level versions**: Updated `src/README.md` (v0.1.0 → v1.2.3) and `src/codomyrmex/AGENTS.md` (v0.1.0 → v1.2.3)
+
+### Metrics
+
+| Metric | Before v1.2.3 | v1.2.3 |
+|--------|--------|--------|
+| **Registered modules** | 90 | **129** (39 added) |
+| **Version files synced** | 1 | **7** |
+| **Coverage gate** | inconsistent | **40%** (unified) |
 
 ---
 

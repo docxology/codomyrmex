@@ -20,13 +20,12 @@ import pytest
 
 from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
 
 
-@pytest.fixture()
+@pytest.fixture
 def populated_db(tmp_path):
     """A temp-file SQLiteSessionStore with two known sessions."""
     db = tmp_path / "test_mcptools.db"
@@ -40,10 +39,10 @@ def populated_db(tmp_path):
         s2.add_message("user", "hello beta")
         store.save(s2)
 
-    yield str(db), s1.session_id, s2.session_id
+    return str(db), s1.session_id, s2.session_id
 
 
-@pytest.fixture()
+@pytest.fixture
 def client_with_db(populated_db):
     """A HermesClient pointing at the pre-populated DB."""
     db_path, sid1, sid2 = populated_db

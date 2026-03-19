@@ -1,7 +1,12 @@
 import time
+from unittest.mock import (
+    patch,
+)
+
 import pytest
-from unittest.mock import patch
+
 from codomyrmex.agents.hermes._provider_router import ProviderRouter
+
 
 @pytest.fixture
 def mock_router():

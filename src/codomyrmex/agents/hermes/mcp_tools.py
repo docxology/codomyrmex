@@ -1826,12 +1826,28 @@ def hermes_spawn_agent(
         profile = capability_profile or {role: [role]}
         orch = AgentOrchestrator(capability_profile=profile)
 
-        # Register a simple Hermes client stub as the role agent
-        # In a full deployment this would be a real HermesClient instance
-        def _hermes_stub(t: str, **_kw: Any) -> dict[str, Any]:
-            return {"task": t, "agent": "hermes", "note": "Hermes agent delegated."}
+        # Wire a real HermesClient agent behind the requested role.
+        # Falls back to a thin delegate when the hermes binary is unavailable
+        # (e.g. test environments) so the MCP tool always returns a usable result.
+        try:
+            client = _get_client(backend="auto")
 
-        orch.register_agent(role, _hermes_stub)
+            def _hermes_agent(t: str, **_kw: Any) -> dict[str, Any]:
+                """Real HermesClient delegate — runs a one-shot prompt."""
+                result = client.execute(t)
+                return {
+                    "task": t,
+                    "agent": "hermes",
+                    "backend": getattr(client, "_backend", "auto"),
+                    "result": result if isinstance(result, str) else str(result),
+                }
+
+        except Exception:
+            # HermesClient unavailable (hermes binary / Ollama not installed)
+            def _hermes_agent(t: str, **_kw: Any) -> dict[str, Any]:  # type: ignore[misc]
+                return {"task": t, "agent": "hermes", "note": "Hermes agent delegated (stub)."}
+
+        orch.register_agent(role, _hermes_agent)
 
         return orch.spawn_agent(role, task)
     except Exception as exc:

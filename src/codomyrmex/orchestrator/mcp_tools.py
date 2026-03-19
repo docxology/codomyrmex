@@ -137,7 +137,7 @@ def orchestrator_run_dag(
                     return getattr(mod, parts[1])
             if "fn_expr" in task_dict:
                 expr = task_dict["fn_expr"]
-                return lambda *_a, **_kw: eval(expr)  # noqa: PGH001, S307
+                return lambda *_a, **_kw: eval(expr)
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 

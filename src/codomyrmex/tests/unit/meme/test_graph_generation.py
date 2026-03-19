@@ -14,7 +14,6 @@ import pytest
 from codomyrmex.meme.rhizome.models import NetworkTopology
 from codomyrmex.meme.rhizome.network import build_graph, calculate_centrality
 
-
 # ---------------------------------------------------------------------------
 # Helper utilities
 # ---------------------------------------------------------------------------

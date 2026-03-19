@@ -7,7 +7,9 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import (
+    patch,
+)
 
 import pytest
 
@@ -21,7 +23,7 @@ from codomyrmex.agentic_memory.cognilayer_bridge import (
 from codomyrmex.agentic_memory.models import MemoryImportance
 
 
-@pytest.fixture()
+@pytest.fixture
 def tmp_db(tmp_path: Path) -> Path:
     """Create a temporary SQLite database with a memories table."""
     db_path = tmp_path / "memory.db"

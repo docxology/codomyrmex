@@ -28,70 +28,77 @@ def _with_default_attendee(attendees: list[str] | None) -> list[str]:
 
 
 def _get_provider() -> Any:
-    """Initialize the GoogleCalendar provider from PAI OAuth token and env vars.
+    """Initialize the GoogleCalendar provider, preferring env vars over token file.
+
+    Authentication priority (v1.2.4):
+        1. **Env vars** — ``GOOGLE_REFRESH_TOKEN`` + ``GOOGLE_CLIENT_ID`` +
+           ``GOOGLE_CLIENT_SECRET`` (same unified OAuth2 pattern as GmailProvider).
+        2. **Token file** — ``~/.codomyrmex/gcal_token.json`` (legacy PAI dashboard
+           auth). Still supported as a backwards-compatible fallback.
+        3. **ADC** — Application Default Credentials via ``gcloud auth``.
 
     Returns:
         A configured ``GoogleCalendar`` instance ready for API calls.
 
     Raises:
-        RuntimeError: Under four conditions —
-            1. **Missing dependencies** — Google Calendar packages not installed.
-               Fix: ``uv sync --extra calendar``.
-            2. **No token file** — ``~/.codomyrmex/gcal_token.json`` does not
-               exist.  Fix: authenticate via the PAI dashboard first.
-            3. **Malformed token** — The token file exists but cannot be parsed
-               as JSON or is missing required fields (``access_token``/
-               ``refresh_token``).
-            4. **Missing env vars** — ``GOOGLE_CLIENT_ID`` or
-               ``GOOGLE_CLIENT_SECRET`` are not set.  Load them from a ``.env``
-               file or export them in the shell before invoking MCP tools.
+        RuntimeError: If dependencies are missing or no valid credentials are found.
     """
     try:
-        from google.oauth2.credentials import Credentials
-
-        from codomyrmex.calendar_integration.gcal.provider import GoogleCalendar
+        from codomyrmex.calendar_integration.gcal.provider import (
+            GCAL_AVAILABLE,
+            GoogleCalendar,
+        )
     except ImportError:
         raise RuntimeError(
             "Google Calendar dependencies not installed. Run `uv sync --extra calendar`"
         ) from None
 
-    token_path = Path.home() / ".codomyrmex" / "gcal_token.json"
-    if not token_path.exists():
+    if not GCAL_AVAILABLE:
         raise RuntimeError(
-            "Google Calendar not authenticated. Please connect via PAI dashboard."
+            "Google Calendar dependencies not installed. Run `uv sync --extra calendar`"
         )
 
-    try:
-        with open(token_path) as f:
-            token_data = json.load(f)
-    except Exception as e:
-        raise RuntimeError(f"Failed to read calendar token: {e}") from e
-
-    try:
-        from dotenv import load_dotenv
-
-        load_dotenv()
-    except ImportError as e:
-        logger.debug("python-dotenv not installed, skipping .env loading: %s", e)
-
+    # Priority 1: unified env var OAuth2 pattern (GOOGLE_REFRESH_TOKEN + CLIENT creds)
+    refresh_token = os.environ.get("GOOGLE_REFRESH_TOKEN")
     client_id = os.environ.get("GOOGLE_CLIENT_ID")
     client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
 
-    if not client_id or not client_secret:
-        raise RuntimeError(
-            "GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variables are missing."
+    if refresh_token and client_id and client_secret:
+        logger.debug("calendar: authenticating via GOOGLE_REFRESH_TOKEN env var")
+        return GoogleCalendar.from_env()
+
+    # Priority 2: legacy token-file path (PAI dashboard auth)
+    token_path = Path.home() / ".codomyrmex" / "gcal_token.json"
+    if token_path.exists():
+        logger.debug("calendar: authenticating via token file %s", token_path)
+        try:
+            with open(token_path) as f:
+                token_data = json.load(f)
+        except Exception as e:
+            raise RuntimeError(f"Failed to read calendar token: {e}") from e
+
+        if not client_id or not client_secret:
+            raise RuntimeError(
+                "GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set "
+                "when using a token file. Export them or add to .env."
+            )
+
+        from google.oauth2.credentials import Credentials
+
+        creds = Credentials(
+            token=token_data.get("access_token"),
+            refresh_token=token_data.get("refresh_token"),
+            token_uri="https://oauth2.googleapis.com/token",
+            client_id=client_id,
+            client_secret=client_secret,
+            scopes=["https://www.googleapis.com/auth/calendar"],
         )
+        return GoogleCalendar(credentials=creds)
 
-    creds = Credentials(
-        token=token_data.get("access_token"),
-        refresh_token=token_data.get("refresh_token"),
-        token_uri="https://oauth2.googleapis.com/token",
-        client_id=client_id,
-        client_secret=client_secret,
-        scopes=["https://www.googleapis.com/auth/calendar"],
-    )
+    # Priority 3: ADC fallback via from_env() (handles gcloud / Workload Identity)
+    logger.debug("calendar: attempting Application Default Credentials")
+    return GoogleCalendar.from_env()
 
-    return GoogleCalendar(credentials=creds)
 
 
 @mcp_tool(

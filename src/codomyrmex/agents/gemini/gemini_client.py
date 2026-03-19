@@ -89,13 +89,12 @@ class GeminiClient(
                     client_kwargs["location"] = self.vertex_location
                 self.client = genai.Client(**client_kwargs)
                 logger.debug("Initialized Gemini Client with Vertex AI")
+            elif not self.api_key:
+                logger.warning("No GEMINI_API_KEY found. Some operations will fail.")
             else:
-                if not self.api_key:
-                    logger.warning("No GEMINI_API_KEY found. Some operations will fail.")
-                else:
-                    client_kwargs = {"api_key": self.api_key}
-                    self.client = genai.Client(**client_kwargs)
-                    logger.debug("Initialized Gemini Client with API Key")
+                client_kwargs = {"api_key": self.api_key}
+                self.client = genai.Client(**client_kwargs)
+                logger.debug("Initialized Gemini Client with API Key")
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error("Failed to initialize Gemini Client: %s", e)
             raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e

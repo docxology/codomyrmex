@@ -6,19 +6,19 @@
 
 Anderson's (1972) foundational essay "More Is Different" argues that complex systems exhibit properties at scale that cannot be predicted from their individual components — a claim that the reductive program of physics fails at each level of organizational complexity. In AGI research, Wei et al. (2022) documented "emergent abilities" of large language models — capabilities that appear as sharp phase transitions above certain scale thresholds, absent below them. Kauffman (1993) showed that random Boolean networks produce self-organized criticality at sufficient connectivity — order at the edge of chaos.
 
-But emergence is not magic. It has formal structure. This essay traces four emergent capabilities in the codomyrmex 128-module ecosystem, analyzing each through the lens of statistical mechanics, percolation theory, and information-theoretic complexity.
+But emergence is not magic. It has formal structure. This essay traces four emergent capabilities in the codomyrmex 129-module ecosystem, analyzing each through the lens of statistical mechanics, percolation theory, and information-theoretic complexity.
 
 ## The Percolation Model
 
-Codomyrmex's dependency graph is a directed network with 128 nodes and 440+ edges. We can model emergent cross-module capabilities using **bond percolation** on this graph (Stauffer & Aharony, 1994).
+Codomyrmex's dependency graph is a directed network with 129 nodes and 440+ edges. We can model emergent cross-module capabilities using **bond percolation** on this graph (Stauffer & Aharony, 1994).
 
 Define the occupation probability *p* as the fraction of modules that are functional (i.e., pass health checks). Below a critical threshold *p_c*, the graph fragments into disconnected components — cross-module workflows are impossible. Above *p_c*, a **giant connected component** emerges spanning the system.
 
 For random graphs with mean degree ⟨k⟩, the Molloy-Reed criterion gives:
 
-$$p_c = \frac{1}{\langle k \rangle} = \frac{1}{440/127} \approx 0.289$$
+$$p_c = \frac{1}{\langle k \rangle} = \frac{1}{440/129} \approx 0.293$$
 
-This means that when ≥29% of modules are functional, a giant component exists. In practice, `system_discovery` reports ~95% module health (120/127 pass import checks), placing the system deep into the supercritical regime — well above the percolation threshold.
+This means that when ≥29% of modules are functional, a giant component exists. In practice, `system_discovery` reports ~96% module health (124/129 pass import checks), placing the system deep into the supercritical regime — well above the percolation threshold.
 
 ```mermaid
 graph TB
@@ -115,7 +115,7 @@ This fractal self-similarity is not coincidental — it reflects the autopoietic
 
 Anderson's deeper point is that at each level of complexity, **qualitatively new phenomena emerge** that cannot be predicted from the laws governing the level below. The relationship between levels is not ontological reduction but *broken symmetry*.
 
-Applied to codomyrmex's growth from 130 modules (at inception) to 130 modules (v1.1.9):
+Applied to codomyrmex's growth from 90 modules (at v1.0.7 inception) to 129 modules (v1.2.3):
 
 | Module Count | Phase | Emergent Capability | Symmetry Broken |
 |:-------------|:------|:-------------------|:---------------|
@@ -139,7 +139,7 @@ When the interaction term dominates the specialization term — at n_critical = 
 
 Based on current trajectory:
 
-| Metric | Current (n=127) | Predicted Threshold | Predicted Effect |
+| Metric | Current (n=129) | Predicted Threshold | Predicted Effect |
 |:-------|:---------------|:-------------------|:----------------|
 | Tool count | 474 | ~1,000 | Tool selection becomes PSPACE-hard |
 | Memory entries | ~10K | ~100K | Consolidation becomes mandatory |

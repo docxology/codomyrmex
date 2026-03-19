@@ -8,10 +8,9 @@ from __future__ import annotations
 
 import pytest
 
-from codomyrmex.agents.hermes.session import HermesSession, InMemorySessionStore
 from codomyrmex.agentic_memory.memory import KnowledgeMemory
 from codomyrmex.agentic_memory.stores import InMemoryStore
-
+from codomyrmex.agents.hermes.session import HermesSession, InMemorySessionStore
 
 # ── hermes_build_memory_graph ─────────────────────────────────────────────────
 

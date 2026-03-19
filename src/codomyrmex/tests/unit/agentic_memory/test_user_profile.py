@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-
 from codomyrmex.agentic_memory.user_profile import UserProfile
 
 

@@ -8,7 +8,6 @@ Zero-Mock compliant — uses real file operations.
 import pytest
 
 
-
 @pytest.mark.unit
 class TestBuildArtifactPermissions:
     """Verify synthesized build artifacts have secure permissions."""

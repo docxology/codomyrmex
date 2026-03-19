@@ -6,7 +6,6 @@ without requiring specific hardware state.
 
 from __future__ import annotations
 
-
 from codomyrmex.agents.hermes.monitoring import _get_system_metrics
 
 

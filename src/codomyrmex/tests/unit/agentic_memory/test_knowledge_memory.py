@@ -12,11 +12,10 @@ import pytest
 from codomyrmex.agentic_memory.memory import KnowledgeMemory
 from codomyrmex.agentic_memory.stores import InMemoryStore
 
-
 # ── fixture ────────────────────────────────────────────────────────────────
 
 
-@pytest.fixture()
+@pytest.fixture
 def km() -> KnowledgeMemory:
     """Fresh KnowledgeMemory backed by a real InMemoryStore."""
     return KnowledgeMemory(store=InMemoryStore())

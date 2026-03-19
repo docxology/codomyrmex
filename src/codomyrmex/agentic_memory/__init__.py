@@ -6,6 +6,7 @@ the hierarchical .cursorrules coding governance system via Python API and
 MCP tools.
 """
 
+from codomyrmex.agentic_memory.ki_index import KnowledgeItemIndex
 from codomyrmex.agentic_memory.memory import (
     AgentMemory,
     ConversationMemory,
@@ -37,6 +38,7 @@ __all__ = [
     "ConversationMemory",
     "InMemoryStore",
     "JSONFileStore",
+    "KnowledgeItemIndex",
     "KnowledgeMemory",
     "Memory",
     "MemoryImportance",

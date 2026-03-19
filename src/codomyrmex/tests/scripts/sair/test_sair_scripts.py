@@ -19,35 +19,34 @@ if str(repo_root) not in sys.path:
     sys.path.insert(0, str(repo_root))
 
 # ---------- evaluate --------------------------------------------------------
-from scripts.sair.evaluate import parse_llm_response, OFFICIAL_TEMPLATE
 from jinja2 import Template
+
+# ---------- download_data ---------------------------------------------------
+from scripts.sair.download_data import list_local_datasets, verify_dataset_integrity
+from scripts.sair.evaluate import OFFICIAL_TEMPLATE, parse_llm_response
 
 # ---------- generate_cheatsheet ---------------------------------------------
 from scripts.sair.generate_cheatsheet import (
-    build_cheatsheet,
-    validate_size,
-    trim_to_budget,
-    refine_from_results,
+    MAX_BYTES,
     STRATEGY_BUNDLES,
     TECHNIQUE_LIBRARY,
-    MAX_BYTES,
+    build_cheatsheet,
+    refine_from_results,
+    trim_to_budget,
+    validate_size,
 )
 
 # ---------- utils -----------------------------------------------------------
 from scripts.sair.utils import (
-    compute_hash,
-    load_jsonl,
-    save_jsonl,
-    save_json,
-    load_json,
-    summarize_results,
     compare_runs,
+    compute_hash,
     format_timestamp,
+    load_json,
+    load_jsonl,
+    save_json,
+    save_jsonl,
+    summarize_results,
 )
-
-# ---------- download_data ---------------------------------------------------
-from scripts.sair.download_data import verify_dataset_integrity, list_local_datasets
-
 
 # ===========================================================================
 # evaluate.py tests
@@ -273,4 +272,4 @@ class TestDownloadData:
         (sub / "normal.jsonl").write_text('{"id": "p1"}\n')
         result = list_local_datasets(str(tmp_path))
         assert len(result) == 1
-        assert list(result.values())[0]["valid"] is True
+        assert next(iter(result.values()))["valid"] is True

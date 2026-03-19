@@ -32,7 +32,6 @@ from . import (
     triggers,
     workflows,
 )
-from .swarm_topology import SwarmTopology, TaskResult as SwarmTaskResult, TaskSpec, TopologyMode
 from .config import get_script_config, load_config
 from .core import main as run_orchestrator
 from .discovery import discover_scripts
@@ -74,6 +73,8 @@ from .integration import (
     run_ci_stage,
 )
 from .resilience.retry_policy import with_retry
+from .swarm_topology import SwarmTopology, TaskSpec, TopologyMode
+from .swarm_topology import TaskResult as SwarmTaskResult
 from .thin import (
     StepResult,
     Steps,

@@ -183,11 +183,11 @@ Active items tracked by sprint target.
 
 | Item | Status | Sprint Target | Notes |
 |------|--------|---------------|-------|
-| Circular imports: ~35 pairs across modules | Open | Sprint 29 | Use `isort --check` + dependency graph to surface |
-| Oversized files: 16 non-test files >800 LOC | Open | Sprint 29 | Largest: `orchestration.py` (980); see TODO.md for full list |
+| Circular imports: ~35 pairs across modules | **Fixed** | Sprint 17 | Sprint 17 audit: `--check` confirmed **0 circular imports** via `ci_cd_automation` build import fix |
+| Oversized files: 16 non-test files >800 LOC | Open | Sprint 35 | Largest: `orchestration.py`; ongoing; track in TODO.md |
 | 6 optional modules fail import | Expected | — | Cloud (AWS/Azure/GCP), performance.monitoring, lazy_loader, security cert validator — require optional SDKs |
-| Bidirectional PAI↔codomyrmex comms | Open | Sprint 30 | Codomyrmex cannot initiate calls to PAI; filesystem back-channel only |
-| Tool versioning: no deprecation timeline UI | Open | Sprint 30 | `deprecated_in` metadata added but not surfaced in MCP tool list |
+| Bidirectional PAI↔codomyrmex comms | **Fixed** | v1.1.0 | `agents/pai/pai_webhook.py` + `agents/pai/pai_client.py` added in v1.1.0 |
+| Tool versioning: no deprecation timeline UI | Open | Sprint 35 | `deprecated_in` metadata present but not surfaced in MCP tool list |
 
 ## Navigation Links
 

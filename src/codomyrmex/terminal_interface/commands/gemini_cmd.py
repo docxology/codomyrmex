@@ -26,7 +26,7 @@ def run_gemini_cli(*args: str) -> int:
         )
         return 1
 
-    cmd = [cli_path] + list(args)
+    cmd = [cli_path, *list(args)]
 
     try:
         logger.debug("Executing gemini terminal command: %s", " ".join(cmd))

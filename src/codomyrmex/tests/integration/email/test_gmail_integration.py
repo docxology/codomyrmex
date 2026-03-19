@@ -253,3 +253,102 @@ def test_gmail_send_and_retrieve_by_id() -> None:
     assert isinstance(fetched, EmailMessage)
     assert fetched.id == sent.id
     assert fetched.subject == unique_subject
+
+
+@SKIP
+@pytest.mark.integration
+def test_gmail_mcp_get_message() -> None:
+    """gmail_get_message MCP tool fetches a message by ID and returns structured data.
+
+    Sends a message first via the provider, then exercises the
+    ``gmail_get_message`` MCP tool with the returned ID.
+    """
+    from codomyrmex.email.generics import EmailDraft
+    from codomyrmex.email.mcp_tools import gmail_get_message
+
+    # Seed a real message so we have a known ID
+    provider = _make_provider()
+    unique_subject = f"[PAI] get-by-id test — {int(time.time())}"
+    sent = provider.send_message(
+        EmailDraft(
+            subject=unique_subject,
+            to=[RECIPIENT],
+            body_text="Integration test seed message for gmail_get_message MCP tool.",
+        )
+    )
+    assert sent.id is not None, "seed send_message returned no ID"
+
+    time.sleep(2)
+
+    result = gmail_get_message(message_id=sent.id)
+    assert result["status"] == "success", result.get("error")
+    msg = result["message"]
+    assert msg["id"] == sent.id
+    assert msg["subject"] == unique_subject
+    assert msg["sender"] is not None
+
+
+@SKIP
+@pytest.mark.integration
+def test_gmail_mcp_create_draft() -> None:
+    """gmail_create_draft MCP tool creates a draft and returns a draft ID."""
+    from codomyrmex.email.mcp_tools import gmail_create_draft
+
+    unique_subject = f"[PAI] draft test — {int(time.time())}"
+    result = gmail_create_draft(
+        to=[RECIPIENT],
+        subject=unique_subject,
+        body_text=(
+            "This is an automated draft created by the gmail_create_draft MCP tool.\n"
+            "It has NOT been sent. Draft creation end-to-end is confirmed working.\n"
+            f"Timestamp: {int(time.time())}"
+        ),
+    )
+    assert result["status"] == "success", result.get("error")
+    assert result.get("draft_id") is not None, (
+        "gmail_create_draft returned no draft_id"
+    )
+
+
+@SKIP
+@pytest.mark.integration
+def test_gmail_mcp_send_list_get_e2e() -> None:
+    """Full MCP layer round-trip: send → list → get by id — all via MCP tools."""
+    from codomyrmex.email.mcp_tools import (
+        gmail_get_message,
+        gmail_list_messages,
+        gmail_send_message,
+    )
+
+    unique_subject = f"[PAI] e2e-mcp-round-trip — {int(time.time())}"
+
+    # Step 1: send via MCP tool
+    send_result = gmail_send_message(
+        to=[RECIPIENT],
+        subject=unique_subject,
+        body_text=(
+            "End-to-end MCP round-trip test: send → list → get.\n"
+            f"Timestamp: {int(time.time())}"
+        ),
+    )
+    assert send_result["status"] == "success", send_result.get("error")
+    sent_id = send_result.get("message_id")
+    assert sent_id is not None
+
+    time.sleep(3)
+
+    # Step 2: verify in list
+    list_result = gmail_list_messages(max_results=10)
+    assert list_result["status"] == "success", list_result.get("error")
+    ids_in_list = [m["id"] for m in list_result["messages"]]
+    assert sent_id in ids_in_list, (
+        f"Sent message {sent_id!r} not found in list response: {ids_in_list}"
+    )
+
+    # Step 3: fetch full message
+    get_result = gmail_get_message(message_id=sent_id)
+    assert get_result["status"] == "success", get_result.get("error")
+    msg = get_result["message"]
+    assert msg["id"] == sent_id
+    assert msg["subject"] == unique_subject
+

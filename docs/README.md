@@ -33,7 +33,7 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 | [examples/](examples/) | Executable examples and tutorials | 8 |
 | [getting-started/](getting-started/) | Quick start, installation, first steps | 9 |
 | [integration/](integration/) | Cross-module integration patterns | 11 |
-| [modules/](modules/) | Module-level documentation (126 subdirectories) | 9+ |
+| [modules/](modules/) | Module-level documentation (129 subdirectories) | 9+ |
 | [pai/](pai/) | PAI infrastructure, dashboard, skills, memory | 11 |
 | [plans/](plans/) | Project roadmap and release plans | 3 |
 | [project/](project/) | Project standards, contributing, architecture | 9 |

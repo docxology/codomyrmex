@@ -6,8 +6,9 @@ Zero-Mock: All tests use real objects with filesystem I/O (tmp_path).
 from __future__ import annotations
 
 import json
-import pytest
 from typing import TYPE_CHECKING
+
+import pytest
 
 from codomyrmex.agents.hermes._provider_router import (
     ContextCompressor,
@@ -418,6 +419,7 @@ class TestProviderRouterExecution:
     def test_call_ollama_failure(self, shim_bin_dir: Path) -> None:
         """Test _call_ollama with a failing shim."""
         import stat
+
         import pytest
         ollama_bin = shim_bin_dir / "ollama"
         ollama_bin.write_text("#!/bin/sh\necho 'compile error' >&2\nexit 1\n")
@@ -444,6 +446,7 @@ class TestProviderRouterExecution:
     def test_call_hermes_cli_failure(self, shim_bin_dir: Path) -> None:
         """Test _call_hermes_cli with a failing shim."""
         import stat
+
         import pytest
         hermes_bin = shim_bin_dir / "hermes"
         hermes_bin.write_text("#!/bin/sh\necho 'api error' >&2\nexit 1\n")

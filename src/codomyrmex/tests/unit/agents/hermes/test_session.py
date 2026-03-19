@@ -17,7 +17,6 @@ from codomyrmex.agents.hermes.session import (
     SQLiteSessionStore,
 )
 
-
 # ---------------------------------------------------------------------------
 # HermesSession dataclass
 # ---------------------------------------------------------------------------
@@ -139,7 +138,7 @@ class TestInMemorySessionStore:
 class TestSQLiteSessionStore:
     """Tests for SQLiteSessionStore (in-memory DB)."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def store(self):
         """Provide an in-memory SQLiteSessionStore."""
         with SQLiteSessionStore(":memory:") as s:

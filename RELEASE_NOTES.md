@@ -1,23 +1,29 @@
-# Codomyrmex v1.1.7 — "Post-Swarm Stabilization & Industrial Hardening"
+# Codomyrmex v1.2.3 — "Coherence Release"
 
 ## Overview
 
-This release locks down the ecosystem stability following the massive Jules Mega-Swarm refactoring wave. We have established Zero-Diagnostic Purity across the entire 128-module codebase and massively scaled our testing capabilities.
+This release locks down repo-wide structural coherence: 39 missing modules registered, version skew resolved across 7 files, coverage gate unified to 40%, and spurious root files purged. The ecosystem is now a clean single-source-of-truth at v1.2.3 with 129 registered modules.
 
 ## Key Advancements
 
-- **Zero-Diagnostic Purity**: Achieved 0 `ruff` violations and 0 `ty` type checking errors. Tightened strict type-checking gates in CI across all ~560k lines of code.
-- **Hypothesis Property-Based Fuzzing**: Introduced robust property-based validation for the serialization subsystem, hardening Msgpack, Avro, and Parquet data pipelines.
-- **Mutation & Code Coverage Scaling**: The test suite now encompasses 26,500+ unit and integration tests. Test coverage gate is strictly maintained with Zero-Mock purity running deep into `spatial`, `cerebrum`, and `graph_rag` orchestrations.
-- **De-sloppification & Technical Debt Engine**: Shipped `tools/desloppify.py` to auto-detect "God Classes", AST-level clones, and missing docs.
-- **Sys-Health Diagnostics Dashboard**: Shipped `tools/sys_health.py` for real-time monitoring of worktrees, Agentic Memory buffers, and swarm consensus stability.
-- **CI/CD Industrial Hardening**: Dropped conditional lifelines over critical linting/typing actions to guarantee 100% build validity on every commit.
+- **Version Coherence**: Reconciled `pyproject.toml` (1.2.2), `__init__.py` (1.1.9), `README.md` (1.1.9), and `SPEC.md` (1.1.9) — all aligned to **v1.2.3** across 7 files.
+- **Module Registration**: 39 modules existed on disk but were absent from `__init__.py` `_submodules` and `__all__` — all 129 now registered and lazy-importable.
+- **Coverage Gate Unified**: Contradictory `fail_under` values (75, 40, 33%, 35%) consolidated to **40%** across all config locations.
+- **Python Classifier Fix**: Removed misleading `Python :: 3.10` classifier (project requires `>=3.11`).
+- **Spurious File Removal**: 3 git-tracked junk files at repo root (`Any`, `dict[str,`) created by buggy type-annotation script — deleted.
+- **Sub-level Version Sync**: `src/README.md` (v0.1.0 → v1.2.3) and `src/codomyrmex/AGENTS.md` (v0.1.0 → v1.2.3) updated.
 
 ## Metrics Snapshot
 
-- Modules: 127
-- Test Suite: 26,500+ functional tests
-- Ruff violations: 0
-- Type definition warnings/errors: 0 (errors)
+| Metric | Before | v1.2.3 |
+|--------|--------|---------|
+| Registered modules | 90 | **129** (+39) |
+| Version files synced | 1 | **7** |
+| Coverage gate | 75/40/33% (inconsistent) | **40%** (unified) |
+| Spurious root files | 3 | **0** |
+| Tests collected | 21,000+ | **21,000+** |
+| Ruff violations | 0 | **0** ✅ |
 
-We are fully postured for the v1.1.8 advanced Memory & Knowledge Graph evolutions.
+## Previous Release
+
+See [v1.1.9 CHANGELOG entry](CHANGELOG.md#119---2026-03-07---multimodal--streaming) for the Multimodal & Streaming release details.

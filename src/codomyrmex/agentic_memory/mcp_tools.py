@@ -14,7 +14,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 logger = get_logger(__name__)
 
 
-def _agent_memory() -> "type":
+def _agent_memory() -> type:
     """Lazy import AgentMemory to avoid circular imports.
 
     Returns:
@@ -25,7 +25,7 @@ def _agent_memory() -> "type":
     return AgentMemory
 
 
-def _vector_memory() -> "type":
+def _vector_memory() -> type:
     """Lazy import VectorStoreMemory to avoid circular imports.
 
     Returns:

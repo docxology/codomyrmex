@@ -1,13 +1,13 @@
 # Codomyrmex Integration: Supercharging the Hermes Agent
 
 **Target Audience**: The Hermes Open Source Community
-**Status**: Active | **Version**: v2.3.0 | **Last Updated**: March 2026 (73-commit update)
+**Status**: Active | **Version**: v2.4.0 | **Last Updated**: March 2026 (Sprint 34)
 
 ```mermaid
 graph TD
     User([End User]) <--> |Telegram/CLI| Gateway[Multi-Platform Gateway]
     Gateway <--> |Unified Router| HermesCore[Hermes Core Binary / Ollama]
-    Agent[Other Swarm Agents] <--> |33 MCP Tools| CodomyrmexBridge[Codomyrmex MCP Bridge]
+    Agent[Other Swarm Agents] <--> |41 MCP Tools| CodomyrmexBridge[Codomyrmex MCP Bridge]
     CodomyrmexBridge <--> |Controls & Reads| HermesCore
     HermesCore -.-> |Session Sync| LocalVault[(Obsidian Vault)]
     HermesCore <--> |State + FTS5| SQLite[(SQLite state.db)]
@@ -343,7 +343,7 @@ The v1.5.x sprint added **50 new integration tests** (across `test_gateway_sessi
 
 ## Summary
 
-The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent. By establishing permanent multi-platform routing, bulletproof execution sandboxes, persistent memory syncs, session lifecycle management, batch execution, and 33 native MCP tools, Codomyrmex transforms Hermes from a singular personal assistant into a highly integrated node capable of operating safely and autonomously within complex programmatic ecosystems.
+The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent. By establishing permanent multi-platform routing, bulletproof execution sandboxes, persistent memory syncs, session lifecycle management, batch execution, and **41 native MCP tools**, Codomyrmex transforms Hermes from a singular personal assistant into a highly integrated node capable of operating safely and autonomously within complex programmatic ecosystems.
 
 | Capability | v2.2.0 | v2.3.0 (73-commit update) | v2.4.0 (Sprint 34) |
 | :--------- | :-----: | :-------------: | :-------------: |
@@ -359,3 +359,9 @@ The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent.
 | New bundled skills | 0 | **2** (huggingface-hub, hermes-agent-setup) | **2** |
 
 ```mermaid
+graph LR
+    A[Codomyrmex v2.4.0] --> B[41 MCP Tools]
+    B --> C[Knowledge Codification]
+    B --> D[Swarm Orchestration]
+    B --> E[Session Lifecycle]
+```

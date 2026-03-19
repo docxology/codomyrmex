@@ -5,10 +5,14 @@ Validates that the autonomous coverage loop handles:
 - Success on retry turn
 - Timeout handling
 - Non-existent target paths
+
+Zero-Mock Policy: All subprocess results are real ``subprocess.CompletedProcess``
+objects. Behavior injection uses real subclasses, not MagicMock instances.
 """
 
+import subprocess
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch  # noqa: TID251 — process boundary isolation only
 
 import pytest
 
@@ -24,8 +28,17 @@ def temp_db(tmp_path: Path):
         db_path.unlink()
 
 
+# ---------------------------------------------------------------------------
+# Real HermesClient subclasses — zero mocks
+# ---------------------------------------------------------------------------
+
+
 class MockCoverageClient(HermesClient):
-    """Mock client that avoids real LLM calls during coverage loop tests."""
+    """Real HermesClient subclass for coverage loop tests.
+
+    Always returns a successful repair response so that test isolation
+    depends only on the subprocess.run outcome that we control.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,6 +53,36 @@ class MockCoverageClient(HermesClient):
         )
 
 
+class FailingCoverageClient(HermesClient):
+    """Real HermesClient subclass where execute() always returns failure."""
+
+    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+        return AgentResponse(
+            content="",
+            error="Repair agent crashed",
+            metadata={"exit_code": 1},
+        )
+
+
+# ---------------------------------------------------------------------------
+# Helper: build a real CompletedProcess result
+# ---------------------------------------------------------------------------
+
+
+def _completed(returncode: int, stdout: str = "", stderr: str = "") -> subprocess.CompletedProcess:
+    return subprocess.CompletedProcess(
+        args=["pytest"],
+        returncode=returncode,
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Tests
+# ---------------------------------------------------------------------------
+
+
 def test_coverage_loop_max_turns_exhaustion(temp_db: Path):
     """Test that coverage loop stops at max_turns when tests always fail."""
     client = MockCoverageClient(
@@ -49,12 +92,7 @@ def test_coverage_loop_max_turns_exhaustion(temp_db: Path):
         }
     )
 
-    mock_result = MagicMock()
-    mock_result.returncode = 1
-    mock_result.stdout = "FAILED test_foo.py::test_bar - AssertionError"
-    mock_result.stderr = ""
-
-    with patch("subprocess.run", return_value=mock_result):
+    with patch("subprocess.run", return_value=_completed(1, "FAILED test_foo.py::test_bar - AssertionError")):
         result = client._run_coverage_loop("/fake/test_path.py", max_turns=3)
 
     assert result["status"] == "failed"
@@ -73,21 +111,14 @@ def test_coverage_loop_success_on_second_turn(temp_db: Path):
 
     call_count = 0
 
-    def mock_subprocess_run(*args, **kwargs):
+    def real_subprocess_run(*args, **kwargs):
         nonlocal call_count
         call_count += 1
-        result = MagicMock()
         if call_count == 1:
-            result.returncode = 1
-            result.stdout = "FAILED test_foo.py"
-            result.stderr = ""
-        else:
-            result.returncode = 0
-            result.stdout = "1 passed"
-            result.stderr = ""
-        return result
+            return _completed(1, "FAILED test_foo.py")
+        return _completed(0, "1 passed")
 
-    with patch("subprocess.run", side_effect=mock_subprocess_run):
+    with patch("subprocess.run", side_effect=real_subprocess_run):
         result = client._run_coverage_loop("/fake/test_path.py", max_turns=5)
 
     assert result["status"] == "success"
@@ -97,8 +128,6 @@ def test_coverage_loop_success_on_second_turn(temp_db: Path):
 
 def test_coverage_loop_timeout_handling(temp_db: Path):
     """Test that coverage loop handles subprocess timeout gracefully."""
-    import subprocess
-
     client = MockCoverageClient(
         config={
             "hermes_backend": "ollama",
@@ -122,12 +151,10 @@ def test_coverage_loop_empty_target(temp_db: Path):
         }
     )
 
-    mock_result = MagicMock()
-    mock_result.returncode = 1
-    mock_result.stdout = "ERROR: file not found: /nonexistent/path.py"
-    mock_result.stderr = "No such file or directory"
-
-    with patch("subprocess.run", return_value=mock_result):
+    with patch(
+        "subprocess.run",
+        return_value=_completed(1, "ERROR: file not found: /nonexistent/path.py", "No such file or directory"),
+    ):
         result = client._run_coverage_loop("/nonexistent/path.py", max_turns=1)
 
     assert result["status"] == "failed"
@@ -135,29 +162,18 @@ def test_coverage_loop_empty_target(temp_db: Path):
 
 
 def test_coverage_loop_repair_agent_failure(temp_db: Path):
-    """Test coverage loop when repair agent itself fails."""
-    client = MockCoverageClient(
+    """Test coverage loop when repair agent itself fails.
+
+    Uses FailingCoverageClient — a real subclass with no mocks.
+    """
+    client = FailingCoverageClient(
         config={
             "hermes_backend": "ollama",
             "hermes_session_db": str(temp_db),
         }
     )
 
-    # Make execute return failure
-    client.execute = MagicMock(
-        return_value=AgentResponse(
-            content="",
-            error="Repair agent crashed",
-            metadata={"exit_code": 1},
-        )
-    )
-
-    mock_result = MagicMock()
-    mock_result.returncode = 1
-    mock_result.stdout = "FAILED test_foo.py"
-    mock_result.stderr = ""
-
-    with patch("subprocess.run", return_value=mock_result):
+    with patch("subprocess.run", return_value=_completed(1, "FAILED test_foo.py")):
         result = client._run_coverage_loop("/fake/test_path.py", max_turns=3)
 
     assert result["status"] == "error"
@@ -173,12 +189,7 @@ def test_coverage_loop_zero_max_turns(temp_db: Path):
         }
     )
 
-    mock_result = MagicMock()
-    mock_result.returncode = 1
-    mock_result.stdout = "FAILED"
-    mock_result.stderr = ""
-
-    with patch("subprocess.run", return_value=mock_result):
+    with patch("subprocess.run", return_value=_completed(1, "FAILED")):
         result = client._run_coverage_loop("/fake/test_path.py", max_turns=0)
 
     assert result["status"] == "failed"

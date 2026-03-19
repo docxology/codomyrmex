@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-
 from codomyrmex.agents.hermes.gateway.identity import IdentityResolver
 
 

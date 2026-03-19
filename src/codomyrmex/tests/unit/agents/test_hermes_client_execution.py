@@ -8,8 +8,9 @@ from __future__ import annotations
 
 import os
 import stat
-import pytest
 from pathlib import Path
+
+import pytest
 
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.hermes.hermes_client import HermesClient, HermesError

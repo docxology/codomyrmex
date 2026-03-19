@@ -15,13 +15,12 @@ import pytest
 
 from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
 
-@pytest.fixture()
+@pytest.fixture
 def inmem_store() -> SQLiteSessionStore:
     store = SQLiteSessionStore(":memory:")
     yield store

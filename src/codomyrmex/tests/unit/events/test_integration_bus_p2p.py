@@ -12,7 +12,6 @@ import pytest
 
 from codomyrmex.events.integration_bus import IntegrationBus
 
-
 # ── send_to_agent ─────────────────────────────────────────────────────────────
 
 

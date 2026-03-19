@@ -15,6 +15,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
     from codomyrmex.events.event_store import EventStore
 
 logger = get_logger(__name__)

@@ -69,12 +69,12 @@ Started with: `uv run python scripts/pai/dashboard.py` or `bun run src/codomyrme
 | Timeline | Temporal Gantt-style project visualization | `pai_timeline.png` |
 | 🚴 Bike Ride | LLM email briefing — unanswered threads + A/B/C drafts + TTS | `pai_bikeride.png` |
 
-### MCP Tool Counts (v1.1.9)
+### MCP Tool Counts (v1.2.3)
 
 | Category | Count | Notes |
 |----------|-------|-------|
 | Static proxy tools | 22 | File ops, git, shell, analysis, PAI, testing, workflows |
-| Dynamic auto-discovered | ~474 | From 141 modules with `mcp_tools.py` + `@mcp_tool` |
+| Dynamic auto-discovered | ~474 | From 129 modules with `mcp_tools.py` + `@mcp_tool` |
 | Destructive (trust-gated) | 4 | `write_file`, `run_command`, `run_tests`, `call_module_function` |
 | Resources | 3 | `codomyrmex://modules`, `codomyrmex://status`, discovery metrics |
 | Prompts | 10 | Analysis, review, and generation prompt templates |
