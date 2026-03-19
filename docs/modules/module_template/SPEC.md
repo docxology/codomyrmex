@@ -30,21 +30,21 @@ The `module_template` module provides the scaffolding and generation logic for c
 
 ```mermaid
 graph TD
-    subgraph "Input"
+    subgraph sg_36ecb4f866 [Input]
         CLI[CLI Command]
         Config[Module Metadata]
     end
 
-    subgraph "Core Logic"
+    subgraph sg_deafb64b3e [Core Logic]
         Generator[Module Generator]
         Renderer[Template Renderer]
     end
 
-    subgraph "Assets"
+    subgraph sg_bd12731d7b [Assets]
         Templates[File Templates]
     end
 
-    subgraph "Output"
+    subgraph sg_b2439bcb8d [Output]
         FS[File System]
     end
 

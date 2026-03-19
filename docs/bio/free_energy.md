@@ -40,9 +40,6 @@ graph TB
     PERCEPT -->|"refine model"| PREDICT
     ERROR -->|"drive action"| ACTION
     ACTION -->|"change"| WORLD
-
-    style FEP fill:#533483,stroke:#e94560,color:#e8e8e8
-    style LOOP fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 Perception updates beliefs to better predict sensory data. Action changes the world so data conforms to predictions — this is **active inference**, in which organisms act to confirm their expectations rather than passively correcting errors. The Bayesian brain hypothesis (Knill & Pouget, 2004) established that neural populations encode probability distributions, and Clark (2013) synthesized this into the **predictive processing framework**: the brain generates top-down expectations and processes bottom-up prediction errors hierarchically.
@@ -77,10 +74,6 @@ graph TB
     I2 --> ACTIVE
     ACTIVE --> E1
     ACTIVE --> E3
-
-    style EXTERNAL fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style BLANKET fill:#e94560,stroke:#1a1a2e,color:#fff
-    style INTERNAL fill:#533483,stroke:#e94560,color:#e8e8e8
 ```
 
 The connection to homeostasis is direct: minimizing free energy keeps internal states viable. **Allostasis** — anticipatory regulation before predicted need — is naturally expressed as active inference. The organism doesn't wait for stress to respond; it predicts stress and preemptively adjusts.

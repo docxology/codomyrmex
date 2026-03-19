@@ -30,7 +30,7 @@ flowchart TD
     P4 --> Step7
     
     Step7[7. Start cron ticker 60s interval] --> Step8[8. Build channel directory]
-    Step8 --> End([9. Enter main event loop])
+    Step8 --> MainLoop([9. Enter main event loop])
 ```
 
 ### Message Flow
@@ -39,17 +39,16 @@ flowchart TD
 flowchart TD
     User([User Message]) --> Adapter[Platform Adapter<br/>telegram.py / discord.py]
     Adapter --> Router[GatewayRunner routing<br/>session.py: lookup by platform + user_id]
-    Router --> Agent[AIAgent Processes Message]
-    
-    subgraph Agent Processing
+    Router --> PBuild[prompt_builder.py: assembly system prompt]
+
+    subgraph agentProc [Agent processing]
         direction TB
-        PBuild[prompt_builder.py: assembly system prompt] --> Inference[LLM inference via OpenRouter]
+        PBuild --> Inference[LLM inference via OpenRouter]
         Inference --> Tools[Tool execution if tool_calls returned]
         Tools --> Compress[context_compressor.py if context too long]
     end
-    
-    Agent --> AgentProcessing
-    AgentProcessing --> Response([Response sent back via platform adapter])
+
+    Compress --> Response([Response sent back via platform adapter])
 ```
 
 ## Gateway Commands

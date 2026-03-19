@@ -70,14 +70,6 @@ graph TB
     QUEEN --> CASTES
     CASTES --> PHEROMONE
     PHEROMONE -.->|"stigmergic<br/>feedback"| QUEEN
-
-    style QUEEN fill:#e94560,stroke:#1a1a2e,color:#fff
-    style FORAGER fill:#533483,stroke:#e94560,color:#e8e8e8
-    style BUILDER fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style SOLDIER fill:#16213e,stroke:#0f3460,color:#e8e8e8
-    style NURSE fill:#1a1a2e,stroke:#16213e,color:#e8e8e8
-    style SCOUT fill:#533483,stroke:#1a1a2e,color:#e8e8e8
-    style PHEROMONE fill:#0f3460,stroke:#e94560,color:#e8e8e8
 ```
 
 ### The Queen Paradox
@@ -186,9 +178,6 @@ graph LR
     SUPPRESSOR --> TRUST2
     NEME --> SEARCH2
     PROTO --> MODULES2
-
-    style MINSKY fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style CDM_MAP fill:#533483,stroke:#e94560,color:#e8e8e8
 ```
 
 Minsky's **K-lines** (knowledge lines) are particularly relevant: a K-line is a "wire" that, when activated, partially reactivates the mental state that was active when it was formed. `agentic_memory`'s tag-based retrieval implements exactly this: a tag is a K-line that, when queried, retrieves the stored experience — partially reinstating the context in which the experience was recorded.

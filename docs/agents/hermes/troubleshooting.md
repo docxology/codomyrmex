@@ -163,10 +163,11 @@ grep "api.telegram.org/bot" $HERMES_HOME/logs/gateway.log | tail -1
 
 1. ✅ Is the gateway process running? (`ps aux | grep hermes`)
 2. ✅ Is it polling successfully? (`grep getUpdates $HERMES_HOME/logs/gateway.log | tail -3`)
-3. ✅ Is your username in `TELEGRAM_ALLOWED_USERS`?
-4. ✅ Is `require_mention: true`? Try @mentioning the bot
-5. ✅ Is the bot using the correct token? Check log for `bot<TOKEN>:`
-6. ✅ Are there errors? Check `$HERMES_HOME/logs/errors.log`
+3. ✅ Is the user's **numeric Telegram ID** in `$HERMES_HOME/pairing/telegram-approved.json`? (Check for `Unauthorized user:` in log)
+4. ✅ For groups: is BotFather privacy mode **OFF**? (`curl https://api.telegram.org/bot<TOKEN>/getMe` → `can_read_all_group_messages` must be `true`)
+5. ✅ Is `require_mention: true`? Try @mentioning the bot
+6. ✅ Is the bot using the correct token? Check log for `bot<TOKEN>:`
+7. ✅ Are there errors? Check `$HERMES_HOME/logs/errors.log`
 
 ---
 
@@ -231,11 +232,11 @@ copilot --version
 
 ### 11. Rate Limit Exceeded (429 from OpenRouter)
 
-**Symptom**: `429 Too Many Requests` — free tier is 50 req/day with < $10 balance.
+**Symptom**: `429 Too Many Requests` — free tier is 50 req/day with < $5 balance.
 
 **Fix options**:
 
-1. **Add $10 credits** → bumps free quota to 1,000 req/day: [openrouter.ai/settings/credits](https://openrouter.ai/settings/credits)
+1. **Add $5 credits** → bumps free quota to 1,000 req/day and raises RPM from 20 → 200: [openrouter.ai/settings/credits](https://openrouter.ai/settings/credits)
 2. **Enable smart model routing** to route simple messages to a different model:
 
    ```yaml
@@ -243,15 +244,15 @@ copilot --version
      enabled: true
      cheap_model:
        provider: openrouter
-       model: google/gemini-2.0-flash
+       model: google/gemini-2.0-flash-001
    ```
 
 3. **Add fallback models** to `config.yaml`:
 
    ```yaml
    fallback_models:
-     - meta-llama/llama-3.1-70b-instruct:free
-     - google/gemini-2.0-flash:free
+     - google/gemini-2.0-flash-001
+     - anthropic/claude-3-haiku
    ```
 
 4. **Check current usage**: `curl https://openrouter.ai/api/v1/key -H "Authorization: Bearer $OPENROUTER_API_KEY"`

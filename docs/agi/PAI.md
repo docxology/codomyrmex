@@ -38,9 +38,6 @@ graph LR
     EXEC --> CT
     VER --> FS
     LEARN --> MC
-
-    style ALGORITHM fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style AGI_MAP fill:#533483,stroke:#e94560,color:#e8e8e8
 ```
 
 ### Detailed Phase Analysis

@@ -37,9 +37,6 @@ graph LR
     end
 
     CATEGORY -.-> RAG
-
-    style CATEGORY fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style EMERGENT fill:#533483,stroke:#e94560,color:#e8e8e8
 ```
 
 **Measurement**: With 130 objects and 440+ directed edges in the dependency graph, the number of distinct paths of length ≤5 exceeds 10⁶ — a combinatorial surface far larger than any individual module's design scope.
@@ -115,9 +112,6 @@ graph TB
     HUMAN["Human Reviewer<br/><i>Löbian circuit-breaker</i>"]
     DEPLOY --> HUMAN
     HUMAN -.-> DEPLOY
-
-    style GODEL fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style HUMAN fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 The human reviewer serves as a *Löbian circuit-breaker* (Fallenstein & Soares, 2017): because the final verification step is external to the system, the self-referential proof obligation is discharged externally. The system can self-modify and self-verify, but deployment requires an oracle not subject to the same Gödelian incompleteness constraints. This implements Russell's (2019) *corrigible* self-improvement: the system *defers* to external judgment.

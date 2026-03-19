@@ -15,25 +15,25 @@ The CEREBRUM-FPF integration applies case-based reasoning, Bayesian inference, a
 
 ```mermaid
 graph TB
-    subgraph "FPF Module"
+    subgraph sg_041b60eb67 [FPF Module]
         FPF_SPEC[FPFSpec<br/>Patterns, Concepts, Relationships]
         FPF_ANALYZER[FPFAnalyzer<br/>Importance, Centrality]
         TERM_ANALYZER[TermAnalyzer<br/>Co-occurrence]
     end
     
-    subgraph "CEREBRUM Module"
+    subgraph sg_fdbfc45999 [CEREBRUM Module]
         CEREBRUM_ENGINE[CerebrumEngine<br/>Orchestration]
         CASE_BASE[CaseBase<br/>Pattern Cases]
         BAYESIAN_NET[BayesianNetwork<br/>Pattern Relationships]
         ACTIVE_AGENT[ActiveInferenceAgent<br/>Exploration]
     end
     
-    subgraph "Analysis"
+    subgraph sg_e70d8eb905 [Analysis]
         ORCHESTRATOR[FPFOrchestrator<br/>Main Analysis]
         COMBINATORICS[FPFCombinatoricsAnalyzer<br/>Combinatorics]
     end
     
-    subgraph "Output"
+    subgraph sg_b2439bcb8d [Output]
         VISUALIZATIONS[Visualizations<br/>Networks, Heatmaps]
         REPORTS[Reports<br/>JSON, Markdown]
     end

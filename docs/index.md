@@ -43,7 +43,7 @@ just build
 |:---|:---|
 | [Getting Started](getting-started/quickstart.md) | Installation, setup, and tutorials |
 | [Architecture](ARCHITECTURE.md) | System design and module layout |
-| [Agent Integrations](agents/) | 38 AI agent frameworks with deep-dive Hermes docs |
+| [Agent Integrations](agents/) | 38 AI agent frameworks; Hermes includes [skill registry & MCP preload](agents/hermes/skills.md) |
 | [Module Docs](modules/) | Per-module README, SPEC, AGENTS docs (126 modules) |
 | [Reference](reference/) | API reference, CLI, changelog, troubleshooting |
 | [Development](development/) | Contributing, testing, CI/CD, uv usage |

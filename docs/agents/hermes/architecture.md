@@ -10,52 +10,47 @@ Hermes employs a modular architecture centered on a core agent loop that integra
 
 ```mermaid
 graph TD
-    classDef platform fill:#2E8B57,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef core fill:#4682B4,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef storage fill:#8B4513,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef provider fill:#6A0572,stroke:#fff,stroke-width:2px,color:#fff;
-
-    subgraph "HERMES AGENT"
-        Gateway[Gateway<br/>gateway/]:::core
-        AgentLoop[Agent Loop<br/>run_agent.py]:::core
-        ToolRegistry[Tool Registry<br/>tools/]:::core
-        AuxClient[Auxiliary Client<br/>agent/auxiliary_client.py]:::core
-        SmartRoute[Smart Routing<br/>agent/smart_model_routing.py]:::core
+    subgraph hermesAgent [Hermes agent]
+        Gateway[Gateway<br/>gateway/]
+        AgentLoop[Agent Loop<br/>run_agent.py]
+        ToolRegistry[Tool Registry<br/>tools/]
+        AuxClient[Auxiliary Client<br/>agent/auxiliary_client.py]
+        SmartRoute[Smart Routing<br/>agent/smart_model_routing.py]
 
         Gateway <--> AgentLoop
         AgentLoop <--> ToolRegistry
         AgentLoop --> SmartRoute
         SmartRoute --> AuxClient
 
-        Sessions[(Sessions<br/>state.db)]:::storage
-        Skills[Skills<br/>skills/]:::storage
-        Memory[(Memory<br/>memories/)]:::storage
+        Sessions[("Sessions<br/>state.db")]
+        Skills[Skills<br/>skills/]
+        Memory[("Memory<br/>memories/")]
 
         AgentLoop <--> Sessions
         AgentLoop <--> Skills
         AgentLoop <--> Memory
     end
 
-    subgraph "Platforms"
-        TG([Telegram]):::platform
-        WA([WhatsApp]):::platform
-        DC([Discord]):::platform
-        SL([Slack]):::platform
-        CLI([CLI]):::platform
+    subgraph platforms [Platforms]
+        TG([Telegram])
+        WA([WhatsApp])
+        DC([Discord])
+        SL([Slack])
+        HermesCLI([CLI])
     end
 
-    subgraph "LLM Providers"
-        OR([OpenRouter]):::provider
-        NP([Nous Portal]):::provider
-        CP([Copilot ACP]):::provider
-        OA([OpenAI/BYOK]):::provider
+    subgraph llmProviders [LLM providers]
+        OR([OpenRouter])
+        NP([Nous Portal])
+        CP([Copilot ACP])
+        OA([OpenAI / BYOK])
     end
 
     TG --> Gateway
     WA --> Gateway
     DC --> Gateway
     SL --> Gateway
-    CLI --> Gateway
+    HermesCLI --> Gateway
     AuxClient --> OR
     AuxClient --> NP
     AuxClient --> CP

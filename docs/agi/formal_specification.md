@@ -42,9 +42,6 @@ graph TB
     WALL["Rice's Theorem<br/><i>Decidability Frontier</i>"]
     PI1 -.-> WALL
     SIGMA2 -.-> WALL
-
-    style HIERARCHY fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style WALL fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 ## Verification Architecture: Defense in Depth
@@ -117,10 +114,6 @@ graph TD
 
     RESOLUTION["Resolution:<br/>External oracle (human)<br/>breaks self-reference"]
     GODEL -.-> RESOLUTION
-
-    style LOBIAN fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style GODEL fill:#e94560,stroke:#1a1a2e,color:#fff
-    style RESOLUTION fill:#533483,stroke:#e94560,color:#e8e8e8
 ```
 
 **Codomyrmex's resolution**: the trust gateway interposes a **human oracle** between verification and deployment. Because the human is external to the system's proof theory, the self-referential cycle is broken. The human serves as an oracle for the Π₁⁰-complete problem "is this modification safe?" — a problem that the system alone cannot decide.

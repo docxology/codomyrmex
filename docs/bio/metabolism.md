@@ -40,10 +40,6 @@ graph TB
     FORAGE_I --> ALLOCATION
     SYMBIONTS --> ALLOCATION
     ALLOCATION --> EXPENDITURE
-
-    style INTAKE fill:#16213e,stroke:#0f3460,color:#e8e8e8
-    style ALLOCATION fill:#533483,stroke:#e94560,color:#e8e8e8
-    style EXPENDITURE fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 ### Trophallaxis: The Decentralized Distribution Network
@@ -66,9 +62,6 @@ flowchart LR
     N2 -->|"regurgitation"| B2
     N1 -->|"trophallaxis"| N3
     N3 -->|"regurgitation"| Q
-
-    style F fill:#e94560,stroke:#1a1a2e,color:#fff
-    style Q fill:#533483,stroke:#1a1a2e,color:#fff
 ```
 
 ## Architectural Mapping

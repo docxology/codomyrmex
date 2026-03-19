@@ -12,7 +12,7 @@ You can run multiple Hermes bots on the same machine, each with its own identity
 Machine
 ├── ~/.hermes/                          (Instance 1: Primary)
 │   ├── .env                            BOT_TOKEN=8626408153:AAFky...
-│   ├── config.yaml                     model: hermes-3-llama-3.1-405b-instruct:free
+│   ├── config.yaml                     model: nvidia/nemotron-3-super-120b-a12b:free
 │   ├── state.db, sessions/, skills/
 │   └── gateway.pid
 │
@@ -59,7 +59,10 @@ chmod 600 ~/hermes-bot2/.hermes/.env
 
 ```bash
 cat > ~/hermes-bot2/.hermes/config.yaml << 'EOF'
-model: nousresearch/hermes-3-llama-3.1-405b-instruct:free
+model: nvidia/nemotron-3-super-120b-a12b:free
+fallback_models:
+- google/gemini-2.0-flash-001
+- anthropic/claude-3-haiku
 toolsets:
   - all
 agent:
@@ -75,7 +78,7 @@ terminal:
 compression:
   enabled: true
   threshold: 0.85
-  summary_model: google/gemini-3-flash-preview
+  summary_model: google/gemini-2.0-flash-001
 telegram:
   require_mention: true
   free_response_channels: ""

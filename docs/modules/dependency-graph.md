@@ -6,7 +6,7 @@
 
 ```mermaid
 graph TD
-    subgraph "Foundation Layer"
+    subgraph sg_5f13f7c061 [Foundation Layer]
         ENV[environment_setup]
         LOG[logging_monitoring]
         MCP[model_context_protocol]
@@ -20,7 +20,7 @@ graph TD
         ENC[encryption]
     end
 
-    subgraph "AI & Intelligence Layer"
+    subgraph sg_15c4926e85 [AI & Intelligence Layer]
         AI[agents]
         LLM["llm (multimodal, safety)"]
         MO["model_ops (eval, registry, optimization, features)"]
@@ -29,22 +29,22 @@ graph TD
         GRAG[graph_rag]
     end
 
-    subgraph "Analysis & Quality Layer"
+    subgraph sg_08afff16a7 [Analysis & Quality Layer]
         CODE["coding (static_analysis, pattern_matching)"]
         SECURITY["security (governance)"]
     end
 
-    subgraph "Visualization Layer"
+    subgraph sg_b45863baca [Visualization Layer]
         VIZ[data_visualization]
     end
 
-    subgraph "Build & Deploy Layer"
+    subgraph sg_b3cb94339a [Build & Deploy Layer]
         CICD["ci_cd_automation (build)"]
         GIT[git_operations]
         CONTAINER[containerization]
     end
 
-    subgraph "Application Layer"
+    subgraph sg_2ba8632d46 [Application Layer]
         ORCH["orchestrator (scheduler)"]
         TERM[terminal_interface]
         DISCO[system_discovery]
@@ -80,11 +80,6 @@ graph TD
     DISCO -.-> LOG
     TEST -.-> LOG
     API -.-> LOG
-
-    style ENV fill:#e1f5ff
-    style LOG fill:#e1f5ff
-    style MCP fill:#e1f5ff
-    style TEL fill:#e1f5ff
 ```
 
 ## Dependency Rules

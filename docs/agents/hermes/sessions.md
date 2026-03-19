@@ -13,27 +13,27 @@ flowchart TD
     NewMsg([1. New Message Arrives]) --> Lookup{2. Session Lookup<br/>platform + user_id}
     Lookup -->|Existing session| Load[load context]
     Lookup -->|New session| Create[create entry in state.db]
-    
+
     Load --> Process[3. Agent Processing]
     Create --> Process
-    
-    subgraph Processing Steps
+
+    subgraph procSteps [Processing steps]
         direction TB
         P1[Prompt built with session context + memory] --> P2[LLM inference]
         P2 --> P3[Tool execution]
     end
-    Process --> ProcessingSteps
-    
-    ProcessingSteps --> Persist[4. State Persistence]
-    
-    subgraph Persistence Steps
+    Process --> P1
+
+    P3 --> Persist[4. State Persistence]
+
+    subgraph persistSteps [Persistence steps]
         direction TB
         S1[Messages appended to state.db] --> S2[Session JSON file updated]
         S2 --> S3[Compression check]
     end
-    Persist --> PersistenceSteps
-    
-    PersistenceSteps --> End([5. Session Continues or Closes])
+    Persist --> S1
+
+    S3 --> SessionEnd([5. Session continues or closes])
 ```
 
 ## Storage Components
@@ -85,7 +85,7 @@ When a conversation approaches the model's context window limit, Hermes automati
 compression:
     enabled: true
     threshold: 0.85 # compress at 85% of model context
-    summary_model: google/gemini-3-flash-preview
+    summary_model: google/gemini-2.0-flash
     summary_provider: auto
 ```
 
@@ -98,26 +98,27 @@ compression:
 
 ```mermaid
 flowchart LR
-    subgraph Before Compression
+    subgraph beforeComp [Before compression]
+        direction LR
         O1[(Old Msg 1)] -.- O2[(Old Msg 2)] -.- ON[(Old Msg N)] -.- RM1[(Recent Msgs)]
     end
-    
+
     Compressor[[context_compressor.summarize]]
-    
-    Before Compression --> Compressor
-    
-    subgraph After Compression
+
+    subgraph afterComp [After compression]
+        direction LR
         OSumm[(Compressed Summary)] -.- RM2[(Recent Msgs)]
     end
-    
-    Compressor --> After Compression
+
+    beforeComp --> Compressor
+    Compressor --> afterComp
 ```
 
 ### Choosing a Summary Model
 
 Use a fast, inexpensive model for compression:
 
-- `google/gemini-3-flash-preview` — fast and effective
+- `google/gemini-2.0-flash-001` — fast and effective (confirmed working, March 2026)
 - `anthropic/claude-3-haiku` — good summarization
 - Any model available via OpenRouter
 

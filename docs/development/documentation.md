@@ -21,6 +21,18 @@ This guide provides standards and best practices for maintaining and contributin
 | **Documentation Tools** | `src/codomyrmex/documentation/` | Website generation tools | Other projects |
 | **API References** | `*/API_SPECIFICATION.md` | Technical API details | Developers |
 
+## Mermaid diagrams (`docs/`)
+
+Diagrams use fenced code blocks with the `mermaid` language tag. Conventions:
+
+1. **No hard-coded theme styling** — Do not use `style … fill:…`, `classDef`, or `:::class` on nodes. Diagrams must render legibly in light and dark themes (see Cursor Mermaid rules).
+2. **Subgraphs** — Prefer `subgraph graphId [Human-readable label]` so the graph id has no spaces and labels with punctuation stay in brackets.
+3. **Edges and nodes** — Use quoted edge labels when they contain parentheses or slashes. Avoid node ids that are Mermaid reserved words (`end`, `graph`, …).
+4. **Edges only between real nodes** — Do not point an edge at a subgraph name unless your renderer supports it; connect to an explicit node inside the subgraph instead.
+5. **Maintenance scripts** (repo root): `uv run python scripts/strip_mermaid_style_lines.py` removes legacy `style` lines; `uv run python scripts/normalize_mermaid_subgraphs.py` converts `subgraph "Title"` to `subgraph sg_… [Title]`.
+
+Hermes-specific examples and agent-doc rules: [docs/agents/hermes/AGENTS.md](../agents/hermes/AGENTS.md) (Diagram conventions).
+
 ## 🏗️ Documentation Structure
 
 ### **Main Documentation (`docs/`)**

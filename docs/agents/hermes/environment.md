@@ -57,8 +57,8 @@ OPENROUTER_API_KEY=sk-or-v1-...   # OpenRouter (recommended, access to many mode
 ```bash
 # Telegram
 TELEGRAM_BOT_TOKEN=1234567890:AAxxxxxxxxxxxxxxxxx
-TELEGRAM_ALLOWED_USERS=username1,username2   # comma-separated Telegram usernames
-TELEGRAM_HOME_CHANNEL=channel_name           # for cron/proactive messages
+TELEGRAM_ALLOWED_USERS=username1,username2  # Legacy — prefer pairing/telegram-approved.json (see telegram.md)
+TELEGRAM_HOME_CHANNEL=channel_name          # for cron/proactive messages
 
 # WhatsApp (via Baileys bridge)
 WHATSAPP_ENABLED=false
@@ -136,7 +136,7 @@ Project defaults use **`.codomyrmex/hermes_skills_profile.yaml`** discovered fro
 1. **Never commit `.env` files** — add to `.gitignore`
 2. **Use restrictive permissions** — `chmod 600 $HERMES_HOME/.env`
 3. **Rotate keys periodically** — especially after any suspected leak
-4. **Use `TELEGRAM_ALLOWED_USERS`** — always restrict who can interact with the bot
+4. **Use the pairing system** — add authorized Telegram numeric IDs to `$HERMES_HOME/pairing/telegram-approved.json` (see [telegram.md](telegram.md)); avoid relying solely on `TELEGRAM_ALLOWED_USERS`
 5. **Separate keys per instance** — each bot instance should have unique API keys where possible
 
 ## Common Issues

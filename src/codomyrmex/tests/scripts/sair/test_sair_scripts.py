@@ -14,7 +14,8 @@ from pathlib import Path
 import pytest
 
 # Add repo root to sys.path so 'scripts' package is importable.
-repo_root = Path(__file__).resolve().parents[6]
+# Path: src/codomyrmex/tests/scripts/sair/this_file.py -> parents[5] = repo root.
+repo_root = Path(__file__).resolve().parents[5]
 if str(repo_root) not in sys.path:
     sys.path.insert(0, str(repo_root))
 

@@ -33,18 +33,18 @@ The `simulation` module provides the core simulation engine for Codomyrmex. It e
 
 ```mermaid
 graph TD
-    subgraph "Configuration"
+    subgraph sg_b332c3492d [Configuration]
         Config[SimulationConfig]
     end
 
-    subgraph "Core Engine"
+    subgraph sg_15b51ea489 [Core Engine]
         Sim[Simulator]
         Run[run()]
         Step[step()]
         Results[get_results()]
     end
 
-    subgraph "Infrastructure"
+    subgraph sg_ce0cff719a [Infrastructure]
         Logger[logging_monitoring]
     end
 

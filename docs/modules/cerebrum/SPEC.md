@@ -42,36 +42,36 @@ The `cerebrum` module serves as the cognitive modeling layer of Codomyrmex, inte
 
 ```mermaid
 graph TD
-    subgraph "Client Layer"
+    subgraph sg_6136584869 [Client Layer]
         PublicAPI[Public API]
         MCPTools[MCP Tools]
     end
 
-    subgraph "Core Logic"
+    subgraph sg_deafb64b3e [Core Logic]
         CerebrumEngine[CerebrumEngine]
         ReasoningEngine[ReasoningEngine]
         ModelManager[ModelManager]
     end
 
-    subgraph "Case-Based Reasoning"
+    subgraph sg_cd86ca24b7 [Case-Based Reasoning]
         CaseBase[CaseBase]
         CaseRetriever[CaseRetriever]
         SimilarityMetrics[Similarity Metrics]
     end
 
-    subgraph "Bayesian Inference"
+    subgraph sg_52a6010dfa [Bayesian Inference]
         BayesianNetwork[BayesianNetwork]
         InferenceEngine[InferenceEngine]
         PriorBuilder[PriorBuilder]
     end
 
-    subgraph "Active Inference"
+    subgraph sg_87a106220a [Active Inference]
         ActiveAgent[ActiveInferenceAgent]
         FreeEnergy[VariationalFreeEnergy]
         PolicySelector[PolicySelector]
     end
 
-    subgraph "Transformation"
+    subgraph sg_cf2a63375a [Transformation]
         TransformationManager[TransformationManager]
         AdaptationTransformer[AdaptationTransformer]
         LearningTransformer[LearningTransformer]

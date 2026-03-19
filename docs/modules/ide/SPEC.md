@@ -48,17 +48,17 @@ The IDE module provides programmatic integration and automation capabilities for
 
 ```mermaid
 graph TD
-    subgraph "IDE Module"
+    subgraph sg_59c232f3c1 [IDE Module]
         IDEBase[ide_base.py<br/>Base Classes]
         
-        subgraph "Integrations"
+        subgraph sg_090512d93f [Integrations]
             Antigravity[antigravity/<br/>Antigravity IDE]
             Cursor[cursor/<br/>Cursor IDE]
             VSCode[vs-code/<br/>VS Code]
         end
     end
     
-    subgraph "Codomyrmex Core"
+    subgraph sg_1d609d050e [Codomyrmex Core]
         Logging[logging_monitoring]
         Config[config_management]
         Agents[agents]

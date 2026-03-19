@@ -81,9 +81,6 @@ graph TB
     REINFORCE --> AMEM
     DEPOSIT --> BIOSIM
     EVAPORATE --> BIOSIM
-
-    style STIG fill:#e94560,stroke:#1a1a2e,color:#fff
-    style MODULES fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 **[events](../../src/codomyrmex/events/)** — The EventBus publish-subscribe system is the most direct software analogue of pheromone deposition. A module publishes an event to a shared medium without addressing any specific recipient. Subscribers detect and respond according to their own logic. The publisher does not know which subscribers exist, mirroring the ant that deposits pheromone without knowledge of which nestmates will encounter it. The signal is deposited in the medium, not transmitted to a receiver. This is the critical distinction between stigmergy and message-passing: in stigmergy, the environment is the communication channel.

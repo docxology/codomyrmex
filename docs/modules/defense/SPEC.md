@@ -48,18 +48,18 @@ The `defense` module implements "Fiduciary Defense" capabilities for Secure Cogn
 
 ```mermaid
 graph TD
-    subgraph "Detection"
+    subgraph sg_e3818c7886 [Detection]
         ED[ExploitDetector]
         Patterns[Attack Patterns]
     end
 
-    subgraph "Response"
+    subgraph sg_9061383b8e [Response]
         AD[ActiveDefense]
         CP[ContextPoisoner]
         RH[RabbitHole]
     end
 
-    subgraph "Dependencies"
+    subgraph sg_2e41b118eb [Dependencies]
         LOG[logging_monitoring]
         ID[identity]
     end

@@ -39,10 +39,6 @@ graph TB
     INNATE --> |"ancient · hardcoded · fast"| RESPONSE["Immune Response"]
     ADAPTIVE --> |"vertebrate · learned · slow"| RESPONSE
     SOCIAL --> |"behavioral · organizational"| RESPONSE
-
-    style INNATE fill:#16213e,stroke:#0f3460,color:#e8e8e8
-    style ADAPTIVE fill:#533483,stroke:#e94560,color:#e8e8e8
-    style SOCIAL fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 **Innate immunity** provides rapid defense via pattern recognition receptors (PRRs) such as Toll-like receptors, which detect pathogen-associated molecular patterns (PAMPs) — conserved signatures like lipopolysaccharide that are common across pathogen classes but absent from host cells. This system is ancient, hardcoded, and fast. It is a **signature-based classifier** — the biological equivalent of regex matching against a known-bad list.
@@ -89,9 +85,6 @@ graph LR
     DANGER_L --> LOG_MON
     NESTMATE --> IDENT
     VACCINATION --> CHAOS
-
-    style BIO_IMMUNE fill:#e94560,stroke:#1a1a2e,color:#fff
-    style CDM_SEC fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 - **[`defense`](../../src/codomyrmex/defense/)** — Adaptive immunity: learns from attacks, builds a response repertoire. Like clonal selection, encounter with a novel threat generates persistent countermeasures. Memory cells → persistent defense rules.

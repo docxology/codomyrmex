@@ -57,6 +57,12 @@ This documentation suite captures architecture, operational patterns, troublesho
 | [troubleshooting.md](troubleshooting.md) | 9 common issue patterns with diagnosis & fixes |
 | [security.md](security.md)               | API key hygiene, access control, hardening     |
 
+### Assets
+
+| Path | Description |
+| :--- | :--- |
+| [assets/README.md](assets/README.md) | Optional exported diagrams; Mermaid sources live in the docs above |
+
 ## Quick Start
 
 ```bash

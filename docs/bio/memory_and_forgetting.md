@@ -38,9 +38,6 @@ graph LR
     LTM -.-> AMEM_M
     LTM -.-> CERE_M
     LTM -.-> VEC_M
-
-    style STORES fill:#533483,stroke:#e94560,color:#e8e8e8
-    style CDM fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 ### The Forgetting Curve and Spacing Effect
@@ -72,9 +69,6 @@ graph TB
     POLICY --> LRU_P["LRU Eviction<br/><i>cache/</i>"]
     POLICY --> TTL_P["TTL Decay<br/><i>agentic_memory/</i>"]
     POLICY --> REL_P["Relevance Scoring<br/><i>cerebrum/</i>"]
-
-    style ADAPTIVE fill:#e94560,stroke:#1a1a2e,color:#fff
-    style POLICY fill:#533483,stroke:#1a1a2e,color:#fff
 ```
 
 ## Architectural Mapping

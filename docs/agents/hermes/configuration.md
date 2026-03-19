@@ -12,11 +12,11 @@ Hermes configuration lives in `$HERMES_HOME/config.yaml`. This file controls mod
 # =============================================================================
 # Model / Provider
 # =============================================================================
-model: nousresearch/hermes-3-llama-3.1-405b-instruct:free
+model: nvidia/nemotron-3-super-120b-a12b:free
 provider: openrouter   # openrouter | nous | zai | kimi-coding | minimax
 fallback_models:
-  - meta-llama/llama-3.1-70b-instruct:free
-  - google/gemini-2.0-flash:free
+  - google/gemini-2.0-flash-001
+  - anthropic/claude-3-haiku
 
 # =============================================================================
 # Toolsets
@@ -50,7 +50,7 @@ terminal:
 compression:
   enabled: true
   threshold: 0.85          # compress when context reaches 85% of model limit
-  summary_model: google/gemini-2.0-flash
+  summary_model: google/gemini-2.0-flash-001
   summary_provider: auto
 
 # =============================================================================
@@ -63,7 +63,7 @@ smart_model_routing:
   max_simple_words: 28
   cheap_model:
     provider: openrouter
-    model: google/gemini-2.0-flash
+    model: google/gemini-2.0-flash-001
 
 # =============================================================================
 # Security (v0.3.0)

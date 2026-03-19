@@ -41,6 +41,7 @@ This document provides a guide to Personal AI Infrastructure (PAI) documentation
 | LLM Integration | [modules/llm/](modules/llm/) | LLM provider setup |
 | Ollama | [modules/ollama.md](modules/ollama.md) | Local LLM setup |
 | Agent Framework | [modules/agents/](modules/agents/) | AI agent usage |
+| Hermes skill preload | [agents/hermes/skills.md](agents/hermes/skills.md) | Unified registry, `.codomyrmex/` profile, MCP `hermes_skills_*`, merge order |
 | Fabric AI | [integration/fabric-ai-integration.md](integration/fabric-ai-integration.md) | Fabric integration |
 
 ### Workflow Guides

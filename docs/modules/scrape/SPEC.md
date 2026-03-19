@@ -43,27 +43,27 @@ The `scrape` module is the web data extraction engine of Codomyrmex. It provides
 
 ```mermaid
 graph TD
-    subgraph "User Code"
+    subgraph sg_8cbf9f5f16 [User Code]
         A[Scraper]
     end
 
-    subgraph "Core Layer"
+    subgraph sg_6572b4b746 [Core Layer]
         B[BaseScraper Interface]
         C[ScrapeResult Types]
         D[ScrapeOptions]
     end
 
-    subgraph "Provider Layer"
+    subgraph sg_b461fb937f [Provider Layer]
         E[FirecrawlAdapter]
         F[Future Adapters]
     end
 
-    subgraph "Client Layer"
+    subgraph sg_6136584869 [Client Layer]
         G[FirecrawlClient]
         H[Future Clients]
     end
 
-    subgraph "External Services"
+    subgraph sg_ec1bb9b527 [External Services]
         I[Firecrawl API]
         J[Future APIs]
     end

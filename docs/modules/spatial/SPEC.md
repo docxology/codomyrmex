@@ -24,7 +24,7 @@ Spatial module providing 3D/4D visualization, modeling, and world model capabili
 
 ```mermaid
 graph TD
-    subgraph "Spatial Module"
+    subgraph sg_82a331d33e [Spatial Module]
         ThreeD[three_d/]
         FourD[four_d/]
         WorldModels[world_models/]

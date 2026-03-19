@@ -79,11 +79,6 @@ graph TD
     B["2. CLI-BASED TOOL<br/>(Shell command)"] -->|"If not possible"| C
     C["3. PROMPT<br/>(LLM with instructions)"] -->|"If not possible"| D
     D["4. SKILL<br/>(Full skill pack invocation)"]
-
-    style A fill:#2d6a4f,color:white
-    style B fill:#40916c,color:white
-    style C fill:#52b788,color:white
-    style D fill:#74c69d,color:white
 ```
 
 Codomyrmex enforces this through its tool registry:

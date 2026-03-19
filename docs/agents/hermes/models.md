@@ -10,7 +10,7 @@ Hermes is model-agnostic and routes LLM calls through configurable providers. Op
 
 ```yaml
 # config.yaml
-model: nousresearch/hermes-3-llama-3.1-405b:free
+model: nvidia/nemotron-3-super-120b-a12b:free
 ```
 
 The model string follows OpenRouter's `provider/model-name` format.
@@ -36,7 +36,7 @@ The model string follows OpenRouter's `provider/model-name` format.
 3. Set model in `config.yaml`:
 
    ```yaml
-   model: nousresearch/hermes-3-llama-3.1-405b
+   model: nvidia/nemotron-3-super-120b-a12b:free
    ```
 
 ### Listing Available Models
@@ -52,35 +52,29 @@ hermes model
 These models receive the `:free` suffix on OpenRouter and cost nothing to run (subject to daily quotas):
 
 ```yaml
-# Native Hermes model — best tool use + agentic tasks
-model: nousresearch/hermes-3-llama-3.1-405b-instruct:free
+# Nvidia Nemotron 120B — top free model for tool use and agentic tasks (confirmed March 2026)
+model: nvidia/nemotron-3-super-120b-a12b:free
 
-# Fast, strong function calling — 128K context
-model: meta-llama/llama-3.1-70b-instruct:free
+# Qwen 2.5 72B — fast, strong function calling, 128K context
+model: qwen/qwen-2.5-72b-instruct
 
-# Coding-specialized, 128K context
-model: qwen/qwen2.5-coder-32b-instruct:free
-
-# 1M+ context, ultra-fast (Google Gemini)
-model: google/gemini-2.0-flash:free
-
-# Lightweight, fastest responses
-model: microsoft/phi-3.5-mini-instruct:free
+# Google Gemini Flash — ultra-fast, 1M context, supports tool use
+model: google/gemini-2.0-flash-001
 ```
 
-> **Tip**: `nousresearch/hermes-3-llama-3.1-405b-instruct:free` is the best default — it is the Hermes-native model and supports structured tool calling natively.
+> **Tip**: `nvidia/nemotron-3-super-120b-a12b:free` is the current recommended default — large 120B MoE model, free tier, confirmed tool-use capable. Always probe model IDs with a live test before committing: `hermes chat -q "OK" --model <model_id>`.
 
 ### Recommended for Production
 
 ```yaml
-# High quality reasoning
-model: nousresearch/hermes-3-llama-3.1-405b
+# High quality reasoning + tool use
+model: anthropic/claude-3-haiku
 
-# Fast + capable
-model: anthropic/claude-3.5-sonnet
+# Fast + capable (sub-$1 per million tokens)
+model: google/gemini-2.0-flash-001
 
-# Cost-effective
-model: google/gemini-2.0-flash
+# Cost-effective balance
+model: qwen/qwen-2.5-72b-instruct
 ```
 
 ### Compression/Summary Models
@@ -89,7 +83,7 @@ For context compression, use a fast, inexpensive model:
 
 ```yaml
 compression:
-  summary_model: google/gemini-3-flash-preview
+  summary_model: google/gemini-2.0-flash-001
   # or
   summary_model: anthropic/claude-3-haiku
 ```
@@ -130,13 +124,13 @@ Vision Model (if configured)
 
 | Tier | Daily Free Req | RPM | Paid Models | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Free** (< $10) | 50 req/day | 20 rpm | ❌ `:free` only | All `:free` models only; failed reqs count toward limit |
-| **Pay-as-you-go** (≥ $10 credits) | 1000 req/day | 20 rpm | ✅ All models | 5.5% surcharge on credit top-ups ($0.80 min); BYOK: 1M free req/month |
+| **Free** (< $5) | 50 req/day | 20 rpm | ❌ `:free` only | All `:free` models only; failed reqs count toward limit |
+| **Pay-as-you-go** (≥ $5 credits) | 1000 req/day | 200 rpm | ✅ All models | 5.5% surcharge on credit top-ups; BYOK: 1M free req/month |
 | **Enterprise** | Custom | Dedicated | ✅ All models | SSO, SLAs, admin controls; invoicing available |
 
 ### How to Increase Your Rate Limits
 
-1. **Buy $10 in credits** at [openrouter.ai/settings/credits](https://openrouter.ai/settings/credits) — this is the single most effective action. It unlocks all paid models and raises daily free quota from 50 → 1,000 req/day.
+1. **Buy $5 in credits** at [openrouter.ai/settings/credits](https://openrouter.ai/settings/credits) — this is the single most effective action. It unlocks all paid models, raises daily free quota from 50 → 1,000 req/day, and increases RPM from 20 → 200.
 2. **Use BYOK** (bring your own key): set `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` directly. OpenRouter routes your requests to the upstream provider, giving you that provider's full rate limits. First 1M req/month free through OpenRouter.
 3. **Check current limits** via API:
 
@@ -145,26 +139,30 @@ Vision Model (if configured)
      -H "Authorization: Bearer $OPENROUTER_API_KEY"
    ```
 
-4. **Distribute across models** — different `:free` variants have separate provider quotas. Rotating between `hermes-3-llama-3.1-405b:free` and `qwen2.5-coder-32b:free` spreads load.
-5. **Use smart model routing** — Hermes now supports automatic fallback via `smart_model_routing.py` (v73 update). Configure a fallback model:
+4. **Distribute across models** — different `:free` variants have separate provider quotas. Rotating between `nvidia/nemotron-3-super-120b-a12b:free` and `qwen/qwen-2.5-72b-instruct` spreads load.
+5. **Use smart model routing** — Hermes supports automatic fallback via `smart_model_routing.py` (v73 update). Configure a fallback list:
 
    ```yaml
-   model: nousresearch/hermes-3-llama-3.1-405b-instruct:free
-   fallback_model: qwen/qwen2.5-coder-32b-instruct:free
+   model: nvidia/nemotron-3-super-120b-a12b:free
+   fallback_models:
+   - google/gemini-2.0-flash-001
+   - anthropic/claude-3-haiku
    ```
 
 ### Recommended Setup: Free + Cheap Hybrid
 
 ```yaml
-# Primary — native Hermes, best agentic quality, free
-model: nousresearch/hermes-3-llama-3.1-405b-instruct:free
+# Primary — best free agentic model (120B MoE, tool-use confirmed)
+model: nvidia/nemotron-3-super-120b-a12b:free
 
-# Fallback — ultra-cheap when primary hits limit (<$0.30/M tokens paid)
-fallback_model: qwen/qwen2.5-coder-32b-instruct
+# Fallback stack — activates automatically when primary is rate-limited
+fallback_models:
+- google/gemini-2.0-flash-001
+- anthropic/claude-3-haiku
 
-# Compression — use the fastest cheap model
+# Compression — use a fast cheap model
 compression:
-  summary_model: google/gemini-2.0-flash
+  summary_model: google/gemini-2.0-flash-001
 ```
 
 ## Cost Optimization

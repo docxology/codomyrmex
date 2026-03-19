@@ -55,10 +55,6 @@ graph TB
     MAINTAIN -.-> PLUGIN_AGENT
     SOLDIER -.-> IDENTITY_AGENT
     FORAGE -.-> AGENT_TYPES
-
-    style COLONY fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style CDM fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style AGE fill:#533483,stroke:#1a1a2e,color:#fff
 ```
 
 ### Caste Determination: Genetics vs. Epigenetics

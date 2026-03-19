@@ -39,10 +39,10 @@ Cloud services integration module providing standardized Python clients for inte
 
 ```mermaid
 graph TD
-    subgraph "Cloud Module"
+    subgraph sg_33d569bdee [Cloud Module]
         Init[__init__.py]
         
-        subgraph "Common Layer"
+        subgraph sg_46b651ec39 [Common Layer]
             CloudClient[CloudClient ABC]
             StorageClient[StorageClient ABC]
             ComputeClient[ComputeClient ABC]
@@ -51,14 +51,14 @@ graph TD
             Enums[CloudProvider, ResourceType]
         end
         
-        subgraph "Provider Implementations"
+        subgraph sg_60d1f9f536 [Provider Implementations]
             AWS[aws/S3Client]
             GCP[gcp/GCSClient]
             Azure[azure/AzureBlobClient]
             Coda[coda_io/CodaClient]
         end
 
-        subgraph "Infomaniak Provider"
+        subgraph sg_3979e4c8d3 [Infomaniak Provider]
             IKCompute[InfomaniakComputeClient]
             IKVolume[InfomaniakVolumeClient]
             IKNetwork[InfomaniakNetworkClient]

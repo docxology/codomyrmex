@@ -77,6 +77,7 @@ Documentation for all AI agent integrations in the Codomyrmex ecosystem. This di
 - `PAI.md` — PAI bridge documentation
 - `SPEC.md` — Functional specification
 - `rules/` — Agent rules and guidelines
+- `hermes/AGENTS.md` — Hermes doc index + **Mermaid diagram conventions** for this folder’s inline diagrams
 
 ## Navigation
 

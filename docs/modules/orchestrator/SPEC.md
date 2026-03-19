@@ -42,11 +42,11 @@ Provide centralized script orchestration capabilities for discovering, configuri
 
 ```mermaid
 graph TD
-    subgraph "Entry Points"
+    subgraph sg_ee6d83ad8d [Entry Points]
         CLI[CLI / main]
     end
 
-    subgraph "Core Components"
+    subgraph sg_e8978802b9 [Core Components]
         Core[core.py<br/>main]
         Config[config.py<br/>load_config, get_script_config]
         Discovery[discovery.py<br/>discover_scripts]
@@ -54,7 +54,7 @@ graph TD
         Reporting[reporting.py<br/>save_log, generate_report]
     end
 
-    subgraph "Dependencies"
+    subgraph sg_2e41b118eb [Dependencies]
         Logging[logging_monitoring]
         CLIHelpers[utils.cli_helpers]
     end

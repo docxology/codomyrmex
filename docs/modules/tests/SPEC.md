@@ -54,7 +54,7 @@ Testing directory providing comprehensive test suites following test-driven deve
 
 ```mermaid
 graph TD
-    subgraph "Test Pyramid"
+    subgraph sg_fc76105425 [Test Pyramid]
         Unit[unit/]
         Integration[integration/]
         Performance[performance/]
@@ -62,7 +62,7 @@ graph TD
         Fixtures[fixtures/]
     end
 
-    subgraph "Test Infrastructure"
+    subgraph sg_c49f5b8727 [Test Infrastructure]
         Pytest[pytest]
         Coverage[coverage.py]
         Fixtures[pytest fixtures]

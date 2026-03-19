@@ -43,11 +43,6 @@ graph TB
     ORCH --> TOOL --> CODING --> CONTAIN
     CONTAIN --> AMEM --> TELEM --> EVOL
     EVOL -.->|"policy update"| SKILLS
-
-    style DISCOVERY fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style SELECTION fill:#533483,stroke:#e94560,color:#e8e8e8
-    style EXECUTION fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style LEARNING fill:#16213e,stroke:#0f3460,color:#e8e8e8
 ```
 
 ### Phase 1: Discovery — Enumerating the Morphism Set
@@ -106,9 +101,6 @@ graph TD
 
     CDM["Current position<br/>VERIFIED → TRUSTED<br/><i>Level 3-4 autonomy</i>"]
     CDM -.-> TRUSTED
-
-    style LATTICE fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style CDM fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 The tool count is not vanity — it is a *measure of potential agency*. The autonomy spectrum maps to lattice positions:
@@ -168,9 +160,6 @@ graph TD
     READY -.-> WORKS
     UNREADY -.-> FAILS
     PRESENT -.-> DEBUG
-
-    style ONTOLOGY fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style CDM fill:#533483,stroke:#e94560,color:#e8e8e8
 ```
 
 When a tool works, it is *transparent* — the agent uses it without attending to it (Zuhandenheit). When it fails, it *breaks down* and becomes the object of explicit attention (Unzuhandenheit → Vorhandenheit). The `telemetry` and `logging_monitoring` modules implement the transition to explicit inspection: the tool that was invisible becomes the focus of diagnostic analysis.

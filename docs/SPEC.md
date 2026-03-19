@@ -54,45 +54,44 @@ Documentation directory providing comprehensive guides, references, and user-fac
 
 ```mermaid
 graph TD
-    subgraph "Audience Organization"
+    subgraph audOrg [Audience organization]
         Users[getting-started/]
         Contributors[project/]
         Developers[development/]
         Admins[deployment/]
     end
 
-    subgraph "Content Organization"
+    subgraph contentOrg [Content organization]
         Examples[examples/]
         ReferenceDir[reference/]
         Modules[modules/]
-        Integration[integration/]
+        IntegDir[integration/]
     end
 
-    subgraph "Documentation Flow"
+    subgraph docFlow [Documentation flow]
         Discovery[Discovery]
         Learning[Learning]
-        Reference[Reference]
-        Troubleshooting[Troubleshooting]
+        RefHub[Reference]
     end
 
     Users --> Discovery
     Contributors --> Learning
     Developers --> Learning
-    Admins --> Reference
-    ReferenceDir --> Reference
+    Admins --> RefHub
+    ReferenceDir --> RefHub
     Modules --> Learning
-    
-    subgraph "Secure Cognitive Agent"
-        Identity[Identity/Wallet]
-        Defense[Active Defense]
-        Market[Anonymous Market]
-        Privacy[Privacy Layer]
+
+    subgraph secureCog [Secure cognitive agent]
+        Identity[Identity / Wallet]
+        Defense[Active defense]
+        Market[Anonymous market]
+        Privacy[Privacy layer]
     end
-    
-    Identity --> Reference
-    Defense --> Reference
-    Market --> Reference
-    Privacy --> Reference
+
+    Identity --> RefHub
+    Defense --> RefHub
+    Market --> RefHub
+    Privacy --> RefHub
 ```
 
 ## Functional Requirements

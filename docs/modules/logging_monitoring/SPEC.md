@@ -54,18 +54,18 @@ Foundation module providing centralized logging infrastructure for the Codomyrme
 
 ```mermaid
 graph TD
-    subgraph "Configuration"
+    subgraph sg_b332c3492d [Configuration]
         EnvVars[Environment Variables]
         ConfigFile[Configuration File]
     end
 
-    subgraph "Core System"
+    subgraph sg_d155bc7da9 [Core System]
         Setup[setup_logging()]
         GetLogger[get_logger()]
         LogContext[LogContext]
     end
 
-    subgraph "Output Layer"
+    subgraph sg_e5d5a0063a [Output Layer]
         Console[Console Handler]
         File[File Handler]
         JSON[JSONFormatter]

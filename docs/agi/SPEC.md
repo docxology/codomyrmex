@@ -41,8 +41,6 @@ graph TD
 
     FORMAL --> GAP --> DESIGN
     DESIGN -.->|"motivates further"| FORMAL
-
-    style LENSES fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
 ```
 
 ### Essay Structure Template
@@ -143,10 +141,6 @@ graph TB
     COG_ARCH --> CAIS
     ALIGN --> CAIS
     RSI --> CAIS
-
-    style FOUNDATION fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style COGNITIVE fill:#533483,stroke:#e94560,color:#e8e8e8
-    style AGI_SPECIFIC fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 ## Navigation

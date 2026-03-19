@@ -25,7 +25,7 @@ The `docs/` directory is organized into **19 thematic sections** containing **20
 
 | Section | Focus | Key Content |
 |:---|:---|:---|
-| `agents/` | AI agent integrations | 38 agent subfolders, Hermes deep-dive (19 docs) |
+| `agents/` | AI agent integrations | 38 agent subfolders; Hermes: 19 docs + [skills.md](agents/hermes/skills.md) (registry / profile / MCP) |
 | `agi/` | AGI theory | Essays on emergence, category theory, agency |
 | `bio/` | Biological simulation | BioSimulator, genetic algorithms |
 | `cognitive/` | Cognitive systems | Cerebrum, Bayesian networks, active inference |
@@ -56,6 +56,7 @@ The `docs/` directory is organized into **19 thematic sections** containing **20
 - **Signposting**: Parent/child/sibling links in every document
 - **Cross-references**: Source docs link to doc docs and vice versa via relative paths
 - **Hierarchical AGENTS.md**: Root → `docs/AGENTS.md` → `docs/agents/AGENTS.md` → per-agent `AGENTS.md`
+- **Mermaid**: [development/documentation.md](development/documentation.md) — theme-neutral diagrams, subgraph conventions, normalizer scripts under `scripts/`
 
 ## Navigation
 

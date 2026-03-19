@@ -43,11 +43,6 @@ graph TB
     REPRESENTATION -->|"infer"| INFERENCE
     INFERENCE -->|"plan"| ACTION
     ACTION -.->|"execute & observe"| PERCEPTION
-
-    style PERCEPTION fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style REPRESENTATION fill:#533483,stroke:#e94560,color:#e8e8e8
-    style INFERENCE fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style ACTION fill:#16213e,stroke:#0f3460,color:#e8e8e8
 ```
 
 ### Perception: The Four Senses
@@ -174,12 +169,6 @@ graph TB
     EXTERNAL["External States η<br/><i>all other modules</i>"]
 
     EXTERNAL --> SENSORY --> INTERNAL --> ACTIVE --> EXTERNAL
-
-    style BLANKET fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style INTERNAL fill:#533483,stroke:#e94560,color:#e8e8e8
-    style SENSORY fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style ACTIVE fill:#16213e,stroke:#0f3460,color:#e8e8e8
-    style EXTERNAL fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 The key property: conditional on the blanket states (s, a), the internal states μ are **statistically independent** of the external states η:

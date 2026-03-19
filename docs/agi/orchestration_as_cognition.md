@@ -40,11 +40,6 @@ graph TB
     WORKSPACE -->|"load"| PHONOLOGICAL
     PHONOLOGICAL -->|"invoke"| EFFECTORS
     EFFECTORS -.->|"feedback"| EXECUTIVE
-
-    style EXECUTIVE fill:#e94560,stroke:#1a1a2e,color:#fff
-    style WORKSPACE fill:#533483,stroke:#e94560,color:#e8e8e8
-    style PHONOLOGICAL fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style EFFECTORS fill:#16213e,stroke:#0f3460,color:#e8e8e8
 ```
 
 ### The Global Workspace as Information Integration
@@ -113,11 +108,6 @@ graph TD
     BIOLOGICAL -.->|"reward signal"| NEURAL
     NEURAL -.->|"replanning trigger"| COGNITIVE
     COGNITIVE -.->|"mission revision"| RATIONAL
-
-    style RATIONAL fill:#e94560,stroke:#1a1a2e,color:#fff
-    style COGNITIVE fill:#533483,stroke:#e94560,color:#e8e8e8
-    style NEURAL fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style BIOLOGICAL fill:#16213e,stroke:#0f3460,color:#e8e8e8
 ```
 
 This four-level hierarchy maps to Newell's (1990) **cognitive band hierarchy**:

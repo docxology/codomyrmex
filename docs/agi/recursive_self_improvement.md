@@ -45,12 +45,6 @@ graph TB
     MODIFY -->|"diff Δc"| VERIFY
     VERIFY -->|"fitness Δ"| DEPLOY
     DEPLOY -.->|"new baseline"| OBSERVE
-
-    style OBSERVE fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style SEARCH fill:#533483,stroke:#e94560,color:#e8e8e8
-    style MODIFY fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style VERIFY fill:#16213e,stroke:#0f3460,color:#e8e8e8
-    style DEPLOY fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 ### Formal Characterization

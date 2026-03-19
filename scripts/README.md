@@ -119,5 +119,14 @@ Maintenance and automation utilities for project management.
 - `workflow_testing/` – Subdirectory
 - `sair/` – SAIR Mathematics Distillation submodule (Equational Theories)
 
+## Documentation (Mermaid)
+
+| Script | Purpose |
+| :--- | :--- |
+| `strip_mermaid_style_lines.py` | Remove `style … fill:…` lines from fenced `mermaid` blocks under `docs/` |
+| `normalize_mermaid_subgraphs.py` | Rewrite `subgraph "Label"` → `subgraph sg_<hash> [Label]` in `docs/` |
+
+See [docs/development/documentation.md](../docs/development/documentation.md).
+
 ## Navigation
 - **Project Root**: ../README.md

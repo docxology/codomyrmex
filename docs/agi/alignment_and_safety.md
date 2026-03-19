@@ -43,11 +43,6 @@ graph TB
 
     VALUE_CHANNEL --> TRUST --> CONSTRAINT --> OVERSIGHT
     OVERSIGHT -.->|"feedback"| VALUE_CHANNEL
-
-    style VALUE_CHANNEL fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style TRUST fill:#533483,stroke:#e94560,color:#e8e8e8
-    style CONSTRAINT fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style OVERSIGHT fill:#16213e,stroke:#0f3460,color:#e8e8e8
 ```
 
 ### Primitive 1: Trust Gateway — Cooperative Inverse Reinforcement Learning

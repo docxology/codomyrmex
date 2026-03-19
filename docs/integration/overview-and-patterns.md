@@ -8,13 +8,13 @@ This guide covers integrating Codomyrmex with external systems, APIs, databases,
 
 ```mermaid
 graph TB
-    subgraph "Codomyrmex Core"
+    subgraph sg_1d609d050e [Codomyrmex Core]
         Core["Codomyrmex<br/>Modules"]
         API["API Layer"]
         Events["Event System"]
     end
 
-    subgraph "External Systems"
+    subgraph sg_029bdd7765 [External Systems]
         Database["Databases<br/>PostgreSQL, MongoDB"]
         Cloud["Cloud Services<br/>AWS, GCP, Azure"]
         CI["CI/CD Systems<br/>GitHub Actions, Jenkins"]
@@ -23,7 +23,7 @@ graph TB
         Storage["Object Storage<br/>S3, MinIO"]
     end
 
-    subgraph "Integration Methods"
+    subgraph sg_8b5041891f [Integration Methods]
         REST["REST APIs"]
         Webhooks["Webhooks"]
         EventDriven["Event-Driven"]

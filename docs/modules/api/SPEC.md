@@ -24,7 +24,7 @@ API module providing OpenAPI specification generation, API documentation, and st
 
 ```mermaid
 graph TD
-    subgraph "API Module"
+    subgraph sg_2501fba29e [API Module]
         Generator[OpenAPI Generator]
         Documentation[Documentation Submodule]
         Standardization[Standardization Submodule]

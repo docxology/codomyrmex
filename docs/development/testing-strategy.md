@@ -12,7 +12,7 @@ This document outlines Codomyrmex's comprehensive testing approach, ensuring hig
 ### **Testing Pyramid**
 ```mermaid
 graph TB
-    subgraph "Testing Pyramid"
+    subgraph sg_a0657c7da2 [Testing Pyramid]
         E2E["End-to-End Tests<br/>🔍 Full workflow validation"]
         Integration["Integration Tests<br/>🔗 Module interactions"]
         Unit["Unit Tests<br/>⚡ Individual functions"]
@@ -21,7 +21,7 @@ graph TB
         Integration --> E2E
     end
 
-    subgraph "Coverage Targets"
+    subgraph sg_4fe987e1c4 [Coverage Targets]
         UnitCov["Unit: 90%+"]
         IntegCov["Integration: 80%+"]
         E2ECov["E2E: Critical paths 100%"]

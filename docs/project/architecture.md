@@ -34,38 +34,38 @@ Codomyrmex is designed as a modular, extensible coding workspace that integrates
 
 ```mermaid
 graph TB
-    subgraph "User Interfaces"
+    subgraph sg_6c79c72ff1 [User Interfaces]
         CLI["CLI<br/>(codomyrmex)"]
         Shell["Interactive<br/>Shell"]
         API["API Endpoints<br/>(FastAPI)"]
     end
 
-    subgraph "Core Services Layer"
+    subgraph sg_8c861d1c94 [Core Services Layer]
         Discovery["System<br/>Discovery"]
         Status["Status<br/>Reporting"]
         Terminal["Interactive<br/>Terminal"]
     end
 
-    subgraph "Module Layer - AI & Intelligence"
+    subgraph sg_5023f964c6 [Module Layer - AI & Intelligence]
         AICode["AI Code<br/>Editing"]
         MCP["Model Context<br/>Protocol"]
     end
 
-    subgraph "Module Layer - Analysis & Quality"
+    subgraph sg_d8702d52e6 [Module Layer - Analysis & Quality]
         CodeExec["Coding<br/>(static_analysis, pattern_matching)"]
     end
 
-    subgraph "Module Layer - Build & Deploy"
+    subgraph sg_4e319ce7ac [Module Layer - Build & Deploy]
         CICD["CI/CD Automation<br/>(includes build)"]
         Git["Git<br/>Operations"]
         Docs["Documentation<br/>Generation"]
     end
 
-    subgraph "Module Layer - Visualization"
+    subgraph sg_cb4190d5bb [Module Layer - Visualization]
         DataViz["Data<br/>Visualization"]
     end
 
-    subgraph "Foundation Layer"
+    subgraph sg_5f13f7c061 [Foundation Layer]
         Logging["Logging &<br/>Monitoring"]
         Environment["Environment<br/>Setup"]
         TerminalInterface["Terminal<br/>Interface"]

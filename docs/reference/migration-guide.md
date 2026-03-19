@@ -9,14 +9,14 @@ Codomyrmex follows [Semantic Versioning](https://semver.org/) principles:
 
 ```mermaid
 graph LR
-    subgraph "Version Format"
+    subgraph sg_74a8ff1a1a [Version Format]
         Major["MAJOR.MINOR.PATCH"]
         Major --> MajorEx["1.0.0 → 2.0.0<br/>Breaking Changes"]
         Major --> MinorEx["1.0.0 → 1.1.0<br/>New Features"]
         Major --> PatchEx["1.0.0 → 1.0.1<br/>Bug Fixes"]
     end
 
-    subgraph "Migration Complexity"
+    subgraph sg_121f8cfb08 [Migration Complexity]
         Patch["Patch Updates<br/>🟢 Drop-in replacement"]
         Minor["Minor Updates<br/>🟡 Backward compatible"]
         MajorUp["Major Updates<br/>🔴 Breaking changes"]

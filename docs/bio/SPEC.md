@@ -59,9 +59,6 @@ graph LR
     S7 --> P7
     S8 --> P8
     S9 --> P9
-
-    style BIO fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style SW fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 ## 4. Formal Analogies

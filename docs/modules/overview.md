@@ -31,26 +31,26 @@ Modules are organized in dependency layers to prevent circular dependencies:
 
 ```mermaid
 graph TD
-    subgraph "Application Layer"
+    subgraph sg_2ba8632d46 [Application Layer]
         InteractiveShell["Interactive<br/>Shell"]
         SystemDiscovery["System Discovery<br/>& Orchestration"]
     end
 
-    subgraph "Service Layer"
+    subgraph sg_d55324be2d [Service Layer]
         AIAgents["AI Agents<br/>& Benchmarks"]
         Documentation["Documentation<br/>& Education"]
         CICD["CI/CD<br/>(incl. build)"]
         Coding["Coding<br/>(static analysis, patterns)"]
     end
 
-    subgraph "Core Layer"
+    subgraph sg_6572b4b746 [Core Layer]
         ModelOps["Model Ops<br/>(eval, registry, optimization)"]
         DataViz["Data Visualization<br/>& Export"]
         Testing["Testing<br/>(workflow, chaos)"]
         GitOperations["Git Operations<br/>& Merge Resolution"]
     end
 
-    subgraph "Foundation Layer"
+    subgraph sg_5f13f7c061 [Foundation Layer]
         LoggingMonitoring["Logging &<br/>Monitoring"]
         EnvironmentSetup["Environment<br/>Setup"]
         MCP["Model Context<br/>Protocol"]

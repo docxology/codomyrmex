@@ -52,18 +52,18 @@ The module's architecture is straightforward, consisting of a collection of Pyth
 
 ```mermaid
 graph TD
-    subgraph "User/Client Interaction"
+    subgraph sg_17a4a94375 [User/Client Interaction]
         PyAPICall["Python API Call (e.g., create_line_plot(...))"]
         MCPRequest["MCP Request (tool_name: create_line_plot, args)"]
     end
 
-    subgraph "Data Visualization Module Core"
+    subgraph sg_6f7e925e39 [Data Visualization Module Core]
         PyPlotFunc["Python Plotting Function (e.g., internal_create_line_plot)"]
         PlotUtils["plot_utils.py (Styling, Saving, Logging Helpers)"]
         MCPHandlers["MCP Tool Handlers"]
     end
 
-    subgraph "External Libraries & Services"
+    subgraph sg_da652fc98d [External Libraries & Services]
         MathematicsLibraries["Matplotlib / Seaborn / NumPy"]
         LoggingService["logging_monitoring Module"]
         FileSystem["File System (for Output Plots)"]

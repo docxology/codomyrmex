@@ -49,22 +49,22 @@ The `identity` module provides multi-persona management and bio-cognitive verifi
 
 ```mermaid
 graph TD
-    subgraph "Public API"
+    subgraph sg_ab3aa426f8 [Public API]
         IM[IdentityManager]
         BCV[BioCognitiveVerifier]
     end
 
-    subgraph "Data Model"
+    subgraph sg_f357db9302 [Data Model]
         P[Persona]
         VL[VerificationLevel]
     end
 
-    subgraph "Lifecycle"
+    subgraph sg_46459b1fa9 [Lifecycle]
         RM[RevocationManager]
         Export[Portable Export]
     end
 
-    subgraph "Dependencies"
+    subgraph sg_2e41b118eb [Dependencies]
         LOG[logging_monitoring]
         PRIV[privacy]
     end

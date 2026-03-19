@@ -92,7 +92,7 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 
 ```mermaid
 graph LR
-    subgraph "Primary Workflow"
+    subgraph sg_3f0de0ecc0 [Primary Workflow]
         UserCode["User Code"]
         CodingAnalysis["Coding Module<br/>(static analysis + patterns)"]
         CICD["CI/CD Automation<br/>(incl. build)"]
@@ -101,7 +101,7 @@ graph LR
         CodingAnalysis --> CICD
     end
 
-    subgraph "Supporting Services"
+    subgraph sg_43f02c4095 [Supporting Services]
         AICode["AI Agents<br/>& Benchmarks"]
         GitOps["Git Operations<br/>& Merge Resolution"]
 
@@ -639,30 +639,30 @@ LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
 ```mermaid
 graph LR
-    subgraph "Module Compatibility & Dependencies"
-        subgraph "Foundation Layer (Required by All)"
+    subgraph sg_6c0a652885 [Module Compatibility & Dependencies]
+        subgraph sg_0bd68e137e [Foundation Layer (Required by All)]
             ENV["environment_setup"]
             LOG["logging_monitoring"]
             MCP["model_context_protocol"]
         end
 
-        subgraph "AI & Intelligence Layer"
+        subgraph sg_15c4926e85 [AI & Intelligence Layer]
             AI["agents"]
             MOPS["model_ops"]
         end
 
-        subgraph "Analysis & Quality Layer"
+        subgraph sg_08afff16a7 [Analysis & Quality Layer]
             CODE["coding (static_analysis, patterns)"]
             SEC["security (governance)"]
         end
 
-        subgraph "Build & Deploy Layer"
+        subgraph sg_b3cb94339a [Build & Deploy Layer]
             CICD["ci_cd_automation (build)"]
             GIT["git_operations"]
             DOCS["documentation (education)"]
         end
 
-        subgraph "Visualization Layer"
+        subgraph sg_b45863baca [Visualization Layer]
             VIZ["data_visualization"]
         end
     end

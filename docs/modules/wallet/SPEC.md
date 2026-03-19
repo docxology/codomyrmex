@@ -29,7 +29,7 @@ The `wallet` module provides secure self-custody key management and Natural Ritu
 
 ```mermaid
 graph TD
-    subgraph "Public API"
+    subgraph sg_ab3aa426f8 [Public API]
         WM[WalletManager]
         NRR[NaturalRitualRecovery]
         BM[BackupManager]
@@ -37,11 +37,11 @@ graph TD
         W[Wallet Facade]
     end
 
-    subgraph "Internal"
+    subgraph sg_2ea1842b44 [Internal]
         EX[Exceptions]
     end
 
-    subgraph "Dependencies"
+    subgraph sg_2e41b118eb [Dependencies]
         KMgr[encryption.KeyManager]
         LOG[logging_monitoring]
     end

@@ -44,10 +44,6 @@ graph TB
     HOST -.-> CDM_HOST
     MICRO -.-> CDM_PLUGINS
     MITO -.-> CDM_LLM
-
-    style HOLOBIONT fill:#533483,stroke:#e94560,color:#e8e8e8
-    style HOLOGENOME fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style CDM_HOLO fill:#16213e,stroke:#0f3460,color:#e8e8e8
 ```
 
 ### The Symbiosis Spectrum
@@ -66,10 +62,6 @@ graph LR
     MUT -.->|"e.g."| LLM_MUT["LLM ↔ Codomyrmex<br/><i>obligate mutualism</i>"]
     COM -.->|"e.g."| LOG_COM["Passive monitoring<br/><i>commensal telemetry</i>"]
     PAR -.->|"e.g."| ROGUE["Rogue agent<br/><i>resource parasitism</i>"]
-
-    style MUT fill:#16213e,stroke:#0f3460,color:#e8e8e8
-    style COM fill:#533483,stroke:#e94560,color:#e8e8e8
-    style PAR fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 ### Ant Agriculture: The Archetypal Mutualism

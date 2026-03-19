@@ -32,13 +32,6 @@ graph TD
     ECIT -..->|"swarm_intelligence.md"| SW["🔗 Swarm"]
     LINE -..->|"stigmergy.md"| ST["🔗 Stigmergy"]
     SOLE -..->|"immune_system.md"| IM["🔗 Immune"]
-
-    style FORM fill:#e94560,stroke:#1a1a2e,color:#fff
-    style MYRM fill:#533483,stroke:#1a1a2e,color:#fff
-    style FORMI fill:#533483,stroke:#1a1a2e,color:#fff
-    style DORY fill:#0f3460,stroke:#1a1a2e,color:#fff
-    style DOLI fill:#0f3460,stroke:#1a1a2e,color:#fff
-    style PONE fill:#16213e,stroke:#1a1a2e,color:#e8e8e8
 ```
 
 ## Architectural Mapping
@@ -68,9 +61,6 @@ graph LR
     PHERO --> BIOSIM
     SOCIAL --> RELAT
     QUEEN --> GOVERN
-
-    style ANT fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style CDM fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 **[bio_simulation](../../src/codomyrmex/bio_simulation/)** provides a literal computational model of colony dynamics. Its `Colony`, `Ant`, and `PheromoneGrid` classes implement agent-based simulations in which virtual ants deposit and follow pheromone gradients, forage for resources, and exhibit emergent path optimization. The `PheromoneGrid` is parameterized by deposition rate (ρ), evaporation rate (λ), and diffusion coefficient (D), recapitulating the reaction-diffusion dynamics that govern real trail pheromone propagation (Camazine et al., 2001).

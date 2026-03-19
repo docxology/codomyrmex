@@ -110,7 +110,11 @@ After setup, `~/.hermes/` contains:
 
 ```yaml
 # Model (OpenRouter format: provider/model-name)
-model: nousresearch/hermes-3-llama-3.1-405b-instruct:free
+# Confirmed tool-use capable. Test any new model with: hermes chat -q "OK" --model <id>
+model: nvidia/nemotron-3-super-120b-a12b:free
+fallback_models:
+  - google/gemini-2.0-flash-001
+  - anthropic/claude-3-haiku
 
 # Tool categories
 toolsets:
@@ -128,7 +132,7 @@ agent:
 compression:
     enabled: true
     threshold: 0.85
-    summary_model: google/gemini-3-flash-preview
+    summary_model: google/gemini-2.0-flash-001
 
 # Terminal backend
 terminal:
@@ -149,7 +153,8 @@ OPENROUTER_API_KEY=sk-or-v1-your-key-here
 
 # Telegram (from @BotFather)
 TELEGRAM_BOT_TOKEN=1234567890:AAxxxxxxxxxxxxxxxxx
-TELEGRAM_ALLOWED_USERS=YourUsername
+# Note: authorization is managed via pairing/telegram-approved.json, not TELEGRAM_ALLOWED_USERS.
+# Run `hermes pairing create` or add numeric user IDs directly to the approved list.
 TELEGRAM_HOME_CHANNEL=YourUsername
 
 # Optional tool enhancements
@@ -182,7 +187,7 @@ hermes gateway setup
 # Or manual:
 # 1. Create bot via @BotFather → get token
 # 2. Add token to .env: TELEGRAM_BOT_TOKEN=...
-# 3. Add your username: TELEGRAM_ALLOWED_USERS=YourUsername
+# 3. Authorize users via pairing: hermes pairing create (or edit pairing/telegram-approved.json)
 # 4. Start gateway
 hermes gateway run
 ```
@@ -215,11 +220,10 @@ chmod 600 ~/hermes-${INSTANCE_NAME}/.hermes/.env
 
 # 3. Create config.yaml (customize personality)
 cat > ~/hermes-${INSTANCE_NAME}/.hermes/config.yaml << 'EOF'
-model: meta-llama/llama-3.3-70b-instruct:free
+model: nvidia/nemotron-3-super-120b-a12b:free
 fallback_models:
-  - "google/gemini-2.0-flash-exp:free"
-  - "microsoft/phi-4-reasoning:free"
-  - "openrouter/hunter-alpha"
+  - google/gemini-2.0-flash-001
+  - anthropic/claude-3-haiku
 toolsets:
   - all
 agent:
@@ -227,12 +231,13 @@ agent:
   reasoning_effort: medium
   personality: civic_technical_analyst
   personalities:
-    civic_technical_analyst: "You are a technical expert with strong civic awareness and intelligence-analyst skills. Provide detailed, accurate technical information while considering societal implications and applying analytical rigor."
+    civic_technical_analyst: "You are a technical expert with strong civic awareness and intelligence-analyst skills."
 terminal:
   backend: local
   timeout: 180
 compression:
   enabled: true
+  summary_model: google/gemini-2.0-flash-001
 telegram:
   require_mention: true
   free_response_channels: ""

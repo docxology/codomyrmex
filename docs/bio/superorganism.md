@@ -40,9 +40,6 @@ graph TB
     DIGEST <--> CIRCULATE
     REPRO <--> GAMETE
     DEATH <--> APOPTOSIS
-
-    style SUPER fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style METAZOAN fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 ### Distributed Cognition
@@ -64,12 +61,6 @@ flowchart LR
     DEATH_LC["💀 Senescence<br/><i>queen dies<br/>colony declines</i>"]
 
     FOUND --> GROWTH --> MATURE --> REPRO_LC --> DEATH_LC
-
-    style FOUND fill:#16213e,stroke:#0f3460,color:#e8e8e8
-    style GROWTH fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style MATURE fill:#533483,stroke:#e94560,color:#e8e8e8
-    style REPRO_LC fill:#e94560,stroke:#1a1a2e,color:#fff
-    style DEATH_LC fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
 ```
 
 ## Architectural Mapping
@@ -97,9 +88,6 @@ graph LR
     AWARE --> DASH
     MEMBRANE --> MCP_MOD
     MODEL --> BIOSIM_MOD
-
-    style ORGANISM fill:#e94560,stroke:#1a1a2e,color:#fff
-    style CDM fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 - **[`system_discovery`](../../src/codomyrmex/system_discovery/)** — The colony's **proprioceptive sense**. Just as a superorganism continuously assesses workforce composition and resource reserves, system_discovery monitors module health, agent availability, and system composition. Without self-assessment, adaptive allocation is impossible. This is not monitoring *about* the system — it is the system monitoring *itself*, the diagnostic prerequisite for homeostasis.

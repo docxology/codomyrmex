@@ -76,9 +76,6 @@ graph LR
     V3["v3.0: Active Execution<br/>(Semi-Autonomous)"]
 
     V2 -->|"Evolution"| V3
-
-    style V2 fill:#6c757d,color:white
-    style V3 fill:#2d6a4f,color:white
 ```
 
 | Version | Mode | Mechanism | Features |

@@ -6,7 +6,9 @@
 
 Agent coordination document for the Hermes documentation subfolder. Guides AI agents navigating Hermes-related documentation and scripts.
 
-## Documentation Files (21)
+## Documentation Files (22)
+
+Includes **`assets/README.md`** for optional static diagram exports (primary diagrams are Mermaid blocks in the Markdown files below).
 
 ### Getting Started
 
@@ -64,6 +66,10 @@ Agent coordination document for the Hermes documentation subfolder. Guides AI ag
 | `observe_hermes.py`         | Session observability                        |
 | `evaluate_orchestrators.py` | Thin orchestrator evaluation                 |
 | `prompt_context.py`         | Project-aware context builder                |
+
+## Diagram conventions (Mermaid)
+
+Hermes docs use **flowchart** / **graph** / **sequenceDiagram** blocks. Prefer `subgraph graphId [Visible label]` (explicit id + bracket label), avoid reserved-looking node ids such as `end`, avoid hard-coded `classDef` / theme colors so diagrams stay readable in light and dark themes, and wire **named nodes** only (do not reference a subgraph alias as if it were a node).
 
 ## Operating Contracts
 

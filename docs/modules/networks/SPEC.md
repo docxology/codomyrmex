@@ -32,13 +32,13 @@ The `networks` module provides core graph data structures for the Codomyrmex pla
 
 ```mermaid
 graph TD
-    subgraph "networks module"
+    subgraph sg_c9d368cc89 [networks module]
         Network[Network]
         Node[Node Generic T]
         Edge[Edge]
     end
 
-    subgraph "Foundation"
+    subgraph sg_df42a4d5d3 [Foundation]
         Logger[logging_monitoring]
     end
 

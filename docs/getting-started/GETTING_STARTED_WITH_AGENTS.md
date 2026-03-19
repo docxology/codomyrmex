@@ -68,12 +68,6 @@ graph TB
     ORCH --> AGENTS
     AGENTS --> INFRA
     INFRA --> MODULES
-
-    style IDE fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style ORCH fill:#533483,stroke:#e94560,color:#e8e8e8
-    style AGENTS fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style INFRA fill:#16213e,stroke:#0f3460,color:#e8e8e8
-    style MODULES fill:#1a1a2e,stroke:#16213e,color:#e8e8e8
 ```
 
 ---
@@ -111,10 +105,6 @@ graph LR
     CC_MCP --> |"JSON-RPC"| CDM["Codomyrmex<br/>Modules"]
     AG_ROUTER --> CDM
     CR_AGENT --> |"direct file access"| CDM
-
-    style Cursor fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style Antigravity fill:#533483,stroke:#e94560,color:#e8e8e8
-    style ClaudeCode fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 ### Cursor Integration
@@ -194,11 +184,6 @@ graph TD
     CLI_B --> OW_P["OpenClaw<br/>open-source"]
 
     LOCAL --> OLLAMA_P["Ollama<br/>privacy-first<br/>zero cost"]
-
-    style ROOT fill:#e94560,stroke:#1a1a2e,color:#fff
-    style API fill:#533483,stroke:#1a1a2e,color:#fff
-    style CLI_B fill:#0f3460,stroke:#1a1a2e,color:#fff
-    style LOCAL fill:#16213e,stroke:#1a1a2e,color:#fff
 ```
 
 ### Core Agent Modules (`src/codomyrmex/agents/`)
@@ -336,14 +321,6 @@ flowchart LR
     E -..->|"run_command<br/>run_tests"| CDM5["Codomyrmex"]
     V -..->|"git_status<br/>checksum_file"| CDM6["Codomyrmex"]
     L -..->|"pai_awareness<br/>agentic_memory"| CDM7["Codomyrmex"]
-
-    style O fill:#e94560,stroke:#1a1a2e,color:#fff
-    style T fill:#533483,stroke:#1a1a2e,color:#fff
-    style P fill:#0f3460,stroke:#1a1a2e,color:#fff
-    style B fill:#16213e,stroke:#1a1a2e,color:#fff
-    style E fill:#0f3460,stroke:#1a1a2e,color:#fff
-    style V fill:#533483,stroke:#1a1a2e,color:#fff
-    style L fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 ### PAI Bridge Components (`src/codomyrmex/agents/pai/`)
@@ -498,9 +475,6 @@ graph LR
 
     MCP_TOOLS -->|"runs Python in<br/>codomyrmex process"| CDM["Codomyrmex<br/>MCP Server"]
     EXT_SKILLS -->|"guides Claude's<br/>own generation"| CC["Claude Code<br/>Session"]
-
-    style MCP_TOOLS fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style EXT_SKILLS fill:#533483,stroke:#e94560,color:#e8e8e8
 ```
 
 ### PAI Skills (`src/codomyrmex/skills/`)
@@ -552,8 +526,6 @@ graph TB
 
     AGENT -->|"writes"| LT
     AGENT -->|"writes"| OBSIDIAN
-
-    style MEMORY fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
 ```
 
 ```python
@@ -602,10 +574,6 @@ flowchart LR
     BUS -->|"on()"| TELEM_SUB
     BUS -->|"on()"| MEMORY_SUB
     BUS -->|"on()"| DASH_SUB
-
-    style Publishers fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style BUS fill:#e94560,stroke:#1a1a2e,color:#fff
-    style Subscribers fill:#533483,stroke:#e94560,color:#e8e8e8
 ```
 
 ```python

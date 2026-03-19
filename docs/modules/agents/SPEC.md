@@ -52,12 +52,12 @@ The `agents` module provides integration with various agentic frameworks includi
 
 ```mermaid
 graph TD
-    subgraph "Client Layer"
+    subgraph sg_6136584869 [Client Layer]
         PublicAPI[Public API]
         AgentInterface[AgentInterface]
     end
 
-    subgraph "Generic Layer"
+    subgraph sg_70930ef218 [Generic Layer]
         BaseAgent[BaseAgent]
         CLIAgentBase[CLIAgentBase]
         APIAgentBase[APIAgentBase]
@@ -66,7 +66,7 @@ graph TD
         TaskPlanner[TaskPlanner]
     end
 
-    subgraph "CLI-based Agents"
+    subgraph sg_ed83088a62 [CLI-based Agents]
         JulesClient[JulesClient<br/>Jules CLI]
         GeminiClient[GeminiClient<br/>Gemini CLI]
         OpenCodeClient[OpenCodeClient<br/>OpenCode CLI]
@@ -74,7 +74,7 @@ graph TD
         EveryCodeClient[EveryCodeClient<br/>Every Code CLI]
     end
 
-    subgraph "API-based Agents"
+    subgraph sg_36a3577334 [API-based Agents]
         ClaudeClient[ClaudeClient<br/>Anthropic API]
         CodexClient[CodexClient<br/>OpenAI API]
         O1Client[O1Client<br/>OpenAI o1/o3]
@@ -82,17 +82,17 @@ graph TD
         QwenClient[QwenClient<br/>Alibaba API]
     end
 
-    subgraph "Local Agents"
+    subgraph sg_02e4a50437 [Local Agents]
         OllamaManager[OllamaManager<br/>Local LLMs]
     end
 
-    subgraph "Integration Adapters"
+    subgraph sg_8d5f2cc70a [Integration Adapters]
         AICodeEditingAdapter[AI Code Editing Adapter]
         LanguageModelsAdapter[Language Models Adapter]
         CodeExecutionAdapter[Code Execution Adapter]
     end
 
-    subgraph "Theory & Utilities"
+    subgraph sg_da46e5ac4b [Theory & Utilities]
         Architectures[Agent Architectures]
         ReasoningModels[Reasoning Models]
         AICodeEditing[AI Code Editing Module]

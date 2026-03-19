@@ -49,17 +49,17 @@ The `privacy` module enforces data minimization and network anonymity for Secure
 
 ```mermaid
 graph TD
-    subgraph "Sanitization"
+    subgraph sg_b00ab46171 [Sanitization]
         CC[CrumbCleaner]
         DB[DynamicBlacklist]
         TA[TraceAnalyzer]
     end
 
-    subgraph "Transport"
+    subgraph sg_aaead4abf5 [Transport]
         MP[MixnetProxy]
     end
 
-    subgraph "Dependencies"
+    subgraph sg_2e41b118eb [Dependencies]
         LOG[logging_monitoring]
     end
 

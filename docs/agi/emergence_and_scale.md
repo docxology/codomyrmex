@@ -33,9 +33,6 @@ graph TB
 
     CDM["Codomyrmex<br/>p ≈ 0.95<br/><i>Deep supercritical</i>"]
     CDM -.-> SUPER
-
-    style PERCOLATION fill:#1a1a2e,stroke:#e94560,color:#e8e8e8
-    style CDM fill:#e94560,stroke:#1a1a2e,color:#fff
 ```
 
 ## Four Emergent Capabilities

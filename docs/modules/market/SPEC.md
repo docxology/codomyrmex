@@ -49,22 +49,22 @@ The `market` module facilitates anonymous economic coordination for Secure Cogni
 
 ```mermaid
 graph TD
-    subgraph "Public API"
+    subgraph sg_ab3aa426f8 [Public API]
         RA[ReverseAuction]
         DA[DemandAggregator]
     end
 
-    subgraph "Data Model"
+    subgraph sg_f357db9302 [Data Model]
         Bid[Bid]
         Auction[AuctionState]
     end
 
-    subgraph "Support"
+    subgraph sg_be91940b79 [Support]
         BM[BidManager]
         PR[ProviderRegistry]
     end
 
-    subgraph "Dependencies"
+    subgraph sg_2e41b118eb [Dependencies]
         LOG[logging_monitoring]
         ID[identity]
         PRIV[privacy]

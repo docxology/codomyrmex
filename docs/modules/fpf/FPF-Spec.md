@@ -14367,7 +14367,7 @@ The entities are connected by a set of precise, normative relations that form an
 
 ```mermaid
 graph TD
-    subgraph Design-Time Scope (Tᴰ)
+    subgraph designScope [Design-Time Scope Tᴰ]
         A[U.BoundedContext] -- defines --> B(U.Role)
         M[U.Method] -- isDescribedBy --> D[U.MethodDescription]
         Cap[U.Capability] -- supports --> M
@@ -14377,21 +14377,12 @@ graph TD
         A -- bindsCapability(Role,Capability) --> Cap
     end
 
-    subgraph Run-Time Scope (Tᴿ)
+    subgraph runScope [Run-Time Scope Tᴿ]
         W[U.Work]
     end
 
     RB -- performedBy --> W
     W  -- isExecutionOf --> D
-
-    style A fill:#e6f3ff,stroke:#36c,stroke-width:2px
-    style B fill:#fff2cc,stroke:#d6b656,stroke-width:2px
-    style Cap fill:#d5e8d4,stroke:#82b366,stroke-width:2px
-    style M fill:#d5e8d4,stroke:#82b366,stroke-width:2px
-    style D fill:#f8cecc,stroke:#b85450,stroke-width:2px
-    style H fill:#e1d5e7,stroke:#9673a6,stroke-width:2px
-    style RB fill:#dae8fc,stroke:#6c8ebf,stroke-width:3px,stroke-dasharray: 5 5
-    style W fill:#ffe6cc,stroke:#d79b00,stroke-width:2px,font-weight:bold
 ```
 
 *   **`bindsCapability(Role, Capability)`:** A `U.BoundedContext` asserts that a given `Role` requires a specific `Capability`. This is a `design-time` rule.

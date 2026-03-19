@@ -177,13 +177,13 @@ Codomyrmex employs a synergistic combination of its modules to proactively and r
 
 ```mermaid
 graph TD
-    subgraph Traditional Workflow
+    subgraph tradWf [Traditional Workflow]
         A[Developer Writes Code] -->|Typing/Copy-Paste| B(Potential Typo);
         B -->|Compiler/Linter Miss| C{Typo Persists};
         C -->|Logic Error/Bug| D[Runtime Issue];
     end
 
-    subgraph Codomyrmex Enhanced Workflow
+    subgraph cxTypoFlow [Codomyrmex Enhanced Workflow]
         A1[Developer Writes Code with `ai_code_editing`] -->|AI Assistance & Auto-completion| B1(Reduced Typo Chance);
         B1 -- `static_analysis` (Linting/Formatting) --> F1{Typo Caught Early};
         F1 -- `ai_code_editing` (Auto-fix/Suggest) --> G1[Typo Fixed];
@@ -193,11 +193,6 @@ graph TD
         H1 -- `git_operations` (Pre-commit Hook) --> I1[Verified Code in VCS];
         I1 -- `deployment` (CI Check) --> J1[Robust Build];
     end
-
-    style A1 fill:#e6ffe6,stroke:#333,stroke-width:2px
-    style F1 fill:#ffe6e6,stroke:#333,stroke-width:2px
-    style G1 fill:#e6ffe6,stroke:#333,stroke-width:2px
-    style J1 fill:#d1f0ff,stroke:#333,stroke-width:2px
 ```
 
 ---
@@ -287,13 +282,13 @@ Logical errors, where the code is syntactically correct but behaves incorrectly,
 
 ```mermaid
 graph TD
-    subgraph ProblemSpace
+    subgraph probSpace [ProblemSpace]
         L_Dev[Developer Implements Logic] --> L_Code[Code with Potential Logical Flaw];
         L_Code -- Execution --> L_Behaves[Incorrect Behavior];
         L_Behaves --> L_Bug[Logical Bug Manifests];
     end
 
-    subgraph CodomyrmexAssistedSolution
+    subgraph cxLogicSol [CodomyrmexAssistedSolution]
         L_Dev -- `ai_code_editing` (Design & Simplification) --> L_BetterCode[Simpler/Clearer Code];
         L_BetterCode -- `static_analysis` (Complexity & Pattern Checks) --> L_Warn[Warnings on Risky Logic];
         
@@ -306,10 +301,6 @@ graph TD
         L_Insight -- `model_context_protocol` (Error Signature Learning) --> L_Learn[System Learns Pattern];
         L_Learn -- `ai_code_editing` / `static_analysis` (Proactive Guidance) --> L_FuturePrevent[Future Prevention Enhanced];
     end
-    
-    style L_BetterCode fill:#e6ffe6,stroke:#333,stroke-width:2px
-    style L_Fix fill:#e6ffe6,stroke:#333,stroke-width:2px
-    style L_Deploy fill:#d1f0ff,stroke:#333,stroke-width:2px
 ```
 
 ---
@@ -392,12 +383,12 @@ Codomyrmex helps ensure that code is resilient to or explicit about its operatin
 graph TD
     Input([External Input/State]) --> IU_Func[Function Call];
 
-    subgraph Without Codomyrmex
+    subgraph withoutCx [Without Codomyrmex]
         IU_Func -->|No/Poor Validation| IU_Logic[Function Logic];
         IU_Logic -->|Unexpected Condition| IU_Crash{Crash/Undefined Behavior};
     end
 
-    subgraph With Codomyrmex
+    subgraph withCx [With Codomyrmex]
         Input -- `static_analysis` (Suggests Checks) / `ai_code_editing` (Adds Asserts) --> IU_Func_C[Function Call with Preconditions];
         IU_Func_C -- `documentation` (Clear Contract) --> IU_Caller[Caller Aware of Expectations];
         
@@ -409,10 +400,6 @@ graph TD
         IU_Func_C -- `code_execution_sandbox` (Fuzz Testing) --> IU_DetectIssue[Detects Unhandled Cases];
         IU_DetectIssue -- `ai_code_editing` (Fix/Refine) --> IU_Func_C;
     end
-
-    style IU_Crash fill:#ffcccc
-    style IU_SafeOutput fill:#ccffcc
-    style IU_ErrorHandle fill:#fff0b3
 ```
 
 ---
@@ -632,7 +619,7 @@ graph TD
     SharedX -->|Unsynchronized| Race{Data Race / Inconsistent State};
     Race --> AppErr[Application Error/Crash];
 
-    subgraph CodomyrmexIntervention
+    subgraph cxRace [CodomyrmexIntervention]
         Dev[Developer Coding Concurrency] -- `ai_code_editing` (Safe Patterns) --> SafeCode[Safer Concurrent Code];
         SafeCode -- `static_analysis` (Race/Deadlock Check) --> StaticWarn[Potential Issues Flagged];
         
@@ -641,13 +628,6 @@ graph TD
         Diagnosis -- `ai_code_editing` (Synchronization Fix) --> PatchedCode[Patched Concurrent Code];
         PatchedCode --> StableApp[Stable Application];
     end
-
-    style Race fill:#ffcccc
-    style AppErr fill:#ffcccc
-    style SafeCode fill:#e6ffe6
-    style FixedCode fill:#e6ffe6
-    style PatchedCode fill:#e6ffe6
-    style StableApp fill:#d1f0ff
 ```
 
 ---

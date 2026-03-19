@@ -16,21 +16,21 @@ This overview covers performance tiers and philosophy for Codomyrmex modules. Fu
 
 ```mermaid
 graph TB
-    subgraph "Performance Tiers"
+    subgraph sg_69d44543dc [Performance Tiers]
         Interactive["Interactive Tier<br/>< 200ms response"]
         Batch["Batch Tier<br/>< 30s processing"]
         Background["Background Tier<br/>< 5min jobs"]
         LongRunning["Long-Running Tier<br/>Hours/Days"]
     end
 
-    subgraph "Module Categories"
+    subgraph sg_eea32a4f9d [Module Categories]
         DataViz["Data Visualization"] --> Interactive
         StaticAnalysis["Static Analysis"] --> Batch
         AICode["AI Code Editing"] --> Background
         Documentation["Documentation"] --> LongRunning
     end
 
-    subgraph "Optimization Strategies"
+    subgraph sg_0bd2cf4178 [Optimization Strategies]
         Caching["Caching"]
         Async["Async Processing"]
         Streaming["Streaming"]

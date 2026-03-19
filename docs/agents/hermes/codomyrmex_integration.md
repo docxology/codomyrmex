@@ -164,12 +164,12 @@ Hermes sessions now automatically feed a persistent **Knowledge Item** (KI) data
 sequenceDiagram
     participant Hermes as HermesSession
     participant KmTool as hermes_extract_ki
-    participant KM as KnowledgeMemory (SQLite)
+    participant KM as KnowledgeMemory SQLite
     participant Search as hermes_search_knowledge_items
 
     Hermes->>KmTool: session_id
     KmTool->>KM: KnowledgeMemory.store(title, body, tags)
-    Note over KM: SEMANTIC memory stored
+    Note over KM: Semantic memory stored
     Search->>KM: KnowledgeMemory.recall(query, k=5)
     KM-->>Search: Ranked list of KIs
 ```
@@ -263,7 +263,7 @@ A major interface addition is the native ability for Hermes to act autonomously 
 
 **Deep Links**:
 
-- 🔗 **Autonomous Loop Logic**: [`src/codomyrmex/agents/hermes/hermes_client.py#L507-L565`](../../../src/codomyrmex/agents/hermes/hermes_client.py)
+- 🔗 **Autonomous Loop Logic**: [`hermes_client.py` — `chat_session` autonomous loop](../../../src/codomyrmex/agents/hermes/hermes_client.py#L751-L911)
 - 🔗 **Task Integration Tests**: [`src/codomyrmex/tests/integration/hermes/test_gateway_workflow_loop.py`](../../../src/codomyrmex/tests/integration/hermes/test_gateway_workflow_loop.py)
 
 ---
@@ -306,14 +306,14 @@ The `GatewayRunner` daemon bridges Hermes to the outside world, piping in messag
 
 ```mermaid
 graph TD
-    TG([Telegram]) --> |Webhook/Poll| Auth[Gateway Tool Sandbox]
-    Discord([Discord]) --> |WebSocket| Auth
-    Web([Web UI]) --> |REST| Auth
-    
-    Auth --> |Identity Handoff| ID[Identity Resolver mapping to usr_UUID]
-    
-    ID --> |Execute via CLI| Exec[Gateway Runner]
-    Exec --> CLI[Hermes Client]
+    TG([Telegram]) -->|"Webhook or poll"| Auth[Gateway Tool Sandbox]
+    Discord([Discord]) -->|WebSocket| Auth
+    Web([Web UI]) -->|REST| Auth
+
+    Auth -->|Identity handoff| ID["Identity Resolver to usr_UUID"]
+
+    ID -->|Execute via CLI| Exec[Gateway Runner]
+    Exec --> HermesExec[Hermes client]
 ```
 
 ### Multimodal Augmentations

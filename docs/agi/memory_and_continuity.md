@@ -52,12 +52,6 @@ graph TB
     PROCEDURAL -.->|"skill loading"| WORKING
     SEMANTIC -.->|"similarity cue"| WORKING
     EPISODIC -.->|"context reinstatement"| WORKING
-
-    style SENSORY fill:#e94560,stroke:#1a1a2e,color:#fff
-    style WORKING fill:#533483,stroke:#e94560,color:#e8e8e8
-    style EPISODIC fill:#0f3460,stroke:#533483,color:#e8e8e8
-    style SEMANTIC fill:#16213e,stroke:#0f3460,color:#e8e8e8
-    style PROCEDURAL fill:#1a1a2e,stroke:#16213e,color:#e8e8e8
 ```
 
 ### Tier 0: Sensory Register — The LLM Context Window

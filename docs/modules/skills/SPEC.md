@@ -30,24 +30,24 @@ Integration with the [vibeship-spawner-skills](https://github.com/vibeforge1111/
 
 ```mermaid
 graph TD
-    subgraph "Skills Module"
+    subgraph sg_e4ba74a0fd [Skills Module]
         SM[SkillsManager]
         SL[SkillLoader]
         SS[SkillSync]
         SR[SkillRegistry]
     end
     
-    subgraph "External"
+    subgraph sg_68c114ea9c [External]
         VSR[vibeship-spawner-skills<br/>Git Repository]
     end
     
-    subgraph "Storage"
+    subgraph sg_a69c4dece1 [Storage]
         US[Upstream Skills<br/>skills/upstream/]
         CS[Custom Skills<br/>skills/custom/]
         MC[Merged Cache<br/>skills/.cache/]
     end
     
-    subgraph "Integration"
+    subgraph sg_9a42d40a3f [Integration]
         GO[git_operations]
         MCP[model_context_protocol]
         LM[logging_monitoring]

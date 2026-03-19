@@ -23,7 +23,7 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 
 | Section | Purpose | Files |
 |:---|:---|---:|
-| [agents/](agents/) | **38 AI agent integrations** — Claude, Gemini, Jules, Hermes, and 34 more | 66+ |
+| [agents/](agents/) | **38 AI agent integrations** — Claude, Gemini, Jules, Hermes ([skill preload / registry](agents/hermes/skills.md)), and 34 more | 66+ |
 | [agi/](agi/) | AGI theory, perspectives, emergence models | 14 |
 | [bio/](bio/) | Biological simulation documentation | 15 |
 | [cognitive/](cognitive/) | Cognitive architecture, Bayesian inference, active inference | 11 |

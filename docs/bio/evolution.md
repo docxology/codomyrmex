@@ -48,10 +48,6 @@ graph TB
     NEUTRAL -.-> MEME_M
     RECOMB -.-> EVOL_M
     BALDWIN -.-> MEME_M
-
-    style LANDSCAPE fill:#e94560,stroke:#1a1a2e,color:#fff
-    style ESCAPE fill:#533483,stroke:#1a1a2e,color:#fff
-    style CDM fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 ### Neutral Theory

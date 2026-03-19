@@ -8,17 +8,17 @@ This guide covers deploying Codomyrmex modules and workflows in production envir
 
 ```mermaid
 graph TB
-    subgraph "Development"
+    subgraph sg_21b6a79832 [Development]
         Dev["Development<br/>Environment"]
         Testing["Testing &<br/>Validation"]
     end
 
-    subgraph "Staging"
+    subgraph sg_a8e7ac92a1 [Staging]
         Staging["Staging<br/>Environment"]
         Integration["Integration<br/>Testing"]
     end
 
-    subgraph "Production"
+    subgraph sg_13a7c655a7 [Production]
         Prod["Production<br/>Environment"]
         Monitor["Monitoring &<br/>Observability"]
     end

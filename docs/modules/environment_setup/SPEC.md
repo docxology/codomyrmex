@@ -35,11 +35,11 @@ The `environment_setup` module ensures the Codomyrmex platform runs in a determi
 
 ```mermaid
 graph TD
-    subgraph "Entry Point"
+    subgraph sg_f3475ce78c [Entry Point]
         EnvChecker[env_checker.py]
     end
 
-    subgraph "Validation Steps"
+    subgraph sg_c9ebeb9875 [Validation Steps]
         PythonCheck[Python Version Check]
         DepCheck[Dependency Check]
         EnvVarCheck[Environment Variables]

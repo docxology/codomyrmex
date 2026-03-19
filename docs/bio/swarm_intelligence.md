@@ -69,11 +69,6 @@ graph LR
     COH --> FLOCK
 
     FLOCK --> |"No agent has<br/>global state"| GLOBAL["Globally<br/>Coordinated Motion"]
-
-    style SEP fill:#e94560,stroke:#1a1a2e,color:#fff
-    style ALI fill:#533483,stroke:#1a1a2e,color:#fff
-    style COH fill:#0f3460,stroke:#1a1a2e,color:#fff
-    style FLOCK fill:#16213e,stroke:#0f3460,color:#e8e8e8
 ```
 
 The critical feature across all these mechanisms is that **simple local rules produce globally adaptive behavior** without any agent representing the global state.
@@ -103,9 +98,6 @@ graph TB
     FLOCK_M --> MEME
     WAGGLE --> GRAG
     FORAGE --> MARKET
-
-    style SWARM fill:#e94560,stroke:#1a1a2e,color:#fff
-    style MODULES fill:#0f3460,stroke:#533483,color:#e8e8e8
 ```
 
 - **[`meme`](../../src/codomyrmex/meme/)** — The swarm submodule implements digital flocking and memetic evolution. Memetic swarm algorithms apply Reynolds' update rules to candidate solutions, evolving shared structures through imitation and recombination. Dawkins's "meme" as a unit of cultural selection (1976) is computationally instantiated here: solutions reproduce differentially based on fitness, creating cultural evolution within a single optimization run.
