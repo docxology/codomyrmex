@@ -306,6 +306,22 @@ class TestSkillManifest:
             assert "name" in tool
             assert "description" in tool
             assert "input_schema" in tool
+            assert "tags" in tool
+            assert isinstance(tool["tags"], list)
+            assert len(tool["tags"]) >= 1
+
+    def test_manifest_includes_hermes_external_skills_workflow(self):
+        manifest = get_skill_manifest()
+        names = {w["name"] for w in manifest["workflows"]}
+        assert "hermes_external_skills" in names
+
+    def test_manifest_hermes_execute_indexed(self):
+        manifest = get_skill_manifest()
+        execute = next(
+            t for t in manifest["tools"] if t.get("name") == "codomyrmex.hermes_execute"
+        )
+        assert "hermes" in execute["tags"]
+        assert "skills" in execute["tags"]
 
     def test_manifest_serializable(self):
         """Manifest must be JSON-serializable for PAI consumption."""

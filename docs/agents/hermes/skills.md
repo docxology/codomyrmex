@@ -98,6 +98,33 @@ Install/verify with:
 hermes skills list  # should show both new skills
 ```
 
+## Codomyrmex MCP preload
+
+From Codomyrmex, Hermes CLI turns can pass **`hermes_skill`** (one name) and/or **`hermes_skills`** (list or comma-separated string) on MCP tools such as `hermes_execute`, `hermes_stream`, `hermes_chat_session`, `hermes_batch_execute`, and `hermes_sampling`. The client maps these to `hermes chat -s <names>` (comma-joined). **Ollama** fallback does not load Hermes skill packs.
+
+For **multi-turn** `hermes_chat_session`, skill names are stored on the session (`metadata.hermes_skills`) and reused on each turn.
+
+PAI **`get_skill_manifest()`** lists every tool with **`tags`** (for example `hermes`, `skills`, `cli_preload`, `interop`, `mcp`). Filter manifest tools by `category == "hermes"` or by tag `skills`. Workflow **`hermes_external_skills`** lists a discover → chat → execute sequence.
+
+## Unified registry and project profile
+
+Codomyrmex ships a **bundled skill registry** (`codomyrmex.agents.hermes.data.skills_registry.yaml`): each entry has a stable **`id`**, human **`title`**, and **`hermes_preload`** names passed to `hermes chat -s`. Optional overlay: set **`CODOMYRMEX_SKILLS_REGISTRY`** to a path of extra YAML in the same shape (merged by id; later files do not remove bundled entries unless you use distinct ids).
+
+**Project defaults**: from the process current working directory, walk upward for **`.codomyrmex/hermes_skills_profile.yaml`**. It may list:
+
+- **`skill_ids`** — resolved through the registry to Hermes preload names
+- **`hermes_preload`** — raw CLI names appended after resolution
+
+**Client config** (passed into `HermesClient` or agent config) may set:
+
+- **`hermes_default_skill_ids`** — registry ids
+- **`hermes_default_hermes_skills`** — raw Hermes names
+- **`hermes_skill_profile_disable`** — skip the project profile file
+
+**Merge order** for each CLI turn (unique, first-wins order): profile → client config → session metadata (`hermes_skills` stored on the session) → explicit `AgentRequest.context` / MCP `hermes_skill(s)` parameters.
+
+MCP tools: **`hermes_skills_resolve`** (ids → names + metadata), **`hermes_skills_validate_registry`** (compare registry to `hermes skills list` when CLI is active). Example profile: [config/hermes_skills_profile.example.yaml](../../../config/hermes_skills_profile.example.yaml).
+
 ## Key Implementation Files
 
 | File                          | Purpose                                          |
@@ -110,4 +137,7 @@ hermes skills list  # should show both new skills
 ## Related Documents
 
 - [Architecture](architecture.md) — Prompt building and skill injection
-- [Tools](tools.md) — Tool registry system
+- [Tools](tools.md) — Tool registry system (distinct from Codomyrmex skill id registry)
+- [codomyrmex_integration.md](codomyrmex_integration.md) — MCP tool surface and §3c skill preload overview
+- [configuration.md](configuration.md) — Hermes `config.yaml` vs `HermesClient` keys
+- [environment.md](environment.md) — `CODOMYRMEX_SKILLS_REGISTRY`, `HERMES_HOME`

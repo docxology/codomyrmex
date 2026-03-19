@@ -256,6 +256,17 @@ copilot --version
 
 4. **Check current usage**: `curl https://openrouter.ai/api/v1/key -H "Authorization: Bearer $OPENROUTER_API_KEY"`
 
+### 10. Codomyrmex skill profile not applied (wrong skills or none)
+
+**Symptoms**: `HermesClient` / MCP runs without expected `hermes chat -s` skills, or profile seems ignored.
+
+**Checks**:
+
+1. **Working directory** — `.codomyrmex/hermes_skills_profile.yaml` is discovered from the process **cwd** (walking up to filesystem root). Running from a different directory than the repo root picks up a different profile or none.
+2. **Disable flag** — `hermes_skill_profile_disable` on the client skips the project file.
+3. **Ollama fallback** — skill packs are not loaded on the Ollama path (use Hermes CLI backend for preload).
+4. **Validate** — call MCP `hermes_skills_validate_registry` and read [skills.md](skills.md) for merge order.
+
 ## Diagnostic Commands Reference
 
 | Command           | Purpose                      |
@@ -273,3 +284,4 @@ copilot --version
 - [launchd](launchd.md) — Service management
 - [Environment](environment.md) — `.env` loading
 - [Copilot ACP](copilot_acp.md) — Copilot backend issues
+- [skills.md](skills.md) — Codomyrmex skill registry, profile, merge order

@@ -24,7 +24,8 @@ graph TD
     
     HCLI --> |skills| HS[Hermes Skills]
     HCLI --> |honcho| HO[Honcho Memory]
-    MCP[MCP Tools ×34+] --> HC
+    REG[skill_registry + profile YAML] -.-> HC
+    MCP[MCP Tools ×48] --> HC
     HC -.-> Base[CLIAgentBase]
     UM[UserModel] -.-> |context| HC
     MB[MCPBridgeManager] -.-> |hot-reload| HCLI
@@ -51,7 +52,7 @@ graph TD
 
 ## Model Context Protocol (MCP) Interface
 
-The module exposes 37+ tools to the swarm:
+The module exposes 48 tools to the swarm (see `MCP_TOOL_SPECIFICATION.md`):
 
 | Tool | Purpose | Category |
 | :--- | :--- | :--- |
@@ -65,6 +66,8 @@ The module exposes 37+ tools to the swarm:
 | `hermes_version` | CLI version info | Diagnostic |
 | `hermes_provider_status` | Multi-provider credential status | Diagnostic |
 | `hermes_skills_list` | Available Hermes skills (CLI only) | Skills |
+| `hermes_skills_resolve` | Registry `skill_ids` → Hermes `-s` names | Skills |
+| `hermes_skills_validate_registry` | Registry vs `hermes skills list` (CLI) | Skills |
 | `hermes_template_list` | Prompt template names | Templates |
 | `hermes_template_render` | Template rendering with variables | Templates |
 | `hermes_session_list` | All active session IDs | Sessions |
@@ -102,6 +105,11 @@ The module exposes 37+ tools to the swarm:
 | `pass_session_id` | `False` | Include session ID in system prompt |
 | `max_context_tokens` | `100000` | ContextCompressor token threshold |
 | `worktree_base_dir` | `~/.codomyrmex/worktrees` | Git worktree base directory |
+| `hermes_skill_profile_disable` | `False` | Skip `.codomyrmex/hermes_skills_profile.yaml` |
+| `hermes_default_skill_ids` | `[]` | Registry ids → CLI `-s` names (merged each turn) |
+| `hermes_default_hermes_skills` | `[]` | Extra raw Hermes skill names |
+
+Environment: **`CODOMYRMEX_SKILLS_REGISTRY`** — optional path to YAML extending the bundled skill registry.
 
 ## Evolution Submodule
 

@@ -140,3 +140,4 @@ CLI operations).
 - [Configuration](configuration.md) — Full config.yaml reference
 - [Setup Guide](setup_guide.md) — Initial installation
 - [Troubleshooting](troubleshooting.md) — Common issues
+- [skills.md](skills.md) — Codomyrmex Hermes skill preload (independent of Copilot ACP)

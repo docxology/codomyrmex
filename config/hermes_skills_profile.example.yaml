@@ -1,0 +1,15 @@
+# Example project Hermes skill profile.
+# Copy to:  <repo>/.codomyrmex/hermes_skills_profile.yaml
+#
+# Codomyrmex walks upward from the current working directory to find this file.
+# skill_ids map through the unified registry (bundled + CODOMYRMEX_SKILLS_REGISTRY).
+# hermes_preload appends raw CLI names for `hermes chat -s`.
+
+version: 1
+
+skill_ids:
+  - codomyrmex-fabric
+  # - codomyrmex-code-review
+
+hermes_preload: []
+  # - my-custom-pack

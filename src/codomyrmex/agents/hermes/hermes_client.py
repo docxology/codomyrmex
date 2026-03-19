@@ -27,6 +27,11 @@ from codomyrmex.agents.core import (
 from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError
 from codomyrmex.agents.generic import CLIAgentBase
 from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+from codomyrmex.agents.hermes.skill_names import (
+    SESSION_METADATA_HERMES_SKILLS_KEY,
+    agent_context_for_hermes_skills,
+    normalize_hermes_skill_names,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -103,6 +108,9 @@ class HermesClient(CLIAgentBase):
               - ``hermes_model``    (str, default ``"hermes3"``): Ollama model name
               - ``fallback_model``  (str | None): fallback model on provider errors
               - ``fallback_provider`` (str | None): fallback provider (e.g. ``"ollama"``)
+              - ``hermes_skill_profile_disable`` (bool): skip ``.codomyrmex/hermes_skills_profile.yaml``
+              - ``hermes_default_skill_ids`` (list[str] | str): registry ids → CLI ``-s`` names
+              - ``hermes_default_hermes_skills`` (list[str] | str): extra raw CLI skill names
 
         """
         cfg = config or {}
@@ -213,6 +221,12 @@ class HermesClient(CLIAgentBase):
         else:
             self._active_backend = self._backend
 
+        self._skill_profile_disabled: bool = bool(
+            self.get_config_value("hermes_skill_profile_disable", config=cfg)
+        )
+        # Used only during chat_session turns (not thread-safe vs parallel batch on same client).
+        self._session_skills_for_next_execute: list[str] | None = None
+
     # ------------------------------------------------------------------
     # Properties
     # ------------------------------------------------------------------
@@ -273,7 +287,9 @@ class HermesClient(CLIAgentBase):
                         # Found a provider line with an actual key value
                         return True
         except Exception as exc:
-            self.logger.debug("Failed to parse `hermes config` output: %s", exc)  # Fall through to .env check
+            self.logger.debug(
+                "Failed to parse `hermes config` output: %s", exc
+            )  # Fall through to .env check
 
         # Method 2: check ~/.hermes/.env directly
         try:
@@ -295,7 +311,9 @@ class HermesClient(CLIAgentBase):
 
         return False
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Execute via the active backend, with fallback on provider errors."""
         try:
             return self._execute_primary(request, max_tokens=max_tokens)
@@ -311,7 +329,9 @@ class HermesClient(CLIAgentBase):
                 )
             raise
 
-    def _execute_primary(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_primary(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Execute via the primary active backend (CLI or Ollama)."""
         if self._active_backend == "ollama":
             return self._execute_via_ollama(request, max_tokens=max_tokens)
@@ -345,11 +365,28 @@ class HermesClient(CLIAgentBase):
             )
         )
 
-    def _execute_via_cli(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_via_cli(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Execute via the NousResearch Hermes CLI."""
+        from codomyrmex.agents.hermes import skill_registry
+
         prompt = request.prompt
-        context = request.context or {}
-        hermes_args = self._build_hermes_args(prompt, context)
+        base = dict(request.context or {})
+        merged = skill_registry.merged_hermes_skill_list_for_client(
+            cwd=Path.cwd(),
+            client_config=self.config,
+            profile_disabled=self._skill_profile_disabled,
+            session_skills=self._session_skills_for_next_execute,
+            context=base,
+        )
+        ctx = dict(base)
+        if merged:
+            ctx["hermes_skills"] = merged
+        else:
+            ctx.pop("hermes_skills", None)
+        skill_names = merged
+        hermes_args = self._build_hermes_args(prompt, ctx)
 
         try:
             # Build environment for the subprocess: inherit os.environ and
@@ -390,6 +427,7 @@ class HermesClient(CLIAgentBase):
                 additional_metadata={
                     "backend": "cli",
                     "command_full": " ".join([self.command, *hermes_args]),
+                    **({"hermes_skills_loaded": skill_names} if skill_names else {}),
                 },
             )
         except AgentTimeoutError as e:
@@ -486,9 +524,23 @@ class HermesClient(CLIAgentBase):
         if self._active_backend == "ollama":
             yield from self._stream_via_ollama(request)
         else:
+            from codomyrmex.agents.hermes import skill_registry
+
             prompt = request.prompt
-            context = request.context or {}
-            hermes_args = self._build_hermes_args(prompt, context)
+            base = dict(request.context or {})
+            merged = skill_registry.merged_hermes_skill_list_for_client(
+                cwd=Path.cwd(),
+                client_config=self.config,
+                profile_disabled=self._skill_profile_disabled,
+                session_skills=self._session_skills_for_next_execute,
+                context=base,
+            )
+            ctx = dict(base)
+            if merged:
+                ctx["hermes_skills"] = merged
+            else:
+                ctx.pop("hermes_skills", None)
+            hermes_args = self._build_hermes_args(prompt, ctx)
             yield from self._stream_command(args=hermes_args)
 
     def _stream_via_ollama(self, request: AgentRequest) -> Iterator[str]:
@@ -644,6 +696,8 @@ class HermesClient(CLIAgentBase):
         session_id: str | None = None,
         session_name: str | None = None,
         max_tokens: int | None = None,
+        hermes_skill: str | None = None,
+        hermes_skills: list[str] | str | None = None,
     ) -> AgentResponse:
         """Execute a stateful multi-turn chat.
 
@@ -652,6 +706,9 @@ class HermesClient(CLIAgentBase):
             session_id: Session ID (optional). If omitted, a new one is created.
             session_name: Human-friendly session name (v0.2.0). If provided and
                 no session_id is given, attempts to resume by name.
+            hermes_skill: Optional single Hermes CLI skill name to preload (``-s``).
+            hermes_skills: Optional skill names (list or comma-separated string).
+                Stored on the session and applied on each CLI turn (Ollama ignores).
 
         Returns:
             Response containing the assistant's reply and the session ID in metadata.
@@ -678,6 +735,14 @@ class HermesClient(CLIAgentBase):
             # Update name if provided on an existing session
             if session_name and session.name != session_name:
                 session.name = session_name
+
+            skill_fragment = agent_context_for_hermes_skills(
+                hermes_skill, hermes_skills
+            )
+            if skill_fragment.get("hermes_skills"):
+                session.metadata[SESSION_METADATA_HERMES_SKILLS_KEY] = skill_fragment[
+                    "hermes_skills"
+                ]
 
             store.save(session)
 
@@ -733,8 +798,17 @@ class HermesClient(CLIAgentBase):
                 else:
                     full_prompt = f"{system_directives}\n\nUser: {current_prompt}"
 
-                request = AgentRequest(prompt=full_prompt)
-                response = self.execute(request, max_tokens=max_tokens)
+                raw_stored = session.metadata.get(SESSION_METADATA_HERMES_SKILLS_KEY)
+                if isinstance(raw_stored, list):
+                    sess_skills = [str(x) for x in raw_stored if str(x).strip()]
+                else:
+                    sess_skills = None
+                self._session_skills_for_next_execute = sess_skills
+                try:
+                    request = AgentRequest(prompt=full_prompt, context={})
+                    response = self.execute(request, max_tokens=max_tokens)
+                finally:
+                    self._session_skills_for_next_execute = None
                 final_response = response
 
                 if response.is_success():
@@ -866,7 +940,11 @@ class HermesClient(CLIAgentBase):
             return args
         # Non-interactive mode: -Q suppresses spinner/banner, --provider forces the
         # configured inference provider so hermes never enters the setup wizard.
-        args = ["chat", "-q", prompt, "-Q", "--provider", self._hermes_provider]
+        skill_names = normalize_hermes_skill_names(context=context)
+        args: list[str] = ["chat"]
+        if skill_names:
+            args.extend(["-s", ",".join(skill_names)])
+        args.extend(["-q", prompt, "-Q", "--provider", self._hermes_provider])
         if self._yolo:
             args.append("--yolo")
         if self._continue_session:
@@ -1250,6 +1328,8 @@ class HermesClient(CLIAgentBase):
         parallel: bool = False,
         backend: str | None = None,
         timeout: int | None = None,
+        hermes_skill: str | None = None,
+        hermes_skills: list[str] | str | None = None,
     ) -> list[dict[str, Any]]:
         """Execute a list of prompts, returning a list of result dicts.
 
@@ -1260,6 +1340,8 @@ class HermesClient(CLIAgentBase):
             backend: Override the active backend (``\"cli\"`` | ``\"ollama\"``).
                 If ``None``, uses the currently configured backend.
             timeout: Per-request timeout in seconds.  If ``None``, uses the client default.
+            hermes_skill: Optional Hermes CLI skill for every prompt (see :meth:`chat_session`).
+            hermes_skills: Optional skill list or comma-separated string for every prompt.
 
         Returns:
             List of dicts with keys ``prompt``, ``status``, ``content``, ``error``.
@@ -1274,10 +1356,12 @@ class HermesClient(CLIAgentBase):
             orig_timeout = self.timeout
             self.timeout = timeout
 
+        req_ctx = agent_context_for_hermes_skills(hermes_skill, hermes_skills)
+
         def _execute_one(prompt: str) -> dict[str, Any]:
             """Execute a single prompt and return a normalized result dict."""
             try:
-                resp = self.execute(AgentRequest(prompt=prompt))
+                resp = self.execute(AgentRequest(prompt=prompt, context=dict(req_ctx)))
                 return {
                     "prompt": prompt,
                     "status": "success" if resp.is_success() else "error",
@@ -1374,10 +1458,9 @@ class HermesClient(CLIAgentBase):
 
                     if deduplicate and target.messages:
                         last = target.messages[-1]
-                        if (
-                            msg.get("role") == last.get("role")
-                            and msg.get("content") == last.get("content")
-                        ):
+                        if msg.get("role") == last.get("role") and msg.get(
+                            "content"
+                        ) == last.get("content"):
                             continue
 
                     target.add_message(msg["role"], msg["content"])
@@ -1386,4 +1469,3 @@ class HermesClient(CLIAgentBase):
             if merged_any:
                 store.save(target)
             return merged_any
-

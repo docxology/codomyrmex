@@ -16,9 +16,15 @@ from codomyrmex.agents.hermes.session import (
     SessionStore,
     SQLiteSessionStore,
 )
+from codomyrmex.agents.hermes.skill_names import (
+    SESSION_METADATA_HERMES_SKILLS_KEY,
+    agent_context_for_hermes_skills,
+    normalize_hermes_skill_names,
+)
 from codomyrmex.agents.hermes.templates import TemplateLibrary
 
 __all__ = [
+    "SESSION_METADATA_HERMES_SKILLS_KEY",
     "ContextCompressor",
     "HermesClient",
     "HermesError",
@@ -30,4 +36,6 @@ __all__ = [
     "SessionStore",
     "TemplateLibrary",
     "UserModel",
+    "agent_context_for_hermes_skills",
+    "normalize_hermes_skill_names",
 ]

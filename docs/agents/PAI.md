@@ -26,7 +26,7 @@ PAI agents operating within the Codomyrmex ecosystem integrate through the agent
 
 ## Key Agents with PAI Deep Integration
 
-- **Hermes** — [hermes/](hermes/) — 19 modular docs covering gateway, Telegram, launchd, sessions, skills, cron, troubleshooting
+- **Hermes** — [hermes/](hermes/) — 19 modular docs (gateway, Telegram, launchd, sessions, cron, troubleshooting); [skills.md](hermes/skills.md) documents unified skill id registry, `.codomyrmex/hermes_skills_profile.yaml`, MCP `hermes_skills_*`, and PAI `hermes_external_skills` workflow steps
 - **Claude** — [claude/](claude/) — Anthropic integration with advanced reasoning
 - **Gemini** — [gemini/](gemini/) — Google CLI with file operations and session management
 - **Jules** — [jules/](jules/) — Swarm orchestration (113+ concurrent sessions)

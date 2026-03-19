@@ -119,6 +119,13 @@ class TestMCPToolDecoratorMetadata:
 
         assert old_tool._mcp_tool["deprecated_in"] == "1.5"
 
+    def test_tags_stored_in_metadata(self) -> None:
+        @mcp_tool(tags=["alpha", "beta"])
+        def tagged_tool():
+            """Tagged."""
+
+        assert tagged_tool._mcp_tool_meta["tags"] == ["alpha", "beta"]
+
 
 @pytest.mark.unit
 class TestMCPToolDecoratorBehavior:
@@ -241,6 +248,26 @@ class TestSchemaGeneration:
 
         schema = _generate_schema_from_signature(func)
         assert schema["properties"]["items"]["type"] == "array"
+
+    def test_schema_union_with_none_optional(self) -> None:
+        def func(opt: str | None = None) -> None:
+            pass
+
+        schema = _generate_schema_from_signature(func)
+        assert "opt" not in schema["required"]
+        prop = schema["properties"]["opt"]
+        assert "anyOf" in prop
+        types_found = {p.get("type") for p in prop["anyOf"]}
+        assert "string" in types_found
+        assert "null" in types_found
+
+    def test_schema_list_or_string_union(self) -> None:
+        def func(skills: list[str] | str | None = None) -> None:
+            pass
+
+        schema = _generate_schema_from_signature(func)
+        assert "skills" not in schema["required"]
+        assert "anyOf" in schema["properties"]["skills"]
 
     def test_schema_dict_type_mapped_to_object(self):
         def func(data: dict) -> None:

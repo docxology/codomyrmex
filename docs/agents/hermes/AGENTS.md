@@ -42,7 +42,7 @@ Agent coordination document for the Hermes documentation subfolder. Guides AI ag
 | File          | Description                           |
 | :------------ | :------------------------------------ |
 | `sessions.md` | Session lifecycle, state.db, FTS5     |
-| `skills.md`   | Self-improving skills, agentskills.io |
+| `skills.md`   | Hermes skills + Codomyrmex unified registry, profile, MCP merge |
 | `tools.md`    | Tool registry, MCP integration        |
 | `cron.md`     | Scheduled jobs, proactive messaging   |
 
@@ -75,6 +75,7 @@ Agent coordination document for the Hermes documentation subfolder. Guides AI ag
 6. **`--replace` Flag**: Always use in launchd plists for PID management
 7. **`security.redact_secrets: true`**: Always set in production
 8. **Tirith Policy Engine**: Enable `tirith_enabled: true` for production deployments
+9. **Codomyrmex skill preload**: Project defaults come from `.codomyrmex/hermes_skills_profile.yaml` (cwd walk), optional `CODOMYRMEX_SKILLS_REGISTRY`, and `HermesClient` config — see [skills.md](skills.md); **Ollama** fallback does not load Hermes skill packs
 
 ## Navigation
 

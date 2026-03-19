@@ -7,7 +7,7 @@
 graph TD
     User([End User]) <--> |Telegram/CLI| Gateway[Multi-Platform Gateway]
     Gateway <--> |Unified Router| HermesCore[Hermes Core Binary / Ollama]
-    Agent[Other Swarm Agents] <--> |41 MCP Tools| CodomyrmexBridge[Codomyrmex MCP Bridge]
+    Agent[Other Swarm Agents] <--> |48 MCP Tools| CodomyrmexBridge[Codomyrmex MCP Bridge]
     CodomyrmexBridge <--> |Controls & Reads| HermesCore
     HermesCore -.-> |Session Sync| LocalVault[(Obsidian Vault)]
     HermesCore <--> |State + FTS5| SQLite[(SQLite state.db)]
@@ -110,15 +110,15 @@ client.set_system_prompt("session-id", "You are an expert Python reviewer.")
 
 ---
 
-## 🧩 3. 41 Model Context Protocol (MCP) Tools
+## 🧩 3. 48 Model Context Protocol (MCP) Tools
 
-Codomyrmex binds Hermes into the broader swarm ecosystem by exposing **41 native MCP tools**. This allows other agents (like Claude or Jules) to spin up Hermes instances, query its status, fork sessions, read its memory, extract knowledge items, and participate in multi-agent swarms transparently.
+Codomyrmex binds Hermes into the broader swarm ecosystem by exposing **48 native MCP tools** (see `@mcp_tool` count in [`mcp_tools.py`](../../../src/codomyrmex/agents/hermes/mcp_tools.py)). This allows other agents (like Claude or Jules) to spin up Hermes instances, query its status, fork sessions, read its memory, extract knowledge items, and participate in multi-agent swarms transparently.
 
 ```mermaid
 graph LR
     SwarmProxy[Jules / Claude] --> |Action Request| MCP[Codomyrmex MCP Server]
     
-    subgraph Codomyrmex Tools
+    subgraph codomyrmexTools [Codomyrmex Tools]
         MCP --> SessionMgmt(Session: fork, export, stats, prune, archive)
         MCP --> Chat(hermes_chat_session / hermes_batch_execute)
         MCP --> Search(hermes_recall_memory / hermes_session_search)
@@ -126,10 +126,12 @@ graph LR
         MCP --> TaskOrch(hermes_create_task / hermes_update_task_status)
         MCP --> KnowledgeTools("hermes_build_memory_graph<br/>hermes_extract_ki<br/>hermes_search_knowledge_items<br/>hermes_deduplicate_ki")
         MCP --> SwarmTools("hermes_spawn_agent<br/>orchestrator_run_dag<br/>events_send_to_agent<br/>events_agent_inbox")
+        MCP --> SkillPreload("Skill preload<br/>hermes_skills_list<br/>hermes_skills_resolve<br/>hermes_skills_validate_registry")
     end
     
     SessionMgmt -.-> DB[(state.db)]
     Chat --> |Direct Exec| HermesCli[Hermes Executable]
+    SkillPreload --> |"-s preload + validate"| HermesCli
     KnowledgeTools -.-> KnowledgeDB[(agentic_memory)]
 ```
 
@@ -145,6 +147,7 @@ graph LR
 | **Diagnostics** | `hermes_status`, `hermes_provider_status`, `hermes_doctor`, `hermes_version`, `hermes_system_health` |
 | **Workflow** | `hermes_create_task`, `hermes_update_task_status`, `hermes_delegate_task` |
 | **Utilities** | `hermes_read_log_chunk`, `hermes_parse_canvas`, `hermes_search_vault`, `hermes_honcho_status` |
+| **Skill preload** | `hermes_skills_list`, `hermes_skills_resolve`, `hermes_skills_validate_registry` |
 
 **Deep Links**:
 
@@ -232,6 +235,20 @@ inbox = events_agent_inbox(agent_id="orchestrator", mode="drain")
 
 - 🔗 **SwarmTopology**: [`src/codomyrmex/orchestrator/swarm_topology.py`](../../../src/codomyrmex/orchestrator/swarm_topology.py)
 - 🔗 **IntegrationBus P2P**: [`src/codomyrmex/events/integration_bus.py`](../../../src/codomyrmex/events/integration_bus.py)
+
+---
+
+## 🎯 3c. Unified Hermes skill preload (Codomyrmex)
+
+Separate from Hermes’s in-process **tool** registry (`tools/registry.py`), Codomyrmex maintains a **skill id → Hermes preload name** registry (bundled YAML + optional `CODOMYRMEX_SKILLS_REGISTRY` overlay) and optional per-repo **`.codomyrmex/hermes_skills_profile.yaml`**. `HermesClient` merges skill names for each CLI turn in a fixed order and passes them to `hermes chat -s`.
+
+Authoritative detail — merge order, `HermesClient` config keys, session metadata (`metadata.hermes_skills`), MCP parameters, and PAI workflow hooks:
+
+- [skills.md](skills.md) — full specification
+- [environment.md](environment.md) — `CODOMYRMEX_SKILLS_REGISTRY`
+- [configuration.md](configuration.md) — Hermes `config.yaml` vs Codomyrmex client keys (cross-reference)
+
+**MCP**: `hermes_skills_resolve`, `hermes_skills_validate_registry` (plus `hermes_skills_list` wrapping `hermes skills list` when the CLI is available).
 
 ---
 
@@ -343,11 +360,11 @@ The v1.5.x sprint added **50 new integration tests** (across `test_gateway_sessi
 
 ## Summary
 
-The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent. By establishing permanent multi-platform routing, bulletproof execution sandboxes, persistent memory syncs, session lifecycle management, batch execution, and **41 native MCP tools**, Codomyrmex transforms Hermes from a singular personal assistant into a highly integrated node capable of operating safely and autonomously within complex programmatic ecosystems.
+The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent. By establishing permanent multi-platform routing, bulletproof execution sandboxes, persistent memory syncs, session lifecycle management, batch execution, and **48 native MCP tools**, Codomyrmex transforms Hermes from a singular personal assistant into a highly integrated node capable of operating safely and autonomously within complex programmatic ecosystems.
 
 | Capability | v2.2.0 | v2.3.0 (73-commit update) | v2.4.0 (Sprint 34) |
 | :--------- | :-----: | :-------------: | :-------------: |
-| MCP tools | 33 | **36** | **41** |
+| MCP tools | 33 | **36** | **48** |
 | Session methods | 12 | **12** | **12** |
 | Script orchestrations | 7 | **7** | **7** |
 | Integration tests | 78 | **80+** | **98+** |
@@ -360,8 +377,9 @@ The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent.
 
 ```mermaid
 graph LR
-    A[Codomyrmex v2.4.0] --> B[41 MCP Tools]
+    A[Codomyrmex v2.4.0] --> B[48 MCP Tools]
     B --> C[Knowledge Codification]
     B --> D[Swarm Orchestration]
     B --> E[Session Lifecycle]
+    B --> F[Skill preload registry]
 ```

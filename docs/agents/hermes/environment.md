@@ -97,6 +97,17 @@ HERMES_COPILOT_ACP_ARGS=--acp --stdio # override default CLI args
 GITHUB_TOKEN=ghp_...                  # GitHub auth token (set by hermes copilot login)
 ```
 
+### Codomyrmex Hermes skill registry (optional)
+
+When driving Hermes through **Codomyrmex** (`HermesClient` or MCP), you can extend the bundled skill id registry with extra YAML:
+
+```bash
+# Path to additional registry YAML (same shape as bundled skills_registry.yaml)
+CODOMYRMEX_SKILLS_REGISTRY=/path/to/extra_skills_registry.yaml
+```
+
+Project defaults use **`.codomyrmex/hermes_skills_profile.yaml`** discovered from the process **current working directory** (walk upward). That path is independent of `HERMES_HOME`. Full merge order and client keys: [skills.md](skills.md).
+
 ### Optional Service Keys
 
 ```bash
@@ -161,3 +172,4 @@ The `HERMES_HOME` export in your `.zshrc` is **not** available to launchd servic
 - [Multi-Instance](multi_instance.md) — Running multiple bots
 - [Security](security.md) — API key hygiene
 - [launchd](launchd.md) — macOS service management
+- [skills.md](skills.md) — `CODOMYRMEX_SKILLS_REGISTRY` and project skill profile

@@ -23,7 +23,8 @@ Universal protocols specific to this module:
 - **Provider Router** (`_provider_router.py`): Unified `call_llm()` abstraction across 6 providers, with automatic credential resolution and fallback.
 - **Context Compressor** (`_provider_router.py`): Progressive conversation compression triggered at configurable token thresholds.
 - **User Model** (`_provider_router.py`): Cross-session user context persistence — preferences, observations, session summaries backed by JSON.
-- **MCP Bridge** (`mcp_tools.py`): **41 MCP tools** exposed to Claude and swarm orchestrators, including Sprint 34 knowledge codification and swarm orchestration tools.
+- **MCP Bridge** (`mcp_tools.py`): **48** `@mcp_tool` entries; skill-interop tools carry `tags` for PAI manifest indexing (`skills`, `cli_preload`, `interop`).
+- **Unified skill registry** (`skill_registry.py`, `data/skills_registry.yaml`): stable `skill_ids` → Hermes `-s` names; project profile `.codomyrmex/hermes_skills_profile.yaml`; optional `CODOMYRMEX_SKILLS_REGISTRY` overlay; MCP `hermes_skills_resolve` / `hermes_skills_validate_registry`.
 - **Session Engine** (`session.py`): `InMemorySessionStore`, `SQLiteSessionStore` (FTS5 BM25), session `close()` KI lifecycle hook.
 - **Knowledge Codification** (Sprint 34): `hermes_build_memory_graph`, `hermes_extract_ki`, `hermes_search_knowledge_items`, `hermes_deduplicate_ki`, `hermes_archive_sessions`.
 - **Swarm Orchestration** (Sprint 34): `hermes_spawn_agent` (capability profile routing), backed by `AgentOrchestrator.spawn_agent` + `filter_tools`.
@@ -54,5 +55,6 @@ When coordinating with Hermes via MCP:
 
 ## Navigation Links
 
+- [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) — MCP surface and tags
 - **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [../../../../README.md](../../../../README.md) - Main project documentation

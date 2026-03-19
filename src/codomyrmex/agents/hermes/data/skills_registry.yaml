@@ -1,0 +1,26 @@
+# Codomyrmex unified skill registry (bundled defaults).
+# Override or extend via CODOMYRMEX_SKILLS_REGISTRY (path to extra YAML) or
+# user-maintained entries under the same schema.
+#
+# Each skill has a stable id used by .codomyrmex/hermes_skills_profile.yaml and MCP
+# hermes_skills_resolve. hermes_preload lists CLI names passed to `hermes chat -s`.
+
+version: 1
+skills:
+  - id: codomyrmex-fabric
+    title: Fabric-style pattern prompts
+    hermes_preload:
+      - fabric
+    cli_only: true
+    pai_skill_hint: Fabric
+    tags:
+      - extraction
+      - research
+
+  - id: codomyrmex-code-review
+    title: Code review helper pack
+    hermes_preload:
+      - code_review
+    cli_only: true
+    tags:
+      - coding

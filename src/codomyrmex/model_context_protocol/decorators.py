@@ -8,8 +8,9 @@ MCP exposure without centralized registry files.
 
 import functools
 import inspect
+import types
 from collections.abc import Callable
-from typing import Any, get_type_hints
+from typing import Any, Union, get_args, get_origin, get_type_hints
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -21,6 +22,7 @@ def mcp_tool(
     description: str | None = None,
     schema: dict[str, Any] | None = None,
     category: str = "general",
+    tags: list[str] | None = None,
     version: str | None = None,
     deprecated_in: str | None = None,
 ) -> Callable[..., Any]:
@@ -32,6 +34,7 @@ def mcp_tool(
         description: Tool description (default: docstring)
         schema: JSON Schema for arguments (default: auto-generated from type hints)
         category: Tool category for organization
+        tags: Optional tags for discovery / PAI manifest indexing (e.g. ``skills``).
         version: Tool version string (e.g., "1.0", "2.0"). Defaults to "1.0".
         deprecated_in: Version in which this tool was deprecated (e.g., "1.5").
                        If set, calling the tool emits a DeprecationWarning.
@@ -63,11 +66,13 @@ def mcp_tool(
             "description": tool_desc,
             "schema": tool_schema,
             "category": category,
+            "tags": list(tags or []),
             "module": func.__module__,
             "version": version or "1.0",
             "deprecated_in": deprecated_in,
         }
         func._mcp_tool_meta = tool_meta
+        func._mcp_tool = tool_meta
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -83,6 +88,7 @@ def mcp_tool(
 
         # Copy metadata onto wrapper so scanners find it via dir()
         wrapper._mcp_tool_meta = tool_meta
+        wrapper._mcp_tool = tool_meta
 
         return wrapper
 
@@ -133,9 +139,7 @@ def _generate_schema_from_signature(func: Callable[..., Any]) -> dict[str, Any]:
 
             # Determine type
             param_type = type_hints.get(param_name, Any)
-            json_type = _map_python_type_to_json(param_type)
-
-            prop_schema = {"type": json_type}
+            prop_schema = _annotation_to_json_schema(param_type)
 
             # Default value? (JSON-safe conversion)
             if param.default is not inspect.Parameter.empty:
@@ -159,8 +163,63 @@ def _generate_schema_from_signature(func: Callable[..., Any]) -> dict[str, Any]:
         return {"type": "object", "properties": {}}  # Fallback
 
 
-def _map_python_type_to_json(py_type: type[Any]) -> str:
-    """Map Python types to JSON Schema types."""
+def _is_union(tp: Any) -> bool:
+    origin = get_origin(tp)
+    return origin is Union or origin is types.UnionType
+
+
+def _annotation_to_json_schema(annotation: Any) -> dict[str, Any]:
+    """Map a typing annotation to a JSON Schema fragment (object with type/anyOf/items)."""
+    if annotation is Any:
+        return {"type": "string"}
+
+    if _is_union(annotation):
+        parts: list[dict[str, Any]] = []
+        for arg in get_args(annotation):
+            if arg is type(None):
+                parts.append({"type": "null"})
+            else:
+                sub = _annotation_to_json_schema(arg)
+                if sub:
+                    parts.append(sub)
+        if not parts:
+            return {"type": "string"}
+        if len(parts) == 1:
+            return parts[0]
+        return {"anyOf": parts}
+
+    origin = get_origin(annotation)
+    args = get_args(annotation)
+
+    if origin is list or annotation is list:
+        inner = args[0] if args else Any
+        inner_schema = (
+            _annotation_to_json_schema(inner)
+            if inner is not Any
+            else {"type": "string"}
+        )
+        return {"type": "array", "items": inner_schema}
+
+    if origin is dict or annotation is dict:
+        return {"type": "object"}
+
+    if annotation is str:
+        return {"type": "string"}
+    if annotation is int:
+        return {"type": "integer"}
+    if annotation is float:
+        return {"type": "number"}
+    if annotation is bool:
+        return {"type": "boolean"}
+    if annotation is type(None):
+        return {"type": "null"}
+
+    # Legacy single-string fallback (bytes, custom classes, etc.)
+    return {"type": _map_python_type_to_json_string(annotation)}
+
+
+def _map_python_type_to_json_string(py_type: type[Any]) -> str:
+    """Map Python types to a single JSON Schema type string (non-union)."""
     if py_type is str:
         return "string"
     if py_type is int:
@@ -173,4 +232,9 @@ def _map_python_type_to_json(py_type: type[Any]) -> str:
         return "array"
     if py_type is dict or getattr(py_type, "__origin__", None) is dict:
         return "object"
-    return "string"  # Default fallback
+    return "string"
+
+
+def _map_python_type_to_json(py_type: type[Any]) -> str:
+    """Map Python types to JSON Schema types (tests and simple callers)."""
+    return _map_python_type_to_json_string(py_type)

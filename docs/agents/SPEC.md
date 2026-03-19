@@ -23,6 +23,8 @@ The `README.md` for each agent provides:
 - Quick start usage example
 - Links to source documentation (README, SPEC, AGENTS, PAI)
 
+Large integrations (e.g. **Hermes**) add deep-dive pages under `docs/agents/<agent>/` beyond `README.md`. Hermes-specific cross-cutting behavior that spans MCP, env, and repo layout is documented in [hermes/skills.md](hermes/skills.md) and [hermes/codomyrmex_integration.md](hermes/codomyrmex_integration.md).
+
 ## Architectural Constraints
 
 - **Mirror Rule**: `docs/agents/` mirrors `src/codomyrmex/agents/` — every source agent directory has a corresponding docs subfolder

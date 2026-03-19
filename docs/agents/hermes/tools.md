@@ -1,6 +1,6 @@
 # Hermes Tools System
 
-**Version**: v0.2.0 | **Last Updated**: March 2026
+**Version**: v0.3.0 | **Last Updated**: March 2026
 
 ## Overview
 
@@ -88,9 +88,12 @@ mcp_servers:
 
 ## Codomyrmex MCP Tools (v1.5.x+)
 
-Hermes is exposed to other agents through a set of `@mcp_tool` decorated functions in
-`src/codomyrmex/agents/hermes/mcp_tools.py`. These tools bridge internal Hermes capabilities
-to the broader PAI ecosystem.
+Hermes is exposed to other agents through `@mcp_tool` decorated functions in
+`src/codomyrmex/agents/hermes/mcp_tools.py`. As of March 2026 there are **48** such tools (verify with `rg '^@mcp_tool' mcp_tools.py` if the count drifts).
+
+**Distinction**: Hermes’s runtime **tool** registry (`tools/registry.py`, categories above) is not the same as Codomyrmex’s **skill preload** registry (stable ids → `hermes chat -s` names). The latter is documented in [skills.md](skills.md).
+
+These MCP tools bridge internal Hermes capabilities to the broader PAI ecosystem. Grouped samples below; knowledge codification, swarm orchestration, worktrees, vault, and task tools are summarized in [codomyrmex_integration.md](codomyrmex_integration.md).
 
 ### Session Management Tools
 
@@ -117,6 +120,14 @@ to the broader PAI ecosystem.
 | `hermes_batch_execute` | Submit a list of prompts; sequential or parallel |
 | `hermes_sampling` | Server-initiated MCP sampling protocol |
 | `hermes_run_coverage_loop` | Autonomous pytest heal-and-retry loop |
+
+### Skill preload & validation
+
+| Tool | Description |
+| :--- | :---------- |
+| `hermes_skills_list` | Wraps `hermes skills list` when the Hermes CLI is available |
+| `hermes_skills_resolve` | Resolve registry skill ids to Hermes preload names and metadata |
+| `hermes_skills_validate_registry` | Compare bundled/overlay registry entries to installed Hermes skills |
 
 ### Diagnostics & Utility Tools
 

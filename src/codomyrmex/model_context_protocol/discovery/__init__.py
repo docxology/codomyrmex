@@ -19,6 +19,7 @@ from types import ModuleType
 from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.model_context_protocol.tool_tagging import manifest_tags
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -268,13 +269,18 @@ class MCPDiscovery:
                             f"Install via 'uv add {' '.join(missing)}'"
                         )
 
+                cat = str(meta.get("category", "general"))
+                tag_list = manifest_tags(
+                    category=cat,
+                    explicit=meta.get("tags"),
+                )
                 tool = DiscoveredTool(
                     name=meta["name"] or name,
                     description=meta["description"] or (obj.__doc__ or "").strip(),
                     module_path=module.__name__,
                     callable_name=name,
                     parameters=meta.get("schema", meta.get("parameters", {})),
-                    tags=meta.get("tags", []),
+                    tags=tag_list,
                     version=meta.get("version", "1.0"),
                     requires=meta.get("requires", []),
                     available=available,

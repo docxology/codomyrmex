@@ -187,3 +187,4 @@ HERMES_HOME=/path/to/.hermes /Users/mini/.hermes/hermes-agent/venv/bin/python \
 - [Multi-Instance](multi_instance.md) — Instance setup guide
 - [Gateway](gateway.md) — Gateway architecture
 - [Troubleshooting](troubleshooting.md) — Common issues
+- [skills.md](skills.md) — Codomyrmex skill profile (separate from `HERMES_HOME`)

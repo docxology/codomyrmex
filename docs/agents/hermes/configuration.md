@@ -202,8 +202,14 @@ yamllint $HERMES_HOME/config.yaml
 hermes doctor
 ```
 
+## Codomyrmex `HermesClient` (not `config.yaml`)
+
+Hermes’s **`$HERMES_HOME/config.yaml`** does not define Codomyrmex’s skill preload pipeline. For **project skill profiles**, **bundled skill id registry**, **`CODOMYRMEX_SKILLS_REGISTRY`**, and **`HermesClient`** constructor keys (`hermes_default_skill_ids`, `hermes_default_hermes_skills`, `hermes_skill_profile_disable`), see [skills.md](skills.md) and [environment.md](environment.md).
+
 ## Related Documents
 
 - [Environment Variables](environment.md) — `.env` and `HERMES_HOME`
 - [Models](models.md) — Model selection and OpenRouter
 - [Personalities](personalities.md) — Custom persona definitions
+- [skills.md](skills.md) — Unified skill registry, merge order, MCP skill tools
+- [codomyrmex_integration.md](codomyrmex_integration.md) — Full MCP surface (48 tools)

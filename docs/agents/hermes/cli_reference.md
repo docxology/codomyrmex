@@ -97,6 +97,8 @@ hermes skills tap remove <repo>        # Remove skill tap
 hermes skills tap list                 # List taps
 ```
 
+**Codomyrmex**: MCP tools and `HermesClient` can pass skill names without typing `-s` each time — bundled id registry, optional `CODOMYRMEX_SKILLS_REGISTRY`, `.codomyrmex/hermes_skills_profile.yaml`, and merge order are documented in [skills.md](skills.md).
+
 ### Cron & Pairing
 
 ```bash

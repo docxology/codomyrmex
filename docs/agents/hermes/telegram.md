@@ -142,3 +142,4 @@ Users can pair by sending the code to the bot in Telegram.
 - [Gateway](gateway.md) — Gateway architecture
 - [Multi-Instance](multi_instance.md) — Running multiple bots
 - [Troubleshooting](troubleshooting.md) — Error patterns and fixes
+- [skills.md](skills.md) — Codomyrmex skill defaults for programmatic Hermes calls

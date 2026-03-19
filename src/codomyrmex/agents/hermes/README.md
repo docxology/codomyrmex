@@ -39,14 +39,14 @@ The Hermes Agent Module integrates NousResearch's Hermes capabilities deeply int
     The `evolution/` directory contains the `hermes-agent-self-evolution` submodule, implementing DSPy-based Genetic-Pareto (GEPA) optimization.
 
 11. **MCP Tool Suite**:
-    Provides 37+ comprehensive Model Context Protocol tools — mapping core, session, diagnostic, and administration features to the swarm.
+    48 `@mcp_tool` definitions in `mcp_tools.py` (see [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)); unified skill registry in `skill_registry.py` + `data/skills_registry.yaml`.
 
 ## Directory Structure
 
 - `hermes_client.py`: The `HermesClient` concrete agent subclass (dual-backend, sessions, worktrees, CLI flags, batch execution).
 - `_provider_router.py`: `ProviderRouter`, `UserModel`, `ContextCompressor`, `MCPBridgeManager`.
 - `session.py`: Persistent SQLite tracking (`HermesSession`, `SQLiteSessionStore`) with FTS5 and archiving.
-- `mcp_tools.py`: 37+ Model Context Protocol tools.
+- `mcp_tools.py`: Model Context Protocol tools (`MCP_TOOL_SPECIFICATION.md`).
 - `templates/`: Built-in template registries (code review, debugging, documentation, task decomposition, and rotation).
 - `scripts/`: Operational scripts (`run_chat.py`, `run_batch.py`, `run_session_export.py`, `run_prune.py`, `run_health.py`, etc.).
 - `evolution/`: Genetic self-improvement subsystem.

@@ -112,7 +112,7 @@ The `prompt_builder.py` module assembles the system prompt by combining:
 1. **Base system prompt** — core agent instructions
 2. **Personality text** — from the active personality definition
 3. **Available tools** — JSON schemas for tool calling
-4. **Skills** — any loaded skill prompts
+4. **Skills** — any loaded skill prompts (Hermes `skills/`; Codomyrmex can additionally preload packs via `hermes chat -s` — [skills.md](skills.md))
 5. **Memory context** — relevant memories from FTS5 recall
 6. **Session history** — compressed or full conversation history
 
@@ -130,3 +130,4 @@ The personality text is inserted early in the system prompt, establishing the ag
 - [Configuration](configuration.md) — Full config reference
 - [Models](models.md) — Model selection affects personality expression
 - [Multi-Instance](multi_instance.md) — Per-bot personalities
+- [skills.md](skills.md) — Codomyrmex skill preload vs personality text

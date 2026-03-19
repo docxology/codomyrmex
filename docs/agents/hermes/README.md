@@ -92,6 +92,7 @@ hermes gateway run
 - **Smart Routing**: Auto-routes simple messages to cheap model; complex tasks to strong model
 - **Copilot ACP**: GitHub Copilot as an LLM backend (free with GitHub subscription) via `copilot --acp --stdio`
 - **Pairing**: Dynamic user access management without gateway restart
+- **Codomyrmex skill preload**: Bundled skill id registry + optional env overlay + per-repo `.codomyrmex/hermes_skills_profile.yaml`; merged with client config, session metadata, and MCP parameters ([skills.md](skills.md), [codomyrmex_integration.md](codomyrmex_integration.md))
 
 ## Codomyrmex Scripts
 

@@ -58,6 +58,21 @@ class TestHermesClientArgBuilder:
         )
         assert args == ["skills", "list"]
 
+    def test_build_args_cli_skill_preload(self) -> None:
+        """Hermes CLI chat inserts ``-s`` before ``-q`` when skills are in context."""
+        client = HermesClient()
+        args = client._build_hermes_args(
+            "task",
+            {"hermes_skills": ["fabric", "research"]},
+        )
+        assert args[:4] == ["chat", "-s", "fabric,research", "-q"]
+
+    def test_normalize_hermes_skill_names(self) -> None:
+        from codomyrmex.agents.hermes.skill_names import normalize_hermes_skill_names
+
+        assert normalize_hermes_skill_names("a", "b,c") == ["a", "b", "c"]
+        assert normalize_hermes_skill_names(context={"hermes_skill": "x"}) == ["x"]
+
 
 class TestHermesClientExecution:
     """Zero-mock execution tests for HermesClient."""
@@ -161,6 +176,28 @@ class TestHermesClientSessionIntegration:
             assert session.message_count == 4
             assert session.messages[0]["content"] == "hello session"
             assert session.messages[2]["content"] == "follow up"
+
+    def test_chat_session_persists_skills_metadata(self, tmp_path) -> None:
+        from codomyrmex.agents.hermes.session import SQLiteSessionStore
+        from codomyrmex.agents.hermes.skill_names import (
+            SESSION_METADATA_HERMES_SKILLS_KEY,
+        )
+
+        db_path = tmp_path / "skills_meta.db"
+        client = HermesClient(
+            config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
+        )
+        response = client.chat_session(prompt="hi", hermes_skills=["one", "two"])
+        assert response.is_success()
+        session_id = response.metadata.get("session_id")
+        assert session_id
+        with SQLiteSessionStore(db_path) as store:
+            loaded = store.load(session_id)
+            assert loaded is not None
+            assert loaded.metadata.get(SESSION_METADATA_HERMES_SKILLS_KEY) == [
+                "one",
+                "two",
+            ]
 
 
 class TestHermesSessionMCPTools:

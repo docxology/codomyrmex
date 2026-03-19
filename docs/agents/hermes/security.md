@@ -44,6 +44,10 @@ Each Hermes instance should use unique API keys where possible:
 - **Telegram**: Each bot requires its own unique token from @BotFather
 - **Other services**: Shared keys are acceptable if usage tracking isn't needed
 
+## Codomyrmex skill registry files
+
+If you use **`CODOMYRMEX_SKILLS_REGISTRY`** or commit **`.codomyrmex/hermes_skills_profile.yaml`**, treat those YAML files like config: they can reference skill names and project policy. Do not embed secrets; keep registry paths readable only by intended users. See [skills.md](skills.md).
+
 ## Access Control
 
 ### TELEGRAM_ALLOWED_USERS
@@ -169,3 +173,4 @@ Tirith evaluates tool calls against policies before execution. If `tirith_fail_o
 - [Configuration](configuration.md) — Security-relevant settings
 - [Multi-Instance](multi_instance.md) — Instance isolation
 - [Telegram](telegram.md) — DM access control and pairing
+- [skills.md](skills.md) — Skill registry / profile files (Codomyrmex)

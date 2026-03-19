@@ -345,6 +345,10 @@ Thin orchestrator scripts in [`scripts/agents/hermes/`](../../../scripts/agents/
 | `evaluate_orchestrators.py` | Evaluate scripts against thin orchestrator pattern |
 | `new_instance.py`           | Create and configure a new Hermes instance         |
 
+### Optional: Codomyrmex project skill defaults
+
+For **Codomyrmex**-driven Hermes runs, you can add **`.codomyrmex/hermes_skills_profile.yaml`** at the repo root (or use `CODOMYRMEX_SKILLS_REGISTRY`) so `HermesClient` and MCP tools apply consistent `hermes chat -s` preloads. Example: [`config/hermes_skills_profile.example.yaml`](../../../config/hermes_skills_profile.example.yaml). Behavior and merge order: [skills.md](skills.md).
+
 ## Related Documents
 
 - [Architecture](architecture.md) — Core agent loop
@@ -354,6 +358,7 @@ Thin orchestrator scripts in [`scripts/agents/hermes/`](../../../scripts/agents/
 - [Multi-Instance](multi_instance.md) — Multiple bots
 - [launchd](launchd.md) — macOS services
 - [Troubleshooting](troubleshooting.md) — Common issues
+- [skills.md](skills.md) — Codomyrmex skill registry and project profile
 
 ## External Links
 

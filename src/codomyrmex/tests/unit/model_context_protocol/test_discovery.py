@@ -211,6 +211,9 @@ class TestMCPDiscoveryEngine:
         assert len(tools) >= 1
         names = [t.name for t in tools]
         assert "codomyrmex.test_scan" in names
+        scanned = next(t for t in tools if t.name == "codomyrmex.test_scan")
+        assert "test" in scanned.tags
+        assert "mcp" in scanned.tags
 
     def test_scan_module_no_tools_returns_empty(self):
         mod = types.ModuleType("empty_module")

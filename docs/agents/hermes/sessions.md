@@ -195,8 +195,13 @@ with SQLiteSessionStore("/path/to/hermes_sessions.db") as store:
 
 Archived sessions are stored as gzip-compressed JSON in `sessions_archive/` next to the database.
 
+## Codomyrmex `hermes_chat_session` and skill metadata
+
+Multi-turn sessions created through **Codomyrmex** may store Hermes skill names on the session object (`metadata.hermes_skills`). Those names participate in the same merge order as project profile and MCP parameters for each subsequent turn. Details: [skills.md](skills.md).
+
 ## Related Documents
 
 - [Architecture](architecture.md) — Core agent loop
 - [Configuration](configuration.md) — Compression settings
 - [Models](models.md) — Summary model selection
+- [skills.md](skills.md) — Session skill metadata and merge order

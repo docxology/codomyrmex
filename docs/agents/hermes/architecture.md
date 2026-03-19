@@ -153,6 +153,10 @@ Hermes supports 6 execution backends for tool commands:
 | **Singularity** | HPC/research environments           |
 | **Modal**       | Cloud-native serverless             |
 
+## Codomyrmex integration note
+
+When Hermes is invoked via **Codomyrmex** (`HermesClient`), skill names for `hermes chat -s` can be supplied from a **project profile**, **client config**, **session metadata**, and **per-request MCP parameters** (merged in a fixed order). That layer is separate from the in-repo Hermes **tool** registry above. See [skills.md](skills.md) and [codomyrmex_integration.md](codomyrmex_integration.md).
+
 ## Related Documents
 
 - [Gateway System](gateway.md) — Platform-specific routing
@@ -160,3 +164,4 @@ Hermes supports 6 execution backends for tool commands:
 - [Tools](tools.md) — Tool registry and categories
 - [Configuration](configuration.md) — `config.yaml` reference
 - [Copilot ACP](copilot_acp.md) — GitHub Copilot backend
+- [skills.md](skills.md) — Skill preload registry (Codomyrmex)

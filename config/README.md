@@ -6,6 +6,8 @@
 
 Configuration templates and examples.
 
+Hermes unified skills: copy [`hermes_skills_profile.example.yaml`](hermes_skills_profile.example.yaml) to **`.codomyrmex/hermes_skills_profile.yaml`** in a project (see `docs/agents/hermes/skills.md`).
+
 ## Directory Contents
 - `PAI.md` – File
 - `README.md` – File

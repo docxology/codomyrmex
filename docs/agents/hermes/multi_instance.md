@@ -161,3 +161,4 @@ tail -f ~/.hermes/logs/gateway.log \
 - [Telegram](telegram.md) — Bot token setup
 - [Environment](environment.md) — HERMES_HOME reference
 - [Troubleshooting](troubleshooting.md) — Common issues
+- [skills.md](skills.md) — `.codomyrmex/` skill profile is per cwd, not per `HERMES_HOME`

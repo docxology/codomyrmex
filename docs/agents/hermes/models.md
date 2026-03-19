@@ -174,9 +174,14 @@ compression:
 3. **Lower max_turns** — reduce runaway conversations
 4. **Enable compression** — reduces token usage in long conversations
 
+## Codomyrmex skill preload
+
+When using **Codomyrmex** `HermesClient`, Hermes **skill packs** (`hermes chat -s`) are applied on the **Hermes CLI** execution path. The **Ollama** fallback does not load those packs. See [skills.md](skills.md).
+
 ## Related Documents
 
 - [Configuration](configuration.md) — Full config reference
 - [Sessions](sessions.md) — Compression and summary model usage
 - [Personalities](personalities.md) — Custom personas
 - [Copilot ACP](copilot_acp.md) — Using GitHub Copilot as a Hermes backend (new v0.3.0)
+- [skills.md](skills.md) — Skill registry, merge order, backends

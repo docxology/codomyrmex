@@ -240,3 +240,4 @@ When the DB is under the threshold, the tool returns immediately without deletin
 - [Multi-Instance](multi_instance.md) — Running multiple gateways
 - [launchd](launchd.md) — macOS service management
 - [Cron](cron.md) — Scheduled jobs
+- [skills.md](skills.md) — Codomyrmex skill preload when invoking Hermes via MCP/client

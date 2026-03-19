@@ -6,6 +6,7 @@ import time
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.model_context_protocol.tool_tagging import manifest_tags
 
 from .definitions import PROMPT_DEFINITIONS, RESOURCE_DEFINITIONS, TOOL_DEFINITIONS
 from .discovery import discover_dynamic_tools
@@ -288,15 +289,19 @@ def get_skill_manifest() -> dict[str, Any]:
         Dictionary with skill metadata, tools, workflows, and knowledge scope.
     """
     # Start with static schema
-    static_tools = [
-        {
-            "name": t[0],
-            "description": t[1],
-            "category": t[0].split(".")[1] if "." in t[0] else "general",
-            "input_schema": t[3],
-        }
-        for t in TOOL_DEFINITIONS
-    ]
+    static_tools = []
+    for t in TOOL_DEFINITIONS:
+        tname = t[0]
+        cat = tname.split(".")[1] if "." in tname else "general"
+        static_tools.append(
+            {
+                "name": tname,
+                "description": t[1],
+                "category": cat,
+                "input_schema": t[3],
+                "tags": manifest_tags(category=cat, explicit=None),
+            }
+        )
 
     # Merge dynamic tools
     dynamic_list = discover_dynamic_tools()
@@ -305,8 +310,13 @@ def get_skill_manifest() -> dict[str, Any]:
         name, description, handler, input_schema = t
         # Extract category from @mcp_tool metadata on the handler
         category = "general"
+        explicit_tags = None
         if handler and hasattr(handler, "_mcp_tool_meta"):
-            category = handler._mcp_tool_meta.get("category", "general")
+            meta = handler._mcp_tool_meta
+            category = meta.get("category", "general")
+            raw_tags = meta.get("tags")
+            if raw_tags:
+                explicit_tags = raw_tags
         if category == "general" and "." in name:
             # Fallback: derive from dotted tool name prefix
             category = name.split(".")[1]
@@ -316,6 +326,7 @@ def get_skill_manifest() -> dict[str, Any]:
                 "description": description,
                 "category": category,
                 "input_schema": input_schema,
+                "tags": manifest_tags(category=category, explicit=explicit_tags),
             }
         )
 
@@ -386,6 +397,20 @@ def get_skill_manifest() -> dict[str, Any]:
                     "codomyrmex.list_modules",
                 ],
                 "description": "Full PAI + Codomyrmex health assessment",
+            },
+            {
+                "name": "hermes_external_skills",
+                "steps": [
+                    "codomyrmex.hermes_skills_resolve",
+                    "codomyrmex.hermes_skills_list",
+                    "codomyrmex.hermes_skills_validate_registry",
+                    "codomyrmex.hermes_chat_session",
+                    "codomyrmex.hermes_execute",
+                ],
+                "description": (
+                    "Resolve registry skill_ids → Hermes -s names, list CLI skills, "
+                    "optional validate, then chat/execute (profile + session merge automatic)"
+                ),
             },
         ],
         "algorithm_mapping": {
