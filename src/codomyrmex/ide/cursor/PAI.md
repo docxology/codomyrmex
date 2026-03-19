@@ -1,28 +1,32 @@
 # Personal AI Infrastructure - Cursor Context
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
-
-**Module**: cursor
-**Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Context
 
-Cursor AI-enhanced IDE integration for code completion, chat-based assistance, and AI-driven development workflows.
+This submodule provides Cursor-specific IDE control for Codomyrmex agents through `CursorClient`.
+The implementation is local-first and testable, with no required remote Cursor API dependencies.
 
-## AI Strategy
+## Agent Guidance
 
-As an AI agent, when working with this module:
+When updating this module:
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+1. Respect the `IDEClient` contract and keep `IDEStatus` transitions accurate.
+2. Keep command behavior explicit; unknown commands must fail clearly.
+3. Preserve deterministic filesystem behavior for test stability.
+4. Keep docs synchronized (`README.md`, `AGENTS.md`, `SPEC.md`) with implementation changes.
 
 ## Key Files
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+- `__init__.py` — `CursorClient` implementation and exports.
+- `SPEC.md` — Functional contracts and command surface.
+- `README.md` — Usage and verification.
 
-## Future Considerations
+## Validation Focus
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+- `test_cursor_impl.py` — active file discovery and extension filtering.
+- `test_cursor_settings.py` — connection, rules, model, command flow, persistence.
+- `test_ide_mcp_tools.py` — MCP wrappers (`ide_cursor_*`) and Antigravity tool shape.
+- `test_ide.py` — cross-IDE contract coverage including Cursor.
+
+MCP surface: parent [MCP_TOOL_SPECIFICATION.md](../MCP_TOOL_SPECIFICATION.md); editor guide [docs/development/cursor-integration.md](../../../../docs/development/cursor-integration.md).

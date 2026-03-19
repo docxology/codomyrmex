@@ -75,6 +75,19 @@ hermes skills sync          # sync from Skills Hub
 # The agent can create/update/delete skills autonomously
 ```
 
+## Codomyrmex MCP: preloading skills
+
+Third-party packs (for example [PrediHermes / geopolitical-market-sim](https://github.com/nativ3ai/hermes-geopolitical-market-sim)) install under `$HERMES_HOME/skills/`. The Hermes CLI loads them with `hermes chat -s <name>` (or comma-separated names).
+
+Codomyrmex maps the same behavior onto MCP tools:
+
+- `hermes_execute`, `hermes_stream`, `hermes_sampling`, `hermes_batch_execute`: optional `hermes_skill` (one name) and/or `hermes_skills` (list or comma-separated string).
+- `hermes_chat_session`: same parameters; normalized names are stored on the session as `hermes_skills` in metadata and reused on later turns until you pass new skill arguments.
+
+**Ollama fallback**: when the client runs `ollama run` instead of `hermes`, these flags are not applied—Hermes-native skills exist only on the CLI path.
+
+**Response metadata**: on successful CLI turns, `AgentResponse.metadata` may include `hermes_skills_loaded` (list of names) echoing what was passed to `-s`, for tracing and orchestration logs.
+
 ## Community Skills Hub
 
 Hermes integrates with [agentskills.io](https://agentskills.io) for community sharing:
@@ -107,7 +120,32 @@ hermes skills list  # should show both new skills
 | `tools/skill_manager_tool.py` | CRUD operations on skills                        |
 | `tools/skills_guard.py`       | Safety guard: blocks dangerous skill ops         |
 
+## Codomyrmex HermesSkillBridge
+
+The [`HermesSkillBridge`](../../../src/codomyrmex/skills/hermes_skill_bridge.py) syncs
+`$HERMES_HOME/skills/` into the Codomyrmex `SkillRegistry`, making every installed
+Hermes skill (including third-party packs like PrediHermes) a first-class Python callable:
+
+```python
+from codomyrmex.skills.hermes_skill_bridge import HermesSkillBridge
+
+bridge = HermesSkillBridge()
+
+# Discover all installed Hermes skills
+skills = bridge.list_hermes_skills()   # dict[name → HermesSkillEntry]
+
+# Run a skill directly
+entry = bridge.get_skill("geopolitical-market-sim")
+resp = entry.run("Use PrediHermes health")
+
+# Or via the convenience method
+resp = bridge.run_skill("geopolitical-market-sim", "Use PrediHermes health")
+```
+
+See [PrediHermes Integration Guide](predihermes.md) for full end-to-end examples.
+
 ## Related Documents
 
 - [Architecture](architecture.md) — Prompt building and skill injection
 - [Tools](tools.md) — Tool registry system
+- [PrediHermes](predihermes.md) — Full PrediHermes integration guide

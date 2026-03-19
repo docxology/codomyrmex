@@ -1,20 +1,46 @@
 # IDE - MCP Tool Specification
 
-This document outlines the specification for tools within the IDE module that are intended to be integrated with the Model Context Protocol (MCP).
+This document describes MCP tools exposed by the `ide` module. They are discovered via `@mcp_tool` in [`mcp_tools.py`](mcp_tools.py).
 
-## Current Status: No MCP Tools Defined
+## Antigravity backend
 
-The IDE module provides programmatic integration and automation capabilities for various Integrated Development Environments for internal use by other Codomyrmex modules, including Cursor AI-first code editor, Visual Studio Code, and Google DeepMind Antigravity IDE support. It enables AI agents to achieve maximum agentic operation of IDEs through an abstract IDEClient interface with command execution, file management, event handling, and batch operations. These functions are primarily for programmatic integration within the application lifecycle and are not suited for exposure as Model Context Protocol (MCP) tools.
+| Tool | Description |
+|------|-------------|
+| `codomyrmex.ide_get_active_file` | Active file heuristic for the Antigravity IDE relay. |
+| `codomyrmex.ide_list_tools` | Lists tool names exposed by the Antigravity relay CLI. |
 
-MCP tools are typically designed for discrete, invocable actions or queries that an external agent (like an LLM) would trigger. The internal IDE automation mechanisms do not fit this paradigm.
+Responses include `"backend": "antigravity"` for disambiguation.
 
-If future enhancements to this module introduce features that are appropriate for MCP (e.g., executing an IDE command in a connected session, or querying the list of open files), this document will be updated accordingly.
+## Cursor backend
 
-For details on how to use the ide functionalities within your Python code, please refer to the module's `README.md` and `API_SPECIFICATION.md`.
+These tools use [`codomyrmex.ide.cursor.CursorClient`](cursor/__init__.py): filesystem-backed workspace state, not a live Cursor RPC. They are suitable for agents that need a consistent view of `.cursorrules`, workspace layout, and mtime-based “active file” hints.
+
+| Tool | Description |
+|------|-------------|
+| `codomyrmex.ide_cursor_workspace_info` | Connection status, resolved workspace path, `.cursor` / `.cursorrules` presence, capability metadata. |
+| `codomyrmex.ide_cursor_get_active_file` | Most recently modified source/config file under the workspace (same heuristic as `CursorClient.get_active_file`). |
+| `codomyrmex.ide_cursor_rules_read` | Reads `.cursorrules` with a bounded payload (`max_chars`, clamped 1–512_000). |
+
+**Workspace resolution** (all Cursor tools):
+
+1. `workspace_path` argument if provided  
+2. Else `CODOMYRMEX_CURSOR_WORKSPACE`  
+3. Else process current working directory  
+
+Responses include `"backend": "cursor"`.
+
+## Python usage
+
+```python
+from codomyrmex.ide.mcp_tools import ide_cursor_workspace_info, ide_get_active_file
+
+ide_get_active_file()
+ide_cursor_workspace_info(workspace_path="/path/to/repo")
+```
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Parent**: [ide README](README.md)
+- **API**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Cursor submodule**: [cursor/README.md](cursor/README.md)
+- **Project root**: [../../../README.md](../../../README.md)

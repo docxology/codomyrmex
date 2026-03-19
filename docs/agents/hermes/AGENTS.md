@@ -42,7 +42,7 @@ Agent coordination document for the Hermes documentation subfolder. Guides AI ag
 | File          | Description                           |
 | :------------ | :------------------------------------ |
 | `sessions.md` | Session lifecycle, state.db, FTS5     |
-| `skills.md`   | Self-improving skills, agentskills.io |
+| `skills.md`   | Skills hub, agentskills.io, Codomyrmex MCP `-s` preload |
 | `tools.md`    | Tool registry, MCP integration        |
 | `cron.md`     | Scheduled jobs, proactive messaging   |
 

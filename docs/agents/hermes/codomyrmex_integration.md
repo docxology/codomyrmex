@@ -62,6 +62,22 @@ results = client.batch_execute(
 # results = [{"prompt": ..., "status": "success", "content": ..., "error": None}, ...]
 ```
 
+### External Hermes skills (CLI preload)
+
+`HermesClient._build_hermes_args` passes `hermes chat -s <names>` when `AgentRequest.context` contains `hermes_skills` (and optionally `hermes_skill`). Helpers: `normalize_hermes_skill_names`, `agent_context_for_hermes_skills` in [`hermes_client.py`](../../../src/codomyrmex/agents/hermes/hermes_client.py).
+
+MCP tools `hermes_execute`, `hermes_stream`, `hermes_sampling`, `hermes_batch_execute`, and `hermes_chat_session` accept `hermes_skill` / `hermes_skills`. Stateful sessions persist the list under metadata key `hermes_skills` so multi-turn loops keep preloading the same pack—useful for workflows such as [PrediHermes](https://github.com/nativ3ai/hermes-geopolitical-market-sim) after installing its skill into `$HERMES_HOME/skills/`.
+
+Operator-only pieces (WorldOSINT, MiroFish, `predihermes` scripts) still run outside Codomyrmex; MCP covers driving Hermes with the skill context attached.
+
+#### PrediHermes-style workflow (checklist)
+
+1. Install the skill (and optional full stack) per [upstream README](https://github.com/nativ3ai/hermes-geopolitical-market-sim): `./install.sh` or `./install.sh --bootstrap-stack`.
+2. Confirm the skill is visible: `hermes skills list` or MCP `hermes_skills_list`.
+3. Start companion services as needed (WorldOSINT, MiroFish); verify with `predihermes-stack-health` or `predihermes health` when using generated launchers.
+4. From Codomyrmex MCP, call `hermes_chat_session` or `hermes_execute` with `hermes_skill="geopolitical-market-sim"` (or the exact name shown in `hermes skills list`).
+5. Use natural-language prompts that reference PrediHermes commands (as in the upstream doc); heavy automation still goes through `predihermes` in a terminal when the skill delegates to subprocesses.
+
 **Deep Links**:
 
 - 🔗 **Client Engine**: [`src/codomyrmex/agents/hermes/hermes_client.py`](../../../src/codomyrmex/agents/hermes/hermes_client.py)
@@ -110,9 +126,9 @@ client.set_system_prompt("session-id", "You are an expert Python reviewer.")
 
 ---
 
-## 🧩 3. 41 Model Context Protocol (MCP) Tools
+## 🧩 3. Model Context Protocol (MCP) Tools
 
-Codomyrmex binds Hermes into the broader swarm ecosystem by exposing **41 native MCP tools**. This allows other agents (like Claude or Jules) to spin up Hermes instances, query its status, fork sessions, read its memory, extract knowledge items, and participate in multi-agent swarms transparently.
+Codomyrmex binds Hermes into the broader swarm ecosystem by exposing **46 `@mcp_tool` handlers** in [`mcp_tools.py`](../../../src/codomyrmex/agents/hermes/mcp_tools.py). Other agents (Claude, Jules, etc.) can drive Hermes execution (including optional CLI skill preload on `hermes_execute` / `hermes_chat_session` / batch / stream / sampling), query status, fork sessions, search memory, extract knowledge items, and coordinate swarms.
 
 ```mermaid
 graph LR
@@ -138,7 +154,7 @@ graph LR
 | Group | Representative Tools |
 | :---- | :------------------- |
 | **Session Lifecycle** | `hermes_session_stats`, `hermes_session_fork`, `hermes_session_export_md`, `hermes_session_detail`, `hermes_prune_sessions`, `hermes_archive_sessions` |
-| **Execution** | `hermes_execute`, `hermes_stream`, `hermes_chat_session`, `hermes_batch_execute` |
+| **Execution** | `hermes_execute`, `hermes_stream`, `hermes_chat_session`, `hermes_batch_execute`, `hermes_sampling` (optional `hermes_skill` / `hermes_skills` on CLI path) |
 | **Memory & FTS5** | `hermes_recall_memory` (BM25), `hermes_session_search`, `hermes_set_system_prompt` |
 | **Knowledge Codification** *(Sprint 34)* | `hermes_build_memory_graph`, `hermes_extract_ki`, `hermes_search_knowledge_items`, `hermes_deduplicate_ki` |
 | **Swarm Orchestration** *(Sprint 34)* | `hermes_spawn_agent`, `orchestrator_run_dag`, `events_send_to_agent`, `events_agent_inbox` |
@@ -341,22 +357,78 @@ The v1.5.x sprint added **50 new integration tests** (across `test_gateway_sessi
 
 ---
 
+---
+
+## 🗺️ 9. Typed Skill Facade & Finance Bridge *(v1.5.x — PrediHermes)*
+
+For skills that produce structured outputs (like Polymarket prices or simulation forecasts),
+Codomyrmex provides two additional integration layers on top of the MCP tool pathway:
+
+### HermesSkillBridge
+
+Syncs `$HERMES_HOME/skills/` into the Codomyrmex skill ecosystem:
+
+```python
+from codomyrmex.skills.hermes_skill_bridge import HermesSkillBridge
+
+bridge = HermesSkillBridge()
+entry = bridge.get_skill("geopolitical-market-sim")
+resp = entry.run("Use PrediHermes dashboard iran-conflict")
+```
+
+### GeopoliticalMarketPipeline (Typed Python Facade)
+
+```python
+from codomyrmex.skills.skills.custom.geopolitical_market_sim import (
+    GeopoliticalMarketPipeline, TopicConfig,
+)
+
+pipeline = GeopoliticalMarketPipeline()
+pipeline.track_topic("iran-conflict", "Iran nuclear diplomacy",
+                     "Iran nuclear deal", ["iran"], ["IR", "US"])
+result = pipeline.run_tracked("iran-conflict", simulate=True, target_agents=48)
+```
+
+### PolymarketBridge (Finance Module)
+
+```python
+from codomyrmex.finance.polymarket_bridge import PolymarketBridge
+
+bp = PolymarketBridge()
+snapshot = bp.get_market_snapshot("Iran nuclear deal 2025")
+delta = bp.compare_implied_vs_forecast("iran-conflict")
+print(delta.interpretation)
+```
+
+**Deep Links**:
+
+- 🔗 **PrediHermes Guide**: [`docs/agents/hermes/predihermes.md`](predihermes.md)
+- 🔗 **Skill Bridge**: [`src/codomyrmex/skills/hermes_skill_bridge.py`](../../../src/codomyrmex/skills/hermes_skill_bridge.py)
+- 🔗 **Typed Facade**: [`src/codomyrmex/skills/skills/custom/geopolitical_market_sim/`](../../../src/codomyrmex/skills/skills/custom/geopolitical_market_sim/)
+- 🔗 **Polymarket Bridge**: [`src/codomyrmex/finance/polymarket_bridge.py`](../../../src/codomyrmex/finance/polymarket_bridge.py)
+- 🔗 **Install Script**: [`scripts/install_hermes_skill.sh`](../../../scripts/install_hermes_skill.sh)
+
+---
+
 ## Summary
 
 The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent. By establishing permanent multi-platform routing, bulletproof execution sandboxes, persistent memory syncs, session lifecycle management, batch execution, and **41 native MCP tools**, Codomyrmex transforms Hermes from a singular personal assistant into a highly integrated node capable of operating safely and autonomously within complex programmatic ecosystems.
 
-| Capability | v2.2.0 | v2.3.0 (73-commit update) | v2.4.0 (Sprint 34) |
-| :--------- | :-----: | :-------------: | :-------------: |
-| MCP tools | 33 | **36** | **41** |
-| Session methods | 12 | **12** | **12** |
-| Script orchestrations | 7 | **7** | **7** |
-| Integration tests | 78 | **80+** | **98+** |
-| Copilot ACP backend | ❌ | ✅ | ✅ |
-| Smart model routing | ❌ | ✅ | ✅ |
-| Knowledge codification | ❌ | ❌ | ✅ |
-| Swarm orchestration | ❌ | ❌ | ✅ |
-| EventStore P2P mailbox | ❌ | ❌ | ✅ |
-| New bundled skills | 0 | **2** (huggingface-hub, hermes-agent-setup) | **2** |
+| Capability | v2.2.0 | v2.3.0 (73-commit update) | v2.4.0 (Sprint 34) | v2.5.0 (PrediHermes) |
+| :--------- | :-----: | :-------------: | :-------------: | :-------------: |
+| MCP tools | 33 | **36** | **41** | **41** |
+| Session methods | 12 | **12** | **12** | **12** |
+| Script orchestrations | 7 | **7** | **7** | **8** |
+| Integration tests | 78 | **80+** | **98+** | **110+** |
+| Copilot ACP backend | ❌ | ✅ | ✅ | ✅ |
+| Smart model routing | ❌ | ✅ | ✅ | ✅ |
+| Knowledge codification | ❌ | ❌ | ✅ | ✅ |
+| Swarm orchestration | ❌ | ❌ | ✅ | ✅ |
+| EventStore P2P mailbox | ❌ | ❌ | ✅ | ✅ |
+| HermesSkillBridge | ❌ | ❌ | ❌ | ✅ |
+| Typed skill facades | ❌ | ❌ | ❌ | ✅ |
+| Polymarket finance bridge | ❌ | ❌ | ❌ | ✅ |
+| New bundled skills | 0 | **2** (huggingface-hub, hermes-agent-setup) | **2** | **2** |
 
 ```mermaid
 graph LR

@@ -1,10 +1,10 @@
 # codomyrmex - Functional Specification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Core Python package containing 88 specialized modules organized in a four-layer architecture. Provides modular development capabilities through independent modules with clear interfaces. The package serves as the central coordination point for AI-assisted software development, code analysis, testing, documentation generation, and comprehensive workflow automation.
+Core Python package containing 89 specialized modules organized in a four-layer architecture. Provides modular development capabilities through independent modules with clear interfaces. The package serves as the central coordination point for AI-assisted software development, code analysis, testing, documentation generation, and comprehensive workflow automation.
 
 ## Design Principles
 
@@ -136,7 +136,7 @@ graph TB
 ```
 
 > [!NOTE]
-> The diagram above shows representative modules per layer. The full list of all 130 modules is in the text descriptions below and in [INDEX.md](INDEX.md).
+> The diagram above shows representative modules per layer. The full list of all 88 modules is in the text descriptions below and in [INDEX.md](INDEX.md).
 
 ### Module Layer Descriptions
 
@@ -221,7 +221,7 @@ graph TB
 
 - `spatial`: 3D/4D spatial modeling and visualization
 - `cerebrum`: Case-based reasoning and Bayesian inference
-- `fpf`: Feed-Parse-Format Pipeline
+- `fpf`: Functional Programming Framework
 - `agents`: AI agent integrations (CodeEditor, Claude, Codex, Jules, etc.)
 - `events`: Event system and pub/sub
 - `plugin_system`: Plugin architecture
@@ -270,7 +270,7 @@ graph TB
 - `vector_store`: Vector storage and similarity search
 - `video`: Video processing and analysis
 - `wallet`: Self-custody and key management
-- `calendar_integration`: Specialized module
+- `calendar`: Specialized module
 - `email`: Specialized module
 
 **Characteristics**:

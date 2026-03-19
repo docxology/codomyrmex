@@ -13,10 +13,15 @@ Desktop.ini
 # IDEs and editors
 .vscode/
 .idea/
-.cursor/
 *.sublime-project
 *.sublime-workspace
 *.komodoproject
+
+# Cursor — track `.cursor/rules/` and this README in git; ignore other local paths under `.cursor/`
+.cursor/*
+!.cursor/README.md
+!.cursor/rules/
+!.cursor/rules/**
 
 # Editor swap files
 *.swp

@@ -29,7 +29,7 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 | [cognitive/](cognitive/) | Cognitive architecture, Bayesian inference, active inference | 11 |
 | [compliance/](compliance/) | Regulatory compliance, audit frameworks | 5 |
 | [deployment/](deployment/) | Deployment guides, CI/CD, containerization | 5 |
-| [development/](development/) | Developer guides, environment setup, testing strategy | 10 |
+| [development/](development/) | Developer guides, environment setup, testing strategy, Cursor integration | 12 |
 | [examples/](examples/) | Executable examples and tutorials | 8 |
 | [getting-started/](getting-started/) | Quick start, installation, first steps | 9 |
 | [integration/](integration/) | Cross-module integration patterns | 11 |
@@ -54,6 +54,8 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 ### For Developers
 - **Environment Setup**: [development/environment-setup.md](development/environment-setup.md)
 - **Testing Strategy**: [development/testing-strategy.md](development/testing-strategy.md)
+- **Cursor integration**: [development/cursor-integration.md](development/cursor-integration.md)
+- **Cursor MCP troubleshooting**: [development/cursor-mcp-troubleshooting.md](development/cursor-mcp-troubleshooting.md)
 - **Contributing**: [project/contributing.md](project/contributing.md)
 
 ### For Agents

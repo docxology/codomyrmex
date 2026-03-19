@@ -9,6 +9,9 @@ Documentation files and guides.
 - `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
+- `cursor-integration.md` – Project file
+- `cursor-mcp.json.example` – Project file
+- `cursor-mcp-troubleshooting.md` – Project file
 - `documentation.md` – Project file
 - `environment-setup.md` – Project file
 - `google-integration.md` – Project file
@@ -27,6 +30,9 @@ Documentation files and guides.
 - `PAI.md`
 - `README.md`
 - `SPEC.md`
+- `cursor-integration.md`
+- `cursor-mcp.json.example`
+- `cursor-mcp-troubleshooting.md`
 - `documentation.md`
 - `environment-setup.md`
 - `google-integration.md`

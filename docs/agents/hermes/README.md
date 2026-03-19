@@ -46,7 +46,7 @@ This documentation suite captures architecture, operational patterns, troublesho
 | Document                   | Description                                      |
 | :------------------------- | :----------------------------------------------- |
 | [sessions.md](sessions.md) | Session lifecycle, `state.db`, FTS5, compression |
-| [skills.md](skills.md)     | Skills system, self-improvement, agentskills.io  |
+| [skills.md](skills.md)     | Skills system, agentskills.io, Codomyrmex MCP `-s` preload, third-party packs |
 | [tools.md](tools.md)       | Tool registry, categories, MCP integration       |
 | [cron.md](cron.md)         | Scheduled jobs, cron ticker, proactive messaging |
 
@@ -104,6 +104,7 @@ Thin orchestrator scripts in [`scripts/agents/hermes/`](../../../scripts/agents/
 | `run_hermes.py`             | Send prompt, get response (CLI or Ollama fallback) |
 | `dispatch_hermes.py`        | Sweep-and-dispatch improvement orchestrator        |
 | `observe_hermes.py`         | Session observability and telemetry viewer         |
+| `prompt_context.py`         | Project-aware context builder                      |
 | `evaluate_orchestrators.py` | Evaluate scripts against thin orchestrator pattern |
 
 ## Navigation

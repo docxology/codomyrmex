@@ -3,7 +3,7 @@
 **Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Documentation files and guides for the `ide` module, including MCP tools (`ide_*`, `ide_cursor_*`). See [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) and [Cursor integration](../../development/cursor-integration.md).
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

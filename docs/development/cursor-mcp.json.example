@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "codomyrmex": {
+      "type": "stdio",
+      "command": "/ABSOLUTE/PATH/TO/codomyrmex/.venv/bin/python",
+      "args": ["scripts/model_context_protocol/run_pai_mcp_stdio.py"],
+      "cwd": "/ABSOLUTE/PATH/TO/codomyrmex",
+      "env": {
+        "CODOMYRMEX_CURSOR_WORKSPACE": "/ABSOLUTE/PATH/TO/codomyrmex"
+      }
+    },
+    "codex": {
+      "type": "stdio",
+      "command": "/opt/homebrew/bin/codex",
+      "args": ["mcp-server"],
+      "env": {
+        "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+      }
+    }
+  }
+}

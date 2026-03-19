@@ -1,39 +1,38 @@
 # Codomyrmex Agents — src/codomyrmex/ide/cursor
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+
+Coordinate agent work for the Cursor IDE integration module.  
+This module provides a real, filesystem-backed `CursorClient` implementation of the shared `IDEClient` contract.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `py.typed` – Project file
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- `__init__.py` — Defines `CursorClient` and all Cursor command/rules/model behaviors.
+- `README.md` — Human-facing usage and verification guide.
+- `SPEC.md` — Functional contracts and behaviors.
+- `PAI.md` — AI integration context.
+- `AGENTS.md` — This coordination document.
 
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-- `__init__.py`
-- `py.typed`
+## Implementation Contracts
 
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+- `CursorClient` must honor the `IDEClient` interface from `codomyrmex.ide`.
+- `connect()` and `disconnect()` must keep `IDEStatus` accurate (`CONNECTING`, `CONNECTED`, `DISCONNECTED`, `ERROR`).
+- `execute_command()` must reject unknown commands with `CommandExecutionError`.
+- Rules updates must write UTF-8 content to workspace `.cursorrules`.
+- Model selection must update internal active-model state only for known models.
 
-## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+## Testing Contracts
 
-## Navigation Links
-- **📁 Parent Directory**: [ide](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- Use zero-mock tests with real filesystem state (`tmp_path` / temp directories).
+- Keep these suites green after changes:
+  - `src/codomyrmex/tests/unit/ide/test_cursor_impl.py`
+  - `src/codomyrmex/tests/unit/ide/test_cursor_settings.py`
+  - `src/codomyrmex/tests/unit/ide/test_ide.py` (Cursor sections)
+
+## Navigation
+
+- **Parent Directory**: [ide](../README.md)
+- **Project Root**: [README](../../../../README.md)
+- **Sibling Docs**: [README](README.md) · [SPEC](SPEC.md) · [PAI](PAI.md)

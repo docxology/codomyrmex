@@ -1,80 +1,84 @@
 # cursor - Functional Specification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Integration with Cursor IDE, providing programmatic access to AI-first code editing capabilities including Composer automation, rules management, and model configuration.
+Provide a deterministic, testable Cursor integration that implements the shared `IDEClient` contract.  
+The current scope is local workspace automation (rules, model state, file-state inspection, and command routing), not remote Cursor APIs.
 
-## Design Principles
+## Functional Scope
 
-### Modularity
+### Connection Lifecycle
 
-- Composer automation separated from rules management
-- Model configuration as independent component
-- Clear separation of concerns
+- `connect()`:
+  - Sets status to `CONNECTING`.
+  - Connects when workspace exists or Cursor markers are present (`.cursor` or `.cursorrules`).
+  - Sets status to `CONNECTED` on success, `ERROR` on failure.
+- `disconnect()`:
+  - Sets status to `DISCONNECTED`.
+  - Clears tracked open-file state.
 
-### Functionality
+### File Operations
 
-- Real working integration with Cursor
-- Full coverage of available capabilities
-- Production-ready implementation
-
-## Functional Requirements
-
-### Composer Automation
-
-1. Start/stop Composer sessions
-2. Submit prompts programmatically
-3. Capture and process responses
-4. Handle multi-turn conversations
+- Source-file discovery scans recursively in workspace and ignores hidden directories.
+- `get_active_file()` returns the most recently modified source/config file.
+- `open_file()` tracks opened file paths if they exist.
+- `get_open_files()` returns tracked files when available, otherwise a bounded workspace fallback.
 
 ### Rules Management
 
-1. Read .cursorrules files
-2. Update rule configurations
-3. Validate rule syntax
-4. Apply rules to workspace
+- `.cursorrules` read/write is UTF-8.
+- `update_rules()` accepts:
+  - Raw string content.
+  - Dict content (serialized to JSON).
+- Rules updates require active connection.
 
-### Model Configuration
+### Model State
 
-1. List available models
-2. Switch active model
-3. Configure model parameters
-4. Save preferences
+- `get_models()` returns known model list.
+- `set_model()` updates active model only for known entries.
+- Capabilities include `active_model`.
 
-## Interface Contracts
+### Command Routing
 
-### CursorClient
+`execute_command()` supports only explicit command names and raises `CommandExecutionError` for unknown commands:
+
+- `cursor.rules.get`
+- `cursor.rules.update`
+- `cursor.model.get`
+- `cursor.model.set`
+- `cursor.file.open`
+- `cursor.file.close`
+- `cursor.file.list_open`
+
+## Interface Contract
 
 ```python
 class CursorClient(IDEClient):
     def connect(self) -> bool: ...
     def disconnect(self) -> None: ...
-    def get_capabilities(self) -> dict: ...
-    def get_rules(self) -> dict: ...
-    def update_rules(self, rules: dict) -> bool: ...
-    def get_models(self) -> List[str]: ...
+    def is_connected(self) -> bool: ...
+    def get_capabilities(self) -> dict[str, Any]: ...
+    def execute_command(self, command: str, args: dict | None = None) -> Any: ...
+    def get_active_file(self) -> str | None: ...
+    def open_file(self, path: str) -> bool: ...
+    def close_file(self, path: str) -> bool: ...
+    def get_open_files(self) -> list[str]: ...
+    def save_file(self, path: str) -> bool: ...
+    def save_all(self) -> bool: ...
+    def get_rules(self) -> dict[str, Any]: ...
+    def update_rules(self, rules: dict[str, Any]) -> bool: ...
+    def get_models(self) -> list[str]: ...
     def set_model(self, model: str) -> bool: ...
 ```
+
+## Validation
+
+Primary validation is through unit tests under `src/codomyrmex/tests/unit/ide/`.
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent**: [ide](../README.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **Agent Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [ide](../README.md)

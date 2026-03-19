@@ -4,14 +4,14 @@
 
 ## Overview
 
-Documentation files and guides.
+Docs for the `ide` module. Implementation: [`src/codomyrmex/ide/`](../../../src/codomyrmex/ide/).
 
 ## Directory Contents
-- `API_SPECIFICATION.md` – File
-- `MCP_TOOL_SPECIFICATION.md` – File
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
+
+- `API_SPECIFICATION.md` — `IDEClient` API
+- `MCP_TOOL_SPECIFICATION.md` — Antigravity + Cursor MCP tools
+- `PAI.md`, `SPEC.md` — Agent and design context
+- [Cursor integration](../../development/cursor-integration.md) — editor ↔ repo wiring
 
 ## Navigation
 - **Parent Directory**: [modules](../README.md)

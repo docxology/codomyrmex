@@ -1,12 +1,12 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows with 129 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows with 89 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
 
 ## Repository Structure
 
@@ -21,11 +21,12 @@ The repository is organized into distinct surfaces, each with specific responsib
 | **docs/** | Project documentation (about Codomyrmex) | [docs/README.md](docs/README.md) |
 | **src/codomyrmex/tests/** | Test suites (unit and integration) | [src/codomyrmex/tests/README.md](src/codomyrmex/tests/README.md) |
 | **config/** | Configuration templates and examples | [config/README.md](config/README.md) |
+| **cursorrules/** | Coding standards and automation rules | [cursorrules/README.md](cursorrules/README.md) |
+| **.cursor/** | Cursor-native rules under `rules/` (committed); see README | [.cursor/README.md](.cursor/README.md) |
 | **projects/** | Project workspace and templates | [projects/README.md](projects/README.md) |
 | **src/codomyrmex/examples/** | Executable examples and demos | [src/codomyrmex/examples/README.md](src/codomyrmex/examples/README.md) |
-| **scripts/sair/** | SAIR Mathematics Distillation submodule | [scripts/sair/README.md](scripts/sair/README.md) |
 
-## Key Files
+### Repository Root Files
 
 - `README.md` - Primary entry point for users and contributors
 - `AGENTS.md` - This file: agent coordination and navigation
@@ -37,18 +38,11 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `uv.lock` - Python dependency lock file
 - `start_here.sh` - Interactive entry point for exploration
 - `package.json` - Node.js package configuration
-
-## Dependencies
-
-- All dependencies are managed via `uv` (for Python) and `npm`/`yarn` (for JS/TS).
-- See `pyproject.toml` and `package.json` for explicit version constraints.
-- No direct dependencies between modular layers are permitted without interface contracts.
-
-## Development Guidelines
-
-- **Zero-Mock Policy:** All tests must use real components. No mocks.
-- **Coverage Gate:** Ensure test coverage exceeds 35.0% on new features.
-- **Documentation:** Maintain `AGENTS.md`, `README.md`, and `SPEC.md` parity on structural changes.
+- `cursorrules/general.cursorrules` - General coding standards (in `cursorrules/` directory)
+- `.cursor/rules/*.mdc` - Cursor-native project rules (see `.cursor/README.md`; other paths under `.cursor/` are gitignored)
+- `resources.json` - Resource configuration
+- `test.db` - Generated test database (artifact, not source)
+- `workflow.db` - Generated workflow database (artifact, not source)
 
 ## Operating Contracts
 
@@ -60,7 +54,7 @@ All agents operating within this repository must:
 
 2. **Maintain Documentation Alignment**: Code, documentation, and workflows must remain synchronized. When updating code, update corresponding documentation.
 
-3. **Follow Coding Standards**: Adhere to coding standards defined in project documentation and `.editorconfig`.
+3. **Follow Cursor rules**: Use `cursorrules/general.cursorrules`, `.cursor/rules/*.mdc`, and module-specific rules as applicable.
 
 4. **Use Structured Logging**: All operations must use the centralized logging system (`src/codomyrmex/logging_monitoring/`).
 
@@ -75,7 +69,7 @@ All agents operating within this repository must:
 #### src/ - Source Code
 
 - Follow Python best practices (PEP 8)
-- Maintain test coverage (≥33%)
+- Maintain test coverage (≥80%)
 - Update `API_SPECIFICATION.md` when changing interfaces
 - Document MCP tools in `MCP_TOOL_SPECIFICATION.md`
 - Version changes in `CHANGELOG.md`
@@ -125,9 +119,9 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 **Core Layer**:
 
 - `agents/` - Agentic framework integrations
-  - Key Classes: `AgentInterface`, `BaseAgent`, `JulesClient`, `ClaudeClient`, `CodexClient`, `HermesClient`, `AgentOrchestrator`
+  - Key Classes: `AgentInterface`, `BaseAgent`, `JulesClient`, `ClaudeClient`, `CodexClient`, `AgentOrchestrator`
   - Key Functions: `execute(request: AgentRequest) -> AgentResponse`
-  - Key Submodules: `ai_code_editing/`, `droid/` (task management), `claude/`, `codex/`, `hermes/` (dual-backend: CLI + Ollama, session persistence, prompt templates)
+  - Key Submodules: `ai_code_editing/`, `droid/` (task management), `claude/`, `codex/`
 - `static_analysis/` - Code quality analysis
   - Key Classes: `CodeAnalyzer`, `LintRunner`, `ComplexityCalculator`
   - Key Functions: `analyze_file(filepath: str) -> dict`, `calculate_complexity(code: str) -> float`
@@ -199,7 +193,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `cerebrum/` - Case-based reasoning and Bayesian inference
   - Key Classes: `CerebrumEngine`, `CaseBase`, `BayesianNetwork`, `ActiveInferenceAgent`
   - Key Functions: `reason(case: Case, context: dict) -> ReasoningResult`, `infer(network: BayesianNetwork, evidence: dict) -> InferenceResult`
-- `fpf/` - Feed-Parse-Format Pipeline
+- `fpf/` - Functional Programming Framework
   - Key Classes: `FPFOrchestrator`, `CombinatorEngine`, `TransformationPipeline`
   - Key Functions: `compose(functions: list) -> ComposedFunction`, `transform(data: Any, pipeline: Pipeline) -> Any`
 - `documents/` - Document processing and management
@@ -211,7 +205,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `plugin_system/` - Plugin architecture and management
   - Key Classes: `PluginManager`, `PluginLoader`, `PluginRegistry`
   - Key Functions: `load_plugin(path: str) -> Plugin`, `register_plugin(plugin: Plugin) -> None`
-- `tool_use/` - Tool invocation and management
+- `tools/` - Utility tools and helpers
   - Key Classes: `ToolRegistry`, `ToolExecutor`
   - Key Functions: `register_tool(name: str, tool: callable) -> None`, `execute_tool(name: str, args: dict) -> Any`
 - `utils/` - General utilities
@@ -242,6 +236,8 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `CollaborationSession`, `SyncManager`
 - `concurrency/` - Concurrency utilities
   - Key Classes: `AsyncExecutor`, `TaskPool`
+- `deployment/` - Deployment automation
+  - Key Classes: `DeploymentManager`, `RollbackHandler`
 - `embodiment/` - Physical embodiment interfaces
   - Key Classes: `EmbodimentInterface`, `SensorManager`
 - `evolutionary_ai/` - Evolutionary AI algorithms
@@ -256,18 +252,12 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `TelemetryClient`, `TraceManager`
 - `website/` - Website generation and management
   - Key Classes: `WebsiteBuilder`, `PageGenerator`
-- `meme/` - Memetics & Information Dynamics *(Experimental — not yet MCP-exposed)*
+- `meme/` - Memetics & Information Dynamics
   - Key Classes: `MemeSpecific`, `NarrativeEngine`
-- `agentic_memory/` - Long-term agent memory, recall, and Obsidian vault integration
+- `agentic_memory/` - Long-term agent memory and recall
   - Key Classes: `AgentMemory`, `VectorStoreMemory`
-  - Key Submodule: `obsidian/` — 19-module dual-mode Obsidian integration (filesystem + CLI)
-  - Key Functions: `ObsidianVault(path)`, `search_vault()`, `create_note()`, `build_link_graph()`, `parse_canvas()`
-- `audio/` - Audio processing, transcription, and streaming
+- `audio/` - Audio processing and transcription
   - Key Classes: `AudioProcessor`, `Transcriber`
-  - Key Submodule: `streaming/` — WebSocket streaming pipeline with `AudioStreamServer`, `AudioStreamClient`, `CodecNegotiator`, energy-based `VAD`
-- `vision/` - Local-first visual understanding (VLM via Ollama)
-  - Key Classes: `VLMClient`, `PDFExtractor`, `AnnotationExtractor`
-  - Key Functions: `analyze_image(path) -> VLMResponse`, `extract_text(pdf_path) -> str`
 - `bio_simulation/` - Biological simulation
   - Key Classes: `BioSimulator`
 - `crypto/` - Cryptographic utilities
@@ -297,14 +287,18 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `QuantumCircuit`, `QuantumSimulator`
 - `relations/` - Relationship management
   - Key Classes: `RelationshipManager`
+- `search/` - Search and retrieval
+  - Key Classes: `SearchEngine`, `IndexBuilder`
 - `simulation/` - Simulation framework
   - Key Classes: `Simulator`, `SimulationEngine`
+- `tool_use/` - Tool invocation and management
+  - Key Classes: `ToolRegistry`, `ToolExecutor`
 - `vector_store/` - Vector storage and similarity search
   - Key Classes: `InMemoryVectorStore`, `VectorIndex`
-- `video/` - Video processing and analysis *(Stub — exceptions only, not yet implemented)*
+- `video/` - Video processing and analysis
   - Key Classes: `VideoProcessor`, `FrameExtractor`
 
-**Secure Cognitive Layer** *(Experimental — modules exist but are not yet MCP-exposed via the PAI bridge)*:
+**Secure Cognitive Layer**:
 
 - `identity/` - Multi-persona and bio-verification
   - Key Classes: `IdentityManager`, `BioCognitiveVerifier`, `Persona`
@@ -336,7 +330,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 
 ### For Agents
 
-- **Coding Standards**: [.editorconfig](.editorconfig)
+- **Coding Standards**: [cursorrules/general.cursorrules](cursorrules/general.cursorrules)
 - **Module System**: [docs/modules/overview.md](docs/modules/overview.md)
 - **Module Relationships**: [docs/modules/relationships.md](docs/modules/relationships.md)
 - **API Reference**: [docs/reference/api.md](docs/reference/api.md)
@@ -364,6 +358,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 | **docs/** | [docs/AGENTS.md](docs/AGENTS.md) | Documentation coordination |
 | **scripts/** | [scripts/AGENTS.md](scripts/AGENTS.md) | Automation scripts coordination |
 | **config/** | [config/AGENTS.md](config/AGENTS.md) | Configuration coordination |
+| **cursorrules/** | [cursorrules/AGENTS.md](cursorrules/AGENTS.md) | Coding standards coordination |
 | **projects/** | [projects/AGENTS.md](projects/AGENTS.md) | Project workspace coordination |
 
 ### Key Module AGENTS.md Files
@@ -387,6 +382,33 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Development Setup**: [docs/development/environment-setup.md](docs/development/environment-setup.md)
 - **Testing Strategy**: [docs/development/testing-strategy.md](docs/development/testing-strategy.md)
 - **Documentation Guide**: [docs/development/documentation.md](docs/development/documentation.md)
+
+## Active Components
+
+- `package.json` – Node.js package configuration
+- `projects/` – Project workspace and templates
+- `pyproject.toml` – Python package configuration
+- `pytest.ini` – Test configuration
+- `resources.json` – Resource configuration
+- `scripts/` – Maintenance and automation utilities
+- `src/` – Core source modules implementing functionality
+- `start_here.sh` – Interactive entry point for exploration
+- `test.db` – Test database file
+- `src/codomyrmex/tests/` – Test suites (unit and integration)
+- `workflow.db` – Workflow database file
+- `output/` – Generated reports and documentation artifacts
+
+## Navigation Links
+
+- **Main Documentation**: [README.md](README.md) - Main project README
+- **Documentation Hub**: [docs/README.md](docs/README.md) - Documentation structure
+- **Source Code**: [src/README.md](src/README.md) - Source code structure
+- **Scripts**: [scripts/README.md](scripts/README.md) - Scripts directory
+- **Testing**: [src/codomyrmex/tests/README.md](src/codomyrmex/tests/README.md) - Testing suite
+- **Configuration**: [config/README.md](config/README.md) - Configuration templates
+- **Cursor Rules**: [cursorrules/README.md](cursorrules/README.md) - Coding standards
+- **Projects**: [projects/README.md](projects/README.md) - Projects workspace
+- **Examples**: [src/codomyrmex/examples/README.md](src/codomyrmex/examples/README.md) - Executable examples and demos
 
 ## Agent Coordination
 
@@ -420,104 +442,76 @@ Before completing significant changes:
 
 ## Version History
 
-- **v1.2.3** (March 2026) — Codebase Health, API Freeze, Config Validation, Typed Events, Performance Profiling
-- **v1.1.8** (March 2026) — Persistent memory, Obsidian sync, multi-hop Graph RAG, active inference
-- **v1.1.7** (March 2026) — Repository-wide documentation audit and consistency sweep
-- **v1.1.6** (March 2026) — Hermes dual-backend, Gemini package migration
-- **v1.1.5** (March 2026) — Type safety diagnostics, coverage gate ratcheted to 35%
-- **v1.1.4** (March 2026) — Ruff zero, 129 modules, 474 `@mcp_tool` decorators, RASP doc compliance 129/129
-- **v1.1.0** (March 2026) — Production readiness, zero-mock hardening
-- **v1.0.7** (March 2026) — MCP expansion: 74 auto-discovered modules, ~367 tools
-- **v0.1.0** (February 2026) — Initial repository structure and agent coordination framework
+- **v0.1.7** (February 2026) - Module count corrected to 82, version synchronized, missing modules added to discovery
+- **v0.1.6** (February 2026) - Agent & memory foundations, event orchestration
+- **v0.1.0** (February 2026) - Initial repository structure and agent coordination framework
 
 ## Related Documentation
 
+- **[Module Overview](docs/modules/overview.md)** - Module system documentation
 - **[Architecture](docs/project/architecture.md)** - System architecture and design principles
+- **[Cursorrules](cursorrules/README.md)** - Detailed coding standards and automation rules
 - **[Contributing](docs/project/contributing.md)** - Contributing guidelines and workflow
 
 <!-- gitnexus:start -->
-# GitNexus — Code Intelligence
+# GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (89700 symbols, 211567 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (40472 symbols, 104132 relationships, 300 execution flows).
 
-> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
+GitNexus provides a knowledge graph over this codebase — call chains, blast radius, execution flows, and semantic search.
 
-## Always Do
+## Always Start Here
 
-- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
-- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
-- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
-- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
-- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
+For any task involving code understanding, debugging, impact analysis, or refactoring, you must:
 
-## When Debugging
+1. **Read `gitnexus://repo/{name}/context`** — codebase overview + check index freshness
+2. **Match your task to a skill below** and **read that skill file**
+3. **Follow the skill's workflow and checklist**
 
-1. `gitnexus_query({query: "<error or symptom>"})` — find execution flows related to the issue
-2. `gitnexus_context({name: "<suspect function>"})` — see all callers, callees, and process participation
-3. `READ gitnexus://repo/codomyrmex/process/{processName}` — trace the full execution flow step by step
-4. For regressions: `gitnexus_detect_changes({scope: "compare", base_ref: "main"})` — see what your branch changed
+> If step 1 warns the index is stale, run `npx gitnexus analyze` in the terminal first.
 
-## When Refactoring
-
-- **Renaming**: MUST use `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` first. Review the preview — graph edits are safe, text_search edits need manual review. Then run with `dry_run: false`.
-- **Extracting/Splitting**: MUST run `gitnexus_context({name: "target"})` to see all incoming/outgoing refs, then `gitnexus_impact({target: "target", direction: "upstream"})` to find all external callers before moving code.
-- After any refactor: run `gitnexus_detect_changes({scope: "all"})` to verify only expected files changed.
-
-## Never Do
-
-- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
-- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
-- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
-- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
-
-## Tools Quick Reference
-
-| Tool | When to use | Command |
-|------|-------------|---------|
-| `query` | Find code by concept | `gitnexus_query({query: "auth validation"})` |
-| `context` | 360-degree view of one symbol | `gitnexus_context({name: "validateUser"})` |
-| `impact` | Blast radius before editing | `gitnexus_impact({target: "X", direction: "upstream"})` |
-| `detect_changes` | Pre-commit scope check | `gitnexus_detect_changes({scope: "staged"})` |
-| `rename` | Safe multi-file rename | `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` |
-| `cypher` | Custom graph queries | `gitnexus_cypher({query: "MATCH ..."})` |
-
-## Impact Risk Levels
-
-| Depth | Meaning | Action |
-|-------|---------|--------|
-| d=1 | WILL BREAK — direct callers/importers | MUST update these |
-| d=2 | LIKELY AFFECTED — indirect deps | Should test |
-| d=3 | MAY NEED TESTING — transitive | Test if critical path |
-
-## Resources
-
-| Resource | Use for |
-|----------|---------|
-| `gitnexus://repo/codomyrmex/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/codomyrmex/clusters` | All functional areas |
-| `gitnexus://repo/codomyrmex/processes` | All execution flows |
-| `gitnexus://repo/codomyrmex/process/{name}` | Step-by-step execution trace |
-
-## Self-Check Before Finishing
-
-Before completing any code modification task, verify:
-1. `gitnexus_impact` was run for all modified symbols
-2. No HIGH/CRITICAL risk warnings were ignored
-3. `gitnexus_detect_changes()` confirms changes match expected scope
-4. All d=1 (WILL BREAK) dependents were updated
-
-## CLI
-
-- Re-index: `npx gitnexus analyze`
-- Check freshness: `npx gitnexus status`
-- Generate docs: `npx gitnexus wiki`
-
-<!-- gitnexus:end -->
-
-## qmd Skill
-
-This project is configured with the `qmd` skill for local hybrid search of Markdown notes and docs.
+## Skills
 
 | Task | Read this skill file |
-| --- | --- |
-| Search notes, docs, or knowledge base | `.claude/skills/qmd/SKILL.md` |
+|------|---------------------|
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/exploring/SKILL.md` |
+| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/debugging/SKILL.md` |
+| Rename / extract / split / refactor | `.claude/skills/gitnexus/refactoring/SKILL.md` |
+
+## Tools Reference
+
+| Tool | What it gives you |
+|------|-------------------|
+| `query` | Process-grouped code intelligence — execution flows related to a concept |
+| `context` | 360-degree symbol view — categorized refs, processes it participates in |
+| `impact` | Symbol blast radius — what breaks at depth 1/2/3 with confidence |
+| `detect_changes` | Git-diff impact — what do your current changes affect |
+| `rename` | Multi-file coordinated rename with confidence-tagged edits |
+| `cypher` | Raw graph queries (read `gitnexus://repo/{name}/schema` first) |
+| `list_repos` | Discover indexed repos |
+
+## Resources Reference
+
+Lightweight reads (~100-500 tokens) for navigation:
+
+| Resource | Content |
+|----------|---------|
+| `gitnexus://repo/{name}/context` | Stats, staleness check |
+| `gitnexus://repo/{name}/clusters` | All functional areas with cohesion scores |
+| `gitnexus://repo/{name}/cluster/{clusterName}` | Area members |
+| `gitnexus://repo/{name}/processes` | All execution flows |
+| `gitnexus://repo/{name}/process/{processName}` | Step-by-step trace |
+| `gitnexus://repo/{name}/schema` | Graph schema for Cypher |
+
+## Graph Schema
+
+**Nodes:** File, Function, Class, Interface, Method, Community, Process
+**Edges (via CodeRelation.type):** CALLS, IMPORTS, EXTENDS, IMPLEMENTS, DEFINES, MEMBER_OF, STEP_IN_PROCESS
+
+```cypher
+MATCH (caller)-[:CodeRelation {type: 'CALLS'}]->(f:Function {name: "myFunc"})
+RETURN caller.name, caller.filePath
+```
+
+<!-- gitnexus:end -->

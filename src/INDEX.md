@@ -1,6 +1,6 @@
 # Source Directory Index
 
-**Project**: Codomyrmex | **Version**: v1.1.9 | **Last Updated**: March 2026
+**Project**: Codomyrmex | **Version**: v1.0.0 | **Last Updated**: February 2026
 
 > [!TIP]
 > This INDEX catalogs the `src/` directory structure for maximum discoverability.
@@ -10,7 +10,7 @@
 | Item | Type | Description |
 | :--- | :--- | :--- |
 | [**init**.py](__init__.py) | File | Namespace package marker |
-| [codomyrmex/](codomyrmex/) | Package | Main package — **130 modules** |
+| [codomyrmex/](codomyrmex/) | Package | Main package — **89 modules** |
 
 ## Documentation Files
 

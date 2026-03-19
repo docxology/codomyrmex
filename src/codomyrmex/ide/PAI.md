@@ -61,13 +61,18 @@ from codomyrmex.ide import IDEStatus, IDECommand, IDECommandResult, FileInfo
 
 ## Architecture Role
 
-**Interface Layer** — Top-level user interaction module. Consumes `coding/` (code operations) and `git_operations/` (VCS integration). No MCP tools — operates through direct IDE protocol.
+**Interface Layer** — Top-level user interaction module. Consumes `coding/` (code operations) and `git_operations/` (VCS integration).
 
 ## MCP Tools
 
-This module does not expose MCP tools directly. Access its capabilities via:
-- Direct Python import: `from codomyrmex.ide import ...`
-- CLI: `codomyrmex ide <command>`
+Auto-discovered from `mcp_tools.py`:
+
+- **Antigravity:** `ide_get_active_file`, `ide_list_tools`
+- **Cursor (filesystem-backed):** `ide_cursor_workspace_info`, `ide_cursor_get_active_file`, `ide_cursor_rules_read`
+
+See [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) and [docs/development/cursor-integration.md](../../../docs/development/cursor-integration.md).
+
+Non-MCP access: `from codomyrmex.ide import ...`, `from codomyrmex.ide.cursor import CursorClient`.
 
 ## Navigation
 

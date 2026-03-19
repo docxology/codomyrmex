@@ -111,11 +111,11 @@ to the broader PAI ecosystem.
 
 | Tool | Description |
 | :--- | :---------- |
-| `hermes_execute` | Single-turn prompt execution |
-| `hermes_stream` | Streaming prompt execution |
-| `hermes_chat_session` | Stateful multi-turn session |
-| `hermes_batch_execute` | Submit a list of prompts; sequential or parallel |
-| `hermes_sampling` | Server-initiated MCP sampling protocol |
+| `hermes_execute` | Single-turn execution; optional `hermes_skill` / `hermes_skills` → `hermes chat -s` (CLI only) |
+| `hermes_stream` | Streaming; same optional skill preload |
+| `hermes_chat_session` | Stateful multi-turn session; skills persisted in session metadata |
+| `hermes_batch_execute` | List of prompts; optional shared skill preload per request |
+| `hermes_sampling` | MCP sampling protocol; optional skill preload |
 | `hermes_run_coverage_loop` | Autonomous pytest heal-and-retry loop |
 
 ### Diagnostics & Utility Tools

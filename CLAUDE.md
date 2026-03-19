@@ -12,17 +12,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Install dependencies (uv recommended)
 uv sync
 
-# Set up git submodules (run once after cloning, or after submodule updates)
-# Initializes all 5 submodules and installs hermes/evolution Python deps
-bash scripts/setup_submodules.sh
-# Or via Makefile:
-make submodules   # submodules only
-make setup        # install + submodules together
-
-# NOTE: Never run `uv sync` inside src/codomyrmex/agents/hermes/evolution/ —
-# its `darwinian` optional extra requires a non-PyPI package and will fail locking.
-# The setup script handles this correctly via `uv venv --seed` + pip.
-
 # Install with optional module dependencies
 uv sync --extra <module-name>    # e.g., uv sync --extra spatial
 uv sync --all-extras             # Install all optional dependencies
@@ -38,9 +27,9 @@ uv run pytest src/codomyrmex/tests/unit/<module>/test_<module>.py
 uv run pytest -k "test_name"     # Run tests matching pattern
 
 # Code formatting and linting
-uv run ruff format src/
+uv run black src/
 uv run ruff check src/
-uv run ty check src/
+uv run mypy src/
 
 # CLI usage
 codomyrmex --help
@@ -58,27 +47,17 @@ codomyrmex fpf fetch <url>       # FPF fetch/parse/export
 codomyrmex skills list           # Skill management
 ```
 
-## Security Scanning
+## Cursor editor integration
 
-We use `ggshield` (GitGuardian) to prevent secret leaks.
-
-```bash
-# Install ggshield globally via uv
-uv tool install ggshield
-
-# Authenticate with GitGuardian
-ggshield auth login
-
-# Scan the entire repository for secrets
-ggshield scan repo .
-
-# Scan the current staging area before committing
-ggshield scan pre-commit
-```
+- **Native rules**: `.cursor/rules/*.mdc` (committed) — see `.cursor/README.md`; complements `cursorrules/general.cursorrules` and `cursorrules/codomyrmex-cursor.cursorrules`.
+- **MCP tools** (when the Codomyrmex bridge is enabled): `codomyrmex.ide_cursor_workspace_info`, `codomyrmex.ide_cursor_get_active_file`, `codomyrmex.ide_cursor_rules_read` — see `src/codomyrmex/ide/MCP_TOOL_SPECIFICATION.md`.
+- **Workspace override**: set `CODOMYRMEX_CURSOR_WORKSPACE` to the repo root if the MCP server process cwd is not the project directory.
+- **Guide**: `docs/development/cursor-integration.md`
+- **Cursor `~/.cursor/mcp.json`**: use `docs/development/cursor-mcp.json.example` — prefer **`/path/to/codomyrmex/.venv/bin/python`** as `command` (GUI apps often lack `uv` on PATH → `spawn uv ENOENT`).
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 129 specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 89 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -121,7 +100,7 @@ Each module is self-contained with standard structure:
 - **Model Context Protocol (MCP)**: Standardized interface for AI/LLM integration across modules
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
-- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 146 files are auto-discovered.
+- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 32 modules are auto-discovered.
 
 ### Extended Modules (auto-discovered via MCP)
 
@@ -141,24 +120,18 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 - `plugin_system` - Plugin discovery and dependency resolution
 - `relations` - Relationship strength scoring
 - `agents/core` - ThinkingAgent reasoning traces and depth control
-- `agentic_memory` - Agent memory store, retrieve, and semantic search
-- `calendar_integration` - Calendar event management and scheduling
-- `data_visualization` - Chart/dashboard generation and HTML export
 - `email` - AgentMail inbox/message/thread management and webhook registration
 - `git_analysis` - Git history analysis, contributor stats, and commit pattern detection
 - `logging_monitoring` - Centralized structured logging and monitoring integration
 - `collaboration` - Multi-user session management and collaborative editing
 - `documentation` - Documentation generation, linting, and publishing workflows
-- `security` - Vulnerability scanning, secret detection, and security auditing
-- `skills` - Skill discovery, listing, and invocation management
-- `validation` - Schema validation, config validation, and validation summaries
 
 ## PAI Integration
 
-Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/Personal_AI_Infrastructure) (`~/.claude/PAI/`). Key integration points:
+Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/PAI) (`~/.claude/skills/PAI/`). Key integration points:
 
-- **Detection**: PAI is present when `~/.claude/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~474 dynamic tools across 129 auto-discovered modules, with 3 resources and 10 prompts
+- **Detection**: PAI is present when `~/.claude/skills/PAI/SKILL.md` exists
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 19 static tools (16 core + 3 universal proxy) + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~167 tools (163 safe + 4 destructive) across 32 auto-discovered modules, with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
@@ -166,9 +139,9 @@ Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielm
 - **Agent Mapping**: PAI subagent types (Engineer, Architect, QATester) consume codomyrmex agent providers and tools — see [`src/codomyrmex/agents/PAI.md`](src/codomyrmex/agents/PAI.md)
 - **Detailed Reference**: [`docs/pai/`](docs/pai/) — Architecture, tools, API, workflows for PAI-Codomyrmex integration
 
-Key PAI system references (in `~/.claude/PAI/`):
+Key PAI system references (in `~/.claude/skills/PAI/`):
 
-- `SKILL.md` — Algorithm CORE (v3.5.0)
+- `SKILL.md` — Algorithm CORE (v1.5.0)
 - `PAIAGENTSYSTEM.md` — Agent types and delegation
 - `SKILLSYSTEM.md` — Skill architecture
 - `THEHOOKSYSTEM.md` — Hook event patterns
@@ -226,182 +199,65 @@ All dependencies are managed in `pyproject.toml`:
 
 Module-specific `requirements.txt` files are **deprecated** - do not modify them.
 
-## Multi-Agent Git Coordination
-
-When multiple Claude Code instances or AI agents run concurrently, git operations can conflict on `.git/index.lock`. Follow these rules:
-
-### Rules
-
-1. **Use `--no-verify` for all agent commits** — pre-commit hooks on 900+ files take 20+ minutes and block the lock
-2. **Atomic stage+commit**: Always `git add -A && git commit --no-verify` in one shell command to minimize lock time
-3. **Check lock before writing**: Run `ls .git/index.lock 2>/dev/null` before any git write operation
-4. **Clear stale locks**: If no `git` process is running (`ps aux | grep git`) but lock exists > 60s, remove it: `rm -f .git/index.lock`
-5. **Large files**: Check for files > 50MB before committing (`find . -not -path './.git/*' -size +50M`). GitHub rejects files > 100MB.
-6. **Use worktrees for parallel work**: Run `/codomyrmexWorktree` for managed worktree creation — each gets its own index
-
-### Quick Reference
-
-```bash
-# Safe: read-only (no lock needed)
-git status; git log; git diff; git show
-
-# Unsafe: acquires lock — coordinate first
-rm -f .git/index.lock && git add -A && git commit --no-verify -m "msg"
-
-# Clean stale worktrees
-git worktree prune && git branch --list 'worktree-agent-*' | xargs git branch -D 2>/dev/null
-```
-
-See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed workflow.
-
 <!-- gitnexus:start -->
-# GitNexus — Code Intelligence
+# GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (89700 symbols, 211567 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (40472 symbols, 104132 relationships, 300 execution flows).
 
-> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
+GitNexus provides a knowledge graph over this codebase — call chains, blast radius, execution flows, and semantic search.
 
-## Always Do
+## Always Start Here
 
-- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
-- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
-- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
-- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
-- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
+For any task involving code understanding, debugging, impact analysis, or refactoring, you must:
 
-## When Debugging
+1. **Read `gitnexus://repo/{name}/context`** — codebase overview + check index freshness
+2. **Match your task to a skill below** and **read that skill file**
+3. **Follow the skill's workflow and checklist**
 
-1. `gitnexus_query({query: "<error or symptom>"})` — find execution flows related to the issue
-2. `gitnexus_context({name: "<suspect function>"})` — see all callers, callees, and process participation
-3. `READ gitnexus://repo/codomyrmex/process/{processName}` — trace the full execution flow step by step
-4. For regressions: `gitnexus_detect_changes({scope: "compare", base_ref: "main"})` — see what your branch changed
+> If step 1 warns the index is stale, run `npx gitnexus analyze` in the terminal first.
 
-## When Refactoring
-
-- **Renaming**: MUST use `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` first. Review the preview — graph edits are safe, text_search edits need manual review. Then run with `dry_run: false`.
-- **Extracting/Splitting**: MUST run `gitnexus_context({name: "target"})` to see all incoming/outgoing refs, then `gitnexus_impact({target: "target", direction: "upstream"})` to find all external callers before moving code.
-- After any refactor: run `gitnexus_detect_changes({scope: "all"})` to verify only expected files changed.
-
-## Never Do
-
-- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
-- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
-- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
-- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
-
-## Tools Quick Reference
-
-| Tool | When to use | Command |
-|------|-------------|---------|
-| `query` | Find code by concept | `gitnexus_query({query: "auth validation"})` |
-| `context` | 360-degree view of one symbol | `gitnexus_context({name: "validateUser"})` |
-| `impact` | Blast radius before editing | `gitnexus_impact({target: "X", direction: "upstream"})` |
-| `detect_changes` | Pre-commit scope check | `gitnexus_detect_changes({scope: "staged"})` |
-| `rename` | Safe multi-file rename | `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` |
-| `cypher` | Custom graph queries | `gitnexus_cypher({query: "MATCH ..."})` |
-
-## Impact Risk Levels
-
-| Depth | Meaning | Action |
-|-------|---------|--------|
-| d=1 | WILL BREAK — direct callers/importers | MUST update these |
-| d=2 | LIKELY AFFECTED — indirect deps | Should test |
-| d=3 | MAY NEED TESTING — transitive | Test if critical path |
-
-## Resources
-
-| Resource | Use for |
-|----------|---------|
-| `gitnexus://repo/codomyrmex/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/codomyrmex/clusters` | All functional areas |
-| `gitnexus://repo/codomyrmex/processes` | All execution flows |
-| `gitnexus://repo/codomyrmex/process/{name}` | Step-by-step execution trace |
-
-## Self-Check Before Finishing
-
-Before completing any code modification task, verify:
-1. `gitnexus_impact` was run for all modified symbols
-2. No HIGH/CRITICAL risk warnings were ignored
-3. `gitnexus_detect_changes()` confirms changes match expected scope
-4. All d=1 (WILL BREAK) dependents were updated
-
-## CLI
-
-- Re-index: `npx gitnexus analyze`
-- Check freshness: `npx gitnexus status`
-- Generate docs: `npx gitnexus wiki`
-
-<!-- gitnexus:end -->
-
-## qmd Skill
-
-This project is configured with the `qmd` skill for local hybrid search of Markdown notes and docs.
+## Skills
 
 | Task | Read this skill file |
-| --- | --- |
-| Search notes, docs, or knowledge base | `.claude/skills/qmd/SKILL.md` |
+|------|---------------------|
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/exploring/SKILL.md` |
+| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/debugging/SKILL.md` |
+| Rename / extract / split / refactor | `.claude/skills/gitnexus/refactoring/SKILL.md` |
 
-## === COGNILAYER (auto-generated, do not delete) ===
+## Tools Reference
 
-## CogniLayer v3 Active
-Persistent memory is ON.
-ON FIRST USER MESSAGE in this session, briefly tell the user:
-  'CogniLayer v3 active — persistent memory is on. Type /cognihelp for available commands.'
-Say it ONCE, keep it short, then continue with their request.
+| Tool | What it gives you |
+|------|-------------------|
+| `query` | Process-grouped code intelligence — execution flows related to a concept |
+| `context` | 360-degree symbol view — categorized refs, processes it participates in |
+| `impact` | Symbol blast radius — what breaks at depth 1/2/3 with confidence |
+| `detect_changes` | Git-diff impact — what do your current changes affect |
+| `rename` | Multi-file coordinated rename with confidence-tagged edits |
+| `cypher` | Raw graph queries (read `gitnexus://repo/{name}/schema` first) |
+| `list_repos` | Discover indexed repos |
 
-## Memory Tools
-You have access to the `cognilayer` MCP server:
-- memory_search(query) — search memory semantically
-- memory_write(content) — save important information
-- file_search(query) — search project files (PRD, docs...)
-- decision_log(query) — find past decisions
+## Resources Reference
 
-When unsure about context or project history,
-ALWAYS search memory first via memory_search.
-When you need info from PRD or docs, use file_search
-INSTEAD of reading the entire file.
+Lightweight reads (~100-500 tokens) for navigation:
 
-## VERIFY-BEFORE-ACT — MANDATORY
-When memory_search returns a fact marked with ⚠ STALE:
-1. ALWAYS read the source file and verify the fact still holds
-2. If the fact changed -> update it via memory_write
-3. NEVER make changes based on STALE facts without verification
+| Resource | Content |
+|----------|---------|
+| `gitnexus://repo/{name}/context` | Stats, staleness check |
+| `gitnexus://repo/{name}/clusters` | All functional areas with cohesion scores |
+| `gitnexus://repo/{name}/cluster/{clusterName}` | Area members |
+| `gitnexus://repo/{name}/processes` | All execution flows |
+| `gitnexus://repo/{name}/process/{processName}` | Step-by-step trace |
+| `gitnexus://repo/{name}/schema` | Graph schema for Cypher |
 
-## PROACTIVE MEMORY — IMPORTANT
-When you discover something important during work, SAVE IT IMMEDIATELY:
-- Bug and fix -> memory_write(type="error_fix")
-- Pitfall/danger -> memory_write(type="gotcha")
-- Exact procedure -> memory_write(type="procedure")
-- How components communicate -> memory_write(type="api_contract")
-- Performance issue -> memory_write(type="performance")
-- Important command -> memory_write(type="command")
-DO NOT wait for /harvest — session may crash.
+## Graph Schema
 
-## RUNNING BRIDGE — CRITICAL
-After completing each task AUTOMATICALLY update session bridge:
-  session_bridge(action="save", content="Progress: ...; Open: ...")
-This is Tier 1 — do it yourself, don't announce, it's part of the job.
+**Nodes:** File, Function, Class, Interface, Method, Community, Process
+**Edges (via CodeRelation.type):** CALLS, IMPORTS, EXTENDS, IMPLEMENTS, DEFINES, MEMBER_OF, STEP_IN_PROCESS
 
-## Safety Rules — MANDATORY
-- Before ANY deploy, push, ssh, pm2, docker, db migration:
-  1. ALWAYS call verify_identity(action_type="...") first
-  2. If it returns BLOCKED — STOP and ask the user
-  3. If it returns VERIFIED — READ the target server to the user and request confirmation
+```cypher
+MATCH (caller)-[:CodeRelation {type: 'CALLS'}]->(f:Function {name: "myFunc"})
+RETURN caller.name, caller.filePath
+```
 
-## Git Rules
-- Commit often, small atomic changes. Format: "[type] what and why"
-- commit = Tier 1 (do it yourself). push = Tier 3 (verify_identity).
-
-## Project DNA: codomyrmex
-Stack: unknown
-Style: [unknown]
-Structure: .agent, .benchmarks, .desloppify, .gemini, .github, .gitnexus, .mypy_cache, .pipelines
-Deploy: [NOT SET]
-Active: [new session]
-Last: [first session]
-
-## Last Session Bridge
-[Emergency bridge — running bridge was not updated]
-No changes or facts in this session.
-
-# === END COGNILAYER ===
+<!-- gitnexus:end -->

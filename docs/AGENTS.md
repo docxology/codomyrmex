@@ -1,64 +1,81 @@
-# Codomyrmex Agents — docs/
+# Codomyrmex Agents — docs
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Agent coordination document for the `docs/` directory. Guides AI agents navigating the documentation surface of the Codomyrmex ecosystem.
+Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 89 specialized modules.
 
-## Documentation Architecture
+## Documentation Organization
 
-The `docs/` directory is organized into **19 thematic sections** containing **200+ markdown files**:
+| Section | Scope | Agent Priority |
+|---------|-------|----------------|
+| [**getting-started/**](getting-started/) | Installation, setup, tutorials | High - user onboarding |
+| [**development/**](development/) | Dev environment, testing | Medium - dev workflows |
+| [**reference/**](reference/) | API, CLI, troubleshooting | High - technical reference |
+| [**deployment/**](deployment/) | Production deployment | Medium - operations |
+| [**modules/**](modules/) | Per-module docs (89) | High - module details |
+| [**integration/**](integration/) | External integrations | Medium - integrations |
+| [**examples/**](examples/) | Code examples | Medium - learning |
+| [**project/**](project/) | Architecture, contributing | Low - project info |
+| [**project_orchestration/**](project_orchestration/) | Multi-project workflows | Low - advanced |
+| [**bio/**](bio/) | Biological perspectives | Medium - theory |
+| [**cognitive/**](cognitive/) | Cognitive science perspectives | Medium - theory |
+| [**compliance/**](compliance/) | Audit reports, policy compliance | Medium - quality |
+| [**pai/**](pai/) | PAI integration reference | High - PAI details |
+| [**security/**](security/) | Security theory & practice | High - security |
+| [**skills/**](skills/) | Skill system documentation | Medium - skills |
+| [**agents/**](agents/) | Agent rules and coordination | High - agent guidance |
 
-### Core References (Top Level)
+### Secure Cognitive Agent Documentation
 
-| File | Purpose | Lines |
-|:---|:---|---:|
-| `ARCHITECTURE.md` | System architecture, layers, module graph | 448 |
-| `DEPENDENCIES.md` | Dependency compatibility guide | 116 |
-| `PAI.md` | Personal AI Infrastructure hub | 127 |
-| `PAI_DASHBOARD.md` | Dashboard functionality matrix | 38 |
-| `SPEC.md` | Functional specification | 178 |
-| `index.md` | Documentation site entry point | 50 |
+| Directory | Scope | Agent Priority |
+|-----------|-------|----------------|
+| [**src/codomyrmex/identity/**](../src/codomyrmex/identity/) | Identity & Verification | Critical - Security Core |
+| [**src/codomyrmex/wallet/**](../src/codomyrmex/wallet/) | Self-Custody & Recovery | Critical - Security Core |
+| [**src/codomyrmex/defense/**](../src/codomyrmex/defense/) | Active Defense | Critical - Security Core |
+| [**src/codomyrmex/market/**](../src/codomyrmex/market/) | Anonymous Markets | High - Economic Layer |
+| [**src/codomyrmex/privacy/**](../src/codomyrmex/privacy/) | Privacy & Mixnets | Critical - Privacy Core |
 
-### Thematic Sections
+## Agent Guidelines
 
-| Section | Focus | Key Content |
-|:---|:---|:---|
-| `agents/` | AI agent integrations | 38 agent subfolders, Hermes deep-dive (19 docs) |
-| `agi/` | AGI theory | Essays on emergence, category theory, agency |
-| `bio/` | Biological simulation | BioSimulator, genetic algorithms |
-| `cognitive/` | Cognitive systems | Cerebrum, Bayesian networks, active inference |
-| `compliance/` | Regulatory | Audit frameworks, data governance |
-| `deployment/` | DevOps | CI/CD, containers, cloud deployment |
-| `development/` | Developer guides | Environment setup, testing, coding standards |
-| `examples/` | Tutorials | Executable demos and integration examples |
-| `getting-started/` | Onboarding | Quickstart, installation, learning path |
-| `integration/` | Cross-module | Integration patterns, MCP bridges |
-| `modules/` | Module docs | 126 module subdirectories |
-| `pai/` | PAI system | Dashboard, skills, memory, dispatch |
-| `plans/` | Roadmap | Release plans, version targets |
-| `project/` | Standards | Contributing, architecture, coding style |
-| `project_orchestration/` | Workflows | Multi-agent coordination, orchestration |
-| `reference/` | API docs | CLI tools, configuration reference |
-| `security/` | Security | Threat models, audit, secret management |
-| `skills/` | Agent skills | Skill creation, registry, testing |
+### Documentation Quality Standards
+
+1. **Accuracy**: Keep documentation synchronized with code changes
+2. **Completeness**: Ensure all public APIs are documented
+3. **Clarity**: Use clear, concise language
+4. **Examples**: Include working code examples where applicable
+
+### When Modifying Documentation
+
+- Update corresponding source code docstrings if applicable
+- Verify all links are valid after changes
+- Run spell-check on modified content
+- Ensure code examples are runnable
+
+### Cross-Reference Patterns
+
+```markdown
+# Link to module source
+[llm module](../src/codomyrmex/llm/)
+
+# Link to API reference
+[API Reference](reference/api.md)
+
+# Link to sibling doc
+[Installation Guide](getting-started/installation.md)
+```
 
 ## Operating Contracts
 
-1. **Docs mirror src/**: The `docs/agents/` structure mirrors `src/codomyrmex/agents/` with a documentation subfolder for each agent framework
-2. **Navigation consistency**: Every document must have Navigation section with links to parent, siblings, and root
-3. **Version stamping**: All top-level docs must have version/status/date header
-4. **Real content only**: No placeholder or auto-generated boilerplate — every file must contain substantive documentation
+- Maintain alignment between documentation and source code
+- All modules must have corresponding documentation in `modules/`
+- Ensure RASP compliance (README, AGENTS, SPEC, PAI) in each directory
+- Update documentation when API changes are made
 
-## Key Patterns
+## Navigation Links
 
-- **Signposting**: Parent/child/sibling links in every document
-- **Cross-references**: Source docs link to doc docs and vice versa via relative paths
-- **Hierarchical AGENTS.md**: Root → `docs/AGENTS.md` → `docs/agents/AGENTS.md` → per-agent `AGENTS.md`
-
-## Navigation
-
-- **Parent**: [AGENTS.md](../AGENTS.md) — Root agent coordination
-- **Project Root**: [README.md](../README.md) — Project overview
-- **Source**: [src/codomyrmex/](../src/codomyrmex/) — Source code
+- **🏠 Project Root**: [../README.md](../README.md) - Main project entry
+- **📦 Source Code**: [../src/codomyrmex/](../src/codomyrmex/) - Implementation
+- **🔧 Scripts**: [../scripts/](../scripts/) - Automation utilities
+- **📋 Examples**: [../examples/](../examples/) - Executable examples

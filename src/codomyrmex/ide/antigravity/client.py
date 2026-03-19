@@ -33,12 +33,18 @@ class _AntigravityClientMixin:
 
 
 class AntigravityClient(
-    IDEClient, AntigravityArtifactsMixin, AntigravityFilesMixin, AntigravityToolsMixin
+    AntigravityArtifactsMixin,
+    AntigravityFilesMixin,
+    AntigravityToolsMixin,
+    IDEClient,
 ):
     """Client for interacting with Antigravity IDE.
 
     Provides programmatic access to Antigravity's capabilities including
     tool invocation, artifact management, and context access.
+
+    Mixins are listed before ``IDEClient`` so their concrete methods satisfy
+    ``IDEClient``'s abstract methods in the MRO (see Python ABC + mixin order).
 
     Attributes:
         artifact_dir: Path to the Antigravity artifacts directory.

@@ -6,6 +6,17 @@
 
 To integrate NousResearch Hermes capabilities within the Codomyrmex agent ecosystem via a dual-backend client. This client exposes both stateless queries and stateful multi-turn persistent sessions, scaling flexibly between the official `hermes` CLI and local Ollama deployments. Provider routing, context compression, and cross-session user modeling ensure resilient, context-aware operation. v2.2.1 introduces a non-git-tracked LLM rotation strategy for free models, cooldown tracking, `ollama pull` automation, and advanced session merging.
 
+## Upstream Reference
+
+Codomyrmex draws on [`outsourc-e/hermes-workspace`](https://github.com/outsourc-e/hermes-workspace) as the upstream reference for the Hermes web UI layer.
+
+| Upstream | Role | Notes |
+| :--- | :--- | :--- |
+| [`outsourc-e/hermes-workspace`](https://github.com/outsourc-e/hermes-workspace) | Next.js PWA web workspace frontend | Chat, memory, skills, files, PTY terminal, 8-theme system |
+| [`outsourc-e/hermes-agent`](https://github.com/outsourc-e/hermes-agent) | Backend fork | Adds `hermes webapi` (FastAPI, SSE streaming, port 8642) to `NousResearch/hermes-agent` |
+| [`NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent) | Upstream CLI baseline | The reference Hermes CLI agent |
+| [`NousResearch/hermes-agent-self-evolution`](https://github.com/NousResearch/hermes-agent-self-evolution) | DSPy GEPA submodule | Evolutionary self-improvement via genetic-Pareto optimization |
+
 ## Architecture
 
 ```mermaid
@@ -14,23 +25,27 @@ graph TD
     HC --> |auto-detect| BD{Backend?}
     BD --> |CLI available| HCLI[hermes CLI]
     BD --> |Ollama fallback| OL[ollama run hermes3]
-    
+
     HC -.-> |chat_session| SS[(SQLiteSessionStore)]
     HC -.-> |compress| CC[ContextCompressor]
-    
+
     PR[ProviderRouter] --> |call_llm| HCLI
     PR --> |call_llm| OL
     PR --> |credentials| ENV[~/.hermes/.env]
-    
+
     HCLI --> |skills| HS[Hermes Skills]
     HCLI --> |honcho| HO[Honcho Memory]
-    MCP[MCP Tools ×34+] --> HC
+    MCP[MCP Tools x34+] --> HC
     HC -.-> Base[CLIAgentBase]
     UM[UserModel] -.-> |context| HC
     MB[MCPBridgeManager] -.-> |hot-reload| HCLI
     Gateway[GatewayRunner] --> HC
     Gateway --> |Voice| VR[VoiceReceiver]
+    WebAPI[hermes webapi :8642] --> |SSE/REST| UI[hermes-workspace PWA :3000]
+    HCLI --> WebAPI
 ```
+
+> **Web UI**: When `hermes webapi` (from [`outsourc-e/hermes-agent`](https://github.com/outsourc-e/hermes-agent)) is running on port 8642, the [`outsourc-e/hermes-workspace`](https://github.com/outsourc-e/hermes-workspace) PWA connects on port 3000, providing a browser-based command center. The `HermesClient` Python class wraps the same CLI; both surfaces operate independently.
 
 ## Core Requirements
 
@@ -47,18 +62,20 @@ graph TD
    - Integrates `VoiceReceiver` for RTP capture and DAVE E2EE decryption in Discord voice channels.
    - Native `/voice` commands for real-time TTS and listening toggle.
 6. **Standard Subclassing**:   - Inherits from `CLIAgentBase` according to standard Codomyrmex agent implementation rules.
-7. **Zero-Mock Policy**:   - All tests against the Hermes framework must execute functional logic (e.g., using `echo` as a mock-free proxy when the real CLI is too slow or unavailable).
+7. **Hermes skill preload (CLI)**:   - `AgentRequest.context` may include `hermes_skill` / `hermes_skills`; `_build_hermes_args` emits `hermes chat -s …` per upstream CLI. Session metadata persists skills for `chat_session` multi-turn loops. No effect on the Ollama fallback backend.
+8. **Zero-Mock Policy**:   - All tests against the Hermes framework must execute functional logic (e.g., using `echo` as a mock-free proxy when the real CLI is too slow or unavailable).
 
 ## Model Context Protocol (MCP) Interface
 
-The module exposes 37+ tools to the swarm:
+The module exposes 45+ tools to the swarm (46 `@mcp_tool` registrations in `mcp_tools.py`):
 
 | Tool | Purpose | Category |
 | :--- | :--- | :--- |
-| `hermes_execute` | Single-turn, stateless execution | Core |
-| `hermes_chat_session` | Multi-turn stateful chat | Core |
-| `hermes_stream` | Real-time streaming output | Core |
-| `hermes_batch_execute` | Parallel multi-prompt dispatch (v2.2.0) | Core |
+| `hermes_execute` | Single-turn execution; optional `hermes_skill` / `hermes_skills` (CLI) | Core |
+| `hermes_chat_session` | Multi-turn chat; skills persisted in session metadata | Core |
+| `hermes_stream` | Streaming; optional skill preload | Core |
+| `hermes_batch_execute` | Batch prompts; optional shared skill preload | Core |
+| `hermes_sampling` | MCP sampling; optional skill preload | Core |
 | `hermes_set_system_prompt` | Persist system instructions to session (v2.2.0) | Core |
 | `hermes_status` | Backend availability diagnostics | Diagnostic |
 | `hermes_doctor` | Comprehensive health check (CLI v0.2.0+) | Diagnostic |

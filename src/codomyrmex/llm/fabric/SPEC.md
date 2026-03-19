@@ -10,7 +10,7 @@ Provides integration with Fabric AI framework for pattern-based AI workflows. It
 
 - **Pattern-Based**: Leverage Fabric's pattern system for structured AI interactions
 - **Integration First**: Seamless integration with Codomyrmex modules (visualization, logging, etc.)
-- **Fallbacks**: Graceful error handling if Fabric binary is not available
+- **Graceful Fallbacks**: Strict adherence to the Codomyrmex zero-mock testing policy. Evaluates `.is_available()` naturally and fails gracefully without raising subprocess exceptions if `fabric` is missing locally.
 
 ## Functional Requirements
 
@@ -35,7 +35,7 @@ Provides integration with Fabric AI framework for pattern-based AI workflows. It
 
 ## Detailed Architecture and Implementation
 
-### Design Principles
+### Implementation Details
 
 1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
 2. **Performance Optimization**: Implementation leverages intelligent caching and efficient subprocess management.
