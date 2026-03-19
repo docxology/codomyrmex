@@ -23,15 +23,6 @@ IDE integration with code editing assistance, AI-powered suggestions, and projec
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## MCP tools (auto-discovered)
-
-| Name | Backend |
-|------|---------|
-| `ide_get_active_file`, `ide_list_tools` | Antigravity |
-| `ide_cursor_workspace_info`, `ide_cursor_get_active_file`, `ide_cursor_rules_read` | Cursor (filesystem) |
-
-Env: `CODOMYRMEX_CURSOR_WORKSPACE` when MCP cwd ≠ repo root. Spec: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md).
-
 ## Key Files
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview

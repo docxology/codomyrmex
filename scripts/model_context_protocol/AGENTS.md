@@ -16,7 +16,6 @@ Automation and utility scripts.
 - `mcp_utils.py` – Project file
 - `orchestrate.py` – Project file
 - `run_mcp_server.py` – Project file
-- `run_pai_mcp_stdio.py` – Project file
 - `verify_dynamic_mcp.py` – Project file
 
 ## Operating Contracts

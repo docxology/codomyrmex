@@ -4,15 +4,12 @@
 
 ## Overview
 
-Developer-facing documentation covering environment setup, testing strategy, coding standards, multi-agent Git workflows, uv package management, and Cursor ↔ Codomyrmex wiring.
+Developer-facing documentation covering environment setup, testing strategy, coding standards, multi-agent Git workflows, and uv package management.
 
 ## Contents
 
 | Document | Description |
 |:---|:---|
-| [cursor-integration.md](cursor-integration.md) | Cursor editor rules, MCP tools (`ide_cursor_*`), `CODOMYRMEX_CURSOR_WORKSPACE` |
-| [cursor-mcp.json.example](cursor-mcp.json.example) | Example `~/.cursor/mcp.json` for full PAI MCP stdio server |
-| [cursor-mcp-troubleshooting.md](cursor-mcp-troubleshooting.md) | `ENOENT` / PATH issues for `uv`, `codex`, extension MCP servers |
 | [documentation.md](documentation.md) | Documentation standards, AGENTS/README/SPEC parity |
 | [environment-setup.md](environment-setup.md) | Development environment prerequisites and configuration |
 | [google-integration.md](google-integration.md) | Google Cloud and Workspace integration for development |

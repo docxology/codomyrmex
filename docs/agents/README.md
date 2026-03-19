@@ -14,7 +14,7 @@ Documentation for all AI agent integrations in the Codomyrmex ecosystem. This di
 |:---|:---|:---|
 | **Jules** | [jules/](jules/) | Google Jules CLI, swarm orchestration |
 | **Gemini** | [gemini/](gemini/) | Google Gemini CLI, OAuth/API key, @ file ops |
-| **Hermes** | [hermes/](hermes/) | Nous Research, gateway, Telegram/WhatsApp (21 docs) |
+| **Hermes** | [hermes/](hermes/) | Nous Research, gateway, Telegram/WhatsApp (19 docs) |
 | **OpenCode** | [opencode/](opencode/) | Open-source coding agent |
 | **Mistral Vibe** | [mistral_vibe/](mistral_vibe/) | Mistral AI vibe CLI |
 | **Every Code** | [every_code/](every_code/) | Multi-agent orchestration, /plan /solve /code |

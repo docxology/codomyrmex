@@ -3,12 +3,11 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-PAI-related integration tests, including **MCP stdio bidirectional** checks for Cursor-style clients.
+Test files and validation suites.
 
 ## Active Components
 - `README.md` – Project file
 - `__init__.py` – Project file
-- `test_mcp_stdio_bidirectional.py` – JSON-RPC round-trip (in-process + `uv` subprocess)
 - `test_bikeride_api.py` – Project file
 - `test_email_compose.py` – Project file
 
@@ -22,7 +21,6 @@ PAI-related integration tests, including **MCP stdio bidirectional** checks for 
 - `README.md` - Directory overview
 - `README.md`
 - `__init__.py`
-- `test_mcp_stdio_bidirectional.py`
 - `test_bikeride_api.py`
 - `test_email_compose.py`
 

@@ -26,7 +26,7 @@ PAI agents operating within the Codomyrmex ecosystem integrate through the agent
 
 ## Key Agents with PAI Deep Integration
 
-- **Hermes** — [hermes/](hermes/) — 21 modular docs; MCP can preload CLI skills (`hermes_skill` / `hermes_skills`) for packs such as [PrediHermes](https://github.com/nativ3ai/hermes-geopolitical-market-sim); see [skills.md](hermes/skills.md#codomyrmex-mcp-preloading-skills)
+- **Hermes** — [hermes/](hermes/) — 19 modular docs covering gateway, Telegram, launchd, sessions, skills, cron, troubleshooting
 - **Claude** — [claude/](claude/) — Anthropic integration with advanced reasoning
 - **Gemini** — [gemini/](gemini/) — Google CLI with file operations and session management
 - **Jules** — [jules/](jules/) — Swarm orchestration (113+ concurrent sessions)

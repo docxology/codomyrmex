@@ -24,7 +24,6 @@ from . import (
     testing,
     versioning,
 )
-from .hermes_skill_bridge import HermesSkillBridge, HermesSkillEntry
 from .skill_loader import SkillLoader
 from .skill_registry import SkillRegistry
 from .skill_runner import list_runnable_skills, run_skill, run_skill_by_name
@@ -64,8 +63,6 @@ def cli_commands():
 
 
 __all__ = [
-    "HermesSkillBridge",
-    "HermesSkillEntry",
     "SkillLoader",
     "SkillRegistry",
     "SkillSync",

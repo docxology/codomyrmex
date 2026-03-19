@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/skills
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Skill discovery, loading, health monitoring, and lifecycle management. Enables modular capability extension through pluggable skill packages with MCP tool integration.
@@ -16,7 +16,6 @@ Skill discovery, loading, health monitoring, and lifecycle management. Enables m
 - `composition/` – composition module implementation
 - `discovery/` – discovery module implementation
 - `execution/` – execution module implementation
-- `hermes_skill_bridge.py` – **HermesSkillBridge**: syncs `$HERMES_HOME/skills/` → Codomyrmex SkillRegistry
 - `marketplace/` – marketplace module implementation
 - `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
 - `permissions/` – permissions module implementation

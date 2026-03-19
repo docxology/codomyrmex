@@ -162,8 +162,7 @@ def hermes_check_dependencies(package_name: str) -> dict[str, Any]:
     category="hermes",
     description=(
         "Execute a single-turn chat with the Hermes agent. "
-        "Uses the Hermes CLI if available, otherwise Ollama hermes3. "
-        "Optional hermes_skill / hermes_skills preload CLI skills (ignored on Ollama fallback)."
+        "Uses the Hermes CLI if available, otherwise Ollama hermes3."
     ),
 )
 def hermes_execute(
@@ -171,8 +170,6 @@ def hermes_execute(
     backend: str = "auto",
     model: str = "hermes3",
     timeout: int = 120,
-    hermes_skill: str | None = None,
-    hermes_skills: list[str] | str | None = None,
 ) -> dict[str, Any]:
     """Submit a prompt to the Hermes agent.
 
@@ -181,8 +178,6 @@ def hermes_execute(
         backend: ``"auto"`` (default), ``"cli"``, or ``"ollama"``.
         model: Ollama model name (default ``hermes3``).
         timeout: Subprocess timeout in seconds (default 120).
-        hermes_skill: Preload one Hermes skill (``hermes chat -s``); CLI backend only.
-        hermes_skills: Extra skills as a list or comma-separated string.
 
     Returns:
         dict with keys: status, content, error, metadata
@@ -190,13 +185,9 @@ def hermes_execute(
     """
     try:
         from codomyrmex.agents.core import AgentRequest
-        from codomyrmex.agents.hermes.hermes_client import (
-            agent_context_for_hermes_skills,
-        )
 
         client = _get_client(backend=backend, model=model, timeout=timeout)
-        skill_ctx = agent_context_for_hermes_skills(hermes_skill, hermes_skills)
-        request = AgentRequest(prompt=prompt, context=skill_ctx)
+        request = AgentRequest(prompt=prompt)
         response = client.execute(request)
         return {
             "status": "success" if response.is_success() else "error",
@@ -332,8 +323,6 @@ def hermes_stream(
     backend: str = "auto",
     model: str = "hermes3",
     timeout: int = 120,
-    hermes_skill: str | None = None,
-    hermes_skills: list[str] | str | None = None,
 ) -> dict[str, Any]:
     """Stream Hermes agent output and collect all lines.
 
@@ -342,8 +331,6 @@ def hermes_stream(
         backend: ``"auto"`` (default), ``"cli"``, or ``"ollama"``.
         model: Ollama model name (default ``hermes3``).
         timeout: Subprocess timeout in seconds (default 120).
-        hermes_skill: Preload one Hermes skill (CLI only).
-        hermes_skills: Extra skills as a list or comma-separated string.
 
     Returns:
         dict with keys: status, lines (list of str), line_count, backend
@@ -351,9 +338,6 @@ def hermes_stream(
     """
     try:
         from codomyrmex.agents.core import AgentRequest
-        from codomyrmex.agents.hermes.hermes_client import (
-            agent_context_for_hermes_skills,
-        )
 
         client = _get_client(backend=backend, model=model, timeout=timeout)
         if client.active_backend == "none":
@@ -363,8 +347,7 @@ def hermes_stream(
                 "lines": [],
                 "line_count": 0,
             }
-        skill_ctx = agent_context_for_hermes_skills(hermes_skill, hermes_skills)
-        request = AgentRequest(prompt=prompt, context=skill_ctx)
+        request = AgentRequest(prompt=prompt)
         lines = list(client.stream(request))
         return {
             "status": "success",
@@ -389,8 +372,6 @@ def hermes_chat_session(
     backend: str = "auto",
     model: str = "hermes3",
     timeout: int = 120,
-    hermes_skill: str | None = None,
-    hermes_skills: list[str] | str | None = None,
 ) -> dict[str, Any]:
     """Submit a prompt to a stateful Hermes agent session.
 
@@ -400,8 +381,6 @@ def hermes_chat_session(
         backend: ``"auto"`` (default), ``"cli"``, or ``"ollama"``.
         model: Ollama model name (default ``hermes3``).
         timeout: Subprocess timeout in seconds (default 120).
-        hermes_skill: Preload one Hermes skill for this session (persisted in session metadata).
-        hermes_skills: Extra skills as a list or comma-separated string.
 
     Returns:
         dict with keys: status, content, session_id, error, metadata
@@ -409,12 +388,7 @@ def hermes_chat_session(
     """
     try:
         client = _get_client(backend=backend, model=model, timeout=timeout)
-        response = client.chat_session(
-            prompt=prompt,
-            session_id=session_id,
-            hermes_skill=hermes_skill,
-            hermes_skills=hermes_skills,
-        )
+        response = client.chat_session(prompt=prompt, session_id=session_id)
         return {
             "status": "success" if response.is_success() else "error",
             "content": response.content,
@@ -499,8 +473,6 @@ def hermes_sampling(
     max_tokens: int = 2048,
     backend: str = "auto",
     model: str = "hermes3",
-    hermes_skill: str | None = None,
-    hermes_skills: list[str] | str | None = None,
 ) -> dict[str, Any]:
     """Server-initiated sampling via Hermes.
 
@@ -513,8 +485,6 @@ def hermes_sampling(
         max_tokens: Maximum tokens to generate.
         backend: ``"auto"`` (default), ``"cli"``, or ``"ollama"``.
         model: Ollama model name (default ``hermes3``).
-        hermes_skill: Preload one Hermes skill (CLI only).
-        hermes_skills: Extra skills as a list or comma-separated string.
 
     Returns:
         dict with keys: status, content, model, stop_reason, usage
@@ -522,14 +492,10 @@ def hermes_sampling(
     """
     try:
         from codomyrmex.agents.core import AgentRequest
-        from codomyrmex.agents.hermes.hermes_client import (
-            agent_context_for_hermes_skills,
-        )
 
         full_prompt = f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
         client = _get_client(backend=backend, model=model, timeout=120)
-        skill_ctx = agent_context_for_hermes_skills(hermes_skill, hermes_skills)
-        request = AgentRequest(prompt=full_prompt, context=skill_ctx)
+        request = AgentRequest(prompt=full_prompt)
         response = client.execute(request)
 
         if response.is_success():
@@ -1338,8 +1304,6 @@ def hermes_batch_execute(
     parallel: bool = False,
     backend: str = "auto",
     timeout: int = 120,
-    hermes_skill: str | None = None,
-    hermes_skills: list[str] | str | None = None,
 ) -> dict[str, Any]:
     """Execute a batch of prompts with the Hermes agent.
 
@@ -1348,8 +1312,6 @@ def hermes_batch_execute(
         parallel: Submit all prompts concurrently (default False).
         backend: ``"auto"`` (default), ``"cli"``, or ``"ollama"``.
         timeout: Per-prompt timeout in seconds (default 120).
-        hermes_skill: Preload one Hermes skill for each prompt (CLI only).
-        hermes_skills: Extra skills as a list or comma-separated string.
 
     Returns:
         dict with keys: status, results (list of {prompt, status, content, error}), count
@@ -1357,12 +1319,7 @@ def hermes_batch_execute(
     """
     try:
         client = _get_client(backend=backend, timeout=timeout)
-        results = client.batch_execute(
-            prompts,
-            parallel=parallel,
-            hermes_skill=hermes_skill,
-            hermes_skills=hermes_skills,
-        )
+        results = client.batch_execute(prompts, parallel=parallel)
         total_err = sum(1 for r in results if r["status"] == "error")
         return {
             "status": "success" if total_err == 0 else "partial",
@@ -1530,9 +1487,7 @@ def hermes_session_merge(
         ok = client.session_merge(target_id, source_ids, deduplicate=deduplicate)
         return {
             "status": "success" if ok else "error",
-            "message": f"Merged sources into {target_id}"
-            if ok
-            else "Merge failed or no sessions found",
+            "message": f"Merged sources into {target_id}" if ok else "Merge failed or no sessions found",
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
@@ -1558,7 +1513,6 @@ def hermes_health_check() -> dict[str, Any]:
 
         # Check sessions DB
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
-
         with SQLiteSessionStore(client._session_db_path) as store:
             db_stats = store.get_stats()
 
@@ -1576,7 +1530,7 @@ def hermes_health_check() -> dict[str, Any]:
             "environment": {
                 "python_version": sys.version.split()[0],
                 "platform": sys.platform,
-            },
+            }
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
@@ -1632,7 +1586,9 @@ def hermes_build_memory_graph(
                 session = store.load(sid)
                 if session is None:
                     continue
-                full_text = " ".join(m.get("content", "") for m in session.messages)
+                full_text = " ".join(
+                    m.get("content", "") for m in session.messages
+                )
                 concepts_in_session = set(WIKI_LINK_RE.findall(full_text))
                 for concept in concepts_in_session:
                     concept_sessions[concept].add(sid)
@@ -1644,7 +1600,8 @@ def hermes_build_memory_graph(
 
         # Filter to nodes that appear in enough sessions
         nodes = [
-            c for c, sids in concept_sessions.items() if len(sids) >= min_link_count
+            c for c, sids in concept_sessions.items()
+            if len(sids) >= min_link_count
         ]
         node_set = set(nodes)
         edges = [
@@ -1888,11 +1845,7 @@ def hermes_spawn_agent(
         except Exception:
             # HermesClient unavailable (hermes binary / Ollama not installed)
             def _hermes_agent(t: str, **_kw: Any) -> dict[str, Any]:  # type: ignore[misc]
-                return {
-                    "task": t,
-                    "agent": "hermes",
-                    "note": "Hermes agent delegated (stub).",
-                }
+                return {"task": t, "agent": "hermes", "note": "Hermes agent delegated (stub)."}
 
         orch.register_agent(role, _hermes_agent)
 

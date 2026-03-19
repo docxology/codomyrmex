@@ -6,6 +6,7 @@ Zero-mock: uses real InMemoryStore, SQLiteSessionStore (:memory:), EventStore, e
 
 from __future__ import annotations
 
+import pytest
 
 from codomyrmex.events.event_store import EventStore
 from codomyrmex.events.integration_bus import IntegrationBus
@@ -80,6 +81,7 @@ def test_spawn_agent_catches_exception_gracefully() -> None:
 
 
 def test_orchestrator_run_dag_fan_out() -> None:
+    from codomyrmex.orchestrator.mcp_tools import orchestrator_run_dag
 
     def _add(x: int) -> int:
         return x + 1

@@ -17,7 +17,6 @@ Test files and validation suites.
 - `test_antigravity_client_extended.py` – File
 - `test_cursor_impl.py` – File
 - `test_cursor_settings.py` – File
-- `test_ide_mcp_tools.py` – File
 - `test_ide.py` – File
 - `test_ide_common.py` – File
 - `test_relay_cli.py` – File

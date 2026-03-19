@@ -11,12 +11,7 @@ import shutil
 import pytest
 
 from codomyrmex.agents.core import AgentRequest
-from codomyrmex.agents.hermes import (
-    SESSION_METADATA_HERMES_SKILLS_KEY,
-    HermesClient,
-    agent_context_for_hermes_skills,
-    normalize_hermes_skill_names,
-)
+from codomyrmex.agents.hermes import HermesClient
 from codomyrmex.agents.hermes.mcp_tools import (
     hermes_execute,
     hermes_skills_list,
@@ -62,70 +57,6 @@ class TestHermesClientArgBuilder:
             context={"command": "skills", "args": ["list"]},
         )
         assert args == ["skills", "list"]
-
-    def test_build_args_single_skill(self) -> None:
-        """Hermes chat prepends -s for one skill."""
-        client = HermesClient()
-        args = client._build_hermes_args(
-            prompt="run pipeline",
-            context=agent_context_for_hermes_skills(
-                hermes_skill="geopolitical-market-sim"
-            ),
-        )
-        assert args[:4] == [
-            "chat",
-            "-s",
-            "geopolitical-market-sim",
-            "-q",
-        ]
-        assert "run pipeline" in args
-
-    def test_build_args_multiple_skills(self) -> None:
-        """Multiple skills are comma-joined for one -s flag."""
-        client = HermesClient()
-        args = client._build_hermes_args(
-            prompt="x",
-            context=agent_context_for_hermes_skills(
-                hermes_skill="a",
-                hermes_skills=["b", "c"],
-            ),
-        )
-        idx = args.index("-s")
-        assert args[idx + 1] == "a,b,c"
-
-    def test_normalize_hermes_skill_names(self) -> None:
-        """Dedup and trim skill names."""
-        assert normalize_hermes_skill_names("a", ["a", " b "]) == ["a", "b"]
-        assert normalize_hermes_skill_names(None, "x, y") == ["x", "y"]
-
-    def test_cli_response_includes_hermes_skills_loaded_metadata(self) -> None:
-        """CLI path echoes preloaded skill names in response metadata."""
-
-        class _StubHermes(HermesClient):
-            def _is_cli_configured(self) -> bool:
-                return True
-
-            def _execute_command(self, args, env=None):
-                return {
-                    "success": True,
-                    "stdout": "stub",
-                    "stderr": "",
-                    "exit_code": 0,
-                }
-
-        client = _StubHermes(
-            config={"hermes_backend": "cli", "hermes_command": "hermes"}
-        )
-        req = AgentRequest(
-            prompt="hello",
-            context=agent_context_for_hermes_skills(
-                hermes_skill="demo-pack",
-                hermes_skills=["other"],
-            ),
-        )
-        resp = client.execute(req)
-        assert resp.is_success()
-        assert resp.metadata.get("hermes_skills_loaded") == ["demo-pack", "other"]
 
 
 class TestHermesClientExecution:
@@ -230,36 +161,6 @@ class TestHermesClientSessionIntegration:
             assert session.message_count == 4
             assert session.messages[0]["content"] == "hello session"
             assert session.messages[2]["content"] == "follow up"
-
-    def test_chat_session_persists_hermes_skills(self, tmp_path) -> None:
-        """Skill names persist on the session for subsequent turns."""
-        db_path = tmp_path / "skills_sessions.db"
-        client = HermesClient(
-            config={"hermes_command": "echo", "hermes_session_db": str(db_path)}
-        )
-        r1 = client.chat_session(
-            prompt="hello",
-            hermes_skill="geopolitical-market-sim",
-        )
-        assert r1.is_success()
-        sid = r1.metadata.get("session_id")
-        assert sid is not None
-        from codomyrmex.agents.hermes.session import SQLiteSessionStore
-
-        with SQLiteSessionStore(db_path) as store:
-            s = store.load(sid)
-            assert s is not None
-            assert s.metadata.get(SESSION_METADATA_HERMES_SKILLS_KEY) == [
-                "geopolitical-market-sim",
-            ]
-        r2 = client.chat_session(prompt="again", session_id=sid)
-        assert r2.is_success()
-        with SQLiteSessionStore(db_path) as store:
-            s2 = store.load(sid)
-            assert s2 is not None
-            assert s2.metadata.get(SESSION_METADATA_HERMES_SKILLS_KEY) == [
-                "geopolitical-market-sim",
-            ]
 
 
 class TestHermesSessionMCPTools:

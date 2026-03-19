@@ -8,6 +8,7 @@ from __future__ import annotations
 import threading
 import time
 
+import pytest
 
 from codomyrmex.events.integration_bus import IntegrationBus
 

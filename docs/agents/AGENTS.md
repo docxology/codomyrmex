@@ -14,7 +14,7 @@ Agent coordination document for the `docs/agents/` directory. This directory con
 |:---|:---|:---|
 | Jules | [jules/](jules/) | `src/codomyrmex/agents/jules/` |
 | Gemini | [gemini/](gemini/) | `src/codomyrmex/agents/gemini/` |
-| Hermes | [hermes/](hermes/) ⭐ 21 docs | `src/codomyrmex/agents/hermes/` |
+| Hermes | [hermes/](hermes/) ⭐ 19 docs | `src/codomyrmex/agents/hermes/` |
 | OpenCode | [opencode/](opencode/) | `src/codomyrmex/agents/opencode/` |
 | Mistral Vibe | [mistral_vibe/](mistral_vibe/) | `src/codomyrmex/agents/mistral_vibe/` |
 | Every Code | [every_code/](every_code/) | `src/codomyrmex/agents/every_code/` |

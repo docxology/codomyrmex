@@ -1,6 +1,6 @@
 # Codomyrmex Functional Specification
 
-**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## System Concept
 
@@ -32,7 +32,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ### Internal Coherence
 
-- Consistent directory structure and naming conventions across all 89 modules.
+- Consistent directory structure and naming conventions across all 129 modules.
 - Unified documentation patterns: every module carries the same set of specification files.
 - Shared configuration idioms via standardized `Config` objects and `pyproject.toml` extras.
 
@@ -179,19 +179,15 @@ This root directory serves as the nexus of the colony. It does not contain busin
 
 ## Known Architecture Debt
 
-Tracked items by sprint target. Resolved items are kept for historical reference.
+Active items tracked by sprint target.
 
 | Item | Status | Sprint Target | Notes |
 |------|--------|---------------|-------|
-| Circular imports: ~35 pairs across modules | Open | Sprint 3 | Use `isort --check` + dependency graph to surface |
-| Oversized files: 8 files >1K LOC | Open | Sprint 3 | `mcp_bridge.py` (1,266 lines) is largest |
-| EventBus trust events wrong signature | **Resolved v1.0.2** | — | `EventType.TRUST_LEVEL_CHANGED` added; `publish_event` call fixed in `trust_gateway.py` |
-| PAI.md thin files (5 modules at <52 lines) | **Resolved v1.0.2** | — | All 5 expanded to ≥100 lines with MCP tool docs and phase mapping |
-| Tool versioning: no deprecation scheme | **Resolved v1.0.2** | — | `version` + `deprecated_in` params added to `@mcp_tool` decorator |
-| Stale module/tool counts in docs | **Resolved v1.0.2** | — | Updated: 89 modules, 167 tools (163 safe + 4 destructive), 3 resources |
+| Circular imports: ~35 pairs across modules | **Fixed** | Sprint 17 | Sprint 17 audit: `--check` confirmed **0 circular imports** via `ci_cd_automation` build import fix |
+| Oversized files: 16 non-test files >800 LOC | Open | Sprint 35 | Largest: `orchestration.py`; ongoing; track in TODO.md |
 | 6 optional modules fail import | Expected | — | Cloud (AWS/Azure/GCP), performance.monitoring, lazy_loader, security cert validator — require optional SDKs |
-| Bidirectional PAI↔codomyrmex comms | Open | Sprint 4 | Codomyrmex cannot initiate calls to PAI; filesystem back-channel only |
-| Tool versioning: no deprecation timeline UI | Open | Sprint 4 | `deprecated_in` metadata added but not surfaced in MCP tool list |
+| Bidirectional PAI↔codomyrmex comms | **Fixed** | v1.1.0 | `agents/pai/pai_webhook.py` + `agents/pai/pai_client.py` added in v1.1.0 |
+| Tool versioning: no deprecation timeline UI | Open | Sprint 35 | `deprecated_in` metadata present but not surfaced in MCP tool list |
 
 ## Navigation Links
 

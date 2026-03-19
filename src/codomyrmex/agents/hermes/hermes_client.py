@@ -8,13 +8,6 @@ Backends (configurable via ``hermes_backend``):
 - ``"auto"`` (default): use CLI if available, else Ollama
 - ``"cli"``: force NousResearch Hermes Agent CLI
 - ``"ollama"``: force ``ollama run <model>``
-
-Upstream references:
-- Web workspace UI : https://github.com/outsourc-e/hermes-workspace
-  (Next.js PWA — chat, memory, skills, files, PTY terminal; connects to WebAPI on port 8642)
-- Backend fork : https://github.com/outsourc-e/hermes-agent
-  (adds ``hermes webapi`` FastAPI + SSE layer on top of NousResearch/hermes-agent)
-- CLI upstream : https://github.com/NousResearch/hermes-agent
 """
 
 from __future__ import annotations
@@ -69,47 +62,6 @@ AUTO_HEAL_ALLOWLIST: set[str] = {
     "beautifulsoup4",
     "lxml",
 }
-
-# Persisted on :class:`HermesSession` when skills are set via :meth:`HermesClient.chat_session`.
-SESSION_METADATA_HERMES_SKILLS_KEY = "hermes_skills"
-
-
-def normalize_hermes_skill_names(
-    hermes_skill: str | None,
-    hermes_skills: list[str] | str | None,
-) -> list[str]:
-    """Normalize skill names for ``hermes chat -s`` (comma-separated; order preserved)."""
-    out: list[str] = []
-    seen: set[str] = set()
-
-    def add_one(name: str) -> None:
-        t = name.strip()
-        if t and t not in seen:
-            seen.add(t)
-            out.append(t)
-
-    if hermes_skill is not None:
-        add_one(str(hermes_skill))
-    if hermes_skills is None:
-        return out
-    if isinstance(hermes_skills, str):
-        for part in hermes_skills.split(","):
-            add_one(part)
-    else:
-        for item in hermes_skills:
-            add_one(str(item))
-    return out
-
-
-def agent_context_for_hermes_skills(
-    hermes_skill: str | None = None,
-    hermes_skills: list[str] | str | None = None,
-) -> dict[str, Any]:
-    """Build :class:`AgentRequest` ``context`` for Hermes CLI skill preload."""
-    names = normalize_hermes_skill_names(hermes_skill, hermes_skills)
-    if not names:
-        return {}
-    return {"hermes_skills": names}
 
 
 class HermesError(AgentError):
@@ -321,9 +273,7 @@ class HermesClient(CLIAgentBase):
                         # Found a provider line with an actual key value
                         return True
         except Exception as exc:
-            self.logger.debug(
-                "Failed to parse `hermes config` output: %s", exc
-            )  # Fall through to .env check
+            self.logger.debug("Failed to parse `hermes config` output: %s", exc)  # Fall through to .env check
 
         # Method 2: check ~/.hermes/.env directly
         try:
@@ -345,9 +295,7 @@ class HermesClient(CLIAgentBase):
 
         return False
 
-    def _execute_impl(
-        self, request: AgentRequest, max_tokens: int | None = None
-    ) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute via the active backend, with fallback on provider errors."""
         try:
             return self._execute_primary(request, max_tokens=max_tokens)
@@ -363,9 +311,7 @@ class HermesClient(CLIAgentBase):
                 )
             raise
 
-    def _execute_primary(
-        self, request: AgentRequest, max_tokens: int | None = None
-    ) -> AgentResponse:
+    def _execute_primary(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute via the primary active backend (CLI or Ollama)."""
         if self._active_backend == "ollama":
             return self._execute_via_ollama(request, max_tokens=max_tokens)
@@ -399,9 +345,7 @@ class HermesClient(CLIAgentBase):
             )
         )
 
-    def _execute_via_cli(
-        self, request: AgentRequest, max_tokens: int | None = None
-    ) -> AgentResponse:
+    def _execute_via_cli(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute via the NousResearch Hermes CLI."""
         prompt = request.prompt
         context = request.context or {}
@@ -440,21 +384,13 @@ class HermesClient(CLIAgentBase):
                     f"{result.get('stderr') or result.get('stdout')}",
                     command=self.command,
                 )
-            ctx = request.context or {}
-            loaded = normalize_hermes_skill_names(
-                ctx.get("hermes_skill"),
-                ctx.get("hermes_skills"),
-            )
-            extra_md: dict[str, Any] = {
-                "backend": "cli",
-                "command_full": " ".join([self.command, *hermes_args]),
-            }
-            if loaded:
-                extra_md["hermes_skills_loaded"] = loaded
             return self._build_response_from_result(
                 result,
                 request,
-                additional_metadata=extra_md,
+                additional_metadata={
+                    "backend": "cli",
+                    "command_full": " ".join([self.command, *hermes_args]),
+                },
             )
         except AgentTimeoutError as e:
             raise HermesError(
@@ -708,8 +644,6 @@ class HermesClient(CLIAgentBase):
         session_id: str | None = None,
         session_name: str | None = None,
         max_tokens: int | None = None,
-        hermes_skill: str | None = None,
-        hermes_skills: list[str] | str | None = None,
     ) -> AgentResponse:
         """Execute a stateful multi-turn chat.
 
@@ -718,10 +652,6 @@ class HermesClient(CLIAgentBase):
             session_id: Session ID (optional). If omitted, a new one is created.
             session_name: Human-friendly session name (v0.2.0). If provided and
                 no session_id is given, attempts to resume by name.
-            hermes_skill: Preload one Hermes skill (CLI only); merged into session metadata.
-            hermes_skills: Additional skill names (list or comma-separated string). If either
-                skill argument is set on a call, session metadata is replaced with the
-                normalized list. If both are omitted, prior session skills are reused.
 
         Returns:
             Response containing the assistant's reply and the session ID in metadata.
@@ -748,15 +678,6 @@ class HermesClient(CLIAgentBase):
             # Update name if provided on an existing session
             if session_name and session.name != session_name:
                 session.name = session_name
-
-            if hermes_skill is not None or hermes_skills is not None:
-                session.metadata[SESSION_METADATA_HERMES_SKILLS_KEY] = (
-                    normalize_hermes_skill_names(hermes_skill, hermes_skills)
-                )
-            skill_context: dict[str, Any] = {}
-            persisted = session.metadata.get(SESSION_METADATA_HERMES_SKILLS_KEY) or []
-            if persisted:
-                skill_context = {"hermes_skills": list(persisted)}
 
             store.save(session)
 
@@ -812,7 +733,7 @@ class HermesClient(CLIAgentBase):
                 else:
                     full_prompt = f"{system_directives}\n\nUser: {current_prompt}"
 
-                request = AgentRequest(prompt=full_prompt, context=skill_context or {})
+                request = AgentRequest(prompt=full_prompt)
                 response = self.execute(request, max_tokens=max_tokens)
                 final_response = response
 
@@ -932,8 +853,6 @@ class HermesClient(CLIAgentBase):
             context: Context dictionary which may include keys:
                 - ``command``: Subcommand (e.g. ``"skills"``, ``"setup"``)
                 - ``args``: Additional arguments for the subcommand
-                - ``hermes_skill``: Single skill name (optional)
-                - ``hermes_skills``: List of skill names or comma-separated str (optional)
 
         Returns:
             Argument list suitable for subprocess call.
@@ -945,16 +864,9 @@ class HermesClient(CLIAgentBase):
             if context.get("args"):
                 args.extend(context["args"])
             return args
-        skill_names = normalize_hermes_skill_names(
-            context.get("hermes_skill"),
-            context.get("hermes_skills"),
-        )
         # Non-interactive mode: -Q suppresses spinner/banner, --provider forces the
         # configured inference provider so hermes never enters the setup wizard.
-        args = ["chat"]
-        if skill_names:
-            args.extend(["-s", ",".join(skill_names)])
-        args.extend(["-q", prompt, "-Q", "--provider", self._hermes_provider])
+        args = ["chat", "-q", prompt, "-Q", "--provider", self._hermes_provider]
         if self._yolo:
             args.append("--yolo")
         if self._continue_session:
@@ -1338,8 +1250,6 @@ class HermesClient(CLIAgentBase):
         parallel: bool = False,
         backend: str | None = None,
         timeout: int | None = None,
-        hermes_skill: str | None = None,
-        hermes_skills: list[str] | str | None = None,
     ) -> list[dict[str, Any]]:
         """Execute a list of prompts, returning a list of result dicts.
 
@@ -1350,16 +1260,12 @@ class HermesClient(CLIAgentBase):
             backend: Override the active backend (``\"cli\"`` | ``\"ollama\"``).
                 If ``None``, uses the currently configured backend.
             timeout: Per-request timeout in seconds.  If ``None``, uses the client default.
-            hermes_skill: Preload one Hermes skill for each prompt (CLI only).
-            hermes_skills: Additional skills (list or comma-separated string).
 
         Returns:
             List of dicts with keys ``prompt``, ``status``, ``content``, ``error``.
 
         """
         from codomyrmex.agents.core import AgentRequest
-
-        skill_ctx = agent_context_for_hermes_skills(hermes_skill, hermes_skills)
 
         if backend:
             orig_backend = self._active_backend
@@ -1371,10 +1277,7 @@ class HermesClient(CLIAgentBase):
         def _execute_one(prompt: str) -> dict[str, Any]:
             """Execute a single prompt and return a normalized result dict."""
             try:
-                req = AgentRequest(
-                    prompt=prompt, context=dict(skill_ctx) if skill_ctx else {}
-                )
-                resp = self.execute(req)
+                resp = self.execute(AgentRequest(prompt=prompt))
                 return {
                     "prompt": prompt,
                     "status": "success" if resp.is_success() else "error",
@@ -1471,9 +1374,10 @@ class HermesClient(CLIAgentBase):
 
                     if deduplicate and target.messages:
                         last = target.messages[-1]
-                        if msg.get("role") == last.get("role") and msg.get(
-                            "content"
-                        ) == last.get("content"):
+                        if (
+                            msg.get("role") == last.get("role")
+                            and msg.get("content") == last.get("content")
+                        ):
                             continue
 
                     target.add_message(msg["role"], msg["content"])
@@ -1482,3 +1386,4 @@ class HermesClient(CLIAgentBase):
             if merged_any:
                 store.save(target)
             return merged_any
+

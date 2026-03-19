@@ -20,6 +20,7 @@ from __future__ import annotations
 import math
 import re
 from collections import defaultdict
+from typing import Any
 
 
 def _tokenise(text: str) -> list[str]:

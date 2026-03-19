@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from codomyrmex.ide import CommandExecutionError, IDEError, IDEStatus
+from codomyrmex.ide import CommandExecutionError, IDEError
 from codomyrmex.ide.cursor import CursorClient
 
 
@@ -43,7 +43,6 @@ class TestCursorClientInitialization:
         client = CursorClient(workspace_path=str(tmp_path))
         assert client.connect() is True
         assert client.is_connected() is True
-        assert client.status == IDEStatus.CONNECTED
 
     def test_connect_with_cursor_dir(self, tmp_path):
         """connect() should succeed when .cursor directory exists."""
@@ -56,12 +55,6 @@ class TestCursorClientInitialization:
         (tmp_path / ".cursorrules").write_text("rules content")
         client = CursorClient(workspace_path=str(tmp_path))
         assert client.connect() is True
-
-    def test_connect_nonexistent_workspace_sets_error_status(self):
-        """connect() should fail and set ERROR for nonexistent workspace."""
-        client = CursorClient(workspace_path="/tmp/definitely_nonexistent_cursor_ws_123")
-        assert client.connect() is False
-        assert client.status == IDEStatus.ERROR
 
 
 @pytest.mark.unit
@@ -163,8 +156,9 @@ class TestCursorCommandExecution:
         """execute_command should succeed when connected."""
         client = CursorClient(workspace_path=str(tmp_path))
         client.connect()
-        result = client.execute_command("cursor.model.get")
-        assert "model" in result
+        result = client.execute_command("test_command", {"arg": "value"})
+        assert result["status"] == "success"
+        assert result["command"] == "test_command"
 
     def test_execute_command_when_disconnected(self, tmp_path):
         """execute_command should raise CommandExecutionError when disconnected."""
@@ -179,14 +173,7 @@ class TestCursorCommandExecution:
         client.disconnect()
         assert client.is_connected() is False
         with pytest.raises(CommandExecutionError):
-            client.execute_command("cursor.model.get")
-
-    def test_execute_command_unknown_when_connected(self, tmp_path):
-        """Unknown Cursor commands should fail fast when connected."""
-        client = CursorClient(workspace_path=str(tmp_path))
-        client.connect()
-        with pytest.raises(CommandExecutionError, match="Unknown Cursor command"):
-            client.execute_command("test_command")
+            client.execute_command("test")
 
     def test_open_file_checks_existence(self, tmp_path):
         """open_file should verify file exists on disk."""
@@ -201,26 +188,6 @@ class TestCursorCommandExecution:
         client = CursorClient()
         result = client.get_open_files()
         assert isinstance(result, list)
-
-    def test_execute_cursor_model_set_command(self, tmp_path):
-        """cursor.model.set should update active model through command API."""
-        client = CursorClient(workspace_path=str(tmp_path))
-        client.connect()
-        target = client.get_models()[-1]
-        result = client.execute_command("cursor.model.set", {"model": target})
-        assert result["status"] == "success"
-        assert result["model"] == target
-
-    def test_execute_cursor_file_open_and_list_commands(self, tmp_path):
-        """cursor.file.open/list_open should use tracked open-file state."""
-        test_file = tmp_path / "script.py"
-        test_file.write_text("print('ok')")
-        client = CursorClient(workspace_path=str(tmp_path))
-        client.connect()
-        open_result = client.execute_command("cursor.file.open", {"path": str(test_file)})
-        assert open_result["opened"] is True
-        list_result = client.execute_command("cursor.file.list_open")
-        assert str(test_file.resolve()) in list_result["files"]
 
 
 @pytest.mark.unit

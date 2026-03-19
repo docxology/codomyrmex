@@ -58,7 +58,7 @@ License:
     MIT License (see LICENSE file for details)
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.8"
 __author__ = "Codomyrmex Contributors"
 __email__ = "codomyrmex@example.com"
 __license__ = "MIT"
@@ -88,16 +88,7 @@ try:
 
     from . import codomyrmex
 except (ImportError, ModuleNotFoundError):
-    get_module_path = None
-    list_modules = None
-    get_codomyrmex_version = None
-    CodeExecutionError = None
-    CodeGenerationError = None
-    CodomyrmexError = None
-    ConfigurationError = None
-    EnvironmentError = None
-    StaticAnalysisError = None
-    codomyrmex = None
+    pass
 
 
 def get_source_version() -> str:
@@ -131,7 +122,7 @@ def get_main_package_info() -> dict:
         "name": "codomyrmex",
         "version": codomyrmex.__version__,
         "modules": codomyrmex.list_modules(),
-        "description": "Core Codomyrmex functionality and modules"
+        "description": "Core Codomyrmex functionality and modules",
     }
 
 
@@ -151,25 +142,25 @@ def get_template_info() -> dict:
         "name": "module_template",
         "description": "Project templates and boilerplate code",
         "location": "codomyrmex/module_template/",
-        "components": ["AGENTS.md", "README.md", "SPEC.md", "docs/"]
+        "components": ["AGENTS.md", "README.md", "SPEC.md", "docs/"],
     }
 
 
 __all__ = [
+    "CodeExecutionError",
+    "CodeGenerationError",
+    # Common exceptions
+    "CodomyrmexError",
+    "ConfigurationError",
+    "EnvironmentError",
+    "StaticAnalysisError",
     # Main components
     "codomyrmex",
     # Re-exported functions
     "get_codomyrmex_version",
-    "list_modules",
+    "get_main_package_info",
     "get_module_path",
     "get_source_version",
-    "get_main_package_info",
     "get_template_info",
-    # Common exceptions
-    "CodomyrmexError",
-    "CodeExecutionError",
-    "CodeGenerationError",
-    "ConfigurationError",
-    "EnvironmentError",
-    "StaticAnalysisError",
+    "list_modules",
 ]
