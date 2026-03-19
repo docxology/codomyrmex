@@ -285,7 +285,7 @@ class TestBaseAgent:
         AgentRequest = agent_modules["AgentRequest"]
 
         class ErrorAgent(BaseAgent):
-            def _execute_impl(self, request):
+            def _execute_impl(self, request, max_tokens=None):
                 raise RuntimeError("Test error")
 
             def _stream_impl(self, request):
