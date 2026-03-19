@@ -151,6 +151,7 @@ class InMemorySessionStore:
     """In-memory session store (for testing and ephemeral use)."""
 
     def __init__(self) -> None:
+        """Initialize an empty in-memory session store."""
         self._sessions: dict[str, HermesSession] = {}
 
     def save(self, session: HermesSession) -> None:
@@ -186,6 +187,11 @@ class SQLiteSessionStore:
     """
 
     def __init__(self, db_path: str | Path = ":memory:") -> None:
+        """Initialize the SQLite session store.
+
+        Args:
+            db_path: Path to the SQLite database file. Use ":memory:" for in-memory storage.
+        """
         self._db_path = str(db_path)
         # Increase the default timeout to 5000ms to allow concurrent lockers to wait
         self._conn = sqlite3.connect(
