@@ -52,7 +52,7 @@ class ToolEntry:
             tags=list(self.tags),
         )
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self: ToolEntry) -> dict[str, Any]:
         return {
             "name": self.name,
             "description": self.description,
@@ -130,11 +130,11 @@ class ToolRegistry:
         """Retrieve a tool entry by exact name, or None if not found."""
         return self._tools.get(name)
 
-    def list(self) -> list[ToolEntry]:  # type: ignore
+    def list(self: ToolEntry) -> list[ToolEntry]:  # type: ignore
         """Return all registered tool entries, sorted by name."""
         return sorted(self._tools.values(), key=lambda e: e.name)
 
-    def list_names(self) -> list[str]:  # type: ignore
+    def list_names(self: ToolEntry) -> list[str]:  # type: ignore
         """Return sorted list of all registered tool names."""
         return sorted(self._tools.keys())
 
