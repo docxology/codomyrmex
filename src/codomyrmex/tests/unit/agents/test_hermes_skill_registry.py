@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from codomyrmex.agents.hermes import skill_registry
 from codomyrmex.agents.hermes.skill_names import normalize_hermes_skill_names
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.mark.unit

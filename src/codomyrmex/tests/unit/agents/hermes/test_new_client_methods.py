@@ -9,7 +9,7 @@ import pytest
 from codomyrmex.agents.hermes.hermes_client import HermesClient
 
 
-@pytest.fixture()
+@pytest.fixture
 def client() -> HermesClient:
     """Minimal HermesClient for testing; CLI availability probed automatically."""
     return HermesClient(config={})

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import shutil
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -17,6 +17,8 @@ from codomyrmex.agents.hermes.mcp_tools import (
     hermes_skill_install,
 )
 
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # hermes_gateway_status

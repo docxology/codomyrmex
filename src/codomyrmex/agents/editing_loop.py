@@ -339,7 +339,7 @@ class EditingOrchestrator:
         req = AgentRequest(prompt=prompt)
         resp = self._planner.execute_with_session(req)
         content = resp.content.strip() if hasattr(resp, "content") else str(resp)
-        return content if content else "No plan generated."
+        return content or "No plan generated."
 
     # ── Private: Edit ────────────────────────────────────────────────
 

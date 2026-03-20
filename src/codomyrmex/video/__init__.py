@@ -183,6 +183,10 @@ __all__ = [
     "FilterType",
     "FrameExtractionError",
     "ProcessingResult",
+    # Transcription
+    "TranscriptionResult",
+    "TranscriptionSegment",
+    "TranscriptionWord",
     "UnsupportedFormatError",
     "VideoAnalysisError",
     "VideoCodec",
@@ -194,6 +198,7 @@ __all__ = [
     "VideoInfo",
     "VideoProcessingError",
     "VideoReadError",
+    "VideoTranscriberError",
     "VideoWriteError",
     # Version
     "__version__",
@@ -203,11 +208,6 @@ __all__ = [
     "get_config",
     "reset_config",
     "set_config",
-    # Transcription
-    "TranscriptionResult",
-    "TranscriptionSegment",
-    "TranscriptionWord",
-    "VideoTranscriberError",
     "transcribe_url",
 ]
 

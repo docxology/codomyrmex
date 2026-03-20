@@ -6,7 +6,7 @@ All tests create a real temporary database file so there are zero mocks.
 from __future__ import annotations
 
 import sqlite3
-from pathlib import Path
+from typing import TYPE_CHECKING
 from unittest.mock import (
     patch,
 )
@@ -21,6 +21,9 @@ from codomyrmex.agentic_memory.cognilayer_bridge import (
     store_memory,
 )
 from codomyrmex.agentic_memory.models import MemoryImportance
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.fixture

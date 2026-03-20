@@ -168,7 +168,7 @@ class TranscriptionResult:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "TranscriptionResult":
+    def from_dict(cls, data: dict[str, Any]) -> TranscriptionResult:
         """Build a :class:`TranscriptionResult` from a raw API/CLI JSON dict."""
         segments: list[TranscriptionSegment] = []
         for s in data.get("segments") or []:

@@ -1541,7 +1541,7 @@ class HermesClient(CLIAgentBase):
                 "model_id": model_id,
                 "context_length": 0,
                 "supports_tools": None,
-                "provider": model_id.split("/")[0] if "/" in model_id else "unknown",
+                "provider": model_id.split("/", maxsplit=1)[0] if "/" in model_id else "unknown",
                 "source": "unknown",
             }
 
@@ -1562,7 +1562,7 @@ class HermesClient(CLIAgentBase):
                                 result["supports_tools"] = entry.get("supports_tools")
                                 result["source"] = "hermes_cli/models.py"
                                 break
-                            elif isinstance(entry, int):
+                            if isinstance(entry, int):
                                 result["context_length"] = entry
                                 result["source"] = "hermes_cli/models.py"
                                 break

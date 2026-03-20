@@ -1,6 +1,6 @@
 """Geopolitical Market Simulation Pipeline — typed Codomyrmex facade.
 
-Wraps the ``hermes-geopolitical-market-sim`` skill 
+Wraps the ``hermes-geopolitical-market-sim`` skill
 (https://github.com/nativ3ai/hermes-geopolitical-market-sim)
 as a first-class Python API, delegating execution to the Hermes CLI via
 :class:`~codomyrmex.agents.hermes.HermesClient`.

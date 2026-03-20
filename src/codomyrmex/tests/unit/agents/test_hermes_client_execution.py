@@ -8,12 +8,15 @@ from __future__ import annotations
 
 import os
 import stat
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.hermes.hermes_client import HermesClient, HermesError
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class TestHermesClientExecutionShims:

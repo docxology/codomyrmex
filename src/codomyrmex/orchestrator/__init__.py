@@ -160,10 +160,15 @@ __all__ = [
     "StepError",
     "StepResult",
     "Steps",
+    "SwarmTaskResult",
+    # ── swarm topology ─────────────────────────────────────────────────────────
+    "SwarmTopology",
     "Task",
     "TaskFailedError",
     "TaskResult",
+    "TaskSpec",
     "TaskStatus",
+    "TopologyMode",
     # ── workflow ───────────────────────────────────────────────────────────────
     "Workflow",
     "WorkflowError",
@@ -210,9 +215,4 @@ __all__ = [
     "with_retry",
     "workflow",
     "workflows",
-    # ── swarm topology ─────────────────────────────────────────────────────────
-    "SwarmTopology",
-    "SwarmTaskResult",
-    "TaskSpec",
-    "TopologyMode",
 ]

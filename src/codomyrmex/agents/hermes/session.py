@@ -22,13 +22,13 @@ import json
 import sqlite3
 import time
 import uuid
-from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Protocol, Self, runtime_checkable
 
 from codomyrmex.logging_monitoring import get_logger
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from pathlib import Path
 
 logger = get_logger(__name__)

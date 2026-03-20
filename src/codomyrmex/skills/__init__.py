@@ -24,12 +24,12 @@ from . import (
     testing,
     versioning,
 )
+from .hermes_skill_bridge import HermesSkillBridge, HermesSkillEntry
 from .skill_loader import SkillLoader
 from .skill_registry import SkillRegistry
 from .skill_runner import list_runnable_skills, run_skill, run_skill_by_name
 from .skill_sync import SkillSync
 from .skills_manager import SkillsManager
-from .hermes_skill_bridge import HermesSkillBridge, HermesSkillEntry
 
 
 def cli_commands():

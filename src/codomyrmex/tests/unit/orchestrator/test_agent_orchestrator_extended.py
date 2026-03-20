@@ -6,7 +6,6 @@ Zero-mock: uses real InMemoryStore, SQLiteSessionStore (:memory:), EventStore, e
 
 from __future__ import annotations
 
-
 from codomyrmex.events.event_store import EventStore
 from codomyrmex.events.integration_bus import IntegrationBus
 from codomyrmex.orchestrator.integration import AgentOrchestrator

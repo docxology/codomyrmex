@@ -6,11 +6,14 @@ No live LLM backend required.
 
 from __future__ import annotations
 
-import pytest
+from typing import TYPE_CHECKING
 
 from codomyrmex.agentic_memory.memory import KnowledgeMemory
 from codomyrmex.agentic_memory.stores import InMemoryStore
 from codomyrmex.agents.hermes.session import HermesSession, InMemorySessionStore
+
+if TYPE_CHECKING:
+    import pytest
 
 # ── hermes_build_memory_graph ─────────────────────────────────────────────────
 

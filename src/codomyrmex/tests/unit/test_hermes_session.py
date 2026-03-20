@@ -10,7 +10,7 @@ import gzip
 import json
 import sqlite3
 import time
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -19,6 +19,9 @@ from codomyrmex.agents.hermes.session import (
     InMemorySessionStore,
     SQLiteSessionStore,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ── HermesSession ─────────────────────────────────────────────────────
 

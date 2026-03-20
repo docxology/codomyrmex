@@ -641,7 +641,7 @@ class TestHermesCheckDependencies:
             def check_dependency(self, name):
                 raise FileNotFoundError("uv.lock not found")
 
-        monkeypatch.setattr(lockfile_mod, "LockfileParser", lambda: BrokenParser())
+        monkeypatch.setattr(lockfile_mod, "LockfileParser", BrokenParser)
         result = hermes_check_dependencies("some-package")
         assert result["status"] == "error"
         assert "not found" in result["message"].lower() or "uv.lock" in result["message"]

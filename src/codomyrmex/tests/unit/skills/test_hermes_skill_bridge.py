@@ -8,8 +8,11 @@ from pathlib import Path
 
 import pytest
 
-from codomyrmex.skills.hermes_skill_bridge import HermesSkillBridge, HermesSkillEntry, _normalize_name
-
+from codomyrmex.skills.hermes_skill_bridge import (
+    HermesSkillBridge,
+    HermesSkillEntry,
+    _normalize_name,
+)
 
 # ---------------------------------------------------------------------------
 # HermesSkillEntry
@@ -161,7 +164,7 @@ class TestHermesSkillBridge:
 
 
 class TestNormalizeName:
-    @pytest.mark.parametrize("raw,expected", [
+    @pytest.mark.parametrize(("raw", "expected"), [
         ("MySkill", "myskill"),
         ("my-skill", "my_skill"),
         ("My Skill", "my_skill"),
