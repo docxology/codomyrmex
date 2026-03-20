@@ -4,7 +4,7 @@
 
 ## Overview
 
-Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **129+ modules**, **474+ MCP tools**, and **38 AI agent integrations**.
+Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **128 top-level modules**, **604 `@mcp_tool` decorators** (596 dynamic + 9 static, see [reference/inventory.md](reference/inventory.md)), and **38 AI agent integrations**.
 
 ## Documentation Map
 
@@ -18,6 +18,7 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 | [PAI_DASHBOARD.md](PAI_DASHBOARD.md) | Dashboard functionality matrix (Admin :8787, PM :8888) |
 | [SPEC.md](SPEC.md) | Functional specification |
 | [index.md](index.md) | Documentation site entry point |
+| [reference/inventory.md](reference/inventory.md) | Repo metrics (modules, MCP tools, tests) — refresh via `scripts/doc_inventory.py` |
 
 ### Documentation Sections
 
@@ -33,7 +34,7 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 | [examples/](examples/) | Executable examples and tutorials | 8 |
 | [getting-started/](getting-started/) | Quick start, installation, first steps | 9 |
 | [integration/](integration/) | Cross-module integration patterns | 11 |
-| [modules/](modules/) | Module-level documentation (129 subdirectories) | 9+ |
+| [modules/](modules/) | Module-level documentation (128 top-level packages under `src/codomyrmex/`) | 9+ |
 | [pai/](pai/) | PAI infrastructure, dashboard, skills, memory | 11 |
 | [plans/](plans/) | Project roadmap and release plans | 3 |
 | [project/](project/) | Project standards, contributing, architecture | 9 |

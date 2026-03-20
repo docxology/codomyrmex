@@ -1,6 +1,6 @@
 # Hermes Cron & Scheduling
 
-**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
+**Version**: v0.4.0 | **Last Updated**: March 2026 (73-commit update + v0.4.0)
 
 ## Overview
 

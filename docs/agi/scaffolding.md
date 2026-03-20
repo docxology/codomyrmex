@@ -20,7 +20,7 @@ Goertzel's analysis of OpenCog identifies *combinatorial composability* as the f
 
 The MCP protocol guarantees *associativity* (tool chains are order-preserving) and every module has an *identity morphism* (the no-op self-invocation). Codomyrmex's module system forms a legitimate category.
 
-The 474 `@mcp_tool` decorators are the morphisms of this category. The *composability surface* is not the module count but the **hom-set cardinality**: |Hom(**Mod**)| = 474. The combinatorial explosion of multi-step compositions — paths of length *k* through the dependency graph — gives rise to novel capabilities that no individual morphism encodes.
+The 595 `@mcp_tool` decorators are the morphisms of this category. The *composability surface* is not the module count but the **hom-set cardinality**: |Hom(**Mod**)| = 595. The combinatorial explosion of multi-step compositions — paths of length *k* through the dependency graph — gives rise to novel capabilities that no individual morphism encodes.
 
 ```mermaid
 graph LR
@@ -39,7 +39,7 @@ graph LR
     CATEGORY -.-> RAG
 ```
 
-**Measurement**: With 130 objects and 440+ directed edges in the dependency graph, the number of distinct paths of length ≤5 exceeds 10⁶ — a combinatorial surface far larger than any individual module's design scope.
+**Measurement**: With 128 top-level modules and 440+ directed edges in the dependency graph, the number of distinct paths of length ≤5 exceeds 10⁶ — a combinatorial surface far larger than any individual module's design scope.
 
 ### Precondition 2: Self-Description — Autopoietic Closure
 
@@ -51,7 +51,7 @@ where Υ is the intelligence measure, π is the agent's policy, μ ranges over e
 
 Maturana and Varela's (1980) autopoiesis formalizes this as *organizational closure*: a system whose components produce the very network of production that produced them. Codomyrmex achieves a software version of organizational closure:
 
-- **`system_discovery`** — Dynamically scans all 130 modules via `scan_all_modules()`, producing a typed `ModuleHealthReport` for each. This is the system's *proprioceptive loop*.
+- **`system_discovery`** — Dynamically scans all top-level modules via `scan_all_modules()`, producing a typed `ModuleHealthReport` for each. This is the system's *proprioceptive loop*.
 - **RASP documentation** — Every module carries machine-readable metadata (README, AGENTS, SPEC, PAI) constituting a *self-model* that agents parse at runtime.
 - **`@mcp_tool` registration** — Tools self-register with typed signatures, enabling runtime capability enumeration. The `list_tools()` method returns the system's complete morphism set.
 
@@ -148,7 +148,7 @@ $$S = \sum_{i=1}^{5} w_i \cdot s_i \quad \text{where} \quad s_i \in [0, 1]$$
 
 | Precondition | Weight (wᵢ) | Score (sᵢ) | Justification |
 |:-------------|:----------:|:----------:|:-------------|
-| Composability | 0.25 | 0.90 | 474 morphisms, full associativity, but Python-only |
+| Composability | 0.25 | 0.90 | 604 morphisms (596 dynamic + 8 static), full associativity, but Python-only |
 | Self-description | 0.20 | 0.85 | RASP + system_discovery, but self-model not used for planning |
 | Tool acquisition | 0.15 | 0.70 | Dynamic plugins + MCP, but no cross-language, no tool synthesis |
 | Persistent memory | 0.20 | 0.75 | 5-tier architecture, but no auto-consolidation or forgetting |

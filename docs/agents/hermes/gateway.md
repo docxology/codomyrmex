@@ -1,6 +1,6 @@
 # Hermes Gateway System
 
-**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
+**Version**: v0.4.0 | **Last Updated**: March 2026 (v0.4.0 update — 22 commits)
 
 ## Overview
 
@@ -232,6 +232,41 @@ hermes_archive_sessions --max-size-mb 100 --days-old 14
 ```
 
 When the DB is under the threshold, the tool returns immediately without deleting anything. Add `--dry-run` to preview what would be pruned.
+
+## Dangerous Command Approval (v0.4.0 — /approve /deny)
+
+In v0.4.0, gateway platforms now use explicit `/approve` and `/deny` Telegram/Discord messages for dangerous command approvals instead of bare text confirmation. When the agent proposes a dangerous action, it sends a message like:
+
+```text
+Proposed: rm -rf /tmp/old_data
+Reply `/approve` to execute, `/approve session` to approve this pattern for the session, or `/deny` to cancel.
+```
+
+| Command | Effect |
+| :------ | :----- |
+| `/approve` | Execute this specific action |
+| `/approve session` | Approve this command pattern for the rest of the session |
+| `/deny` | Cancel the proposed action |
+
+### Gateway-Wide Authorization (v0.4.0)
+
+Two new env vars complement the per-platform pairing system:
+
+```bash
+# Global allowlist — comma-separated IDs trusted across ALL platforms
+GATEWAY_ALLOWED_USERS=123456789,987654321
+
+# Open-door mode — allow ANY user (use only on private/air-gapped deployments)
+GATEWAY_ALLOW_ALL_USERS=true
+```
+
+Full authorization priority order (gateway/run.py):
+
+1. Platform-specific env var (`TELEGRAM_ALLOWED_USERS`, `DISCORD_ALLOWED_USERS`, …)
+2. Global `GATEWAY_ALLOWED_USERS`
+3. Pairing store (`pairing/telegram-approved.json` or per-platform equivalent)
+4. `GATEWAY_ALLOW_ALL_USERS=true`
+5. Default: **deny**
 
 ## Related Documents
 

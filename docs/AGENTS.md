@@ -35,7 +35,7 @@ The `docs/` directory is organized into **19 thematic sections** containing **20
 | `examples/` | Tutorials | Executable demos and integration examples |
 | `getting-started/` | Onboarding | Quickstart, installation, learning path |
 | `integration/` | Cross-module | Integration patterns, MCP bridges |
-| `modules/` | Module docs | 126 module subdirectories |
+| `modules/` | Module docs | **128** top-level packages (see [reference/inventory.md](reference/inventory.md)) |
 | `pai/` | PAI system | Dashboard, skills, memory, dispatch |
 | `plans/` | Roadmap | Release plans, version targets |
 | `project/` | Standards | Contributing, architecture, coding style |

@@ -5,7 +5,6 @@ Zero-mock policy: all tests use real HermesSession dataclass.
 
 from __future__ import annotations
 
-import pytest
 
 from codomyrmex.agents.hermes.session import HermesSession
 

@@ -1,14 +1,14 @@
 ---
 name: Codomyrmex
-description: Full-spectrum coding workspace skill providing ~474 MCP tools across 129 modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
+description: Full-spectrum coding workspace skill providing ~595 MCP tool decorators across 128 top-level modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
 ---
 # Codomyrmex Skill for PAI
 
-**Version**: 1.0.8 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: ~474
+**Version**: 1.0.8 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: ~595 (`@mcp_tool`; see `docs/reference/inventory.md`)
 
 ## Description
 
-Full-spectrum coding workspace skill providing ~474 MCP tools across 129 auto-discovered modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
+Full-spectrum coding workspace skill providing ~595 MCP tool decorators across 128 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
 
 ## Installation
 
@@ -53,13 +53,13 @@ result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 | `CodomyrmexDeploy` | Infrastructure | "docker build", "list instances" |
 | `CodomyrmexTest` | Testing | "run tests", "benchmark" |
 
-## Tools Summary (~474)
+## Tools Summary (~604)
 
-~469 safe tools + 5 destructive (require `/codomyrmexTrust`):
+Most tools are read-only; a small set is destructive (require `/codomyrmexTrust`). Run `/codomyrmexVerify` for the live safe/destructive split.
 
 - **Destructive**: `write_file`, `run_command`, `run_tests`, `call_module_function`
 
-Auto-discovered from 129 modules covering: agents, cerebrum, coding, containerization, crypto, data_visualization, documentation, events, formal_verification, git_analysis, git_operations, llm, logging_monitoring, maintenance, orchestrator, performance, plugin_system, relations, scrape, search, security, and more.
+Auto-discovered from **149** `mcp_tools.py` files across the package tree (128 top-level modules), including agents, cerebrum, coding, containerization, crypto, data_visualization, documentation, events, formal_verification, git_analysis, git_operations, llm, logging_monitoring, maintenance, orchestrator, performance, plugin_system, relations, scrape, search, security, and more.
 
 ## Resources
 
@@ -84,7 +84,7 @@ Auto-discovered from 129 modules covering: agents, cerebrum, coding, containeriz
 | ------- | -------- | ------------ |
 | `UNTRUSTED` | None | Default state |
 | `VERIFIED` | Read-only tools | `/codomyrmexVerify` |
-| `TRUSTED` | All ~474 tools | `/codomyrmexTrust` |
+| `TRUSTED` | All dynamic tools (~604 `@mcp_tool` decorators in tree: 596 dynamic + 9 static) | `/codomyrmexTrust` |
 
 ## Repository
 

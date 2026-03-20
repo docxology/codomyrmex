@@ -1,6 +1,6 @@
 # Hermes Skills System
 
-**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
+**Version**: v0.4.0 | **Last Updated**: March 2026 (73-commit update + v0.4.0)
 
 ## Overview
 
@@ -133,6 +133,116 @@ MCP tools: **`hermes_skills_resolve`** (ids → names + metadata), **`hermes_ski
 | `tools/skills_tool.py`        | In-conversation skill invocation                 |
 | `tools/skill_manager_tool.py` | CRUD operations on skills                        |
 | `tools/skills_guard.py`       | Safety guard: blocks dangerous skill ops         |
+
+---
+
+## Codomyrmex Integration — HermesSkillBridge
+
+`HermesSkillBridge` (in `src/codomyrmex/skills/hermes_skill_bridge.py`) bridges
+the Hermes skill ecosystem into Codomyrmex. It discovers skills from
+`~/.hermes/skills/` and exposes them as typed `HermesSkillEntry` objects that
+delegate to `HermesClient.chat_session`.
+
+### Quick Start
+
+```python
+from codomyrmex.skills import HermesSkillBridge
+
+bridge = HermesSkillBridge()  # reads ~/.hermes/skills/
+
+# List all installed skills
+skills = bridge.list_hermes_skills()
+
+# Run a skill by name
+result = bridge.run_skill(
+    "geopolitical_market_sim",
+    "What is the BTC price impact of a FOMC rate hike?",
+)
+print(result["content"])
+
+# Get a typed entry
+entry = bridge.get_skill("geopolitical_market_sim")
+# entry.skill_path, entry.description, entry.hermes_skill_id ...
+result2 = entry.run("Give me a dashboard for BTC/FOMC")
+```
+
+### API
+
+| Method | Description |
+| :----- | :---------- |
+| `list_hermes_skills()` | Returns list of `HermesSkillEntry` objects (CLI → filesystem fallback) |
+| `sync_hermes_skills(hermes_home)` | Returns `{name: HermesSkillEntry}` dict for a specific home |
+| `get_skill(name)` | Lookup by name (case-insensitive, hyphen-tolerant) |
+| `run_skill(name, prompt, session_id, timeout)` | Runs skill via `HermesClient.chat_session` |
+
+### HermesSkillEntry
+
+| Attribute | Type | Description |
+| :-------- | :--- | :---------- |
+| `name` | `str` | Canonical skill name |
+| `description` | `str` | From `skill.yaml` or `README.md` |
+| `skill_path` | `Path \| None` | Absolute path to skill directory |
+| `hermes_skill_id` | `str` | Value passed to `-s` flag |
+| `metadata` | `dict` | Full parsed manifest |
+| `.run(prompt, session_id, timeout)` | method | Convenience runner |
+
+---
+
+## Installing Skills via Codomyrmex
+
+Use the install script to add a community skill:
+
+```bash
+# Install the geopolitical market sim skill (default)
+./scripts/agents/hermes/install_hermes_skill.sh
+
+# Install a custom skill
+./scripts/agents/hermes/install_hermes_skill.sh \
+    --skill-repo https://github.com/example/my-skill.git \
+    --skill-name my_skill
+
+# Restart gateway to activate
+hermes gateway restart
+```
+
+The script runs a doctor check, clones the repo, runs `install.sh` with the
+`install_args` array bug fixed, and verifies the skill appears in
+`hermes skills list`.
+
+---
+
+## PrediHermes Typed Facade
+
+`GeopoliticalMarketPipeline` provides a typed API for the
+`hermes-geopolitical-market-sim` skill:
+
+```python
+from codomyrmex.skills.skills.custom.geopolitical_market_sim import (
+    GeopoliticalMarketPipeline,
+)
+
+pipeline = GeopoliticalMarketPipeline()
+result = pipeline.track_topic(
+    topic_id="btc_fomc",
+    topic="Federal Reserve rate decision",
+    market_query="BTC price impact",
+    keywords=["FOMC", "rate", "BTC"],
+    regions=["US"],
+)
+dashboard = pipeline.dashboard("btc_fomc")
+health = pipeline.health()
+```
+
+| Method | Description |
+| :----- | :---------- |
+| `track_topic(topic_id, topic, market_query, ...)` | Initiate geopolitical tracking |
+| `run_tracked(topic_id, simulate=False)` | Full pipeline run |
+| `plan_tracked(topic_id)` | Generate research plan |
+| `dashboard(topic_id)` | Summary dashboard |
+| `health()` | Health check for skill stack |
+| `list_worldosint_modules()` | Available WorldOSINT modules |
+
+---
 
 ## Related Documents
 

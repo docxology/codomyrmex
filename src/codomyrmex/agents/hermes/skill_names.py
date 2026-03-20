@@ -24,6 +24,7 @@ def normalize_hermes_skill_names(
     collected: list[str] = []
 
     def _add_value(value: Any) -> None:
+        """Append non-empty skill names from value to the collected list."""
         if value is None:
             return
         if isinstance(value, str):

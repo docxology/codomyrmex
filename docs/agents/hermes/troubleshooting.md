@@ -1,6 +1,6 @@
 # Hermes Troubleshooting Guide
 
-**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
+**Version**: v0.4.0 | **Last Updated**: March 2026 (73-commit update + v0.4.0)
 
 ## Quick Diagnostics
 
@@ -257,7 +257,7 @@ copilot --version
 
 4. **Check current usage**: `curl https://openrouter.ai/api/v1/key -H "Authorization: Bearer $OPENROUTER_API_KEY"`
 
-### 10. Codomyrmex skill profile not applied (wrong skills or none)
+### 12. Codomyrmex skill profile not applied (wrong skills or none)
 
 **Symptoms**: `HermesClient` / MCP runs without expected `hermes chat -s` skills, or profile seems ignored.
 

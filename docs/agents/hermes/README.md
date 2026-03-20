@@ -1,6 +1,6 @@
 # Hermes Agent Documentation
 
-**Version**: v0.3.0 | **Status**: Active | **Last Updated**: March 2026 (73-commit update)
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: March 2026 (73-commit update + v0.4.0)
 
 > **Official Docs**: [hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs/)
 > **GitHub**: [github.com/NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
@@ -54,7 +54,7 @@ This documentation suite captures architecture, operational patterns, troublesho
 
 | Document                                 | Description                                    |
 | :--------------------------------------- | :--------------------------------------------- |
-| [troubleshooting.md](troubleshooting.md) | 9 common issue patterns with diagnosis & fixes |
+| [troubleshooting.md](troubleshooting.md) | 12 common issue patterns with diagnosis & fixes |
 | [security.md](security.md)               | API key hygiene, access control, hardening     |
 
 ### Assets

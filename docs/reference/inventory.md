@@ -9,7 +9,7 @@ Single source of truth for counts used in documentation and marketing copy. **Re
 | Term | Meaning |
 |------|---------|
 | **Top-level modules** | Directories under `src/codomyrmex/` that contain `__init__.py`, excluding `tests/`. Each is one Codomyrmex package surface. |
-| **`@mcp_tool` count** | Physical lines starting with `@mcp_tool` in `.py` files under `src/codomyrmex/`, excluding paths containing `tests/`. **589** on a full tree walk. Default `rg` (respecting `.gitignore`) reports **583** because `config_audits/` and `config_monitoring/` are ignored but may exist on disk. |
+| **`@mcp_tool` count** | Physical lines starting with `@mcp_tool` in `.py` files under `src/codomyrmex/`, excluding paths containing `tests/`. **595** on a full tree walk. |
 | **`mcp_tools.py` files** | Files named `mcp_tools.py` under `src/codomyrmex/`, excluding `*/tests/*`. |
 | **Collected tests** | Items reported by `uv run pytest --collect-only -q` when collection completes without errors. |
 
@@ -21,7 +21,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 |--------|---------------------------|
 | Top-level modules | 128 |
 | `mcp_tools.py` files (non-test) | 149 |
-| Production `@mcp_tool` decorators | 589 (583 if using `rg` without `--no-ignore`; see definitions) |
+| Production `@mcp_tool` decorators | 595 (see definitions) |
 | Pytest tests collected | 34,492 (`uv run pytest --collect-only -q --no-cov`) |
 
 ## Reproduce

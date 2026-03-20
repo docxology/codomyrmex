@@ -5,8 +5,8 @@
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml/badge.svg" alt="Auto-Merge"></a>
   <br>
   <img src="https://img.shields.io/badge/Codomyrmex-v1.2.3-blue?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/Modules-129-green?style=for-the-badge" alt="Modules">
-  <img src="https://img.shields.io/badge/MCP_Tools-474-orange?style=for-the-badge" alt="MCP Tools">
+  <img src="https://img.shields.io/badge/Modules-128-green?style=for-the-badge" alt="Modules">
+  <img src="https://img.shields.io/badge/MCP_Tools-604-orange?style=for-the-badge" alt="MCP Tools">
   <img src="https://img.shields.io/badge/Workflows-36-purple?style=for-the-badge" alt="Workflows">
   <img src="https://img.shields.io/badge/Zero--Mock-100%25-brightgreen?style=for-the-badge" alt="Zero Mock">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
@@ -19,14 +19,14 @@
   <img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/code%20style-ruff-D7FF64?style=flat-square&logo=ruff&logoColor=black" alt="Ruff">
   <img src="https://img.shields.io/badge/types-ty-blue?style=flat-square" alt="ty">
-  <img src="https://img.shields.io/badge/tests-21%2C000%2B-brightgreen?style=flat-square" alt="Tests">
+  <img src="https://img.shields.io/badge/tests-34%2C492-brightgreen?style=flat-square" alt="Tests">
 </p>
 
 # 🐜 Codomyrmex
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **129 deeply integrated modules** spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **474 MCP tools** for Claude, Gemini, GPT, and any Model Context Protocol client. It includes **3,000+ Python files**, **21,000+ tests**, **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
+Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **604** `@mcp_tool` decorators (596 dynamic + 8 static) in production sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](../docs/reference/inventory.md)). It includes **3,000+ Python files**, **34,492** collected tests (`pytest --collect-only --no-cov`), **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
 
 ```bash
 # Install
@@ -64,9 +64,9 @@ uv run codomyrmex doctor --all
 
 | | |
 |---|---|
-| 🧩 **129 Self-Contained Modules** | Every module is composable, independently versioned, and zero-mock tested |
-| 🤖 **474 MCP Tools** | Claude, Gemini, GPT, and any MCP client can invoke all capabilities natively |
-| 🧪 **21,000+ Real Tests** | Zero-mock policy — `unittest.mock` is banned; every test exercises real code paths |
+| 🧩 **128 Top-Level Modules** | Packages under `src/codomyrmex/` — composable, independently versioned, zero-mock tested |
+| 🤖 **604 MCP Tool Decorators** | 596 dynamic + 8 static; see [inventory](../docs/reference/inventory.md) |
+| 🧪 **34,492 Collected Tests** | `uv run pytest --collect-only -q --no-cov`; zero-mock policy |
 | 🔒 **Security First** | GitGuardian, SBOM, GGSHIELD pre-commit, detect-secrets integration |
 | 🎛️ **13+ Agent Providers** | Claude, Gemini, GPT-4o, DeepSeek, Mistral, Jules, Codex, Pi, and more |
 | 🔬 **ML Research Ready** | LoRA, RLHF, DPO, distillation, quantization, NAS, Mamba SSM, autograd |
@@ -97,7 +97,7 @@ uv run codomyrmex doctor --all
 | [**docs/getting-started/**](docs/getting-started/) | 9 | Quick start, installation, setup, tutorials |
 | [**docs/development/**](docs/development/) | 10 | Dev environment, testing strategy, contribution guides |
 | [**docs/reference/**](docs/reference/) | 16 | API reference, CLI reference, troubleshooting |
-| [**docs/modules/**](docs/modules/) | 126 dirs | Per-module documentation (README, SPEC, AGENTS, PAI per module) |
+| [**docs/modules/**](docs/modules/) | 128 pkgs | Per-module documentation (README, SPEC, AGENTS, PAI per module) |
 | [**docs/agents/**](docs/agents/) | 4 | Agent rules, coordination, autonomous operation |
 | [**docs/integration/**](docs/integration/) | 11 | External service integration (Google, GitHub, etc.) |
 | [**docs/deployment/**](docs/deployment/) | 5 | Production deployment guides and checklists |
@@ -209,7 +209,7 @@ graph TB
 ## 🗂️ Complete Module Inventory
 
 > Every module links directly to its **source**, **docs**, **config**, and **scripts** directories.
-> 129 modules total across 10 capability layers — from foundation utilities to ML training primitives.
+> 128 top-level modules across 10 capability layers — from foundation utilities to ML training primitives.
 
 ### 🧠 Core Intelligence Modules
 
@@ -483,7 +483,7 @@ sequenceDiagram
     User->>CLI: codomyrmex run --task "analyze codebase"
     CLI->>Orchestrator: Create workflow
     Orchestrator->>MCP: Register available tools
-    MCP->>Tools: Discover ~474 tools across 129 modules
+    MCP->>Tools: Discover ~604 tools (128 top-level modules)
     Orchestrator->>Agents: Dispatch agent
     Agents->>LLM: Generate completion (Gemini 2.5 Pro)
     LLM-->>Agents: Response + tool calls
@@ -513,7 +513,7 @@ codomyrmex/
 │   ├── index.md              # MkDocs site index
 │   ├── getting-started/      # 9 quick-start docs
 │   ├── development/          # 10 dev guides
-│   ├── modules/              # 126 per-module doc directories
+│   ├── modules/              # Per-module doc directories (see inventory for counts)
 │   ├── security/             # 11 security guides
 │   ├── agi/                  # 14 AGI theory docs
 │   └── ... (18 directories)
@@ -538,16 +538,16 @@ codomyrmex/
 
 | Metric | Value |
 |:---|:---:|
-| **Total Modules** | 129 |
+| **Total Modules** | 128 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
-| **Total Test Files** | 21,000+ |
+| **Collected tests** | 34,492 (`pytest --collect-only --no-cov`) |
 | **Documentation Files** | 1,029+ |
 | **GitHub Workflows** | 36 |
-| **MCP Tools** | 474 |
-| **`@mcp_tool` Decorators** | 474 |
+| **MCP Tools** | 604 (`@mcp_tool` lines, production tree) |
+| **`mcp_tools.py` files** | 149 (non-test) |
 | **PAI Skills** | 81 installed |
-| **RASP Doc Compliance** | 129/129 |
-| **Ruff Violations** | 0 |
+| **RASP Doc Compliance** | 128/128 |
+| **Ruff / ty** | Run locally; targets in `pyproject.toml` |
 | **Testing Policy** | Zero-Mock (100% real methods) |
 | **Coverage Gate** | ≥35% (target: 45%) |
 | **Default LLM** | Gemini 2.5 Pro |
@@ -736,7 +736,7 @@ uv run codomyrmex doctor --all
 
 # 5. Explore
 uv run codomyrmex --help
-uv run codomyrmex modules        # List all 129 modules
+uv run codomyrmex modules        # List all top-level modules
 uv run codomyrmex status         # Live system status
 
 # 6. Run tests
@@ -824,7 +824,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>129 modules · 474 MCP tools · 21,000+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>128 modules · 604 MCP tools · 34,562 tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

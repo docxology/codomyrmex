@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🐜 Codomyrmex</h1>
   <p align="center">
-    <strong>A modular, AI-native coding workspace with 129 composable modules and 474 MCP tools</strong>
+    <strong>A modular, AI-native coding workspace with 128 top-level modules and 595 MCP tool decorators</strong>
   </p>
 </p>
 
@@ -12,7 +12,7 @@
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
   <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/tests-21%2C000%2B-brightgreen?style=flat-square" alt="Tests"></a>
-  <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/MCP_tools-474-orange?style=flat-square" alt="MCP Tools"></a>
+  <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/MCP_tools-604-orange?style=flat-square" alt="MCP Tools"></a>
 </p>
 
 <p align="center">
@@ -27,15 +27,15 @@
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together **129 specialized modules** for AI-assisted development, code analysis, orchestration, security, and documentation. Every module is self-contained, zero-mock tested, and composable — use what you need.
+Codomyrmex is a **modular development platform** that brings together **128 top-level modules** under `src/codomyrmex/` for AI-assisted development, code analysis, orchestration, security, and documentation. Every module is self-contained, zero-mock tested, and composable — use what you need. Authoritative counts: [docs/reference/inventory.md](docs/reference/inventory.md).
 
 ### Why Codomyrmex?
 
 | | |
 |---|---|
-| 🧩 **129 Modules** | Self-contained, composable units with clear interfaces |
-| 🤖 **474 MCP Tools** | AI agents invoke tools via Model Context Protocol |
-| 🧪 **21,000+ Tests** | Zero-mock policy — every test exercises real code |
+| 🧩 **128 Modules** | Top-level packages under `src/codomyrmex/` |
+| 🤖 **595 MCP Tools** | `@mcp_tool` decorators in production sources ([inventory](docs/reference/inventory.md)) |
+| 🧪 **34,492 Tests** | Collected via `uv run pytest --collect-only -q --no-cov` (see inventory) |
 | 🔒 **Security First** | Secret scanning, SBOM generation, detect-secrets integration |
 | 🎛️ **Multi-Agent Orchestration** | Claude, Gemini, GPT, and 10+ agent providers |
 | 📦 **PyPI Ready** | `uv build` + `twine check` verified |
@@ -100,7 +100,7 @@ Codomyrmex is the **toolbox** for the [Personal AI Infrastructure](https://githu
 | **Verify** | `static_analysis`, `security`, `validation` | Test and validate |
 | **Learn** | `agentic_memory`, `telemetry` | Store insights |
 
-**MCP Bridge**: Dynamic tools across 129 auto-discovered modules
+**MCP Bridge**: Dynamic tools across auto-discovered `mcp_tools.py` entry points ([inventory](docs/reference/inventory.md))
 **Trust model**: `UNTRUSTED` → `VERIFIED` → `TRUSTED`  
 **Deep dive**: [`PAI.md`](PAI.md) · [`docs/pai/`](docs/pai/)
 
@@ -148,14 +148,14 @@ uv run mutmut run                                # 6-file mutation suite
 
 | Metric | Value |
 |--------|-------|
-| Modules | **129** |
-| MCP tools | **474** dynamically discovered |
-| Test suite | **21,000+** tests |
-| Coverage | ~35% (gate: 40%, target: 45%) |
-| `@mcp_tool` decorators | **474** |
-| Ruff violations | **0** |
+| Modules | **128** (top-level under `src/codomyrmex/`) |
+| MCP tools | **595** `@mcp_tool` lines (production tree) |
+| Test suite | **34,492** collected (`pytest --collect-only --no-cov`) |
+| Coverage | Run `uv run pytest --cov=src/codomyrmex` (gate in `pyproject.toml`) |
+| `mcp_tools.py` files | **149** (non-test) |
+| Ruff / ty | Run `uv run ruff check src/` and `uv run ty check src/` |
 | PAI skills | **81** installed |
-| RASP docs compliance | **129/129** |
+| RASP docs compliance | **128/128** |
 | Python compatibility | 3.11 – 3.14 |
 
 ## Contributing

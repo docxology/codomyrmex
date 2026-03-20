@@ -163,7 +163,7 @@ Advanced capabilities for specific domains:
 
 ## Explore Modules
 
-Codomyrmex includes **130 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **128 top-level modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 

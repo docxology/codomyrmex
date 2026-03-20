@@ -1,6 +1,6 @@
 # Codomyrmex Architecture Overview
 
-Codomyrmex is a modular, AI-first coding workspace enabling robust multi-agent development workflows across 129+ specialized functional modules.
+Codomyrmex is a modular, AI-first coding workspace enabling robust multi-agent development workflows across **128** top-level functional modules under `src/codomyrmex/` ([docs/reference/inventory.md](docs/reference/inventory.md)).
 
 This top-level document serves as a high-level orientation for the system's structural design. For the exhaustive deep-dive, see the [Comprehensive Architecture Document](docs/project/architecture.md).
 
@@ -23,7 +23,7 @@ The codebase is stratified into four distinct operational layers:
 
 ## Directory Structure Strategy
 
-- `src/codomyrmex/`: The primary source space housing all 129+ core modules.
+- `src/codomyrmex/`: The primary source space housing all **128** top-level core modules.
 - `docs/`: Comprehensive project documentation, mirroring the source structure (e.g., `docs/agents/`).
 - `scripts/`: Automation utilities and maintenance scripts.
 - `tests/`: Unified and modular integration/unit tests validating the Zero-Mock policy.

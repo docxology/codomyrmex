@@ -69,7 +69,7 @@ uv run python scripts/pai/dashboard.py
 
 At this level you can **ask questions** but not **change answers**:
 
-- Browse all 129 modules, read their READMEs and SPECs
+- Browse all **128** top-level modules, read their READMEs and SPECs
 - Search across the codebase for patterns, imports, dependencies
 - Analyze any Python file for classes, functions, metrics
 - Query PAI state — missions, projects, tasks, TELOS identity
@@ -143,7 +143,7 @@ At this level you can **modify the orchestration** — Codomyrmex itself:
 ```text
 Codomyrmex (this repo)                    Derived Repo (e.g., QuadCraft)
 ┌─────────────────────────┐              ┌──────────────────────┐
-│ 129 modules             │              │ Focused codebase     │
+│ 128 modules             │              │ Focused codebase     │
 │ Testing infrastructure  │──creates──→  │ Single responsibility│
 │ MCP tool discovery      │              │ Own CI/CD            │
 │ PAI Dashboard           │──manages──→  │ Linked via GitHub    │

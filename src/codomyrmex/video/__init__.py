@@ -5,11 +5,14 @@ This module provides video processing capabilities including:
 - Frame extraction and thumbnail generation
 - Audio extraction from video
 - Video analysis and metadata extraction
+- **URL video transcription** via ``nativ3ai/universal-video-transcriber``
+  (yt-dlp → ffmpeg → faster-whisper → JSON)
 
 Submodules:
     - processing: Video manipulation operations
     - extraction: Frame and audio extraction
     - analysis: Video metadata and comparison
+    - transcription: URL video transcription (universal-video-transcriber)
 
 Installation:
     Install video dependencies with:
@@ -121,6 +124,21 @@ try:
 except ImportError:
     VIDEO_GENERATION_AVAILABLE = False
 
+# Import transcription (universal-video-transcriber wrapper)
+try:
+    from .transcription import (
+        TranscriptionResult,
+        TranscriptionSegment,
+        TranscriptionWord,
+        VideoTranscriber,
+        VideoTranscriberError,
+        transcribe_url,
+    )
+
+    TRANSCRIPTION_AVAILABLE = True
+except ImportError:
+    TRANSCRIPTION_AVAILABLE = False
+
 
 def cli_commands():
     """Return CLI commands for the video module."""
@@ -157,6 +175,7 @@ __all__ = [
     # Availability flags
     "PIL_AVAILABLE",
     "PROCESSING_AVAILABLE",
+    "TRANSCRIPTION_AVAILABLE",
     "AudioCodec",
     "AudioExtractionError",
     "ExtractionResult",
@@ -184,6 +203,12 @@ __all__ = [
     "get_config",
     "reset_config",
     "set_config",
+    # Transcription
+    "TranscriptionResult",
+    "TranscriptionSegment",
+    "TranscriptionWord",
+    "VideoTranscriberError",
+    "transcribe_url",
 ]
 
 if PROCESSING_AVAILABLE:

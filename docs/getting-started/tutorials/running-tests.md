@@ -103,7 +103,7 @@ The policy is enforced via `ruff` — any import of mock libraries will fail lin
 | Metric | Value |
 |--------|-------|
 | Test files | 886 |
-| Tests collected | 21,000+ |
+| Tests collected | 34,492 (`uv run pytest --collect-only -q --no-cov`) |
 | Coverage gate | `fail_under=31` |
 | Actual coverage | ~32% |
 

@@ -31,6 +31,13 @@ Diagrams use fenced code blocks with the `mermaid` language tag. Conventions:
 4. **Edges only between real nodes** — Do not point an edge at a subgraph name unless your renderer supports it; connect to an explicit node inside the subgraph instead.
 5. **Maintenance scripts** (repo root): `uv run python scripts/strip_mermaid_style_lines.py` removes legacy `style` lines; `uv run python scripts/normalize_mermaid_subgraphs.py` converts `subgraph "Title"` to `subgraph sg_… [Title]`.
 
+## Documentation metrics (inventory)
+
+Counts for modules, MCP tools, and tests drift quickly. **Do not hand-edit** broad statistics across the tree — refresh from one place:
+
+- [docs/reference/inventory.md](../reference/inventory.md) — definitions, dated table, reproduce commands
+- `uv run python scripts/doc_inventory.py` — print current counts (`--pytest` includes collected test total, ~30s)
+
 Hermes-specific examples and agent-doc rules: [docs/agents/hermes/AGENTS.md](../agents/hermes/AGENTS.md) (Diagram conventions).
 
 ## 🏗️ Documentation Structure

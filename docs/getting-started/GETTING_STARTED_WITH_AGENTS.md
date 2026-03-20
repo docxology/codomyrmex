@@ -2,7 +2,7 @@
 
 **Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
-A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **130 Python modules**, **~474 MCP tools**, **81 PAI skills**, and **15 Antigravity workflows**.
+A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **128** top-level Python modules, **~604** `@mcp_tool` decorators (595 dynamic + 9 static), **81 PAI skills**, and **15 Antigravity workflows**. Live counts: [reference/inventory.md](../reference/inventory.md).
 
 ---
 
@@ -55,7 +55,7 @@ graph TB
         EVENTS["EventBus<br/>phase transitions"]
     end
 
-    subgraph MODULES["🐜 Codomyrmex (129 modules)"]
+    subgraph MODULES["🐜 Codomyrmex (128 modules)"]
         direction LR
         SKILLS_MOD["Skills<br/>81 installed"]
         MEMORY_MOD["Agentic Memory<br/>rules + obsidian"]
@@ -330,7 +330,7 @@ flowchart LR
 | **PAI Bridge** | `pai_bridge.py` | Discovery, validation — reads PAI's filesystem (read-only) |
 | **Trust Gateway** | `trust_gateway.py` | 3-tier security gating for tool execution |
 | **MCP Bridge** | `mcp_bridge.py` | JSON-RPC protocol for tool invocation |
-| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers 129 modules with `mcp_tools.py` |
+| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers **149** `mcp_tools.py` files (non-test) |
 | **PAI Webhook** | `pai_webhook.py` | FastAPI router for bidirectional PAI ↔ Codomyrmex |
 | **PAI Client** | `pai_client.py` | HTTP client to push events to PAI |
 
@@ -399,17 +399,12 @@ sequenceDiagram
 
 ## 5. MCP Tool Integration
 
-Every module exposes functionality through `mcp_tools.py` files. **129 modules** provide **~474 dynamically-discovered tools** plus 20 static tools.
+Every module exposes functionality through `mcp_tools.py` files. **149** `mcp_tools.py` entry points provide **~595** dynamically-discovered `@mcp_tool` registrations plus **9** static proxy tools on the PAI bridge.
 
 ```mermaid
-pie title MCP Tool Distribution (~447 Total)
-    "Auto-Discovered (dynamic)" : 407
-    "Core Static Tools" : 17
-    "Universal Proxy Tools" : 3
-    "Maintenance Tools" : 2
-    "Email (AgentMail)" : 8
-    "Calendar (Google)" : 5
-    "Email (Gmail)" : 4
+pie title MCP Tool Distribution (~604 Total)
+    "Auto-Discovered (dynamic)" : 595
+    "Static Proxy Tools" : 9
 ```
 
 ### Using MCP Tools

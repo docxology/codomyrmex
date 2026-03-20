@@ -1,6 +1,6 @@
 # Hermes Setup Guide — Complete New Instance
 
-**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
+**Version**: v0.4.0 | **Last Updated**: March 2026 (73-commit update + v0.4.0)
 
 > **Official Docs**: [hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs/)
 > **GitHub**: [github.com/NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
@@ -153,8 +153,9 @@ OPENROUTER_API_KEY=sk-or-v1-your-key-here
 
 # Telegram (from @BotFather)
 TELEGRAM_BOT_TOKEN=1234567890:AAxxxxxxxxxxxxxxxxx
-# Note: authorization is managed via pairing/telegram-approved.json, not TELEGRAM_ALLOWED_USERS.
-# Run `hermes pairing create` or add numeric user IDs directly to the approved list.
+# Authorization: prefer the pairing system (hermes pairing create / telegram-approved.json).
+# TELEGRAM_ALLOWED_USERS is legacy and supported for backwards compatibility only.
+# TELEGRAM_ALLOWED_USERS=YourUsername  # legacy
 TELEGRAM_HOME_CHANNEL=YourUsername
 
 # Optional tool enhancements

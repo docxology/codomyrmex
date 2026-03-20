@@ -117,7 +117,7 @@ Repo-wide structural coherence audit and reconciliation.
 ### Fixed
 
 - **Version sync**: Reconciled version mismatch — `pyproject.toml` (1.2.2), `__init__.py` (1.1.9), `README.md` (1.1.9), `SPEC.md` (1.1.9) → all aligned to **1.2.3**
-- **Module registration**: 39 modules existed on disk but were missing from `__init__.py` `_submodules` and `__all__` — now all 129 registered and lazy-importable
+- **Module registration**: 39 modules existed on disk but were missing from `__init__.py` `_submodules` and `__all__` — now all 128 registered and lazy-importable
 - **Coverage config**: Reconciled contradictory `fail_under` values (75/40/33%) → unified to **40%**
 - **Python classifier**: Removed misleading `Python :: 3.10` classifier (project requires `>=3.11`)
 - **Spurious files**: Removed git-tracked junk files at repo root created by buggy type-annotation script
@@ -127,7 +127,7 @@ Repo-wide structural coherence audit and reconciliation.
 
 | Metric | Before v1.2.3 | v1.2.3 |
 |--------|--------|--------|
-| **Registered modules** | 90 | **129** (39 added) |
+| **Registered modules** | 90 | **128** (38 added) |
 | **Version files synced** | 1 | **7** |
 | **Coverage gate** | inconsistent | **40%** (unified) |
 
@@ -403,7 +403,7 @@ First feature release targeting external consumption. All 9 planned items implem
 
 ### Metrics
 
-- Modules: **127**
+- Modules: **128**
 - MCP tools: **424** dynamically discovered
 - Integration tests marked: **35/35**
 - Ruff violations: **0**
@@ -418,7 +418,7 @@ First feature release targeting external consumption. All 9 planned items implem
 
 - **Jules AI swarm**: 25 PRs merged from 113+ concurrent Jules sessions covering MCP expansion, Ruff auto-fixing, and test coverage improvements
 - **New modules**: `dark/`, `git_analysis/`, `meme/`, `operating_system/`, `quantum/`, `evolutionary_ai/` — 124 total modules (was 88)
-- **MCP tool expansion**: ~474 registered tools across 141 auto-discovered modules (was 171/33)
+- **MCP tool expansion**: ~589 registered tools across 149 auto-discovered modules (was 171/33)
 - **Git submodules**: `dark-pdf` vendor, `gitnexus` vendor
 
 ### Changed
@@ -441,9 +441,9 @@ First feature release targeting external consumption. All 9 planned items implem
 
 ### Metrics
 
-- Modules: 88 → **124** (+36)
-- MCP tools: 171 → **~407** (+236)
-- Auto-discovered modules: 33 → **121** (+88)
+- Modules: 88 → **128** (+40)
+- MCP tools: 171 → **~589** (+418)
+- Auto-discovered modules: 33 → **149** (+116)
 - Version-synced files: **16** files updated to v1.0.8
 
 ---

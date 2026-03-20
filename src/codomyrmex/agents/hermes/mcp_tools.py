@@ -2056,3 +2056,224 @@ def hermes_archive_sessions(
 
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
+
+# ── v0.4.0: Gateway management, model info, pairing, skill install ────
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Query the status of all running Hermes gateway instances. "
+        "Returns each instance name, running state, and active model (v0.4.0+)."
+    ),
+)
+def hermes_gateway_status() -> dict[str, Any]:
+    """Get live status for all Hermes gateway instances.
+
+    Returns:
+        dict with keys: status, instances (list), output
+    """
+    try:
+        client = _get_client()
+        result = client.get_gateway_status()
+        return {
+            "status": "success" if result.get("success") else "error",
+            "instances": result.get("instances", []),
+            "output": result.get("output", ""),
+            "error": result.get("error", ""),
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc), "instances": []}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Look up context length, tool-use support, and provider metadata for a "
+        "given model ID. Queries the Hermes model catalog first, then falls "
+        "back to the CLI (v0.4.0 model metadata expansion)."
+    ),
+)
+def hermes_model_info(model_id: str) -> dict[str, Any]:
+    """Retrieve metadata for a specific model ID.
+
+    Args:
+        model_id: OpenRouter model ID, e.g. ``"nvidia/nemotron-3-super-120b-a12b:free"``.
+
+    Returns:
+        dict with keys: status, model_id, context_length, supports_tools, provider, source
+    """
+    try:
+        client = _get_client()
+        info = client.get_model_info(model_id)
+        return {"status": "success" if "error" not in info else "error", **info}
+    except Exception as exc:
+        return {"status": "error", "model_id": model_id, "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Send an /approve or /deny command to the Hermes gateway to confirm or "
+        "cancel a pending dangerous-command approval request (v0.4.0+). "
+        "Use /approve session to approve a command pattern for the entire session."
+    ),
+)
+def hermes_approve_command(
+    command: str = "/approve",
+    session_id: str | None = None,
+) -> dict[str, Any]:
+    """Approve or deny a pending gateway command approval.
+
+    Args:
+        command: ``"/approve"``, ``"/approve session"``, or ``"/deny"``.
+        session_id: Target session ID (optional).
+
+    Returns:
+        dict with keys: status, output, error
+    """
+    valid_commands = {"/approve", "/approve session", "/deny"}
+    if command not in valid_commands:
+        return {
+            "status": "error",
+            "message": f"Invalid command '{command}'. Use one of: {valid_commands}",
+        }
+    try:
+        client = _get_client()
+        result = client.send_gateway_command(command, session_id=session_id)
+        return {
+            "status": "success" if result.get("success") else "error",
+            "output": result.get("output", ""),
+            "error": result.get("error", ""),
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "List all paired (approved) users and groups for the Hermes gateway. "
+        "Reads $HERMES_HOME/pairing/telegram-approved.json."
+    ),
+)
+def hermes_pairing_list() -> dict[str, Any]:
+    """List all approved gateway users and groups.
+
+    Returns:
+        dict with keys: status, approved (dict), count
+    """
+    try:
+        import json
+        import os
+        from pathlib import Path
+
+        hermes_home = Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes"))
+        approved_path = hermes_home / "pairing" / "telegram-approved.json"
+        if not approved_path.exists():
+            return {
+                "status": "success",
+                "approved": {},
+                "count": 0,
+                "message": f"No pairing file found at {approved_path}",
+            }
+        approved = json.loads(approved_path.read_text())
+        total = sum(len(v) if isinstance(v, list) else 1 for v in approved.values())
+        return {
+            "status": "success",
+            "approved": approved,
+            "count": total,
+            "path": str(approved_path),
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc), "approved": {}}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Add a user or group ID to the Hermes gateway pairing approved list "
+        "($HERMES_HOME/pairing/telegram-approved.json). "
+        "Use platform='telegram' and a numeric Telegram user/chat ID."
+    ),
+)
+def hermes_pairing_add(
+    user_id: str,
+    platform: str = "telegram",
+) -> dict[str, Any]:
+    """Add a user or group to the gateway pairing list.
+
+    Args:
+        user_id: Numeric user or chat ID to approve.
+        platform: Platform name (default ``"telegram"``).
+
+    Returns:
+        dict with keys: status, message, approved_count
+    """
+    try:
+        import json
+        import os
+        from pathlib import Path
+
+        hermes_home = Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes"))
+        pairing_dir = hermes_home / "pairing"
+        pairing_dir.mkdir(parents=True, exist_ok=True)
+        approved_path = pairing_dir / "telegram-approved.json"
+
+        approved: dict[str, list[str]] = {}
+        if approved_path.exists():
+            approved = json.loads(approved_path.read_text())
+
+        if platform not in approved:
+            approved[platform] = []
+
+        if user_id in approved[platform]:
+            return {
+                "status": "success",
+                "message": f"{user_id} already in {platform} approved list",
+                "approved_count": len(approved[platform]),
+            }
+
+        approved[platform].append(user_id)
+        approved_path.write_text(json.dumps(approved, indent=2))
+
+        return {
+            "status": "success",
+            "message": f"Added {user_id} to {platform} approved list",
+            "approved_count": len(approved[platform]),
+            "path": str(approved_path),
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Install a Hermes skill from a git repository URL. "
+        "Runs hermes skills install <repo_url>. "
+        "Restart the gateway after installation for the skill to be available."
+    ),
+)
+def hermes_skill_install(repo_url: str) -> dict[str, Any]:
+    """Install a Hermes skill from a git URL.
+
+    Args:
+        repo_url: Git URL of the skill repository, e.g.
+            ``"https://github.com/nativ3ai/hermes-geopolitical-market-sim.git"``.
+
+    Returns:
+        dict with keys: status, output, error
+    """
+    try:
+        client = _get_client()
+        result = client.install_skill(repo_url)
+        return {
+            "status": "success" if result.get("success") else "error",
+            "output": result.get("output", ""),
+            "error": result.get("error", ""),
+            "tip": "Run hermes gateway restart to activate the new skill.",
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

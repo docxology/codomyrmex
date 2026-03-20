@@ -6,19 +6,19 @@
 
 Anderson's (1972) foundational essay "More Is Different" argues that complex systems exhibit properties at scale that cannot be predicted from their individual components — a claim that the reductive program of physics fails at each level of organizational complexity. In AGI research, Wei et al. (2022) documented "emergent abilities" of large language models — capabilities that appear as sharp phase transitions above certain scale thresholds, absent below them. Kauffman (1993) showed that random Boolean networks produce self-organized criticality at sufficient connectivity — order at the edge of chaos.
 
-But emergence is not magic. It has formal structure. This essay traces four emergent capabilities in the codomyrmex 129-module ecosystem, analyzing each through the lens of statistical mechanics, percolation theory, and information-theoretic complexity.
+But emergence is not magic. It has formal structure. This essay traces four emergent capabilities in the codomyrmex 128-module ecosystem, analyzing each through the lens of statistical mechanics, percolation theory, and information-theoretic complexity.
 
 ## The Percolation Model
 
-Codomyrmex's dependency graph is a directed network with 129 nodes and 440+ edges. We can model emergent cross-module capabilities using **bond percolation** on this graph (Stauffer & Aharony, 1994).
+Codomyrmex's dependency graph is a directed network with 128 nodes and 440+ edges. We can model emergent cross-module capabilities using **bond percolation** on this graph (Stauffer & Aharony, 1994).
 
 Define the occupation probability *p* as the fraction of modules that are functional (i.e., pass health checks). Below a critical threshold *p_c*, the graph fragments into disconnected components — cross-module workflows are impossible. Above *p_c*, a **giant connected component** emerges spanning the system.
 
 For random graphs with mean degree ⟨k⟩, the Molloy-Reed criterion gives:
 
-$$p_c = \frac{1}{\langle k \rangle} = \frac{1}{440/129} \approx 0.293$$
+$$p_c = \frac{1}{\langle k \rangle} = \frac{1}{440/128} \approx 0.291$$
 
-This means that when ≥29% of modules are functional, a giant component exists. In practice, `system_discovery` reports ~96% module health (124/129 pass import checks), placing the system deep into the supercritical regime — well above the percolation threshold.
+This means that when ≥29% of modules are functional, a giant component exists. In practice, `system_discovery` reports ~96% module health (124/128 pass import checks), placing the system deep into the supercritical regime — well above the percolation threshold.
 
 ```mermaid
 graph TB
@@ -92,7 +92,7 @@ Wei et al.'s (2022) emergent abilities framework predicts that capabilities appe
 | ~60 modules | Basic tool composition | Connected component size | Graph connectivity |
 | ~80 modules | Self-description | Fraction of self-modeling coverage | `system_discovery` completeness |
 | ~100 modules | Cross-domain transfer | Transfer entropy between domains | Embedding space overlap |
-| 130 modules | Self-healing loop | Mean time to recovery | All feedback path modules present |
+| 128 modules | Self-healing loop | Mean time to recovery | All feedback path modules present |
 
 These thresholds are *percolation thresholds* for specific subgraph structures. The self-healing loop requires a cycle in the dependency graph connecting `telemetry → defense → ci_cd_automation → deployment → telemetry`; this cycle cannot form below ~100 modules because the intermediate modules don't exist.
 
@@ -112,14 +112,14 @@ This fractal self-similarity is not coincidental — it reflects the autopoietic
 
 Anderson's deeper point is that at each level of complexity, **qualitatively new phenomena emerge** that cannot be predicted from the laws governing the level below. The relationship between levels is not ontological reduction but *broken symmetry*.
 
-Applied to codomyrmex's growth from 90 modules (at v1.0.7 inception) to 129 modules (v1.2.3):
+Applied to codomyrmex's growth from 90 modules (at v1.0.7 inception) to **128** top-level modules (2026 inventory):
 
 | Module Count | Phase | Emergent Capability | Symmetry Broken |
 |:-------------|:------|:-------------------|:---------------|
 | 1–10 | **Gas** (independent modules) | Individual tool invocations | No coordination |
 | 10–50 | **Liquid** (loose coupling) | Pipeline workflows | Temporal ordering emerges |
 | 50–100 | **Crystal** (structured coupling) | Multi-step reasoning chains | Functional specialization |
-| 100+ | **Biological** (adaptive coupling) | Autonomous task completion | Self-monitoring emerges |
+| 100–128 | **Biological** (adaptive coupling) | Autonomous task completion | Self-monitoring emerges |
 | ~500+ (predicted) | **Cognitive** (emergent planning) | Dynamic DAG synthesis | Goal decomposition |
 
 Each phase transition breaks a symmetry: in the gas phase, all modules are equivalent (symmetric). In the crystal phase, modules occupy specialized roles (symmetry broken). The prediction: at ~500+ modules with sufficient inter-module connectivity, the system may cross a threshold where *dynamic planning* emerges — DAGs are synthesized at runtime rather than specified statically.
@@ -136,9 +136,9 @@ When the interaction term dominates the specialization term — at n_critical = 
 
 Based on current trajectory:
 
-| Metric | Current (n=129) | Predicted Threshold | Predicted Effect |
+| Metric | Current (n=128) | Predicted Threshold | Predicted Effect |
 |:-------|:---------------|:-------------------|:----------------|
-| Tool count | 474 | ~1,000 | Tool selection becomes PSPACE-hard |
+| Tool count | 604 | ~1,000 | Tool selection becomes PSPACE-hard |
 | Memory entries | ~10K | ~100K | Consolidation becomes mandatory |
 | Cross-references | ~1,500 | ~10,000 | Binding problem becomes acute |
 

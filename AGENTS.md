@@ -6,7 +6,7 @@
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows with 129 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows with **128** top-level modules under `src/codomyrmex/`. This document serves as the central navigation hub for agents working with any part of the system. Repo metrics: [docs/reference/inventory.md](docs/reference/inventory.md).
 
 ## Repository Structure
 
@@ -425,7 +425,7 @@ Before completing significant changes:
 - **v1.1.7** (March 2026) — Repository-wide documentation audit and consistency sweep
 - **v1.1.6** (March 2026) — Hermes dual-backend, Gemini package migration
 - **v1.1.5** (March 2026) — Type safety diagnostics, coverage gate ratcheted to 35%
-- **v1.1.4** (March 2026) — Ruff zero, 129 modules, 474 `@mcp_tool` decorators, RASP doc compliance 129/129
+- **v1.1.4** (March 2026) — Ruff zero, 128 modules, 595 `@mcp_tool` decorators, RASP doc compliance 128/128
 - **v1.1.0** (March 2026) — Production readiness, zero-mock hardening
 - **v1.0.7** (March 2026) — MCP expansion: 74 auto-discovered modules, ~367 tools
 - **v0.1.0** (February 2026) — Initial repository structure and agent coordination framework
@@ -438,7 +438,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (89999 symbols, 205796 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (90114 symbols, 205967 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

@@ -10,7 +10,7 @@
 | Item | Type | Description |
 | :--- | :--- | :--- |
 | [**init**.py](__init__.py) | File | Namespace package marker |
-| [codomyrmex/](codomyrmex/) | Package | Main package — **130 modules** |
+| [codomyrmex/](codomyrmex/) | Package | Main package — **128 top-level modules** |
 
 ## Documentation Files
 

@@ -19,11 +19,11 @@ PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt,
 
 ## How Codomyrmex Serves PAI
 
-Codomyrmex is a **129-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
+Codomyrmex is a **128 top-level module** Python development platform. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              129 modules of dev-platform tools
+     Algorithm + Skills + Hooks              128 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
@@ -49,7 +49,7 @@ graph LR
         CodeAnalysis["Code Analysis"]
         Shell["Shell Execution"]
         Memory["Memory/Knowledge"]
-        Modules["129 Module Tools"]
+        Modules["128 Module Tools"]
     end
 
     Algo --> Agents
@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and Codomyrmex Admin Dashboard (port 8787)
-**Tools**: 9 static proxy tools + ~474 auto-discovered dynamic tools from 129 modules via `pkgutil` scan (~469 safe + 5 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces these tools for MCP exposure.
+**Tools**: 9 static proxy tools + **596** `@mcp_tool` decorators in production sources (149 `mcp_tools.py` files; **128** top-level packages — total ~604 — [docs/reference/inventory.md](docs/reference/inventory.md)). Trust split is dynamic; run `/codomyrmexVerify` for the current safe vs destructive list. The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces these tools for MCP exposure.
 **Web UI**: `http://localhost:8787/` (Codomyrmex Admin Dashboard) · `http://localhost:8888/` (PAI Project Manager)
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)
@@ -76,11 +76,11 @@ that gates destructive operations behind explicit approval:
 ```
 UNTRUSTED ──/codomyrmexVerify──> VERIFIED ──/codomyrmexTrust──> TRUSTED
    │                                │                              │
-   └── All tools start here         └── ~469 safe tools promoted   └── 5 destructive tools enabled
+   └── All tools start here         └── safe tools promoted          └── 5 destructive tools enabled
 ```
 
-**Safe tools (~469)**: Auto-promoted to VERIFIED by `/codomyrmexVerify`. All read, list,
-analyze, search, git status/diff, and discovery tools.
+**Safe tools**: Auto-promoted to VERIFIED by `/codomyrmexVerify`. All read, list,
+analyze, search, git status/diff, and discovery tools. (Cardinality tracks the live tool registry, not a fixed ~469.)
 
 **Destructive tools (5)**: Require explicit `/codomyrmexTrust`:
 
@@ -123,7 +123,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 └── claude_desktop_config.json      # MCP server registrations
 
 codomyrmex/                         # SHARED (this repo, committed)
-├── src/codomyrmex/                 # 129 Python modules
+├── src/codomyrmex/                 # 128 top-level Python modules
 ├── scripts/model_context_protocol/ # MCP server runner
 ├── PAI.md                          # THIS FILE (bridge doc)
 └── docs/                           # Documentation

@@ -21,6 +21,7 @@ Documentation files and guides.
 - `performance.md` – Project file
 - `security.md` – Project file
 - `troubleshooting.md` – Project file
+- `inventory.md` – Repo metrics (modules, MCP tools, tests); refresh via `scripts/doc_inventory.py`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

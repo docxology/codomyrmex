@@ -15,6 +15,7 @@ Comprehensive reference documentation for APIs, CLI tools, configuration, perfor
 | [changelog.md](changelog.md) | Version history and release notes |
 | [cli.md](cli.md) | CLI tools reference for all command-line utilities |
 | [glossary.md](glossary.md) | Terminology glossary for Codomyrmex concepts |
+| [inventory.md](inventory.md) | Authoritative repo metrics (modules, MCP tools, tests) and how to reproduce them |
 | [migration-guide.md](migration-guide.md) | Guide for migrating between major versions |
 | [orchestrator.md](orchestrator.md) | Orchestrator API and workflow engine reference |
 | [performance-benchmarks.md](performance-benchmarks.md) | Benchmark results and methodology |

@@ -1,6 +1,6 @@
 # Hermes Documentation — Agent Coordination
 
-**Module**: `docs/agents/hermes/` | **Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
+**Module**: `docs/agents/hermes/` | **Version**: v0.4.0 | **Last Updated**: March 2026 (73-commit update + v0.4.0)
 
 ## Purpose
 
@@ -52,7 +52,7 @@ Includes **`assets/README.md`** for optional static diagram exports (primary dia
 
 | File                 | Description                           |
 | :------------------- | :------------------------------------ |
-| `troubleshooting.md` | 9 issue patterns with diagnosis/fixes |
+| `troubleshooting.md` | 12 issue patterns with diagnosis/fixes |
 | `security.md`        | API key hygiene, access control       |
 
 ## Scripts (`scripts/agents/hermes/`)

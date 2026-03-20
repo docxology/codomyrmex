@@ -1,0 +1,20 @@
+name: geopolitical_market_sim
+version: "1.0.0"
+description: >
+  Geopolitical + Polymarket intelligence simulation skill powered by the
+  nativ3ai/hermes-geopolitical-market-sim Hermes skill. Tracks geopolitical
+  events, cross-references Polymarket prediction markets, and generates
+  structured market-impact analyses.
+category: research
+author: "Codomyrmex Integration"
+upstream: "https://github.com/nativ3ai/hermes-geopolitical-market-sim"
+hermes_skill_id: geopolitical_market_sim
+tags:
+  - geopolitics
+  - prediction-markets
+  - finance
+  - polymarket
+  - intelligence
+entry_point: geopolitical_market_pipeline.GeopoliticalMarketPipeline
+requires:
+  - hermes>=0.4.0

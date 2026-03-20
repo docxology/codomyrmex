@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.2.7 | **Date**: 2026-03-19 | **Modules**: 129 | **Sprint**: 35
+**Version**: v1.2.7 | **Date**: 2026-03-19 | **Modules**: 128 | **Sprint**: 35
 
 > **Current release**: v1.2.7 "Multi-Agent Swarm Orchestration" (2026-03-19). Sprint 35 work to be versioned as v1.2.8+ upon release.
 

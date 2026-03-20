@@ -1,6 +1,6 @@
 # Hermes Environment & API Keys
 
-**Version**: v0.3.0 | **Last Updated**: March 2026 (73-commit update)
+**Version**: v0.4.0 | **Last Updated**: March 2026 (v0.4.0 update)
 
 ## HERMES_HOME
 
@@ -59,6 +59,10 @@ OPENROUTER_API_KEY=sk-or-v1-...   # OpenRouter (recommended, access to many mode
 TELEGRAM_BOT_TOKEN=1234567890:AAxxxxxxxxxxxxxxxxx
 TELEGRAM_ALLOWED_USERS=username1,username2  # Legacy — prefer pairing/telegram-approved.json (see telegram.md)
 TELEGRAM_HOME_CHANNEL=channel_name          # for cron/proactive messages
+
+# Gateway — multi-platform authorization (v0.4.0)
+GATEWAY_ALLOWED_USERS=123456789,987654321  # cross-platform trusted IDs
+GATEWAY_ALLOW_ALL_USERS=false              # true = open access (private deployments only)
 
 # WhatsApp (via Baileys bridge)
 WHATSAPP_ENABLED=false
