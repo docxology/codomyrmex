@@ -103,6 +103,14 @@ agent:
 
 Higher reasoning effort adds structured thinking tags (`<SCRATCHPAD>`, `<PLAN>`) to the prompt, encouraging the model to think more carefully.
 
+## Automated Metadata & Context Windows (v0.4.0)
+
+Hermes automatically resolves context length capacities dynamically via the OpenRouter `models.dev` API (`agent/models_dev.py`).
+This means you no longer have to manually track if `qwen/qwen-2.5-72b-instruct` has 128K context limits; Hermes maps it instantly.
+
+When Hermes' `ContextCompressor` experiences context pressure (e.g., >80% capacity), it accurately initiates token eviction based on this dynamic capacity map.
+For Codomyrmex swarms depending on prolonged, deep context spanning thousands of lines of code, this automated boundary resolution significantly reduces OOM/token limits from OpenRouter.
+
 ## Multi-Model Architecture
 
 Hermes uses different models for different purposes:

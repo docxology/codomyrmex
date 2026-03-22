@@ -12,7 +12,7 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.codomyrmex.bio_simulation.genomics.genome import Genome
+    from codomyrmex.bio_simulation.genomics.genome import Genome
 
 
 class AntState(Enum):

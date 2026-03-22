@@ -147,6 +147,7 @@ class EveryCodeClient(CLIAgentBase):
 
         Args:
             request: Agent request
+            max_tokens: Optional maximum tokens for the response
 
         Returns:
             Agent response
@@ -177,6 +178,9 @@ class EveryCodeClient(CLIAgentBase):
             TypeError,
         ) as e:
             self._wrap_execute_error(e)
+
+        # Explicit return for type checker - should never be reached
+        return AgentResponse(content="", error="Execution failed", metadata={"error": "unknown"})
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """

@@ -10,7 +10,7 @@ import os
 import platform
 import re
 
-from src.codomyrmex.operating_system.base import (
+from codomyrmex.operating_system.base import (
     DiskInfo,
     NetworkInfo,
     OSPlatform,

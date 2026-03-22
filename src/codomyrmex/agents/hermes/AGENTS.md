@@ -1,10 +1,10 @@
 # Codomyrmex Agents — src/codomyrmex/agents/hermes
 
-**Version**: v2.4.0 | **Status**: Active | **Last Updated**: March 2026 (Sprint 34)
+**Version**: v2.5.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-This document coordinates operations for the Hermes agent module within the Codomyrmex ecosystem. The `hermes` module provides dual-backend scaled execution (CLI + Ollama fallback), provider-agnostic routing, context compression, and stateful, multi-turn conversational persistence — now extended in v2.4.0 with **Knowledge Codification** (KI extraction / search / dedup), **Swarm Orchestration** (capability-based agent spawning, DAG topologies), and **P2P agent messaging** via `IntegrationBus`.
+This document coordinates operations for the Hermes agent module within the Codomyrmex ecosystem. The `hermes` module provides dual-backend scaled execution (CLI + Ollama fallback), provider-agnostic routing, context compression, and stateful, multi-turn conversational persistence. v2.5.0 adds a **Plugin System** (`hermes plugins`), **@ Context References** for inline file/git/URL injection, a **Gateway Agent Cache** for per-session AIAgent reuse, **Mattermost** messaging integration, and optional **meme-generation** and **bioinformatics** skills.
 
 ## Operating Contracts
 
@@ -23,29 +23,36 @@ Universal protocols specific to this module:
 - **Provider Router** (`_provider_router.py`): Unified `call_llm()` abstraction across 6 providers, with automatic credential resolution and fallback.
 - **Context Compressor** (`_provider_router.py`): Progressive conversation compression triggered at configurable token thresholds.
 - **User Model** (`_provider_router.py`): Cross-session user context persistence — preferences, observations, session summaries backed by JSON.
-- **MCP Bridge** (`mcp_tools.py`): **48** `@mcp_tool` entries; skill-interop tools carry `tags` for PAI manifest indexing (`skills`, `cli_preload`, `interop`).
-- **Unified skill registry** (`skill_registry.py`, `data/skills_registry.yaml`): stable `skill_ids` → Hermes `-s` names; project profile `.codomyrmex/hermes_skills_profile.yaml`; optional `CODOMYRMEX_SKILLS_REGISTRY` overlay; MCP `hermes_skills_resolve` / `hermes_skills_validate_registry`.
+- **MCP Bridge** (`mcp_tools.py`): **50** `@mcp_tool` entries; skill-interop tools carry `tags` for PAI manifest indexing (`skills`, `cli_preload`, `interop`).
+- **Plugin Manager** (`hermes_cli/plugins_cmd.py`, v2.5.0): `hermes plugins install/update/remove/list` manages Git-sourced plugins in `~/.hermes/plugins/`. Reads `plugin.yaml` manifest, validates `manifest_version`, copies `.example` files, renders `after-install.md` via Rich. Path traversal protection enforced.
+- **@ Context References** (`agent/context_references.py`, v2.5.0): Parses `@file:`, `@folder:`, `@diff`, `@staged`, `@git:N`, `@url:` tokens from messages and expands them to attached context blocks. Token budget enforced (50% hard, 25% soft). Async-safe (sync wrapper for CLI, thread pool for gateway).
+- **Gateway Agent Cache** (`gateway/run.py`, v2.5.0): `GatewayRunner` caches `AIAgent` per session via config signature (MD5 of model + provider + toolsets + system_prompt). Same-config reuse freezes system prompt. `reasoning_config` and callbacks update in-place. Thread-safe via `_agent_cache_lock`.
+- **Unified skill registry** (`skill_registry.py`, `data/skills_registry.yaml`): stable `skill_ids` → Hermes `-s` names; project profile `.codomyrmex/hermes_skills_profile.yaml`; optional `CODOMYRMEX_SKILLS_REGISTRY` overlay.
 - **Session Engine** (`session.py`): `InMemorySessionStore`, `SQLiteSessionStore` (FTS5 BM25), session `close()` KI lifecycle hook.
 - **Knowledge Codification** (Sprint 34): `hermes_build_memory_graph`, `hermes_extract_ki`, `hermes_search_knowledge_items`, `hermes_deduplicate_ki`, `hermes_archive_sessions`.
 - **Swarm Orchestration** (Sprint 34): `hermes_spawn_agent` (capability profile routing), backed by `AgentOrchestrator.spawn_agent` + `filter_tools`.
 - **Template Library** (`templates/`): Parameterized prompt templates for code review, debugging, documentation, and task decomposition.
-- **Evolution Engine** (`evolution/`): Linked Git submodule containing DSPy GEPA optimization logic for prompt mutations.
-- **Discord Gateway** (`gateway/`): Native voice gateway with RTP capture, Opus decoding, and DAVE E2EE support.
+- **Instance Templates** (`instance_templates/`): Config template, `.env.example`, `SOUL.md` persona, and `hermes_example.py`.
+- **Spawn Script** (`scripts/spawn_instance.sh`): One-shot instance creation script.
+- **Evolution Engine** (`evolution/`): DSPy GEPA optimization for prompt mutations.
+- **Multi-Platform Gateway** (`gateway/`): Telegram, Discord (voice/text), WhatsApp, Mattermost (v2.5.0). Native RTP/DAVE E2EE for Discord voice.
 
 ## Agent Workflows
 
 When coordinating with Hermes via MCP:
 
-- Swarm agents should prefer `hermes_chat_session` when dealing with multi-step logical operations (to retain contextual thread history without re-submitting large texts).
-- Swarm agents must use `hermes_status` before attempting CLI-specific tools to determine if the system runs on binaries or the Ollama fallback.
-- Use `hermes_session_fork` to branch long-running tasks into isolated sub-threads without polluting the primary session.
-- Use `hermes_session_export_md` for human-readable handoffs or archiving long-running complex traces.
-- Use `hermes_batch_execute` for massive parallel data processing or unit test generation swarms.
-- Use `hermes_session_stats` to monitor disk usage and trigger `hermes_archive_sessions` when the SQLite file grows over the configured threshold.
-- Use `hermes_session_merge` to consolidate multiple research sessions into a single context for final synthesis.
-- Use `hermes_rotation_status` to check the health of free LLM providers and monitor cooldown windows.
-- **Knowledge Codification** (Sprint 34): use `hermes_extract_ki(session_id)` after high-quality sessions to persist insights; use `hermes_search_knowledge_items(topic)` to recall; use `hermes_deduplicate_ki()` periodically to keep the KI store clean; use `hermes_build_memory_graph()` to visualise concept relationships.
-- **Swarm Orchestration** (Sprint 34): use `hermes_spawn_agent(role, task, capability_profile)` to dispatch tasks to specialist agents; combine with `orchestrator_run_dag` for Fan-Out / Fan-In / Pipeline / Broadcast topologies; use `events_send_to_agent` / `events_agent_inbox` for direct P2P messaging between agents.
+- Prefer `hermes_chat_session` for multi-step logical operations (retains contextual thread history).
+- Use `hermes_status` before CLI-specific tools to determine backend (binary vs. Ollama).
+- Use `hermes_session_fork` to branch long-running tasks into isolated sub-threads.
+- Use `hermes_session_export_md` for human-readable handoffs or archiving.
+- Use `hermes_batch_execute` for parallel data processing or test generation swarms.
+- Use `hermes_session_stats` to monitor disk usage; trigger `hermes_archive_sessions` when SQLite grows large.
+- Use `hermes_session_merge` to consolidate multiple research sessions into one context.
+- Use `hermes_rotation_status` to check free LLM provider health and cooldown windows.
+- **Plugins (v2.5.0)**: use `hermes_plugins_install(identifier)` to add a plugin; `hermes_plugins_list()` to see installed plugins. Restart the gateway after install: `hermes gateway restart`.
+- **@ Context References (v2.5.0)**: in gateway messages, use `@file:src/main.py` to attach full file, `@file:path:10-50` for line ranges, `@diff` for unstaged changes, `@url:https://docs.example.com/api` to inject web content. Stay under 25% of context window to avoid warnings, 50% to avoid blocking.
+- **Knowledge Codification** (Sprint 34): use `hermes_extract_ki(session_id)` after high-quality sessions; `hermes_search_knowledge_items(topic)` to recall; `hermes_deduplicate_ki()` periodically; `hermes_build_memory_graph()` to visualise.
+- **Swarm Orchestration** (Sprint 34): use `hermes_spawn_agent(role, task, capability_profile)` to dispatch; combine with `orchestrator_run_dag` for Fan-Out/Fan-In/Pipeline topologies; use `events_send_to_agent` / `events_agent_inbox` for P2P messaging.
 
 ## Dependencies
 

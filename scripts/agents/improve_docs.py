@@ -34,7 +34,7 @@ def get_target_docs() -> list[Path]:
     if not DOCS_DIR.exists():
         logger.error(f"Docs directory not found: {DOCS_DIR}")
         return targets
-        
+
     for item in DOCS_DIR.iterdir():
         if item.name.startswith("__"):
             continue
@@ -90,7 +90,7 @@ def main():
         sys.exit(1)
 
     tasks = [{"target": t.name, "prompt": generate_prompt(t)} for t in targets]
-    
+
     if args.limit:
         tasks = tasks[:args.limit]
 
@@ -105,12 +105,12 @@ def main():
 
     dispatched = 0
     failed = 0
-    
+
     print(f"🚀 Dispatching {len(tasks)} Jules agents...")
     for i in range(0, len(tasks), args.batch_size):
         batch = tasks[i:i + args.batch_size]
         print(f"\n── Batch {i // args.batch_size + 1} ──")
-        
+
         for task in batch:
             if dispatch_agent(task["prompt"], args.dry_run):
                 dispatched += 1
@@ -118,7 +118,7 @@ def main():
             else:
                 failed += 1
                 print(f"  ❌ Failed -> {task['target']}")
-                
+
         if i + args.batch_size < len(tasks):
             time.sleep(args.delay)
 

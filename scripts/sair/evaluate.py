@@ -11,18 +11,22 @@ Integrates:
 
 from __future__ import annotations
 
-import os
 import argparse
+import os
 import time
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from jinja2 import Template
 
-from codomyrmex.llm.providers import get_provider, ProviderType, Message
-from codomyrmex.logging_monitoring import get_logger, new_correlation_id, set_correlation_id
+from codomyrmex.llm.providers import Message, ProviderType, get_provider
+from codomyrmex.logging_monitoring import (
+    get_logger,
+    new_correlation_id,
+    set_correlation_id,
+)
 from codomyrmex.performance import profile_function
 from scripts.sair.utils import (
     compute_hash,
@@ -78,6 +82,7 @@ COUNTEREXAMPLE: required if VERDICT is FALSE, empty otherwise.\
 
 # Default paths
 import os
+
 MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_RUNS_DIR = os.path.join(MODULE_DIR, "output", "runs")
 DEFAULT_LOGS_DIR = os.path.join(MODULE_DIR, "output", "logs")
@@ -87,14 +92,14 @@ DEFAULT_LOGS_DIR = os.path.join(MODULE_DIR, "output", "logs")
 # Parsing
 # -------------------------------------------------------------------
 
-def parse_llm_response(response_text: str) -> Dict[str, str]:
+def parse_llm_response(response_text: str) -> dict[str, str]:
     """Parse the structured LLM response based on the official SAIR headers.
 
     Handles multiline REASONING/PROOF/COUNTEREXAMPLE sections.
     Stage 2 CONFIDENCE field parsed as float string if present.
     """
     lines = response_text.strip().split("\n")
-    result: Dict[str, str] = {
+    result: dict[str, str] = {
         "VERDICT": "UNKNOWN",
         "CONFIDENCE": "",
         "REASONING": "",
@@ -124,7 +129,7 @@ def parse_llm_response(response_text: str) -> Dict[str, str]:
     return result
 
 
-def extract_confidence(parsed: Dict[str, str]) -> Optional[float]:
+def extract_confidence(parsed: dict[str, str]) -> Optional[float]:
     """Extract confidence probability from parsed response (Stage 2 log-loss support).
 
     Returns float in [0, 1] or None if not parseable.
@@ -135,7 +140,7 @@ def extract_confidence(parsed: Dict[str, str]) -> Optional[float]:
         verdict = parsed.get("VERDICT", "UNKNOWN")
         if verdict == "TRUE":
             return 0.9
-        elif verdict == "FALSE":
+        if verdict == "FALSE":
             return 0.1
         return None
     try:
@@ -170,12 +175,12 @@ def compute_log_loss(ground_truth: str, confidence: Optional[float]) -> Optional
 def evaluate_problem(
     provider: Any,
     model_name: str,
-    problem: Dict[str, Any],
+    problem: dict[str, Any],
     cheatsheet: Optional[str] = None,
     cheatsheet_hash: Optional[str] = None,
     max_retries: int = 3,
     stage2: bool = False,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run evaluation for a single SAIR problem with retries and full telemetry.
 
     Returns a result dict containing all fields required for structured logging.
@@ -198,7 +203,7 @@ def evaluate_problem(
     for attempt in range(max_retries):
         try:
             # Use performance.profile_function to capture execution time + memory
-            result_holder: Dict[str, Any] = {}
+            result_holder: dict[str, Any] = {}
 
             def _call() -> None:
                 completion = provider.complete(messages=messages, model=model_name)
@@ -281,7 +286,7 @@ def run_evaluation(
     runs_dir: str = DEFAULT_RUNS_DIR,
     logs_dir: str = DEFAULT_LOGS_DIR,
     stage2: bool = False,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run a full batch evaluation and persist all structured telemetry.
 
     Args:
@@ -309,7 +314,7 @@ def run_evaluation(
     cheatsheet: Optional[str] = None
     cheatsheet_hash: Optional[str] = None
     if cheatsheet_path and os.path.exists(cheatsheet_path):
-        with open(cheatsheet_path, "r", encoding="utf-8") as f:
+        with open(cheatsheet_path, encoding="utf-8") as f:
             cheatsheet = f.read()
         size_bytes = len(cheatsheet.encode("utf-8"))
         cheatsheet_hash = compute_hash(cheatsheet)
@@ -340,7 +345,7 @@ def run_evaluation(
         raise RuntimeError("Missing API key for LLM provider.")
 
     # Run evaluation --------------------------------------------------------
-    results: List[Dict[str, Any]] = []
+    results: list[dict[str, Any]] = []
     for i, problem in enumerate(problems):
         logger.info(
             "[%d/%d] Evaluating '%s'", i + 1, len(problems), problem.get("id", "?")
@@ -382,7 +387,7 @@ def run_evaluation(
         summary["total_tokens"],
     )
 
-    run_data: Dict[str, Any] = {"summary": summary, "results": results}
+    run_data: dict[str, Any] = {"summary": summary, "results": results}
 
     # Persist run -----------------------------------------------------------
     ensure_dir(runs_dir)

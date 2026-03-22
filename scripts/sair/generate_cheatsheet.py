@@ -14,7 +14,7 @@ import argparse
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from scripts.sair.utils import compute_hash, ensure_dir, load_json, save_json
 
@@ -24,7 +24,7 @@ MAX_BYTES = 10_240  # Official 10KB limit
 # Technique Library
 # -------------------------------------------------------------------
 
-TECHNIQUE_LIBRARY: Dict[str, str] = {
+TECHNIQUE_LIBRARY: dict[str, str] = {
     "algebraic_manipulation": (
         "If Eq1 holds universally, substitute specific expressions into Eq1 to derive Eq2. "
         "Try setting variables equal (x=y=z) or substituting one side of Eq1 into Eq2."
@@ -68,7 +68,7 @@ TECHNIQUE_LIBRARY: Dict[str, str] = {
 }
 
 # Pre-packaged strategy bundles
-STRATEGY_BUNDLES: Dict[str, List[str]] = {
+STRATEGY_BUNDLES: dict[str, list[str]] = {
     "baseline": [
         "algebraic_manipulation",
         "counterexample_small_magma",
@@ -93,10 +93,10 @@ STRATEGY_BUNDLES: Dict[str, List[str]] = {
 # -------------------------------------------------------------------
 
 def build_cheatsheet(
-    techniques: Optional[List[str]] = None,
-    rules: Optional[List[str]] = None,
+    techniques: Optional[list[str]] = None,
+    rules: Optional[list[str]] = None,
     additional_context: Optional[str] = None,
-    bundles: Optional[List[str]] = None,
+    bundles: Optional[list[str]] = None,
 ) -> str:
     """Compose a cheat sheet from technique keys, explicit rules, and context.
 
@@ -106,14 +106,14 @@ def build_cheatsheet(
         additional_context: Extra text appended under CONTEXT.
         bundles: Pre-defined strategy bundles to include (merged with techniques).
     """
-    all_keys: List[str] = list(techniques or [])
+    all_keys: list[str] = list(techniques or [])
     for bundle in (bundles or []):
         all_keys.extend(STRATEGY_BUNDLES.get(bundle, []))
     # Deduplicate while preserving order
     seen: set = set()
     unique_keys = [k for k in all_keys if not (k in seen or seen.add(k))]  # type: ignore[arg-type]
 
-    content: List[str] = []
+    content: list[str] = []
 
     if unique_keys:
         content.append("### STRATEGIES")
@@ -152,7 +152,7 @@ def trim_to_budget(content: str) -> str:
     return truncated[:last_newline] if last_newline > 0 else truncated
 
 
-def save_cheatsheet(content: str, filepath: str) -> Dict[str, Any]:
+def save_cheatsheet(content: str, filepath: str) -> dict[str, Any]:
     """Save the cheat sheet to a file, enforcing size budget.
 
     Returns a metadata dict: {filepath, size_bytes, hash, valid}.
@@ -180,9 +180,9 @@ def save_cheatsheet(content: str, filepath: str) -> Dict[str, Any]:
 
 def refine_from_results(
     results_file: str,
-    base_techniques: Optional[List[str]] = None,
-    base_bundles: Optional[List[str]] = None,
-    extra_rules: Optional[List[str]] = None,
+    base_techniques: Optional[list[str]] = None,
+    base_bundles: Optional[list[str]] = None,
+    extra_rules: Optional[list[str]] = None,
 ) -> str:
     """Build a refined cheat sheet targeted at previous run failures.
 
@@ -205,8 +205,8 @@ def refine_from_results(
     results = run_data.get("results", [])
     summary = run_data.get("summary", {})
 
-    missed_true: List[str] = []   # GT=TRUE but answered FALSE/UNKNOWN
-    missed_false: List[str] = []  # GT=FALSE but answered TRUE/UNKNOWN
+    missed_true: list[str] = []   # GT=TRUE but answered FALSE/UNKNOWN
+    missed_false: list[str] = []  # GT=FALSE but answered TRUE/UNKNOWN
 
     for r in results:
         if "error" in r or r.get("is_correct") is not False:
@@ -222,8 +222,8 @@ def refine_from_results(
             missed_false.append(label)
 
     # Determine which extra strategies to activate
-    extra_keys: List[str] = list(base_techniques or [])
-    extra_keys_from_failures: List[str] = []
+    extra_keys: list[str] = list(base_techniques or [])
+    extra_keys_from_failures: list[str] = []
     if missed_true:
         extra_keys_from_failures += ["substitution_chain", "singleton_magma", "idempotent_check"]
     if missed_false:
@@ -234,7 +234,7 @@ def refine_from_results(
             extra_keys.append(k)
 
     # Build refinement context block
-    context_lines: List[str] = [
+    context_lines: list[str] = [
         f"[REFINEMENT based on run {summary.get('run_id', 'unknown')}]",
         f"Prior accuracy: {summary.get('accuracy', 0):.1%} "
         f"({summary.get('correct', 0)}/{summary.get('evaluated', 0)})",
@@ -253,7 +253,7 @@ def refine_from_results(
 
     cheatsheet = build_cheatsheet(
         techniques=extra_keys,
-        rules=all_rules if all_rules else None,
+        rules=all_rules or None,
         bundles=base_bundles,
         additional_context=context_text,
     )
@@ -303,7 +303,7 @@ if __name__ == "__main__":
     else:
         cs_content = build_cheatsheet(
             techniques=args.technique,
-            rules=args.rule if args.rule else ["Magma: a set with one binary operation (no associativity)."],
+            rules=args.rule or ["Magma: a set with one binary operation (no associativity)."],
             bundles=args.bundle,
         )
 

@@ -13,8 +13,7 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any, Optional
 
 # ---------------------------------------------------------------------------
 # File I/O
@@ -25,33 +24,32 @@ def ensure_dir(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
 
-def load_jsonl(filepath: str) -> List[Dict[str, Any]]:
+def load_jsonl(filepath: str) -> list[dict[str, Any]]:
     """Load a JSONL file into a list of dictionaries."""
-    data: List[Dict[str, Any]] = []
+    data: list[dict[str, Any]] = []
     if not os.path.exists(filepath):
         return data
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(filepath, encoding="utf-8") as f:
         for line in f:
             if line.strip():
                 data.append(json.loads(line))
     return data
 
 
-def save_jsonl(data: List[Dict[str, Any]], filepath: str) -> None:
+def save_jsonl(data: list[dict[str, Any]], filepath: str) -> None:
     """Save a list of dictionaries to a JSONL file."""
     ensure_dir(os.path.dirname(filepath) or ".")
     with open(filepath, "w", encoding="utf-8") as f:
-        for entry in data:
-            f.write(json.dumps(entry) + "\n")
+        f.writelines(json.dumps(entry) + "\n" for entry in data)
 
 
-def load_json(filepath: str) -> Dict[str, Any]:
+def load_json(filepath: str) -> dict[str, Any]:
     """Load a JSON file into a dictionary."""
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(filepath, encoding="utf-8") as f:
         return json.load(f)
 
 
-def save_json(data: Dict[str, Any], filepath: str, indent: int = 2) -> None:
+def save_json(data: dict[str, Any], filepath: str, indent: int = 2) -> None:
     """Save a dictionary to a JSON file with pretty-printing."""
     ensure_dir(os.path.dirname(filepath) or ".")
     with open(filepath, "w", encoding="utf-8") as f:
@@ -67,7 +65,7 @@ def compute_hash(content: str) -> str:
     return hashlib.sha256(content.encode("utf-8")).hexdigest()[:12]
 
 
-def format_equation(law_data: Dict[str, Any]) -> str:
+def format_equation(law_data: dict[str, Any]) -> str:
     """Format equational law data into a human-readable string."""
     return law_data.get("equation", "Unknown")
 
@@ -76,7 +74,7 @@ def format_equation(law_data: Dict[str, Any]) -> str:
 # Run History & Analysis
 # ---------------------------------------------------------------------------
 
-def load_run_history(run_dir: str) -> List[Dict[str, Any]]:
+def load_run_history(run_dir: str) -> list[dict[str, Any]]:
     """Load all saved evaluation runs from a directory.
 
     Returns a list of run dicts, each containing 'summary' and 'results' keys,
@@ -96,7 +94,7 @@ def load_run_history(run_dir: str) -> List[Dict[str, Any]]:
     return runs
 
 
-def summarize_results(results: List[Dict[str, Any]]) -> Dict[str, Any]:
+def summarize_results(results: list[dict[str, Any]]) -> dict[str, Any]:
     """Compute a rich accuracy summary from a list of per-problem result dicts.
 
     Returns a dict with:
@@ -118,8 +116,8 @@ def summarize_results(results: List[Dict[str, Any]]) -> Dict[str, Any]:
     false_correct = 0
     false_total = 0
     unknown_verdicts = 0
-    missed_problems: List[str] = []
-    latencies: List[float] = []
+    missed_problems: list[str] = []
+    latencies: list[float] = []
     total_tokens = 0
     total_log_loss = 0.0
     valid_log_loss_count = 0
@@ -155,7 +153,7 @@ def summarize_results(results: List[Dict[str, Any]]) -> Dict[str, Any]:
             latencies.append(lat)
         usage = r.get("usage") or {}
         total_tokens += usage.get("total_tokens", 0)
-        
+
         if "log_loss" in r and r["log_loss"] is not None:
             total_log_loss += r["log_loss"]
             valid_log_loss_count += 1
@@ -163,7 +161,7 @@ def summarize_results(results: List[Dict[str, Any]]) -> Dict[str, Any]:
     accuracy = correct / evaluated if evaluated > 0 else 0.0
     avg_latency = sum(latencies) / len(latencies) if latencies else 0.0
 
-    ans: Dict[str, Any] = {
+    ans: dict[str, Any] = {
         "total": total,
         "evaluated": evaluated,
         "errors": errors,
@@ -186,7 +184,7 @@ def summarize_results(results: List[Dict[str, Any]]) -> Dict[str, Any]:
     return ans
 
 
-def compare_runs(run_a: Dict[str, Any], run_b: Dict[str, Any]) -> Dict[str, Any]:
+def compare_runs(run_a: dict[str, Any], run_b: dict[str, Any]) -> dict[str, Any]:
     """Compute performance delta between two evaluation runs.
 
     Args:

@@ -17,3 +17,9 @@
 [submodule "src/codomyrmex/agents/mission_control/app"]
 	path = src/codomyrmex/agents/mission_control/app
 	url = https://github.com/builderz-labs/mission-control.git
+[submodule "src/codomyrmex/agents/ghost_architecture"]
+	path = src/codomyrmex/agents/ghost_architecture
+	url = https://github.com/B-Smith-92/ghost-architecture
+[submodule "src/codomyrmex/agents/open_gauss"]
+	path = src/codomyrmex/agents/open_gauss
+	url = https://github.com/math-inc/OpenGauss.git

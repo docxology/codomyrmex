@@ -1,58 +1,84 @@
 # Hermes Agent Module
 
-**Version**: v2.2.1 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v2.5.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The Hermes Agent Module integrates NousResearch's Hermes capabilities deeply into the Codomyrmex ecosystem. Designed for maximum reliability and local-first execution, it provides dual-backend scaling, persistent multi-turn chat, provider-agnostic routing, context compression, and specialized prompt templating. v2.2.1 adds LLM rotation for free models, cooldown tracking, and advanced session merging.
+The Hermes Agent Module integrates NousResearch's Hermes capabilities deeply into the Codomyrmex ecosystem. Designed for maximum reliability and local-first execution, it provides dual-backend scaling, persistent multi-turn chat, provider-agnostic routing, context compression, and specialized prompt templating. v2.5.0 adds a **git-based plugin system**, **@ context references**, a **gateway agent cache**, **Mattermost** support, and optional **meme-generation** and **bioinformatics** skills.
 
 ## Core Features
 
-1. **Dual-Backend Auto-Detection**:
-   The module seamlessly targets either the official `hermes` CLI binary or a local `ollama` instance (defaulting to the `hermes3` model). This fallback ensures the agent is strictly available on local developer machines even without the custom CLI.
+1. **Dual-Backend Auto-Detection**: The module seamlessly targets either the official `hermes` CLI binary or a local `ollama` instance. Fallback ensures availability without the CLI.
 
-2. **Persistent Stateful Chat**:
-   Using `SQLiteSessionStore`, the module tracks multi-turn conversational history natively. v2.2.1 adds advanced orchestration: session forking, session merging, rich metrics, search via FTS5, and automated lifecycle management.
+2. **Persistent Stateful Chat**: Using `SQLiteSessionStore`, the module tracks multi-turn conversational history natively — with session forking, merging, FTS5 search, and automated lifecycle management.
 
-3. **Discord Voice Support**:
-   Native gateway runner with RTP capture, Opus decoding, and DAVE E2EE decryption for real-time interaction in Discord voice channels via `/voice` commands.
+3. **Plugin System (v2.5.0)**:
+   Install third-party Hermes plugins from any Git repository:
+   ```bash
+   hermes plugins install owner/repo          # GitHub shorthand
+   hermes plugins update my-plugin            # git pull
+   hermes plugins list                        # Rich table display
+   ```
+   Plugins live in `~/.hermes/plugins/` (respects `HERMES_HOME`). See [plugins.md](../../../../docs/agents/hermes/plugins.md).
 
-4. **Batch Execution**:
-   A robust sequential or parallel multi-prompt execution engine with `HermesClient.batch_execute()`, allowing for massive swarm-scale data processing.
+4. **@ Context References (v2.5.0)**:
+   Inline file, folder, git diff, and URL content into any gateway message:
 
-5. **Free LLM Rotation**:
-   A robust non-git-tracked model rotation strategy for free OpenRouter models (Gemini, DeepSeek, Llama). Includes persistent cooldown tracking on rate limits (429) for maximum uptime.
+   | Token | Expands To |
+   |-------|-----------|
+   | `@file:path` | File contents |
+   | `@file:path:L-R` | Lines L–R |
+   | `@folder:path` | Directory listing |
+   | `@diff` / `@staged` | Git diffs |
+   | `@git:N` | Last N commits |
+   | `@url:https://...` | Web page |
 
-6. **Provider Router**:
-   `ProviderRouter` provides a unified `call_llm()` abstraction across multiple providers (OpenRouter, Ollama, Anthropic, OpenAI, z.ai, Nous). Credentials are auto-resolved from environment and `~/.hermes/.env`.
+   Hard limit: 50% of context window. See [context-references.md](../../../../docs/agents/hermes/context-references.md).
 
-7. **Context Compression**:
-   `ContextCompressor` auto-compresses conversation context when it exceeds token limits using progressive deduplication, summarization, and truncation strategies.
+5. **Gateway Agent Cache (v2.5.0)**: `GatewayRunner` reuses `AIAgent` instances per session via config signature (model + provider + toolsets). System prompt frozen after first turn. Thread-safe. See [agent-cache.md](../../../../docs/agents/hermes/agent-cache.md).
 
-8. **Cross-Session User Model**:
-   `UserModel` persists user preferences, coding style observations, and session summaries across sessions — enabling contextual continuity.
+6. **Multi-Platform Gateway**: Telegram, Discord (voice + text via RTP/DAVE E2EE), WhatsApp, **Mattermost** (v2.5.0).
 
-9. **Git Worktree Isolation**:
-   Create isolated git worktrees per session for parallel agent execution without branch conflicts.
+7. **Batch Execution**: Parallel multi-prompt dispatch via `HermesClient.batch_execute()` for swarm-scale processing.
 
-10. **Evolutionary Submodule**:
-    The `evolution/` directory contains the `hermes-agent-self-evolution` submodule, implementing DSPy-based Genetic-Pareto (GEPA) optimization.
+8. **Provider Router**: Unified `call_llm()` across OpenRouter, Ollama, Anthropic, OpenAI, z.ai, Nous. Credentials auto-resolved from env + `~/.hermes/.env`.
 
-11. **MCP Tool Suite**:
-    48 `@mcp_tool` definitions in `mcp_tools.py` (see [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)); unified skill registry in `skill_registry.py` + `data/skills_registry.yaml`.
+9. **Context Compression**: `ContextCompressor` progressively compresses conversations at configurable token thresholds.
+
+10. **Cross-Session User Model**: Persists preferences, coding style observations, and summaries across sessions.
+
+11. **MCP Tool Suite**: **50** `@mcp_tool` definitions in `mcp_tools.py` (see [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)).
+
+12. **Evolutionary Submodule**: DSPy-based GEPA prompt optimization via `evolution/` submodule.
+
+## Optional Skills (v2.5.0)
+
+| Skill | Description |
+|-------|-------------|
+| `meme-generation` | Real `.png` meme images via Pillow; 10 curated templates + imgflip API |
+| `bioinformatics` | Gateway to 400+ bioSkills patterns and 33+ ClawBio pipelines |
+
+```bash
+hermes skills enable meme-generation
+hermes skills enable bioinformatics
+```
 
 ## Directory Structure
 
-- `hermes_client.py`: The `HermesClient` concrete agent subclass (dual-backend, sessions, worktrees, CLI flags, batch execution).
+- `hermes_client.py`: `HermesClient` — dual-backend, sessions, worktrees, CLI flags, batch.
 - `_provider_router.py`: `ProviderRouter`, `UserModel`, `ContextCompressor`, `MCPBridgeManager`.
-- `session.py`: Persistent SQLite tracking (`HermesSession`, `SQLiteSessionStore`) with FTS5 and archiving.
-- `mcp_tools.py`: Model Context Protocol tools (`MCP_TOOL_SPECIFICATION.md`).
-- `templates/`: Built-in template registries (code review, debugging, documentation, task decomposition, and rotation).
-- `scripts/`: Operational scripts (`run_chat.py`, `run_batch.py`, `run_session_export.py`, `run_prune.py`, `run_health.py`, etc.).
-- `evolution/`: Genetic self-improvement subsystem.
-- `gateway/`: Discord voice gateway integration.
+- `session.py`: `SQLiteSessionStore` with FTS5, archiving, and lifecycle hooks.
+- `mcp_tools.py`: 50 MCP tools (see `MCP_TOOL_SPECIFICATION.md`).
+- `templates/`: Built-in prompt templates (code review, debugging, documentation, decomposition).
+- `scripts/`: Operational scripts (`run_chat.py`, `run_batch.py`, `run_health.py`, etc.).
+- `evolution/`: GEPA self-improvement submodule.
+- `gateway/`: Multi-platform gateway (Telegram, Discord, WhatsApp, Mattermost).
+- `instance_templates/`: Config templates, `SOUL.md`, `.env.example`.
 
 ## Navigation
 
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: [../../../../README.md](../../../../README.md)
+- **Plugins Reference**: [plugins.md](../../../../docs/agents/hermes/plugins.md)
+- **@ Context References**: [context-references.md](../../../../docs/agents/hermes/context-references.md)
+- **Agent Cache**: [agent-cache.md](../../../../docs/agents/hermes/agent-cache.md)

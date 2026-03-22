@@ -59,7 +59,7 @@ class Environment:
         # Food sources
         self._food_sources: list[FoodSource] = []
 
-        # Add random food sources if requested (simulated for now, usually done by Colony)
+        # Add random food sources if requested (simulated, usually done by Colony)
         # In a real impl, we might use a seed here too.
 
         # Obstacle set

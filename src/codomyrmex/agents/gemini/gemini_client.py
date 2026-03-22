@@ -17,9 +17,12 @@ from google import genai
 from google.genai import types
 
 try:
-    from PIL import Image
+    from PIL import Image as PILImage
 except ImportError:
-    Image = None
+    PILImage = None  # type: ignore[assignment]
+
+# Image is the PIL Image module for use with Image.open() calls
+Image: Any = PILImage
 
 from codomyrmex.agents.core import (
     AgentCapabilities,

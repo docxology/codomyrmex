@@ -25,8 +25,8 @@ See AGENTS.md for operational contracts.
 """
 
 from .utils import (
-    compute_hash,
     compare_runs,
+    compute_hash,
     ensure_dir,
     format_timestamp,
     load_json,
@@ -40,8 +40,8 @@ from .utils import (
 __version__ = "0.2.0"
 
 __all__ = [
-    "compute_hash",
     "compare_runs",
+    "compute_hash",
     "ensure_dir",
     "format_timestamp",
     "load_json",

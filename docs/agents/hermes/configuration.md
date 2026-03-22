@@ -121,6 +121,19 @@ telegram:
   free_response_channels: "" # channel IDs for auto-response (empty = none)
 
 # =============================================================================
+# Webhook platform (v0.4.0)
+# =============================================================================
+webhook:
+  port: 8644
+  routes:
+    github_events:
+      secret: "your-hmac-sha256-secret"
+      prompt_template: "github_pr_review"
+    custom_dashboard:
+      secret: "dashboard-api-key"
+      prompt_template: "dashboard_command"
+
+# =============================================================================
 # Approvals
 # =============================================================================
 approvals:

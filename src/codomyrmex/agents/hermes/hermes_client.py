@@ -818,7 +818,7 @@ class HermesClient(CLIAgentBase):
                     session.add_message("assistant", response.content)
                     store.save(session)
 
-                    tasks = session.metadata.get("workflow_tasks", {})
+                    tasks: dict[str, Any] = session.metadata.get("workflow_tasks", {})
 
                     has_pending = any(
                         t.get("status") in ("pending", "running")
@@ -900,6 +900,8 @@ class HermesClient(CLIAgentBase):
                     self.logger.error("Error executing vault sync hook: %s", e)
 
             if final_response:
+                if final_response.metadata is None:
+                    final_response.metadata = {}
                 final_response.metadata["session_id"] = session.session_id
                 if session.name:
                     final_response.metadata["session_name"] = session.name
@@ -1374,6 +1376,8 @@ class HermesClient(CLIAgentBase):
                     "error": str(exc),
                 }
 
+        orig_backend: str | None = None
+        orig_timeout: int | None = None
         try:
             if parallel:
                 from concurrent.futures import ThreadPoolExecutor
@@ -1383,10 +1387,10 @@ class HermesClient(CLIAgentBase):
             else:
                 results = [_execute_one(p) for p in prompts]
         finally:
-            if backend:
-                self._active_backend = orig_backend  # type: ignore[possibly-undefined]
-            if timeout:
-                self.timeout = orig_timeout  # type: ignore[possibly-undefined]
+            if backend and orig_backend is not None:
+                self._active_backend = orig_backend
+            if timeout and orig_timeout is not None:
+                self.timeout = orig_timeout
 
         return results
 
@@ -1551,7 +1555,7 @@ class HermesClient(CLIAgentBase):
                 spec = importlib.util.spec_from_file_location("hermes_models", models_path)
                 if spec and spec.loader:
                     mod = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(mod)  # type: ignore[union-attr]
+                    spec.loader.exec_module(mod)
                     # Look for model in catalog dictionaries
                     for attr_name in dir(mod):
                         attr = getattr(mod, attr_name)

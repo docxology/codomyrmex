@@ -65,6 +65,7 @@ Documentation for all AI agent integrations in the Codomyrmex ecosystem. This di
 
 | Module | Documentation | Description |
 |:---|:---|:---|
+| **Ghost Architecture** | [ghost_architecture/](ghost_architecture/) | Continual-learning modular transformer; crystallized ghost modules (git submodule) |
 | **Git Agent** | [git_agent/](git_agent/) | Git-aware operations, conflict resolution |
 | **Google Workspace** | [google_workspace/](google_workspace/) | Docs, Sheets, Drive, Calendar |
 | **Mission Control** | [mission_control/](mission_control/) | Multi-agent mission orchestration |

@@ -28,9 +28,9 @@ def naive_chunker(file_path: Path, max_lines: int = 150) -> list[dict]:
     """Naive line-based chunking fallback if tree-sitter not available."""
     chunks = []
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             lines = f.readlines()
-        
+
         for i in range(0, len(lines), max_lines):
             chunk_text = "".join(lines[i:i+max_lines])
             chunks.append({
@@ -63,42 +63,42 @@ def main():
 
     # Note: the new genai SDK handles vertex ai transparently if configured
     client = genai.Client(vertexai=True, project=args.project, location=args.location)
-    
+
     logger.info("Chunking repository files...")
     all_chunks = []
     for filepath in repo.rglob("*"):
         if filepath.is_file() and not any(p.startswith(".") for p in filepath.parts):
             if filepath.suffix in {".py", ".md", ".js", ".ts", ".html", ".css", ".json"}:
                 all_chunks.extend(naive_chunker(filepath))
-                
+
     if not all_chunks:
         logger.warning("No indexable code chunks found.")
         sys.exit(0)
 
     logger.info("Generated %d chunks. Embedding...", len(all_chunks))
-    
+
     # In a real script, batch these appropriately to avoid payload limits
     batch_size = 100
     all_embeddings = []
-    
+
     try:
         for i in range(0, len(all_chunks), batch_size):
             batch = all_chunks[i:i+batch_size]
             texts = [c["text"] for c in batch]
-            
+
             # Using genai unified representation
             resp = client.models.embed_content(
                 model=args.embedding_model,
                 contents=texts
             )
-            
+
             if hasattr(resp, "embeddings") and resp.embeddings:
                 all_embeddings.extend([e.values for e in resp.embeddings])
             elif hasattr(resp, "embedding") and resp.embedding:
                 all_embeddings.append(resp.embedding.values)
-                
+
             logger.info("Embedded batch %d/%d", i // batch_size + 1, (len(all_chunks) + batch_size - 1) // batch_size)
-            
+
     except Exception as e:
         logger.error("Embedding failed: %s", e)
         sys.exit(1)

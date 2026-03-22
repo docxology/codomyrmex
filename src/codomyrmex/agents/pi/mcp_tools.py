@@ -13,10 +13,10 @@ try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
 
-    def mcp_tool(**_kw):  # type: ignore[misc]
+    def mcp_tool(**_kw):
         """Fallback no-op decorator when MCP framework not available."""
 
-        def _wrap(fn):  # type: ignore[misc]
+        def _wrap(fn):
             return fn
 
         return _wrap

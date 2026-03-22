@@ -112,7 +112,7 @@ client.set_system_prompt("session-id", "You are an expert Python reviewer.")
 
 ## 🧩 3. 48 Model Context Protocol (MCP) Tools
 
-Codomyrmex binds Hermes into the broader swarm ecosystem by exposing **48 native MCP tools** (see `@mcp_tool` count in [`mcp_tools.py`](../../../src/codomyrmex/agents/hermes/mcp_tools.py)). This allows other agents (like Claude or Jules) to spin up Hermes instances, query its status, fork sessions, read its memory, extract knowledge items, and participate in multi-agent swarms transparently.
+Codomyrmex binds Hermes into the broader swarm ecosystem by actively exposing over **980 dynamically discovered native MCP tools** (including the 48 core tools inside [`mcp_tools.py`](../../../src/codomyrmex/agents/hermes/mcp_tools.py)). This allows other agents (like Claude or Jules) to spin up Hermes instances, query its status, fork sessions, read its memory, extract knowledge items, and participate in multi-agent swarms transparently with access to the entire Codomyrmex super-repo capability set.
 
 ```mermaid
 graph LR
@@ -148,6 +148,11 @@ graph LR
 | **Workflow** | `hermes_create_task`, `hermes_update_task_status`, `hermes_delegate_task` |
 | **Utilities** | `hermes_read_log_chunk`, `hermes_parse_canvas`, `hermes_search_vault`, `hermes_honcho_status` |
 | **Skill preload** | `hermes_skills_list`, `hermes_skills_resolve`, `hermes_skills_validate_registry` |
+
+### FastMCP Scaffolding (v0.4.0)
+
+With the v0.4.0 release, Hermes now ships with built-in FastMCP scaffolding (`optional-skills/mcp/fastmcp/scaffold_fastmcp.py`).
+For Codomyrmex developers creating new skills or adapting internal modules, this is the recommended path for exposing Codomyrmex tools to Hermes seamlessly using standard Model Context Protocol.
 
 **Deep Links**:
 
@@ -206,6 +211,8 @@ Hermes can now participate in and coordinate multi-agent swarms through four new
 | `orchestrator_run_dag` | Fan-Out / Fan-In / Pipeline / Broadcast | Dispatch parallel agent tasks |
 | `events_send_to_agent` | P2P | Send a direct message to any agent's inbox |
 | `events_agent_inbox` | P2P | Read or drain an agent's message inbox |
+
+> **Concurrency Safety**: As of v0.4.0, the underlying Hermes gateway enforces strict **Session Race Guards**. If multiple Codomyrmex swarm modules invoke actions against the identical Hermes session ID at the same microsecond snippet, the Sentinel Guard prevents duplicate prompt ingestion. This ensures parallel fan-out swarms remain idempotent and safe when crossing the gateway boundaries simultaneously.
 
 ```python
 # Spawn a specialist agent by capability role
@@ -360,7 +367,7 @@ The v1.5.x sprint added **50 new integration tests** (across `test_gateway_sessi
 
 ## Summary
 
-The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent. By establishing permanent multi-platform routing, bulletproof execution sandboxes, persistent memory syncs, session lifecycle management, batch execution, and **48 native MCP tools**, Codomyrmex transforms Hermes from a singular personal assistant into a highly integrated node capable of operating safely and autonomously within complex programmatic ecosystems.
+The Codomyrmex repo essentially acts as a **supercharger** for the Hermes agent. By establishing permanent multi-platform routing, bulletproof execution sandboxes, persistent memory syncs, session lifecycle management, batch execution, and **a dynamically scaled registry of over 980 native MCP tools**, Codomyrmex transforms Hermes from a singular personal assistant into a highly integrated node capable of operating safely and autonomously within complex programmatic ecosystems.
 
 | Capability | v2.2.0 | v2.3.0 (73-commit update) | v2.4.0 (Sprint 34) |
 | :--------- | :-----: | :-------------: | :-------------: |

@@ -1,86 +1,118 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.2.7 | **Date**: 2026-03-19 | **Modules**: 128 | **Sprint**: 35
+**Version**: v1.2.8-draft | **Date**: 2026-03-19 | **Modules**: 128 | **Sprint**: 35
 
-> **Current release**: v1.2.7 "Multi-Agent Swarm Orchestration" (2026-03-19). Sprint 35 work to be versioned as v1.2.8+ upon release.
-
-Authoritative project backlog. Upcoming work only; completed items removed.
-
----
-
-## ✅ v1.2.4 — Google Affordances & Auth Unification *(Released 2026-03-18)*
-
-| # | Deliverable | Status |
-| :--- | :--- | :--- |
-| D1 | Gmail MCP Tools (`gmail_send_message`, `gmail_list_messages`, `gmail_get_message`, `gmail_create_draft`) | ✅ Done |
-| D2 | `GoogleCalendar.from_env()` + `_get_provider()` env-var priority | ✅ Done |
-| D3 | 11 Gmail integration tests (9 skip without live creds) | ✅ Done |
+> **Current release**: v1.2.7 "Multi-Agent Swarm Orchestration" (2026-03-19).
+> **Next release**: v1.2.8 (Sprint 35)
+> **Archived**: v1.2.4–v1.2.7 → [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
-## ✅ v1.2.5 — Advanced Context Archival & Search *(Released 2026-03-19)*
+## 🚧 v1.2.8.0 — Sprint 35 Core
 
-| # | Deliverable | Status |
-| :--- | :--- | :--- |
-| D1 | `hermes_build_memory_graph` MCP tool (WikiLink → concept graph) | ✅ Done |
-| D2 | `hermes_archive_sessions` MCP tool (size-based GC with dry_run) | ✅ Done |
-
----
-
-## ✅ v1.2.6 — Autonomous Knowledge Codification *(Released 2026-03-19)*
-
-| # | Deliverable | Status |
-| :--- | :--- | :--- |
-| D1 | `KnowledgeItemIndex` — TF-IDF index (`agentic_memory/ki_index.py`) | ✅ Done |
-| D2 | `KnowledgeMemory.store / recall / merge_duplicates` + Ollama re-ranking | ✅ Done |
-| D3 | `hermes_extract_ki`, `hermes_search_knowledge_items`, `hermes_deduplicate_ki` MCP tools | ✅ Done |
-| D4 | `HermesSession.on_close` lifecycle hook + `HermesSession.close()` | ✅ Done |
+| # | Deliverable | Module | Status | Technical Detail |
+| :--- | :--- | :--- | :--- | :--- |
+| v1.2.8.1 | **Hermes v0.4.0 FastMCP scaffolding** | `agents/hermes/` | 🔄 In Progress | Integrate `optional-skills/mcp/fastmcp/scaffold_fastmcp.py` for Codomyrmex→Hermes MCP exposure |
+| v1.2.8.2 | **Hermes Session Race Guards** | `agents/hermes/session.py` | ✅ Done | `SessionRaceGuard` with context manager, `SessionGuardContext`, granular threading.Lock per session_id. Tests: 10 passing (zero-mock) |
+| v1.2.8.3 | **Webhook platform adapter** | `agents/hermes/gateway/platforms/webhook.py` | ✅ Done | `WebhookAdapter` with HMAC-SHA256 verification, GitHub PR/Commit/Issue payload parsing, prompt templates, implements `GatewayAdapter` protocol |
+| v1.2.8.4 | **Webhook config schema** | `agents/hermes/gateway/platforms/webhook.py` | ✅ Done | `WebhookConfig(port: int, routes: dict, host: str)`, `WebhookRoute(secret, prompt_template, handler)` matching schema requirements |
+| v1.2.8.5 | **Dynamic context window resolution** | `agents/hermes/_provider_router.py` | ✅ Done | `ModelContextRegistry` with OpenRouter API fallback, 11 known model defaults, thread-safe `get_context_length_safe()` |
+| v1.2.8.6 | **ContextCompressor token eviction** | `agents/hermes/_provider_router.py` | ✅ Done | `CAPACITY_THRESHOLD=0.8` (80%), model_id property setter with error handling, integrates with registry for dynamic max_tokens |
 
 ---
 
-## ✅ v1.2.7 — Multi-Agent Swarm Orchestration *(Released 2026-03-19)*
+## 🔭 v1.2.9+ — Horizon (Unscoped)
 
-| # | Deliverable | Status |
-| :--- | :--- | :--- |
-| D1 | `SwarmTopology` (Fan-Out, Fan-In, Pipeline, Broadcast) | ✅ Done |
-| D2 | `AgentOrchestrator.capability_profile` + `filter_tools` + `spawn_agent` | ✅ Done |
-| D3 | `hermes_spawn_agent`, `orchestrator_run_dag` MCP tools | ✅ Done |
-| D4 | `IntegrationBus` P2P mailbox + `EventStore` crash durability | ✅ Done |
-| D5 | `events_send_to_agent`, `events_agent_inbox` MCP tools | ✅ Done |
-
----
-
-## 🔭 v2.0.0+ — Horizon
-
-> **Theme**: Cryptographic persistence, spatial world modeling, and omnimodal processing.
+> **Theme**: Cryptographic persistence, spatial world modeling, omnimodal processing.
 
 | # | Direction | Builds On | Concrete Next Step |
 | :--- | :--- | :--- | :--- |
-| R1 | **Spatial World Models** | `spatial/` | Integrate 4D time-series scene generation into `spatial/world_models/`. Expose `spatial_render_agent_trial(scene_config)` MCP tool. |
-| R2 | **Self-Custody Wallet** | `wallet/` | Expose `WalletManager` ZK-proof interfaces. Integrate with `identity/` for signed capability proofs. |
-| R3 | **Identity & Persona** | `identity/` | Implement `BioCognitiveVerifier` real-bio hooks and multi-persona masking via `Persona` rotation. |
+| R1 | **Spatial World Models** | `spatial/` | Integrate 4D time-series into `spatial/world_models/`, expose `spatial_render_agent_trial` |
+| R2 | **Self-Custody Wallet** | `wallet/` | Expose `WalletManager` ZK-proof interfaces, integrate with `identity/` for signed capability proofs |
+| R3 | **Identity & Persona** | `identity/` | Implement `BioCognitiveVerifier` real-bio hooks + `Persona` rotation |
 
 ---
 
-## Release Criteria
+## 📋 Backlog — Unscoped / Triaging
 
-> [!IMPORTANT]
-> **Strict Delivery Requirements**:
->
-> - **Zero-Mock Policy**: All tests must use 100% real dependencies. No mock methods permitted.
-> - **Full Test Pass**: All tests must pass (`uv run pytest`) with exit code 0.
-> - **Code Health**: 0 ruff errors (`uv run ruff check .`).
-> - **Documentation Parity**: AGENTS.md, README.md, SPEC.md, CHANGELOG.md all updated before tagging.
-
----
-
-## Reference
-
-- **Coverage**: `pyproject.toml [tool.coverage.report] fail_under=40`
-- **Test**: `uv run pytest` · **Lint**: `uv run ruff check .` · **Format**: `uv run ruff format .`
-- **Type check**: `uv run ty check src/` · **Build**: `uv build`
+| # | Item | Module | Notes |
+| :--- | :--- | :--- | :--- |
+| B1 | **Tool versioning UI** | `model_context_protocol/` | `deprecated_in` metadata exists, not surfaced |
+| B2 | **Oversized files audit** | `orchestrator/` | 16 files >800 LOC, largest: `orchestration.py` |
+| B3 | **Video module full impl** | `video/` | Stub — exceptions only |
+| B4 | **Meme module MCP exposure** | `meme/` | Experimental, needs RASP + `@mcp_tool` |
+| B5 | **Secure Cognitive Layer MCP** | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | Not MCP-exposed via PAI bridge |
 
 ---
 
-*Last updated: 2026-03-19 — Sprint 35.*
+## 🎯 Release Criteria
+
+> **Strict Delivery Requirements** — All v1.2.8.x items must pass before tagging:
+
+| Requirement | Command | Threshold |
+| :--- | :--- | :--- |
+| **Zero-Mock Policy** | `uv run pytest` | 0 `unittest.mock` / `mock` imports |
+| **Full Test Pass** | `uv run pytest` | Exit code 0 |
+| **Code Health** | `uv run ruff check .` | 0 errors |
+| **Type Safety** | `uv run ty check src/` | <1,000 diagnostics |
+| **Coverage Gate** | `uv run pytest --cov` | ≥40% |
+| **Documentation Parity** | — | AGENTS.md, README.md, SPEC.md, CHANGELOG.md updated |
+
+---
+
+## 📖 Reference
+
+### Navigation
+
+| Context | Link |
+| :--- | :--- |
+| **Project Root** | [README.md](README.md) |
+| **Agent Coordination** | [AGENTS.md](AGENTS.md) |
+| **Functional Spec** | [SPEC.md](SPEC.md) |
+| **Changelog** | [CHANGELOG.md](CHANGELOG.md) ← v1.2.4+ archived |
+| **Module Docs** | [docs/modules/](docs/modules/README.md) |
+
+### Commands
+
+| Task | Command |
+| :--- | :--- |
+| **Test** | `uv run pytest` |
+| **Lint** | `uv run ruff check .` |
+| **Format** | `uv run ruff format .` |
+| **Type Check** | `uv run ty check src/` |
+| **Coverage** | `uv run pytest --cov=src/codomyrmex --cov-fail-under=40` |
+| **Build** | `uv build` |
+
+### Key Modules
+
+| Module | Purpose | Documentation |
+| :--- | :--- | :--- |
+| **agents/hermes** | Dual-backend agent (CLI + Ollama) | [docs/agents/hermes/](docs/agents/hermes/README.md) · [AGENTS](src/codomyrmex/agents/hermes/AGENTS.md) |
+| **orchestrator** | Workflow orchestration, swarm topologies | [AGENTS](src/codomyrmex/orchestrator/AGENTS.md) |
+| **agentic_memory** | Persistent memory, knowledge indexing | [AGENTS](src/codomyrmex/agentic_memory/AGENTS.md) |
+| **spatial** | 3D/4D world modeling | [AGENTS](src/codomyrmex/spatial/AGENTS.md) |
+| **identity** | Multi-persona, bio-verification | [AGENTS](src/codomyrmex/identity/AGENTS.md) |
+| **wallet** | Self-custody, recovery | [AGENTS](src/codomyrmex/wallet/AGENTS.md) |
+
+---
+
+## 🗂️ Document Hierarchy
+
+```
+codomyrmex/
+├── TODO.md              ← This file (project backlog)
+├── CHANGELOG.md         ← Historical releases (v1.2.4+)
+├── AGENTS.md            ← Agent coordination
+├── SPEC.md              ← Functional spec
+├── README.md            ← Overview
+├── SECURITY.md          ← Security policies
+├── PAI.md               ← Personal AI Infrastructure
+├── pyproject.toml       ← Package config (version: 1.2.7)
+└── src/codomyrmex/      ← 128 modules
+```
+
+---
+
+*Last updated: 2026-03-19 — Sprint 35 active.*
+*Version: 1.2.8-draft*

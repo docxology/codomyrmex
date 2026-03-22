@@ -80,6 +80,7 @@ Each platform has a dedicated adapter in `gateway/platforms/`:
 | WhatsApp | `whatsapp.py` | Node.js Baileys bridge   |
 | Discord  | `discord.py`  | WebSocket gateway        |
 | Slack    | `slack.py`    | Socket Mode              |
+| Webhook  | `webhook.py`  | Custom HTTP POSTs (v0.4.0)|
 | CLI      | Built-in      | Direct stdin/stdout      |
 
 ## Session Routing

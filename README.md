@@ -1,17 +1,17 @@
 <p align="center">
   <h1 align="center">🐜 Codomyrmex</h1>
   <p align="center">
-    <strong>A modular, AI-native coding workspace with 128 top-level modules and 595 MCP tool decorators</strong>
+    <strong>A modular, AI-native coding workspace with 128 top-level modules and 622 MCP tool decorators</strong>
   </p>
 </p>
 
 <p align="center">
-  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.2.3"><img src="https://img.shields.io/badge/release-v1.2.3-blueviolet?style=flat-square" alt="Release"></a>
+  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.2.7"><img src="https://img.shields.io/badge/release-v1.2.7-blueviolet?style=flat-square" alt="Release"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License: MIT"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
-  <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/tests-21%2C000%2B-brightgreen?style=flat-square" alt="Tests"></a>
+  <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/tests-34%2C492-brightgreen?style=flat-square" alt="Tests"></a>
   <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/MCP_tools-604-orange?style=flat-square" alt="MCP Tools"></a>
 </p>
 
@@ -20,7 +20,7 @@
   <a href="docs/getting-started/GETTING_STARTED_WITH_AGENTS.md">Agent Guide</a> •
   <a href="docs/">Documentation</a> •
   <a href="CONTRIBUTING.md">Contributing</a> •
-  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.2.3">v1.2.3 Release</a>
+  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.2.7">v1.2.7 Release</a>
 </p>
 
 ---
@@ -34,8 +34,8 @@ Codomyrmex is a **modular development platform** that brings together **128 top-
 | | |
 |---|---|
 | 🧩 **128 Modules** | Top-level packages under `src/codomyrmex/` |
-| 🤖 **595 MCP Tools** | `@mcp_tool` decorators in production sources ([inventory](docs/reference/inventory.md)) |
-| 🧪 **34,492 Tests** | Collected via `uv run pytest --collect-only -q --no-cov` (see inventory) |
+| 🤖 **604 MCP Tools** | `@mcp_tool` decorators in production sources ([inventory](docs/reference/inventory.md)) |
+| 🧪 **34,594 Tests** | Collected via `uv run pytest --collect-only -q --no-cov` (see inventory) |
 | 🔒 **Security First** | Secret scanning, SBOM generation, detect-secrets integration |
 | 🎛️ **Multi-Agent Orchestration** | Claude, Gemini, GPT, and 10+ agent providers |
 | 📦 **PyPI Ready** | `uv build` + `twine check` verified |
@@ -149,10 +149,10 @@ uv run mutmut run                                # 6-file mutation suite
 | Metric | Value |
 |--------|-------|
 | Modules | **128** (top-level under `src/codomyrmex/`) |
-| MCP tools | **595** `@mcp_tool` lines (production tree) |
-| Test suite | **34,492** collected (`pytest --collect-only --no-cov`) |
+| MCP tools | **622** `@mcp_tool` lines (production tree) |
+| Test suite | **34,594** collected (`pytest --collect-only --no-cov`) |
 | Coverage | Run `uv run pytest --cov=src/codomyrmex` (gate in `pyproject.toml`) |
-| `mcp_tools.py` files | **149** (non-test) |
+| `mcp_tools.py` files | **148** (non-test) |
 | Ruff / ty | Run `uv run ruff check src/` and `uv run ty check src/` |
 | PAI skills | **81** installed |
 | RASP docs compliance | **128/128** |

@@ -3,6 +3,8 @@
 Provides session state management with SQLite-backed storage
 for conversation continuity across invocations.
 
+Supports v0.4.0 Session Race Guards for concurrent same-session safety.
+
 Example::
 
     store = SQLiteSessionStore()
@@ -14,12 +16,22 @@ Example::
     # Later...
     restored = store.load("task-42")
     print(restored.messages)
+
+Session Race Guard Usage::
+
+    guard = SessionRaceGuard(store)
+    with guard.acquire(session_id):
+        # Safe concurrent access to session
+        session = store.load(session_id)
+        session.add_message("user", "new prompt")
+        store.save(session)
 """
 
 from __future__ import annotations
 
 import json
 import sqlite3
+import threading
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -649,9 +661,177 @@ class SQLiteSessionStore:
         self.close()
 
 
+# ─────────────────────────────────────────────────────────────────────
+# Session Race Guard (v0.4.0)
+# ─────────────────────────────────────────────────────────────────────
+
+
+class SessionRaceGuard:
+    """Thread-safe session access guard for preventing duplicate prompt ingestion.
+
+    When multiple Codomyrmex swarm modules invoke actions against the identical
+    Hermes session ID at the same microsecond, the Sentinel Guard prevents
+    duplicate prompt ingestion. This ensures parallel fan-out swarms remain
+    idempotent and safe when crossing the gateway boundaries simultaneously.
+
+    Attributes:
+        store: The session store to guard.
+        _locks: Dict of session_id -> threading.Lock for granular locking.
+
+    Example::
+
+        guard = SessionRaceGuard(store)
+        with guard.acquire(session_id):
+            # Safe concurrent access to session
+            session = store.load(session_id)
+            session.add_message("user", "new prompt")
+            store.save(session)
+    """
+
+    def __init__(self, store: SQLiteSessionStore) -> None:
+        """Initialize the race guard with a session store.
+
+        Args:
+            store: SQLiteSessionStore instance to guard.
+        """
+        self._store = store
+        self._locks: dict[str, threading.Lock] = {}
+        self._guard_lock = threading.Lock()
+
+    def _get_lock(self, session_id: str) -> threading.Lock:
+        """Get or create a lock for the given session ID.
+
+        Args:
+            session_id: Session identifier.
+
+        Returns:
+            Threading lock for this session.
+        """
+        with self._guard_lock:
+            if session_id not in self._locks:
+                self._locks[session_id] = threading.Lock()
+            return self._locks[session_id]
+
+    def acquire(self, session_id: str, timeout: float = 5.0) -> SessionGuardContext:
+        """Acquire a lock for the given session.
+
+        Args:
+            session_id: Session identifier to guard.
+            timeout: Maximum seconds to wait for lock acquisition.
+
+        Returns:
+            Context manager that releases lock on exit.
+        """
+        lock = self._get_lock(session_id)
+        acquired = lock.acquire(timeout=timeout)
+        if not acquired:
+            raise RuntimeError(
+                f"Timeout acquiring lock for session '{session_id}' "
+                f"after {timeout}s — possible concurrent access deadlock"
+            )
+        return SessionGuardContext(self, session_id)
+
+    def release(self, session_id: str) -> None:
+        """Release the lock for a session.
+
+        Args:
+            session_id: Session identifier.
+        """
+        with self._guard_lock:
+            if session_id in self._locks:
+                try:
+                    self._locks[session_id].release()
+                except RuntimeError:
+                    pass  # Lock not held
+
+    def is_locked(self, session_id: str) -> bool:
+        """Check if a session is currently locked.
+
+        Args:
+            session_id: Session identifier.
+
+        Returns:
+            True if the session lock is held.
+        """
+        lock = self._locks.get(session_id)
+        if lock is None:
+            return False
+        # Try to acquire without blocking - if we get it, it wasn't locked
+        return not lock.acquire(blocking=False)
+
+    def prune_locks(self, max_size: int = 100) -> int:
+        """Prune unlocked sessions from the lock dictionary to prevent unbounded growth.
+
+        Removes locks for sessions that are not currently held, keeping the
+        lock dictionary bounded. This prevents memory leaks in long-running
+        processes with many session IDs.
+
+        Args:
+            max_size: Maximum number of locks to keep. Defaults to 100.
+
+        Returns:
+            Number of locks pruned.
+        """
+        with self._guard_lock:
+            current_count = len(self._locks)
+            if current_count <= max_size:
+                return 0
+
+            # Find unlocked sessions to prune
+            to_prune: list[str] = []
+            for session_id, lock in self._locks.items():
+                # Check if lock is free (not acquired)
+                if lock.acquire(blocking=False):
+                    lock.release()
+                    to_prune.append(session_id)
+
+            # Prune unlocked entries up to the excess count
+            excess = current_count - max_size
+            prune_count = min(len(to_prune), excess)
+            for sid in to_prune[:prune_count]:
+                del self._locks[sid]
+
+            return prune_count
+
+    def get_lock_count(self) -> int:
+        """Get the current number of active locks.
+
+        Returns:
+            Number of session locks currently tracked.
+        """
+        return len(self._locks)
+
+
+class SessionGuardContext:
+    """Context manager for session race guard access.
+
+    Automatically releases the lock when the context exits.
+    """
+
+    def __init__(self, guard: SessionRaceGuard, session_id: str) -> None:
+        """Initialize context with guard and session ID.
+
+        Args:
+            guard: The SessionRaceGuard instance.
+            session_id: The session ID being guarded.
+        """
+        self._guard = guard
+        self._session_id = session_id
+
+    def __enter__(self) -> Self:
+        """Enter the context."""
+        return self
+
+    def __exit__(self, exc_type: object, exc_val: object, exc_tb: object) -> None:
+        """Exit the context and release the lock."""
+        self._guard.release(self._session_id)
+
+
 __all__ = [
     "HermesSession",
     "InMemorySessionStore",
     "SQLiteSessionStore",
+    "SessionGuardContext",
+    "SessionRaceGuard",
     "SessionStore",
 ]

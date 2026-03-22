@@ -50,16 +50,16 @@ def main():
                 )
             )
         )
-        
+
         all_thoughts = ""
         final_answer = ""
-        
+
         print("\n=== REASONING PROCESS ===\n")
-        
+
         for chunk in response:
             if chunk.candidates and chunk.candidates[0].content:
                 for part in chunk.candidates[0].content.parts:
-                    if getattr(part, 'thought', False):
+                    if getattr(part, "thought", False):
                         if args.show_thoughts:
                             sys.stderr.write(f"\033[90m{part.text}\033[0m")
                             sys.stderr.flush()
@@ -71,9 +71,9 @@ def main():
                             sys.stdout.write(part.text)
                         sys.stdout.flush()
                         final_answer += part.text
-                        
+
         print("\n\n=== STREAM COMPLETE ===")
-        
+
     except Exception as e:
         logger.error("Streaming failed: %s", e)
         sys.exit(1)

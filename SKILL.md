@@ -4,11 +4,11 @@ description: Full-spectrum coding workspace skill providing ~595 MCP tool decora
 ---
 # Codomyrmex Skill for PAI
 
-**Version**: 1.0.8 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: ~595 (`@mcp_tool`; see `docs/reference/inventory.md`)
+**Version**: v1.0.8 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: ~604 (`@mcp_tool`; see `docs/reference/inventory.md`)
 
 ## Description
 
-Full-spectrum coding workspace skill providing ~595 MCP tool decorators across 128 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
+Full-spectrum coding workspace skill providing ~604 MCP tool decorators across 128 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
 
 ## Installation
 

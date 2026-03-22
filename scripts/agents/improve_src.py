@@ -35,7 +35,7 @@ def get_core_modules() -> list[Path]:
     if not SRC_DIR.exists():
         logger.error(f"Source directory not found: {SRC_DIR}")
         return modules
-        
+
     for item in SRC_DIR.iterdir():
         if item.is_dir() and not item.name.startswith("__") and item.name not in ("tests", "examples", "docs"):
             modules.append(item)
@@ -89,7 +89,7 @@ def main():
         sys.exit(1)
 
     tasks = [{"module": m.name, "prompt": generate_prompt(m)} for m in modules]
-    
+
     if args.limit:
         tasks = tasks[:args.limit]
 
@@ -104,12 +104,12 @@ def main():
 
     dispatched = 0
     failed = 0
-    
+
     print(f"🚀 Dispatching {len(tasks)} Jules agents in batches of {args.batch_size}...")
     for i in range(0, len(tasks), args.batch_size):
         batch = tasks[i:i + args.batch_size]
         print(f"\n── Batch {i // args.batch_size + 1} ({len(batch)} agents) ──")
-        
+
         for task in batch:
             if dispatch_agent(task["prompt"], args.dry_run):
                 dispatched += 1
@@ -117,13 +117,13 @@ def main():
             else:
                 failed += 1
                 print(f"  ❌ Failed dispatch -> {task['module']}")
-                
+
         if i + args.batch_size < len(tasks):
             print(f"  ⏳ Waiting {args.delay}s...")
             time.sleep(args.delay)
 
     print("\n" + "="*40)
-    print(f"✅ src/ Improvement Swarm Complete")
+    print("✅ src/ Improvement Swarm Complete")
     print(f"   Success: {dispatched}")
     print(f"   Failed:  {failed}")
     print("Monitor with: jules remote list --session")

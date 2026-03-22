@@ -211,8 +211,11 @@ class PiClient:
     def _read_events(self) -> None:
         """Background thread: Continuously read JSONL events from stdout."""
         assert self._proc is not None
+        stdout = self._proc.stdout
+        if stdout is None:
+            return
         try:
-            for raw_line in self._proc.stdout:
+            for raw_line in stdout:
                 line = raw_line.rstrip("\n").rstrip("\r")
                 if not line:
                     continue

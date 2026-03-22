@@ -97,11 +97,12 @@ class ThinkingAgent(AgentInterface):
         """Check if the agent supports a specific capability."""
         return capability in self.get_capabilities()
 
-    def execute(self, request: AgentRequest) -> AgentResponse:
+    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
         """Execute the observe → think → reason → act → reflect loop.
 
         Args:
             request: The agent request.
+            max_tokens: Optional maximum tokens for the response.
 
         Returns:
             AgentResponse with the reasoning-informed output.

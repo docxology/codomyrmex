@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Model Context Protocol Module
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -69,11 +69,11 @@ The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) wi
 | `/resources` | GET | List registered resources |
 | `/prompts` | GET | List registered prompt templates |
 
-## Available Tools (33 Total)
+## Available Tools (~984 Total)
 
-### Built-in Tools (15) — Fully Implemented
+### Built-in Transport Tools (15) — Fully Implemented
 
-All built-in tools delegate to `tools.py` implementations with real functionality:
+The standard transport provides common operations directly implemented in `tools.py`:
 
 | Category | Tool | Description | PAI Phase |
 |----------|------|-------------|-----------|
@@ -91,11 +91,11 @@ All built-in tools delegate to `tools.py` implementations with real functionalit
 | **Memory** | `recall_memory` | Retrieve value from session memory | OBSERVE |
 | **Memory** | `list_memories` | List all stored memory keys | OBSERVE |
 | **Module** | `list_modules` | List all codomyrmex modules | OBSERVE |
-| **Module** | `get_module_info` | Get module README, file listing | OBSERVE |
+| **Module** | `module_info` | Get module info and file listing for a specific module | OBSERVE |
 
-### Discovered Tools (~18) — From MCP Specifications
+### Dynamically Discovered Tools (>950) — From `@mcp_tool` Decorators
 
-Additional tools are auto-discovered from `MCP_TOOL_SPECIFICATION.md` files across all modules. These are prefixed with `{module}__` to avoid collisions (e.g., `git_operations__git_status`). Tools with matching entries in `_SPEC_TOOL_IMPLEMENTATIONS` are wired to real `tools.py` functions; others return structured metadata as spec-only placeholders.
+The vast majority of the Codomyrmex tools are auto-discovered at server boot. The transport layer leverages `MCPDiscovery.scan_package("codomyrmex")` to dynamically traverse the 128 top-level modules, compiling the registry by locating all `@mcp_tool` decorators (e.g., from `codomyrmex.agents.hermes.mcp_tools`, `codomyrmex.coding.mcp_tools`, etc.). This automatically scales the registry perfectly into parity with the capabilities of the host infrastructure.
 
 ### Registered Resources
 
@@ -197,6 +197,16 @@ open http://localhost:8080/
 | **VERIFY** | `checksum_file` — integrity checks; `analyze_python_file` — code quality; `git_diff` — change validation |
 | **LEARN** | `store_memory` — capture learnings; discovery system learns from new `MCP_TOOL_SPECIFICATION.md` files |
 
+## MCP Introspection Tools
+
+Three tools are auto-discovered via `@mcp_tool` from `model_context_protocol/mcp_tools.py` — these allow PAI agents to introspect the MCP server itself:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `inspect_server` | Inspect the running MCP server configuration, capabilities, and registered tools | Safe | model_context_protocol |
+| `list_registered_tools` | List all tools currently registered with the MCP server, with schemas | Safe | model_context_protocol |
+| `get_tool_schema` | Get the input/output schema for a specific registered tool | Safe | model_context_protocol |
+
 ## MCP Protocol Version
 
 The server implements **MCP 2025-06-18** with:
@@ -233,6 +243,14 @@ server.register_tool(
 ```
 
 Any codomyrmex module can expose tools through MCP by adding an `MCP_TOOL_SPECIFICATION.md` file. The discovery bridge in `run_mcp_server.py` auto-discovers and registers these at startup.
+
+## MCP Tools
+
+| Tool | Description | Key Parameters | PAI Phase |
+|------|-------------|----------------|-----------|
+| `inspect_server` | Get MCP server metadata, capability count, and protocol version | `server_url: str` | OBSERVE |
+| `list_registered_tools` | List all registered tools on the running MCP server | -- | OBSERVE |
+| `get_tool_schema` | Get input schema and description for a specific tool | `tool_name: str` | OBSERVE |
 
 ## Navigation
 

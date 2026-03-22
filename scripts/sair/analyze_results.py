@@ -21,7 +21,9 @@ import json
 import os
 import statistics
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
+
+import matplotlib as mpl
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.performance.profiling.benchmark import BenchmarkResult
@@ -33,8 +35,7 @@ from scripts.sair.utils import (
     summarize_results,
 )
 
-import matplotlib
-matplotlib.use("Agg")
+mpl.use("Agg")
 import matplotlib.pyplot as plt
 
 logger = get_logger(__name__)
@@ -47,7 +48,7 @@ DEFAULT_VIS_DIR = os.path.join(MODULE_DIR, "output", "visualizations")
 # Latency report using codomyrmex BenchmarkResult
 # -------------------------------------------------------------------
 
-def latency_report_from_results(results: List[Dict[str, Any]], name: str = "evaluation") -> str:
+def latency_report_from_results(results: list[dict[str, Any]], name: str = "evaluation") -> str:
     """Build a latency report using BenchmarkResult from codomyrmex.performance."""
     latencies = [r["latency"] for r in results if "latency" in r and "error" not in r]
     if not latencies:
@@ -76,7 +77,7 @@ def latency_report_from_results(results: List[Dict[str, Any]], name: str = "eval
 # Visualizations
 # -------------------------------------------------------------------
 
-def generate_run_visualizations(run_data: Dict[str, Any], out_dir: str = DEFAULT_VIS_DIR) -> None:
+def generate_run_visualizations(run_data: dict[str, Any], out_dir: str = DEFAULT_VIS_DIR) -> None:
     """Generate and save visualizations for a single run."""
     ensure_dir(out_dir)
     results = run_data.get("results", [])
@@ -97,7 +98,7 @@ def generate_run_visualizations(run_data: Dict[str, Any], out_dir: str = DEFAULT
         plt.close()
         logger.info(f"Saved run visualization → {path}")
 
-def generate_trend_visualizations(runs: List[Dict[str, Any]], out_dir: str = DEFAULT_VIS_DIR) -> None:
+def generate_trend_visualizations(runs: list[dict[str, Any]], out_dir: str = DEFAULT_VIS_DIR) -> None:
     """Generate and save visualizations across multiple runs (trend)."""
     if len(runs) < 2:
         return
@@ -131,7 +132,7 @@ def generate_trend_visualizations(runs: List[Dict[str, Any]], out_dir: str = DEF
 
     plt.title("SAIR Evaluation Trend (Accuracy vs Latency)")
     plt.grid(alpha=0.3)
-    
+
     path = os.path.join(out_dir, "accuracy_latency_trend.png")
     plt.tight_layout()
     plt.savefig(path)
@@ -144,17 +145,17 @@ def generate_trend_visualizations(runs: List[Dict[str, Any]], out_dir: str = DEF
 # Main analysis function
 # -------------------------------------------------------------------
 
-def analyze_run(run_data: Dict[str, Any], verbose: bool = False) -> str:
+def analyze_run(run_data: dict[str, Any], verbose: bool = False) -> str:
     """Produce a human-readable analysis report for a single run."""
     summary = run_data.get("summary", {})
     results = run_data.get("results", [])
     s = summarize_results(results)
 
-    lines: List[str] = []
+    lines: list[str] = []
     run_id = summary.get("run_id", "unknown")
-    lines.append(f"╔══════════════════════════════════════════════════════╗")
+    lines.append("╔══════════════════════════════════════════════════════╗")
     lines.append(f"  SAIR Run Analysis  run_id={run_id}")
-    lines.append(f"╚══════════════════════════════════════════════════════╝")
+    lines.append("╚══════════════════════════════════════════════════════╝")
     lines.append(f"  Model      : {summary.get('model', 'unknown')}")
     lines.append(f"  Dataset    : {summary.get('dataset', 'unknown')}")
     cs_hash = summary.get("cheatsheet_hash")
@@ -216,7 +217,7 @@ def analyze_run(run_data: Dict[str, Any], verbose: bool = False) -> str:
     return "\n".join(lines)
 
 
-def analyze_trend(runs: List[Dict[str, Any]]) -> str:
+def analyze_trend(runs: list[dict[str, Any]]) -> str:
     """Summarise accuracy/latency trend across multiple runs."""
     if not runs:
         return "No runs found."

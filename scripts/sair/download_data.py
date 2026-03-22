@@ -16,7 +16,7 @@ import argparse
 import json
 import os
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
 
 import requests
 from huggingface_hub import hf_hub_download
@@ -49,7 +49,7 @@ def verify_dataset_integrity(path: str) -> bool:
         return False
     try:
         valid_lines = 0
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             for i, line in enumerate(f):
                 if line.strip():
                     json.loads(line)
@@ -66,10 +66,10 @@ def verify_dataset_integrity(path: str) -> bool:
         return False
 
 
-def list_local_datasets(data_dir: str = "data/sair") -> Dict[str, Any]:
+def list_local_datasets(data_dir: str = "data/sair") -> dict[str, Any]:
     """Return a dict summarising locally cached SAIR datasets."""
     base = Path(data_dir)
-    summary: Dict[str, Any] = {}
+    summary: dict[str, Any] = {}
     for jsonl in base.rglob("*.jsonl"):
         size = jsonl.stat().st_size
         valid = verify_dataset_integrity(str(jsonl))

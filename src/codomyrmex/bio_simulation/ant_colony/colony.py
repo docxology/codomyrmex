@@ -10,7 +10,7 @@ from __future__ import annotations
 import random
 from typing import Any
 
-from src.codomyrmex.bio_simulation.genomics.genome import Genome
+from codomyrmex.bio_simulation.genomics.genome import Genome
 
 from .ant import Ant, AntState
 from .environment import Environment

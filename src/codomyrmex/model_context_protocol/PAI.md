@@ -69,11 +69,11 @@ The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) wi
 | `/resources` | GET | List registered resources |
 | `/prompts` | GET | List registered prompt templates |
 
-## Available Tools (33 Total)
+## Available Tools (~984 Total)
 
-### Built-in Tools (15) — Fully Implemented
+### Built-in Transport Tools (15) — Fully Implemented
 
-All built-in tools delegate to `tools.py` implementations with real functionality:
+The standard transport provides common operations directly implemented in `tools.py`:
 
 | Category | Tool | Description | PAI Phase |
 |----------|------|-------------|-----------|
@@ -93,9 +93,9 @@ All built-in tools delegate to `tools.py` implementations with real functionalit
 | **Module** | `list_modules` | List all codomyrmex modules | OBSERVE |
 | **Module** | `module_info` | Get module info and file listing for a specific module | OBSERVE |
 
-### Discovered Tools (~18) — From MCP Specifications
+### Dynamically Discovered Tools (>950) — From `@mcp_tool` Decorators
 
-Additional tools are auto-discovered from `MCP_TOOL_SPECIFICATION.md` files across all modules. These are prefixed with `{module}__` to avoid collisions (e.g., `git_operations__git_status`). Tools with matching entries in `_SPEC_TOOL_IMPLEMENTATIONS` are wired to real `tools.py` functions; others return structured metadata as spec-only placeholders.
+The vast majority of the Codomyrmex tools are auto-discovered at server boot. The transport layer leverages `MCPDiscovery.scan_package("codomyrmex")` to dynamically traverse the 128 top-level modules, compiling the registry by locating all `@mcp_tool` decorators (e.g., from `codomyrmex.agents.hermes.mcp_tools`, `codomyrmex.coding.mcp_tools`, etc.). This automatically scales the registry perfectly into parity with the capabilities of the host infrastructure.
 
 ### Registered Resources
 

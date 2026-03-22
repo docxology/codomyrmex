@@ -31,22 +31,22 @@ async def process_document(client, model, file_path, schema, semaphore):
     async with semaphore:
         logger.debug("Processing %s...", file_path.name)
         try:
-            # Note: The unified SDK's async capabilities might be evolving. 
+            # Note: The unified SDK's async capabilities might be evolving.
             # We map this to the standard generate_content using asyncio.to_thread if native async is unavailable.
             # Assuming standard API calls for this thin wrapper snippet.
             import asyncio
-            
+
             def run_sync():
                 if file_path.suffix.lower() == ".pdf":
                     mime = "application/pdf"
                 else:
                     mime = "text/plain"
-                    
+
                 # Real implementation would upload to GCS first for Vertex batch processing.
                 # For this thin script, we use inline files for simplicity. (Note: large files need URI)
                 with open(file_path, "rb" if mime == "application/pdf" else "r") as f:
                     data = f.read()
-                    
+
                 return client.models.generate_content(
                     model=model,
                     contents=[
@@ -62,43 +62,43 @@ async def process_document(client, model, file_path, schema, semaphore):
             loop = asyncio.get_running_loop()
             resp = await loop.run_in_executor(None, run_sync)
             return file_path.name, resp.text
-            
+
         except Exception as e:
             logger.error("Failed processing %s: %s", file_path.name, e)
-            return file_path.name, f'{{"error": "{str(e)}"}}'
+            return file_path.name, f'{{"error": "{e!s}"}}'
 
 
 async def async_main(args):
     """Main async execution."""
     client = genai.Client()
     folder = Path(args.input_dir)
-    
+
     files_to_process = list(folder.glob("*.*"))
     if not files_to_process:
         logger.error("No files found in %s", args.input_dir)
         sys.exit(1)
-        
+
     logger.info("Found %d files to process. Using %d concurrent workers.", len(files_to_process), args.jobs)
     semaphore = asyncio.Semaphore(args.jobs)
-    
+
     tasks = [
-        process_document(client, args.model, f, args.schema, semaphore) 
+        process_document(client, args.model, f, args.schema, semaphore)
         for f in files_to_process
     ]
-    
+
     results = await asyncio.gather(*tasks)
-    
+
     # Save results
     output_path = Path(args.output)
     output_dict = {
-        fname: (eval(content) if content.strip().startswith("{") else content) 
+        fname: (eval(content) if content.strip().startswith("{") else content)
         for fname, content in results
     }
-    
+
     import json
     with open(output_path, "w") as f:
         json.dump(output_dict, f, indent=2)
-        
+
     logger.info("Batch processing complete. Results saved to %s", output_path)
 
 

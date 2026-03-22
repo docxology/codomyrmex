@@ -93,12 +93,12 @@ def cmd_evaluate(args: argparse.Namespace) -> str:
 def cmd_generate(args: argparse.Namespace) -> None:
     """Generate or refine a cheatsheet."""
     from scripts.sair.generate_cheatsheet import (
+        MAX_BYTES,
+        STRATEGY_BUNDLES,
+        TECHNIQUE_LIBRARY,
         build_cheatsheet,
         refine_from_results,
         save_cheatsheet,
-        STRATEGY_BUNDLES,
-        TECHNIQUE_LIBRARY,
-        MAX_BYTES,
     )
 
     output = getattr(args, "output", "cheatsheets/default_cs.txt")
@@ -123,7 +123,12 @@ def cmd_generate(args: argparse.Namespace) -> None:
 
 def cmd_analyze(args: argparse.Namespace) -> None:
     """Analyze run results."""
-    from scripts.sair.analyze_results import analyze_run, analyze_trend, compare_two_runs, load_run_history
+    from scripts.sair.analyze_results import (
+        analyze_run,
+        analyze_trend,
+        compare_two_runs,
+        load_run_history,
+    )
     from scripts.sair.utils import load_json
 
     if getattr(args, "compare", None):
@@ -173,7 +178,7 @@ def cmd_full(args: argparse.Namespace) -> None:
 
     s = run_data["summary"]
     if s.get("missed_problems"):
-        print(f"\n💡 Tip: Refine the cheatsheet for the next run:")
+        print("\n💡 Tip: Refine the cheatsheet for the next run:")
         import glob
         runs = sorted(glob.glob(os.path.join(args.runs_dir, f"*{s['run_id']}*")))
         if runs:

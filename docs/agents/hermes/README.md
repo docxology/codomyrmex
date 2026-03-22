@@ -52,10 +52,19 @@ This documentation suite captures architecture, operational patterns, troublesho
 
 ### Operations
 
-| Document                                 | Description                                    |
+| Document | Description |
 | :--------------------------------------- | :--------------------------------------------- |
 | [troubleshooting.md](troubleshooting.md) | 12 common issue patterns with diagnosis & fixes |
-| [security.md](security.md)               | API key hygiene, access control, hardening     |
+| [security.md](security.md) | API key hygiene, access control, hardening |
+| [gotchas.md](gotchas.md) | Hard-won operational lessons (polling conflict, CWD, launchd) |
+
+### Instance Management
+
+| Document | Description |
+| :--------------------------------------- | :--------------------------------------------- |
+| [instance_templates.md](instance_templates.md) | Template system, spawn workflow, config defaults |
+| [instances.md](instances.md) | All active instances — Main, Crescent City, Template Bot |
+| [new_instance_questionnaire.md](new_instance_questionnaire.md) | Required inputs checklist for new instances |
 
 ### Assets
 

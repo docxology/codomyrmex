@@ -47,9 +47,13 @@ When `true`, the bot only responds to messages that @mention it. This is recomme
 
 Comma-separated channel/group IDs where the bot responds to all messages without requiring @mention. Leave empty (`""`) to disable.
 
-### `TELEGRAM_ALLOWED_USERS` (legacy)
+### `TELEGRAM_ALLOWED_USERS` & `TELEGRAM_ALLOW_ALL_USERS`
 
-This env var is no longer the primary authorization mechanism. The current system uses `$HERMES_HOME/pairing/telegram-approved.json` — a JSON file mapping Telegram user IDs to approval timestamps. Manage it via:
+Hermes supports three tiers of user authorization for Telegram:
+
+1. **Global Open Access**: Setting `TELEGRAM_ALLOW_ALL_USERS=true` in `.env` disables the pairing wall completely. Anyone who messages the bot will be processed. This is highly recommended for public group chats where you want all members to interface fluidly.
+2. **Explicit Allowlist**: Setting `TELEGRAM_ALLOWED_USERS=1234,4567` restricts access to only those numeric Telegram IDs.
+3. **Dynamic Pairing**: The current runtime system uses `$HERMES_HOME/pairing/telegram-approved.json` — a JSON file mapping dynamic user IDs to approval timestamps. Manage it via:
 
 ```bash
 # Create a pairing code (user sends it to the bot to self-authorize)
@@ -65,7 +69,7 @@ p.write_text(json.dumps(d, indent=2))
 "
 ```
 
-Groups are authorized by adding the group's chat_id (negative number, e.g., `-5295181842`) as an entry in `telegram-approved.json`.
+Groups are technically authorized by adding the group's `chat_id` (e.g., `-5295181842`) as an entry in `telegram-approved.json`. **However**, this only authorizes the *group routing*; individual users within the group still must pass the pairing check unless `TELEGRAM_ALLOW_ALL_USERS=true` is activated.
 
 ### `TELEGRAM_HOME_CHANNEL`
 
@@ -171,8 +175,9 @@ hermes pairing create
    grep -E "group:|Unauthorized" $HERMES_HOME/logs/gateway.log | tail -5
    ```
 
-4. Add the group chat_id to the approved list (see above)
-5. Optionally set `free_response_channels: '-5295181842'` in `config.yaml` to respond without @mention
+4. Add the group `chat_id` to the approved list in `telegram-approved.json` (see above).
+5. Open `config.yaml` and set `free_response_channels: '-5295181842'` under the `telegram:` block to let the bot respond to casual chat without needing a strict `@mention`.
+6. **Critical for groups:** Open `.env` and set `TELEGRAM_ALLOW_ALL_USERS=true` so that new group members aren't silently blocked by the pairing wall when they try to chat with the bot.
 
 ## Related Documents
 

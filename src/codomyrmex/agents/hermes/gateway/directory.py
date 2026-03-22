@@ -24,7 +24,8 @@ class ChannelDirectorySync:
             self.file_path = Path(file_path)
 
         self._lock = asyncio.Lock()
-        self._directory: dict[str, dict[str, str]] = {}
+        # Type: platform -> user_id -> metadata dict
+        self._directory: dict[str, dict[str, dict[str, str]]] = {}
 
     def _ensure_dir(self) -> None:
         """Ensure parent directories exist."""
@@ -57,19 +58,21 @@ class ChannelDirectorySync:
         self, platform: str, user_id: str, metadata: dict[str, str] | None = None
     ) -> None:
         """Safely register a new incoming platform channel mapping."""
-        if not metadata:
-            metadata = {}
+        # Ensure metadata is never None - use empty dict as fallback
+        safe_metadata: dict[str, str] = metadata if metadata is not None else {}
 
         async with self._lock:
-            # Memory sync
-            platform_dir = self._directory.setdefault(platform, {})
-            platform_dir[user_id] = metadata
+            # Memory sync - ensure platform key exists with proper typing
+            if platform not in self._directory:
+                self._directory[platform] = {}
+            # Assign metadata dict - type accepts dict[str, dict[str, str]]
+            self._directory[platform][user_id] = safe_metadata
 
             # Flush
             self._write_disk()
             logger.info(f"Directory Sync: registered {platform} → {user_id}")
 
-    async def get_directory(self) -> dict[str, dict[str, str]]:
+    async def get_directory(self) -> dict[str, dict[str, dict[str, str]]]:
         """Return a copy of the current synced routing tree."""
         async with self._lock:
             # Read to ensure we have any out-of-band updates before returning memory copy

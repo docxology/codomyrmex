@@ -1,8 +1,11 @@
 ---
 scope: project
+version: v1.2.7
 ---
 
 # CLAUDE.md
+
+**Version**: v1.2.7 | **Last Updated**: March 2026
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -257,7 +260,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (90283 symbols, 206382 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (90294 symbols, 206389 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

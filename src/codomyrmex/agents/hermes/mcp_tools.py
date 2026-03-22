@@ -1232,7 +1232,7 @@ def hermes_delegate_task(
         from codomyrmex.logging_monitoring.core.correlation import get_correlation_id
 
         parent_cid = get_correlation_id()
-        if parent_cid:
+        if parent_cid and request.metadata is not None:
             request.metadata["parent_trace_id"] = parent_cid
 
         response = sub_agent.execute(request)
@@ -1938,21 +1938,23 @@ def hermes_spawn_agent(
 
             def _hermes_agent(t: str, **_kw: Any) -> dict[str, Any]:
                 """Real HermesClient delegate — runs a one-shot prompt."""
-                result = client.execute(t)
+                from codomyrmex.agents.core import AgentRequest
+
+                result = client.execute(AgentRequest(prompt=t))
                 return {
                     "task": t,
                     "agent": "hermes",
-                    "backend": getattr(client, "_backend", "auto"),
-                    "result": result if isinstance(result, str) else str(result),
+                    "backend": getattr(client, "_active_backend", "auto"),
+                    "result": result.content if hasattr(result, "content") else str(result),
                 }
 
         except Exception:
             # HermesClient unavailable (hermes binary / Ollama not installed)
-            def _hermes_agent(t: str, **_kw: Any) -> dict[str, Any]:  # type: ignore[misc]
+            def _hermes_agent(t: str, **_kw: Any) -> dict[str, Any]:
                 return {
                     "task": t,
                     "agent": "hermes",
-                    "note": "Hermes agent delegated (stub).",
+                    "note": "Hermes agent delegated (stub)",
                 }
 
         orch.register_agent(role, _hermes_agent)

@@ -2,6 +2,8 @@
 
 Use this checklist when spawning a new Hermes instance. Items marked **[REQUIRED]** must be provided. Others have sensible defaults.
 
+**Quick spawn**: `src/codomyrmex/agents/hermes/scripts/spawn_instance.sh <name> [personality] [model] [workdir]`
+
 ## 1. Instance Identity
 
 - **[REQUIRED] Instance name**: Directory name (no spaces, lowercase)
@@ -58,13 +60,12 @@ Use this checklist when spawning a new Hermes instance. Items marked **[REQUIRED
 - **toolsets**: Which tools to enable
   - Default: `['all']` (everything)
   - Restricted: `['terminal', 'file', 'web', 'skills', 'delegation']`
-  - Full list: terminal, file, web, vision, browser, skills, delegation, execution, memory, session_search, clarify, todo, text_to_speech, cronjob, mixture_of_agents, honcho, homeassistant
 
 ## 7. Context Compression
 
 - **compression.enabled**: Default `true`
 - **compression.summary_model**: Default `google/gemini-3-flash-preview` (fast, cheap)
-- **compression.threshold**: Default `0.85` (compress when 85% full)
+- **compression.threshold**: Default `0.9` (compress when 90% full)
 
 ## 8. Scheduling (Optional)
 
@@ -78,7 +79,13 @@ Define cron jobs for the agent:
 ## 9. Advanced (Optional)
 
 - **agent.max_turns**: Max conversation turns (default: 300)
-- **agent.reasoning_effort**: `low`, `medium`, `high` (default: medium)
-- **terminal.timeout**: Command timeout in seconds (default: 180)
+- **agent.reasoning_effort**: `low`, `medium`, `high` (default: high)
+- **terminal.timeout**: Command timeout in seconds (default: 300)
 - **human_delay.mode**: `off`, `typing`, `random` (default: off)
 - **session_reset.idle_minutes**: Session reset after idle (default: 1440 = 24h)
+
+## Navigation
+
+- **Spawn script**: [scripts/spawn\_instance.sh](../../../src/codomyrmex/agents/hermes/scripts/spawn_instance.sh)
+- **Config template**: [instance\_templates/config.template.yaml](../../../src/codomyrmex/agents/hermes/instance_templates/config.template.yaml)
+- **Active instances**: [instances.md](instances.md)

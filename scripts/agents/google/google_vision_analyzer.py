@@ -49,9 +49,9 @@ def main():
 
     contents = []
     processed_files = []
-    
+
     for file in folder.iterdir():
-        if file.suffix.lower() in {'.png', '.jpg', '.jpeg', '.pdf'}:
+        if file.suffix.lower() in {".png", ".jpg", ".jpeg", ".pdf"}:
             logger.info("Uploading %s...", file.name)
             try:
                 # Note: In production, upload to GCS first if using Vertex, or use files.upload for API Studio
@@ -62,7 +62,7 @@ def main():
                         parts=[
                             types.Part.from_text(f"Analyze {file.name}. Tasks: {args.tasks}"),
                             types.Part.from_uri(
-                                file_uri=file_uri.uri, 
+                                file_uri=file_uri.uri,
                                 mime_type="application/pdf" if file.suffix.lower() == ".pdf" else "image/jpeg"
                             )
                         ]
@@ -88,18 +88,18 @@ def main():
                 response_mime_type="application/json"
             )
         )
-        
+
         # Parse the structured response
         try:
             results = json.loads(responses.text)
         except json.JSONDecodeError:
             results = {"raw_text": responses.text}
-            
+
         with open(args.output, "w") as f:
             json.dump(results, f, indent=2)
-            
+
         logger.info("Successfully wrote results to %s", args.output)
-            
+
     except Exception as e:
         logger.error("Batch inference failed: %s", e)
         sys.exit(1)

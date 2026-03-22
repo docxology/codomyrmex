@@ -1,17 +1,19 @@
 #!/bin/bash
-# spawn.sh — Create a new Hermes instance from template
-# Usage: ./spawn.sh <instance-name> [personality] [model] [working-dir]
+# spawn_instance.sh — Create a new Hermes instance from Codomyrmex template
+# Location: src/codomyrmex/agents/hermes/scripts/spawn_instance.sh
+# Usage: ./spawn_instance.sh <instance-name> [personality] [model] [working-dir]
 #
 # Examples:
-#   ./spawn.sh research-bot "You are a research assistant" 
-#   ./spawn.sh codomyrmex-watcher technical openrouter/hunter-alpha ~/codomyrmex
-#   ./spawn.sh civic-analyst "You analyze civic implications" nvidia/nemotron-3-super-120b-a12b:free
+#   ./spawn_instance.sh research-bot "You are a research assistant"
+#   ./spawn_instance.sh codomyrmex-watcher technical openrouter/hunter-alpha ~/codomyrmex
+#   ./spawn_instance.sh civic-analyst "You analyze civic implications" nvidia/nemotron-3-super-120b-a12b:free
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TEMPLATE_CONFIG="$SCRIPT_DIR/config.yaml"
-TEMPLATE_ENV="$SCRIPT_DIR/.env.example"
+TEMPLATE_DIR="$SCRIPT_DIR/../instance_templates"
+TEMPLATE_CONFIG="$TEMPLATE_DIR/config.template.yaml"
+TEMPLATE_ENV="$TEMPLATE_DIR/.env.example"
 
 # Validate arguments
 if [ -z "$1" ]; then
@@ -54,7 +56,7 @@ echo "Creating config.yaml..."
 cp "$TEMPLATE_CONFIG" "$HERMES_HOME/config.yaml"
 
 # Customize model
-sed -i '' "s|model: openrouter/hunter-alpha|model: $MODEL|" "$HERMES_HOME/config.yaml"
+sed -i '' "s|model: nvidia/nemotron-3-nano-30b-a3b:free|model: $MODEL|" "$HERMES_HOME/config.yaml"
 
 # Customize working directory
 sed -i '' "s|cwd: \.|cwd: $WORKDIR|" "$HERMES_HOME/config.yaml"
@@ -98,7 +100,7 @@ echo "3. Test: HERMES_HOME=$HERMES_HOME hermes chat -q 'Hello, who are you?'"
 echo "4. Start: cd $WORKDIR && HERMES_HOME=$HERMES_HOME hermes gateway run &"
 echo ""
 echo "⚠️  IMPORTANT: Always start gateway with explicit CWD (cd to workdir first)"
-echo "   See GOTCHAS.md for details on why this matters."
+echo "   See docs/agents/hermes/gotchas.md for details."
 echo ""
 echo "For Telegram:"
 echo "  - Add TELEGRAM_BOT_TOKEN to .env"
