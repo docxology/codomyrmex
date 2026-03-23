@@ -17,7 +17,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 - **Safe Execution**: Code execution must be sandboxed and observable.
 - **Discoverability**: All modules must be discoverable via the `system_discovery` mechanism and registered in the module index.
 - **Instrumentation**: Every module must integrate with `logging_monitoring` for structured telemetry and observability.
-- **Integration Workspaces**: The `projects/` surface must support standalone integration projects, including Paperclip adapter implementations, without coupling into core module boundaries.
+- **Integration Workspaces**: The `projects/` surface must support standalone integration projects (including `daf-consulting` and `hermes-paperclip-adapter`) without coupling into core module boundaries.
 
 ## Design Principles
 

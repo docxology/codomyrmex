@@ -21,7 +21,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 | **docs/** | Project documentation (about Codomyrmex) | [docs/README.md](docs/README.md) |
 | **src/codomyrmex/tests/** | Test suites (unit and integration) | [src/codomyrmex/tests/README.md](src/codomyrmex/tests/README.md) |
 | **config/** | Configuration templates and examples | [config/README.md](config/README.md) |
-| **projects/** | Project workspace, templates, and external adapter integrations | [projects/README.md](projects/README.md) |
+| **projects/** | Project workspace, templates, and external adapter integrations (`daf-consulting`, `hermes-paperclip-adapter`) | [projects/README.md](projects/README.md) |
 | **src/codomyrmex/examples/** | Executable examples and demos | [src/codomyrmex/examples/README.md](src/codomyrmex/examples/README.md) |
 | **scripts/sair/** | SAIR Mathematics Distillation submodule | [scripts/sair/README.md](scripts/sair/README.md) |
 
