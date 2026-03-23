@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Projects directory providing workspace for project templates, example implementations, and development sandboxes that demonstrate Codomyrmex capabilities and enable rapid project development.
+Projects directory providing workspace for project templates, example implementations, development sandboxes, and adapter projects (including Paperclip integrations) that demonstrate Codomyrmex capabilities and enable rapid project development.
 
 ## Design Principles
 
@@ -89,6 +89,7 @@ graph TD
 1. **Templates**: Reusable project structures
 2. **Examples**: Demonstration projects
 3. **Sandboxes**: Development workspaces
+4. **Adapters**: Integration projects bridging Codomyrmex agents into external orchestration systems (for example, Paperclip)
 
 ### Project Standards
 
