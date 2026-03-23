@@ -61,7 +61,7 @@ class TestRESTAPI:
     """Test the REST API functionality."""
 
     def setup_method(self):
-        """Set up test method."""
+        """set up test method."""
         self.api = RESTAPI("Test API", "1.0.0", "Test description")
 
     def test_api_creation(self):
@@ -140,7 +140,7 @@ class TestGraphQLAPI:
     """Test the GraphQL API functionality."""
 
     def setup_method(self):
-        """Set up test method."""
+        """set up test method."""
         self.schema = GraphQLSchema()
         self.api = GraphQLAPI(self.schema)
 
@@ -219,7 +219,7 @@ class TestAPIVersioning:
     """Test the API versioning functionality."""
 
     def setup_method(self):
-        """Set up test method."""
+        """set up test method."""
         self.version_manager = APIVersionManager("1.0.0", VersionFormat.SEMVER)
 
     def test_version_creation(self):
@@ -297,7 +297,7 @@ class TestOpenAPIGenerator:
     """Test the OpenAPI generator functionality."""
 
     def setup_method(self):
-        """Set up test method."""
+        """set up test method."""
         self.generator = OpenAPIGenerator("Test API", "1.0.0", "Test description")
 
     def test_generator_creation(self):

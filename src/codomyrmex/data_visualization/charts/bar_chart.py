@@ -93,8 +93,8 @@ class BarChart:
         Initialize a bar chart.
 
         Args:
-            categories: List of category labels
-            values: List of values for each category
+            categories: list of category labels
+            values: list of values for each category
             title: Chart title
             x_label: X-axis label
             y_label: Y-axis label

@@ -55,7 +55,7 @@ class PDFExtractor:
             pdf_path: Path to the PDF file.
 
         Returns:
-            List of :class:`PageContent` for each page.
+            list of :class:`PageContent` for each page.
 
         Raises:
             FileNotFoundError: If the PDF doesn't exist.
@@ -116,7 +116,7 @@ class PDFExtractor:
             pages: Optional list of 1-indexed page numbers to extract.
 
         Returns:
-            List of :class:`PageContent` with VLM-extracted text.
+            list of :class:`PageContent` with VLM-extracted text.
 
         Raises:
             FileNotFoundError: If the PDF doesn't exist.
@@ -174,7 +174,7 @@ class PDFExtractor:
             pdf_path: Path to the PDF file.
 
         Returns:
-            Dict of PDF metadata.
+            dict of PDF metadata.
         """
         path = Path(pdf_path)
         if not path.exists():

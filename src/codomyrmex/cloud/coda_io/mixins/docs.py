@@ -28,7 +28,7 @@ class DocsMixin:
         page_token: str | None = None,
     ) -> DocList:
         """
-        List accessible docs.
+        list accessible docs.
 
         Returns docs in reverse chronological order by last relevant event.
 

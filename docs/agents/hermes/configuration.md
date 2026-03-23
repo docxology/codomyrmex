@@ -226,3 +226,10 @@ Hermes’s **`$HERMES_HOME/config.yaml`** does not define Codomyrmex’s skill p
 - [Personalities](personalities.md) — Custom persona definitions
 - [skills.md](skills.md) — Unified skill registry, merge order, MCP skill tools
 - [codomyrmex_integration.md](codomyrmex_integration.md) — Full MCP surface (48 tools)
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

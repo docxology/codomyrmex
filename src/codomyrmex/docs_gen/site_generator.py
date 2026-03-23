@@ -23,8 +23,8 @@ class SiteConfig:
         nav: Navigation structure.
         plugins: Enabled plugins.
         base_url: Base URL.
-        extra_css: List of extra CSS files.
-        extra_javascript: List of extra JS files.
+        extra_css: list of extra CSS files.
+        extra_javascript: list of extra JS files.
     """
 
     title: str = "Codomyrmex Documentation"

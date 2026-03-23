@@ -66,7 +66,7 @@ class StatusReporter:
         """Check the current Python environment and return diagnostic info.
 
         Returns:
-            Dict with keys: version, version_string, executable,
+            dict with keys: version, version_string, executable,
             virtual_env (bool), path (first 5 sys.path entries), platform.
         """
         from codomyrmex.system_discovery.reporting.profilers import EnvironmentProfiler
@@ -103,7 +103,7 @@ class StatusReporter:
         virtual env) and configuration files (pyproject.toml, pytest.ini, etc.).
 
         Returns:
-            Dict with boolean flags for each directory and a config_files sub-dict.
+            dict with boolean flags for each directory and a config_files sub-dict.
         """
         status = {
             "project_root_exists": self.project_root.exists(),
@@ -145,7 +145,7 @@ class StatusReporter:
         and web frameworks to determine what is available in the environment.
 
         Returns:
-            Dict with keys: dependencies (name -> bool), available_count,
+            dict with keys: dependencies (name -> bool), available_count,
             total_count, success_rate (percentage).
         """
         dependencies = {
@@ -197,7 +197,7 @@ class StatusReporter:
         via subprocess calls to git. Gracefully handles missing git or non-repo.
 
         Returns:
-            Dict with keys: is_git_repo, git_available, current_branch,
+            dict with keys: is_git_repo, git_available, current_branch,
             clean_working_tree, remotes, recent_commits, staged_changes,
             unstaged_changes.
         """
@@ -309,7 +309,7 @@ class StatusReporter:
         Probes git, npm, node, docker, and uv by running --version on each.
 
         Returns:
-            Dict mapping tool name to a boolean indicating availability.
+            dict mapping tool name to a boolean indicating availability.
         """
         tools = {
             "git": False,
@@ -337,7 +337,7 @@ class StatusReporter:
         check_dependencies, check_git_status, and check_external_tools.
 
         Returns:
-            Dict with keys: timestamp, python_environment, project_structure,
+            dict with keys: timestamp, python_environment, project_structure,
             dependencies, git_status, external_tools, hardware.
         """
         from codomyrmex.system_discovery.reporting.profilers import HardwareProfiler

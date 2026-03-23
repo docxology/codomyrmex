@@ -37,7 +37,7 @@ class Span:
         start_time: Start timestamp.
         end_time: End timestamp.
         attributes: Span attributes.
-        events: List of timed events.
+        events: list of timed events.
         status: Span status (``ok``, ``error``).
     """
 
@@ -69,7 +69,7 @@ class Span:
         return 0.0
 
     def set_attribute(self, key: str, value: Any) -> None:
-        """Set a span attribute."""
+        """set a span attribute."""
         self.attributes[key] = value
 
     def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:
@@ -222,7 +222,7 @@ class MetricCounter:
     def gauge(
         self, name: str, value: float, labels: dict[str, str] | None = None
     ) -> None:
-        """Set a gauge."""
+        """set a gauge."""
         key = self._get_key(name, labels)
         self._gauges[key] = value
 

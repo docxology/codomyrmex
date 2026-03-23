@@ -238,7 +238,7 @@ class DeploymentOrchestrator:
             name: Deployment name
             version: Version to deploy
             environment_name: Target environment name
-            artifacts: List of artifacts to deploy
+            artifacts: list of artifacts to deploy
             **kwargs: Additional deployment options
 
         Returns:
@@ -711,7 +711,7 @@ class DeploymentOrchestrator:
         return self.deployments.get(deployment_name)
 
     def list_deployments(self) -> list[Deployment]:
-        """List all deployments."""
+        """list all deployments."""
         return list(self.deployments.values())
 
     def cancel_deployment(self, deployment_name: str) -> bool:

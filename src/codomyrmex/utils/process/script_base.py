@@ -426,7 +426,7 @@ Environment Variables:
         return config
 
     def setup_output_directory(self) -> Path:
-        """Set up output directory for this run."""
+        """set up output directory for this run."""
         self.run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         if self.config.output_dir:
@@ -448,14 +448,14 @@ Environment Variables:
         return self.output_path
 
     def setup_logging(self) -> None:
-        """Set up logging for this script."""
-        # Set log level via environment for global setup
+        """set up logging for this script."""
+        # set log level via environment for global setup
         os.environ["CODOMYRMEX_LOG_LEVEL"] = self.config.log_level
 
         if self.config.log_format == "json":
             os.environ["CODOMYRMEX_LOG_FORMAT"] = "JSON"
 
-        # Set up file logging if output is enabled
+        # set up file logging if output is enabled
         if self.config.save_output and self.output_path:
             log_file = self.config.log_file or (self.output_path / f"{self.name}.log")
             os.environ["CODOMYRMEX_LOG_FILE"] = str(log_file)
@@ -589,11 +589,11 @@ Environment Variables:
             # Load configuration
             self.config = self.load_config(args)
 
-            # Set up output directory
+            # set up output directory
             if self.config.save_output:
                 self.setup_output_directory()
 
-            # Set up logging
+            # set up logging
             self.setup_logging()
 
             self.log_info(f"{self.name} v{self.version}")

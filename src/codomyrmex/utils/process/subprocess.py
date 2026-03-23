@@ -702,7 +702,7 @@ def split_command(command: str) -> list[str]:
         command: Command string.
 
     Returns:
-        List of command arguments.
+        list of command arguments.
 
     Example:
         >>> split_command("echo 'hello world'")

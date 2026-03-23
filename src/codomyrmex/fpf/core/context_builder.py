@@ -197,7 +197,7 @@ class ContextBuilder:
             depth: Relationship depth
 
         Returns:
-            List of related Pattern objects
+            list of related Pattern objects
         """
         pattern = self.spec.get_pattern_by_id(pattern_id)
         if not pattern:

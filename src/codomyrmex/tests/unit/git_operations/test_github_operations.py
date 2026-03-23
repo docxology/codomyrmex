@@ -107,7 +107,7 @@ class TestGitHubOperationsComprehensive:
 
     @pytest.fixture(autouse=True)
     def _setup(self, tmp_path):
-        """Set up test fixtures for each test."""
+        """set up test fixtures for each test."""
         self.github_token = _GITHUB_TOKEN
         self.test_dir = str(tmp_path)
         _local_test_dirs.append(self.test_dir)
@@ -334,7 +334,7 @@ This PR is part of the comprehensive GitHub operations testing suite."""
 
         print(f"   Retrieved PR details: #{pr_details['number']}")
 
-        # Step 8: List pull requests
+        # Step 8: list pull requests
         pr_list = get_pull_requests(owner, repo_name, "open", self.github_token)
 
         assert len(pr_list) > 0

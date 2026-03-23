@@ -109,10 +109,10 @@ class WorkerAgent(CollaborativeAgent):
         """Execute a batch of tasks, respecting concurrency limits.
 
         Args:
-            tasks: List of tasks to execute.
+            tasks: list of tasks to execute.
 
         Returns:
-            List of task results in the same order as input tasks.
+            list of task results in the same order as input tasks.
 
         """
         semaphore = asyncio.Semaphore(self._max_concurrent_tasks)

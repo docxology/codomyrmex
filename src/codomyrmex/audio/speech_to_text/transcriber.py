@@ -187,7 +187,7 @@ class Transcriber:
             audio_path: Path to the audio file
 
         Returns:
-            Tuple of (language_code, confidence)
+            tuple of (language_code, confidence)
 
         """
         return self._provider.detect_language(audio_path)
@@ -201,12 +201,12 @@ class Transcriber:
         """Transcribe multiple audio files.
 
         Args:
-            audio_paths: List of paths to audio files
+            audio_paths: list of paths to audio files
             language: Language code (None for auto-detection)
             **kwargs: Additional transcription options
 
         Returns:
-            List of TranscriptionResult objects
+            list of TranscriptionResult objects
 
         """
         results = []
@@ -225,13 +225,13 @@ class Transcriber:
         """Transcribe multiple audio files concurrently.
 
         Args:
-            audio_paths: List of paths to audio files
+            audio_paths: list of paths to audio files
             language: Language code (None for auto-detection)
             max_concurrent: Maximum concurrent transcriptions
             **kwargs: Additional transcription options
 
         Returns:
-            List of TranscriptionResult objects (in same order as input)
+            list of TranscriptionResult objects (in same order as input)
 
         """
         semaphore = asyncio.Semaphore(max_concurrent)
@@ -247,7 +247,7 @@ class Transcriber:
         """Get list of supported language codes.
 
         Returns:
-            List of ISO 639-1 language codes
+            list of ISO 639-1 language codes
 
         """
         return self._provider.get_supported_languages()

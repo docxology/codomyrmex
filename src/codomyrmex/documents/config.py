@@ -56,6 +56,6 @@ def get_config() -> DocumentsConfig:
 
 
 def set_config(config: DocumentsConfig) -> None:
-    """Set the global documents configuration."""
+    """set the global documents configuration."""
     global _config
     _config = config

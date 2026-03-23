@@ -299,7 +299,7 @@ class ConcordanceVisualizer:
 
         Args:
             analysis_results: Dictionary mapping analysis names to results
-            pattern_ids: List of pattern IDs
+            pattern_ids: list of pattern IDs
             agreement_threshold: Threshold for considering results in agreement
 
         Returns:

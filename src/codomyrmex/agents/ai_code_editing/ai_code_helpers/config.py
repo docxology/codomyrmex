@@ -58,7 +58,7 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
         model_name: Optional specific model to use
 
     Returns:
-        Tuple of (client, model_name)
+        tuple of (client, model_name)
 
     Raises:
         ImportError: If the required client library is not installed

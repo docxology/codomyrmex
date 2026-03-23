@@ -137,7 +137,7 @@ def profile_function(func: Callable, *args: Any, **kwargs: Any) -> dict[str, Any
         **kwargs: Keyword arguments.
 
     Returns:
-        Dict with 'execution_time' (seconds) and 'memory_usage' (MB).
+        dict with 'execution_time' (seconds) and 'memory_usage' (MB).
     """
     memory_before = 0.0
     if HAS_PSUTIL:
@@ -171,7 +171,7 @@ def compare_benchmarks(
     """Compare two functions side-by-side.
 
     Returns:
-        Dict with results for both functions and a speedup ratio.
+        dict with results for both functions and a speedup ratio.
     """
     result_a = run_benchmark(func_a, iterations=iterations, name=name_a)
     result_b = run_benchmark(func_b, iterations=iterations, name=name_b)

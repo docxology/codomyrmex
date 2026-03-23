@@ -53,7 +53,7 @@ class TestWasmSandbox:
 
     def test_fuel_timeout_protection(self):
         """Test that infinite loops are killed by fuel limits."""
-        # Set a very low fuel budget
+        # set a very low fuel budget
         sandbox = WasmSandbox(max_fuel=10)
         wat = """
         (module

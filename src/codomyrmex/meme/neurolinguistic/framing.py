@@ -15,10 +15,10 @@ def analyze_frames(
 
     Args:
         text: Input text.
-        known_frames: List of Frame definitions to check against.
+        known_frames: list of Frame definitions to check against.
 
     Returns:
-        List of active Frames sorted by relevance.
+        list of active Frames sorted by relevance.
     """
     active = []
     text_lower = text.lower()

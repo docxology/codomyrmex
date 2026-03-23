@@ -305,7 +305,7 @@ class ModelAvailabilityChecker:
             force_refresh: Force refresh of model list
 
         Returns:
-            List of available model names
+            list of available model names
         """
         if force_refresh or self._available_models_cache is None:
             models = self.manager.list_models(force_refresh=force_refresh)
@@ -320,7 +320,7 @@ class ModelAvailabilityChecker:
         Context: Different tests may need different model characteristics
 
         Args:
-            requirements: List of requirements (e.g., ["small", "fast"])
+            requirements: list of requirements (e.g., ["small", "fast"])
 
         Returns:
             Suitable model name or None

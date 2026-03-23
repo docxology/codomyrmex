@@ -39,7 +39,7 @@ def cli_commands():
     """Return CLI commands for the i18n module."""
 
     def _locales():
-        """List supported locales."""
+        """list supported locales."""
         print("i18n Supported Locales")
         print("  Default: en")
         print("  Available formatters: NumberFormatter, DateFormatter")

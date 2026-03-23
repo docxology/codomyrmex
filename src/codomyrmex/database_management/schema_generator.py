@@ -693,7 +693,7 @@ class SchemaGenerator:
         return str(output)
 
     def list_migrations(self) -> list[dict[str, Any]]:
-        """List all migrations."""
+        """list all migrations."""
         return [
             {
                 "id": m.migration_id,
@@ -711,7 +711,7 @@ def generate_schema(models: list[Any], output_dir: str) -> dict[str, Any]:
     """Generate database schema from models.
 
     Args:
-        models: List of model definitions
+        models: list of model definitions
         output_dir: Output directory for generated schema
 
     Returns:
@@ -725,7 +725,7 @@ def generate_schema_from_models(models: list[Any], output_dir: str) -> dict[str,
     """Generate database schema from model definitions.
 
     Args:
-        models: List of model classes or dictionaries
+        models: list of model classes or dictionaries
         output_dir: Output directory for generated schema
 
     Returns:

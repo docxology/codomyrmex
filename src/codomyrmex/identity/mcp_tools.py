@@ -26,10 +26,10 @@ def _get_persona_models():
 
 @mcp_tool(
     category="identity",
-    description="List available verification levels for identity personas.",
+    description="list available verification levels for identity personas.",
 )
 def identity_list_levels() -> dict[str, Any]:
-    """List all supported identity verification levels.
+    """list all supported identity verification levels.
 
     Returns:
         dict with keys: status, levels
@@ -105,7 +105,7 @@ def identity_check_capability(
     """Check if a set of capabilities includes a required permission.
 
     Args:
-        capabilities: List of capability strings the persona holds.
+        capabilities: list of capability strings the persona holds.
         required_capability: The capability to check for.
 
     Returns:

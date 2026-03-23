@@ -43,12 +43,12 @@ class Lesson:
 
     Args:
         title: Lesson title.
-        objectives: List of learning objectives.
+        objectives: list of learning objectives.
         content: Lesson content text.
         difficulty: Difficulty level.
         duration_minutes: Expected duration (default 30).
-        prerequisites: List of prerequisite module names.
-        exercises: List of exercise dicts (prompt/solution).
+        prerequisites: list of prerequisite module names.
+        exercises: list of exercise dicts (prompt/solution).
     """
 
     title: str
@@ -113,7 +113,7 @@ class Curriculum:
             objectives: Learning objectives (auto-generated if None).
             exercises: Exercise dicts with prompt/solution.
             duration_minutes: Expected duration.
-            prerequisites: List of prerequisite module names.
+            prerequisites: list of prerequisite module names.
             **kwargs: Additional module parameters.
 
         Returns:
@@ -170,7 +170,7 @@ class Curriculum:
             student_level: If provided, skip modules at or below this level.
 
         Returns:
-            List of module names in dependency order.
+            list of module names in dependency order.
         """
         # Build adjacency / in-degree for topological sort
         modules = dict(self._modules)

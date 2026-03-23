@@ -21,7 +21,7 @@ class NamespacedCache(Cache):
         return self.cache.get(self._full_key(key))
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
-        """Set the value."""
+        """set the value."""
         return self.cache.set(self._full_key(key), value, ttl)
 
     def delete(self, key: str) -> bool:

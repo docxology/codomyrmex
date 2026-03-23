@@ -219,7 +219,7 @@ class WalletManager:
         return True
 
     def list_wallets(self) -> dict[str, str]:
-        """List all registered wallets.
+        """list all registered wallets.
 
         Returns:
             Dictionary mapping user_id to wallet_address.

@@ -1,0 +1,28 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "FixtureTool",
+          "version": "1.0.0"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "rule-a",
+          "level": "error",
+          "message": { "text": "finding one" },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/x.py" },
+                "region": { "startLine": 10 }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

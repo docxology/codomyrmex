@@ -45,7 +45,7 @@ def all_gather(shards: list) -> np.ndarray:
     Here we simply concatenate the shards.
 
     Args:
-        shards: List of param shards, one per device
+        shards: list of param shards, one per device
 
     Returns:
         Full parameter tensor (concatenation of all shards along axis 0)
@@ -68,7 +68,7 @@ def reduce_scatter(full_grad: np.ndarray, world_size: int) -> list:
         world_size: Number of devices
 
     Returns:
-        List of gradient shards, one per device
+        list of gradient shards, one per device
     """
     total_size = full_grad.shape[0]
     shard_size = total_size // world_size
@@ -116,13 +116,13 @@ def simulate_fsdp_step(
 
     Args:
         params: Full parameter tensor (d,)
-        gradients: List of gradient tensors, one per device
+        gradients: list of gradient tensors, one per device
         world_size: Number of simulated devices
         learning_rate: SGD learning rate
 
     Returns:
         updated_params: New parameter tensor after gradient update
-        shards: List of FSDPShard objects with updated shards
+        shards: list of FSDPShard objects with updated shards
     """
     # AllReduce: average gradients across devices
     mean_grad = np.mean(gradients, axis=0)  # (d,)

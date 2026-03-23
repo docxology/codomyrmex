@@ -51,7 +51,7 @@ def detect_pii(text: str, field_name: str = "") -> list[PIIMatch]:
         field_name: Optional field name for context.
 
     Returns:
-        List of PIIMatch objects for each detected PII occurrence.
+        list of PIIMatch objects for each detected PII occurrence.
     """
     matches: list[PIIMatch] = []
     for pii_type, pattern in _PII_PATTERNS.items():
@@ -160,7 +160,7 @@ def dp_mean(values: list[float], epsilon: float, lower: float, upper: float) -> 
     """Differentially private mean using Laplace mechanism.
 
     Args:
-        values: List of numeric values.
+        values: list of numeric values.
         epsilon: Privacy budget.
         lower: Lower bound of the value range.
         upper: Upper bound of the value range.

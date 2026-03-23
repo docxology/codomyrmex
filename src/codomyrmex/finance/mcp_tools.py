@@ -28,10 +28,10 @@ def _get_account_chart():
 
 @mcp_tool(
     category="finance",
-    description="List available account types for double-entry bookkeeping.",
+    description="list available account types for double-entry bookkeeping.",
 )
 def finance_list_account_types() -> dict[str, Any]:
-    """List all supported financial account types.
+    """list all supported financial account types.
 
     Returns:
         dict with keys: status, account_types
@@ -59,7 +59,7 @@ def finance_create_chart(
     """Create an account chart and return its summary.
 
     Args:
-        accounts: List of account dicts with keys 'name', 'type', and optional 'code'.
+        accounts: list of account dicts with keys 'name', 'type', and optional 'code'.
                   Type must be one of: ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE.
 
     Returns:

@@ -68,7 +68,7 @@ def auth_validate_token(token_value: str) -> dict:
 @mcp_tool(
     category="auth",
     description=(
-        "List available authentication provider class names "
+        "list available authentication provider class names "
         "(e.g. Authenticator, APIKeyManager, TokenManager)."
     ),
 )

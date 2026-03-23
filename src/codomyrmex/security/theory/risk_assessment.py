@@ -135,7 +135,7 @@ class RiskAssessor:
             context: Context with system information
 
         Returns:
-            List of identified risks
+            list of identified risks
         """
         risks = []
 
@@ -270,7 +270,7 @@ class RiskAssessor:
         Calculate overall risk level from individual risks.
 
         Args:
-            risks: List of risks
+            risks: list of risks
 
         Returns:
             Overall risk level (low, medium, high, critical)
@@ -294,10 +294,10 @@ class RiskAssessor:
         Generate risk mitigation recommendations.
 
         Args:
-            risks: List of risks
+            risks: list of risks
 
         Returns:
-            List of recommendations
+            list of recommendations
         """
         recommendations = []
 
@@ -325,7 +325,7 @@ class RiskAssessor:
         Create a risk matrix visualization data.
 
         Args:
-            risks: List of risks
+            risks: list of risks
 
         Returns:
             Risk matrix data structure
@@ -353,7 +353,7 @@ class RiskAssessor:
         Generate assessment summary.
 
         Args:
-            risks: List of risks
+            risks: list of risks
             overall_risk: Overall risk level
 
         Returns:
@@ -429,7 +429,7 @@ def prioritize_risks(risks: list[Risk]) -> list[Risk]:
     Prioritize risks by score and mitigation priority.
 
     Args:
-        risks: List of risks
+        risks: list of risks
 
     Returns:
         Sorted list of risks (highest priority first)
@@ -448,7 +448,7 @@ def calculate_aggregate_risk(risks: list[Risk]) -> dict[str, Any]:
     Calculate aggregate risk metrics.
 
     Args:
-        risks: List of risks
+        risks: list of risks
 
     Returns:
         Aggregate risk metrics

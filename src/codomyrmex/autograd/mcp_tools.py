@@ -39,7 +39,7 @@ def autograd_compute(expression: str, variables: dict) -> dict:
     Args:
         expression: Simple math expression like "x*x + y" using +,-,*,** ops.
             Available functions: relu, tanh, sigmoid.
-        variables: Dict of variable names to float values, e.g. {"x": 2.0, "y": 3.0}
+        variables: dict of variable names to float values, e.g. {"x": 2.0, "y": 3.0}
 
     Returns:
         dict with keys: result (float), gradients (dict of var->grad)
@@ -89,7 +89,7 @@ def autograd_gradient_check(func_name: str, inputs: list) -> dict:
 
     Args:
         func_name: One of "relu", "tanh", "sigmoid", "square", "sum"
-        inputs: List of input values
+        inputs: list of input values
 
     Returns:
         dict with: max_error (float), passed (bool), analytic_grads, numeric_grads

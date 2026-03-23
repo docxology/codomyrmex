@@ -42,7 +42,7 @@ def cli_commands():
     """Return CLI commands for the networking module."""
 
     def _interfaces(**kwargs):
-        """List network interfaces."""
+        """list network interfaces."""
         import socket
 
         hostname = socket.gethostname()
@@ -74,7 +74,7 @@ def cli_commands():
                 print(f"  {host}:{port} - UNREACHABLE")
 
     return {
-        "interfaces": {"handler": _interfaces, "help": "List network interfaces"},
+        "interfaces": {"handler": _interfaces, "help": "list network interfaces"},
         "check": {"handler": _check, "help": "Check network connectivity"},
     }
 

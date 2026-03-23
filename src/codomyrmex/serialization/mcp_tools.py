@@ -69,7 +69,7 @@ def deserialize_data(data: str, format: str = "json") -> dict[str, Any] | list[A
 
 @mcp_tool(
     category="serialization",
-    description="List all supported serialization format names (e.g. json, yaml, pickle).",
+    description="list all supported serialization format names (e.g. json, yaml, pickle).",
 )
 def serialization_list_formats() -> list[str]:
     """Return all supported serialization format identifiers."""

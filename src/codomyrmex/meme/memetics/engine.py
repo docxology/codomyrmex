@@ -41,7 +41,7 @@ class MemeticEngine:
             text: Input text to dissect.
 
         Returns:
-            List of Meme objects, one per detected meme unit.
+            list of Meme objects, one per detected meme unit.
         """
         sentences = self._SENTENCE_RE.split(text.strip())
         sentences = [s.strip() for s in sentences if s.strip()]
@@ -95,7 +95,7 @@ class MemeticEngine:
         """Compute the fitness landscape of a memeplex population.
 
         Args:
-            population: List of memeplexes to evaluate.
+            population: list of memeplexes to evaluate.
 
         Returns:
             FitnessMap mapping each memeplex ID to its fitness.

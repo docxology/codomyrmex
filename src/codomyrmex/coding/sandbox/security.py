@@ -23,7 +23,7 @@ def prepare_code_file(code: str, language: str) -> tuple[str, str]:
         language: The programming language for file extension
 
     Returns:
-        Tuple of (temp directory path, code file path relative to temp directory)
+        tuple of (temp directory path, code file path relative to temp directory)
     """
     temp_dir = tempfile.mkdtemp(prefix="codomyrmex_sandbox_")
 

@@ -57,7 +57,7 @@ def compute_scale_zero_point_int8(
         axis: If not None, compute per-channel along this axis.
 
     Returns:
-        Tuple of (scale, zero_point).
+        tuple of (scale, zero_point).
     """
     if scheme not in ("symmetric", "asymmetric"):
         raise ValueError(f"scheme must be 'symmetric' or 'asymmetric', got '{scheme}'")

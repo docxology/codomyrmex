@@ -616,7 +616,7 @@ class VideoProcessor:
         """Merge multiple videos into one.
 
         Args:
-            video_paths: List of video paths to merge
+            video_paths: list of video paths to merge
             output_path: Output path for merged video
             transition: Transition type (currently unused)
             transition_duration: Duration of transitions

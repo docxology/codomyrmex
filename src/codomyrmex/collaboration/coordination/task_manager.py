@@ -361,7 +361,7 @@ class TaskManager:
         Automatically assigns tasks to agents and waits for completion.
 
         Args:
-            agents: List of agents to use.
+            agents: list of agents to use.
             on_progress: Optional progress callback.
 
         Returns:

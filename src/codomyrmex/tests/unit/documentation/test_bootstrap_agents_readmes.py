@@ -19,7 +19,7 @@ class TestDocumentationBootstrapper:
     """Test cases for DocumentationBootstrapper."""
 
     def setup_method(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.temp_dir = Path(tempfile.mkdtemp()).resolve()
         self.bootstrapper = DocumentationBootstrapper(self.temp_dir)
 
@@ -59,7 +59,7 @@ class TestDocumentationBootstrapper:
         scripts_dir = self.temp_dir / "scripts"
         scripts_dir.mkdir()
 
-        # Set the bootstrapper's repo_root to the temp directory to test real logic
+        # set the bootstrapper's repo_root to the temp directory to test real logic
         original_repo_root = self.bootstrapper.repo_root
         try:
             self.bootstrapper.repo_root = self.temp_dir
@@ -75,7 +75,7 @@ class TestDocumentationBootstrapper:
         doc_dir = scripts_dir / "documentation"
         doc_dir.mkdir()
 
-        # Set the bootstrapper's repo_root to test real logic
+        # set the bootstrapper's repo_root to test real logic
         original_repo_root = self.bootstrapper.repo_root
         try:
             self.bootstrapper.repo_root = self.temp_dir
@@ -157,7 +157,7 @@ class TestDocumentationBootstrapper:
         # Create parent README
         (scripts_dir / "README.md").touch()
 
-        # Set repo_root to test real navigation logic
+        # set repo_root to test real navigation logic
         original_repo_root = self.bootstrapper.repo_root
         try:
             self.bootstrapper.repo_root = self.temp_dir
@@ -180,7 +180,7 @@ class TestDocumentationBootstrapper:
         test_dir.mkdir()
         (test_dir / "file.py").touch()
 
-        # Set repo_root to test real bootstrap logic
+        # set repo_root to test real bootstrap logic
         original_repo_root = self.bootstrapper.repo_root
         try:
             self.bootstrapper.repo_root = self.temp_dir
@@ -201,7 +201,7 @@ class TestDocumentationBootstrapper:
         output_dir = scripts_dir / "output"
         output_dir.mkdir()
 
-        # Set repo_root to test real exclusion logic
+        # set repo_root to test real exclusion logic
         original_repo_root = self.bootstrapper.repo_root
         try:
             self.bootstrapper.repo_root = self.temp_dir

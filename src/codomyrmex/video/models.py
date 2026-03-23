@@ -176,7 +176,7 @@ class ExtractionResult:
 
     Attributes:
         source_path: Path to the source video
-        frames: List of extracted PIL Image frames
+        frames: list of extracted PIL Image frames
         timestamps: Timestamps of extracted frames
         output_paths: Paths to saved frame files
         audio_path: Path to extracted audio file
@@ -185,7 +185,7 @@ class ExtractionResult:
     """
 
     source_path: Path
-    frames: list = field(default_factory=list)  # List of PIL.Image
+    frames: list = field(default_factory=list)  # list of PIL.Image
     timestamps: list[float] = field(default_factory=list)
     output_paths: list[Path] = field(default_factory=list)
     audio_path: Path | None = None

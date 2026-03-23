@@ -193,7 +193,7 @@ class EventSchema:
             event: Event to validate
 
         Returns:
-            Tuple of (is_valid, list_of_validation_errors)
+            tuple of (is_valid, list_of_validation_errors)
         """
         schema = self.schemas.get(event.event_type.value)
         if not schema:
@@ -236,10 +236,10 @@ class EventSchema:
 
     def list_registered_schemas(self) -> list[str]:
         """
-        List all registered event type schemas.
+        list all registered event type schemas.
 
         Returns:
-            List of registered event type names
+            list of registered event type names
         """
         return list(self.schemas.keys())
 

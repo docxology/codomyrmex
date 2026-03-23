@@ -55,7 +55,7 @@ class OpenRouterProvider(LLMProvider):
 
     def __init__(self, config: ProviderConfig):
         super().__init__(config)
-        # Set OpenRouter base URL if not specified
+        # set OpenRouter base URL if not specified
         if not self.config.base_url:
             self.config.base_url = self.BASE_URL
         # Add required OpenRouter headers
@@ -194,7 +194,7 @@ class OpenRouterProvider(LLMProvider):
             ) from e
 
     def list_models(self) -> list[str]:
-        """List free models available on OpenRouter.
+        """list free models available on OpenRouter.
 
         For a full list of models, see: https://openrouter.ai/models
         """

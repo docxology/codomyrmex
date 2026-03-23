@@ -13,7 +13,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(
     category="prompt_engineering",
     description=(
-        "List all prompt template names in the default registry. "
+        "list all prompt template names in the default registry. "
         "Returns a sorted list of template name strings."
     ),
 )
@@ -27,7 +27,7 @@ def prompt_list_templates() -> list[str]:
 @mcp_tool(
     category="prompt_engineering",
     description=(
-        "List available prompt optimization strategy names. "
+        "list available prompt optimization strategy names. "
         "Returns a sorted list of strategy identifier strings."
     ),
 )

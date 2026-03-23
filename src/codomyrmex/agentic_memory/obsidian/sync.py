@@ -168,7 +168,7 @@ def sync_deleted(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List deleted files tracked by sync.
+    """list deleted files tracked by sync.
 
     Maps to ``obsidian sync:deleted``.
     """
@@ -196,7 +196,7 @@ def publish_list(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List published files.
+    """list published files.
 
     Maps to ``obsidian publish:list``.
     """

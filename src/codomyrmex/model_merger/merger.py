@@ -87,7 +87,7 @@ def model_soup(
     individual models by smoothing out loss basin differences.
 
     Args:
-        param_dicts: List of parameter dictionaries from multiple models
+        param_dicts: list of parameter dictionaries from multiple models
         weights: Optional weights for weighted average (uniform if None)
 
     Returns:

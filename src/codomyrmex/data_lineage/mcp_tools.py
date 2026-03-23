@@ -45,8 +45,8 @@ def data_lineage_track(
         event_type: Type of event - 'dataset' or 'transformation'.
         node_id: Unique identifier for the node.
         name: Human-readable name for the node.
-        inputs: List of input node IDs (required for transformations).
-        outputs: List of output node IDs (required for transformations).
+        inputs: list of input node IDs (required for transformations).
+        outputs: list of output node IDs (required for transformations).
         location: Location of the dataset (for dataset events).
 
     Returns:

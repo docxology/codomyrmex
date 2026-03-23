@@ -100,10 +100,10 @@ class ConfigurationMonitor:
         """Detect changes in configuration files.
 
         Args:
-            config_paths: List of configuration file paths to monitor
+            config_paths: list of configuration file paths to monitor
 
         Returns:
-            List of detected changes
+            list of detected changes
         """
         changes = []
 
@@ -197,7 +197,7 @@ class ConfigurationMonitor:
 
         Args:
             environment: Environment name
-            config_paths: List of configuration file paths
+            config_paths: list of configuration file paths
 
         Returns:
             Created snapshot
@@ -360,7 +360,7 @@ class ConfigurationMonitor:
         if issues_found:
             recommendations.append("Review and fix identified security issues")
             recommendations.append("Implement configuration validation")
-            recommendations.append("Set up regular configuration audits")
+            recommendations.append("set up regular configuration audits")
 
         # Default compliance rules if none provided
         if compliance_rules is None:
@@ -437,7 +437,7 @@ class ConfigurationMonitor:
             hours: Number of hours to look back
 
         Returns:
-            List of recent changes
+            list of recent changes
         """
         cutoff_time = datetime.now() - timedelta(hours=hours)
 
@@ -450,7 +450,7 @@ class ConfigurationMonitor:
             environment: Filter by environment name
 
         Returns:
-            List of audits
+            list of audits
         """
         audits = self._audits
 
@@ -490,7 +490,7 @@ def monitor_config_changes(
     """Monitor configuration changes continuously.
 
     Args:
-        config_paths: List of configuration paths to monitor
+        config_paths: list of configuration paths to monitor
         interval_seconds: Monitoring interval in seconds
         workspace_dir: Workspace directory
 

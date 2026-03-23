@@ -385,7 +385,7 @@ def get_config() -> AgentConfig:
 
 
 def set_config(config: AgentConfig) -> None:
-    """Set global agent configuration instance."""
+    """set global agent configuration instance."""
     global _config_instance
     _config_instance = config
 

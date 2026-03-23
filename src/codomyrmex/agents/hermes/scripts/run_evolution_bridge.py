@@ -170,7 +170,7 @@ def run_evolution_bridge() -> dict[str, Any]:
     """Validate evolution submodule integration.
 
     Returns:
-        Dict with ``components`` (per-component results) and overall ``status``.
+        dict with ``components`` (per-component results) and overall ``status``.
     """
     components = {
         "config": _check_evolution_config(),

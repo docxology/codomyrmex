@@ -87,13 +87,13 @@ class BackupManager:
         return backup_record
 
     def list_backups(self, user_id: str) -> list[dict[str, Any]]:
-        """List all backups for a user.
+        """list all backups for a user.
 
         Args:
             user_id: The user identifier.
 
         Returns:
-            List of backup records sorted by timestamp (newest first).
+            list of backup records sorted by timestamp (newest first).
         """
         backups = []
         pattern = f"backup_{user_id}_*.json"

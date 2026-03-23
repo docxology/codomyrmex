@@ -82,7 +82,7 @@ class PermissionRegistry:
         return True
 
     def list_roles(self) -> list[str]:
-        """List all registered role names."""
+        """list all registered role names."""
         return sorted(self._roles.keys())
 
     # ── User assignment ─────────────────────────────────────────────

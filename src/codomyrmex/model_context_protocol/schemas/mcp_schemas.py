@@ -199,10 +199,10 @@ class MCPToolRegistry:
 
     def list_tools(self) -> list[str]:
         """
-        List all registered tool names.
+        list all registered tool names.
 
         Returns:
-            List of tool names
+            list of tool names
         """
         return list(self._tools.keys())
 
@@ -214,7 +214,7 @@ class MCPToolRegistry:
             tool_call: The tool call to validate
 
         Returns:
-            Tuple of (is_valid, error_message)
+            tuple of (is_valid, error_message)
         """
         tool = self._tools.get(tool_call.tool_name)
         if not tool:

@@ -138,7 +138,7 @@ class GeminiCLIWrapper(BaseAgent):
     # --- CLI specific methods ---
 
     def list_sessions(self) -> str:
-        """List available sessions for the current project."""
+        """list available sessions for the current project."""
         if not self.cli_path:
             raise GeminiError("gemini CLI executable not found")
 
@@ -168,7 +168,7 @@ class GeminiCLIWrapper(BaseAgent):
             ) from e
 
     def list_extensions(self) -> str:
-        """List all available extensions."""
+        """list all available extensions."""
         if not self.cli_path:
             raise GeminiError("gemini CLI executable not found")
 

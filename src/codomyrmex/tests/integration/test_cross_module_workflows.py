@@ -92,7 +92,7 @@ try:
 except ImportError:
     LOGGING_AVAILABLE = False
 
-# Set up logging for tests
+# set up logging for tests
 if LOGGING_AVAILABLE and callable(setup_logging):
     with contextlib.suppress(Exception):
         setup_logging()
@@ -104,7 +104,7 @@ class TestCrossModuleWorkflows:
     """Integration tests for complex cross-module workflows."""
 
     def setup_method(self):
-        """Set up test environment."""
+        """set up test environment."""
         self.test_dir = tempfile.mkdtemp()
         self.workflow_results = {}
 

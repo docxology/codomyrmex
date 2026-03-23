@@ -33,7 +33,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_containers(self) -> list[str]:
-        """List all containers."""
+        """list all containers."""
         try:
             containers = list(self._conn.object_store.containers())
             return [c.name for c in containers]
@@ -75,7 +75,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_objects(self, container: str, prefix: str | None = None) -> list[str]:
-        """List objects in a container."""
+        """list objects in a container."""
         try:
             objects = list(self._conn.object_store.objects(container, prefix=prefix))
             return [obj.name for obj in objects]
@@ -164,7 +164,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
 
     def set_container_read_acl(self, container: str, acl: str) -> bool:
         """
-        Set container read ACL.
+        set container read ACL.
 
         Args:
             container: Container name
@@ -172,17 +172,17 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
         """
         try:
             self._conn.object_store.set_container_metadata(container, read_acl=acl)
-            logger.info("Set read ACL for %s: %s", container, acl)
+            logger.info("set read ACL for %s: %s", container, acl)
             return True
         except Exception as e:
             logger.error("Failed to set read ACL for %s: %s", container, e)
             return False
 
     def set_container_write_acl(self, container: str, acl: str) -> bool:
-        """Set container write ACL."""
+        """set container write ACL."""
         try:
             self._conn.object_store.set_container_metadata(container, write_acl=acl)
-            logger.info("Set write ACL for %s: %s", container, acl)
+            logger.info("set write ACL for %s: %s", container, acl)
             return True
         except Exception as e:
             logger.error("Failed to set write ACL for %s: %s", container, e)
@@ -207,7 +207,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     # =========================================================================
 
     def list_buckets(self) -> list[str]:
-        """List all buckets."""
+        """list all buckets."""
         try:
             response = self._client.list_buckets()
             return [b["Name"] for b in response.get("Buckets", [])]
@@ -254,7 +254,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     def list_objects(
         self, bucket: str, prefix: str | None = None, max_keys: int = 1000
     ) -> list[str]:
-        """List objects in a bucket."""
+        """list objects in a bucket."""
         try:
             params = {"Bucket": bucket, "MaxKeys": max_keys}
             if prefix:
@@ -395,7 +395,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     def list_objects_paginated(
         self, bucket: str, prefix: str | None = None
     ) -> list[str]:
-        """List all objects using pagination (handles >1000 objects)."""
+        """list all objects using pagination (handles >1000 objects)."""
         try:
             paginator = self._client.get_paginator("list_objects_v2")
             params: dict[str, Any] = {"Bucket": bucket}
@@ -418,7 +418,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         Auto-batches if more than 1000 keys (S3 limit per request).
 
         Returns:
-            Dict with 'deleted' count and 'errors' list
+            dict with 'deleted' count and 'errors' list
         """
         deleted_count = 0
         errors: list[dict[str, Any]] = []
@@ -489,7 +489,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
 
     def put_bucket_policy(self, bucket: str, policy: str) -> bool:
         """
-        Set the bucket policy.
+        set the bucket policy.
 
         Args:
             bucket: Bucket name
@@ -497,7 +497,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         """
         try:
             self._client.put_bucket_policy(Bucket=bucket, Policy=policy)
-            logger.info("Set bucket policy on: %s", bucket)
+            logger.info("set bucket policy on: %s", bucket)
             return True
         except Exception as e:
             logger.error("Failed to set bucket policy on %s: %s", bucket, e)

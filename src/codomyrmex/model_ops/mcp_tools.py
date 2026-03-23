@@ -66,7 +66,7 @@ def model_ops_sanitize_dataset(
 
 @mcp_tool(
     category="model_ops",
-    description="List the available scorer type names for model output evaluation.",
+    description="list the available scorer type names for model output evaluation.",
 )
 def model_ops_list_scorers() -> list[str]:
     """Return supported scorer identifiers."""

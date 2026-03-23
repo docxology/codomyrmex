@@ -109,7 +109,7 @@ class CompatShimGenerator:
         return self._shims.get(old_name)
 
     def list_shims(self) -> list[str]:
-        """List all created shim names."""
+        """list all created shim names."""
         return sorted(self._shims.keys())
 
     def translate_params(self, old_name: str, kwargs: dict[str, Any]) -> dict[str, Any]:

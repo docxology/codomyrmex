@@ -351,7 +351,7 @@ class MCPServer:
         }
 
     async def _list_tools(self, params: dict[str, Any]) -> dict[str, Any]:
-        """List available tools."""
+        """list available tools."""
         tools = []
         for name in self._tool_registry.list_tools():
             tool = self._tool_registry.get(name)
@@ -462,7 +462,7 @@ class MCPServer:
         ).to_mcp_response()
 
     async def _list_resources(self, params: dict[str, Any]) -> dict[str, Any]:
-        """List available resources."""
+        """list available resources."""
         resources = []
         for r in self._resources.values():
             resources.append(
@@ -498,7 +498,7 @@ class MCPServer:
         }
 
     async def _list_prompts(self, params: dict[str, Any]) -> dict[str, Any]:
-        """List available prompts."""
+        """list available prompts."""
         prompts = []
         for p in self._prompts.values():
             prompts.append(

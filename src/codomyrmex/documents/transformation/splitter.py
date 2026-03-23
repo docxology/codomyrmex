@@ -16,7 +16,7 @@ def split_document(document: Document, criteria: dict) -> list[Document]:
         criteria: Split criteria (e.g., {"method": "by_pages", "pages": 10})
 
     Returns:
-        List of split documents
+        list of split documents
 
     Raises:
         DocumentConversionError: If splitting fails

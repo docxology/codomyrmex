@@ -39,7 +39,7 @@ class AISafetyMonitor:
         Check an input for potential AI safety violations.
 
         Returns:
-            Dict with 'safe' (bool), 'threats' (list), and 'action' (str).
+            dict with 'safe' (bool), 'threats' (list), and 'action' (str).
         """
         threats = []
         action = "allow"

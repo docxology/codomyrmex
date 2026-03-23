@@ -94,7 +94,7 @@ class NetworkGraph(Generic[T]):
             node_id: ID of the node.
 
         Returns:
-            List of neighboring nodes.
+            list of neighboring nodes.
         """
         if node_id not in self._adj:
             return []
@@ -112,7 +112,7 @@ class NetworkGraph(Generic[T]):
             end_id: ID of the end node.
 
         Returns:
-            List of nodes representing the path, or None if no path exists.
+            list of nodes representing the path, or None if no path exists.
         """
         if start_id not in self._nodes or end_id not in self._nodes:
             return None

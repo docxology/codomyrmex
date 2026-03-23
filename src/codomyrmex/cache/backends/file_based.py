@@ -82,7 +82,7 @@ class FileBasedCache(Cache):
             return None
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
-        """Set a value in the cache."""
+        """set a value in the cache."""
         file_path = self._get_file_path(key)
         meta_path = self._get_meta_path(key)
 

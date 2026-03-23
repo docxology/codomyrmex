@@ -123,7 +123,7 @@ class ParallelRunner:
         """Run scripts in parallel.
 
         Args:
-            scripts: List of script paths
+            scripts: list of script paths
             timeout: Timeout per script (overrides default)
             cwd: Working directory
             env: Environment variables
@@ -237,7 +237,7 @@ class ParallelRunner:
         """Run scripts in parallel asynchronously.
 
         Args:
-            scripts: List of script paths
+            scripts: list of script paths
             timeout: Timeout per script
             cwd: Working directory
             env: Environment variables
@@ -286,13 +286,13 @@ class BatchRunner:
         """Run batches sequentially, scripts within batches in parallel.
 
         Args:
-            batches: List of script batches
+            batches: list of script batches
             timeout: Timeout per script
             cwd: Working directory
             stop_on_batch_failure: Stop if any batch has failures
 
         Returns:
-            List of ExecutionResult per batch
+            list of ExecutionResult per batch
         """
         results = []
 
@@ -322,7 +322,7 @@ def run_parallel(
     """Convenience function to run scripts in parallel.
 
     Args:
-        scripts: List of script paths
+        scripts: list of script paths
         max_workers: Maximum concurrent workers
         timeout: Timeout per script
         progress_callback: Progress callback
@@ -347,7 +347,7 @@ async def run_parallel_async(
     """Async convenience function to run scripts in parallel.
 
     Args:
-        scripts: List of script paths
+        scripts: list of script paths
         max_workers: Maximum concurrent workers
         timeout: Timeout per script
         progress_callback: Progress callback

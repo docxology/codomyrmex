@@ -90,7 +90,7 @@ def cli_commands():
     """Return CLI commands for the ci_cd_automation module."""
     return {
         "pipelines": {
-            "help": "List configured CI/CD pipelines",
+            "help": "list configured CI/CD pipelines",
             "handler": lambda **kwargs: print(
                 "CI/CD Pipelines:\n"
                 + "\n".join(

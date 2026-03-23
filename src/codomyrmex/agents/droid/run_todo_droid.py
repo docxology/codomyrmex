@@ -346,7 +346,7 @@ def build_controller(config_path: str | None) -> DroidController:
 
 def _list_todos(todo_items: list[TodoItem], completed_items: list[TodoItem]) -> None:
     """Display TODO list and exit."""
-    print("📋 TODO List:")
+    print("📋 TODO list:")
     print("============")
     if not todo_items:
         print("No TODO items found.")
@@ -431,7 +431,7 @@ Examples:
   python run_todo_droid.py --count 3         # Process 3 TODOs
   python run_todo_droid.py --count -1        # Process all TODOs
   python run_todo_droid.py --non-interactive # Process 1 TODO non-interactively
-  python run_todo_droid.py --list            # List all TODOs without processing
+  python run_todo_droid.py --list            # list all TODOs without processing
         """,
     )
 
@@ -453,7 +453,7 @@ Examples:
         help="Run in non-interactive mode (process 1 TODO)",
     )
     parser.add_argument(
-        "--list", action="store_true", help="List all TODOs without processing"
+        "--list", action="store_true", help="list all TODOs without processing"
     )
     parser.add_argument(
         "--dry-run",

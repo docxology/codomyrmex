@@ -68,7 +68,7 @@ def run_code_in_docker(
 
     # Add volume mapping for code and working directory
     docker_args.append(f"-v={real_temp}:/sandbox")
-    docker_args.append("-w=/sandbox")  # Set working directory
+    docker_args.append("-w=/sandbox")  # set working directory
 
     # Prepare the command to run inside the container
     container_cmd = [

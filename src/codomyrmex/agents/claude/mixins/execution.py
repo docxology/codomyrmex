@@ -141,7 +141,7 @@ class ExecutionMixin:
             response: Claude API response
 
         Returns:
-            Tuple of (text_content, tool_calls)
+            tuple of (text_content, tool_calls)
         """
         content = ""
         tool_calls = []
@@ -245,7 +245,7 @@ class ExecutionMixin:
             request: Agent request
 
         Returns:
-            Tuple of (messages, system_message)
+            tuple of (messages, system_message)
         """
         messages = []
         system_message = None

@@ -47,10 +47,10 @@ class Scorer(ABC):
         """Score multiple output/reference pairs.
 
         Args:
-            pairs: List of (output, reference) tuples.
+            pairs: list of (output, reference) tuples.
 
         Returns:
-            List of scores corresponding to each pair.
+            list of scores corresponding to each pair.
         """
         return [self.score(output, reference) for output, reference in pairs]
 
@@ -218,7 +218,7 @@ class CompositeScorer(Scorer):
     The final score is the weighted average of all constituent scorers.
 
     Args:
-        scorers: List of WeightedScorer instances. Can also be populated
+        scorers: list of WeightedScorer instances. Can also be populated
             via add_scorer().
     """
 

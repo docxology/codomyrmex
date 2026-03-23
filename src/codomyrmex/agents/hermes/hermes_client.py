@@ -966,7 +966,7 @@ class HermesClient(CLIAgentBase):
             package_name: The name of the package that triggered the ImportError.
 
         Returns:
-            Dict containing success boolean and the subprocess output.
+            dict containing success boolean and the subprocess output.
 
         """
         try:
@@ -1119,7 +1119,7 @@ class HermesClient(CLIAgentBase):
         Available in Hermes CLI v0.2.0+.  Returns structured results.
 
         Returns:
-            Dict with ``success`` boolean and ``output`` or ``error``.
+            dict with ``success`` boolean and ``output`` or ``error``.
 
         """
         if not self._cli_available:
@@ -1149,10 +1149,10 @@ class HermesClient(CLIAgentBase):
     # ------------------------------------------------------------------
 
     def list_skills(self) -> dict[str, Any]:
-        """List active skills available to Hermes.
+        """list active skills available to Hermes.
 
         Returns:
-            Dict with ``success`` boolean and ``output`` or ``error``.
+            dict with ``success`` boolean and ``output`` or ``error``.
 
         """
         if self._active_backend != "cli":
@@ -1171,7 +1171,7 @@ class HermesClient(CLIAgentBase):
         """Get the current Hermes configuration status.
 
         Returns:
-            Dict with diagnostic information including the active backend.
+            dict with diagnostic information including the active backend.
 
         """
         status: dict[str, Any] = {
@@ -1336,7 +1336,7 @@ class HermesClient(CLIAgentBase):
         """Execute a list of prompts, returning a list of result dicts.
 
         Args:
-            prompts: List of prompt strings.
+            prompts: list of prompt strings.
             parallel: If ``True``, use a :class:`~concurrent.futures.ThreadPoolExecutor`
                 to submit all prompts concurrently.  Defaults to ``False`` (sequential).
             backend: Override the active backend (``\"cli\"`` | ``\"ollama\"``).
@@ -1346,7 +1346,7 @@ class HermesClient(CLIAgentBase):
             hermes_skills: Optional skill list or comma-separated string for every prompt.
 
         Returns:
-            List of dicts with keys ``prompt``, ``status``, ``content``, ``error``.
+            list of dicts with keys ``prompt``, ``status``, ``content``, ``error``.
 
         """
         from codomyrmex.agents.core import AgentRequest
@@ -1435,7 +1435,7 @@ class HermesClient(CLIAgentBase):
 
         Args:
             target_id: Destination session identifier. Created if missing.
-            source_ids: List of session identifiers to pull messages from.
+            source_ids: list of session identifiers to pull messages from.
             deduplicate: If True, exact duplicate consecutive messages are skipped.
 
         Returns:

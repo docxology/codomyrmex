@@ -74,7 +74,7 @@ def _probe_api_key_env(name: str, env_var: str) -> ProbeResult:
     return ProbeResult(
         name=name,
         status="key_missing",
-        detail=f"Set {env_var} to enable",
+        detail=f"set {env_var} to enable",
     )
 
 

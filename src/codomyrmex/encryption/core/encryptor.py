@@ -410,7 +410,7 @@ class Encryptor:
             key_size: RSA key size in bits (default: 2048).
 
         Returns:
-            Tuple of (private_key_pem, public_key_pem).
+            tuple of (private_key_pem, public_key_pem).
         """
         private_key = rsa.generate_private_key(
             public_exponent=65537, key_size=key_size, backend=default_backend()

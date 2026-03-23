@@ -251,3 +251,10 @@ health = pipeline.health()
 - [codomyrmex_integration.md](codomyrmex_integration.md) — MCP tool surface and §3c skill preload overview
 - [configuration.md](configuration.md) — Hermes `config.yaml` vs `HermesClient` keys
 - [environment.md](environment.md) — `CODOMYRMEX_SKILLS_REGISTRY`, `HERMES_HOME`
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

@@ -59,7 +59,7 @@ class TemperatureProcessor(LogitProcessor):
 
 
 class TopKProcessor(LogitProcessor):
-    """Set all logits below the top-k to ``-inf``.
+    """set all logits below the top-k to ``-inf``.
 
     Only the *k* highest logits will have non-zero probability after softmax.
     """
@@ -109,7 +109,7 @@ class TopPProcessor(LogitProcessor):
         # Keep that index too (ensure at least one token remains)
         cutoff_mask = cumulative_probs - sorted_probs > self.top_p
 
-        # Set filtered logits to -inf
+        # set filtered logits to -inf
         filtered_indices = sorted_indices[cutoff_mask]
         result = logits.copy()
         result[filtered_indices] = float("-inf")

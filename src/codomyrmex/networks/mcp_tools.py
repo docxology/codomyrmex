@@ -31,8 +31,8 @@ def networks_analyze(
     """Build a network from nodes/edges and return analysis metrics.
 
     Args:
-        nodes: List of node IDs.
-        edges: List of [source, target] pairs.
+        nodes: list of node IDs.
+        edges: list of [source, target] pairs.
 
     Returns:
         dict with keys: status, node_count, edge_count, density,
@@ -73,8 +73,8 @@ def networks_has_path(
     """Check reachability between two nodes.
 
     Args:
-        nodes: List of node IDs.
-        edges: List of [source, target] pairs.
+        nodes: list of node IDs.
+        edges: list of [source, target] pairs.
         source: Source node ID.
         target: Target node ID.
 
@@ -114,8 +114,8 @@ def networks_to_dict(
 
     Args:
         name: Network name.
-        nodes: List of node IDs (default: empty).
-        edges: List of [source, target] pairs (default: empty).
+        nodes: list of node IDs (default: empty).
+        edges: list of [source, target] pairs (default: empty).
 
     Returns:
         dict with keys: status, network (serialized dict)

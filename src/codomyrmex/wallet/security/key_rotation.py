@@ -162,7 +162,7 @@ class KeyRotation:
             user_id: The user identifier.
 
         Returns:
-            List of rotation records, oldest first.
+            list of rotation records, oldest first.
 
         Raises:
             WalletNotFoundError: If user has no rotation history.

@@ -196,7 +196,7 @@ class PhysicsSimulator:
         return self.objects.get(object_id)
 
     def set_object_position(self, object_id: str, position: Vector3D) -> bool:
-        """Set the position of an object."""
+        """set the position of an object."""
         if object_id in self.objects:
             self.objects[object_id]["position"] = position
             return True
@@ -280,7 +280,7 @@ class PhysicsSimulator:
         return True
 
     def set_object_velocity(self, object_id: str, velocity: Vector3D) -> bool:
-        """Set the velocity of an object."""
+        """set the velocity of an object."""
         if object_id in self.objects:
             self.objects[object_id]["velocity"] = velocity
             return True

@@ -47,7 +47,7 @@ class Permission:
 
 @dataclass
 class PermissionList:
-    """List of permissions with pagination."""
+    """list of permissions with pagination."""
 
     items: list[Permission]
     href: str

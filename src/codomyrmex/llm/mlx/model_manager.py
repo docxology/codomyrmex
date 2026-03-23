@@ -154,14 +154,14 @@ class MLXModelManager:
             raise RuntimeError(f"Failed to download model {repo_id}: {exc}") from exc
 
     # ------------------------------------------------------------------
-    # List
+    # list
     # ------------------------------------------------------------------
 
     def list_cached_models(self) -> list[MLXModelInfo]:
         """Return metadata for every model in the local cache.
 
         Returns:
-            List of :class:`MLXModelInfo` objects, one per cached model.
+            list of :class:`MLXModelInfo` objects, one per cached model.
         """
         models: list[MLXModelInfo] = []
         if not self._cache_dir.is_dir():

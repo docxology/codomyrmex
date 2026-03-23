@@ -26,10 +26,10 @@ def _get_models():
 
 @mcp_tool(
     category="fpf",
-    description="List available FPF pattern statuses and relationship types.",
+    description="list available FPF pattern statuses and relationship types.",
 )
 def fpf_list_types() -> dict[str, Any]:
-    """List all FPF pattern statuses, concept types, and relationship types.
+    """list all FPF pattern statuses, concept types, and relationship types.
 
     Returns:
         dict with keys: status, pattern_statuses, concept_types, relationship_types

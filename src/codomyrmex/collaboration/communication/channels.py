@@ -311,7 +311,7 @@ class ChannelManager:
         return None
 
     def list_channels(self) -> list[ChannelInfo]:
-        """List all channels."""
+        """list all channels."""
         return [ch.get_info() for ch in self._channels.values()]
 
     def close_channel(self, channel_id: str) -> bool:

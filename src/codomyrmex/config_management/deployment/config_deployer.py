@@ -136,7 +136,7 @@ class ConfigurationDeployer:
 
         Args:
             environment_name: Target environment name
-            config_files: List of configuration files to deploy
+            config_files: list of configuration files to deploy
             deployed_by: Who is deploying the configuration
 
         Returns:
@@ -312,13 +312,13 @@ class ConfigurationDeployer:
     def list_deployments(
         self, environment: str | None = None
     ) -> list[ConfigDeployment]:
-        """List configuration deployments.
+        """list configuration deployments.
 
         Args:
             environment: Filter by environment name
 
         Returns:
-            List of deployments
+            list of deployments
         """
         deployments = list(self._deployments.values())
 
@@ -342,10 +342,10 @@ class ConfigurationDeployer:
         return self._environments.get(environment_name)
 
     def list_environments(self) -> list[Environment]:
-        """List all configured environments.
+        """list all configured environments.
 
         Returns:
-            List of environments
+            list of environments
         """
         return list(self._environments.values())
 
@@ -357,7 +357,7 @@ def deploy_configuration(
 
     Args:
         environment_name: Target environment name
-        config_files: List of configuration files to deploy
+        config_files: list of configuration files to deploy
         deployed_by: Who is deploying the configuration
 
     Returns:

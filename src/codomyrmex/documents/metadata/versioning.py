@@ -34,7 +34,7 @@ def get_document_version(file_path: str | Path) -> str | None:
 
 def set_document_version(file_path: str | Path, version: str) -> None:
     """
-    Set version information for a document.
+    set version information for a document.
 
     Args:
         file_path: Path to document file

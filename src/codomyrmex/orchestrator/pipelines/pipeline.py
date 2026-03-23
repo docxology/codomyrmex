@@ -213,7 +213,7 @@ class Pipeline:
         return self
 
     def set_context(self, key: str, value: Any) -> "Pipeline":
-        """Set an initial context value; returns self for chaining."""
+        """set an initial context value; returns self for chaining."""
         self._context[key] = value
         return self
 
@@ -365,7 +365,7 @@ class PipelineBuilder:
         return self
 
     def context(self, key: str, value: Any) -> "PipelineBuilder":
-        """Set an initial context value; returns self for chaining."""
+        """set an initial context value; returns self for chaining."""
         self._pipeline.set_context(key, value)
         return self
 

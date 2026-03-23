@@ -152,7 +152,7 @@ class PAIClient:
         """Get log of events sent in this session.
 
         Returns:
-            List of sent event records.
+            list of sent event records.
         """
         return list(self._event_log)
 

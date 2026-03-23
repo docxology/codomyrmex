@@ -53,10 +53,10 @@ def maintenance_health_check(
 
 @mcp_tool(
     category="maintenance",
-    description="List all registered maintenance tasks and their status.",
+    description="list all registered maintenance tasks and their status.",
 )
 def maintenance_list_tasks() -> dict[str, Any]:
-    """List maintenance tasks with their current status."""
+    """list maintenance tasks with their current status."""
     try:
         from codomyrmex.maintenance.health.scheduler import MaintenanceScheduler
 

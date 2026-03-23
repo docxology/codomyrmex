@@ -120,7 +120,7 @@ class GitHistoryAnalyzer:
         """Return branch names, their tip commits, and active branch.
 
         Returns:
-            Dict with keys: active_branch (str), branches (list), branch_count (int).
+            dict with keys: active_branch (str), branches (list), branch_count (int).
             Each branch entry: name, tip_sha, tip_message, tip_date.
         """
         branches = []
@@ -147,7 +147,7 @@ class GitHistoryAnalyzer:
                 or "month" (YYYY-MM). Defaults to "week".
 
         Returns:
-            Dict mapping period key → commit count, sorted chronologically.
+            dict mapping period key → commit count, sorted chronologically.
         """
         buckets: dict[str, int] = defaultdict(int)
         for commit in self._repo.iter_commits():
@@ -241,7 +241,7 @@ class GitHistoryAnalyzer:
         Useful for identifying which modules have the most activity.
 
         Returns:
-            List sorted by change_count desc:
+            list sorted by change_count desc:
             [{"directory": str, "change_count": int, "files": int}]
         """
         top_n = min(max(1, top_n), 10000)
@@ -270,7 +270,7 @@ class GitHistoryAnalyzer:
         Files changed recently score higher than equally-churned stale files.
 
         Returns:
-            List sorted by hotspot_score desc:
+            list sorted by hotspot_score desc:
             [{"file": str, "change_count": int, "last_changed": str, "hotspot_score": float}]
         """
         top_n = min(max(1, top_n), 10000)

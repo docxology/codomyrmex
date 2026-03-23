@@ -147,7 +147,7 @@ def build_merkle_tree(leaves: list[bytes]) -> MerkleTree:
     before hashing.
 
     Args:
-        leaves: List of leaf hashes (each should be raw bytes, typically
+        leaves: list of leaf hashes (each should be raw bytes, typically
             32-byte SHA-256 digests).
 
     Returns:
@@ -232,7 +232,7 @@ def verify_merkle_proof(
 
     Args:
         leaf: The leaf hash to verify.
-        proof: List of ``(sibling_hash, position)`` pairs.
+        proof: list of ``(sibling_hash, position)`` pairs.
         root: The expected Merkle root.
 
     Returns:

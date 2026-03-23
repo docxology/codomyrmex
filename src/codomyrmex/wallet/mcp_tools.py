@@ -83,12 +83,12 @@ def wallet_get_address(
 
 @mcp_tool(
     category="wallet",
-    description="List all registered wallets mapping user IDs to addresses.",
+    description="list all registered wallets mapping user IDs to addresses.",
 )
 def wallet_list(
     storage_path: str | None = None,
 ) -> dict[str, Any]:
-    """List all registered wallets.
+    """list all registered wallets.
 
     Args:
         storage_path: Optional directory for key storage.

@@ -47,7 +47,7 @@ class CodaClient(
     Coda.io REST API v1 client.
 
     This client provides methods for all Coda API v1 endpoints including:
-    - Docs: List, create, get, update, delete documents
+    - Docs: list, create, get, update, delete documents
     - Pages: Manage pages and their content
     - Tables: Access tables and views
     - Columns: Read column definitions
@@ -115,7 +115,7 @@ class CodaClient(
     def list_resources(
         self, resource_type: ResourceType | None = None
     ) -> list[CloudResource]:
-        """List Coda documents as cloud resources."""
+        """list Coda documents as cloud resources."""
         if resource_type and resource_type != ResourceType.DOCUMENT:
             return []
 

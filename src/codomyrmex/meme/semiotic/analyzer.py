@@ -30,7 +30,7 @@ class SemioticAnalyzer:
             text: Input text to analyze.
 
         Returns:
-            List of Sign objects found in the text.
+            list of Sign objects found in the text.
         """
         signs: list[Sign] = []
         words = text.split()
@@ -144,7 +144,7 @@ class SemioticAnalyzer:
             n_domains: Number of top-level territories to identify.
 
         Returns:
-            List of SemanticTerritory objects.
+            list of SemanticTerritory objects.
         """
         all_signs = []
         for text in corpus:

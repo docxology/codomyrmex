@@ -110,7 +110,7 @@ def cli_commands():
     """Return CLI commands for the orchestrator module."""
     return {
         "workflows": {
-            "help": "List available workflows",
+            "help": "list available workflows",
             "handler": lambda **kwargs: print(
                 "Available workflows:\n"
                 + "\n".join(

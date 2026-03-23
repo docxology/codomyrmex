@@ -26,7 +26,7 @@ Quick Start:
     setup_logging()
     logger = get_logger(__name__)
 
-    # List available modules
+    # list available modules
     modules = list_modules()
     logger.info(f"Available modules: {len(modules)}")
 

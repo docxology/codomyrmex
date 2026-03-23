@@ -208,7 +208,7 @@ class ABTest:
             executor_factory: Creates executor for each variant's prompt
 
         Returns:
-            Dict mapping variant names to results
+            dict mapping variant names to results
         """
         tester = PromptTester()
 

@@ -63,7 +63,7 @@ class HealthHandler:
         """Lazily initialise the shared MetricCollector and DashboardManager.
 
         Returns:
-            Tuple of (collector, dashboard_manager, MetricType) for callers.
+            tuple of (collector, dashboard_manager, MetricType) for callers.
         """
         from codomyrmex.telemetry.dashboard import (
             DashboardManager,

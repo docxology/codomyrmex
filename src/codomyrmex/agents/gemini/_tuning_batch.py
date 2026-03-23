@@ -44,7 +44,7 @@ class GeminiTuningBatchMixin:
             raise GeminiError(f"Failed to create tuned model: {e}") from e
 
     def list_tuned_models(self) -> list[dict[str, Any]]:
-        """List all tuned models."""
+        """list all tuned models."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -104,7 +104,7 @@ class GeminiTuningBatchMixin:
             raise GeminiError(f"Failed to get batch {name}: {e}") from e
 
     def list_batches(self) -> list[dict[str, Any]]:
-        """List all batch jobs."""
+        """list all batch jobs."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:

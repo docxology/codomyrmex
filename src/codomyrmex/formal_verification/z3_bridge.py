@@ -61,7 +61,7 @@ class Z3Verifier:
         invariant is unsatisfiable.
 
         Args:
-            current_state_constraints: List of Z3 boolean expressions representing the state.
+            current_state_constraints: list of Z3 boolean expressions representing the state.
             invariant: A Z3 boolean expression to prove.
 
         Returns:

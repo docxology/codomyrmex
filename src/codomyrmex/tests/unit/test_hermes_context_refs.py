@@ -109,7 +109,7 @@ class TestParseContextReferences:
 
     def test_parse_folder_reference(self):
         ctx = _import_ctx()
-        refs = ctx.parse_context_references("List @folder:src/")
+        refs = ctx.parse_context_references("list @folder:src/")
         assert len(refs) == 1
         assert refs[0].kind == "folder"
         assert refs[0].target == "src/"
@@ -318,7 +318,7 @@ class TestPreprocessContextReferencesAsync:
         (tmp_path / "src" / "main.py").write_text("# main\n")
         (tmp_path / "src" / "utils.py").write_text("# utils\n")
 
-        msg = f"List @folder:{tmp_path / 'src'} please"
+        msg = f"list @folder:{tmp_path / 'src'} please"
         result = self._run(
             ctx.preprocess_context_references_async(
                 msg, cwd=tmp_path, context_length=128000

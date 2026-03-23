@@ -226,7 +226,7 @@ class FrameExtractor:
             end: End time in seconds (None for video end)
 
         Returns:
-            List of PIL Images
+            list of PIL Images
         """
         path = validate_video_path(video_path)
         if OPENCV_AVAILABLE:
@@ -244,7 +244,7 @@ class FrameExtractor:
 
         Args:
             video_path: Path to video file
-            timestamps: List of timestamps in seconds
+            timestamps: list of timestamps in seconds
 
         Returns:
             ExtractionResult with frames and metadata
@@ -360,13 +360,13 @@ class FrameExtractor:
         """Save extracted frames to files.
 
         Args:
-            frames: List of PIL Images
+            frames: list of PIL Images
             output_directory: Directory to save frames
             prefix: Filename prefix
             format: Image format (png, jpg)
 
         Returns:
-            List of saved file paths
+            list of saved file paths
         """
         output_dir = Path(output_directory)
         output_dir.mkdir(parents=True, exist_ok=True)

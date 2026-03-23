@@ -146,7 +146,7 @@ class ProjectManager:
         return self.active_projects.get(name)
 
     def list_projects(self) -> list[Project]:
-        """List all active projects."""
+        """list all active projects."""
         return list(self.active_projects.values())
 
     def update_project_status(self, name: str, status: ProjectStatus) -> bool:

@@ -30,7 +30,7 @@ class GitHubLibraryGenerator:
         Fetch all repositories for the user.
 
         Returns:
-            List of repository dictionaries
+            list of repository dictionaries
         """
         repos = []
         page = 1
@@ -70,7 +70,7 @@ class GitHubLibraryGenerator:
         Categorize repositories into OWN, FORK, and interesting categories.
 
         Args:
-            repos: List of repository dictionaries
+            repos: list of repository dictionaries
 
         Returns:
             Dictionary with categorized repositories

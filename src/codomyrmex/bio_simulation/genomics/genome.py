@@ -20,7 +20,7 @@ class Genome:
     values (higher is better).
 
     Attributes:
-        traits: Dict of trait names and values, each in [0.0, 1.0].
+        traits: dict of trait names and values, each in [0.0, 1.0].
     """
 
     traits: dict[str, float] = field(default_factory=dict)

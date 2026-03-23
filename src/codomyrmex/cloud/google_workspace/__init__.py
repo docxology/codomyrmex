@@ -1,7 +1,7 @@
 """Codomyrmex cloud/google_workspace module -- Google Workspace SDK clients.
 
 Install SDK: uv sync --extra google_workspace
-Configure:   Set GWS_SERVICE_ACCOUNT_FILE or GOOGLE_APPLICATION_CREDENTIALS env var.
+Configure:   set GWS_SERVICE_ACCOUNT_FILE or GOOGLE_APPLICATION_CREDENTIALS env var.
 """
 
 from __future__ import annotations

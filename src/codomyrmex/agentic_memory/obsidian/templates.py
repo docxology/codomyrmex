@@ -40,7 +40,7 @@ def list_templates(
     *,
     vault: str | None = None,
 ) -> list[TemplateInfo]:
-    """List available templates.
+    """list available templates.
 
     Maps to ``obsidian templates``.
     """

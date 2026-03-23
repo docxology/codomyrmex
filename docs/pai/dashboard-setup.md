@@ -33,7 +33,7 @@ open http://localhost:8787/
 | **Scripts** | `/scripts` | Executable scripts in `scripts/`; run them with args from UI |
 | **Config** | `/config` | Read/edit `.json`, `.toml`, `.yaml` config files |
 | **Docs** | `/docs` | Browse `docs/` directory and module READMEs |
-| **Tools** | `/tools` | All dynamic MCP tools (~604 `@mcp_tool` in tree: 596 dynamic + 9 static) with trust classification (safe / destructive) |
+| **Tools** | `/tools` | MCP tools (~600 production `@mcp_tool`; see [inventory](../reference/inventory.md)) with trust classification (safe / destructive) |
 | **Tests** | `/tests` | Run pytest async; poll for results; view JUnit XML summary |
 | **Chat** | `/chat` | Direct LLM chat via Ollama (requires Ollama running) |
 | **Health** | `/health` | Python version, architecture layers, git status, pipeline status |

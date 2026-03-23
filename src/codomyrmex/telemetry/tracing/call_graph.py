@@ -147,7 +147,7 @@ class MCPCallGraphCollector:
         """Build a call-graph JSON structure.
 
         Returns:
-            Dict with ``nodes`` (list of node dicts) and ``edges``
+            dict with ``nodes`` (list of node dicts) and ``edges``
             (list of ``{source, target, weight}`` dicts).
         """
         with self._lock:
@@ -195,7 +195,7 @@ class MCPCallGraphCollector:
         """Return aggregate statistics.
 
         Returns:
-            Dict with ``total_calls``, ``unique_tools``, ``unique_callers``,
+            dict with ``total_calls``, ``unique_tools``, ``unique_callers``,
             ``error_rate``, and ``top_tools``.
         """
         with self._lock:
@@ -222,7 +222,7 @@ class MCPCallGraphCollector:
             limit: Maximum number of calls to return.
 
         Returns:
-            List of call dicts (most recent first).
+            list of call dicts (most recent first).
         """
         with self._lock:
             recent = self._history[-limit:][::-1]
@@ -264,7 +264,7 @@ class _TraceContext:
         self._success = True
 
     def set_metadata(self, metadata: dict[str, Any]) -> None:
-        """Set additional metadata for the call."""
+        """set additional metadata for the call."""
         self._metadata.update(metadata)
 
     def set_error(self) -> None:

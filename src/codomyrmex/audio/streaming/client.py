@@ -158,7 +158,7 @@ class AudioStreamClient:
             chunk_size: Size of each chunk in bytes.
 
         Returns:
-            List of :class:`AudioChunk` objects.
+            list of :class:`AudioChunk` objects.
         """
         path = Path(file_path)
         if not path.exists():

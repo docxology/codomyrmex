@@ -33,7 +33,7 @@ class InMemoryHistoryStore:
         limit: int = 100,
         offset: int = 0,
     ) -> list[Conversation]:
-        """List conversations, most recent first."""
+        """list conversations, most recent first."""
         sorted_convs = sorted(
             self._conversations.values(), key=lambda c: c.updated_at, reverse=True
         )
@@ -96,7 +96,7 @@ class FileHistoryStore:
         limit: int = 100,
         offset: int = 0,
     ) -> list[Conversation]:
-        """List conversations."""
+        """list conversations."""
         conversations = []
         for path in self.directory.glob("*.json"):
             conv = self.load(path.stem)
@@ -270,7 +270,7 @@ class SQLiteHistoryStore:
         limit: int = 100,
         offset: int = 0,
     ) -> list[Conversation]:
-        """List conversations."""
+        """list conversations."""
         with self._get_connection() as conn:
             rows = conn.execute(
                 "SELECT conversation_id FROM conversations ORDER BY updated_at DESC LIMIT ? OFFSET ?",

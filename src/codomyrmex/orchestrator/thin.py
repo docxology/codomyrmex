@@ -202,7 +202,7 @@ def pipe(
     """Pipe commands together sequentially.
 
     Args:
-        commands: List of shell commands
+        commands: list of shell commands
         timeout_per_command: Timeout for each command
         stop_on_error: Stop on first error
 
@@ -215,7 +215,7 @@ def pipe(
     start_time = time.time()
 
     for i, cmd in enumerate(commands):
-        # Set previous output as input via environment
+        # set previous output as input via environment
         env = {"PIPE_INPUT": prev_stdout, "PIPE_INDEX": str(i)}
 
         result = shell(cmd, timeout=timeout_per_command, env=env)
@@ -244,7 +244,7 @@ def batch(
     """Run multiple targets in parallel.
 
     Args:
-        targets: List of script paths or commands
+        targets: list of script paths or commands
         workers: Number of parallel workers
         timeout: Timeout per target
 
@@ -272,7 +272,7 @@ def chain_scripts(
     """Chain scripts sequentially with result passing.
 
     Args:
-        scripts: List of script paths
+        scripts: list of script paths
         timeout_per_script: Timeout per script
         pass_results: Pass previous results via environment
         stop_on_error: Stop on first failure
@@ -372,7 +372,7 @@ class Steps:
         """Add parallel steps.
 
         Args:
-            steps: List of (name, action) tuples
+            steps: list of (name, action) tuples
             depends_on: Common dependencies
 
         Returns:

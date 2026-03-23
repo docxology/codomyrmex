@@ -57,7 +57,7 @@ class WorkflowAnalytics:
             n: Maximum number of hotspots.
 
         Returns:
-            List of (step_name, failure_count) tuples, descending.
+            list of (step_name, failure_count) tuples, descending.
         """
         failures: dict[str, int] = defaultdict(int)
         for entry in self._journal.by_event_type("step"):
@@ -74,7 +74,7 @@ class WorkflowAnalytics:
             window: Moving average window size.
 
         Returns:
-            List of averaged durations.
+            list of averaged durations.
         """
         completions = self._journal.by_event_type("complete")
         durations = [e.duration_ms for e in completions]

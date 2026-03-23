@@ -139,7 +139,7 @@ class DarkPDF:
         return count
 
     def set_filter(self, preset: str | DarkPDFFilter) -> DarkPDF:
-        """Set the filter to a preset or a custom DarkPDFFilter.
+        """set the filter to a preset or a custom DarkPDFFilter.
 
         Args:
             preset: Preset name or DarkPDFFilter instance.
@@ -165,7 +165,7 @@ class DarkPDF:
         return self
 
     def set_brightness(self, value: float) -> DarkPDF:
-        """Set brightness multiplier.
+        """set brightness multiplier.
 
         Args:
             value: Brightness multiplier, 0.1-3.0.
@@ -178,7 +178,7 @@ class DarkPDF:
         return self
 
     def set_contrast(self, value: float) -> DarkPDF:
-        """Set contrast multiplier.
+        """set contrast multiplier.
 
         Args:
             value: Contrast multiplier, 0.1-3.0.
@@ -191,7 +191,7 @@ class DarkPDF:
         return self
 
     def set_inversion(self, value: float) -> DarkPDF:
-        """Set inversion amount.
+        """set inversion amount.
 
         Args:
             value: Inversion amount, 0.0-1.0.
@@ -204,7 +204,7 @@ class DarkPDF:
         return self
 
     def set_sepia(self, value: float) -> DarkPDF:
-        """Set sepia amount.
+        """set sepia amount.
 
         Args:
             value: Sepia amount, 0.0-1.0.
@@ -291,14 +291,14 @@ class DarkPDF:
         """Process multiple PDFs with the same settings.
 
         Args:
-            input_paths: List of input PDF paths.
+            input_paths: list of input PDF paths.
             output_dir: Directory for output files.
             preset: Preset to use (default "dark").
             suffix: Suffix to append to filenames (default "_dark").
             **kwargs: Override individual filter parameters.
 
         Returns:
-            List of paths to saved output files.
+            list of paths to saved output files.
         """
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)

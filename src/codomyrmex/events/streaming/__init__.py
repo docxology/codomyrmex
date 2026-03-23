@@ -25,7 +25,7 @@ def cli_commands():
     """Return CLI commands for the streaming module."""
     return {
         "streams": {
-            "help": "List active streams",
+            "help": "list active streams",
             "handler": lambda: print(
                 "Stream Backends:\n"
                 "  - InMemoryStream\n"

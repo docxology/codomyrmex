@@ -233,7 +233,7 @@ class ContextManager:
         """Get the current context as LLM-compatible message dicts.
 
         Returns:
-            List of ``{"role": ..., "content": ...}`` dicts.
+            list of ``{"role": ..., "content": ...}`` dicts.
         """
         return [{"role": m.role, "content": m.content} for m in self._messages]
 

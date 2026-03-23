@@ -48,10 +48,10 @@ def logistics_queue_stats(backend: str = "in_memory") -> dict[str, Any]:
 
 @mcp_tool(
     category="logistics",
-    description="List all currently scheduled task IDs in the schedule manager.",
+    description="list all currently scheduled task IDs in the schedule manager.",
 )
 def logistics_list_scheduled() -> dict[str, Any]:
-    """List scheduled task IDs from the ScheduleManager.
+    """list scheduled task IDs from the ScheduleManager.
 
     Returns:
         dict with keys: status, task_ids, count

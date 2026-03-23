@@ -105,7 +105,7 @@ def cli_commands():
     """Return CLI commands for the templating module."""
 
     def _list_engines():
-        """List template engines."""
+        """list template engines."""
         print("Templating Module - Engines:")
         print("  jinja2 - Jinja2 template engine (default)")
         print("  mako   - Mako template engine")

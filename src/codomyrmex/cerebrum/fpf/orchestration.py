@@ -84,7 +84,7 @@ class FPFOrchestrator(FPFVisualizationMixin, FPFReportMixin):
         """Create cases from FPF patterns for case-based reasoning.
 
         Returns:
-            List of Case objects
+            list of Case objects
         """
         cases = []
         for pattern in self.spec.patterns:
@@ -161,7 +161,7 @@ class FPFOrchestrator(FPFVisualizationMixin, FPFReportMixin):
         network.add_edge("pattern_status", "pattern_importance")
         network.add_edge("has_dependencies", "pattern_importance")
 
-        # Set conditional probability tables
+        # set conditional probability tables
         # Pattern importance given status
         network.set_cpt(
             "pattern_importance",
@@ -345,7 +345,7 @@ class FPFOrchestrator(FPFVisualizationMixin, FPFReportMixin):
             policy_horizon=3,
         )
 
-        # Set transition model
+        # set transition model
         transition_model = {
             "unexplored_analyze_pattern": {"exploring": 0.8, "analyzed": 0.2},
             "exploring_analyze_pattern": {"analyzed": 0.9, "exploring": 0.1},
@@ -354,7 +354,7 @@ class FPFOrchestrator(FPFVisualizationMixin, FPFReportMixin):
         }
         agent.set_transition_model(transition_model)
 
-        # Set observation model
+        # set observation model
         importance_scores = self.fpf_analyzer.calculate_pattern_importance()
         observation_model = {
             "analyzed": {

@@ -206,3 +206,10 @@ Multi-turn sessions created through **Codomyrmex** may store Hermes skill names 
 - [Configuration](configuration.md) — Compression settings
 - [Models](models.md) — Summary model selection
 - [skills.md](skills.md) — Session skill metadata and merge order
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

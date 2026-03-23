@@ -40,7 +40,7 @@ def cli_commands():
     """Return CLI commands for the encryption module."""
     return {
         "algorithms": {
-            "help": "List available encryption algorithms",
+            "help": "list available encryption algorithms",
             "handler": lambda **kwargs: print(
                 "Encryption Algorithms:\n"
                 "  - AES-256-CBC: Symmetric (legacy, deprecated)\n"

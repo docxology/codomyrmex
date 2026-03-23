@@ -97,7 +97,7 @@ class DockerManager:
             registry_auth: Registry authentication credentials
 
         Returns:
-            Dict containing build results
+            dict containing build results
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -165,7 +165,7 @@ class DockerManager:
             auth_config: Registry authentication credentials
 
         Returns:
-            Dict containing push results
+            dict containing push results
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -205,7 +205,7 @@ class DockerManager:
             detach: Whether to run in detached mode
 
         Returns:
-            Dict containing container run results
+            dict containing container run results
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -263,13 +263,13 @@ class DockerManager:
 
     def list_containers(self, show_all: bool = False) -> list[dict[str, Any]]:
         """
-        List Docker containers.
+        list Docker containers.
 
         Args:
             show_all: Whether to show all containers (including stopped)
 
         Returns:
-            List of container information
+            list of container information
         """
         if not self.client:
             return []
@@ -306,7 +306,7 @@ class DockerManager:
             container_id: Container ID or name
 
         Returns:
-            Dict containing stop results
+            dict containing stop results
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -336,7 +336,7 @@ class DockerManager:
             force: Force removal of running container
 
         Returns:
-            Dict containing removal results
+            dict containing removal results
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -364,7 +364,7 @@ class DockerManager:
             tail: Number of log lines to retrieve
 
         Returns:
-            Dict containing container logs
+            dict containing container logs
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -392,7 +392,7 @@ class DockerManager:
             container_id: Container ID or name
 
         Returns:
-            Dict containing container statistics
+            dict containing container statistics
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -423,7 +423,7 @@ class DockerManager:
             driver: Network driver (default: bridge)
 
         Returns:
-            Dict containing network creation results
+            dict containing network creation results
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -445,10 +445,10 @@ class DockerManager:
 
     def list_images(self) -> list[dict[str, Any]]:
         """
-        List Docker images.
+        list Docker images.
 
         Returns:
-            List of image information
+            list of image information
         """
         if not self.client:
             return []
@@ -478,7 +478,7 @@ class DockerManager:
             force: Force removal of image
 
         Returns:
-            Dict containing image removal results
+            dict containing image removal results
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -501,7 +501,7 @@ class DockerManager:
         Get Docker system information.
 
         Returns:
-            Dict containing Docker system information
+            dict containing Docker system information
         """
         if not self.client:
             return {"available": False, "error": "Docker client not available"}
@@ -533,7 +533,7 @@ class DockerManager:
 
         Args:
             base_image: Current base image
-            requirements: List of required packages/tools
+            requirements: list of required packages/tools
 
         Returns:
             Optimized base image recommendation
@@ -576,7 +576,7 @@ class DockerManager:
             image_name: Name of the image to analyze
 
         Returns:
-            Dict containing size analysis
+            dict containing size analysis
         """
         if not self.client:
             return {"error": "Docker client not available"}
@@ -652,7 +652,7 @@ class DockerManager:
             image_name: Name of the image to analyze
 
         Returns:
-            List of layer information dictionaries
+            list of layer information dictionaries
         """
         if not self.client:
             return []
@@ -697,7 +697,7 @@ def build_containers(
         registry_auth: Registry authentication
 
     Returns:
-        Dict containing build results
+        dict containing build results
     """
     manager = DockerManager()
     return manager.build_image(config, push, registry_auth)

@@ -75,7 +75,7 @@ class TemplateManager:
         return name in self._templates
 
     def list_templates(self) -> list[str]:
-        """List all registered template names."""
+        """list all registered template names."""
         return sorted(self._templates.keys())
 
     # ── Retrieval ───────────────────────────────────────────────────
@@ -138,10 +138,10 @@ class TemplateManager:
 
         Args:
             name: Template name.
-            contexts: List of context dicts.
+            contexts: list of context dicts.
 
         Returns:
-            List of rendered strings.
+            list of rendered strings.
         """
         return [self.render(name, ctx) for ctx in contexts]
 
@@ -195,7 +195,7 @@ class TemplateManager:
         """Validate all registered templates.
 
         Returns:
-            Dict mapping template name to (valid, error_message).
+            dict mapping template name to (valid, error_message).
         """
         return {name: self.validate(name) for name in self._templates}
 

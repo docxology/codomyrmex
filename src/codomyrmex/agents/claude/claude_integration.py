@@ -262,8 +262,8 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
             Analysis result dictionary with:
             - success: Whether analysis completed
             - output: Analysis results
-            - issues: List of identified issues
-            - recommendations: List of recommendations
+            - issues: list of identified issues
+            - recommendations: list of recommendations
             - error: Error message if failed
         """
         # Build analysis-specific prompt

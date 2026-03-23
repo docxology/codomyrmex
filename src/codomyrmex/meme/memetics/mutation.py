@@ -114,7 +114,7 @@ def batch_mutate(
     with the given `intensity`.
 
     Args:
-        population: List of memes to mutate.
+        population: list of memes to mutate.
         mutation_rate: Probability each meme is mutated (0–1).
         intensity: Drift intensity passed to `semantic_drift`.
 

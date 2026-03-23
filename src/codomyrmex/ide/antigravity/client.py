@@ -146,7 +146,7 @@ class AntigravityClient(
         """Get Antigravity capabilities.
 
         Returns:
-            Dict containing available tools and features.
+            dict containing available tools and features.
         """
         return {
             "name": "Antigravity",
@@ -180,13 +180,13 @@ class AntigravityClient(
         return self._conversation_id
 
     def list_conversations(self, limit: int = 10) -> list[dict[str, Any]]:
-        """List recent conversations.
+        """list recent conversations.
 
         Args:
             limit: Maximum number of conversations to return.
 
         Returns:
-            List of conversation metadata.
+            list of conversation metadata.
         """
         if not self.artifact_dir.exists():
             return []

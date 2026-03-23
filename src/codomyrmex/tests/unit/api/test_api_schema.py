@@ -551,7 +551,7 @@ class TestDocGeneratorBoost:
     def test_api_endpoint(self):
         from codomyrmex.api.documentation.doc_generator import APIEndpoint
 
-        ep = APIEndpoint(path="/users", method="GET", summary="List users")
+        ep = APIEndpoint(path="/users", method="GET", summary="list users")
         assert ep.method == "GET"
 
     def test_doc_generator_init(self):

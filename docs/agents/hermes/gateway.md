@@ -276,3 +276,10 @@ Full authorization priority order (gateway/run.py):
 - [launchd](launchd.md) — macOS service management
 - [Cron](cron.md) — Scheduled jobs
 - [skills.md](skills.md) — Codomyrmex skill preload when invoking Hermes via MCP/client
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

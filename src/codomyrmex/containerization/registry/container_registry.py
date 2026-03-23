@@ -341,13 +341,13 @@ class ContainerRegistry:
             raise CodomyrmexError(f"Failed to build and push image: {e}") from e
 
     def list_images(self, repository: str | None = None) -> list[dict[str, Any]]:
-        """List images in the local Docker cache or registry.
+        """list images in the local Docker cache or registry.
 
         Args:
             repository: Filter by repository name
 
         Returns:
-            List of image information
+            list of image information
         """
         if not self.is_available():
             return []
@@ -389,14 +389,14 @@ class ContainerRegistry:
     def list_registry_images(
         self, repository: str | None = None, limit: int = 100
     ) -> list[dict[str, Any]]:
-        """List images directly from the registry API.
+        """list images directly from the registry API.
 
         Args:
             repository: Repository name to list
             limit: Maximum number of images to return
 
         Returns:
-            List of image information from registry
+            list of image information from registry
         """
         if not REQUESTS_AVAILABLE or not self._session:
             logger.warning("Requests not available for registry API calls")

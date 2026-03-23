@@ -17,7 +17,7 @@ def cli_commands():
     """Return CLI commands for the spatial module."""
 
     def _list_coordinate_systems():
-        """List coordinate systems."""
+        """list coordinate systems."""
         print("Spatial Module - Coordinate Systems:")
         print("  cartesian   - 3D Cartesian (x, y, z)")
         print("  spherical   - Spherical (r, theta, phi)")

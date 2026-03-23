@@ -185,3 +185,10 @@ hermes pairing create
 - [Multi-Instance](multi_instance.md) — Running multiple bots
 - [Troubleshooting](troubleshooting.md) — Error patterns and fixes
 - [skills.md](skills.md) — Codomyrmex skill defaults for programmatic Hermes calls
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

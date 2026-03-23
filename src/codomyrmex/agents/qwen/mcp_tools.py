@@ -48,7 +48,7 @@ def qwen_chat(
         max_tokens: Maximum response tokens.
 
     Returns:
-        Dict with 'content', 'model', 'tokens_used', 'finish_reason'.
+        dict with 'content', 'model', 'tokens_used', 'finish_reason'.
     """
     from codomyrmex.agents.core import AgentRequest
 
@@ -105,7 +105,7 @@ def qwen_chat_with_tools(
         max_iterations: Maximum tool-calling rounds.
 
     Returns:
-        Dict with 'messages' (full conversation) and 'status'.
+        dict with 'messages' (full conversation) and 'status'.
     """
     from .qwen_client import QwenClient
 
@@ -125,14 +125,14 @@ def qwen_chat_with_tools(
 
 @mcp_tool(
     name="qwen_list_models",
-    description="List all available Qwen models with their context lengths and categories.",
+    description="list all available Qwen models with their context lengths and categories.",
     tags=["qwen", "models", "registry"],
 )
 def qwen_list_models() -> dict[str, Any]:
-    """List available Qwen models.
+    """list available Qwen models.
 
     Returns:
-        Dict with 'models' containing model registry and 'code_models' list.
+        dict with 'models' containing model registry and 'code_models' list.
     """
     from .qwen_client import QWEN_MODELS, QwenClient
 
@@ -161,11 +161,11 @@ def qwen_create_agent(
 
     Args:
         model: Model name (default: qwen-coder-turbo).
-        tools: List of tool names (e.g., ['code_interpreter', 'image_gen']).
+        tools: list of tool names (e.g., ['code_interpreter', 'image_gen']).
         system_message: System prompt.
 
     Returns:
-        Dict with 'status' and 'agent_info'.
+        dict with 'status' and 'agent_info'.
     """
     try:
         from .qwen_agent_wrapper import create_assistant
@@ -211,7 +211,7 @@ def qwen_code_review(
         model: Qwen model to use.
 
     Returns:
-        Dict with 'review' content and metadata.
+        dict with 'review' content and metadata.
     """
     from codomyrmex.agents.core import AgentRequest
 

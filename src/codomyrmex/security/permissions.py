@@ -133,7 +133,7 @@ class PermissionModel:
         return perms
 
     def list_grants(self, principal: str = "") -> list[Grant]:
-        """List grants, optionally filtered by principal."""
+        """list grants, optionally filtered by principal."""
         if principal:
             return list(self._grants.get(principal, []))
         return [g for grants in self._grants.values() for g in grants]

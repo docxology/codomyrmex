@@ -37,8 +37,8 @@ class CodeIntelMixin:
             Dictionary containing:
                 - success: Whether review succeeded
                 - output: Full analysis text
-                - issues: List of identified issues
-                - recommendations: List of suggestions
+                - issues: list of identified issues
+                - recommendations: list of suggestions
                 - tokens_used: Tokens consumed
                 - cost_usd: Estimated cost
 
@@ -336,7 +336,7 @@ Structure your response:
             Dictionary containing:
                 - success: Whether generation succeeded
                 - tests: Generated test code
-                - test_cases: List of test case descriptions
+                - test_cases: list of test case descriptions
                 - coverage_notes: Notes about test coverage
                 - tokens_used: Tokens consumed
                 - cost_usd: Estimated cost
@@ -363,7 +363,7 @@ Include:
 
 Return:
 1. Test code (ready to run)
-2. List of test cases with descriptions"""
+2. list of test cases with descriptions"""
 
         prompt = f"""Generate tests for this {language} code using {framework}:
 

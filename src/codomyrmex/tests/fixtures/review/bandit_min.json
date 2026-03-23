@@ -1,0 +1,15 @@
+{
+  "errors": [],
+  "generated_at": "2026-01-01T00:00:00Z",
+  "metrics": {},
+  "results": [
+    {
+      "filename": "sample.py",
+      "line_number": 7,
+      "issue_severity": "HIGH",
+      "issue_text": "Possible hardcoded secret",
+      "test_id": "B105",
+      "test_name": "hardcoded_password_string"
+    }
+  ]
+}

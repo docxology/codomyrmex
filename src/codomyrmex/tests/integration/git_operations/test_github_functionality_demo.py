@@ -168,7 +168,7 @@ def demonstrate_github_functionality():
     # Test current token status
     github_token = os.environ.get("GITHUB_TOKEN", "not_set")
     print(
-        f"\n   🔑 Current token status: {'✅ Set' if github_token != 'not_set' else '❌ Not set'}"
+        f"\n   🔑 Current token status: {'✅ set' if github_token != 'not_set' else '❌ Not set'}"
     )
 
     if github_token not in {"not_set", "placeholder_for_testing"}:
@@ -273,7 +273,7 @@ def show_complete_workflow():
 
     print("\n8. 📝 LIST PULL REQUESTS")
     print("   • get_pull_requests(owner, repo, state='open')")
-    print("   • List all PRs with filtering by state")
+    print("   • list all PRs with filtering by state")
 
     print(
         "\n✅ RESULT: Complete development workflow from repo creation to PR management!"
@@ -313,7 +313,7 @@ def main():
             print("\n💡 TO ENABLE FULL GITHUB TESTING:")
             print("   1. Get a GitHub personal access token from:")
             print("      https://github.com/settings/tokens")
-            print("   2. Set the token: export GITHUB_TOKEN='your_token_here'")
+            print("   2. set the token: export GITHUB_TOKEN='your_token_here'")
             print("   3. Re-run the tests: python test_github_operations_demo.py")
             print("\n   The code is working - it just needs a valid token!")
         elif local_git_works and github_works:

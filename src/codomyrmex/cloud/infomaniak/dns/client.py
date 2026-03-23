@@ -29,7 +29,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_zones(self) -> list[dict[str, Any]]:
-        """List all DNS zones."""
+        """list all DNS zones."""
 
         def _list():
             zones = list(self._conn.dns.zones())
@@ -124,11 +124,11 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         return self._safe_call(_update, "update", f"zone {zone_id}", default=False)
 
     # =========================================================================
-    # Record Set Operations
+    # Record set Operations
     # =========================================================================
 
     def list_records(self, zone_id: str) -> list[dict[str, Any]]:
-        """List all record sets in a zone."""
+        """list all record sets in a zone."""
 
         def _list():
             records = list(self._conn.dns.recordsets(zone_id))
@@ -179,7 +179,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             zone_id: Zone ID or name
             name: Record name (must end with '.')
             record_type: Record type (A, AAAA, CNAME, MX, TXT, etc.)
-            records: List of record values
+            records: list of record values
             ttl: Time to live in seconds
             description: Optional description
         """
@@ -245,7 +245,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_ptr_records(self) -> list[dict[str, Any]]:
-        """List all PTR records (reverse DNS)."""
+        """list all PTR records (reverse DNS)."""
 
         def _list():
             ptrs = list(self._conn.dns.ptr_records())
@@ -269,7 +269,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         description: str | None = None,
     ) -> dict[str, Any] | None:
         """
-        Set reverse DNS (PTR record) for a floating IP.
+        set reverse DNS (PTR record) for a floating IP.
 
         Args:
             floating_ip: Floating IP address
@@ -294,7 +294,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
                 ttl=ttl,
                 description=description,
             )
-            logger.info("Set reverse DNS for %s: %s", floating_ip, normalized_hostname)
+            logger.info("set reverse DNS for %s: %s", floating_ip, normalized_hostname)
             return {
                 "id": ptr.id,
                 "address": floating_ip,

@@ -93,7 +93,7 @@ def benchmark_matmul(sizes: list[int] | None = None) -> dict:
     Benchmark tiled matmul vs numpy.dot for various sizes.
 
     Args:
-        sizes: List of matrix dimensions (N) to benchmark. If None,
+        sizes: list of matrix dimensions (N) to benchmark. If None,
                defaults to [32, 64, 128, 256].
 
     Returns:

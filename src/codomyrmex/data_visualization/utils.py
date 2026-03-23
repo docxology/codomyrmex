@@ -106,7 +106,7 @@ def get_color_palette(n_colors: int = 10) -> list:
         n_colors: Number of colors needed.
 
     Returns:
-        List of color hex codes.
+        list of color hex codes.
     """
     base_palette = [
         "#1f77b4",  # Blue

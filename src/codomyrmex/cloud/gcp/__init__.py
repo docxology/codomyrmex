@@ -20,7 +20,7 @@ class GCSClient(StorageClient):
         self.client = client or storage.Client(project=project)
 
     def list_buckets(self) -> list[str]:
-        """List storage buckets."""
+        """list storage buckets."""
         try:
             buckets = self.client.list_buckets()
             return [bucket.name for bucket in buckets]
@@ -80,7 +80,7 @@ class GCSClient(StorageClient):
             return False
 
     def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
-        """List objects in a bucket."""
+        """list objects in a bucket."""
         try:
             blobs = self.client.list_blobs(bucket, prefix=prefix)
             return [blob.name for blob in blobs]

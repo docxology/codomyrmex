@@ -84,6 +84,9 @@ dependencies = [
     "mlx-lm>=0.31.1",
     "wasmtime>=42.0.0",
     "matplotlib>=3.10.8",
+    # OpenGauss in-tree agent (CLI + ACP adapter tests import these)
+    "prompt-toolkit>=3.0.0",
+    "agent-client-protocol>=0.8.0",
 ]
 
 [project.optional-dependencies]
@@ -330,6 +333,7 @@ dev = [
     {include-group = "lint"},
     {include-group = "test"},
     "hypothesis>=6.151.9",
+    "sarif-tools>=3.0.0",
 ]
 docs = [
     "mkdocs>=1.6.1",
@@ -341,6 +345,7 @@ lint = ["ruff>=0.11.0", "ty"]
 test = [
     "pytest>=8.0.0",
     "pytest-cov>=4.0.0",
+    "pytest-xdist>=3.0.0",
     "pytest-timeout>=2.1.0",
     "pytest-asyncio>=0.23.0",
     "pytest-benchmark>=4.0.0",
@@ -678,6 +683,11 @@ docstring-code-format = true
 # ty type checker (replaces mypy — faster, from Astral team)
 [tool.ty.environment]
 python-version = "3.11"
+
+# Excluded: ty panics on this module (infer_expression_type_impl cycle limit).
+[tool.ty.src]
+include = ["src/codomyrmex"]
+exclude = ["src/codomyrmex/physical_management/object_manager.py"]
 
 [tool.ty.rules]
 # v1.1.1: Tightened from initial lenient config

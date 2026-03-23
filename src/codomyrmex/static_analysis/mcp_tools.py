@@ -25,7 +25,7 @@ def static_analysis_audit_exports(src_dir: str) -> list[dict[str, Any]]:
         src_dir: Path to the source directory to scan (e.g. ``'src/codomyrmex'``).
 
     Returns:
-        List of dicts, each with ``module``, ``issue``, and ``detail`` keys.
+        list of dicts, each with ``module``, ``issue``, and ``detail`` keys.
     """
     from pathlib import Path
 
@@ -48,7 +48,7 @@ def static_analysis_find_dead_exports(src_dir: str) -> list[dict[str, Any]]:
         src_dir: Path to the source directory to scan.
 
     Returns:
-        List of dicts with ``module``, ``export_name``, and ``detail`` keys.
+        list of dicts with ``module``, ``export_name``, and ``detail`` keys.
     """
     from pathlib import Path
 
@@ -71,7 +71,7 @@ def static_analysis_full_audit(src_dir: str) -> dict[str, Any]:
         src_dir: Path to the source directory to audit.
 
     Returns:
-        Dict with keys ``missing_all``, ``dead_exports``, ``unused_functions``,
+        dict with keys ``missing_all``, ``dead_exports``, ``unused_functions``,
         and ``summary`` (containing counts for each category).
     """
     from pathlib import Path

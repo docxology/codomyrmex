@@ -25,7 +25,7 @@ def cli_commands():
     """Return CLI commands for the search module."""
     return {
         "engines": {
-            "help": "List available search engines",
+            "help": "list available search engines",
             "handler": lambda **kwargs: print(
                 "Search Engines:\n"
                 "  - in_memory   (TF-IDF based, default)\n"

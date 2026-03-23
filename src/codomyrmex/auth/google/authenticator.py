@@ -41,7 +41,7 @@ class GoogleAuthenticator:
         Args:
             client_secrets_file: Path to the downloaded client_secret_<client_id>.json from Google Cloud Console.
             token_cache_file: Path to cache the acquired refresh/access tokens. Defaults to `~/.codomyrmex/auth/google/token.json`.
-            scopes: List of OAuth2 scopes. Defaults to Calendar and Gmail modify scopes.
+            scopes: list of OAuth2 scopes. Defaults to Calendar and Gmail modify scopes.
         """
         if not AUTH_AVAILABLE:
             raise ImportError(

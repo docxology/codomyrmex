@@ -138,7 +138,7 @@ class TranscriptionResult:
         duration_sec: Duration in seconds.
         language: Detected language code (e.g. ``"en"``).
         transcript: Full concatenated transcript text.
-        segments: List of timed :class:`TranscriptionSegment` objects.
+        segments: list of timed :class:`TranscriptionSegment` objects.
         metadata: Raw metadata from yt-dlp and whisper.
         status: ``"completed"``, ``"error"``, or ``"running"``.
         error: Error message if ``status == "error"``.

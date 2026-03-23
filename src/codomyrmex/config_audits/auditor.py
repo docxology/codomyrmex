@@ -17,7 +17,7 @@ class ConfigAuditor:
         """Initialize the auditor with a set of rules.
 
         Args:
-            rules: List of AuditRule objects. If None, uses DEFAULT_RULES.
+            rules: list of AuditRule objects. If None, uses DEFAULT_RULES.
         """
         self.rules = rules if rules is not None else DEFAULT_RULES
 
@@ -97,7 +97,7 @@ class ConfigAuditor:
             pattern: Glob pattern to match configuration files.
 
         Returns:
-            List of AuditResult objects.
+            list of AuditResult objects.
         """
         path = Path(directory_path)
         results = []
@@ -122,7 +122,7 @@ class ConfigAuditor:
         """Generate a human-readable summary report of audit results.
 
         Args:
-            results: List of AuditResult objects.
+            results: list of AuditResult objects.
 
         Returns:
             Formatted report string.

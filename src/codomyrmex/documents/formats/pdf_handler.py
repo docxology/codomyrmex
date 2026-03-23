@@ -120,7 +120,7 @@ def write_pdf(
             file_path.parent.mkdir(parents=True, exist_ok=True)
             c = canvas.Canvas(str(file_path), pagesize=letter)
 
-            # Set metadata
+            # set metadata
             if metadata.get("title"):
                 c.setTitle(metadata["title"])
             if metadata.get("author"):
@@ -152,7 +152,7 @@ def write_pdf(
                 pdf.set_auto_page_break(auto=True, margin=15)
                 pdf.add_page()
 
-                # Set metadata
+                # set metadata
                 if metadata.get("title"):
                     pdf.set_title(metadata["title"])
                 if metadata.get("author"):

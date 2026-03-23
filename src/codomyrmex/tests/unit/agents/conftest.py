@@ -85,7 +85,7 @@ class ConcreteAgent(BaseAgent):
         self._response = "Default test response"
 
     def set_response(self, response: str):
-        """Set the response to return from execute."""
+        """set the response to return from execute."""
         self._response = response
 
     def _execute_impl(

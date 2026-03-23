@@ -108,7 +108,7 @@ class MetricAggregator:
             self._labeled_counters[name][label_key] += value
 
     def set_gauge(self, name: str, value: float) -> None:
-        """Set a gauge to a specific value."""
+        """set a gauge to a specific value."""
         self._gauges[name] = value
 
     def observe(self, name: str, value: float) -> None:

@@ -94,7 +94,7 @@ class Task:
     parameters: dict[str, Any] = field(default_factory=dict)
     priority: TaskPriority = TaskPriority.NORMAL
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    dependencies: list[str] = field(default_factory=list)  # List of task IDs
+    dependencies: list[str] = field(default_factory=list)  # list of task IDs
     resources: list[TaskResource] = field(default_factory=list)
     timeout: float | None = None
     retry_count: int = 0
@@ -318,7 +318,7 @@ class TaskOrchestrator:
             logger.info("Task completed: %s (%s)", task.name, task.status.value)
 
     def list_tasks(self) -> list[Task]:
-        """List all tasks."""
+        """list all tasks."""
         return list(self.tasks.values())
 
     def get_task(self, task_id: str) -> Task | None:

@@ -63,7 +63,7 @@ class SemioticEncoder:
             encoded: Text containing hidden payload.
 
         Returns:
-            List of integers representing payload bits.
+            list of integers representing payload bits.
         """
         words = encoded.split()
         bits: list[int] = []

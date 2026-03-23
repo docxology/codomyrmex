@@ -112,13 +112,13 @@ def get_current_branch(repository_path: str | None = None) -> str:
 
 
 def list_branches(repository_path: str | None = None) -> list[str]:
-    """List all local branches in the repository.
+    """list all local branches in the repository.
 
     Args:
         repository_path: Path to the git repository. Defaults to current directory.
 
     Returns:
-        List of branch names (current branch has no special marker).
+        list of branch names (current branch has no special marker).
         Returns empty list if not a git repository or on error.
     """
     cwd = repository_path or "."

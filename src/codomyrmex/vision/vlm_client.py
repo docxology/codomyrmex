@@ -147,7 +147,7 @@ class VLMClient:
 
         Args:
             prompt: Text prompt.
-            images: List of base64-encoded images.
+            images: list of base64-encoded images.
 
         Returns:
             A :class:`VLMResponse`.

@@ -128,7 +128,7 @@ class APIDocumentationGenerator:
         Initialize the API documentation generator.
 
         Args:
-            source_paths: List of paths to scan for API endpoints
+            source_paths: list of paths to scan for API endpoints
         """
         self.source_paths = source_paths or ["src"]
         self.discovered_endpoints: list[APIEndpoint] = []
@@ -441,7 +441,7 @@ class APIDocumentationGenerator:
         Validate API documentation for completeness and accuracy.
 
         Returns:
-            List of validation issues
+            list of validation issues
         """
         issues = []
 
@@ -509,7 +509,7 @@ def extract_api_specs(source_path: str) -> list[APIEndpoint]:
         source_path: Path to scan for API endpoints
 
     Returns:
-        List of discovered API endpoints
+        list of discovered API endpoints
     """
     generator = APIDocumentationGenerator([source_path])
     generator._discover_endpoints()

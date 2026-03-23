@@ -37,7 +37,7 @@ def concurrency_pool_status() -> dict:
 
 @mcp_tool(category="concurrency")
 def concurrency_list_locks() -> dict:
-    """List all currently tracked distributed locks.
+    """list all currently tracked distributed locks.
 
     Queries the LockManager for any locks that have been registered
     or are currently held.

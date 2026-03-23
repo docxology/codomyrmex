@@ -160,3 +160,10 @@ When Hermes is invoked via **Codomyrmex** (`HermesClient`), skill names for `her
 - [Configuration](configuration.md) — `config.yaml` reference
 - [Copilot ACP](copilot_acp.md) — GitHub Copilot backend
 - [skills.md](skills.md) — Skill preload registry (Codomyrmex)
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

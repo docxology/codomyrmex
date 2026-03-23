@@ -29,7 +29,7 @@ def main() -> None:
 
     logger.info(f"Connected to Paperclip CLI: {version_info.get('version')}")
 
-    # Step 2: List Companies to find the target company
+    # Step 2: list Companies to find the target company
     companies_res = client.list_companies()
     if not companies_res.get("success"):
         logger.error(f"Failed to list companies: {companies_res.get('error')}")

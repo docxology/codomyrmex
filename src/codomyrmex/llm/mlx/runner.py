@@ -321,7 +321,7 @@ class MLXRunner:
         """Chat-style generation using the tokenizer's chat template.
 
         Args:
-            messages: List of ``{"role": ..., "content": ...}`` dicts.
+            messages: list of ``{"role": ..., "content": ...}`` dicts.
             config: Optional per-call config override.
 
         Returns:

@@ -100,10 +100,10 @@ class SecretManager:
         return None
 
     def list_secrets(self) -> list[dict[str, Any]]:
-        """List all stored secrets (without values).
+        """list all stored secrets (without values).
 
         Returns:
-            List of secret metadata
+            list of secret metadata
         """
         return [
             {
@@ -168,7 +168,7 @@ class SecretManager:
             new_value: New secret value.
 
         Returns:
-            Dict with ``secret_id``, ``rotated_at``, ``previous_id``.
+            dict with ``secret_id``, ``rotated_at``, ``previous_id``.
         """
         previous_id: str | None = None
         for sid, secret in self._secrets.items():
@@ -205,7 +205,7 @@ class SecretManager:
             name: If provided, filter history to this secret name only.
 
         Returns:
-            List of rotation event dicts.
+            list of rotation event dicts.
         """
         if name is None:
             return list(self._rotation_history)
@@ -219,7 +219,7 @@ class SecretManager:
             max_age_days: Maximum age in days before the secret is flagged.
 
         Returns:
-            Dict with ``name``, ``age_days``, ``stale``, ``created_at``.
+            dict with ``name``, ``age_days``, ``stale``, ``created_at``.
         """
         for secret in self._secrets.values():
             if secret["name"] == name:
@@ -277,7 +277,7 @@ def encrypt_configuration(
 
     Args:
         config: Configuration dictionary
-        secret_keys: List of keys that should be encrypted
+        secret_keys: list of keys that should be encrypted
 
     Returns:
         Configuration with encrypted values

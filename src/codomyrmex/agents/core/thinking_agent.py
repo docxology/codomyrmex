@@ -273,7 +273,7 @@ class ThinkingAgent(AgentInterface):
 
     @thinking_depth.setter
     def thinking_depth(self, depth: ThinkingDepth) -> None:
-        """Set thinking depth."""
+        """set thinking depth."""
         self._cot.depth = depth
 
     @property
@@ -288,7 +288,7 @@ class ThinkingAgent(AgentInterface):
 
     @knowledge_retriever.setter
     def knowledge_retriever(self, retriever: Any | None) -> None:
-        """Set or replace the knowledge retriever at runtime."""
+        """set or replace the knowledge retriever at runtime."""
         self._knowledge_retriever = retriever
 
     def _store_trace(self, trace: ReasoningTrace) -> None:

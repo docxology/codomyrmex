@@ -157,7 +157,7 @@ class ContractValidator:
             current: Current API contract.
 
         Returns:
-            List of breaking changes found.
+            list of breaking changes found.
         """
         changes: list[BreakingChange] = []
 

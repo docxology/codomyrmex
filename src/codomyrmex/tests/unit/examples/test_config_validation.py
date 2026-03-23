@@ -201,7 +201,7 @@ class TestConfigValidation:
 
     def test_environment_variable_substitution(self, examples_dir: Path):
         """Test that environment variable substitution works."""
-        # Set test environment variables
+        # set test environment variables
         test_vars = {
             "TEST_API_KEY": "test_key_123",
             "TEST_DATABASE_URL": "sqlite:///test.db",

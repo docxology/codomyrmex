@@ -160,7 +160,7 @@ class PolicySelector:
         """Select a policy based on expected free energy.
 
         Args:
-            policies: List of available policies
+            policies: list of available policies
             expected_free_energies: EFE values for each policy
             temperature: Temperature for softmax selection
 
@@ -189,7 +189,7 @@ class PolicySelector:
         """Select policy with lowest expected free energy (greedy).
 
         Args:
-            policies: List of available policies
+            policies: list of available policies
             expected_free_energies: EFE values for each policy
 
         Returns:
@@ -217,9 +217,9 @@ class ActiveInferenceAgent:
         """Initialize active inference agent.
 
         Args:
-            states: List of possible states
-            observations: List of possible observations
-            actions: List of possible actions
+            states: list of possible states
+            observations: list of possible observations
+            actions: list of possible actions
             precision: Precision parameter for free energy
             policy_horizon: Planning horizon
             exploration_weight: Exploration vs exploitation weight
@@ -246,23 +246,23 @@ class ActiveInferenceAgent:
         self.beliefs.states = dict.fromkeys(states, uniform_prob)
 
     def set_transition_model(self, model: dict[str, dict[str, float]]) -> None:
-        """Set state transition model.
+        """set state transition model.
 
         Args:
             model: Transition probabilities P(s'|s, a)
         """
         self.transition_model = model
-        self.logger.debug("Set transition model")
+        self.logger.debug("set transition model")
 
     def set_observation_model(self, model: dict[str, dict[str, float]]) -> None:
-        """Set observation model.
+        """set observation model.
 
         Args:
             model: Observation probabilities P(o|s)
         """
         self.observation_model = model
         self.likelihood = model  # Alias for compatibility
-        self.logger.debug("Set observation model")
+        self.logger.debug("set observation model")
 
     def predict(self, observation: dict[str, Any] | None = None) -> dict[str, float]:
         """Predict state distribution given observation.

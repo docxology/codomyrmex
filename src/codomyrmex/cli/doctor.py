@@ -261,7 +261,7 @@ _RASP_TEMPLATES: dict[str, str] = {
     "SPEC.md": (
         "# {module} — Specification\n\n## Purpose\n\n"
         "TODO: Add functional specification.\n\n## Public API\n\n"
-        "TODO: Document public API.\n\n## Dependencies\n\nTODO: List dependencies.\n"
+        "TODO: Document public API.\n\n## Dependencies\n\nTODO: list dependencies.\n"
     ),
     "PAI.md": (
         "# {module} — PAI Context\n\n## Algorithm Phase Mapping\n\n"
@@ -275,7 +275,7 @@ def fix_rasp() -> list[CheckResult]:
     """Auto-create missing RASP documentation files from templates.
 
     Returns:
-        List of results indicating what was fixed.
+        list of results indicating what was fixed.
     """
     results: list[CheckResult] = []
     created: list[str] = []
@@ -312,7 +312,7 @@ def fix_env() -> list[CheckResult]:
     """Auto-create .env from .env.example if missing.
 
     Returns:
-        List of results indicating what was fixed.
+        list of results indicating what was fixed.
     """
     results: list[CheckResult] = []
     env_path = _PROJECT_ROOT / ".env"
@@ -357,7 +357,7 @@ def fix_optional_deps() -> list[CheckResult]:
     """Check and suggest optional dependency installation.
 
     Returns:
-        List of results with install suggestions.
+        list of results with install suggestions.
     """
     results: list[CheckResult] = []
     extras_to_check = [

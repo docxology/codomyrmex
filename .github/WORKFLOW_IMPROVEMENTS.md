@@ -2,12 +2,12 @@
 
 **Last Updated**: March 2026
 
-## Current State: 33 Active Workflows
+## Current State: 36 Active Workflows
 
 ### Core CI/CD & Security (5)
 
 | # | Workflow | File | Status |
-|:-:|---------|------|:------:|
+| :---: | --- | --- | :---: |
 | 1 | Continuous Integration | `ci.yml` | ✅ |
 | 2 | Pre-commit Checks | `pre-commit.yml` | ✅ |
 | 3 | Security Scanning | `security.yml` | ✅ |
@@ -17,7 +17,7 @@
 ### PR Automation & Agent Infrastructure (12)
 
 | # | Workflow | File | Status |
-|:-:|---------|------|:------:|
+| :---: | --- | --- | :---: |
 | 6 | Auto-Merge Agent PRs | `auto-merge.yml` | ✅ |
 | 7 | PR Auto-Labeler | `pr-labeler.yml` | ✅ |
 | 8 | PR Title Semantic Check | `pr-title-check.yml` | ✅ |
@@ -25,8 +25,8 @@
 | 10 | PR Conflict Checker | `pr-conflict-check.yml` | ✅ |
 | 11 | Dependabot Auto-Approve | `dependabot-auto-approve.yml` | ✅ |
 | 12 | Agent PR Welcome | `agent-welcome.yml` | ✅ |
-| 13 | PR Linter Comments | `pr-linter-comments.yml`| ✅ |
-| 14 | Post Coverage Comment | `pr-coverage-comment.yml`| ✅ |
+| 13 | PR Linter Comments | `pr-linter-comments.yml` | ✅ |
+| 14 | Post Coverage Comment | `pr-coverage-comment.yml` | ✅ |
 | 15 | Agent Metrics Dashboard | `agent-metrics.yml` | ✅ |
 | 16 | Jules Batch Dispatch | `jules-dispatch.yml` | ✅ |
 | 17 | First Interaction Greeter | `first-interaction.yml` | ✅ |
@@ -34,14 +34,14 @@
 ### Documentation (2)
 
 | # | Workflow | File | Status |
-|:-:|---------|------|:------:|
+| :---: | --- | --- | :---: |
 | 16 | Doc Build & Deploy | `documentation.yml` | ✅ |
 | 17 | Doc Quality Gate | `documentation-validation.yml` | ✅ |
 
 ### Repository Health (5)
 
 | # | Workflow | File | Status |
-|:-:|---------|------|:------:|
+| :---: | --- | --- | :---: |
 | 18 | Code Health Dashboard | `code-health.yml` | ✅ |
 | 19 | Performance Benchmarks | `benchmarks.yml` | ✅ |
 | 20 | Repository Maintenance | `maintenance.yml` | ✅ |
@@ -51,14 +51,14 @@
 ### Orchestration (2)
 
 | # | Workflow | File | Status |
-|:-:|---------|------|:------:|
+| :---: | --- | --- | :---: |
 | 23 | Workflow Coordinator | `workflow-coordinator.yml` | ✅ |
 | 24 | Workflow Status Dashboard | `workflow-status.yml` | ✅ |
 
 ### Gemini AI (5)
 
 | # | Workflow | File | Status |
-|:-:|---------|------|:------:|
+| :---: | --- | --- | :---: |
 | 25 | Gemini Dispatch | `gemini-dispatch.yml` | ✅ |
 | 26 | Gemini Review | `gemini-review.yml` | ✅ |
 | 27 | Gemini Triage | `gemini-triage.yml` | ✅ |
@@ -69,7 +69,7 @@
 
 ## Agent PR Pipeline
 
-```
+```text
 PR Opened (by Jules/Dependabot/Gemini/Human)
   │
   ├─ pr-labeler.yml ────────→ Auto-label (paths, branch, size, module)
@@ -98,7 +98,7 @@ PR Merged to `main`
 ## Scheduled Tasks
 
 | Schedule | Workflows |
-|----------|-----------|
+| --- | --- |
 | Daily 2 AM | Security scanning |
 | Every 6h | PR conflict check |
 | Daily 9 AM | Workflow status dashboard |
@@ -109,7 +109,7 @@ PR Merged to `main`
 ## Key Configuration
 
 | Setting | Value |
-|---------|-------|
+| --- | --- |
 | Coverage gate (CI) | 25% |
 | Coverage gate (release) | 25% |
 | PR stale threshold | 90 days |

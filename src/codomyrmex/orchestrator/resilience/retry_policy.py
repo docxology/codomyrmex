@@ -81,7 +81,7 @@ class PipelineRetryExecutor:
         self._step_policies: dict[str, RetryPolicy] = {}
 
     def set_policy(self, step_name: str, policy: RetryPolicy) -> None:
-        """Set a custom retry policy for a specific pipeline step."""
+        """set a custom retry policy for a specific pipeline step."""
         self._step_policies[step_name] = policy
 
     def get_policy(self, step_name: str) -> RetryPolicy:

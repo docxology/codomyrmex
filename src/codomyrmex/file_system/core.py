@@ -141,7 +141,7 @@ class FileSystemManager:
 
     def list_dir(self, path: str | Path = ".", recursive: bool = False) -> list[Path]:
         """
-        List directory contents.
+        list directory contents.
 
         Args:
             path: Directory to list.
@@ -190,7 +190,7 @@ class FileSystemManager:
             search_path: Directory to start search from.
 
         Returns:
-            List of matching Path objects.
+            list of matching Path objects.
         """
         search_path = Path(search_path)
         return list(search_path.rglob(pattern))
@@ -224,7 +224,7 @@ class FileSystemManager:
             path: Directory to search for duplicates.
 
         Returns:
-            Dict mapping hashes to lists of duplicate Path objects.
+            dict mapping hashes to lists of duplicate Path objects.
         """
         path = Path(path)
         hashes = {}
@@ -249,7 +249,7 @@ class FileSystemManager:
             path: Path to analyze.
 
         Returns:
-            Dict with total, used, and free space (in bytes).
+            dict with total, used, and free space (in bytes).
         """
         path = Path(path).resolve()
         # Fallback to current directory if path doesn't exist for usage stats

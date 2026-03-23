@@ -33,14 +33,14 @@ def run_session(
     """Run a multi-turn session with SQLite persistence.
 
     Args:
-        prompts: List of prompts to send in sequence. Defaults to a
+        prompts: list of prompts to send in sequence. Defaults to a
             demo pair.
         db_path: SQLite database path. Use ``":memory:"`` for ephemeral.
         backend: Backend preference.
         model: Ollama model name.
 
     Returns:
-        Dict with session summary: ``session_id``, ``message_count``,
+        dict with session summary: ``session_id``, ``message_count``,
         ``messages``, ``persisted``, ``reloaded``.
     """
     if prompts is None:
@@ -87,7 +87,7 @@ def run_session(
             and reloaded.message_count == session.message_count
         )
 
-        # List sessions to confirm
+        # list sessions to confirm
         all_ids = store.list_sessions()
 
         return {

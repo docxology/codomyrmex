@@ -100,10 +100,10 @@ def image_file_info(file_path: str) -> dict[str, Any]:
 
 @mcp_tool(
     category="image",
-    description="List supported image formats recognized by the detect_format tool.",
+    description="list supported image formats recognized by the detect_format tool.",
 )
 def image_list_formats() -> dict[str, Any]:
-    """List all image formats the detection engine can identify.
+    """list all image formats the detection engine can identify.
 
     Returns:
         dict with keys: status, formats

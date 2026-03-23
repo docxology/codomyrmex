@@ -36,7 +36,7 @@ def get_deprecated_tools() -> list[dict[str, Any]]:
     """Scan the MCP tool registry for tools with ``deprecated_in`` set.
 
     Returns:
-        List of dicts with keys: ``name``, ``module``, ``deprecated_in``,
+        list of dicts with keys: ``name``, ``module``, ``deprecated_in``,
         ``description``.
     """
     deprecated: list[dict[str, Any]] = []
@@ -70,7 +70,7 @@ def get_deprecation_timeline() -> dict[str, list[dict[str, Any]]]:
     """Group deprecated tools by the version they were deprecated in.
 
     Returns:
-        Dict mapping version strings to lists of deprecated tool info dicts.
+        dict mapping version strings to lists of deprecated tool info dicts.
         Sorted by version (ascending).
     """
     deprecated = get_deprecated_tools()
@@ -88,7 +88,7 @@ def get_deprecation_summary() -> dict[str, Any]:
     """Get a high-level summary of the deprecation status.
 
     Returns:
-        Dict with keys: ``total_deprecated``, ``by_version`` (counts),
+        dict with keys: ``total_deprecated``, ``by_version`` (counts),
         ``tools`` (full list).
     """
     deprecated = get_deprecated_tools()

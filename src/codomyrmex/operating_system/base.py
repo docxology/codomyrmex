@@ -218,7 +218,7 @@ class OSProviderBase(ABC):
 
     @abstractmethod
     def list_processes(self, limit: int = 50) -> list[ProcessInfo]:
-        """List running processes (up to *limit*)."""
+        """list running processes (up to *limit*)."""
         ...  # ABC: intentional
 
     @abstractmethod
@@ -228,7 +228,7 @@ class OSProviderBase(ABC):
 
     @abstractmethod
     def get_services(self, pattern: str = "") -> list[ServiceInfo]:
-        """List system services, optionally filtered by *pattern*."""
+        """list system services, optionally filtered by *pattern*."""
         ...  # ABC: intentional
 
     @abstractmethod

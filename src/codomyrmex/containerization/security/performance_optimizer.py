@@ -247,7 +247,7 @@ class ContainerOptimizer:
             container_id: Container ID or name
 
         Returns:
-            List of specific, data-driven recommendations
+            list of specific, data-driven recommendations
 
         Raises:
             NotImplementedError: If Docker CLI is not available
@@ -290,7 +290,7 @@ def optimize_containers(
     Optimize multiple containers.
 
     Args:
-        container_ids: List of container IDs to optimize
+        container_ids: list of container IDs to optimize
         optimizer: Optional pre-configured optimizer instance
 
     Returns:

@@ -203,7 +203,7 @@ class PyscnAnalyzer:
         hashing.
 
         Args:
-            files: List of file paths to analyze for clones.
+            files: list of file paths to analyze for clones.
             threshold: Similarity threshold (0.0-1.0) for clone detection.
                 Higher values require more similarity. Defaults to 0.8.
 

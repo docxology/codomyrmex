@@ -705,7 +705,7 @@ class TestMultimodalMessage:
             assert content["type"] == "text"
             assert content["text"] == "just text"
         else:
-            # List form
+            # list form
             assert any(p.get("type") == "text" for p in content)
 
     def test_to_dict_empty_message(self):

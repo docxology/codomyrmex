@@ -186,7 +186,7 @@ class TestDiskHealthCheck:
             assert "path" in result.details
 
     def test_disk_check_low_thresholds_returns_unhealthy_or_degraded(self):
-        # Set both thresholds extremely low so any disk usage triggers unhealthy
+        # set both thresholds extremely low so any disk usage triggers unhealthy
         check = DiskHealthCheck(
             name="disk-low-thresh",
             path="/tmp",
@@ -197,7 +197,7 @@ class TestDiskHealthCheck:
         assert result.status in (HealthStatus.UNHEALTHY, HealthStatus.DEGRADED)
 
     def test_disk_check_high_thresholds_returns_healthy(self):
-        # Set thresholds so high any reasonable disk is healthy
+        # set thresholds so high any reasonable disk is healthy
         check = DiskHealthCheck(
             name="disk-high-thresh",
             path="/tmp",

@@ -63,7 +63,7 @@ def perplexity_ask(
     """Submit a multi-turn conversation to Perplexity.
 
     Args:
-        messages: List of message dictionaries containing "role" and "content".
+        messages: list of message dictionaries containing "role" and "content".
         timeout: API timeout in seconds (default 120).
 
     Returns:

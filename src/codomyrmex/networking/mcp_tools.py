@@ -13,10 +13,10 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 @mcp_tool(
     category="networking",
-    description="List local network interfaces and their addresses.",
+    description="list local network interfaces and their addresses.",
 )
 def networking_list_interfaces() -> dict[str, Any]:
-    """List network interfaces with hostnames and IP addresses.
+    """list network interfaces with hostnames and IP addresses.
 
     Returns:
         dict with keys: status, hostname, addresses
@@ -85,7 +85,7 @@ def networking_check_connectivity(
     description="Return the list of HTTP error/exception classes available in the networking module.",
 )
 def networking_list_exceptions() -> dict[str, Any]:
-    """List all networking exception classes and their hierarchy.
+    """list all networking exception classes and their hierarchy.
 
     Returns:
         dict with keys: status, exceptions

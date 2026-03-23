@@ -95,7 +95,7 @@ class AgentSession:
             max_messages: Maximum messages to include (default: all)
 
         Returns:
-            List of message dicts with role and content
+            list of message dicts with role and content
         """
         messages = self.messages[-max_messages:] if max_messages else self.messages
         return [{"role": m.role, "content": m.content} for m in messages]
@@ -264,7 +264,7 @@ class SessionManager:
         return count
 
     def list_sessions(self, agent_name: str | None = None) -> list[AgentSession]:
-        """List all sessions, optionally filtered by agent name."""
+        """list all sessions, optionally filtered by agent name."""
         sessions = list(self.sessions.values())
         if agent_name:
             sessions = [s for s in sessions if s.agent_name == agent_name]

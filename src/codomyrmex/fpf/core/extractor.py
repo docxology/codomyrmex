@@ -36,7 +36,7 @@ class FPFExtractor:
             spec: The FPFSpec object containing parsed patterns
 
         Returns:
-            List of Pattern objects (same as input, but with enhanced metadata)
+            list of Pattern objects (same as input, but with enhanced metadata)
         """
         # Patterns are already extracted by the parser
         # This method can be used for post-processing
@@ -49,7 +49,7 @@ class FPFExtractor:
             spec: The FPFSpec object
 
         Returns:
-            List of Concept objects
+            list of Concept objects
         """
         concepts = []
         concept_names = set()
@@ -98,7 +98,7 @@ class FPFExtractor:
             spec: The FPFSpec object
 
         Returns:
-            List of Relationship objects
+            list of Relationship objects
         """
         relationships = []
 
@@ -217,7 +217,7 @@ class FPFExtractor:
             pattern: Pattern to extract from
 
         Returns:
-            List of U.Type names (without the U. prefix)
+            list of U.Type names (without the U. prefix)
         """
         u_types = set()
         content = pattern.content + " " + pattern.title
@@ -237,7 +237,7 @@ class FPFExtractor:
             pattern: Pattern to extract from
 
         Returns:
-            List of tuples (concept_name, concept_type)
+            list of tuples (concept_name, concept_type)
         """
         concepts = []
         content = pattern.content.lower()
@@ -306,7 +306,7 @@ class FPFExtractor:
             concept_name: Name of the concept
 
         Returns:
-            List of pattern IDs that reference the concept
+            list of pattern IDs that reference the concept
         """
         references = []
         for pattern in spec.patterns:

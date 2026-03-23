@@ -48,7 +48,7 @@ class HistogramMixin:
             **kwargs: Additional arguments for plt.hist
 
         Returns:
-            Tuple of (counts, bin_edges, patches)
+            tuple of (counts, bin_edges, patches)
         """
         if self.current_axes is None:
             self.create_figure()
@@ -148,7 +148,7 @@ class HistogramMixin:
             **kwargs: Additional arguments for sns.violinplot
 
         Returns:
-            List of violin plot elements
+            list of violin plot elements
         """
         if self.current_axes is None:
             self.create_figure()

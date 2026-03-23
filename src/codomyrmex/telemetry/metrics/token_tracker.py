@@ -138,7 +138,7 @@ class TokenTracker:
         """Return aggregate token consumption statistics.
 
         Returns:
-            Dict with ``total_input``, ``total_output``, ``total_calls``,
+            dict with ``total_input``, ``total_output``, ``total_calls``,
             ``by_model``, and ``recent_calls``.
         """
         with self._lock:
@@ -172,7 +172,7 @@ class TokenTracker:
             model: Model name.
 
         Returns:
-            Dict with ``input_tokens``, ``output_tokens``, ``calls``.
+            dict with ``input_tokens``, ``output_tokens``, ``calls``.
         """
         with self._lock:
             return {
@@ -190,7 +190,7 @@ class TokenTracker:
             limit: Maximum records to return.
 
         Returns:
-            List of usage dicts (most recent first).
+            list of usage dicts (most recent first).
         """
         with self._lock:
             recent = self._history[-limit:][::-1]

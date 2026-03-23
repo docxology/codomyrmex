@@ -154,7 +154,7 @@ class ToolRegistry:
         return self.tools.get(name)
 
     def list_tools(self, category: str | None = None) -> list[Tool]:
-        """List all tools or tools in a category."""
+        """list all tools or tools in a category."""
         if category:
             tool_names = self.categories.get(category, [])
             return [self.tools[name] for name in tool_names]

@@ -71,7 +71,7 @@ class SerializationManager:
         logger.info("Registered custom serializer for format: %s", format)
 
     def supported_formats(self) -> list[str]:
-        """List all registered/available formats."""
+        """list all registered/available formats."""
         return sorted(self._serializers.keys())
 
     # ── Serialize / Deserialize ─────────────────────────────────────
@@ -156,11 +156,11 @@ class SerializationManager:
         """Serialize multiple objects in sequence.
 
         Args:
-            objects: List of objects to serialize.
+            objects: list of objects to serialize.
             format: Target format.
 
         Returns:
-            List of serialized outputs.
+            list of serialized outputs.
 
         """
         return [self.serialize(obj, format=format) for obj in objects]

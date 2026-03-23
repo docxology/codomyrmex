@@ -205,7 +205,7 @@ class GraphGenerator:
             color_map: Optional mapping of attribute values to colors
 
         Returns:
-            List of color values for each node
+            list of color values for each node
         """
         if color_map is None:
             # Default color maps
@@ -249,7 +249,7 @@ class GraphGenerator:
             importance_metric: Metric to use ("degree", "betweenness", "pagerank")
 
         Returns:
-            List of sizes for each node
+            list of sizes for each node
         """
         if importance_metric == "degree":
             importances = dict(G.degree())

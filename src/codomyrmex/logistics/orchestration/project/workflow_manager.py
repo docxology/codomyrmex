@@ -109,7 +109,7 @@ class WorkflowManager:
         return self.workflows.get(name)
 
     def list_workflows(self) -> list[str]:
-        """List available workflows."""
+        """list available workflows."""
         return list(self.workflows.keys())
 
     def execute_workflow(self, name: str, **params) -> WorkflowExecution:
@@ -223,7 +223,7 @@ class WorkflowManager:
         """Create a :class:`WorkflowDAG` from a list of task dictionaries.
 
         Args:
-            tasks: List of task dicts, each with at least ``name``, ``module``,
+            tasks: list of task dicts, each with at least ``name``, ``module``,
                    ``action``, and optionally ``dependencies``.
 
         Returns:
@@ -237,10 +237,10 @@ class WorkflowManager:
         """Validate that all task dependencies are satisfiable.
 
         Args:
-            tasks: List of task dicts with ``name`` and ``dependencies`` keys.
+            tasks: list of task dicts with ``name`` and ``dependencies`` keys.
 
         Returns:
-            List of error strings. Empty list means valid.
+            list of error strings. Empty list means valid.
         """
         from .parallel_executor import validate_workflow_dependencies
 
@@ -252,10 +252,10 @@ class WorkflowManager:
         """Get the topological execution order for a set of tasks.
 
         Args:
-            tasks: List of task dicts (must include ``name`` and ``dependencies``).
+            tasks: list of task dicts (must include ``name`` and ``dependencies``).
 
         Returns:
-            List of lists -- each inner list contains task names that can run
+            list of lists -- each inner list contains task names that can run
             in parallel at that level.
         """
         from .parallel_executor import get_workflow_execution_order

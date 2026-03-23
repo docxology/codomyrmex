@@ -168,7 +168,7 @@ class ProviderRouter:
         """Read rotation models from config.
 
         Returns:
-            List of model config dicts, sorted by priority.
+            list of model config dicts, sorted by priority.
 
         """
         if not os.path.exists(self._rotation_path):
@@ -202,7 +202,7 @@ class ProviderRouter:
             timeout: Timeout in seconds.
 
         Returns:
-            Dict with keys: ``success``, ``content``, ``provider``, ``model``,
+            dict with keys: ``success``, ``content``, ``provider``, ``model``,
             ``is_fallback``, ``error``.
 
         """
@@ -543,7 +543,7 @@ class UserModel:
         self.save()
 
     def set_preference(self, key: str, value: Any) -> None:
-        """Set a user preference.
+        """set a user preference.
 
         Args:
             key: Preference key (e.g., ``"language"``, ``"style"``).
@@ -600,7 +600,7 @@ class ModelContextRegistry:
     it accurately initiates token eviction based on this dynamic capacity map.
 
     Attributes:
-        _cache: Dict of model_id -> context_length (in tokens).
+        _cache: dict of model_id -> context_length (in tokens).
         _last_fetch: Timestamp of last API refresh.
         _ttl_seconds: Cache TTL before refresh.
 
@@ -850,7 +850,7 @@ class ContextCompressor:
 
     @model_id.setter
     def model_id(self, value: str | None) -> None:
-        """Set the model ID and refresh max_tokens from registry."""
+        """set the model ID and refresh max_tokens from registry."""
         self._model_id = value
         if value is not None:
             try:
@@ -873,7 +873,7 @@ class ContextCompressor:
         """Estimate token count from messages.
 
         Args:
-            messages: List of message dicts with 'content' key.
+            messages: list of message dicts with 'content' key.
 
         Returns:
             Estimated token count.
@@ -1070,7 +1070,7 @@ class MCPBridgeManager:
         process to reload its MCP connections.
 
         Returns:
-            Dict with ``success`` and ``servers_loaded`` count.
+            dict with ``success`` and ``servers_loaded`` count.
 
         """
         self._load_config()
@@ -1111,10 +1111,10 @@ class MCPBridgeManager:
         return copy.deepcopy(self._servers)
 
     def list_servers(self) -> list[dict[str, Any]]:
-        """List all configured MCP servers.
+        """list all configured MCP servers.
 
         Returns:
-            List of server info dicts with ``name``, ``command``, ``transport``.
+            list of server info dicts with ``name``, ``command``, ``transport``.
 
         """
         return [{"name": name, **config} for name, config in self._servers.items()]

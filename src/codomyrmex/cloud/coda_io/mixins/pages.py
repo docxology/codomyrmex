@@ -21,7 +21,7 @@ class PagesMixin:
         page_token: str | None = None,
     ) -> PageList:
         """
-        List pages in a doc.
+        list pages in a doc.
 
         Args:
             doc_id: The doc ID
@@ -165,7 +165,7 @@ class PagesMixin:
         page_token: str | None = None,
     ) -> dict[str, Any]:
         """
-        List content elements in a page.
+        list content elements in a page.
 
         Args:
             doc_id: The doc ID

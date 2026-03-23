@@ -301,7 +301,7 @@ class BackupManager:
                 f.write(result.stdout)
 
     def list_backups(self, database_name: str | None = None) -> list[dict[str, Any]]:
-        """List available backups."""
+        """list available backups."""
         backups = []
         for backup in self._backups.values():
             if database_name and backup.database_name != database_name:

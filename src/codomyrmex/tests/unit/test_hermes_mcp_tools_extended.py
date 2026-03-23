@@ -451,7 +451,7 @@ class TestHermesCreateTask:
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
         result = hermes_create_task(
-            session_id="sess-1", name="setup", description="Set up the environment"
+            session_id="sess-1", name="setup", description="set up the environment"
         )
         assert isinstance(result, dict)
         assert "status" in result

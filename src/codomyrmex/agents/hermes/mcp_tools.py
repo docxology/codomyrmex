@@ -209,10 +209,10 @@ def hermes_execute(
 @mcp_tool(
     category="hermes",
     tags=["hermes", "skills", "registry", "interop"],
-    description="List all skills available to the Hermes agent (CLI backend only).",
+    description="list all skills available to the Hermes agent (CLI backend only).",
 )
 def hermes_skills_list() -> dict[str, Any]:
-    """List available Hermes skills.
+    """list available Hermes skills.
 
     Returns:
         dict with keys: status, output, or error info
@@ -297,10 +297,10 @@ def hermes_skills_validate_registry() -> dict[str, Any]:
 
 @mcp_tool(
     category="hermes",
-    description="List all available Hermes prompt template names.",
+    description="list all available Hermes prompt template names.",
 )
 def hermes_template_list() -> dict[str, Any]:
-    """List available Hermes prompt templates.
+    """list available Hermes prompt templates.
 
     Returns:
         dict with keys: status, templates (list of names), count
@@ -496,10 +496,10 @@ def hermes_chat_session(
 
 @mcp_tool(
     category="hermes",
-    description="List all active persistent Hermes session IDs.",
+    description="list all active persistent Hermes session IDs.",
 )
 def hermes_session_list() -> dict[str, Any]:
-    """List available Hermes session IDs.
+    """list available Hermes session IDs.
 
     Returns:
         dict with keys: status, sessions (list of str), count
@@ -678,7 +678,7 @@ def hermes_user_context(
             }
         if action == "set" and key and value:
             model.set_preference(key, value)
-            return {"status": "success", "message": f"Set {key}={value}"}
+            return {"status": "success", "message": f"set {key}={value}"}
         if action == "observe" and value:
             model.add_observation(value)
             return {
@@ -1005,7 +1005,7 @@ def hermes_search_vault(
     Args:
         vault_path: Path to the Obsidian vault root directory.
         query: Search string or regex pattern.
-        use_regex: Set to True to treat the query as a regular expression.
+        use_regex: set to True to treat the query as a regular expression.
 
     Returns:
         dict with keys: status, results (list of snippets), count, error (if any)
@@ -1405,7 +1405,7 @@ def hermes_batch_execute(
     """Execute a batch of prompts with the Hermes agent.
 
     Args:
-        prompts: List of prompt strings to process.
+        prompts: list of prompt strings to process.
         parallel: Submit all prompts concurrently (default False).
         backend: ``"auto"`` (default), ``"cli"``, or ``"ollama"``.
         timeout: Per-prompt timeout in seconds (default 120).
@@ -1438,7 +1438,7 @@ def hermes_batch_execute(
 @mcp_tool(
     category="hermes",
     description=(
-        "Set or replace the persistent system prompt for a Hermes session. "
+        "set or replace the persistent system prompt for a Hermes session. "
         "The system prompt is always the first message and guides agent behaviour."
     ),
 )
@@ -1446,7 +1446,7 @@ def hermes_set_system_prompt(
     session_id: str,
     prompt: str,
 ) -> dict[str, Any]:
-    """Set the system prompt for a Hermes session.
+    """set the system prompt for a Hermes session.
 
     Args:
         session_id: Session to update (will be created if missing).
@@ -1579,7 +1579,7 @@ def hermes_session_merge(
 
     Args:
         target_id: Destination session ID (created if missing).
-        source_ids: List of session IDs to pull messages from.
+        source_ids: list of session IDs to pull messages from.
         deduplicate: Skip exact back-to-back duplicates (default True).
 
     Returns:
@@ -1918,7 +1918,7 @@ def hermes_spawn_agent(
     Args:
         role: Capability role name (e.g. ``"code_reviewer"``, ``"summariser"``).
         task: Natural language task description.
-        capability_profile: Dict mapping role → list of allowed agent name prefixes.
+        capability_profile: dict mapping role → list of allowed agent name prefixes.
             Defaults to ``{role: [role]}`` if omitted.
 
     Returns:
@@ -1975,7 +1975,7 @@ def hermes_spawn_agent(
         "Archive and prune Hermes sessions when the database exceeds a size threshold. "
         "Sessions are compressed to .json.gz files in a sessions_archive/ directory "
         "adjacent to the DB, then removed from SQLite to keep the store lean. "
-        "Set dry_run=True to see what would be pruned without deleting anything."
+        "set dry_run=True to see what would be pruned without deleting anything."
     ),
 )
 def hermes_archive_sessions(
@@ -2158,12 +2158,12 @@ def hermes_approve_command(
 @mcp_tool(
     category="hermes",
     description=(
-        "List all paired (approved) users and groups for the Hermes gateway. "
+        "list all paired (approved) users and groups for the Hermes gateway. "
         "Reads $HERMES_HOME/pairing/telegram-approved.json."
     ),
 )
 def hermes_pairing_list() -> dict[str, Any]:
-    """List all approved gateway users and groups.
+    """list all approved gateway users and groups.
 
     Returns:
         dict with keys: status, approved (dict), count

@@ -19,10 +19,10 @@ def _get_manager():
 
 @mcp_tool(
     category="physical_management",
-    description="List available physical object types and status values.",
+    description="list available physical object types and status values.",
 )
 def physical_management_list_types() -> dict[str, Any]:
-    """List all ObjectType and ObjectStatus enum values.
+    """list all ObjectType and ObjectStatus enum values.
 
     Returns:
         dict with keys: status, object_types, object_statuses, material_types

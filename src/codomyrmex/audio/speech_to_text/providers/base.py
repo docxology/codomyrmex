@@ -120,7 +120,7 @@ class STTProvider(ABC):
             audio_path: Path to the audio file
 
         Returns:
-            Tuple of (language_code, probability)
+            tuple of (language_code, probability)
 
         Raises:
             TranscriptionError: If detection fails
@@ -132,7 +132,7 @@ class STTProvider(ABC):
         """Get list of supported language codes.
 
         Returns:
-            List of ISO 639-1 language codes
+            list of ISO 639-1 language codes
 
         """
 

@@ -51,8 +51,8 @@ class MermaidDiagramGenerator:
         Create a Git branch diagram using Mermaid gitgraph syntax.
 
         Args:
-            branches: List of branch information dictionaries
-            commits: List of commit information dictionaries
+            branches: list of branch information dictionaries
+            commits: list of commit information dictionaries
             title: Title for the diagram
             output_path: Optional file path to save the diagram
 
@@ -102,7 +102,7 @@ class MermaidDiagramGenerator:
         Create a Git workflow diagram using Mermaid flowchart syntax.
 
         Args:
-            workflow_steps: List of workflow step dictionaries
+            workflow_steps: list of workflow step dictionaries
             title: Title for the diagram
             output_path: Optional file path to save the diagram
 
@@ -186,7 +186,7 @@ class MermaidDiagramGenerator:
         Create a commit timeline diagram using Mermaid timeline syntax.
 
         Args:
-            commits: List of commit information dictionaries
+            commits: list of commit information dictionaries
             title: Title for the diagram
             output_path: Optional file path to save the diagram
 

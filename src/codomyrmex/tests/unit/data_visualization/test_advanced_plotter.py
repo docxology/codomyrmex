@@ -1238,7 +1238,7 @@ class TestViolinEdgeCases:
     """Additional violin plot tests."""
 
     def test_violin_dict_single_group(self, plotter):
-        """Dict with a single group."""
+        """dict with a single group."""
         plotter.create_figure()
         vp = plotter.plot_violin({"Only": [1, 2, 3, 4, 5, 6, 7, 8]})
         assert vp is not None

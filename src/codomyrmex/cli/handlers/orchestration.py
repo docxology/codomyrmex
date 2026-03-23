@@ -315,7 +315,7 @@ def handle_orchestration_health() -> bool:
 
 
 def list_workflows() -> bool:
-    """List available workflows and orchestration templates."""
+    """list available workflows and orchestration templates."""
     try:
         from codomyrmex.logistics.orchestration.project import get_workflow_manager
 

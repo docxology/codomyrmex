@@ -144,7 +144,7 @@ class ConfigSchema:
             config: Configuration to validate
 
         Returns:
-            List of validation errors (empty if valid)
+            list of validation errors (empty if valid)
         """
         errors = []
 
@@ -207,7 +207,7 @@ class Configuration:
         return value
 
     def set_value(self, key: str, value: Any):
-        """Set configuration value by key."""
+        """set configuration value by key."""
         keys = key.split(".")
         config = self.data
 
@@ -217,7 +217,7 @@ class Configuration:
                 config[k] = {}
             config = config[k]
 
-        # Set the value
+        # set the value
         config[keys[-1]] = value
 
     def to_dict(self) -> dict[str, Any]:
@@ -286,7 +286,7 @@ class ConfigurationManager(ConfigValidationMixin):
 
         Args:
             name: Configuration name
-            sources: List of configuration sources (files, env vars, etc.)
+            sources: list of configuration sources (files, env vars, etc.)
             schema_path: Path to JSON schema for validation
             defaults: Optional default values (lowest precedence)
 
@@ -501,7 +501,7 @@ class ConfigurationManager(ConfigValidationMixin):
         Validate all loaded configurations.
 
         Returns:
-            Dict mapping configuration names to validation errors
+            dict mapping configuration names to validation errors
         """
         validation_results = {}
 
@@ -545,7 +545,7 @@ class ConfigurationManager(ConfigValidationMixin):
         return self.configurations.get(name)
 
     def list_configurations(self) -> list[str]:
-        """List all loaded configuration names."""
+        """list all loaded configuration names."""
         return list(self.configurations.keys())
 
     def create_configuration_template(self, schema_path: str, output_path: str) -> bool:
@@ -644,7 +644,7 @@ def load_configuration(
 
     Args:
         name: Configuration name
-        sources: List of configuration sources
+        sources: list of configuration sources
         schema_path: Path to JSON schema for validation
         defaults: Optional default values
 
@@ -663,6 +663,6 @@ def validate_configuration(config: Configuration) -> list[str]:
         config: Configuration to validate
 
     Returns:
-        List of validation errors (empty if valid)
+        list of validation errors (empty if valid)
     """
     return config.validate()

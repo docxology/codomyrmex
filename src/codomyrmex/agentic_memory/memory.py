@@ -419,7 +419,7 @@ class KnowledgeMemory:
             ollama_model: Ollama embedding model name.
 
         Returns:
-            List of :class:`RetrievalResult` sorted by combined score.
+            list of :class:`RetrievalResult` sorted by combined score.
         """
         # Phase 1: token-overlap recall (always works, no external deps)
         base_results = self._agent.recall(

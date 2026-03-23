@@ -31,7 +31,7 @@ class DecisionModule:
         """Make a decision among options based on criteria and context.
 
         Args:
-            options: List of available choices. If choices are objects,
+            options: list of available choices. If choices are objects,
                      they may need to have attributes matching criteria keys.
             criteria: Dictionary of criterion name to weight (0-1).
             context: Additional information for evaluation.

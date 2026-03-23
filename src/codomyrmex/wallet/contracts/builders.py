@@ -161,12 +161,12 @@ def build_batch(
 
     Args:
         from_address: Sender address.
-        transfers: List of {"to": address, "value": amount} dicts.
+        transfers: list of {"to": address, "value": amount} dicts.
         starting_nonce: First nonce to use (auto-incremented).
         gas_price: Gas price for all transactions.
 
     Returns:
-        List of built Transaction objects.
+        list of built Transaction objects.
     """
     txs: list[Transaction] = []
     for i, spec in enumerate(transfers):

@@ -83,11 +83,11 @@ def softmax(values: list[float], temperature: float = 1.0) -> list[float]:
     """Compute softmax probabilities.
 
     Args:
-        values: List of values
+        values: list of values
         temperature: Temperature parameter (higher = more uniform)
 
     Returns:
-        List of probabilities
+        list of probabilities
     """
     if not values:
         return []

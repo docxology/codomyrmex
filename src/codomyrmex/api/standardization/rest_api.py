@@ -87,7 +87,7 @@ class APIResponse:
     content_type: str = "application/json"
 
     def __post_init__(self):
-        """Set default headers based on content type."""
+        """set default headers based on content type."""
         if self.content_type and "content-type" not in [
             h.lower() for h in self.headers
         ]:
@@ -253,7 +253,7 @@ class APIRouter:
             path: Request path
 
         Returns:
-            Tuple of (endpoint, path_parameters) if matched, None otherwise
+            tuple of (endpoint, path_parameters) if matched, None otherwise
         """
         # Check direct endpoints
         key = f"{method.value}:{path}"
@@ -289,7 +289,7 @@ class APIRouter:
             path: Path pattern (e.g., "/users/{id}")
 
         Returns:
-            Tuple of (compiled_regex, parameter_names)
+            tuple of (compiled_regex, parameter_names)
         """
         # Replace {param} with named capture groups
         param_pattern = re.compile(r"\{([^}]+)\}")
@@ -306,7 +306,7 @@ class APIRouter:
         Get all endpoints from this router and sub-routers.
 
         Returns:
-            List of all endpoints
+            list of all endpoints
         """
         endpoints = list(self.endpoints.values())
 
@@ -511,7 +511,7 @@ class RESTAPI:
         Get all registered endpoints.
 
         Returns:
-            List of all endpoints
+            list of all endpoints
         """
         return self.router.get_all_endpoints()
 

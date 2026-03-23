@@ -45,7 +45,7 @@ class GoogleCredentials:
         )
         if not creds_file:
             raise GoogleWorkspaceAuthError(
-                "No Google credentials configured. Set GWS_SERVICE_ACCOUNT_FILE "
+                "No Google credentials configured. set GWS_SERVICE_ACCOUNT_FILE "
                 "or GOOGLE_APPLICATION_CREDENTIALS environment variable."
             )
         return cls(credentials_file=creds_file, scopes=scopes)

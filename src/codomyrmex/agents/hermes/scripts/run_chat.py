@@ -34,7 +34,7 @@ def run_chat(
         timeout: Subprocess timeout in seconds.
 
     Returns:
-        Dict with keys: ``status``, ``content``, ``error``,
+        dict with keys: ``status``, ``content``, ``error``,
         ``metadata``, ``elapsed_s``.
     """
     client = HermesClient(

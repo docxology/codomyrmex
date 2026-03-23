@@ -161,7 +161,7 @@ class DatabaseBackup:
         return True
 
     def list_backups(self) -> list[dict[str, Any]]:
-        """List all available backups in local storage."""
+        """list all available backups in local storage."""
         return list(self._manifest)
 
     def _find_backup(self, backup_id: str) -> dict[str, Any] | None:

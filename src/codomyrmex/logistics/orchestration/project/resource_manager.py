@@ -356,7 +356,7 @@ class ResourceManager:
         )
 
     def list_resources(self, type_filter: ResourceType | None = None) -> list[Resource]:
-        """List all resources, optionally filtered by type."""
+        """list all resources, optionally filtered by type."""
         if type_filter:
             return [r for r in self.resources.values() if r.type == type_filter]
         return list(self.resources.values())

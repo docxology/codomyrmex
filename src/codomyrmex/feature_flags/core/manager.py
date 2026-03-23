@@ -121,7 +121,7 @@ class FeatureManager:
         return None
 
     def list_flags(self) -> list[FlagDefinition]:
-        """List all registered flags."""
+        """list all registered flags."""
         return [self.get_flag(name) for name in self._storage.list_all()]  # type: ignore
 
     # ── Evaluation ──────────────────────────────────────────────────
@@ -165,7 +165,7 @@ class FeatureManager:
     # ── Overrides ───────────────────────────────────────────────────
 
     def set_override(self, name: str, enabled: bool) -> None:
-        """Set a runtime override for a flag."""
+        """set a runtime override for a flag."""
         self._overrides[name] = enabled
 
     def clear_override(self, name: str) -> None:

@@ -68,7 +68,7 @@ def vector_search(
         k: Maximum number of results to return (default 5).
 
     Returns:
-        List of dicts with ``id``, ``score``, and ``metadata`` keys,
+        list of dicts with ``id``, ``score``, and ``metadata`` keys,
         sorted best-match first.
     """
     results = _get_store().search(query_embedding, k=k)

@@ -120,7 +120,7 @@ class SkillHealthChecker:
         """Check all skills.
 
         Returns:
-            Dict with ``total_skills``, ``health_distribution``, and ``skills`` list.
+            dict with ``total_skills``, ``health_distribution``, and ``skills`` list.
         """
         start = time.monotonic()
         skills: list[dict] = []

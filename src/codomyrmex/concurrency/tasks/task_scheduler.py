@@ -129,7 +129,7 @@ class TaskScheduler:
         return self._workers.pop(worker_id, None) is not None
 
     def set_affinity(self, task_type: str, worker_id: str) -> None:
-        """Set affinity: route task_type to preferred worker.
+        """set affinity: route task_type to preferred worker.
 
         Args:
             task_type: Task type to route.
@@ -185,7 +185,7 @@ class TaskScheduler:
         """Redistribute load across workers.
 
         Returns:
-            List of (from_worker, to_worker) reassignment suggestions.
+            list of (from_worker, to_worker) reassignment suggestions.
 
         Example:
             >>> scheduler.rebalance()
@@ -211,7 +211,7 @@ class TaskScheduler:
             task: Task to find workers for.
 
         Returns:
-            List of eligible WorkerInfo objects.
+            list of eligible WorkerInfo objects.
         """
         eligible = []
         for w in self._workers.values():
@@ -230,7 +230,7 @@ class TaskScheduler:
         """Internal round-robin selection.
 
         Args:
-            workers: List of eligible workers.
+            workers: list of eligible workers.
 
         Returns:
             Selected worker ID.
@@ -245,7 +245,7 @@ class TaskScheduler:
         """Internal least-loaded selection.
 
         Args:
-            workers: List of eligible workers.
+            workers: list of eligible workers.
 
         Returns:
             Selected worker ID.
@@ -259,7 +259,7 @@ class TaskScheduler:
 
         Args:
             task: Task to assign.
-            workers: List of eligible workers.
+            workers: list of eligible workers.
 
         Returns:
             Selected worker ID.

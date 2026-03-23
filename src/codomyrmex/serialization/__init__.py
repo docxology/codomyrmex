@@ -32,7 +32,7 @@ def cli_commands() -> dict[str, dict[str, Any]]:
     """Return CLI commands for the serialization module."""
 
     def _formats(**kwargs: Any) -> None:
-        """List supported serialization formats."""
+        """list supported serialization formats."""
         print("=== Serialization Formats ===")
         for fmt in SerializationFormat:
             print(f"  {fmt.value}")
@@ -59,7 +59,7 @@ def cli_commands() -> dict[str, dict[str, Any]]:
             print(f"Conversion error: {e}")
 
     return {
-        "formats": {"handler": _formats, "help": "List serialization formats"},
+        "formats": {"handler": _formats, "help": "list serialization formats"},
         "convert": {
             "handler": _convert,
             "help": "Convert between serialization formats",

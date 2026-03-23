@@ -604,7 +604,7 @@ This module ensures documentation consistency across the Codomyrmex platform,
 checking for naming conventions, formatting standards, and content alignment.
 """
 
-from typing import Dict, List, Set, Tuple
+
 from pathlib import Path
 import re
 

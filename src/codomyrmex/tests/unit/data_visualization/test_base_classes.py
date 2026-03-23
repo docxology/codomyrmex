@@ -44,10 +44,10 @@ class TestBasePlotPublicAPI:
     def test_to_dict_structure(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
 
-        p = BasePlot(title="Dict Test", data=[10, 20])
+        p = BasePlot(title="dict Test", data=[10, 20])
         d = p.to_dict()
         assert d["type"] == "BasePlot"
-        assert d["title"] == "Dict Test"
+        assert d["title"] == "dict Test"
         assert d["width"] == 800
         assert d["height"] == 400
         assert d["data_count"] == 2

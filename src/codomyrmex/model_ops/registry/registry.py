@@ -168,11 +168,11 @@ class ModelRegistry:
             return model_version
 
     def list_models(self) -> list[str]:
-        """List all registered model names."""
+        """list all registered model names."""
         return list(self._models.keys())
 
     def list_versions(self, name: str) -> list[ModelVersion]:
-        """List all versions of a model."""
+        """list all versions of a model."""
         model = self.get_model(name)
         if model:
             return model.versions.copy()

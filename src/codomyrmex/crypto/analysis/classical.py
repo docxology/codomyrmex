@@ -114,7 +114,7 @@ def break_caesar(ciphertext: str) -> list[CaesarResult]:
         ciphertext: The encrypted text to break.
 
     Returns:
-        List of 26 CaesarResult entries sorted by chi-squared score
+        list of 26 CaesarResult entries sorted by chi-squared score
         (lowest/best first).
     """
     results = []

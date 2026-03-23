@@ -131,3 +131,10 @@ The personality text is inserted early in the system prompt, establishing the ag
 - [Models](models.md) — Model selection affects personality expression
 - [Multi-Instance](multi_instance.md) — Per-bot personalities
 - [skills.md](skills.md) — Codomyrmex skill preload vs personality text
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

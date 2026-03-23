@@ -21,10 +21,10 @@ class ExtractedContent:
     Attributes:
         url: Source URL of the content.
         title: Extracted page title.
-        headings: List of (level, text) heading tuples.
-        paragraphs: List of paragraph text blocks.
-        links: List of (url, anchor_text) tuples.
-        images: List of (src, alt_text) tuples.
+        headings: list of (level, text) heading tuples.
+        paragraphs: list of paragraph text blocks.
+        links: list of (url, anchor_text) tuples.
+        images: list of (src, alt_text) tuples.
         meta: Extracted metadata (description, keywords, etc.).
         word_count: Total word count of text content.
         content_hash: SHA-256 hash of the full text.

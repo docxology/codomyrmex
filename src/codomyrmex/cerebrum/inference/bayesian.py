@@ -30,7 +30,7 @@ class Distribution:
             n: Number of samples
 
         Returns:
-            List of samples
+            list of samples
         """
         return np.random.choice(self.values, size=n, p=self.probabilities).tolist()
 
@@ -114,7 +114,7 @@ class BayesianNetwork:
         self.logger.debug("Added edge %s -> %s", parent, child)
 
     def set_cpt(self, node: str, cpt: dict[tuple, dict[Any, float]]) -> None:
-        """Set conditional probability table for a node.
+        """set conditional probability table for a node.
 
         Args:
             node: Node name
@@ -139,13 +139,13 @@ class BayesianNetwork:
             distributions[parent_config] = Distribution(node_values, probs)
 
         self.cpt[node] = distributions
-        self.logger.debug("Set CPT for node %s", node)
+        self.logger.debug("set CPT for node %s", node)
 
     def get_topological_order(self) -> list[str]:
         """Get nodes in topological order (parents before children).
 
         Returns:
-            List of node names in topological order
+            list of node names in topological order
         """
         visited = set()
         temp_visited = set()
@@ -435,7 +435,7 @@ class PriorBuilder:
         """Build prior distribution from case outcomes.
 
         Args:
-            cases: List of cases
+            cases: list of cases
             variable: Variable name
             feature_extractor: Function to extract variable value from case
 

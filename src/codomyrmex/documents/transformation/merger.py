@@ -15,7 +15,7 @@ def merge_documents(
     Merge multiple documents into a single document.
 
     Args:
-        documents: List of documents to merge
+        documents: list of documents to merge
         target_format: Optional target format (uses first document's format if not provided)
 
     Returns:

@@ -30,13 +30,13 @@ class WebhookMixin:
     """Mixin providing webhook management methods for AgentMailProvider."""
 
     def list_webhooks(self, limit: int = 50) -> list[AgentMailWebhook]:
-        """List all webhook subscriptions.
+        """list all webhook subscriptions.
 
         Args:
             limit: Maximum number of webhooks to return.
 
         Returns:
-            List of AgentMailWebhook objects.
+            list of AgentMailWebhook objects.
         """
         try:
             response = self._client.webhooks.list(limit=limit)
@@ -80,7 +80,7 @@ class WebhookMixin:
 
         Args:
             url: The HTTPS endpoint to receive events.
-            event_types: List of event types (e.g., ``["message.received"]``).
+            event_types: list of event types (e.g., ``["message.received"]``).
             inbox_ids: Restrict events to specific inboxes.
             pod_ids: Restrict events to specific pods.
 

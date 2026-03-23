@@ -108,7 +108,7 @@ class Config:
         return self.values.get(key, default)
 
     def set(self, key: str, value: Any) -> None:
-        """Set the value."""
+        """set the value."""
         self.values[key] = value
 
 

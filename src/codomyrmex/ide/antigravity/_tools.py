@@ -61,7 +61,7 @@ class AntigravityToolsMixin:
             tool_name: Name of the tool.
 
         Returns:
-            Dict with tool information or None if not found.
+            dict with tool information or None if not found.
         """
         tool_info = {
             "task_boundary": {
@@ -111,7 +111,7 @@ class AntigravityToolsMixin:
             },
             "list_dir": {
                 "name": "list_dir",
-                "description": "List directory contents",
+                "description": "list directory contents",
                 "parameters": ["DirectoryPath"],
             },
             "replace_file_content": {

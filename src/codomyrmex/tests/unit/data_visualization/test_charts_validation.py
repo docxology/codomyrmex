@@ -25,7 +25,7 @@ pytestmark = [
     ),
 ]
 
-# Set non-interactive backend before any matplotlib import to prevent circular
+# set non-interactive backend before any matplotlib import to prevent circular
 # import issues that arise when charts/__init__.py re-enters during submodule loads.
 os.environ.setdefault("MPLBACKEND", "Agg")
 

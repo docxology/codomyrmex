@@ -484,7 +484,7 @@ class AsyncPipelineManager:
         timeout: int = 30,
     ) -> AsyncPipelineResult:
         """
-        List workflow runs asynchronously.
+        list workflow runs asynchronously.
 
         Args:
             repo_owner: Repository owner

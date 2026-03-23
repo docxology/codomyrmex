@@ -123,7 +123,7 @@ class LogAggregator:
             query: Search parameters.
 
         Returns:
-            List of matching records, most recent first.
+            list of matching records, most recent first.
         """
         results = []
         for record in reversed(self._records):

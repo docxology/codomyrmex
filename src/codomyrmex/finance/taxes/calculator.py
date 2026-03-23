@@ -183,7 +183,7 @@ class TaxCalculator:
 
         Args:
             income: Gross income.
-            deductions: List of deduction dicts.
+            deductions: list of deduction dicts.
 
         Returns:
             Adjusted taxable income.

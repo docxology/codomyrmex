@@ -18,7 +18,7 @@ def cli_commands():
     """Return CLI commands for the identity module."""
     return {
         "providers": {
-            "help": "List identity providers and verification methods",
+            "help": "list identity providers and verification methods",
             "handler": lambda **kwargs: print(
                 "Identity Providers:\n"
                 f"  - Identity Manager: {IdentityManager.__name__}\n"

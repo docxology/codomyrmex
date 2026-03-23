@@ -300,7 +300,7 @@ class LiveAgentBridge:
             msg_type: Filter by type.
 
         Returns:
-            List of received messages.
+            list of received messages.
         """
         msgs = self._received
         if msg_type:

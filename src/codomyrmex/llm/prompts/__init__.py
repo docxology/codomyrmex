@@ -139,7 +139,7 @@ class PromptTemplate:
         Validate that all required variables are provided.
 
         Returns:
-            List of missing variable names
+            list of missing variable names
         """
         # Variables with defaults are optional
         required = set()
@@ -331,17 +331,17 @@ class PromptRegistry:
         return None
 
     def list_templates(self) -> list[str]:
-        """List all registered template names."""
+        """list all registered template names."""
         return list(self._templates.keys())
 
     def list_versions(self, name: str) -> list[str]:
-        """List all versions of a template."""
+        """list all versions of a template."""
         if name in self._templates:
             return list(self._templates[name].keys())
         return []
 
     def set_active(self, name: str, version: str) -> bool:
-        """Set the active version of a template."""
+        """set the active version of a template."""
         if name in self._templates and version in self._templates[name]:
             self._active_versions[name] = version
             return True

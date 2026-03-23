@@ -30,7 +30,7 @@ def setup_module_logging(
     level: int = logging.INFO,
     format_str: str | None = None,
 ) -> logging.Logger:
-    """Set up logging for a module."""
+    """set up logging for a module."""
     log = logging.getLogger(f"codomyrmex.{module_name}")
     log.setLevel(level)
 

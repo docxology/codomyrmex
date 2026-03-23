@@ -175,7 +175,7 @@ class AsyncWorkerPool:
             items: Items to process.
 
         Returns:
-            List of TaskResults in input order.
+            list of TaskResults in input order.
 
         Example:
             >>> results = await pool.map(fetch_url, ["url1", "url2"])

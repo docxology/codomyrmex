@@ -26,10 +26,10 @@ def _get_models():
 
 @mcp_tool(
     category="graph_rag",
-    description="List available entity types and relation types in the knowledge graph.",
+    description="list available entity types and relation types in the knowledge graph.",
 )
 def graph_rag_list_types() -> dict[str, Any]:
-    """List all supported entity and relation types.
+    """list all supported entity and relation types.
 
     Returns:
         dict with keys: status, entity_types, relation_types
@@ -59,7 +59,7 @@ def graph_rag_build_graph(
     """Build a knowledge graph from entities and relationships.
 
     Args:
-        entities: List of entity dicts with keys 'id', 'name', and optional
+        entities: list of entity dicts with keys 'id', 'name', and optional
                   'entity_type' (person, organization, location, concept, event,
                   document, custom). Defaults to 'concept'.
         relationships: Optional list of relationship dicts with keys 'source_id',
@@ -126,7 +126,7 @@ def graph_rag_search_entities(
     """Search entities in a knowledge graph by name.
 
     Args:
-        entities: List of entity dicts to populate the graph (keys: id, name,
+        entities: list of entity dicts to populate the graph (keys: id, name,
                   entity_type).
         query: Search query string matched against entity names.
         entity_type: Optional entity type filter.

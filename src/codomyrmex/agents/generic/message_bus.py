@@ -87,8 +87,8 @@ class MessageBus:
     - Broadcast messages to all subscribers
 
     Attributes:
-        subscribers: Dict mapping message_type to list of handler callbacks.
-        message_history: List of all published messages (for auditing/replay).
+        subscribers: dict mapping message_type to list of handler callbacks.
+        message_history: list of all published messages (for auditing/replay).
 
     Example::
 
@@ -338,7 +338,7 @@ class MessageBus:
             limit: Limit number of messages (optional, returns most recent).
 
         Returns:
-            List of matching messages, most recent last.
+            list of matching messages, most recent last.
         """
         messages = self.message_history
 

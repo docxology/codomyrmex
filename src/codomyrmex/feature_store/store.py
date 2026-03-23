@@ -29,7 +29,7 @@ class FeatureStore(ABC):
 
     @abstractmethod
     def set_value(self, feature_name: str, entity_id: str, value: Any) -> None:
-        """Set a feature value for an entity."""
+        """set a feature value for an entity."""
 
     @abstractmethod
     def get_value(self, feature_name: str, entity_id: str) -> FeatureValue | None:
@@ -41,7 +41,7 @@ class FeatureStore(ABC):
 
     @abstractmethod
     def list_features(self) -> list[FeatureDefinition]:
-        """List all registered features."""
+        """list all registered features."""
 
     @abstractmethod
     def delete_value(self, feature_name: str, entity_id: str) -> bool:
@@ -62,7 +62,7 @@ class InMemoryFeatureStore(FeatureStore):
             value_type=ValueType.INT,
         ))
 
-        # Set values
+        # set values
         store.set_value("user_age", "user_123", 25)
 
         # Get values
@@ -104,7 +104,7 @@ class InMemoryFeatureStore(FeatureStore):
 
     def set_value(self, feature_name: str, entity_id: str, value: Any) -> None:
         """
-        Set a feature value for an entity.
+        set a feature value for an entity.
 
         Args:
             feature_name: Name of the feature.
@@ -150,7 +150,7 @@ class InMemoryFeatureStore(FeatureStore):
 
         Args:
             entity_id: ID of the entity.
-            feature_names: List of feature names to retrieve.
+            feature_names: list of feature names to retrieve.
 
         Returns:
             FeatureVector containing the requested features.
@@ -169,7 +169,7 @@ class InMemoryFeatureStore(FeatureStore):
         return FeatureVector(entity_id=entity_id, features=features)
 
     def list_features(self) -> list[FeatureDefinition]:
-        """List all registered features."""
+        """list all registered features."""
         return list(self._definitions.values())
 
     def delete_value(self, feature_name: str, entity_id: str) -> bool:

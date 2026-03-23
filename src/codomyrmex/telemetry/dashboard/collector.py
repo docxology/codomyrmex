@@ -73,7 +73,7 @@ class MetricCollector:
         return metrics[-1] if metrics else None
 
     def list_metric_names(self) -> list[str]:
-        """List all metric names."""
+        """list all metric names."""
         return list(self._metrics.keys())
 
     def cleanup_old(self) -> int:

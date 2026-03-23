@@ -31,7 +31,7 @@ class CalendarEvent(BaseModel):
         default=None, description="Physical or virtual location string."
     )
     attendees: list[str] = Field(
-        default_factory=list, description="List of attendee email addresses."
+        default_factory=list, description="list of attendee email addresses."
     )
     html_link: str | None = Field(
         default=None,
@@ -46,14 +46,14 @@ class CalendarProvider(abc.ABC):
     def list_events(
         self, time_min: datetime, time_max: datetime
     ) -> list[CalendarEvent]:
-        """List events within a time window.
+        """list events within a time window.
 
         Args:
             time_min: Inclusive start of the query window (timezone-aware).
             time_max: Exclusive end of the query window (timezone-aware).
 
         Returns:
-            List of ``CalendarEvent`` objects ordered by start time, possibly
+            list of ``CalendarEvent`` objects ordered by start time, possibly
             empty if no events exist in the window.
 
         Raises:

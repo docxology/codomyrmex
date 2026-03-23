@@ -152,7 +152,7 @@ class Pyttsx3Provider(TTSProvider):
         start_time = time.time()
 
         try:
-            # Set voice if specified
+            # set voice if specified
             if config.voice:
                 voice_exists = any(v.id == config.voice for v in self._voices)
                 if not voice_exists:
@@ -163,11 +163,11 @@ class Pyttsx3Provider(TTSProvider):
                     )
                 self._engine.setProperty("voice", config.voice)
 
-            # Set rate (pyttsx3 uses words per minute, default ~200)
+            # set rate (pyttsx3 uses words per minute, default ~200)
             base_rate = self._engine.getProperty("rate")
             self._engine.setProperty("rate", int(base_rate * config.rate))
 
-            # Set volume (0.0 to 1.0)
+            # set volume (0.0 to 1.0)
             self._engine.setProperty("volume", config.volume)
 
             # Synthesize to temporary file
@@ -243,13 +243,13 @@ class Pyttsx3Provider(TTSProvider):
         self,
         language: str | None = None,
     ) -> list[VoiceInfo]:
-        """List available voices.
+        """list available voices.
 
         Args:
             language: Filter by language code
 
         Returns:
-            List of available VoiceInfo objects
+            list of available VoiceInfo objects
 
         """
         if language:
@@ -279,7 +279,7 @@ class Pyttsx3Provider(TTSProvider):
         """Get list of supported language codes.
 
         Returns:
-            List of unique language codes from available voices
+            list of unique language codes from available voices
 
         """
         languages = set()

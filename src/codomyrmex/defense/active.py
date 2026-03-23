@@ -52,7 +52,7 @@ class ActiveDefense:
             input_text: The input to scan.
 
         Returns:
-            Dict containing detection results:
+            dict containing detection results:
             - detected: bool
             - patterns: list of triggered patterns
             - threat_level: ThreatLevel
@@ -119,7 +119,7 @@ class ActiveDefense:
             intensity: 0.0 to 1.0, how much noise to inject
 
         Returns:
-            Dict containing poisoned context and metadata.
+            dict containing poisoned context and metadata.
         """
         logger.info(
             "Generating poison context for %s (intensity=%f)", attacker_id, intensity
@@ -181,7 +181,7 @@ class ActiveDefense:
             text: Input text to scan.
 
         Returns:
-            List of triggered honeytoken IDs.
+            list of triggered honeytoken IDs.
         """
         triggered: list[str] = []
         with self._honeytoken_lock:
@@ -201,6 +201,6 @@ class ActiveDefense:
         return triggered
 
     def list_honeytokens(self) -> dict[str, dict[str, Any]]:
-        """List all active honeytokens with their status."""
+        """list all active honeytokens with their status."""
         with self._honeytoken_lock:
             return dict(self._honeytokens)

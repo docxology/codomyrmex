@@ -56,7 +56,7 @@ try:
 except ImportError:
     LOGGING_AVAILABLE = False
 
-# Set up logging for tests
+# set up logging for tests
 if LOGGING_AVAILABLE and callable(setup_logging):
     with contextlib.suppress(Exception):
         setup_logging()
@@ -68,7 +68,7 @@ class TestVisualizationPerformanceWorkflow:
     """Integration tests for data visualization → performance monitoring workflow."""
 
     def setup_method(self):
-        """Set up test environment."""
+        """set up test environment."""
         self.test_data = self._generate_test_data()
         self.output_dir = tempfile.mkdtemp()
 

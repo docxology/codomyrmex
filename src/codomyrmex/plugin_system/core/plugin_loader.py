@@ -55,7 +55,7 @@ class PluginLoader:
         Initialize the plugin loader.
 
         Args:
-            plugin_directories: List of directories to search for plugins
+            plugin_directories: list of directories to search for plugins
         """
         self.plugin_directories = plugin_directories or [
             Path.cwd() / "plugins",
@@ -74,7 +74,7 @@ class PluginLoader:
         Discover available plugins in configured directories.
 
         Returns:
-            List of discovered PluginInfo objects
+            list of discovered PluginInfo objects
         """
         discovered_plugins = []
 
@@ -253,7 +253,7 @@ class PluginLoader:
             plugin_info: Plugin metadata
 
         Returns:
-            List of missing dependencies
+            list of missing dependencies
         """
         missing = []
 
@@ -477,7 +477,7 @@ def discover_plugins() -> list[PluginInfo]:
     Convenience function to discover plugins.
 
     Returns:
-        List of discovered PluginInfo objects
+        list of discovered PluginInfo objects
     """
     loader = PluginLoader()
     return loader.discover_plugins()

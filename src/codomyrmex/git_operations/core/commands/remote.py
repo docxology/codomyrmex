@@ -127,7 +127,7 @@ def remove_remote(remote_name: str, repository_path: str | None = None) -> bool:
 
 @mcp_tool(name="git_list_remotes")
 def list_remotes(repository_path: str | None = None) -> list[dict[str, str]]:
-    """List all remote repositories."""
+    """list all remote repositories."""
     if repository_path is None:
         repository_path = os.getcwd()
 

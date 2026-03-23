@@ -31,7 +31,7 @@ def cli_commands():
     """Return CLI commands for the multimodal module."""
     return {
         "modalities": {
-            "help": "List supported modalities",
+            "help": "list supported modalities",
             "handler": lambda **kwargs: print(
                 "Supported Modalities\n"
                 f"  Media types: {', '.join(mt.value if hasattr(mt, 'value') else str(mt) for mt in MediaType)}\n"

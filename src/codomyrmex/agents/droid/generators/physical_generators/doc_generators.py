@@ -165,11 +165,11 @@ def generate_physical_api_spec() -> str:
   - `create_object(object_id, name, object_type, x, y, z, **properties) -> PhysicalObject`
   - `get_object_status(object_id) -> Optional[ObjectStatus]`
   - `update_object_location(object_id, x, y, z) -> bool`
-  - `get_nearby_objects(x, y, z, radius) -> List[PhysicalObject]`
-  - `get_objects_by_type(object_type) -> List[PhysicalObject]`
+  - `get_nearby_objects(x, y, z, radius) -> list[PhysicalObject]`
+  - `get_objects_by_type(object_type) -> list[PhysicalObject]`
   - `save_state(file_path) -> None`
   - `load_state(file_path) -> None`
-  - `get_statistics() -> Dict[str, Any]`
+  - `get_statistics() -> dict[str, Any]`
 
 ### PhysicalObject
 - **Purpose**: Represents a physical object
@@ -177,13 +177,13 @@ def generate_physical_api_spec() -> str:
   - `id: str` - Unique identifier
   - `name: str` - Human-readable name
   - `object_type: ObjectType` - Type classification
-  - `location: Tuple[float, float, float]` - 3D coordinates
-  - `properties: Dict[str, Any]` - Custom properties
+  - `location: tuple[float, float, float]` - 3D coordinates
+  - `properties: dict[str, Any]` - Custom properties
   - `status: ObjectStatus` - Current status
 - **Methods**:
   - `update_location(x, y, z) -> None`
   - `update_status(status) -> None`
-  - `to_dict() -> Dict[str, Any]`
+  - `to_dict() -> dict[str, Any]`
 
 ### ObjectRegistry
 - **Purpose**: Registry for managing object collections
@@ -191,8 +191,8 @@ def generate_physical_api_spec() -> str:
   - `register_object(obj) -> None`
   - `unregister_object(object_id) -> Optional[PhysicalObject]`
   - `get_object(object_id) -> Optional[PhysicalObject]`
-  - `get_objects_by_type(object_type) -> List[PhysicalObject]`
-  - `get_objects_in_area(x, y, z, radius) -> List[PhysicalObject]`
+  - `get_objects_by_type(object_type) -> list[PhysicalObject]`
+  - `get_objects_in_area(x, y, z, radius) -> list[PhysicalObject]`
   - `save_to_file(file_path) -> None`
   - `load_from_file(file_path) -> None`
 
@@ -205,9 +205,9 @@ def generate_physical_api_spec() -> str:
   - `add_constraint(constraint) -> None`
   - `register_object(object_id, mass, position, velocity) -> None`
   - `update_physics(delta_time) -> None`
-  - `get_object_state(object_id) -> Optional[Dict[str, Any]]`
+  - `get_object_state(object_id) -> Optional[dict[str, Any]]`
   - `set_object_position(object_id, position) -> bool`
-  - `get_simulation_stats() -> Dict[str, Any]`
+  - `get_simulation_stats() -> dict[str, Any]`
 
 ### Vector3D
 - **Purpose**: 3D vector for physics calculations
@@ -230,11 +230,11 @@ def generate_physical_api_spec() -> str:
   - `unregister_device(device_id) -> Optional[DeviceInterface]`
   - `add_reading(reading) -> None`
   - `get_latest_reading(sensor_type) -> Optional[SensorReading]`
-  - `get_readings_by_type(sensor_type, start_time, end_time) -> List[SensorReading]`
+  - `get_readings_by_type(sensor_type, start_time, end_time) -> list[SensorReading]`
   - `subscribe_to_sensor(sensor_type, callback) -> None`
   - `unsubscribe_from_sensor(sensor_type, callback) -> None`
   - `export_readings(file_path, sensor_type) -> None`
-  - `get_statistics() -> Dict[str, Any]`
+  - `get_statistics() -> dict[str, Any]`
 
 ### SensorReading
 - **Purpose**: Represents a sensor reading
@@ -244,7 +244,7 @@ def generate_physical_api_spec() -> str:
   - `value: float`
   - `unit: str`
   - `timestamp: float`
-  - `metadata: Dict[str, Any]`
+  - `metadata: dict[str, Any]`
 
 ## Enums
 

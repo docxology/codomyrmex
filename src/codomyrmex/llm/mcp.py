@@ -162,7 +162,7 @@ class MCPBridge:
         self.register_tool(tool_name, tool_desc, input_schema, func)
 
     def list_tools(self) -> list[dict[str, Any]]:
-        """List all registered tools in MCP format."""
+        """list all registered tools in MCP format."""
         return list(self._tools.values())
 
     # =========================================================================
@@ -174,7 +174,7 @@ class MCPBridge:
         self._resources[resource.uri] = resource
 
     def list_resources(self) -> list[dict[str, Any]]:
-        """List all registered resources."""
+        """list all registered resources."""
         return [
             {
                 "uri": r.uri,
@@ -194,7 +194,7 @@ class MCPBridge:
         self._prompts[prompt.name] = prompt
 
     def list_prompts(self) -> list[dict[str, Any]]:
-        """List all registered prompts."""
+        """list all registered prompts."""
         return [
             {
                 "name": p.name,

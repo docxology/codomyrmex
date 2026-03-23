@@ -66,6 +66,14 @@ This documentation suite captures architecture, operational patterns, troublesho
 | [instances.md](instances.md) | All active instances — Main, Crescent City, Template Bot |
 | [new_instance_questionnaire.md](new_instance_questionnaire.md) | Required inputs checklist for new instances |
 
+### Plugins, @-context, and cache
+
+| Document | Description |
+| :--------------------------------------- | :--------------------------------------------- |
+| [plugins.md](plugins.md) | Third-party plugins from Git, gateway hooks, skills |
+| [context-references.md](context-references.md) | `@` context references in chat (files, URLs, agent cache) |
+| [agent-cache.md](agent-cache.md) | Agent cache semantics and eviction |
+
 ### Assets
 
 | Path | Description |

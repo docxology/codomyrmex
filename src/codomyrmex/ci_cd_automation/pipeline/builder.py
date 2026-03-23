@@ -23,8 +23,8 @@ class PipelineBuilder:
 
         Args:
             name: Stage name
-            commands: List of commands for the single job in this stage
-            dependencies: List of stage names this stage depends on
+            commands: list of commands for the single job in this stage
+            dependencies: list of stage names this stage depends on
             on_branch: Optional branch constraint (simulated in variables for now)
         """
         # Create a job with the provided commands

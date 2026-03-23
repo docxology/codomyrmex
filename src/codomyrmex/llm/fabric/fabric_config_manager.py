@@ -85,7 +85,7 @@ class FabricConfigManager:
         self.config.custom_patterns[pattern.name] = pattern
 
     def list_patterns(self) -> list[str]:
-        """List available patterns."""
+        """list available patterns."""
         return list(self.patterns.keys())
 
 

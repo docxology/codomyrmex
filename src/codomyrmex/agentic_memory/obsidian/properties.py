@@ -133,7 +133,7 @@ def set_property(
     path: str | None = None,
     vault: str | None = None,
 ) -> CLIResult:
-    """Set a property on a note.
+    """set a property on a note.
 
     Maps to ``obsidian property:set name=<name> value=<value>
     [type=text|list|number|checkbox|date|datetime] [file=|path=]``.
@@ -176,7 +176,7 @@ def get_tags(
     counts: bool = False,
     vault: str | None = None,
 ) -> list[str]:
-    """List all tags in the vault.
+    """list all tags in the vault.
 
     Maps to ``obsidian tags [counts]``.
     """

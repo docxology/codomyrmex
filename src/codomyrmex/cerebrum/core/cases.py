@@ -142,7 +142,7 @@ class CaseBase:
             threshold: Minimum similarity threshold
 
         Returns:
-            List of (case, similarity) tuples, sorted by similarity (descending)
+            list of (case, similarity) tuples, sorted by similarity (descending)
         """
         similarities = []
         for case in self.cases.values():
@@ -223,7 +223,7 @@ class CaseRetriever:
             threshold: Minimum similarity threshold
 
         Returns:
-            List of (case, weight) tuples
+            list of (case, weight) tuples
         """
         similar_cases = self.case_base.retrieve_similar(query, k=k, threshold=threshold)
 

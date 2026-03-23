@@ -108,7 +108,7 @@ class UOREntity:
         return key in self.attributes
 
     def set_attribute(self, key: str, value: Any) -> None:
-        """Set an attribute and recompute the content hash."""
+        """set an attribute and recompute the content hash."""
         self.attributes[key] = value
         self.recompute_hash()
 

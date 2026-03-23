@@ -53,7 +53,7 @@ def relations_score_strength(
     Args:
         source: First entity ID.
         target: Second entity ID.
-        interactions: List of dicts with keys: type, timestamp, weight (optional).
+        interactions: list of dicts with keys: type, timestamp, weight (optional).
         decay_function: One of: exponential, linear, step, none.
         half_life_days: Half-life in days for exponential decay.
 

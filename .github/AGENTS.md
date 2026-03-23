@@ -11,7 +11,7 @@ This document tells AI agents what they need to know to operate safely within th
 ## Directory Contents
 
 | Path | Purpose |
-|------|---------|
+| --- | --- |
 | `workflows/ci.yml` | Continuous integration: lint, test matrix (slim for PRs), build |
 | `workflows/pre-commit.yml` | Pre-commit hook validation and commit message checks (soft-fail for agents) |
 | `workflows/security.yml` | Daily + push-triggered security scanning (6 scanners) |
@@ -36,14 +36,14 @@ This document tells AI agents what they need to know to operate safely within th
 | `commands/` | Gemini AI command `.toml` configs for PR review and triage |
 | `CODEOWNERS` | Code ownership mapping (`@docxology`) |
 | `dependabot.yml` | Automated dependency update configuration (3 ecosystems) |
-| `PULL_REQUEST_TEMPLATE.md` | Concise agent-friendly PR template (27 lines) |
+| `PULL_REQUEST_TEMPLATE.md` | Concise agent-friendly PR template (28 lines) |
 
 ## Agent-Specific Infrastructure
 
 ### Jules AI Agent
 
 | Feature | Workflow | Details |
-|---------|----------|---------|
+| --- | --- | --- |
 | Auto-labeling | `pr-labeler.yml` | Labels by branch name, paths, size, module |
 | Auto-merge | `auto-merge.yml` | Squash-merge when checks pass + `auto-merge` label |
 | Welcome message | `agent-welcome.yml` | Posts checklist comment on new Jules PRs |
@@ -56,7 +56,7 @@ This document tells AI agents what they need to know to operate safely within th
 ### Gemini CLI Agent
 
 | Feature | Workflow | Details |
-|---------|----------|---------|
+| --- | --- | --- |
 | PR review | `gemini-review.yml` | Automated code review on PR open |
 | Issue triage | `gemini-triage.yml` | Auto-triage on issue open/reopen |
 | Dispatch | `gemini-dispatch.yml` | Routes `@gemini-cli` commands |
@@ -66,7 +66,7 @@ This document tells AI agents what they need to know to operate safely within th
 ### Dependabot
 
 | Feature | Details |
-|---------|---------|
+| --- | --- |
 | Auto-labeling | `pr-labeler.yml` adds `dependencies` + `automated` + `auto-merge` |
 | Auto-merge | `auto-merge.yml` merges when checks pass |
 
@@ -120,7 +120,7 @@ gh workflow run jules-dispatch.yml -f modules=all -f task_template=docstrings-mc
 ## Operating Contracts
 
 | Contract | Requirement |
-|----------|-------------|
+| --- | --- |
 | Workflow top-level permissions | Must be `permissions: {}` (deny-all) |
 | Job-level permissions | Grant only what the job needs |
 | Action pinning | Pin to specific tags, never `@main` or `@latest` |

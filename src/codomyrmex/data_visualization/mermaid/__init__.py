@@ -122,7 +122,7 @@ class MermaidDiagram:
         return self
 
     def set_config(self, config: dict[str, Any]) -> "MermaidDiagram":
-        """Set Mermaid configuration."""
+        """set Mermaid configuration."""
         self._config = config
         return self
 

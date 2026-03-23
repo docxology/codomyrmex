@@ -51,10 +51,10 @@ def video_get_config() -> dict[str, Any]:
 
 @mcp_tool(
     category="video",
-    description="List supported video codecs, audio codecs, and filter types.",
+    description="list supported video codecs, audio codecs, and filter types.",
 )
 def video_list_formats() -> dict[str, Any]:
-    """List all supported video formats, codecs, and filters.
+    """list all supported video formats, codecs, and filters.
 
     Returns:
         dict with keys: status, video_codecs, audio_codecs, filters
@@ -189,12 +189,12 @@ def video_transcriber_doctor(mode: str = "auto") -> dict[str, Any]:
 @mcp_tool(
     category="video",
     description=(
-        "List available Whisper model sizes for video transcription, "
+        "list available Whisper model sizes for video transcription, "
         "ordered from smallest/fastest to largest/most accurate."
     ),
 )
 def video_transcriber_list_models() -> dict[str, Any]:
-    """List available Whisper model sizes.
+    """list available Whisper model sizes.
 
     Returns:
         dict with keys: status, models (list), recommended.

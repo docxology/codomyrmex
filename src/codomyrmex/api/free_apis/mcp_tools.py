@@ -17,7 +17,7 @@ _registry = FreeAPIRegistry()
 
 @mcp_tool(category="api")
 def free_api_list_categories() -> dict[str, Any]:
-    """List all categories available in the public free APIs registry.
+    """list all categories available in the public free APIs registry.
 
     Fetches the public-apis index (cached for 1 hour) and returns a
     sorted list of unique categories with entry counts.

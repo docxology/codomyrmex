@@ -74,7 +74,7 @@ class OpenFangRunner:
             raise OpenFangNotInstalledError(str(exc)) from exc
 
     def hands_list(self) -> dict[str, str]:
-        """List available autonomous Hands."""
+        """list available autonomous Hands."""
         return self._run(["hands", "list"])
 
     def hands_run(self, hand_name: str, config_path: str = "") -> dict[str, str]:

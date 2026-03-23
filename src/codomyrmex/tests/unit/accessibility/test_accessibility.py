@@ -733,7 +733,7 @@ class TestAccessibilityReporterDict:
     """Tests for AccessibilityReporter.to_dict()."""
 
     def test_dict_contains_all_keys(self):
-        """Dict has url, score, passed, errors, warnings, issues keys."""
+        """dict has url, score, passed, errors, warnings, issues keys."""
         report = AccessibilityReport(passed=5, errors=1, warnings=2)
         reporter = AccessibilityReporter(report)
         d = reporter.to_dict()

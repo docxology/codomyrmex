@@ -55,7 +55,7 @@ def cli_commands():
             ),
         },
         "formats": {
-            "help": "List available output formats",
+            "help": "list available output formats",
             "handler": lambda: print(
                 "\n".join(f"- {fmt.value}" for fmt in ScrapeFormat)
             ),

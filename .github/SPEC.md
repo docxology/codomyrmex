@@ -7,13 +7,13 @@
 The `.github/` directory provides GitHub platform integration for the Codomyrmex project.
 It defines CI/CD automation, multi-agent infrastructure, security scanning, and AI-assisted
 review processes. This specification documents the technical requirements and contracts
-for all 24 GitHub Actions workflows.
+for all 36 GitHub Actions workflows.
 
 ## Directory Structure
 
-```
+```text
 .github/
-  workflows/                        # 24 GitHub Actions workflow YAML files
+  workflows/                        # 36 GitHub Actions workflow YAML files
     # ─── Core CI/CD ───
     ci.yml                          # Continuous integration pipeline
     pre-commit.yml                  # Pre-commit hook validation
@@ -49,7 +49,7 @@ for all 24 GitHub Actions workflows.
   AGENTS.md                         # AI agent operational guide
   CODEOWNERS                        # @docxology for all paths
   dependabot.yml                    # 3 ecosystems (actions, pip, npm)
-  PULL_REQUEST_TEMPLATE.md          # 27-line agent-friendly template
+  PULL_REQUEST_TEMPLATE.md          # 28-line agent-friendly template
   PAI.md / SPEC.md / README.md      # Integration docs
 ```
 
@@ -60,31 +60,31 @@ for all 24 GitHub Actions workflows.
 ### PR vs Main Matrix
 
 | Context | OS | Python Versions |
-|---------|-----|-----------------|
+| --- | --- | --- |
 | Pull Requests | `ubuntu-latest` | `3.11` only |
 | Push to `main` | `ubuntu-latest`, `macos-latest`, `windows-latest` | `3.10`, `3.11`, `3.12`, `3.13` |
 
 ### Lint & Format Requirements
 
 | Tool | Failure Behavior |
-|------|-----------------|
+| --- | --- |
 | `ruff check` | Blocks pipeline |
 | `ruff format --check` | Blocks pipeline |
 | `black --check` | Soft-fail (`continue-on-error`) |
 | `mypy src/` | Soft-fail (`continue-on-error`) |
-| `pylint`, `flake8` | Soft fail (`|| true`) |
+| `pylint`, `flake8` | Soft fail (`&#124;&#124; true`) |
 
 ### Coverage Gates
 
 | Context | Threshold |
-|---------|-----------|
+| --- | --- |
 | CI minimum | 25% |
 | Release quality gate | 25% |
 | `pytest.ini` default | 25% |
 
 ## Agent PR Pipeline
 
-```
+```text
 PR Opened
   ├─→ pr-labeler.yml      (adds labels: jules, source, module:X, size/M, etc.)
   ├─→ agent-welcome.yml   (posts welcome comment with checklist)
@@ -100,7 +100,7 @@ PR Opened
 ## Maintenance Schedule
 
 | Workflow | Schedule | Purpose |
-|----------|----------|---------|
+| --- | --- | --- |
 | `maintenance.yml` | Sunday 6 AM UTC | Stale issues (60d), stale PRs (90d), artifact cleanup |
 | `cleanup-branches.yml` | Weekly | Delete merged + 14d stale branches |
 | `lock-threads.yml` | Sunday 4 AM UTC | Lock 90d issues, 60d PRs |
@@ -112,7 +112,7 @@ PR Opened
 ## Security Scanner Inventory
 
 | Scanner | Job | What It Scans |
-|---------|-----|-------------|
+| --- | --- | --- |
 | pip-audit | `dependency-scan` | Known CVEs in packages |
 | Safety | `dependency-scan` | CVE database for Python deps |
 | Bandit | `bandit-scan` | Python SAST |
@@ -129,7 +129,7 @@ PR Opened
 ## Stale Management Policy
 
 | Target | Days to Stale | Days to Close | Exempt Labels |
-|--------|:---:|:---:|---|
+| --- | :---: | :---: | --- |
 | Issues | 60 | 7 | `keep-open`, `pinned`, `security`, `jules`, `agent-task` |
 | PRs | 90 | 14 | `keep-open`, `pinned`, `security`, `wip`, `jules`, `agent-pr`, `auto-merge` |
 

@@ -51,7 +51,7 @@ class RealityTunnel:
 
     Attributes:
         name: Name of the tunnel (e.g. 'Materialist', 'Conspiratorial').
-        filters: List of cognitive filters applied.
+        filters: list of cognitive filters applied.
         distortion: Degree of distortion from baseline consensus reality (0-1).
     """
 

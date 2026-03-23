@@ -12,7 +12,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 @mcp_tool(category="cli")
 def cli_list_commands() -> dict[str, Any]:
-    """List all available CLI commands.
+    """list all available CLI commands.
 
     Introspects the Cli class to enumerate every registered command,
     returning the command name and its docstring.

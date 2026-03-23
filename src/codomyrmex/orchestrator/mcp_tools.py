@@ -111,7 +111,7 @@ def orchestrator_run_dag(
 
     Args:
         topology: One of ``"fan_out"``, ``"fan_in"``, ``"pipeline"``, ``"broadcast"``.
-        tasks: List of task specification dicts.
+        tasks: list of task specification dicts.
         broadcast_message: Message payload injected for ``broadcast`` mode.
         max_workers: Maximum parallel workers for concurrent modes.
 

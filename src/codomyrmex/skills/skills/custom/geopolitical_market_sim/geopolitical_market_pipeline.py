@@ -168,7 +168,7 @@ class GeopoliticalMarketPipeline:
         return result
 
     def list_worldosint_modules(self) -> dict[str, Any]:
-        """List available WorldOSINT modules within the skill.
+        """list available WorldOSINT modules within the skill.
 
         Returns:
             dict with ``status``, ``modules`` (list of str), ``content``.

@@ -36,7 +36,7 @@ class TermAnalyzer:
             pattern: Pattern to extract terms from
 
         Returns:
-            Set of unique terms
+            set of unique terms
         """
         terms = set()
         content = pattern.content + " " + pattern.title
@@ -108,7 +108,7 @@ class TermAnalyzer:
             min_occurrences: Minimum number of patterns a term must appear in
 
         Returns:
-            List of tuples (term, occurrence_count, pattern_ids)
+            list of tuples (term, occurrence_count, pattern_ids)
         """
         term_patterns: dict[str, set[str]] = defaultdict(set)
 
@@ -155,7 +155,7 @@ class TermAnalyzer:
             top_n: Number of top terms to return
 
         Returns:
-            List of tuples (term, frequency, importance_score)
+            list of tuples (term, frequency, importance_score)
         """
         term_frequency = self.get_term_frequency(spec)
         term_patterns: dict[str, set[str]] = defaultdict(set)
@@ -214,7 +214,7 @@ class TermAnalyzer:
             min_sections: Minimum number of sections a term must appear in
 
         Returns:
-            List of tuples (term, section_count, section_names)
+            list of tuples (term, section_count, section_names)
         """
         term_sections: dict[str, set[str]] = defaultdict(set)
 

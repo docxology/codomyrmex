@@ -147,14 +147,14 @@ class TestJSONFileStorePersistence:
             with open(path, "w") as f:
                 json.dump(
                     {
-                        "k1": {"id": "k1", "content": "Dict entry"},
+                        "k1": {"id": "k1", "content": "dict entry"},
                     },
                     f,
                 )
             store = JSONFileStore(path)
             retrieved = store.get("k1")
             assert retrieved is not None
-            assert retrieved.content == "Dict entry"
+            assert retrieved.content == "dict entry"
         finally:
             os.remove(path)
 

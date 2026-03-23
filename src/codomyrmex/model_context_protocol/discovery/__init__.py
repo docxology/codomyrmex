@@ -318,7 +318,7 @@ class MCPDiscovery:
         return self._registry.get(name)
 
     def list_tools(self, tag: str | None = None) -> list[DiscoveredTool]:
-        """List all discovered tools, optionally filtered by tag."""
+        """list all discovered tools, optionally filtered by tag."""
         if tag:
             return [t for t in self._registry.values() if tag in t.tags]
         return list(self._registry.values())
@@ -355,9 +355,9 @@ def mcp_tool(
     Args:
         name: Override the tool name (default: function name).
         description: Tool description (default: docstring).
-        tags: List of tags for classification.
+        tags: list of tags for classification.
         version: Semantic version string.
-        requires: List of importable package names required by this tool.
+        requires: list of importable package names required by this tool.
                   If any are missing, the tool will be registered as unavailable.
     """
 

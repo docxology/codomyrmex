@@ -43,7 +43,7 @@ src_dir = current_dir.parent.parent.parent / "src"
 
 
 def cmd_list(manager: RepositoryManager, args) -> None:
-    """List repositories command."""
+    """list repositories command."""
     repo_type = None
     if args.type:
         try:
@@ -315,7 +315,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s list --type own                    # List your own repositories
+  %(prog)s list --type own                    # list your own repositories
   %(prog)s search docxology                   # Search for docxology repositories
   %(prog)s clone docxology/docxology          # Clone a specific repository
   %(prog)s clone --all --type own             # Clone all your repositories
@@ -339,8 +339,8 @@ Examples:
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-    # List command
-    list_parser = subparsers.add_parser("list", help="List repositories")
+    # list command
+    list_parser = subparsers.add_parser("list", help="list repositories")
     list_parser.add_argument(
         "--type", help="Filter by repository type (own, use, fork)"
     )
@@ -391,7 +391,7 @@ Examples:
     # Remote command
     remote_parser = subparsers.add_parser("remote", help="Manage remotes")
     remote_parser.add_argument("repository", help="Repository name")
-    remote_parser.add_argument("--list", action="store_true", help="List remotes")
+    remote_parser.add_argument("--list", action="store_true", help="list remotes")
     remote_parser.add_argument("--add", metavar="NAME", help="Add remote")
     remote_parser.add_argument("--url", help="URL for adding remote")
     remote_parser.add_argument("--remove", metavar="NAME", help="Remove remote")

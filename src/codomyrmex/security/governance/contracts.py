@@ -71,7 +71,7 @@ class Contract:
 
     Args:
         title: Contract title.
-        parties: List of party names (at least 2, no duplicates).
+        parties: list of party names (at least 2, no duplicates).
     """
 
     def __init__(self, title: str, parties: list[str]) -> None:
@@ -194,7 +194,7 @@ class Contract:
         """Check compliance across all terms.
 
         Returns:
-            Dict with total_terms, fulfilled, overdue, pending,
+            dict with total_terms, fulfilled, overdue, pending,
             compliance_rate, and issues list.
         """
         total = len(self.terms)

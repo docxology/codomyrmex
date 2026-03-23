@@ -100,7 +100,7 @@ class CodeSimilarity:
         exceeding the threshold.
 
         Args:
-            files: List of file paths to compare.
+            files: list of file paths to compare.
             threshold: Minimum similarity to report (0.0 - 1.0).
 
         Returns:

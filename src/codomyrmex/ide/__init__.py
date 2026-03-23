@@ -300,7 +300,7 @@ def cli_commands():
     """Return CLI commands for the IDE module."""
 
     def _list_extensions():
-        """List IDE extensions."""
+        """list IDE extensions."""
         print("IDE Integration Extensions:")
         print("  cursor    - Cursor AI-first code editor")
         print("  vscode    - Visual Studio Code")

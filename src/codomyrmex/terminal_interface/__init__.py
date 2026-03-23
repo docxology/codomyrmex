@@ -40,7 +40,7 @@ def cli_commands():
 
     return {
         "themes": {
-            "help": "List available terminal themes",
+            "help": "list available terminal themes",
             "handler": lambda **kwargs: print(
                 "Available themes:\n"
                 "  - default: Standard terminal output\n"

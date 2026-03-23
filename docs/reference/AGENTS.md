@@ -1,60 +1,34 @@
 # Codomyrmex Agents — docs/reference
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `api-complete.md` – Project file
-- `api.md` – Project file
-- `changelog.md` – Project file
-- `cli.md` – Project file
-- `glossary.md` – Project file
-- `migration-guide.md` – Project file
-- `orchestrator.md` – Project file
-- `performance-benchmarks.md` – Project file
-- `performance-optimization.md` – Project file
-- `performance.md` – Project file
-- `security.md` – Project file
-- `troubleshooting.md` – Project file
-- `inventory.md` – Repo metrics (modules, MCP tools, tests); refresh via `scripts/doc_inventory.py`
+Agent coordination for `docs/reference/`: API and CLI reference, performance and migration guides, and the authoritative [inventory.md](inventory.md) for repo metrics (top-level modules, `@mcp_tool` count, collected tests).
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Contents (by file)
 
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-- `api-complete.md`
-- `api.md`
-- `changelog.md`
-- `cli.md`
-- `glossary.md`
-- `migration-guide.md`
-- `orchestrator.md`
-- `performance-benchmarks.md`
-- `performance-optimization.md`
-- `performance.md`
-- `security.md`
-- `troubleshooting.md`
+| File | Role |
+|:---|:---|
+| [inventory.md](inventory.md) | Single source of truth for counts used across READMEs; refresh with `uv run python scripts/doc_inventory.py` |
+| [api.md](api.md), [api-complete.md](api-complete.md) | API reference |
+| [cli.md](cli.md) | CLI surface |
+| [changelog.md](changelog.md) | Version history |
+| [glossary.md](glossary.md) | Terminology |
+| [migration-guide.md](migration-guide.md) | Major-version migrations |
+| [orchestrator.md](orchestrator.md) | Orchestrator reference |
+| [performance.md](performance.md), [performance-benchmarks.md](performance-benchmarks.md), [performance-optimization.md](performance-optimization.md) | Performance |
+| [security.md](security.md) | Security reference |
+| [troubleshooting.md](troubleshooting.md) | Common failures |
+| [README.md](README.md) | Section index |
+| [SPEC.md](SPEC.md), [PAI.md](PAI.md) | Local specs / PAI notes for this tree |
 
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+## Operating contracts
 
-## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+- Volatile numbers belong in `inventory.md`, not duplicated in prose without a pointer to refresh steps.
+- Cross-link to [docs/development/documentation.md](../development/documentation.md) when adding diagrams or bulk doc changes.
 
-## Navigation Links
-- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+## Navigation
+
+- **Parent**: [docs/AGENTS.md](../AGENTS.md), [docs/README.md](../README.md)
+- **Project root**: [README.md](../../README.md), [AGENTS.md](../../AGENTS.md)

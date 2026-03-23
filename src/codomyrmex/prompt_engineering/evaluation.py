@@ -196,7 +196,7 @@ def get_default_criteria() -> list[EvaluationCriteria]:
     Get the default set of evaluation criteria.
 
     Returns:
-        List of EvaluationCriteria with balanced weights.
+        list of EvaluationCriteria with balanced weights.
     """
     return [
         EvaluationCriteria(
@@ -242,7 +242,7 @@ class PromptEvaluator:
         Initialize the evaluator.
 
         Args:
-            criteria: List of evaluation criteria. If None, uses defaults.
+            criteria: list of evaluation criteria. If None, uses defaults.
         """
         self._criteria = criteria if criteria is not None else get_default_criteria()
 
@@ -326,10 +326,10 @@ class PromptEvaluator:
         Evaluate multiple prompt-response pairs.
 
         Args:
-            pairs: List of (prompt, response) tuples.
+            pairs: list of (prompt, response) tuples.
 
         Returns:
-            List of EvaluationResult objects.
+            list of EvaluationResult objects.
         """
         return [self.evaluate(prompt, response) for prompt, response in pairs]
 
@@ -343,7 +343,7 @@ class PromptEvaluator:
 
         Args:
             prompt: The shared prompt.
-            responses: List of different response strings to compare.
+            responses: list of different response strings to compare.
 
         Returns:
             Dictionary with individual results, rankings, and statistics.
@@ -377,7 +377,7 @@ class PromptEvaluator:
 
     def criteria_names(self) -> list[str]:
         """
-        List the names of all active criteria.
+        list the names of all active criteria.
 
         Returns:
             Sorted list of criterion names.

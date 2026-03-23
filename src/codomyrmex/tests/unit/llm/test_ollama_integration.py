@@ -53,7 +53,7 @@ class TestOllamaIntegration:
 
     @pytest.fixture(autouse=True)
     def _setup(self, tmp_path):
-        """Set up test environment."""
+        """set up test environment."""
         self.test_output_dir = tmp_path / "ollama_tests"
         self.test_output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -496,7 +496,7 @@ class TestOllamaIntegrationRealExecution:
 
     @pytest.fixture(autouse=True)
     def _setup(self):
-        """Set up for real execution tests."""
+        """set up for real execution tests."""
         self.ollama_manager = OllamaManager()
         self.model_runner = ModelRunner(self.ollama_manager)
         self.output_manager = OutputManager()

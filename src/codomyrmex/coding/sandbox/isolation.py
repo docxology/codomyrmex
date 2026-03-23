@@ -67,7 +67,7 @@ def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, No
     old_limits = {}
 
     try:
-        # Set CPU time limit (soft limit)
+        # set CPU time limit (soft limit)
         soft, hard = resource.getrlimit(resource.RLIMIT_CPU)
         old_limits[resource.RLIMIT_CPU] = (soft, hard)
 
@@ -87,7 +87,7 @@ def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, No
         except (ValueError, OSError) as e:
             logger.warning("Failed to set CPU limit: %s", e)
 
-        # Set memory limit (address space)
+        # set memory limit (address space)
         soft, hard = resource.getrlimit(resource.RLIMIT_AS)
         old_limits[resource.RLIMIT_AS] = (soft, hard)
         memory_bytes = limits.memory_limit * 1024 * 1024  # Convert MB to bytes
@@ -133,7 +133,7 @@ def execute_with_limits(
 
     monitor = ResourceMonitor()
 
-    # Set resource limits for the current process
+    # set resource limits for the current process
     with resource_limits_context(limits):
         monitor.start_monitoring()
 
@@ -200,7 +200,7 @@ def sandbox_process_isolation(
     def execute_in_subprocess(queue: multiprocessing.Queue) -> None:
         """Execute code in a subprocess with resource limits."""
         try:
-            # Set resource limits in the subprocess
+            # set resource limits in the subprocess
             resource.setrlimit(
                 resource.RLIMIT_CPU, (limits.time_limit, limits.time_limit + 10)
             )

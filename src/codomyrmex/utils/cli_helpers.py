@@ -96,7 +96,7 @@ class ProgressReporter:
 
     def set_current(self, current: int, message: str | None = None) -> None:
         """
-        Set current progress value.
+        set current progress value.
 
         Args:
             current: Current progress value
@@ -136,8 +136,8 @@ def format_table(data: list[dict[str, Any]], headers: list[str]) -> str:
     Format data as a table.
 
     Args:
-        data: List of dictionaries containing row data
-        headers: List of column headers
+        data: list of dictionaries containing row data
+        headers: list of column headers
 
     Returns:
         Formatted table string
@@ -254,7 +254,7 @@ def create_dry_run_plan(
 
     Args:
         args: Command line arguments
-        operations: List of operations that would be performed
+        operations: list of operations that would be performed
 
     Returns:
         Formatted execution plan
@@ -588,7 +588,7 @@ def format_result(
         output_key: Optional key for output message
 
     Returns:
-        Tuple of (success: bool, message: Optional[str])
+        tuple of (success: bool, message: Optional[str])
     """
     if isinstance(result, dict):
         success = result.get(success_key, False)

@@ -337,7 +337,7 @@ class TestMCPClientTimeout:
         asyncio.run(_test())
 
     def test_timeout_on_list_tools(self):
-        """List tools timeout is retried then wrapped in MCPClientError."""
+        """list tools timeout is retried then wrapped in MCPClientError."""
 
         async def _test():
             config = MCPClientConfig(

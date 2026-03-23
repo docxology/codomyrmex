@@ -99,7 +99,7 @@ class CloudClient(ABC):
         self,
         resource_type: ResourceType | None = None,
     ) -> list[CloudResource]:
-        """List cloud resources."""
+        """list cloud resources."""
 
     @abstractmethod
     def get_resource(self, resource_id: str) -> CloudResource | None:
@@ -124,7 +124,7 @@ class StorageClient(ABC):
 
     @abstractmethod
     def list_buckets(self) -> list[str]:
-        """List storage buckets."""
+        """list storage buckets."""
 
     @abstractmethod
     def create_bucket(self, name: str, region: str | None = None) -> bool:
@@ -154,7 +154,7 @@ class StorageClient(ABC):
 
     @abstractmethod
     def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
-        """List objects in a bucket."""
+        """list objects in a bucket."""
 
     @abstractmethod
     def delete_object(self, bucket: str, key: str) -> bool:
@@ -180,7 +180,7 @@ class ComputeClient(ABC):
 
     @abstractmethod
     def list_instances(self) -> list[dict[str, Any]]:
-        """List compute instances."""
+        """list compute instances."""
 
     @abstractmethod
     def start_instance(self, instance_id: str) -> bool:
@@ -206,7 +206,7 @@ class ServerlessClient(ABC):
 
     @abstractmethod
     def list_functions(self) -> list[dict[str, Any]]:
-        """List serverless functions."""
+        """list serverless functions."""
 
     @abstractmethod
     def invoke_function(

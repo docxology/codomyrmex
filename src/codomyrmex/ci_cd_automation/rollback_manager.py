@@ -411,10 +411,10 @@ class RollbackManager:
         return self._active_rollbacks.get(execution_id)
 
     def list_rollback_plans(self) -> list[RollbackPlan]:
-        """List all rollback plans.
+        """list all rollback plans.
 
         Returns:
-            List of rollback plans
+            list of rollback plans
         """
         return list(self._rollback_plans.values())
 

@@ -31,7 +31,7 @@ def parse_pyproject_dependencies(content: str) -> dict[str, list[tuple[str, str]
     Parse dependencies from pyproject.toml content.
 
     Returns:
-        Dict mapping section name to list of (package_name, version_spec)
+        dict mapping section name to list of (package_name, version_spec)
     """
     dependencies = defaultdict(list)
 

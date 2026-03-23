@@ -45,7 +45,7 @@ def cli_commands():
     """Return CLI commands for the edge_computing module."""
 
     def _nodes():
-        """List edge nodes."""
+        """list edge nodes."""
         cluster = EdgeCluster()
         nodes = cluster.list_nodes()
         print("Edge Computing Nodes")

@@ -22,7 +22,7 @@ except ImportError:
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_performance_logging():
-    """Set up logging for performance tests."""
+    """set up logging for performance tests."""
     if LOGGING_AVAILABLE and callable(setup_logging):
         with contextlib.suppress(Exception):
             setup_logging()

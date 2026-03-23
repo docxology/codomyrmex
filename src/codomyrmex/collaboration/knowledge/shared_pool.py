@@ -186,7 +186,7 @@ class SharedMemoryPool:
             requesting_agent: Agent performing the search (for ACL check).
 
         Returns:
-            List of matching entries from all accessible namespaces.
+            list of matching entries from all accessible namespaces.
 
         """
         results: list[KnowledgeEntry] = []

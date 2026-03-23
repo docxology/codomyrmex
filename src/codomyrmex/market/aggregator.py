@@ -121,7 +121,7 @@ class DemandAggregator:
         return entry
 
     def set_threshold(self, category: str, threshold: int) -> None:
-        """Set a custom bulk threshold for a category."""
+        """set a custom bulk threshold for a category."""
         self._thresholds[category] = threshold
 
     # ── Statistics ──────────────────────────────────────────────────
@@ -147,7 +147,7 @@ class DemandAggregator:
         )
 
     def list_categories(self) -> list[str]:
-        """List all categories with pending demand."""
+        """list all categories with pending demand."""
         return list(self._demands.keys())
 
     def get_demand(self, category: str) -> list[DemandEntry]:
@@ -213,7 +213,7 @@ class DemandAggregator:
         """Check all categories and trigger auctions where possible.
 
         Returns:
-            List of auction IDs triggered.
+            list of auction IDs triggered.
         """
         triggered: list[str] = []
         for category in list(self._demands.keys()):

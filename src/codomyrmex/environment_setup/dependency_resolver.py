@@ -93,7 +93,7 @@ class DependencyResolver:
         return conflicts
 
     def list_installed(self) -> list[DependencyInfo]:
-        """List all installed packages with metadata."""
+        """list all installed packages with metadata."""
         try:
             result = subprocess.run(  # nosec B603
                 [self._python, "-m", "pip", "list", "--format=json"],
@@ -206,7 +206,7 @@ class DependencyResolver:
         """Detect whether running inside a virtual environment.
 
         Returns:
-            Dict with keys: active, path, type (venv, conda, uv, none).
+            dict with keys: active, path, type (venv, conda, uv, none).
         """
         import sys
 
@@ -235,7 +235,7 @@ class DependencyResolver:
         """Get comprehensive environment information.
 
         Returns:
-            Dict with python_version, platform, virtualenv info, and package count.
+            dict with python_version, platform, virtualenv info, and package count.
         """
         import platform
         import sys
@@ -303,7 +303,7 @@ class DependencyResolver:
         """Find outdated packages.
 
         Returns:
-            List of dicts with name, version, latest_version.
+            list of dicts with name, version, latest_version.
         """
         try:
             result = subprocess.run(  # nosec B603
@@ -333,7 +333,7 @@ class DependencyResolver:
         """Run all checks and return a structured audit result.
 
         Returns:
-            Dict with environment, conflicts, pyproject_issues, outdated, and report.
+            dict with environment, conflicts, pyproject_issues, outdated, and report.
         """
         conflicts = self.check_conflicts()
         pyproject_issues = (

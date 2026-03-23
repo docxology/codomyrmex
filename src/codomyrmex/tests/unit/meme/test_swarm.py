@@ -63,13 +63,13 @@ class TestSwarmAgent:
         assert agent.integrity == 1.0
 
     def test_list_position_converted_to_ndarray(self) -> None:
-        """List position is converted to numpy array via __post_init__."""
+        """list position is converted to numpy array via __post_init__."""
         agent = SwarmAgent(position=[1.0, 2.0, 3.0])
         assert isinstance(agent.position, np.ndarray)
         assert agent.position[0] == 1.0
 
     def test_list_velocity_converted_to_ndarray(self) -> None:
-        """List velocity is converted to numpy array via __post_init__."""
+        """list velocity is converted to numpy array via __post_init__."""
         agent = SwarmAgent(velocity=[0.5, 0.0, -0.5])
         assert isinstance(agent.velocity, np.ndarray)
         assert agent.velocity[2] == -0.5

@@ -61,7 +61,7 @@ def create_model_soup(
     """Average multiple models into a model soup.
 
     Args:
-        param_dicts: List of model parameter dictionaries (key -> list of floats).
+        param_dicts: list of model parameter dictionaries (key -> list of floats).
         weights: Optional weighting for each model (uniform if omitted).
 
     Returns:

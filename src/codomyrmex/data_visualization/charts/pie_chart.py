@@ -111,7 +111,7 @@ class PieChart:
             title: Chart title
             autopct: Format string for percentage display
             startangle: Starting angle for the first slice
-            explode: List of offset distances for each slice
+            explode: list of offset distances for each slice
         """
         self.labels = labels or []
         self.sizes = sizes or []

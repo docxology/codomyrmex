@@ -81,7 +81,7 @@ def aider_edit(
     """Edit one or more files using aider with a code-mode instruction.
 
     Args:
-        file_paths: List of file paths to include in aider context for editing.
+        file_paths: list of file paths to include in aider context for editing.
         instruction: Natural-language instruction describing the change to make.
         model: LLM model to use (default: claude-sonnet-4-6).
         timeout: Subprocess timeout in seconds (default: 300).
@@ -120,7 +120,7 @@ def aider_ask(
     """Ask aider about code in ask mode (no file changes made).
 
     Args:
-        file_paths: List of file paths to include as context.
+        file_paths: list of file paths to include as context.
         question: Question to ask about the code.
         model: LLM model to use (default: claude-sonnet-4-6).
         timeout: Subprocess timeout in seconds (default: 120).
@@ -157,7 +157,7 @@ def aider_architect(
     """Run aider in architect mode for complex tasks requiring planning.
 
     Args:
-        file_paths: List of file paths to include.
+        file_paths: list of file paths to include.
         task: Complex task description for the architect to plan and execute.
         model: Architect model (planner). Default: claude-sonnet-4-6.
         editor_model: Editor model (applies changes). Defaults to same as model.

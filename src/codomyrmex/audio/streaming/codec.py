@@ -45,7 +45,7 @@ class CodecCapabilities:
     """Audio capabilities of a client or server.
 
     Attributes:
-        supported: List of supported codecs.
+        supported: list of supported codecs.
         preferred: Preferred codec (optional).
         sample_rates: Supported sample rates in Hz.
         channels: Supported channel counts.

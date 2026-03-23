@@ -30,18 +30,18 @@ def _get_manager():
 
 @mcp_tool(
     name="skills_list",
-    description="List available skills, optionally filtered by category.",
+    description="list available skills, optionally filtered by category.",
     category="skills",
     version="1.0",
 )
 def skills_list(category: str = "") -> list[dict[str, Any]]:
-    """List available skills, optionally filtered by category.
+    """list available skills, optionally filtered by category.
 
     Args:
         category: Optional category filter (empty string for all).
 
     Returns:
-        List of skill information dictionaries with category, name,
+        list of skill information dictionaries with category, name,
         and metadata.
     """
     mgr = _get_manager()
@@ -81,7 +81,7 @@ def skills_search(query: str) -> list[dict[str, Any]]:
         query: Search query.
 
     Returns:
-        List of matching skills with full data and metadata.
+        list of matching skills with full data and metadata.
     """
     mgr = _get_manager()
     return mgr.search_skills(query)
@@ -144,7 +144,7 @@ def skills_get_categories() -> list[str]:
     """Get all available skill categories.
 
     Returns:
-        List of category names.
+        list of category names.
     """
     mgr = _get_manager()
     return mgr.get_categories()

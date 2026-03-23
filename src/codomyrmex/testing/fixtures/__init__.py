@@ -151,7 +151,7 @@ class FixtureManager:
                 self.cleanup(name)
 
     def list_fixtures(self) -> list[str]:
-        """List all registered fixtures."""
+        """list all registered fixtures."""
         return list(self._definitions.keys())
 
 

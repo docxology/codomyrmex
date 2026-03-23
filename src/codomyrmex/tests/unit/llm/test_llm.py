@@ -61,7 +61,7 @@ class TestLLMConfig:
 
     @pytest.fixture(autouse=True)
     def _setup(self, tmp_path):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.temp_dir = str(tmp_path)
 
     @pytest.fixture(autouse=True)
@@ -291,7 +291,7 @@ class TestModelRunner:
 
     @pytest.fixture(autouse=True)
     def _setup(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         from codomyrmex.llm.ollama.model_runner import ModelRunner
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
@@ -474,7 +474,7 @@ class TestOutputManager:
 
     @pytest.fixture(autouse=True)
     def _setup(self, tmp_path):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.temp_dir = str(tmp_path)
         from codomyrmex.llm.ollama.output_manager import OutputManager
 
@@ -614,7 +614,7 @@ class TestConfigManager:
 
     @pytest.fixture(autouse=True)
     def _setup(self, tmp_path):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.temp_dir = str(tmp_path)
 
     def test_config_manager_initialization(self):
@@ -918,7 +918,7 @@ class TestAsyncModelRunner:
 
     @pytest.fixture(autouse=True)
     def _setup(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         from codomyrmex.llm.ollama.model_runner import ModelRunner
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 

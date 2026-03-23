@@ -155,7 +155,7 @@ class TestInfomaniakDNS:
         )
 
     # =====================================================================
-    # Record Set Operations
+    # Record set Operations
     # =====================================================================
 
     def test_list_records_success(self, stub_openstack_connection):

@@ -67,7 +67,7 @@ class MetricsCollector:
         value: float,
         labels: dict[str, str] | None = None,
     ) -> None:
-        """Set a gauge value."""
+        """set a gauge value."""
         key = self._make_key(name, labels)
         with self._lock:
             self._gauges[key] = value

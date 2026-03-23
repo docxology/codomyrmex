@@ -30,7 +30,7 @@ def terminal_info() -> dict:
 
 @mcp_tool(category="terminal_interface")
 def terminal_list_themes() -> dict:
-    """List available terminal output themes for Codomyrmex rendering.
+    """list available terminal output themes for Codomyrmex rendering.
 
     Returns:
         Dictionary with available themes and their descriptions.

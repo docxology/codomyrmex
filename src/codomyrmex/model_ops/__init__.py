@@ -91,7 +91,7 @@ class Dataset:
         Initialize a dataset.
 
         Args:
-            data: List of data examples (dictionaries)
+            data: list of data examples (dictionaries)
         """
         self.data = data or []
 
@@ -313,7 +313,7 @@ def cli_commands():
     """Return CLI commands for the model_ops module."""
     return {
         "pipelines": {
-            "help": "List ML pipelines",
+            "help": "list ML pipelines",
             "handler": lambda **kwargs: print(
                 "Model Operations Pipelines\n"
                 "  Available pipelines:\n"

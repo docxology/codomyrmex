@@ -110,7 +110,7 @@ class TestMapFeature:
         assert feature.metadata == {}
 
     def test_list_position_converted_to_ndarray(self) -> None:
-        """List position is converted to numpy array via __post_init__."""
+        """list position is converted to numpy array via __post_init__."""
         feature = MapFeature(name="peak", position=[10.0, -20.0])
         assert isinstance(feature.position, np.ndarray)
         assert feature.position[0] == pytest.approx(10.0)
@@ -184,7 +184,7 @@ class TestTerrainMap:
         assert terrain.features == []
 
     def test_list_height_map_converted_to_ndarray(self) -> None:
-        """List height_map is converted to numpy array via __post_init__."""
+        """list height_map is converted to numpy array via __post_init__."""
         data = [[0.1, 0.2], [0.3, 0.4]]
         terrain = TerrainMap(height_map=data)
         assert isinstance(terrain.height_map, np.ndarray)

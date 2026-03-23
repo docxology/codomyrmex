@@ -78,7 +78,7 @@ class DatabaseConnection:
     connection_count: int = 0
 
     def __post_init__(self):
-        """Set defaults based on database type."""
+        """set defaults based on database type."""
         if self.db_type != DatabaseType.SQLITE:
             self.host = self.host or os.getenv("DB_HOST", DEFAULT_POSTGRES_HOST)
             self.port = self.port or int(os.getenv("DB_PORT", DEFAULT_POSTGRES_PORT))
@@ -235,7 +235,7 @@ class DatabaseManager:
         return self.connections.get(name) if name else None
 
     def list_connections(self) -> list[str]:
-        """List all connection names."""
+        """list all connection names."""
         return list(self.connections.keys())
 
     def connect_all(self):

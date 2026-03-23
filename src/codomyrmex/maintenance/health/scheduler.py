@@ -181,7 +181,7 @@ class MaintenanceScheduler:
             now: Current unix timestamp.
 
         Returns:
-            List of due tasks sorted by priority.
+            list of due tasks sorted by priority.
         """
         due = []
         for task in self._tasks.values():

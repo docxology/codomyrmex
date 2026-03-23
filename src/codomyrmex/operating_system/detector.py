@@ -81,7 +81,7 @@ def get_system_info() -> SystemInfo:
 
 
 def list_processes(limit: int = 50) -> list[ProcessInfo]:
-    """List running processes on the current platform."""
+    """list running processes on the current platform."""
     return get_provider().list_processes(limit=limit)
 
 
@@ -91,7 +91,7 @@ def get_disk_usage() -> list[DiskInfo]:
 
 
 def get_services(pattern: str = "") -> list[ServiceInfo]:
-    """List system services, optionally filtered by *pattern*."""
+    """list system services, optionally filtered by *pattern*."""
     return get_provider().get_services(pattern=pattern)
 
 

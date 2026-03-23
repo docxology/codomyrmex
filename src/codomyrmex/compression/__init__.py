@@ -36,7 +36,7 @@ def cli_commands():
     """Return CLI commands for the compression module."""
     return {
         "algorithms": {
-            "help": "List available compression algorithms",
+            "help": "list available compression algorithms",
             "handler": lambda **kwargs: print(
                 "Compression Algorithms:\n"
                 "  - gzip: GNU zip (default, level 1-9)\n"

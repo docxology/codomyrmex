@@ -14,7 +14,7 @@ class RouterMixin:
     """
 
     def list_routers(self) -> list[dict[str, Any]]:
-        """List all routers."""
+        """list all routers."""
         try:
             routers = list(self._conn.network.routers())
             return [

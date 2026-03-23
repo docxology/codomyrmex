@@ -75,7 +75,7 @@ def match_pattern(
 
 @mcp_tool(category="pattern_matching")
 def list_patterns() -> dict[str, Any]:
-    """List all available code patterns that can be detected.
+    """list all available code patterns that can be detected.
 
     Returns both the design patterns from PatternDetector (singleton,
     factory, observer, etc.) and the structural patterns from ASTMatcher

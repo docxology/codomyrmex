@@ -21,7 +21,7 @@ class S3Client(StorageClient):
         self.client = self.session.client("s3", region_name=region_name)
 
     def list_buckets(self) -> list[str]:
-        """List storage buckets."""
+        """list storage buckets."""
         try:
             response = self.client.list_buckets()
             return [bucket["Name"] for bucket in response.get("Buckets", [])]
@@ -86,7 +86,7 @@ class S3Client(StorageClient):
             return False
 
     def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
-        """List objects in a bucket."""
+        """list objects in a bucket."""
         kwargs = {"Bucket": bucket}
         if prefix:
             kwargs["Prefix"] = prefix

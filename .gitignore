@@ -13,7 +13,9 @@ Desktop.ini
 # IDEs and editors
 .vscode/
 .idea/
-.cursor/
+.cursor/*
+!.cursor/skills/
+!.cursor/skills/**
 *.sublime-project
 *.sublime-workspace
 *.komodoproject
@@ -247,17 +249,14 @@ coverage.txt
 .benchmarks/
 fix_*.py
 /.claude
-.desloppify/state-python.json
-.desloppify/review_packet_blind.json
+.desloppify/
 src/codomyrmex/dark/pdf/vendor/dark-pdf
 src/codomyrmex.llm/
 src/codomyrmex/llm/outputs/
 /static_analysis_codeql_1/codeql.db
 3-4-2026.md
-/.desloppify
 cov_config.json
 codomyrmex_inventory.json
-/.desloppify
 /chroma_db
 
 # Generated root-level data files

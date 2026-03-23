@@ -37,7 +37,7 @@ class AccessMixin:
         page_token: str | None = None,
     ) -> PermissionList:
         """
-        List permissions for a doc.
+        list permissions for a doc.
 
         Args:
             doc_id: The doc ID
@@ -112,7 +112,7 @@ class AccessMixin:
             query: Search query (if empty, returns no results)
 
         Returns:
-            Dict with users and groups lists
+            dict with users and groups lists
         """
         params = {"query": query} if query else {}
         path = f"/docs/{self._encode_id(doc_id)}/acl/principals/search"
@@ -170,7 +170,7 @@ class AccessMixin:
         Get all available doc categories.
 
         Returns:
-            Dict with items list of categories
+            dict with items list of categories
         """
         return self._get("/categories")
 

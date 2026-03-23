@@ -97,7 +97,7 @@ class AntigravityToolSkill(_AntigravityClientMixin):
             **kwargs: Parameters to validate.
 
         Returns:
-            List of validation error strings (empty if valid).
+            list of validation error strings (empty if valid).
         """
         from codomyrmex.ide.antigravity.tool_provider import AntigravityToolProvider
 

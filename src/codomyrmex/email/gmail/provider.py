@@ -143,7 +143,7 @@ class GmailProvider(EmailProvider):
             return cls(credentials=creds)
         except Exception as e:
             raise EmailAuthError(
-                "No Gmail credentials found. Set GOOGLE_CLIENT_ID + "
+                "No Gmail credentials found. set GOOGLE_CLIENT_ID + "
                 "GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars, "
                 "or place a token file at ~/.codomyrmex/gmail_token.json, "
                 f"or configure GOOGLE_APPLICATION_CREDENTIALS: {e}"
@@ -265,7 +265,7 @@ class GmailProvider(EmailProvider):
     def list_messages(
         self, query: str = "", max_results: int = 100, user_id: str = "me"
     ) -> list[EmailMessage]:
-        """List messages matching the generic query."""
+        """list messages matching the generic query."""
         try:
             results = (
                 self.service.users()
@@ -368,7 +368,7 @@ class GmailProvider(EmailProvider):
             raise EmailAPIError(f"Failed to modify message labels: {e}") from e
 
     def list_labels(self, user_id: str = "me") -> list[dict[str, str]]:
-        """List all available labels for the user."""
+        """list all available labels for the user."""
         try:
             results = self.service.users().labels().list(userId=user_id).execute()
             return results.get("labels", [])

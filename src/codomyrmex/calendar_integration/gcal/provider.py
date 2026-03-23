@@ -131,7 +131,7 @@ class GoogleCalendar(CalendarProvider):
             return cls(credentials=creds)
         except Exception as e:
             raise CalendarAuthError(
-                "No Google Calendar credentials found. Set GOOGLE_CLIENT_ID + "
+                "No Google Calendar credentials found. set GOOGLE_CLIENT_ID + "
                 "GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars, "
                 "or place a token file at ~/.codomyrmex/gcal_token.json, "
                 f"or configure GOOGLE_APPLICATION_CREDENTIALS: {e}"
@@ -245,7 +245,7 @@ class GoogleCalendar(CalendarProvider):
     def list_events(
         self, time_min: datetime, time_max: datetime, calendar_id: str = "primary"
     ) -> list[CalendarEvent]:
-        """List events between the given start and end times."""
+        """list events between the given start and end times."""
         try:
             events_result = (
                 self.service.events()

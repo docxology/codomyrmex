@@ -87,10 +87,10 @@ def population_fitness_stats(population: list[Meme]) -> dict:
     """Compute summary statistics for a meme population.
 
     Args:
-        population: List of memes.
+        population: list of memes.
 
     Returns:
-        Dict with keys: mean, std, min, max, count.
+        dict with keys: mean, std, min, max, count.
     """
     if not population:
         return {"mean": 0.0, "std": 0.0, "min": 0.0, "max": 0.0, "count": 0}

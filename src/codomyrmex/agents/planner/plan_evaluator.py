@@ -157,7 +157,7 @@ class PlanEvaluator:
         the configured threshold.
 
         Args:
-            scores: List of PlanScore objects across iterations.
+            scores: list of PlanScore objects across iterations.
 
         Returns:
             True if the improvement between last two scores is

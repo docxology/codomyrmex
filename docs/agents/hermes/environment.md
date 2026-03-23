@@ -177,3 +177,10 @@ The `HERMES_HOME` export in your `.zshrc` is **not** available to launchd servic
 - [Security](security.md) — API key hygiene
 - [launchd](launchd.md) — macOS service management
 - [skills.md](skills.md) — `CODOMYRMEX_SKILLS_REGISTRY` and project skill profile
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

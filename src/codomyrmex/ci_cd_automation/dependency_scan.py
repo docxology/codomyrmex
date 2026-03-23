@@ -54,7 +54,7 @@ class ScanReport:
 
     Attributes:
         packages_scanned: Number of packages analyzed.
-        vulnerabilities: List of found vulnerabilities.
+        vulnerabilities: list of found vulnerabilities.
         scan_source: Where the scan data came from.
     """
 

@@ -24,7 +24,7 @@ class GoogleGmailClient(GoogleWorkspaceBase):
         max_results: int = 20,
         user_id: str = "me",
     ) -> list[dict[str, Any]]:
-        """List Gmail messages matching an optional query.
+        """list Gmail messages matching an optional query.
 
         Args:
             query: Gmail search query (e.g., 'from:boss@co.com is:unread').
@@ -32,7 +32,7 @@ class GoogleGmailClient(GoogleWorkspaceBase):
             user_id: User ID (default: 'me' for authenticated user).
 
         Returns:
-            List of message stub dicts (id, threadId).
+            list of message stub dicts (id, threadId).
         """
         params: dict[str, Any] = {"userId": user_id, "maxResults": max_results}
         if query:

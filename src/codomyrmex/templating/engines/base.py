@@ -21,7 +21,7 @@ class TemplateContext:
         return default
 
     def set(self, key: str, value: Any) -> None:
-        """Set a value in the context."""
+        """set a value in the context."""
         self.data[key] = value
 
     def child(self, **kwargs) -> "TemplateContext":
@@ -33,7 +33,7 @@ class TemplateContext:
         return self.get(key)
 
     def __setitem__(self, key: str, value: Any) -> None:
-        """Set item at the given key."""
+        """set item at the given key."""
         self.set(key, value)
 
 

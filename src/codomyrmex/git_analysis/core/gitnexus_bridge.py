@@ -111,7 +111,7 @@ class GitNexusBridge:
         May take several minutes for large repositories.
 
         Returns:
-            Dict with "stdout" and "stderr" from the analyze process, plus
+            dict with "stdout" and "stderr" from the analyze process, plus
             "indexed": True to confirm completion.
         """
         result = self._run("analyze", self.repo_path, timeout=300, json_output=False)
@@ -164,6 +164,6 @@ class GitNexusBridge:
         return self._run("cypher", cypher_query)
 
     def list_repos(self) -> list[dict[str, Any]]:
-        """List all repos indexed in the global ~/.gitnexus registry."""
+        """list all repos indexed in the global ~/.gitnexus registry."""
         result = self._run("list-repos")
         return result.get("repos", result) if isinstance(result, dict) else result

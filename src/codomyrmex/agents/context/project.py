@@ -212,7 +212,7 @@ class ToolSelector:
             task_type: Task type (review, test, document, refactor, etc.).
 
         Returns:
-            List of tool names.
+            list of tool names.
         """
         key = (file_ext.lower().lstrip("."), task_type.lower())
         tools = self._TOOL_MAP.get(key, [])

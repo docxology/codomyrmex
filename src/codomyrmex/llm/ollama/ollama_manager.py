@@ -181,13 +181,13 @@ class OllamaManager:
 
     def list_models(self, force_refresh: bool = False) -> list[OllamaModel]:
         """
-        List all available Ollama models.
+        list all available Ollama models.
 
         Args:
             force_refresh: Force refresh of model cache
 
         Returns:
-            List of available models
+            list of available models
         """
         # Check cache first
         current_time = time.time()

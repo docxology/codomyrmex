@@ -80,7 +80,7 @@ class StrategyLibrary:
         return False
 
     def list_strategies(self) -> list[Strategy]:
-        """List all strategies sorted by success rate (descending)."""
+        """list all strategies sorted by success rate (descending)."""
         return sorted(
             self._strategies.values(),
             key=lambda s: s.success_rate,

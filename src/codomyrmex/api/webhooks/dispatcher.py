@@ -128,7 +128,7 @@ class WebhookDispatcher:
             event: The webhook event to dispatch.
 
         Returns:
-            List of ``DeliveryResult`` objects, one per targeted webhook.
+            list of ``DeliveryResult`` objects, one per targeted webhook.
         """
         targets = self._registry.list_for_event(event.event_type)
         results: list[DeliveryResult] = []
@@ -157,7 +157,7 @@ class WebhookDispatcher:
                 If ``None``, each webhook's own ``max_retries`` is used.
 
         Returns:
-            List of final ``DeliveryResult`` objects, one per targeted
+            list of final ``DeliveryResult`` objects, one per targeted
             webhook. Each result reflects the outcome of the last attempt
             (whether successful or the final failure).
         """

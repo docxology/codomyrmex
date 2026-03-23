@@ -189,7 +189,7 @@ class ClaudeTaskMaster(ClaudeTaskExecutionMixin, ClaudeTaskPlanningMixin):
             **kwargs: Additional API arguments
 
         Returns:
-            Tuple of (response, retry_count)
+            tuple of (response, retry_count)
         """
         client = self._get_client()
 

@@ -37,7 +37,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
             end: End datetime (defaults to now)
         """
         try:
-            # List all instances and sum up resources
+            # list all instances and sum up resources
             servers = list(self._conn.compute.servers(all_projects=False))
 
             total_vcpus = 0
@@ -140,7 +140,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_resources_with_usage(self) -> list[dict[str, Any]]:
-        """List all resources with their current usage metrics."""
+        """list all resources with their current usage metrics."""
         resources = []
 
         # Compute instances

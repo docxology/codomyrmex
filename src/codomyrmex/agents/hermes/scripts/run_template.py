@@ -31,7 +31,7 @@ def render_template(
         variables: Variable values to substitute.
 
     Returns:
-        Dict with ``template_name``, ``system_prompt``, ``rendered_prompt``,
+        dict with ``template_name``, ``system_prompt``, ``rendered_prompt``,
         ``variables_used``.
     """
     lib = TemplateLibrary()
@@ -66,7 +66,7 @@ def run_template(
         model: Ollama model name.
 
     Returns:
-        Dict with keys: ``status``, ``template``, ``content``,
+        dict with keys: ``status``, ``template``, ``content``,
         ``error``, ``elapsed_s``.
     """
     rendered = render_template(template_name, variables)

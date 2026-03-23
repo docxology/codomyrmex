@@ -180,7 +180,7 @@ class TopicStream:
         return await stream.subscribe(handler, topic=topic)
 
     def list_topics(self) -> list[str]:
-        """List all topics."""
+        """list all topics."""
         return list(self._topics.keys())
 
 

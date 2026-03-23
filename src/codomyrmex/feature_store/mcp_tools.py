@@ -50,7 +50,7 @@ def _get_value_type(type_str: str) -> ValueType:
 
 @mcp_tool(
     category="feature_store",
-    description="List all available FeatureType and ValueType enum values.",
+    description="list all available FeatureType and ValueType enum values.",
 )
 def feature_store_list_types() -> dict[str, Any]:
     """Return all supported feature types and value types."""

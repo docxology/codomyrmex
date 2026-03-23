@@ -142,7 +142,7 @@ def test_gmail_send_interview_questions_email() -> None:
     provider = _make_provider()
 
     body = (
-        "Interview Question Set — Behavioral/Technical (Senior Engineer)\n"
+        "Interview Question set — Behavioral/Technical (Senior Engineer)\n"
         "\n"
         "1. Describe a time you had to make a critical architectural decision with\n"
         "   incomplete information. What was the outcome?\n"

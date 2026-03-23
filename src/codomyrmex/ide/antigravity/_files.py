@@ -67,7 +67,7 @@ class AntigravityFilesMixin:
         """Get list of open files.
 
         Returns:
-            List of file paths.
+            list of file paths.
         """
         # Simulated based on artifacts
         if not self._connected:

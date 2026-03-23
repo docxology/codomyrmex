@@ -61,7 +61,7 @@ class AnalysisReport:
     """Aggregated report from anti-pattern analysis.
 
     Attributes:
-        patterns: List of detected anti-patterns.
+        patterns: list of detected anti-patterns.
         files_scanned: Number of files analyzed.
         total_lines: Total lines of code analyzed.
     """

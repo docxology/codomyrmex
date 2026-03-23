@@ -99,7 +99,7 @@ class MetaAgent:
             iterations: Number of iterations.
 
         Returns:
-            List of evolution records.
+            list of evolution records.
         """
         strategies = self.library.list_strategies()
         if not strategies:

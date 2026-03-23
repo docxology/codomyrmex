@@ -29,7 +29,7 @@ def cli_commands():
     """Return CLI commands for the inference_optimization module."""
     return {
         "strategies": {
-            "help": "List available optimization strategies",
+            "help": "list available optimization strategies",
             "handler": lambda **kwargs: print(
                 "Inference Optimization Strategies\n"
                 f"  Quantization types: {', '.join(qt.value if hasattr(qt, 'value') else str(qt) for qt in QuantizationType)}\n"

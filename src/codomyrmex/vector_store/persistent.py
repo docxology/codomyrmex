@@ -39,7 +39,7 @@ class PersistentVectorStore(_SearchMixin, VectorStore):
         self._operation_count = 0
         self._lock = threading.Lock()
 
-        # Set up distance function
+        # set up distance function
         if distance_metric == "cosine":
             self._distance_fn = DistanceMetric.cosine
             self._higher_is_better = True

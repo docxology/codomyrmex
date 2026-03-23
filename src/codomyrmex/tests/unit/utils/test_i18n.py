@@ -179,7 +179,7 @@ class TestTranslator:
         # Add bundle for "en" (no region)
         en_bundle = MessageBundle.from_dict(Locale("en"), {"key": "value"})
         t.add_bundle(en_bundle)
-        # Set locale to "en_US" — exact match fails, falls back to "en"
+        # set locale to "en_US" — exact match fails, falls back to "en"
         t.set_locale(Locale("en", "US"))
         assert t.t("key") == "value"
 

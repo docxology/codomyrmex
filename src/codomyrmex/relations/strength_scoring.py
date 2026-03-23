@@ -222,7 +222,7 @@ class RelationStrengthScorer:
             now: Current timestamp for decay calculation.
 
         Returns:
-            List of StrengthScore objects, sorted by raw_score descending.
+            list of StrengthScore objects, sorted by raw_score descending.
 
         """
         pairs: set[tuple[str, str]] = set()
@@ -248,7 +248,7 @@ class RelationStrengthScorer:
             n: Maximum number of results.
 
         Returns:
-            List of StrengthScore objects sorted descending by raw_score.
+            list of StrengthScore objects sorted descending by raw_score.
 
         """
         partners: set[str] = set()

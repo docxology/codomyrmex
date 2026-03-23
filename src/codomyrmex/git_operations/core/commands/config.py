@@ -51,7 +51,7 @@ def set_config(
     repository_path: str | None = None,
     global_config: bool = False,
 ) -> bool:
-    """Set a Git configuration value."""
+    """set a Git configuration value."""
     if repository_path is None:
         repository_path = os.getcwd()
 

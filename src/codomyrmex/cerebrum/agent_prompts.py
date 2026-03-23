@@ -228,7 +228,7 @@ class AgentPromptSelector:
         return selection
 
     def list_templates(self) -> list[str]:
-        """List available template names."""
+        """list available template names."""
         return self._registry.list()
 
 

@@ -36,7 +36,7 @@ class GeminiCacheMixin:
             raise GeminiError(f"Failed to create cached content: {e}") from e
 
     def list_cached_contents(self) -> list[dict[str, Any]]:
-        """List all cached contents."""
+        """list all cached contents."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:

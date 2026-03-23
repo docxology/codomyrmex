@@ -56,7 +56,7 @@ class TestAgentConfigSimple:
         original_log = os.environ.get("AGENT_LOG_LEVEL")
 
         try:
-            # Set environment variables
+            # set environment variables
             os.environ["JULES_COMMAND"] = "custom-jules"
             os.environ["JULES_TIMEOUT"] = "45"
             os.environ["CLAUDE_MODEL"] = "custom-model"
@@ -123,7 +123,7 @@ class TestAgentConfigSimple:
         original_logging = os.environ.get("AGENT_ENABLE_LOGGING")
 
         try:
-            # Set environment variable
+            # set environment variable
             os.environ["AGENT_ENABLE_LOGGING"] = "false"
 
             # Reset config to pick up new environment variable
@@ -255,7 +255,7 @@ class TestAgentConfigComplex:
 
     def test_configuration_persistence_and_reset(self):
         """Test configuration persistence and reset."""
-        # Set initial config
+        # set initial config
         config1 = AgentConfig(default_timeout=50)
         set_config(config1)
 
@@ -294,7 +294,7 @@ class TestAgentConfigComplex:
         original_claude = os.environ.get("CLAUDE_TIMEOUT")
 
         try:
-            # Set environment variables
+            # set environment variables
             os.environ["JULES_TIMEOUT"] = "100"
             os.environ["CLAUDE_TIMEOUT"] = "200"
 

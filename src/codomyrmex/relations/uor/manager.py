@@ -99,7 +99,7 @@ class EntityManager:
             entity_type: Optional type filter (exact match).
 
         Returns:
-            List of matching entities.
+            list of matching entities.
 
         """
         q = query.lower()
@@ -131,7 +131,7 @@ class EntityManager:
             threshold: Minimum fidelity score (0.0 to 1.0).
 
         Returns:
-            List of (entity, fidelity) tuples, sorted by descending fidelity.
+            list of (entity, fidelity) tuples, sorted by descending fidelity.
             Excludes the reference entity itself.
 
         """
@@ -164,7 +164,7 @@ class EntityManager:
         """Find groups of entities with identical content hashes.
 
         Returns:
-            List of groups, where each group contains 2+ entities
+            list of groups, where each group contains 2+ entities
             sharing the same content hash.
 
         """

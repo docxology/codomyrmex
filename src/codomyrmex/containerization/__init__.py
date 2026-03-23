@@ -92,7 +92,7 @@ def cli_commands():
     """Return CLI commands for the containerization module."""
     return {
         "images": {
-            "help": "List container images",
+            "help": "list container images",
             "handler": lambda **kwargs: print(
                 "Container Images:\n"
                 + (

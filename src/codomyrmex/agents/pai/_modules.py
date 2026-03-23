@@ -31,7 +31,7 @@ class PAIModulesMixin:
     # ==================================================================
 
     def list_skills(self) -> list[PAISkillInfo]:
-        """List all installed PAI skill packs.
+        """list all installed PAI skill packs.
 
         Scans ``~/.claude/skills/`` for subdirectories containing
         a ``SKILL.md`` file (the PAI skill marker).
@@ -78,7 +78,7 @@ class PAIModulesMixin:
     # ==================================================================
 
     def list_tools(self) -> list[PAIToolInfo]:
-        """List all PAI TypeScript tools in ``Tools/``."""
+        """list all PAI TypeScript tools in ``Tools/``."""
         tools_dir = self.config.tools_dir
         if not tools_dir.is_dir():
             return []
@@ -111,7 +111,7 @@ class PAIModulesMixin:
     # ==================================================================
 
     def list_hooks(self) -> list[PAIHookInfo]:
-        """List all PAI hooks in ``hooks/``."""
+        """list all PAI hooks in ``hooks/``."""
         hooks_dir = self.config.hooks_dir
         if not hooks_dir.is_dir():
             return []
@@ -142,7 +142,7 @@ class PAIModulesMixin:
         return result
 
     def list_active_hooks(self) -> list[PAIHookInfo]:
-        """List only non-archived (active) hooks."""
+        """list only non-archived (active) hooks."""
         return [h for h in self.list_hooks() if not h.is_archived]
 
     def get_hook_info(self, name: str) -> PAIHookInfo | None:
@@ -157,7 +157,7 @@ class PAIModulesMixin:
     # ==================================================================
 
     def list_agents(self) -> list[PAIAgentInfo]:
-        """List all PAI agent personality definitions."""
+        """list all PAI agent personality definitions."""
         agents_dir = self.config.agents_dir
         if not agents_dir.is_dir():
             return []
@@ -194,7 +194,7 @@ class PAIModulesMixin:
     # ==================================================================
 
     def list_memory_stores(self) -> list[PAIMemoryStore]:
-        """List all PAI memory stores (subdirectories of ``MEMORY/``)."""
+        """list all PAI memory stores (subdirectories of ``MEMORY/``)."""
         memory_dir = self.config.memory_dir
         if not memory_dir.is_dir():
             return []
@@ -232,7 +232,7 @@ class PAIModulesMixin:
     # ==================================================================
 
     def get_telos_files(self) -> list[str]:
-        """List TELOS identity files from the USER/ directory."""
+        """list TELOS identity files from the USER/ directory."""
         telos_dir = self.config.telos_dir
         if not telos_dir.is_dir():
             return []

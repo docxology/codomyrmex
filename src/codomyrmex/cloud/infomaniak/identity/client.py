@@ -65,7 +65,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_projects(self) -> list[dict[str, Any]]:
-        """List accessible projects."""
+        """list accessible projects."""
         try:
             projects = list(self._conn.identity.projects())
             return [
@@ -105,7 +105,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_application_credentials(self) -> list[dict[str, Any]]:
-        """List application credentials for the current user."""
+        """list application credentials for the current user."""
         try:
             user_id = self._conn.current_user_id
             creds = list(self._conn.identity.application_credentials(user=user_id))
@@ -138,7 +138,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
             name: Credential name
             description: Optional description
             expires_at: Expiration datetime (ISO format)
-            roles: List of role names (defaults to all user roles)
+            roles: list of role names (defaults to all user roles)
             unrestricted: Allow use for all operations including credential creation
 
         Returns:
@@ -210,7 +210,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_roles(self) -> list[dict[str, Any]]:
-        """List available roles."""
+        """list available roles."""
         try:
             roles = list(self._conn.identity.roles())
             return [
@@ -222,7 +222,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
             return []
 
     def list_user_roles(self, project_id: str | None = None) -> list[dict[str, Any]]:
-        """List roles assigned to the current user."""
+        """list roles assigned to the current user."""
         try:
             user_id = self._conn.current_user_id
             project_id = project_id or self._conn.current_project_id
@@ -246,7 +246,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_ec2_credentials(self) -> list[dict[str, Any]]:
-        """List EC2-style credentials (used for S3 access)."""
+        """list EC2-style credentials (used for S3 access)."""
         try:
             user_id = self._conn.current_user_id
             creds = list(self._conn.identity.credentials(user_id=user_id))

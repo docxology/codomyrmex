@@ -27,7 +27,7 @@ class ChainStep:
 
     Attributes:
         tool_name: Name of the tool to invoke (must exist in the registry).
-        input_mapping: Dict mapping tool input keys to keys in the
+        input_mapping: dict mapping tool input keys to keys in the
             accumulated chain context. If empty, the entire context
             is passed as input.
 

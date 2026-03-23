@@ -358,7 +358,7 @@ class PaperclipClient(CLIAgentBase):
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
     def list_companies(self) -> dict[str, Any]:
-        """List all companies in the Paperclip instance."""
+        """list all companies in the Paperclip instance."""
         try:
             result = self._execute_command(
                 args=["company", "list", "--json"], timeout=15
@@ -374,7 +374,7 @@ class PaperclipClient(CLIAgentBase):
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
     def list_agents(self, company_id: str) -> dict[str, Any]:
-        """List agents in a company.
+        """list agents in a company.
 
         Args:
             company_id: Company identifier.

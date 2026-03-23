@@ -136,7 +136,7 @@ class ExamplesValidator:
         Run all validation checks.
 
         Args:
-            types: List of validation types to run
+            types: list of validation types to run
             verbose: Whether to print verbose output
             fix: Whether to attempt automatic fixes
 

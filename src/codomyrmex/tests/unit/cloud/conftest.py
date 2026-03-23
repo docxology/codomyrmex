@@ -46,7 +46,7 @@ def stub_s3_client():
 
 @pytest.fixture
 def infomaniak_openstack_env():
-    """Set standard env vars for OpenStack connections."""
+    """set standard env vars for OpenStack connections."""
     keys = [
         "INFOMANIAK_APP_CREDENTIAL_ID",
         "INFOMANIAK_APP_CREDENTIAL_SECRET",
@@ -68,7 +68,7 @@ def infomaniak_openstack_env():
 
 @pytest.fixture
 def infomaniak_s3_env():
-    """Set standard env vars for S3 connections."""
+    """set standard env vars for S3 connections."""
     keys = [
         "INFOMANIAK_S3_ACCESS_KEY",
         "INFOMANIAK_S3_SECRET_KEY",

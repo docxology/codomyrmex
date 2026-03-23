@@ -15,7 +15,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 def api_list_endpoints(
     source_path: str = ".",
 ) -> dict[str, Any]:
-    """List API endpoints discovered from source code.
+    """list API endpoints discovered from source code.
 
     Scans the given source path for API endpoint definitions
     using the documentation generator's code analysis.

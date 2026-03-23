@@ -177,5 +177,5 @@ class FeatureService:
         return self.get_features(entity_id, group.feature_names)
 
     def list_groups(self) -> list[str]:
-        """List registered feature groups."""
+        """list registered feature groups."""
         return list(self._groups.keys())

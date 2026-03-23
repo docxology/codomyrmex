@@ -30,7 +30,7 @@ def _validate_github_token(token: str | None) -> str:
 
     if not token:
         raise GitHubAPIError(
-            "GitHub token is required. Set GITHUB_TOKEN environment variable or pass token parameter."
+            "GitHub token is required. set GITHUB_TOKEN environment variable or pass token parameter."
         )
 
     return token
@@ -56,7 +56,7 @@ async def _async_request(
         timeout: Request timeout in seconds
 
     Returns:
-        Tuple of (status_code, response_data)
+        tuple of (status_code, response_data)
 
     Raises:
         GitHubAPIError: If network error occurs

@@ -124,7 +124,7 @@ class EventReplayer:
             result_b: Second replay result.
 
         Returns:
-            Dict with comparison details.
+            dict with comparison details.
         """
         outputs_match = result_a.handler_outputs == result_b.handler_outputs
         return {

@@ -42,7 +42,7 @@ class BPETokenizer:
         4. Repeat until vocab_size reached
 
         Args:
-            texts: List of training strings.
+            texts: list of training strings.
             vocab_size: Target vocabulary size (overrides __init__ value).
         """
         if vocab_size:
@@ -97,7 +97,7 @@ class BPETokenizer:
             text: Input string to tokenize.
 
         Returns:
-            List of integer token IDs.
+            list of integer token IDs.
 
         Raises:
             RuntimeError: If tokenizer has not been trained.
@@ -122,7 +122,7 @@ class BPETokenizer:
         """Decode token IDs back to text.
 
         Args:
-            token_ids: List of integer token IDs.
+            token_ids: list of integer token IDs.
 
         Returns:
             Reconstructed text string.
@@ -148,7 +148,7 @@ class BPETokenizer:
             texts: Corpus of training strings.
 
         Returns:
-            Dict mapping word representations to their frequency counts.
+            dict mapping word representations to their frequency counts.
         """
         freqs: dict[str, int] = defaultdict(int)
         for text in texts:
@@ -170,7 +170,7 @@ class BPETokenizer:
             word_freqs: Frequency of each word in corpus.
 
         Returns:
-            Dict mapping (token_a, token_b) pairs to their total frequency.
+            dict mapping (token_a, token_b) pairs to their total frequency.
         """
         pair_freqs: dict[tuple[str, str], int] = defaultdict(int)
         for word, splits in word_splits.items():
@@ -219,10 +219,10 @@ class BPETokenizer:
         frequent pairs first). This is the standard BPE application algorithm.
 
         Args:
-            chars: List of character tokens (including '</w>' marker).
+            chars: list of character tokens (including '</w>' marker).
 
         Returns:
-            List of merged tokens after all applicable rules are applied.
+            list of merged tokens after all applicable rules are applied.
         """
         word = list(chars)
         for merge in self.merges:

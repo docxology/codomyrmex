@@ -160,7 +160,7 @@ class VideoAnalyzer:
             video_path: Path to video file
 
         Returns:
-            Tuple of (width, height)
+            tuple of (width, height)
         """
         info = self.get_info(video_path)
         return (info.width, info.height)

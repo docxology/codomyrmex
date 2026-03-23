@@ -1,6 +1,6 @@
 # Agent Documentation
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -8,19 +8,21 @@ Documentation for all AI agent integrations in the Codomyrmex ecosystem. This di
 
 ## Agent Index
 
-### CLI-based Agents
+### CLI-based Agents (12)
 
 | Agent | Documentation | Description |
 |:---|:---|:---|
 | **Jules** | [jules/](jules/) | Google Jules CLI, swarm orchestration |
 | **Gemini** | [gemini/](gemini/) | Google Gemini CLI, OAuth/API key, @ file ops |
-| **Hermes** | [hermes/](hermes/) | Nous Research, gateway, Telegram/WhatsApp; 19 docs incl. [skills.md](hermes/skills.md) (Codomyrmex skill registry / MCP preload) |
+| **Hermes** | [hermes/](hermes/) | Nous Research, gateway, Telegram/WhatsApp; index [hermes/AGENTS.md](hermes/AGENTS.md), [skills.md](hermes/skills.md) (Codomyrmex skill registry / MCP preload) |
 | **OpenCode** | [opencode/](opencode/) | Open-source coding agent |
 | **Mistral Vibe** | [mistral_vibe/](mistral_vibe/) | Mistral AI vibe CLI |
 | **Every Code** | [every_code/](every_code/) | Multi-agent orchestration, /plan /solve /code |
 | **OpenClaw** | [openclaw/](openclaw/) | Open-source agentic CLI |
 | **agenticSeek** | [agentic_seek/](agentic_seek/) | Autonomous browser-capable agent |
 | **OpenFang** | [openfang/](openfang/) | Security-conscious agent framework |
+| **Open Gauss** | [open_gauss/](open_gauss/) | Gauss CLI, gateway, skills, formal-math / agent workflows (upstream OpenGauss fork) |
+| **Paperclip** | [paperclip/](paperclip/) | Paperclip orchestration CLI and API clients |
 | **Pi** | [pi/](pi/) | Pi coding agent via RPC |
 
 ### API-based Agents

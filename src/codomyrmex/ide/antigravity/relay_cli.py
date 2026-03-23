@@ -14,7 +14,7 @@ Usage::
     # View history
     codomyrmex relay history --channel collab-1 --limit 20
 
-    # List channels
+    # list channels
     codomyrmex relay list
 
     # Stop endpoint
@@ -105,7 +105,7 @@ def cmd_history(args: argparse.Namespace) -> None:
 
 
 def cmd_list(args: argparse.Namespace) -> None:
-    """List all relay channels."""
+    """list all relay channels."""
     channels = AgentRelay.list_channels()
     if not channels:
         print("No relay channels found.")
@@ -176,7 +176,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_hist.set_defaults(func=cmd_history)
 
     # list
-    p_list = sub.add_parser("list", help="List channels")
+    p_list = sub.add_parser("list", help="list channels")
     p_list.set_defaults(func=cmd_list)
 
     # stats

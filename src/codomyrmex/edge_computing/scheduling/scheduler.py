@@ -94,7 +94,7 @@ class EdgeScheduler:
         return self._jobs.get(job_id)
 
     def list_jobs(self, enabled_only: bool = False) -> list[ScheduledJob]:
-        """List scheduled jobs."""
+        """list scheduled jobs."""
         jobs = list(self._jobs.values())
         if enabled_only:
             jobs = [j for j in jobs if j.enabled]

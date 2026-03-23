@@ -134,7 +134,7 @@ class StaticAnalyzer:
             analysis_types: Types of analysis to perform
 
         Returns:
-            List of analysis results
+            list of analysis results
         """
         if analysis_types is None:
             analysis_types = [
@@ -261,7 +261,7 @@ class StaticAnalyzer:
         Analyze an entire project.
 
         Args:
-            target_paths: List of paths to analyze (defaults to project root)
+            target_paths: list of paths to analyze (defaults to project root)
             analysis_types: Types of analysis to perform
             exclude_patterns: Patterns to exclude from analysis
 

@@ -42,7 +42,7 @@ class PropagationTrace:
     """Detailed log of a single propagation simulation run.
 
     Attributes:
-        time_steps: List of time points.
+        time_steps: list of time points.
         infected_counts: Number of infected nodes at each step.
         susceptible_counts: Number of susceptible nodes at each step.
         recovered_counts: Number of recovered nodes at each step.

@@ -71,7 +71,7 @@ class TestAdvancedGitOperations:
 
     @pytest.fixture(autouse=True)
     def setup_dirs(self, tmp_path):
-        """Set up test fixtures for each test."""
+        """set up test fixtures for each test."""
         self.test_dir = str(tmp_path)
         self.repo_dir = os.path.join(self.test_dir, "test_repo")
         os.makedirs(self.repo_dir, exist_ok=True)

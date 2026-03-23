@@ -115,7 +115,7 @@ class ToolCallValidator:
     def __init__(self, tool_schemas: dict[str, dict[str, Any]]):
         """
         Args:
-            tool_schemas: Dict mapping tool names to their input schemas
+            tool_schemas: dict mapping tool names to their input schemas
         """
         self.tool_schemas = tool_schemas
 

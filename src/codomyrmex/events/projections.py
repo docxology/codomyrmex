@@ -53,7 +53,7 @@ class StreamProjection:
             key_fn: Function to extract key from event.
 
         Returns:
-            Dict of key → latest event.
+            dict of key → latest event.
         """
         events = self._store.read_by_topic(topic)
         latest: dict[str, StreamEvent] = {}
@@ -96,7 +96,7 @@ class StreamProjection:
             key_fn: Key extraction function.
 
         Returns:
-            Dict of key → list of events.
+            dict of key → list of events.
         """
         events = self._store.read_by_topic(topic)
         groups: dict[str, list[StreamEvent]] = defaultdict(list)
@@ -116,7 +116,7 @@ class StreamProjection:
             value_fn: Extract numeric value from event.
 
         Returns:
-            List of cumulative sums.
+            list of cumulative sums.
         """
         events = self._store.read_by_topic(topic)
         cumulative: list[float] = []

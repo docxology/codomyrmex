@@ -83,7 +83,7 @@ class LogRotationManager:
         return False
 
     def list_handlers(self) -> list[str]:
-        """List all managed handler keys (logger:filename)."""
+        """list all managed handler keys (logger:filename)."""
         return sorted(self._handlers.keys())
 
     # ── Disk monitoring ─────────────────────────────────────────────
@@ -92,7 +92,7 @@ class LogRotationManager:
         """Calculate disk usage of the log directory.
 
         Returns:
-            Dict with total_bytes, file_count, and largest_file.
+            dict with total_bytes, file_count, and largest_file.
         """
         log_path = Path(self.log_dir)
         if not log_path.exists():
@@ -112,7 +112,7 @@ class LogRotationManager:
         }
 
     def log_files(self) -> list[dict[str, Any]]:
-        """List all files in the log directory with metadata."""
+        """list all files in the log directory with metadata."""
         log_path = Path(self.log_dir)
         if not log_path.exists():
             return []

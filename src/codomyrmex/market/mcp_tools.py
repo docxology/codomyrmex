@@ -97,10 +97,10 @@ def market_demand_stats(category: str) -> dict[str, Any]:
 
 @mcp_tool(
     category="market",
-    description="List all available categories with pending demand in the aggregator.",
+    description="list all available categories with pending demand in the aggregator.",
 )
 def market_list_categories() -> dict[str, Any]:
-    """List demand categories tracked by the aggregator.
+    """list demand categories tracked by the aggregator.
 
     Returns:
         dict with keys: status, categories, count

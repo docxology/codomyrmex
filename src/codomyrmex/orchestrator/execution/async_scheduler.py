@@ -204,7 +204,7 @@ class AsyncScheduler:
         return self._jobs.get(job_id)
 
     def list_jobs(self, status: AsyncJobStatus | None = None) -> list[AsyncJob]:
-        """List jobs, optionally filtered by status."""
+        """list jobs, optionally filtered by status."""
         jobs = list(self._jobs.values())
         if status is not None:
             jobs = [j for j in jobs if j.status == status]

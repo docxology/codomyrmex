@@ -26,10 +26,10 @@ def _get_genome():
 
 @mcp_tool(
     category="evolutionary_ai",
-    description="List available genetic operators (mutation, crossover, selection strategies).",
+    description="list available genetic operators (mutation, crossover, selection strategies).",
 )
 def evolutionary_ai_list_operators() -> dict[str, Any]:
-    """List all available genetic operators.
+    """list all available genetic operators.
 
     Returns:
         dict with keys: status, mutation_operators, crossover_operators,

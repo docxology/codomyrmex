@@ -33,7 +33,7 @@ class CyberneticEngine:
         """Update control outputs based on current state and setpoints.
 
         Returns:
-            Dict of control signals (adjustments) for each variable.
+            dict of control signals (adjustments) for each variable.
         """
         now = time.time()
         dt = now - self._last_tick

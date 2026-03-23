@@ -17,7 +17,7 @@ class CellularAutomaton:
         ]
 
     def set_cell(self, x: int, y: int, val: int) -> None:
-        """Set a specific cell (wraps toroidally)."""
+        """set a specific cell (wraps toroidally)."""
         self.grid[y % self.height][x % self.width] = val
 
     def get_cell(self, x: int, y: int) -> int:

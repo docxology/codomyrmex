@@ -83,11 +83,11 @@ class ParallelCompressor:
         """Compress a list of data blobs in parallel.
 
         Args:
-            data_list: List of byte strings to compress.
+            data_list: list of byte strings to compress.
             on_progress: Optional callback(completed, total) for progress tracking.
 
         Returns:
-            List of compressed byte strings (same order as input).
+            list of compressed byte strings (same order as input).
         """
         start = time.time()
         compressor = Compressor(self.format)
@@ -163,7 +163,7 @@ class ParallelCompressor:
             on_progress: Optional progress callback.
 
         Returns:
-            List of compressed chunks. Decompress and concatenate to recover.
+            list of compressed chunks. Decompress and concatenate to recover.
         """
         chunks = [
             data[i : i + self.chunk_size] for i in range(0, len(data), self.chunk_size)

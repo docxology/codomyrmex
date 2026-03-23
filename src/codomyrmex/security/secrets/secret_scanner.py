@@ -91,7 +91,7 @@ class SecretScanner:
             file_path: File path for reporting.
 
         Returns:
-            List of SecretFinding objects.
+            list of SecretFinding objects.
         """
         findings: list[SecretFinding] = []
         lines = source.splitlines()

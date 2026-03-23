@@ -91,7 +91,7 @@ class RenderPipeline:
     def _apply_material(self, material) -> None:
         """Apply material properties."""
         logger.debug("Applying material: %s", material.name)
-        # Set shader uniforms for material properties
+        # set shader uniforms for material properties
         # gl.uniform3f(loc, material.diffuse_color)
 
     def _render_geometry(self, obj: Object3D) -> None:

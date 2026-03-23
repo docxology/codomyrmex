@@ -153,7 +153,7 @@ class AsyncParallelRunner:
         Parameters
         ----------
         tasks:
-            List of ``(name, coroutine_func, args)`` triples.
+            list of ``(name, coroutine_func, args)`` triples.
 
         Returns
         -------

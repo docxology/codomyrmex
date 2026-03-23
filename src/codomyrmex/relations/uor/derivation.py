@@ -120,7 +120,7 @@ class DerivationTracker:
             entity_id: The entity to query.
 
         Returns:
-            List of derivation records in chronological order.
+            list of derivation records in chronological order.
 
         """
         return [r for r in self._records if r.entity_id == entity_id]

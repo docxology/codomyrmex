@@ -23,7 +23,7 @@ def balance_table(accounts: list[Account]) -> str:
     """Generate a text table of account balances.
 
     Args:
-        accounts: List of Account objects.
+        accounts: list of Account objects.
 
     Returns:
         Formatted multi-line table string.

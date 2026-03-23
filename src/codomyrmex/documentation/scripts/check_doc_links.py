@@ -31,7 +31,7 @@ def extract_links(content: str, file_path: Path) -> list[tuple[str, int, str]]:
     """
     Extract all markdown links from content.
 
-    Returns: List of tuples (link_text, line_number, link_url)
+    Returns: list of tuples (link_text, line_number, link_url)
     """
     links = []
 

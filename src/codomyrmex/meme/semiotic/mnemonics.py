@@ -11,7 +11,7 @@ class MnemonicDevice:
 
     Attributes:
         name: Identifier for the device.
-        anchors: List of stable mental anchors (loci).
+        anchors: list of stable mental anchors (loci).
         associations: Map of anchors to information items.
         encoding_strength: Estimated retention strength (0-1).
     """
@@ -29,8 +29,8 @@ def build_memory_palace(items: list[str], locations: list[str]) -> MnemonicDevic
     familiar spatial locations.
 
     Args:
-        items: List of information items to store.
-        locations: List of spatial anchors (e.g. rooms in a house).
+        items: list of information items to store.
+        locations: list of spatial anchors (e.g. rooms in a house).
 
     Returns:
         MnemonicDevice object linking items to locations.

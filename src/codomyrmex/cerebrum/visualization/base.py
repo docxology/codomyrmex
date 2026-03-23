@@ -87,7 +87,7 @@ class BaseVisualizer(ABC):
             **kwargs: Additional subplot parameters
 
         Returns:
-            Tuple of (figure, axes)
+            tuple of (figure, axes)
         """
         figsize = kwargs.pop("figsize", self.figure_size)
         dpi = kwargs.pop("dpi", self.dpi)
@@ -187,7 +187,7 @@ class BaseNetworkVisualizer(BaseVisualizer):
             color_map: Optional custom color mapping
 
         Returns:
-            List of colors for each node
+            list of colors for each node
         """
         if color_map is None:
             # Use theme colors
@@ -227,7 +227,7 @@ class BaseNetworkVisualizer(BaseVisualizer):
             max_size: Maximum node size
 
         Returns:
-            List of sizes for each node
+            list of sizes for each node
         """
         if metric == "degree":
             importances = dict(G.degree())
@@ -277,7 +277,7 @@ class BaseNetworkVisualizer(BaseVisualizer):
             max_width: Maximum edge width
 
         Returns:
-            List of widths for each edge
+            list of widths for each edge
         """
         weights = []
         for u, v in G.edges():
@@ -488,7 +488,7 @@ class BaseHeatmapVisualizer(BaseVisualizer):
             **kwargs: Additional imshow parameters
 
         Returns:
-            Tuple of (figure, axes)
+            tuple of (figure, axes)
         """
         if ax is None:
             fig, ax = self.create_figure()
@@ -497,7 +497,7 @@ class BaseHeatmapVisualizer(BaseVisualizer):
 
         im = ax.imshow(data, cmap=colormap, aspect="auto", **kwargs)
 
-        # Set ticks and labels
+        # set ticks and labels
         ax.set_xticks(np.arange(len(col_labels)))
         ax.set_yticks(np.arange(len(row_labels)))
         ax.set_xticklabels(col_labels, rotation=45, ha="right")

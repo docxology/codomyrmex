@@ -23,7 +23,7 @@ class FeedbackConfig:
         retry_on_partial_failure: If True, re-plan when some (but not
             all) workflow steps fail.
         memory_ttl: TTL in seconds for feedback memory entries.
-            Set to 0 for no expiration.
+            set to 0 for no expiration.
         memory_tag_prefix: Prefix for memory tags to namespace
             feedback entries.
         weight_success_rate: Weight for success rate in plan scoring.

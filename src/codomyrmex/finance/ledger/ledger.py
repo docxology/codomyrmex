@@ -192,7 +192,7 @@ class Ledger:
         An optional ``description`` key is forwarded to the entry.
 
         Args:
-            entries: List of entry dicts.
+            entries: list of entry dicts.
             description: Human-readable description of the transaction.
 
         Returns:

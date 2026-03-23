@@ -152,7 +152,7 @@ class ModuleIntrospector:
                     if isinstance(node, ast.Assign):
                         for target in node.targets:
                             if isinstance(target, ast.Name) and target.id == "__all__":
-                                if isinstance(node.value, ast.List):
+                                if isinstance(node.value, ast.list):
                                     info.exports = [
                                         elt.value
                                         for elt in node.value.elts
@@ -177,7 +177,7 @@ class ModuleIntrospector:
         """Scan all modules under src/codomyrmex/.
 
         Returns:
-            Dict with ``total_modules``, ``total_loc``, ``total_files``,
+            dict with ``total_modules``, ``total_loc``, ``total_files``,
             ``health_distribution``, and ``modules`` list.
         """
         start = time.monotonic()
@@ -233,7 +233,7 @@ class ModuleIntrospector:
             by: Metric to sort by (``loc``, ``file_count``, ``classes``).
 
         Returns:
-            List of module dicts sorted descending.
+            list of module dicts sorted descending.
         """
         report = self.scan_all()
         return sorted(report["modules"], key=lambda m: m.get(by, 0), reverse=True)[:n]

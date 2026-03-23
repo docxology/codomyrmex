@@ -218,7 +218,7 @@ class PrismEngine:
             b: Second value (integer or byte tuple).
 
         Returns:
-            Dict with keys: difference_stratum, total_difference,
+            dict with keys: difference_stratum, total_difference,
             max_difference, fidelity.
 
         """

@@ -75,7 +75,7 @@ class PromptTemplate:
         Validate that all required variables are provided.
 
         Returns:
-            List of missing variable names (empty if all present).
+            list of missing variable names (empty if all present).
         """
         return [v for v in self.variables if v not in kwargs]
 
@@ -187,7 +187,7 @@ class TemplateRegistry:
 
     def list(self) -> builtins.list[str]:
         """
-        List all registered template names.
+        list all registered template names.
 
         Returns:
             Sorted list of template names.
@@ -196,10 +196,10 @@ class TemplateRegistry:
 
     def list_templates(self) -> builtins.list[PromptTemplate]:
         """
-        List all registered templates.
+        list all registered templates.
 
         Returns:
-            List of PromptTemplate objects sorted by name.
+            list of PromptTemplate objects sorted by name.
         """
         return [self._templates[name] for name in sorted(self._templates.keys())]
 
@@ -226,7 +226,7 @@ class TemplateRegistry:
             query: Search term to match against template names and metadata.
 
         Returns:
-            List of matching PromptTemplate objects.
+            list of matching PromptTemplate objects.
         """
         query_lower = query.lower()
         results = []
@@ -243,7 +243,7 @@ class TemplateRegistry:
         Export all templates as a list of dictionaries.
 
         Returns:
-            List of template dictionaries.
+            list of template dictionaries.
         """
         return [t.to_dict() for t in self.list_templates()]
 
@@ -254,7 +254,7 @@ class TemplateRegistry:
         Import templates from a list of dictionaries.
 
         Args:
-            data: List of template dictionaries.
+            data: list of template dictionaries.
             overwrite: If True, overwrite existing templates.
 
         Returns:

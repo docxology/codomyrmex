@@ -13,7 +13,7 @@ def semantic_router_route(
 
     Args:
         text: Input text to classify
-        routes: List of route dicts, each with 'name' and 'utterances' keys.
+        routes: list of route dicts, each with 'name' and 'utterances' keys.
                 Default provides weather/greeting/help routes.
         embedding_dim: Dimension of the embedding vectors
 

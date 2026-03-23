@@ -1,45 +1,22 @@
 # Codomyrmex Agents — docs/project
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `architecture-overview.md` – Project file
-- `architecture.md` – Project file
-- `codebase_audit.md` – Project file
-- `contributing.md` – Project file
-- `docs_audit.md` – Project file
+Agent coordination for project-level standards: architecture narratives, contributing workflow, and audit artifacts.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Contents (by file)
 
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-- `architecture-overview.md`
-- `architecture.md`
-- `codebase_audit.md`
-- `contributing.md`
-- `docs_audit.md`
+| File | Role |
+|:---|:---|
+| [contributing.md](contributing.md) | PR process, deps policy, optional local review/SARIF pointers |
+| [architecture.md](architecture.md), [architecture-overview.md](architecture-overview.md) | System design |
+| [codebase_audit.md](codebase_audit.md), [docs_audit.md](docs_audit.md) | Audit logs |
+| [README.md](README.md) | Section index |
+| [SPEC.md](SPEC.md), [PAI.md](PAI.md) | Local specs / PAI notes |
 
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+## Navigation
 
-## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
-
-## Navigation Links
-- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+- **Parent**: [docs/AGENTS.md](../AGENTS.md), [docs/README.md](../README.md)
+- **Project root**: [README.md](../../README.md), [AGENTS.md](../../AGENTS.md)

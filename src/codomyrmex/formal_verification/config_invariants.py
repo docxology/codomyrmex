@@ -74,7 +74,7 @@ class ConfigInvariantChecker:
         """Resolve a config key through the cascade.
 
         Returns:
-            Tuple of (resolved_value, source_layer).
+            tuple of (resolved_value, source_layer).
         """
         # Layer 1: Environment variable (highest priority)
         env_key = f"{self._env_prefix}{key.upper()}"
@@ -123,7 +123,7 @@ class ConfigInvariantChecker:
         Resolves each key twice and asserts identical results.
 
         Returns:
-            List of :class:`InvariantResult` for each config key.
+            list of :class:`InvariantResult` for each config key.
         """
         results: list[InvariantResult] = []
         keys = sorted(self._get_all_keys())
@@ -157,7 +157,7 @@ class ConfigInvariantChecker:
         """Verify that env vars override YAML which overrides defaults.
 
         Returns:
-            List of :class:`InvariantResult` for precedence checks.
+            list of :class:`InvariantResult` for precedence checks.
         """
         results: list[InvariantResult] = []
 
@@ -211,7 +211,7 @@ class ConfigInvariantChecker:
         """Return a summary of all invariant checks.
 
         Returns:
-            Dict with ``total_keys``, ``determinism_pass``, ``precedence_pass``.
+            dict with ``total_keys``, ``determinism_pass``, ``precedence_pass``.
         """
         det = self.verify_determinism()
         prec = self.verify_precedence()

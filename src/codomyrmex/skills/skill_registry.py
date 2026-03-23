@@ -108,7 +108,7 @@ class SkillRegistry:
         Get all available skill categories.
 
         Returns:
-            List of category names
+            list of category names
         """
         if not self._index:
             self.build_index()
@@ -141,7 +141,7 @@ class SkillRegistry:
             case_sensitive: Whether search is case sensitive
 
         Returns:
-            List of matching skill metadata
+            list of matching skill metadata
         """
         if not self._metadata:
             self.build_index()
@@ -178,7 +178,7 @@ class SkillRegistry:
             query: Search query
 
         Returns:
-            List of matching skills with full data
+            list of matching skills with full data
         """
         matches = self.search_by_pattern(query, case_sensitive=False)
         results = []

@@ -165,7 +165,7 @@ class CodeReviewer(
             analysis_types: Types of analysis to perform
 
         Returns:
-            List of analysis results
+            list of analysis results
         """
         if analysis_types is None:
             analysis_types = self.config["analysis_types"]
@@ -190,7 +190,7 @@ class CodeReviewer(
         Analyze an entire project.
 
         Args:
-            target_paths: List of paths to analyze (defaults to project root)
+            target_paths: list of paths to analyze (defaults to project root)
             analysis_types: Types of analysis to perform
 
         Returns:

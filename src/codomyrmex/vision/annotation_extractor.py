@@ -53,7 +53,7 @@ class AnnotationExtractor:
             categories: Optional category filter (e.g. ["text", "logo"]).
 
         Returns:
-            List of :class:`Annotation` objects.
+            list of :class:`Annotation` objects.
         """
         path = Path(image_path)
         if not path.exists():
@@ -77,7 +77,7 @@ class AnnotationExtractor:
             vlm_client: VLM client.
 
         Returns:
-            List of text-region annotations.
+            list of text-region annotations.
         """
         return self.extract_annotations(
             image_path, vlm_client, categories=["text", "label", "caption"]
@@ -117,7 +117,7 @@ class AnnotationExtractor:
             response: VLM response.
 
         Returns:
-            List of :class:`Annotation` objects.
+            list of :class:`Annotation` objects.
         """
         text = response.text.strip()
 

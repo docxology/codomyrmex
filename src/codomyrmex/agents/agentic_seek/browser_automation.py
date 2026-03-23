@@ -101,7 +101,7 @@ def extract_form_fields(text: str) -> list[dict[str, str]]:
         text: LLM response that may contain form instructions.
 
     Returns:
-        List of ``{"name": …, "value": …}`` dicts.
+        list of ``{"name": …, "value": …}`` dicts.
     """
     results: list[dict[str, str]] = []
     for match in _FORM_PATTERN.finditer(text):
@@ -122,7 +122,7 @@ def build_search_prompt(
 
     Args:
         user_query: The original user request.
-        search_results: List of dicts with ``"title"``, ``"url"``,
+        search_results: list of dicts with ``"title"``, ``"url"``,
             and optionally ``"snippet"`` keys.
 
     Returns:

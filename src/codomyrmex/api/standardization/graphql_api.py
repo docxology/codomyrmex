@@ -460,7 +460,7 @@ class GraphQLAPI:
             query: GraphQL query string
 
         Returns:
-            List of validation errors (empty if valid)
+            list of validation errors (empty if valid)
         """
         errors = []
 

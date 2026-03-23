@@ -437,7 +437,7 @@ class TestAgentRelayPostToolResult:
         assert result.metadata["error"] == "not found"
 
     def test_post_tool_result_with_dict_result(self, relay):
-        """Dict result should be JSON-serialized into content."""
+        """dict result should be JSON-serialized into content."""
         result = relay.post_tool_result("ex", "req-1", {"files": [1, 2, 3]})
         parsed = json.loads(result.content)
         assert parsed["files"] == [1, 2, 3]

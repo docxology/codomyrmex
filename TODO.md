@@ -50,14 +50,14 @@
 
 > **Strict Delivery Requirements** — All v1.2.8.x items must pass before tagging:
 
-| Requirement | Command | Threshold |
-| :--- | :--- | :--- |
-| **Zero-Mock Policy** | `uv run pytest` | 0 `unittest.mock` / `mock` imports |
-| **Full Test Pass** | `uv run pytest` | Exit code 0 |
-| **Code Health** | `uv run ruff check .` | 0 errors |
-| **Type Safety** | `uv run ty check src/` | <1,000 diagnostics |
-| **Coverage Gate** | `uv run pytest --cov` | ≥40% |
-| **Documentation Parity** | — | AGENTS.md, README.md, SPEC.md, CHANGELOG.md updated |
+| Requirement | Command | Threshold | Status |
+| :--- | :--- | :--- | :--- |
+| **Zero-Mock Policy** | `uv run pytest` | 0 `unittest.mock` / `mock` imports | ✅ PASSED |
+| **Full Test Pass** | `uv run pytest` | Exit code 0 | 🟡 PENDING |
+| **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED |
+| **Type Safety** | `uv run ty check src/` | <1,000 diagnostics | ✅ PASSED |
+| **Coverage Gate** | `uv run pytest --cov` | ≥40% | 🟡 PENDING |
+| **Documentation Parity** | — | AGENTS.md, README.md, SPEC.md, CHANGELOG.md updated | 🟡 IN PROGRESS |
 
 ---
 

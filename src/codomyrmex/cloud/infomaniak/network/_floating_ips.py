@@ -14,7 +14,7 @@ class FloatingIPMixin:
     """
 
     def list_floating_ips(self) -> list[dict[str, Any]]:
-        """List all floating IPs."""
+        """list all floating IPs."""
         try:
             fips = list(self._conn.network.ips())
             return [

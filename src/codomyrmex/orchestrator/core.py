@@ -49,7 +49,7 @@ def _parse_args(argv=None) -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s --dry-run                    # List scripts without running
+  %(prog)s --dry-run                    # list scripts without running
   %(prog)s --timeout 30                 # Run with 30s timeout per script
   %(prog)s --subdirs documentation      # Run only documentation scripts
   %(prog)s --filter audit               # Run scripts containing 'audit'
@@ -62,7 +62,7 @@ Examples:
         "--dry-run",
         "-n",
         action="store_true",
-        help="List scripts without executing them",
+        help="list scripts without executing them",
     )
 
     parser.add_argument(
@@ -160,7 +160,7 @@ def _discover_and_display_scripts(
         config: Loaded orchestrator config.
 
     Returns:
-        Tuple of (discovered scripts list, exit code if early exit needed or -1 to continue).
+        tuple of (discovered scripts list, exit code if early exit needed or -1 to continue).
     """
     print_section("Discovering Scripts", separator="-")
     scripts = discover_scripts(
@@ -219,13 +219,13 @@ def _execute_scripts(
     """Execute all discovered scripts and collect results.
 
     Args:
-        scripts: List of script paths to execute.
+        scripts: list of script paths to execute.
         scripts_dir: Root scripts directory.
         args: Parsed arguments (timeout, verbose).
         config: Loaded orchestrator config.
 
     Returns:
-        List of result dictionaries for each script.
+        list of result dictionaries for each script.
     """
     results = []
     progress = ProgressReporter(total=len(scripts), prefix="Progress")
@@ -304,7 +304,7 @@ def _report_results(results: list[dict], args: argparse.Namespace, run_id: str) 
     """Generate and display the summary report.
 
     Args:
-        results: List of script execution result dicts.
+        results: list of script execution result dicts.
         args: Parsed arguments (output_dir).
         run_id: Unique run identifier.
 

@@ -1,47 +1,31 @@
 # Codomyrmex Agents — docs/development
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `documentation.md` – Project file
-- `environment-setup.md` – Project file
-- `google-integration.md` – Project file
-- `multi-agent-git.md` – Project file
-- `testing-strategy.md` – Project file
-- `uv-usage-guide.md` – Project file
+Agent coordination for developer-facing guides: environment, testing, documentation standards, multi-agent Git, uv usage, and local PR/SARIF triage.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Contents (by file)
 
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-- `documentation.md`
-- `environment-setup.md`
-- `google-integration.md`
-- `multi-agent-git.md`
-- `testing-strategy.md`
-- `uv-usage-guide.md`
+| File | Role |
+|:---|:---|
+| [documentation.md](documentation.md) | Doc standards, AGENTS/README/SPEC parity, Mermaid |
+| [environment-setup.md](environment-setup.md) | Prerequisites and configuration |
+| [testing-strategy.md](testing-strategy.md) | Zero-mock policy, coverage expectations, layout |
+| [uv-usage-guide.md](uv-usage-guide.md) | uv workflows |
+| [multi-agent-git.md](multi-agent-git.md) | Concurrent agent Git practices |
+| [google-integration.md](google-integration.md) | Google Cloud / Workspace for dev |
+| [code-review-and-sarif.md](code-review-and-sarif.md) | `scripts/review/` helpers, Bandit SARIF artifacts, sarif-tools |
+| [README.md](README.md) | Section index |
+| [SPEC.md](SPEC.md), [PAI.md](PAI.md) | Local specs / PAI notes |
 
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+## Operating contracts
 
-## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+- Prefer measured commands (`uv run pytest`, `uv run ruff`) over hand-waved thresholds; point to `pyproject.toml` for gates.
+- New automation that contributors run locally should be linked from [README.md](README.md) and, when security-related, from [code-review-and-sarif.md](code-review-and-sarif.md).
 
-## Navigation Links
-- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+## Navigation
+
+- **Parent**: [docs/AGENTS.md](../AGENTS.md), [docs/README.md](../README.md)
+- **Project root**: [README.md](../../README.md), [AGENTS.md](../../AGENTS.md)

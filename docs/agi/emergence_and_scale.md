@@ -138,7 +138,7 @@ Based on current trajectory:
 
 | Metric | Current (n=128) | Predicted Threshold | Predicted Effect |
 |:-------|:---------------|:-------------------|:----------------|
-| Tool count | 604 | ~1,000 | Tool selection becomes PSPACE-hard |
+| Tool count | 600 | ~1,000 | Tool selection becomes PSPACE-hard |
 | Memory entries | ~10K | ~100K | Consolidation becomes mandatory |
 | Cross-references | ~1,500 | ~10,000 | Binding problem becomes acute |
 

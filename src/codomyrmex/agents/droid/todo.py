@@ -89,7 +89,7 @@ class TodoManager:
         """Load TODO and completed items from file.
 
         Returns:
-            Tuple of (todo_items, completed_items)
+            tuple of (todo_items, completed_items)
         """
         if not self.todo_path.exists():
             return [], []

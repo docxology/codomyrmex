@@ -103,7 +103,7 @@ class VoiceActivityDetector:
             audio_data: Raw PCM audio bytes (int16, mono).
 
         Returns:
-            List of :class:`SpeechSegment` objects.
+            list of :class:`SpeechSegment` objects.
         """
         window = self._config.window_size_samples * 2  # 2 bytes per int16 sample
         ms_per_window = (

@@ -21,13 +21,13 @@ logger = get_logger(__name__)
 
 
 def handle_memory_list(limit: int = 20) -> list[dict]:
-    """List recent memory entries.
+    """list recent memory entries.
 
     Args:
         limit: Maximum entries to show.
 
     Returns:
-        List of memory dicts.
+        list of memory dicts.
     """
     try:
         from codomyrmex.agentic_memory.sqlite_store import SQLiteStore
@@ -105,7 +105,7 @@ def handle_memory_search(query: str, limit: int = 10) -> list[dict]:
         limit: Maximum results.
 
     Returns:
-        List of matching memory dicts.
+        list of matching memory dicts.
     """
     print(f"🔍 Searching memories for: '{query}'")
 

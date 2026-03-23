@@ -6,6 +6,10 @@
 
 Maintenance and automation utilities for project management.
 
+## Code review and SARIF
+
+- [`review/`](review/) — `pr_analyzer.py`, `code_quality_checker.py`, `review_report_generator.py`, `sarif_merge.py`, `bandit_json_to_sarif.py`, and `sarif_utils.py` for local diff heuristics, Python structural checks, Bandit JSON→SARIF, and SARIF merge/summary. See [review/README.md](review/README.md), [review/AGENTS.md](review/AGENTS.md), and [docs/development/code-review-and-sarif.md](../docs/development/code-review-and-sarif.md).
+
 ## Directory Contents
 - `PAI.md` – File
 - `README.md` – File
@@ -95,6 +99,7 @@ Maintenance and automation utilities for project management.
 - `plugin_system/` – Subdirectory
 - `prompt_testing/` – Subdirectory
 - `reports/` – Subdirectory
+- `review/` – Subdirectory (PR/SARIF helpers)
 - `rna/` – Subdirectory
 - `run_all_scripts.py` – File
 - `scrape/` – Subdirectory

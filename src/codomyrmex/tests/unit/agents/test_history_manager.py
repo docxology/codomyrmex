@@ -124,7 +124,7 @@ class TestConversationManager:
     def test_set_active(self):
         """set_active loads and sets a conversation as active."""
         mgr = ConversationManager()
-        conv = mgr.create_conversation("Set Active")
+        conv = mgr.create_conversation("set Active")
         mgr.save(conv)
         # Create a new conversation (shifts active)
         mgr.create_conversation("Other")

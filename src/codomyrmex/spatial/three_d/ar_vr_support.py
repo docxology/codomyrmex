@@ -126,7 +126,7 @@ class VRRenderer:
         self._render_resolution = (1920, 1080)
 
     def set_resolution(self, width: int, height: int) -> None:
-        """Set per-eye render resolution."""
+        """set per-eye render resolution."""
         self._render_resolution = (width, height)
 
     def update_head_pose(self, position: Vector3D, rotation: Quaternion) -> None:

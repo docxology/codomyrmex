@@ -67,7 +67,7 @@ class RedisCache(Cache):
             return None
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
-        """Set a value in the cache."""
+        """set a value in the cache."""
         try:
             ttl = ttl or self.default_ttl
             serialized = json.dumps(value, default=str).encode(

@@ -40,7 +40,7 @@ class StatsDClient:
         self.client.incr(name, count, rate)
 
     def gauge(self, name: str, value: float, rate: float = 1) -> None:
-        """Set a gauge value."""
+        """set a gauge value."""
         self.client.gauge(name, value, rate)
 
     def timing(self, name: str, dt: float, rate: float = 1) -> None:

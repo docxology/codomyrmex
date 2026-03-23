@@ -130,7 +130,7 @@ class UORGraph:
             relationship_type: Optional filter by type.
 
         Returns:
-            List of relationships where entity is source or target.
+            list of relationships where entity is source or target.
 
         """
         results: list[UORRelationship] = []
@@ -164,7 +164,7 @@ class UORGraph:
         Follows relationships in both directions (undirected semantics).
 
         Returns:
-            List of neighbor entities (deduplicated).
+            list of neighbor entities (deduplicated).
 
         """
         neighbor_ids: set[str] = set()

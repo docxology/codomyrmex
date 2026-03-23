@@ -95,8 +95,8 @@ class ParallelExecutor:
         Execute tasks with dependency management.
 
         Args:
-            tasks: List of task dictionaries
-            dependencies: Dict mapping task names to their dependencies
+            tasks: list of task dictionaries
+            dependencies: dict mapping task names to their dependencies
             timeout: Overall timeout for execution
 
         Returns:
@@ -207,11 +207,11 @@ class ParallelExecutor:
         Execute a group of independent tasks in parallel.
 
         Args:
-            tasks: List of task dictionaries (assumed to be independent)
+            tasks: list of task dictionaries (assumed to be independent)
             timeout: Timeout for the entire group execution
 
         Returns:
-            List of execution results
+            list of execution results
         """
         if timeout is None:
             timeout = self.default_timeout
@@ -267,7 +267,7 @@ class ParallelExecutor:
 
         Args:
             task: Task dictionary
-            completed: Set of completed task names
+            completed: set of completed task names
 
         Returns:
             True if all dependencies are satisfied
@@ -285,12 +285,12 @@ class ParallelExecutor:
         Get tasks that are ready to execute (all dependencies completed).
 
         Args:
-            tasks: List of all tasks
-            completed: Set of completed task names
+            tasks: list of all tasks
+            completed: set of completed task names
             dependencies: Dependency mapping
 
         Returns:
-            List of ready tasks
+            list of ready tasks
         """
         ready = []
         for task in tasks:
@@ -413,10 +413,10 @@ def validate_workflow_dependencies(tasks: list[dict[str, Any]]) -> list[str]:
     Validate workflow task dependencies.
 
     Args:
-        tasks: List of task dictionaries
+        tasks: list of task dictionaries
 
     Returns:
-        List of validation error messages
+        list of validation error messages
     """
     errors = []
     task_names = {task["name"] for task in tasks}
@@ -442,10 +442,10 @@ def get_workflow_execution_order(tasks: list[dict[str, Any]]) -> list[list[str]]
     Get the topological execution order for workflow tasks.
 
     Args:
-        tasks: List of task dictionaries
+        tasks: list of task dictionaries
 
     Returns:
-        List of lists, where each inner list contains tasks that can be
+        list of lists, where each inner list contains tasks that can be
         executed in parallel at that level
     """
     from .workflow_dag import WorkflowDAG

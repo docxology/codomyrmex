@@ -272,6 +272,51 @@ graph TB
 - `wallet`: Self-custody and key management
 - `calendar_integration`: Specialized module
 - `email`: Specialized module
+- `ai_gateway`: Specialized module
+- `aider`: Specialized module
+- `autograd`: Specialized module
+- `config_audits`: Specialized module
+- `config_monitoring`: Specialized module
+- `container_optimization`: Specialized module
+- `cost_management`: Specialized module
+- `data_curation`: Specialized module
+- `data_lineage`: Specialized module
+- `demos`: Specialized module
+- `distillation`: Specialized module
+- `distributed_training`: Specialized module
+- `docs_gen`: Specialized module
+- `dpo`: Specialized module
+- `eval_harness`: Specialized module
+- `feature_store`: Specialized module
+- `file_system`: Specialized module
+- `git_analysis`: Specialized module
+- `image`: Specialized module
+- `interpretability`: Specialized module
+- `languages`: Specialized module
+- `logit_processor`: Specialized module
+- `lora`: Specialized module
+- `matmul_kernel`: Specialized module
+- `ml_pipeline`: Specialized module
+- `model_merger`: Specialized module
+- `multimodal`: Specialized module
+- `nas`: Specialized module
+- `neural`: Specialized module
+- `operating_system`: Specialized module
+- `pai_pm`: Specialized module
+- `peft`: Specialized module
+- `quantization`: Specialized module
+- `release`: Specialized module
+- `rlhf`: Specialized module
+- `semantic_router`: Specialized module
+- `slm`: Specialized module
+- `softmax_opt`: Specialized module
+- `soul`: Specialized module
+- `ssm`: Specialized module
+- `synthetic_data`: Specialized module
+- `text_to_sql`: Specialized module
+- `tokenizer`: Specialized module
+- `tree_sitter`: Specialized module
+- `vision`: Specialized module
 
 **Characteristics**:
 

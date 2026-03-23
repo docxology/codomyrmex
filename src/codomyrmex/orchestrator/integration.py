@@ -435,7 +435,7 @@ class AgentOrchestrator:
         """Create a workflow from agent tasks.
 
         Args:
-            tasks: List of task definitions
+            tasks: list of task definitions
             name: Workflow name
 
         Returns:
@@ -474,7 +474,7 @@ def create_pipeline_workflow(
     """Create a workflow from pipeline stages.
 
     Args:
-        stages: List of stage configurations
+        stages: list of stage configurations
         name: Pipeline name
         fail_fast: Stop on first failure
 

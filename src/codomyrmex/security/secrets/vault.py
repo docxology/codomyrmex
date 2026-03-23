@@ -72,7 +72,7 @@ class SecretVault:
         return False
 
     def list_names(self) -> list[str]:
-        """List all secret names."""
+        """list all secret names."""
         return list(self._secrets.keys())
 
     def save(self) -> None:

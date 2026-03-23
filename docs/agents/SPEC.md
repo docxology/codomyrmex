@@ -1,10 +1,10 @@
 # Agent Documentation — Specification
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Defines the structure and behavioral standards for agent coordination documentation within the Codomyrmex ecosystem. This directory documents **38 agent frameworks** organized into 5 categories.
+Defines the structure and behavioral standards for agent coordination documentation within the Codomyrmex ecosystem. This directory documents **41 agent packages** under `src/codomyrmex/agents/`, organized into five categories (plus [`rules/`](rules/) here as docs-only).
 
 ## Documentation Structure
 
@@ -37,11 +37,11 @@ Large integrations (e.g. **Hermes**) add deep-dive pages under `docs/agents/<age
 
 | Category | Count | Examples |
 |:---|---:|:---|
-| CLI-based | 10 | Jules, Gemini, Hermes, Every Code |
+| CLI-based | 12 | Jules, Gemini, Hermes, Open Gauss, Paperclip, Every Code |
 | API-based | 6 | Claude, Codex, O1, DeepSeek, Qwen, Perplexity |
 | Core Infrastructure | 8 | Core, Droid, Planner, Memory, Meta, Learning |
 | Infrastructure | 9 | Agent Setup, CLI, Context, Pooling, Transport |
-| Specialized | 5 | Git Agent, Mission Control, Specialized, Theory |
+| Specialized | 6 | Ghost Architecture, Git Agent, Google Workspace, Mission Control, Specialized, Theory |
 
 ## Verification Criteria
 

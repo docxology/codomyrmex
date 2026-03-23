@@ -185,10 +185,10 @@ class RegressionDetector:
         Results without a matching baseline are silently skipped.
 
         Args:
-            results: List of benchmark measurements.
+            results: list of benchmark measurements.
 
         Returns:
-            List of RegressionReport objects.
+            list of RegressionReport objects.
         """
         reports = []
         for r in results:
@@ -206,7 +206,7 @@ class RegressionDetector:
         """Generate a text summary of regression reports.
 
         Args:
-            reports: List of reports from check_all.
+            reports: list of reports from check_all.
 
         Returns:
             Multi-line summary string.

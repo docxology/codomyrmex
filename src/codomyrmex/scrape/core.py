@@ -65,13 +65,13 @@ class ScrapeOptions:
     """Configuration options for scraping operations.
 
     Attributes:
-        formats: List of formats to request (markdown, html, json, etc.)
+        formats: list of formats to request (markdown, html, json, etc.)
         timeout: Request timeout in seconds
         headers: Custom HTTP headers to send
         wait_for: CSS selector or time to wait for before scraping
-        actions: List of actions to perform before scraping (click, scroll, etc.)
-        exclude_tags: List of HTML tags to exclude from content
-        include_tags: List of HTML tags to include in content
+        actions: list of actions to perform before scraping (click, scroll, etc.)
+        exclude_tags: list of HTML tags to exclude from content
+        include_tags: list of HTML tags to include in content
         max_depth: Maximum crawl depth (for crawl operations)
         limit: Maximum number of pages to scrape (for crawl operations)
         follow_links: Whether to follow links when crawling
@@ -125,7 +125,7 @@ class CrawlResult:
         status: Current status of the crawl (pending, running, completed, failed)
         total: Total number of pages found
         completed: Number of pages completed
-        results: List of ScrapeResult objects for each page
+        results: list of ScrapeResult objects for each page
         credits_used: Number of API credits used
         expires_at: When the crawl result expires
     """
@@ -144,7 +144,7 @@ class MapResult:
     """Result structure for map operations.
 
     Attributes:
-        links: List of discovered links with metadata
+        links: list of discovered links with metadata
         total: Total number of links found (auto-calculated from links if not set)
     """
 
@@ -163,7 +163,7 @@ class SearchResult:
 
     Attributes:
         query: The search query
-        results: List of search results with content
+        results: list of search results with content
         total: Total number of results
     """
 
@@ -254,7 +254,7 @@ class BaseScraper(ABC):
         """Extract structured data from URLs using LLM.
 
         Args:
-            urls: List of URLs to extract data from
+            urls: list of URLs to extract data from
             schema: Optional JSON schema for extraction
             prompt: Optional prompt for extraction
 

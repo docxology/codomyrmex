@@ -5,7 +5,7 @@ Exports one or more Hermes sessions to Markdown files (or stdout).
 
 Usage::
 
-    # List all session IDs
+    # list all session IDs
     uv run python -m codomyrmex.agents.hermes.scripts.run_session_export --list
 
     # Export a specific session to stdout
@@ -32,7 +32,7 @@ def _parse_args() -> argparse.Namespace:
         description="Export Hermes sessions to Markdown.",
     )
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--list", action="store_true", help="List all session IDs.")
+    group.add_argument("--list", action="store_true", help="list all session IDs.")
     group.add_argument("--session-id", metavar="ID", help="Export a single session.")
     group.add_argument("--all", action="store_true", help="Export ALL sessions.")
 

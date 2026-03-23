@@ -160,7 +160,7 @@ class KnowledgeBase:
         return key in self.facts
 
     def list_facts(self) -> list[str]:
-        """List all fact keys."""
+        """list all fact keys."""
         return list(self.facts.keys())
 
     def query(self, query_func: callable) -> Any:  # type: ignore
@@ -180,13 +180,13 @@ class DeliberativeArchitecture(AgentArchitecture):
 
     def set_goal(self, goal: dict[str, Any]) -> None:
         """
-        Set a goal for the agent.
+        set a goal for the agent.
 
         Args:
             goal: Goal description
         """
         self.goals.append(goal)
-        self.logger.debug("Set goal: %s", goal)
+        self.logger.debug("set goal: %s", goal)
 
     def plan(
         self, goal: dict[str, Any], current_state: dict[str, Any]
@@ -199,7 +199,7 @@ class DeliberativeArchitecture(AgentArchitecture):
             current_state: Current state
 
         Returns:
-            List of actions (plan)
+            list of actions (plan)
         """
         # Store current state in KB
         for k, v in current_state.items():

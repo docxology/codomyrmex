@@ -98,10 +98,10 @@ def check_dependencies(dependencies: list[str]) -> list[DependencyStatus]:
     """Check if specified dependencies are installed and meet version constraints.
 
     Args:
-        dependencies: List of package names or constraints (e.g., "requests", "numpy>=1.25.0").
+        dependencies: list of package names or constraints (e.g., "requests", "numpy>=1.25.0").
 
     Returns:
-        List of DependencyStatus objects.
+        list of DependencyStatus objects.
     """
     results = []
     # Map from import name to distribution name if they differ
@@ -279,11 +279,11 @@ def check_and_setup_env_vars(
 
     Args:
         repo_root: Directory to look for .env file.
-        required: List of environment variables that MUST be present.
-        optional: List of environment variables that are optional.
+        required: list of environment variables that MUST be present.
+        optional: list of environment variables that are optional.
 
     Returns:
-        List of missing required environment variable names.
+        list of missing required environment variable names.
     """
     if repo_root:
         dotenv_path = os.path.join(repo_root, ".env")
@@ -311,7 +311,7 @@ def check_api_keys(keys: list[str]) -> APIKeyReport:
     """Check if required API keys are set in the environment.
 
     Args:
-        keys: List of environment variable names to check.
+        keys: list of environment variable names to check.
 
     Returns:
         APIKeyReport indicating status.

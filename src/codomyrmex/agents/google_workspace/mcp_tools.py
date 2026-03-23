@@ -147,7 +147,7 @@ def gws_schema(tool_path: str) -> dict[str, Any]:
 
 @mcp_tool(
     category="google_workspace",
-    description="List Google Drive files matching an optional query.",
+    description="list Google Drive files matching an optional query.",
 )
 def gws_drive_list_files(
     query: str = "",
@@ -156,7 +156,7 @@ def gws_drive_list_files(
     account: str = "",
     timeout: int = 60,
 ) -> dict[str, Any]:
-    """List files in Google Drive.
+    """list files in Google Drive.
 
     Args:
         query: Drive search query (e.g., "name contains 'report'").
@@ -183,7 +183,7 @@ def gws_drive_list_files(
 
 @mcp_tool(
     category="google_workspace",
-    description="List Gmail messages matching an optional query.",
+    description="list Gmail messages matching an optional query.",
 )
 def gws_gmail_list_messages(
     query: str = "",
@@ -191,7 +191,7 @@ def gws_gmail_list_messages(
     account: str = "",
     timeout: int = 60,
 ) -> dict[str, Any]:
-    """List Gmail messages.
+    """list Gmail messages.
 
     Args:
         query: Gmail search query (e.g., "from:boss@company.com is:unread").
@@ -217,7 +217,7 @@ def gws_gmail_list_messages(
 
 @mcp_tool(
     category="google_workspace",
-    description="List Google Calendar events in a date range.",
+    description="list Google Calendar events in a date range.",
 )
 def gws_calendar_list_events(
     calendar_id: str = "primary",
@@ -227,7 +227,7 @@ def gws_calendar_list_events(
     account: str = "",
     timeout: int = 60,
 ) -> dict[str, Any]:
-    """List Google Calendar events.
+    """list Google Calendar events.
 
     Args:
         calendar_id: Calendar ID (default: 'primary').
@@ -296,7 +296,7 @@ def gws_sheets_get_values(
 
 @mcp_tool(
     category="google_workspace",
-    description="List tasks from a Google Tasks tasklist.",
+    description="list tasks from a Google Tasks tasklist.",
 )
 def gws_tasks_list(
     tasklist_id: str = "@default",
@@ -304,7 +304,7 @@ def gws_tasks_list(
     account: str = "",
     timeout: int = 60,
 ) -> dict[str, Any]:
-    """List tasks from Google Tasks.
+    """list tasks from Google Tasks.
 
     Args:
         tasklist_id: ID of the tasklist (default: '@default').
@@ -343,7 +343,7 @@ def gws_mcp_start(
     """Return the gws MCP server start command (does NOT spawn a process).
 
     Args:
-        services: List of service names to enable (empty = all services).
+        services: list of service names to enable (empty = all services).
         account: Account to use for the MCP server session.
 
     Returns:

@@ -32,7 +32,7 @@ class FreeAPIRegistry:
 
     Args:
         cache_ttl_seconds: How long (seconds) to keep fetched data before
-            re-fetching. Set to 0 to always re-fetch. Default: 3600.
+            re-fetching. set to 0 to always re-fetch. Default: 3600.
         timeout: HTTP request timeout in seconds. Default: 15.
     """
 
@@ -56,7 +56,7 @@ class FreeAPIRegistry:
         """Create a registry pre-loaded from a list (no network required).
 
         Args:
-            entries: List of :class:`APIEntry` objects.
+            entries: list of :class:`APIEntry` objects.
 
         Returns:
             FreeAPIRegistry populated with the given entries.
@@ -80,7 +80,7 @@ class FreeAPIRegistry:
             force: If True, bypass the cache and always re-fetch.
 
         Returns:
-            List of all loaded :class:`APIEntry` objects.
+            list of all loaded :class:`APIEntry` objects.
 
         Raises:
             RuntimeError: If both fetch strategies fail.
@@ -117,7 +117,7 @@ class FreeAPIRegistry:
         """Fetch entries from https://api.publicapis.org/entries.
 
         Returns:
-            List of APIEntry objects parsed from the JSON response.
+            list of APIEntry objects parsed from the JSON response.
 
         Raises:
             urllib.error.URLError: On network failure.
@@ -153,7 +153,7 @@ class FreeAPIRegistry:
             | Name | Desc | apiKey | Yes | Yes |
 
         Returns:
-            List of APIEntry objects parsed from the README.
+            list of APIEntry objects parsed from the README.
 
         Raises:
             urllib.error.URLError: On network failure.
@@ -179,7 +179,7 @@ class FreeAPIRegistry:
             query: Search string to match against name and description.
 
         Returns:
-            List of matching :class:`APIEntry` objects.
+            list of matching :class:`APIEntry` objects.
         """
         q = query.lower()
         return [
@@ -318,7 +318,7 @@ def _parse_readme_markdown(content: str) -> list[APIEntry]:
         content: Full text content of the README.md file.
 
     Returns:
-        List of parsed :class:`APIEntry` objects.
+        list of parsed :class:`APIEntry` objects.
 
     Raises:
         ValueError: If no entries at all could be parsed.

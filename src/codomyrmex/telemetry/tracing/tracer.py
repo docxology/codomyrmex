@@ -42,7 +42,7 @@ class Tracer:
         return getattr(_context_local, "context", None)
 
     def _set_current_context(self, context: SpanContext | None) -> None:
-        """Set current span context in thread-local storage."""
+        """set current span context in thread-local storage."""
         _context_local.context = context
 
     def start_span(

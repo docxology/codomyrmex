@@ -96,7 +96,7 @@ class EventLoggingBridge:
 
     @property
     def events_captured(self) -> list[dict[str, Any]]:
-        """List of captured event dicts (for testing / inspection)."""
+        """list of captured event dicts (for testing / inspection)."""
         return list(self._events_captured)
 
     @property

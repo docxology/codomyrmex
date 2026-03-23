@@ -53,7 +53,7 @@ class Population:
     Attributes:
         individuals: Current list of individuals.
         generation: Current generation number.
-        history: List of per-generation statistics.
+        history: list of per-generation statistics.
     """
 
     def __init__(
@@ -63,7 +63,7 @@ class Population:
         """Initialize a population with a given set of individuals.
 
         Args:
-            individuals: List of individuals to manage.
+            individuals: list of individuals to manage.
         """
         if not individuals:
             raise ValueError("Population must contain at least one individual.")

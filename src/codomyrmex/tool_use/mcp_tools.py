@@ -14,7 +14,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(
     category="tool_use",
     description=(
-        "List all tools registered in a ToolRegistry instance. "
+        "list all tools registered in a ToolRegistry instance. "
         "Returns a list of tool entry name strings."
     ),
 )
@@ -22,7 +22,7 @@ def tool_use_list_tools() -> list[str]:
     """Return a list of registered tool names from a fresh registry.
 
     Returns:
-        List of tool name strings (may be empty if no tools registered).
+        list of tool name strings (may be empty if no tools registered).
     """
     from codomyrmex.tool_use import ToolRegistry
 

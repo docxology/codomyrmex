@@ -18,7 +18,7 @@ def slm_generate(
     """Generate tokens from a tiny language model.
 
     Args:
-        prompt_tokens: List of integer token IDs for the prompt (default: [1, 2, 3])
+        prompt_tokens: list of integer token IDs for the prompt (default: [1, 2, 3])
         max_new_tokens: Number of new tokens to generate
         vocab_size: Vocabulary size
         d_model: Model dimension

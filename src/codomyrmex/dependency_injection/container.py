@@ -448,9 +448,9 @@ class Container:
         name: str | None = None,
         scope_context: ScopeContext | None = None,
     ) -> Any:
-        """Core resolution logic with support for List, Optional, and named resolution."""
+        """Core resolution logic with support for list, Optional, and named resolution."""
 
-        # Handle List[T] / Iterable[T] for collection resolution
+        # Handle list[T] / Iterable[T] for collection resolution
         origin = get_origin(interface)
         if origin is list or origin is Iterable:
             args = get_args(interface)

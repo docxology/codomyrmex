@@ -2,14 +2,15 @@
 
 Single source of truth for counts used in documentation and marketing copy. **Refresh** after large changes to modules, tools, or tests.
 
-**Last updated:** 2026-03-22
+**Last updated:** 2026-03-23
 
 ## Definitions
 
 | Term | Meaning |
 |------|---------|
 | **Top-level modules** | Directories under `src/codomyrmex/` that contain `__init__.py`, excluding `tests/`. Each is one Codomyrmex package surface. |
-| **`@mcp_tool` count** | Physical lines starting with `@mcp_tool` in `.py` files under `src/codomyrmex/`, excluding paths containing `tests/`. **599** on a full tree walk. |
+| **Agent packages** | Directories under `src/codomyrmex/agents/` with `__init__.py` (excluding `__pycache__`). Documented under `docs/agents/`; **`docs/agents/rules/`** is docs-only. **41** packages. |
+| **`@mcp_tool` count** | Physical lines starting with `@mcp_tool` in `.py` files under `src/codomyrmex/`, excluding paths containing `tests/`. Matches `uv run python scripts/doc_inventory.py`. |
 | **`mcp_tools.py` files** | Files named `mcp_tools.py` under `src/codomyrmex/`, excluding `*/tests/*`. |
 | **Collected tests** | Items reported by `uv run pytest --collect-only -q` when collection completes without errors. |
 
@@ -20,9 +21,10 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | Metric | Value (as of last update) |
 |--------|---------------------------|
 | Top-level modules | 128 |
+| Agent packages (`src/codomyrmex/agents/`) | 41 |
 | `mcp_tools.py` files (non-test) | 149 |
-| Production `@mcp_tool` decorators | 599 (see definitions) |
-| Pytest tests collected | 39,470 (`uv run pytest --collect-only -q --no-cov`) |
+| Production `@mcp_tool` decorators | 600 |
+| Pytest tests collected | 39,473 (`uv run pytest --collect-only -q --no-cov`) |
 
 ## Reproduce
 

@@ -27,7 +27,7 @@ def cli_commands() -> dict[str, Callable[[], None]]:
     """Return CLI commands for the quantum module."""
 
     def _backends() -> None:
-        """List available simulator backends."""
+        """list available simulator backends."""
         print("Quantum Simulator Backends")
         print(f"  Gate Types: {[gt.value for gt in GateType]}")
         print("  Available Algorithms: bell_state, ghz_state, qft")

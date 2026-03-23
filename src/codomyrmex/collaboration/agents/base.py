@@ -67,7 +67,7 @@ class CollaborativeAgent(AbstractAgent):
     Attributes:
         agent_id: Unique identifier for this agent.
         name: Human-readable agent name.
-        capabilities: List of capabilities this agent possesses.
+        capabilities: list of capabilities this agent possesses.
         state: Current agent state.
 
     """

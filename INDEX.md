@@ -12,7 +12,7 @@
 | Run the CLI | `codomyrmex --help` → [cli/](src/codomyrmex/cli/) |
 | Understand PAI integration | [PAI.md](PAI.md) — algorithm phase ↔ module mapping |
 | Browse all 128 top-level modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
-| MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — ~604 `@mcp_tool` decorators ([inventory](docs/reference/inventory.md)) |
+| MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — **600** production `@mcp_tool` lines ([inventory](docs/reference/inventory.md)) |
 | Check system health | `codomyrmex status` or `codomyrmex check` |
 | Run tests | `uv run pytest` |
 | Install dependencies | `uv sync` |
@@ -23,11 +23,11 @@
 | Metric | Value | Source |
 |:-------|:------|:-------|
 | Top-level packages | 128 | [docs/reference/inventory.md](docs/reference/inventory.md) |
-| `@mcp_tool` decorators | 604 (596 dynamic + 8 static) | `uv run python scripts/doc_inventory.py` |
+| `@mcp_tool` decorators (production) | 600 | `uv run python scripts/doc_inventory.py` |
 | `mcp_tools.py` files (non-test) | 149 | [docs/reference/inventory.md](docs/reference/inventory.md) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Tests collected | 34,492 | `uv run pytest --collect-only -q --no-cov` |
+| Tests collected | 39,473 | `uv run pytest --collect-only -q --no-cov` |
 | RASP doc coverage | 100% (128/128) | [AGENTS.md](AGENTS.md) |
 | Version | v1.2.3 | [pyproject.toml](pyproject.toml) |
 

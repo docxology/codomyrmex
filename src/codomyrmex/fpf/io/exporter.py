@@ -52,7 +52,7 @@ class FPFExporter:
         """Export patterns to JSON.
 
         Args:
-            patterns: List of Pattern objects
+            patterns: list of Pattern objects
             output_path: Path to output JSON file
         """
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -70,7 +70,7 @@ class FPFExporter:
         """Export concepts to JSON.
 
         Args:
-            concepts: List of Concept objects
+            concepts: list of Concept objects
             output_path: Path to output JSON file
         """
         output_path.parent.mkdir(parents=True, exist_ok=True)

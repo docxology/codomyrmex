@@ -85,7 +85,7 @@ class SchemaVerifier:
         """Scan source tree for MCP tool definitions.
 
         Returns:
-            List of :class:`ToolSchemaInfo` for all discovered tools.
+            list of :class:`ToolSchemaInfo` for all discovered tools.
         """
         tools: list[ToolSchemaInfo] = []
         codomyrmex_root = self._src_root / "codomyrmex"
@@ -157,7 +157,7 @@ class SchemaVerifier:
         """Verify all discovered MCP tools.
 
         Returns:
-            List of :class:`SchemaViolation` for any mismatches.
+            list of :class:`SchemaViolation` for any mismatches.
         """
         if not self._tools:
             self.scan_tools()
@@ -220,7 +220,7 @@ class SchemaVerifier:
         """Return a summary of the verification.
 
         Returns:
-            Dict with ``total_tools``, ``violations``, and ``by_type``.
+            dict with ``total_tools``, ``violations``, and ``by_type``.
         """
         violations = self.verify_all()
         by_type: dict[str, int] = {}
@@ -243,7 +243,7 @@ def verify_tool_schemas(src_root: Path | None = None) -> list[SchemaViolation]:
         src_root: Source root path.
 
     Returns:
-        List of violations (empty if all tools pass).
+        list of violations (empty if all tools pass).
     """
     verifier = SchemaVerifier(src_root)
     return verifier.verify_all()

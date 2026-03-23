@@ -149,7 +149,7 @@ def real_logger_fixture(tmp_path):
     if get_logger is None or setup_logging is None:
         pytest.skip("logging_monitoring module not available")
 
-    # Set up real logging configuration
+    # set up real logging configuration
     log_file = tmp_path / "test.log"
     os.environ["CODOMYRMEX_LOG_FILE"] = str(log_file)
     os.environ["CODOMYRMEX_LOG_LEVEL"] = "DEBUG"

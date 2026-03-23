@@ -129,7 +129,7 @@ class DependencyResolutionError(OrchestrationError):
         Args:
             message: Error description
             task_name: Name of the task with unresolved dependencies
-            missing_dependencies: List of missing dependency names
+            missing_dependencies: list of missing dependency names
             **kwargs: Additional context passed to parent
         """
         super().__init__(message, **kwargs)

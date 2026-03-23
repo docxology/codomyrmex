@@ -373,3 +373,10 @@ For **Codomyrmex**-driven Hermes runs, you can add **`.codomyrmex/hermes_skills_
 - 🤖 [Skills Hub](https://agentskills.io)
 - 💬 [Discord](https://discord.gg/NousResearch)
 - 🏢 [Nous Research](https://nousresearch.com)
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

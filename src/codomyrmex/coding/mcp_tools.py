@@ -41,10 +41,10 @@ def code_execute(language: str, code: str, timeout: int = 30) -> dict[str, Any]:
 
 @mcp_tool(
     category="coding",
-    description="List all supported programming languages for code execution.",
+    description="list all supported programming languages for code execution.",
 )
 def code_list_languages() -> dict[str, Any]:
-    """List supported languages."""
+    """list supported languages."""
     SUPPORTED_LANGUAGES = _get_supported_languages()
     return {
         "status": "success",

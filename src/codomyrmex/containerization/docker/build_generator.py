@@ -74,7 +74,7 @@ class MultiStageBuild:
             if i < len(self.stages) - 1:
                 lines.append("")
 
-        # Set final stage if specified
+        # set final stage if specified
         if self.final_stage and self.final_stage != self.stages[-1].name:
             lines.append(f"\nFROM {self.final_stage}")
 
@@ -254,7 +254,7 @@ class BuildGenerator:
             dockerfile_content: Dockerfile content to validate
 
         Returns:
-            Tuple of (is_valid, list_of_issues)
+            tuple of (is_valid, list_of_issues)
         """
         issues = []
         lines = dockerfile_content.split("\n")

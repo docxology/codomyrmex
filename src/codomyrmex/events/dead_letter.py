@@ -77,7 +77,7 @@ class DeadLetterQueue:
         return letter
 
     def list_all(self) -> list[DeadLetter]:
-        """List all dead letters."""
+        """list all dead letters."""
         if not self._path.exists():
             return []
         letters = []

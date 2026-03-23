@@ -154,10 +154,10 @@ def batch_cosine_similarity(
 
     Args:
         query: The query embedding.
-        candidates: List of candidate embeddings.
+        candidates: list of candidate embeddings.
 
     Returns:
-        List of similarity scores (same order as candidates).
+        list of similarity scores (same order as candidates).
     """
     return [DistanceMetric.cosine(query, c) for c in candidates]
 

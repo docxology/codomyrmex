@@ -26,7 +26,7 @@ def quantize_tensor(
     """Quantize a list of float values to int8 or fp4.
 
     Args:
-        values: List of float32 values to quantize.
+        values: list of float32 values to quantize.
         method: Quantization method -- "int8" or "fp4".
         scheme: For int8: "symmetric" or "asymmetric" (ignored for fp4).
 

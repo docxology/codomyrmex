@@ -28,7 +28,7 @@ def cli_commands():
     """Return CLI commands for the accessibility module."""
     return {
         "checks": {
-            "help": "List available accessibility checks and WCAG rules",
+            "help": "list available accessibility checks and WCAG rules",
             "handler": lambda **kwargs: print(
                 "Accessibility Checks:\n"
                 f"  Checker: {A11yChecker.__name__}\n"

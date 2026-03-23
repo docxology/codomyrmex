@@ -158,7 +158,7 @@ class ImageOptimizer:
             image_name: Name of the image to analyze
 
         Returns:
-            List of optimization suggestions
+            list of optimization suggestions
         """
         try:
             analysis = self.analyze_image(image_name)

@@ -11,7 +11,7 @@ authorization via the Trust Gateway (`VERIFIED` or `TRUSTED` state).
 
 ## Workflow Inventory
 
-The repository contains 15 workflow files. The table below lists those relevant to
+The repository contains 36 workflow files. The table below lists those relevant to
 PAI's Algorithm phases:
 
 | Workflow | Trigger | What It Does |

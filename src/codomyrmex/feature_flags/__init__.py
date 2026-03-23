@@ -32,7 +32,7 @@ def cli_commands():
     """Return CLI commands for the feature_flags module."""
     return {
         "list": {
-            "help": "List all feature flags",
+            "help": "list all feature flags",
             "handler": lambda: print(
                 "Feature Flags:\n"
                 + (

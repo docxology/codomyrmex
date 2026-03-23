@@ -41,10 +41,10 @@ def edge_computing_cluster_health() -> dict[str, Any]:
 
 @mcp_tool(
     category="edge_computing",
-    description="List available edge node statuses and deployment strategies.",
+    description="list available edge node statuses and deployment strategies.",
 )
 def edge_computing_list_capabilities() -> dict[str, Any]:
-    """List available edge node statuses and deployment strategies.
+    """list available edge node statuses and deployment strategies.
 
     Returns:
         dict with keys: status, node_statuses, deployment_strategies, schedule_types

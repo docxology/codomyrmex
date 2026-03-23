@@ -122,7 +122,7 @@ class DashboardBuilder:
         return self
 
     def set_refresh(self, interval: str) -> DashboardBuilder:
-        """Set auto-refresh interval."""
+        """set auto-refresh interval."""
         self._refresh = interval
         return self
 

@@ -61,7 +61,7 @@ def emit_event(
 
 @mcp_tool(category="events")
 def list_event_types() -> dict[str, Any]:
-    """List all registered event types in the event bus.
+    """list all registered event types in the event bus.
 
     Returns:
         Dictionary with available event types and subscriber counts.
@@ -257,7 +257,7 @@ def events_agent_inbox(
 ) -> dict[str, Any]:
     """Read messages from an agent's inbox.
 
-    By default returns the **oldest** single message (FIFO).  Set *drain=True*
+    By default returns the **oldest** single message (FIFO).  set *drain=True*
     to atomically drain all pending messages at once.
 
     Args:

@@ -96,7 +96,7 @@ class TestCacheManagerEnhanced:
         # Access "a" to make it most recently used
         cache.get("a")
 
-        # Set "c", which should evict "b" (since "a" was accessed last)
+        # set "c", which should evict "b" (since "a" was accessed last)
         cache.set("c", 3)
 
         assert "a" in cache._memory_cache

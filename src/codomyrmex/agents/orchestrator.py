@@ -283,7 +283,7 @@ class ConversationOrchestrator:
 
     Args:
         channel: Relay channel ID (auto-generated if empty).
-        agents: List of agent specs (dicts or ``AgentSpec`` instances).
+        agents: list of agent specs (dicts or ``AgentSpec`` instances).
         seed_prompt: Initial prompt to kick off the conversation.
         relay_dir: Override relay storage directory (for tests).
         context_files: Paths to project files to inject into agent context.

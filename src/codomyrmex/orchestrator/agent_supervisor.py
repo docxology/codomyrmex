@@ -149,7 +149,7 @@ class AgentSupervisor:
             crashed_agent_id: The agent that crashed.
 
         Returns:
-            List of agent IDs that should be restarted.
+            list of agent IDs that should be restarted.
         """
         if self._strategy == RestartStrategy.ONE_FOR_ONE:
             return [crashed_agent_id]

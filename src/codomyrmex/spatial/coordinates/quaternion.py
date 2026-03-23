@@ -192,7 +192,7 @@ class Quaternion:
         """Convert to axis-angle representation.
 
         Returns:
-            Tuple of (axis, angle) where axis is (x, y, z) unit vector
+            tuple of (axis, angle) where axis is (x, y, z) unit vector
             and angle is in radians.
         """
         q = self.normalize()

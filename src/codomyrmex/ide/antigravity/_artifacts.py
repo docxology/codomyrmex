@@ -82,10 +82,10 @@ class AntigravityArtifactsMixin:
         return None
 
     def list_artifacts(self) -> list[dict[str, Any]]:
-        """List conversation artifacts.
+        """list conversation artifacts.
 
         Returns:
-            List of artifact metadata dictionaries.
+            list of artifact metadata dictionaries.
         """
         if not self._connected or not self._conversation_id:
             return []
@@ -104,7 +104,7 @@ class AntigravityArtifactsMixin:
             name: Artifact name (without extension).
 
         Returns:
-            Dict with artifact data including content.
+            dict with artifact data including content.
         """
         if not self._connected or not self._conversation_id:
             return None
@@ -138,7 +138,7 @@ class AntigravityArtifactsMixin:
             artifact_type: Type of artifact (task, implementation_plan, walkthrough, other).
 
         Returns:
-            Dict with artifact metadata.
+            dict with artifact metadata.
 
         Raises:
             ArtifactError: If artifact creation fails.
@@ -179,7 +179,7 @@ class AntigravityArtifactsMixin:
             content: New artifact content.
 
         Returns:
-            Dict with artifact metadata.
+            dict with artifact metadata.
 
         Raises:
             ArtifactError: If artifact doesn't exist or update fails.

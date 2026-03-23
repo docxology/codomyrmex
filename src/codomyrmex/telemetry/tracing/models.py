@@ -128,12 +128,12 @@ class Span:
         return self.end_time is not None
 
     def set_attribute(self, key: str, value: Any) -> "Span":
-        """Set an attribute. Returns self for chaining."""
+        """set an attribute. Returns self for chaining."""
         self.attributes[key] = value
         return self
 
     def set_attributes(self, attributes: dict[str, Any]) -> "Span":
-        """Set multiple attributes."""
+        """set multiple attributes."""
         self.attributes.update(attributes)
         return self
 
@@ -154,7 +154,7 @@ class Span:
         return self
 
     def set_status(self, status: SpanStatus, message: str = "") -> "Span":
-        """Set span status."""
+        """set span status."""
         self.status = status
         self.status_message = message
         return self

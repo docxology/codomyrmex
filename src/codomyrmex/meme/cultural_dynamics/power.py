@@ -11,8 +11,8 @@ def map_power_dynamics(
     """Map power based on capital flows.
 
     Args:
-        entities: List of entity IDs.
-        flows: List of (source, target, amount) tuples.
+        entities: list of entity IDs.
+        flows: list of (source, target, amount) tuples.
     """
     scores = dict.fromkeys(entities, 0.0)
 

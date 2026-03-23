@@ -329,7 +329,7 @@ class DatabasePerformanceMonitor:
             database_name: Name of the database to check
 
         Returns:
-            List of active alerts
+            list of active alerts
 
         """
         alerts = []
@@ -481,7 +481,7 @@ class DatabasePerformanceMonitor:
             days: Days of history to retrieve
 
         Returns:
-            List of historical performance data
+            list of historical performance data
 
         """
         cutoff_time = datetime.now() - timedelta(days=days)

@@ -144,7 +144,7 @@ class PluginValidationError(PluginError):
 
         Args:
             message: Error description
-            validation_errors: List of validation error messages
+            validation_errors: list of validation error messages
             **kwargs: Additional context passed to parent
         """
         super().__init__(message, **kwargs)

@@ -45,7 +45,7 @@ def privacy_scrub(data: dict[str, Any] | None = None) -> dict[str, Any]:
 
 @mcp_tool(
     category="privacy",
-    description="List the default blacklisted metadata keys that CrumbCleaner removes.",
+    description="list the default blacklisted metadata keys that CrumbCleaner removes.",
 )
 def privacy_list_blacklist() -> dict[str, Any]:
     """Return the current set of blacklisted metadata key names.

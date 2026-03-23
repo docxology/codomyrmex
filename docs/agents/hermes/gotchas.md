@@ -101,3 +101,10 @@ tail -10 ~/.hermes/logs/gateway.log  # should show "Connected and polling"
 ## 7. Port Conflicts
 
 **Note:** Multiple gateway instances don't conflict (each polls Telegram independently). But local tool servers (MCP, etc.) may conflict if using same ports. Use different tool configurations per instance.
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

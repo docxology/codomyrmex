@@ -84,7 +84,7 @@ class WorkflowDAG:
         Initialize the DAG with optional tasks.
 
         Args:
-            tasks: List of task dictionaries to initialize the DAG with
+            tasks: list of task dictionaries to initialize the DAG with
         """
         self.tasks: dict[str, DAGTask] = {}
         self.graph: dict[str, set[str]] = defaultdict(set)  # task -> dependencies
@@ -138,7 +138,7 @@ class WorkflowDAG:
         Validate the DAG for cycles and other issues.
 
         Returns:
-            Tuple of (is_valid, list_of_errors)
+            tuple of (is_valid, list_of_errors)
         """
         errors = []
 
@@ -223,7 +223,7 @@ class WorkflowDAG:
         Get the topological execution order of tasks.
 
         Returns:
-            List of lists, where each inner list contains tasks that can be
+            list of lists, where each inner list contains tasks that can be
             executed in parallel at that level
         """
         # Validate DAG first
@@ -269,7 +269,7 @@ class WorkflowDAG:
             task_name: Name of the task
 
         Returns:
-            List of all dependency task names
+            list of all dependency task names
         """
         if task_name not in self.tasks:
             return []
@@ -295,7 +295,7 @@ class WorkflowDAG:
             task_name: Name of the task
 
         Returns:
-            List of all dependent task names
+            list of all dependent task names
         """
         if task_name not in self.tasks:
             return []

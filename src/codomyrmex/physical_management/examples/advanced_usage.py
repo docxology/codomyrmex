@@ -97,7 +97,7 @@ def example_smart_factory_monitoring():
         f"Network connectivity: {network_metrics['average_degree']:.2f} avg connections per object"
     )
 
-    # Set up event monitoring
+    # set up event monitoring
     def factory_event_handler(event):
         print(f"Factory Event: {event.event_type.value} for {event.object_id}")
 
@@ -122,10 +122,10 @@ def example_iot_sensor_network():
     analytics.create_stream("humidity", buffer_size=5000, window_duration=30.0)
     analytics.create_stream("pressure", buffer_size=5000, window_duration=30.0)
 
-    # Set up predictive analytics
+    # set up predictive analytics
     predictor = PredictiveAnalytics(min_data_points=10)
 
-    # Set up alert conditions
+    # set up alert conditions
     analytics.create_alert("temperature", "above", 40.0, "High temperature alert!")
     analytics.create_alert("humidity", "below", 20.0, "Low humidity warning!")
 

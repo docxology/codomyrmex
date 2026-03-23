@@ -146,7 +146,7 @@ class ModuleHealthProvider:
             force_refresh: Force a fresh scan.
 
         Returns:
-            List of :class:`ModuleHealth` for every module.
+            list of :class:`ModuleHealth` for every module.
         """
         if (
             not force_refresh
@@ -187,7 +187,7 @@ class ModuleHealthProvider:
         """Get aggregate summary statistics.
 
         Returns:
-            Dict with total modules, files, LOC, tests, and doc completeness.
+            dict with total modules, files, LOC, tests, and doc completeness.
         """
         modules = self.get_all_modules()
         return {

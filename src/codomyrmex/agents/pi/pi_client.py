@@ -81,7 +81,7 @@ class PiClient:
         client = PiClient(PiConfig(provider="anthropic"))
         client.start()
 
-        for event in client.prompt("List *.py files in src/"):
+        for event in client.prompt("list *.py files in src/"):
             if event.get("type") == "message_update":
                 ae = event.get("assistantMessageEvent", {})
                 if ae.get("type") == "text_delta":
@@ -296,7 +296,7 @@ class PiClient:
         self._send({"type": "set_model", "model": model})
 
     def set_thinking(self, level: str) -> None:
-        """Set thinking level (off|minimal|low|medium|high|xhigh)."""
+        """set thinking level (off|minimal|low|medium|high|xhigh)."""
         self._send({"type": "set_thinking", "level": level})
 
     def get_state(self) -> None:

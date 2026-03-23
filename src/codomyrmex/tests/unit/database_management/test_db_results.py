@@ -12,7 +12,7 @@ from codomyrmex.database_management.migration.migration_manager import (
 )
 
 # ==============================================================================
-# Result Set Iteration Tests
+# Result set Iteration Tests
 # ==============================================================================
 
 

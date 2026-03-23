@@ -35,7 +35,7 @@ class PayStub:
         federal_tax: Federal income tax withheld.
         social_security: Social Security withholding.
         medicare: Medicare withholding.
-        other_deductions: Dict of additional deduction names to amounts.
+        other_deductions: dict of additional deduction names to amounts.
         net_pay: Take-home pay after all deductions.
         generated_at: Timestamp of stub generation.
     """
@@ -157,10 +157,10 @@ class PayrollProcessor:
         """Generate a detailed pay stub for an employee.
 
         Args:
-            employee: Dict with at least ``"name"`` (str) and ``"id"`` (str).
+            employee: dict with at least ``"name"`` (str) and ``"id"`` (str).
                 May also include ``"deductions"`` -- a dict mapping deduction
                 names to per-period amounts (e.g. ``{"401k": 500}``).
-            period: Dict with ``"label"`` (str, e.g. ``"Jan 2024"``) and
+            period: dict with ``"label"`` (str, e.g. ``"Jan 2024"``) and
                 ``"gross_salary"`` (float).  Optional ``"pay_period"``
                 defaults to ``"monthly"``.
 

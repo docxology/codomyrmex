@@ -217,7 +217,7 @@ class ConfigMigrator:
             to_version: Target version
 
         Returns:
-            List of (from_version, to_version) tuples representing migration steps
+            list of (from_version, to_version) tuples representing migration steps
         """
         # Simple path finding - assumes linear version progression
         # Could be enhanced with more sophisticated path finding for complex version graphs
@@ -444,7 +444,7 @@ class ConfigMigrator:
         return current
 
     def _set_nested_value(self, config: dict[str, Any], path: str, value: Any) -> None:
-        """Set a nested value in configuration using dot notation."""
+        """set a nested value in configuration using dot notation."""
         keys = path.split(".")
         current = config
 

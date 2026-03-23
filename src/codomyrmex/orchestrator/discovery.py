@@ -70,7 +70,7 @@ def discover_scripts(
         max_depth: Maximum directory depth to search
 
     Returns:
-        List of script paths
+        list of script paths
     """
     scripts = []
 

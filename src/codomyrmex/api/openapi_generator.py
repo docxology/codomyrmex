@@ -132,11 +132,11 @@ def generate_openapi_spec(
     Args:
         title: API title
         version: API version
-        endpoints: List of API endpoints
+        endpoints: list of API endpoints
         base_url: Base API URL
 
     Returns:
-        Dict containing OpenAPI specification
+        dict containing OpenAPI specification
     """
     base_url = base_url or os.getenv("API_BASE_URL", DEFAULT_API_BASE_URL)
     generator = DocumentationOpenAPIGenerator()
@@ -151,7 +151,7 @@ def validate_openapi_spec(spec: dict[str, Any]) -> list[str]:
         spec: OpenAPI specification dictionary
 
     Returns:
-        List of validation errors (empty if valid)
+        list of validation errors (empty if valid)
     """
     generator = DocumentationOpenAPIGenerator()
     return generator.validate_spec(spec)

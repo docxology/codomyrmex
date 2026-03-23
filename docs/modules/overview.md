@@ -154,6 +154,7 @@ graph TD
 | **`calendar_integration`** | Event management | Calendar providers, event scheduling |
 | **`release`** | Release management | Versioning, changelog generation, release coordination |
 | **`docs_gen`** | Documentation generation | Template scaffolding, source-to-docs conversion |
+| **`calendar`** | Event management | Calendar providers, event scheduling |
 
 ### **🎮 Application Modules**
 

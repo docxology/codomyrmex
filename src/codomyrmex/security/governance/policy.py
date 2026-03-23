@@ -75,7 +75,7 @@ class PolicyEngine:
             description: Optional description.
 
         Returns:
-            Dict with 'name', 'id', and 'description'.
+            dict with 'name', 'id', and 'description'.
 
         Raises:
             PolicyError: If a policy with that name already exists.
@@ -119,7 +119,7 @@ class PolicyEngine:
             context: Context dict to evaluate rules against.
 
         Returns:
-            Dict with 'passed', 'violations', 'total_rules', and 'details'.
+            dict with 'passed', 'violations', 'total_rules', and 'details'.
 
         Raises:
             PolicyError: If the policy does not exist.
@@ -161,7 +161,7 @@ class PolicyEngine:
             context: Context dict.
 
         Returns:
-            List of dicts with 'rule' and 'action' for each violation.
+            list of dicts with 'rule' and 'action' for each violation.
         """
         result = self.evaluate(policy_name, context)
         return [
@@ -178,7 +178,7 @@ class PolicyEngine:
             context: Context dict.
 
         Returns:
-            Dict with 'enforced' (bool), 'actions' (list of action strings),
+            dict with 'enforced' (bool), 'actions' (list of action strings),
             and 'violations' count.
         """
         violations = self.get_violations(policy_name, context)

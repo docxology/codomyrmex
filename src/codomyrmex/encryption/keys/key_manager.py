@@ -47,7 +47,7 @@ class KeyManager:
             key_file = self.key_dir / f"{key_id}.key"
             with open(key_file, "wb") as f:
                 f.write(key)
-            # Set restrictive permissions (owner read/write only)
+            # set restrictive permissions (owner read/write only)
             key_file.chmod(0o600)
             logger.info("Stored key: %s", key_id)
             return True
@@ -96,7 +96,7 @@ class KeyManager:
             raise
 
     def list_keys(self) -> Sequence[str]:
-        """List all stored key identifiers.
+        """list all stored key identifiers.
 
         Returns:
             Sorted list of key ID strings.

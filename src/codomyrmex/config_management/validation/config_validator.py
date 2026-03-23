@@ -150,7 +150,7 @@ class ConfigValidator:
                     if not custom_result.is_valid:
                         result.is_valid = False
                 elif isinstance(custom_result, list):
-                    # List of issues
+                    # list of issues
                     for issue in custom_result:
                         if isinstance(issue, ValidationIssue):
                             result.add_issue(issue)
@@ -174,10 +174,10 @@ class ConfigValidator:
 
         Args:
             config: Configuration dictionary
-            required: List of required field names
+            required: list of required field names
 
         Returns:
-            List of missing field names
+            list of missing field names
         """
         missing = []
         for field_name in required:
@@ -196,7 +196,7 @@ class ConfigValidator:
             schema: Type schema dictionary
 
         Returns:
-            List of validation issues
+            list of validation issues
         """
         issues = []
 
@@ -228,7 +228,7 @@ class ConfigValidator:
             constraints: Constraint dictionary mapping fields to constraint rules
 
         Returns:
-            List of validation issues
+            list of validation issues
         """
         issues = []
 
@@ -595,7 +595,7 @@ def validate_config_schema(
         schema: Schema to validate against
 
     Returns:
-        Tuple of (is_valid, list_of_error_messages)
+        tuple of (is_valid, list_of_error_messages)
     """
     validator = ConfigValidator(schema)
     result = validator.validate(config)

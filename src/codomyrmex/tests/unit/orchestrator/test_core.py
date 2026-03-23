@@ -7,7 +7,7 @@ from codomyrmex.orchestrator.core import main
 
 @pytest.fixture
 def test_env(tmp_path):
-    """Set up a real directory structure with scripts for core.main()."""
+    """set up a real directory structure with scripts for core.main()."""
     scripts_dir = tmp_path / "scripts"
     scripts_dir.mkdir()
 

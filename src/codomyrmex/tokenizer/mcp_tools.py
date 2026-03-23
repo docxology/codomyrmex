@@ -24,7 +24,7 @@ def tokenizer_train(texts: list[str], vocab_size: int = 500) -> dict:
     """Train a BPE tokenizer on a list of texts.
 
     Args:
-        texts: List of training strings.
+        texts: list of training strings.
         vocab_size: Target vocabulary size (default 500).
 
     Returns:
@@ -64,7 +64,7 @@ def tokenizer_decode(token_ids: list[int]) -> dict:
     """Decode BPE token IDs back to text.
 
     Args:
-        token_ids: List of integer token IDs.
+        token_ids: list of integer token IDs.
 
     Returns:
         dict with: status, text (str).

@@ -202,7 +202,7 @@ class TestSuiteResult:
             threshold: Maximum acceptable drop in pass_rate or avg score.
 
         Returns:
-            Dict with 'regressed' bool, 'pass_rate_delta', 'score_delta',
+            dict with 'regressed' bool, 'pass_rate_delta', 'score_delta',
             and lists of improved/degraded test IDs.
         """
         pr_delta = self.pass_rate - baseline.pass_rate

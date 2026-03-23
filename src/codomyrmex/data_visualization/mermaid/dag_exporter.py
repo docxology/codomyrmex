@@ -31,7 +31,7 @@ class ModuleNode:
         name: Module name (e.g., ``"auth"``).
         file_count: Number of ``.py`` files in the module.
         loc: Total lines of code.
-        imports: Set of module names this module imports from.
+        imports: set of module names this module imports from.
     """
 
     name: str

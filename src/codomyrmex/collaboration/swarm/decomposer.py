@@ -109,7 +109,7 @@ class TaskDecomposer:
             task: High-level task description.
 
         Returns:
-            List of ``SubTask`` objects with ``depends_on`` edges.
+            list of ``SubTask`` objects with ``depends_on`` edges.
 
         """
         task_lower = task.lower()
@@ -152,7 +152,7 @@ class TaskDecomposer:
         """Topologically sort sub-tasks by their dependency edges.
 
         Args:
-            subtasks: List of sub-tasks with ``depends_on`` edges.
+            subtasks: list of sub-tasks with ``depends_on`` edges.
 
         Returns:
             Sub-tasks in valid execution order.

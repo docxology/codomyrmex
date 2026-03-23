@@ -50,7 +50,7 @@ def cli_commands() -> dict[str, dict[str, str | Callable]]:
             ),
         },
         "deps": {
-            "help": "List and verify installed dependencies",
+            "help": "list and verify installed dependencies",
             "handler": lambda **kwargs: print(
                 f"Dependencies status: {ensure_dependencies_installed()}"
             ),

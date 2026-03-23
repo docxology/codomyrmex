@@ -20,7 +20,7 @@ class TestTemplate:
         """Test that template directory contains the expected template files."""
         template_dir = code_dir / "codomyrmex" / "module_template"
 
-        # List all items in the template directory
+        # list all items in the template directory
         items = list(template_dir.iterdir())
 
         # Template directory should contain template files

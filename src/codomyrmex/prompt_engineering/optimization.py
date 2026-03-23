@@ -89,10 +89,10 @@ class PromptOptimizer:
 
     def set_few_shot_examples(self, examples: list[dict[str, str]]) -> None:
         """
-        Set examples for the few-shot optimization strategy.
+        set examples for the few-shot optimization strategy.
 
         Args:
-            examples: List of dicts with "input" and "output" keys.
+            examples: list of dicts with "input" and "output" keys.
         """
         self._few_shot_examples = examples
 
@@ -316,18 +316,18 @@ class PromptOptimizer:
         Optimize multiple templates with the same strategy.
 
         Args:
-            templates: List of templates to optimize.
+            templates: list of templates to optimize.
             strategy: The optimization strategy to apply to all.
             **kwargs: Strategy-specific options passed to each optimization.
 
         Returns:
-            List of OptimizationResult objects.
+            list of OptimizationResult objects.
         """
         return [self.optimize(t, strategy, **kwargs) for t in templates]
 
     def available_strategies(self) -> list[str]:
         """
-        List available optimization strategy names.
+        list available optimization strategy names.
 
         Returns:
             Sorted list of strategy value strings.

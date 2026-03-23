@@ -11,7 +11,7 @@ def eval_harness_run(
     """Run evaluation tasks against an identity model and return metrics.
 
     Args:
-        tasks: List of task dicts, each with 'name' and 'examples' (list of
+        tasks: list of task dicts, each with 'name' and 'examples' (list of
                {'input': str, 'target': str}). Default provides simple QA tasks.
         metric: Metric to use ('exact_match' or 'f1')
 
@@ -63,8 +63,8 @@ def eval_harness_score(
     """Score predictions against targets using the specified metric.
 
     Args:
-        predictions: List of predicted strings
-        targets: List of target/gold strings
+        predictions: list of predicted strings
+        targets: list of target/gold strings
         metric: 'exact_match' or 'f1'
 
     Returns:

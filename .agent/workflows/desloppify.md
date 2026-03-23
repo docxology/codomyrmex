@@ -4,53 +4,47 @@ description: Codebase health scanner and technical debt tracker. Use when asked 
 
 # Desloppify
 
-Crossover workflow from the `desloppify` Claude Code skill. This workflow maximizes the codebase "strict score" by detecting and fixing code quality issues, dead code, and duplication.
+Maximize the codebase **strict score** via the `desloppify` CLI. Full workflow, install steps, exclude policy, and execution rules: [`.agent/skills/desloppify/SKILL.md`](../skills/desloppify/SKILL.md).
 
-Read the full skill:
-`view_file /Users/mini/Documents/GitHub/codomyrmex/.claude/skills/desloppify/SKILL.md`
+## Quick reference
 
-## 1. Outer Loop: Scan & Check
+**Scan**
 
 ```bash
-desloppify scan --path .       # analyze the codebase
-desloppify status              # check scores — are we at target?
+desloppify scan --path .
+desloppify status
 ```
 
-Rescan periodically to measure progress, especially after batch fixes.
-
-## 2. Inner Loop: Fix Issues
-
-Repeat until the queue is clear:
+**Inner loop** (repeat until queue is clear)
 
 ```bash
 desloppify next
 ```
 
-1. `desloppify next` tells you literally what to fix next.
-2. Fix the issue in the code.
-3. Resolve it using the exact command provided by `next`.
+Fix the issue, then run the **exact** `resolve` command from `next` output. Do not skip the resolve step.
 
-If `next` suggests an auto-fixer, run `desloppify fix <fixer> --dry-run` to preview, then apply.
-
-## 3. Planning & Clustering
-
-Use `plan` to shape what `next` gives you:
+**Planning**
 
 ```bash
-desloppify plan                        # see the full ordered queue
-desloppify plan cluster create <name>  # group related issues
-desloppify plan focus <cluster>        # scope next to one cluster
-desloppify plan defer <pat>            # push low-value items aside
+desloppify plan
+desloppify plan queue
+desloppify plan cluster create <name>
+desloppify plan focus <cluster>
+desloppify plan defer <pat>
 ```
 
-## 4. Subjective Reviews
+**Backlog** (inspection only; `next` drives work)
 
-The scan will prompt you when a subjective review (design quality) is needed.
+```bash
+desloppify backlog
+```
 
-**Preferred One-Command Review:**
+**Subjective review** (when prompted)
 
 ```bash
 desloppify review --run-batches --runner codex --parallel --scan-after-import
 ```
 
-Alternatively, you can split dimensions across N subagents and merge outputs, then run `desloppify review --import findings.json`. Follow the CLI instructions strictly.
+Or follow `desloppify review --import` per CLI instructions. If `next` suggests an auto-fixer: `desloppify fix <fixer> --dry-run` then apply.
+
+Rescan periodically after batch fixes. Follow scan/agent instructions from the tool, not improvised analysis.

@@ -62,7 +62,7 @@ class EmailProvider(abc.ABC):
     def list_messages(
         self, query: str = "", max_results: int = 100
     ) -> list[EmailMessage]:
-        """List messages matching the generic query."""
+        """list messages matching the generic query."""
         ...
 
     @abc.abstractmethod

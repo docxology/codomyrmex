@@ -235,7 +235,7 @@ class TestHermesSessionMCPTools:
         session_id = res1["session_id"]
         assert session_id is not None
 
-        # 2. List sessions
+        # 2. list sessions
         list_res = hermes_session_list()
         assert list_res["status"] == "success"
         assert session_id in list_res["sessions"]

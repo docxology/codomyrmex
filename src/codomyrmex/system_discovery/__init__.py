@@ -23,7 +23,7 @@ def cli_commands():
     """Return CLI commands for the system_discovery module."""
     return {
         "modules": {
-            "help": "List all discovered modules and their capabilities",
+            "help": "list all discovered modules and their capabilities",
             "handler": lambda **kwargs: print(
                 f"System context: {type(get_system_context()).__name__}\n"
                 f"Discovery engine: {SystemDiscovery.__name__}\n"

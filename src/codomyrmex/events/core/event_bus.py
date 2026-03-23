@@ -318,7 +318,7 @@ class EventBus:
             self.subscriptions.clear()
 
     def list_event_types(self) -> list[str]:
-        """List all event types that have active subscriptions."""
+        """list all event types that have active subscriptions."""
         all_patterns = set()
         with self._lock:
             for sub in self.subscriptions.values():

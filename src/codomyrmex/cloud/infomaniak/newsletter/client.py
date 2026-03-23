@@ -139,7 +139,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
     # ------------------------------------------------------------------
 
     def list_campaigns(self) -> list[dict[str, Any]]:
-        """List all campaigns."""
+        """list all campaigns."""
         result = self._get("campaigns")
         if isinstance(result, list):
             return result
@@ -217,7 +217,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
     # ------------------------------------------------------------------
 
     def list_mailing_lists(self) -> list[dict[str, Any]]:
-        """List all mailing lists."""
+        """list all mailing lists."""
         result = self._get("mailing-lists")
         if isinstance(result, list):
             return result
@@ -257,7 +257,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
 
         Args:
             list_id: Mailing list ID.
-            contacts: List of contact dicts with at least 'email' key.
+            contacts: list of contact dicts with at least 'email' key.
         """
         return self._post(
             f"mailing-lists/{list_id}/contacts/import",

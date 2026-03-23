@@ -91,7 +91,7 @@ def _extract_public_functions(source: str) -> dict[str, ast.FunctionDef]:
         source: Python source code.
 
     Returns:
-        Dict mapping function name to its AST node.
+        dict mapping function name to its AST node.
     """
     result: dict[str, ast.FunctionDef] = {}
     try:
@@ -114,7 +114,7 @@ def _extract_function_params(node: ast.FunctionDef) -> list[str]:
         node: AST function definition node.
 
     Returns:
-        List of parameter names (excluding 'self' and 'cls').
+        list of parameter names (excluding 'self' and 'cls').
     """
     params = []
     for arg in node.args.args:
@@ -265,7 +265,7 @@ class CodeChangeVerifier:
         """Initialize with invariant rules.
 
         Args:
-            rules: List of InvariantRule to apply. Defaults to DEFAULT_RULES.
+            rules: list of InvariantRule to apply. Defaults to DEFAULT_RULES.
         """
         self._rules: list[InvariantRule] = list(rules or DEFAULT_RULES)
 

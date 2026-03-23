@@ -331,7 +331,7 @@ def get_best_practices(category: str | None = None) -> list[SecurityBestPractice
         category: Optional category filter (authentication, data_protection, operations, coding)
 
     Returns:
-        List of security best practices
+        list of security best practices
     """
     practices = list(BEST_PRACTICES.values())
     if category:
@@ -446,7 +446,7 @@ def get_practices_for_category(category: str) -> list[SecurityBestPractice]:
         category: Practice category
 
     Returns:
-        List of practices in the category
+        list of practices in the category
     """
     return [p for p in BEST_PRACTICES.values() if p.category == category]
 
@@ -458,7 +458,7 @@ def prioritize_practices(
     Prioritize practices by priority level.
 
     Args:
-        practices: List of practices
+        practices: list of practices
 
     Returns:
         Sorted list (critical first)

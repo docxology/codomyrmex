@@ -201,13 +201,13 @@ class VersionManager:
 
     def list_versions(self, template_name: str) -> list[PromptVersion]:
         """
-        List all versions of a template in chronological order.
+        list all versions of a template in chronological order.
 
         Args:
             template_name: Name of the template.
 
         Returns:
-            List of PromptVersion objects, oldest first.
+            list of PromptVersion objects, oldest first.
 
         Raises:
             KeyError: If no versions exist for the template.
@@ -218,7 +218,7 @@ class VersionManager:
 
     def list_template_names(self) -> list[str]:
         """
-        List all template names that have versions.
+        list all template names that have versions.
 
         Returns:
             Sorted list of template names.
@@ -322,7 +322,7 @@ class VersionManager:
             template_name: Name of the template.
 
         Returns:
-            List of version dictionaries in chronological order.
+            list of version dictionaries in chronological order.
         """
         versions = self.list_versions(template_name)
         return [v.to_dict() for v in versions]

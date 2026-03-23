@@ -321,7 +321,7 @@ class CaseVisualizer(BaseChartVisualizer):
         """Plot case similarity scores with enhanced styling.
 
         Args:
-            cases: List of (case, similarity) tuples
+            cases: list of (case, similarity) tuples
             query_case: Optional query case for reference
             group_by: Optional attribute to group by ("status", "part")
             show_threshold: Whether to show similarity threshold line
@@ -437,7 +437,7 @@ class CaseVisualizer(BaseChartVisualizer):
         """Plot case features comparison with enhanced styling.
 
         Args:
-            cases: List of cases
+            cases: list of cases
             features: Feature names to plot
             chart_type: Chart type ("bar", "grouped")
 
@@ -525,7 +525,7 @@ class InferenceVisualizer(BaseChartVisualizer):
         """Plot evolution of beliefs over time with enhanced styling.
 
         Args:
-            belief_history: List of belief dictionaries over time
+            belief_history: list of belief dictionaries over time
             show_confidence: Whether to show confidence intervals (if available)
 
         Returns:

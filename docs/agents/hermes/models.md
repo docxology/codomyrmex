@@ -189,5 +189,12 @@ When using **Codomyrmex** `HermesClient`, Hermes **skill packs** (`hermes chat -
 - [Configuration](configuration.md) — Full config reference
 - [Sessions](sessions.md) — Compression and summary model usage
 - [Personalities](personalities.md) — Custom personas
-- [Copilot ACP](copilot_acp.md) — Using GitHub Copilot as a Hermes backend (new v0.3.0)
+- [Copilot ACP](copilot_acp.md) — Using GitHub Copilot as a Hermes backend (Hermes doc suite v0.4.0)
 - [skills.md](skills.md) — Skill registry, merge order, backends
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

@@ -50,7 +50,7 @@ def create_tag(
 
 @mcp_tool(name="git_list_tags")
 def list_tags(repository_path: str | None = None) -> list[str]:
-    """List all Git tags."""
+    """list all Git tags."""
     if repository_path is None:
         repository_path = os.getcwd()
 

@@ -24,7 +24,7 @@ class ArchiveManager:
         """Create an archive containing multiple files.
 
         Args:
-            files: List of file paths to include
+            files: list of file paths to include
             output: Output archive path
             format: Archive format (zip, tar, tar.gz)
 

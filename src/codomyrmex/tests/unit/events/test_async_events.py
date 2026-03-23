@@ -960,7 +960,7 @@ class TestAsyncEventCorrelation:
 
         bus.subscribe([EventType.CUSTOM], handler, "corr_collector")
 
-        # Set correlation context
+        # set correlation context
         emitter.set_correlation_context("shared-correlation-id")
 
         # Emit multiple events

@@ -137,13 +137,13 @@ class SkillsManager:
 
     def list_skills(self, category: str | None = None) -> list[dict[str, Any]]:
         """
-        List available skills.
+        list available skills.
 
         Args:
             category: Optional category filter
 
         Returns:
-            List of skill information dictionaries
+            list of skill information dictionaries
         """
         index = self.registry.get_index()
 
@@ -182,7 +182,7 @@ class SkillsManager:
             query: Search query
 
         Returns:
-            List of matching skills
+            list of matching skills
         """
         return self.registry.search_skills(query)
 
@@ -245,7 +245,7 @@ class SkillsManager:
         Get all available skill categories.
 
         Returns:
-            List of category names
+            list of category names
         """
         return self.registry.get_categories()
 

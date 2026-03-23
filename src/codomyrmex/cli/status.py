@@ -52,7 +52,7 @@ def print_status_report():
     print("\nEnvironment Constraints:")
     print(f"UV_PROJECT_ENV:     {os.environ.get('UV_PROJECT_ENV', 'Not set')}")
     print(
-        f"ANTHROPIC_API_KEY:  {'Set' if 'ANTHROPIC_API_KEY' in os.environ else 'Not set'}"
+        f"ANTHROPIC_API_KEY:  {'set' if 'ANTHROPIC_API_KEY' in os.environ else 'Not set'}"
     )
 
     print("==================================================")

@@ -861,7 +861,7 @@ class TestCacheIntegration:
 
         cache = get_cache("workflow_test")
 
-        # Set values
+        # set values
         cache.set("key1", "value1")
         cache.set("key2", {"nested": "data"})
 
@@ -966,7 +966,7 @@ class TestCacheBasicOps:
         """Test multiple cache operations in sequence."""
         cache = InMemoryCache()
 
-        # Set multiple values
+        # set multiple values
         for i in range(10):
             cache.set(f"key{i}", f"value{i}")
 

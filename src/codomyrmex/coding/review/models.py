@@ -208,7 +208,7 @@ class ComplexityReductionSuggestion:
         current_complexity: Current cyclomatic complexity score.
         suggested_refactoring: Description of suggested refactoring.
         estimated_effort: Effort estimate ("low", "medium", "high").
-        benefits: List of benefits from the refactoring.
+        benefits: list of benefits from the refactoring.
         code_example: Optional example of the refactored code.
     """
 
@@ -262,7 +262,7 @@ class ArchitectureViolation:
         description: Detailed description of the violation.
         severity: Severity level of the violation.
         suggestion: Recommendation for fixing the violation.
-        affected_modules: List of modules affected by this violation.
+        affected_modules: list of modules affected by this violation.
     """
 
     file_path: str
@@ -357,7 +357,7 @@ class QualityGateResult:
         total_checks: Total number of quality checks performed.
         passed_checks: Number of checks that passed.
         failed_checks: Number of checks that failed.
-        failures: List of failure details with check names and values.
+        failures: list of failure details with check names and values.
     """
 
     passed: bool

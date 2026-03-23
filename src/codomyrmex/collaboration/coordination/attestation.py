@@ -190,11 +190,11 @@ class AttestationAuthority:
         """Verify multiple attestations in batch.
 
         Args:
-            attestations: List of attestations to verify.
+            attestations: list of attestations to verify.
             results: Corresponding result data for each attestation.
 
         Returns:
-            Dict mapping task_id to verification result.
+            dict mapping task_id to verification result.
 
         Raises:
             ValueError: If attestations and results have different lengths.

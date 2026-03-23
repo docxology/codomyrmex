@@ -157,7 +157,7 @@ class APIKeyManager:
     def list_keys(
         self, user_id: str | None = None, include_revoked: bool = False
     ) -> list[APIKey]:
-        """List API keys, optionally filtered by user and status.
+        """list API keys, optionally filtered by user and status.
 
         Args:
             user_id: Filter to a specific user.

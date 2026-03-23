@@ -18,7 +18,7 @@ def data_curation_deduplicate(texts: list, threshold: float = 0.8) -> dict:
     """Deduplicate a list of texts using MinHash + LSH.
 
     Args:
-        texts: List of text strings to deduplicate
+        texts: list of text strings to deduplicate
         threshold: Jaccard similarity threshold (0.0-1.0) for considering
             two documents as near-duplicates. Default 0.8.
 

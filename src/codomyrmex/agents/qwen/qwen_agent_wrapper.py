@@ -51,8 +51,8 @@ def create_assistant(
         model_type: Model backend type ('qwen_dashscope' or 'oai').
         name: Assistant display name.
         description: Assistant description.
-        tools: List of tool specs (strings for built-ins, dicts for custom).
-        mcp_servers: Dict of MCP server configs for native MCP integration.
+        tools: list of tool specs (strings for built-ins, dicts for custom).
+        mcp_servers: dict of MCP server configs for native MCP integration.
             Example: {'time': {'command': 'uvx', 'args': ['mcp-server-time']}}
         system_message: System prompt for the assistant.
         api_key: Explicit API key (default: reads DASHSCOPE_API_KEY env).

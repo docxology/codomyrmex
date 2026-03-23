@@ -43,10 +43,10 @@ def generate_text(
 
 @mcp_tool(category="llm")
 def list_local_models() -> dict:
-    """List available local models managed by Ollama.
+    """list available local models managed by Ollama.
 
     Returns:
-        List of local LLM models installed.
+        list of local LLM models installed.
     """
     from codomyrmex.llm import OllamaManager
 

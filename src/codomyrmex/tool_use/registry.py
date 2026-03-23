@@ -155,7 +155,7 @@ class ToolRegistry:
                 If False (default), tool must have at least one.
 
         Returns:
-            List of matching ToolEntry objects, sorted by name.
+            list of matching ToolEntry objects, sorted by name.
         """
         results: list[ToolEntry] = []
         for entry in self._tools.values():

@@ -67,7 +67,7 @@ class FirecrawlClient:
 
         Args:
             url: The URL to scrape
-            formats: List of formats to request (markdown, html, json, etc.)
+            formats: list of formats to request (markdown, html, json, etc.)
             actions: Optional list of actions to perform before scraping
             wait_for: Optional CSS selector or time to wait for
 
@@ -183,7 +183,7 @@ class FirecrawlClient:
         Returns:
             Dictionary containing discovered links with structure:
                 pass
-            - links: List of link dictionaries with url, title, description
+            - links: list of link dictionaries with url, title, description
 
         Raises:
             ScrapeConnectionError: If connection fails
@@ -238,7 +238,7 @@ class FirecrawlClient:
         Returns:
             Dictionary containing search results with structure:
                 pass
-            - data: List of result dictionaries with url, title, content
+            - data: list of result dictionaries with url, title, content
 
         Raises:
             ScrapeConnectionError: If connection fails
@@ -282,7 +282,7 @@ class FirecrawlClient:
         """Extract structured data from URLs using LLM.
 
         Args:
-            urls: List of URLs to extract data from (supports wildcards like "https://example.com/*")
+            urls: list of URLs to extract data from (supports wildcards like "https://example.com/*")
             schema: Optional JSON schema for extraction
             prompt: Optional prompt for extraction
 

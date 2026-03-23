@@ -116,7 +116,7 @@ class TestThinkingAgentKnowledgeWiring:
         agent = ThinkingAgent()
         assert agent.knowledge_retriever is None
 
-        # Set a mock-free retriever object via property
+        # set a mock-free retriever object via property
         class FakeRetriever:
             def retrieve(self, query: str):
                 from types import SimpleNamespace

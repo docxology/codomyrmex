@@ -124,7 +124,7 @@ def get_pull_requests(
         github_token: GitHub personal access token
 
     Returns:
-        List of PR dictionaries
+        list of PR dictionaries
 
     Raises:
         GitHubAPIError: If fetching fails
@@ -266,7 +266,7 @@ async def async_list_pull_requests(
         github_token: GitHub personal access token
 
     Returns:
-        List of PR dictionaries
+        list of PR dictionaries
 
     Raises:
         GitHubAPIError: If fetching fails

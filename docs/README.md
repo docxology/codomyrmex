@@ -1,10 +1,10 @@
 # Codomyrmex Documentation
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **128 top-level modules**, **604 `@mcp_tool` decorators** (596 dynamic + 9 static, see [reference/inventory.md](reference/inventory.md)), and **38 AI agent integrations**.
+Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **128 top-level modules**, **600** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md)), and **41 agent packages** under `src/codomyrmex/agents/` (see [agents/](agents/)).
 
 ## Documentation Map
 
@@ -24,7 +24,7 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 
 | Section | Purpose | Files |
 |:---|:---|---:|
-| [agents/](agents/) | **38 AI agent integrations** — Claude, Gemini, Jules, Hermes ([skill preload / registry](agents/hermes/skills.md)), and 34 more | 66+ |
+| [agents/](agents/) | **41 agent packages** — Claude, Gemini, Jules, Hermes ([skill preload / registry](agents/hermes/skills.md)), and 37 more | 66+ |
 | [agi/](agi/) | AGI theory, perspectives, emergence models | 14 |
 | [bio/](bio/) | Biological simulation documentation | 15 |
 | [cognitive/](cognitive/) | Cognitive architecture, Bayesian inference, active inference | 11 |
@@ -55,6 +55,7 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 ### For Developers
 - **Environment Setup**: [development/environment-setup.md](development/environment-setup.md)
 - **Testing Strategy**: [development/testing-strategy.md](development/testing-strategy.md)
+- **Code Review & SARIF**: [development/code-review-and-sarif.md](development/code-review-and-sarif.md) — local `scripts/review/` helpers and Bandit SARIF triage
 - **Contributing**: [project/contributing.md](project/contributing.md)
 
 ### For Agents

@@ -72,7 +72,7 @@ def document_list(
     recursive: bool = False,
     formats: str = "md,txt,json,yaml,html,xml,csv",
 ) -> dict:
-    """List document files in a directory.
+    """list document files in a directory.
 
     Args:
         directory: Directory path to scan (default: current directory)

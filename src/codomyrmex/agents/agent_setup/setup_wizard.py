@@ -153,7 +153,7 @@ def run_setup_wizard(
         if desc.agent_type == "api":
             value = _prompt_api_key(desc.display_name, desc.env_var)
             if value:
-                # Set in environment for immediate re-probe
+                # set in environment for immediate re-probe
                 os.environ[desc.env_var] = value
                 # Store in config dict
                 if desc.name not in agents_config:

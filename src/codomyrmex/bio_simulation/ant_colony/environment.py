@@ -114,7 +114,7 @@ class Environment:
         return dict(self._pheromones)
 
     def set_pheromone(self, position: tuple[int, int], amount: float) -> None:
-        """Set pheromone intensity at a specific cell."""
+        """set pheromone intensity at a specific cell."""
         ix, iy = round(position[0]), round(position[1])
         if 0 <= ix < self.width and 0 <= iy < self.height:
             self._pheromones[(ix, iy)] = self._pheromones.get((ix, iy), 0.0) + amount
@@ -148,7 +148,7 @@ class Environment:
             radius: Maximum Chebyshev distance (default 1 = 8-connected).
 
         Returns:
-            List of passable (x, y) cells within the radius.
+            list of passable (x, y) cells within the radius.
         """
         cx, cy = position
         neighbors: list[tuple[int, int]] = []

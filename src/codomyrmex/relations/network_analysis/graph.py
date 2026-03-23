@@ -74,7 +74,7 @@ class SocialGraph:
         count is reached).
 
         Returns:
-            List of sets, each set containing node IDs in a community.
+            list of sets, each set containing node IDs in a community.
 
         """
         labels: dict[str, str] = {n: n for n in self._nodes}

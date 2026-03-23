@@ -60,7 +60,7 @@ class SkillVersionManager:
             required_version: Version string to check against
 
         Returns:
-            Dict with 'compatible' (bool), 'current_version', 'required_version'
+            dict with 'compatible' (bool), 'current_version', 'required_version'
         """
         current = self.get_version(skill)
         current_parts = parse_version(current)
@@ -82,13 +82,13 @@ class SkillVersionManager:
 
     def list_versions(self, skill_id: str) -> list[str]:
         """
-        List known versions for a skill.
+        list known versions for a skill.
 
         Args:
             skill_id: Skill identifier
 
         Returns:
-            List of version strings (may be empty if no history tracked)
+            list of version strings (may be empty if no history tracked)
         """
         return list(self._version_history.get(skill_id, []))
 

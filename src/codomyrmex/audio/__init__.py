@@ -100,7 +100,7 @@ def cli_commands():
     """Return CLI commands for the audio module."""
     return {
         "formats": {
-            "help": "List supported audio formats and capabilities",
+            "help": "list supported audio formats and capabilities",
             "handler": lambda **kwargs: print(
                 f"Audio Module v{__version__}\n"
                 f"  STT available: {STT_AVAILABLE}"

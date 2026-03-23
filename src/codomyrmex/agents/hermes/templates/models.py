@@ -14,7 +14,7 @@ class PromptTemplate:
         name: Unique template name.
         system_prompt: System message for the LLM.
         user_template: User message template with ``{variable}`` placeholders.
-        variables: List of variable names used in the template.
+        variables: list of variable names used in the template.
         metadata: Optional metadata.
     """
 

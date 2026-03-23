@@ -26,7 +26,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_stacks(self) -> list[dict[str, Any]]:
-        """List all Heat stacks."""
+        """list all Heat stacks."""
         try:
             stacks = list(self._conn.orchestration.stacks())
             return [
@@ -180,7 +180,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_stack_resources(self, stack_id: str) -> list[dict[str, Any]]:
-        """List resources in a stack."""
+        """list resources in a stack."""
         try:
             resources = list(self._conn.orchestration.resources(stack_id))
             return [
@@ -223,7 +223,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
     def list_stack_events(
         self, stack_id: str, resource_name: str | None = None
     ) -> list[dict[str, Any]]:
-        """List events for a stack or specific resource."""
+        """list events for a stack or specific resource."""
         try:
             events = list(self._conn.orchestration.events(stack_id, resource_name))
             return [

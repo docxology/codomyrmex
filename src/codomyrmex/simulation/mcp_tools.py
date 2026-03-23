@@ -100,10 +100,10 @@ def simulation_status(
 
 @mcp_tool(
     category="simulation",
-    description="List available agent types and their descriptions.",
+    description="list available agent types and their descriptions.",
 )
 def simulation_list_agents() -> dict[str, Any]:
-    """List available simulation agent types.
+    """list available simulation agent types.
 
     Returns:
         dict with keys: status, agent_types

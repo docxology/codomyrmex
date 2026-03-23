@@ -169,7 +169,7 @@ class FPFAnalyzer:
             top_n: Number of top patterns to return
 
         Returns:
-            List of tuples (pattern_id, importance_score)
+            list of tuples (pattern_id, importance_score)
         """
         importance = self.calculate_pattern_importance()
         sorted_patterns = sorted(importance.items(), key=lambda x: x[1], reverse=True)
@@ -179,7 +179,7 @@ class FPFAnalyzer:
         """Get patterns that have no dependencies or dependents.
 
         Returns:
-            List of isolated pattern IDs
+            list of isolated pattern IDs
         """
         if not self._dependency_graph:
             self._build_dependency_graph()

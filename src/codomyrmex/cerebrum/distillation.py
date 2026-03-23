@@ -69,10 +69,10 @@ class DistillationPipeline:
         - outcome: conclusion action + justification
 
         Args:
-            traces: List of traces to distill.
+            traces: list of traces to distill.
 
         Returns:
-            List of distilled ``Case`` objects.
+            list of distilled ``Case`` objects.
         """
         cases: list[Case] = []
 

@@ -22,7 +22,7 @@ class GoogleDriveClient(GoogleWorkspaceBase):
         page_size: int = 20,
         fields: str = "files(id,name,mimeType,modifiedTime,size)",
     ) -> list[dict[str, Any]]:
-        """List files in Drive matching an optional query.
+        """list files in Drive matching an optional query.
 
         Args:
             query: Drive search query string (e.g., "name contains 'report'").
@@ -30,7 +30,7 @@ class GoogleDriveClient(GoogleWorkspaceBase):
             fields: Fields to include in the response.
 
         Returns:
-            List of file metadata dicts.
+            list of file metadata dicts.
         """
         params: dict[str, Any] = {"pageSize": page_size, "fields": fields}
         if query:

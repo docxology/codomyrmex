@@ -95,8 +95,8 @@ class ThreatModelBuilder:
 
         Args:
             system_name: Name of the system to model
-            assets: List of assets to protect
-            attack_surface: List of attack surface elements
+            assets: list of assets to protect
+            attack_surface: list of attack surface elements
             assumptions: Optional list of assumptions
             constraints: Optional list of constraints
 
@@ -361,8 +361,8 @@ def create_threat_model(
 
     Args:
         system_name: Name of the system
-        assets: List of system assets
-        attack_surface: List of attack surface elements
+        assets: list of system assets
+        attack_surface: list of attack surface elements
         builder: Optional ThreatModelBuilder instance
         methodology: Threat modeling methodology (STRIDE, DREAD, PASTA)
 
@@ -467,7 +467,7 @@ def prioritize_threats(threat_model: ThreatModel) -> list[Threat]:
         threat_model: ThreatModel to prioritize
 
     Returns:
-        List of threats sorted by priority (highest first)
+        list of threats sorted by priority (highest first)
     """
     from .risk_assessment import calculate_risk_score
 

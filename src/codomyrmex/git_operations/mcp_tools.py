@@ -173,10 +173,10 @@ def git_switch_branch(path: str, branch_name: str) -> dict[str, Any]:
 
 @mcp_tool(
     category="git_operations",
-    description="List all local branches in a git repository.",
+    description="list all local branches in a git repository.",
 )
 def git_list_branches(path: str = ".") -> dict[str, Any]:
-    """List all local branches in a git repository.
+    """list all local branches in a git repository.
 
     Args:
         path: Path to the git repository. Defaults to current directory.
@@ -351,10 +351,10 @@ def git_stash_apply(path: str = ".", stash_ref: str | None = None) -> dict[str, 
 
 @mcp_tool(
     category="git_operations",
-    description="List all stash entries in the repository.",
+    description="list all stash entries in the repository.",
 )
 def git_stash_list(path: str = ".") -> dict[str, Any]:
-    """List all stashes."""
+    """list all stashes."""
     try:
         result = _git().list_stashes(repository_path=path)
         return {"status": "success", "stashes": result, "count": len(result)}
@@ -379,10 +379,10 @@ def git_create_tag(
 
 @mcp_tool(
     category="git_operations",
-    description="List all tags in the repository.",
+    description="list all tags in the repository.",
 )
 def git_list_tags(path: str = ".") -> dict[str, Any]:
-    """List all tags."""
+    """list all tags."""
     try:
         result = _git().list_tags(repository_path=path)
         return {"status": "success", "tags": result, "count": len(result)}
@@ -431,10 +431,10 @@ def git_remove_remote(path: str, name: str) -> dict[str, Any]:
 
 @mcp_tool(
     category="git_operations",
-    description="List all configured remotes for the repository.",
+    description="list all configured remotes for the repository.",
 )
 def git_list_remotes(path: str = ".") -> dict[str, Any]:
-    """List all remotes."""
+    """list all remotes."""
     try:
         result = _git().list_remotes(repository_path=path)
         return {"status": "success", "remotes": result, "count": len(result)}
@@ -485,12 +485,12 @@ def git_get_config(path: str, key: str, global_config: bool = False) -> dict[str
 
 @mcp_tool(
     category="git_operations",
-    description="Set a git configuration value (local or global scope).",
+    description="set a git configuration value (local or global scope).",
 )
 def git_set_config(
     path: str, key: str, value: str, global_config: bool = False
 ) -> dict[str, Any]:
-    """Set a git config value."""
+    """set a git config value."""
     try:
         result = _git().set_config(
             key, value, repository_path=path, global_config=global_config

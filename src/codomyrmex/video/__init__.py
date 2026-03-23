@@ -144,7 +144,7 @@ def cli_commands():
     """Return CLI commands for the video module."""
     return {
         "formats": {
-            "help": "List supported video formats and capabilities",
+            "help": "list supported video formats and capabilities",
             "handler": lambda **kwargs: print(
                 f"Video Module v{__version__}\n"
                 f"  Video codecs: {', '.join(vc.value if hasattr(vc, 'value') else str(vc) for vc in VideoCodec)}\n"

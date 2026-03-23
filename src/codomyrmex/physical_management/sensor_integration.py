@@ -219,7 +219,7 @@ class SensorManager:
     ) -> dict[str, float]:
         """
         Calibrate a sensor using reference values.
-        reference_values: List of (sensor_reading, actual_value) tuples
+        reference_values: list of (sensor_reading, actual_value) tuples
         Returns calibration coefficients: {'slope': float, 'offset': float}
         """
         if len(reference_values) < 2:

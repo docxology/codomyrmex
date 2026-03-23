@@ -4,7 +4,7 @@ Exercises ``HermesClient.stream()`` to yield output lines in real time.
 
 Usage::
 
-    python -m codomyrmex.agents.hermes.scripts.run_stream "List 3 Python tips"
+    python -m codomyrmex.agents.hermes.scripts.run_stream "list 3 Python tips"
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ def run_stream(
         timeout: Subprocess timeout in seconds.
 
     Returns:
-        Dict with keys: ``status``, ``lines``, ``line_count``,
+        dict with keys: ``status``, ``lines``, ``line_count``,
         ``elapsed_s``, ``backend``.
     """
     client = HermesClient(
@@ -73,7 +73,7 @@ def run_stream(
 
 def main() -> None:
     """CLI entry point — pass prompt as first argument."""
-    prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "List 3 Python tips"
+    prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "list 3 Python tips"
     result = run_stream(prompt)
     for line in result["lines"]:
         print(line)

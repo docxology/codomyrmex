@@ -274,7 +274,7 @@ class APIVersionManager:
         Get all supported versions.
 
         Returns:
-            List of supported versions
+            list of supported versions
         """
         return list(self.versions.values())
 

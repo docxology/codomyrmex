@@ -217,7 +217,7 @@ class AgenticSeekClient(CLIAgentBase):
         """Validate external dependencies required by agenticSeek.
 
         Returns:
-            Dict mapping dependency names to availability booleans.
+            dict mapping dependency names to availability booleans.
         """
         return {
             "docker": shutil.which("docker") is not None,

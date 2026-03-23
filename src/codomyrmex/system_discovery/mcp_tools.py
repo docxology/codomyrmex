@@ -30,7 +30,7 @@ def health_check(module: str | None = None) -> dict:
 
 @mcp_tool(category="system_discovery")
 def list_modules() -> dict:
-    """List all registered modules and their availability.
+    """list all registered modules and their availability.
 
     Returns:
         Dictionary with module names, versions, and availability status.

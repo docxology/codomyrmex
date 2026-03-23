@@ -66,7 +66,7 @@ def list_commands(
     filter: str | None = None,
     vault: str | None = None,
 ) -> list[str]:
-    """List all registered command IDs.
+    """list all registered command IDs.
 
     Maps to ``obsidian commands [filter=<text>]``.
     """
@@ -95,7 +95,7 @@ def list_hotkeys(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List all configured hotkeys.
+    """list all configured hotkeys.
 
     Maps to ``obsidian hotkeys``.
     """
@@ -176,7 +176,7 @@ def list_history(
     path: str | None = None,
     vault: str | None = None,
 ) -> list[HistoryEntry]:
-    """List version history entries for a file.
+    """list version history entries for a file.
 
     Maps to ``obsidian history:list [file=|path=]``.
     """
@@ -297,7 +297,7 @@ def get_unresolved(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List unresolved (broken) links in the vault.
+    """list unresolved (broken) links in the vault.
 
     Maps to ``obsidian unresolved``.
     """
@@ -309,7 +309,7 @@ def get_orphans(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List orphan notes (no incoming links).
+    """list orphan notes (no incoming links).
 
     Maps to ``obsidian orphans``.
     """
@@ -321,7 +321,7 @@ def get_deadends(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List dead-end notes (no outgoing links).
+    """list dead-end notes (no outgoing links).
 
     Maps to ``obsidian deadends``.
     """

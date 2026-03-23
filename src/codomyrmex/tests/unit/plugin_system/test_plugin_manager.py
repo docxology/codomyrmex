@@ -78,7 +78,7 @@ class TestPlugin:
             json.dump(plugin_json, f)
 
         manager = PluginManager()
-        # Set plugin directories to include our test directory
+        # set plugin directories to include our test directory
         manager.loader.plugin_directories = [str(tmp_path)]
 
         plugins = manager.discover_plugins()

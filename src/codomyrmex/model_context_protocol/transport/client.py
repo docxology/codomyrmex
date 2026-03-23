@@ -247,7 +247,7 @@ class MCPClient:
                 return {"ok": False, "latency_ms": round(latency, 2), "error": str(exc)}
 
     async def list_tools(self) -> list[dict[str, Any]]:
-        """List tools exposed by the server."""
+        """list tools exposed by the server."""
         result = await self._send("tools/list")
         return result.get("tools", [])
 
@@ -293,7 +293,7 @@ class MCPClient:
         return result
 
     async def list_resources(self) -> list[dict[str, Any]]:
-        """List resources exposed by the server."""
+        """list resources exposed by the server."""
         result = await self._send("resources/list")
         return result.get("resources", [])
 
@@ -303,7 +303,7 @@ class MCPClient:
         return result
 
     async def list_prompts(self) -> list[dict[str, Any]]:
-        """List prompt templates exposed by the server."""
+        """list prompt templates exposed by the server."""
         result = await self._send("prompts/list")
         return result.get("prompts", [])
 

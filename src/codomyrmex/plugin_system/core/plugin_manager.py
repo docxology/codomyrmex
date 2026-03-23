@@ -146,7 +146,7 @@ class PluginManager:
     def list_plugins(
         self, filter_type: PluginType | None = None, include_loaded: bool = True
     ) -> list[PluginInfo]:
-        """List available plugins."""
+        """list available plugins."""
         return self.registry.list_plugins(filter_type)
 
     def get_plugin_status(self, plugin_name: str) -> dict[str, Any]:

@@ -92,7 +92,7 @@ class DeadLetterQueue:
         since: datetime | None = None,
         include_replayed: bool = False,
     ) -> list[dict[str, Any]]:
-        """List dead-letter entries with optional filtering.
+        """list dead-letter entries with optional filtering.
 
         Args:
             operation: Filter by operation name.
@@ -100,7 +100,7 @@ class DeadLetterQueue:
             include_replayed: Include already-replayed entries.
 
         Returns:
-            List of entry dicts.
+            list of entry dicts.
 
         Example:
             >>> dlq.list_entries(operation="sync")
@@ -140,7 +140,7 @@ class DeadLetterQueue:
             callback: Function(operation, args) -> result.
 
         Returns:
-            Dict with replay outcome (success, result, error).
+            dict with replay outcome (success, result, error).
 
         Example:
             >>> dlq.replay("uuid-123", my_handler)

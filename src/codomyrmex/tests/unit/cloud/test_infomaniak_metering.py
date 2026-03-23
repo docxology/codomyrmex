@@ -308,7 +308,7 @@ class TestInfomaniakMetering:
 
     def test_get_all_usage_structure(self, stub_openstack_connection):
         """get_all_usage returns compute, storage, network, object_storage, and timestamp."""
-        # Set up minimal stubs so sub-methods succeed
+        # set up minimal stubs so sub-methods succeed
         stub_openstack_connection.compute.servers.return_value = []
         stub_openstack_connection.block_storage.volumes.return_value = []
         stub_openstack_connection.network.networks.return_value = []

@@ -36,10 +36,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
     def list_instances(self) -> list[dict[str, Any]]:
         """
-        List all compute instances.
+        list all compute instances.
 
         Returns:
-            List of instance dictionaries with id, name, status, etc.
+            list of instance dictionaries with id, name, status, etc.
         """
         try:
             servers = list(self._conn.compute.servers())
@@ -86,7 +86,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             image: Image name or ID
             network: Network name or ID
             key_name: SSH key pair name
-            security_groups: List of security group names
+            security_groups: list of security group names
             user_data: Cloud-init user data script
             availability_zone: Target availability zone
             **kwargs: Additional Nova create parameters
@@ -226,10 +226,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
     def list_images(self) -> list[dict[str, Any]]:
         """
-        List available images.
+        list available images.
 
         Returns:
-            List of image dictionaries
+            list of image dictionaries
         """
         try:
             images = list(self._conn.image.images())
@@ -273,10 +273,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
     def list_flavors(self) -> list[dict[str, Any]]:
         """
-        List available flavors (instance types).
+        list available flavors (instance types).
 
         Returns:
-            List of flavor dictionaries
+            list of flavor dictionaries
         """
         try:
             flavors = list(self._conn.compute.flavors())
@@ -301,10 +301,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
     def list_keypairs(self) -> list[dict[str, Any]]:
         """
-        List SSH key pairs.
+        list SSH key pairs.
 
         Returns:
-            List of keypair dictionaries
+            list of keypair dictionaries
         """
         try:
             keypairs = list(self._conn.compute.keypairs())
@@ -376,10 +376,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
     def list_availability_zones(self) -> list[dict[str, Any]]:
         """
-        List availability zones.
+        list availability zones.
 
         Returns:
-            List of availability zone dictionaries
+            list of availability zone dictionaries
         """
         try:
             zones = list(self._conn.compute.availability_zones())

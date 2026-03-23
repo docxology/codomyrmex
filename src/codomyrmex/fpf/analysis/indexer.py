@@ -28,7 +28,7 @@ class FPFIndexer:
             FPFIndex object containing all indexes
         """
         pattern_index: dict[str, Pattern] = {}
-        concept_index: dict[str, list] = {}  # concept_name -> List[Concept]
+        concept_index: dict[str, list] = {}  # concept_name -> list[Concept]
         keyword_index: dict[str, list[str]] = {}  # keyword -> pattern_ids
         title_index: dict[str, list[str]] = {}  # word -> pattern_ids
         relationship_graph: dict[str, list[str]] = {}  # pattern_id -> related_ids
@@ -96,7 +96,7 @@ class FPFIndexer:
             filters: Optional filters (status, part, etc.)
 
         Returns:
-            List of matching Pattern objects
+            list of matching Pattern objects
         """
         if not self.index:
             return []
@@ -125,7 +125,7 @@ class FPFIndexer:
             depth: Relationship traversal depth
 
         Returns:
-            List of related Pattern objects
+            list of related Pattern objects
         """
         if not self.index:
             return []

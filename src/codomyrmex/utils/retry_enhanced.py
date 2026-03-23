@@ -61,7 +61,7 @@ def retry(
         max_delay: Maximum delay cap in seconds.
         backoff_factor: Multiplier applied to delay after each retry.
         jitter: Whether to add random jitter to delay.
-        retryable_exceptions: Tuple of exception types to retry on.
+        retryable_exceptions: tuple of exception types to retry on.
         on_retry: Optional callback ``(attempt, exception, delay)`` before retry.
 
     Returns:

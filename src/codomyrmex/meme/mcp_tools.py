@@ -132,7 +132,7 @@ def meme_synthesize(fragments: list[str], separator: str = " ") -> dict[str, Any
     to join them.
 
     Args:
-        fragments: List of text fragments to combine.
+        fragments: list of text fragments to combine.
         separator: String to join fragments with (default: single space).
 
     Returns:

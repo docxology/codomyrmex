@@ -29,7 +29,7 @@ def cli_commands():
     """Return CLI commands for the model_registry module."""
     return {
         "list": {
-            "help": "List registered models",
+            "help": "list registered models",
             "handler": lambda **kwargs: print(
                 "Model Registry\n"
                 f"  Stages: {', '.join(ms.value if hasattr(ms, 'value') else str(ms) for ms in ModelStage)}\n"

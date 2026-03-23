@@ -511,7 +511,7 @@ class TestGenerateSchemaFromModels:
 
     @pytest.mark.unit
     def test_generate_from_dict_models(self, tmp_path):
-        """Dict-based models generate schema with correct table count."""
+        """dict-based models generate schema with correct table count."""
         models = [
             {
                 "name": "users",

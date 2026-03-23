@@ -162,7 +162,7 @@ class FlakyTestQuarantine:
         """Return a summary of quarantine state.
 
         Returns:
-            Dict with ``total_tracked``, ``quarantined_count``, ``quarantined_tests``.
+            dict with ``total_tracked``, ``quarantined_count``, ``quarantined_tests``.
         """
         return {
             "total_tracked": len(self._runs),

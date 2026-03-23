@@ -28,7 +28,7 @@ def config_monitoring_detect_changes(
     """Detect configuration file changes by hashing and comparing to stored baselines.
 
     Args:
-        config_paths: List of file paths to check for changes.
+        config_paths: list of file paths to check for changes.
         workspace_dir: Optional workspace directory for storing monitoring state.
 
     Returns:

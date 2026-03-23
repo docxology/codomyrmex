@@ -73,7 +73,7 @@ class ConversationManager:
         return self.store.delete(conversation_id)
 
     def list_recent(self, limit: int = 20) -> list[Conversation]:
-        """List recent conversations."""
+        """list recent conversations."""
         return self.store.list_conversations(limit=limit)
 
     def search(self, query: str) -> list[Conversation]:
@@ -86,7 +86,7 @@ class ConversationManager:
         return self._active_conversation
 
     def set_active(self, conversation_id: str) -> Conversation | None:
-        """Set the active conversation."""
+        """set the active conversation."""
         conv = self.store.load(conversation_id)
         if conv:
             self._active_conversation = conv

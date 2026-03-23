@@ -53,7 +53,7 @@ class WorkingMemory:
         self.logger.debug("Cleared working memory")
 
     def list_keys(self) -> list[str]:
-        """List all keys in memory."""
+        """list all keys in memory."""
         return list(self.storage.keys())
 
     def to_dict(self) -> dict[str, Any]:

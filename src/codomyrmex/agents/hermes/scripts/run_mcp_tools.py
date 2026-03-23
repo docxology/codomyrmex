@@ -80,7 +80,7 @@ def run_mcp_tools(*, prompt: str = "Say hello in one sentence.") -> dict[str, An
         prompt: Prompt forwarded to ``hermes_execute`` and ``hermes_stream``.
 
     Returns:
-        Dict with per-tool results, ``total_elapsed_s``, and ``all_have_status_key``.
+        dict with per-tool results, ``total_elapsed_s``, and ``all_have_status_key``.
     """
     start = time.time()
     results: dict[str, Any] = {**_probe_core(prompt), **_probe_templates(prompt)}

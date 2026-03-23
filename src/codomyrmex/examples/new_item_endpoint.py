@@ -77,7 +77,7 @@ async def read_item(item_id: int):
 
 @router.get("/", response_model=list[ItemResponse])
 async def list_items(skip: int = 0, limit: int = 10):
-    """List items with pagination."""
+    """list items with pagination."""
     items = list(fake_items_db.values())
     return items[skip : skip + limit]
 

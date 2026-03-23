@@ -74,7 +74,7 @@ def test_google_calendar_live_integration():
 
     provider = GoogleCalendar(credentials=creds)
 
-    # 1. List events (make sure it doesn't crash)
+    # 1. list events (make sure it doesn't crash)
     now = datetime.now(UTC)
     events = provider.list_events(now, now + timedelta(days=7))
     assert isinstance(events, list)

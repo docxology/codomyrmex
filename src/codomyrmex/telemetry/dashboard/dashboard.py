@@ -62,7 +62,7 @@ class DashboardManager:
         return self._dashboards.get(dashboard_id)
 
     def list(self) -> list[Dashboard]:
-        """List all dashboards."""
+        """list all dashboards."""
         return list(self._dashboards.values())
 
     def delete(self, dashboard_id: str) -> bool:

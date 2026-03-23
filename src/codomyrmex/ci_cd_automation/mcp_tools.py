@@ -5,7 +5,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 @mcp_tool(category="ci_cd_automation")
 def pipeline_list() -> dict:
-    """List all configured CI/CD pipelines and their current status.
+    """list all configured CI/CD pipelines and their current status.
 
     Returns:
         Dictionary with pipeline names and status information.

@@ -7,18 +7,18 @@ It serves as the primary entry point for user interaction with all Codomyrmex ca
 Available Commands:
     codomyrmex --help          Show help and available commands
     codomyrmex check           Verify environment setup and dependencies
-    codomyrmex modules         List available modules and their status
+    codomyrmex modules         list available modules and their status
     codomyrmex status          Show system status dashboard
     codomyrmex shell           Launch interactive shell mode
 
     Workflow Management:
     codomyrmex workflow create     Create a new workflow definition
-    codomyrmex workflow list       List available workflows
+    codomyrmex workflow list       list available workflows
     codomyrmex workflow run        Execute a workflow
 
     Project Operations:
     codomyrmex project create      Initialize a new project
-    codomyrmex project list        List available projects
+    codomyrmex project list        list available projects
 
     AI Code Operations:
     codomyrmex ai generate         Generate code with AI assistance
@@ -41,14 +41,14 @@ Available Commands:
 
     Skills Management:
     codomyrmex skills sync         Synchronize skill definitions
-    codomyrmex skills list         List available skills
+    codomyrmex skills list         list available skills
     codomyrmex skills get          Get skill details
 
 Usage Examples:
     # Check environment setup
     $ codomyrmex check
 
-    # List all available modules
+    # list all available modules
     $ codomyrmex modules
 
     # Run analysis on a file

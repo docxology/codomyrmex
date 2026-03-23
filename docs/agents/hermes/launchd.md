@@ -188,3 +188,10 @@ HERMES_HOME=/path/to/.hermes /Users/mini/.hermes/hermes-agent/venv/bin/python \
 - [Gateway](gateway.md) — Gateway architecture
 - [Troubleshooting](troubleshooting.md) — Common issues
 - [skills.md](skills.md) — Codomyrmex skill profile (separate from `HERMES_HOME`)
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

@@ -102,7 +102,7 @@ class Ant:
             strength: Base pheromone strength at the most recent position.
 
         Returns:
-            List of (position, amount) pairs.
+            list of (position, amount) pairs.
         """
         deposits: list[tuple[tuple[int, int], float]] = []
         trail_len = len(self.pheromone_trail)

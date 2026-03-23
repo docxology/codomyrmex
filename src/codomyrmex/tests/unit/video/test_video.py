@@ -125,7 +125,7 @@ class TestVideoConfig:
         # Get default config
         get_config()
 
-        # Set new config
+        # set new config
         new_config = VideoConfig(default_fps=60)
         set_config(new_config)
 

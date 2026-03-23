@@ -70,10 +70,10 @@ def openfang_execute(prompt: str, timeout: int = 120) -> dict[str, Any]:
 
 @mcp_tool(
     category="openfang",
-    description="List available openfang autonomous Hands (scheduled agent packages).",
+    description="list available openfang autonomous Hands (scheduled agent packages).",
 )
 def openfang_hands_list() -> dict[str, Any]:
-    """List all available Hands with name, description, schedule, and enabled status."""
+    """list all available Hands with name, description, schedule, and enabled status."""
     guard = _import_guard()
     if guard:
         return guard

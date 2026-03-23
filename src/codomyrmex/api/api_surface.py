@@ -78,7 +78,7 @@ class APISurface:
         return report.frozen_endpoints / report.total_endpoints
 
     def unfrozen_endpoints(self) -> list[str]:
-        """List endpoints that are not yet frozen."""
+        """list endpoints that are not yet frozen."""
         return [name for name, ep in self._contract.endpoints.items() if not ep.frozen]
 
     def by_module(self) -> dict[str, list[APIEndpoint]]:

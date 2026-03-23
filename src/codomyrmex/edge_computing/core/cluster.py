@@ -59,7 +59,7 @@ class EdgeCluster:
         return self._runtimes.get(node_id)
 
     def list_nodes(self, status: EdgeNodeStatus | None = None) -> list[EdgeNode]:
-        """List nodes, optionally filtered by status."""
+        """list nodes, optionally filtered by status."""
         nodes = list(self._nodes.values())
         if status:
             nodes = [n for n in nodes if n.status == status]
@@ -81,7 +81,7 @@ class EdgeCluster:
         """Find nodes whose heartbeat is older than timeout.
 
         Returns:
-            List of stale node IDs.
+            list of stale node IDs.
         """
         now = datetime.now()
         stale = []

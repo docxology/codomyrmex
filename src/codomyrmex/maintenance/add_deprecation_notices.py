@@ -104,7 +104,7 @@ def scan_for_deprecated(root: Path) -> list[dict[str, Any]]:
         root: Project root directory.
 
     Returns:
-        List of dicts with file path, module name, and deprecation status.
+        list of dicts with file path, module name, and deprecation status.
     """
     codomyrmex_dir = root / "src" / "codomyrmex"
     results: list[dict[str, Any]] = []

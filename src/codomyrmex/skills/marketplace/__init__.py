@@ -26,7 +26,7 @@ class SkillMarketplace:
         Initialize SkillMarketplace.
 
         Args:
-            sources: List of source configurations, each a dict with 'name' and 'url' keys.
+            sources: list of source configurations, each a dict with 'name' and 'url' keys.
                      Defaults to the upstream vibeship-spawner-skills repository.
         """
         self._sources = sources or [
@@ -46,7 +46,7 @@ class SkillMarketplace:
             query: Search query string
 
         Returns:
-            List of matching skill metadata dicts from remote sources.
+            list of matching skill metadata dicts from remote sources.
             Each dict includes 'source', 'name', and 'description'.
         """
         logger.info("Searching remote sources for: %s", query)
@@ -87,10 +87,10 @@ class SkillMarketplace:
 
     def list_sources(self) -> list[dict[str, str]]:
         """
-        List configured remote sources.
+        list configured remote sources.
 
         Returns:
-            List of source configuration dictionaries
+            list of source configuration dictionaries
         """
         return list(self._sources)
 

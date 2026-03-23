@@ -31,7 +31,7 @@ def parse_requirements_file(file_path: Path) -> list[tuple[str, str, str]]:
     Parse a requirements.txt file and return list of (name, version, source_file).
 
     Returns:
-        List of tuples: (package_name, version_spec, source_file)
+        list of tuples: (package_name, version_spec, source_file)
     """
     dependencies = []
 
@@ -98,9 +98,9 @@ def analyze_dependencies(root: Path) -> dict[str, dict]:
         Dictionary mapping package names to dependency info:
         {
             "package_name": {
-                "versions": Set of version specs found,
-                "sources": List of source files,
-                "conflicts": List of conflicting versions
+                "versions": set of version specs found,
+                "sources": list of source files,
+                "conflicts": list of conflicting versions
             }
         }
     """
@@ -134,7 +134,7 @@ def generate_pyproject_additions(
     Generate additions to pyproject.toml for optional dependency groups.
 
     Returns:
-        Tuple of (optional_dependencies_section, module_mapping)
+        tuple of (optional_dependencies_section, module_mapping)
     """
     # Parse existing dependencies from pyproject.toml
     existing_deps = set()

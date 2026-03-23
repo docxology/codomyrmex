@@ -43,7 +43,7 @@ class DeploymentManager:
             service_name: Name of the service to deploy.
             version: Version string to deploy.
             strategy: The deployment strategy to use.
-            targets: List of deployment targets.
+            targets: list of deployment targets.
 
         Returns:
             DeploymentResult reflecting the outcome.

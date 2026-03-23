@@ -60,7 +60,7 @@ def store_memory(
         metadata: Optional extra metadata dict.
 
     Returns:
-        Dict with stored memory details including the database row id.
+        dict with stored memory details including the database row id.
 
     Example:
         >>> result = store_memory(
@@ -157,7 +157,7 @@ def recall_memory(
         tags: Optional tag filter — only return memories matching these tags.
 
     Returns:
-        List of memory dicts sorted by relevance.
+        list of memory dicts sorted by relevance.
 
     Example:
         >>> results = recall_memory("PAI tool count", top_k=3)
@@ -213,7 +213,7 @@ def consolidate_memories() -> dict[str, Any]:
     keeping the most recent version.
 
     Returns:
-        Dict with consolidation statistics.
+        dict with consolidation statistics.
 
     """
     conn = _get_db_connection()
@@ -259,7 +259,7 @@ def get_memory_stats() -> dict[str, Any]:
     """Return CogniLayer memory database statistics.
 
     Returns:
-        Dict with total memories, tag distribution, type breakdown, and db size.
+        dict with total memories, tag distribution, type breakdown, and db size.
 
     """
     if not COGNILAYER_DB.exists():

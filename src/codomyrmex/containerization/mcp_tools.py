@@ -57,10 +57,10 @@ def container_build(
 
 @mcp_tool(
     category="containerization",
-    description="List running containers managed by Docker.",
+    description="list running containers managed by Docker.",
 )
 def container_list() -> dict[str, Any]:
-    """List running containers."""
+    """list running containers."""
     try:
         from . import DockerManager
 

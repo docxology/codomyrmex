@@ -100,7 +100,7 @@ class Population:
             count: Number of parents to select.
 
         Returns:
-            List of selected Genome instances.
+            list of selected Genome instances.
         """
         selected: list[Genome] = []
         for _ in range(count):

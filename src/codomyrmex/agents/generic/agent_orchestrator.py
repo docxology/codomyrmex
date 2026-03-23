@@ -33,7 +33,7 @@ class AgentOrchestrator:
         Initialize orchestrator with list of agents.
 
         Args:
-            agents: List of agent instances to orchestrate
+            agents: list of agent instances to orchestrate
         """
         self.agents = agents
         self.logger = get_logger(__name__)
@@ -48,10 +48,10 @@ class AgentOrchestrator:
 
         Args:
             request: Agent request to execute
-            agents: List of agents to use (defaults to all agents)
+            agents: list of agents to use (defaults to all agents)
 
         Returns:
-            List of agent responses
+            list of agent responses
         """
         agents_to_use = agents or self.agents
 
@@ -103,11 +103,11 @@ class AgentOrchestrator:
 
         Args:
             request: Agent request to execute
-            agents: List of agents to use (defaults to all agents)
+            agents: list of agents to use (defaults to all agents)
             stop_on_success: Stop after first successful response
 
         Returns:
-            List of agent responses
+            list of agent responses
         """
         agents_to_use = agents or self.agents
 
@@ -151,7 +151,7 @@ class AgentOrchestrator:
 
         Args:
             request: Agent request to execute
-            agents: List of agents to use (defaults to all agents)
+            agents: list of agents to use (defaults to all agents)
 
         Returns:
             First successful agent response, or last error response
@@ -195,10 +195,10 @@ class AgentOrchestrator:
 
         Args:
             capability: Capability name to check
-            agents: List of agents to check (defaults to all agents)
+            agents: list of agents to check (defaults to all agents)
 
         Returns:
-            List of agents that support the capability
+            list of agents that support the capability
         """
 
         agents_to_check = agents or self.agents

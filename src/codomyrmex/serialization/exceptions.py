@@ -73,7 +73,7 @@ class SchemaValidationError(SerializationError):
     Attributes:
         message: Error description.
         schema_name: Name of the schema.
-        validation_errors: List of specific validation failures.
+        validation_errors: list of specific validation failures.
         path: JSON path or location of the validation error.
 
     """
@@ -127,7 +127,7 @@ class FormatNotSupportedError(SerializationError):
     Attributes:
         message: Error description.
         requested_format: The format that was requested.
-        supported_formats: List of supported formats.
+        supported_formats: list of supported formats.
 
     """
 

@@ -33,7 +33,7 @@ def cli_commands():
     """Return CLI commands for the vector_store module."""
 
     def _backends():
-        """List available vector store backends."""
+        """list available vector store backends."""
         print("Vector Store Backends")
         print("  InMemoryVectorStore - In-process memory store")
         print("  NamespacedVectorStore - Namespace-partitioned store")

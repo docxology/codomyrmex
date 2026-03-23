@@ -99,7 +99,7 @@ def pi_prompt(
 
 @mcp_tool(
     name="pi_list_models",
-    description="List available models for a provider via pi --list-models.",
+    description="list available models for a provider via pi --list-models.",
     category="pi",
 )
 def pi_list_models(
@@ -198,7 +198,7 @@ def pi_install_package(source: str) -> dict[str, Any]:
 
 @mcp_tool(
     name="pi_list_packages",
-    description="List installed pi packages.",
+    description="list installed pi packages.",
     category="pi",
 )
 def pi_list_packages() -> dict[str, Any]:

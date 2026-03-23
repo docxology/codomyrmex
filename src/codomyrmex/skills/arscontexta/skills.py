@@ -66,7 +66,7 @@ def _register_arscontexta_skills() -> None:
         return manager.derive_config(user_text)
 
     def arscontexta_primitives(layer: str = "") -> list:
-        """List kernel primitives, optionally filtered by layer name."""
+        """list kernel primitives, optionally filtered by layer name."""
         return manager.get_primitives(layer or None)
 
     def arscontexta_stats() -> dict:
@@ -132,7 +132,7 @@ def _register_arscontexta_skills() -> None:
         (
             arscontexta_primitives,
             "arscontexta_primitives",
-            "List kernel primitives, optionally filtered by layer.",
+            "list kernel primitives, optionally filtered by layer.",
             [
                 ParameterSchema(
                     name="layer",

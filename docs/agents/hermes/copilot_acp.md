@@ -141,3 +141,10 @@ CLI operations).
 - [Setup Guide](setup_guide.md) — Initial installation
 - [Troubleshooting](troubleshooting.md) — Common issues
 - [skills.md](skills.md) — Codomyrmex Hermes skill preload (independent of Copilot ACP)
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

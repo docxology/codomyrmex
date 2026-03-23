@@ -22,12 +22,12 @@ _AGENT_DIR = Path(__file__).resolve().parents[2] / "agents"
 
 
 def handle_agent_list() -> list[str]:
-    """List all available agents.
+    """list all available agents.
 
     Scans ``src/codomyrmex/agents/`` for subdirectories with ``__init__.py``.
 
     Returns:
-        List of agent names.
+        list of agent names.
     """
     agents = []
     if _AGENT_DIR.exists():

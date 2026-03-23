@@ -27,7 +27,7 @@ class TestOrchestrationIntegration:
 
     @pytest.fixture(autouse=True)
     def setup_environment(self):
-        """Set up test environment."""
+        """set up test environment."""
         self.engine = get_orchestration_engine()
         self.wf_manager = get_workflow_manager()
         self.task_orchestrator = get_task_orchestrator()
@@ -367,7 +367,7 @@ class TestOrchestrationEdgeCases:
 
     @pytest.fixture(autouse=True)
     def setup_environment(self):
-        """Set up test environment."""
+        """set up test environment."""
         self.engine = get_orchestration_engine()
         self.wf_manager = get_workflow_manager()
         self.task_orchestrator = get_task_orchestrator()

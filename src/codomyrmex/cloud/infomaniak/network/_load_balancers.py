@@ -18,7 +18,7 @@ class LoadBalancerMixin:
     # =========================================================================
 
     def list_loadbalancers(self) -> list[dict[str, Any]]:
-        """List all load balancers."""
+        """list all load balancers."""
         try:
             lbs = list(self._conn.load_balancer.load_balancers())
             return [
@@ -68,7 +68,7 @@ class LoadBalancerMixin:
     def list_listeners(
         self, loadbalancer_id: str | None = None
     ) -> list[dict[str, Any]]:
-        """List listeners, optionally filtered by load balancer."""
+        """list listeners, optionally filtered by load balancer."""
         try:
             kwargs = {}
             if loadbalancer_id:
@@ -121,7 +121,7 @@ class LoadBalancerMixin:
     # =========================================================================
 
     def list_pools(self, loadbalancer_id: str | None = None) -> list[dict[str, Any]]:
-        """List pools, optionally filtered by load balancer."""
+        """list pools, optionally filtered by load balancer."""
         try:
             kwargs = {}
             if loadbalancer_id:
@@ -180,7 +180,7 @@ class LoadBalancerMixin:
     # =========================================================================
 
     def list_pool_members(self, pool_id: str) -> list[dict[str, Any]]:
-        """List members in a pool."""
+        """list members in a pool."""
         try:
             members = list(self._conn.load_balancer.members(pool_id))
             return [
@@ -242,7 +242,7 @@ class LoadBalancerMixin:
     # =========================================================================
 
     def list_health_monitors(self, pool_id: str | None = None) -> list[dict[str, Any]]:
-        """List health monitors, optionally filtered by pool."""
+        """list health monitors, optionally filtered by pool."""
         try:
             kwargs = {}
             if pool_id:

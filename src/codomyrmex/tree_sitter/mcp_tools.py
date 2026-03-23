@@ -88,7 +88,7 @@ def parse_code(
 
 @mcp_tool(category="tree_sitter")
 def list_languages() -> dict[str, Any]:
-    """List tree-sitter languages currently loaded in the LanguageManager.
+    """list tree-sitter languages currently loaded in the LanguageManager.
 
     Returns:
         Dictionary with loaded language names.

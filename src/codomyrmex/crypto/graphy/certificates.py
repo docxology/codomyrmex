@@ -159,7 +159,7 @@ def validate_certificate_chain(cert_chain: list) -> ValidationResult:
     - Signature verification (each cert signed by next cert's key)
 
     Args:
-        cert_chain: List of x509.Certificate objects, leaf first, root last.
+        cert_chain: list of x509.Certificate objects, leaf first, root last.
 
     Returns:
         ValidationResult with validity status and any errors.

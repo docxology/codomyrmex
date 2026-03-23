@@ -45,7 +45,7 @@ def audio_get_capabilities() -> dict[str, Any]:
 
 @mcp_tool(category="audio")
 def audio_list_voices(provider: str = "pyttsx3") -> dict[str, Any]:
-    """List available text-to-speech voices for a given provider.
+    """list available text-to-speech voices for a given provider.
 
     Args:
         provider: TTS provider to query ('pyttsx3' or 'edge-tts')
@@ -263,7 +263,7 @@ def audio_batch_transcribe(
     """Transcribe multiple audio files in batch.
 
     Args:
-        audio_paths: List of audio file paths
+        audio_paths: list of audio file paths
         output_directory: Directory to save transcription files
         language: Language code for all files
         model_size: Whisper model size

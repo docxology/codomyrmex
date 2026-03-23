@@ -28,7 +28,7 @@ class Cache(ABC):
 
     @abstractmethod
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
-        """Set a value in the cache.
+        """set a value in the cache.
 
         Args:
             key: Cache key

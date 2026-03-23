@@ -52,7 +52,7 @@ def list_bookmarks(
     format: str | None = None,
     vault: str | None = None,
 ) -> list[BookmarkItem]:
-    """List all bookmarks in the vault.
+    """list all bookmarks in the vault.
 
     Maps to ``obsidian bookmarks [total] [verbose] [format=...]``.
     """

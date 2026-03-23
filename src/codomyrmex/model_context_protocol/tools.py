@@ -37,7 +37,7 @@ def read_file(
         max_size: Maximum file size in bytes
 
     Returns:
-        Dict with content, size, encoding, and metadata
+        dict with content, size, encoding, and metadata
     """
     try:
         file_path = Path(path).expanduser().resolve()
@@ -77,7 +77,7 @@ def write_file(path: str, content: str, create_dirs: bool = True) -> dict[str, A
         create_dirs: Create parent directories if needed
 
     Returns:
-        Dict with success status and metadata
+        dict with success status and metadata
     """
     try:
         file_path = Path(path).expanduser().resolve()
@@ -104,7 +104,7 @@ def list_directory(
     max_items: int = 200,
 ) -> dict[str, Any]:
     """
-    List directory contents with filtering.
+    list directory contents with filtering.
 
     Args:
         path: Directory path
@@ -113,7 +113,7 @@ def list_directory(
         max_items: Maximum items to return
 
     Returns:
-        Dict with items list and metadata
+        dict with items list and metadata
     """
     try:
         dir_path = Path(path).expanduser().resolve()
@@ -169,7 +169,7 @@ def analyze_python_file(path: str) -> dict[str, Any]:
         path: Python file path
 
     Returns:
-        Dict with classes, functions, imports, and metrics
+        dict with classes, functions, imports, and metrics
     """
     try:
         content = Path(path).expanduser().read_text()
@@ -257,7 +257,7 @@ def search_codebase(
         max_results: Maximum results to return
 
     Returns:
-        Dict with matches and statistics
+        dict with matches and statistics
     """
     try:
         base_path = Path(path).expanduser().resolve()
@@ -330,7 +330,7 @@ def git_status(path: str = ".") -> dict[str, Any]:
         path: Repository path
 
     Returns:
-        Dict with branch, changes, and status
+        dict with branch, changes, and status
     """
     try:
         cwd = Path(path).expanduser().resolve()
@@ -396,7 +396,7 @@ def git_diff(path: str = ".", staged: bool = False) -> dict[str, Any]:
         staged: Show staged changes only
 
     Returns:
-        Dict with diff content
+        dict with diff content
     """
     try:
         cwd = Path(path).expanduser().resolve()
@@ -437,7 +437,7 @@ def run_shell_command(
         env: Additional environment variables
 
     Returns:
-        Dict with stdout, stderr, and exit code
+        dict with stdout, stderr, and exit code
     """
     try:
         cmd_env = os.environ.copy()
@@ -481,7 +481,7 @@ def json_query(path: str, query: str | None = None) -> dict[str, Any]:
         query: Optional dot-notation path (e.g., "data.items[0].name")
 
     Returns:
-        Dict with data or queried value
+        dict with data or queried value
     """
     try:
         content = Path(path).expanduser().read_text()
@@ -509,7 +509,7 @@ def checksum_file(path: str, algorithm: str = "sha256") -> dict[str, Any]:
         algorithm: Hash algorithm (md5, sha1, sha256)
 
     Returns:
-        Dict with checksum and metadata
+        dict with checksum and metadata
     """
     try:
         file_path = Path(path).expanduser().resolve()

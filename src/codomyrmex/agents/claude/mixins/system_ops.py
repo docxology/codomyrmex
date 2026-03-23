@@ -39,7 +39,7 @@ class SystemOpsMixin:
                 - success: Whether scan succeeded
                 - structure: Hierarchical dict of directory
                 - file_count: Total files found
-                - files: List of file paths
+                - files: list of file paths
                 - summary: Directory summary
 
         Example:

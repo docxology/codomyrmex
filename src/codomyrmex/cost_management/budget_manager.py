@@ -174,7 +174,7 @@ class BudgetManager:
         """Get spend breakdown by model.
 
         Returns:
-            Dict mapping model names to total spend.
+            dict mapping model names to total spend.
         """
         today = _start_of_day()
         breakdown: dict[str, float] = defaultdict(float)
@@ -192,7 +192,7 @@ class BudgetManager:
         """Return a budget summary.
 
         Returns:
-            Dict with ``daily_limit``, ``daily_spend``, ``utilization``, etc.
+            dict with ``daily_limit``, ``daily_spend``, ``utilization``, etc.
         """
         return {
             "daily_limit": self._daily_limit,

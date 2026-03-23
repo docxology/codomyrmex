@@ -61,7 +61,7 @@ class CompositeScorer(Scorer):
     """Combine multiple scorers with weights."""
 
     def __init__(self, scorers: list[tuple[Scorer, float]]):
-        """Args: scorers: List of (scorer, weight) tuples."""
+        """Args: scorers: list of (scorer, weight) tuples."""
         self.scorers = scorers
         total_weight = sum(w for _, w in scorers)
         self.normalized_scorers = [(s, w / total_weight) for s, w in scorers]

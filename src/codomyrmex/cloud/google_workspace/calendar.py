@@ -23,7 +23,7 @@ class GoogleCalendarClient(GoogleWorkspaceBase):
         time_max: str = "",
         max_results: int = 20,
     ) -> list[dict[str, Any]]:
-        """List calendar events in an optional date range.
+        """list calendar events in an optional date range.
 
         Args:
             calendar_id: Calendar ID (default: 'primary').
@@ -32,7 +32,7 @@ class GoogleCalendarClient(GoogleWorkspaceBase):
             max_results: Maximum number of events to return.
 
         Returns:
-            List of event dicts.
+            list of event dicts.
         """
         params: dict[str, Any] = {
             "calendarId": calendar_id,
@@ -68,7 +68,7 @@ class GoogleCalendarClient(GoogleWorkspaceBase):
             end: End datetime in RFC3339 format.
             calendar_id: Calendar ID (default: 'primary').
             description: Event description.
-            attendees: List of attendee email addresses.
+            attendees: list of attendee email addresses.
 
         Returns:
             Created event dict, or empty dict on error.

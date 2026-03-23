@@ -34,14 +34,14 @@ class InboxMixin:
         limit: int = 50,
         page_token: str | None = None,
     ) -> list[AgentMailInbox]:
-        """List all inboxes accessible with the current API key.
+        """list all inboxes accessible with the current API key.
 
         Args:
             limit: Maximum number of inboxes to return.
             page_token: Pagination cursor from a previous response.
 
         Returns:
-            List of AgentMailInbox objects.
+            list of AgentMailInbox objects.
         """
         try:
             kwargs: dict[str, Any] = {"limit": limit}

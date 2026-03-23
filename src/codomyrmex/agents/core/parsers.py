@@ -104,7 +104,7 @@ def parse_code_blocks(text: str, language: str | None = None) -> list[CodeBlock]
         language: Filter by specific language (e.g., "python", "javascript")
 
     Returns:
-        List of extracted CodeBlock objects
+        list of extracted CodeBlock objects
     """
     if not text:
         return []
@@ -154,11 +154,11 @@ def parse_structured_output(
 
     Args:
         text: Text to parse
-        patterns: Dict mapping field names to regex patterns
+        patterns: dict mapping field names to regex patterns
         flags: Regex flags
 
     Returns:
-        Dict of extracted values (None if not found)
+        dict of extracted values (None if not found)
     """
     result = {}
 
@@ -208,7 +208,7 @@ def parse_key_value_pairs(
         line_separator: Line separator
 
     Returns:
-        Dict of parsed pairs
+        dict of parsed pairs
     """
     result = {}
 
@@ -298,7 +298,7 @@ def parse_all_xml_tags(text: str, tag: str) -> list[str]:
         tag: Tag name
 
     Returns:
-        List of contents inside the tags
+        list of contents inside the tags
     """
     pattern = rf"<{tag}>(.*?)</{tag}>"
     matches = re.findall(pattern, text, re.DOTALL)

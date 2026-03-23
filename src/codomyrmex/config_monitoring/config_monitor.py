@@ -187,10 +187,10 @@ class ConfigurationMonitor:
         """Detect changes in configuration files and persist hashes.
 
         Args:
-            config_paths: List of configuration file paths to monitor
+            config_paths: list of configuration file paths to monitor
 
         Returns:
-            List of detected changes
+            list of detected changes
 
         """
         changes = []
@@ -512,7 +512,7 @@ class ConfigurationMonitor:
             config_path: Optional path to filter by
 
         Returns:
-            List of changes
+            list of changes
 
         """
         if config_path:

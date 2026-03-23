@@ -241,7 +241,7 @@ class IntegrationBus:
             agent_id: Recipient agent identifier.
 
         Returns:
-            List of message envelopes (may be empty).
+            list of message envelopes (may be empty).
         """
         messages = list(self._mailboxes[agent_id])
         self._mailboxes[agent_id].clear()
@@ -263,7 +263,7 @@ class IntegrationBus:
             agent_id: Recipient agent identifier.
 
         Returns:
-            List of persisted message envelopes in append order, or ``[]`` if
+            list of persisted message envelopes in append order, or ``[]`` if
             no EventStore is attached.
         """
         if self._event_store is None:

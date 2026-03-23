@@ -27,7 +27,7 @@ def get_module_path() -> Path:
 
 
 def list_modules() -> list[str]:
-    """List all available submodules in the package."""
+    """list all available submodules in the package."""
     return [name for _, name, _ in pkgutil.iter_modules([str(get_module_path())])]
 
 
@@ -248,8 +248,6 @@ __all__ = [
     "finance",
     "formal_verification",
     "fpf",
-    "get_module_path",
-    "get_version",
     "git_analysis",
     "git_operations",
     "graph_rag",
@@ -258,7 +256,6 @@ __all__ = [
     "image",
     "interpretability",
     "languages",
-    "list_modules",
     "llm",
     "logging_monitoring",
     "logistics",
@@ -323,4 +320,7 @@ __all__ = [
     "vision",
     "wallet",
     "website",
+    "get_version",
+    "get_module_path",
+    "list_modules",
 ]

@@ -980,7 +980,7 @@ class TestRunFullDiscovery:
     def test_runs_without_error(self, tmp_path, capsys):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
 
-        # Set up minimal structure
+        # set up minimal structure
         codomyrmex_dir = tmp_path / "src" / "codomyrmex"
         codomyrmex_dir.mkdir(parents=True)
         mod = codomyrmex_dir / "mymod"

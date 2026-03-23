@@ -194,12 +194,12 @@ class Synthesizer:
         """Synthesize multiple texts.
 
         Args:
-            texts: List of texts to synthesize
+            texts: list of texts to synthesize
             voice: Voice ID to use for all
             **kwargs: Additional synthesis options
 
         Returns:
-            List of SynthesisResult objects
+            list of SynthesisResult objects
 
         """
         results = []
@@ -218,13 +218,13 @@ class Synthesizer:
         """Synthesize multiple texts concurrently.
 
         Args:
-            texts: List of texts to synthesize
+            texts: list of texts to synthesize
             voice: Voice ID to use for all
             max_concurrent: Maximum concurrent synthesis operations
             **kwargs: Additional synthesis options
 
         Returns:
-            List of SynthesisResult objects (in same order as input)
+            list of SynthesisResult objects (in same order as input)
 
         """
         semaphore = asyncio.Semaphore(max_concurrent)
@@ -240,13 +240,13 @@ class Synthesizer:
         self,
         language: str | None = None,
     ) -> list[VoiceInfo]:
-        """List available voices.
+        """list available voices.
 
         Args:
             language: Filter by language code (e.g., "en-US", "es")
 
         Returns:
-            List of VoiceInfo objects
+            list of VoiceInfo objects
 
         """
         return self._provider.list_voices(language)
@@ -267,7 +267,7 @@ class Synthesizer:
         """Get list of supported language codes.
 
         Returns:
-            List of language codes (e.g., ["en-US", "es-ES"])
+            list of language codes (e.g., ["en-US", "es-ES"])
 
         """
         return self._provider.get_supported_languages()
@@ -278,7 +278,7 @@ class Synthesizer:
         return self._provider.default_voice
 
     def set_default_voice(self, voice_id: str) -> None:
-        """Set the default voice for all synthesis operations.
+        """set the default voice for all synthesis operations.
 
         Args:
             voice_id: Voice identifier to use as default
@@ -287,7 +287,7 @@ class Synthesizer:
         self._default_config.voice = voice_id
 
     def set_default_language(self, language: str) -> None:
-        """Set the default language.
+        """set the default language.
 
         Args:
             language: Language code (e.g., "en-US")

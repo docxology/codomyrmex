@@ -21,7 +21,7 @@ def read_csv(file_path: str | Path, encoding: str | None = None) -> list[dict]:
         encoding: Optional encoding (defaults to utf-8)
 
     Returns:
-        List of dictionaries, one per row, keyed by header names
+        list of dictionaries, one per row, keyed by header names
 
     Raises:
         DocumentReadError: If reading fails
@@ -51,7 +51,7 @@ def write_csv(
     Write CSV data to a file.
 
     Args:
-        data: List of dictionaries to write as CSV rows
+        data: list of dictionaries to write as CSV rows
         file_path: Path where file should be written
         encoding: Optional encoding (defaults to utf-8)
         fieldnames: Optional list of field names for header. Auto-detected from first row if None.

@@ -345,7 +345,7 @@ class AgentRelay:
             exclude_heartbeats: Skip heartbeat messages (default True).
 
         Returns:
-            List of new ``RelayMessage`` objects.
+            list of new ``RelayMessage`` objects.
         """
         messages: list[RelayMessage] = []
 
@@ -400,7 +400,7 @@ class AgentRelay:
             exclude_heartbeats: Skip heartbeat messages.
 
         Returns:
-            List of ``RelayMessage`` objects.
+            list of ``RelayMessage`` objects.
         """
         all_msgs = self.poll_messages(
             since_cursor=0,
@@ -478,13 +478,13 @@ class AgentRelay:
 
     @staticmethod
     def list_channels(relay_dir: Path | str | None = None) -> list[str]:
-        """List all available relay channels.
+        """list all available relay channels.
 
         Args:
             relay_dir: Root relay directory.
 
         Returns:
-            List of channel IDs.
+            list of channel IDs.
         """
         root = Path(relay_dir) if relay_dir else DEFAULT_RELAY_DIR
         if not root.exists():

@@ -94,7 +94,7 @@ class ToolRegistry:
             return self._tools.get(name)
 
     def list_tools(self) -> list[Tool]:
-        """List all registered tools."""
+        """list all registered tools."""
         with self._lock:
             return list(self._tools.values())
 

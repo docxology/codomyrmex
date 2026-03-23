@@ -128,7 +128,7 @@ class ConfigValidationMixin:
             schema: Schema dictionary
 
         Returns:
-            Tuple of (is_valid, list_of_error_messages)
+            tuple of (is_valid, list_of_error_messages)
         """
         try:
             from codomyrmex.config_management.validation.config_validator import (

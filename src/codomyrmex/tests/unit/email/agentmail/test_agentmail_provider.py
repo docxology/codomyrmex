@@ -141,7 +141,7 @@ def test_list_and_get_draft() -> None:
     draft = EmailDraft(
         subject=f"list-draft-test-{int(time.time())}",
         to=[DEFAULT_INBOX],
-        body_text="List draft test.",
+        body_text="list draft test.",
     )
     draft_id = provider.create_draft(draft)
 

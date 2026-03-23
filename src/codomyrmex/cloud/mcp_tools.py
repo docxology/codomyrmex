@@ -5,7 +5,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 @mcp_tool(category="cloud")
 def list_cloud_instances() -> dict:
-    """List virtual machine instances currently running in the Infomaniak OpenStack cloud.
+    """list virtual machine instances currently running in the Infomaniak OpenStack cloud.
 
     Returns:
         A list of active instances or an error if authentication fails.
@@ -37,7 +37,7 @@ def list_cloud_instances() -> dict:
 
 @mcp_tool(category="cloud")
 def list_s3_buckets() -> dict:
-    """List S3 buckets available in the Infomaniak storage.
+    """list S3 buckets available in the Infomaniak storage.
 
     Returns:
         A list of available S3 buckets.
@@ -86,9 +86,9 @@ def upload_file_to_s3(
         return {"status": "error", "message": f"Failed to upload file: {e}"}
 
 
-@mcp_tool(category="google_workspace", description="List Google Drive files via SDK.")
+@mcp_tool(category="google_workspace", description="list Google Drive files via SDK.")
 def gws_sdk_drive_list_files(query: str = "", page_size: int = 20) -> dict:
-    """List files in Google Drive using the Python SDK.
+    """list files in Google Drive using the Python SDK.
 
     Args:
         query: Drive search query (e.g., "name contains 'report'").
@@ -107,9 +107,9 @@ def gws_sdk_drive_list_files(query: str = "", page_size: int = 20) -> dict:
         return {"status": "error", "message": str(exc)}
 
 
-@mcp_tool(category="google_workspace", description="List Gmail messages via SDK.")
+@mcp_tool(category="google_workspace", description="list Gmail messages via SDK.")
 def gws_sdk_gmail_list_messages(query: str = "", max_results: int = 20) -> dict:
-    """List Gmail messages using the Python SDK.
+    """list Gmail messages using the Python SDK.
 
     Args:
         query: Gmail search query (e.g., "is:unread").
@@ -130,14 +130,14 @@ def gws_sdk_gmail_list_messages(query: str = "", max_results: int = 20) -> dict:
 
 @mcp_tool(
     category="google_workspace",
-    description="List Google Calendar events via SDK.",
+    description="list Google Calendar events via SDK.",
 )
 def gws_sdk_calendar_list_events(
     calendar_id: str = "primary",
     time_min: str = "",
     time_max: str = "",
 ) -> dict:
-    """List Google Calendar events using the Python SDK.
+    """list Google Calendar events using the Python SDK.
 
     Args:
         calendar_id: Calendar ID (default: 'primary').

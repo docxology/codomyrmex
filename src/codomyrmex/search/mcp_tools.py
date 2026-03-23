@@ -26,7 +26,7 @@ def search_documents(
 
     Args:
         query: Search query string.
-        documents: List of plain-text strings to search.
+        documents: list of plain-text strings to search.
         top_k: Maximum number of results to return.
     """
     try:
@@ -61,7 +61,7 @@ def search_index_query(
 
     Args:
         query: Search query string.
-        documents: List of plain-text strings to index.
+        documents: list of plain-text strings to index.
         top_k: Maximum number of results to return.
     """
     try:
@@ -100,7 +100,7 @@ def search_fuzzy(
 
     Args:
         query: String to match against.
-        candidates: List of candidate strings.
+        candidates: list of candidate strings.
         threshold: Minimum similarity score (0.0–1.0).
     """
     try:

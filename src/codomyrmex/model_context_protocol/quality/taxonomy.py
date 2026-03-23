@@ -119,10 +119,10 @@ def categorize_all_tools(tool_names: list[str]) -> dict[str, ToolCategory]:
     """Classify all tools, returning a name→category mapping.
 
     Args:
-        tool_names: List of fully-qualified tool names.
+        tool_names: list of fully-qualified tool names.
 
     Returns:
-        Dict mapping each tool name to its ``ToolCategory``.
+        dict mapping each tool name to its ``ToolCategory``.
     """
     return {name: categorize_tool(name) for name in tool_names}
 
@@ -148,7 +148,7 @@ def generate_taxonomy_report(tool_names: list[str]) -> TaxonomyReport:
     """Generate a full taxonomy report for a set of tools.
 
     Args:
-        tool_names: List of tool names to classify.
+        tool_names: list of tool names to classify.
 
     Returns:
         A ``TaxonomyReport`` with per-category counts and tool assignments.

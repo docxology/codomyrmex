@@ -55,7 +55,7 @@ try:
 except ImportError:
     LOGGING_AVAILABLE = False
 
-# Set up logging for tests
+# set up logging for tests
 if LOGGING_AVAILABLE and callable(setup_logging):
     with contextlib.suppress(Exception):
         setup_logging()
@@ -67,7 +67,7 @@ class TestAnalysisSecurityCICDWorkflow:
     """Integration tests for static analysis → security audit → CI/CD workflow."""
 
     def setup_method(self):
-        """Set up test environment."""
+        """set up test environment."""
         self.test_dir = tempfile.mkdtemp()
         self.test_files = self._create_test_files()
 

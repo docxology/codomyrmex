@@ -24,7 +24,7 @@ class FPFVisualizer:
         """Generate a Mermaid diagram of the pattern hierarchy.
 
         Args:
-            patterns: List of Pattern objects
+            patterns: list of Pattern objects
 
         Returns:
             Mermaid diagram string
@@ -66,7 +66,7 @@ class FPFVisualizer:
         """Generate a Mermaid diagram of pattern dependencies.
 
         Args:
-            patterns: List of Pattern objects
+            patterns: list of Pattern objects
 
         Returns:
             Mermaid diagram string

@@ -43,8 +43,8 @@ class NarrativeArc:
 
     Attributes:
         name: Arc name (e.g. 'Tragedy', 'Rags to Riches').
-        tension_curve: List of floats representing dramatic tension over time (0-1).
-        emotional_valence: List of floats representing emotional state (-1 to 1).
+        tension_curve: list of floats representing dramatic tension over time (0-1).
+        emotional_valence: list of floats representing emotional state (-1 to 1).
     """
 
     name: str

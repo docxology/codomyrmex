@@ -26,10 +26,10 @@ def _get_scope_enum():
 
 @mcp_tool(
     category="dependency_injection",
-    description="List available service scopes and create a new empty IoC container.",
+    description="list available service scopes and create a new empty IoC container.",
 )
 def dependency_injection_list_scopes() -> dict[str, Any]:
-    """List available dependency injection scopes.
+    """list available dependency injection scopes.
 
     Returns:
         dict with keys: status, scopes

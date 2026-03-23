@@ -48,7 +48,7 @@ class NotificationRouter:
         return self
 
     def add_default(self, channel: NotificationChannel) -> "NotificationRouter":
-        """Set default channel."""
+        """set default channel."""
         self._default = channel
         return self
 

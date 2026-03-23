@@ -253,7 +253,7 @@ class JulesClient(CLIAgentBase):
             batch_size: Max tasks combined into one Jules invocation (default 10).
 
         Returns:
-            List of :class:`AgentResponse`, one per batch.
+            list of :class:`AgentResponse`, one per batch.
         """
         if not tasks:
             return []
@@ -367,7 +367,7 @@ class JulesSwarmDispatcher:
             batch_size: Tasks per Jules invocation (default 10).
 
         Returns:
-            List of :class:`AgentResponse`, one per batch.
+            list of :class:`AgentResponse`, one per batch.
         """
         return self.client.dispatch_swarm(
             tasks=self.tasks,

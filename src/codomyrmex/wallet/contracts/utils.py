@@ -93,11 +93,11 @@ def parse_event_log(topics: list[str], data: str) -> dict[str, Any]:
     """Parse a simplified event log.
 
     Args:
-        topics: List of hex-encoded topic strings (topic[0] = event signature hash).
+        topics: list of hex-encoded topic strings (topic[0] = event signature hash).
         data: Hex-encoded non-indexed data.
 
     Returns:
-        Dict with event_hash, indexed topics, and decoded data segments.
+        dict with event_hash, indexed topics, and decoded data segments.
     """
     result: dict[str, Any] = {
         "event_hash": topics[0] if topics else "",

@@ -288,13 +288,13 @@ class EdgeTTSProvider(TTSProvider):
         self,
         language: str | None = None,
     ) -> list[VoiceInfo]:
-        """List available voices.
+        """list available voices.
 
         Args:
             language: Filter by language code (e.g., "en-US" or "en")
 
         Returns:
-            List of available VoiceInfo objects
+            list of available VoiceInfo objects
 
         """
         # Ensure voices are loaded
@@ -313,13 +313,13 @@ class EdgeTTSProvider(TTSProvider):
         self,
         language: str | None = None,
     ) -> list[VoiceInfo]:
-        """List available voices asynchronously.
+        """list available voices asynchronously.
 
         Args:
             language: Filter by language code
 
         Returns:
-            List of available VoiceInfo objects
+            list of available VoiceInfo objects
 
         """
         await self._load_voices()
@@ -354,7 +354,7 @@ class EdgeTTSProvider(TTSProvider):
         """Get list of supported language codes.
 
         Returns:
-            List of unique language codes
+            list of unique language codes
 
         """
         if not self._voices_loaded:

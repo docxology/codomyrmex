@@ -73,13 +73,13 @@ class SkillPermissionManager:
 
     def list_permissions(self, skill_id: str) -> list[str]:
         """
-        List all permissions granted to a skill.
+        list all permissions granted to a skill.
 
         Args:
             skill_id: Skill identifier
 
         Returns:
-            List of permission strings
+            list of permission strings
         """
         return sorted(self._permissions.get(skill_id, set()))
 
@@ -89,7 +89,7 @@ class SkillPermissionManager:
 
         Args:
             skill_id: Skill identifier
-            permissions: List of permissions to grant
+            permissions: list of permissions to grant
         """
         for perm in permissions:
             self.grant(skill_id, perm)

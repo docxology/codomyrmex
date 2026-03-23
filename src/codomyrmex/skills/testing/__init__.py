@@ -60,15 +60,15 @@ class SkillTestRunner:
 
         Each test case is a dict with:
             - 'name': Test case name
-            - 'inputs': Dict of keyword arguments
+            - 'inputs': dict of keyword arguments
             - 'expected': Expected return value (optional, for equality check)
 
         Args:
             skill: Skill instance to test
-            test_cases: List of test case dictionaries
+            test_cases: list of test case dictionaries
 
         Returns:
-            List of SkillTestResult objects
+            list of SkillTestResult objects
         """
         results = []
         skill_name = getattr(getattr(skill, "metadata", None), "name", str(skill))

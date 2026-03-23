@@ -51,7 +51,7 @@ class GitHubOperationsDemo:
         self.github_token = os.environ.get("GITHUB_TOKEN")
         if not self.github_token:
             raise ValueError(
-                "GitHub token required. Set GITHUB_TOKEN environment variable."
+                "GitHub token required. set GITHUB_TOKEN environment variable."
             )
 
         self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -285,7 +285,7 @@ class TestDemoFeature(unittest.TestCase):
     """Test cases for DemoFeature class."""
 
     def setUp(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.demo = DemoFeature("Test Demo")
 
     def test_initialization(self):
@@ -422,7 +422,7 @@ and GitHub API functionality for a seamless development workflow."""
                     print(f"   • Additions: +{pr_details['additions']}")
                     print(f"   • Deletions: -{pr_details['deletions']}")
 
-                    # List all pull requests
+                    # list all pull requests
                     print("\n8. Listing all pull requests...")
                     pr_list = get_pull_requests(
                         owner, pr_repo_name, "open", self.github_token
@@ -484,7 +484,7 @@ and GitHub API functionality for a seamless development workflow."""
 
             if not self.github_token:
                 print(
-                    "\n❌ GitHub token required. Set GITHUB_TOKEN environment variable."
+                    "\n❌ GitHub token required. set GITHUB_TOKEN environment variable."
                 )
                 return
 

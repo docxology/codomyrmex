@@ -22,7 +22,7 @@ def os_system_info() -> dict:
 
 @mcp_tool(category="operating_system")
 def os_list_processes(limit: int = 50) -> dict:
-    """List running processes on the current platform.
+    """list running processes on the current platform.
 
     Args:
         limit: Maximum number of processes to return (default 50).

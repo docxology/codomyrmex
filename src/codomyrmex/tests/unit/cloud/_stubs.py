@@ -119,7 +119,7 @@ class Stub:
         object.__getattribute__(self, "_stub_calls").append(_CallRecord(args, kwargs))
         se = object.__getattribute__(self, "_stub_side_effect")
         if se is not None:
-            # List/iterator: consume one element per call
+            # list/iterator: consume one element per call
             if isinstance(se, list):
                 if not se:
                     raise StopIteration("side_effect list exhausted")

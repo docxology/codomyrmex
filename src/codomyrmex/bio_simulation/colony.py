@@ -193,7 +193,7 @@ class Colony:
         return counts
 
     def set_foraging(self, count: int) -> None:
-        """Set N idle ants to foraging state."""
+        """set N idle ants to foraging state."""
         set_count = 0
         for ant in self.ants:
             if ant.state == AntState.IDLE and ant.is_alive and set_count < count:

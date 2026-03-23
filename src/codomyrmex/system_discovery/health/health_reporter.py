@@ -110,7 +110,7 @@ class HealthReporter:
         Generate a health report for specified modules.
 
         Args:
-            modules: List of module names to check
+            modules: list of module names to check
             include_system_metrics: Whether to include system-wide metrics
 
         Returns:
@@ -467,7 +467,7 @@ def generate_health_report(modules: list[str]) -> HealthReport:
     Convenience function to generate a health report.
 
     Args:
-        modules: List of module names to check
+        modules: list of module names to check
 
     Returns:
         HealthReport with comprehensive health information

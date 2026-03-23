@@ -61,7 +61,7 @@ TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     ),
     (
         "codomyrmex.list_directory",
-        "List directory contents with filtering",
+        "list directory contents with filtering",
         list_directory,
         {
             "type": "object",
@@ -171,7 +171,7 @@ TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     # Discovery
     (
         "codomyrmex.list_modules",
-        "List all available Codomyrmex modules",
+        "list all available Codomyrmex modules",
         tool_list_modules,
         {"type": "object", "properties": {}},
     ),
@@ -222,7 +222,7 @@ TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     # ── Universal Module Proxy ────────────────────────────────────
     (
         "codomyrmex.list_module_functions",
-        "List all public callable functions and classes in any Codomyrmex module. "
+        "list all public callable functions and classes in any Codomyrmex module. "
         "Use this to discover what's available before calling call_module_function.",
         tool_list_module_functions,
         {
@@ -274,7 +274,7 @@ TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     ),
     (
         "codomyrmex.list_workflows",
-        "List available Claude Code workflows",
+        "list available Claude Code workflows",
         tool_list_workflows,
         {"type": "object", "properties": {}},
     ),

@@ -138,7 +138,7 @@ class SwarmManager:
             mission: High-level mission description.
 
         Returns:
-            List of results for each sub-task.
+            list of results for each sub-task.
 
         """
         logger.info("Starting mission: %s", mission)
@@ -161,7 +161,7 @@ class SwarmManager:
 
         Args:
             proposal: The proposal to vote on.
-            votes: List of votes from agents.
+            votes: list of votes from agents.
             strategy: Voting strategy.
 
         Returns:

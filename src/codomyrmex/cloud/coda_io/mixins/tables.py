@@ -29,7 +29,7 @@ class TablesMixin:
         table_types: list[str] | None = None,
     ) -> TableList:
         """
-        List tables and views in a doc.
+        list tables and views in a doc.
 
         Args:
             doc_id: The doc ID
@@ -86,7 +86,7 @@ class TablesMixin:
         visible_only: bool = False,
     ) -> ColumnList:
         """
-        List columns in a table.
+        list columns in a table.
 
         Args:
             doc_id: The doc ID
@@ -148,7 +148,7 @@ class TablesMixin:
         sync_token: str | None = None,
     ) -> RowList:
         """
-        List rows in a table.
+        list rows in a table.
 
         Args:
             doc_id: The doc ID
@@ -197,7 +197,7 @@ class TablesMixin:
         Args:
             doc_id: The doc ID
             table_id_or_name: Table ID or name
-            rows: List of rows to insert (RowEdit or dict with "cells")
+            rows: list of rows to insert (RowEdit or dict with "cells")
             key_columns: Columns for upsert matching
             disable_parsing: Don't parse values
 
@@ -329,7 +329,7 @@ class TablesMixin:
         Args:
             doc_id: The doc ID
             table_id_or_name: Table ID or name
-            row_ids: List of row IDs to delete
+            row_ids: list of row IDs to delete
 
         Returns:
             Deletion result

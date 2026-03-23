@@ -144,7 +144,7 @@ class QLearningAgent(Agent):
 
     Args:
         agent_id: Unique identifier.
-        action_types: List of available action type strings.
+        action_types: list of available action type strings.
         alpha: Learning rate (0–1).
         gamma: Discount factor (0–1).
         epsilon: Exploration rate (0–1). Decays multiplicatively each step.

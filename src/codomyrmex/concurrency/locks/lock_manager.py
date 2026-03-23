@@ -97,10 +97,10 @@ class LockManager:
             )
 
     def list_locks(self) -> list[str]:
-        """List all registered lock names.
+        """list all registered lock names.
 
         Returns:
-            List of registered lock names.
+            list of registered lock names.
 
         Example:
             >>> manager.list_locks()
@@ -113,7 +113,7 @@ class LockManager:
         """Acquire multiple locks safely to avoid deadlocks (sorts by name).
 
         Args:
-            names: List of lock names to acquire.
+            names: list of lock names to acquire.
             timeout: Maximum time to wait for all locks.
 
         Returns:
@@ -167,7 +167,7 @@ class LockManager:
         """Release multiple locks.
 
         Args:
-            names: List of lock names to release.
+            names: list of lock names to release.
 
         Example:
             >>> manager.release_all(["db", "file"])

@@ -136,7 +136,7 @@ def cli_commands():
     """Return CLI commands for the documents module."""
 
     def _list_formats():
-        """List document formats."""
+        """list document formats."""
         print("Documents Module - Supported Formats:")
         formats = [
             ("markdown", FORMATS_AVAILABLE),

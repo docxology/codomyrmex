@@ -53,7 +53,7 @@ class ElementsMixin:
         sort_by: str | None = None,
     ) -> FormulaList:
         """
-        List named formulas in a doc.
+        list named formulas in a doc.
 
         Args:
             doc_id: The doc ID
@@ -92,7 +92,7 @@ class ElementsMixin:
         sort_by: str | None = None,
     ) -> ControlList:
         """
-        List controls in a doc.
+        list controls in a doc.
 
         Args:
             doc_id: The doc ID

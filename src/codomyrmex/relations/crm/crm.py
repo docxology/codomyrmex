@@ -39,7 +39,7 @@ class Contact:
         id: Unique identifier.
         name: Display name.
         email: Primary email address.
-        tags: List of categorical tags.
+        tags: list of categorical tags.
         metadata: Arbitrary key-value metadata.
         created_at: ISO-format creation timestamp.
         interactions: History of interactions with this contact.
@@ -125,7 +125,7 @@ class ContactManager:
             query: Search string.
 
         Returns:
-            List of matching Contact instances.
+            list of matching Contact instances.
 
         """
         q = query.lower()
@@ -167,7 +167,7 @@ class ContactManager:
             contact_id: The contact's ID.
 
         Returns:
-            List of interaction dicts sorted by timestamp (newest first),
+            list of interaction dicts sorted by timestamp (newest first),
             or an empty list if the contact is not found.
 
         """

@@ -1,15 +1,15 @@
 # Agent Documentation — Personal AI Infrastructure
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-PAI agents operating within the Codomyrmex ecosystem integrate through the agent documentation here. This directory governs **38 AI agent frameworks** spanning CLI-based, API-based, local, and infrastructure agents.
+PAI agents operating within the Codomyrmex ecosystem integrate through the agent documentation here. This directory governs **41 agent packages** spanning CLI-based, API-based, core infrastructure, infrastructure, and specialized modules.
 
 ## AI Capabilities
 
 1. **Behavioral guidelines** — Core operating rules for all AI agents (see `rules/`)
-2. **Coordination patterns** — How 38 agents collaborate within and across modules
+2. **Coordination patterns** — How agent packages collaborate within and across modules
 3. **Quality enforcement** — Zero-Mock policy and functional integrity across all agent integrations
 4. **Multi-agent orchestration** — Pooling, load balancing, and mission control
 

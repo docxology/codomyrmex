@@ -38,7 +38,7 @@ class AzureBlobClient(StorageClient):
                 )
 
     def list_buckets(self) -> list[str]:
-        """List containers (buckets)."""
+        """list containers (buckets)."""
         if not self.client:
             return []
         try:
@@ -115,7 +115,7 @@ class AzureBlobClient(StorageClient):
             return False
 
     def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
-        """List blobs in a container."""
+        """list blobs in a container."""
         if not self.client:
             return []
         try:

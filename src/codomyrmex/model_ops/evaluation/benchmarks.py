@@ -234,7 +234,7 @@ class BenchmarkSuite:
         """Add multiple pre-built benchmark cases.
 
         Args:
-            cases: List of BenchmarkCase instances to add.
+            cases: list of BenchmarkCase instances to add.
         """
         self._cases.extend(cases)
 
@@ -258,7 +258,7 @@ class BenchmarkSuite:
             tag: The tag to filter by.
 
         Returns:
-            List of cases that have the specified tag.
+            list of cases that have the specified tag.
         """
         return [c for c in self._cases if tag in c.tags]
 
@@ -328,7 +328,7 @@ class BenchmarkSuite:
             scorer: Optional scorer override.
 
         Returns:
-            List of BenchmarkResult instances.
+            list of BenchmarkResult instances.
         """
         suite_result = self.run(model_fn, scorer)
         return suite_result.results

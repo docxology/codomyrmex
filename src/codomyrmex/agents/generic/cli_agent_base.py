@@ -63,7 +63,7 @@ class CLIAgentBase(BaseAgent):
         Args:
             name: Agent name
             command: CLI command name
-            capabilities: List of capabilities
+            capabilities: list of capabilities
             config: Optional configuration override
             timeout: Command timeout in seconds
             working_dir: Working directory for commands
@@ -117,7 +117,7 @@ class CLIAgentBase(BaseAgent):
         Perform comprehensive health check.
 
         Returns:
-            Dict with status, available, version, and response_time
+            dict with status, available, version, and response_time
         """
         start_time = time.time()
         available = self.is_available()

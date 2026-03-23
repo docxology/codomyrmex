@@ -105,7 +105,7 @@ class TestComputeInstanceOps:
 
     def test_create_instance_happy_path(self, stub_openstack_connection):
         """create_instance resolves flavor/image/network and returns created server."""
-        # Set up resolved objects
+        # set up resolved objects
         stub_flavor = Stub()
         stub_flavor.id = "flavor-a1"
         stub_image = Stub()

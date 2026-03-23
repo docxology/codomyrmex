@@ -107,7 +107,7 @@ class AssetInventory:
     def list_assets(
         self, asset_type: str | None = None, status: str | None = None
     ) -> list[PhysicalAsset]:
-        """List assets, optionally filtered by type and/or status."""
+        """list assets, optionally filtered by type and/or status."""
         results = list(self.assets.values())
 
         if asset_type is not None:

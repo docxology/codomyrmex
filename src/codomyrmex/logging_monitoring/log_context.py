@@ -80,7 +80,7 @@ class LogContext:
         """Generate extra dict for ``logger.*()`` calls.
 
         Returns:
-            Dict with ``correlation_id``, ``module``, ``operation``, and tags.
+            dict with ``correlation_id``, ``module``, ``operation``, and tags.
         """
         return {
             "correlation_id": self.correlation_id,

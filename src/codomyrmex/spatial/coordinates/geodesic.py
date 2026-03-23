@@ -17,8 +17,8 @@ class IcosahedralMesh:
     """An icosahedral mesh with vertices and triangular faces.
 
     Attributes:
-        vertices: List of 3D points on the unit sphere.
-        faces: List of (i, j, k) index triples defining triangles.
+        vertices: list of 3D points on the unit sphere.
+        faces: list of (i, j, k) index triples defining triangles.
         frequency: Subdivision frequency used to generate this mesh.
     """
 

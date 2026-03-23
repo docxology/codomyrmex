@@ -48,7 +48,7 @@ class SkillValidator:
             skill_data: Skill data dictionary
 
         Returns:
-            Tuple of (is_valid, list_of_errors)
+            tuple of (is_valid, list_of_errors)
         """
         errors = []
 
@@ -100,7 +100,7 @@ class SkillValidator:
             file_path: Path to skill YAML file
 
         Returns:
-            Tuple of (is_valid, list_of_errors)
+            tuple of (is_valid, list_of_errors)
         """
         if not file_path.exists():
             return False, [f"File does not exist: {file_path}"]

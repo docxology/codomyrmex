@@ -18,7 +18,7 @@ class CascadeDetector:
         - 'parent_id': Source of transmission (optional)
 
         Returns:
-            List of detected Cascades.
+            list of detected Cascades.
         """
         # Group by meme_id
         grouped: dict[str, list[dict]] = {}

@@ -39,7 +39,7 @@ class Task:
         id: Unique task identifier.
         name: Human-readable task name.
         description: Detailed task description.
-        required_capabilities: List of capabilities an agent needs to execute this task.
+        required_capabilities: list of capabilities an agent needs to execute this task.
         priority: Task priority (1-10, higher is more urgent).
         dependencies: IDs of tasks that must complete before this one.
         metadata: Additional task-specific metadata.
@@ -197,7 +197,7 @@ class AgentStatus:
         name: Agent name.
         status: Current status (idle, busy, offline, error).
         current_task_id: ID of the task currently being executed.
-        capabilities: List of agent capabilities.
+        capabilities: list of agent capabilities.
         tasks_completed: Number of tasks completed by this agent.
         tasks_failed: Number of tasks failed by this agent.
         last_heartbeat: Last time agent sent a heartbeat.

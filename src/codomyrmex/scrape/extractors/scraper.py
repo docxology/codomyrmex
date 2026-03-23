@@ -231,7 +231,7 @@ class Scraper(BaseScraper):
         """Extract structured data from URLs using LLM.
 
         Args:
-            urls: List of URLs to extract data from
+            urls: list of URLs to extract data from
             schema: Optional JSON schema for extraction
             prompt: Optional prompt for extraction
 

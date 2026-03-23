@@ -63,7 +63,7 @@ class Doc:
 
 @dataclass
 class DocList:
-    """List of docs with pagination."""
+    """list of docs with pagination."""
 
     items: list[Doc]
     href: str | None = None
@@ -159,7 +159,7 @@ class Page:
 
 @dataclass
 class PageList:
-    """List of pages with pagination."""
+    """list of pages with pagination."""
 
     items: list[Page]
     href: str | None = None

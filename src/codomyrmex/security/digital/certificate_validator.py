@@ -165,7 +165,7 @@ def validate_ssl_certificates(
         timeout: Connection timeout in seconds (default 10).
 
     Returns:
-        Dict representation of :class:`SSLValidationResult`.
+        dict representation of :class:`SSLValidationResult`.
     """
     validator = CertificateValidator(timeout=timeout)
     result = validator.validate_certificate(hostname, port)

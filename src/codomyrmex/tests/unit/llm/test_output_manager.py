@@ -93,7 +93,7 @@ class TestOutputManagerSave:
 
 
 # ---------------------------------------------------------------------------
-# OutputManager — List and Stats
+# OutputManager — list and Stats
 # ---------------------------------------------------------------------------
 
 

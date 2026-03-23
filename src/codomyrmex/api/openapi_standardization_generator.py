@@ -422,7 +422,7 @@ class StandardizationOpenAPIGenerator:
         self, url: str, description: str = "Find out more about this API"
     ) -> None:
         """
-        Set external documentation.
+        set external documentation.
 
         Args:
             url: Documentation URL
@@ -435,7 +435,7 @@ class StandardizationOpenAPIGenerator:
         Validate the OpenAPI specification.
 
         Returns:
-            List of validation errors (empty if valid)
+            list of validation errors (empty if valid)
         """
         errors = []
 

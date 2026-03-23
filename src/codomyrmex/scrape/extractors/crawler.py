@@ -153,7 +153,7 @@ class Crawler:
         """Add seed URLs to the frontier.
 
         Args:
-            urls: List of starting URLs.
+            urls: list of starting URLs.
 
         Returns:
             Number of new URLs added (deduped).
@@ -175,7 +175,7 @@ class Crawler:
         """Get the next URL to crawl from the frontier.
 
         Returns:
-            Tuple of (url, depth) or None if frontier is empty.
+            tuple of (url, depth) or None if frontier is empty.
         """
         if not self.has_next():
             return None

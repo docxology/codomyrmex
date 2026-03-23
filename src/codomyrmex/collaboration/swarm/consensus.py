@@ -98,7 +98,7 @@ class ConsensusEngine:
         """Resolve a set of votes into a decision.
 
         Args:
-            votes: List of votes.
+            votes: list of votes.
             strategy: Voting strategy (``majority``, ``weighted``, ``veto``).
             threshold: Approval threshold (default 0.5 = simple majority).
 

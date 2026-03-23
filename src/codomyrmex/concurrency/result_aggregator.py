@@ -94,7 +94,7 @@ class ResultAggregator:
         """Add multiple results at once.
 
         Args:
-            results: List of TaskResults.
+            results: list of TaskResults.
 
         Example:
             >>> agg.add_batch([res1, res2])

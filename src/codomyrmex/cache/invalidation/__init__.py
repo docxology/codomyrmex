@@ -169,7 +169,7 @@ class InvalidationManager:
         ttl: float | None = None,
         tags: set[str] | None = None,
     ) -> None:
-        """Set a cache entry."""
+        """set a cache entry."""
         with self._lock:
             # Evict if at capacity
             while len(self._entries) >= self.max_size:
@@ -241,7 +241,7 @@ class InvalidationManager:
             return count
 
     def set_version(self, namespace: str, version: int) -> None:
-        """Set namespace version for version-based invalidation."""
+        """set namespace version for version-based invalidation."""
         self._versions[namespace] = version
 
     def get_version(self, namespace: str) -> int:

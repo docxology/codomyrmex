@@ -29,7 +29,7 @@ class RolloutConfig:
     """Configuration for a gradual rollout.
 
     Attributes:
-        stages: List of rollout percentages (e.g. [5, 25, 50, 100]).
+        stages: list of rollout percentages (e.g. [5, 25, 50, 100]).
         stage_delay_seconds: Minimum seconds between automatic stage advances.
     """
 

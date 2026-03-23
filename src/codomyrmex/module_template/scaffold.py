@@ -145,7 +145,7 @@ def _create_core_module(path: Path, module_name: str, description: str) -> None:
 {description or "Core implementation for this module."}
 """
 
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -155,7 +155,7 @@ logger = get_logger(__name__)
 class {class_name}:
     """Main class for {module_name.replace("_", " ")} functionality."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         Initialize {class_name}.
 
@@ -180,7 +180,7 @@ class {class_name}:
 
 
 # Convenience function
-def create_{module_name}(config: Optional[Dict[str, Any]] = None) -> {class_name}:
+def create_{module_name}(config: Optional[dict[str, Any]] = None) -> {class_name}:
     """
     Create a new {class_name} instance.
 
@@ -208,10 +208,10 @@ def create_{module_name}(config: Optional[Dict[str, Any]] = None) -> {class_name
 
 def list_template_files() -> list[str]:
     """
-    List all files available in the module template.
+    list all files available in the module template.
 
     Returns:
-        List of template file names
+        list of template file names
     """
     template_dir = Path(__file__).parent
     return [

@@ -152,7 +152,7 @@ class Network:
         """Breadth-first traversal from a starting node.
 
         Returns:
-            List of node IDs in BFS visit order.
+            list of node IDs in BFS visit order.
         """
         if start_id not in self.nodes:
             raise ValueError(f"Node {start_id} does not exist")
@@ -174,7 +174,7 @@ class Network:
         """Depth-first traversal from a starting node.
 
         Returns:
-            List of node IDs in DFS visit order.
+            list of node IDs in DFS visit order.
         """
         if start_id not in self.nodes:
             raise ValueError(f"Node {start_id} does not exist")
@@ -202,7 +202,7 @@ class Network:
         """Find all connected components in the network.
 
         Returns:
-            List of sets, each containing the node IDs of one component.
+            list of sets, each containing the node IDs of one component.
         """
         visited: set[str] = set()
         components: list[set[str]] = []
@@ -225,7 +225,7 @@ class Network:
         """Compute normalized degree centrality for all nodes.
 
         Returns:
-            Dict mapping node_id to centrality score in [0, 1].
+            dict mapping node_id to centrality score in [0, 1].
         """
         n = len(self.nodes)
         if n <= 1:

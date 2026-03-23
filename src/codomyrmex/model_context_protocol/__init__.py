@@ -79,7 +79,7 @@ def cli_commands():
     """Return CLI commands for the model_context_protocol module."""
     return {
         "tools": {
-            "help": "List registered MCP tools",
+            "help": "list registered MCP tools",
             "handler": lambda **kwargs: print(
                 "MCP Tool Registry:\n"
                 f"  Registry class: {MCPToolRegistry.__name__}\n"

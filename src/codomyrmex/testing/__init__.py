@@ -45,7 +45,7 @@ def cli_commands():
     """Return CLI commands for the testing module."""
     return {
         "frameworks": {
-            "help": "List available test frameworks and strategies",
+            "help": "list available test frameworks and strategies",
             "handler": lambda **kwargs: print(
                 "Test Frameworks:\n"
                 "  - property_test  (property-based testing)\n"

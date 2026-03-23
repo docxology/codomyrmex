@@ -24,7 +24,7 @@ def compute_scale_zero_point(
         scheme: "asymmetric" or "symmetric".
 
     Returns:
-        Tuple of (scale, zero_point).
+        tuple of (scale, zero_point).
 
     Raises:
         ValueError: If scheme is not "asymmetric" or "symmetric".

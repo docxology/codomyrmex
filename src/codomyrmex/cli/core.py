@@ -80,7 +80,7 @@ class Cli:
         return show_info()
 
     def modules(self):
-        """List all available modules and their descriptions"""
+        """list all available modules and their descriptions"""
         return show_modules()
 
     def status(self):
@@ -157,7 +157,7 @@ class Cli:
         """Workflow management subcommands"""
 
         def list(self):
-            """List all available workflows"""
+            """list all available workflows"""
             return list_workflows()
 
         def run(self, name: str, params: str = ""):
@@ -179,7 +179,7 @@ class Cli:
         """Project management subcommands"""
 
         def list(self):
-            """List all projects"""
+            """list all projects"""
             return handle_project_list()
 
         def create(
@@ -312,7 +312,7 @@ class Cli:
             return handle_skills_sync(force)
 
         def list(self, category: str = ""):
-            """List available skills, optionally filtered by category"""
+            """list available skills, optionally filtered by category"""
             return handle_skills_list(category or None)
 
         def get(self, category: str, name: str, output: str = ""):
@@ -327,7 +327,7 @@ class Cli:
         """Rules management — query .cursorrules governance hierarchy"""
 
         def list(self):
-            """List all rules with their priority and file path"""
+            """list all rules with their priority and file path"""
             return handle_rules_list()
 
         def check(self, file: str):
@@ -338,7 +338,7 @@ class Cli:
         """Agent management subcommands"""
 
         def list(self):
-            """List all available agents"""
+            """list all available agents"""
             from .handlers.agent import handle_agent_list
 
             return handle_agent_list()
@@ -359,7 +359,7 @@ class Cli:
         """Memory management subcommands"""
 
         def list(self, limit: int = 20):
-            """List recent memory entries"""
+            """list recent memory entries"""
             from .handlers.memory import handle_memory_list
 
             return handle_memory_list(limit=limit)

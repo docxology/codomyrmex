@@ -119,7 +119,7 @@ class TermAnalyzer:
             top_n: Maximum number of terms to return.
 
         Returns:
-            List of ``(term, count, score)`` tuples sorted by score
+            list of ``(term, count, score)`` tuples sorted by score
             descending.
         """
         blocks = self._extract_text_blocks(spec)

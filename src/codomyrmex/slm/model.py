@@ -125,7 +125,7 @@ class SLM:
         """Greedy autoregressive generation.
 
         Args:
-            prompt_ids: List of initial token IDs
+            prompt_ids: list of initial token IDs
             max_new_tokens: Number of tokens to generate
 
         Returns:

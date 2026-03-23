@@ -32,7 +32,7 @@ class DashboardMixin:
         Create a multi-panel dashboard.
 
         Args:
-            datasets: List of datasets to plot
+            datasets: list of datasets to plot
             layout: Dashboard layout (rows, cols)
             title: Dashboard title
             **kwargs: Additional arguments for subplots

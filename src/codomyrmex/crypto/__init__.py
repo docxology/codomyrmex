@@ -92,7 +92,7 @@ def _cmd_status(**kwargs):
 
 
 def _cmd_algorithms(**kwargs):
-    """List available crypto algorithms across all submodules."""
+    """list available crypto algorithms across all submodules."""
     return {
         "symmetric": ["AES-256-GCM", "ChaCha20-Poly1305"],
         "asymmetric": ["RSA-4096", "Ed25519", "X25519", "SECP256R1"],

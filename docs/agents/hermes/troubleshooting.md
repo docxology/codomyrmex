@@ -286,3 +286,10 @@ copilot --version
 - [Environment](environment.md) — `.env` loading
 - [Copilot ACP](copilot_acp.md) — Copilot backend issues
 - [skills.md](skills.md) — Codomyrmex skill registry, profile, merge order
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

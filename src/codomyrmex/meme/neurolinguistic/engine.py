@@ -25,7 +25,7 @@ class NeurolinguisticEngine:
         """Perform a full audit of text.
 
         Returns:
-            Dict containing active frames and detected patterns.
+            dict containing active frames and detected patterns.
         """
         frames = analyze_frames(text, self.known_frames)
         patterns = detect_patterns(text)

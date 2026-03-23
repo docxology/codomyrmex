@@ -126,7 +126,7 @@ class SkillExecutor:
         result as the `input` keyword argument.
 
         Args:
-            skills: List of Skill instances to execute in order
+            skills: list of Skill instances to execute in order
             **kwargs: Initial parameters for the first skill
 
         Returns:

@@ -9,7 +9,7 @@ class PipelineValidationMixin:
             config: Pipeline configuration dictionary
 
         Returns:
-            Tuple of (is_valid, list_of_errors)
+            tuple of (is_valid, list_of_errors)
         """
         errors = []
 
@@ -117,7 +117,7 @@ class PipelineValidationMixin:
         Extract stage dependencies from stage list.
 
         Args:
-            stages: List of stage dictionaries
+            stages: list of stage dictionaries
 
         Returns:
             Dictionary mapping stage names to dependency lists
@@ -135,10 +135,10 @@ class PipelineValidationMixin:
         Validate stage dependency graph.
 
         Args:
-            stages: List of stage dictionaries
+            stages: list of stage dictionaries
 
         Returns:
-            Tuple of (is_valid, list_of_errors)
+            tuple of (is_valid, list_of_errors)
         """
         errors = []
         stage_names = {stage["name"] for stage in stages}

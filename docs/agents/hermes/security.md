@@ -178,3 +178,10 @@ Tirith evaluates tool calls against policies before execution. If `tirith_fail_o
 - [Multi-Instance](multi_instance.md) — Instance isolation
 - [Telegram](telegram.md) — DM access control and pairing
 - [skills.md](skills.md) — Skill registry / profile files (Codomyrmex)
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

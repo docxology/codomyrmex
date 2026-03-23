@@ -541,7 +541,7 @@ class ArsContextaManager:
         }
 
     def get_primitives(self, layer: str | None = None) -> list[dict[str, Any]]:
-        """List kernel primitives, optionally filtered by layer."""
+        """list kernel primitives, optionally filtered by layer."""
         if layer:
             try:
                 kl = KernelLayer(layer)

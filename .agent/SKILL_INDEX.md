@@ -13,6 +13,7 @@ These workflows in `.agent/workflows/` are auto-detected by Antigravity:
 | `/tdd` | Superpowers | Test-Driven Development: red-green-refactor |
 | `/systematicDebugging` | Superpowers | Root cause investigation before fixes |
 | `/propertyBasedTesting` | Trail of Bits | Hypothesis-style property testing |
+| `/desloppify` | Codomyrmex | Codebase health scanner: strict score via scan → `next` → resolve loop ([skill](../skills/desloppify/SKILL.md)) |
 
 ---
 

@@ -217,7 +217,7 @@ class MetricCollector:
         return metrics[-1] if metrics else None
 
     def list_metric_names(self) -> list[str]:
-        """List all recorded metric names."""
+        """list all recorded metric names."""
         return list(self._metrics.keys())
 
     def cleanup_old(self) -> int:
@@ -341,7 +341,7 @@ class DashboardManager:
         return self._dashboards.get(dashboard_id)
 
     def list(self) -> list[Dashboard]:  # type: ignore
-        """List all dashboards."""
+        """list all dashboards."""
         return list(self._dashboards.values())
 
     def delete(self, dashboard_id: str) -> bool:

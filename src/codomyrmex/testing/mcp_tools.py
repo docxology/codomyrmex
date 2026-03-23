@@ -89,7 +89,7 @@ def testing_generate_data(
 
 @mcp_tool(
     category="testing",
-    description="List available test data generator strategy type names.",
+    description="list available test data generator strategy type names.",
 )
 def testing_list_strategies() -> list[str]:
     """Return supported generator strategy identifiers."""

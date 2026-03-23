@@ -80,7 +80,7 @@ def list_plugins(
     format: str | None = None,
     vault: str | None = None,
 ) -> list[PluginInfo]:
-    """List installed plugins.
+    """list installed plugins.
 
     Maps to ``obsidian plugins [filter=core|community] [versions] [format=...]``.
     """
@@ -102,7 +102,7 @@ def list_enabled(
     filter: str | None = None,
     vault: str | None = None,
 ) -> list[PluginInfo]:
-    """List enabled plugins.
+    """list enabled plugins.
 
     Maps to ``obsidian plugins:enabled [filter=core|community]``.
     """
@@ -210,7 +210,7 @@ def list_themes(
     versions: bool = False,
     vault: str | None = None,
 ) -> list[str]:
-    """List installed themes.
+    """list installed themes.
 
     Maps to ``obsidian themes [versions]``.
     """
@@ -241,7 +241,7 @@ def set_theme(
     *,
     vault: str | None = None,
 ) -> CLIResult:
-    """Set the active theme.
+    """set the active theme.
 
     Maps to ``obsidian theme:set name=<name>``.
     """
@@ -284,7 +284,7 @@ def list_snippets(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List CSS snippets.
+    """list CSS snippets.
 
     Maps to ``obsidian snippets``.
     """
@@ -297,7 +297,7 @@ def list_enabled_snippets(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List enabled CSS snippets.
+    """list enabled CSS snippets.
 
     Maps to ``obsidian snippets:enabled``.
     """

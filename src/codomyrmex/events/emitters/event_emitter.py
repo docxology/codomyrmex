@@ -144,7 +144,7 @@ class EventEmitter:
         Emit multiple events in batch.
 
         Args:
-            events: List of event dictionaries with keys: event_type, data, correlation_id, metadata, priority
+            events: list of event dictionaries with keys: event_type, data, correlation_id, metadata, priority
         """
         if not self.enabled:
             return
@@ -163,7 +163,7 @@ class EventEmitter:
         Emit multiple events in batch asynchronously.
 
         Args:
-            events: List of event dictionaries with keys: event_type, data, correlation_id, metadata, priority
+            events: list of event dictionaries with keys: event_type, data, correlation_id, metadata, priority
         """
         if not self.enabled:
             return
@@ -378,7 +378,7 @@ class EventEmitter:
 
     def set_correlation_context(self, correlation_id: str) -> None:
         """
-        Set the default correlation ID for subsequent events.
+        set the default correlation ID for subsequent events.
 
         Args:
             correlation_id: Correlation ID to use
@@ -391,7 +391,7 @@ class EventEmitter:
 
     def set_default_metadata(self, metadata: dict[str, Any]) -> None:
         """
-        Set default metadata for all emitted events.
+        set default metadata for all emitted events.
 
         Args:
             metadata: Default metadata dictionary

@@ -255,7 +255,7 @@ def _handle_api_key_check(
         else:
             print_warning(
                 f"{client_name} API key is not configured",
-                context=f"Set {api_key_env} environment variable",
+                context=f"set {api_key_env} environment variable",
             )
 
         print_info(f"Model: {getattr(config, f'{config_prefix}_model', 'unknown')}")

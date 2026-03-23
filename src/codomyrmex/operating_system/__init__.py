@@ -72,7 +72,7 @@ def cli_commands():
             ),
         },
         "processes": {
-            "help": "List running processes",
+            "help": "list running processes",
             "handler": lambda **kwargs: print(
                 "\n".join(f"[{p.pid}] {p.name}" for p in list_processes(limit=20))
             ),

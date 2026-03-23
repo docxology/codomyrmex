@@ -47,7 +47,7 @@ def cli_commands():
     """Return CLI commands for the logistics module."""
 
     def _list_routes():
-        """List logistics routes."""
+        """list logistics routes."""
         print("Logistics Module - Routing:")
         print("  orchestration - Workflow and project orchestration")
         print("  task          - Task queue management and job execution")

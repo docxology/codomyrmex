@@ -90,7 +90,7 @@ class ContractRegistry:
         return False
 
     def list(self) -> list[str]:  # type: ignore
-        """List all registered contract names."""
+        """list all registered contract names."""
         return sorted(self._contracts.keys())
 
     # ── Lifecycle management ────────────────────────────────────────

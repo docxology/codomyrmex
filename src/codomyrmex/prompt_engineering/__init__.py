@@ -69,7 +69,7 @@ class PromptEngineeringError(CodomyrmexError):
 
 def list_templates() -> list[str]:
     """
-    List all templates in the default registry.
+    list all templates in the default registry.
 
     Returns:
         Sorted list of template names.
@@ -79,7 +79,7 @@ def list_templates() -> list[str]:
 
 def list_strategies() -> list[str]:
     """
-    List available optimization strategies.
+    list available optimization strategies.
 
     Returns:
         Sorted list of strategy value strings.
@@ -112,7 +112,7 @@ def cli_commands() -> dict[str, Any]:
     """
     return {
         "templates": {
-            "help": "List prompt templates in the default registry",
+            "help": "list prompt templates in the default registry",
             "handler": lambda args: print(
                 "\n".join(list_templates())
                 if list_templates()
@@ -121,7 +121,7 @@ def cli_commands() -> dict[str, Any]:
             "arguments": [],
         },
         "strategies": {
-            "help": "List available prompt optimization strategies",
+            "help": "list available prompt optimization strategies",
             "handler": lambda args: print("\n".join(list_strategies())),
             "arguments": [],
         },

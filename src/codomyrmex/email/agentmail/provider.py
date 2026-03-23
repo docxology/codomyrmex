@@ -116,7 +116,7 @@ class AgentMailProvider(
         if not resolved_key:
             raise EmailAuthError(
                 "No AgentMail API key provided. "
-                "Set AGENTMAIL_API_KEY environment variable or pass api_key= argument."
+                "set AGENTMAIL_API_KEY environment variable or pass api_key= argument."
             )
 
         try:
@@ -152,7 +152,7 @@ class AgentMailProvider(
         before: str | None = None,
         after: str | None = None,
     ) -> list[EmailMessage]:
-        """List messages in an AgentMail inbox.
+        """list messages in an AgentMail inbox.
 
         AgentMail does not support free-text search queries. The ``query``
         argument is accepted for interface compatibility but ignored.
@@ -166,7 +166,7 @@ class AgentMailProvider(
             after: ISO datetime string -- return messages after this time.
 
         Returns:
-            List of EmailMessage objects.
+            list of EmailMessage objects.
         """
         resolved_inbox = self._resolve_inbox_id(inbox_id)
         try:
@@ -416,7 +416,7 @@ class AgentMailProvider(
 
         Args:
             message_id: The message to forward.
-            to: List of recipient email addresses.
+            to: list of recipient email addresses.
             text: Optional additional plain-text body.
             html: Optional additional HTML body.
             inbox_id: Sending inbox. Defaults to AGENTMAIL_DEFAULT_INBOX.
@@ -540,13 +540,13 @@ class AgentMailProvider(
     # -------------------------------------------------------------------------
 
     def list_pods(self, limit: int = 50) -> list[AgentMailPod]:
-        """List all pods.
+        """list all pods.
 
         Args:
             limit: Maximum number of pods to return.
 
         Returns:
-            List of AgentMailPod objects.
+            list of AgentMailPod objects.
         """
         try:
             response = self._client.pods.list(limit=limit)
@@ -626,13 +626,13 @@ class AgentMailProvider(
     # -------------------------------------------------------------------------
 
     def list_domains(self, limit: int = 50) -> list[AgentMailDomain]:
-        """List all domains configured for this account.
+        """list all domains configured for this account.
 
         Args:
             limit: Maximum number of domains to return.
 
         Returns:
-            List of AgentMailDomain objects.
+            list of AgentMailDomain objects.
         """
         try:
             response = self._client.domains.list(limit=limit)

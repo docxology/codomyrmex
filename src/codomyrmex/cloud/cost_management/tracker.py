@@ -218,7 +218,7 @@ class BudgetManager:
         return self._budgets.get(budget_id)
 
     def list_budgets(self) -> list[Budget]:
-        """List all budgets."""
+        """list all budgets."""
         return list(self._budgets.values())
 
     def get_utilization(self, budget: Budget) -> float:

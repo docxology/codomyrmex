@@ -113,7 +113,7 @@ class FPFParser:
             content: The markdown content
 
         Returns:
-            List of Pattern objects
+            list of Pattern objects
         """
         patterns = []
         lines = content.split("\n")
@@ -324,7 +324,7 @@ class FPFParser:
             dep_string: String containing dependency references
 
         Returns:
-            List of pattern IDs
+            list of pattern IDs
         """
         # Extract pattern IDs like A.1, A.2.1, B.3, etc.
         pattern_ids = re.findall(r"([A-Z]\.\d+(?:\.\d+)?(?:\.[A-Z])?)", dep_string)

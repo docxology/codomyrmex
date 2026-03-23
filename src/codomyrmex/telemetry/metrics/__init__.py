@@ -148,7 +148,7 @@ class Gauge(_LabeledMetric):
         return MetricType.GAUGE
 
     def set(self, value: float, labels: dict[str, str] | None = None) -> None:
-        """Set the gauge value."""
+        """set the gauge value."""
         key = self._key(labels or self.labels)
         with self._lock:
             self._values[key] = value

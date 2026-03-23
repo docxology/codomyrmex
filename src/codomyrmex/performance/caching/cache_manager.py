@@ -130,7 +130,7 @@ class CacheManager:
         return None
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> None:
-        """Set a value in the cache."""
+        """set a value in the cache."""
         ttl = ttl or self.default_ttl
         timestamp = time.time()
 

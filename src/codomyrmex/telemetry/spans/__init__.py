@@ -114,12 +114,12 @@ class Span:
         return self
 
     def set_attribute(self, key: str, value: Any) -> "Span":
-        """Set an attribute on the span."""
+        """set an attribute on the span."""
         self.attributes[key] = value
         return self
 
     def set_attributes(self, attributes: dict[str, Any]) -> "Span":
-        """Set multiple attributes."""
+        """set multiple attributes."""
         self.attributes.update(attributes)
         return self
 
@@ -153,7 +153,7 @@ class Span:
         return self
 
     def set_status(self, status: str, message: str = "") -> "Span":
-        """Set the span status."""
+        """set the span status."""
         self.status = status
         self.status_message = message
         return self
@@ -204,7 +204,7 @@ def get_current_span() -> Span | None:
 
 
 def set_current_span(span: Span | None) -> None:
-    """Set the current span in context."""
+    """set the current span in context."""
     _current_span.span = span
 
 

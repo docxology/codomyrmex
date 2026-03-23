@@ -63,7 +63,7 @@ def list_issues(
     labels: list[str] | None = None,
     github_token: str | None = None,
 ) -> list[dict]:
-    """List issues in a repository."""
+    """list issues in a repository."""
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
@@ -185,8 +185,8 @@ async def async_create_issue(
         repo_name: Repository name
         title: Issue title
         body: Issue body/description
-        labels: List of label names
-        assignees: List of assignee usernames
+        labels: list of label names
+        assignees: list of assignee usernames
         github_token: GitHub personal access token
 
     Returns:
@@ -235,7 +235,7 @@ async def async_list_issues(
     github_token: str | None = None,
 ) -> list[dict]:
     """
-    List issues in a repository asynchronously.
+    list issues in a repository asynchronously.
 
     Args:
         owner: Repository owner
@@ -245,7 +245,7 @@ async def async_list_issues(
         github_token: GitHub personal access token
 
     Returns:
-        List of issue dictionaries
+        list of issue dictionaries
 
     Raises:
         GitHubAPIError: If fetching fails

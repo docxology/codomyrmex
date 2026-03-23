@@ -74,7 +74,7 @@ Started with: `uv run python scripts/pai/dashboard.py` or `bun run src/codomyrme
 | Category | Count | Notes |
 |----------|-------|-------|
 | Static proxy tools | 22 | File ops, git, shell, analysis, PAI, testing, workflows |
-| Dynamic auto-discovered | ~604 | 596 from 149 `mcp_tools.py` files + 9 static proxy ([inventory](../reference/inventory.md)) |
+| Dynamic auto-discovered | 600 | 149 `mcp_tools.py` files (non-test); production `@mcp_tool` lines ([inventory](../reference/inventory.md)) |
 | Destructive (trust-gated) | 4 | `write_file`, `run_command`, `run_tests`, `call_module_function` |
 | Resources | 3 | `codomyrmex://modules`, `codomyrmex://status`, discovery metrics |
 | Prompts | 10 | Analysis, review, and generation prompt templates |

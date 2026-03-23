@@ -149,7 +149,7 @@ def get_commit_history_filtered(
         file_path: Show only commits affecting this file
 
     Returns:
-        List of commit dictionaries
+        list of commit dictionaries
     """
     if repository_path is None:
         repository_path = os.getcwd()

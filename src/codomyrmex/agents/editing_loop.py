@@ -57,7 +57,7 @@ class EditTask:
         file_path: Primary file to edit.
         edit_type: Hint for the planner (e.g. ``"refactor"``, ``"add"``, ``"fix"``).
         context_files: Additional files the planner should read.
-        approved: Set to ``True`` when the reviewer accepts the edit.
+        approved: set to ``True`` when the reviewer accepts the edit.
         result: Final edit summary after approval.
         review_notes: Accumulated reviewer feedback across iterations.
         iterations_used: How many plan→edit→review cycles were executed.
@@ -232,7 +232,7 @@ class EditingOrchestrator:
         """Run multiple tasks sequentially.
 
         Args:
-            tasks: List of editing tasks.
+            tasks: list of editing tasks.
 
         Returns:
             The same list with results populated.
@@ -257,7 +257,7 @@ class EditingOrchestrator:
             config: Optional configuration override.
 
         Returns:
-            Tuple of (orchestrator, tasks).
+            tuple of (orchestrator, tasks).
         """
         from codomyrmex.agents.orchestrator import extract_todo_items
 
@@ -401,7 +401,7 @@ class EditingOrchestrator:
         """Extract FIND/REPLACE pairs from a plan text.
 
         Returns:
-            List of (find_text, replace_text) tuples.
+            list of (find_text, replace_text) tuples.
         """
         edits: list[tuple[str, str]] = []
         pattern = re.compile(
@@ -449,7 +449,7 @@ class EditingOrchestrator:
             edit_summary: Summary of what was changed.
 
         Returns:
-            Tuple of (approved, review_notes, score).
+            tuple of (approved, review_notes, score).
         """
         # Read the file after edits (if it exists).
         post_edit_content = ""

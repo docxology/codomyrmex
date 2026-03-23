@@ -232,7 +232,7 @@ class PipelineManager(
         return self.pipelines.get(pipeline_name)
 
     def list_pipelines(self) -> list[Pipeline]:
-        """List all configured pipelines."""
+        """list all configured pipelines."""
         return list(self.pipelines.values())
 
     def cancel_pipeline(self, pipeline_name: str) -> bool:

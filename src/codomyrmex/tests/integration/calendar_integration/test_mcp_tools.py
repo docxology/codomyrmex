@@ -41,9 +41,9 @@ else:
 )
 def test_calendar_mcp_flow():
     """Verify calendar mcp flow behavior."""
-    # 1. List
+    # 1. list
     res = calendar_list_events(days_ahead=2)
-    assert res["status"] == "success", f"List events failed: {res}"
+    assert res["status"] == "success", f"list events failed: {res}"
     assert "events" in res
 
     # 2. Create

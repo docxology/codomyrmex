@@ -60,10 +60,10 @@ class ArtifactHistoryBridge:
         logger.info("ArtifactHistoryBridge initialized: %s", self.brain_dir)
 
     def list_artifacts(self) -> list[str]:
-        """List existing artifacts in the brain directory.
+        """list existing artifacts in the brain directory.
 
         Returns:
-            List of artifact filenames.
+            list of artifact filenames.
         """
         if not self.brain_dir.exists():
             return []
@@ -152,10 +152,10 @@ class ArtifactHistoryBridge:
         return json.loads(path.read_text(encoding="utf-8"))
 
     def list_memories(self) -> list[str]:
-        """List all agent memory keys.
+        """list all agent memory keys.
 
         Returns:
-            List of memory keys.
+            list of memory keys.
         """
         if not self._memory_dir.exists():
             return []

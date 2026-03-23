@@ -88,7 +88,7 @@ class ModelPricingTable:
         per_call: float = 0.0,
         per_second: float = 0.0,
     ) -> None:
-        """Set pricing for *model_name*.
+        """set pricing for *model_name*.
 
         Args:
             model_name: Model identifier.
@@ -312,7 +312,7 @@ class _TrackingContext:
         self.metadata: dict[str, Any] = {}
 
     def set_tokens(self, *, input: int = 0, output: int = 0) -> None:
-        """Set token counts for cost calculation.
+        """set token counts for cost calculation.
 
         Args:
             input: Number of input tokens.

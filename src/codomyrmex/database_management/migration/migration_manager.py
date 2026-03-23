@@ -97,7 +97,7 @@ class MigrationManager:
         self.migration_history_dir.mkdir(parents=True, exist_ok=True)
 
     def set_database_url(self, database_url: str):
-        """Set the database URL for migrations."""
+        """set the database URL for migrations."""
         self._database_url = database_url
         self._connector = None
 
@@ -382,7 +382,7 @@ class MigrationManager:
         }
 
     def list_migrations(self) -> list[dict[str, Any]]:
-        """List all migrations with their status."""
+        """list all migrations with their status."""
         migrations = []
         for migration in self._migrations.values():
             is_applied = self._is_migration_applied(migration.id)

@@ -115,7 +115,7 @@ class InMemoryVectorStore(_SearchMixin, VectorStore):
             self._vectors.clear()
 
     def list_ids(self) -> list[str]:
-        """List all vector IDs."""
+        """list all vector IDs."""
         return list(self._vectors.keys())
 
 
@@ -129,7 +129,7 @@ class NamespacedVectorStore(VectorStore):
         self._lock = threading.Lock()
 
     def use_namespace(self, namespace: str) -> "NamespacedVectorStore":
-        """Set the current namespace."""
+        """set the current namespace."""
         with self._lock:
             if namespace not in self._namespaces:
                 self._namespaces[namespace] = InMemoryVectorStore()
@@ -174,7 +174,7 @@ class NamespacedVectorStore(VectorStore):
         self._get_store().clear()
 
     def list_namespaces(self) -> list[str]:
-        """List all namespaces."""
+        """list all namespaces."""
         return list(self._namespaces.keys())
 
     def delete_namespace(self, namespace: str) -> bool:

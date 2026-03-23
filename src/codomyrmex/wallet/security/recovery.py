@@ -100,7 +100,7 @@ class NaturalRitualRecovery:
             user_id: The user identifier.
 
         Returns:
-            List of prompt strings.
+            list of prompt strings.
 
         Raises:
             RitualError: If no ritual is registered.
@@ -149,7 +149,7 @@ class NaturalRitualRecovery:
 
         Args:
             user_id: The user identifier.
-            responses: List of response strings, one per ritual step.
+            responses: list of response strings, one per ritual step.
 
         Returns:
             True if all responses matched, False otherwise.

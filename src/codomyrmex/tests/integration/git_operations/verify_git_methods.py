@@ -648,7 +648,7 @@ class ComprehensiveGitVerifier:
 
         self.test_method("Stashing", "stash_changes", test_stash_changes)
 
-        # Test 2: List Stashes
+        # Test 2: list Stashes
         def test_list_stashes():
             stashes = list_stashes(test_repo)
 
@@ -698,7 +698,7 @@ class ComprehensiveGitVerifier:
 
         self.test_method("Tagging", "create_tag", test_create_tag)
 
-        # Test 2: List Tags
+        # Test 2: list Tags
         def test_list_tags():
             tags = list_tags(test_repo)
 
@@ -722,7 +722,7 @@ class ComprehensiveGitVerifier:
                     check=True,
                 )
 
-                # List all tags
+                # list all tags
                 result2 = subprocess.run(
                     ["git", "tag", "-l"],
                     cwd=test_repo,

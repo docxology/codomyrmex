@@ -17,7 +17,7 @@ class CodomyrmexError(Exception):
 
     Attributes:
         message (str): The error message
-        context (Dict[str, Any]): Additional context information about the error
+        context (dict[str, Any]): Additional context information about the error
         error_code (str): A unique error code for this exception type
     """
 

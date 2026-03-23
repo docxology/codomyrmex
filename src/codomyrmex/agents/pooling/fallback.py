@@ -34,7 +34,7 @@ class FallbackResult(Generic[T]):
         agent_name: Name of the agent that succeeded (None if all failed).
         result: The successful result (None if all failed).
         error: The exception from the last failed agent (None if succeeded).
-        attempts: List of (agent_name, error) tuples for each attempt.
+        attempts: list of (agent_name, error) tuples for each attempt.
     """
 
     success: bool = False
@@ -48,7 +48,7 @@ class FallbackChain(Generic[T]):
     """Chain of agents tried in order until one succeeds.
 
     Attributes:
-        handled_exceptions: Tuple of exception types that trigger fallback.
+        handled_exceptions: tuple of exception types that trigger fallback.
 
     Example::
 

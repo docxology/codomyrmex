@@ -113,7 +113,7 @@ class TestLoRALayerForward:
         config = LoRAConfig(rank=r, alpha=8.0)
         layer = LoRALayer(W, config)
 
-        # Set B to non-zero for meaningful test
+        # set B to non-zero for meaningful test
         layer.B = np.random.randn(d, r) * 0.1
 
         x = np.random.randn(3, k)  # batch of 3

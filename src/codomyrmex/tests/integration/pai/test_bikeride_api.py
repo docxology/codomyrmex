@@ -229,7 +229,7 @@ class TestGitHubIntegration:
     """Test GitHub sync API endpoints."""
 
     def test_repos_list(self) -> None:
-        """List repos for the default owner."""
+        """list repos for the default owner."""
         result = _api_get("/api/github/repos?owner=docxology")
         assert isinstance(result, list), f"Expected list of repos, got {type(result)}"
         assert len(result) > 0, "No repos returned for docxology"

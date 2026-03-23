@@ -329,7 +329,7 @@ def get_user(user_id: int, name: str = "default"):
             endpoints=[],
         )
 
-        # Set the documentation on the generator
+        # set the documentation on the generator
         self.generator.documentation = documentation
 
         output_path = str(tmp_path / "test.json")
@@ -353,7 +353,7 @@ def get_user(user_id: int, name: str = "default"):
             endpoints=[],
         )
 
-        # Set the documentation on the generator
+        # set the documentation on the generator
         self.generator.documentation = documentation
 
         output_path = str(tmp_path / "test.yaml")

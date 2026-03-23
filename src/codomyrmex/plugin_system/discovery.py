@@ -53,7 +53,7 @@ class PluginInfo:
         description: Brief description.
         state: Current lifecycle state.
         entry_point: Entry point group that discovered it.
-        dependencies: List of required plugin names.
+        dependencies: list of required plugin names.
         error: Error message if state is ERROR.
         metadata: Additional plugin metadata.
     """
@@ -75,8 +75,8 @@ class DiscoveryResult:
     """Result of a plugin discovery scan.
 
     Attributes:
-        plugins: List of discovered plugins.
-        errors: List of (source, error_message) tuples.
+        plugins: list of discovered plugins.
+        errors: list of (source, error_message) tuples.
         scan_sources: Sources that were scanned.
     """
 

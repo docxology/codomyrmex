@@ -246,7 +246,7 @@ class DirectMessenger:
             limit: Maximum number of messages to return.
 
         Returns:
-            List of messages, most recent first.
+            list of messages, most recent first.
 
         """
         messages = self._message_log

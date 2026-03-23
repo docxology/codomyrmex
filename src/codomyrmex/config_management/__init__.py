@@ -120,7 +120,7 @@ def get_config(key: str, default: Any = None, namespace: str = "default") -> Any
 
 
 def set_config(key: str, value: Any, namespace: str = "default") -> None:
-    """Set a configuration value.
+    """set a configuration value.
 
     Args:
         key: Configuration key to set.

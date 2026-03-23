@@ -51,7 +51,7 @@ class TaskPlanner:
 
         Args:
             description: Task description
-            dependencies: List of task IDs this task depends on
+            dependencies: list of task IDs this task depends on
             metadata: Optional task metadata
 
         Returns:
@@ -78,10 +78,10 @@ class TaskPlanner:
 
         Args:
             main_task: Main task to decompose
-            subtask_descriptions: List of subtask descriptions
+            subtask_descriptions: list of subtask descriptions
 
         Returns:
-            List of created subtasks
+            list of created subtasks
         """
         subtasks = []
 
@@ -145,7 +145,7 @@ class TaskPlanner:
         Get tasks that are ready to execute (dependencies completed).
 
         Returns:
-            List of ready tasks
+            list of ready tasks
         """
         ready_tasks = []
 
@@ -170,7 +170,7 @@ class TaskPlanner:
         Get tasks in execution order (respecting dependencies).
 
         Returns:
-            List of tasks in execution order
+            list of tasks in execution order
         """
         # Simple topological sort
         executed = set()
@@ -209,6 +209,6 @@ class TaskPlanner:
         Get all tasks.
 
         Returns:
-            List of all tasks
+            list of all tasks
         """
         return list(self.tasks.values())

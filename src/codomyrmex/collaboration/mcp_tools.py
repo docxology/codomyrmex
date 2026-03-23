@@ -107,10 +107,10 @@ def pool_status() -> dict[str, Any]:
 
 @mcp_tool(
     category="collaboration",
-    description="List available agent capabilities and coordination protocols.",
+    description="list available agent capabilities and coordination protocols.",
 )
 def collaboration_list_agents() -> dict[str, Any]:
-    """List the available agent classes and protocols.
+    """list the available agent classes and protocols.
 
     Returns:
         Dictionary with agent types, protocol classes, and capability info.

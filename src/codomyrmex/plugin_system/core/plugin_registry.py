@@ -156,7 +156,7 @@ class Plugin:
         return self.state
 
     def set_config(self, config: dict[str, Any]):
-        """Set plugin configuration."""
+        """set plugin configuration."""
         self.config = config
 
     def get_config(self) -> dict[str, Any]:
@@ -244,7 +244,7 @@ class PluginRegistry:
         return self._plugin_info.get(name)
 
     def list_plugins(self, plugin_type: PluginType | None = None) -> list[PluginInfo]:
-        """List all plugins, optionally filtered by type."""
+        """list all plugins, optionally filtered by type."""
         plugins = list(self._plugin_info.values())
         if plugin_type:
             plugins = [p for p in plugins if p.plugin_type == plugin_type]

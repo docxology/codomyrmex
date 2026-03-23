@@ -13,7 +13,7 @@ class BaseReport:
 
     Attributes:
         title: Report title.
-        sections: List of content sections.
+        sections: list of content sections.
     """
 
     title: str = ""

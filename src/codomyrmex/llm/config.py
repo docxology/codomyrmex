@@ -271,7 +271,7 @@ def get_config() -> LLMConfig:
 
 def set_config(config: LLMConfig):
     """
-    Set global LLM configuration instance.
+    set global LLM configuration instance.
 
     Args:
         config: LLMConfig instance to set as global

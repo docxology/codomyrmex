@@ -162,7 +162,7 @@ def retry(
         max_attempts: Maximum number of attempts
         delay: Initial delay between retries in seconds
         backoff: Multiplier for delay after each retry
-        exceptions: Tuple of exceptions to catch and retry
+        exceptions: tuple of exceptions to catch and retry
 
     Returns:
         Decorator function

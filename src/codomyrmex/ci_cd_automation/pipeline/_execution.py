@@ -173,7 +173,7 @@ class PipelineExecutionMixin:
         Execute pipeline stages in parallel where possible.
 
         Args:
-            stages: List of stage dictionaries with dependencies
+            stages: list of stage dictionaries with dependencies
 
         Returns:
             Dictionary with execution results

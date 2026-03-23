@@ -86,13 +86,13 @@ def run_skill_by_name(
 
 
 def list_runnable_skills(registry: SkillRegistry) -> list[dict[str, Any]]:
-    """List all skills eligible for execution.
+    """list all skills eligible for execution.
 
     Args:
         registry: The SkillRegistry to query.
 
     Returns:
-        List of dicts with id, name, description, category, and
+        list of dicts with id, name, description, category, and
         enabled status for each registered skill.
     """
     return [

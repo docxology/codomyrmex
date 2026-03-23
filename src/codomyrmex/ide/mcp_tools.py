@@ -29,7 +29,7 @@ def ide_get_active_file() -> dict:
 
 @mcp_tool(category="ide")
 def ide_list_tools() -> dict:
-    """List all available Antigravity IDE tools.
+    """list all available Antigravity IDE tools.
 
     Returns the full list of tool names that the Antigravity IDE exposes
     for programmatic invocation via the relay CLI.

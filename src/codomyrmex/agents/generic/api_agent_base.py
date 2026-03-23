@@ -34,7 +34,7 @@ class APIAgentBase(BaseAgent):
 
         Args:
             name: Agent name
-            capabilities: List of capabilities this agent supports
+            capabilities: list of capabilities this agent supports
             api_key_config_key: Config key for API key (e.g., "claude_api_key")
             model_config_key: Config key for model (e.g., "claude_model")
             timeout_config_key: Config key for timeout (e.g., "claude_timeout")
@@ -250,7 +250,7 @@ class APIAgentBase(BaseAgent):
             provider: Provider name ("anthropic", "openai", etc.)
 
         Returns:
-            Tuple of (input_tokens, output_tokens)
+            tuple of (input_tokens, output_tokens)
         """
         if provider == "anthropic":
             # Claude API structure

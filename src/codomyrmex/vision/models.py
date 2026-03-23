@@ -95,7 +95,7 @@ class PageContent:
     Attributes:
         page_number: 1-indexed page number.
         text: Extracted text content.
-        images: List of image descriptions on the page.
+        images: list of image descriptions on the page.
         annotations: Structured annotations found.
         metadata: Additional page metadata.
     """

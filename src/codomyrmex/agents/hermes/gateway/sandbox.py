@@ -17,7 +17,7 @@ class SandboxViolation(Exception):
 class GatewayToolSandbox:
     """Intercepts and validates tool requests against session authentication thresholds."""
 
-    # List of tool names that are strictly forbidden for untrusted origin sessions
+    # list of tool names that are strictly forbidden for untrusted origin sessions
     RESTRICTED_TOOLS = {"run_command", "write_file", "delete_file"}
 
     def __init__(self, is_authenticated: bool = False) -> None:

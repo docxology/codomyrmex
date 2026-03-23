@@ -198,7 +198,7 @@ class ClaudeTaskPlanningMixin:
 
         Args:
             goal: The goal to achieve
-            constraints: List of constraints
+            constraints: list of constraints
             context: Additional context
             **kwargs: Additional arguments
 

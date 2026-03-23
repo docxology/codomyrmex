@@ -85,7 +85,7 @@ class AntiPatternDetector:
             file_path: Optional file path for reporting.
 
         Returns:
-            List of detected AntiPattern objects.
+            list of detected AntiPattern objects.
         """
         results: list[AntiPattern] = []
         lines = source.splitlines()
@@ -159,7 +159,7 @@ class ImprovementPipeline:
             file_path: File path for reporting.
 
         Returns:
-            List of detected anti-patterns.
+            list of detected anti-patterns.
         """
         return self._detector.analyze(source, file_path)
 

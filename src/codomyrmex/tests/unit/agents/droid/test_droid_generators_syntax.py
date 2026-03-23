@@ -164,11 +164,11 @@ class TestGenerateDocumentationQualityModule:
         pytest.fail("DocumentationQualityAnalyzer class not found in generated source")
 
     def test_no_deprecated_typing_imports_in_output(self):
-        """Generated module should use built-in generics, not typing.Dict/List/Optional."""
+        """Generated module should use built-in generics, not typing.dict/list/Optional."""
         source = generate_documentation_quality_module()
         # Check that the deprecated typing imports are not present
         deprecated_pattern = re.compile(
-            r"from\s+typing\s+import\s+[^\n]*\b(Dict|List|Optional|Tuple)\b"
+            r"from\s+typing\s+import\s+[^\n]*\b(dict|list|Optional|tuple)\b"
         )
         match = deprecated_pattern.search(source)
         assert match is None, (

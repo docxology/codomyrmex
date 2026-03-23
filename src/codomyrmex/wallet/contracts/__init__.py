@@ -30,7 +30,7 @@ def cli_commands():
     """Return CLI commands for the smart_contracts module."""
 
     def _registry():
-        """List registered contracts."""
+        """list registered contracts."""
         reg = ContractRegistry()
         contracts = reg.list_contracts()
         print("Smart Contract Registry")

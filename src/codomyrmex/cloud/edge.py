@@ -75,7 +75,7 @@ class EdgeClient(ABC):
 
     @abstractmethod
     def list_deployments(self) -> list[EdgeDeployment]:
-        """List all deployments."""
+        """list all deployments."""
 
     @abstractmethod
     def delete(self, deployment_id: str) -> bool:
@@ -196,7 +196,7 @@ class EdgeManager:
         return client.deploy(config, code)
 
     def list_all_deployments(self) -> dict[EdgeProvider, list[EdgeDeployment]]:
-        """List deployments from all providers."""
+        """list deployments from all providers."""
         return {
             provider: client.list_deployments()
             for provider, client in self._clients.items()

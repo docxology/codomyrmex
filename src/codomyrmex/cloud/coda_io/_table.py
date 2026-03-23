@@ -72,7 +72,7 @@ class Table:
 
 @dataclass
 class TableList:
-    """List of tables with pagination."""
+    """list of tables with pagination."""
 
     items: list[Table]
     href: str | None = None
@@ -124,7 +124,7 @@ class Column:
 
 @dataclass
 class ColumnList:
-    """List of columns with pagination."""
+    """list of columns with pagination."""
 
     items: list[Column]
     href: str | None = None
@@ -176,7 +176,7 @@ class Row:
 
 @dataclass
 class RowList:
-    """List of rows with pagination."""
+    """list of rows with pagination."""
 
     items: list[Row]
     href: str | None = None

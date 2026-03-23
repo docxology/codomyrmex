@@ -68,7 +68,7 @@ class ValidationManager:
         return self._validators.get(name)
 
     def list_validators(self) -> list[str]:
-        """List registered validator names."""
+        """list registered validator names."""
         return sorted(self._validators.keys())
 
     # ── Core Validation ─────────────────────────────────────────────
@@ -121,7 +121,7 @@ class ValidationManager:
         """Validate multiple records against the same schema.
 
         Returns:
-            List of ValidationResult for each record.
+            list of ValidationResult for each record.
         """
         return [
             self.validate(record, schema, validator_type=validator_type)
@@ -148,7 +148,7 @@ class ValidationManager:
 
         Args:
             name: Profile name.
-            rules: List of (rule_name, rule_callable) pairs.
+            rules: list of (rule_name, rule_callable) pairs.
         """
         self._profiles[name] = rules or []
 

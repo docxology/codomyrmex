@@ -170,7 +170,7 @@ class TypedEventBus:
             limit: Maximum events to return.
 
         Returns:
-            List of recent events (newest first).
+            list of recent events (newest first).
         """
         events = self._history
         if event_type:

@@ -228,7 +228,7 @@ class FirecrawlAdapter(BaseScraper):
         """Extract structured data from URLs using Firecrawl LLM extraction.
 
         Args:
-            urls: List of URLs to extract data from (supports wildcards like "https://example.com/*")
+            urls: list of URLs to extract data from (supports wildcards like "https://example.com/*")
             schema: Optional JSON schema for extraction
             prompt: Optional prompt for extraction
 
@@ -292,7 +292,7 @@ class FirecrawlAdapter(BaseScraper):
                     else {}
                 )
         elif isinstance(firecrawl_data, dict):
-            # Dict response - handle both nested (data.markdown) and flat (markdown) structures
+            # dict response - handle both nested (data.markdown) and flat (markdown) structures
             data = firecrawl_data.get("data", firecrawl_data)
             if not isinstance(data, dict):
                 data = firecrawl_data
@@ -416,7 +416,7 @@ class FirecrawlAdapter(BaseScraper):
 
         Args:
             firecrawl_data: Raw Firecrawl API response
-            urls: List of URLs that were processed
+            urls: list of URLs that were processed
 
         Returns:
             ExtractResult instance

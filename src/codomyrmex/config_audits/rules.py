@@ -101,7 +101,7 @@ def check_debug_enabled(content: Any, file_path: str | None) -> list[AuditIssue]
                 message="Debug mode enabled in production configuration",
                 severity=Severity.HIGH,
                 file_path=file_path,
-                recommendation="Set debug to false for production environments.",
+                recommendation="set debug to false for production environments.",
             )
         )
 

@@ -258,7 +258,7 @@ def apply_theme(theme: Theme) -> None:
 
 
 def list_themes() -> list[str]:
-    """List available theme names."""
+    """list available theme names."""
     return [t.value for t in ThemeName]
 
 

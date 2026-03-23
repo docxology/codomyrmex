@@ -146,7 +146,7 @@ class TestCacheManager:
     """Test cases for CacheManager functionality."""
 
     def setup_method(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.temp_dir = tempfile.mkdtemp()
         self.cache = CacheManager(cache_dir=self.temp_dir, max_memory_items=10)
 
@@ -175,7 +175,7 @@ class TestCacheManager:
 
     def test_cache_set_and_get(self):
         """Test basic cache set and get operations."""
-        # Set a value
+        # set a value
         self.cache.set("test_key", "test_value")
 
         # Get the value
@@ -184,7 +184,7 @@ class TestCacheManager:
 
     def test_cache_expiration(self):
         """Test cache expiration."""
-        # Set a value with short TTL
+        # set a value with short TTL
         self.cache.set("test_key", "test_value", ttl=1)
 
         # Should return the value immediately
@@ -216,7 +216,7 @@ class TestCacheManager:
 
     def test_cache_persistence(self):
         """Test disk persistence of cache."""
-        # Set a value
+        # set a value
         self.cache.set("persistent_key", "persistent_value")
 
         # Create new cache manager with same directory
@@ -290,7 +290,7 @@ class TestPerformanceMonitor:
     """Test cases for PerformanceMonitor functionality."""
 
     def setup_method(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         if not PERFORMANCE_MONITOR_AVAILABLE:
             pytest.skip("PerformanceMonitor not available (psutil not installed)")
 

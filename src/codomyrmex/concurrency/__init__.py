@@ -45,7 +45,7 @@ def cli_commands():
     """
 
     def _pools(**kwargs):
-        """List thread/process pools.
+        """list thread/process pools.
 
         Args:
             **kwargs: Additional arguments from CLI.
@@ -78,7 +78,7 @@ def cli_commands():
             print("  No active concurrency operations")
 
     return {
-        "pools": {"handler": _pools, "help": "List thread/process pools"},
+        "pools": {"handler": _pools, "help": "list thread/process pools"},
         "stats": {"handler": _stats, "help": "Show concurrency statistics"},
     }
 

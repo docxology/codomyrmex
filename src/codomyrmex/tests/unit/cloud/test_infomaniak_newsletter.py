@@ -297,15 +297,15 @@ class TestInfomaniakNewsletterClient:
         """create_mailing_list POSTs name payload."""
         client = self._make_client()
         client._session.post.return_value = self._stub_response(
-            {"data": {"id": "ml-new", "name": "New List"}},
+            {"data": {"id": "ml-new", "name": "New list"}},
         )
-        result = client.create_mailing_list("New List")
+        result = client.create_mailing_list("New list")
 
-        assert result["name"] == "New List"
+        assert result["name"] == "New list"
         url = client._session.post.call_args[0][0]
         assert url == f"{self.URL_PREFIX}/mailing-lists"
         payload = client._session.post.call_args[1]["json"]
-        assert payload == {"name": "New List"}
+        assert payload == {"name": "New list"}
 
     def test_update_mailing_list(self):
         """update_mailing_list PUTs kwargs."""
@@ -488,7 +488,7 @@ class TestInfomaniakNewsletterClient:
             {"data": {"total": 5, "items": [{"id": "c1"}]}},
         )
         result = client.list_campaigns()
-        # Dict-wrapped response: items extracted
+        # dict-wrapped response: items extracted
         assert isinstance(result, list)
         assert result == [{"id": "c1"}]
 

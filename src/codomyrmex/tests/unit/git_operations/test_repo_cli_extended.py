@@ -99,7 +99,7 @@ class StubRepositoryManager:
     def _record(self, method, *args, **kwargs):
         self._calls.setdefault(method, []).append((args, kwargs))
 
-    # List / search
+    # list / search
     def list_repositories(self, repo_type=None):
         self._record("list_repositories", repo_type)
         return self._repos

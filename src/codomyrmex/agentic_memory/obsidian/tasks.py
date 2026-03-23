@@ -91,7 +91,7 @@ def list_tasks(
     total: bool = False,
     vault: str | None = None,
 ) -> list[TaskItem]:
-    """List tasks across the vault with optional filters.
+    """list tasks across the vault with optional filters.
 
     Maps to ``obsidian tasks [file=|path=] [status="<char>"]
     [format=json|tsv|csv] [done] [todo] [daily] [active] [verbose] [total]``.
@@ -186,7 +186,7 @@ def set_task_status(
     daily: bool = False,
     vault: str | None = None,
 ) -> CLIResult:
-    """Set a task to a specific status character.
+    """set a task to a specific status character.
 
     Maps to ``obsidian task [ref=|file=|path=] [line=<n>]
     status="<char>" [daily]``.

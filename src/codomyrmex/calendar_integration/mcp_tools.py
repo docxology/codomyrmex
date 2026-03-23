@@ -102,10 +102,10 @@ def _get_provider() -> Any:
 
 @mcp_tool(
     category="calendar",
-    description="List upcoming events from the calendar.",
+    description="list upcoming events from the calendar.",
 )
 def calendar_list_events(days_ahead: int = 7) -> dict[str, Any]:
-    """List calendar events for the next given number of days.
+    """list calendar events for the next given number of days.
 
     Args:
         days_ahead: Number of days into the future to query (default 7).

@@ -39,7 +39,7 @@ class TestRepositoryManager:
 
     @pytest.fixture(autouse=True)
     def setup_environment(self, tmp_path):
-        """Set up test environment."""
+        """set up test environment."""
         self.temp_dir = str(tmp_path)
         self.library_file = os.path.join(self.temp_dir, "test_library.txt")
         self.base_path = os.path.join(self.temp_dir, "repos")
@@ -91,11 +91,11 @@ FORK|upstream|project|https://github.com/upstream/project.git|Forked project|for
             library_file=self.library_file, base_path=self.base_path
         )
 
-        # List all repositories
+        # list all repositories
         all_repos = manager.list_repositories()
         assert len(all_repos) == 3
 
-        # List by type
+        # list by type
         own_repos = manager.list_repositories(RepositoryType.OWN)
         assert len(own_repos) == 1
         assert own_repos[0].full_name == "testuser/testrepo"

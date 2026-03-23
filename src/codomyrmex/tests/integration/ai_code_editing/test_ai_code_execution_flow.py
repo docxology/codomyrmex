@@ -27,7 +27,7 @@ try:
 except ImportError:
     CODE_EXECUTION_AVAILABLE = False
 
-# Set up logging for tests
+# set up logging for tests
 if setup_logging and callable(setup_logging):
     try:
         setup_logging()

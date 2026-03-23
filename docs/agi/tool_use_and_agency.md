@@ -8,7 +8,7 @@ The capacity for autonomous tool use — selecting, composing, and invoking tool
 
 But tool use is not merely an engineering convenience. It is an instance of **extended cognition** (Clark & Chalmers, 1998): the tools become part of the cognitive system's functional organization. The boundary between "the agent" and "the tool" dissolves when tool invocation is seamless and automatic — precisely as it does in skilled human tool use, where the hammer becomes a transparent extension of the carpenter's motor system (Heidegger's *Zuhandenheit*, readiness-to-hand).
 
-Codomyrmex's 604 `@mcp_tool`-decorated functions (596 dynamic + 9 static) across 128 top-level modules constitute one of the largest compositional tool surfaces in any open-source AI development platform. This essay examines how this tool ecosystem relates to the AGI requirement for autonomous agency.
+Codomyrmex's **600** production `@mcp_tool`-decorated functions across 128 top-level modules constitute one of the largest compositional tool surfaces in any open-source AI development platform. This essay examines how this tool ecosystem relates to the AGI requirement for autonomous agency. (See [reference/inventory.md](../reference/inventory.md).)
 
 ## Tool Anatomy: The Four-Phase Lifecycle
 
@@ -49,13 +49,13 @@ graph TB
 
 The `system_discovery` module scans `src/codomyrmex/*/mcp_tools.py` files, introspects `@mcp_tool` decorators, and registers them with `model_context_protocol`. This is *dynamic*: modules added at runtime are discovered without restart.
 
-Formally, discovery computes: δ: **Mod** → Set(T) where T is the set of tool descriptors. Each descriptor is a typed signature: `t: (τ₁ × τ₂ × ... × τₙ) → τᵣ`. The MCP bridge exposes the full tool set |T| = 604 to agents.
+Formally, discovery computes: δ: **Mod** → Set(T) where T is the set of tool descriptors. Each descriptor is a typed signature: `t: (τ₁ × τ₂ × ... × τₙ) → τᵣ`. The MCP bridge exposes the full tool set |T| = 600 to agents.
 
-This implements Patil et al.'s (2023) "tool retrieval" — the first bottleneck in tool-augmented AI. The information-theoretic cost: selecting from |T| tools requires ≥ log₂(604) ≈ 9.24 bits of decision per invocation. Reducing this cost is the function of Phase 2.
+This implements Patil et al.'s (2023) "tool retrieval" — the first bottleneck in tool-augmented AI. The information-theoretic cost: selecting from |T| tools requires ≥ log₂(600) ≈ 9.23 bits of decision per invocation. Reducing this cost is the function of Phase 2.
 
 ### Phase 2: Selection — The Bandits Problem
 
-Given task τ, the agent must select tools from the 604 available. This is a **contextual multi-armed bandit** problem (Li et al., 2010): each tool is an arm, the context is the task description, and the reward is task completion quality.
+Given task τ, the agent must select tools from the 600 available. This is a **contextual multi-armed bandit** problem (Li et al., 2010): each tool is an arm, the context is the task description, and the reward is task completion quality.
 
 Three modules contribute complementary selection strategies:
 
@@ -83,14 +83,14 @@ where the likelihood term accounts for all past outcomes of tool tᵢ on similar
 
 ## The Agency Boundary
 
-Mialon et al.'s (2023) insight: **the boundary of agency is the boundary of tool access**. An agent with 604 tools spanning code editing, security scanning, database management, LLM inference, and container orchestration has an *agency volume* proportional to the product of its capability dimensions.
+Mialon et al.'s (2023) insight: **the boundary of agency is the boundary of tool access**. An agent with 600 tools spanning code editing, security scanning, database management, LLM inference, and container orchestration has an *agency volume* proportional to the product of its capability dimensions.
 
 Formally, the **agency lattice** L is the power set 2ᵀ of all tools, partially ordered by subset inclusion. The current agent operates at a position in this lattice determined by its trust level. The trust gateway restricts the lattice position:
 
 ```mermaid
 graph TD
     subgraph LATTICE["Agency Lattice 2^T"]
-        TOP["⊤ = All 604 tools<br/><i>full autonomy</i>"]
+        TOP["⊤ = All 600 tools<br/><i>full autonomy</i>"]
         TRUSTED["Trusted subset<br/><i>~400 tools</i>"]
         VERIFIED["Verified subset<br/><i>~200 tools</i>"]
         UNTRUSTED["Untrusted subset<br/><i>~50 read-only tools</i>"]

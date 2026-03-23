@@ -37,7 +37,7 @@ def cli_commands():
     """Return CLI commands for the scheduler module."""
 
     def _list_jobs():
-        """List scheduled jobs."""
+        """list scheduled jobs."""
         try:
             scheduler = Scheduler()
             jobs = scheduler.get_jobs() if hasattr(scheduler, "get_jobs") else []  # type: ignore

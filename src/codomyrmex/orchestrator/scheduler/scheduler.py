@@ -114,7 +114,7 @@ class Scheduler:
         return self._jobs.get(job_id)
 
     def list_jobs(self, status: JobStatus | None = None) -> list[Job]:
-        """List all jobs, optionally filtered by status."""
+        """list all jobs, optionally filtered by status."""
         jobs = list(self._jobs.values())
         if status:
             jobs = [j for j in jobs if j.status == status]

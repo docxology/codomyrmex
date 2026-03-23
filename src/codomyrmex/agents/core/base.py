@@ -45,7 +45,7 @@ class AgentRequest:
     trace_id: str | None = None
 
     def __post_init__(self) -> None:
-        """Set default optional fields to empty collections."""
+        """set default optional fields to empty collections."""
         import uuid
 
         if self.context is None:
@@ -72,7 +72,7 @@ class AgentResponse:
     trace_id: str | None = None
 
     def __post_init__(self) -> None:
-        """Set default optional fields to empty collections."""
+        """set default optional fields to empty collections."""
         if self.metadata is None:
             self.metadata = {}
 
@@ -196,7 +196,7 @@ class BaseAgent(AgentInterface):
 
         Args:
             name: Agent name
-            capabilities: List of agent capabilities
+            capabilities: list of agent capabilities
             config: Agent configuration
         """
         super().__init__(config)
@@ -350,7 +350,7 @@ class BaseAgent(AgentInterface):
         Get agent capabilities.
 
         Returns:
-            List of agent capabilities
+            list of agent capabilities
         """
         return self.capabilities
 

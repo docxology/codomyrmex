@@ -27,7 +27,7 @@ class DependencyNode:
     Attributes:
         name: Plugin name.
         version: Plugin version string.
-        dependencies: List of required plugin names.
+        dependencies: list of required plugin names.
         optional_dependencies: Dependencies that are nice-to-have.
         conflicts: Plugins that conflict with this one.
     """
@@ -47,8 +47,8 @@ class ResolutionResult:
         status: Overall resolution status.
         load_order: Ordered list of plugin names (dependencies first).
         missing: Plugin names that are required but not registered.
-        circular: List of cycles found (each a list of plugin names).
-        conflicts: List of (plugin_a, plugin_b) conflicts.
+        circular: list of cycles found (each a list of plugin names).
+        conflicts: list of (plugin_a, plugin_b) conflicts.
     """
 
     status: ResolutionStatus

@@ -88,7 +88,7 @@ class ScrapeConfig:
 
         if not self.api_key:
             raise ScrapeValidationError(
-                "API key is required. Set FIRECRAWL_API_KEY environment variable or pass api_key to ScrapeConfig."
+                "API key is required. set FIRECRAWL_API_KEY environment variable or pass api_key to ScrapeConfig."
             )
 
         if self.default_timeout <= 0:
@@ -142,7 +142,7 @@ def get_config() -> ScrapeConfig:
 
 
 def set_config(config: ScrapeConfig) -> None:
-    """Set the global configuration instance.
+    """set the global configuration instance.
 
     Args:
         config: ScrapeConfig instance to use globally

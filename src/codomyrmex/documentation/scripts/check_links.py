@@ -19,7 +19,7 @@ def check_links(root_dir):
         root_dir: Directory to scan
 
     Returns:
-        List of dictionaries containing broken link details
+        list of dictionaries containing broken link details
     """
     root_path = Path(root_dir).absolute()
     link_pattern = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")

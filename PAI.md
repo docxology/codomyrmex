@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and Codomyrmex Admin Dashboard (port 8787)
-**Tools**: 9 static proxy tools + **596** `@mcp_tool` decorators in production sources (149 `mcp_tools.py` files; **128** top-level packages — total ~604 — [docs/reference/inventory.md](docs/reference/inventory.md)). Trust split is dynamic; run `/codomyrmexVerify` for the current safe vs destructive list. The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces these tools for MCP exposure.
+**Tools**: 9 static proxy tools + **600** production `@mcp_tool` lines (149 `mcp_tools.py` files; **128** top-level packages — [docs/reference/inventory.md](docs/reference/inventory.md)). Trust split is dynamic; run `/codomyrmexVerify` for the current safe vs destructive list. The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces these tools for MCP exposure.
 **Web UI**: `http://localhost:8787/` (Codomyrmex Admin Dashboard) · `http://localhost:8888/` (PAI Project Manager)
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)

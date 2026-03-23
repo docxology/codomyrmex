@@ -53,7 +53,7 @@ class FabricManager:
         Get list of available Fabric patterns.
 
         Returns:
-            List of pattern names
+            list of pattern names
         """
         if not self.fabric_available:
             return []

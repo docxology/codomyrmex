@@ -1,6 +1,6 @@
 # Development Guide
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -16,6 +16,7 @@ Developer-facing documentation covering environment setup, testing strategy, cod
 | [multi-agent-git.md](multi-agent-git.md) | Git workflows for concurrent multi-agent development |
 | [testing-strategy.md](testing-strategy.md) | Zero-Mock testing philosophy, coverage targets (≥35%), test organization |
 | [uv-usage-guide.md](uv-usage-guide.md) | uv package manager usage for Python dependency management |
+| [code-review-and-sarif.md](code-review-and-sarif.md) | Local PR/diff review scripts and SARIF triage (Bandit artifacts, sarif-tools, merge) |
 
 ## Coordination
 

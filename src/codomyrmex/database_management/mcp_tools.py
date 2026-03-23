@@ -13,7 +13,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(
     category="database_management",
     description=(
-        "List available database adapter names supported by the "
+        "list available database adapter names supported by the "
         "database_management module (e.g. sqlite, postgres, mysql, redis)."
     ),
 )
@@ -60,7 +60,7 @@ def db_generate_schema(
     """Generate database schema from model definitions.
 
     Args:
-        models: List of model definition dicts.
+        models: list of model definition dicts.
         output_dir: Directory for generated schema output.
 
     Returns:

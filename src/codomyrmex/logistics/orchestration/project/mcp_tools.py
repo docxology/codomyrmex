@@ -117,7 +117,7 @@ class OrchestrationMCPTools:
                         },
                         "steps": {
                             "type": "array",
-                            "description": "List of workflow steps",
+                            "description": "list of workflow steps",
                             "items": {
                                 "type": "object",
                                 "properties": {
@@ -141,7 +141,7 @@ class OrchestrationMCPTools:
             },
             "list_workflows": {
                 "name": "list_workflows",
-                "description": "List all available workflows",
+                "description": "list all available workflows",
                 "input_schema": {"type": "object", "properties": {}, "required": []},
             },
             "create_project": {
@@ -173,7 +173,7 @@ class OrchestrationMCPTools:
             },
             "list_projects": {
                 "name": "list_projects",
-                "description": "List all available projects",
+                "description": "list all available projects",
                 "input_schema": {"type": "object", "properties": {}, "required": []},
             },
             "execute_task": {
@@ -377,7 +377,7 @@ class OrchestrationMCPTools:
         )
 
     def _list_workflows_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
-        """List workflows tool."""
+        """list workflows tool."""
         workflows = self.wf_manager.list_workflows()
 
         return MCPToolResult(
@@ -424,7 +424,7 @@ class OrchestrationMCPTools:
             )
 
     def _list_projects_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
-        """List projects tool."""
+        """list projects tool."""
         projects = self.project_manager.list_projects()
         project_details = []
 
@@ -584,7 +584,7 @@ if __name__ == "__main__":
 
     # Test workflow listing
     result = tools.execute_tool("list_workflows", {})
-    print(f"List workflows result: {result.success}")
+    print(f"list workflows result: {result.success}")
 
     # Test system status
     result = tools.execute_tool("get_system_status", {})

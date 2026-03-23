@@ -32,7 +32,7 @@ class TestDocGenMultipleEndpoints:
         """GET and POST on the same path both appear in spec."""
         gen = DocumentationOpenAPIGenerator()
         endpoints = [
-            {"path": "/items", "method": "GET", "summary": "List items"},
+            {"path": "/items", "method": "GET", "summary": "list items"},
             {"path": "/items", "method": "POST", "summary": "Create item"},
         ]
         spec = gen.generate_spec("API", "1.0.0", endpoints)

@@ -32,7 +32,7 @@ class PreflightResult:
         checks_passed: Number of checks passed.
         checks_total: Total number of checks.
         ready: Whether ready to publish.
-        issues: List of issues found.
+        issues: list of issues found.
     """
 
     target: DistributionTarget

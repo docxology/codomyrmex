@@ -87,11 +87,11 @@ class CloudToolFactory:
         Args:
             client: An Infomaniak client instance.
             service_name: Service label (e.g., "compute", "s3").
-            registry: Dict to populate with tool_name -> Tool.
+            registry: dict to populate with tool_name -> Tool.
             security_pipeline: Optional CloudSecurityPipeline for wrapping.
 
         Returns:
-            List of registered tool names.
+            list of registered tool names.
         """
         registered = []
 

@@ -181,7 +181,7 @@ class ChainOfThought:
 
     @depth.setter
     def depth(self, value: ThinkingDepth) -> None:
-        """Set thinking depth."""
+        """set thinking depth."""
         self._depth = value
 
     @property

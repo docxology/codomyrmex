@@ -28,7 +28,7 @@ def inspect_server(server_name: str = "default") -> dict:
 
 @mcp_tool(category="model_context_protocol")
 def list_registered_tools() -> dict:
-    """List all tools registered across the MCP ecosystem.
+    """list all tools registered across the MCP ecosystem.
 
     Returns:
         Dictionary with all registered tool names and their modules.

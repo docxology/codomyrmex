@@ -123,7 +123,7 @@ def cli_commands():
     """Return CLI commands for the cloud module."""
 
     def _list_providers():
-        """List cloud providers."""
+        """list cloud providers."""
         print("Cloud Providers:")
         print("  coda_io     - Coda.io REST API v1 (always available)")
         print(

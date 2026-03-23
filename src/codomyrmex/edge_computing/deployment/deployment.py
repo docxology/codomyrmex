@@ -153,7 +153,7 @@ class DeploymentManager:
         return True
 
     def _finalise_state(self, plan: DeploymentPlan) -> None:
-        """Set terminal state based on whether any nodes failed."""
+        """set terminal state based on whether any nodes failed."""
         plan.state = (
             DeploymentState.COMPLETED
             if not plan.failed_nodes

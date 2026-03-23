@@ -101,10 +101,10 @@ class SwarmTopology:
         Results are returned in submission order once all complete.
 
         Args:
-            tasks: List of :class:`TaskSpec` to execute concurrently.
+            tasks: list of :class:`TaskSpec` to execute concurrently.
 
         Returns:
-            List of :class:`TaskResult` in the same order as *tasks*.
+            list of :class:`TaskResult` in the same order as *tasks*.
         """
         results: list[TaskResult] = []
         with concurrent.futures.ThreadPoolExecutor(
@@ -170,7 +170,7 @@ class SwarmTopology:
             tasks: Ordered list of :class:`TaskSpec` to chain.
 
         Returns:
-            List of :class:`TaskResult` in execution order.
+            list of :class:`TaskResult` in execution order.
         """
         results: list[TaskResult] = []
         carry: Any = None
@@ -191,10 +191,10 @@ class SwarmTopology:
 
         Args:
             message: Shared payload injected into each task's kwargs.
-            tasks: List of :class:`TaskSpec` to receive the broadcast.
+            tasks: list of :class:`TaskSpec` to receive the broadcast.
 
         Returns:
-            List of :class:`TaskResult`.
+            list of :class:`TaskResult`.
         """
         for spec in tasks:
             spec.kwargs["broadcast_message"] = message

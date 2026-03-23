@@ -94,7 +94,7 @@ class SkillLoader:
             name: Skill name
 
         Returns:
-            Tuple of (upstream_path, custom_path)
+            tuple of (upstream_path, custom_path)
         """
         # Try skill.yaml first, then just the directory name
         upstream_path = self.upstream_dir / category / name / "skill.yaml"

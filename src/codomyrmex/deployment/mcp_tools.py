@@ -58,10 +58,10 @@ def deployment_execute(
 
 @mcp_tool(category="deployment")
 def deployment_list_strategies() -> list[str]:
-    """List available deployment strategy names.
+    """list available deployment strategy names.
 
     Returns:
-        List of strategy names.
+        list of strategy names.
     """
     return ["rolling", "blue_green", "canary"]
 
@@ -71,7 +71,7 @@ def deployment_get_history() -> list[dict[str, Any]]:
     """Get the history of all deployment operations.
 
     Returns:
-        List of deployment result dictionaries.
+        list of deployment result dictionaries.
     """
     return [r.to_dict() for r in _manager.history]
 

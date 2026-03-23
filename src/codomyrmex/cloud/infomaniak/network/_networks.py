@@ -14,7 +14,7 @@ class NetworkSubnetMixin:
     """
 
     def list_networks(self) -> list[dict[str, Any]]:
-        """List all networks."""
+        """list all networks."""
 
         def _op():
             return [
@@ -89,7 +89,7 @@ class NetworkSubnetMixin:
             return None
 
     def list_subnets(self) -> list[dict[str, Any]]:
-        """List all subnets."""
+        """list all subnets."""
         try:
             subnets = list(self._conn.network.subnets())
             return [

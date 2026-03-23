@@ -20,7 +20,7 @@ Goertzel's analysis of OpenCog identifies *combinatorial composability* as the f
 
 The MCP protocol guarantees *associativity* (tool chains are order-preserving) and every module has an *identity morphism* (the no-op self-invocation). Codomyrmex's module system forms a legitimate category.
 
-The 595 `@mcp_tool` decorators are the morphisms of this category. The *composability surface* is not the module count but the **hom-set cardinality**: |Hom(**Mod**)| = 595. The combinatorial explosion of multi-step compositions — paths of length *k* through the dependency graph — gives rise to novel capabilities that no individual morphism encodes.
+The **600** production `@mcp_tool` lines are the morphisms of this category. The *composability surface* is not the module count but the **hom-set cardinality**: |Hom(**Mod**)| = 600. The combinatorial explosion of multi-step compositions — paths of length *k* through the dependency graph — gives rise to novel capabilities that no individual morphism encodes.
 
 ```mermaid
 graph LR
@@ -148,7 +148,7 @@ $$S = \sum_{i=1}^{5} w_i \cdot s_i \quad \text{where} \quad s_i \in [0, 1]$$
 
 | Precondition | Weight (wᵢ) | Score (sᵢ) | Justification |
 |:-------------|:----------:|:----------:|:-------------|
-| Composability | 0.25 | 0.90 | 604 morphisms (596 dynamic + 8 static), full associativity, but Python-only |
+| Composability | 0.25 | 0.90 | 600 morphisms (production `@mcp_tool` lines), full associativity, but Python-only |
 | Self-description | 0.20 | 0.85 | RASP + system_discovery, but self-model not used for planning |
 | Tool acquisition | 0.15 | 0.70 | Dynamic plugins + MCP, but no cross-language, no tool synthesis |
 | Persistent memory | 0.20 | 0.75 | 5-tier architecture, but no auto-consolidation or forgetting |

@@ -74,7 +74,7 @@ class DemoRegistry:
     def list_demos(
         self, module: str | None = None, category: str | None = None
     ) -> list[DemoInfo]:
-        """List registered demos, optionally filtered."""
+        """list registered demos, optionally filtered."""
         results = list(self._demos.values())
         if module:
             results = [d for d in results if d.module == module]

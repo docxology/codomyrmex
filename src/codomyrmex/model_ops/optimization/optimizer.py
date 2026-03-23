@@ -19,7 +19,7 @@ class InferenceOptimizer:
     Main inference optimization engine.
 
     Usage:
-        def model_fn(inputs: List[str]) -> List[str]:
+        def model_fn(inputs: list[str]) -> list[str]:
             return [llm.complete(x) for x in inputs]
 
         optimizer = InferenceOptimizer(

@@ -74,7 +74,7 @@ class LintRule(ABC):
             file_path: Path of the file being checked.
 
         Returns:
-            List of issues found.
+            list of issues found.
         """
         ...
 

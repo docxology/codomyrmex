@@ -1,26 +1,28 @@
 # Codomyrmex Agents — docs/agents/ Coordination
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Agent coordination document for the `docs/agents/` directory. This directory contains documentation for all **38 AI agent integrations** in the Codomyrmex ecosystem, mirroring the structure of `src/codomyrmex/agents/`.
+Agent coordination document for the `docs/agents/` directory. This directory contains documentation for all **41 agent packages** under `src/codomyrmex/agents/`, mirroring that tree. The additional [`rules/`](rules/) folder here is documentation-only (no `src` counterpart).
 
 ## Agent Documentation Index
 
-### CLI-based Agents (10)
+### CLI-based Agents (12)
 
 | Agent | Documentation | Source Module |
 |:---|:---|:---|
 | Jules | [jules/](jules/) | `src/codomyrmex/agents/jules/` |
 | Gemini | [gemini/](gemini/) | `src/codomyrmex/agents/gemini/` |
-| Hermes | [hermes/](hermes/) — 21 docs, [skills.md](hermes/skills.md) (registry / profile / MCP) | `src/codomyrmex/agents/hermes/` |
+| Hermes | [hermes/](hermes/) — topical guides: [hermes/AGENTS.md](hermes/AGENTS.md); [skills.md](hermes/skills.md) (registry / profile / MCP) | `src/codomyrmex/agents/hermes/` |
 | OpenCode | [opencode/](opencode/) | `src/codomyrmex/agents/opencode/` |
 | Mistral Vibe | [mistral_vibe/](mistral_vibe/) | `src/codomyrmex/agents/mistral_vibe/` |
 | Every Code | [every_code/](every_code/) | `src/codomyrmex/agents/every_code/` |
 | OpenClaw | [openclaw/](openclaw/) | `src/codomyrmex/agents/openclaw/` |
 | agenticSeek | [agentic_seek/](agentic_seek/) | `src/codomyrmex/agents/agentic_seek/` |
 | OpenFang | [openfang/](openfang/) | `src/codomyrmex/agents/openfang/` |
+| Open Gauss | [open_gauss/](open_gauss/) | `src/codomyrmex/agents/open_gauss/` |
+| Paperclip | [paperclip/](paperclip/) | `src/codomyrmex/agents/paperclip/` |
 | Pi | [pi/](pi/) | `src/codomyrmex/agents/pi/` |
 
 ### API-based Agents (6)

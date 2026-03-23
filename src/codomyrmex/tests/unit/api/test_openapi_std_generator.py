@@ -231,7 +231,7 @@ class TestStdGenRESTIntegration:
             path="/widgets",
             method=HTTPMethod.GET,
             handler=handler,
-            summary="List widgets",
+            summary="list widgets",
             description="Get all widgets",
         )
         api.router.add_endpoint(ep)
@@ -598,7 +598,7 @@ class TestEndToEndWorkflow:
             {
                 "path": "/users",
                 "method": "GET",
-                "summary": "List users",
+                "summary": "list users",
                 "parameters": [{"name": "limit", "in": "query"}],
                 "responses": {"200": {"description": "OK"}},
             },

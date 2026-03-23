@@ -236,7 +236,7 @@ _on_trust_change: Callable[[TrustLevel, TrustLevel], None] | None = None
 def set_trust_change_callback(
     callback: Callable[[TrustLevel, TrustLevel], None] | None,
 ) -> None:
-    """Set a callback to be invoked when global trust level changes."""
+    """set a callback to be invoked when global trust level changes."""
     global _on_trust_change
     _on_trust_change = callback
 

@@ -178,7 +178,7 @@ class CredentialRotator:
 
     @property
     def registered_providers(self) -> list[str]:
-        """List all registered provider names."""
+        """list all registered provider names."""
         return list(self._fetchers.keys())
 
     def register_provider(

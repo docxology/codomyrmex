@@ -28,7 +28,7 @@ class ValidationResult:
 
     Attributes:
         valid: Whether the data passed all validation checks.
-        errors: List of human-readable error descriptions.
+        errors: list of human-readable error descriptions.
     """
 
     valid: bool = True

@@ -207,7 +207,7 @@ class StructuredFormatter:
         """Format multiple entries as newline-delimited JSON.
 
         Args:
-            entries: List of log entries.
+            entries: list of log entries.
 
         Returns:
             Newline-separated JSON strings.

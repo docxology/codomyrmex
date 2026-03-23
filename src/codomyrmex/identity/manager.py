@@ -95,7 +95,7 @@ class IdentityManager:
         return None
 
     def list_personas(self, level: VerificationLevel | None = None) -> list[Persona]:
-        """List all personas, optionally filtered by verification level.
+        """list all personas, optionally filtered by verification level.
 
         Args:
             level: Optional VerificationLevel to filter results.

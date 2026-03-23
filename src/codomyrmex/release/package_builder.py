@@ -94,7 +94,7 @@ class PackageBuilder:
         """Validate package metadata.
 
         Returns:
-            List of validation errors (empty = valid).
+            list of validation errors (empty = valid).
         """
         errors: list[str] = []
         if not self._metadata.name:

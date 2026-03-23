@@ -98,7 +98,7 @@ class Wallet:
         """Register recovery ritual steps.
 
         Args:
-            steps: List of RitualStep objects defining the recovery ritual.
+            steps: list of RitualStep objects defining the recovery ritual.
         """
         self._recovery.register_ritual(self.user_id, steps)
 

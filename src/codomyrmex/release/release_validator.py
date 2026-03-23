@@ -50,7 +50,7 @@ class ReleaseCertification:
         checks: All certification checks.
         certified: Whether release is certified.
         certified_at: Certification timestamp.
-        blockers: List of blocking issues.
+        blockers: list of blocking issues.
     """
 
     version: str

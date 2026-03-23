@@ -27,7 +27,7 @@ class ComposedSkill:
 
         Args:
             name: Name for this composed skill
-            skills: List of skills to compose
+            skills: list of skills to compose
             mode: Composition mode ('chain' or 'parallel')
         """
         self.name = name

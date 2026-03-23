@@ -122,7 +122,7 @@ class KnowledgeItemIndex:
             limit: Maximum results to return.
 
         Returns:
-            List of ``(memory_id, score)`` tuples, highest score first.
+            list of ``(memory_id, score)`` tuples, highest score first.
         """
         q_tokens = _tokenise(query)
         if not q_tokens or self._n_docs == 0:

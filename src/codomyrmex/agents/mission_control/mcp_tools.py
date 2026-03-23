@@ -64,13 +64,13 @@ def mission_control_status(
 
 @mcp_tool(
     category="mission_control",
-    description="List all agents registered in Mission Control.",
+    description="list all agents registered in Mission Control.",
 )
 def mission_control_list_agents(
     base_url: str = "http://localhost:3000",
     api_key: str = "",
 ) -> dict[str, Any]:
-    """List registered Mission Control agents.
+    """list registered Mission Control agents.
 
     Args:
         base_url: Dashboard URL.
@@ -90,7 +90,7 @@ def mission_control_list_agents(
 @mcp_tool(
     category="mission_control",
     description=(
-        "List tasks on the Mission Control Kanban board. "
+        "list tasks on the Mission Control Kanban board. "
         "Optionally filter by status, assignee, or priority."
     ),
 )
@@ -101,7 +101,7 @@ def mission_control_list_tasks(
     assigned_to: str | None = None,
     priority: str | None = None,
 ) -> dict[str, Any]:
-    """List Mission Control tasks.
+    """list Mission Control tasks.
 
     Args:
         base_url: Dashboard URL.

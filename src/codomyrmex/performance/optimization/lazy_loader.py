@@ -135,7 +135,7 @@ def lazy_function(
         func = getattr(loader, function_name)
         return func(*args, **kwargs)
 
-    # Set the function name for better debugging
+    # set the function name for better debugging
     lazy_wrapper.__name__ = function_name
     lazy_wrapper.__qualname__ = f"{module_name}.{function_name}"
 

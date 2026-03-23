@@ -86,7 +86,7 @@ def cli_commands():  # pragma: no cover
     """
     return {
         "sessions": {
-            "help": "List active collaboration sessions",
+            "help": "list active collaboration sessions",
             "handler": lambda: print(
                 "Active Collaboration Sessions:\n  (no active sessions)"
             ),

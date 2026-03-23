@@ -112,7 +112,7 @@ class TemplateLibrary:
         return self._templates[name]
 
     def list_templates(self) -> list[str]:
-        """List all available template names."""
+        """list all available template names."""
         return sorted(self._templates.keys())
 
     def register(self, template: PromptTemplate) -> None:

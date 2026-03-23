@@ -10,7 +10,7 @@ import pytest
 # Guard against hanging imports (google.genai init blocks in sandbox)
 _AI_CODE_HELPERS_AVAILABLE = False
 try:
-    # Set a 5-second alarm to abort if import hangs
+    # set a 5-second alarm to abort if import hangs
     _old_handler = signal.signal(
         signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError())
     )

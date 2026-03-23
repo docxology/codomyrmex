@@ -85,7 +85,7 @@ def apply_stash(
 
 @mcp_tool(name="git_stash_list")
 def list_stashes(repository_path: str | None = None) -> list[dict[str, str]]:
-    """List all stashes."""
+    """list all stashes."""
     if repository_path is None:
         repository_path = os.getcwd()
 

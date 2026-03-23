@@ -41,7 +41,7 @@ def generate_physical_manager_content() -> str:
     """Generate the core physical object manager implementation."""
     return '''"""Core physical object management system."""
 
-from typing import Dict, List, Optional, Set, Tuple, Any
+from typing import Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum
 import json
@@ -74,8 +74,8 @@ class PhysicalObject:
     id: str
     name: str
     object_type: ObjectType
-    location: Tuple[float, float, float]  # x, y, z coordinates
-    properties: Dict[str, Any] = field(default_factory=dict)
+    location: tuple[float, float, float]  # x, y, z coordinates
+    properties: dict[str, Any] = field(default_factory=dict)
     status: ObjectStatus = ObjectStatus.ACTIVE
     created_at: float = field(default_factory=time.time)
     last_updated: float = field(default_factory=time.time)
@@ -90,7 +90,7 @@ class PhysicalObject:
         self.status = status
         self.last_updated = time.time()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation."""
         return {
             "id": self.id,
@@ -108,8 +108,8 @@ class ObjectRegistry:
     """Registry for managing physical objects."""
 
     def __init__(self):
-        self.objects: Dict[str, PhysicalObject] = {}
-        self._location_index: Dict[Tuple[int, int, int], Set[str]] = {}  # Grid-based index
+        self.objects: dict[str, PhysicalObject] = {}
+        self._location_index: dict[tuple[int, int, int], set[str]] = {}  # Grid-based index
 
     def register_object(self, obj: PhysicalObject) -> None:
         """Register a physical object."""
@@ -130,11 +130,11 @@ class ObjectRegistry:
         """Get a physical object by ID."""
         return self.objects.get(object_id)
 
-    def get_objects_by_type(self, object_type: ObjectType) -> List[PhysicalObject]:
+    def get_objects_by_type(self, object_type: ObjectType) -> list[PhysicalObject]:
         """Get all objects of a specific type."""
         return [obj for obj in self.objects.values() if obj.object_type == object_type]
 
-    def get_objects_in_area(self, x: float, y: float, z: float, radius: float) -> List[PhysicalObject]:
+    def get_objects_in_area(self, x: float, y: float, z: float, radius: float) -> list[PhysicalObject]:
         """Get objects within a spherical area."""
         nearby_objects = []
         center_x, center_y, center_z = int(x), int(y), int(z)
@@ -242,11 +242,11 @@ class PhysicalObjectManager:
             return True
         return False
 
-    def get_nearby_objects(self, x: float, y: float, z: float, radius: float) -> List[PhysicalObject]:
+    def get_nearby_objects(self, x: float, y: float, z: float, radius: float) -> list[PhysicalObject]:
         """Get objects near a location."""
         return self.registry.get_objects_in_area(x, y, z, radius)
 
-    def get_objects_by_type(self, object_type: ObjectType) -> List[PhysicalObject]:
+    def get_objects_by_type(self, object_type: ObjectType) -> list[PhysicalObject]:
         """Get all objects of a specific type."""
         return self.registry.get_objects_by_type(object_type)
 
@@ -258,7 +258,7 @@ class PhysicalObjectManager:
         """Load state from file."""
         self.registry.load_from_file(file_path)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get statistics about managed objects."""
         objects_by_type = {}
         for obj_type in ObjectType:
@@ -287,7 +287,7 @@ def generate_physical_simulation_content() -> str:
     """Generate the physical simulation engine."""
     return '''"""Physical simulation engine for object interactions."""
 
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Optional, Any
 from dataclasses import dataclass
 import math
 import numpy as np
@@ -352,7 +352,7 @@ class Constraint:
     object1_id: str
     object2_id: str
     constraint_type: str
-    parameters: Dict[str, Any] = field(default_factory=dict)
+    parameters: dict[str, Any] = field(default_factory=dict)
 
 
 class PhysicsSimulator:
@@ -360,9 +360,9 @@ class PhysicsSimulator:
 
     def __init__(self):
         self.gravity = Vector3D(0, -9.81, 0)
-        self.force_fields: List[ForceField] = []
-        self.constraints: List[Constraint] = []
-        self.objects: Dict[str, Dict[str, Any]] = {}
+        self.force_fields: list[ForceField] = []
+        self.constraints: list[Constraint] = []
+        self.objects: dict[str, dict[str, Any]] = {}
 
     def add_force_field(self, force_field: ForceField) -> None:
         """Add a force field to the simulation."""
@@ -450,18 +450,18 @@ class PhysicsSimulator:
             obj_data["velocity"] = velocity
             obj_data["position"] = position
 
-    def get_object_state(self, object_id: str) -> Optional[Dict[str, Any]]:
+    def get_object_state(self, object_id: str) -> Optional[dict[str, Any]]:
         """Get the current state of an object."""
         return self.objects.get(object_id)
 
     def set_object_position(self, object_id: str, position: Vector3D) -> bool:
-        """Set the position of an object."""
+        """set the position of an object."""
         if object_id in self.objects:
             self.objects[object_id]["position"] = position
             return True
         return False
 
-    def get_simulation_stats(self) -> Dict[str, Any]:
+    def get_simulation_stats(self) -> dict[str, Any]:
         """Get simulation statistics."""
         return {
             "total_objects": len(self.objects),
@@ -480,7 +480,7 @@ def generate_sensor_integration_content() -> str:
     """Generate sensor integration module."""
     return '''"""Sensor integration and device management."""
 
-from typing import Dict, List, Optional, Callable, Any
+from typing import Optional, Callable, Any
 from dataclasses import dataclass
 from enum import Enum
 import time
@@ -517,9 +517,9 @@ class SensorReading:
     value: float
     unit: str
     timestamp: float = field(default_factory=time.time)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "sensor_id": self.sensor_id,
@@ -536,19 +536,19 @@ class DeviceInterface:
     """Interface for connected devices."""
     device_id: str
     device_type: str
-    sensors: List[SensorType]
+    sensors: list[SensorType]
     status: DeviceStatus = DeviceStatus.UNKNOWN
     last_seen: float = field(default_factory=time.time)
-    capabilities: Dict[str, Any] = field(default_factory=dict)
+    capabilities: dict[str, Any] = field(default_factory=dict)
 
 
 class SensorManager:
     """Manages sensor data collection and device integration."""
 
     def __init__(self):
-        self.devices: Dict[str, DeviceInterface] = {}
-        self.readings: List[SensorReading] = []
-        self._callbacks: Dict[str, List[Callable]] = {}
+        self.devices: dict[str, DeviceInterface] = {}
+        self.readings: list[SensorReading] = []
+        self._callbacks: dict[str, list[Callable]] = {}
         self.max_readings = 10000  # Keep last N readings
 
     def register_device(self, device: DeviceInterface) -> None:
@@ -586,7 +586,7 @@ class SensorManager:
 
     def get_readings_by_type(self, sensor_type: SensorType,
                            start_time: Optional[float] = None,
-                           end_time: Optional[float] = None) -> List[SensorReading]:
+                           end_time: Optional[float] = None) -> list[SensorReading]:
                                pass
         """Get readings for a sensor type within time range."""
         filtered_readings = []
@@ -644,7 +644,7 @@ class SensorManager:
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=2)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get sensor system statistics."""
         sensor_counts = {}
         for reading in self.readings:
@@ -697,7 +697,7 @@ class CoordinateSystem:
     """Coordinate system utilities."""
 
     @staticmethod
-    def cartesian_to_spherical(x: float, y: float, z: float) -> Tuple[float, float, float]:
+    def cartesian_to_spherical(x: float, y: float, z: float) -> tuple[float, float, float]:
         """Convert Cartesian to spherical coordinates."""
         r = math.sqrt(x**2 + y**2 + z**2)
         theta = math.acos(z / r) if r != 0 else 0
@@ -705,7 +705,7 @@ class CoordinateSystem:
         return r, theta, phi
 
     @staticmethod
-    def spherical_to_cartesian(r: float, theta: float, phi: float) -> Tuple[float, float, float]:
+    def spherical_to_cartesian(r: float, theta: float, phi: float) -> tuple[float, float, float]:
         """Convert spherical to Cartesian coordinates."""
         x = r * math.sin(theta) * math.cos(phi)
         y = r * math.sin(theta) * math.sin(phi)

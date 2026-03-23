@@ -131,7 +131,7 @@ class AlertEvaluator:
         """Evaluate all rules against current metrics.
 
         Returns:
-            List of newly fired alerts.
+            list of newly fired alerts.
         """
         new_alerts: list[Alert] = []
         snap = self._metrics.snapshot()

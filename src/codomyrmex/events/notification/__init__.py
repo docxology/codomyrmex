@@ -38,7 +38,7 @@ def cli_commands():
     """Return CLI commands for the notification module."""
 
     def _channels(**kwargs):
-        """List notification channels."""
+        """list notification channels."""
         print("=== Notification Channels ===")
         for channel in NotificationChannel:
             print(f"  {channel.value}")
@@ -70,7 +70,7 @@ def cli_commands():
         print(f"Notification {status}: {message}")
 
     return {
-        "channels": {"handler": _channels, "help": "List notification channels"},
+        "channels": {"handler": _channels, "help": "list notification channels"},
         "send": {"handler": _send, "help": "Send notification with --message arg"},
     }
 

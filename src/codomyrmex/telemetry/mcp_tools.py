@@ -29,9 +29,9 @@ def telemetry_record_metrics(
     """Record metrics and return a snapshot of all recorded values.
 
     Args:
-        counters: Dict of counter_name -> increment_value.
-        gauges: Dict of gauge_name -> value.
-        observations: Dict of histogram_name -> list of observed values.
+        counters: dict of counter_name -> increment_value.
+        gauges: dict of gauge_name -> value.
+        observations: dict of histogram_name -> list of observed values.
 
     Returns:
         dict with keys: status, counters, gauges, histograms, timestamp
@@ -100,7 +100,7 @@ def telemetry_histogram_stats(
 
     Args:
         name: Name of the histogram.
-        values: List of observed values.
+        values: list of observed values.
 
     Returns:
         dict with keys: status, name, stats

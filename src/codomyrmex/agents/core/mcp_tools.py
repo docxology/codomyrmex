@@ -81,7 +81,7 @@ def get_thinking_depth() -> dict:
 
 @mcp_tool(category="agents.core")
 def set_thinking_depth(depth: str) -> dict:
-    """Set the ThinkingAgent's reasoning depth.
+    """set the ThinkingAgent's reasoning depth.
 
     Args:
         depth: One of 'shallow', 'normal', or 'deep'.
@@ -153,7 +153,7 @@ def react_step(
 
     Args:
         observation: Current observation or task description.
-        available_tools: List of tool names available for actions.
+        available_tools: list of tool names available for actions.
         max_steps: Maximum number of steps before forced conclusion.
 
     Returns:

@@ -36,7 +36,7 @@ def cli_commands():
     """Return CLI commands for the skills module."""
 
     def _list_skills():
-        """List available skills."""
+        """list available skills."""
         try:
             registry = SkillRegistry()  # type: ignore
             skills = registry.list_skills()

@@ -57,7 +57,7 @@ class CronExpression:
             max_val: Maximum value
 
         Returns:
-            List of valid values
+            list of valid values
         """
         if field == "*":
             return list(range(min_val, max_val + 1))

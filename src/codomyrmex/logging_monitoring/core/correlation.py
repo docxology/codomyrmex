@@ -136,7 +136,7 @@ def create_mcp_correlation_header() -> dict[str, str]:
     """Generate MCP metadata headers with the current correlation ID.
 
     Returns:
-        Dict suitable for MCP message metadata.
+        dict suitable for MCP message metadata.
     """
     cid = get_correlation_id()
     if cid:

@@ -137,10 +137,10 @@ class PaperclipAPIClient:
     # ------------------------------------------------------------------ #
 
     def list_companies(self) -> dict[str, Any]:
-        """List all companies.
+        """list all companies.
 
         Returns:
-            Dict with a ``companies`` list.
+            dict with a ``companies`` list.
         """
         return self._request("GET", "/api/companies")
 
@@ -167,7 +167,7 @@ class PaperclipAPIClient:
     # ------------------------------------------------------------------ #
 
     def list_agents(self, company_id: str) -> dict[str, Any]:
-        """List agents in a company.
+        """list agents in a company.
 
         Args:
             company_id: Company identifier.
@@ -216,7 +216,7 @@ class PaperclipAPIClient:
     # ------------------------------------------------------------------ #
 
     def list_issues(self, company_id: str) -> dict[str, Any]:
-        """List issues in a company.
+        """list issues in a company.
 
         Args:
             company_id: Company identifier.
@@ -279,7 +279,7 @@ class PaperclipAPIClient:
     # ------------------------------------------------------------------ #
 
     def list_approvals(self, company_id: str) -> dict[str, Any]:
-        """List pending approvals for a company.
+        """list pending approvals for a company.
 
         Args:
             company_id: Company identifier.

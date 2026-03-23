@@ -12,7 +12,7 @@ Key Features:
 - Configuration Editor: View and edit configuration files.
 - Documentation Browser: Navigate and view project documentation.
 - Pipeline Visualization: Monitor CI/CD pipeline status.
-- Agent Overview: List all agents with their descriptions and paths.
+- Agent Overview: list all agents with their descriptions and paths.
 
 Quick Start:
     # Generate the website

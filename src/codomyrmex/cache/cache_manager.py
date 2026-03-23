@@ -4,7 +4,7 @@ Provides:
 - CacheManager: registry of named cache instances across backends
 - Backend selection (in_memory, file_based, redis with auto-fallback)
 - Default TTL configuration per cache
-- List/remove/clear operations across all caches
+- list/remove/clear operations across all caches
 - Summary statistics
 """
 
@@ -98,7 +98,7 @@ class CacheManager:
         return len(keys_to_remove) > 0
 
     def list_caches(self) -> list[dict[str, Any]]:
-        """List all active caches with their metadata."""
+        """list all active caches with their metadata."""
         return [
             {
                 "key": key,

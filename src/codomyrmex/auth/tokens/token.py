@@ -79,7 +79,7 @@ class TokenManager:
 
         Args:
             user_id: User identifier
-            permissions: List of permissions
+            permissions: list of permissions
             ttl: Time-to-live in seconds. 0 = no expiry.
 
         Returns:

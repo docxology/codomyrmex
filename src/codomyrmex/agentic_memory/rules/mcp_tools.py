@@ -14,7 +14,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(
     category="agentic_memory",
     description=(
-        "List all Codomyrmex module names that have a defined coding rule. "
+        "list all Codomyrmex module names that have a defined coding rule. "
         "Returns a sorted list of module names (e.g. 'agentic_memory', 'agents', 'cloud')."
     ),
 )
@@ -120,7 +120,7 @@ def rules_search(query: str) -> list[dict]:
 
 @mcp_tool(
     category="agentic_memory",
-    description="List all cross-module rule names (8 rules governing inter-module concerns).",
+    description="list all cross-module rule names (8 rules governing inter-module concerns).",
 )
 def rules_list_cross_module() -> list[str]:
     """Return sorted list of all cross-module rule names."""
@@ -132,7 +132,7 @@ def rules_list_cross_module() -> list[str]:
 @mcp_tool(
     category="agentic_memory",
     description=(
-        "List all file-specific rule names (6 rules for file types: .py, .yaml, .json, etc.)."
+        "list all file-specific rule names (6 rules for file types: .py, .yaml, .json, etc.)."
     ),
 )
 def rules_list_file_specific() -> list[str]:
@@ -145,7 +145,7 @@ def rules_list_file_specific() -> list[str]:
 @mcp_tool(
     category="agentic_memory",
     description=(
-        "List all 75 rules across all categories as summary dicts, sorted by priority. "
+        "list all 75 rules across all categories as summary dicts, sorted by priority. "
         "FILE_SPECIFIC rules come first, GENERAL last."
     ),
 )

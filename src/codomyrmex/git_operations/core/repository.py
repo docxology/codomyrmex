@@ -157,13 +157,13 @@ class RepositoryManager:
         self, repo_type: RepositoryType | None = None
     ) -> list[Repository]:
         """
-        List repositories, optionally filtered by type.
+        list repositories, optionally filtered by type.
 
         Args:
             repo_type: Filter by repository type
 
         Returns:
-            List of repositories
+            list of repositories
         """
         repos = list(self.repositories.values())
 
@@ -192,7 +192,7 @@ class RepositoryManager:
             query: Search query
 
         Returns:
-            List of matching repositories
+            list of matching repositories
         """
         query_lower = query.lower()
         matches = []
@@ -277,7 +277,7 @@ class RepositoryManager:
 
     def _setup_development_repo(self, repo_path: str, repo: Repository) -> None:
         """
-        Set up a development repository with appropriate branches.
+        set up a development repository with appropriate branches.
 
         Args:
             repo_path: Local repository path
@@ -546,7 +546,7 @@ class RepositoryManager:
         for repo_type, count in type_counts.items():
             print(f"  {repo_type.value}: {count}")
 
-        # List by type
+        # list by type
         for repo_type in RepositoryType:
             repos = self.list_repositories(repo_type)
             if repos:
@@ -580,7 +580,7 @@ def main():
     for repo in docx_repos[:3]:  # Show first 3
         print(f"  - {repo.full_name}: {repo.description}")
 
-    # List development repositories
+    # list development repositories
     dev_repos = manager.list_repositories(RepositoryType.OWN)
     print(f"\nDevelopment repositories: {len(dev_repos)}")
 

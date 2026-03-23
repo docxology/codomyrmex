@@ -119,15 +119,15 @@ class VersionRegistry:
         return self._tools.get(name)
 
     def list_versions(self, name: str) -> list[APIVersion]:
-        """List all known versions of a tool."""
+        """list all known versions of a tool."""
         return [t.version for t in self._history.get(name, [])]
 
     def list_deprecated(self) -> list[str]:
-        """List all deprecated tool names."""
+        """list all deprecated tool names."""
         return [name for name, tool in self._tools.items() if tool.deprecated]
 
     def list_all(self) -> list[VersionedTool]:
-        """List all registered tools."""
+        """list all registered tools."""
         return list(self._tools.values())
 
     def add_migration(

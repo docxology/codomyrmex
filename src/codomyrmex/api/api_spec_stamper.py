@@ -80,7 +80,7 @@ class APISpecStamper:
             if isinstance(node, ast.Assign):
                 for target in node.targets:
                     if isinstance(target, ast.Name) and target.id == "__all__":
-                        if isinstance(node.value, ast.List):
+                        if isinstance(node.value, ast.list):
                             api.exports = [
                                 elt.value
                                 for elt in node.value.elts
@@ -101,7 +101,7 @@ class APISpecStamper:
             version: Version tag for the snapshot.
 
         Returns:
-            Dict with ``version``, ``timestamp``, ``modules``, ``total_surface``.
+            dict with ``version``, ``timestamp``, ``modules``, ``total_surface``.
         """
         start = time.monotonic()
         modules: list[dict] = []
@@ -143,7 +143,7 @@ class APISpecStamper:
             new: Current snapshot.
 
         Returns:
-            Dict with ``added``, ``removed``, ``changed`` module lists.
+            dict with ``added``, ``removed``, ``changed`` module lists.
         """
         old_map = {m["name"]: set(m["exports"]) for m in old.get("modules", [])}
         new_map = {m["name"]: set(m["exports"]) for m in new.get("modules", [])}

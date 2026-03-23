@@ -138,7 +138,7 @@ class CLIProfiler:
             package: Package name to scan.
 
         Returns:
-            List of :class:`ProfileResult` sorted by duration (slowest first).
+            list of :class:`ProfileResult` sorted by duration (slowest first).
         """
         src_root = Path(__file__).resolve().parents[1]
         results: list[ProfileResult] = []

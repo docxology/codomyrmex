@@ -24,7 +24,7 @@ class QueryBuilder:
         return self
 
     def set_sort(self, field: str) -> "QueryBuilder":
-        """Set sort field."""
+        """set sort field."""
         self.sort_by = field
         return self
 
@@ -49,7 +49,7 @@ def build_query(
     Build a search query.
 
     Args:
-        terms: List of search terms
+        terms: list of search terms
         filters: Optional filters dictionary
         sort_by: Optional sort field
 

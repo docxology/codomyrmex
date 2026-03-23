@@ -14,7 +14,7 @@ class SecurityGroupMixin:
     """
 
     def list_security_groups(self) -> list[dict[str, Any]]:
-        """List all security groups."""
+        """list all security groups."""
         try:
             sgs = list(self._conn.network.security_groups())
             return [

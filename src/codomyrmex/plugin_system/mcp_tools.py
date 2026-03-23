@@ -50,7 +50,7 @@ def plugin_resolve_dependencies(
     """Resolve plugin dependencies using topological sort.
 
     Args:
-        plugins: List of dicts with 'name' and optional 'dependencies' list.
+        plugins: list of dicts with 'name' and optional 'dependencies' list.
     """
     try:
         from codomyrmex.plugin_system.dependency_resolver import (

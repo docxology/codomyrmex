@@ -111,7 +111,7 @@ async def list_pai_events(
     limit: int = 50,
     event_type: str | None = None,
 ) -> list[dict[str, Any]]:
-    """List recent PAI events.
+    """list recent PAI events.
 
     Args:
         limit: Maximum number of events to return.

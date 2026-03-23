@@ -116,7 +116,7 @@ class PatternDetector:
         """Initialise with an optional custom pattern catalogue.
 
         Args:
-            patterns: Dict mapping pattern names to definition dicts.
+            patterns: dict mapping pattern names to definition dicts.
                 Falls back to the built-in :data:`PATTERNS` if ``None``.
         """
         raw = patterns if patterns is not None else PATTERNS
@@ -129,7 +129,7 @@ class PatternDetector:
 
         Args:
             name: Unique pattern name.
-            definition: Dict with ``description``, ``indicators``, and
+            definition: dict with ``description``, ``indicators``, and
                 optionally ``category``.
         """
         self._definitions[name] = _to_definition(name, definition)

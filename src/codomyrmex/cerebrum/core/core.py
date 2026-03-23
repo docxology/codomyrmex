@@ -86,7 +86,7 @@ class ModelManager:
             self.logger.debug("Removed model: %s", name)
 
     def list_models(self) -> list[str]:
-        """List all model names."""
+        """list all model names."""
         return list(self.models.keys())
 
 
@@ -323,7 +323,7 @@ class CerebrumEngine:
         """Make a decision among options.
 
         Args:
-            options: List of options
+            options: list of options
             criteria: Dictionary of criteria weights
             context: Additional context
 
@@ -355,7 +355,7 @@ class CerebrumEngine:
         return self.transformation_manager.transform(model, transformation, **kwargs)
 
     def set_bayesian_network(self, network: BayesianNetwork) -> None:
-        """Set Bayesian network for probabilistic inference.
+        """set Bayesian network for probabilistic inference.
 
         Args:
             network: Bayesian network
@@ -365,16 +365,16 @@ class CerebrumEngine:
         self.reasoning_engine = ReasoningEngine(
             self.case_base, self.bayesian_network, self.config
         )
-        self.logger.info("Set Bayesian network: %s", network.name)
+        self.logger.info("set Bayesian network: %s", network.name)
 
     def set_active_inference_agent(self, agent: ActiveInferenceAgent) -> None:
-        """Set active inference agent.
+        """set active inference agent.
 
         Args:
             agent: Active inference agent
         """
         self.active_inference_agent = agent
-        self.logger.info("Set active inference agent")
+        self.logger.info("set active inference agent")
 
     def get_case_base(self) -> CaseBase:
         """Get the case base."""

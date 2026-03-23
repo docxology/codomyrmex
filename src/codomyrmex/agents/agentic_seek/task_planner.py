@@ -173,11 +173,11 @@ def validate_plan(
 
     Args:
         steps: The parsed plan steps.
-        available_agents: Set of agent types that are actually available.
+        available_agents: set of agent types that are actually available.
             If ``None``, all types are considered available.
 
     Returns:
-        List of human-readable error strings (empty if valid).
+        list of human-readable error strings (empty if valid).
     """
     if available_agents is None:
         available_agents = set(AgenticSeekAgentType)

@@ -22,7 +22,7 @@ Safety properties can be classified using the **arithmetical hierarchy** (Rogers
 Codomyrmex's safety properties distribute across this hierarchy:
 
 - **Σ₀⁰ (decidable)**: typing, lint rules (ruff), import structure → `static_analysis` handles these
-- **Σ₁⁰ (semi-decidable)**: "does a bug exist?" → the test suite (**34,492** collected tests, `pytest --collect-only --no-cov`) is a partial oracle
+- **Σ₁⁰ (semi-decidable)**: "does a bug exist?" → the test suite (**39,473** collected tests, `pytest --collect-only --no-cov`) is a partial oracle
 - **Π₁⁰ (co-semi-decidable)**: "is this function correct for all inputs?" → property-based testing (Hypothesis) approximates
 - **Σ₂⁰ (undecidable)**: "is this self-modification safe?" → the Löbian obstacle
 

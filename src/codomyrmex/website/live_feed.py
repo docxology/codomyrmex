@@ -110,7 +110,7 @@ class LiveFeedProvider:
             source: Optional source filter.
 
         Returns:
-            List of recent events, newest first.
+            list of recent events, newest first.
         """
         with self._lock:
             events = list(self._events)
@@ -126,7 +126,7 @@ class LiveFeedProvider:
         """Get a snapshot of current system state.
 
         Returns:
-            Dict with ``total_events``, ``event_types``, ``sources``,
+            dict with ``total_events``, ``event_types``, ``sources``,
             and ``recent`` events.
         """
         with self._lock:
@@ -157,7 +157,7 @@ class LiveFeedProvider:
             since: Unix timestamp to filter from.
 
         Returns:
-            List of events since the given timestamp.
+            list of events since the given timestamp.
         """
         with self._lock:
             return [e for e in self._events if e.timestamp >= since]

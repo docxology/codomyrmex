@@ -145,7 +145,7 @@ class MissionControlClient:
         try:
             with urllib.request.urlopen(req, timeout=self._config.timeout) as resp:
                 # Capture session cookie if present
-                set_cookie = resp.headers.get("Set-Cookie", "")
+                set_cookie = resp.headers.get("set-Cookie", "")
                 if "mc-session" in set_cookie:
                     self._session_cookie = set_cookie.split(";")[0]
 
@@ -220,10 +220,10 @@ class MissionControlClient:
     # ── Agent Management ─────────────────────────────────────────
 
     def list_agents(self) -> list[dict[str, Any]]:
-        """List all registered agents.
+        """list all registered agents.
 
         Returns:
-            List of agent dicts.
+            list of agent dicts.
         """
         result = self._request("GET", "/api/agents")
         if isinstance(result, list):
@@ -257,7 +257,7 @@ class MissionControlClient:
         assigned_to: str | None = None,
         priority: str | None = None,
     ) -> list[dict[str, Any]]:
-        """List tasks with optional filters.
+        """list tasks with optional filters.
 
         Args:
             status: Filter by task status (inbox, assigned, in_progress,
@@ -266,7 +266,7 @@ class MissionControlClient:
             priority: Filter by priority level.
 
         Returns:
-            List of task dicts.
+            list of task dicts.
         """
         params: list[str] = []
         if status:
@@ -357,13 +357,13 @@ class MissionControlClient:
     # ── Task Comments ────────────────────────────────────────────
 
     def list_comments(self, task_id: str) -> list[dict[str, Any]]:
-        """List comments on a task.
+        """list comments on a task.
 
         Args:
             task_id: Task identifier.
 
         Returns:
-            List of comment dicts.
+            list of comment dicts.
         """
         result = self._request("GET", f"/api/tasks/{task_id}/comments")
         if isinstance(result, list):
@@ -400,7 +400,7 @@ class MissionControlClient:
         Runs ``pnpm dev`` in the app directory as a background process.
 
         Returns:
-            Dict with ``pid`` and ``status``.
+            dict with ``pid`` and ``status``.
 
         Raises:
             MissionControlError: If the app path doesn't exist or
@@ -446,7 +446,7 @@ class MissionControlClient:
         """Stop the running Mission Control dev server.
 
         Returns:
-            Dict with ``status`` and ``pid``.
+            dict with ``status`` and ``pid``.
         """
         if not self._server_process:
             return {"status": "not_running"}

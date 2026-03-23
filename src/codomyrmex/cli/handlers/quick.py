@@ -121,7 +121,7 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
     """Pipe multiple commands together.
 
     Args:
-        commands: List of commands to pipe
+        commands: list of commands to pipe
         stop_on_error: Stop on first error
 
     Returns:
@@ -198,7 +198,7 @@ def handle_quick_batch(
     """Run multiple targets in parallel batches.
 
     Args:
-        targets: List of targets (scripts, modules, patterns)
+        targets: list of targets (scripts, modules, patterns)
         workers: Number of parallel workers
         timeout: Timeout per target
         verbose: Show detailed output
@@ -251,7 +251,7 @@ def handle_quick_chain(
     """Chain scripts to run sequentially, passing results.
 
     Args:
-        scripts: List of script paths
+        scripts: list of script paths
         timeout: Timeout per script
         continue_on_error: Continue even if a script fails
 

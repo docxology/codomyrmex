@@ -27,7 +27,7 @@ def search_documents(query: str, index: InMemoryIndex) -> list[Document]:
         index: InMemoryIndex to search
 
     Returns:
-        List of matching documents
+        list of matching documents
     """
     terms = _tokenize(query)
     if not terms:
@@ -52,7 +52,7 @@ def search_index(query: str, index: InMemoryIndex) -> list[dict]:
         index: InMemoryIndex to search
 
     Returns:
-        List of search result dictionaries with 'document_id', 'score', and 'document' keys
+        list of search result dictionaries with 'document_id', 'score', and 'document' keys
     """
     terms = _tokenize(query)
     if not terms:

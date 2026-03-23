@@ -63,7 +63,7 @@ class SectionExporter:
         """Export a pattern group to JSON.
 
         Args:
-            pattern_ids: List of pattern IDs
+            pattern_ids: list of pattern IDs
             output_path: Path to output JSON file
             include_dependencies: Whether to include dependent patterns
             include_metadata: Whether to include metadata
@@ -123,7 +123,7 @@ class SectionExporter:
         """Export a concept cluster to JSON.
 
         Args:
-            concept_names: List of concept names
+            concept_names: list of concept names
             output_path: Path to output JSON file
             include_related_patterns: Whether to include related patterns
             include_metadata: Whether to include metadata
@@ -158,7 +158,7 @@ class SectionExporter:
             include_metadata: Whether to include metadata
 
         Returns:
-            List of exported file paths
+            list of exported file paths
         """
         output_dir.mkdir(parents=True, exist_ok=True)
         exported_paths = []

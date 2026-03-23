@@ -352,13 +352,13 @@ class KubernetesOrchestrator:
             return None
 
     def list_deployments(self, namespace: str = "default") -> list[dict[str, Any]]:
-        """List all deployments in a namespace.
+        """list all deployments in a namespace.
 
         Args:
             namespace: Kubernetes namespace
 
         Returns:
-            List of deployment information
+            list of deployment information
         """
         if not self.is_available():
             return []
@@ -481,14 +481,14 @@ class KubernetesOrchestrator:
     def list_pods(
         self, namespace: str = "default", label_selector: str | None = None
     ) -> list[dict[str, Any]]:
-        """List pods in a namespace.
+        """list pods in a namespace.
 
         Args:
             namespace: Kubernetes namespace
             label_selector: Label selector string (e.g., "app=myapp")
 
         Returns:
-            List of pod information
+            list of pod information
         """
         if not self.is_available():
             return []
@@ -567,7 +567,7 @@ class KubernetesOrchestrator:
             namespace: Default namespace
 
         Returns:
-            List of apply results
+            list of apply results
         """
         results = []
         path = Path(yaml_path)

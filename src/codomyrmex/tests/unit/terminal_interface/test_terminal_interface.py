@@ -19,7 +19,7 @@ class TestInteractiveShell:
     """Test cases for InteractiveShell functionality."""
 
     def setup_method(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.shell = InteractiveShell()
 
     def test_interactive_shell_initialization(self):
@@ -217,7 +217,7 @@ class TestInteractiveShell:
 
     def test_do_clear(self):
         """Test clear command."""
-        # Set some session data
+        # set some session data
         self.shell.session_data["commands_run"] = 5
         self.shell.session_data["modules_explored"].add("test_module")
 
@@ -318,7 +318,7 @@ class TestShellIntegration:
     """Integration tests for shell functionality."""
 
     def setup_method(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.shell = InteractiveShell()
 
     def test_shell_initialization_with_discovery(self):
@@ -367,7 +367,7 @@ class TestCommandValidation:
     """Test command validation and error handling."""
 
     def setup_method(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.shell = InteractiveShell()
 
     def test_invalid_command_handling(self, capsys):
@@ -404,7 +404,7 @@ class TestShellOutputFormatting:
     """Test shell output formatting and display."""
 
     def setup_method(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.shell = InteractiveShell()
 
     def test_colored_output(self):
@@ -432,7 +432,7 @@ class TestShellStateManagement:
     """Test shell state management and persistence."""
 
     def setup_method(self):
-        """Set up test fixtures."""
+        """set up test fixtures."""
         self.shell = InteractiveShell()
 
     def test_session_persistence(self):

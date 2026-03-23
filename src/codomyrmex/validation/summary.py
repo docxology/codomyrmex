@@ -79,7 +79,7 @@ class ValidationSummary:
         """Return top-N fields with the most error-severity issues.
 
         Returns:
-            List of (field_name, error_count) sorted descending.
+            list of (field_name, error_count) sorted descending.
         """
         field_counts: dict[str, int] = defaultdict(int)
         for issue in self.issues:

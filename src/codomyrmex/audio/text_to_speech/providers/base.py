@@ -75,13 +75,13 @@ class TTSProvider(ABC):
         self,
         language: str | None = None,
     ) -> list[VoiceInfo]:
-        """List available voices.
+        """list available voices.
 
         Args:
             language: Filter by language code (e.g., "en-US")
 
         Returns:
-            List of available VoiceInfo objects
+            list of available VoiceInfo objects
 
         """
 
@@ -102,7 +102,7 @@ class TTSProvider(ABC):
         """Get list of supported language codes.
 
         Returns:
-            List of language codes (e.g., ["en-US", "es-ES"])
+            list of language codes (e.g., ["en-US", "es-ES"])
 
         """
 

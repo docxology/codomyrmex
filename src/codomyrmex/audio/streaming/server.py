@@ -161,7 +161,7 @@ class AudioStreamServer:
             session_id: Session identifier.
 
         Returns:
-            Dict with session metadata.
+            dict with session metadata.
         """
         session = self._sessions.get(session_id)
         if not session:

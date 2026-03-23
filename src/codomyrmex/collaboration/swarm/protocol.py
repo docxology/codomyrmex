@@ -98,7 +98,7 @@ class SwarmAgent:
     Attributes:
         agent_id: Unique agent identifier.
         role: Agent's role.
-        capabilities: Set of capability tags (e.g. ``python``, ``security``).
+        capabilities: set of capability tags (e.g. ``python``, ``security``).
         active_tasks: Number of currently assigned tasks.
         max_concurrent: Maximum concurrent tasks.
 

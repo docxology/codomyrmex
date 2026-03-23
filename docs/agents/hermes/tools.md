@@ -164,3 +164,10 @@ uv run python -m codomyrmex.agents.hermes.scripts.run_prune --days 30 --dry-run
 - [Skills](skills.md) — Skill-based tools
 - [Configuration](configuration.md) — Toolset configuration
 - [Sessions](sessions.md) — Session management and storage
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

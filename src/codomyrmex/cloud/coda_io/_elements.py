@@ -31,7 +31,7 @@ class Formula:
 
 @dataclass
 class FormulaList:
-    """List of formulas with pagination."""
+    """list of formulas with pagination."""
 
     items: list[Formula]
     href: str | None = None
@@ -77,7 +77,7 @@ class Control:
 
 @dataclass
 class ControlList:
-    """List of controls with pagination."""
+    """list of controls with pagination."""
 
     items: list[Control]
     href: str | None = None

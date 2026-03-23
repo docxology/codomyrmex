@@ -66,7 +66,7 @@ class JobScheduler:
         Get status of all jobs in the queue.
 
         Returns:
-            Dict mapping job_id to status string
+            dict mapping job_id to status string
         """
         statuses = {}
         # Access backend's job storage

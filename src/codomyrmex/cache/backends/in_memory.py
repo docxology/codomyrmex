@@ -47,7 +47,7 @@ class InMemoryCache(Cache):
         return value
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
-        """Set a value in the cache."""
+        """set a value in the cache."""
         # Evict if at max size
         if len(self._cache) >= self.max_size and key not in self._cache:
             # Remove oldest entry

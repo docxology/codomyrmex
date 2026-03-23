@@ -137,7 +137,7 @@ class TranscriptionResult:
 
     Attributes:
         text: Full transcribed text
-        segments: List of transcription segments with timing
+        segments: list of transcription segments with timing
         language: Detected or specified language code (ISO 639-1)
         language_probability: Confidence of language detection
         duration: Total audio duration in seconds

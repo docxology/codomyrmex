@@ -243,7 +243,7 @@ class OutputManager:
         Save batch execution results.
 
         Args:
-            results: List of execution results
+            results: list of execution results
             batch_name: Name for the batch
             output_dir: Custom output directory (optional)
 
@@ -356,14 +356,14 @@ class OutputManager:
         self, model_name: str | None = None, output_type: str = "outputs"
     ) -> list[dict[str, Any]]:
         """
-        List saved outputs of a specific type.
+        list saved outputs of a specific type.
 
         Args:
             model_name: Filter by model name (optional)
             output_type: Type of outputs to list ("outputs", "configs", "results", "reports")
 
         Returns:
-            List of output information dictionaries
+            list of output information dictionaries
         """
         if output_type == "outputs":
             search_dir = self.outputs_dir

@@ -33,10 +33,10 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
     def list_volumes(self) -> list[dict[str, Any]]:
         """
-        List all block storage volumes.
+        list all block storage volumes.
 
         Returns:
-            List of volume dictionaries
+            list of volume dictionaries
         """
         try:
             volumes = list(self._conn.block_storage.volumes())
@@ -201,10 +201,10 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
     def list_backups(self) -> list[dict[str, Any]]:
         """
-        List volume backups.
+        list volume backups.
 
         Returns:
-            List of backup dictionaries
+            list of backup dictionaries
         """
         try:
             backups = list(self._conn.block_storage.backups())
@@ -311,7 +311,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_snapshots(self) -> list[dict[str, Any]]:
-        """List volume snapshots."""
+        """list volume snapshots."""
         try:
             snapshots = list(self._conn.block_storage.snapshots())
             return [

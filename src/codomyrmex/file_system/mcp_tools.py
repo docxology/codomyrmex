@@ -37,7 +37,7 @@ def file_system_list_directory(
     path: str = ".",
     recursive: bool = False,
 ) -> dict:
-    """List entries in a directory.
+    """list entries in a directory.
 
     Args:
         path: Directory path to list (default: current working directory).

@@ -152,7 +152,7 @@ class SessionStore(Protocol):
         ...
 
     def list_sessions(self) -> list[str]:
-        """List all session IDs."""
+        """list all session IDs."""
         ...
 
     def delete(self, session_id: str) -> bool:
@@ -176,7 +176,7 @@ class InMemorySessionStore:
         return self._sessions.get(session_id)
 
     def list_sessions(self) -> list[str]:
-        """List session IDs."""
+        """list session IDs."""
         return list(self._sessions.keys())
 
     def delete(self, session_id: str) -> bool:
@@ -217,7 +217,7 @@ class SQLiteSessionStore:
         # Enable Write-Ahead Logging (WAL) for safer cross-process concurrency
         self._conn.execute("PRAGMA journal_mode=WAL;")
         self._conn.execute("PRAGMA synchronous=NORMAL;")
-        # Set busy timeout (this is somewhat redundant with timeout=5.0, but explicit)
+        # set busy timeout (this is somewhat redundant with timeout=5.0, but explicit)
         self._conn.execute("PRAGMA busy_timeout=5000;")
 
         self._conn.execute("""
@@ -400,7 +400,7 @@ class SQLiteSessionStore:
             query: Substring to match against session names.
 
         Returns:
-            List of dicts with ``session_id``, ``name``, ``updated_at``.
+            list of dicts with ``session_id``, ``name``, ``updated_at``.
         """
         cursor = self._conn.execute(
             "SELECT session_id, name, updated_at FROM hermes_sessions "
@@ -420,7 +420,7 @@ class SQLiteSessionStore:
             limit: Maximum number of results to return.
 
         Returns:
-            List of dicts with ``session_id``, ``name``, ``messages_snippet``, and ``rank``.
+            list of dicts with ``session_id``, ``name``, ``messages_snippet``, and ``rank``.
         """
         cursor = self._conn.execute(
             "SELECT session_id, name, snippet(hermes_sessions_fts, 2, '<b>', '</b>', '...', 64), rank "
@@ -495,10 +495,10 @@ class SQLiteSessionStore:
         return deleted_count
 
     def list_sessions(self) -> list[str]:
-        """List all session IDs.
+        """list all session IDs.
 
         Returns:
-            List of session ID strings.
+            list of session ID strings.
         """
         cursor = self._conn.execute(
             "SELECT session_id FROM hermes_sessions ORDER BY updated_at DESC"
@@ -678,7 +678,7 @@ class SessionRaceGuard:
 
     Attributes:
         store: The session store to guard.
-        _locks: Dict of session_id -> threading.Lock for granular locking.
+        _locks: dict of session_id -> threading.Lock for granular locking.
 
     Example::
 

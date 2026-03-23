@@ -63,7 +63,7 @@ class LLMProvider(ABC):
 
     @abstractmethod
     def list_models(self) -> list[str]:
-        """List available models for this provider."""
+        """list available models for this provider."""
 
     def get_model(self, model: str | None = None) -> str:
         return model or self.config.default_model or self._default_model()

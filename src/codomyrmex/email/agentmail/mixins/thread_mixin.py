@@ -37,7 +37,7 @@ class ThreadMixin:
         before: str | None = None,
         after: str | None = None,
     ) -> list[AgentMailThread]:
-        """List threads in an inbox.
+        """list threads in an inbox.
 
         Args:
             inbox_id: Inbox to list threads from. Defaults to AGENTMAIL_DEFAULT_INBOX.
@@ -47,7 +47,7 @@ class ThreadMixin:
             after: Return threads after this ISO datetime string.
 
         Returns:
-            List of AgentMailThread objects.
+            list of AgentMailThread objects.
         """
         resolved_inbox = self._resolve_inbox_id(inbox_id)
         try:

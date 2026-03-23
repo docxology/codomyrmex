@@ -175,7 +175,7 @@ class NetworkStructureError(BayesianInferenceError):
 
     Attributes:
         message (str): The error message.
-        missing_nodes (list[str] | None): List of missing nodes in the network.
+        missing_nodes (list[str] | None): list of missing nodes in the network.
     """
 
     def __init__(

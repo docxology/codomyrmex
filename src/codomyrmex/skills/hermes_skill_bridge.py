@@ -116,7 +116,7 @@ class HermesSkillBridge:
         Falls back to filesystem scan when the CLI is unavailable.
 
         Returns:
-            List of :class:`HermesSkillEntry` objects.  May be empty.
+            list of :class:`HermesSkillEntry` objects.  May be empty.
 
         """
         if self._hermes_bin:
@@ -138,7 +138,7 @@ class HermesSkillBridge:
             hermes_home: Override the home directory for this call only.
 
         Returns:
-            Dict mapping skill name → :class:`HermesSkillEntry`.
+            dict mapping skill name → :class:`HermesSkillEntry`.
 
         """
         home = Path(hermes_home or self._hermes_home).expanduser()

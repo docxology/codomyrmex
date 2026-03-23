@@ -413,7 +413,7 @@ class PipelineOptimizer:
             pipeline_name: Name of the pipeline
 
         Returns:
-            List of historical optimization plans
+            list of historical optimization plans
         """
         history = []
 

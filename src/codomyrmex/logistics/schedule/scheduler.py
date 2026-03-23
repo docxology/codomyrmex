@@ -159,9 +159,9 @@ class ScheduleManager:
                 time.sleep(check_interval)
 
     def list_tasks(self) -> list[str]:
-        """List all scheduled task IDs.
+        """list all scheduled task IDs.
 
         Returns:
-            List of task IDs
+            list of task IDs
         """
         return list(self._scheduled_tasks.keys())

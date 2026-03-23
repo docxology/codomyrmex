@@ -39,7 +39,7 @@ def set_config(
     value: Any,
     namespace: str = "default",
 ) -> dict:
-    """Set a configuration value.
+    """set a configuration value.
 
     Args:
         key: Configuration key to set

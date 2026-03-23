@@ -60,7 +60,7 @@ def check_all_defined(init_path: Path) -> tuple[bool, list[str] | None]:
         if isinstance(node, ast.Assign):
             for target in node.targets:
                 if isinstance(target, ast.Name) and target.id == "__all__":
-                    if isinstance(node.value, (ast.List, ast.Tuple)):
+                    if isinstance(node.value, (ast.list, ast.tuple)):
                         names = [
                             elt.value
                             for elt in node.value.elts
@@ -71,7 +71,7 @@ def check_all_defined(init_path: Path) -> tuple[bool, list[str] | None]:
                     return True, None
         if isinstance(node, ast.AnnAssign):
             if isinstance(node.target, ast.Name) and node.target.id == "__all__":
-                if node.value and isinstance(node.value, (ast.List, ast.Tuple)):
+                if node.value and isinstance(node.value, (ast.list, ast.tuple)):
                     names = [
                         elt.value
                         for elt in node.value.elts
@@ -135,7 +135,7 @@ def find_dead_exports(src_dir: Path) -> list[dict[str, Any]]:
     """Find exports in __all__ that are never imported anywhere else.
 
     Returns:
-        List of dicts with module, export_name, and detail.
+        list of dicts with module, export_name, and detail.
     """
     all_imports = _collect_all_imports(src_dir)
     dead: list[dict[str, Any]] = []
@@ -192,7 +192,7 @@ def find_unused_functions(src_dir: Path) -> list[dict[str, Any]]:
     """Find top-level public functions that are never referenced elsewhere.
 
     Returns:
-        List of dicts with file, function_name, and detail.
+        list of dicts with file, function_name, and detail.
     """
     # Phase 1: collect all function definitions
     definitions: list[tuple[Path, str]] = []
@@ -234,7 +234,7 @@ def full_audit(src_dir: Path) -> dict[str, Any]:
     """Run all export/dead-code audits and return a unified report.
 
     Returns:
-        Dict with keys: missing_all, dead_exports, unused_functions, summary.
+        dict with keys: missing_all, dead_exports, unused_functions, summary.
     """
     missing = audit_exports(src_dir)
     dead = find_dead_exports(src_dir)

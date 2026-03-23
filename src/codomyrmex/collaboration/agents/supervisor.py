@@ -30,7 +30,7 @@ class SupervisorAgent(CollaborativeAgent):
     capabilities, aggregate results, and handle failures with retry logic.
 
     Attributes:
-        workers: List of managed worker agents.
+        workers: list of managed worker agents.
         delegation_strategy: Strategy for selecting workers ("round_robin", "capability", "least_busy").
         max_retries: Maximum retries for failed tasks.
 
@@ -164,11 +164,11 @@ class SupervisorAgent(CollaborativeAgent):
         """Delegate a batch of tasks to workers.
 
         Args:
-            tasks: List of tasks to delegate.
+            tasks: list of tasks to delegate.
             parallel: Whether to execute tasks in parallel.
 
         Returns:
-            List of task results.
+            list of task results.
 
         """
         if parallel:
@@ -202,7 +202,7 @@ class SupervisorAgent(CollaborativeAgent):
         Each task waits for its dependencies to complete.
 
         Args:
-            tasks: List of tasks with dependencies.
+            tasks: list of tasks with dependencies.
             on_progress: Optional callback for progress updates.
 
         Returns:

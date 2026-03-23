@@ -187,7 +187,7 @@ def get_discovery_metrics() -> dict[str, Any] | None:
     import the private ``_DISCOVERY_ENGINE`` or instantiate a fresh scanner.
 
     Returns:
-        Dict with keys ``total_tools``, ``modules_scanned``, ``cache_hits``,
+        dict with keys ``total_tools``, ``modules_scanned``, ``cache_hits``,
         ``failed_modules`` (list), ``scan_duration_ms`` (float), and
         ``last_scan_time`` (datetime or None); or None if engine not yet
         initialized.

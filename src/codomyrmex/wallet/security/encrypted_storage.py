@@ -158,7 +158,7 @@ class EncryptedStore:
         return key in self._entries
 
     def list_keys(self) -> list[str]:
-        """List all credential identifiers."""
+        """list all credential identifiers."""
         return sorted(self._entries.keys())
 
     @property

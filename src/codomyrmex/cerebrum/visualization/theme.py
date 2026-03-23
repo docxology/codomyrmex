@@ -182,7 +182,7 @@ class VisualizationTheme:
     def _setup_matplotlib(self) -> None:
         """Configure matplotlib with theme settings."""
         try:
-            # Set font family
+            # set font family
             plt.rcParams["font.family"] = self.font.family
             plt.rcParams["font.sans-serif"] = [
                 "Arial",
@@ -340,7 +340,7 @@ class VisualizationTheme:
             palette: Palette name ("primary", "secondary", "accent")
 
         Returns:
-            List of color hex codes
+            list of color hex codes
         """
         if palette == "primary":
             colors = self.colors.primary
@@ -397,7 +397,7 @@ class VisualizationTheme:
 
         Args:
             ax: Matplotlib axes object
-            statuses: List of status values to include
+            statuses: list of status values to include
         """
         if not HAS_MATPLOTLIB:
             return
@@ -416,7 +416,7 @@ class VisualizationTheme:
 
         Args:
             ax: Matplotlib axes object
-            levels: List of importance levels to include
+            levels: list of importance levels to include
         """
         if not HAS_MATPLOTLIB:
             return
@@ -448,7 +448,7 @@ def get_default_theme() -> VisualizationTheme:
 
 
 def set_default_theme(theme: VisualizationTheme) -> None:
-    """Set the default visualization theme.
+    """set the default visualization theme.
 
     Args:
         theme: VisualizationTheme instance

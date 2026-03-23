@@ -306,7 +306,7 @@ def compare_formats(data: bytes, level: int = 6) -> dict[str, dict[str, float]]:
         level: Compression level
 
     Returns:
-        Dict with format -> {compressed_size, ratio, time_ms}
+        dict with format -> {compressed_size, ratio, time_ms}
     """
     import time
 

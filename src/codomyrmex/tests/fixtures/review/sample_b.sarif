@@ -1,0 +1,41 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "FixtureTool",
+          "version": "1.0.0"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "rule-b",
+          "level": "warning",
+          "message": { "text": "finding two" },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/y.py" },
+                "region": { "startLine": 3 }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "rule-a",
+          "level": "error",
+          "message": { "text": "duplicate location" },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/x.py" },
+                "region": { "startLine": 10 }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

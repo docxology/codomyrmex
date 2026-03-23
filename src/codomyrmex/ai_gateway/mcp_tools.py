@@ -64,7 +64,7 @@ def gateway_health(
     """Return health status for all providers.
 
     Args:
-        providers: List of provider configs (name, endpoint).
+        providers: list of provider configs (name, endpoint).
 
     Returns:
         Dictionary mapping provider names to their health and circuit state.

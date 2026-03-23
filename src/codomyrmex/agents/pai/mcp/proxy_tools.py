@@ -33,7 +33,7 @@ def get_package_version() -> str:
 
 
 def tool_list_modules(**_kwargs: Any) -> dict[str, Any]:
-    """List all available Codomyrmex modules."""
+    """list all available Codomyrmex modules."""
     import codomyrmex
 
     modules = codomyrmex.list_modules()
@@ -61,14 +61,14 @@ def tool_module_info(*, module_name: str) -> dict[str, Any]:
 
 
 def tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
-    """List all public callable functions in a Codomyrmex module.
+    """list all public callable functions in a Codomyrmex module.
 
     Args:
         module: Module path (e.g. 'encryption', 'cache', 'validation').
                 Automatically prefixed with 'codomyrmex.'.
 
     Returns:
-        Dict with function names, signatures, and docstrings.
+        dict with function names, signatures, and docstrings.
     """
     full_path = (
         f"codomyrmex.{module}" if not module.startswith("codomyrmex.") else module
@@ -124,7 +124,7 @@ def tool_call_module_function(
         kwargs: Keyword arguments to pass to the function.
 
     Returns:
-        Dict with 'result' key (function return value) or 'error' key.
+        dict with 'result' key (function return value) or 'error' key.
     """
     if kwargs is None:
         kwargs = {}
@@ -178,7 +178,7 @@ def tool_get_module_readme(*, module: str = "") -> dict[str, Any]:
         module: Module name (e.g. 'encryption', 'cache').
 
     Returns:
-        Dict with README contents or error.
+        dict with README contents or error.
     """
     full_path = (
         f"codomyrmex.{module}" if not module.startswith("codomyrmex.") else module
@@ -269,7 +269,7 @@ def tool_run_tests(
 
 
 def tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
-    """List available Claude Code workflows from .agent/workflows.
+    """list available Claude Code workflows from .agent/workflows.
 
     Parses YAML frontmatter to extract descriptions.
 

@@ -496,7 +496,7 @@ class WhisperProvider(STTProvider):
             audio_path: Path to the audio file
 
         Returns:
-            Tuple of (language_code, probability)
+            tuple of (language_code, probability)
 
         """
         if not self._model:
@@ -525,7 +525,7 @@ class WhisperProvider(STTProvider):
         """Get list of supported language codes.
 
         Returns:
-            List of ISO 639-1 language codes supported by Whisper
+            list of ISO 639-1 language codes supported by Whisper
 
         """
         return WHISPER_LANGUAGES.copy()

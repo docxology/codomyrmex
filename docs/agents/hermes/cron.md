@@ -110,3 +110,10 @@ grep "cron" $HERMES_HOME/logs/gateway.log
 - [Gateway](gateway.md) — Gateway and ticker architecture
 - [Tools](tools.md) — `cronjob_tools.py`
 - [skills.md](skills.md) — Codomyrmex skill preload for scheduled / scripted Hermes use
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

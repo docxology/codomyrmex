@@ -250,7 +250,7 @@ def cli_commands():
     """Return CLI commands for the chaos_engineering module."""
 
     def _experiments():
-        """List registered chaos experiments."""
+        """list registered chaos experiments."""
         print("Chaos Engineering Experiments")
         print(f"  Fault Types: {[ft.value for ft in FaultType]}")
         monkey = ChaosMonkey()

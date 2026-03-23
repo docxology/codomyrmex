@@ -90,7 +90,7 @@ def test_gmail_live_integration():
 
     provider = GmailProvider(credentials=creds)
 
-    # 1. List messages (make sure it doesn't crash)
+    # 1. list messages (make sure it doesn't crash)
     # We query for something unlikely to return huge sets immediately
     messages = provider.list_messages(query="is:unread", max_results=5)
     assert isinstance(messages, list)

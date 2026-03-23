@@ -1,6 +1,6 @@
 # Codomyrmex Agents — docs/
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -10,22 +10,24 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 
 The `docs/` directory is organized into **19 thematic sections** containing **200+ markdown files**:
 
-### Core References (Top Level)
+### Core references (top level)
 
-| File | Purpose | Lines |
-|:---|:---|---:|
-| `ARCHITECTURE.md` | System architecture, layers, module graph | 448 |
-| `DEPENDENCIES.md` | Dependency compatibility guide | 116 |
-| `PAI.md` | Personal AI Infrastructure hub | 127 |
-| `PAI_DASHBOARD.md` | Dashboard functionality matrix | 38 |
-| `SPEC.md` | Functional specification | 178 |
-| `index.md` | Documentation site entry point | 50 |
+| File | Purpose |
+|:---|:---|
+| `ARCHITECTURE.md` | System architecture, layers, module graph |
+| `DEPENDENCIES.md` | Dependency compatibility guide |
+| `PAI.md` | Personal AI Infrastructure hub |
+| `PAI_DASHBOARD.md` | Dashboard functionality matrix |
+| `SPEC.md` | Documentation-area functional specification ([root `SPEC.md`](../SPEC.md) is authoritative for the whole repo) |
+| `index.md` | Documentation site entry point |
+
+Volatile counts (modules, MCP tools, tests) live in [reference/inventory.md](reference/inventory.md); refresh with `uv run python scripts/doc_inventory.py`.
 
 ### Thematic Sections
 
 | Section | Focus | Key Content |
 |:---|:---|:---|
-| `agents/` | AI agent integrations | 38 agent subfolders; Hermes: 19 docs + [skills.md](agents/hermes/skills.md) (registry / profile / MCP) |
+| `agents/` | AI agent integrations | 41 packages mirror `src/codomyrmex/agents/` (+ [`agents/rules/`](agents/rules/) docs-only); Hermes: [agents/hermes/AGENTS.md](agents/hermes/AGENTS.md), [skills.md](agents/hermes/skills.md) |
 | `agi/` | AGI theory | Essays on emergence, category theory, agency |
 | `bio/` | Biological simulation | BioSimulator, genetic algorithms |
 | `cognitive/` | Cognitive systems | Cerebrum, Bayesian networks, active inference |

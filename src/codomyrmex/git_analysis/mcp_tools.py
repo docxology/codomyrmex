@@ -183,12 +183,12 @@ def git_analysis_cypher_query(repo_path: str, cypher_query: str) -> dict[str, An
 @mcp_tool(
     category="git_analysis",
     description=(
-        "List all repositories indexed in the global GitNexus registry "
+        "list all repositories indexed in the global GitNexus registry "
         "(~/.gitnexus). Shows previously analyzed repos."
     ),
 )
 def git_analysis_list_indexed() -> dict[str, Any]:
-    """List all repositories in the global GitNexus registry."""
+    """list all repositories in the global GitNexus registry."""
     try:
         # Use "." as dummy path — list-repos is global, not repo-specific
         b = _bridge(".")

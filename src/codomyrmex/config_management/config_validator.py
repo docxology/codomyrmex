@@ -55,8 +55,8 @@ class ValidationResult:
 
     Attributes:
         valid: Whether the config passed validation.
-        errors: List of error messages.
-        warnings: List of warning messages.
+        errors: list of error messages.
+        warnings: list of warning messages.
         config: Final config with defaults applied.
     """
 
@@ -70,7 +70,7 @@ class ConfigSchema:
     """Declarative configuration schema with validation.
 
     Args:
-        fields: Dict mapping field name to :class:`SchemaField`.
+        fields: dict mapping field name to :class:`SchemaField`.
 
     Example::
 
@@ -159,7 +159,7 @@ class ConfigSchema:
         """Get all default values.
 
         Returns:
-            Dict of field name to default value (excluding None defaults).
+            dict of field name to default value (excluding None defaults).
         """
         return {
             name: f.default for name, f in self._fields.items() if f.default is not None
@@ -169,7 +169,7 @@ class ConfigSchema:
         """Describe the schema as a list of field descriptions.
 
         Returns:
-            List of field metadata dicts.
+            list of field metadata dicts.
         """
         return [
             {

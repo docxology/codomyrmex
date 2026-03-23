@@ -158,7 +158,7 @@ class KnowledgeRouter:
             n: Maximum number of experts to return.
 
         Returns:
-            List of (agent_id, score) tuples, descending.
+            list of (agent_id, score) tuples, descending.
 
         """
         if not self._experts:

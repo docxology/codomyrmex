@@ -54,9 +54,10 @@ We welcome contributions in various forms, including but not limited to:
 ### PR Process
 
 1.  Ensure your code builds and all tests pass locally.
-2.  Submit your pull request to the appropriate branch in the main Codomyrmex repository.
-3.  The maintainers will review your PR. Be prepared for discussions and make adjustments based on feedback.
-4.  Once approved and all checks pass, your PR will be merged.
+2.  Optional: use local diff review and SARIF triage helpers (`scripts/review/`, Bandit SARIF from CI artifacts) — see [Code review and SARIF](../development/code-review-and-sarif.md).
+3.  Submit your pull request to the appropriate branch in the main Codomyrmex repository.
+4.  The maintainers will review your PR. Be prepared for discussions and make adjustments based on feedback.
+5.  Once approved and all checks pass, your PR will be merged.
 
 ## Dependency Management
 

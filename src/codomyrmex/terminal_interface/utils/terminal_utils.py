@@ -314,7 +314,7 @@ class CommandRunner:
             timeout: Timeout in seconds
 
         Returns:
-            Dict with 'returncode', 'stdout', 'stderr', 'success'
+            dict with 'returncode', 'stdout', 'stderr', 'success'
         """
         if show_output:
             print(self.formatter.info(f"Running: {' '.join(command)}"))

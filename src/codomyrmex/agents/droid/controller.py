@@ -101,7 +101,7 @@ class DroidConfig:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> DroidConfig:
-        """From Dict.
+        """From dict.
 
         Args:        cls: Parameter for the operation.        data: Data to process.
 
@@ -137,7 +137,7 @@ class DroidConfig:
         mapping: dict[str, Any] = {}
 
         def set_if_present(name: str, transform: Callable[[str], Any]) -> None:
-            """Set mapping value if environment variable is present."""
+            """set mapping value if environment variable is present."""
             env_val = os.environ.get(f"{prefix}{name.upper()}")
             if env_val is not None:
                 mapping[name] = transform(env_val)

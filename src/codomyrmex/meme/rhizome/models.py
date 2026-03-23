@@ -25,7 +25,7 @@ class Node:
         id: Unique identifier.
         content: Payload (e.g. meme content).
         node_type: Classification.
-        connections: Set of connected node IDs.
+        connections: set of connected node IDs.
     """
 
     id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
@@ -66,7 +66,7 @@ class Graph:
 
     Attributes:
         nodes: Map of ID to Node.
-        edges: List of Edges.
+        edges: list of Edges.
     """
 
     nodes: dict[str, Node] = field(default_factory=dict)

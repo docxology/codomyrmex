@@ -67,7 +67,7 @@ class TestCacheTTLBehavior:
     """Verify that the cache respects TTL expiry."""
 
     def test_expired_cache_is_rebuilt(self) -> None:
-        """Set cache with an expiry in the past → next access should rebuild."""
+        """set cache with an expiry in the past → next access should rebuild."""
         from codomyrmex.agents.pai.mcp import discovery as mcp_bridge
 
         # Place a sentinel value into the cache with an already-expired TTL
@@ -89,7 +89,7 @@ class TestCacheTTLBehavior:
         mcp_bridge.invalidate_tool_cache()
 
     def test_active_cache_is_not_expired(self) -> None:
-        """Set cache with a future expiry → should be considered valid."""
+        """set cache with a future expiry → should be considered valid."""
         from codomyrmex.agents.pai.mcp import discovery as mcp_bridge
 
         sentinel = [("sentinel", "desc", None, {})]

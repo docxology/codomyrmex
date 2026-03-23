@@ -90,7 +90,7 @@ class ToolTester:
 
         Args:
             tool_name: Name of tool to test
-            test_cases: List of dicts with 'arguments' and optional 'expected'
+            test_cases: list of dicts with 'arguments' and optional 'expected'
 
         Returns:
             TestSuite with results
@@ -446,7 +446,7 @@ class TestMCPClient:
         )
 
     async def list_tools(self) -> dict[str, Any]:
-        """List available tools."""
+        """list available tools."""
         return await self.server.handle_request(
             {
                 "jsonrpc": "2.0",
@@ -472,7 +472,7 @@ class TestMCPClient:
         )
 
     async def list_resources(self) -> dict[str, Any]:
-        """List available resources."""
+        """list available resources."""
         return await self.server.handle_request(
             {
                 "jsonrpc": "2.0",

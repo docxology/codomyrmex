@@ -137,7 +137,7 @@ class AudioFormatError(AudioError):
         Args:
             message: The error message
             format_type: The invalid format
-            supported_formats: List of supported formats
+            supported_formats: list of supported formats
             **kwargs: Additional context
 
         """
@@ -200,7 +200,7 @@ class ProviderNotAvailableError(AudioError):
         Args:
             message: The error message
             provider_name: Name of the provider
-            missing_packages: List of missing packages
+            missing_packages: list of missing packages
             **kwargs: Additional context
 
         """
@@ -232,7 +232,7 @@ class VoiceNotFoundError(AudioError):
         Args:
             message: The error message
             voice_id: The missing voice ID
-            available_voices: List of available voices
+            available_voices: list of available voices
             **kwargs: Additional context
 
         """

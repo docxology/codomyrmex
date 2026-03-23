@@ -101,7 +101,7 @@ class EventStore:
             to_seq: End sequence (inclusive). 0 = latest.
 
         Returns:
-            List of events in the range.
+            list of events in the range.
         """
         with self._lock:
             if to_seq <= 0:
@@ -140,7 +140,7 @@ class EventStore:
             return [e for e in self._events if from_time <= e.timestamp <= to_time]
 
     def topics(self) -> list[str]:
-        """List all known topics."""
+        """list all known topics."""
         with self._lock:
             return sorted(self._topic_index.keys())
 

@@ -51,7 +51,7 @@ def cli_commands():
             ),
         },
         "exporters": {
-            "help": "List available export formats",
+            "help": "list available export formats",
             "handler": lambda: print(
                 "Available FPF export formats:\n"
                 "- json\n"
@@ -167,7 +167,7 @@ class FPFClient:
             filters: Optional filters
 
         Returns:
-            List of matching Pattern objects
+            list of matching Pattern objects
         """
         if not self.spec:
             raise ValueError(

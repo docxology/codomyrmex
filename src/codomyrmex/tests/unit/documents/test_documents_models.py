@@ -48,13 +48,13 @@ class TestDocumentModel:
         doc = Document(content="Hello", format=DocumentFormat.TEXT)
         assert doc.get_content_as_string() == "Hello"
 
-        # Dict content
+        # dict content
         doc = Document(content={"key": "value"}, format=DocumentFormat.JSON)
         content_str = doc.get_content_as_string()
         assert "key" in content_str
         assert "value" in content_str
 
-        # List content
+        # list content
         doc = Document(content=[1, 2, 3], format=DocumentFormat.JSON)
         content_str = doc.get_content_as_string()
         assert "1" in content_str

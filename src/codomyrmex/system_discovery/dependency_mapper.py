@@ -86,7 +86,7 @@ class DependencyMapper:
         """Build the full dependency graph.
 
         Returns:
-            Dict with ``total_modules``, ``total_edges``,
+            dict with ``total_modules``, ``total_edges``,
             ``edges``, ``in_degree``, ``out_degree``, ``cycles``.
         """
         start = time.monotonic()
@@ -185,7 +185,7 @@ class DependencyMapper:
             module: Module name.
 
         Returns:
-            List of module names this module imports from.
+            list of module names this module imports from.
         """
         mod_dir = self._root / module
         if not mod_dir.exists():
@@ -207,7 +207,7 @@ class DependencyMapper:
             module: Module name.
 
         Returns:
-            List of module names that import from this module.
+            list of module names that import from this module.
         """
         dependents: set[str] = set()
 

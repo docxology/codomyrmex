@@ -217,7 +217,7 @@ class SBOMGenerator:
         """Get a brief summary of the SBOM.
 
         Returns:
-            Dict with ``total_components``, ``from_lock``, ``project_version``.
+            dict with ``total_components``, ``from_lock``, ``project_version``.
         """
         lock_deps = self._parse_lock_deps()
         pyproject_deps = self._parse_pyproject_deps()

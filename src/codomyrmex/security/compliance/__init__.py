@@ -146,7 +146,7 @@ class PolicyChecker(ControlChecker):
     def __init__(
         self,
         control_id: str,
-        check_fn: Any,  # Callable[[Dict], bool]
+        check_fn: Any,  # Callable[[dict], bool]
         pass_message: str = "Control passed",
         fail_message: str = "Control failed",
         remediation: str = "",
@@ -226,7 +226,7 @@ class ComplianceChecker:
         return self._controls.get(control_id)
 
     def list_controls(self) -> list[Control]:
-        """List all controls."""
+        """list all controls."""
         return list(self._controls.values())
 
     def _get_report_id(self) -> str:

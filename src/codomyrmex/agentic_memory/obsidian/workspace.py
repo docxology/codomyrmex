@@ -32,7 +32,7 @@ def list_workspaces(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List all saved workspaces.
+    """list all saved workspaces.
 
     Maps to ``obsidian workspaces``.
     """
@@ -87,7 +87,7 @@ def list_tabs(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List open tabs.
+    """list open tabs.
 
     Maps to ``obsidian tabs``.
     """
@@ -120,7 +120,7 @@ def list_recents(
     *,
     vault: str | None = None,
 ) -> list[str]:
-    """List recently opened files.
+    """list recently opened files.
 
     Maps to ``obsidian recents``.
     """

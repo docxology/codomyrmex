@@ -226,7 +226,7 @@ class CursorClient(IDEClient):
         return self.get_capabilities()["models"]
 
     def set_model(self, model: str) -> bool:
-        """Set the active AI model."""
+        """set the active AI model."""
         return model in self.get_models()
 
 

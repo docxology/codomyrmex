@@ -47,7 +47,7 @@ class OllamaConfig:
     # Model preferences
     default_model: str = "llama3.1:latest"  # Default model to use
     preferred_models: list[str] = (
-        None  # List of preferred models (fallback order)  # type: ignore
+        None  # list of preferred models (fallback order)  # type: ignore
     )
 
     # Execution defaults
@@ -458,7 +458,7 @@ class ConfigManager:
         Get list of available models from Ollama server.
 
         Returns:
-            List of model names available in Ollama
+            list of model names available in Ollama
         """
         if not self.config:
             return []

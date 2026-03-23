@@ -103,7 +103,7 @@ class AccessControlSystem:
         return False
 
     def list_permissions(self, user_id: str) -> list[AccessPermission]:
-        """List all permissions for a user."""
+        """list all permissions for a user."""
         return self.permissions.get(user_id, [])
 
     def check_access(self, user_id: str, resource: str, permission_type: str) -> bool:

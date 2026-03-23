@@ -165,3 +165,10 @@ tail -f ~/.hermes/logs/gateway.log \
 - [Environment](environment.md) — HERMES_HOME reference
 - [Troubleshooting](troubleshooting.md) — Common issues
 - [skills.md](skills.md) — `.codomyrmex/` skill profile is per cwd, not per `HERMES_HOME`
+
+## Navigation
+
+- **Index**: [README.md](README.md)
+- **Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Source**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)

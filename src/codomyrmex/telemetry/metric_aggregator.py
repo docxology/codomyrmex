@@ -68,7 +68,7 @@ class MetricAggregator:
     def gauge(
         self, name: str, value: float, labels: dict[str, str] | None = None
     ) -> None:
-        """Set a gauge value."""
+        """set a gauge value."""
         key = self._get_key(name, labels)
         self._gauges[key] = value
 
@@ -93,7 +93,7 @@ class MetricAggregator:
         """Get histogram statistics.
 
         Returns:
-            Dict with count, sum, min, max, mean, p50, p95, p99.
+            dict with count, sum, min, max, mean, p50, p95, p99.
         """
         values = sorted(self._histograms.get(name, []))
         if not values:

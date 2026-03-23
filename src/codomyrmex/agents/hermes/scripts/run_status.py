@@ -24,7 +24,7 @@ def run_status(*, backend: str = "auto", model: str = "hermes3") -> dict[str, An
         model: Ollama model name.
 
     Returns:
-        Dict with keys: ``active_backend``, ``cli_available``,
+        dict with keys: ``active_backend``, ``cli_available``,
         ``ollama_available``, ``ollama_model``, ``success``.
     """
     client = HermesClient(

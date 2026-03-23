@@ -56,14 +56,14 @@ def paperclip_execute(
 @mcp_tool(
     category="paperclip",
     description=(
-        "List all companies managed by the Paperclip instance via the REST API."
+        "list all companies managed by the Paperclip instance via the REST API."
     ),
 )
 def paperclip_list_companies(
     base_url: str = "http://localhost:3100",
     api_key: str | None = None,
 ) -> dict[str, Any]:
-    """List companies from the Paperclip API.
+    """list companies from the Paperclip API.
 
     Args:
         base_url: Paperclip server URL.

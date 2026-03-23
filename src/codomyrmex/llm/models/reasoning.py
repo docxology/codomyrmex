@@ -166,7 +166,7 @@ class ReasoningTrace:
         self.total_confidence = self.mean_confidence
 
     def set_conclusion(self, conclusion: Conclusion) -> None:
-        """Set the trace conclusion."""
+        """set the trace conclusion."""
         self.conclusion = conclusion
         self.total_confidence = self.mean_confidence * 0.7 + conclusion.confidence * 0.3
 

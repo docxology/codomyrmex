@@ -49,7 +49,7 @@ def cli_commands():
     """Return CLI commands for the database_management module."""
     return {
         "adapters": {
-            "help": "List available database adapters",
+            "help": "list available database adapters",
             "handler": lambda **kwargs: print(
                 "Database Adapters:\n"
                 "  - sqlite    (built-in)\n"

@@ -39,7 +39,7 @@ def flag_create(
         percentage: Rollout percentage 0.0–100.0 (default 100.0 = fully on).
 
     Returns:
-        Dict with ``key``, ``enabled``, and ``percentage`` keys.
+        dict with ``key``, ``enabled``, and ``percentage`` keys.
     """
     from codomyrmex.feature_flags.evaluation import FlagDefinition
 
@@ -78,7 +78,7 @@ def flag_is_enabled(key: str, user_id: str = "") -> bool:
 @mcp_tool(
     category="feature_flags",
     description=(
-        "List all feature flags currently defined in this session. "
+        "list all feature flags currently defined in this session. "
         "Returns a list of dicts with key, enabled, and percentage."
     ),
 )
@@ -86,7 +86,7 @@ def flag_list() -> list[dict]:
     """Return all flags registered in the current session.
 
     Returns:
-        List of dicts with ``key``, ``enabled``, and ``percentage`` keys.
+        list of dicts with ``key``, ``enabled``, and ``percentage`` keys.
     """
     return [
         {"key": f.name, "enabled": f.enabled, "percentage": f.percentage}

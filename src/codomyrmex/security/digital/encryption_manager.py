@@ -71,7 +71,7 @@ class EncryptionManager:
                 for protecting it (e.g. restrict file permissions, use secure storage).
 
         Returns:
-            Tuple of (private_key_pem, public_key_pem)
+            tuple of (private_key_pem, public_key_pem)
         """
         if not CRYPTOGRAPHY_AVAILABLE:
             raise ImportError("cryptography package not available")
@@ -109,7 +109,7 @@ class EncryptionManager:
             salt: Optional salt. If None, random salt is generated.
 
         Returns:
-            Tuple of (key, salt)
+            tuple of (key, salt)
         """
         if not CRYPTOGRAPHY_AVAILABLE:
             raise ImportError("cryptography package not available")
@@ -135,7 +135,7 @@ def encrypt_sensitive_data(data: str | bytes) -> dict[str, bytes]:
         data: Plaintext string or bytes to encrypt.
 
     Returns:
-        Dict with 'encrypted_data' (bytes) and 'key' (bytes, the Fernet key).
+        dict with 'encrypted_data' (bytes) and 'key' (bytes, the Fernet key).
     """
     manager = EncryptionManager()
     encrypted = manager.encrypt(data)

@@ -84,7 +84,7 @@ class InMemoryFlagStore(FlagStore):
             return self._data.get(key)
 
     def set(self, key: str, value: Any) -> None:
-        """Set the value."""
+        """set the value."""
         with self._lock:
             self._data[key] = value
 
@@ -136,7 +136,7 @@ class FileFlagStore(FlagStore):
         return data.get(key)
 
     def set(self, key: str, value: Any) -> None:
-        """Set the value."""
+        """set the value."""
         with self._lock:
             data = self._read()
             data[key] = value

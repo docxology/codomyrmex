@@ -50,7 +50,7 @@ def cli_commands():
     """Return CLI commands for the pattern_matching module."""
     return {
         "patterns": {
-            "help": "List known code patterns (repository index, symbols, dependencies, etc.)",
+            "help": "list known code patterns (repository index, symbols, dependencies, etc.)",
             "handler": lambda **kwargs: print(
                 "Known patterns:\n"
                 "  - repository_index: Index repository structure\n"

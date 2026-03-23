@@ -64,7 +64,7 @@ class AgentPool:
 
     @property
     def available_agents(self) -> list[SwarmAgent]:
-        """List of agents with available capacity."""
+        """list of agents with available capacity."""
         return [a for a in self._agents.values() if a.available]
 
     def get(self, agent_id: str) -> SwarmAgent | None:

@@ -128,7 +128,7 @@ class EventValidationError(EventError):
     Attributes:
         message: Error description.
         event_type: Type of event that failed validation.
-        validation_errors: List of specific validation failures.
+        validation_errors: list of specific validation failures.
         schema: Name of the schema used for validation.
     """
 
@@ -182,7 +182,7 @@ class EventDeliveryError(EventError):
     Attributes:
         message: Error description.
         event_id: Identifier of the event.
-        failed_subscribers: List of subscribers that failed to receive the event.
+        failed_subscribers: list of subscribers that failed to receive the event.
         retry_count: Number of delivery attempts made.
     """
 

@@ -56,7 +56,7 @@ class SectionManager:
         """Extract a group of patterns and their related content.
 
         Args:
-            pattern_ids: List of pattern IDs to extract
+            pattern_ids: list of pattern IDs to extract
             include_dependencies: Whether to include dependent patterns
 
         Returns:
@@ -99,7 +99,7 @@ class SectionManager:
         """Extract a cluster of concepts and their related patterns.
 
         Args:
-            concept_names: List of concept names to extract
+            concept_names: list of concept names to extract
             include_related_patterns: Whether to include patterns that define/use these concepts
 
         Returns:
@@ -140,7 +140,7 @@ class SectionManager:
         """Extract relationships of specific types.
 
         Args:
-            relationship_types: List of relationship types to extract
+            relationship_types: list of relationship types to extract
             include_patterns: Whether to include related patterns
 
         Returns:
@@ -178,16 +178,16 @@ class SectionManager:
         return result
 
     def list_parts(self) -> list[str]:
-        """List all part identifiers in the specification.
+        """list all part identifiers in the specification.
 
         Returns:
-            List of part identifiers
+            list of part identifiers
         """
         parts = {p.part for p in self.spec.patterns if p.part}
         return sorted(parts)
 
     def list_pattern_groups(self, by_part: bool = False) -> dict[str, list[str]]:
-        """List pattern groups.
+        """list pattern groups.
 
         Args:
             by_part: If True, group by part; if False, return flat list

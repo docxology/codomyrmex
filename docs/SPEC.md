@@ -1,10 +1,12 @@
 # docs - Functional Specification
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
 Documentation directory providing comprehensive guides, references, and user-facing content about the Codomyrmex platform. Documentation is organized by audience and purpose for clear navigation and discovery.
+
+**Authority**: The repository root [SPEC.md](../SPEC.md) defines the whole-project functional specification. This file adds **docs-surface** requirements only; on conflict, root `SPEC.md` wins.
 
 ## Design Principles
 

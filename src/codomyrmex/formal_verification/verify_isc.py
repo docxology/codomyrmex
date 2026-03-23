@@ -64,7 +64,7 @@ def verify_criteria_consistency(
     be translated are skipped (not errors).
 
     Args:
-        criteria: List of dicts with keys "id" and "description".
+        criteria: list of dicts with keys "id" and "description".
             Example: [{"id": "ISC-C1", "description": "Response time under 200ms"}]
         timeout_ms: Solver timeout in milliseconds.
 

@@ -162,7 +162,7 @@ class ThreatDetector:
         """Evaluate a request against all rules.
 
         Returns:
-            List of ThreatEvent for each triggered rule.
+            list of ThreatEvent for each triggered rule.
         """
         threats: list[ThreatEvent] = []
         for rule in self._rules:

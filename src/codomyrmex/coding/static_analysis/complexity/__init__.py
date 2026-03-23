@@ -253,7 +253,7 @@ class ComplexityAnalyzer:
             metrics: FileMetrics to filter.
 
         Returns:
-            List of FunctionMetrics above threshold.
+            list of FunctionMetrics above threshold.
         """
         return [
             f

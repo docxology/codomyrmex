@@ -109,7 +109,7 @@ class TestConfigurationManagerEnvVars:
         yaml_file = tmp_path / "myapp.yaml"
         yaml_file.write_text(yaml.dump({"host": "filehost", "port": 3000}))
 
-        # Set env var with the correct prefix
+        # set env var with the correct prefix
         saved = {k: os.environ.get(k) for k in ("MYAPP_HOST", "MYAPP_PORT")}
         os.environ["MYAPP_HOST"] = "envhost"
         os.environ["MYAPP_PORT"] = "9999"

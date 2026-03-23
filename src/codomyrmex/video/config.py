@@ -147,7 +147,7 @@ def get_config() -> VideoConfig:
 
 
 def set_config(config: VideoConfig) -> None:
-    """Set the global video configuration."""
+    """set the global video configuration."""
     global _config
     _config = config
 

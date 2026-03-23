@@ -6,8 +6,8 @@
   <br>
   <img src="https://img.shields.io/badge/Codomyrmex-v1.2.7-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Modules-128-green?style=for-the-badge" alt="Modules">
-  <img src="https://img.shields.io/badge/MCP_Tools-599-orange?style=for-the-badge" alt="MCP Tools">
-  <img src="https://img.shields.io/badge/Workflows-40-purple?style=for-the-badge" alt="Workflows">
+  <img src="https://img.shields.io/badge/MCP_Tools-600-orange?style=for-the-badge" alt="MCP Tools">
+  <img src="https://img.shields.io/badge/Workflows-36-purple?style=for-the-badge" alt="Workflows">
   <img src="https://img.shields.io/badge/Zero--Mock-100%25-brightgreen?style=for-the-badge" alt="Zero Mock">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
   <br>
@@ -19,14 +19,14 @@
   <img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/code%20style-ruff-D7FF64?style=flat-square&logo=ruff&logoColor=black" alt="Ruff">
   <img src="https://img.shields.io/badge/types-ty-blue?style=flat-square" alt="ty">
-  <img src="https://img.shields.io/badge/tests-39%2C470-brightgreen?style=flat-square" alt="Tests">
+  <img src="https://img.shields.io/badge/tests-39%2C473-brightgreen?style=flat-square" alt="Tests">
 </p>
 
 # 🐜 Codomyrmex
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **599** `@mcp_tool` decorators in production sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **39,470** collected tests (`pytest --collect-only --no-cov`), **1,029+ documentation pages**, and **40 GitHub Actions workflows**.
+Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **600** production `@mcp_tool` lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **39,473** collected tests (`pytest --collect-only --no-cov`), **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
 
 ```bash
 # Install
@@ -52,10 +52,10 @@ uv run codomyrmex doctor --all
 - [Agent Dispatch Architecture](#-agent-dispatch-architecture)
 - [Testing Philosophy](#-testing-philosophy)
 - [Configuration Architecture](#️-configuration-architecture)
-- [Personal AI Dashboard](#️-personal-ai-dashboard)
+- [Personal AI Dashboard](#-personal-ai-dashboard)
 - [Quick Start](#-quick-start)
 - [Documentation Standards](#-documentation-standards)
-- [GitHub Actions Workflows](#-githubbr-directory-overview)
+- [GitHub Actions Workflows](#github-directory-overview)
 - [License](#-license)
 
 ---
@@ -65,8 +65,8 @@ uv run codomyrmex doctor --all
 | | |
 |---|---|
 | 🧩 **128 Top-Level Modules** | Packages under `src/codomyrmex/` — composable, independently versioned, zero-mock tested |
-| 🤖 **599 MCP Tool Decorators** | See [inventory](docs/reference/inventory.md) |
-| 🧪 **39,470 Collected Tests** | `uv run pytest --collect-only -q --no-cov`; zero-mock policy |
+| 🤖 **600 MCP Tool Decorators** | See [inventory](docs/reference/inventory.md) |
+| 🧪 **39,473 Collected Tests** | `uv run pytest --collect-only -q --no-cov`; zero-mock policy |
 | 🔒 **Security First** | GitGuardian, SBOM, GGSHIELD pre-commit, detect-secrets integration |
 | 🎛️ **13+ Agent Providers** | Claude, Gemini, GPT-4o, DeepSeek, Mistral, Jules, Codex, Pi, and more |
 | 🔬 **ML Research Ready** | LoRA, RLHF, DPO, distillation, quantization, NAS, Mamba SSM, autograd |
@@ -483,7 +483,7 @@ sequenceDiagram
     User->>CLI: codomyrmex run --task "analyze codebase"
     CLI->>Orchestrator: Create workflow
     Orchestrator->>MCP: Register available tools
-    MCP->>Tools: Discover ~604 tools (128 top-level modules)
+    MCP->>Tools: Discover ~600 tools (128 top-level modules)
     Orchestrator->>Agents: Dispatch agent
     Agents->>LLM: Generate completion (Gemini 2.5 Pro)
     LLM-->>Agents: Response + tool calls
@@ -540,10 +540,10 @@ codomyrmex/
 |:---|:---:|
 | **Total Modules** | 128 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
-| **Collected tests** | 39,470 (`pytest --collect-only --no-cov`) |
+| **Collected tests** | 39,473 (`pytest --collect-only --no-cov`) |
 | **Documentation Files** | 1,029+ |
-| **GitHub Workflows** | 40 |
-| **MCP Tools** | 599 (`@mcp_tool` lines, production tree) |
+| **GitHub Workflows** | 36 |
+| **MCP Tools** | 600 (`@mcp_tool` lines, production tree) |
 | **`mcp_tools.py` files** | 149 (non-test) |
 | **PAI Skills** | 81 installed |
 | **RASP Doc Compliance** | 128/128 |
@@ -824,7 +824,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>128 modules · 604 MCP tools · 34,562 tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>128 modules · 600 MCP tools · 39,473 tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

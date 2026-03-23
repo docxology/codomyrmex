@@ -39,7 +39,7 @@ def cli_commands():
             ),
         },
         "transactions": {
-            "help": "List recent wallet transactions",
+            "help": "list recent wallet transactions",
             "args": ["--user-id", "--limit"],
             "handler": lambda user_id=None, limit=10: print(
                 f"Listing last {limit} transactions"

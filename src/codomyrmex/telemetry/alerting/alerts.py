@@ -126,7 +126,7 @@ class AlertEngine:
         """Evaluate all rules against provided metrics.
 
         Returns:
-            List of fired alerts.
+            list of fired alerts.
         """
         fired: list[Alert] = []
         for rule in self._rules:

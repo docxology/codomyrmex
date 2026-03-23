@@ -204,7 +204,7 @@ def cli_commands():
     """Return CLI commands for the API module."""
 
     def _list_routes():
-        """List API routes."""
+        """list API routes."""
         print("API Module - Route Types:")
         print("  REST API routes (via RESTAPI / APIRouter)")
         print("  GraphQL endpoints (via GraphQLAPI / GraphQLSchema)")

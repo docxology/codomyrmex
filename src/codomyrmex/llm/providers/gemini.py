@@ -186,7 +186,7 @@ class GeminiProvider(LLMProvider):
     # ---- models ------------------------------------------------------------
 
     def list_models(self) -> list[str]:
-        """List known Gemini models."""
+        """list known Gemini models."""
         return list(GEMINI_MODELS)
 
     def _default_model(self) -> str:

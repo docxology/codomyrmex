@@ -54,7 +54,7 @@ class ExtractFunctionRefactoring(Refactoring):
         the specified line range falls within the file's bounds.
 
         Returns:
-            List of warning messages. Empty if all checks pass.
+            list of warning messages. Empty if all checks pass.
 
         Example:
             >>> refactoring = ExtractFunctionRefactoring(

@@ -107,7 +107,7 @@ class DocumentationReportingMixin:
             {
                 "area": "Process Improvement",
                 "priority": "medium",
-                "recommendation": "Set up automated documentation validation in CI/CD pipeline",
+                "recommendation": "set up automated documentation validation in CI/CD pipeline",
                 "count": 0,
             }
         )

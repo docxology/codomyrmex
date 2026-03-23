@@ -299,7 +299,7 @@ class SkillRegistry:
         return results
 
     def list_all(self) -> list[SkillMetadata]:
-        """List all skill metadata."""
+        """list all skill metadata."""
         return [s.metadata for s in self._skills.values()]
 
     def execute(self, skill_id: str, **kwargs) -> Any:

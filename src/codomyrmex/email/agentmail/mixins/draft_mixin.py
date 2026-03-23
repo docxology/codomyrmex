@@ -81,14 +81,14 @@ class DraftMixin:
         inbox_id: str | None = None,
         limit: int = 50,
     ) -> list[AgentMailDraft]:
-        """List drafts in an inbox.
+        """list drafts in an inbox.
 
         Args:
             inbox_id: Inbox to list drafts from. Defaults to AGENTMAIL_DEFAULT_INBOX.
             limit: Maximum number of drafts to return.
 
         Returns:
-            List of AgentMailDraft objects.
+            list of AgentMailDraft objects.
         """
         resolved_inbox = self._resolve_inbox_id(inbox_id)
         try:

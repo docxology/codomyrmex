@@ -115,9 +115,9 @@ class SemanticRouter:
         """Route a batch of texts.
 
         Args:
-            texts: List of input texts
+            texts: list of input texts
 
         Returns:
-            List of RouteMatch results
+            list of RouteMatch results
         """
         return [self.route(t) for t in texts]

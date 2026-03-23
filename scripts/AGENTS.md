@@ -94,6 +94,7 @@ Maintenance and automation utilities for project management.
 - `plugin_system/` – Directory containing plugin_system components
 - `prompt_testing/` – Directory containing prompt_testing components
 - `reports/` – Directory containing reports components
+- `review/` – PR diff heuristics, Python structural checks, Bandit JSON→SARIF, SARIF merge/summary (`pr_analyzer.py`, `code_quality_checker.py`, `review_report_generator.py`, `sarif_merge.py`, `bandit_json_to_sarif.py`, `sarif_utils.py`); see [review/README.md](review/README.md), [review/AGENTS.md](review/AGENTS.md)
 - `rna/` – Directory containing rna components
 - `run_all_scripts.py` – Project file
 - `scrape/` – Directory containing scrape components

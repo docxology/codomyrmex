@@ -6,54 +6,83 @@
 
 Agent coordination document for the Hermes documentation subfolder. Guides AI agents navigating Hermes-related documentation and scripts.
 
-## Documentation Files (22)
+## Documentation files (29)
 
-Includes **`assets/README.md`** for optional static diagram exports (primary diagrams are Mermaid blocks in the Markdown files below).
+Twenty-eight topical Markdown files in this folder plus **`assets/README.md`** (optional diagram exports; primary diagrams are Mermaid in the guides below). Hermes doc suite version **v0.4.0** applies to this folder; Copilot ACP is documented under `copilot_acp.md` at that same suite revision unless upstream release notes say otherwise.
 
-### Getting Started
+### Index
 
-| File               | Description                                      |
-| :----------------- | :----------------------------------------------- |
-| `README.md`        | Index, overview, and quick start                 |
-| `setup_guide.md`   | Complete new-instance setup (from official docs) |
-| `cli_reference.md` | All CLI commands and slash commands              |
+| File | Description |
+| :--- | :--- |
+| `README.md` | Overview, quick start, documentation map |
+| `AGENTS.md` | This coordination file |
 
-### Architecture & Configuration
+### Getting started
 
-| File                        | Description                                        |
-| :-------------------------- | :------------------------------------------------- |
-| `architecture.md`           | Core agent loop, components, LLM provider backends |
-| `codomyrmex_integration.md` | Deep dive into Codomyrmex interfaces and MCP       |
-| `configuration.md`          | config.yaml reference, YAML pitfalls               |
-| `copilot_acp.md`            | GitHub Copilot ACP backend (v0.3.0)                |
-| `environment.md`            | HERMES_HOME, .env, API key management              |
-| `models.md`                 | Model selection, OpenRouter, providers             |
-| `personalities.md`          | Personality system and custom personas             |
+| File | Description |
+| :--- | :--- |
+| `setup_guide.md` | New-instance setup (aligned with official docs) |
+| `cli_reference.md` | CLI and slash commands |
 
-### Platform Integration
+### Architecture and configuration
 
-| File                | Description                            |
-| :------------------ | :------------------------------------- |
-| `gateway.md`        | Gateway daemon, platform adapters      |
-| `telegram.md`       | Telegram bot setup, 409 Conflict fixes |
-| `launchd.md`        | macOS launchd service management       |
-| `multi_instance.md` | Multi-bot deployment patterns          |
+| File | Description |
+| :--- | :--- |
+| `architecture.md` | Agent loop, components, LLM backends |
+| `copilot_acp.md` | GitHub Copilot ACP backend |
+| `codomyrmex_integration.md` | Codomyrmex interfaces and MCP |
+| `configuration.md` | `config.yaml`, YAML pitfalls |
+| `environment.md` | `HERMES_HOME`, `.env`, API keys |
+| `models.md` | Model selection, providers, limits |
+| `personalities.md` | Personas |
 
-### Agent Capabilities
+### Platform integration
 
-| File          | Description                           |
-| :------------ | :------------------------------------ |
-| `sessions.md` | Session lifecycle, state.db, FTS5     |
-| `skills.md`   | Hermes skills + Codomyrmex unified registry, profile, MCP merge |
-| `tools.md`    | Tool registry, MCP integration        |
-| `cron.md`     | Scheduled jobs, proactive messaging   |
+| File | Description |
+| :--- | :--- |
+| `gateway.md` | Gateway daemon and adapters |
+| `telegram.md` | Telegram setup and 409 Conflict |
+| `launchd.md` | macOS `launchd` |
+| `multi_instance.md` | Multiple bots on one host |
+
+### Agent capabilities
+
+| File | Description |
+| :--- | :--- |
+| `sessions.md` | Sessions, `state.db`, FTS5 |
+| `skills.md` | Skills + Codomyrmex registry, profile, MCP merge |
+| `tools.md` | Tool registry, MCP |
+| `cron.md` | Scheduled jobs, proactive messaging |
+
+### Plugins, @-context, and cache
+
+| File | Description |
+| :--- | :--- |
+| `plugins.md` | Plugins from Git, hooks |
+| `context-references.md` | `@` references |
+| `agent-cache.md` | Agent cache |
 
 ### Operations
 
-| File                 | Description                           |
-| :------------------- | :------------------------------------ |
-| `troubleshooting.md` | 12 issue patterns with diagnosis/fixes |
-| `security.md`        | API key hygiene, access control       |
+| File | Description |
+| :--- | :--- |
+| `troubleshooting.md` | Common failures and fixes |
+| `security.md` | Keys, access control |
+| `gotchas.md` | Operational lessons |
+
+### Instance management
+
+| File | Description |
+| :--- | :--- |
+| `instance_templates.md` | Templates and spawn workflow |
+| `instances.md` | Active instances |
+| `new_instance_questionnaire.md` | New-instance checklist |
+
+### Assets
+
+| File | Description |
+| :--- | :--- |
+| `assets/README.md` | Optional static diagram exports |
 
 ## Scripts (`scripts/agents/hermes/`)
 

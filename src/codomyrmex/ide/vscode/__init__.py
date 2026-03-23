@@ -93,7 +93,7 @@ class VSCodeClient(IDEClient):
         """Get VS Code capabilities.
 
         Returns:
-            Dict containing available features.
+            dict containing available features.
         """
         return {
             "name": "Visual Studio Code",
@@ -165,7 +165,7 @@ class VSCodeClient(IDEClient):
         """Get list of open files.
 
         Returns:
-            List of file paths.
+            list of file paths.
         """
         if not self._connected:
             return []
@@ -184,10 +184,10 @@ class VSCodeClient(IDEClient):
         return self._connected
 
     def list_extensions(self) -> list[dict[str, Any]]:
-        """List installed extensions.
+        """list installed extensions.
 
         Returns:
-            List of extension metadata.
+            list of extension metadata.
         """
         # Common extensions that might be installed
         return [
@@ -212,10 +212,10 @@ class VSCodeClient(IDEClient):
         ]
 
     def list_commands(self) -> list[str]:
-        """List available commands.
+        """list available commands.
 
         Returns:
-            List of command IDs.
+            list of command IDs.
         """
         return self.get_capabilities()["commands"]
 
@@ -223,7 +223,7 @@ class VSCodeClient(IDEClient):
         """Get workspace settings.
 
         Returns:
-            Dict containing settings.
+            dict containing settings.
         """
         settings_path = self._vscode_dir / "settings.json"
         if settings_path.exists():

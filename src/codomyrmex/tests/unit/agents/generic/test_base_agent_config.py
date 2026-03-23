@@ -97,7 +97,7 @@ class TestBaseAgentConfigExtraction:
         original_config = get_config()
 
         try:
-            # Set AgentConfig value
+            # set AgentConfig value
             test_config = AgentConfig()
             test_config.test_key = "value_from_agent_config"
             set_config(test_config)

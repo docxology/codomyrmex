@@ -101,7 +101,7 @@ def _cmd_status(**kwargs):
 
 
 def _cmd_backends(**kwargs):
-    """List available solver backends."""
+    """list available solver backends."""
     backends = []
     try:
         from .backends.z3_backend import Z3Backend

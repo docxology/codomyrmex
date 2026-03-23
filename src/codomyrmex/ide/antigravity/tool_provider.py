@@ -273,7 +273,7 @@ _TOOL_SCHEMAS: dict[str, dict[str, Any]] = {
         },
     },
     "list_dir": {
-        "description": "List contents of a directory",
+        "description": "list contents of a directory",
         "parameters": {
             "type": "object",
             "properties": {
@@ -461,7 +461,7 @@ class AntigravityToolProvider:
 
     @staticmethod
     def list_all_tools() -> list[str]:
-        """List all known Antigravity tool names.
+        """list all known Antigravity tool names.
 
         Returns:
             Sorted list of tool names.

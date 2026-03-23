@@ -264,7 +264,7 @@ class GeminiClient(
     # =========================================================================
 
     def list_models(self) -> list[dict[str, Any]]:
-        """List available Gemini models."""
+        """list available Gemini models."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:

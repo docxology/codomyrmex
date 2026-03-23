@@ -170,7 +170,7 @@ class EvalHarness:
         """Evaluate all tasks and return summary.
 
         Args:
-            tasks: List of EvalTask objects
+            tasks: list of EvalTask objects
 
         Returns:
             dict with: num_tasks, mean_score, results (per-task summaries)

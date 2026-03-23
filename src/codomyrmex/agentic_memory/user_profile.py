@@ -84,7 +84,7 @@ class UserProfile:
     # ── helpers ──────────────────────────────────────────────────
 
     def set_preference(self, key: str, value: Any) -> None:
-        """Set a user preference.
+        """set a user preference.
 
         Args:
             key: Preference identifier (e.g., "theme", "language").

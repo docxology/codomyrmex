@@ -56,7 +56,7 @@ def agentmail_send_message(
     """Send an email immediately via AgentMail.
 
     Args:
-        to: List of recipient email addresses.
+        to: list of recipient email addresses.
         subject: Email subject line.
         text: Plain-text message body.
         html: Optional HTML message body.
@@ -94,14 +94,14 @@ def agentmail_send_message(
 
 @mcp_tool(
     category="email",
-    description="List messages in an AgentMail inbox.",
+    description="list messages in an AgentMail inbox.",
 )
 def agentmail_list_messages(
     inbox_id: str | None = None,
     limit: int = 20,
     labels: list[str] | None = None,
 ) -> dict[str, Any]:
-    """List the most recent messages in an AgentMail inbox.
+    """list the most recent messages in an AgentMail inbox.
 
     Args:
         inbox_id: Inbox to query. Defaults to AGENTMAIL_DEFAULT_INBOX env var.
@@ -222,10 +222,10 @@ def agentmail_reply_to_message(
 
 @mcp_tool(
     category="email",
-    description="List all AgentMail inboxes accessible with the configured API key.",
+    description="list all AgentMail inboxes accessible with the configured API key.",
 )
 def agentmail_list_inboxes(limit: int = 50) -> dict[str, Any]:
-    """List all inboxes for the current AgentMail account.
+    """list all inboxes for the current AgentMail account.
 
     Args:
         limit: Maximum number of inboxes to return (default 50).
@@ -286,14 +286,14 @@ def agentmail_create_inbox(
 
 @mcp_tool(
     category="email",
-    description="List threads in an AgentMail inbox.",
+    description="list threads in an AgentMail inbox.",
 )
 def agentmail_list_threads(
     inbox_id: str | None = None,
     limit: int = 20,
     labels: list[str] | None = None,
 ) -> dict[str, Any]:
-    """List conversation threads in an AgentMail inbox.
+    """list conversation threads in an AgentMail inbox.
 
     Args:
         inbox_id: Inbox to query. Defaults to AGENTMAIL_DEFAULT_INBOX env var.
@@ -343,7 +343,7 @@ def gmail_send_message(
     """Send an email immediately via the Gmail API (FristonBlanket@gmail.com).
 
     Args:
-        to: List of recipient email addresses.
+        to: list of recipient email addresses.
         subject: Email subject line.
         body_text: Plain-text message body.
         body_html: Optional HTML message body.
@@ -381,7 +381,7 @@ def gmail_send_message(
 @mcp_tool(
     category="email",
     description=(
-        "List messages in the Gmail inbox (FristonBlanket@gmail.com). "
+        "list messages in the Gmail inbox (FristonBlanket@gmail.com). "
         "Supports Gmail search query syntax (e.g. 'is:unread', 'from:user@example.com'). "
         "Requires GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars."
     ),
@@ -390,7 +390,7 @@ def gmail_list_messages(
     query: str = "",
     max_results: int = 20,
 ) -> dict[str, Any]:
-    """List messages in the Gmail inbox, optionally filtered by a Gmail search query.
+    """list messages in the Gmail inbox, optionally filtered by a Gmail search query.
 
     Args:
         query: Gmail search query string (default empty = all messages).
@@ -484,7 +484,7 @@ def gmail_create_draft(
     """Create a Gmail draft without sending it.
 
     Args:
-        to: List of recipient email addresses.
+        to: list of recipient email addresses.
         subject: Email subject line.
         body_text: Plain-text message body.
         body_html: Optional HTML message body.
@@ -529,7 +529,7 @@ def agentmail_create_webhook(
 
     Args:
         url: The HTTPS endpoint URL to receive event payloads.
-        event_types: List of event type strings to subscribe to
+        event_types: list of event type strings to subscribe to
             (e.g., ``["message.received", "message.sent"]``).
         inbox_ids: Scope events to specific inboxes. Defaults to all inboxes.
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 
 def handle_rules_list() -> int:
-    """List all rules with their priority and module."""
+    """list all rules with their priority and module."""
     from codomyrmex.agentic_memory.rules import RuleEngine
 
     engine = RuleEngine()

@@ -42,7 +42,7 @@ def cli_commands():
     """Return CLI commands for the cache module."""
     return {
         "backends": {
-            "help": "List available cache backends",
+            "help": "list available cache backends",
             "handler": lambda **kwargs: print(
                 "Cache Backends:\n"
                 "  - in_memory   (default, dictionary-based)\n"

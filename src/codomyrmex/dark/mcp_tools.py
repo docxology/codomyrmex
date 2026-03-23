@@ -47,10 +47,10 @@ def dark_status() -> dict[str, Any]:
 
 @mcp_tool(
     category="dark",
-    description="List the available dark mode filter presets and their parameter values.",
+    description="list the available dark mode filter presets and their parameter values.",
 )
 def dark_list_presets() -> dict[str, Any]:
-    """List available dark mode presets with their filter parameters.
+    """list available dark mode presets with their filter parameters.
 
     Returns:
         dict with status and presets mapping (name -> filter params).

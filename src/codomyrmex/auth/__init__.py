@@ -46,7 +46,7 @@ def cli_commands():
     """Return CLI commands for the auth module."""
     return {
         "providers": {
-            "help": "List available authentication providers",
+            "help": "list available authentication providers",
             "handler": lambda **kwargs: print(
                 "Auth Providers:\n"
                 f"  - Authenticator: {Authenticator.__name__}\n"

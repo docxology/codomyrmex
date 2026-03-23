@@ -264,7 +264,7 @@ class ObsidianCLI:
         total: bool = False,
         vault: str | None = None,
     ) -> list[str]:
-        """List files in the vault.
+        """list files in the vault.
 
         Maps to ``obsidian files [folder=<path>] [ext=<ext>] [total]``.
         """
@@ -302,7 +302,7 @@ class ObsidianCLI:
         total: bool = False,
         vault: str | None = None,
     ) -> list[str]:
-        """List folders in the vault.
+        """list folders in the vault.
 
         Maps to ``obsidian folders [folder=<path>] [total]``.
         """

@@ -31,7 +31,7 @@ class GeminiFilesMixin:
             raise GeminiError(f"Failed to upload file: {e}") from e
 
     def list_files(self) -> list[dict[str, Any]]:
-        """List all uploaded files."""
+        """list all uploaded files."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:

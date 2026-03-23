@@ -143,7 +143,7 @@ class WasmtimeClient(WASMRuntimeClient):
             return False
 
     def list_instances(self) -> list[WASMInstance]:
-        """List all instances."""
+        """list all instances."""
         return list(self._instances.values())
 
 

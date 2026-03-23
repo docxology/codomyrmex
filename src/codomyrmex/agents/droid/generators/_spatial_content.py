@@ -10,7 +10,7 @@ def generate_ar_vr_content() -> str:
     """Generate AR/VR/XR support module."""
     return '''"""Augmented Reality, Virtual Reality, and Extended Reality support."""
 
-from typing import Optional, Dict, Any
+from typing import Optional, Any
 from .engine_3d import Vector3D, Quaternion
 
 
@@ -59,7 +59,7 @@ class XRInterface:
         """Initialize XR systems."""
         return self.ar_session.start_session()
 
-    def get_mixed_reality_frame(self) -> Dict[str, Any]:
+    def get_mixed_reality_frame(self) -> dict[str, Any]:
         """Get frame data combining real and virtual content."""
         return {
             "camera_pose": self.ar_session.get_camera_pose(),
@@ -73,7 +73,7 @@ def generate_rendering_content() -> str:
     """Generate rendering pipeline module."""
     return '''"""3D Rendering Pipeline."""
 
-from typing import List, Optional
+from typing import Optional
 from .engine_3d import Scene3D, Camera3D, Light3D, Object3D, Vector3D
 
 
@@ -117,21 +117,21 @@ class RenderPipeline:
 
         self._apply_post_effects()
 
-    def _calculate_view_matrix(self, camera: Camera3D) -> List[List[float]]:
+    def _calculate_view_matrix(self, camera: Camera3D) -> list[list[float]]:
         """Calculate view matrix from camera."""
         return [[1.0, 0.0, 0.0, 0.0],
                 [0.0, 1.0, 0.0, 0.0],
                 [0.0, 0.0, 1.0, 0.0],
                 [0.0, 0.0, 0.0, 1.0]]
 
-    def _calculate_projection_matrix(self, camera: Camera3D) -> List[List[float]]:
+    def _calculate_projection_matrix(self, camera: Camera3D) -> list[list[float]]:
         """Calculate projection matrix from camera."""
         return [[1.0, 0.0, 0.0, 0.0],
                 [0.0, 1.0, 0.0, 0.0],
                 [0.0, 0.0, 1.0, 0.0],
                 [0.0, 0.0, 0.0, 1.0]]
 
-    def _render_object(self, obj: Object3D, view_matrix, proj_matrix, lights: List[Light3D]) -> None:
+    def _render_object(self, obj: Object3D, view_matrix, proj_matrix, lights: list[Light3D]) -> None:
         """Render a single 3D object."""
         if obj.material:
             self._apply_material(obj.material)
