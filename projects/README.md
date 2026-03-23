@@ -10,6 +10,7 @@ Project workspace and templates.
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
+- `daf-consulting/` – DAF Consulting Paperclip swarm workspace (standalone nested Git repository)
 - `hermes-paperclip-adapter/` – Paperclip adapter project for Hermes Agent execution (managed as a standalone nested Git repository)
 - `test_project/` – Subdirectory
 
