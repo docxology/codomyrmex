@@ -84,6 +84,11 @@ graph TD
 
 ## Functional Requirements
 
+### Active Workspaces
+
+- `daf-consulting/`: Education-sector Paperclip swarm deployment workspace (standalone nested Git repository)
+- `hermes-paperclip-adapter/`: Hermes Agent Paperclip adapter workspace (standalone nested Git repository)
+
 ### Project Types
 
 1. **Templates**: Reusable project structures
