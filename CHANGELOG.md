@@ -13,8 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Hermes FastMCP scaffold lane**: Added bundled scaffold script at `src/codomyrmex/agents/hermes/optional-skills/mcp/fastmcp/scaffold_fastmcp.py` to generate minimal FastMCP server packages for Codomyrmex↔Hermes MCP exposure.
 - **`HermesClient.scaffold_fastmcp()`**: New client helper that resolves and executes the scaffold script with overwrite protection.
 - **`hermes_fastmcp_scaffold` MCP tool**: Exposes FastMCP scaffolding through the Hermes MCP surface.
-- **Paperclip workspace surfaces**: Root and `projects/` docs now explicitly track Paperclip adapter/integration workspaces; `projects/hermes-paperclip-adapter` is treated as an intentional standalone nested repository pending writable upstream publication.
 - **DAF Paperclip release milestone**: `projects/daf-consulting` advanced to `v0.4.1` with health-attempt telemetry artifacts, executable bootstrap artifact audit CLI, and end-to-end zero-mock CLI coverage for setup/audit flows.
+
+### Changed
+
+- **Code Health & Zero-Mock Enforcement**: Resolved 446 `ruff` diagnostic errors across the ecosystem. Enforced strict Zero-Mock compliance by removing legacy mock-dependent test adapters for the `open_gauss` agent.
+- **Paperclip workspace surfaces**: Root and `projects/` docs now explicitly track Paperclip adapter/integration workspaces; `projects/hermes-paperclip-adapter` is treated as an intentional standalone nested repository pending writable upstream publication.
 
 ### Tests
 
