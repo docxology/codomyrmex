@@ -225,3 +225,19 @@ class TestMCPTool:
 
         assert hasattr(distillation_compute_loss, "_mcp_tool")
         assert distillation_compute_loss._mcp_tool["category"] == "distillation"
+        assert distillation_compute_loss._mcp_tool["description"] == "Compute knowledge distillation loss on synthetic teacher-student data."
+
+    @pytest.mark.unit
+    def test_distillation_compute_loss_params(self):
+        from codomyrmex.distillation.mcp_tools import distillation_compute_loss
+
+        result = distillation_compute_loss(
+            num_classes=5, batch_size=2, temperature=2.0, alpha=0.5, seed=123
+        )
+        assert result["status"] == "success"
+        assert result["temperature"] == 2.0
+        assert result["alpha"] == 0.5
+        assert "total_loss" in result
+        assert "distillation_loss" in result
+        assert "ce_loss" in result
+        assert "teacher_accuracy" in result
