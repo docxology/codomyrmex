@@ -66,7 +66,12 @@ class TestHermesSessionStats:
     def test_stats_keys_present(self, client_with_db) -> None:
         client, _, _ = client_with_db
         stats = client.get_session_stats()
-        for key in ("session_count", "db_size_bytes", "oldest_session_at", "newest_session_at"):
+        for key in (
+            "session_count",
+            "db_size_bytes",
+            "oldest_session_at",
+            "newest_session_at",
+        ):
             assert key in stats
 
     def test_mcp_tool_returns_success(self, populated_db, monkeypatch) -> None:
@@ -78,6 +83,7 @@ class TestHermesSessionStats:
 
         def patched(*args, **kwargs):
             from codomyrmex.agents.hermes.hermes_client import HermesClient
+
             return HermesClient(config={"hermes_session_db": db_path})
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched)
@@ -117,6 +123,7 @@ class TestHermesSessionFork:
 
         def patched(*a, **kw):
             from codomyrmex.agents.hermes.hermes_client import HermesClient
+
             return HermesClient(config={"hermes_session_db": db_path})
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched)
@@ -124,12 +131,15 @@ class TestHermesSessionFork:
         assert result["status"] == "success"
         assert result["parent_session_id"] == sid1
 
-    def test_mcp_tool_fork_missing_session_returns_error(self, populated_db, monkeypatch) -> None:
+    def test_mcp_tool_fork_missing_session_returns_error(
+        self, populated_db, monkeypatch
+    ) -> None:
         db_path, _, _ = populated_db
         from codomyrmex.agents.hermes import mcp_tools
 
         def patched(*a, **kw):
             from codomyrmex.agents.hermes.hermes_client import HermesClient
+
             return HermesClient(config={"hermes_session_db": db_path})
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched)
@@ -160,6 +170,7 @@ class TestHermesSessionExportMd:
 
         def patched(*a, **kw):
             from codomyrmex.agents.hermes.hermes_client import HermesClient
+
             return HermesClient(config={"hermes_session_db": db_path})
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched)
@@ -200,10 +211,13 @@ class TestHermesSetSystemPrompt:
 
         def patched(*a, **kw):
             from codomyrmex.agents.hermes.hermes_client import HermesClient
+
             return HermesClient(config={"hermes_session_db": db_path})
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched)
-        result = mcp_tools.hermes_set_system_prompt(session_id=sid1, prompt="Be concise.")
+        result = mcp_tools.hermes_set_system_prompt(
+            session_id=sid1, prompt="Be concise."
+        )
         assert result["status"] == "success"
 
 
@@ -218,8 +232,14 @@ class TestHermesSessionDetail:
         detail = client.get_session_detail(sid1)
         assert detail is not None
         required_keys = {
-            "session_id", "name", "message_count", "last_message",
-            "has_system_prompt", "metadata", "created_at", "updated_at",
+            "session_id",
+            "name",
+            "message_count",
+            "last_message",
+            "has_system_prompt",
+            "metadata",
+            "created_at",
+            "updated_at",
         }
         assert required_keys.issubset(set(detail.keys()))
 
@@ -239,6 +259,7 @@ class TestHermesSessionDetail:
 
         def patched(*a, **kw):
             from codomyrmex.agents.hermes.hermes_client import HermesClient
+
             return HermesClient(config={"hermes_session_db": db_path})
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched)
@@ -253,12 +274,15 @@ class TestHermesSessionDetail:
 
 
 class TestHermesMinusPruneSessions:
-    def test_prune_returns_zero_for_fresh_sessions(self, populated_db, monkeypatch) -> None:
+    def test_prune_returns_zero_for_fresh_sessions(
+        self, populated_db, monkeypatch
+    ) -> None:
         db_path, _, _ = populated_db
         from codomyrmex.agents.hermes import mcp_tools
 
         def patched(*a, **kw):
             from codomyrmex.agents.hermes.hermes_client import HermesClient
+
             return HermesClient(config={"hermes_session_db": db_path})
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched)
@@ -280,6 +304,7 @@ class TestHermesMinusPruneSessions:
 
         def patched(*a, **kw):
             from codomyrmex.agents.hermes.hermes_client import HermesClient
+
             return HermesClient(config={"hermes_session_db": str(db)})
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched)

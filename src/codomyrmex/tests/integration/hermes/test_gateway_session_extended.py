@@ -47,7 +47,9 @@ class TestGetStats:
         assert stats["oldest_session_at"] is None
         assert stats["newest_session_at"] is None
 
-    def test_stats_count_matches_saved_sessions(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_stats_count_matches_saved_sessions(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         for i in range(3):
             _make_session(inmem_store, name=f"sess-{i}")
         stats = inmem_store.get_stats()
@@ -93,12 +95,16 @@ class TestFork:
         child = parent.fork()
         assert child.parent_session_id == parent.session_id
 
-    def test_fork_has_independent_session_id(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_fork_has_independent_session_id(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         parent = _make_session(inmem_store)
         child = parent.fork()
         assert child.session_id != parent.session_id
 
-    def test_fork_messages_are_independent_copy(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_fork_messages_are_independent_copy(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         parent = _make_session(inmem_store)
         child = parent.fork()
         child.add_message("user", "extra message")
@@ -111,7 +117,9 @@ class TestFork:
 
 
 class TestExportMarkdown:
-    def test_missing_session_returns_none(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_missing_session_returns_none(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         result = inmem_store.export_markdown("nonexistent")
         assert result is None
 
@@ -121,13 +129,17 @@ class TestExportMarkdown:
         assert md is not None
         assert "# Session: My Session" in md
 
-    def test_export_contains_user_and_assistant_headings(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_export_contains_user_and_assistant_headings(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         s = _make_session(inmem_store)
         md = inmem_store.export_markdown(s.session_id)
         assert "## User" in md
         assert "## Assistant" in md
 
-    def test_export_contains_message_content(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_export_contains_message_content(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         s = HermesSession()
         s.add_message("user", "unique_prompt_content_99")
         inmem_store.save(s)
@@ -146,7 +158,9 @@ class TestExportMarkdown:
 
 
 class TestUpdateSystemPrompt:
-    def test_returns_false_for_missing_session(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_returns_false_for_missing_session(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         result = inmem_store.update_system_prompt("ghost", "something")
         assert result is False
 
@@ -158,7 +172,9 @@ class TestUpdateSystemPrompt:
         assert loaded.messages[0]["role"] == "system"
         assert "pirate" in loaded.messages[0]["content"]
 
-    def test_replaces_existing_system_message(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_replaces_existing_system_message(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         s = HermesSession()
         s.add_message("system", "old instruction")
         s.add_message("user", "hello")
@@ -171,7 +187,9 @@ class TestUpdateSystemPrompt:
         assert len(sys_msgs) == 1
         assert "new instruction" in sys_msgs[0]["content"]
 
-    def test_existing_user_messages_preserved(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_existing_user_messages_preserved(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         s = _make_session(inmem_store)
         original_count = len(s.messages)
         inmem_store.update_system_prompt(s.session_id, "sys")
@@ -185,15 +203,26 @@ class TestUpdateSystemPrompt:
 
 
 class TestGetDetail:
-    def test_missing_session_returns_none(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_missing_session_returns_none(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         detail = inmem_store.get_detail("no_such_session")
         assert detail is None
 
-    def test_detail_contains_expected_keys(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_detail_contains_expected_keys(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         s = _make_session(inmem_store, "test-detail")
         detail = inmem_store.get_detail(s.session_id)
         assert detail is not None
-        for key in ("session_id", "name", "message_count", "last_message", "has_system_prompt", "metadata"):
+        for key in (
+            "session_id",
+            "name",
+            "message_count",
+            "last_message",
+            "has_system_prompt",
+            "metadata",
+        ):
             assert key in detail
 
     def test_message_count_correct(self, inmem_store: SQLiteSessionStore) -> None:
@@ -201,18 +230,24 @@ class TestGetDetail:
         detail = inmem_store.get_detail(s.session_id)
         assert detail["message_count"] == 2
 
-    def test_has_system_prompt_false_by_default(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_has_system_prompt_false_by_default(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         s = _make_session(inmem_store)
         detail = inmem_store.get_detail(s.session_id)
         assert detail["has_system_prompt"] is False
 
-    def test_has_system_prompt_true_after_update(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_has_system_prompt_true_after_update(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         s = _make_session(inmem_store)
         inmem_store.update_system_prompt(s.session_id, "sys")
         detail = inmem_store.get_detail(s.session_id)
         assert detail["has_system_prompt"] is True
 
-    def test_last_message_returns_most_recent(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_last_message_returns_most_recent(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         s = _make_session(inmem_store)
         detail = inmem_store.get_detail(s.session_id)
         assert detail["last_message"] is not None
@@ -225,7 +260,9 @@ class TestGetDetail:
 
 
 class TestPruneEdgeCases:
-    def test_prune_zero_returns_zero_when_none_old(self, inmem_store: SQLiteSessionStore) -> None:
+    def test_prune_zero_returns_zero_when_none_old(
+        self, inmem_store: SQLiteSessionStore
+    ) -> None:
         _make_session(inmem_store)
         # Sessions just created — not older than 365 days
         count = inmem_store.prune_old_sessions(days_old=365)

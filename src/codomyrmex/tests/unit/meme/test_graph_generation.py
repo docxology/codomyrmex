@@ -115,7 +115,9 @@ class TestPowerLawProperties:
         mean_d = sum(degrees) / len(degrees)
         variance = sum((d - mean_d) ** 2 for d in degrees) / len(degrees)
         # For a power-law network variance should be at least ~mean
-        assert variance >= mean_d * 0.5, f"Variance {variance:.1f} too low vs mean {mean_d:.1f}"
+        assert variance >= mean_d * 0.5, (
+            f"Variance {variance:.1f} too low vs mean {mean_d:.1f}"
+        )
 
     @pytest.mark.parametrize("num_nodes", [100, 500])
     def test_most_nodes_low_degree(self, num_nodes):

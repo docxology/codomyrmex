@@ -239,15 +239,21 @@ class TestRetrievalResult:
         """Should apply correct weights (50% relevance, 30% recency, 20% importance)."""
         m = Memory(id="1", content="Test")
         # Only relevance set
-        r_rel = RetrievalResult(memory=m, relevance_score=1.0, recency_score=0.0, importance_score=0.0)
+        r_rel = RetrievalResult(
+            memory=m, relevance_score=1.0, recency_score=0.0, importance_score=0.0
+        )
         assert r_rel.combined_score == pytest.approx(0.5)
 
         # Only recency set
-        r_rec = RetrievalResult(memory=m, relevance_score=0.0, recency_score=1.0, importance_score=0.0)
+        r_rec = RetrievalResult(
+            memory=m, relevance_score=0.0, recency_score=1.0, importance_score=0.0
+        )
         assert r_rec.combined_score == pytest.approx(0.3)
 
         # Only importance set
-        r_imp = RetrievalResult(memory=m, relevance_score=0.0, recency_score=0.0, importance_score=1.0)
+        r_imp = RetrievalResult(
+            memory=m, relevance_score=0.0, recency_score=0.0, importance_score=1.0
+        )
         assert r_imp.combined_score == pytest.approx(0.2)
 
 

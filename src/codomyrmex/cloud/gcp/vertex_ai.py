@@ -7,6 +7,7 @@ from codomyrmex.logging_monitoring import get_logger
 try:
     import vertexai
     from vertexai.generative_models import GenerationConfig, GenerativeModel
+
     VERTEX_AI_AVAILABLE = True
 except ImportError:
     VERTEX_AI_AVAILABLE = False
@@ -26,7 +27,9 @@ class VertexAIClient:
             location: GCP region (e.g., 'us-central1').
         """
         if not VERTEX_AI_AVAILABLE:
-            logger.warning("Vertex AI SDK not installed. Please `pip install google-cloud-aiplatform`.")
+            logger.warning(
+                "Vertex AI SDK not installed. Please `pip install google-cloud-aiplatform`."
+            )
             return
 
         self.project = project
@@ -34,7 +37,9 @@ class VertexAIClient:
 
         try:
             vertexai.init(project=self.project, location=self.location)
-            logger.debug(f"Vertex AI initialized for project {self.project} in {self.location}")
+            logger.debug(
+                f"Vertex AI initialized for project {self.project} in {self.location}"
+            )
         except Exception as e:
             logger.error("Failed to initialize Vertex AI: %s", e)
 

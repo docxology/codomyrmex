@@ -19,6 +19,7 @@ logger = get_logger(__name__)
 
 try:
     from google import genai
+
     GENAI_AVAILABLE = True
 except ImportError:
     GENAI_AVAILABLE = False
@@ -32,24 +33,35 @@ def naive_chunker(file_path: Path, max_lines: int = 150) -> list[dict]:
             lines = f.readlines()
 
         for i in range(0, len(lines), max_lines):
-            chunk_text = "".join(lines[i:i+max_lines])
-            chunks.append({
-                "path": str(file_path),
-                "text": chunk_text,
-                "start_line": i,
-                "end_line": min(i+max_lines, len(lines))
-            })
+            chunk_text = "".join(lines[i : i + max_lines])
+            chunks.append(
+                {
+                    "path": str(file_path),
+                    "text": chunk_text,
+                    "start_line": i,
+                    "end_line": min(i + max_lines, len(lines)),
+                }
+            )
     except Exception as e:
         logger.debug("Skipping %s: %s", file_path, e)
     return chunks
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Google Repo Indexer (Vertex AI Vector Search)")
+    parser = argparse.ArgumentParser(
+        description="Google Repo Indexer (Vertex AI Vector Search)"
+    )
     parser.add_argument("repo_path", type=str, help="Path to repository")
     parser.add_argument("--project", type=str, required=True, help="GCP Project ID")
-    parser.add_argument("--location", type=str, default="us-central1", help="GCP Location")
-    parser.add_argument("--embedding-model", type=str, default="text-embedding-004", help="Embedding model")
+    parser.add_argument(
+        "--location", type=str, default="us-central1", help="GCP Location"
+    )
+    parser.add_argument(
+        "--embedding-model",
+        type=str,
+        default="text-embedding-004",
+        help="Embedding model",
+    )
     args = parser.parse_args()
 
     if not GENAI_AVAILABLE:
@@ -68,7 +80,15 @@ def main():
     all_chunks = []
     for filepath in repo.rglob("*"):
         if filepath.is_file() and not any(p.startswith(".") for p in filepath.parts):
-            if filepath.suffix in {".py", ".md", ".js", ".ts", ".html", ".css", ".json"}:
+            if filepath.suffix in {
+                ".py",
+                ".md",
+                ".js",
+                ".ts",
+                ".html",
+                ".css",
+                ".json",
+            }:
                 all_chunks.extend(naive_chunker(filepath))
 
     if not all_chunks:
@@ -83,13 +103,12 @@ def main():
 
     try:
         for i in range(0, len(all_chunks), batch_size):
-            batch = all_chunks[i:i+batch_size]
+            batch = all_chunks[i : i + batch_size]
             texts = [c["text"] for c in batch]
 
             # Using genai unified representation
             resp = client.models.embed_content(
-                model=args.embedding_model,
-                contents=texts
+                model=args.embedding_model, contents=texts
             )
 
             if hasattr(resp, "embeddings") and resp.embeddings:
@@ -97,14 +116,21 @@ def main():
             elif hasattr(resp, "embedding") and resp.embedding:
                 all_embeddings.append(resp.embedding.values)
 
-            logger.info("Embedded batch %d/%d", i // batch_size + 1, (len(all_chunks) + batch_size - 1) // batch_size)
+            logger.info(
+                "Embedded batch %d/%d",
+                i // batch_size + 1,
+                (len(all_chunks) + batch_size - 1) // batch_size,
+            )
 
     except Exception as e:
         logger.error("Embedding failed: %s", e)
         sys.exit(1)
 
     logger.info("Successfully generated %d embeddings.", len(all_embeddings))
-    logger.info("Next Step: Upsert these to Vertex AI Vector Search Index (implementation depends on vertexai.vector_search).")
+    logger.info(
+        "Next Step: Upsert these to Vertex AI Vector Search Index (implementation depends on vertexai.vector_search)."
+    )
+
 
 if __name__ == "__main__":
     main()

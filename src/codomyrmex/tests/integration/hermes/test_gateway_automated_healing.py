@@ -36,7 +36,9 @@ class MockFailingClient(HermesClient):
         self.call_count = 0
         self.heal_called = False
 
-    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def execute(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         self.call_count += 1
         if self.call_count == 1:
             # Simulate a Python script that failed to find requests

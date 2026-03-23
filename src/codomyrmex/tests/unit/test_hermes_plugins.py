@@ -12,10 +12,10 @@ from pathlib import Path
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # Helpers to locate the upstream plugins_cmd module
 # ---------------------------------------------------------------------------
+
 
 def _hermes_agent_root() -> Path | None:
     """Find the installed hermes-agent source under ~/.hermes/hermes-agent."""
@@ -30,11 +30,13 @@ def _import_plugins_cmd():
         pytest.skip("~/.hermes/hermes-agent not found — Hermes not installed")
 
     import sys
+
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
 
     try:
         import hermes_cli.plugins_cmd as pc
+
         return pc
     except ImportError as e:
         pytest.skip(f"hermes_cli.plugins_cmd not importable: {e}")
@@ -169,15 +171,22 @@ class TestRepoNameFromUrl:
 
     def test_https_with_git_suffix(self):
         pc = _import_plugins_cmd()
-        assert pc._repo_name_from_url("https://github.com/owner/my-plugin.git") == "my-plugin"
+        assert (
+            pc._repo_name_from_url("https://github.com/owner/my-plugin.git")
+            == "my-plugin"
+        )
 
     def test_https_without_git_suffix(self):
         pc = _import_plugins_cmd()
-        assert pc._repo_name_from_url("https://github.com/owner/my-plugin") == "my-plugin"
+        assert (
+            pc._repo_name_from_url("https://github.com/owner/my-plugin") == "my-plugin"
+        )
 
     def test_trailing_slash_stripped(self):
         pc = _import_plugins_cmd()
-        assert pc._repo_name_from_url("https://github.com/owner/my-plugin/") == "my-plugin"
+        assert (
+            pc._repo_name_from_url("https://github.com/owner/my-plugin/") == "my-plugin"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -219,9 +228,7 @@ class TestReadManifest:
         pc = _import_plugins_cmd()
         plugin_dir = tmp_path / "versioned-plugin"
         plugin_dir.mkdir()
-        (plugin_dir / "plugin.yaml").write_text(
-            "name: test\nmanifest_version: 1\n"
-        )
+        (plugin_dir / "plugin.yaml").write_text("name: test\nmanifest_version: 1\n")
         manifest = pc._read_manifest(plugin_dir)
         assert manifest["manifest_version"] == 1
 
@@ -241,6 +248,7 @@ class TestCopyExampleFiles:
         (plugin_dir / "config.yaml.example").write_text("key: value\n")
 
         from rich.console import Console
+
         console = Console(quiet=True)
         pc._copy_example_files(plugin_dir, console)
 
@@ -255,6 +263,7 @@ class TestCopyExampleFiles:
         (plugin_dir / "config.yaml").write_text("existing: value\n")
 
         from rich.console import Console
+
         console = Console(quiet=True)
         pc._copy_example_files(plugin_dir, console)
 

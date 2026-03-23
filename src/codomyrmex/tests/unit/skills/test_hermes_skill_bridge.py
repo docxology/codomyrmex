@@ -52,10 +52,19 @@ class TestHermesSkillEntry:
                 return None
 
             def run_skill(
-                self, name: str, prompt: str, session_id: str | None = None, timeout: int = 180
+                self,
+                name: str,
+                prompt: str,
+                session_id: str | None = None,
+                timeout: int = 180,
             ) -> dict:
                 calls.append({"name": name, "prompt": prompt, "session_id": session_id})
-                return {"status": "success", "content": "ok", "session_id": None, "error": None}
+                return {
+                    "status": "success",
+                    "content": "ok",
+                    "session_id": None,
+                    "error": None,
+                }
 
         monkeypatch.setattr(bridge_mod, "HermesSkillBridge", FakeBridge)
         entry = HermesSkillEntry(name="poly", hermes_skill_id="polymarket")
@@ -92,7 +101,9 @@ class TestHermesSkillBridge:
         skills_dir = tmp_path / "skills"
         skill_a = skills_dir / "skill_alpha"
         skill_a.mkdir(parents=True)
-        (skill_a / "skill.yaml").write_text("name: skill_alpha\ndescription: Alpha skill\n")
+        (skill_a / "skill.yaml").write_text(
+            "name: skill_alpha\ndescription: Alpha skill\n"
+        )
         skill_b = skills_dir / "skill_beta"
         skill_b.mkdir()
 
@@ -164,12 +175,15 @@ class TestHermesSkillBridge:
 
 
 class TestNormalizeName:
-    @pytest.mark.parametrize(("raw", "expected"), [
-        ("MySkill", "myskill"),
-        ("my-skill", "my_skill"),
-        ("My Skill", "my_skill"),
-        ("MY_SKILL", "my_skill"),
-        ("geo-market sim", "geo_market_sim"),
-    ])
+    @pytest.mark.parametrize(
+        ("raw", "expected"),
+        [
+            ("MySkill", "myskill"),
+            ("my-skill", "my_skill"),
+            ("My Skill", "my_skill"),
+            ("MY_SKILL", "my_skill"),
+            ("geo-market sim", "geo_market_sim"),
+        ],
+    )
     def test_normalize(self, raw: str, expected: str) -> None:
         assert _normalize_name(raw) == expected

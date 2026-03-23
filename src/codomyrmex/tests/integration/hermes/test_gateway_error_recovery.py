@@ -1,6 +1,5 @@
 """Integration tests for Hermes Error-Correction Handoffs."""
 
-
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.hermes.hermes_client import HermesClient
 
@@ -15,7 +14,9 @@ class TestFailedHermesClient(HermesClient):
         self.call_count = 0
         self.intercepted_prompts = []
 
-    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def execute(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Simulate LLM creating a tool call that fails, then recovering."""
         self.call_count += 1
         self.intercepted_prompts.append(request.prompt)

@@ -286,4 +286,3 @@ def events_agent_inbox(
         }
     except Exception as e:
         return {"status": "error", "message": f"Failed to read inbox: {e!s}"}
-

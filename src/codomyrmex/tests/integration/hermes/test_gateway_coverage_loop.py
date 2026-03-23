@@ -44,7 +44,9 @@ class MockCoverageClient(HermesClient):
         super().__init__(*args, **kwargs)
         self.execute_call_count = 0
 
-    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def execute(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         self.execute_call_count += 1
         return AgentResponse(
             content="Fixed the issue.",
@@ -56,7 +58,9 @@ class MockCoverageClient(HermesClient):
 class FailingCoverageClient(HermesClient):
     """Real HermesClient subclass where execute() always returns failure."""
 
-    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def execute(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         return AgentResponse(
             content="",
             error="Repair agent crashed",
@@ -69,7 +73,9 @@ class FailingCoverageClient(HermesClient):
 # ---------------------------------------------------------------------------
 
 
-def _completed(returncode: int, stdout: str = "", stderr: str = "") -> subprocess.CompletedProcess:
+def _completed(
+    returncode: int, stdout: str = "", stderr: str = ""
+) -> subprocess.CompletedProcess:
     return subprocess.CompletedProcess(
         args=["pytest"],
         returncode=returncode,
@@ -92,7 +98,10 @@ def test_coverage_loop_max_turns_exhaustion(temp_db: Path):
         }
     )
 
-    with patch("subprocess.run", return_value=_completed(1, "FAILED test_foo.py::test_bar - AssertionError")):
+    with patch(
+        "subprocess.run",
+        return_value=_completed(1, "FAILED test_foo.py::test_bar - AssertionError"),
+    ):
         result = client._run_coverage_loop("/fake/test_path.py", max_turns=3)
 
     assert result["status"] == "failed"
@@ -153,7 +162,11 @@ def test_coverage_loop_empty_target(temp_db: Path):
 
     with patch(
         "subprocess.run",
-        return_value=_completed(1, "ERROR: file not found: /nonexistent/path.py", "No such file or directory"),
+        return_value=_completed(
+            1,
+            "ERROR: file not found: /nonexistent/path.py",
+            "No such file or directory",
+        ),
     ):
         result = client._run_coverage_loop("/nonexistent/path.py", max_turns=1)
 

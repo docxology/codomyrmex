@@ -378,10 +378,20 @@ class AgentOrchestrator:
                 result = agent(task, **(extra_kwargs or {}))
             else:
                 result = {"raw": str(agent)}
-            return {"status": "success", "role": role, "agent": agent_name, "result": result}
+            return {
+                "status": "success",
+                "role": role,
+                "agent": agent_name,
+                "result": result,
+            }
         except Exception as exc:
             logger.warning("spawn_agent error for role '%s': %s", role, exc)
-            return {"status": "error", "role": role, "agent": agent_name, "error": str(exc)}
+            return {
+                "status": "error",
+                "role": role,
+                "agent": agent_name,
+                "error": str(exc),
+            }
 
     async def run_agent_task(
         self, agent_name: str, task: str, **kwargs

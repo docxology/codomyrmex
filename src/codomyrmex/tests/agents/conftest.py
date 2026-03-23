@@ -4,6 +4,7 @@ Adds the open_gauss submodule to sys.path at collection time so all test
 modules in this directory can import from it without reimporting sys.path
 inside each test file.
 """
+
 import sys
 from pathlib import Path
 

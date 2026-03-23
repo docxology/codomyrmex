@@ -10,7 +10,9 @@ Typical usage::
 
     bridge = HermesSkillBridge()
     skills = bridge.list_hermes_skills()
-    result = bridge.run_skill("geopolitical_market_sim", "What is the BTC dump probability?")
+    result = bridge.run_skill(
+        "geopolitical_market_sim", "What is the BTC dump probability?"
+    )
 
 """
 

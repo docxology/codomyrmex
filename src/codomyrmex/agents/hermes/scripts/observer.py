@@ -25,18 +25,25 @@ class CodebaseObserver:
         self.client._active_backend = "ollama"
         self.client._ollama_model = model
         self.rec_dir = Path("recommendations")
-        self.prompt_template = Path(__file__).parent.parent / "templates" / "observer_prompt.md"
+        self.prompt_template = (
+            Path(__file__).parent.parent / "templates" / "observer_prompt.md"
+        )
 
     def get_git_context(self, limit=10):
         """Get recent git commits and diff summaries."""
         try:
             log = subprocess.check_output(
-                ["git", "log", f"-n {limit}", "--pretty=format:%h - %s (%ad)", "--date=short"],
-                text=True
+                [
+                    "git",
+                    "log",
+                    f"-n {limit}",
+                    "--pretty=format:%h - %s (%ad)",
+                    "--date=short",
+                ],
+                text=True,
             )
             summary = subprocess.check_output(
-                ["git", "diff", "--stat", f"HEAD~{limit}", "HEAD"],
-                text=True
+                ["git", "diff", "--stat", f"HEAD~{limit}", "HEAD"], text=True
             )
             return f"### Recent Commits:\n{log}\n\n### File Changes Summary:\n{summary}"
         except Exception as e:
@@ -49,14 +56,24 @@ class CodebaseObserver:
         # Skill categories
         skills_dir = Path("src/codomyrmex/skills/skills/upstream")
         if skills_dir.exists():
-            categories = sorted([d.name for d in skills_dir.iterdir() if d.is_dir() and not d.name.startswith(".")])
+            categories = sorted(
+                [
+                    d.name
+                    for d in skills_dir.iterdir()
+                    if d.is_dir() and not d.name.startswith(".")
+                ]
+            )
             context.append(f"- **Skill Categories**: {', '.join(categories)}")
 
         # Core MCP tools
-        context.append("- **Core MCP Tools**: read_file, write_file, list_directory, analyze_python_file, search_codebase, git_status, git_diff, run_shell_command, gitnexus, desloppify")
+        context.append(
+            "- **Core MCP Tools**: read_file, write_file, list_directory, analyze_python_file, search_codebase, git_status, git_diff, run_shell_command, gitnexus, desloppify"
+        )
 
         # Standards
-        context.append("- **Standards**: Zero-Mock policy, modular separation (Foundation, Core, Service, Specialized), desloppify scoring.")
+        context.append(
+            "- **Standards**: Zero-Mock policy, modular separation (Foundation, Core, Service, Specialized), desloppify scoring."
+        )
 
         return "\n".join(context)
 
@@ -128,18 +145,28 @@ class CodebaseObserver:
         except Exception as e:
             print(f"[{datetime.datetime.now()}] Error in observation cycle: {e}")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Hermes Codebase Observer (Sentinel)")
     parser.add_argument("--loop", action="store_true", help="Run in a loop")
-    parser.add_argument("--interval", type=int, default=3600, help="Interval between cycles in seconds (default 3600)")
-    parser.add_argument("--model", type=str, default="llama3.2:latest", help="Ollama model to use")
+    parser.add_argument(
+        "--interval",
+        type=int,
+        default=3600,
+        help="Interval between cycles in seconds (default 3600)",
+    )
+    parser.add_argument(
+        "--model", type=str, default="llama3.2:latest", help="Ollama model to use"
+    )
     args = parser.parse_args()
 
     observer = CodebaseObserver(model=args.model)
 
     if args.loop:
         throttle = max(1, args.interval)
-        print(f"[{datetime.datetime.now()}] Sentinel starting in loop mode (throttle: {throttle}s)...")
+        print(
+            f"[{datetime.datetime.now()}] Sentinel starting in loop mode (throttle: {throttle}s)..."
+        )
         while True:
             observer.run_cycle()
             if args.interval > 0:

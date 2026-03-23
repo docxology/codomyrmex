@@ -274,3 +274,7 @@ db_performance/
 config/default.yaml
 MEMORY/
 /dispatches
+
+# DAF Consulting Project
+/projects/daf-consulting
+/agents

@@ -157,6 +157,7 @@ For Codomyrmex developers creating new skills or adapting internal modules, this
 **Deep Links**:
 
 - 🔗 **MCP Protocol Bridge**: [`src/codomyrmex/agents/hermes/mcp_tools.py`](../../../src/codomyrmex/agents/hermes/mcp_tools.py)
+- 🔗 **FastMCP Scaffold MCP Tool**: `hermes_fastmcp_scaffold(output_dir, server_name, force=False)`
 - 🔗 **New MCP Tool Tests**: [`src/codomyrmex/tests/integration/hermes/test_gateway_mcp_new_tools.py`](../../../src/codomyrmex/tests/integration/hermes/test_gateway_mcp_new_tools.py)
 
 ---

@@ -122,7 +122,9 @@ class InfrastructureAgent(BaseAgent):
     # Agent interface
     # ------------------------------------------------------------------
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Execute a cloud infrastructure request.
 
         Expected prompt format (JSON):

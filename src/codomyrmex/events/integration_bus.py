@@ -63,6 +63,7 @@ class IntegrationBus:
 
         # With durable mailboxes:
         from codomyrmex.events.event_store import EventStore
+
         bus = IntegrationBus(event_store=EventStore())
         bus.send_to_agent("worker", {"task": "analyze"})
     """

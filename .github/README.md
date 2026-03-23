@@ -4,10 +4,10 @@
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml/badge.svg" alt="Auto-Merge"></a>
   <br>
-  <img src="https://img.shields.io/badge/Codomyrmex-v1.2.3-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Codomyrmex-v1.2.7-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Modules-128-green?style=for-the-badge" alt="Modules">
-  <img src="https://img.shields.io/badge/MCP_Tools-604-orange?style=for-the-badge" alt="MCP Tools">
-  <img src="https://img.shields.io/badge/Workflows-36-purple?style=for-the-badge" alt="Workflows">
+  <img src="https://img.shields.io/badge/MCP_Tools-599-orange?style=for-the-badge" alt="MCP Tools">
+  <img src="https://img.shields.io/badge/Workflows-40-purple?style=for-the-badge" alt="Workflows">
   <img src="https://img.shields.io/badge/Zero--Mock-100%25-brightgreen?style=for-the-badge" alt="Zero Mock">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
   <br>
@@ -19,14 +19,14 @@
   <img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/code%20style-ruff-D7FF64?style=flat-square&logo=ruff&logoColor=black" alt="Ruff">
   <img src="https://img.shields.io/badge/types-ty-blue?style=flat-square" alt="ty">
-  <img src="https://img.shields.io/badge/tests-34%2C492-brightgreen?style=flat-square" alt="Tests">
+  <img src="https://img.shields.io/badge/tests-39%2C470-brightgreen?style=flat-square" alt="Tests">
 </p>
 
 # 🐜 Codomyrmex
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **604** `@mcp_tool` decorators (596 dynamic + 8 static) in production sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](../docs/reference/inventory.md)). It includes **3,000+ Python files**, **34,492** collected tests (`pytest --collect-only --no-cov`), **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
+Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **599** `@mcp_tool` decorators in production sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **39,470** collected tests (`pytest --collect-only --no-cov`), **1,029+ documentation pages**, and **40 GitHub Actions workflows**.
 
 ```bash
 # Install
@@ -65,8 +65,8 @@ uv run codomyrmex doctor --all
 | | |
 |---|---|
 | 🧩 **128 Top-Level Modules** | Packages under `src/codomyrmex/` — composable, independently versioned, zero-mock tested |
-| 🤖 **604 MCP Tool Decorators** | 596 dynamic + 8 static; see [inventory](../docs/reference/inventory.md) |
-| 🧪 **34,492 Collected Tests** | `uv run pytest --collect-only -q --no-cov`; zero-mock policy |
+| 🤖 **599 MCP Tool Decorators** | See [inventory](docs/reference/inventory.md) |
+| 🧪 **39,470 Collected Tests** | `uv run pytest --collect-only -q --no-cov`; zero-mock policy |
 | 🔒 **Security First** | GitGuardian, SBOM, GGSHIELD pre-commit, detect-secrets integration |
 | 🎛️ **13+ Agent Providers** | Claude, Gemini, GPT-4o, DeepSeek, Mistral, Jules, Codex, Pi, and more |
 | 🔬 **ML Research Ready** | LoRA, RLHF, DPO, distillation, quantization, NAS, Mamba SSM, autograd |
@@ -540,10 +540,10 @@ codomyrmex/
 |:---|:---:|
 | **Total Modules** | 128 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
-| **Collected tests** | 34,492 (`pytest --collect-only --no-cov`) |
+| **Collected tests** | 39,470 (`pytest --collect-only --no-cov`) |
 | **Documentation Files** | 1,029+ |
-| **GitHub Workflows** | 36 |
-| **MCP Tools** | 604 (`@mcp_tool` lines, production tree) |
+| **GitHub Workflows** | 40 |
+| **MCP Tools** | 599 (`@mcp_tool` lines, production tree) |
 | **`mcp_tools.py` files** | 149 (non-test) |
 | **PAI Skills** | 81 installed |
 | **RASP Doc Compliance** | 128/128 |

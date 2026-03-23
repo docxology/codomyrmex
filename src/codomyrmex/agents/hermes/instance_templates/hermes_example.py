@@ -16,10 +16,7 @@ def main():
     # Example 1: Search for template files
     print("1. Searching for template files...")
     search_result = search_files(
-        pattern=".*template.*\\.(yaml|yml|md)$",
-        target="files",
-        path=".",
-        limit=10
+        pattern=".*template.*\\.(yaml|yml|md)$", target="files", path=".", limit=10
     )
 
     if search_result["matches"]:
@@ -62,7 +59,7 @@ def main():
         path=".",
         file_glob="*.md",
         limit=5,
-        output_mode="count"
+        output_mode="count",
     )
 
     print(f"   Found 'Hermes' in {len(content_result['matches'])} files:")
@@ -71,6 +68,7 @@ def main():
     print()
 
     print("=== Example completed ===")
+
 
 if __name__ == "__main__":
     main()

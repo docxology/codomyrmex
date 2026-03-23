@@ -19,7 +19,6 @@ from pathlib import Path
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # Import helpers
 # ---------------------------------------------------------------------------
@@ -43,6 +42,7 @@ def _import_ctx():
 
     try:
         import agent.context_references as ctx
+
         return ctx
     except ImportError as e:
         pytest.skip(f"agent.context_references not importable: {e}")
@@ -336,7 +336,9 @@ class TestPreprocessContextReferencesAsync:
         msg = f"Summarize @file:{large}"
         result = self._run(
             ctx.preprocess_context_references_async(
-                msg, cwd=tmp_path, context_length=100  # tiny context
+                msg,
+                cwd=tmp_path,
+                context_length=100,  # tiny context
             )
         )
         assert result.blocked is True
@@ -359,4 +361,6 @@ class TestPreprocessContextReferencesAsync:
                 allowed_root=workspace,  # outside is not in workspace
             )
         )
-        assert any("outside" in w.lower() or "allowed" in w.lower() for w in result.warnings)
+        assert any(
+            "outside" in w.lower() or "allowed" in w.lower() for w in result.warnings
+        )

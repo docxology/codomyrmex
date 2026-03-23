@@ -62,7 +62,9 @@ def cli_commands():
         },
         "gemini": {
             "help": "Run the Gemini CLI directly (requires @google/gemini-cli installed)",
-            "handler": lambda **kwargs: __import__("codomyrmex.terminal_interface.commands.gemini_cmd", fromlist=[""]).run_gemini_cli(),
+            "handler": lambda **kwargs: __import__(
+                "codomyrmex.terminal_interface.commands.gemini_cmd", fromlist=[""]
+            ).run_gemini_cli(),
         },
     }
 

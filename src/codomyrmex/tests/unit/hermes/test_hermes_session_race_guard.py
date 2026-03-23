@@ -232,7 +232,9 @@ class TestSessionRaceGuardIntegration:
                     accessed.append(sid)
 
         with ThreadPoolExecutor(max_workers=10) as executor:
-            futures = [executor.submit(access_session, f"multi-{i % 5}") for i in range(20)]
+            futures = [
+                executor.submit(access_session, f"multi-{i % 5}") for i in range(20)
+            ]
             for f in as_completed(futures):
                 f.result()
 

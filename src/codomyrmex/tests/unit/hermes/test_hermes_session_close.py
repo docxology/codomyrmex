@@ -97,6 +97,7 @@ class TestHermesSessionClose:
 
     def test_close_not_in_repr_or_compare(self) -> None:
         import dataclasses
+
         cb = lambda s: None
         s1 = HermesSession(session_id="abc", on_close=cb)
         # on_close is excluded from __repr__

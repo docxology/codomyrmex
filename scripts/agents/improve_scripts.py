@@ -77,8 +77,12 @@ def dispatch_agent(prompt: str, dry_run: bool) -> bool:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Massive Parallel Improver for scripts/")
-    parser.add_argument("--dry-run", action="store_true", help="Preview tasks without dispatching")
+    parser = argparse.ArgumentParser(
+        description="Massive Parallel Improver for scripts/"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Preview tasks without dispatching"
+    )
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--batch-size", type=int, default=DEFAULT_BATCH_SIZE)
     parser.add_argument("--delay", type=float, default=DEFAULT_BATCH_DELAY)
@@ -92,7 +96,7 @@ def main():
     tasks = [{"target": t.name, "prompt": generate_prompt(t)} for t in targets]
 
     if args.limit:
-        tasks = tasks[:args.limit]
+        tasks = tasks[: args.limit]
 
     logger.info(f"Generated {len(tasks)} improvement tasks for scripts/")
 
@@ -108,7 +112,7 @@ def main():
 
     print(f"🚀 Dispatching {len(tasks)} Jules agents...")
     for i in range(0, len(tasks), args.batch_size):
-        batch = tasks[i:i + args.batch_size]
+        batch = tasks[i : i + args.batch_size]
         print(f"\n── Batch {i // args.batch_size + 1} ──")
 
         for task in batch:
@@ -122,7 +126,7 @@ def main():
         if i + args.batch_size < len(tasks):
             time.sleep(args.delay)
 
-    print("\n" + "="*40)
+    print("\n" + "=" * 40)
     print(f"✅ scripts/ Improvement Swarm Complete ({dispatched} dispatched)")
 
 

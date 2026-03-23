@@ -15,6 +15,7 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
+import sys
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -195,7 +196,8 @@ class HermesClient(CLIAgentBase):
         from codomyrmex.agents.hermes._provider_router import ContextCompressor
 
         self._compressor = ContextCompressor(
-            max_tokens=self.get_config_value("max_context_tokens", config=cfg) or 100_000,
+            max_tokens=self.get_config_value("max_context_tokens", config=cfg)
+            or 100_000,
         )
 
         # Probe availability
@@ -1486,7 +1488,11 @@ class HermesClient(CLIAgentBase):
 
         """
         if not self._cli_available:
-            return {"success": False, "instances": [], "error": "Hermes CLI not available"}
+            return {
+                "success": False,
+                "instances": [],
+                "error": "Hermes CLI not available",
+            }
         try:
             subprocess_env = dict(os.environ)
             subprocess_env["NO_COLOR"] = "1"
@@ -1545,14 +1551,18 @@ class HermesClient(CLIAgentBase):
                 "model_id": model_id,
                 "context_length": 0,
                 "supports_tools": None,
-                "provider": model_id.split("/", maxsplit=1)[0] if "/" in model_id else "unknown",
+                "provider": model_id.split("/", maxsplit=1)[0]
+                if "/" in model_id
+                else "unknown",
                 "source": "unknown",
             }
 
             if models_path.exists():
                 import importlib.util
 
-                spec = importlib.util.spec_from_file_location("hermes_models", models_path)
+                spec = importlib.util.spec_from_file_location(
+                    "hermes_models", models_path
+                )
                 if spec and spec.loader:
                     mod = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(mod)
@@ -1562,7 +1572,9 @@ class HermesClient(CLIAgentBase):
                         if isinstance(attr, dict) and model_id in attr:
                             entry = attr[model_id]
                             if isinstance(entry, dict):
-                                result["context_length"] = entry.get("context_length", 0)
+                                result["context_length"] = entry.get(
+                                    "context_length", 0
+                                )
                                 result["supports_tools"] = entry.get("supports_tools")
                                 result["source"] = "hermes_cli/models.py"
                                 break
@@ -1666,3 +1678,78 @@ class HermesClient(CLIAgentBase):
         except Exception as exc:
             self.logger.error("install_skill(%s) failed: %s", repo_url, exc)
             return {"success": False, "output": "", "error": str(exc)}
+
+    def scaffold_fastmcp(
+        self,
+        output_dir: str,
+        server_name: str,
+        force: bool = False,
+    ) -> dict[str, Any]:
+        """Run the FastMCP scaffold script for Hermes-compatible MCP servers.
+
+        Args:
+            output_dir: Destination directory for generated package scaffold.
+            server_name: Human-friendly FastMCP server name.
+            force: Overwrite generated files when they already exist.
+
+        Returns:
+            dict with keys: ``success``, ``output``, ``error``, ``script_path``.
+        """
+        bundled = (
+            Path(__file__).resolve().parent
+            / "optional-skills"
+            / "mcp"
+            / "fastmcp"
+            / "scaffold_fastmcp.py"
+        )
+        cli_relative = (
+            Path(self.command).resolve().parent.parent
+            / "optional-skills"
+            / "mcp"
+            / "fastmcp"
+            / "scaffold_fastmcp.py"
+        )
+        script_candidates = [bundled, cli_relative]
+        script_path = next((path for path in script_candidates if path.exists()), None)
+        if script_path is None:
+            return {
+                "success": False,
+                "output": "",
+                "error": (
+                    "FastMCP scaffold script not found. Checked: "
+                    + ", ".join(str(path) for path in script_candidates)
+                ),
+                "script_path": "",
+            }
+        try:
+            args = [
+                sys.executable,
+                str(script_path),
+                "--output-dir",
+                output_dir,
+                "--name",
+                server_name,
+            ]
+            if force:
+                args.append("--force")
+            result = subprocess.run(
+                args,
+                capture_output=True,
+                text=True,
+                timeout=60,
+                env=dict(os.environ),
+            )
+            return {
+                "success": result.returncode == 0,
+                "output": result.stdout.strip(),
+                "error": result.stderr.strip() if result.returncode != 0 else "",
+                "script_path": str(script_path),
+            }
+        except Exception as exc:
+            self.logger.error("scaffold_fastmcp(%s) failed: %s", output_dir, exc)
+            return {
+                "success": False,
+                "output": "",
+                "error": str(exc),
+                "script_path": str(script_path),
+            }

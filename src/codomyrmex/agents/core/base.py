@@ -96,7 +96,9 @@ class AgentInterface(ABC):
         """Get list of capabilities supported by this agent."""
 
     @abstractmethod
-    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def execute(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Execute an agent request."""
 
     @abstractmethod
@@ -239,7 +241,9 @@ class BaseAgent(AgentInterface):
         # Default to True for base agent, override in subclasses
         return True
 
-    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def execute(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """
         Execute agent request.
 
@@ -309,7 +313,9 @@ class BaseAgent(AgentInterface):
                         self.name,
                     )
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """
         Implementation of execute method.
 

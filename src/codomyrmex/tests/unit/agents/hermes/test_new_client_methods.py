@@ -21,14 +21,18 @@ def client() -> HermesClient:
 
 
 class TestGetGatewayStatus:
-    def test_no_cli_returns_error(self, monkeypatch: pytest.MonkeyPatch, client: HermesClient) -> None:
+    def test_no_cli_returns_error(
+        self, monkeypatch: pytest.MonkeyPatch, client: HermesClient
+    ) -> None:
         monkeypatch.setattr(client, "_cli_available", False)
         result = client.get_gateway_status()
         assert result["success"] is False
         assert "instances" in result
         assert result["instances"] == []
 
-    @pytest.mark.skipif(shutil.which("hermes") is None, reason="Hermes CLI not installed")
+    @pytest.mark.skipif(
+        shutil.which("hermes") is None, reason="Hermes CLI not installed"
+    )
     def test_cli_returns_dict(self, client: HermesClient) -> None:
         result = client.get_gateway_status()
         assert "success" in result
@@ -57,7 +61,9 @@ class TestGetModelInfo:
         assert result.get("provider") == "unknown"
         assert "model_id" in result
 
-    @pytest.mark.skipif(shutil.which("hermes") is None, reason="Hermes CLI not installed")
+    @pytest.mark.skipif(
+        shutil.which("hermes") is None, reason="Hermes CLI not installed"
+    )
     def test_nemotron_info_real(self, client: HermesClient) -> None:
         """Integration: real model lookup for the current default model."""
         result = client.get_model_info("nvidia/nemotron-3-super-120b-a12b:free")
@@ -72,13 +78,17 @@ class TestGetModelInfo:
 
 
 class TestSendGatewayCommand:
-    def test_no_cli_returns_error(self, monkeypatch: pytest.MonkeyPatch, client: HermesClient) -> None:
+    def test_no_cli_returns_error(
+        self, monkeypatch: pytest.MonkeyPatch, client: HermesClient
+    ) -> None:
         monkeypatch.setattr(client, "_cli_available", False)
         result = client.send_gateway_command("/approve")
         assert result["success"] is False
         assert "Hermes CLI not available" in result.get("error", "")
 
-    @pytest.mark.skipif(shutil.which("hermes") is None, reason="Hermes CLI not installed")
+    @pytest.mark.skipif(
+        shutil.which("hermes") is None, reason="Hermes CLI not installed"
+    )
     def test_deny_command_real(self, client: HermesClient) -> None:
         """Integration: sends /deny (safe no-op when no pending approval)."""
         result = client.send_gateway_command("/deny")
@@ -92,16 +102,56 @@ class TestSendGatewayCommand:
 
 
 class TestInstallSkill:
-    def test_no_cli_returns_error(self, monkeypatch: pytest.MonkeyPatch, client: HermesClient) -> None:
+    def test_no_cli_returns_error(
+        self, monkeypatch: pytest.MonkeyPatch, client: HermesClient
+    ) -> None:
         monkeypatch.setattr(client, "_cli_available", False)
         result = client.install_skill("https://github.com/example/skill.git")
         assert result["success"] is False
         assert "Hermes CLI not available" in result.get("error", "")
 
-    @pytest.mark.skipif(shutil.which("hermes") is None, reason="Hermes CLI not installed")
+    @pytest.mark.skipif(
+        shutil.which("hermes") is None, reason="Hermes CLI not installed"
+    )
     def test_bad_url_returns_error(self, client: HermesClient) -> None:
         """Integration: invalid URL should fail gracefully."""
         result = client.install_skill("https://github.com/nonexistent/xxxxxxxx.git")
         assert isinstance(result, dict)
         assert "success" in result
         # Either it fails cleanly or raises subprocess error caught in dict
+
+
+# ---------------------------------------------------------------------------
+# scaffold_fastmcp
+# ---------------------------------------------------------------------------
+
+
+class TestScaffoldFastMcp:
+    def test_generates_fastmcp_scaffold(self, tmp_path, client: HermesClient) -> None:
+        result = client.scaffold_fastmcp(
+            output_dir=str(tmp_path),
+            server_name="Codomyrmex Demo",
+        )
+        assert result["success"] is True
+        assert "script_path" in result
+
+        package_dir = tmp_path / "codomyrmex_demo"
+        assert (package_dir / "server.py").exists()
+        assert (package_dir / "pyproject.toml").exists()
+        assert (package_dir / "README.md").exists()
+
+    def test_refuses_overwrite_without_force(
+        self, tmp_path, client: HermesClient
+    ) -> None:
+        first = client.scaffold_fastmcp(
+            output_dir=str(tmp_path),
+            server_name="Codomyrmex Demo",
+        )
+        assert first["success"] is True
+
+        second = client.scaffold_fastmcp(
+            output_dir=str(tmp_path),
+            server_name="Codomyrmex Demo",
+        )
+        assert second["success"] is False
+        assert "Refusing to overwrite existing file" in second.get("error", "")

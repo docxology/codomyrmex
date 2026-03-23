@@ -498,9 +498,7 @@ class TestHermesCreateTask:
             )
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
-        hermes_create_task(
-            session_id="sess-3", name="task-a", description="First task"
-        )
+        hermes_create_task(session_id="sess-3", name="task-a", description="First task")
         result = hermes_create_task(
             session_id="sess-3", name="task-a", description="Duplicate"
         )
@@ -519,9 +517,7 @@ class TestHermesCreateTask:
             )
 
         monkeypatch.setattr(mcp_tools, "_get_client", patched_get_client)
-        result = hermes_create_task(
-            session_id="nonexistent", name="x", description="y"
-        )
+        result = hermes_create_task(session_id="nonexistent", name="x", description="y")
         assert result["status"] == "error"
         assert "not found" in result["message"].lower()
 
@@ -644,4 +640,6 @@ class TestHermesCheckDependencies:
         monkeypatch.setattr(lockfile_mod, "LockfileParser", BrokenParser)
         result = hermes_check_dependencies("some-package")
         assert result["status"] == "error"
-        assert "not found" in result["message"].lower() or "uv.lock" in result["message"]
+        assert (
+            "not found" in result["message"].lower() or "uv.lock" in result["message"]
+        )

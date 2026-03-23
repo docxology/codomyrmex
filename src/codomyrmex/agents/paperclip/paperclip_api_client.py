@@ -76,9 +76,7 @@ class PaperclipAPIClient:
             headers["Content-Type"] = "application/json"
             body = json.dumps(data).encode("utf-8")
 
-        req = urllib.request.Request(
-            url, data=body, headers=headers, method=method
-        )
+        req = urllib.request.Request(url, data=body, headers=headers, method=method)
 
         try:
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
@@ -183,9 +181,7 @@ class PaperclipAPIClient:
             company_id: Company identifier.
             agent_id: Agent identifier.
         """
-        return self._request(
-            "GET", f"/api/companies/{company_id}/agents/{agent_id}"
-        )
+        return self._request("GET", f"/api/companies/{company_id}/agents/{agent_id}")
 
     def create_agent(
         self,
@@ -234,9 +230,7 @@ class PaperclipAPIClient:
             company_id: Company identifier.
             issue_id: Issue identifier.
         """
-        return self._request(
-            "GET", f"/api/companies/{company_id}/issues/{issue_id}"
-        )
+        return self._request("GET", f"/api/companies/{company_id}/issues/{issue_id}")
 
     def create_issue(
         self,

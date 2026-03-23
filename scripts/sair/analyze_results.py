@@ -48,7 +48,10 @@ DEFAULT_VIS_DIR = os.path.join(MODULE_DIR, "output", "visualizations")
 # Latency report using codomyrmex BenchmarkResult
 # -------------------------------------------------------------------
 
-def latency_report_from_results(results: list[dict[str, Any]], name: str = "evaluation") -> str:
+
+def latency_report_from_results(
+    results: list[dict[str, Any]], name: str = "evaluation"
+) -> str:
     """Build a latency report using BenchmarkResult from codomyrmex.performance."""
     latencies = [r["latency"] for r in results if "latency" in r and "error" not in r]
     if not latencies:
@@ -77,7 +80,10 @@ def latency_report_from_results(results: list[dict[str, Any]], name: str = "eval
 # Visualizations
 # -------------------------------------------------------------------
 
-def generate_run_visualizations(run_data: dict[str, Any], out_dir: str = DEFAULT_VIS_DIR) -> None:
+
+def generate_run_visualizations(
+    run_data: dict[str, Any], out_dir: str = DEFAULT_VIS_DIR
+) -> None:
     """Generate and save visualizations for a single run."""
     ensure_dir(out_dir)
     results = run_data.get("results", [])
@@ -98,7 +104,10 @@ def generate_run_visualizations(run_data: dict[str, Any], out_dir: str = DEFAULT
         plt.close()
         logger.info(f"Saved run visualization → {path}")
 
-def generate_trend_visualizations(runs: list[dict[str, Any]], out_dir: str = DEFAULT_VIS_DIR) -> None:
+
+def generate_trend_visualizations(
+    runs: list[dict[str, Any]], out_dir: str = DEFAULT_VIS_DIR
+) -> None:
     """Generate and save visualizations across multiple runs (trend)."""
     if len(runs) < 2:
         return
@@ -127,7 +136,9 @@ def generate_trend_visualizations(runs: list[dict[str, Any]], out_dir: str = DEF
     ax2 = ax1.twinx()
     color = "tab:red"
     ax2.set_ylabel("Avg Latency (s)", color=color)
-    ax2.plot(run_ids, avg_latencies, marker="x", linestyle="--", color=color, linewidth=1)
+    ax2.plot(
+        run_ids, avg_latencies, marker="x", linestyle="--", color=color, linewidth=1
+    )
     ax2.tick_params(axis="y", labelcolor=color)
 
     plt.title("SAIR Evaluation Trend (Accuracy vs Latency)")
@@ -140,10 +151,10 @@ def generate_trend_visualizations(runs: list[dict[str, Any]], out_dir: str = DEF
     logger.info(f"Saved trend visualization → {path}")
 
 
-
 # -------------------------------------------------------------------
 # Main analysis function
 # -------------------------------------------------------------------
+
 
 def analyze_run(run_data: dict[str, Any], verbose: bool = False) -> str:
     """Produce a human-readable analysis report for a single run."""
@@ -163,12 +174,20 @@ def analyze_run(run_data: dict[str, Any], verbose: bool = False) -> str:
     lines.append(f"  Start      : {summary.get('timestamp_start', '-')}")
     lines.append("")
     lines.append("── Accuracy ─────────────────────────────────────────")
-    lines.append(f"  Overall    : {s['accuracy']:.1%}  ({s['correct']}/{s['evaluated']})")
+    lines.append(
+        f"  Overall    : {s['accuracy']:.1%}  ({s['correct']}/{s['evaluated']})"
+    )
     if s["true_total"] > 0:
-        lines.append(f"  TRUE probs : {s['true_accuracy']:.1%}  ({s['true_correct']}/{s['true_total']})")
+        lines.append(
+            f"  TRUE probs : {s['true_accuracy']:.1%}  ({s['true_correct']}/{s['true_total']})"
+        )
     if s["false_total"] > 0:
-        lines.append(f"  FALSE probs: {s['false_accuracy']:.1%}  ({s['false_correct']}/{s['false_total']})")
-    lines.append(f"  Errors     : {s['errors']}  |  Unknown verdicts: {s['unknown_verdicts']}")
+        lines.append(
+            f"  FALSE probs: {s['false_accuracy']:.1%}  ({s['false_correct']}/{s['false_total']})"
+        )
+    lines.append(
+        f"  Errors     : {s['errors']}  |  Unknown verdicts: {s['unknown_verdicts']}"
+    )
     if summary.get("stage2"):
         ll = summary.get("avg_log_loss")
         lines.append(f"  Avg LogLoss: {ll if ll is not None else 'N/A'} (Stage 2)")
@@ -192,23 +211,35 @@ def analyze_run(run_data: dict[str, Any], verbose: bool = False) -> str:
         lines.append("")
         lines.append("── Refinement Suggestions ───────────────────────────")
         if s["true_correct"] < s["true_total"]:
-            lines.append("  → Add 'substitution_chain', 'singleton_magma' to cheatsheet for TRUE misses.")
+            lines.append(
+                "  → Add 'substitution_chain', 'singleton_magma' to cheatsheet for TRUE misses."
+            )
         if s["false_correct"] < s["false_total"]:
-            lines.append("  → Add 'counterexample_small_magma', 'left_zero_magma' for FALSE misses.")
-        lines.append("  → Run: python scripts/sair/generate_cheatsheet.py --refine-from <run_file>")
+            lines.append(
+                "  → Add 'counterexample_small_magma', 'left_zero_magma' for FALSE misses."
+            )
+        lines.append(
+            "  → Run: python scripts/sair/generate_cheatsheet.py --refine-from <run_file>"
+        )
 
     if verbose:
         lines.append("")
         lines.append("── Per-Problem Results ──────────────────────────────")
         for r in results:
             if "error" in r:
-                lines.append(f"  [ERROR] {r.get('problem_id','?')}: {r['error']}")
+                lines.append(f"  [ERROR] {r.get('problem_id', '?')}: {r['error']}")
             else:
-                correct_sym = "✓" if r.get("is_correct") else "✗" if r.get("is_correct") is False else "?"
+                correct_sym = (
+                    "✓"
+                    if r.get("is_correct")
+                    else "✗"
+                    if r.get("is_correct") is False
+                    else "?"
+                )
                 lines.append(
-                    f"  [{correct_sym}] {r.get('problem_id','?')}"
-                    f" | GT={r.get('ground_truth','?')} verdict={r.get('verdict','?')}"
-                    f" | {r.get('latency',0):.2f}s"
+                    f"  [{correct_sym}] {r.get('problem_id', '?')}"
+                    f" | GT={r.get('ground_truth', '?')} verdict={r.get('verdict', '?')}"
+                    f" | {r.get('latency', 0):.2f}s"
                 )
 
     # Generate offline visual artifacts
@@ -221,8 +252,12 @@ def analyze_trend(runs: list[dict[str, Any]]) -> str:
     """Summarise accuracy/latency trend across multiple runs."""
     if not runs:
         return "No runs found."
-    lines = ["── Run Trend ────────────────────────────────────────────────────────────"]
-    lines.append(f"  {'run_id':<12} {'model':<26} {'accuracy':>8} {'logloss':>8} {'latency':>8} {'tokens':>8}  cheatsheet")
+    lines = [
+        "── Run Trend ────────────────────────────────────────────────────────────"
+    ]
+    lines.append(
+        f"  {'run_id':<12} {'model':<26} {'accuracy':>8} {'logloss':>8} {'latency':>8} {'tokens':>8}  cheatsheet"
+    )
     lines.append("  " + "-" * 88)
     for rd in runs:
         s = rd.get("summary", {})
@@ -234,7 +269,9 @@ def analyze_trend(runs: list[dict[str, Any]]) -> str:
         lat = f"{s.get('avg_latency_sec', 0):.2f}s"
         tokens = str(s.get("total_tokens", 0))
         cs = s.get("cheatsheet_hash") or "base"
-        lines.append(f"  {run_id:<12} {model:<26} {acc:>8} {ll_str:>8} {lat:>8} {tokens:>8}  {cs}")
+        lines.append(
+            f"  {run_id:<12} {model:<26} {acc:>8} {ll_str:>8} {lat:>8} {tokens:>8}  {cs}"
+        )
 
     generate_trend_visualizations(runs)
 
@@ -267,10 +304,18 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyze SAIR evaluation run results.")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--run-file", help="Path to a single run JSON file.")
-    group.add_argument("--run-dir", help="Directory of run JSON files for trend analysis.")
-    group.add_argument("--compare", nargs=2, metavar=("RUN_A", "RUN_B"),
-                       help="Compare two run JSON files side-by-side.")
-    parser.add_argument("--verbose", "-v", action="store_true", help="Show per-problem breakdown.")
+    group.add_argument(
+        "--run-dir", help="Directory of run JSON files for trend analysis."
+    )
+    group.add_argument(
+        "--compare",
+        nargs=2,
+        metavar=("RUN_A", "RUN_B"),
+        help="Compare two run JSON files side-by-side.",
+    )
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Show per-problem breakdown."
+    )
     args = parser.parse_args()
 
     if args.compare:

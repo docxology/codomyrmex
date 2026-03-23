@@ -32,13 +32,15 @@ def _parse_args() -> argparse.Namespace:
         description="Submit a batch of prompts to the Hermes agent.",
     )
     parser.add_argument(
-        "--file", "-f",
+        "--file",
+        "-f",
         type=Path,
         default=None,
         help="Text file with one prompt per line (reads stdin if omitted).",
     )
     parser.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         type=Path,
         default=None,
         help="Write JSON results to this file (prints to stdout if omitted).",
@@ -67,7 +69,8 @@ def _parse_args() -> argparse.Namespace:
         help="Run all prompts concurrently (ThreadPoolExecutor).",
     )
     parser.add_argument(
-        "--quiet", "-q",
+        "--quiet",
+        "-q",
         action="store_true",
         help="Suppress progress messages.",
     )

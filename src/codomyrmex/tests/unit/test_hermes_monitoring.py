@@ -28,7 +28,9 @@ class TestGetSystemMetrics:
         """All metric values should be numeric (int or float)."""
         result = _get_system_metrics()
         for key in ("cpu_percent", "ram_usage_percent", "swap_usage_percent"):
-            assert isinstance(result[key], (int, float)), f"{key} should be numeric, got {type(result[key])}"
+            assert isinstance(result[key], (int, float)), (
+                f"{key} should be numeric, got {type(result[key])}"
+            )
 
     def test_percentages_in_valid_range(self) -> None:
         """All percentage values should be between 0 and 100."""

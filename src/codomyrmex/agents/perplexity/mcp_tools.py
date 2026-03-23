@@ -74,13 +74,15 @@ def perplexity_ask(
         from codomyrmex.agents.perplexity.perplexity_client import PerplexityClient
 
         client = PerplexityClient(config={"timeout": timeout})
-        
+
         # PerplexityClient defaults to a simple prompt if messages aren't provided in context.
         # We pass the messages array explicitly in the request context.
         # We also attempt to extract a prompt string for logging/compatibility.
         prompt = messages[-1]["content"] if messages else ""
-        request = AgentRequest(prompt=prompt, context={"messages": messages, "model": "sonar"})
-        
+        request = AgentRequest(
+            prompt=prompt, context={"messages": messages, "model": "sonar"}
+        )
+
         response = client.execute(request)
         return {
             "status": "success" if response.is_success() else "error",

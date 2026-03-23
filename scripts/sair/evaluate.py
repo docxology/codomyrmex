@@ -92,6 +92,7 @@ DEFAULT_LOGS_DIR = os.path.join(MODULE_DIR, "output", "logs")
 # Parsing
 # -------------------------------------------------------------------
 
+
 def parse_llm_response(response_text: str) -> dict[str, str]:
     """Parse the structured LLM response based on the official SAIR headers.
 
@@ -161,6 +162,7 @@ def compute_log_loss(ground_truth: str, confidence: Optional[float]) -> Optional
         log-loss float or None
     """
     import math
+
     if confidence is None or ground_truth not in ("TRUE", "FALSE"):
         return None
     # Clamp to avoid log(0)
@@ -168,9 +170,11 @@ def compute_log_loss(ground_truth: str, confidence: Optional[float]) -> Optional
     label = 1 if ground_truth == "TRUE" else 0
     return -(label * math.log(p) + (1 - label) * math.log(1 - p))
 
+
 # -------------------------------------------------------------------
 # Single problem evaluation
 # -------------------------------------------------------------------
+
 
 def evaluate_problem(
     provider: Any,
@@ -195,7 +199,9 @@ def evaluate_problem(
     messages = [Message(role="user", content=prompt)]
 
     ground_truth_raw = str(
-        problem.get("answer", problem.get("expected_verdict", problem.get("is_true", "")))
+        problem.get(
+            "answer", problem.get("expected_verdict", problem.get("is_true", ""))
+        )
     ).upper()
     ground_truth = ground_truth_raw if ground_truth_raw in ("TRUE", "FALSE") else None
 
@@ -254,7 +260,7 @@ def evaluate_problem(
                 e,
             )
             if attempt < max_retries - 1:
-                time.sleep(2 ** attempt)  # Exponential backoff
+                time.sleep(2**attempt)  # Exponential backoff
 
     logger.error(
         "Problem %s failed after %d attempts: %s",
@@ -275,6 +281,7 @@ def evaluate_problem(
 # -------------------------------------------------------------------
 # Batch evaluation
 # -------------------------------------------------------------------
+
 
 def run_evaluation(
     dataset_path: str,
@@ -320,9 +327,16 @@ def run_evaluation(
         cheatsheet_hash = compute_hash(cheatsheet)
         if size_bytes > 10_240:
             logger.warning(
-                "Cheatsheet '%s' is %d bytes — exceeds 10KB limit!", cheatsheet_path, size_bytes
+                "Cheatsheet '%s' is %d bytes — exceeds 10KB limit!",
+                cheatsheet_path,
+                size_bytes,
             )
-        logger.info("Loaded cheatsheet %s (%d bytes, hash=%s)", cheatsheet_path, size_bytes, cheatsheet_hash)
+        logger.info(
+            "Loaded cheatsheet %s (%d bytes, hash=%s)",
+            cheatsheet_path,
+            size_bytes,
+            cheatsheet_hash,
+        )
 
     # Load problems ---------------------------------------------------------
     problems = load_jsonl(dataset_path)
@@ -400,6 +414,7 @@ def run_evaluation(
 
     # Append structured telemetry log line ----------------------------------
     import json as _json
+
     log_line = _json.dumps(
         {
             "type": "sair_run",
@@ -438,10 +453,18 @@ if __name__ == "__main__":
         default="gemini-2.5-flash",
         help="Model to use (Gemini or OpenRouter format).",
     )
-    parser.add_argument("--limit", type=int, help="Limit the number of problems evaluated.")
-    parser.add_argument("--output", help="Explicit path to save evaluation JSON results.")
-    parser.add_argument("--runs-dir", default=DEFAULT_RUNS_DIR, help="Directory for auto-saved runs.")
-    parser.add_argument("--logs-dir", default=DEFAULT_LOGS_DIR, help="Directory for telemetry log.")
+    parser.add_argument(
+        "--limit", type=int, help="Limit the number of problems evaluated."
+    )
+    parser.add_argument(
+        "--output", help="Explicit path to save evaluation JSON results."
+    )
+    parser.add_argument(
+        "--runs-dir", default=DEFAULT_RUNS_DIR, help="Directory for auto-saved runs."
+    )
+    parser.add_argument(
+        "--logs-dir", default=DEFAULT_LOGS_DIR, help="Directory for telemetry log."
+    )
 
     args = parser.parse_args()
 

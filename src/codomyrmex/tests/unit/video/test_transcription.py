@@ -184,7 +184,9 @@ class TestVideoTranscriber:
         assert result.status == "completed"
 
     def test_parse_json_output_no_json(self) -> None:
-        result = VideoTranscriber._parse_json_output("ERROR: ffmpeg not found", "https://x.com")
+        result = VideoTranscriber._parse_json_output(
+            "ERROR: ffmpeg not found", "https://x.com"
+        )
         assert result.status == "error"
         assert "No JSON" in result.error
 

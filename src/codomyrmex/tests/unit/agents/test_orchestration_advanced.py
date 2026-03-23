@@ -46,7 +46,9 @@ class StubAgent(BaseAgent):
         self.execution_count = 0
         self.fail_after = fail_after
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         self.execution_count += 1
 
         if self.delay > 0:

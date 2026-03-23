@@ -437,9 +437,7 @@ class KnowledgeMemory:
             import urllib.request as _req
 
             def _embed(text: str) -> list[float]:
-                payload = _json.dumps(
-                    {"model": ollama_model, "input": text}
-                ).encode()
+                payload = _json.dumps({"model": ollama_model, "input": text}).encode()
                 request = _req.Request(
                     "http://localhost:11434/api/embed",
                     data=payload,
@@ -492,9 +490,7 @@ class KnowledgeMemory:
         import datetime
 
         all_memories = self._agent.store.list_all()
-        semantic = [
-            m for m in all_memories if m.memory_type == MemoryType.SEMANTIC
-        ]
+        semantic = [m for m in all_memories if m.memory_type == MemoryType.SEMANTIC]
         # Sort oldest first so we always keep the canonical older copy
         semantic.sort(key=lambda m: m.created_at)
 
@@ -513,9 +509,7 @@ class KnowledgeMemory:
                     now_str = datetime.datetime.fromtimestamp(
                         candidate.created_at
                     ).strftime("%Y-%m-%d")
-                    update_text = (
-                        f"\n\n## Update ({now_str})\n\n{candidate.content}"
-                    )
+                    update_text = f"\n\n## Update ({now_str})\n\n{candidate.content}"
                     base.content += update_text
                     self._agent.store.save(base)
                     # Remove the duplicate

@@ -6,7 +6,10 @@ that wire into the existing :class:`~codomyrmex.orchestrator.engines.parallel.Pa
 Example::
 
     topo = SwarmTopology()
-    tasks = [{"id": "a", "fn": my_fn, "args": [1]}, {"id": "b", "fn": my_fn, "args": [2]}]
+    tasks = [
+        {"id": "a", "fn": my_fn, "args": [1]},
+        {"id": "b", "fn": my_fn, "args": [2]},
+    ]
     result = topo.run(TopologyMode.FAN_OUT, tasks)
     merged = topo.fan_in(result["results"])
 """

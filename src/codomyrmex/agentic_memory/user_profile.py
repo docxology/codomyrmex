@@ -76,7 +76,9 @@ class UserProfile:
                 history_summary=data.get("history_summary", ""),
             )
         except (json.JSONDecodeError, OSError) as exc:
-            logger.warning("Failed to load profile from %s: %s — using defaults", path, exc)
+            logger.warning(
+                "Failed to load profile from %s: %s — using defaults", path, exc
+            )
             return cls()
 
     # ── helpers ──────────────────────────────────────────────────

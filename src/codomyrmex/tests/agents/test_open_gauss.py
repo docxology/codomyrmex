@@ -28,10 +28,12 @@ import yaml
 # Fixtures
 # ===========================================================================
 
+
 @pytest.fixture
 def tmp_db(tmp_path):
     """SessionDB backed by a real SQLite file in a temp directory."""
     from gauss_state import SessionDB
+
     db = SessionDB(db_path=tmp_path / "state.db")
     yield db
     db.close()
@@ -41,6 +43,7 @@ def tmp_db(tmp_path):
 def reset_gauss_time_cache():
     """Reset the gauss_time module cache before each test."""
     import gauss_time
+
     gauss_time.reset_cache()
     yield
     gauss_time.reset_cache()
@@ -50,25 +53,31 @@ def reset_gauss_time_cache():
 # gauss_constants
 # ===========================================================================
 
+
 class TestGaussConstants:
     def test_openrouter_base_url_format(self):
         from gauss_constants import OPENROUTER_BASE_URL
+
         assert OPENROUTER_BASE_URL.startswith("https://openrouter.ai/api/v")
 
     def test_openrouter_models_url_is_subpath(self):
         from gauss_constants import OPENROUTER_BASE_URL, OPENROUTER_MODELS_URL
+
         assert OPENROUTER_MODELS_URL.startswith(OPENROUTER_BASE_URL)
 
     def test_openrouter_chat_url_is_subpath(self):
         from gauss_constants import OPENROUTER_BASE_URL, OPENROUTER_CHAT_URL
+
         assert OPENROUTER_CHAT_URL.startswith(OPENROUTER_BASE_URL)
 
     def test_nous_base_url_is_https(self):
         from gauss_constants import NOUS_API_BASE_URL
+
         assert NOUS_API_BASE_URL.startswith("https://")
 
     def test_nous_chat_url_ends_chat_completions(self):
         from gauss_constants import NOUS_API_CHAT_URL
+
         assert NOUS_API_CHAT_URL.endswith("/chat/completions")
 
 
@@ -76,15 +85,18 @@ class TestGaussConstants:
 # gauss_time
 # ===========================================================================
 
+
 class TestGaussTime:
     def test_now_returns_timezone_aware_datetime(self):
         from gauss_time import now
+
         result = now()
         assert isinstance(result, datetime)
         assert result.tzinfo is not None, "now() must return a tz-aware datetime"
 
     def test_now_with_env_timezone(self, monkeypatch):
         from gauss_time import now, reset_cache
+
         monkeypatch.setenv("GAUSS_TIMEZONE", "America/New_York")
         reset_cache()
         result = now()
@@ -92,6 +104,7 @@ class TestGaussTime:
 
     def test_now_with_invalid_env_timezone_falls_back_gracefully(self, monkeypatch):
         from gauss_time import now, reset_cache
+
         monkeypatch.setenv("GAUSS_TIMEZONE", "Not/A/Real/Zone")
         reset_cache()
         result = now()
@@ -100,6 +113,7 @@ class TestGaussTime:
 
     def test_get_timezone_name_empty_by_default(self, tmp_path, monkeypatch):
         from gauss_time import get_timezone_name
+
         monkeypatch.setenv("GAUSS_HOME", str(tmp_path))
         monkeypatch.delenv("GAUSS_TIMEZONE", raising=False)
         result = get_timezone_name()
@@ -107,6 +121,7 @@ class TestGaussTime:
 
     def test_reset_cache_clears_state(self, monkeypatch):
         from gauss_time import get_timezone_name, reset_cache
+
         monkeypatch.setenv("GAUSS_TIMEZONE", "Europe/Paris")
         reset_cache()
         name1 = get_timezone_name()
@@ -118,7 +133,9 @@ class TestGaussTime:
 
     def test_multiple_calls_to_now_are_monotonic(self):
         import time
+
         from gauss_time import now
+
         t1 = now()
         time.sleep(0.01)
         t2 = now()
@@ -129,9 +146,11 @@ class TestGaussTime:
 # utils — atomic_json_write / atomic_yaml_write
 # ===========================================================================
 
+
 class TestAtomicJsonWrite:
     def test_writes_valid_json(self, tmp_path):
         from utils import atomic_json_write
+
         target = tmp_path / "out.json"
         data = {"key": "value", "num": 42}
         atomic_json_write(target, data)
@@ -140,6 +159,7 @@ class TestAtomicJsonWrite:
 
     def test_overwrites_existing_file(self, tmp_path):
         from utils import atomic_json_write
+
         target = tmp_path / "out.json"
         atomic_json_write(target, {"v": 1})
         atomic_json_write(target, {"v": 2})
@@ -147,12 +167,14 @@ class TestAtomicJsonWrite:
 
     def test_creates_parent_directories(self, tmp_path):
         from utils import atomic_json_write
+
         target = tmp_path / "deep" / "nested" / "out.json"
         atomic_json_write(target, {"nested": True})
         assert target.exists()
 
     def test_no_tmp_file_left_on_success(self, tmp_path):
         from utils import atomic_json_write
+
         target = tmp_path / "out.json"
         atomic_json_write(target, {"ok": True})
         tmp_files = list(tmp_path.glob("*.tmp"))
@@ -160,6 +182,7 @@ class TestAtomicJsonWrite:
 
     def test_handles_nested_structures(self, tmp_path):
         from utils import atomic_json_write
+
         target = tmp_path / "deep.json"
         data = {"list": [1, 2, 3], "nested": {"a": {"b": "c"}}}
         atomic_json_write(target, data)
@@ -169,6 +192,7 @@ class TestAtomicJsonWrite:
 class TestAtomicYamlWrite:
     def test_writes_valid_yaml(self, tmp_path):
         from utils import atomic_yaml_write
+
         target = tmp_path / "out.yaml"
         data = {"key": "value", "count": 7}
         atomic_yaml_write(target, data)
@@ -177,6 +201,7 @@ class TestAtomicYamlWrite:
 
     def test_overwrites_existing_yaml(self, tmp_path):
         from utils import atomic_yaml_write
+
         target = tmp_path / "out.yaml"
         atomic_yaml_write(target, {"v": 1})
         atomic_yaml_write(target, {"v": 99})
@@ -184,6 +209,7 @@ class TestAtomicYamlWrite:
 
     def test_extra_content_appended(self, tmp_path):
         from utils import atomic_yaml_write
+
         target = tmp_path / "out.yaml"
         atomic_yaml_write(target, {"k": "v"}, extra_content="# trailing comment\n")
         content = target.read_text()
@@ -191,6 +217,7 @@ class TestAtomicYamlWrite:
 
     def test_no_tmp_file_left_on_success(self, tmp_path):
         from utils import atomic_yaml_write
+
         target = tmp_path / "out.yaml"
         atomic_yaml_write(target, {"ok": True})
         assert len(list(tmp_path.glob("*.tmp"))) == 0
@@ -200,16 +227,19 @@ class TestAtomicYamlWrite:
 # SessionDB — schema, lifecycle, messages
 # ===========================================================================
 
+
 class TestSessionDBSchemaInit:
     def test_creates_database_file(self, tmp_path):
         from gauss_state import SessionDB
+
         db_path = tmp_path / "state.db"
         db = SessionDB(db_path=db_path)
         db.close()
         assert db_path.exists()
 
     def test_schema_version_initialized(self, tmp_path):
-        from gauss_state import SessionDB, SCHEMA_VERSION
+        from gauss_state import SCHEMA_VERSION, SessionDB
+
         db = SessionDB(db_path=tmp_path / "state.db")
         cursor = db._conn.execute("SELECT version FROM schema_version LIMIT 1")
         version = cursor.fetchone()[0]
@@ -218,6 +248,7 @@ class TestSessionDBSchemaInit:
 
     def test_wal_mode_enabled(self, tmp_path):
         from gauss_state import SessionDB
+
         db = SessionDB(db_path=tmp_path / "state.db")
         cursor = db._conn.execute("PRAGMA journal_mode")
         mode = cursor.fetchone()[0]
@@ -226,6 +257,7 @@ class TestSessionDBSchemaInit:
 
     def test_reinit_is_idempotent(self, tmp_path):
         from gauss_state import SessionDB
+
         db_path = tmp_path / "state.db"
         db = SessionDB(db_path=db_path)
         db.close()
@@ -244,7 +276,8 @@ class TestSessionDBSessionLifecycle:
 
     def test_create_session_with_all_fields(self, tmp_db):
         tmp_db.create_session(
-            "sess-full", source="telegram",
+            "sess-full",
+            source="telegram",
             model="openrouter/hunter-alpha",
             model_config={"temperature": 0.7},
             system_prompt="You are a prover.",
@@ -351,11 +384,15 @@ class TestSessionDBMessages:
 class TestSessionDBFTS5Search:
     def test_search_returns_matching_message(self, tmp_db):
         tmp_db.create_session("fts-sess", source="cli")
-        tmp_db.append_message("fts-sess", "user", "The Pythagorean theorem states a²+b²=c²")
+        tmp_db.append_message(
+            "fts-sess", "user", "The Pythagorean theorem states a²+b²=c²"
+        )
         results = tmp_db.search_messages("Pythagorean")
         assert len(results) >= 1
-        assert any("Pythagorean" in r.get("snippet", "") or r.get("session_id") == "fts-sess"
-                   for r in results)
+        assert any(
+            "Pythagorean" in r.get("snippet", "") or r.get("session_id") == "fts-sess"
+            for r in results
+        )
 
     def test_search_empty_query_returns_empty(self, tmp_db):
         tmp_db.create_session("s1", source="cli")
@@ -379,9 +416,7 @@ class TestSessionDBFTS5Search:
         tmp_db.create_session("role-sess", source="cli")
         tmp_db.append_message("role-sess", "user", "unique_user_word")
         tmp_db.append_message("role-sess", "assistant", "unique_user_word")
-        user_results = tmp_db.search_messages(
-            "unique_user_word", role_filter=["user"]
-        )
+        user_results = tmp_db.search_messages("unique_user_word", role_filter=["user"])
         assert all(r["role"] == "user" for r in user_results)
 
 
@@ -393,21 +428,25 @@ class TestSessionDBTitleManagement:
 
     def test_sanitize_title_strips_whitespace(self):
         from gauss_state import SessionDB
+
         assert SessionDB.sanitize_title("  hello  ") == "hello"
 
     def test_sanitize_title_empty_returns_none(self):
         from gauss_state import SessionDB
+
         assert SessionDB.sanitize_title("") is None
         assert SessionDB.sanitize_title("   ") is None
         assert SessionDB.sanitize_title(None) is None
 
     def test_sanitize_title_collapses_whitespace(self):
         from gauss_state import SessionDB
+
         result = SessionDB.sanitize_title("hello   world")
         assert result == "hello world"
 
     def test_sanitize_title_too_long_raises(self):
         from gauss_state import SessionDB
+
         with pytest.raises(ValueError, match="Title too long"):
             SessionDB.sanitize_title("x" * 101)
 
@@ -453,13 +492,13 @@ class TestSessionDBExportAndPrune:
 
     def test_prune_ended_sessions(self, tmp_db):
         import time
+
         tmp_db.create_session("old-sess", source="cli")
         tmp_db.end_session("old-sess", "user_exit")
         # Force the session's started_at to be very old
         old_ts = time.time() - (100 * 86400)  # 100 days ago
         tmp_db._conn.execute(
-            "UPDATE sessions SET started_at = ? WHERE id = 'old-sess'",
-            (old_ts,)
+            "UPDATE sessions SET started_at = ? WHERE id = 'old-sess'", (old_ts,)
         )
         tmp_db._conn.commit()
         pruned = tmp_db.prune_sessions(older_than_days=90)
@@ -467,12 +506,12 @@ class TestSessionDBExportAndPrune:
 
     def test_prune_does_not_remove_active_sessions(self, tmp_db):
         import time
+
         tmp_db.create_session("active-sess", source="cli")
         # Do NOT call end_session — leave it active
         old_ts = time.time() - (100 * 86400)
         tmp_db._conn.execute(
-            "UPDATE sessions SET started_at = ? WHERE id = 'active-sess'",
-            (old_ts,)
+            "UPDATE sessions SET started_at = ? WHERE id = 'active-sess'", (old_ts,)
         )
         tmp_db._conn.commit()
         tmp_db.prune_sessions(older_than_days=90)
@@ -484,28 +523,34 @@ class TestSessionDBExportAndPrune:
 # gauss_cli/project — utility functions (no Lean install required)
 # ===========================================================================
 
+
 class TestGaussProjectUtilities:
     def test_is_lean_project_root_false_for_empty_dir(self, tmp_path):
         from gauss_cli.project import is_lean_project_root
+
         assert is_lean_project_root(tmp_path) is False
 
     def test_is_lean_project_root_true_with_lakefile_lean(self, tmp_path):
         from gauss_cli.project import is_lean_project_root
+
         (tmp_path / "lakefile.lean").touch()
         assert is_lean_project_root(tmp_path) is True
 
     def test_is_lean_project_root_true_with_lakefile_toml(self, tmp_path):
         from gauss_cli.project import is_lean_project_root
+
         (tmp_path / "lakefile.toml").touch()
         assert is_lean_project_root(tmp_path) is True
 
     def test_find_lean_project_root_none_when_not_found(self, tmp_path):
         from gauss_cli.project import find_lean_project_root
+
         result = find_lean_project_root(tmp_path)
         assert result is None
 
     def test_find_lean_project_root_finds_ancestor(self, tmp_path):
         from gauss_cli.project import find_lean_project_root
+
         (tmp_path / "lakefile.lean").touch()
         subdir = tmp_path / "subdir" / "nested"
         subdir.mkdir(parents=True)
@@ -514,23 +559,32 @@ class TestGaussProjectUtilities:
 
     def test_detect_blueprint_markers_empty(self, tmp_path):
         from gauss_cli.project import detect_blueprint_markers
+
         markers = detect_blueprint_markers(tmp_path)
         assert markers == ()
 
     def test_detect_blueprint_markers_finds_lean_toolchain(self, tmp_path):
         from gauss_cli.project import detect_blueprint_markers
+
         (tmp_path / "lean-toolchain").touch()
         markers = detect_blueprint_markers(tmp_path)
         assert "lean-toolchain" in markers
 
     def test_resolve_template_source_from_env(self, monkeypatch):
-        from gauss_cli.project import resolve_template_source, GAUSS_PROJECT_TEMPLATE_ENV
-        monkeypatch.setenv(GAUSS_PROJECT_TEMPLATE_ENV, "https://github.com/example/template")
+        from gauss_cli.project import (
+            GAUSS_PROJECT_TEMPLATE_ENV,
+            resolve_template_source,
+        )
+
+        monkeypatch.setenv(
+            GAUSS_PROJECT_TEMPLATE_ENV, "https://github.com/example/template"
+        )
         result = resolve_template_source(env=os.environ)
         assert result == "https://github.com/example/template"
 
     def test_resolve_template_source_empty_by_default(self):
         from gauss_cli.project import resolve_template_source
+
         result = resolve_template_source(config=None, env={})
         assert result == ""
 
@@ -544,6 +598,7 @@ class TestGaussProjectInit:
 
     def test_initialize_gauss_project_creates_manifest(self, tmp_path):
         from gauss_cli.project import initialize_gauss_project
+
         lean_dir = self._make_lean_project(tmp_path / "lean-proj")
         project = initialize_gauss_project(lean_dir, name="TestProj")
         manifest_path = lean_dir / ".gauss" / "project.yaml"
@@ -553,6 +608,7 @@ class TestGaussProjectInit:
 
     def test_initialize_gauss_project_is_idempotent(self, tmp_path):
         from gauss_cli.project import initialize_gauss_project
+
         lean_dir = self._make_lean_project(tmp_path / "lean-proj2")
         p1 = initialize_gauss_project(lean_dir, name="Idempotent")
         p2 = initialize_gauss_project(lean_dir, name="Idempotent")
@@ -561,6 +617,7 @@ class TestGaussProjectInit:
 
     def test_initialize_gauss_project_creates_runtime_dirs(self, tmp_path):
         from gauss_cli.project import initialize_gauss_project
+
         lean_dir = self._make_lean_project(tmp_path / "lean-proj3")
         project = initialize_gauss_project(lean_dir)
         assert project.runtime_dir.exists()
@@ -568,22 +625,26 @@ class TestGaussProjectInit:
         assert project.workflows_dir.exists()
 
     def test_initialize_gauss_project_frozen_dataclass(self, tmp_path):
-        from gauss_cli.project import initialize_gauss_project
         from dataclasses import FrozenInstanceError
+
+        from gauss_cli.project import initialize_gauss_project
+
         lean_dir = self._make_lean_project(tmp_path / "lean-frozen")
         project = initialize_gauss_project(lean_dir)
         with pytest.raises((FrozenInstanceError, AttributeError)):
             project.name = "mutated"  # type: ignore
 
     def test_discover_gauss_project_not_found_raises(self, tmp_path):
-        from gauss_cli.project import discover_gauss_project, ProjectNotFoundError
+        from gauss_cli.project import ProjectNotFoundError, discover_gauss_project
+
         empty = tmp_path / "empty"
         empty.mkdir()
         with pytest.raises(ProjectNotFoundError):
             discover_gauss_project(empty)
 
     def test_load_gauss_project_invalid_dir_raises(self, tmp_path):
-        from gauss_cli.project import load_gauss_project, ProjectNotFoundError
+        from gauss_cli.project import ProjectNotFoundError, load_gauss_project
+
         non_gauss = tmp_path / "not-a-gauss-dir"
         non_gauss.mkdir()
         with pytest.raises(ProjectNotFoundError):
@@ -591,12 +652,14 @@ class TestGaussProjectInit:
 
     def test_project_label_uses_name(self, tmp_path):
         from gauss_cli.project import initialize_gauss_project
+
         lean_dir = self._make_lean_project(tmp_path / "label-proj")
         project = initialize_gauss_project(lean_dir, name="MyLeanProject")
         assert project.label == "MyLeanProject"
 
     def test_project_is_blueprint_respects_explicit_empty_markers(self, tmp_path):
         from gauss_cli.project import initialize_gauss_project
+
         lean_dir = self._make_lean_project(tmp_path / "no-blueprint")
         # Pass explicit empty tuple — lakefile.lean is also a blueprint marker,
         # so auto-detection would return is_blueprint=True; override it.
@@ -605,6 +668,7 @@ class TestGaussProjectInit:
 
     def test_project_is_blueprint_true_when_lakefile_present(self, tmp_path):
         from gauss_cli.project import initialize_gauss_project
+
         lean_dir = self._make_lean_project(tmp_path / "yes-blueprint")
         # lakefile.lean is both a Lean project root AND a blueprint marker
         project = initialize_gauss_project(lean_dir)

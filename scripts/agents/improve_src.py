@@ -37,7 +37,11 @@ def get_core_modules() -> list[Path]:
         return modules
 
     for item in SRC_DIR.iterdir():
-        if item.is_dir() and not item.name.startswith("__") and item.name not in ("tests", "examples", "docs"):
+        if (
+            item.is_dir()
+            and not item.name.startswith("__")
+            and item.name not in ("tests", "examples", "docs")
+        ):
             modules.append(item)
     return sorted(modules)
 
@@ -77,8 +81,12 @@ def dispatch_agent(prompt: str, dry_run: bool) -> bool:
 
 def main():
     parser = argparse.ArgumentParser(description="Massive Parallel Improver for src/")
-    parser.add_argument("--dry-run", action="store_true", help="Preview tasks without dispatching")
-    parser.add_argument("--limit", type=int, default=None, help="Max agents to dispatch")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Preview tasks without dispatching"
+    )
+    parser.add_argument(
+        "--limit", type=int, default=None, help="Max agents to dispatch"
+    )
     parser.add_argument("--batch-size", type=int, default=DEFAULT_BATCH_SIZE)
     parser.add_argument("--delay", type=float, default=DEFAULT_BATCH_DELAY)
     args = parser.parse_args()
@@ -91,7 +99,7 @@ def main():
     tasks = [{"module": m.name, "prompt": generate_prompt(m)} for m in modules]
 
     if args.limit:
-        tasks = tasks[:args.limit]
+        tasks = tasks[: args.limit]
 
     logger.info(f"Generated {len(tasks)} improvement tasks for src/codomyrmex/")
 
@@ -105,9 +113,11 @@ def main():
     dispatched = 0
     failed = 0
 
-    print(f"🚀 Dispatching {len(tasks)} Jules agents in batches of {args.batch_size}...")
+    print(
+        f"🚀 Dispatching {len(tasks)} Jules agents in batches of {args.batch_size}..."
+    )
     for i in range(0, len(tasks), args.batch_size):
-        batch = tasks[i:i + args.batch_size]
+        batch = tasks[i : i + args.batch_size]
         print(f"\n── Batch {i // args.batch_size + 1} ({len(batch)} agents) ──")
 
         for task in batch:
@@ -122,7 +132,7 @@ def main():
             print(f"  ⏳ Waiting {args.delay}s...")
             time.sleep(args.delay)
 
-    print("\n" + "="*40)
+    print("\n" + "=" * 40)
     print("✅ src/ Improvement Swarm Complete")
     print(f"   Success: {dispatched}")
     print(f"   Failed:  {failed}")

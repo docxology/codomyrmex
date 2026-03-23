@@ -94,6 +94,7 @@ class HermesSession:
                 if session.message_count >= 3:
                     hermes_extract_ki(session_id=session.session_id)
 
+
             sess = HermesSession(on_close=extract_ki)
 
         The callback is called at most once; after :meth:`close` the
@@ -571,6 +572,7 @@ class SQLiteSessionStore:
         if session.parent_session_id:
             lines.append(f"**Parent**: `{session.parent_session_id}`  ")
         import datetime
+
         lines.append(
             f"**Created**: {datetime.datetime.fromtimestamp(session.created_at).isoformat()}  "
         )

@@ -12,13 +12,18 @@ Usage::
 
     bus = MessageBus()
 
+
     # Subscribe to specific message type
     def handle_task(msg: Message):
         print(f"Received task: {msg.content}")
+
+
     bus.subscribe("task", handle_task)
 
     # Publish a message
-    bus.send(sender="agent1", recipient="agent2", message_type="task", content="process data")
+    bus.send(
+        sender="agent1", recipient="agent2", message_type="task", content="process data"
+    )
 
     # Broadcast to all subscribers
     bus.broadcast(sender="agent1", message_type="alert", content="system status update")
@@ -89,14 +94,21 @@ class MessageBus:
 
         bus = MessageBus()
 
+
         # Agent subscribes to task messages
         def on_task(msg: Message):
             print(f"Agent received: {msg.content}")
 
+
         bus.subscribe("task", on_task)
 
         # Another agent sends a task
-        bus.send(sender="planner", recipient="worker", message_type="task", content="analyze data")
+        bus.send(
+            sender="planner",
+            recipient="worker",
+            message_type="task",
+            content="analyze data",
+        )
     """
 
     def __init__(self, max_history: int = 1000):
@@ -140,7 +152,11 @@ class MessageBus:
 
         # Attach priority to handler for re-sorting
         handler._priority = priority  # type: ignore[attr-defined]
-        self.logger.debug("Subscribed handler to message type: %s (priority=%d)", message_type, priority)
+        self.logger.debug(
+            "Subscribed handler to message type: %s (priority=%d)",
+            message_type,
+            priority,
+        )
 
     def unsubscribe(
         self,
@@ -159,7 +175,9 @@ class MessageBus:
         if message_type in self.subscribers:
             if handler in self.subscribers[message_type]:
                 self.subscribers[message_type].remove(handler)
-                self.logger.debug("Unsubscribed handler from message type: %s", message_type)
+                self.logger.debug(
+                    "Unsubscribed handler from message type: %s", message_type
+                )
                 return True
 
             # Also check for handlers with matching priority removal
@@ -184,7 +202,7 @@ class MessageBus:
         # Add to history with size limit
         self.message_history.append(message)
         if len(self.message_history) > self.max_history:
-            self.message_history = self.message_history[-self.max_history:]
+            self.message_history = self.message_history[-self.max_history :]
 
         delivery_count = 0
 
@@ -216,7 +234,9 @@ class MessageBus:
                     OSError,
                     TypeError,
                 ) as e:
-                    self.logger.error("Error in wildcard message handler: %s", e, exc_info=True)
+                    self.logger.error(
+                        "Error in wildcard message handler: %s", e, exc_info=True
+                    )
 
         self.logger.debug(
             "Published message %s of type %s to %d subscribers",

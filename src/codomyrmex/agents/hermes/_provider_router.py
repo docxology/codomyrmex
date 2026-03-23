@@ -1107,6 +1107,7 @@ class MCPBridgeManager:
     def servers(self) -> dict[str, dict[str, Any]]:
         """Return current server configurations (deep copy)."""
         import copy
+
         return copy.deepcopy(self._servers)
 
     def list_servers(self) -> list[dict[str, Any]]:

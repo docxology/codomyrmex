@@ -41,10 +41,7 @@ def update_flock(agents: list[SwarmAgent], params: FlockingParams) -> None:
 
     # 27 adjacent cell offsets to search for neighbors
     offsets = [
-        (dx, dy, dz)
-        for dx in (-1, 0, 1)
-        for dy in (-1, 0, 1)
-        for dz in (-1, 0, 1)
+        (dx, dy, dz) for dx in (-1, 0, 1) for dy in (-1, 0, 1) for dz in (-1, 0, 1)
     ]
 
     accelerations = np.zeros((n, 3))

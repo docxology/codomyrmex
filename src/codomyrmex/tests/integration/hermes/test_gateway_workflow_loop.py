@@ -1,6 +1,5 @@
 """Integration tests for Hermes Workflow Engine Loop."""
 
-
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.hermes.hermes_client import HermesClient
 
@@ -14,7 +13,9 @@ class TestHermesClient(HermesClient):
         )
         self.call_count = 0
 
-    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def execute(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Simulate LLM creating and resolving tasks iteratively."""
         self.call_count += 1
 

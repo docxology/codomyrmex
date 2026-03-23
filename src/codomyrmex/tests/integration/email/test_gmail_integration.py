@@ -305,9 +305,7 @@ def test_gmail_mcp_create_draft() -> None:
         ),
     )
     assert result["status"] == "success", result.get("error")
-    assert result.get("draft_id") is not None, (
-        "gmail_create_draft returned no draft_id"
-    )
+    assert result.get("draft_id") is not None, "gmail_create_draft returned no draft_id"
 
 
 @SKIP
@@ -351,4 +349,3 @@ def test_gmail_mcp_send_list_get_e2e() -> None:
     msg = get_result["message"]
     assert msg["id"] == sent_id
     assert msg["subject"] == unique_subject
-

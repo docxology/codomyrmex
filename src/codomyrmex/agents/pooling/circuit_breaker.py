@@ -33,6 +33,7 @@ from enum import Enum
 
 class CircuitState(Enum):
     """Possible states for the circuit breaker."""
+
     CLOSED = "closed"
     OPEN = "open"
     HALF_OPEN = "half_open"
@@ -171,4 +172,3 @@ class CircuitBreaker:
             f"failures={self._failures}/{self.failure_threshold}, "
             f"last_failure={self._last_failure_time})"
         )
-

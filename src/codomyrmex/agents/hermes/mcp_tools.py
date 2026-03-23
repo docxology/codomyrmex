@@ -1945,7 +1945,9 @@ def hermes_spawn_agent(
                     "task": t,
                     "agent": "hermes",
                     "backend": getattr(client, "_active_backend", "auto"),
-                    "result": result.content if hasattr(result, "content") else str(result),
+                    "result": result.content
+                    if hasattr(result, "content")
+                    else str(result),
                 }
 
         except Exception:
@@ -2277,5 +2279,47 @@ def hermes_skill_install(repo_url: str) -> dict[str, Any]:
             "error": result.get("error", ""),
             "tip": "Run hermes gateway restart to activate the new skill.",
         }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    tags=["hermes", "mcp", "fastmcp", "interop"],
+    description=(
+        "Generate a FastMCP server scaffold for Codomyrmex↔Hermes integration. "
+        "Wraps optional-skills/mcp/fastmcp/scaffold_fastmcp.py."
+    ),
+)
+def hermes_fastmcp_scaffold(
+    output_dir: str,
+    server_name: str,
+    force: bool = False,
+) -> dict[str, Any]:
+    """Scaffold a FastMCP server package via Hermes optional-skills."""
+    try:
+        import json
+
+        client = _get_client()
+        result = client.scaffold_fastmcp(
+            output_dir=output_dir,
+            server_name=server_name,
+            force=force,
+        )
+        response: dict[str, Any] = {
+            "status": "success" if result.get("success") else "error",
+            "output": result.get("output", ""),
+            "error": result.get("error", ""),
+            "script_path": result.get("script_path", ""),
+        }
+        output = result.get("output", "").strip()
+        if output.startswith("{") and output.endswith("}"):
+            try:
+                payload = json.loads(output)
+                if isinstance(payload, dict):
+                    response["scaffold"] = payload
+            except json.JSONDecodeError:
+                pass
+        return response
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

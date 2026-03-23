@@ -100,7 +100,6 @@ def _get_provider() -> Any:
     return GoogleCalendar.from_env()
 
 
-
 @mcp_tool(
     category="calendar",
     description="List upcoming events from the calendar.",

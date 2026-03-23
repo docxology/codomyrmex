@@ -43,7 +43,9 @@ class FailingAgent(BaseAgent):
         )
         self.failure_type = failure_type
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         if self.failure_type == "error_response":
             return AgentResponse(content="", error="Simulated error")
         if self.failure_type == "exception":

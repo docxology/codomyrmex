@@ -73,9 +73,13 @@ class GeminiClient(
         if genai is None:
             raise ImportError("google-genai package not found. Please install it.")
 
-        self.use_vertex = self.get_config_value("use_vertex_ai", default=False, config=config)
+        self.use_vertex = self.get_config_value(
+            "use_vertex_ai", default=False, config=config
+        )
         self.vertex_project = self.get_config_value("vertex_project", config=config)
-        self.vertex_location = self.get_config_value("vertex_location", default="us-central1", config=config)
+        self.vertex_location = self.get_config_value(
+            "vertex_location", default="us-central1", config=config
+        )
 
         self.api_key = self.get_config_value(
             "gemini_api_key", config=config
@@ -115,7 +119,9 @@ class GeminiClient(
     # Core Agent Interface
     # =========================================================================
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Execute Gemini API request."""
         import time
 

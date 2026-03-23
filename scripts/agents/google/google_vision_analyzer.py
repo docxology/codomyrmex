@@ -22,17 +22,31 @@ logger = get_logger(__name__)
 try:
     from google import genai
     from google.genai import types
+
     GENAI_AVAILABLE = True
 except ImportError:
     GENAI_AVAILABLE = False
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Google Vision Analyzer (Multimodal Pipeline)")
-    parser.add_argument("input_dir", type=str, help="Path to folder containing PDFs/Images")
-    parser.add_argument("--model", type=str, default="gemini-2.5-pro", help="Model to use")
-    parser.add_argument("--tasks", type=str, default="extract", help="Comma-separated list of tasks (e.g. ocr,diagram)")
-    parser.add_argument("--output", type=str, default="vision_results.json", help="Output JSON path")
+    parser = argparse.ArgumentParser(
+        description="Google Vision Analyzer (Multimodal Pipeline)"
+    )
+    parser.add_argument(
+        "input_dir", type=str, help="Path to folder containing PDFs/Images"
+    )
+    parser.add_argument(
+        "--model", type=str, default="gemini-2.5-pro", help="Model to use"
+    )
+    parser.add_argument(
+        "--tasks",
+        type=str,
+        default="extract",
+        help="Comma-separated list of tasks (e.g. ocr,diagram)",
+    )
+    parser.add_argument(
+        "--output", type=str, default="vision_results.json", help="Output JSON path"
+    )
     args = parser.parse_args()
 
     if not GENAI_AVAILABLE:
@@ -60,12 +74,16 @@ def main():
                     types.Content(
                         role="user",
                         parts=[
-                            types.Part.from_text(f"Analyze {file.name}. Tasks: {args.tasks}"),
+                            types.Part.from_text(
+                                f"Analyze {file.name}. Tasks: {args.tasks}"
+                            ),
                             types.Part.from_uri(
                                 file_uri=file_uri.uri,
-                                mime_type="application/pdf" if file.suffix.lower() == ".pdf" else "image/jpeg"
-                            )
-                        ]
+                                mime_type="application/pdf"
+                                if file.suffix.lower() == ".pdf"
+                                else "image/jpeg",
+                            ),
+                        ],
                     )
                 )
                 processed_files.append(file.name)
@@ -84,9 +102,8 @@ def main():
             model=args.model,
             contents=contents,
             config=types.GenerateContentConfig(
-                temperature=0.1,
-                response_mime_type="application/json"
-            )
+                temperature=0.1, response_mime_type="application/json"
+            ),
         )
 
         # Parse the structured response

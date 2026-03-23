@@ -19,7 +19,9 @@ def main():
     # Check Rotation
     try:
         models = client._router.get_rotation_models()
-        print(f"\nRotation Config: {len(models)} models found at {client._router._rotation_path}")
+        print(
+            f"\nRotation Config: {len(models)} models found at {client._router._rotation_path}"
+        )
         for m in models:
             print(f"  - {m['model']} (priority {m['priority']})")
     except Exception as e:
@@ -28,6 +30,7 @@ def main():
     # Check DB
     try:
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
+
         with SQLiteSessionStore(client._session_db_path) as store:
             stats = store.get_stats()
             print(f"\nSession Database: {client._session_db_path}")
@@ -36,6 +39,7 @@ def main():
             print(f"  - Newest: {stats['newest_session_at']}")
     except Exception as e:
         print(f"Error checking database: {e}")
+
 
 if __name__ == "__main__":
     main()

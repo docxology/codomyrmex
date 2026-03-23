@@ -37,13 +37,15 @@ def _parse_args() -> argparse.Namespace:
     group.add_argument("--all", action="store_true", help="Export ALL sessions.")
 
     parser.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         type=Path,
         default=None,
         help="Output file for single-session export (stdout if omitted).",
     )
     parser.add_argument(
-        "--dir", "-d",
+        "--dir",
+        "-d",
         type=Path,
         default=Path("hermes_exports"),
         help="Output directory for --all exports (default: ./hermes_exports).",

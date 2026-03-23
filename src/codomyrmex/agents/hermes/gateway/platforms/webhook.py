@@ -172,9 +172,7 @@ class WebhookSignatureVerifier:
     """Verify HMAC-SHA256 webhook signatures."""
 
     @staticmethod
-    def verify(
-        payload: bytes, secret: str, signature: str | None
-    ) -> bool:
+    def verify(payload: bytes, secret: str, signature: str | None) -> bool:
         """Verify webhook payload signature.
 
         Args:
@@ -191,9 +189,7 @@ class WebhookSignatureVerifier:
         if not signature.startswith("sha256="):
             return False
 
-        expected = hmac.new(
-            secret.encode("utf-8"), payload, hashlib.sha256
-        ).hexdigest()
+        expected = hmac.new(secret.encode("utf-8"), payload, hashlib.sha256).hexdigest()
 
         return hmac.compare_digest(f"sha256={expected}", signature)
 
@@ -207,9 +203,7 @@ class WebhookPromptBuilder:
     """Build Hermes prompts from webhook events."""
 
     @staticmethod
-    def from_pr_review(
-        payload: GitHubPRReviewPayload, template: str
-    ) -> str:
+    def from_pr_review(payload: GitHubPRReviewPayload, template: str) -> str:
         """Build prompt from PR review event."""
         if template == "github_pr_review":
             return f"""GitHub PR Review Event
@@ -227,7 +221,9 @@ PR Description:
 {"Review State: " + payload.review_state if payload.review_state else ""}
 
 Analyze this PR and provide feedback on whether it should be merged."""
-        return f"GitHub event: {payload.action} on {payload.repo} PR #{payload.pr_number}"
+        return (
+            f"GitHub event: {payload.action} on {payload.repo} PR #{payload.pr_number}"
+        )
 
     @staticmethod
     def from_commit(payload: GitHubCommitPayload, template: str) -> str:
@@ -265,7 +261,9 @@ Description:
 {payload.body}
 
 Analyze this issue and suggest how to address it."""
-        return f"GitHub issue: {payload.action} on {payload.repo} #{payload.issue_number}"
+        return (
+            f"GitHub issue: {payload.action} on {payload.repo} #{payload.issue_number}"
+        )
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -307,14 +305,12 @@ class WebhookAdapter:
             port=8644,
             routes={
                 "github_events": WebhookRoute(
-                    secret="your-hmac-secret",
-                    prompt_template="github_pr_review"
+                    secret="your-hmac-secret", prompt_template="github_pr_review"
                 ),
                 "dashboard": WebhookRoute(
-                    secret="dashboard-api-key",
-                    prompt_template="dashboard_command"
-                )
-            }
+                    secret="dashboard-api-key", prompt_template="dashboard_command"
+                ),
+            },
         )
         adapter = WebhookAdapter(config)
         await adapter.start()

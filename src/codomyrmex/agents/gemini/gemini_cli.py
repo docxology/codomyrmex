@@ -36,7 +36,9 @@ class GeminiCLIWrapper(BaseAgent):
             "gemini_model", default=None, config=config
         )
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         if not self.cli_path:
             raise GeminiError("gemini CLI executable not found")
 

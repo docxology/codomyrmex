@@ -22,13 +22,12 @@ import pytest
 
 # sys.path injection handled by conftest.py at collection time
 # (adds src/codomyrmex/agents/open_gauss to path)
-
-from open_gauss_client import OpenGaussConfig, OpenGaussClient, validate_environment
-
+from open_gauss_client import OpenGaussClient, OpenGaussConfig, validate_environment
 
 # ===========================================================================
 # Fixtures
 # ===========================================================================
+
 
 @pytest.fixture
 def demo_home(tmp_path):
@@ -60,6 +59,7 @@ def client(cfg):
 # ===========================================================================
 # OpenGaussConfig
 # ===========================================================================
+
 
 class TestOpenGaussConfig:
     def test_defaults_from_home(self, demo_home):
@@ -139,6 +139,7 @@ class TestOpenGaussConfig:
 # validate_environment
 # ===========================================================================
 
+
 class TestValidateEnvironment:
     def test_returns_ok_status_with_valid_config(self, cfg):
         result = validate_environment(cfg)
@@ -166,6 +167,7 @@ class TestValidateEnvironment:
     def test_validated_at_is_iso_string(self, cfg):
         result = validate_environment(cfg)
         from datetime import datetime
+
         dt = datetime.fromisoformat(result["validated_at"])
         assert dt.tzinfo is not None
 
@@ -184,6 +186,7 @@ class TestValidateEnvironment:
 # ===========================================================================
 # OpenGaussClient — session management
 # ===========================================================================
+
 
 class TestOpenGaussClientSessions:
     def test_create_session_returns_id(self, client):
@@ -219,6 +222,7 @@ class TestOpenGaussClientSessions:
 
     def test_get_stats_ts_is_tz_aware(self, client):
         from datetime import datetime
+
         stats = client.get_stats()
         dt = datetime.fromisoformat(stats["ts"])
         assert dt.tzinfo is not None
@@ -227,6 +231,7 @@ class TestOpenGaussClientSessions:
 # ===========================================================================
 # OpenGaussClient — messages + FTS5
 # ===========================================================================
+
 
 class TestOpenGaussClientMessages:
     def test_append_message_returns_int_id(self, client):
@@ -245,7 +250,9 @@ class TestOpenGaussClientMessages:
 
     def test_fts5_search_returns_results(self, client):
         client.create_session("fts-client-sess")
-        client.append_message("fts-client-sess", "user", "Fermat last theorem proof approach")
+        client.append_message(
+            "fts-client-sess", "user", "Fermat last theorem proof approach"
+        )
         results = client.search_sessions("Fermat", limit=5)
         assert len(results) >= 1
 
@@ -259,6 +266,7 @@ class TestOpenGaussClientMessages:
 # ===========================================================================
 # OpenGaussClient — artifact exports
 # ===========================================================================
+
 
 class TestOpenGaussClientArtifacts:
     def test_export_session_artifact_creates_json_file(self, client, cfg):
@@ -324,7 +332,9 @@ class TestOpenGaussClientArtifacts:
         client.append_message("events-sess", "user", "test")
         client.get_stats()
         log_path = cfg.log_dir / "operations.jsonl"
-        events = [json.loads(l)["event"] for l in log_path.read_text().strip().splitlines()]
+        events = [
+            json.loads(l)["event"] for l in log_path.read_text().strip().splitlines()
+        ]
         assert "client_init" in events
         assert "create_session" in events
         assert "append_message" in events
@@ -335,7 +345,7 @@ class TestOpenGaussClientArtifacts:
 # _load_dotenv + _ensure_api_key  (zero-mock, real file I/O)
 # ===========================================================================
 
-from open_gauss_client import _load_dotenv, _ensure_api_key  # noqa: E402
+from open_gauss_client import _ensure_api_key, _load_dotenv
 
 
 class TestDotenvLoading:
@@ -388,7 +398,9 @@ class TestDotenvLoading:
         key = _ensure_api_key(tmp_path, interactive=False)
         assert key == "sk-from-file"
 
-    def test_ensure_api_key_returns_empty_when_none_available(self, tmp_path, monkeypatch):
+    def test_ensure_api_key_returns_empty_when_none_available(
+        self, tmp_path, monkeypatch
+    ):
         monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
         key = _ensure_api_key(tmp_path, interactive=False)
         assert key == ""

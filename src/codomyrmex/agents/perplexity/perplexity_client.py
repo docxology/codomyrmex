@@ -76,7 +76,9 @@ class PerplexityClient(APIAgentBase):
         """
         return bool(self.api_key)
 
-    def execute(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def execute(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Execute a single-turn completion against Perplexity.
 
         Args:

@@ -296,13 +296,17 @@ class TestProviderRouterRotation:
     def test_get_rotation_models_returns_sorted(self, tmp_path: Path) -> None:
         """Models should be sorted by priority."""
         rotation_file = tmp_path / "rotation.json"
-        rotation_file.write_text(json.dumps({
-            "rotation_models": [
-                {"model": "low-pri", "priority": 10},
-                {"model": "high-pri", "priority": 1},
-                {"model": "mid-pri", "priority": 5},
-            ]
-        }))
+        rotation_file.write_text(
+            json.dumps(
+                {
+                    "rotation_models": [
+                        {"model": "low-pri", "priority": 10},
+                        {"model": "high-pri", "priority": 1},
+                        {"model": "mid-pri", "priority": 5},
+                    ]
+                }
+            )
+        )
         router = ProviderRouter(env_path=str(tmp_path / ".env"))
         router._rotation_path = str(rotation_file)
         models = router.get_rotation_models()
@@ -327,15 +331,21 @@ class TestProviderRouterRotation:
         router._rotation_path = str(rotation_file)
         assert router.get_rotation_models() == []
 
-    def test_get_rotation_models_missing_priority_defaults(self, tmp_path: Path) -> None:
+    def test_get_rotation_models_missing_priority_defaults(
+        self, tmp_path: Path
+    ) -> None:
         """Models without priority should sort to end (default 99)."""
         rotation_file = tmp_path / "rotation.json"
-        rotation_file.write_text(json.dumps({
-            "rotation_models": [
-                {"model": "no-priority"},
-                {"model": "has-priority", "priority": 1},
-            ]
-        }))
+        rotation_file.write_text(
+            json.dumps(
+                {
+                    "rotation_models": [
+                        {"model": "no-priority"},
+                        {"model": "has-priority", "priority": 1},
+                    ]
+                }
+            )
+        )
         router = ProviderRouter(env_path=str(tmp_path / ".env"))
         router._rotation_path = str(rotation_file)
         models = router.get_rotation_models()
@@ -385,7 +395,10 @@ class TestContextCompressorEdgeCases:
         # All remaining messages should be shorter
         for msg in result:
             if msg.get("role") != "system":
-                assert "[...truncated]" in msg.get("content", "") or len(msg.get("content", "")) < 10000
+                assert (
+                    "[...truncated]" in msg.get("content", "")
+                    or len(msg.get("content", "")) < 10000
+                )
 
 
 # ── ProviderRouter Execution (Zero-Mock Shims) ────────────────────────
@@ -398,6 +411,7 @@ class TestProviderRouterExecution:
     def shim_bin_dir(self, tmp_path: Path, monkeypatch) -> Path:
         """Create a temporary directory for shim binaries and add it to PATH."""
         import os
+
         bin_dir = tmp_path / "bin"
         bin_dir.mkdir()
         monkeypatch.setenv("PATH", f"{bin_dir}:{os.environ.get('PATH', '')}")
@@ -406,6 +420,7 @@ class TestProviderRouterExecution:
     def test_call_ollama_success(self, shim_bin_dir: Path) -> None:
         """Test _call_ollama with a successful shim."""
         import stat
+
         ollama_bin = shim_bin_dir / "ollama"
         ollama_bin.write_text("#!/bin/sh\necho 'ollama success'\nexit 0\n")
         ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
@@ -421,6 +436,7 @@ class TestProviderRouterExecution:
         import stat
 
         import pytest
+
         ollama_bin = shim_bin_dir / "ollama"
         ollama_bin.write_text("#!/bin/sh\necho 'compile error' >&2\nexit 1\n")
         ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
@@ -433,6 +449,7 @@ class TestProviderRouterExecution:
     def test_call_hermes_cli_success(self, shim_bin_dir: Path) -> None:
         """Test _call_hermes_cli with a successful shim."""
         import stat
+
         hermes_bin = shim_bin_dir / "hermes"
         hermes_bin.write_text("#!/bin/sh\necho 'cli success'\nexit 0\n")
         hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
@@ -448,6 +465,7 @@ class TestProviderRouterExecution:
         import stat
 
         import pytest
+
         hermes_bin = shim_bin_dir / "hermes"
         hermes_bin.write_text("#!/bin/sh\necho 'api error' >&2\nexit 1\n")
         hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
@@ -460,6 +478,7 @@ class TestProviderRouterExecution:
     def test_call_llm_routes_to_ollama(self, shim_bin_dir: Path) -> None:
         """Test call_llm routing to ollama."""
         import stat
+
         ollama_bin = shim_bin_dir / "ollama"
         ollama_bin.write_text("#!/bin/sh\necho 'routed to ollama'\nexit 0\n")
         ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
@@ -472,6 +491,7 @@ class TestProviderRouterExecution:
     def test_call_llm_routes_to_cli(self, shim_bin_dir: Path) -> None:
         """Test call_llm routing to cli providers."""
         import stat
+
         hermes_bin = shim_bin_dir / "hermes"
         hermes_bin.write_text("#!/bin/sh\necho 'routed to cli'\nexit 0\n")
         hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
@@ -486,6 +506,7 @@ class TestProviderRouterExecution:
     def test_call_llm_fallback(self, shim_bin_dir: Path) -> None:
         """Test call_llm fallback logic."""
         import stat
+
         # Setup failing primary (hermes CLI)
         hermes_bin = shim_bin_dir / "hermes"
         hermes_bin.write_text("#!/bin/sh\necho 'primary failed' >&2\nexit 1\n")
@@ -496,7 +517,9 @@ class TestProviderRouterExecution:
         ollama_bin.write_text("#!/bin/sh\necho 'fallback succeeded'\nexit 0\n")
         ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
 
-        router = ProviderRouter(primary_provider="openrouter", fallback_provider="ollama")
+        router = ProviderRouter(
+            primary_provider="openrouter", fallback_provider="ollama"
+        )
         router._credentials["openrouter"] = "key"
         router._credentials["ollama"] = "local"
 
@@ -509,8 +532,11 @@ class TestProviderRouterExecution:
     async def test_call_llm_stream_cli(self, shim_bin_dir: Path) -> None:
         """Test call_llm_stream using hermes CLI shim."""
         import stat
+
         hermes_bin = shim_bin_dir / "hermes"
-        hermes_bin.write_text("#!/bin/sh\necho 'chunk1'\nsleep 0.1\necho 'chunk2'\nexit 0\n")
+        hermes_bin.write_text(
+            "#!/bin/sh\necho 'chunk1'\nsleep 0.1\necho 'chunk2'\nexit 0\n"
+        )
         hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
 
         router = ProviderRouter(primary_provider="openrouter")

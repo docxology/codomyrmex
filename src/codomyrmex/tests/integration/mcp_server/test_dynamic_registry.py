@@ -43,4 +43,6 @@ async def test_mcp_discovery_scale() -> None:
     # Ensure there are no fatal errors stopping the core boot thread.
     assert isinstance(report.failed_modules, list)
 
-    print(f"[+] test_mcp_discovery_scale PASSED - Dynamically registered {valid_tools_registered} tools.")
+    print(
+        f"[+] test_mcp_discovery_scale PASSED - Dynamically registered {valid_tools_registered} tools."
+    )

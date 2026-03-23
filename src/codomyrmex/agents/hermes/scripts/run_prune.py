@@ -52,7 +52,8 @@ def _parse_args() -> argparse.Namespace:
         help="Path to hermes_sessions.db (auto-discovers from ~/.codomyrmex/ if omitted).",
     )
     parser.add_argument(
-        "--quiet", "-q",
+        "--quiet",
+        "-q",
         action="store_true",
         help="Suppress informational output.",
     )
@@ -69,7 +70,10 @@ def main() -> int:
 
     if not db_path.exists():
         if not args.quiet:
-            print(f"No session database found at {db_path}. Nothing to prune.", file=sys.stderr)
+            print(
+                f"No session database found at {db_path}. Nothing to prune.",
+                file=sys.stderr,
+            )
         return 0
 
     threshold = time.time() - (args.days * 86400)

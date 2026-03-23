@@ -92,6 +92,7 @@ STRATEGY_BUNDLES: dict[str, list[str]] = {
 # Core assembly
 # -------------------------------------------------------------------
 
+
 def build_cheatsheet(
     techniques: Optional[list[str]] = None,
     rules: Optional[list[str]] = None,
@@ -107,7 +108,7 @@ def build_cheatsheet(
         bundles: Pre-defined strategy bundles to include (merged with techniques).
     """
     all_keys: list[str] = list(techniques or [])
-    for bundle in (bundles or []):
+    for bundle in bundles or []:
         all_keys.extend(STRATEGY_BUNDLES.get(bundle, []))
     # Deduplicate while preserving order
     seen: set = set()
@@ -161,7 +162,9 @@ def save_cheatsheet(content: str, filepath: str) -> dict[str, Any]:
     size_bytes = len(content.encode("utf-8"))
     valid = size_bytes <= MAX_BYTES
     if not valid:
-        print(f"WARNING: Cheatsheet is {size_bytes} bytes — exceeds {MAX_BYTES}B limit! Trimming...")
+        print(
+            f"WARNING: Cheatsheet is {size_bytes} bytes — exceeds {MAX_BYTES}B limit! Trimming..."
+        )
         content = trim_to_budget(content)
         size_bytes = len(content.encode("utf-8"))
         valid = True
@@ -171,12 +174,18 @@ def save_cheatsheet(content: str, filepath: str) -> dict[str, Any]:
 
     cs_hash = compute_hash(content)
     print(f"Cheatsheet saved → {filepath}  ({size_bytes} bytes, hash={cs_hash})")
-    return {"filepath": filepath, "size_bytes": size_bytes, "hash": cs_hash, "valid": valid}
+    return {
+        "filepath": filepath,
+        "size_bytes": size_bytes,
+        "hash": cs_hash,
+        "valid": valid,
+    }
 
 
 # -------------------------------------------------------------------
 # Iterative Refinement
 # -------------------------------------------------------------------
+
 
 def refine_from_results(
     results_file: str,
@@ -205,7 +214,7 @@ def refine_from_results(
     results = run_data.get("results", [])
     summary = run_data.get("summary", {})
 
-    missed_true: list[str] = []   # GT=TRUE but answered FALSE/UNKNOWN
+    missed_true: list[str] = []  # GT=TRUE but answered FALSE/UNKNOWN
     missed_false: list[str] = []  # GT=FALSE but answered TRUE/UNKNOWN
 
     for r in results:
@@ -225,10 +234,19 @@ def refine_from_results(
     extra_keys: list[str] = list(base_techniques or [])
     extra_keys_from_failures: list[str] = []
     if missed_true:
-        extra_keys_from_failures += ["substitution_chain", "singleton_magma", "idempotent_check"]
+        extra_keys_from_failures += [
+            "substitution_chain",
+            "singleton_magma",
+            "idempotent_check",
+        ]
     if missed_false:
-        extra_keys_from_failures += ["counterexample_small_magma", "left_zero_magma",
-                                      "right_zero_magma", "constant_magma", "symmetry_duality"]
+        extra_keys_from_failures += [
+            "counterexample_small_magma",
+            "left_zero_magma",
+            "right_zero_magma",
+            "constant_magma",
+            "symmetry_duality",
+        ]
     for k in extra_keys_from_failures:
         if k not in extra_keys:
             extra_keys.append(k)
@@ -266,7 +284,9 @@ def refine_from_results(
 
 if __name__ == "__main__":
     MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
-    DEFAULT_CS_PATH = os.path.join(MODULE_DIR, "output", "cheatsheets", "default_cs.txt")
+    DEFAULT_CS_PATH = os.path.join(
+        MODULE_DIR, "output", "cheatsheets", "default_cs.txt"
+    )
 
     parser = argparse.ArgumentParser(description="Generate SAIR cheat sheets.")
     parser.add_argument("--output", default=DEFAULT_CS_PATH, help="Output path.")
@@ -303,9 +323,12 @@ if __name__ == "__main__":
     else:
         cs_content = build_cheatsheet(
             techniques=args.technique,
-            rules=args.rule or ["Magma: a set with one binary operation (no associativity)."],
+            rules=args.rule
+            or ["Magma: a set with one binary operation (no associativity)."],
             bundles=args.bundle,
         )
 
     meta = save_cheatsheet(cs_content, args.output)
-    print(f"Size: {meta['size_bytes']} / {MAX_BYTES} bytes  ({meta['size_bytes']/MAX_BYTES*100:.1f}%)")
+    print(
+        f"Size: {meta['size_bytes']} / {MAX_BYTES} bytes  ({meta['size_bytes'] / MAX_BYTES * 100:.1f}%)"
+    )

@@ -27,8 +27,8 @@ Usage::
 
     # Transcribe a URL
     tr = t.transcribe("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-    print(tr.transcript)               # Full text
-    for seg in tr.segments:            # Timed segments
+    print(tr.transcript)  # Full text
+    for seg in tr.segments:  # Timed segments
         print(seg.start, seg.text)
 
 """
@@ -53,8 +53,16 @@ logger = get_logger(__name__)
 # Default locations
 # ---------------------------------------------------------------------------
 
-_DEFAULT_SKILL_DIR = Path.home() / ".hermes" / "skills" / "research" / "universal-video-transcriber"
-_DEFAULT_SCRIPT = _DEFAULT_SKILL_DIR / "skill" / "video-url-transcriber" / "scripts" / "transcribe_url.py"
+_DEFAULT_SKILL_DIR = (
+    Path.home() / ".hermes" / "skills" / "research" / "universal-video-transcriber"
+)
+_DEFAULT_SCRIPT = (
+    _DEFAULT_SKILL_DIR
+    / "skill"
+    / "video-url-transcriber"
+    / "scripts"
+    / "transcribe_url.py"
+)
 _DEFAULT_API_URL = "http://127.0.0.1:8099/transcribe"
 
 # Whisper model size options
@@ -109,7 +117,9 @@ class TranscriptionSegment:
             "end": self.end,
             "text": self.text,
             "speaker": self.speaker,
-            "words": [{"word": w.word, "start": w.start, "end": w.end} for w in self.words],
+            "words": [
+                {"word": w.word, "start": w.start, "end": w.end} for w in self.words
+            ],
         }
 
 
@@ -239,7 +249,13 @@ class VideoTranscriber:
         mode: str = "auto",
     ) -> None:
         self._skill_dir = Path(skill_dir or _DEFAULT_SKILL_DIR).expanduser()
-        self._script = self._skill_dir / "skill" / "video-url-transcriber" / "scripts" / "transcribe_url.py"
+        self._script = (
+            self._skill_dir
+            / "skill"
+            / "video-url-transcriber"
+            / "scripts"
+            / "transcribe_url.py"
+        )
         self._api_url = api_url
         self._venv_python = self._skill_dir / ".venv" / "bin" / "python3"
         self._mode = mode
@@ -271,7 +287,11 @@ class VideoTranscriber:
         if self.active_mode == "cli":
             # Run --doctor on the script
             if self._script.exists():
-                python = str(self._venv_python) if self._venv_python.exists() else sys.executable
+                python = (
+                    str(self._venv_python)
+                    if self._venv_python.exists()
+                    else sys.executable
+                )
                 proc = subprocess.run(
                     [python, str(self._script), "--doctor"],
                     capture_output=True,
@@ -288,7 +308,9 @@ class VideoTranscriber:
             try:
                 import urllib.request
 
-                req = urllib.request.Request(self._api_url.rstrip("/") + "/health", method="GET")
+                req = urllib.request.Request(
+                    self._api_url.rstrip("/") + "/health", method="GET"
+                )
                 urllib.request.urlopen(req, timeout=3)
                 deps["api_reachable"] = True
                 doctor_output = f"REST API reachable at {self._api_url}"
@@ -338,12 +360,22 @@ class VideoTranscriber:
         t0 = time.time()
         if self.active_mode == "cli":
             result = self._transcribe_cli(
-                url, model_size, language, word_timestamps, persist_media,
-                cookies_from_browser, timeout,
+                url,
+                model_size,
+                language,
+                word_timestamps,
+                persist_media,
+                cookies_from_browser,
+                timeout,
             )
         else:
             result = self._transcribe_rest(
-                url, model_size, language, word_timestamps, persist_media, timeout,
+                url,
+                model_size,
+                language,
+                word_timestamps,
+                persist_media,
+                timeout,
             )
         result.elapsed_sec = round(time.time() - t0, 2)
         return result
@@ -384,13 +416,17 @@ class VideoTranscriber:
         timeout: int,
     ) -> TranscriptionResult:
         """Run the CLI pipeline and parse JSON output."""
-        python = str(self._venv_python) if self._venv_python.exists() else sys.executable
+        python = (
+            str(self._venv_python) if self._venv_python.exists() else sys.executable
+        )
         cmd = [
             python,
             str(self._script),
             url,
-            "--model-size", model_size,
-            "--output-format", "json",
+            "--model-size",
+            model_size,
+            "--output-format",
+            "json",
         ]
         if language:
             cmd += ["--language", language]
@@ -401,7 +437,12 @@ class VideoTranscriber:
         if cookies_from_browser:
             cmd += ["--cookies-from-browser", cookies_from_browser]
 
-        logger.info("VideoTranscriber CLI: %s model=%s url=%.80s", " ".join(cmd[:3]), model_size, url)
+        logger.info(
+            "VideoTranscriber CLI: %s model=%s url=%.80s",
+            " ".join(cmd[:3]),
+            model_size,
+            url,
+        )
         env = dict(os.environ)
         env["NO_COLOR"] = "1"
 
@@ -465,9 +506,7 @@ class VideoTranscriber:
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 raw = resp.read().decode()
         except Exception as exc:
-            return TranscriptionResult(
-                source_url=url, status="error", error=str(exc)
-            )
+            return TranscriptionResult(source_url=url, status="error", error=str(exc))
         return self._parse_json_output(raw, url)
 
     # ------------------------------------------------------------------

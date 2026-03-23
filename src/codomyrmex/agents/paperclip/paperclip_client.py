@@ -61,7 +61,9 @@ class PaperclipClient(CLIAgentBase):
             working_dir=None,
         )
 
-        paperclip_command = self.get_config_value("paperclip_command", config=config)
+        paperclip_command = (
+            self.get_config_value("paperclip_command", config=config) or "paperclipai"
+        )
         timeout = self.get_config_value("paperclip_timeout", config=config)
         working_dir_str = self.get_config_value("paperclip_working_dir", config=config)
         working_dir = Path(working_dir_str) if working_dir_str else None
@@ -72,9 +74,10 @@ class PaperclipClient(CLIAgentBase):
         self.agent_id: str | None = self.get_config_value(
             "paperclip_agent_id", config=config
         )
-        self.api_base: str = self.get_config_value(
-            "paperclip_api_base", config=config
-        ) or "http://localhost:3100"
+        self.api_base: str = (
+            self.get_config_value("paperclip_api_base", config=config)
+            or "http://localhost:3100"
+        )
         self.config_path: str | None = self.get_config_value(
             "paperclip_config_path", config=config
         )
@@ -137,9 +140,7 @@ class PaperclipClient(CLIAgentBase):
     # Argument builder
     # ------------------------------------------------------------------ #
 
-    def _build_paperclip_args(
-        self, prompt: str, context: dict[str, Any]
-    ) -> list[str]:
+    def _build_paperclip_args(self, prompt: str, context: dict[str, Any]) -> list[str]:
         """Build paperclipai command arguments from prompt and context.
 
         Supports subcommands:
@@ -193,11 +194,16 @@ class PaperclipClient(CLIAgentBase):
             if command == "issue_create":
                 company_id = context.get("company_id", "")
                 title = context.get("title", prompt)
-                args.extend([
-                    "issue", "create",
-                    "--company-id", str(company_id),
-                    "--title", title,
-                ])
+                args.extend(
+                    [
+                        "issue",
+                        "create",
+                        "--company-id",
+                        str(company_id),
+                        "--title",
+                        title,
+                    ]
+                )
                 if context.get("description"):
                     args.extend(["--description", context["description"]])
                 return args
@@ -280,9 +286,7 @@ class PaperclipClient(CLIAgentBase):
         Equivalent to ``paperclipai onboard --yes``.
         """
         try:
-            result = self._execute_command(
-                args=["onboard", "--yes"], timeout=120
-            )
+            result = self._execute_command(args=["onboard", "--yes"], timeout=120)
             return {
                 "success": result.get("success", False),
                 "output": result.get("stdout", ""),
@@ -331,10 +335,14 @@ class PaperclipClient(CLIAgentBase):
         try:
             result = self._execute_command(
                 args=[
-                    "heartbeat", "run",
-                    "--agent-id", agent_id,
-                    "--source", source,
-                    "--trigger", trigger,
+                    "heartbeat",
+                    "run",
+                    "--agent-id",
+                    agent_id,
+                    "--source",
+                    source,
+                    "--trigger",
+                    trigger,
                     "--json",
                 ],
                 timeout=self.timeout,
@@ -346,9 +354,7 @@ class PaperclipClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(
-                "Paperclip heartbeat failed: %s", e, exc_info=True
-            )
+            self.logger.error("Paperclip heartbeat failed: %s", e, exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
     def list_companies(self) -> dict[str, Any]:
@@ -400,9 +406,12 @@ class PaperclipClient(CLIAgentBase):
         """
         try:
             args = [
-                "issue", "create",
-                "--company-id", company_id,
-                "--title", title,
+                "issue",
+                "create",
+                "--company-id",
+                company_id,
+                "--title",
+                title,
             ]
             if description:
                 args.extend(["--description", description])
@@ -452,3 +461,97 @@ class PaperclipClient(CLIAgentBase):
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error("Paperclip db:backup failed: %s", e, exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
+
+    def import_company(self, source: str) -> dict[str, Any]:
+        """Import a company from a source (path, URL, GitHub).
+
+        Args:
+            source: Source path or URL for import.
+        """
+        try:
+            result = self._execute_command(
+                args=["company", "import", source, "--json"], timeout=120
+            )
+            return {
+                "success": result.get("success", False),
+                "output": result.get("stdout", ""),
+                "error": result.get("stderr") if not result.get("success") else None,
+                "exit_code": result.get("exit_code", 0),
+            }
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            self.logger.error("Paperclip company import failed: %s", e, exc_info=True)
+            return {"success": False, "output": "", "error": str(e), "exit_code": -1}
+
+    def export_company(self, company_id: str, output_dir: str) -> dict[str, Any]:
+        """Export a company to a directory.
+
+        Args:
+            company_id: Company identifier.
+            output_dir: Output directory path.
+        """
+        try:
+            result = self._execute_command(
+                args=["company", "export", company_id, "--path", output_dir, "--json"],
+                timeout=60,
+            )
+            return {
+                "success": result.get("success", False),
+                "output": result.get("stdout", ""),
+                "error": result.get("stderr") if not result.get("success") else None,
+                "exit_code": result.get("exit_code", 0),
+            }
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            self.logger.error("Paperclip company export failed: %s", e, exc_info=True)
+            return {"success": False, "output": "", "error": str(e), "exit_code": -1}
+
+    def approve_request(self, approval_id: str) -> dict[str, Any]:
+        """Approve an agent hire or action request.
+
+        Args:
+            approval_id: ID of the approval request.
+        """
+        try:
+            result = self._execute_command(
+                args=["approval", "approve", approval_id, "--json"], timeout=30
+            )
+            return {
+                "success": result.get("success", False),
+                "output": result.get("stdout", ""),
+                "error": result.get("stderr") if not result.get("success") else None,
+                "exit_code": result.get("exit_code", 0),
+            }
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            self.logger.error("Paperclip approval failed: %s", e, exc_info=True)
+            return {"success": False, "output": "", "error": str(e), "exit_code": -1}
+
+    def bootstrap_mission(
+        self, company_id: str, title: str, description: str, trigger_agent_id: str
+    ) -> dict[str, Any]:
+        """Bootstrap a mission by creating an issue and instantly triggering the orchestrating agent.
+
+        Args:
+            company_id: Company identifier.
+            title: Title of the mission/epic issue.
+            description: Detailed description of the mission.
+            trigger_agent_id: ID of the agent (e.g. CEO) to immediately trigger for mission execution.
+        """
+        issue_result = self.create_issue(company_id, title, description)
+        if not issue_result.get("success"):
+            return {
+                "success": False,
+                "output": issue_result.get("output", ""),
+                "error": issue_result.get("error", "Failed to create mission issue."),
+                "exit_code": issue_result.get("exit_code", -1),
+            }
+
+        heartbeat_result = self.trigger_heartbeat(
+            agent_id=trigger_agent_id, source="automation", trigger="system"
+        )
+        return {
+            "success": heartbeat_result.get("success", False),
+            "output": f"Issue Created: {issue_result.get('output', '')}\nHeartbeat Triggered: {heartbeat_result.get('output', '')}",
+            "error": heartbeat_result.get("error")
+            if not heartbeat_result.get("success")
+            else None,
+            "exit_code": heartbeat_result.get("exit_code", 0),
+        }

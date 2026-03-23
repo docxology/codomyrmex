@@ -19,17 +19,28 @@ logger = get_logger(__name__)
 try:
     from google import genai
     from google.genai import types
+
     GENAI_AVAILABLE = True
 except ImportError:
     GENAI_AVAILABLE = False
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Google Reason Stream (Thinking Models)")
-    parser.add_argument("prompt", type=str, help="The complex prompt or puzzle to solve")
-    parser.add_argument("--budget", type=int, default=1024, help="Thinking token budget")
-    parser.add_argument("--model", type=str, default="gemini-2.5-pro", help="Model to use")
-    parser.add_argument("--show-thoughts", action="store_true", help="Stream the thoughts live")
+    parser = argparse.ArgumentParser(
+        description="Google Reason Stream (Thinking Models)"
+    )
+    parser.add_argument(
+        "prompt", type=str, help="The complex prompt or puzzle to solve"
+    )
+    parser.add_argument(
+        "--budget", type=int, default=1024, help="Thinking token budget"
+    )
+    parser.add_argument(
+        "--model", type=str, default="gemini-2.5-pro", help="Model to use"
+    )
+    parser.add_argument(
+        "--show-thoughts", action="store_true", help="Stream the thoughts live"
+    )
     args = parser.parse_args()
 
     if not GENAI_AVAILABLE:
@@ -38,17 +49,18 @@ def main():
 
     client = genai.Client()
 
-    logger.info("Initializing streaming reasoning session with budget %d...", args.budget)
+    logger.info(
+        "Initializing streaming reasoning session with budget %d...", args.budget
+    )
     try:
         response = client.models.generate_content_stream(
             model=args.model,
             contents=args.prompt,
             config=types.GenerateContentConfig(
                 thinking_config=types.ThinkingConfig(
-                    thinking_budget=args.budget,
-                    include_thoughts=args.show_thoughts
+                    thinking_budget=args.budget, include_thoughts=args.show_thoughts
                 )
-            )
+            ),
         )
 
         all_thoughts = ""

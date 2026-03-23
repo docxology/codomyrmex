@@ -224,7 +224,12 @@ class TestConsolidateMemories:
             conn.execute(
                 """INSERT INTO memories (key, content, tags, importance, type, metadata, created_at, updated_at)
                    VALUES (?, ?, '', 'medium', 'knowledge', '{}', ?, ?)""",
-                ("dup-key", f"Version {i}", f"2025-01-0{i+1}T00:00:00", f"2025-01-0{i+1}T00:00:00"),
+                (
+                    "dup-key",
+                    f"Version {i}",
+                    f"2025-01-0{i + 1}T00:00:00",
+                    f"2025-01-0{i + 1}T00:00:00",
+                ),
             )
         conn.commit()
         conn.close()

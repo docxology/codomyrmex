@@ -47,9 +47,11 @@ The Hermes Agent Module integrates NousResearch's Hermes capabilities deeply int
 
 10. **Cross-Session User Model**: Persists preferences, coding style observations, and summaries across sessions.
 
-11. **MCP Tool Suite**: **50** `@mcp_tool` definitions in `mcp_tools.py` (see [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)).
+11. **MCP Tool Suite**: **55** `@mcp_tool` definitions in `mcp_tools.py` (see [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)).
 
-12. **Evolutionary Submodule**: DSPy-based GEPA prompt optimization via `evolution/` submodule.
+12. **FastMCP Scaffold Lane**: `HermesClient.scaffold_fastmcp()` plus MCP tool `hermes_fastmcp_scaffold` generate a minimal FastMCP server package from `optional-skills/mcp/fastmcp/scaffold_fastmcp.py` for Codomyrmex↔Hermes integration work.
+
+13. **Evolutionary Submodule**: DSPy-based GEPA prompt optimization via `evolution/` submodule.
 
 ## Optional Skills (v2.5.0)
 
@@ -68,7 +70,8 @@ hermes skills enable bioinformatics
 - `hermes_client.py`: `HermesClient` — dual-backend, sessions, worktrees, CLI flags, batch.
 - `_provider_router.py`: `ProviderRouter`, `UserModel`, `ContextCompressor`, `MCPBridgeManager`.
 - `session.py`: `SQLiteSessionStore` with FTS5, archiving, and lifecycle hooks.
-- `mcp_tools.py`: 50 MCP tools (see `MCP_TOOL_SPECIFICATION.md`).
+- `mcp_tools.py`: 55 MCP tools (see `MCP_TOOL_SPECIFICATION.md`).
+- `optional-skills/mcp/fastmcp/scaffold_fastmcp.py`: Built-in scaffold generator for FastMCP server packages.
 - `templates/`: Built-in prompt templates (code review, debugging, documentation, decomposition).
 - `scripts/`: Operational scripts (`run_chat.py`, `run_batch.py`, `run_health.py`, etc.).
 - `evolution/`: GEPA self-improvement submodule.

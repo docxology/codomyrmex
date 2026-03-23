@@ -59,7 +59,12 @@ def verify_dataset_integrity(path: str) -> bool:
         if valid_lines == 0:
             logger.error("No valid JSON lines found in %s", path)
             return False
-        logger.info("Integrity OK: %s  (%d bytes, %d valid lines checked)", path, size, valid_lines)
+        logger.info(
+            "Integrity OK: %s  (%d bytes, %d valid lines checked)",
+            path,
+            size,
+            valid_lines,
+        )
         return True
     except json.JSONDecodeError as e:
         logger.error("Invalid JSON in %s: %s", path, e)
@@ -131,7 +136,9 @@ if __name__ == "__main__":
         default="public",
         help="'public': competition files; 'full': full ETP graph; 'list': show local datasets.",
     )
-    parser.add_argument("--output-dir", default=DEFAULT_PUBLIC_DIR, help="Local directory for data.")
+    parser.add_argument(
+        "--output-dir", default=DEFAULT_PUBLIC_DIR, help="Local directory for data."
+    )
     args = parser.parse_args()
 
     if args.type == "public":

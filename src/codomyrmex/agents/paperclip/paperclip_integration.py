@@ -68,8 +68,7 @@ class PaperclipIntegrationAdapter(AgentIntegrationAdapter):
             Completion result dictionary.
         """
         prompt = "\n".join(
-            f"{msg.get('role', 'user')}: {msg.get('content', '')}"
-            for msg in messages
+            f"{msg.get('role', 'user')}: {msg.get('content', '')}" for msg in messages
         )
 
         request = AgentRequest(prompt=prompt, context=kwargs)

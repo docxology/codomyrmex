@@ -89,7 +89,7 @@ mcp_servers:
 ## Codomyrmex MCP Tools (v1.5.x+)
 
 Hermes is exposed to other agents through `@mcp_tool` decorated functions in
-`src/codomyrmex/agents/hermes/mcp_tools.py`. As of March 2026 there are **48** such tools (verify with `rg '^@mcp_tool' mcp_tools.py` if the count drifts).
+`src/codomyrmex/agents/hermes/mcp_tools.py`. As of March 2026 there are **55** such tools (verify with `rg '^@mcp_tool' mcp_tools.py` if the count drifts).
 
 **Distinction**: Hermes’s runtime **tool** registry (`tools/registry.py`, categories above) is not the same as Codomyrmex’s **skill preload** registry (stable ids → `hermes chat -s` names). The latter is documented in [skills.md](skills.md).
 
@@ -128,6 +128,7 @@ These MCP tools bridge internal Hermes capabilities to the broader PAI ecosystem
 | `hermes_skills_list` | Wraps `hermes skills list` when the Hermes CLI is available |
 | `hermes_skills_resolve` | Resolve registry skill ids to Hermes preload names and metadata |
 | `hermes_skills_validate_registry` | Compare bundled/overlay registry entries to installed Hermes skills |
+| `hermes_fastmcp_scaffold` | Generate a FastMCP server scaffold package from Hermes optional-skills |
 
 ### Diagnostics & Utility Tools
 

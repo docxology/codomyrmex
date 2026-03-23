@@ -100,9 +100,11 @@ class TestHermesClientExecutionShims:
         ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
 
         # Require a monkeypatch for _is_cli_configured so it tries CLI first
-        client = HermesClient(config={
-            "fallback_model": "hermes3-fallback",
-        })
+        client = HermesClient(
+            config={
+                "fallback_model": "hermes3-fallback",
+            }
+        )
         client._active_backend = "cli"
         # Bypass the api key check to let it try to run CLI
         client._is_cli_configured = lambda: True
@@ -121,7 +123,9 @@ class TestHermesClientExecutionShims:
     def test_stream_via_ollama(self, shim_bin_dir: Path) -> None:
         """Test _stream_via_ollama yields chunks."""
         ollama_bin = shim_bin_dir / "ollama"
-        ollama_bin.write_text("#!/bin/sh\necho 'stream 1'\nsleep 0.1\necho 'stream 2'\nexit 0\n")
+        ollama_bin.write_text(
+            "#!/bin/sh\necho 'stream 1'\nsleep 0.1\necho 'stream 2'\nexit 0\n"
+        )
         ollama_bin.chmod(ollama_bin.stat().st_mode | stat.S_IEXEC)
 
         client = HermesClient()
@@ -131,16 +135,16 @@ class TestHermesClientExecutionShims:
         assert "stream 1" in chunks
         assert "stream 2" in chunks
 
-    def test_chat_session_simple_reply(self, shim_bin_dir: Path, tmp_path: Path) -> None:
+    def test_chat_session_simple_reply(
+        self, shim_bin_dir: Path, tmp_path: Path
+    ) -> None:
         """Test chat_session executes and updates database."""
         hermes_bin = shim_bin_dir / "hermes"
         hermes_bin.write_text("#!/bin/sh\necho 'Hello user!'\nexit 0\n")
         hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
 
         db_path = tmp_path / "test_session.db"
-        client = HermesClient(config={
-            "hermes_session_db": str(db_path)
-        })
+        client = HermesClient(config={"hermes_session_db": str(db_path)})
         client._active_backend = "cli"
         client._is_cli_configured = lambda: True
 

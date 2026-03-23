@@ -100,7 +100,9 @@ class ReActAgent(BaseAgent):
     # _execute_impl: orchestrates plan → act → observe
     # ------------------------------------------------------------------
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Execute the ReAct loop via plan→act→observe."""
         self.logger.info("Starting ReAct loop for prompt: %s", request.prompt)
 

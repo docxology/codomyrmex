@@ -53,6 +53,7 @@ from scripts.sair.utils import (
 # evaluate.py tests
 # ===========================================================================
 
+
 class TestParseLLMResponse:
     def test_true_verdict(self):
         resp = "VERDICT: TRUE\nREASONING: L0 is reflexive.\nPROOF: x*y = x*y.\nCOUNTEREXAMPLE:"
@@ -74,7 +75,9 @@ class TestParseLLMResponse:
         assert parsed["VERDICT"] == "MAYBE"
 
     def test_multiline_reasoning(self):
-        resp = "VERDICT: TRUE\nREASONING:\nLine 1.\nLine 2.\nPROOF: Done.\nCOUNTEREXAMPLE:"
+        resp = (
+            "VERDICT: TRUE\nREASONING:\nLine 1.\nLine 2.\nPROOF: Done.\nCOUNTEREXAMPLE:"
+        )
         parsed = parse_llm_response(resp)
         assert "Line 1" in parsed["REASONING"]
         assert "Line 2" in parsed["REASONING"]
@@ -83,14 +86,18 @@ class TestParseLLMResponse:
 class TestTemplateRendering:
     def test_renders_equations(self):
         template = Template(OFFICIAL_TEMPLATE)
-        rendered = template.render(equation1="x*y=y*x", equation2="x=x", cheatsheet=None)
+        rendered = template.render(
+            equation1="x*y=y*x", equation2="x=x", cheatsheet=None
+        )
         assert "x*y=y*x" in rendered
         assert "x=x" in rendered
         assert "VERDICT:" in rendered
 
     def test_cheatsheet_injected_when_set(self):
         template = Template(OFFICIAL_TEMPLATE)
-        rendered = template.render(equation1="E1", equation2="E2", cheatsheet="Hint: left-zero.")
+        rendered = template.render(
+            equation1="E1", equation2="E2", cheatsheet="Hint: left-zero."
+        )
         assert "Hint: left-zero" in rendered
 
     def test_cheatsheet_omitted_when_none(self):
@@ -102,6 +109,7 @@ class TestTemplateRendering:
 # ===========================================================================
 # generate_cheatsheet.py tests
 # ===========================================================================
+
 
 class TestCheatsheetGeneration:
     def test_build_with_bundle(self):
@@ -137,7 +145,12 @@ class TestCheatsheetGeneration:
     def test_refine_from_results_uses_failure_patterns(self):
         """refine_from_results should activate counterexample strategies for missed FALSE problems."""
         run_data = {
-            "summary": {"run_id": "test001", "accuracy": 0.5, "correct": 1, "evaluated": 2},
+            "summary": {
+                "run_id": "test001",
+                "accuracy": 0.5,
+                "correct": 1,
+                "evaluated": 2,
+            },
             "results": [
                 {
                     "problem_id": "p1",
@@ -173,6 +186,7 @@ class TestCheatsheetGeneration:
 # utils.py tests
 # ===========================================================================
 
+
 class TestUtils:
     def test_compute_hash_deterministic(self):
         h1 = compute_hash("hello world")
@@ -203,10 +217,22 @@ class TestUtils:
 
     def test_summarize_results_all_correct(self):
         results = [
-            {"problem_id": "p1", "ground_truth": "TRUE", "verdict": "TRUE", "is_correct": True,
-             "latency": 1.0, "usage": {"total_tokens": 100}},
-            {"problem_id": "p2", "ground_truth": "FALSE", "verdict": "FALSE", "is_correct": True,
-             "latency": 2.0, "usage": {"total_tokens": 200}},
+            {
+                "problem_id": "p1",
+                "ground_truth": "TRUE",
+                "verdict": "TRUE",
+                "is_correct": True,
+                "latency": 1.0,
+                "usage": {"total_tokens": 100},
+            },
+            {
+                "problem_id": "p2",
+                "ground_truth": "FALSE",
+                "verdict": "FALSE",
+                "is_correct": True,
+                "latency": 2.0,
+                "usage": {"total_tokens": 200},
+            },
         ]
         s = summarize_results(results)
         assert s["accuracy"] == 1.0
@@ -219,16 +245,36 @@ class TestUtils:
     def test_summarize_results_with_errors(self):
         results = [
             {"problem_id": "p1", "error": "Timeout"},
-            {"problem_id": "p2", "ground_truth": "TRUE", "verdict": "TRUE", "is_correct": True,
-             "latency": 1.0, "usage": {"total_tokens": 100}},
+            {
+                "problem_id": "p2",
+                "ground_truth": "TRUE",
+                "verdict": "TRUE",
+                "is_correct": True,
+                "latency": 1.0,
+                "usage": {"total_tokens": 100},
+            },
         ]
         s = summarize_results(results)
         assert s["errors"] == 1
         assert s["evaluated"] == 1
 
     def test_compare_runs(self):
-        run_a = {"summary": {"accuracy": 0.5, "avg_latency_sec": 2.0, "model": "m1", "cheatsheet_hash": "abc"}}
-        run_b = {"summary": {"accuracy": 0.7, "avg_latency_sec": 1.5, "model": "m2", "cheatsheet_hash": "def"}}
+        run_a = {
+            "summary": {
+                "accuracy": 0.5,
+                "avg_latency_sec": 2.0,
+                "model": "m1",
+                "cheatsheet_hash": "abc",
+            }
+        }
+        run_b = {
+            "summary": {
+                "accuracy": 0.7,
+                "avg_latency_sec": 1.5,
+                "model": "m2",
+                "cheatsheet_hash": "def",
+            }
+        }
         delta = compare_runs(run_a, run_b)
         assert delta["accuracy_delta"] == pytest.approx(0.2, abs=0.001)
         assert delta["improved"] is True
@@ -243,6 +289,7 @@ class TestUtils:
 # ===========================================================================
 # download_data.py tests
 # ===========================================================================
+
 
 class TestDownloadData:
     def test_verify_integrity_valid_jsonl(self, tmp_path):

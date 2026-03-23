@@ -48,12 +48,14 @@ class TestPaperclipClient:
 
     def test_paperclip_client_custom_config(self):
         """Test PaperclipClient with custom configuration."""
-        client = PaperclipClient(config={
-            "paperclip_command": "paperclipai",
-            "paperclip_timeout": 60,
-            "paperclip_agent_id": "test-agent-1",
-            "paperclip_api_base": "http://localhost:4000",
-        })
+        client = PaperclipClient(
+            config={
+                "paperclip_command": "paperclipai",
+                "paperclip_timeout": 60,
+                "paperclip_agent_id": "test-agent-1",
+                "paperclip_api_base": "http://localhost:4000",
+            }
+        )
         assert client.agent_id == "test-agent-1"
         assert client.api_base == "http://localhost:4000"
 
@@ -231,9 +233,7 @@ class TestPaperclipAPIClient:
         client = PaperclipAPIClient(base_url="http://127.0.0.1:59999")
 
         with pytest.raises(PaperclipError):
-            client.create_issue(
-                company_id="test-co", title="Test Issue"
-            )
+            client.create_issue(company_id="test-co", title="Test Issue")
 
 
 # ------------------------------------------------------------------ #
@@ -403,16 +403,12 @@ class TestPaperclipError:
 
     def test_paperclip_error_with_command(self):
         """Test PaperclipError with command context."""
-        error = PaperclipError(
-            "command failed", command="paperclipai doctor"
-        )
+        error = PaperclipError("command failed", command="paperclipai doctor")
         assert error.context["command"] == "paperclipai doctor"
 
     def test_paperclip_error_with_exit_code(self):
         """Test PaperclipError with exit code context."""
-        error = PaperclipError(
-            "exit error", command="paperclipai run", exit_code=1
-        )
+        error = PaperclipError("exit error", command="paperclipai run", exit_code=1)
         assert error.context["exit_code"] == 1
         assert error.context["command"] == "paperclipai run"
 

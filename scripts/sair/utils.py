@@ -19,6 +19,7 @@ from typing import Any, Optional
 # File I/O
 # ---------------------------------------------------------------------------
 
+
 def ensure_dir(path: str) -> None:
     """Ensure that a directory exists, creating it if necessary."""
     os.makedirs(path, exist_ok=True)
@@ -60,6 +61,7 @@ def save_json(data: dict[str, Any], filepath: str, indent: int = 2) -> None:
 # Cheatsheet Fingerprinting
 # ---------------------------------------------------------------------------
 
+
 def compute_hash(content: str) -> str:
     """Compute a SHA-256 hex-digest of the given string (for cheatsheet fingerprinting)."""
     return hashlib.sha256(content.encode("utf-8")).hexdigest()[:12]
@@ -73,6 +75,7 @@ def format_equation(law_data: dict[str, Any]) -> str:
 # ---------------------------------------------------------------------------
 # Run History & Analysis
 # ---------------------------------------------------------------------------
+
 
 def load_run_history(run_dir: str) -> list[dict[str, Any]]:
     """Load all saved evaluation runs from a directory.
@@ -169,10 +172,14 @@ def summarize_results(results: list[dict[str, Any]]) -> dict[str, Any]:
         "accuracy": round(accuracy, 4),
         "true_correct": true_correct,
         "true_total": true_total,
-        "true_accuracy": round(true_correct / true_total, 4) if true_total > 0 else None,
+        "true_accuracy": round(true_correct / true_total, 4)
+        if true_total > 0
+        else None,
         "false_correct": false_correct,
         "false_total": false_total,
-        "false_accuracy": round(false_correct / false_total, 4) if false_total > 0 else None,
+        "false_accuracy": round(false_correct / false_total, 4)
+        if false_total > 0
+        else None,
         "unknown_verdicts": unknown_verdicts,
         "avg_latency_sec": round(avg_latency, 3),
         "total_tokens": total_tokens,

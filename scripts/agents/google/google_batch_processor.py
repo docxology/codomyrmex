@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 try:
     from google import genai
     from google.genai import types
+
     GENAI_AVAILABLE = True
 except ImportError:
     GENAI_AVAILABLE = False
@@ -51,12 +52,13 @@ async def process_document(client, model, file_path, schema, semaphore):
                     model=model,
                     contents=[
                         f"Extract data according to this JSON schema: {schema}",
-                        types.Part.from_bytes(data=data, mime_type=mime) if isinstance(data, bytes) else data
+                        types.Part.from_bytes(data=data, mime_type=mime)
+                        if isinstance(data, bytes)
+                        else data,
                     ],
                     config=types.GenerateContentConfig(
-                        temperature=0.0,
-                        response_mime_type="application/json"
-                    )
+                        temperature=0.0, response_mime_type="application/json"
+                    ),
                 )
 
             loop = asyncio.get_running_loop()
@@ -78,7 +80,11 @@ async def async_main(args):
         logger.error("No files found in %s", args.input_dir)
         sys.exit(1)
 
-    logger.info("Found %d files to process. Using %d concurrent workers.", len(files_to_process), args.jobs)
+    logger.info(
+        "Found %d files to process. Using %d concurrent workers.",
+        len(files_to_process),
+        args.jobs,
+    )
     semaphore = asyncio.Semaphore(args.jobs)
 
     tasks = [
@@ -96,6 +102,7 @@ async def async_main(args):
     }
 
     import json
+
     with open(output_path, "w") as f:
         json.dump(output_dict, f, indent=2)
 
@@ -103,12 +110,20 @@ async def async_main(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Google Batch Processor (Serverless concurrency)")
+    parser = argparse.ArgumentParser(
+        description="Google Batch Processor (Serverless concurrency)"
+    )
     parser.add_argument("input_dir", type=str, help="Directory containing documents")
     parser.add_argument("--jobs", type=int, default=5, help="Concurrent jobs limit")
-    parser.add_argument("--schema", type=str, required=True, help="JSON Schema string for extraction")
-    parser.add_argument("--model", type=str, default="gemini-1.5-pro", help="Model to use")
-    parser.add_argument("--output", type=str, default="batch_results.json", help="Output file")
+    parser.add_argument(
+        "--schema", type=str, required=True, help="JSON Schema string for extraction"
+    )
+    parser.add_argument(
+        "--model", type=str, default="gemini-1.5-pro", help="Model to use"
+    )
+    parser.add_argument(
+        "--output", type=str, default="batch_results.json", help="Output file"
+    )
     args = parser.parse_args()
 
     if not GENAI_AVAILABLE:

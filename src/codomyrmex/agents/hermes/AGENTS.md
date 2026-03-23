@@ -23,11 +23,12 @@ Universal protocols specific to this module:
 - **Provider Router** (`_provider_router.py`): Unified `call_llm()` abstraction across 6 providers, with automatic credential resolution and fallback.
 - **Context Compressor** (`_provider_router.py`): Progressive conversation compression triggered at configurable token thresholds.
 - **User Model** (`_provider_router.py`): Cross-session user context persistence — preferences, observations, session summaries backed by JSON.
-- **MCP Bridge** (`mcp_tools.py`): **50** `@mcp_tool` entries; skill-interop tools carry `tags` for PAI manifest indexing (`skills`, `cli_preload`, `interop`).
+- **MCP Bridge** (`mcp_tools.py`): **55** `@mcp_tool` entries; skill-interop tools carry `tags` for PAI manifest indexing (`skills`, `cli_preload`, `interop`).
 - **Plugin Manager** (`hermes_cli/plugins_cmd.py`, v2.5.0): `hermes plugins install/update/remove/list` manages Git-sourced plugins in `~/.hermes/plugins/`. Reads `plugin.yaml` manifest, validates `manifest_version`, copies `.example` files, renders `after-install.md` via Rich. Path traversal protection enforced.
 - **@ Context References** (`agent/context_references.py`, v2.5.0): Parses `@file:`, `@folder:`, `@diff`, `@staged`, `@git:N`, `@url:` tokens from messages and expands them to attached context blocks. Token budget enforced (50% hard, 25% soft). Async-safe (sync wrapper for CLI, thread pool for gateway).
 - **Gateway Agent Cache** (`gateway/run.py`, v2.5.0): `GatewayRunner` caches `AIAgent` per session via config signature (MD5 of model + provider + toolsets + system_prompt). Same-config reuse freezes system prompt. `reasoning_config` and callbacks update in-place. Thread-safe via `_agent_cache_lock`.
 - **Unified skill registry** (`skill_registry.py`, `data/skills_registry.yaml`): stable `skill_ids` → Hermes `-s` names; project profile `.codomyrmex/hermes_skills_profile.yaml`; optional `CODOMYRMEX_SKILLS_REGISTRY` overlay.
+- **FastMCP scaffold lane** (`optional-skills/mcp/fastmcp/scaffold_fastmcp.py`, `HermesClient.scaffold_fastmcp`, `hermes_fastmcp_scaffold`): generates a minimal FastMCP server package for Codomyrmex↔Hermes MCP exposure with deterministic file layout.
 - **Session Engine** (`session.py`): `InMemorySessionStore`, `SQLiteSessionStore` (FTS5 BM25), session `close()` KI lifecycle hook.
 - **Knowledge Codification** (Sprint 34): `hermes_build_memory_graph`, `hermes_extract_ki`, `hermes_search_knowledge_items`, `hermes_deduplicate_ki`, `hermes_archive_sessions`.
 - **Swarm Orchestration** (Sprint 34): `hermes_spawn_agent` (capability profile routing), backed by `AgentOrchestrator.spawn_agent` + `filter_tools`.
@@ -50,6 +51,7 @@ When coordinating with Hermes via MCP:
 - Use `hermes_session_merge` to consolidate multiple research sessions into one context.
 - Use `hermes_rotation_status` to check free LLM provider health and cooldown windows.
 - **Plugins (v2.5.0)**: use `hermes_plugins_install(identifier)` to add a plugin; `hermes_plugins_list()` to see installed plugins. Restart the gateway after install: `hermes gateway restart`.
+- **FastMCP scaffolding**: use `hermes_fastmcp_scaffold(output_dir, server_name, force=False)` to generate a runnable FastMCP server template under the requested directory.
 - **@ Context References (v2.5.0)**: in gateway messages, use `@file:src/main.py` to attach full file, `@file:path:10-50` for line ranges, `@diff` for unstaged changes, `@url:https://docs.example.com/api` to inject web content. Stay under 25% of context window to avoid warnings, 50% to avoid blocking.
 - **Knowledge Codification** (Sprint 34): use `hermes_extract_ki(session_id)` after high-quality sessions; `hermes_search_knowledge_items(topic)` to recall; `hermes_deduplicate_ki()` periodically; `hermes_build_memory_graph()` to visualise.
 - **Swarm Orchestration** (Sprint 34): use `hermes_spawn_agent(role, task, capability_profile)` to dispatch; combine with `orchestrator_run_dag` for Fan-Out/Fan-In/Pipeline topologies; use `events_send_to_agent` / `events_agent_inbox` for P2P messaging.

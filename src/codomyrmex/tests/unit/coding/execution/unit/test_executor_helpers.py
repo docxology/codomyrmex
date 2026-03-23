@@ -59,11 +59,7 @@ class TestCompressTrace:
         assert _compress_trace(text) == text
 
     def test_mixed_compression(self):
-        lines = (
-            ["preamble"]
-            + ["dup_line"] * 8
-            + ["unique"] * 5
-        )
+        lines = ["preamble"] + ["dup_line"] * 8 + ["unique"] * 5
         text = "\n".join(lines)
         result = _compress_trace(text)
         assert "Line repeated 7 more times" in result

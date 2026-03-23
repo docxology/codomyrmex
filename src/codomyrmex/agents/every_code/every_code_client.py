@@ -141,7 +141,9 @@ class EveryCodeClient(CLIAgentBase):
             f"Every Code command failed: {e!s}", command=self.command
         ) from e
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """
         Execute Every Code command.
 
@@ -180,7 +182,9 @@ class EveryCodeClient(CLIAgentBase):
             self._wrap_execute_error(e)
 
         # Explicit return for type checker - should never be reached
-        return AgentResponse(content="", error="Execution failed", metadata={"error": "unknown"})
+        return AgentResponse(
+            content="", error="Execution failed", metadata={"error": "unknown"}
+        )
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """

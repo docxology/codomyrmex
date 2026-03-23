@@ -46,7 +46,9 @@ class StubClaudeAgent(BaseAgent):
         self._error = error
         self.last_request: AgentRequest | None = None
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         self.last_request = request
         return AgentResponse(
             content=self._response_content,

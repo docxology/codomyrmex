@@ -1,6 +1,5 @@
 """Integration tests for Hermes Context Summarization."""
 
-
 from codomyrmex.agents.hermes.hermes_client import HermesClient
 
 

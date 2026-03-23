@@ -83,10 +83,7 @@ def test_orchestrator_run_dag_fan_out() -> None:
     def _add(x: int) -> int:
         return x + 1
 
-    tasks = [
-        {"task_id": f"t{i}", "fn": "builtins.int", "args": [i]}
-        for i in range(3)
-    ]
+    tasks = [{"task_id": f"t{i}", "fn": "builtins.int", "args": [i]} for i in range(3)]
     # Use the SwarmTopology directly since the MCP tool resolves fn from strings
     topo = SwarmTopology()
     specs = [TaskSpec(task_id=f"t{i}", fn=lambda i=i: i + 1) for i in range(3)]
@@ -99,7 +96,10 @@ def test_orchestrator_run_dag_rejects_unknown_topology() -> None:
     from codomyrmex.orchestrator.mcp_tools import orchestrator_run_dag
 
     result = orchestrator_run_dag("quantum_teleport", [])
-    assert "error" in result.get("status", result).lower() or "error" in str(result).lower()
+    assert (
+        "error" in result.get("status", result).lower()
+        or "error" in str(result).lower()
+    )
 
 
 # ── EventStore-backed IntegrationBus durability ───────────────────────────────
@@ -157,7 +157,9 @@ def test_drain_is_atomic_under_concurrent_sends() -> None:
         bus.send_to_agent("concurrent", {"n": n})
         sent.append(n)
 
-    threads = [threading.Thread(target=sender, args=(i,), daemon=True) for i in range(20)]
+    threads = [
+        threading.Thread(target=sender, args=(i,), daemon=True) for i in range(20)
+    ]
     for t in threads:
         t.start()
     for t in threads:
@@ -189,12 +191,18 @@ def test_fts5_search_returns_bm25_ranked_results() -> None:
 
     s1 = HermesSession(session_id="s-bm25")
     s1.add_message("user", "Explain the BM25 ranking algorithm.")
-    s1.add_message("assistant", "BM25 scores documents using term frequency and inverse document frequency.")
+    s1.add_message(
+        "assistant",
+        "BM25 scores documents using term frequency and inverse document frequency.",
+    )
     store.save(s1)
 
     s2 = HermesSession(session_id="s-other")
     s2.add_message("user", "How does Docker work?")
-    s2.add_message("assistant", "Docker packages applications in containers using layered filesystems.")
+    s2.add_message(
+        "assistant",
+        "Docker packages applications in containers using layered filesystems.",
+    )
     store.save(s2)
 
     results = store.search_fts("BM25 ranking", limit=5)

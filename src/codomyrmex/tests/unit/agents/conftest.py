@@ -88,7 +88,9 @@ class ConcreteAgent(BaseAgent):
         """Set the response to return from execute."""
         self._response = response
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Implementation of execute."""
         self._execute_called = True
         return AgentResponse(
@@ -112,7 +114,9 @@ class FailingAgent(BaseAgent):
         super().__init__("failing_agent", [AgentCapabilities.TEXT_COMPLETION])
         self._error_message = error_message
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         raise AgentError(self._error_message)
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
@@ -129,7 +133,9 @@ class AsyncAgent(BaseAgent):
         )
         self._delay = delay
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         time.sleep(self._delay)
         return AgentResponse(
             content=f"Async response after {self._delay}s",

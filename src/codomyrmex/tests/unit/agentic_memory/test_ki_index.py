@@ -62,7 +62,9 @@ class TestKnowledgeItemIndexSearch:
         idx.add("bm25", "BM25 full-text search scoring and ranking algorithm")
         return idx
 
-    def test_search_returns_top_match(self, populated_index: KnowledgeItemIndex) -> None:
+    def test_search_returns_top_match(
+        self, populated_index: KnowledgeItemIndex
+    ) -> None:
         results = populated_index.search("OAuth2 authentication", limit=1)
         assert len(results) == 1
         assert results[0][0] == "auth"

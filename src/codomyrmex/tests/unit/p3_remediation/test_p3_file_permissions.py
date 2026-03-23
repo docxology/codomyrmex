@@ -4,7 +4,6 @@ TDD regression tests for P3 CodeQL overly-permissive chmod remediation.
 Zero-Mock compliant — uses real file operations.
 """
 
-
 import pytest
 
 

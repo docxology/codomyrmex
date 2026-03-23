@@ -314,7 +314,9 @@ class APIAgentBase(BaseAgent):
         messages.append({"role": "user", "content": request.prompt})
         return messages
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """
         Implementation-specific execution logic.
 

@@ -85,9 +85,7 @@ def paperclip_list_companies(
 
 @mcp_tool(
     category="paperclip",
-    description=(
-        "Create a new issue/ticket in a Paperclip company via the REST API."
-    ),
+    description=("Create a new issue/ticket in a Paperclip company via the REST API."),
 )
 def paperclip_create_issue(
     company_id: str,
@@ -159,9 +157,7 @@ def paperclip_trigger_heartbeat(
 
 @mcp_tool(
     category="paperclip",
-    description=(
-        "Run Paperclip doctor diagnostics to check CLI and server health."
-    ),
+    description=("Run Paperclip doctor diagnostics to check CLI and server health."),
 )
 def paperclip_doctor(
     repair: bool = False,

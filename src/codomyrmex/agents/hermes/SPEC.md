@@ -64,7 +64,7 @@ graph TD
 
 ## Model Context Protocol (MCP) Interface
 
-The module exposes **50 tools** to the swarm (see `MCP_TOOL_SPECIFICATION.md`):
+The module exposes **55 tools** to the swarm (see `MCP_TOOL_SPECIFICATION.md`):
 
 | Tool | Purpose | Category |
 | :--- | :--- | :--- |
@@ -80,6 +80,7 @@ The module exposes **50 tools** to the swarm (see `MCP_TOOL_SPECIFICATION.md`):
 | `hermes_skills_list` | Available Hermes skills (CLI only) | Skills |
 | `hermes_skills_resolve` | Registry `skill_ids` → Hermes `-s` names | Skills |
 | `hermes_skills_validate_registry` | Registry vs `hermes skills list` (CLI) | Skills |
+| `hermes_fastmcp_scaffold` | Generate FastMCP scaffold package for Hermes MCP integration | Skills |
 | `hermes_template_list` | Prompt template names | Templates |
 | `hermes_template_render` | Template rendering with variables | Templates |
 | `hermes_session_list` | All active session IDs | Sessions |

@@ -45,7 +45,9 @@ class CodexClient(APIAgentBase):
             config=config,
         )
 
-    def _execute_impl(self, request: AgentRequest, max_tokens: int | None = None) -> AgentResponse:  # type: ignore
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:  # type: ignore
         """
         Execute Codex API request.
 

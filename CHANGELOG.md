@@ -8,7 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-*(No unreleased changes yet.)*
+### Added
+
+- **Hermes FastMCP scaffold lane**: Added bundled scaffold script at `src/codomyrmex/agents/hermes/optional-skills/mcp/fastmcp/scaffold_fastmcp.py` to generate minimal FastMCP server packages for Codomyrmex↔Hermes MCP exposure.
+- **`HermesClient.scaffold_fastmcp()`**: New client helper that resolves and executes the scaffold script with overwrite protection.
+- **`hermes_fastmcp_scaffold` MCP tool**: Exposes FastMCP scaffolding through the Hermes MCP surface.
+
+### Tests
+
+- Added unit coverage for FastMCP scaffolding in `test_new_client_methods.py` and `test_new_mcp_tools.py` (real filesystem writes; no mocks).
 
 ---
 

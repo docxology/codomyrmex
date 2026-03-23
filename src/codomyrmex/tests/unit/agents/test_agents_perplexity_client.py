@@ -10,7 +10,7 @@ import pytest
 
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.perplexity import PerplexityClient
-from codomyrmex.agents.perplexity.mcp_tools import perplexity_execute, perplexity_ask
+from codomyrmex.agents.perplexity.mcp_tools import perplexity_ask, perplexity_execute
 
 
 class TestPerplexityClientExecution:
@@ -67,7 +67,9 @@ class TestPerplexityClientExecution:
     )
     def test_perplexity_ask_live(self):
         """Test the perplexity_ask MCP tool wrapper directly with a messages array."""
-        messages = [{"role": "user", "content": "What is 2+2? Answer with a single number."}]
+        messages = [
+            {"role": "user", "content": "What is 2+2? Answer with a single number."}
+        ]
         result = perplexity_ask(messages=messages, timeout=30)
         assert result["status"] == "success"
         assert result["content"]

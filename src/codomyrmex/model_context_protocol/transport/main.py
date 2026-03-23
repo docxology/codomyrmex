@@ -26,6 +26,7 @@ from .server import MCPServer, MCPServerConfig
 
 logger = get_logger(__name__)
 
+
 async def run_server() -> None:
     """Run the MCP server."""
     # Configure logging for the MCP server specifically if needed
@@ -52,15 +53,20 @@ async def run_server() -> None:
                     schema=tool.parameters,
                     handler=tool.handler,
                 )
-                logger.info(
-                    "Registered tool: %s from %s", tool.name, tool.module_path
-                )
+                logger.info("Registered tool: %s from %s", tool.name, tool.module_path)
             except Exception as e:
                 logger.error("Failed to register tool %s: %s", tool.name, e)
 
-    tool_count = len(server._tool_registry.list_tools()) if hasattr(server._tool_registry, "list_tools") else len(report.tools)
-    logger.info("Successfully loaded %d MCP tools (encountered %d isolated module import failures)",
-                tool_count, len(report.failed_modules))
+    tool_count = (
+        len(server._tool_registry.list_tools())
+        if hasattr(server._tool_registry, "list_tools")
+        else len(report.tools)
+    )
+    logger.info(
+        "Successfully loaded %d MCP tools (encountered %d isolated module import failures)",
+        tool_count,
+        len(report.failed_modules),
+    )
 
     await server.run_stdio()
 
