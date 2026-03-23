@@ -521,7 +521,7 @@ codomyrmex/
 │   ├── agents/               # Jules batch dispatch, harvester
 │   ├── maintenance/          # Config generation, health checks
 │   └── ... (90+ module scripts)
-├── projects/                 # Project workspaces and adapter integrations (daf-consulting, hermes-paperclip-adapter)
+├── projects/                 # Project workspaces and adapter integrations (daf-consulting v0.4.1, hermes-paperclip-adapter)
 ├── src/codomyrmex/           # Main source (128 modules)
 │   ├── agents/               # 168 files
 │   ├── llm/                  # 41 files
