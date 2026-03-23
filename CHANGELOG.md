@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Hermes FastMCP scaffold lane**: Added bundled scaffold script at `src/codomyrmex/agents/hermes/optional-skills/mcp/fastmcp/scaffold_fastmcp.py` to generate minimal FastMCP server packages for Codomyrmex↔Hermes MCP exposure.
 - **`HermesClient.scaffold_fastmcp()`**: New client helper that resolves and executes the scaffold script with overwrite protection.
 - **`hermes_fastmcp_scaffold` MCP tool**: Exposes FastMCP scaffolding through the Hermes MCP surface.
+- **Paperclip workspace surfaces**: Root and `projects/` docs now explicitly track Paperclip adapter/integration workspaces; `projects/hermes-paperclip-adapter` is treated as an intentional standalone nested repository pending writable upstream publication.
 
 ### Tests
 
