@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`HermesClient.scaffold_fastmcp()`**: New client helper that resolves and executes the scaffold script with overwrite protection.
 - **`hermes_fastmcp_scaffold` MCP tool**: Exposes FastMCP scaffolding through the Hermes MCP surface.
 - **Paperclip workspace surfaces**: Root and `projects/` docs now explicitly track Paperclip adapter/integration workspaces; `projects/hermes-paperclip-adapter` is treated as an intentional standalone nested repository pending writable upstream publication.
+- **DAF Paperclip release milestone**: `projects/daf-consulting` advanced to `v0.4.1` with health-attempt telemetry artifacts, executable bootstrap artifact audit CLI, and end-to-end zero-mock CLI coverage for setup/audit flows.
 
 ### Tests
 
