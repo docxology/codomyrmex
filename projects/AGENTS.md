@@ -9,7 +9,7 @@ Project workspace and templates.
 - `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
-- `hermes-paperclip-adapter/` – Paperclip adapter project for Hermes agent execution
+- `hermes-paperclip-adapter/` – Paperclip adapter project for Hermes agent execution (standalone nested Git repository)
 - `test_project/` – Directory containing test_project components
 
 ## Operating Contracts

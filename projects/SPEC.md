@@ -98,6 +98,7 @@ graph TD
 - Complete documentation
 - Working examples
 - Zero-Mock constraint integration (always use real, functional modules)
+- Adapter projects may be maintained as standalone nested Git repositories when upstream write permissions prevent submodule publication.
 
 ## Quality Standards
 
