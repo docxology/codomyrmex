@@ -13,7 +13,7 @@
 
 | # | Deliverable | Module | Status | Technical Detail |
 | :--- | :--- | :--- | :--- | :--- |
-| v1.2.8.1 | **Hermes v0.4.0 FastMCP scaffolding** | `agents/hermes/` | 🔄 In Progress | Integrate `optional-skills/mcp/fastmcp/scaffold_fastmcp.py` for Codomyrmex→Hermes MCP exposure |
+| v1.2.8.1 | **Hermes v0.4.0 FastMCP scaffolding** | `agents/hermes/` | ✅ Done | Integrated `optional-skills/mcp/fastmcp/scaffold_fastmcp.py` via `HermesClient.scaffold_fastmcp()` and MCP tool `hermes_fastmcp_scaffold` for Codomyrmex→Hermes MCP exposure |
 | v1.2.8.2 | **Hermes Session Race Guards** | `agents/hermes/session.py` | ✅ Done | `SessionRaceGuard` with context manager, `SessionGuardContext`, granular threading.Lock per session_id. Tests: 10 passing (zero-mock) |
 | v1.2.8.3 | **Webhook platform adapter** | `agents/hermes/gateway/platforms/webhook.py` | ✅ Done | `WebhookAdapter` with HMAC-SHA256 verification, GitHub PR/Commit/Issue payload parsing, prompt templates, implements `GatewayAdapter` protocol |
 | v1.2.8.4 | **Webhook config schema** | `agents/hermes/gateway/platforms/webhook.py` | ✅ Done | `WebhookConfig(port: int, routes: dict, host: str)`, `WebhookRoute(secret, prompt_template, handler)` matching schema requirements |
