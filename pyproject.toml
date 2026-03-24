@@ -334,6 +334,7 @@ dev = [
     {include-group = "test"},
     "hypothesis>=6.151.9",
     "sarif-tools>=3.0.0",
+    "desloppify[full]>=0.9.14",
 ]
 docs = [
     "mkdocs>=1.6.1",
@@ -661,6 +662,8 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403", "E402"]
+# Optional / skip-guard imports in unit+integration tests (availability probes, lazy imports).
+"src/codomyrmex/tests/**/*.py" = ["F401"]
 "tests/**/*" = ["S101", "PLR2004", "ANN", "B011", "SLF001", "ARG", "PT011", "S106", "S108", "S310"]
 "scripts/**/*.py" = ["T20", "INP001", "ANN", "S101", "BLE001", "EXE001", "E402", "PLW1510", "F401"]
 "**/mcp_tools.py" = ["ANN", "ARG001"]

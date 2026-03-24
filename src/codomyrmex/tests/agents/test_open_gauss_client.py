@@ -15,8 +15,6 @@ Zero mocks. All real file I/O, SQLite, and datetime operations.
 
 import json
 import os
-import sys
-from pathlib import Path
 
 import pytest
 

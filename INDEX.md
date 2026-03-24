@@ -27,7 +27,7 @@
 | `mcp_tools.py` files (non-test) | 149 | [docs/reference/inventory.md](docs/reference/inventory.md) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Tests collected | 39,473 | `uv run pytest --collect-only -q --no-cov` |
+| Tests collected | 34,085 | `uv run pytest --collect-only -q --no-cov` |
 | RASP doc coverage | 100% (128/128) | [AGENTS.md](AGENTS.md) |
 | Version | v1.2.3 | [pyproject.toml](pyproject.toml) |
 

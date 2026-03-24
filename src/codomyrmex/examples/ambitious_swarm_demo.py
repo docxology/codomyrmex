@@ -9,9 +9,7 @@ Usage:
     uv run python src/codomyrmex/examples/ambitious_swarm_demo.py
 """
 
-import os
 import sys
-from typing import Any
 
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.generic import AgentOrchestrator

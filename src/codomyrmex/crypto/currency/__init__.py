@@ -57,19 +57,24 @@ from codomyrmex.crypto.currency.transactions import (
     sign_transaction,
     verify_transaction,
 )
-from codomyrmex.crypto.currency.wallet import (
-    HDWallet,
-    create_hd_wallet,
-    generate_mnemonic,
-    mnemonic_to_seed,
-)
+
+try:
+    from codomyrmex.crypto.currency.wallet import (
+        HDWallet,
+        create_hd_wallet,
+        generate_mnemonic,
+        mnemonic_to_seed,
+    )
+
+    _HAS_WALLET = True
+except ImportError:  # mnemonic package not installed
+    _HAS_WALLET = False
 
 __all__ = [
     # Blockchain
     "Block",
     # Tokens
     "ERC20Token",
-    "HDWallet",
     "MerkleProof",
     "MerkleTree",
     "SignedTransaction",
@@ -81,7 +86,6 @@ __all__ = [
     "checksum_ethereum_address",
     "create_block",
     "create_erc20_interface",
-    "create_hd_wallet",
     "create_transaction",
     "decode_transfer_event",
     "deserialize_transaction",
@@ -89,10 +93,7 @@ __all__ = [
     # Addresses
     "generate_bitcoin_address",
     "generate_ethereum_address",
-    # Wallet
-    "generate_mnemonic",
     "get_merkle_proof",
-    "mnemonic_to_seed",
     "serialize_transaction",
     "sign_transaction",
     "validate_bitcoin_address",
@@ -100,3 +101,13 @@ __all__ = [
     "verify_merkle_proof",
     "verify_transaction",
 ]
+
+if _HAS_WALLET:
+    __all__ += [
+        # Wallet (requires mnemonic package)
+        "HDWallet",
+        "create_hd_wallet",
+        "generate_mnemonic",
+        "mnemonic_to_seed",
+    ]
+

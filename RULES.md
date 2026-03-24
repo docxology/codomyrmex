@@ -29,7 +29,7 @@ This document codifies the absolute, non-negotiable rules for all human and AI a
 ## 5. Comprehensive Verification
 - Execute iteratively, comprehensively, and intelligently step-by-step.
 - Every introduced feature must be backed by the modular, unified, streamlined test suite anywhere it is added completely.
-- Maintain the repository Coverage Gate (must exceed the target bounds, typically >35.0% for new capabilities). No production code can be introduced without a corresponding failing-then-passing test (TDD methodology).
+- Maintain the repository coverage gate: **40%** minimum line coverage per `pyproject.toml` (see `[tool.coverage.report]` and pytest `addopts`). No production code can be introduced without a corresponding failing-then-passing test (TDD methodology).
 
 ## 6. MCP Universal Protocols
 - Preserve all Model Context Protocol (MCP) interfaces. Tool specifications must remain available and perfectly functional for sibling agents.

@@ -4,7 +4,7 @@
 
 | Metric | Baseline | Target | Gate |
 |--------|----------|--------|------|
-| Line coverage | 31% (Feb 2026) | 35% | CI fails below floor |
+| Line coverage | varies per run | 45%+ stretch | CI fails below **40%** floor (`pyproject.toml`) |
 | Tests collected | 10,041 | growing | — |
 | Skipped | 253 | minimize | — |
 | Failures | 0 | 0 | Blocks merge |

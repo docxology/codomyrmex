@@ -40,6 +40,10 @@ Counts for modules, MCP tools, and tests drift quickly. **Do not hand-edit** bro
 
 Hermes-specific examples and agent-doc rules: [docs/agents/hermes/AGENTS.md](../agents/hermes/AGENTS.md) (Diagram conventions).
 
+## Generated site output (Docusaurus)
+
+Paths such as `src/codomyrmex/documentation/.docusaurus/` are **build output** from the site generator, not editorial sources. Do not treat files there (including any `AGENTS.md` copies) as maintained RASP contracts. Edit hand-written docs under `docs/` and per-module files under `src/codomyrmex/<module>/` instead.
+
 ## 🏗️ Documentation Structure
 
 ### **Main Documentation (`docs/`)**

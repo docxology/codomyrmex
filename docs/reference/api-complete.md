@@ -6,7 +6,7 @@ This document provides the definitive API reference for all **actually implement
 
 All APIs listed here are:
 - ✅ **Actually Implemented** - Every function exists in the codebase
-- ✅ **Tested with Real Methods** - No mock implementations in core functionality [[memory:7401885]]
+- ✅ **Tested with Real Methods** - No mock implementations in core functionality
 - ✅ **Signature Accurate** - Exact parameter names and types from source
 - ✅ **Cross-Referenced** - Links to actual source files and tests
 
@@ -498,7 +498,7 @@ class SystemDiscovery:
 
 ## ✅ Testing Philosophy & Real Implementation Examples
 
-All APIs documented above are tested using **real implementations**, never mocks [[memory:7401885]]. Here are the actual testing patterns:
+All APIs documented above are tested using **real implementations**, never mocks. Here are the actual testing patterns:
 
 ### **Data Visualization Testing**
 ```python

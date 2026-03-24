@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.2.8-draft | **Date**: 2026-03-19 | **Modules**: 128 | **Sprint**: 35
+**Version**: v1.2.8-draft | **Date**: 2026-03-24 | **Modules**: 128 | **Sprint**: 35
 
 > **Current release**: v1.2.7 "Multi-Agent Swarm Orchestration" (2026-03-19).
 > **Next release**: v1.2.8 (Sprint 35)
@@ -9,7 +9,23 @@
 
 ---
 
-## 🚧 v1.2.8.0 — Sprint 35 Core
+## 📊 Measured Metrics (2026-03-24)
+
+> All values below are **measured**, not estimated. Command and timestamp documented.
+
+| Metric | Value | Command |
+| :--- | :--- | :--- |
+| **Tests collected** | **34,085** (0 errors) | `uv run pytest --collect-only --no-cov -q` |
+| **Ruff errors** | **0** | `uv run ruff check .` |
+| **ty diagnostics** | **296** | `uv run ty check src/` |
+| **Mock violations** | **0** | `grep -rc "from unittest.mock" src/ --include="*.py" \| grep -v ":0$"` |
+| **MCP tool decorators** | **600** | `uv run python scripts/doc_inventory.py` (production tree; lines starting with `@mcp_tool`) |
+| **Top-level modules** | **128** | `find src/codomyrmex -maxdepth 1 -type d` |
+| **pyproject.toml version** | **1.2.7** | `grep version pyproject.toml \| head -1` |
+
+---
+
+## ✅ v1.2.8.0 — Sprint 35 Core (Complete)
 
 | # | Deliverable | Module | Status | Technical Detail |
 | :--- | :--- | :--- | :--- | :--- |
@@ -19,6 +35,21 @@
 | v1.2.8.4 | **Webhook config schema** | `agents/hermes/gateway/platforms/webhook.py` | ✅ Done | `WebhookConfig(port: int, routes: dict, host: str)`, `WebhookRoute(secret, prompt_template, handler)` matching schema requirements |
 | v1.2.8.5 | **Dynamic context window resolution** | `agents/hermes/_provider_router.py` | ✅ Done | `ModelContextRegistry` with OpenRouter API fallback, 11 known model defaults, thread-safe `get_context_length_safe()` |
 | v1.2.8.6 | **ContextCompressor token eviction** | `agents/hermes/_provider_router.py` | ✅ Done | `CAPACITY_THRESHOLD=0.8` (80%), model_id property setter with error handling, integrates with registry for dynamic max_tokens |
+
+---
+
+## 🚀 v1.2.8 — Sprint 35 Unreleased
+
+> Items from `[Unreleased]` in [CHANGELOG.md](CHANGELOG.md), pending tag.
+
+| # | Deliverable | Module | Status | Technical Detail |
+| :--- | :--- | :--- | :--- | :--- |
+| v1.2.8.7 | **Hermes FastMCP scaffold lane** | `agents/hermes/` | ✅ Done | Bundled scaffold script at `optional-skills/mcp/fastmcp/scaffold_fastmcp.py` for Codomyrmex↔Hermes MCP exposure |
+| v1.2.8.8 | **DAF Paperclip v0.4.1** | `projects/daf-consulting` | ✅ Done | Health-attempt telemetry, bootstrap audit CLI, end-to-end zero-mock CLI coverage |
+| v1.2.8.9 | **Code Health sweep** | repo-wide | ✅ Done | 446 ruff diagnostics fixed, Zero-Mock enforcement (removed legacy `open_gauss` mock adapters) |
+| v1.2.8.10 | **Zero-Mock hardening** | `tests/` | ✅ Done | Eliminated 4 remaining `unittest.mock` imports across `test_cognilayer_bridge.py`, `test_mission_control_client.py`, `test_gateway_coverage_loop.py`, `test_rotation.py` |
+| v1.2.8.11 | **Ghost architecture bug fix** | `agents/ghost_architecture/model.py` | ✅ Done | Fixed `nn.ModuleDict.get()` → dict-style access pattern; PyTorch `ModuleDict` does not support `.get()` |
+| v1.2.8.12 | **Hermes 0.4.0 Upstream Sync** | `agents/hermes/` | ✅ Done | Synchronized workspace with Hermes v0.4.0, upgraded dependencies via `uv lock --upgrade`, verified agent test stability. |
 
 ---
 
@@ -43,20 +74,23 @@
 | B3 | **Video module full impl** | `video/` | Stub — exceptions only |
 | B4 | **Meme module MCP exposure** | `meme/` | Experimental, needs RASP + `@mcp_tool` |
 | B5 | **Secure Cognitive Layer MCP** | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | Not MCP-exposed via PAI bridge |
+| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 64→0 errors via import guards in `crypto/currency/__init__.py` and `data_visualization/engines/__init__.py` |
+| B7 | ~~README metric drift~~ | root | ✅ Fixed — aligned with [docs/reference/inventory.md](docs/reference/inventory.md) (34,085 tests, 600 MCP `@mcp_tool` lines) |
+| B8 | **Coverage gap** | repo-wide | 32.30% vs 40% gate — needs ~10,600 more covered lines. Dedicated coverage campaign required |
 
 ---
 
 ## 🎯 Release Criteria
 
-> **Strict Delivery Requirements** — All v1.2.8.x items must pass before tagging:
+> **Strict Delivery Requirements** — All items must pass before tagging v1.2.8:
 
 | Requirement | Command | Threshold | Status |
 | :--- | :--- | :--- | :--- |
-| **Zero-Mock Policy** | `uv run pytest` | 0 `unittest.mock` / `mock` imports | ✅ PASSED |
-| **Full Test Pass** | `uv run pytest` | Exit code 0 | 🟡 PENDING |
-| **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED |
-| **Type Safety** | `uv run ty check src/` | <1,000 diagnostics | ✅ PASSED |
-| **Coverage Gate** | `uv run pytest --cov` | ≥40% | 🟡 PENDING |
+| **Zero-Mock Policy** | `grep -rc "from unittest.mock" src/ --include="*.py" \| grep -v ":0$"` | 0 `unittest.mock` imports | ✅ PASSED (0 violations) |
+| **Full Test Pass** | `uv run pytest` | Exit code 0 | 🟡 PENDING (0 collection errors; needs full run) |
+| **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED (0 errors) |
+| **Type Safety** | `uv run ty check src/` | <1,000 diagnostics | ✅ PASSED (296 diagnostics) |
+| **Coverage Gate** | `uv run pytest --cov=src/codomyrmex --cov-fail-under=40` | ≥40% | 🔴 NOT MET (32.30% — 137,819 stmts, 44,522 covered, ~10,600 line gap) |
 | **Documentation Parity** | — | AGENTS.md, README.md, SPEC.md, CHANGELOG.md updated | 🟡 IN PROGRESS |
 
 ---
@@ -114,5 +148,5 @@ codomyrmex/
 
 ---
 
-*Last updated: 2026-03-19 — Sprint 35 active.*
+*Last updated: 2026-03-23 — Sprint 35 active.*
 *Version: 1.2.8-draft*

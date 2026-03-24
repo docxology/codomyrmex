@@ -1,5 +1,6 @@
 import os
 import subprocess
+import threading
 import time
 from collections.abc import Iterator
 from pathlib import Path
@@ -371,6 +372,7 @@ class CLIAgentBase(BaseAgent):
 
         cwd = cwd or self.working_dir
         env = env or self._build_env()
+        stream_timeout = 120.0 if self.timeout is None else float(self.timeout)
 
         self.logger.debug(
             "Streaming command: %s",
@@ -379,6 +381,7 @@ class CLIAgentBase(BaseAgent):
                 "command": " ".join(cmd),
                 "cwd": str(cwd),
                 "has_input": input_text is not None,
+                "timeout": stream_timeout,
             },
         )
 
@@ -399,16 +402,57 @@ class CLIAgentBase(BaseAgent):
                 process.stdin.write(input_text)
                 process.stdin.close()
 
-            # Stream stdout line by line
+            # Stream stdout line by line with wall-clock bound (readline can block forever).
+            deadline = time.monotonic() + stream_timeout
             line_count = 0
-            for line in iter(process.stdout.readline, ""):
-                if line:
-                    line_count += 1
-                    yield line.rstrip()
-                else:
-                    break
+            while True:
+                if time.monotonic() >= deadline:
+                    self.logger.warning(
+                        "CLI stream exceeded timeout; terminating process",
+                        extra={"command": " ".join(cmd), "timeout": stream_timeout},
+                    )
+                    process.kill()
+                    try:
+                        process.wait(timeout=10)
+                    except subprocess.TimeoutExpired:
+                        pass
+                    yield "Error: CLI stream exceeded timeout"
+                    return
 
-            process.wait(timeout=self.timeout)
+                wait_read = min(1.0, max(0.001, deadline - time.monotonic()))
+                line_buf: list[str | None] = [None]
+
+                def _read_line() -> None:
+                    try:
+                        line_buf[0] = process.stdout.readline()
+                    except Exception:
+                        line_buf[0] = ""
+
+                reader = threading.Thread(target=_read_line, daemon=True)
+                reader.start()
+                reader.join(timeout=wait_read)
+                if reader.is_alive():
+                    continue
+                line = line_buf[0]
+                if line is None:
+                    continue
+                if not line:
+                    break
+                line_count += 1
+                yield line.rstrip()
+
+            remaining = max(0.0, deadline - time.monotonic())
+            wait_timeout = remaining if remaining > 0 else 1.0
+            try:
+                process.wait(timeout=wait_timeout)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                try:
+                    process.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    pass
+                yield "Error: CLI stream process did not exit after stdout closed"
+                return
 
             if process.returncode != 0:
                 stderr = process.stderr.read()

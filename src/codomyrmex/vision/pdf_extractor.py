@@ -13,6 +13,7 @@ Example::
 
 from __future__ import annotations
 
+import importlib.util
 import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -40,13 +41,8 @@ class PDFExtractor:
 
     @staticmethod
     def is_available() -> bool:
-        """Check if pymupdf is installed."""
-        try:
-            import fitz
-
-            return True
-        except ImportError:
-            return False
+        """Check if pymupdf is installed (import name ``fitz``)."""
+        return importlib.util.find_spec("fitz") is not None
 
     def extract_text(self, pdf_path: str | Path) -> list[PageContent]:
         """Extract text from a PDF file.

@@ -1,4 +1,3 @@
-import dataclasses
 
 import pytest
 
@@ -21,7 +20,7 @@ async def test_mcp_discovery_scale() -> None:
     report = discovery.scan_package("codomyrmex")
 
     # Instantiate the formal registry to simulate real initialization
-    registry = MCPToolRegistry()
+    MCPToolRegistry()
 
     valid_tools_registered = 0
     for tool in report.tools:

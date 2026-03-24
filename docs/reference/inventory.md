@@ -2,7 +2,7 @@
 
 Single source of truth for counts used in documentation and marketing copy. **Refresh** after large changes to modules, tools, or tests.
 
-**Last updated:** 2026-03-23
+**Last updated:** 2026-03-24
 
 ## Definitions
 
@@ -24,7 +24,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | Agent packages (`src/codomyrmex/agents/`) | 41 |
 | `mcp_tools.py` files (non-test) | 149 |
 | Production `@mcp_tool` decorators | 600 |
-| Pytest tests collected | 39,473 (`uv run pytest --collect-only -q --no-cov`) |
+| Pytest tests collected | 34,085 (`uv run pytest --collect-only -q --no-cov`; or `uv run python scripts/doc_inventory.py --pytest`) |
 
 ## Reproduce
 

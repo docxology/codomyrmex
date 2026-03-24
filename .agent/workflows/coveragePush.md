@@ -4,7 +4,7 @@ description: Push Codomyrmex test coverage toward the 40% target. Zero-mock poli
 
 # Coverage Push Workflow
 
-Current gate: 31%. Target: 40%. Sprint 22 baseline: ~32%.
+Current gate: **40%** (`pyproject.toml`). Stretch target: 45%+. (Historical note: Sprint 22 baseline was ~32%.)
 
 ## 1. Find High-ROI Targets
 

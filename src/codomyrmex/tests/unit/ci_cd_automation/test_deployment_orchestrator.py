@@ -534,8 +534,8 @@ class TestDeployLifecycle:
 
     def test_deploy_no_health_checks_succeeds(self, tmp_path):
         """With no health checks, deployment should succeed."""
-        orch = _orchestrator_with_env(tmp_path)
-        orch.create_deployment("app", "1.0", "staging", [])
+        orch = _orchestrator_with_env(tmp_path, env_name="dev", env_type="development")
+        orch.create_deployment("app", "1.0", "dev", [])
         result = orch.deploy("app")
         assert result.status == DeploymentStatus.SUCCESS
 

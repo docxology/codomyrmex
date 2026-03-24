@@ -1019,6 +1019,15 @@ class HermesClient(CLIAgentBase):
         until the tests pass or max_turns is exhausted.
         """
         import subprocess
+        import os
+
+        # Check if target_path exists
+        if not os.path.exists(target_path):
+            return {
+                "status": "error",
+                "message": f"Target path does not exist: {target_path}",
+                "trace": "",
+            }
 
         turn = 0
         trace = ""

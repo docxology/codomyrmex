@@ -14,8 +14,6 @@ from codomyrmex.video.transcription import (
     TranscriptionSegment,
     TranscriptionWord,
     VideoTranscriber,
-    VideoTranscriberError,
-    transcribe_url,
 )
 
 if TYPE_CHECKING:

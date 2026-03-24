@@ -144,7 +144,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    setup_logging()
+    setup_logging(level=log_level)
     print_info("═" * 60)
     print_info(f"  Hermes Agent — Observability (Last {args.limit} Sessions)")
     print_info("═" * 60)

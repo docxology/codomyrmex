@@ -24,5 +24,5 @@ Produce exactly ONE block:
 
 - Zero-Mock policy: no mocks in tests, real components only
 - Modular layers: Foundation → Core → Service → Specialized
-- Test coverage target: ≥ 35%
+- Test coverage gate: **40%** project minimum (`pyproject.toml`); aim higher on touched code
 - Linting: ruff (PEP 8, PEP 257)

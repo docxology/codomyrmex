@@ -38,7 +38,7 @@ Source code directory containing the core Codomyrmex platform implementation. Pr
 
 ### Testing
 
-- Test coverage gate: ≥31% (project-wide, ratcheting upward)
+- Test coverage gate: **40%** project-wide (`[tool.coverage.report] fail_under` and pytest `addopts` in `pyproject.toml`)
 - Unit tests for all public functions
 - Integration tests for module interactions
 - Real data analysis (no mocks)
@@ -206,7 +206,7 @@ Each module must provide:
 
 ### Testing Standards
 
-- Project-wide coverage gate: ≥31% (ratcheting upward)
+- Project-wide coverage gate: **40%** (`pyproject.toml`; same as CI)
 - Unit tests for public APIs
 - Integration tests for workflows
 - Performance benchmarks where applicable

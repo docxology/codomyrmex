@@ -47,7 +47,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 ## Development Guidelines
 
 - **Zero-Mock Policy:** All tests must use real components. No mocks.
-- **Coverage Gate:** Ensure test coverage exceeds 35.0% on new features.
+- **Coverage Gate:** CI enforces **40%** line coverage (`[tool.coverage.report] fail_under` and pytest `--cov-fail-under` in `pyproject.toml`). New work must not drop below that floor.
 - **Documentation:** Maintain `AGENTS.md`, `README.md`, and `SPEC.md` parity on structural changes.
 
 ## Operating Contracts
@@ -75,7 +75,7 @@ All agents operating within this repository must:
 #### src/ - Source Code
 
 - Follow Python best practices (PEP 8)
-- Maintain test coverage (≥33%)
+- Maintain test coverage at or above the **40%** project gate in `pyproject.toml`
 - Update `API_SPECIFICATION.md` when changing interfaces
 - Document MCP tools in `MCP_TOOL_SPECIFICATION.md`
 - Version changes in `CHANGELOG.md`
@@ -420,6 +420,7 @@ Before completing significant changes:
 
 ## Version History
 
+- **v1.2.9** (March 2026) — Hermes 0.4.0 integration, functional Zero-Mock validation, OpenAI-compatible API support
 - **v1.2.3** (March 2026) — Codebase Health, API Freeze, Config Validation, Typed Events, Performance Profiling
 - **v1.1.8** (March 2026) — Persistent memory, Obsidian sync, multi-hop Graph RAG, active inference
 - **v1.1.7** (March 2026) — Repository-wide documentation audit and consistency sweep
@@ -438,7 +439,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (180055 symbols, 307528 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (179349 symbols, 330468 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

@@ -7,7 +7,7 @@ This script shows how to use the hermes_tools module to interact with the Hermes
 # Import the Hermes tools
 import os
 
-from hermes_tools import json_parse, read_file, search_files, terminal
+from hermes_tools import read_file, search_files, terminal
 
 
 def main():

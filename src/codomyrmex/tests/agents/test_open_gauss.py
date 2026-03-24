@@ -13,8 +13,6 @@ All tests use real in-process implementations. Zero mocks. Zero external network
 
 import json
 import os
-import sys
-import tempfile
 from datetime import datetime
 from pathlib import Path
 
@@ -600,7 +598,7 @@ class TestGaussProjectInit:
         from gauss_cli.project import initialize_gauss_project
 
         lean_dir = self._make_lean_project(tmp_path / "lean-proj")
-        project = initialize_gauss_project(lean_dir, name="TestProj")
+        initialize_gauss_project(lean_dir, name="TestProj")
         manifest_path = lean_dir / ".gauss" / "project.yaml"
         assert manifest_path.exists()
         data = yaml.safe_load(manifest_path.read_text())

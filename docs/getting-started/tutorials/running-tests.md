@@ -7,7 +7,7 @@ This tutorial covers running, filtering, and understanding the Codomyrmex test s
 ## Prerequisites
 
 - Codomyrmex installed in development mode: `uv sync --all-extras`
-- Python 3.10+
+- Python 3.11+ (see root `pyproject.toml`)
 
 ## Quick Start
 
@@ -55,14 +55,14 @@ uv run pytest src/codomyrmex/tests/unit/ide/test_agent_bridge.py -v
 
 ## Coverage
 
-The project maintains a coverage gate at **31%** (ratcheted up over time):
+The project enforces a **40%** line-coverage floor via `[tool.coverage.report] fail_under` and pytest `addopts` (`--cov-fail-under=40`) in `pyproject.toml`. A plain test run already applies that gate:
 
 ```bash
-# Check coverage (will fail if below gate)
-uv run pytest --cov=src/codomyrmex --cov-fail-under=31
+# Full suite with coverage (fails below 40%)
+uv run pytest
 
-# HTML report
-uv run pytest --cov=src/codomyrmex --cov-report=html
+# HTML report (still uses configured cov settings)
+uv run pytest --cov-report=html
 open htmlcov/index.html
 
 # Per-file coverage for a specific module
@@ -103,9 +103,9 @@ The policy is enforced via `ruff` — any import of mock libraries will fail lin
 | Metric | Value |
 |--------|-------|
 | Test files | 886 |
-| Tests collected | 39,473 (`uv run pytest --collect-only -q --no-cov`; see [reference/inventory.md](../../reference/inventory.md)) |
-| Coverage gate | `fail_under=31` |
-| Actual coverage | ~32% |
+| Tests collected | 34,085 (`uv run pytest --collect-only -q --no-cov`; see [reference/inventory.md](../../reference/inventory.md)) |
+| Coverage gate | **40%** (`fail_under` / `--cov-fail-under` in `pyproject.toml`) |
+| Actual coverage | See pytest summary or `coverage.json` after `uv run pytest` |
 
 ## Next Steps
 

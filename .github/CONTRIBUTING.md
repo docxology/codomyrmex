@@ -101,7 +101,7 @@ uv run ty check src/
 ### Running Tests
 
 ```bash
-# Run all tests (coverage gate: 35.0%)
+# Run all tests (coverage gate: 40%; enforced via pyproject.toml addopts)
 uv run pytest
 
 # Run with coverage report
@@ -135,7 +135,7 @@ client = MagicMock()
 
 ### Coverage Gate
 
-The current coverage gate is **35.0%** (enforced in CI). New modules must not drop coverage below this threshold. Target: increase towards 40.0%+ with each sprint.
+The current coverage gate is **40.0%** (enforced in CI via `fail_under` and `--cov-fail-under` in `pyproject.toml`). New modules must not drop coverage below this threshold. Target: increase toward 45%+ over time.
 
 ### Test Skip Policy
 

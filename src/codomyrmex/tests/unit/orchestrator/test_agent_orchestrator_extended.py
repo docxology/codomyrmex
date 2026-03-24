@@ -83,7 +83,7 @@ def test_orchestrator_run_dag_fan_out() -> None:
     def _add(x: int) -> int:
         return x + 1
 
-    tasks = [{"task_id": f"t{i}", "fn": "builtins.int", "args": [i]} for i in range(3)]
+    [{"task_id": f"t{i}", "fn": "builtins.int", "args": [i]} for i in range(3)]
     # Use the SwarmTopology directly since the MCP tool resolves fn from strings
     topo = SwarmTopology()
     specs = [TaskSpec(task_id=f"t{i}", fn=lambda i=i: i + 1) for i in range(3)]

@@ -52,7 +52,7 @@ def test_hermes_context_summarization_integration(tmp_path, monkeypatch):
     assert session_id is not None
 
     # Turn 2
-    resp2 = client.chat_session("Here is some more context.", session_id=session_id)
+    client.chat_session("Here is some more context.", session_id=session_id)
     # Turn 3 - this should add messages, making it hit the threshold > 4
     # Messages structure:
     # After Turn 1: user, assistant (2 msgs)
@@ -60,7 +60,7 @@ def test_hermes_context_summarization_integration(tmp_path, monkeypatch):
     # On start of Turn 3, user is added -> 5 msgs. len(session.messages) > 4
     # _summarize_context should trigger.
 
-    resp3 = client.chat_session("Trigger the limit now.", session_id=session_id)
+    client.chat_session("Trigger the limit now.", session_id=session_id)
 
     # Reload session to check state
     from codomyrmex.agents.hermes.session import SQLiteSessionStore

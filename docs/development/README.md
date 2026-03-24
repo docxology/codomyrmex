@@ -14,7 +14,7 @@ Developer-facing documentation covering environment setup, testing strategy, cod
 | [environment-setup.md](environment-setup.md) | Development environment prerequisites and configuration |
 | [google-integration.md](google-integration.md) | Google Cloud and Workspace integration for development |
 | [multi-agent-git.md](multi-agent-git.md) | Git workflows for concurrent multi-agent development |
-| [testing-strategy.md](testing-strategy.md) | Zero-Mock testing philosophy, coverage targets (≥35%), test organization |
+| [testing-strategy.md](testing-strategy.md) | Zero-Mock testing philosophy, coverage gate (**40%** in `pyproject.toml`), test organization |
 | [uv-usage-guide.md](uv-usage-guide.md) | uv package manager usage for Python dependency management |
 | [code-review-and-sarif.md](code-review-and-sarif.md) | Local PR/diff review scripts and SARIF triage (Bandit artifacts, sarif-tools, merge) |
 

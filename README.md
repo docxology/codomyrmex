@@ -19,14 +19,14 @@
   <img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/code%20style-ruff-D7FF64?style=flat-square&logo=ruff&logoColor=black" alt="Ruff">
   <img src="https://img.shields.io/badge/types-ty-blue?style=flat-square" alt="ty">
-  <img src="https://img.shields.io/badge/tests-39%2C473-brightgreen?style=flat-square" alt="Tests">
+  <img src="https://img.shields.io/badge/tests-34%2C085-brightgreen?style=flat-square" alt="Tests">
 </p>
 
 # 🐜 Codomyrmex
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **600** production `@mcp_tool` lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **39,473** collected tests (`pytest --collect-only --no-cov`), **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
+Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **600** production `@mcp_tool` lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **34,085** collected tests (`pytest --collect-only --no-cov`), **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
 
 ```bash
 # Install
@@ -66,7 +66,7 @@ uv run codomyrmex doctor --all
 |---|---|
 | 🧩 **128 Top-Level Modules** | Packages under `src/codomyrmex/` — composable, independently versioned, zero-mock tested |
 | 🤖 **600 MCP Tool Decorators** | See [inventory](docs/reference/inventory.md) |
-| 🧪 **39,473 Collected Tests** | `uv run pytest --collect-only -q --no-cov`; zero-mock policy |
+| 🧪 **34,085 Collected Tests** | `uv run pytest --collect-only -q --no-cov`; zero-mock policy |
 | 🔒 **Security First** | GitGuardian, SBOM, GGSHIELD pre-commit, detect-secrets integration |
 | 🎛️ **13+ Agent Providers** | Claude, Gemini, GPT-4o, DeepSeek, Mistral, Jules, Codex, Pi, and more |
 | 🔬 **ML Research Ready** | LoRA, RLHF, DPO, distillation, quantization, NAS, Mamba SSM, autograd |
@@ -541,7 +541,7 @@ codomyrmex/
 |:---|:---:|
 | **Total Modules** | 128 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
-| **Collected tests** | 39,473 (`pytest --collect-only --no-cov`) |
+| **Collected tests** | 34,085 (`pytest --collect-only --no-cov`) |
 | **Documentation Files** | 1,029+ |
 | **GitHub Workflows** | 36 |
 | **MCP Tools** | 600 (`@mcp_tool` lines, production tree) |
@@ -550,7 +550,7 @@ codomyrmex/
 | **RASP Doc Compliance** | 128/128 |
 | **Ruff / ty** | Run locally; targets in `pyproject.toml` |
 | **Testing Policy** | Zero-Mock (100% real methods) |
-| **Coverage Gate** | ≥35% (target: 45%) |
+| **Coverage Gate** | **40%** (`fail_under` / `--cov-fail-under` in `pyproject.toml`; stretch toward 45%+) |
 | **Default LLM** | Gemini 2.5 Pro |
 | **Package Manager** | uv |
 | **Python Version** | 3.11 – 3.14 |
@@ -593,7 +593,7 @@ graph TD
         Harvester["mega_swarm_harvester.py"]
     end
 
-    subgraph Targets["Target Modules - 126"]
+    subgraph Targets["Target Modules - 128"]
         M1["agentic_memory"]
         M2["agents"]
         Mdots["..."]
@@ -809,7 +809,7 @@ We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for sta
 **Key requirements:**
 
 - All tests must use real implementations (Zero-Mock policy — no `unittest.mock` or `MagicMock`)
-- Coverage must not drop below 35%
+- Coverage must not drop below the **40%** gate in `pyproject.toml` (`[tool.coverage.report]` and pytest `addopts`)
 - All new modules need `README.md`, `AGENTS.md`, `SPEC.md`, and `PAI.md` (RASP pattern)
 - Run `uv run ruff check .` and `uv run ty check src/` before submitting
 
@@ -825,7 +825,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>128 modules · 600 MCP tools · 39,473 tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>128 modules · 600 MCP tools · 34,085 tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

@@ -25,7 +25,6 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 from typing import Any
-from unittest.mock import patch  # noqa: TID251
 
 import pytest
 
@@ -749,7 +748,9 @@ class TestMissionControlServerLifecycle:
             os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
             proc.wait()
 
-    def test_start_server_pnpm_not_found(self, tmp_path: Path) -> None:
+    def test_start_server_pnpm_not_found(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """start_server raises when pnpm is not available."""
         app_dir = tmp_path / "app"
         app_dir.mkdir()
@@ -759,14 +760,13 @@ class TestMissionControlServerLifecycle:
                 "app_path": str(app_dir),
             }
         )
-        # Patch Popen to simulate pnpm not found
 
         def fake_popen(*args: Any, **kwargs: Any) -> None:
             raise FileNotFoundError("pnpm")
 
-        with patch.object(subprocess, "Popen", fake_popen):
-            with pytest.raises(MissionControlError, match="pnpm not found"):
-                client.start_server()
+        monkeypatch.setattr(subprocess, "Popen", fake_popen)
+        with pytest.raises(MissionControlError, match="pnpm not found"):
+            client.start_server()
 
 
 # ═══════════════════════════════════════════════════════════════════

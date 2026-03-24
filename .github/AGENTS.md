@@ -126,7 +126,7 @@ gh workflow run jules-dispatch.yml -f modules=all -f task_template=docstrings-mc
 | Action pinning | Pin to specific tags, never `@main` or `@latest` |
 | Concurrency | Every workflow must have a `concurrency:` block |
 | Python tooling | Use `uv` for all dependency management |
-| Test coverage | CI enforces 25% minimum |
+| Test coverage | CI enforces **40%** minimum (`pyproject.toml`) |
 | Security scanning | 6 independent scanners must remain active |
 | Agent PR handling | Auto-label → CI → auto-merge pipeline |
 

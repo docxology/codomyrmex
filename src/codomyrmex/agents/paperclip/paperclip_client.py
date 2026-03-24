@@ -69,7 +69,8 @@ class PaperclipClient(CLIAgentBase):
         working_dir = Path(working_dir_str) if working_dir_str else None
 
         self.command = paperclip_command
-        self.timeout = timeout
+        # Preserve explicit 0; otherwise keep base default when config omits timeout.
+        self.timeout = 120 if timeout is None else timeout
         self.working_dir = working_dir
         self.agent_id: str | None = self.get_config_value(
             "paperclip_agent_id", config=config

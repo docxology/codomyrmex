@@ -79,7 +79,6 @@ class TestHermesSessionStats:
         from codomyrmex.agents.hermes import mcp_tools
 
         # Patch _get_client so it uses our pre-populated DB
-        original = mcp_tools._get_client
 
         def patched(*args, **kwargs):
             from codomyrmex.agents.hermes.hermes_client import HermesClient

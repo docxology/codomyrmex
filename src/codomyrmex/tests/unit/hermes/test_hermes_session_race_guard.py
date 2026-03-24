@@ -13,7 +13,6 @@ import pytest
 
 from codomyrmex.agents.hermes.session import (
     HermesSession,
-    SessionGuardContext,
     SessionRaceGuard,
     SQLiteSessionStore,
 )
@@ -210,7 +209,9 @@ class TestSessionRaceGuardIntegration:
         loaded = store.load(session_id)
         assert loaded is not None
         assert loaded.message_count == 11  # system + 10 worker messages
-        assert loaded.metadata["last_worker"] == 9
+        # Worker completion order is non-deterministic with ThreadPoolExecutor;
+        # verify metadata was written by *some* worker, not a specific one.
+        assert loaded.metadata["last_worker"] in range(10)
         store.close()
 
     def test_race_guard_with_multiple_sessions(self) -> None:
@@ -271,7 +272,7 @@ class TestSessionRaceGuardIntegration:
         # Acquire one lock (keep it locked)
         held_context = guard.acquire("session-50")
 
-        pruned = guard.prune_locks(max_size=100)
+        guard.prune_locks(max_size=100)
 
         # The locked session should still exist
         assert guard.get_lock_count() >= 100  # At least the locked one remains

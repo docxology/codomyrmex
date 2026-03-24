@@ -4,6 +4,7 @@ This module provides the VideoProcessor class for manipulating video files
 including resize, crop, rotate, convert, filter, trim, and merge operations.
 """
 
+import importlib.util
 import time
 from pathlib import Path
 
@@ -30,13 +31,8 @@ try:
 except ImportError:
     MOVIEPY_AVAILABLE = False
 
-# Check for OpenCV availability
-try:
-    import cv2
-
-    OPENCV_AVAILABLE = True
-except ImportError:
-    OPENCV_AVAILABLE = False
+# OpenCV is optional; avoid importing solely for availability (Ruff F401).
+OPENCV_AVAILABLE = importlib.util.find_spec("cv2") is not None
 
 
 SUPPORTED_INPUT_FORMATS = {

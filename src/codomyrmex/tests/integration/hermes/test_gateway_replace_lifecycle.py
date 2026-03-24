@@ -97,7 +97,6 @@ def test_gateway_replace_kills_old_pid(temp_home: str) -> None:
             break
         time.sleep(0.1)
 
-    original_pid = p1.pid
 
     p2 = _run_gateway_process(temp_home, True)
 

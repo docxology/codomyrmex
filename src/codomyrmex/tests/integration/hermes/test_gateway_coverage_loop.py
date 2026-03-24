@@ -7,12 +7,11 @@ Validates that the autonomous coverage loop handles:
 - Non-existent target paths
 
 Zero-Mock Policy: All subprocess results are real ``subprocess.CompletedProcess``
-objects. Behavior injection uses real subclasses, not MagicMock instances.
+objects. Behavior injection uses real subclasses and monkeypatch, not MagicMock.
 """
 
 import subprocess
 from pathlib import Path
-from unittest.mock import patch  # noqa: TID251 — process boundary isolation only
 
 import pytest
 
@@ -33,7 +32,7 @@ def temp_db(tmp_path: Path):
 # ---------------------------------------------------------------------------
 
 
-class MockCoverageClient(HermesClient):
+class CoverageLoopClient(HermesClient):
     """Real HermesClient subclass for coverage loop tests.
 
     Always returns a successful repair response so that test isolation
@@ -89,29 +88,35 @@ def _completed(
 # ---------------------------------------------------------------------------
 
 
-def test_coverage_loop_max_turns_exhaustion(temp_db: Path):
+def test_coverage_loop_max_turns_exhaustion(
+    temp_db: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Test that coverage loop stops at max_turns when tests always fail."""
-    client = MockCoverageClient(
+    client = CoverageLoopClient(
         config={
             "hermes_backend": "ollama",
             "hermes_session_db": str(temp_db),
         }
     )
 
-    with patch(
+    monkeypatch.setattr(
         "subprocess.run",
-        return_value=_completed(1, "FAILED test_foo.py::test_bar - AssertionError"),
-    ):
-        result = client._run_coverage_loop("/fake/test_path.py", max_turns=3)
+        lambda *args, **kwargs: _completed(
+            1, "FAILED test_foo.py::test_bar - AssertionError"
+        ),
+    )
+    result = client._run_coverage_loop("/fake/test_path.py", max_turns=3)
 
     assert result["status"] == "failed"
     assert "3 turns" in result["message"]
     assert "trace" in result
 
 
-def test_coverage_loop_success_on_second_turn(temp_db: Path):
+def test_coverage_loop_success_on_second_turn(
+    temp_db: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Test that coverage loop succeeds when tests pass on turn 2."""
-    client = MockCoverageClient(
+    client = CoverageLoopClient(
         config={
             "hermes_backend": "ollama",
             "hermes_session_db": str(temp_db),
@@ -127,54 +132,63 @@ def test_coverage_loop_success_on_second_turn(temp_db: Path):
             return _completed(1, "FAILED test_foo.py")
         return _completed(0, "1 passed")
 
-    with patch("subprocess.run", side_effect=real_subprocess_run):
-        result = client._run_coverage_loop("/fake/test_path.py", max_turns=5)
+    monkeypatch.setattr("subprocess.run", real_subprocess_run)
+    result = client._run_coverage_loop("/fake/test_path.py", max_turns=5)
 
     assert result["status"] == "success"
     assert result["turns"] == 1
     assert "1 passed" in result["output"]
 
 
-def test_coverage_loop_timeout_handling(temp_db: Path):
+def test_coverage_loop_timeout_handling(
+    temp_db: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Test that coverage loop handles subprocess timeout gracefully."""
-    client = MockCoverageClient(
+    client = CoverageLoopClient(
         config={
             "hermes_backend": "ollama",
             "hermes_session_db": str(temp_db),
         }
     )
 
-    with patch("subprocess.run", side_effect=subprocess.TimeoutExpired("pytest", 120)):
-        result = client._run_coverage_loop("/fake/test_path.py", max_turns=2)
+    def timeout_run(*args, **kwargs):
+        raise subprocess.TimeoutExpired("pytest", 120)
+
+    monkeypatch.setattr("subprocess.run", timeout_run)
+    result = client._run_coverage_loop("/fake/test_path.py", max_turns=2)
 
     # Should return error status due to unhandled exception
     assert result["status"] in ("error", "failed")
 
 
-def test_coverage_loop_empty_target(temp_db: Path):
+def test_coverage_loop_empty_target(
+    temp_db: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Test coverage loop with non-existent target path."""
-    client = MockCoverageClient(
+    client = CoverageLoopClient(
         config={
             "hermes_backend": "ollama",
             "hermes_session_db": str(temp_db),
         }
     )
 
-    with patch(
+    monkeypatch.setattr(
         "subprocess.run",
-        return_value=_completed(
+        lambda *args, **kwargs: _completed(
             1,
             "ERROR: file not found: /nonexistent/path.py",
             "No such file or directory",
         ),
-    ):
-        result = client._run_coverage_loop("/nonexistent/path.py", max_turns=1)
+    )
+    result = client._run_coverage_loop("/nonexistent/path.py", max_turns=1)
 
     assert result["status"] == "failed"
     assert "trace" in result
 
 
-def test_coverage_loop_repair_agent_failure(temp_db: Path):
+def test_coverage_loop_repair_agent_failure(
+    temp_db: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Test coverage loop when repair agent itself fails.
 
     Uses FailingCoverageClient — a real subclass with no mocks.
@@ -186,24 +200,32 @@ def test_coverage_loop_repair_agent_failure(temp_db: Path):
         }
     )
 
-    with patch("subprocess.run", return_value=_completed(1, "FAILED test_foo.py")):
-        result = client._run_coverage_loop("/fake/test_path.py", max_turns=3)
+    monkeypatch.setattr(
+        "subprocess.run",
+        lambda *args, **kwargs: _completed(1, "FAILED test_foo.py"),
+    )
+    result = client._run_coverage_loop("/fake/test_path.py", max_turns=3)
 
     assert result["status"] == "error"
     assert "Repair agent failed" in result["message"]
 
 
-def test_coverage_loop_zero_max_turns(temp_db: Path):
+def test_coverage_loop_zero_max_turns(
+    temp_db: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Test coverage loop with max_turns=0 returns immediately."""
-    client = MockCoverageClient(
+    client = CoverageLoopClient(
         config={
             "hermes_backend": "ollama",
             "hermes_session_db": str(temp_db),
         }
     )
 
-    with patch("subprocess.run", return_value=_completed(1, "FAILED")):
-        result = client._run_coverage_loop("/fake/test_path.py", max_turns=0)
+    monkeypatch.setattr(
+        "subprocess.run",
+        lambda *args, **kwargs: _completed(1, "FAILED"),
+    )
+    result = client._run_coverage_loop("/fake/test_path.py", max_turns=0)
 
     assert result["status"] == "failed"
     assert "0 turns" in result["message"]
