@@ -1,7 +1,6 @@
 import functools
 import hashlib
 import json
-import pickle
 import tempfile
 import time
 from collections import OrderedDict
@@ -98,11 +97,11 @@ class CacheManager:
             self._memory_cache.pop(key, None)
 
         # Check disk cache
-        cache_file = self.cache_dir / f"{key}.pkl"
+        cache_file = self.cache_dir / f"{key}.json"
         if cache_file.exists():
             try:
-                with open(cache_file, "rb") as f:
-                    cached_data = pickle.load(f)
+                with open(cache_file) as f:
+                    cached_data = json.load(f)
 
                 # Handle both old format (value, timestamp) and new format (value, timestamp, ttl)
                 if len(cached_data) == 3:
@@ -123,7 +122,7 @@ class CacheManager:
                     return value
                 # Remove expired file
                 cache_file.unlink(missing_ok=True)
-            except (pickle.PickleError, EOFError, OSError):
+            except (ValueError, EOFError, OSError):
                 # Remove corrupted cache file
                 cache_file.unlink(missing_ok=True)
 
@@ -144,11 +143,11 @@ class CacheManager:
             self._evict_oldest()
 
         # Store in disk cache
-        cache_file = self.cache_dir / f"{key}.pkl"
+        cache_file = self.cache_dir / f"{key}.json"
         try:
-            with open(cache_file, "wb") as f:
-                pickle.dump((value, timestamp, ttl), f)
-        except (OSError, pickle.PickleError) as e:
+            with open(cache_file, "w") as f:
+                json.dump((value, timestamp, ttl), f)
+        except (OSError, TypeError, ValueError) as e:
             # If we can't write to disk, that's okay - we still have it in memory
             logger.debug("Failed to write cache entry %s to disk: %s", key, e)
 
@@ -157,7 +156,7 @@ class CacheManager:
         self._memory_cache.clear()
 
         # Clear disk cache
-        for cache_file in self.cache_dir.glob("*.pkl"):
+        for cache_file in self.cache_dir.glob("*.json"):
             cache_file.unlink(missing_ok=True)
 
     def get_stats(self) -> dict[str, Any]:
@@ -166,7 +165,7 @@ class CacheManager:
             "memory_items": len(self._memory_cache),
             "max_memory_items": self.max_memory_items,
             "cache_dir": str(self.cache_dir),
-            "disk_files": len(list(self.cache_dir.glob("*.pkl"))),
+            "disk_files": len(list(self.cache_dir.glob("*.json"))),
         }
 
 
