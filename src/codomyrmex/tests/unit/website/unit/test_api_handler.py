@@ -130,7 +130,8 @@ class TestHandleConfigSave:
     def test_no_content_returns_400(self):
         h = FakeAPIHandler(content_length=0)
         h.handle_config_save()
-        assert h.errors[0][0] == 400
+        assert h.responses[0]["status"] == 400
+        assert "error" in h.responses[0]["data"]
 
     def test_missing_filename_and_no_path_returns_400(self):
         body = json.dumps({"content": "data"}).encode()
@@ -220,13 +221,15 @@ class TestHandleExecute:
     def test_no_content_returns_400(self):
         h = FakeAPIHandler(content_length=0)
         h.handle_execute()
-        assert h.errors[0][0] == 400
+        assert h.responses[0]["status"] == 400
+        assert "error" in h.responses[0]["data"]
 
     def test_non_integer_content_length_treated_as_zero(self):
         h = FakeAPIHandler()
         h.headers["Content-Length"] = "not-a-number"
         h.handle_execute()
-        assert h.errors[0][0] == 400
+        assert h.responses[0]["status"] == 400
+        assert "error" in h.responses[0]["data"]
 
     def test_invalid_json_returns_400(self):
         body = b"bad json{"

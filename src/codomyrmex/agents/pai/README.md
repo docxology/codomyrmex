@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+PAI integration: MCP bridge, trust gateway, and skill manifest. Volatile MCP metrics live in [`docs/reference/inventory.md`](../../../../docs/reference/inventory.md). Refresh with `uv run python scripts/doc_inventory.py` from the repo root; use `--manifest` to print the runtime tool count from `get_skill_manifest()`.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

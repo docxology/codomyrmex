@@ -10,6 +10,7 @@ Test files and validation suites.
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `test_ai_code_editing.py` – Project file
+- `test_claude_task_execution_mixin.py` – Project file
 - `test_droid_manager.py` – Project file
 
 ## Operating Contracts
@@ -24,6 +25,7 @@ Test files and validation suites.
 - `README.md`
 - `SPEC.md`
 - `test_ai_code_editing.py`
+- `test_claude_task_execution_mixin.py`
 - `test_droid_manager.py`
 
 ## Dependencies

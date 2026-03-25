@@ -51,7 +51,7 @@ class AgentConfig:
     gemini_timeout: int = 60
     gemini_working_dir: str | None = None
     gemini_api_key: str | None = None
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-2.5-flash"
     gemini_auth_method: str = "oauth"  # "oauth" or "api_key"
     gemini_settings_path: str | None = None
 

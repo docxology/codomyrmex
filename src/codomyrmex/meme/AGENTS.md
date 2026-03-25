@@ -32,6 +32,7 @@ Memetic evolution and propagation analysis for information spread modeling.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- **Coverage**: this package is listed under `[tool.coverage.run] omit` in the repository root `pyproject.toml` (experimental surface); repo-wide `%` gates do not count `meme/` statements.
 
 ## Key Files
 - `AGENTS.md` - Agent coordination and navigation

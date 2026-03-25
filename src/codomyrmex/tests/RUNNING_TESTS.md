@@ -1,10 +1,12 @@
 # Running Codomyrmex Tests
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-This document provides comprehensive guidance for running the Codomyrmex test suite. The test suite contains **1,203 tests** organized into multiple categories.
+This document describes how to run and filter the Codomyrmex test suite. Canonical counts and inventory live in [docs/reference/inventory.md](../../../docs/reference/inventory.md).
+
+**Collected tests (repo-wide):** **34,320** — `uv run pytest --collect-only -q --no-cov` from the repository root (`testpaths` = `src/codomyrmex` per `pyproject.toml`).
 
 ### Zero-Mock Policy
 
@@ -18,12 +20,17 @@ This document provides comprehensive guidance for running the Codomyrmex test su
 
 ### Test Categories
 
-| Category | Location | Count | Description | Execution Time |
-|----------|----------|-------|-------------|----------------|
-| **Unit Tests** | `src/codomyrmex/tests/unit/` | ~800 | Individual component testing | Fast (< 30s) |
-| **Integration Tests** | `src/codomyrmex/tests/integration/` | ~200 | Cross-module workflow testing | Moderate (1-5 min) |
-| **Example Tests** | `src/codomyrmex/tests/examples/` | ~150 | Example validation and execution | Moderate (30s-2 min) |
-| **Performance Tests** | `src/codomyrmex/tests/performance/` | ~50 | Benchmarking and performance validation | Slow (5-15 min) |
+| Category | Location | Count (indicative) | Notes |
+|----------|----------|--------------------|--------|
+| **All collected** | under `src/codomyrmex/` (`tests/` + `tests/**`) | **34,320** | Single source of truth: `pytest --collect-only` |
+| **`unit` marker** | mostly `tests/unit/**` | **20,488** | `pytest -m unit --collect-only` |
+| **`integration` marker** | mixed | **241** | `pytest -m integration --collect-only` |
+| **Integration tree** | `tests/integration/` | **339** | `pytest tests/integration/ --collect-only` |
+| **Example tests** | `tests/unit/examples/` | **24** | Example validation lives under unit tree |
+| **Performance tree** | `tests/performance/` | **59** | Benchmark-style jobs |
+| **Unit test files** | `tests/unit/**/test_*.py` | **1,117+** | `find` count; changes as tests are added |
+
+Full-suite wall time varies widely (often **tens of minutes**); use markers, `-k`, or the batch script for tighter loops.
 
 ### Test Markers
 
@@ -104,11 +111,13 @@ uv run pytest src/codomyrmex/tests/unit/ --collect-only
 
 ### Coverage Reports
 
+Default `uv run pytest` does **not** enable coverage (see `pyproject.toml` `[tool.pytest.ini_options]`). Use `make test`, `make test-coverage`, or explicit `--cov` flags. The documented floor is **40%** (`[tool.coverage.report] fail_under`); enforce it with `--cov-fail-under=40` when running pytest with `--cov`. The experimental `meme` package is omitted from coverage measurement (`[tool.coverage.run] omit`); all other `src/codomyrmex/` code counts toward the gate.
+
 Generate coverage reports:
 
 ```bash
-# Run with coverage
-uv run pytest --cov=src/codomyrmex --cov-report=html --cov-report=term-missing
+# Run with coverage + gate
+uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html --cov-report=term-missing
 
 # View HTML report
 open htmlcov/index.html
@@ -265,15 +274,13 @@ If you encounter import errors:
 
 ```bash
 # Check Python path
-python -c "import sys; print('
-'.join(sys.path))"
+uv run python -c "import sys; print('\\n'.join(sys.path))"
 
 # Verify package installation
 uv run python -c "import codomyrmex; print('Package imported successfully')"
 
-# Check for syntax errors
-# Check for syntax errors
-find src/ -name "*.py" -exec uv run python -m py_compile {} \;
+# Compile-check Python sources (sample)
+find src -name "*.py" -print0 | xargs -0 -n 50 uv run python -m py_compile
 ```
 
 #### Network/External Dependencies
@@ -325,42 +332,11 @@ When adding tests:
 
 ### Test Fixtures
 
-Common fixtures are available in `src/codomyrmex/tests/conftest.py`:
-
-```python
-def project_root():
-    """Get project root directory."""
-
-def temp_output_dir():
-    """Create temporary output directory."""
-
-def mock_config():
-    """Create mock configuration for testing."""
-```
+Shared fixtures live in `src/codomyrmex/tests/conftest.py` (e.g. `project_root`, `code_dir`, `temp_env_file`, `sample_markdown_file`, `sample_json_file`, `sample_yaml_file`). Prefer real data and temp paths; do not use `unittest.mock` for core assertions (see Zero-Mock Policy above).
 
 ### Test Markers
 
-Apply markers appropriately:
-
-```python
-import pytest
-
-@pytest.mark.unit
-def test_fast_unit_test():
-    """Fast unit test."""
-    pass
-
-@pytest.mark.integration
-@pytest.mark.slow
-def test_integration_workflow():
-    """Slow integration test."""
-    pass
-
-@pytest.mark.performance
-def test_performance_benchmark():
-    """Performance benchmark."""
-    pass
-```
+Apply markers appropriately: decorate tests with `@pytest.mark.unit`, `@pytest.mark.integration`, `@pytest.mark.slow`, or `@pytest.mark.performance`. Each test body must exercise real code paths with concrete assertions (Zero-Mock Policy — no placeholder `assert True` or empty bodies in committed tests).
 
 ## Test Reports
 
@@ -450,8 +426,8 @@ When contributing tests:
 # Debug failing test
 uv run pytest -vv --pdb src/codomyrmex/tests/unit/test_specific.py::TestClass::test_method
 
-# Check coverage
-uv run pytest --cov=src/codomyrmex --cov-report=html
+# Check coverage (40% gate when using --cov-fail-under)
+uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html
 
 # Find slow tests
 uv run pytest --durations=10 src/codomyrmex/tests/

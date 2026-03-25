@@ -261,22 +261,22 @@ def test_something():
 
 ### **Local Development**
 ```bash
-# Run all tests
-pytest
+# Run all tests (prefer uv; default addopts omit --cov for speed)
+uv run pytest
 
 # Run specific test categories
-pytest src/codomyrmex/tests/unit/              # Unit tests only
-pytest src/codomyrmex/tests/integration/       # Integration tests only
-pytest src/codomyrmex/tests/e2e/              # End-to-end tests only
+uv run pytest src/codomyrmex/tests/unit/              # Unit tests only
+uv run pytest src/codomyrmex/tests/integration/       # Integration tests only
+uv run pytest src/codomyrmex/tests/e2e/              # End-to-end tests only
 
 # Run tests for specific module
-pytest src/codomyrmex/tests/unit/test_data_visualization.py
+uv run pytest src/codomyrmex/tests/unit/test_data_visualization.py
 
-# Run with coverage
-pytest --cov=src/codomyrmex --cov-report=html
+# Run with coverage + 40% gate
+uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=40
 
 # Run with detailed output
-pytest -v --tb=short
+uv run pytest -v --tb=short
 ```
 
 ### **CI/CD Integration**
@@ -304,7 +304,7 @@ jobs:
         uv sync --dev
 
     - name: Run unit tests
-      run: uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex
+      run: uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=40
 
     - name: Run integration tests
       run: uv run pytest src/codomyrmex/tests/integration/

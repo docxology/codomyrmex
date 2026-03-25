@@ -38,7 +38,7 @@ Source code directory containing the core Codomyrmex platform implementation. Pr
 
 ### Testing
 
-- Test coverage gate: **40%** project-wide (`[tool.coverage.report] fail_under` and pytest `addopts` in `pyproject.toml`)
+- Test coverage gate: **40%** project-wide (`[tool.coverage.report] fail_under`; enforced when pytest runs with `--cov`, e.g. CI and `Makefile` test targets). The experimental `meme` package is omitted from `[tool.coverage.run]` measurement.
 - Unit tests for all public functions
 - Integration tests for module interactions
 - Real data analysis (no mocks)
@@ -206,7 +206,7 @@ Each module must provide:
 
 ### Testing Standards
 
-- Project-wide coverage gate: **40%** (`pyproject.toml`; same as CI)
+- Project-wide coverage gate: **40%** (`pyproject.toml`; same as CI); `meme/` omitted from coverage run scope
 - Unit tests for public APIs
 - Integration tests for workflows
 - Performance benchmarks where applicable

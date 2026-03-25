@@ -19,6 +19,11 @@ from datetime import datetime
 
 import pytest
 
+pytest.importorskip(
+    "docker",
+    reason="container_registry imports docker SDK (uv sync --extra containerization)",
+)
+
 # --- Skip guards -----------------------------------------------------------
 
 _docker_spec = importlib.util.find_spec("docker")

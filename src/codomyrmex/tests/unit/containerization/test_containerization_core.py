@@ -22,6 +22,11 @@ from datetime import datetime
 
 import pytest
 
+pytest.importorskip(
+    "docker",
+    reason="docker_manager imports docker SDK (uv sync --extra containerization)",
+)
+
 # ---------------------------------------------------------------------------
 # Imports from containerization __init__.py
 # ---------------------------------------------------------------------------

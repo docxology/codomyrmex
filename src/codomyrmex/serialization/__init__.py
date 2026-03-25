@@ -13,7 +13,12 @@ with contextlib.suppress(ImportError):
 
 from collections.abc import Callable
 
-from .binary_formats import AvroSerializer, MsgpackSerializer, ParquetSerializer
+try:
+    from .binary_formats import AvroSerializer, MsgpackSerializer, ParquetSerializer
+except ImportError:
+    AvroSerializer = None  # type: ignore[misc, assignment]
+    MsgpackSerializer = None  # type: ignore[misc, assignment]
+    ParquetSerializer = None  # type: ignore[misc, assignment]
 from .exceptions import (
     BinaryFormatError,
     CircularReferenceError,

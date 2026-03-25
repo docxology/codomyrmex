@@ -24,7 +24,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | Agent packages (`src/codomyrmex/agents/`) | 41 |
 | `mcp_tools.py` files (non-test) | 149 |
 | Production `@mcp_tool` decorators | 600 |
-| Pytest tests collected | 34,085 (`uv run pytest --collect-only -q --no-cov`; or `uv run python scripts/doc_inventory.py --pytest`) |
+| Pytest tests collected | 34,320 (`uv run pytest --collect-only -q --no-cov`; or `uv run python scripts/doc_inventory.py --pytest`) |
 
 ## Reproduce
 
@@ -58,4 +58,5 @@ print(len(mods))
 ## Signposting
 
 - [Reference index](README.md)
+- [MCP tool spec coverage](mcp-tool-spec-coverage.md) — sibling `MCP_TOOL_SPECIFICATION.md` audit (`scripts/mcp_spec_gap.py`)
 - [Documentation guidelines](../development/documentation.md) — Mermaid and maintenance scripts

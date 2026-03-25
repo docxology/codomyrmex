@@ -8,6 +8,7 @@ without an API key (self.client=None), which exercises the guard-clause
 paths that raise GeminiError for every API-dependent method.
 """
 
+import dataclasses
 import inspect
 import os
 
@@ -19,8 +20,15 @@ from codomyrmex.agents.core import (
     AgentResponse,
     BaseAgent,
 )
+from codomyrmex.agents.core.config import AgentConfig
 from codomyrmex.agents.core.exceptions import GeminiError
 from codomyrmex.agents.gemini.gemini_client import GeminiClient
+
+_EXPECTED_DEFAULT_GEMINI_MODEL = next(
+    f.default
+    for f in dataclasses.fields(AgentConfig)
+    if f.name == "gemini_model"
+)
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -112,8 +120,8 @@ class TestGeminiClientInit:
         assert client_no_key.api_key is None or client_no_key.api_key == ""
 
     def test_default_model(self, client_no_key):
-        """Default model is gemini-2.0-flash when not overridden."""
-        assert client_no_key.default_model == "gemini-2.0-flash"
+        """Default model matches global AgentConfig when not overridden."""
+        assert client_no_key.default_model == _EXPECTED_DEFAULT_GEMINI_MODEL
 
     def test_custom_model_from_config(self, client_with_custom_config):
         """Model can be overridden via config dict."""
@@ -150,7 +158,7 @@ class TestGeminiClientInit:
         try:
             gc = GeminiClient(config=None)
             assert gc.name == "gemini"
-            assert gc.default_model == "gemini-2.0-flash"
+            assert gc.default_model == _EXPECTED_DEFAULT_GEMINI_MODEL
         finally:
             _restore_gemini_env(saved)
 
@@ -233,7 +241,7 @@ class TestGeminiClientGuardClauses:
 
     def test_get_model_raises(self, client_no_key):
         with pytest.raises(GeminiError, match="Gemini Client not initialized"):
-            client_no_key.get_model("gemini-2.0-flash")
+            client_no_key.get_model(_EXPECTED_DEFAULT_GEMINI_MODEL)
 
     def test_count_tokens_raises(self, client_no_key):
         with pytest.raises(GeminiError, match="Gemini Client not initialized"):

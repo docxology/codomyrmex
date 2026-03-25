@@ -2,7 +2,7 @@
 
 import time
 from collections.abc import Iterator
-from typing import Any
+from typing import Any, Protocol
 
 import anthropic
 
@@ -24,11 +24,44 @@ CLAUDE_PRICING = {
 }
 
 
+class _ExecutionMixinHost(Protocol):
+    """Host contract for :class:`ExecutionMixin` (``ClaudeClient`` + :class:`~codomyrmex.agents.generic.api_agent_base.APIAgentBase`)."""
+
+    logger: Any
+    model: str
+    max_tokens: Any
+    temperature: Any
+    timeout: Any
+    _tools: Any
+    client: Any
+
+    def _extract_tokens_from_response(
+        self, response: Any, provider: str
+    ) -> tuple[int, int]: ...
+
+    def _build_agent_response(
+        self,
+        content: str,
+        metadata: dict[str, Any],
+        tokens_used: int | None = None,
+        execution_time: float | None = None,
+    ) -> AgentResponse: ...
+
+    def _handle_api_error(
+        self,
+        error: Exception,
+        execution_time: float,
+        api_error_class: type | Any | None = None,
+    ) -> None: ...
+
+
 class ExecutionMixin:
     """ExecutionMixin class."""
 
     def _execute_impl(
-        self, request: AgentRequest, max_tokens: int | None = None
+        self: _ExecutionMixinHost,
+        request: AgentRequest,
+        max_tokens: int | None = None,
     ) -> AgentResponse:  # type: ignore
         """Execute Claude API request.
 
@@ -161,7 +194,9 @@ class ExecutionMixin:
 
         return content, tool_calls
 
-    def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
+    def _stream_impl(
+        self: _ExecutionMixinHost, request: AgentRequest
+    ) -> Iterator[str]:
         """Stream Claude API response.
 
         Args:
@@ -303,7 +338,9 @@ class ExecutionMixin:
 
         return messages, system_message
 
-    def _calculate_cost(self, input_tokens: int, output_tokens: int) -> float:
+    def _calculate_cost(
+        self: _ExecutionMixinHost, input_tokens: int, output_tokens: int
+    ) -> float:
         """Calculate cost in USD based on token usage.
 
         Args:

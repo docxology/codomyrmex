@@ -15,7 +15,7 @@
 
 | Metric | Value | Command |
 | :--- | :--- | :--- |
-| **Tests collected** | **34,085** (0 errors) | `uv run pytest --collect-only --no-cov -q` |
+| **Tests collected** | **34,320** (0 errors) | `uv run pytest --collect-only --no-cov -q` |
 | **Ruff errors** | **0** | `uv run ruff check .` |
 | **ty diagnostics** | **296** | `uv run ty check src/` |
 | **Mock violations** | **0** | `grep -rc "from unittest.mock" src/ --include="*.py" \| grep -v ":0$"` |
@@ -71,12 +71,12 @@
 | :--- | :--- | :--- | :--- |
 | B1 | **Tool versioning UI** | `model_context_protocol/` | `deprecated_in` metadata exists, not surfaced |
 | B2 | **Oversized files audit** | `orchestrator/` | 16 files >800 LOC, largest: `orchestration.py` |
-| B3 | **Video module full impl** | `video/` | Stub — exceptions only |
+| B3 | **Video module depth** | `video/` | Partial impl (processor, extractor, analyzer, transcription paths); not a thin stub — see `video/README.md` / `SPEC.md` |
 | B4 | **Meme module MCP exposure** | `meme/` | Experimental, needs RASP + `@mcp_tool` |
 | B5 | **Secure Cognitive Layer MCP** | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | Not MCP-exposed via PAI bridge |
 | B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 64→0 errors via import guards in `crypto/currency/__init__.py` and `data_visualization/engines/__init__.py` |
-| B7 | ~~README metric drift~~ | root | ✅ Fixed — aligned with [docs/reference/inventory.md](docs/reference/inventory.md) (34,085 tests, 600 MCP `@mcp_tool` lines) |
-| B8 | **Coverage gap** | repo-wide | 32.30% vs 40% gate — needs ~10,600 more covered lines. Dedicated coverage campaign required |
+| B7 | ~~README metric drift~~ | root | ✅ Fixed — aligned with [docs/reference/inventory.md](docs/reference/inventory.md) (34,320 tests, 600 MCP `@mcp_tool` lines) |
+| B8 | **Coverage gate** | repo-wide | **40%** in `[tool.coverage.report] fail_under`; `meme/*` omitted from `[tool.coverage.run]`. Enforce with `make test` or `--cov-fail-under=40`. Re-verify after substantive changes. |
 
 ---
 
@@ -87,11 +87,11 @@
 | Requirement | Command | Threshold | Status |
 | :--- | :--- | :--- | :--- |
 | **Zero-Mock Policy** | `grep -rc "from unittest.mock" src/ --include="*.py" \| grep -v ":0$"` | 0 `unittest.mock` imports | ✅ PASSED (0 violations) |
-| **Full Test Pass** | `uv run pytest` | Exit code 0 | 🟡 PENDING (0 collection errors; needs full run) |
+| **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 40% gate) | 🟡 PENDING (0 collection errors; needs full run) |
 | **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED (0 errors) |
 | **Type Safety** | `uv run ty check src/` | <1,000 diagnostics | ✅ PASSED (296 diagnostics) |
-| **Coverage Gate** | `uv run pytest --cov=src/codomyrmex --cov-fail-under=40` | ≥40% | 🔴 NOT MET (32.30% — 137,819 stmts, 44,522 covered, ~10,600 line gap) |
-| **Documentation Parity** | — | AGENTS.md, README.md, SPEC.md, CHANGELOG.md updated | 🟡 IN PROGRESS |
+| **Coverage Gate** | `make test` or `uv run pytest src/codomyrmex/tests/ ... --cov-fail-under=40` | ≥40% | 🟡 Confirm on CI / local green run — `meme/*` omitted from coverage (`pyproject.toml`); one dev unit+cov snapshot showed ~73% of ~135k statements (Mar 2026) |
+| **Documentation Parity** | — | AGENTS.md, README.md, SPEC.md, CHANGELOG.md aligned with pytest/coverage source of truth | ✅ Updated (pytest → `pyproject.toml`; CI `coverage-gate`; `meme` omit) |
 
 ---
 
@@ -111,7 +111,7 @@
 
 | Task | Command |
 | :--- | :--- |
-| **Test** | `uv run pytest` |
+| **Test** | `uv run pytest` (no coverage) · `make test` (with `--cov` + 40% gate) |
 | **Lint** | `uv run ruff check .` |
 | **Format** | `uv run ruff format .` |
 | **Type Check** | `uv run ty check src/` |

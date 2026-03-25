@@ -11,6 +11,7 @@ Agent coordination for `docs/reference/`: API and CLI reference, performance and
 | File | Role |
 |:---|:---|
 | [inventory.md](inventory.md) | Single source of truth for counts used across READMEs; refresh with `uv run python scripts/doc_inventory.py` |
+| [mcp-tool-spec-coverage.md](mcp-tool-spec-coverage.md) | `MCP_TOOL_SPECIFICATION.md` sibling gaps; refresh list with `uv run python scripts/mcp_spec_gap.py` |
 | [api.md](api.md), [api-complete.md](api-complete.md) | API reference |
 | [cli.md](cli.md) | CLI surface |
 | [changelog.md](changelog.md) | Version history |

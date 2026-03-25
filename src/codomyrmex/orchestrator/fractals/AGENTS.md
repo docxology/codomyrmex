@@ -6,6 +6,7 @@
 Contains components for the src system.
 
 ## Active Components
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool schema for `orchestrate_fractal_task`
 - `PAI.md` – Project file
 - `README.md` – Project file
 - `SKILL.md` – Project file
@@ -25,6 +26,7 @@ Contains components for the src system.
 ## Key Files
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview
+- `MCP_TOOL_SPECIFICATION.md`
 - `PAI.md`
 - `README.md`
 - `SKILL.md`

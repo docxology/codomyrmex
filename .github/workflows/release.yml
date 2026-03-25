@@ -100,7 +100,7 @@ jobs:
       - name: Run comprehensive test suite
         run: |
           echo "🧪 Running comprehensive test suite for release..."
-          uv run pytest src/codomyrmex/tests/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=xml --cov-fail-under=25
+          uv run pytest src/codomyrmex/tests/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=xml --cov-fail-under=40
 
       - name: Run security checks
         run: |

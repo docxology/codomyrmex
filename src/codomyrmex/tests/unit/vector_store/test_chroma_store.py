@@ -4,6 +4,8 @@ import uuid
 
 import pytest
 
+pytest.importorskip("chromadb", reason="chromadb optional; install with uv sync --extra vector_store or uv pip install chromadb")
+
 from codomyrmex.vector_store.chroma import ChromaVectorStore
 
 

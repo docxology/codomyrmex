@@ -53,7 +53,7 @@ The Gemini Agent provides a standardized interface to Google's Gemini models, su
 ## 5. Configuration
 
 - `GEMINI_API_KEY`: Required.
-- `GEMINI_MODEL`: Default model (default: `gemini-2.0-flash`).
+- `GEMINI_MODEL`: Default model (default: `gemini-2.5-flash`).
 
 ## Navigation Links
 

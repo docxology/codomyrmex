@@ -43,7 +43,11 @@ from .gated_rewrite import GateDecision, GatedRewriter, RewriteGate, RewriteProp
 from .mcp_tools import pop, push
 from .solver import ConstraintSolver
 from .verify_isc import ISCVerificationResult, verify_criteria_consistency
-from .z3_bridge import Z3Verifier
+
+try:
+    from .z3_bridge import Z3Verifier
+except ImportError:
+    Z3Verifier = None  # type: ignore[misc, assignment]
 
 __all__ = [
     "BackendNotAvailableError",

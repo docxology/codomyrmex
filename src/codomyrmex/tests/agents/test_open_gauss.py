@@ -11,6 +11,7 @@ Tests cover the public Python API surface of the OpenGauss submodule:
 All tests use real in-process implementations. Zero mocks. Zero external network calls.
 """
 
+import importlib.util
 import json
 import os
 from datetime import datetime
@@ -19,7 +20,27 @@ from pathlib import Path
 import pytest
 import yaml
 
-# Note: sys.path injection for open_gauss is handled in conftest.py
+# Note: sys.path injection for open_gauss is handled in conftest.py.
+# Do not `import utils` — full-suite collection puts codomyrmex.tests.unit.utils on sys.path first.
+_OPEN_GAUSS_DIR = Path(__file__).resolve().parent.parent.parent / "agents" / "open_gauss"
+
+
+def _load_open_gauss_utils():
+    path = _OPEN_GAUSS_DIR / "utils.py"
+    spec = importlib.util.spec_from_file_location(
+        "_codomyrmex_open_gauss_utils", path
+    )
+    if spec is None or spec.loader is None:
+        msg = f"Cannot load Open Gauss utils from {path}"
+        raise ImportError(msg)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_ogu = _load_open_gauss_utils()
+atomic_json_write = _ogu.atomic_json_write
+atomic_yaml_write = _ogu.atomic_yaml_write
 
 
 # ===========================================================================
@@ -147,8 +168,6 @@ class TestGaussTime:
 
 class TestAtomicJsonWrite:
     def test_writes_valid_json(self, tmp_path):
-        from utils import atomic_json_write
-
         target = tmp_path / "out.json"
         data = {"key": "value", "num": 42}
         atomic_json_write(target, data)
@@ -156,31 +175,23 @@ class TestAtomicJsonWrite:
         assert loaded == data
 
     def test_overwrites_existing_file(self, tmp_path):
-        from utils import atomic_json_write
-
         target = tmp_path / "out.json"
         atomic_json_write(target, {"v": 1})
         atomic_json_write(target, {"v": 2})
         assert json.loads(target.read_text())["v"] == 2
 
     def test_creates_parent_directories(self, tmp_path):
-        from utils import atomic_json_write
-
         target = tmp_path / "deep" / "nested" / "out.json"
         atomic_json_write(target, {"nested": True})
         assert target.exists()
 
     def test_no_tmp_file_left_on_success(self, tmp_path):
-        from utils import atomic_json_write
-
         target = tmp_path / "out.json"
         atomic_json_write(target, {"ok": True})
         tmp_files = list(tmp_path.glob("*.tmp"))
         assert len(tmp_files) == 0
 
     def test_handles_nested_structures(self, tmp_path):
-        from utils import atomic_json_write
-
         target = tmp_path / "deep.json"
         data = {"list": [1, 2, 3], "nested": {"a": {"b": "c"}}}
         atomic_json_write(target, data)
@@ -189,8 +200,6 @@ class TestAtomicJsonWrite:
 
 class TestAtomicYamlWrite:
     def test_writes_valid_yaml(self, tmp_path):
-        from utils import atomic_yaml_write
-
         target = tmp_path / "out.yaml"
         data = {"key": "value", "count": 7}
         atomic_yaml_write(target, data)
@@ -198,24 +207,18 @@ class TestAtomicYamlWrite:
         assert loaded == data
 
     def test_overwrites_existing_yaml(self, tmp_path):
-        from utils import atomic_yaml_write
-
         target = tmp_path / "out.yaml"
         atomic_yaml_write(target, {"v": 1})
         atomic_yaml_write(target, {"v": 99})
         assert yaml.safe_load(target.read_text())["v"] == 99
 
     def test_extra_content_appended(self, tmp_path):
-        from utils import atomic_yaml_write
-
         target = tmp_path / "out.yaml"
         atomic_yaml_write(target, {"k": "v"}, extra_content="# trailing comment\n")
         content = target.read_text()
         assert "# trailing comment" in content
 
     def test_no_tmp_file_left_on_success(self, tmp_path):
-        from utils import atomic_yaml_write
-
         target = tmp_path / "out.yaml"
         atomic_yaml_write(target, {"ok": True})
         assert len(list(tmp_path.glob("*.tmp"))) == 0

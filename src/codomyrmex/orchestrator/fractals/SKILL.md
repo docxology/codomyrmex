@@ -5,28 +5,42 @@ category: Orchestration
 version: 1.0.0
 ---
 
-# 🌀 Fractals Orchestrator
+# Fractals orchestrator
 
 ## Overview
 
-The `fractals` integration provides a robust, self-similar, LLM-steered recursion engine that maps high-level abstract goals into concrete tree graphs of executable `atomic` leaves. The engine spins up individual git `worktrees` per leaf node, executing agents inside completely isolated scopes—thereby resolving complex goals without context pollution.
+The `fractals` integration provides a self-similar, LLM-steered recursion flow that maps high-level goals into task trees with `atomic` leaves. Each leaf runs in its own **git worktree** under a dedicated workspace directory so agents stay isolated.
 
-## Capabilities Context
+## Capabilities context
 
-Use this skill via the `orchestrate_fractal_task` MCP Tool when you are presented with a massive, composite goal from the User (e.g. "Build a full stack web application", "Refactor the entire billing module") and standard single-shot agent patterns will fail.
+Use the `orchestrate_fractal_task` MCP tool when the user gives a large composite goal (for example a full-stack build or a broad refactor) and single-shot agent runs are unlikely to succeed.
 
-The logic operates in two phases:
+Phases:
 
-1. **PLAN**: The LLM autonomously classifies tasks as `composite` or `atomic` safely scaling up to a `max_depth`. Composites are strictly decoupled.
-2. **EXECUTE**: Isolated `.worktrees` are appended. Granular agents solve their leaf task.
+1. **PLAN**: Tasks are classified as composite or atomic up to `max_depth` (default 3).
+2. **EXECUTE**: For each leaf, a worktree is created and the chosen provider runs the task there.
 
-## Best Practices
+## Workspace layout (actual behavior)
 
-- **Isolation Boundaries**: Do not attempt to merge the git worktrees manually. The system operates inside `~/.gemini/tmp` equivalent local scopes to sandbox execution.
-- **Provider Switching**: Default execution passes through Anthropics CLI, but internal `codomyrmex` agents serve as fallback providers dynamically.
-- **Decomposition Overload**: Set `max_depth` intentionally (default: 3). Over-decomposition creates administrative burden; let the classifier properly halt recursion at `atomic` boundaries.
+The MCP entrypoint [`mcp_tools.orchestrate_fractal_task`](mcp_tools.py) uses a workspace directory:
+
+- **Path**: `tempfile.gettempdir() / "fractals_workspace"` (for example `/tmp/fractals_workspace` on Unix).
+- **Git root**: That directory is initialized as its own repository if needed.
+- **Leaf worktrees**: `WorkspaceManager` creates `<workspace_path>/.worktrees/<task_id>/` per leaf (see [`workspace.py`](workspace.py)).
+
+Do not merge these worktrees by hand unless you understand the fractal run; treat them as disposable sandboxes for that orchestration run.
+
+## Providers
+
+- **`provider="claude"`** (default): runs the Anthropic Claude CLI in each worktree (`executor.py`).
+- **`provider="codomyrmex"`**: uses the internal codomyrmex agent path in the same worktree.
+
+## Best practices
+
+- Set `max_depth` deliberately; excessive depth adds coordination overhead.
+- Expect sequential leaf execution in the current MCP wrapper (concurrency may be added at async boundaries).
 
 ## Related
 
-- `codomyrmex.logistics.orchestration`
-- `codomyrmex.agents.qwen`
+- [`mcp_tools.py`](mcp_tools.py) — `orchestrate_fractal_task`
+- [`executor.py`](executor.py), [`planner.py`](planner.py), [`models.py`](models.py)

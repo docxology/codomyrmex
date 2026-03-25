@@ -16,6 +16,7 @@ Comprehensive reference documentation for APIs, CLI tools, configuration, perfor
 | [cli.md](cli.md) | CLI tools reference for all command-line utilities |
 | [glossary.md](glossary.md) | Terminology glossary for Codomyrmex concepts |
 | [inventory.md](inventory.md) | Authoritative repo metrics (modules, MCP tools, tests) and how to reproduce them |
+| [mcp-tool-spec-coverage.md](mcp-tool-spec-coverage.md) | `MCP_TOOL_SPECIFICATION.md` sibling coverage for `mcp_tools.py`; run `scripts/mcp_spec_gap.py` |
 | [migration-guide.md](migration-guide.md) | Guide for migrating between major versions |
 | [orchestrator.md](orchestrator.md) | Orchestrator API and workflow engine reference |
 | [performance-benchmarks.md](performance-benchmarks.md) | Benchmark results and methodology |

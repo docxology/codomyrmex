@@ -4,6 +4,11 @@ from __future__ import annotations
 
 import pytest
 
+pytest.importorskip(
+    "mnemonic",
+    reason="HD wallet tests require mnemonic (uv sync --extra crypto)",
+)
+
 from codomyrmex.crypto.currency.wallet import (
     HDWallet,
     create_hd_wallet,

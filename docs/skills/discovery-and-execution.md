@@ -128,6 +128,22 @@ for entry in executor.get_execution_log():
   `SkillExecutionError`
 - `src/codomyrmex/skills/skill_registry.py` -- YAML-level `SkillRegistry`
 
+## Repository `SKILL.md` files and IDE discovery
+
+The `SkillDiscoverer` flow above applies to **Python-registered** skills inside `codomyrmex.skills`. Separately, this repository ships a few **Markdown skill packs** (agentskills-style front matter) for PAI, Cursor, and Claude Code:
+
+| Location | Role |
+|----------|------|
+| [`SKILL.md`](../../SKILL.md) (repo root) | Canonical Codomyrmex PAI / marketplace narrative; volatile counts point to [`docs/reference/inventory.md`](../reference/inventory.md). |
+| [`src/codomyrmex/agents/pai/SKILL.md`](../../src/codomyrmex/agents/pai/SKILL.md) | Same contract as root; kept in-tree for PAI pack resolution next to the MCP bridge. |
+| [`src/codomyrmex/orchestrator/fractals/SKILL.md`](../../src/codomyrmex/orchestrator/fractals/SKILL.md) | Fractal orchestration skill (MCP: `orchestrate_fractal_task`). |
+| [`.agent/skills/`](../../.agent/skills/) | Canonical workflow skills (e.g. desloppify). |
+| [`.cursor/skills/<name>/SKILL.md`](../../.cursor/skills/) | **Cursor** loads skills from here. Use a **stub**: YAML front matter plus links to canonical docs—examples: [desloppify](../../.cursor/skills/desloppify/SKILL.md), [codomyrmex](../../.cursor/skills/codomyrmex/SKILL.md), [fractals](../../.cursor/skills/fractals/SKILL.md). |
+
+Optional **Claude Code** skills under `~/.claude/skills/` (e.g. GitNexus, qmd) are **not** in git; see [CLAUDE.md](../../CLAUDE.md) and [`.agent/SKILL_INDEX.md`](../../.agent/SKILL_INDEX.md) for plugin path maps.
+
+After MCP changes, refresh metrics with `uv run python scripts/doc_inventory.py` (add `--manifest` for runtime `get_skill_manifest()` tool count).
+
 ## Cross-References
 
 - For the full API specification, see the

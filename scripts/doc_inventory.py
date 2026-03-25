@@ -4,6 +4,7 @@
 Run from repo root: uv run python scripts/doc_inventory.py
 
 Optional: pass --pytest to also run pytest --collect-only (slower, ~30s).
+Optional: pass --manifest for runtime merged MCP tool count via get_skill_manifest() (imports codomyrmex).
 """
 
 from __future__ import annotations
@@ -68,6 +69,7 @@ def count_mcp_tools_py(root: Path) -> int:
 
 def pytest_collect_count(root: Path) -> int | None:
     try:
+        # --no-cov keeps the count independent of optional coverage instrumentation.
         proc = subprocess.run(
             [
                 sys.executable,
@@ -92,12 +94,33 @@ def pytest_collect_count(root: Path) -> int | None:
     return None
 
 
+def manifest_tool_count() -> int | None:
+    """Runtime merged static+dynamic MCP tool count (requires package import)."""
+    try:
+        from codomyrmex.agents.pai import get_skill_manifest
+    except ImportError:
+        return None
+    try:
+        m = get_skill_manifest()
+        tools = m.get("tools")
+        if isinstance(tools, list):
+            return len(tools)
+    except Exception:
+        return None
+    return None
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
         "--pytest",
         action="store_true",
         help="Run pytest --collect-only (slow)",
+    )
+    ap.add_argument(
+        "--manifest",
+        action="store_true",
+        help="Print get_skill_manifest() tool count (imports codomyrmex)",
     )
     args = ap.parse_args()
     root = repo_root()
@@ -110,6 +133,12 @@ def main() -> int:
     print(f"  top_level_modules:        {mods}")
     print(f"  mcp_tools.py (non-test):  {mcp_files}")
     print(f"  @mcp_tool (production):   {decorators}")
+    if args.manifest:
+        n = manifest_tool_count()
+        if n is not None:
+            print(f"  manifest tools (runtime): {n}")
+        else:
+            print("  manifest tools (runtime): (import or get_skill_manifest failed)")
     if args.pytest:
         n = pytest_collect_count(root)
         if n is not None:

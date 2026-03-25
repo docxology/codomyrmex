@@ -22,6 +22,11 @@ from datetime import datetime
 import pytest
 import yaml
 
+pytest.importorskip(
+    "kubernetes",
+    reason="kubernetes_orchestrator requires kubernetes client library",
+)
+
 from codomyrmex.containerization.kubernetes.kubernetes_orchestrator import (
     KUBERNETES_AVAILABLE,
     KubernetesDeployment,

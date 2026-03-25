@@ -135,7 +135,7 @@ client = MagicMock()
 
 ### Coverage Gate
 
-The current coverage gate is **40.0%** (enforced in CI via `fail_under` and `--cov-fail-under` in `pyproject.toml`). New modules must not drop coverage below this threshold. Target: increase toward 45%+ over time.
+The current coverage gate is **40.0%** (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI (`ci.yml`) and `make test` / `make test-unit` / `make test-coverage` run pytest with `--cov=src/codomyrmex` and `--cov-fail-under=40`. Plain `uv run pytest` does not collect coverage. Tag releases (`release.yml`) use `--cov-fail-under=40` on the unit test tree. The experimental `meme` package is omitted from aggregate coverage via `[tool.coverage.run] omit` in `pyproject.toml`. New modules must not drop coverage below the documented threshold when measured with `--cov`. Target: increase toward 45%+ over time.
 
 ### Test Skip Policy
 

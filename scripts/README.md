@@ -130,7 +130,8 @@ Maintenance and automation utilities for project management.
 | :--- | :--- |
 | `strip_mermaid_style_lines.py` | Remove `style … fill:…` lines from fenced `mermaid` blocks under `docs/` |
 | `normalize_mermaid_subgraphs.py` | Rewrite `subgraph "Label"` → `subgraph sg_<hash> [Label]` in `docs/` |
-| `doc_inventory.py` | Print module / `mcp_tools.py` / `@mcp_tool` counts (optional `--pytest` for collected test total). Canonical definitions: [docs/reference/inventory.md](../docs/reference/inventory.md) |
+| `doc_inventory.py` | Print module / `mcp_tools.py` / `@mcp_tool` counts; optional `--pytest`, `--manifest` (`get_skill_manifest` tool count). Canonical definitions: [docs/reference/inventory.md](../docs/reference/inventory.md) |
+| `mcp_spec_gap.py` | List `mcp_tools.py` paths missing sibling `MCP_TOOL_SPECIFICATION.md`; see [docs/reference/mcp-tool-spec-coverage.md](../docs/reference/mcp-tool-spec-coverage.md) |
 
 See [docs/development/documentation.md](../docs/development/documentation.md).
 

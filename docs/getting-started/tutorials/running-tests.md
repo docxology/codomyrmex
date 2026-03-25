@@ -18,8 +18,8 @@ uv run pytest
 # Quick check — collect only (no execution)
 uv run pytest --collect-only -q
 
-# Run with coverage
-uv run pytest --cov=src/codomyrmex --cov-report=term-missing
+# Run with coverage + 40% gate (matches CI / `make test`)
+uv run pytest --cov=src/codomyrmex --cov-report=term-missing --cov-fail-under=40
 ```
 
 ## Test Organization
@@ -55,14 +55,17 @@ uv run pytest src/codomyrmex/tests/unit/ide/test_agent_bridge.py -v
 
 ## Coverage
 
-The project enforces a **40%** line-coverage floor via `[tool.coverage.report] fail_under` and pytest `addopts` (`--cov-fail-under=40`) in `pyproject.toml`. A plain test run already applies that gate:
+The project documents a **40%** line-coverage floor in `[tool.coverage.report] fail_under` in `pyproject.toml`. **Plain `uv run pytest` does not collect coverage** (faster local runs). Enforce the gate explicitly:
 
 ```bash
 # Full suite with coverage (fails below 40%)
-uv run pytest
+uv run pytest --cov=src/codomyrmex --cov-fail-under=40
 
-# HTML report (still uses configured cov settings)
-uv run pytest --cov-report=html
+# Or use Makefile (adds reports)
+make test
+
+# HTML report
+uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html
 open htmlcov/index.html
 
 # Per-file coverage for a specific module
@@ -103,9 +106,9 @@ The policy is enforced via `ruff` — any import of mock libraries will fail lin
 | Metric | Value |
 |--------|-------|
 | Test files | 886 |
-| Tests collected | 34,085 (`uv run pytest --collect-only -q --no-cov`; see [reference/inventory.md](../../reference/inventory.md)) |
-| Coverage gate | **40%** (`fail_under` / `--cov-fail-under` in `pyproject.toml`) |
-| Actual coverage | See pytest summary or `coverage.json` after `uv run pytest` |
+| Tests collected | 34,320 (`uv run pytest --collect-only -q --no-cov`; see [reference/inventory.md](../../reference/inventory.md)) |
+| Coverage gate | **40%** (`fail_under` in `pyproject.toml`; pass `--cov-fail-under=40` or `make test`) |
+| Actual coverage | After a run with `--cov` (e.g. `make test-coverage`) — see pytest summary or `coverage.json` (`meme/` omitted; see `pyproject.toml`) |
 
 ## Next Steps
 

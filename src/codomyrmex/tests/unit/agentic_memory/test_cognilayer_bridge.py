@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+import codomyrmex.agentic_memory.cognilayer_bridge as cognilayer_bridge_mod
 from codomyrmex.agentic_memory.cognilayer_bridge import (
     _get_db_connection,
     consolidate_memories,
@@ -49,12 +50,8 @@ def tmp_db(tmp_path: Path) -> Path:
 @pytest.fixture
 def _patch_db(tmp_db: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     """Monkeypatch COGNILAYER_DB and COGNILAYER_HOME to use a temp database."""
-    monkeypatch.setattr(
-        "codomyrmex.agentic_memory.cognilayer_bridge.COGNILAYER_DB", tmp_db
-    )
-    monkeypatch.setattr(
-        "codomyrmex.agentic_memory.cognilayer_bridge.COGNILAYER_HOME", tmp_db.parent
-    )
+    monkeypatch.setattr(cognilayer_bridge_mod, "COGNILAYER_DB", tmp_db)
+    monkeypatch.setattr(cognilayer_bridge_mod, "COGNILAYER_HOME", tmp_db.parent)
     return tmp_db
 
 
@@ -66,9 +63,7 @@ class TestGetDbConnection:
     ) -> None:
         """FileNotFoundError raised when database does not exist."""
         missing = tmp_path / "no_db_here.db"
-        monkeypatch.setattr(
-            "codomyrmex.agentic_memory.cognilayer_bridge.COGNILAYER_DB", missing
-        )
+        monkeypatch.setattr(cognilayer_bridge_mod, "COGNILAYER_DB", missing)
         with pytest.raises(FileNotFoundError, match="not found"):
             _get_db_connection()
 
@@ -239,11 +234,10 @@ class TestConsolidateMemories:
         conn.commit()
         conn.close()
 
+        monkeypatch.setattr(cognilayer_bridge_mod, "COGNILAYER_DB", db_path)
         monkeypatch.setattr(
-            "codomyrmex.agentic_memory.cognilayer_bridge.COGNILAYER_DB", db_path
-        )
-        monkeypatch.setattr(
-            "codomyrmex.agentic_memory.cognilayer_bridge.COGNILAYER_HOME",
+            cognilayer_bridge_mod,
+            "COGNILAYER_HOME",
             db_path.parent,
         )
         result = consolidate_memories()
@@ -295,9 +289,7 @@ class TestGetMemoryStats:
     ) -> None:
         """Returns installed=False when the database file does not exist."""
         missing = tmp_path / "nope.db"
-        monkeypatch.setattr(
-            "codomyrmex.agentic_memory.cognilayer_bridge.COGNILAYER_DB", missing
-        )
+        monkeypatch.setattr(cognilayer_bridge_mod, "COGNILAYER_DB", missing)
         stats = get_memory_stats()
         assert stats["installed"] is False
         assert "not found" in stats.get("error", "").lower()

@@ -15,7 +15,7 @@ There are **two separate skill systems** that interact through a well-defined br
 | **Codomyrmex Skills** | `src/codomyrmex/skills/` (this module) | `SkillsManager`, `SkillLoader` | Internal Python skills for the development platform |
 | **PAI Skills** | `~/.claude/skills/` | PAI Algorithm (SKILL.md) | Personal AI skills invoked by the Algorithm |
 
-The **bridge** between them is the Codomyrmex PAI Skill at `~/.claude/skills/Codomyrmex/SKILL.md`. This PAI-side skill exposes codomyrmex capabilities (~148 auto-discovered MCP tools from 33 modules plus ~19 static tools = ~167 total, 3 resources, 10 prompts) to the PAI Algorithm via the MCP protocol. It also provides the `/codomyrmexVerify` and `/codomyrmexTrust` workflows.
+The **bridge** between them is the Codomyrmex PAI skill: repository root [`SKILL.md`](../../../SKILL.md) and [`agents/pai/SKILL.md`](../pai/SKILL.md) (a copy may also live under `~/.claude/skills/` after install). The MCP surface is large and changes with the tree—volatile counts are in [`docs/reference/inventory.md`](../../../docs/reference/inventory.md); runtime merged tool count: `get_skill_manifest()` from `codomyrmex.agents.pai`. It also documents `/codomyrmexVerify` and `/codomyrmexTrust` workflows.
 
 ### How They Connect
 

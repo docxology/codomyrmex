@@ -54,7 +54,7 @@ jobs:
             // Just notify that coverage was collected
             let body = '## 🧪 Test Coverage Results\n\n';
             if (fs.existsSync('coverage.xml')) {
-               body += '✅ `coverage.xml` generated successfully. The Codomyrmex Quality Gate (25%) has been cleared for this PR.\n\n';
+               body += '✅ `coverage.xml` generated successfully. Documented coverage floor is **40%** (`pyproject.toml`); open CI artifacts for the measured percentage.\n\n';
                body += '> Note: Jules AI agents actively monitor coverage gaps to auto-generate mock-free tests.';
             } else {
                body += '⚠️ Coverage artifact could not be found.';

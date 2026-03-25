@@ -30,11 +30,14 @@ make setup        # install + submodules together
 uv sync --extra <module-name>    # e.g., uv sync --extra spatial
 uv sync --all-extras             # Install all optional dependencies
 
-# Run all tests
+# Run all tests (no coverage — fast default)
 uv run pytest
 
-# Run tests with coverage
-uv run pytest --cov=src/codomyrmex --cov-report=html
+# Run tests with coverage and the 40% gate (same idea as `make test`)
+uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=40
+
+# Pre-tag / release checklist: ruff + ty + full test tree with 40% coverage floor
+make verify-release
 
 # Run specific test file or module
 uv run pytest src/codomyrmex/tests/unit/<module>/test_<module>.py
@@ -178,7 +181,7 @@ Key PAI system references (in `~/.claude/PAI/`):
 
 ## Test Markers
 
-Tests use pytest markers defined in `pytest.ini`:
+Tests use pytest markers defined in `pyproject.toml` (`[tool.pytest.ini_options]`):
 
 - `@pytest.mark.unit` - Unit tests
 - `@pytest.mark.integration` - Integration tests
@@ -260,7 +263,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (179349 symbols, 330468 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (179703 symbols, 331021 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

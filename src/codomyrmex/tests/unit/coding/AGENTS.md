@@ -22,6 +22,7 @@ Test files and validation suites.
 - `test_generator_module.py` – Project file
 - `test_mcp_tools_coding.py` – Project file
 - `test_metrics_mixin.py` – Project file
+- `test_refactoring_mixin.py` – RefactoringMixin unit tests
 - `test_review_models.py` – Project file
 - `test_reviewer_analysis.py` – Project file
 - `test_reviewer_helpers.py` – Project file

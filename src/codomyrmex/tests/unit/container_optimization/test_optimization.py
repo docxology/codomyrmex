@@ -1,8 +1,13 @@
 import contextlib
 import time
 
-import docker
 import pytest
+
+pytest.importorskip(
+    "docker",
+    reason="container optimization tests require docker SDK (uv sync --extra containerization)",
+)
+import docker
 
 from codomyrmex.container_optimization.optimizer import ContainerOptimizer
 from codomyrmex.container_optimization.resource_tuner import (

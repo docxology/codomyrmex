@@ -29,7 +29,7 @@ The `agents/gemini` submodule provides Google Gemini integration for Codomyrmex 
 ```python
 from codomyrmex.agents.gemini import GeminiClient
 
-client = GeminiClient(model="gemini-2.0-flash")
+client = GeminiClient(model="gemini-2.5-flash")
 response = client.generate("Explain quantum computing in simple terms")
 print(response.text)
 ```

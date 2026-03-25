@@ -157,6 +157,39 @@ jobs:
           name: complexity-analysis
           path: complexity-report.md
 
+  coverage-gate:
+    name: Coverage gate (40%)
+    runs-on: ubuntu-latest
+    needs: lint-and-format
+    timeout-minutes: 120
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Create output directory
+        run: |
+          mkdir -p src/codomyrmex/output
+
+      - name: Full test suite with coverage floor
+        run: |
+          uv run pytest src/codomyrmex/tests/ -q --tb=short \
+            --cov=src/codomyrmex \
+            --cov-report=term-missing \
+            --cov-report=json:coverage-gate.json \
+            --cov-fail-under=40
+
   test-matrix:
     name: Test Suite
     runs-on: ${{ matrix.os }}
@@ -204,7 +237,8 @@ jobs:
             --cov-report=html \
             --cov-report=term-missing \
             --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml \
-            --cov-report=json
+            --cov-report=json \
+            --cov-fail-under=40
 
       - name: Run integration tests
         run: |
@@ -293,7 +327,7 @@ jobs:
   build-package:
     name: Build Package
     runs-on: ubuntu-latest
-    needs: [test-matrix, security-scan]
+    needs: [test-matrix, security-scan, coverage-gate]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -398,7 +432,7 @@ jobs:
           if [ -f "$COV_JSON" ]; then
             pct=$(python3 -c "import json; d=json.load(open('$COV_JSON')); print(f\"{d['totals']['percent_covered']:.1f}\")" 2>/dev/null || echo "N/A")
             echo "## Coverage" >> $GITHUB_STEP_SUMMARY
-            echo "- **Coverage**: ${pct}% (gate: 70%)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Coverage**: ${pct}% (documented gate: 40%)" >> $GITHUB_STEP_SUMMARY
           else
             echo "## Coverage" >> $GITHUB_STEP_SUMMARY
             echo "- Coverage report not available (see artifacts)" >> $GITHUB_STEP_SUMMARY
@@ -407,7 +441,7 @@ jobs:
   final-status:
     name: CI Status
     runs-on: ubuntu-latest
-    needs: [lint-and-format, security-scan, complexity-analysis, test-matrix, build-package, validate-dependencies, test-summary]
+    needs: [lint-and-format, security-scan, complexity-analysis, test-matrix, coverage-gate, build-package, validate-dependencies, test-summary]
     if: always()
     steps:
       - name: Check CI Status
@@ -434,6 +468,7 @@ jobs:
           check_result "Security Scan"       "${{ needs.security-scan.result }}"
           check_result "Complexity Analysis" "${{ needs.complexity-analysis.result }}"
           check_result "Test Matrix"         "${{ needs.test-matrix.result }}"
+          check_result "Coverage gate"       "${{ needs.coverage-gate.result }}"
           check_result "Package Build"       "${{ needs.build-package.result }}"
           check_result "Dependencies"        "${{ needs.validate-dependencies.result }}"
           check_result "Test Summary"        "${{ needs.test-summary.result }}"

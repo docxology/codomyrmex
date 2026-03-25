@@ -110,8 +110,8 @@ PR Merged to `main`
 
 | Setting | Value |
 | --- | --- |
-| Coverage gate (CI) | 25% |
-| Coverage gate (release) | 25% |
+| Coverage gate (CI `coverage-gate` job) | 40% (`--cov-fail-under=40`, full `tests/`) |
+| Coverage gate (release tag) | 40% (`--cov-fail-under=40` on unit tree) |
 | PR stale threshold | 90 days |
 | Issue stale threshold | 60 days |
 | Jules exempt from stale | ✅ |

@@ -16,7 +16,7 @@ documentation, benchmarks, PR automation, and repository maintenance. 33 workflo
 | `ci.yml` | push/PR main,develop | lint, test-matrix (slim for PRs), build |
 | `pre-commit.yml` | push/PR | pre-commit, commit-message-check (soft-fail) |
 | `security.yml` | schedule daily + push | dependency-scan, bandit, semgrep, codeql, trufflehog |
-| `release.yml` | tag `v*.*.*` | quality-gate (25%), build, PyPI publish |
+| `release.yml` | tag `v*.*.*` | quality-gate (40% cov), build, PyPI publish |
 
 ### Agent & PR Infrastructure
 
@@ -82,7 +82,7 @@ documentation, benchmarks, PR automation, and repository maintenance. 33 workflo
 - `astral-sh/setup-uv@v5` is the standard for all UV installations
 - CI runs slim matrix (ubuntu/3.11 only) for PRs; full matrix on main push
 - Black and MyPy are soft-fail (`continue-on-error: true`) for agent PRs
-- Coverage gate is 25% (not 80%) across CI, release, and pytest.ini
+- Documented coverage floor is **40%** (`fail_under` in `pyproject.toml`). CI unit matrix step passes `--cov-fail-under=40` (may use `continue-on-error`); **`coverage-gate`** job runs the full suite with `--cov-fail-under=40` and fails the workflow on breach. `release.yml` uses `--cov-fail-under=40`. Default local `uv run pytest` omits `--cov` for speed.
 - Jules PRs are exempt from stale closure (90d stale, 14d close)
 
 ## AI Agent Guidelines

@@ -33,7 +33,7 @@ class _AntigravityClientMixin:
 
 
 class AntigravityClient(
-    IDEClient, AntigravityArtifactsMixin, AntigravityFilesMixin, AntigravityToolsMixin
+    AntigravityArtifactsMixin, AntigravityFilesMixin, AntigravityToolsMixin, IDEClient
 ):
     """Client for interacting with Antigravity IDE.
 

@@ -32,7 +32,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `LICENSE` - MIT License
 - `SECURITY.md` - Security policies and vulnerability reporting
 - `pyproject.toml` - Python package configuration
-- `pytest.ini` - Test configuration
+- `pyproject.toml` (`[tool.pytest.ini_options]`, `[tool.coverage.*]`) — pytest and coverage configuration
 - `Makefile` - Build and automation tasks
 - `uv.lock` - Python dependency lock file
 - `start_here.sh` - Interactive entry point for exploration
@@ -47,7 +47,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 ## Development Guidelines
 
 - **Zero-Mock Policy:** All tests must use real components. No mocks.
-- **Coverage Gate:** CI enforces **40%** line coverage (`[tool.coverage.report] fail_under` and pytest `--cov-fail-under` in `pyproject.toml`). New work must not drop below that floor.
+- **Coverage Gate:** **40%** line coverage (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI and `make test` pass `--cov-fail-under=40`; plain `uv run pytest` skips coverage for speed. Experimental `meme/` is omitted from `[tool.coverage.run]` (see `pyproject.toml`). New work must not drop below the floor when measured with `--cov`.
 - **Documentation:** Maintain `AGENTS.md`, `README.md`, and `SPEC.md` parity on structural changes.
 
 ## Operating Contracts
@@ -439,7 +439,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (179349 symbols, 330468 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (179703 symbols, 331021 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

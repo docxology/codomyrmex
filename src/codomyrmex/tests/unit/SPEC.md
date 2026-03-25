@@ -92,17 +92,17 @@ pytest.importorskip("heavy_sdk")
 
 ## Coverage Counting Rules
 
-- Only `src/codomyrmex/` counts toward coverage (per `pytest.ini`)
+- Only `src/codomyrmex/` counts toward coverage (per `[tool.coverage.run]` in `pyproject.toml`)
 - Tests in `src/codomyrmex/tests/` are excluded from coverage calculation
 - Vendored code in `*/vendor/` is excluded
 - Generated files in `__pycache__` are excluded
 
 ## CI Integration
 
-The `ci.yml` workflow runs:
+The `ci.yml` workflow runs unit tests with:
 ```bash
-uv run pytest --cov=src/codomyrmex --cov-fail-under=<floor>
+uv run pytest src/codomyrmex/tests/unit/ ... --cov=src/codomyrmex --cov-fail-under=40
 ```
 
-Coverage floor is defined in `pytest.ini` as `--cov-fail-under=<N>`.
-All tests must pass and coverage must meet the floor for CI to pass.
+Coverage floor is **40%** in `[tool.coverage.report] fail_under` and mirrored on the CI command line.
+All tests must pass and coverage must meet the floor when that job is configured to fail the workflow (see workflow `continue-on-error` flags).

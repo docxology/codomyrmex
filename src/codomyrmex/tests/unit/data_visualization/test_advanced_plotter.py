@@ -5,30 +5,24 @@ heatmap, box, violin, correlation), dashboard creation, finalize/save workflow,
 convenience functions, and edge cases.
 """
 
-import importlib.util
 import os
 
 import pytest
 
-_has_matplotlib = importlib.util.find_spec("matplotlib") is not None
-_has_seaborn = importlib.util.find_spec("seaborn") is not None
-_has_numpy = importlib.util.find_spec("numpy") is not None
-_has_pandas = importlib.util.find_spec("pandas") is not None
+pytest.importorskip(
+    "matplotlib",
+    reason="advanced_plotter stack (uv sync --extra visualization / scientific)",
+)
+pytest.importorskip("seaborn", reason="advanced_plotter requires seaborn")
+pytest.importorskip("numpy", reason="advanced_plotter requires numpy")
+pytest.importorskip("pandas", reason="advanced_plotter requires pandas")
 
-pytestmark = [
-    pytest.mark.unit,
-    pytest.mark.skipif(
-        not (_has_matplotlib and _has_seaborn and _has_numpy and _has_pandas),
-        reason="Requires matplotlib, seaborn, numpy, and pandas",
-    ),
-]
+pytestmark = [pytest.mark.unit]
 
 # Force non-interactive backend before any matplotlib import
-if _has_matplotlib:
-    import matplotlib as mpl
+import matplotlib as mpl
 
-    mpl.use("Agg")
-
+mpl.use("Agg")
 
 import matplotlib.pyplot as plt
 import numpy as np

@@ -52,6 +52,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 ### Testing
 
 - Comprehensive test coverage enforced through `pytest` with structured markers (`unit`, `integration`, `slow`, `network`, `external`).
+- **40%** line-coverage floor in `[tool.coverage.report] fail_under` (`pyproject.toml`). Plain `uv run pytest` does not collect coverage; `make test`, CI unit jobs, and explicit `--cov=src/codomyrmex --cov-fail-under=40` apply the gate. The experimental `meme` package is omitted from `[tool.coverage.run]` measurement.
 - Test-driven development practices encouraged; tests live alongside source in `src/codomyrmex/tests/unit/<module>/`.
 - Real data analysis required over mocked approximations. Tests use skip-when-unavailable guards for external dependencies.
 

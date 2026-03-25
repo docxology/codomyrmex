@@ -19,11 +19,15 @@ from typing import Any, Optional
 
 from .aggregator import MetricAggregator
 
-with contextlib.suppress(ImportError):
+try:
     from .prometheus_exporter import PrometheusExporter
+except ImportError:
+    PrometheusExporter = None  # type: ignore[misc, assignment]
 
-with contextlib.suppress(ImportError):
+try:
     from .statsd_client import StatsDClient
+except ImportError:
+    StatsDClient = None  # type: ignore[misc, assignment]
 
 try:
     from codomyrmex.exceptions import CodomyrmexError

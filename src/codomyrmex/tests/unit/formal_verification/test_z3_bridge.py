@@ -5,7 +5,11 @@ evaluate and prove theorems natively.
 """
 
 import pytest
-import z3
+
+z3 = pytest.importorskip(
+    "z3",
+    reason="Z3 bridge tests require z3-solver (uv sync --extra formal_verification)",
+)
 
 from codomyrmex.formal_verification.z3_bridge import Z3Verifier
 

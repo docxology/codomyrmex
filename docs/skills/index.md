@@ -62,6 +62,8 @@ from codomyrmex.skills import (
 
 ## Cross-References
 
+**Markdown skill packs in this repo** (PAI / Cursor / agentskills-style): root [`SKILL.md`](../../SKILL.md), [`src/codomyrmex/agents/pai/SKILL.md`](../../src/codomyrmex/agents/pai/SKILL.md), [`src/codomyrmex/orchestrator/fractals/SKILL.md`](../../src/codomyrmex/orchestrator/fractals/SKILL.md), [`.agent/skills/`](../../.agent/skills/), [`.cursor/skills/`](../../.cursor/skills/) (Cursor stubs). Optional `~/.claude/skills/` installs are documented in [CLAUDE.md](../../CLAUDE.md).
+
 For the full module specification, source structure, and API details, see the
 [Module Documentation](../modules/skills/README.md).
 

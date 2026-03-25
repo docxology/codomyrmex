@@ -365,10 +365,12 @@ codomyrmex = "codomyrmex.agents.pai:mcp_bridge"
 
 [tool.coverage.run]
 source = ["src/codomyrmex"]
+# meme: experimental module (root AGENTS.md); omitted from aggregate coverage until stabilized.
 omit = [
     "*/tests/*",
     "*/test_*.py",
     "*/conftest.py",
+    "*/meme/*",
 ]
 
 [tool.coverage.report]
@@ -394,15 +396,12 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
+# Coverage is opt-in: use `make test`, CI, or `pytest --cov=src/codomyrmex --cov-fail-under=40`.
+# [tool.coverage.report] fail_under still applies whenever pytest runs with --cov.
 addopts = [
     "--import-mode=importlib",
     "--verbose",
     "--tb=short",
-    "--cov=src/codomyrmex",
-    "--cov-report=term-missing",
-    "--cov-report=html:htmlcov",
-    "--cov-report=json:coverage.json",
-    "--cov-fail-under=40",
     "--timeout=300",
     "--timeout-method=thread",
 ]
@@ -427,7 +426,10 @@ markers = [
     "google_workspace: Google Workspace API and gws CLI tests",
 ]
 filterwarnings = [
+    # Any warning not matched by a later rule becomes a test failure.
+    "error",
     "ignore:The embodiment module is deprecated:DeprecationWarning",
+    "ignore:codomyrmex\\.collaboration\\.protocols\\.swarm is deprecated:DeprecationWarning",
     "ignore:codomyrmex\\.defense is deprecated:DeprecationWarning",
     "ignore:builtin type Swig.*has no __module__ attribute:DeprecationWarning",
     "ignore:ast\\.Str is deprecated:DeprecationWarning",

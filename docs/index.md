@@ -31,7 +31,7 @@ just build
 - **128 top-level modules** under `src/codomyrmex/` — AI agents, code analysis, security, cloud, and more ([inventory](reference/inventory.md))
 - **600** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md); refresh via `uv run python scripts/doc_inventory.py`)
 - **41 agent packages** — Claude, Gemini, Jules, Hermes, Codex, and 36 more (see [agents/](agents/))
-- **Zero-Mock testing** — all tests use real functional verification (**34,085** tests collected with `uv run pytest --collect-only -q --no-cov`; see [inventory](reference/inventory.md))
+- **Zero-Mock testing** — all tests use real functional verification (**34,320** tests collected with `uv run pytest --collect-only -q --no-cov`; see [inventory](reference/inventory.md))
 - **PAI integration** — Personal AI bridge with 15-tab SPA dashboard + WebSocket push
 - **Lint / types** — run `uv run ruff check src/` and `uv run ty check src/` for current output; thresholds live in `pyproject.toml`
 - **Coverage gate** — configured in `pyproject.toml`; run `uv run pytest --cov=src/codomyrmex` for measured coverage

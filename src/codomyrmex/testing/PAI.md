@@ -177,7 +177,7 @@ export CODOMYRMEX_COVERAGE_TARGET=80
 # Parallel test execution workers (default: auto-detect CPU count)
 export CODOMYRMEX_TEST_PARALLELISM=4
 
-# Test timeout in seconds (default: 300, per pytest.ini)
+# Test timeout in seconds (default: 300, per pyproject.toml addopts)
 export CODOMYRMEX_TEST_TIMEOUT=300
 
 # Property test default iterations
@@ -189,7 +189,7 @@ export CODOMYRMEX_FUZZ_MAX_ITERATIONS=5000
 
 ### Pytest Marker Configuration
 
-Defined in `pytest.ini` at the project root, these markers categorize tests for selective execution:
+Defined in `pyproject.toml` (`[tool.pytest.ini_options]` → `markers`), these markers categorize tests for selective execution:
 
 | Marker | Description | When to Use |
 |--------|-------------|-------------|

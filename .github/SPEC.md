@@ -78,9 +78,10 @@ for all 36 GitHub Actions workflows.
 
 | Context | Threshold |
 | --- | --- |
-| CI minimum | 25% |
-| Release quality gate | 25% |
-| `pytest.ini` default | 25% |
+| Documented floor | 40% (`[tool.coverage.report] fail_under` in `pyproject.toml`) |
+| CI unit job (pytest with `--cov`) | `--cov-fail-under=40` |
+| `release.yml` quality gate | `--cov-fail-under=40` |
+| Default local `uv run pytest` | No coverage (add `--cov` / use `make test` to measure) |
 
 ## Agent PR Pipeline
 

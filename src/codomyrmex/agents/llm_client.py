@@ -56,7 +56,7 @@ class OllamaClient:
                 data=json.dumps(payload).encode("utf-8"),
                 headers={"Content-Type": "application/json"},
             )
-            with urllib.request.urlopen(req) as response:
+            with urllib.request.urlopen(req, timeout=120.0) as response:
                 if response.status == 200:
                     data = json.loads(response.read().decode("utf-8"))
                     return data.get("message", {}).get("content", ""), None

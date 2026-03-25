@@ -81,10 +81,10 @@ def _fail(label: str) -> None:
     print(f"  ✗ {label}")
 
 
-# ── Test Functions ───────────────────────────────────────────────────────────
+# ── Connectivity checks (CLI + pytest; bool return is for ``main()`` only) ───
 
 
-def test_server_health() -> bool:
+def check_server_health() -> bool:
     """Verify PMServer is running and responsive."""
     print("\n── Server Health ──")
     data = _get("/api/projects")
@@ -96,7 +96,7 @@ def test_server_health() -> bool:
     return True
 
 
-def test_calendar_api() -> bool:
+def check_calendar_api() -> bool:
     """Verify calendar API returns real events."""
     print("\n── Calendar API ──")
     data = _get("/api/calendar/events")
@@ -117,7 +117,7 @@ def test_calendar_api() -> bool:
     return True
 
 
-def test_email_agentmail() -> bool:
+def check_email_agentmail() -> bool:
     """Verify AgentMail status endpoint."""
     print("\n── AgentMail Status ──")
     data = _get("/api/email/agentmail/status")
@@ -134,7 +134,7 @@ def test_email_agentmail() -> bool:
     return True
 
 
-def test_email_gmail() -> bool:
+def check_email_gmail() -> bool:
     """Verify Gmail messages endpoint."""
     print("\n── Gmail Messages ──")
     data = _get("/api/email/gmail/messages")
@@ -144,6 +144,38 @@ def test_email_gmail() -> bool:
     msgs = data.get("messages", [])
     _ok(f"Gmail API: {len(msgs)} messages")
     return True
+
+
+@pytest.mark.network
+def test_server_health() -> None:
+    if not check_server_health():
+        pytest.skip(
+            "PMServer not responding on :8888 — start: bun scripts/pai/pm/server.ts --port 8888"
+        )
+
+
+@pytest.mark.network
+def test_calendar_api() -> None:
+    if not check_server_health():
+        pytest.skip("PMServer not running — cannot check calendar API")
+    if not check_calendar_api():
+        pytest.skip("Calendar API not responding")
+
+
+@pytest.mark.network
+def test_email_agentmail() -> None:
+    if not check_server_health():
+        pytest.skip("PMServer not running — cannot check AgentMail API")
+    if not check_email_agentmail():
+        pytest.skip("AgentMail API not responding")
+
+
+@pytest.mark.network
+def test_email_gmail() -> None:
+    if not check_server_health():
+        pytest.skip("PMServer not running — cannot check Gmail API")
+    if not check_email_gmail():
+        pytest.skip("Gmail API not responding")
 
 
 def run_compose(template: str, backend: str, project: str | None = None) -> bool:
@@ -263,18 +295,29 @@ def test_pytest_compose_integration():
 # ── Dry-Run Mode ─────────────────────────────────────────────────────────────
 
 
-def test_dry_run() -> dict:
-    """Test API connectivity without invoking LLM backends."""
+def run_dry_run_checks() -> dict[str, bool]:
+    """Test API connectivity without invoking LLM backends (CLI helper)."""
     print("\n══════════════════════════════════════════")
     print("  DRY RUN — Testing API connectivity only")
     print("══════════════════════════════════════════")
 
-    results: dict = {}
-    results["server"] = test_server_health()
-    results["calendar"] = test_calendar_api()
-    results["agentmail"] = test_email_agentmail()
-    results["gmail"] = test_email_gmail()
+    results: dict[str, bool] = {}
+    results["server"] = check_server_health()
+    results["calendar"] = check_calendar_api()
+    results["agentmail"] = check_email_agentmail()
+    results["gmail"] = check_email_gmail()
     return results
+
+
+@pytest.mark.network
+def test_dry_run() -> None:
+    """Pytest: connectivity-only checks when PMServer is up."""
+    results = run_dry_run_checks()
+    if not results["server"]:
+        pytest.skip("PMServer not running — dry run aborted")
+    for key, ok in results.items():
+        if not ok:
+            pytest.skip(f"Dry-run check failed: {key}")
 
 
 # ── CLI ──────────────────────────────────────────────────────────────────────
@@ -319,13 +362,13 @@ def main() -> int:
     print("╚══════════════════════════════════════════════════╝")
 
     # Phase 1: Server health
-    if not test_server_health():
+    if not check_server_health():
         return 1
 
     # Phase 2: API connectivity
-    test_calendar_api()
-    test_email_agentmail()
-    test_email_gmail()
+    check_calendar_api()
+    check_email_agentmail()
+    check_email_gmail()
 
     if args.dry_run:
         print("\n✅ Dry run complete — all APIs responding.")

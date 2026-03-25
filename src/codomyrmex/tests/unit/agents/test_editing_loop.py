@@ -606,7 +606,7 @@ class TestPlanMethod:
     def test_plan_truncates_large_files(self, tmp_path):
         """_plan truncates file content longer than 8000 chars."""
         target = tmp_path / "big.py"
-        target.write_text("x = 1\n" * 5000)  # ~30000 chars
+        target.write_text("x = 1\n" * 1500)  # ~9000 chars
 
         orch = EditingOrchestrator()
         task = EditTask(description="Reduce file size", file_path=str(target))

@@ -97,7 +97,7 @@ class GeminiClient(
                 self.client = genai.Client(**client_kwargs)
                 logger.debug("Initialized Gemini Client with Vertex AI")
             elif not self.api_key:
-                logger.warning("No GEMINI_API_KEY found. Some operations will fail.")
+                logger.debug("No GEMINI_API_KEY found; client operations that need the API will fail until a key is set.")
             else:
                 client_kwargs = {"api_key": self.api_key}
                 self.client = genai.Client(**client_kwargs)
@@ -107,7 +107,9 @@ class GeminiClient(
             raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e
 
         self.default_model = self.get_config_value(
-            "gemini_model", default="gemini-3.1-pro-preview", config=config
+            "gemini_model",
+            default="gemini-2.5-flash",
+            config=config,
         )
 
         self.max_retries = (config or {}).get("max_retries", 3)

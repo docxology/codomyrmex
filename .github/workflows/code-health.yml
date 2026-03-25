@@ -134,7 +134,7 @@ jobs:
           echo "| Metric | Value | Previous | Trend |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|-------|----------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| 🧪 Test Count | **${{ steps.test-count.outputs.count }}** | ${{ steps.trends.outputs.prev_tests }} | ➡️ |" >> $GITHUB_STEP_SUMMARY
-          echo "| 📏 Coverage | **${{ steps.coverage.outputs.pct }}%** (gate: 68%) | ${{ steps.trends.outputs.prev_cov }}% | ${{ steps.trends.outputs.cov_arrow }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📏 Coverage | **${{ steps.coverage.outputs.pct }}%** (documented gate: 40%) | ${{ steps.trends.outputs.prev_cov }}% | ${{ steps.trends.outputs.cov_arrow }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 🔍 Ruff Violations | **${{ steps.ruff.outputs.total }}** (${{ steps.ruff.outputs.rules }} rules) | ${{ steps.trends.outputs.prev_ruff }} | ➡️ |" >> $GITHUB_STEP_SUMMARY
           echo "| 📝 Covered Lines | ${{ steps.coverage.outputs.covered }} | — | — |" >> $GITHUB_STEP_SUMMARY
           echo "| ❌ Missing Lines | ${{ steps.coverage.outputs.missing }} | — | — |" >> $GITHUB_STEP_SUMMARY

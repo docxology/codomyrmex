@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help dev install setup submodules test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast
+.PHONY: help dev install setup submodules test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release
 
 # Default target
 help:
@@ -13,13 +13,13 @@ help:
 	@echo "  install      - Install dependencies using uv"
 	@echo "  submodules   - Initialize git submodules and install their deps"
 	@echo "  setup        - Set up complete development environment (install + submodules)"
-	@echo "  test         - Run all tests"
+	@echo "  test         - Run all tests with coverage + 40% gate"
 	@echo "  test-unit    - Run unit tests only"
 	@echo "  test-integration - Run integration tests only"
 	@echo "  test-coverage - Run tests with coverage report"
 	@echo "  test-coverage-html - Open HTML coverage report in browser"
 	@echo "  test-obsidian - Run Obsidian module tests only"
-	@echo "  test-fast    - Run tests without coverage overhead"
+	@echo "  test-fast    - Run tests with minimal addopts (no verbose/timeout from ini)"
 	@echo "  lint         - Run code linting with ruff"
 	@echo "  format       - Format code with ruff"
 	@echo "  type-check   - Run type checking with ty"
@@ -31,6 +31,7 @@ help:
 	@echo "  check-deps   - Check and validate dependencies"
 	@echo "  check-dependencies - Check module dependency hierarchy"
 	@echo "  ci           - Run full CI pipeline"
+	@echo "  verify-release - lint + type-check + full tests with 40% coverage gate"
 	@echo ""
 
 # Installation and setup
@@ -52,11 +53,11 @@ setup: install submodules
 # Testing
 test:
 	@echo "Running all tests..."
-	uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json
+	uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=40
 
 test-unit:
 	@echo "Running unit tests..."
-	uv run pytest src/codomyrmex/tests/unit/ -v --tb=short -m unit --cov=src/codomyrmex --cov-report=term-missing --cov-report=json:coverage.json
+	uv run pytest src/codomyrmex/tests/unit/ -v --tb=short -m unit --cov=src/codomyrmex --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=40
 
 test-integration:
 	@echo "Running integration tests..."
@@ -72,7 +73,7 @@ test-fast:
 
 test-coverage:
 	@echo "Running tests with coverage report..."
-	uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json
+	uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=40
 	@echo "Coverage report generated: coverage.json and htmlcov/"
 
 test-coverage-html:
@@ -83,6 +84,9 @@ test-coverage-html:
 	else \
 		echo "No coverage report found. Run 'make test-coverage' first."; \
 	fi
+
+verify-release: lint type-check test
+	@echo "verify-release: all checks passed."
 
 # Code quality
 lint:

@@ -3,10 +3,41 @@
 import contextlib
 import json
 import os
+
+# Hypothesis seeds NumPy's RNG when available; on some Python/NumPy combos that
+# import chain fails (e.g. ImportError: cannot import name randbits). Property
+# tests here do not require NumPy-backed entropy.
+os.environ.setdefault("HYPOTHESIS_NO_NPY", "1")
+import importlib
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
+
+# Hypothesis 6+ still wraps numpy.random when numpy is already in sys.modules.
+# A broken numpy install then fails all @given tests; drop it so Hypothesis
+# uses stdlib random only.
+_NUMPY_RANDOM_HEALTH: bool | None = None
+
+
+def pytest_runtest_setup(item: pytest.Item) -> None:
+    """If numpy is present but numpy.random cannot import, purge numpy from sys.modules."""
+    _ = item
+    global _NUMPY_RANDOM_HEALTH
+    if "numpy" not in sys.modules:
+        _NUMPY_RANDOM_HEALTH = None
+        return
+    if _NUMPY_RANDOM_HEALTH is True:
+        return
+    try:
+        importlib.import_module("numpy.random")
+        _NUMPY_RANDOM_HEALTH = True
+    except ImportError:
+        _NUMPY_RANDOM_HEALTH = False
+        for key in list(sys.modules):
+            if key == "numpy" or key.startswith("numpy."):
+                sys.modules.pop(key, None)
 
 try:
     import yaml

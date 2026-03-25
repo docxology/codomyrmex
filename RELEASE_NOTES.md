@@ -21,7 +21,7 @@ This release locks down repo-wide structural coherence: 38 missing modules regis
 | Version files synced | 1 | **7** |
 | Coverage gate | 75/40/33% (inconsistent) | **40%** (unified) |
 | Spurious root files | 3 | **0** |
-| Tests collected | 21,000+ | **34,492** at v1.2.3 snapshot; **34,085** current ([inventory](docs/reference/inventory.md)) |
+| Tests collected | 21,000+ | **34,492** at v1.2.3 snapshot; **34,320** current ([inventory](docs/reference/inventory.md)) |
 | Ruff / ty | 0 | Run locally; targets in `pyproject.toml` |
 
 ## Previous Release

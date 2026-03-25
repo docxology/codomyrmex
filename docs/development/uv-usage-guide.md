@@ -116,11 +116,11 @@ uv pip sync uv.lock
 ### Run Tests
 
 ```bash
-# Run all tests
+# Run all tests (no coverage by default)
 uv run pytest
 
-# Run with coverage
-uv run pytest --cov=src/codomyrmex
+# Run with coverage and the 40% gate
+uv run pytest --cov=src/codomyrmex --cov-fail-under=40
 
 # Run specific test file
 uv run pytest src/codomyrmex/tests/unit/test_data_visualization.py

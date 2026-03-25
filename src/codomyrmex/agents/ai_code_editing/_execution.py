@@ -2,7 +2,7 @@ import logging
 import re
 import time
 from collections.abc import Iterator
-from typing import Any
+from typing import Any, Protocol
 
 logger = logging.getLogger(__name__)
 
@@ -11,11 +11,38 @@ MAX_TOKENS = 4096
 DEFAULT_TEMPERATURE = 0.3
 
 
+class _ClaudeTaskExecutionHost(Protocol):
+    """Host contract for :class:`ClaudeTaskExecutionMixin`.
+
+    The mixin implements prompts and response parsing; the concrete host
+    (e.g. ``ClaudeTaskMaster``) supplies the Anthropic client, retry wrapper,
+    pricing, and cumulative usage counters.
+    """
+
+    model: str
+    _task_counter: int
+    _total_tokens: int
+    _total_cost: float
+
+    def _get_client(self) -> Any: ...
+
+    def _calculate_cost(self, input_tokens: int, output_tokens: int) -> float: ...
+
+    def _execute_with_retry(
+        self,
+        messages: list[dict[str, Any]],
+        system: str,
+        max_tokens: int = MAX_TOKENS,
+        temperature: float = DEFAULT_TEMPERATURE,
+        **kwargs: Any,
+    ) -> tuple[Any, int]: ...
+
+
 class ClaudeTaskExecutionMixin:
     """Mixin for Claude task master execution and code generation logic."""
 
     def execute_task(
-        self,
+        self: _ClaudeTaskExecutionHost,
         task: str,
         context: str | None = None,
         max_tokens: int = MAX_TOKENS,
@@ -118,7 +145,7 @@ class ClaudeTaskExecutionMixin:
             }
 
     def execute_task_stream(
-        self,
+        self: _ClaudeTaskExecutionHost,
         task: str,
         context: str | None = None,
         max_tokens: int = MAX_TOKENS,
@@ -157,7 +184,7 @@ class ClaudeTaskExecutionMixin:
             yield f"Error: {e!s}"
 
     def generate_code(
-        self,
+        self: _ClaudeTaskExecutionHost,
         description: str,
         language: str = "python",
         context: str | None = None,
