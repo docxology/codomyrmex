@@ -147,18 +147,33 @@ class TestHermesClientSessionManagement:
 
     def test_session_merge(self, monkeypatch: pytest.MonkeyPatch) -> None:
         from codomyrmex.agents.hermes.hermes_client import HermesClient
-        # Patch execute to intercept the auto-summary call
-        monkeypatch.setattr(HermesClient, "execute", lambda *args, **kwargs: type("Mock", (), {"is_success": lambda: True, "content": "fake summary", "error": "", "metadata": {}}))
-        monkeypatch.setattr("subprocess.Popen", lambda *args, **kwargs: type("Mock", (), {"pid": 123, "wait": lambda timeout: 0}))
 
         client = HermesClient()
+        client._session_db_path = ":memory:"
+        
         s1 = "test-merge-1"
         s2 = "test-merge-2"
-        client.set_system_prompt(s1, "Prompt 1")
-        client.set_system_prompt(s2, "Prompt 2")
-        result = client.session_merge([s1, s2], "test-merge-dest")
-        assert result is not None
-        assert result.session_id == "test-merge-dest"
+        
+        # We need to manually add messages to the DB because
+        # set_system_prompt reopens an SQLiteSessionStore(self._session_db_path) which, 
+        # for ":memory:", might create a fresh in-memory DB each time! 
+        # Let's use a temporary file instead of :memory:
+        import tempfile
+        import os
+        fd, temp_db = tempfile.mkstemp()
+        os.close(fd)
+        client._session_db_path = temp_db
+        try:
+            client.set_system_prompt(s1, "Prompt 1")
+            client.set_system_prompt(s2, "Prompt 2")
+            result = client.session_merge("test-merge-dest", [s1, s2])
+            assert result is True
+            
+            merged = client.get_session_detail("test-merge-dest")
+            assert merged is not None
+            assert merged["session_id"] == "test-merge-dest"
+        finally:
+            os.remove(temp_db)
 
 
 class TestHermesClientAdvancedOperations:
@@ -181,7 +196,7 @@ class TestHermesClientAdvancedOperations:
         monkeypatch.setattr(HermesClient, "execute", lambda *args, **kwargs: type("Mock", (), {"is_success": lambda: True, "content": "ok", "error": None, "metadata": {}, "execution_time": 0.1}))
         client = HermesClient()
         
-        results = client.batch_execute(["prompt 1", "prompt 2"], concurrency=2)
+        results = client.batch_execute(["prompt 1", "prompt 2"], parallel=True)
         assert len(results) == 2
         assert all(isinstance(r, dict) for r in results)
 
