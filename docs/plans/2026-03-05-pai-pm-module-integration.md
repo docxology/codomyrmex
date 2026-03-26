@@ -34,7 +34,7 @@ A dangling `try:` block (missing `except ImportError:` for the `import tomllib` 
 **TypeScript source:**
 Copied (rsync, excluding `node_modules/`) from `scripts/pai/pm/` to `src/codomyrmex/pai_pm/server/`.
 
-**pytest.ini:** Added `pai_pm:` marker.
+**pyproject.toml** (`[tool.pytest.ini_options]`): Added `pai_pm:` marker.
 **pyproject.toml:** Added `[project.optional-dependencies.pai_pm]` (no Python deps, requires bun).
 
 ### Pass 3 — Documentation

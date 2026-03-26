@@ -13,7 +13,7 @@ documentation, benchmarks, PR automation, and repository maintenance. 33 workflo
 
 | File | Trigger | Key Jobs |
 |------|---------|----------|
-| `ci.yml` | push/PR main,develop | lint, test-matrix (slim for PRs), build |
+| `ci.yml` | push/PR main,develop | lint, `coverage-gate`, test-matrix (slim for PRs), build |
 | `pre-commit.yml` | push/PR | pre-commit, commit-message-check (soft-fail) |
 | `security.yml` | schedule daily + push | dependency-scan, bandit, semgrep, codeql, trufflehog |
 | `release.yml` | tag `v*.*.*` | quality-gate (40% cov), build, PyPI publish |

@@ -152,7 +152,7 @@ class ModuleIntrospector:
                     if isinstance(node, ast.Assign):
                         for target in node.targets:
                             if isinstance(target, ast.Name) and target.id == "__all__":
-                                if isinstance(node.value, ast.list):
+                                if isinstance(node.value, ast.List):
                                     info.exports = [
                                         elt.value
                                         for elt in node.value.elts

@@ -41,7 +41,7 @@
 
 ### Tests
 - [`src/codomyrmex/tests/unit/security/scanning/test_scanning.py`](../../../src/codomyrmex/tests/unit/security/scanning/test_scanning.py)
-- [`src/codomyrmex/tests/unit/security/secrets/test_secrets.py`](../../../src/codomyrmex/tests/unit/security/secrets/test_secrets.py)
+- [`src/codomyrmex/tests/unit/security/secrets_tests/test_secrets.py`](../../../src/codomyrmex/tests/unit/security/secrets_tests/test_secrets.py)
 - [`src/codomyrmex/tests/unit/security/audit/test_audit.py`](../../../src/codomyrmex/tests/unit/security/audit/test_audit.py)
 - [`src/codomyrmex/tests/unit/security/compliance/test_compliance.py`](../../../src/codomyrmex/tests/unit/security/compliance/test_compliance.py)
 - [`src/codomyrmex/tests/unit/security/test_security_digital.py`](../../../src/codomyrmex/tests/unit/security/test_security_digital.py)

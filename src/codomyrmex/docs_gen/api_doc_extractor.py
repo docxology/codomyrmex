@@ -112,7 +112,7 @@ class APIDocExtractor:
                 and any(
                     isinstance(t, ast.Name) and t.id == "__all__" for t in node.targets
                 )
-                and isinstance(node.value, ast.list)
+                and isinstance(node.value, ast.List)
             ):
                 module_doc.exports = [
                     elt.value

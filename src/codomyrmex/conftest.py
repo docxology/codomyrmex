@@ -10,7 +10,10 @@ import sysconfig
 
 
 def pytest_configure(config):
-    """Pre-load stdlib ``compression`` to prevent namespace shadowing.
+    """Session setup: Hypothesis env, then stdlib ``compression`` preload.
+
+    Property tests do not need NumPy-backed RNG; after other tests import
+    scientific stacks, Hypothesis's NumPy path can raise (e.g. randbits).
 
     Python 3.14 added a ``compression`` package to the stdlib.  Because
     pytest sets ``pythonpath = src`` (adding ``src/`` to ``sys.path``) and
@@ -21,6 +24,7 @@ def pytest_configure(config):
     This hook runs before any test file collection, ensuring the real
     stdlib ``compression`` is cached in ``sys.modules`` first.
     """
+    os.environ["HYPOTHESIS_NO_NPY"] = "1"
     if sys.version_info >= (3, 14) and "compression" not in sys.modules:
         stdlib_dir = sysconfig.get_path("stdlib")
         stdlib_init = os.path.join(stdlib_dir, "compression", "__init__.py")

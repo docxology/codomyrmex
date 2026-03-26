@@ -24,6 +24,7 @@ Universal protocols specific to this module:
 - **Context Compressor** (`_provider_router.py`): Progressive conversation compression triggered at configurable token thresholds.
 - **User Model** (`_provider_router.py`): Cross-session user context persistence — preferences, observations, session summaries backed by JSON.
 - **MCP Bridge** (`mcp_tools.py`): **55** `@mcp_tool` entries; skill-interop tools carry `tags` for PAI manifest indexing (`skills`, `cli_preload`, `interop`).
+- **Godmode Skill** (`skills/red-teaming/godmode/SKILL.md`): Native red-teaming tool operating at the API/Prompt level to bypass safety filters across closed-source LLMs. Uses Parseltongue input obfuscation (33 techniques), classic framework inversion, and Ultraplinian multi-model racing for capability extraction.
 - **Plugin Manager** (`hermes_cli/plugins_cmd.py`, v2.5.0): `hermes plugins install/update/remove/list` manages Git-sourced plugins in `~/.hermes/plugins/`. Reads `plugin.yaml` manifest, validates `manifest_version`, copies `.example` files, renders `after-install.md` via Rich. Path traversal protection enforced.
 - **@ Context References** (`agent/context_references.py`, v2.5.0): Parses `@file:`, `@folder:`, `@diff`, `@staged`, `@git:N`, `@url:` tokens from messages and expands them to attached context blocks. Token budget enforced (50% hard, 25% soft). Async-safe (sync wrapper for CLI, thread pool for gateway).
 - **Gateway Agent Cache** (`gateway/run.py`, v2.5.0): `GatewayRunner` caches `AIAgent` per session via config signature (MD5 of model + provider + toolsets + system_prompt). Same-config reuse freezes system prompt. `reasoning_config` and callbacks update in-place. Thread-safe via `_agent_cache_lock`.
@@ -61,6 +62,7 @@ When coordinating with Hermes via MCP:
 - Relies on global logging framework (`codomyrmex.logging_monitoring`).
 - Relies on global configuration (`codomyrmex.agents.core.config`).
 - Discord Voice requires `libopus` and `nacl` native dependencies.
+- **Nix Support**: Features declarative Nix flake (`flake.nix`) and NixOS module definitions for completely reproducible, hermetic environments independent of standard Python tooling.
 
 ## Navigation Links
 

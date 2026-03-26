@@ -1,11 +1,13 @@
 """SecretVault: simple encrypted secret storage."""
 
 import base64
+import functools
 import hashlib
+import importlib.util
 import json
 import os
 import string
-import sys
+import sysconfig
 from pathlib import Path
 
 
@@ -102,20 +104,31 @@ def mask_secret(value: str, show_chars: int = 4) -> str:
     )
 
 
+@functools.lru_cache(maxsize=1)
+def _stdlib_secrets_module():
+    """Load CPython stdlib ``secrets`` without touching ``sys.modules['secrets']``.
+
+    Mutating ``sys.modules['secrets']`` (pop/restore) breaks later
+    ``from secrets import randbits`` in NumPy's ``random.bit_generator`` and
+    anything else that expects the real stdlib module to stay registered.
+    """
+    path = Path(sysconfig.get_path("stdlib")) / "secrets.py"
+    if not path.is_file():
+        raise RuntimeError(f"stdlib secrets module not found at {path}")
+    name = "_codomyrmex_vault_stdlib_secrets"
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("cannot load stdlib secrets module")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def generate_secret(length: int = 32, include_special: bool = True) -> str:
     """Generate a random secret."""
-    # The stdlib 'secrets' module is shadowed by this package
-    # (codomyrmex.security.secrets). Temporarily remove our package from
-    # sys.modules so importlib resolves to the stdlib module.
-    our_module = sys.modules.pop("secrets", None)
-    try:
-        import secrets as _stdlib_secrets
-    finally:
-        if our_module is not None:
-            sys.modules["secrets"] = our_module
-
+    _secrets = _stdlib_secrets_module()
     chars = string.ascii_letters + string.digits
     if include_special:
         chars += "!@#$%^&*"
 
-    return "".join(_stdlib_secrets.choice(chars) for _ in range(length))
+    return "".join(_secrets.choice(chars) for _ in range(length))

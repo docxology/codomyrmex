@@ -248,7 +248,7 @@ The secrets module uses high-entropy string detection (pattern: 40+ base64 chars
 | Submodule | Test File | Status |
 |-----------|-----------|--------|
 | scanning | `tests/unit/security/scanning/test_scanning.py` | Covered |
-| secrets | `tests/unit/security/secrets/test_secrets.py` | Covered |
+| secrets | `tests/unit/security/secrets_tests/test_secrets.py` | Covered |
 | audit | `tests/unit/security/audit/test_audit.py` | Covered |
 | compliance | `tests/unit/security/compliance/test_compliance.py` | Covered |
 | digital | `tests/unit/security/test_security_digital.py` | Covered |

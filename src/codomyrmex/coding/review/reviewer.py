@@ -8,6 +8,7 @@ for high-performance code quality assessment, security scanning, and maintainabi
 import os
 import subprocess
 import time
+from pathlib import Path
 from typing import Any
 
 # Import models from this module
@@ -22,6 +23,7 @@ from .models import (
     AnalysisResult,
     AnalysisSummary,
     CodeMetrics,
+    Language,
     QualityGateResult,
 )
 from .reviewer_impl import (
@@ -153,6 +155,27 @@ class CodeReviewer(
     def _should_analyze_file(self, file_path: str) -> bool:
         """Determine if a file should be analyzed."""
         return _lang_should_analyze(file_path)
+
+    def _detect_language(self, file_path: str) -> Language:
+        """Infer language from file extension (defaults to Python)."""
+        ext = Path(file_path).suffix.lower()
+        language_map: dict[str, Language] = {
+            ".py": Language.PYTHON,
+            ".js": Language.JAVASCRIPT,
+            ".ts": Language.TYPESCRIPT,
+            ".tsx": Language.TYPESCRIPT,
+            ".jsx": Language.JAVASCRIPT,
+            ".java": Language.JAVA,
+            ".cpp": Language.CPP,
+            ".cc": Language.CPP,
+            ".cxx": Language.CPP,
+            ".cs": Language.CSHARP,
+            ".go": Language.GO,
+            ".rs": Language.RUST,
+            ".php": Language.PHP,
+            ".rb": Language.RUBY,
+        }
+        return language_map.get(ext, Language.PYTHON)
 
     def analyze_file(
         self, file_path: str, analysis_types: list[str] | None = None

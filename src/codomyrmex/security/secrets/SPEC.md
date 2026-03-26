@@ -101,7 +101,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/security/secrets/
+uv run pytest src/codomyrmex/tests/unit/security/secrets_tests/
 ```
 
 ## 6. Future Considerations

@@ -3,6 +3,10 @@
 
 .PHONY: help dev install setup submodules test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release
 
+# Hypothesis loads its pytest plugin (and may bind NumPy RNG) before any conftest runs.
+# Export for all subprocesses so `uv run pytest` sees it even when not using a shell wrapper.
+export HYPOTHESIS_NO_NPY := 1
+
 # Default target
 help:
 	@echo "Codomyrmex Development Makefile"
@@ -68,7 +72,7 @@ test-obsidian:
 	uv run pytest src/codomyrmex/tests/unit/agentic_memory/obsidian/ -v --tb=short --override-ini="addopts="
 
 test-fast:
-	@echo "Running tests without coverage..."
+	@echo "Running tests with minimal addopts (override ini)..."
 	uv run pytest src/codomyrmex/tests/ -q --no-header --override-ini="addopts="
 
 test-coverage:

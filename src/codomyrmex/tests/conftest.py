@@ -1,43 +1,46 @@
 """Shared pytest fixtures and configuration for Codomyrmex testing."""
 
 import contextlib
+import functools
 import json
 import os
 
 # Hypothesis seeds NumPy's RNG when available; on some Python/NumPy combos that
 # import chain fails (e.g. ImportError: cannot import name randbits). Property
-# tests here do not require NumPy-backed entropy.
-os.environ.setdefault("HYPOTHESIS_NO_NPY", "1")
-import importlib
+# tests here do not require NumPy-backed entropy. Force on (not setdefault) so
+# a shell value cannot disable it; codomyrmex/conftest.py also sets this in
+# pytest_configure.
+os.environ["HYPOTHESIS_NO_NPY"] = "1"
+
+
+def _patch_hypothesis_is_local_module_file() -> None:
+    """Third-party lazy loaders may set ``__file__`` to a non-str sentinel; Hypothesis 6.151+ then crashes in ``is_local_module_file``."""
+    try:
+        import hypothesis.internal.conjecture.providers as _prov
+        from hypothesis.internal import constants_ast as _hca
+    except ImportError:
+        return
+    cached = _hca.is_local_module_file
+    _orig = getattr(cached, "__wrapped__", None)
+    if _orig is None:
+        return
+
+    def _safe(path: str) -> bool:
+        if not isinstance(path, str):
+            return False
+        return _orig(path)
+
+    _wrapped = functools.lru_cache(4096)(_safe)
+    _hca.is_local_module_file = _wrapped
+    _prov.is_local_module_file = _wrapped
+
+
+_patch_hypothesis_is_local_module_file()
+
 import subprocess
-import sys
 from pathlib import Path
 
 import pytest
-
-# Hypothesis 6+ still wraps numpy.random when numpy is already in sys.modules.
-# A broken numpy install then fails all @given tests; drop it so Hypothesis
-# uses stdlib random only.
-_NUMPY_RANDOM_HEALTH: bool | None = None
-
-
-def pytest_runtest_setup(item: pytest.Item) -> None:
-    """If numpy is present but numpy.random cannot import, purge numpy from sys.modules."""
-    _ = item
-    global _NUMPY_RANDOM_HEALTH
-    if "numpy" not in sys.modules:
-        _NUMPY_RANDOM_HEALTH = None
-        return
-    if _NUMPY_RANDOM_HEALTH is True:
-        return
-    try:
-        importlib.import_module("numpy.random")
-        _NUMPY_RANDOM_HEALTH = True
-    except ImportError:
-        _NUMPY_RANDOM_HEALTH = False
-        for key in list(sys.modules):
-            if key == "numpy" or key.startswith("numpy."):
-                sys.modules.pop(key, None)
 
 try:
     import yaml
@@ -52,6 +55,7 @@ with contextlib.suppress(ImportError):
 
 def pytest_configure(config):
     """Register custom pytest markers."""
+    os.environ["HYPOTHESIS_NO_NPY"] = "1"
     config.addinivalue_line("markers", "unit: Unit tests")
     config.addinivalue_line("markers", "integration: Integration tests")
     config.addinivalue_line("markers", "slow: Slow running tests")
@@ -143,6 +147,7 @@ def login(username, pwd):
 @pytest.fixture(autouse=True)
 def setup_test_environment():
     """Auto-use fixture to set up test environment."""
+    os.environ["HYPOTHESIS_NO_NPY"] = "1"
     # Ensure we're in test mode
     os.environ.setdefault("CODOMYRMEX_TEST_MODE", "true")
 

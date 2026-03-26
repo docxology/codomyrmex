@@ -67,9 +67,7 @@ class TestGetDbConnection:
         with pytest.raises(FileNotFoundError, match="not found"):
             _get_db_connection()
 
-    def test_returns_connection_when_db_exists(
-        self, _patch_db: Path
-    ) -> None:
+    def test_returns_connection_when_db_exists(self, _patch_db: Path) -> None:
         """Returns a valid sqlite3 connection for an existing database."""
         conn = _get_db_connection()
         try:
@@ -120,9 +118,7 @@ class TestStoreMemory:
         conn.close()
         assert '"source": "test"' in row["metadata"]
 
-    def test_store_with_different_importance_levels(
-        self, _patch_db: Path
-    ) -> None:
+    def test_store_with_different_importance_levels(self, _patch_db: Path) -> None:
         """All importance levels are stored correctly."""
         for imp in MemoryImportance:
             result = store_memory(
@@ -154,9 +150,7 @@ class TestRecallMemory:
         conn.commit()
         conn.close()
 
-    def test_recall_returns_results(
-        self, _patch_db: Path, tmp_db: Path
-    ) -> None:
+    def test_recall_returns_results(self, _patch_db: Path, tmp_db: Path) -> None:
         """LIKE-based fallback search returns matching memories."""
         self._seed(tmp_db)
         results = recall_memory("Python", top_k=10)
@@ -164,17 +158,13 @@ class TestRecallMemory:
         contents = [r["content"] for r in results]
         assert any("programming language" in c for c in contents)
 
-    def test_recall_respects_top_k(
-        self, _patch_db: Path, tmp_db: Path
-    ) -> None:
+    def test_recall_respects_top_k(self, _patch_db: Path, tmp_db: Path) -> None:
         """top_k limits the number of returned results."""
         self._seed(tmp_db)
         results = recall_memory("Python", top_k=1)
         assert len(results) == 1
 
-    def test_recall_with_tag_filter(
-        self, _patch_db: Path, tmp_db: Path
-    ) -> None:
+    def test_recall_with_tag_filter(self, _patch_db: Path, tmp_db: Path) -> None:
         """Tag filtering narrows results to matching tags."""
         self._seed(tmp_db)
         results = recall_memory("Python", top_k=10, tags=["web"])
@@ -266,9 +256,7 @@ class TestConsolidateMemories:
 class TestGetMemoryStats:
     """Tests for get_memory_stats."""
 
-    def test_returns_stats_when_db_exists(
-        self, _patch_db: Path, tmp_db: Path
-    ) -> None:
+    def test_returns_stats_when_db_exists(self, _patch_db: Path, tmp_db: Path) -> None:
         """Stats include table list, db path, and memory count."""
         conn = sqlite3.connect(str(tmp_db))
         conn.execute(

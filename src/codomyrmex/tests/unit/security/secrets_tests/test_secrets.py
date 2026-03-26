@@ -346,6 +346,17 @@ class TestHelperFunctions:
         s2 = generate_secret(length=32)
         assert s1 != s2
 
+    def test_generate_secret_allows_stdlib_secrets_and_numpy(self):
+        """Vault helpers must not break ``secrets.randbits`` (NumPy RNG / stdlib)."""
+        generate_secret(length=16)
+        from secrets import randbits
+
+        assert isinstance(randbits(32), int)
+        import numpy as np
+
+        rng = np.random.default_rng(0)
+        assert len(rng.integers(0, 10, size=3)) == 3
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

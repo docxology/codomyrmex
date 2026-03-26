@@ -13,7 +13,7 @@ Test files and validation suites.
 - `compliance/` – Directory containing compliance components
 - `integration/` – Directory containing integration components
 - `scanning/` – Directory containing scanning components
-- `secrets/` – Directory containing secrets components
+- `secrets_tests/` – Unit tests for `codomyrmex.security.secrets` (folder name avoids stdlib `secrets` shadowing)
 - `test_architecture_patterns.py` – Project file
 - `test_audit_trail.py` – Project file
 - `test_best_practices.py` – Project file

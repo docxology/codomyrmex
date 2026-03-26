@@ -89,7 +89,13 @@ from .inference.hierarchical_planner import (
     LevelResult,
     PlanLevel,
 )
-from .visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
+from .visualization import (
+    CaseVisualizer,
+    CompositionVisualizer,
+    ConcordanceVisualizer,
+    InferenceVisualizer,
+    ModelVisualizer,
+)
 
 # FPF integration (optional)
 try:
@@ -146,6 +152,8 @@ __all__ = [
     # Exceptions
     "CerebrumError",
     "ChainExecutionResult",
+    "CompositionVisualizer",
+    "ConcordanceVisualizer",
     "Decision",
     "DecisionModule",
     "Distribution",

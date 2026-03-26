@@ -437,6 +437,10 @@ filterwarnings = [
     "ignore:datetime\\.datetime\\.utcnow\\(\\) is deprecated:DeprecationWarning",
     "ignore::ResourceWarning",
     "ignore::pytest.PytestCollectionWarning",
+    # requests warns on import when urllib3/chardet pins drift; do not use category path (imports requests during parse).
+    "ignore:.*doesn't match a supported version.*:Warning",
+    # google.api_core without grpcio-status; optional for storage client import chains during test collection.
+    "ignore:Please install grpcio-status.*:ImportWarning",
 ]
 
 

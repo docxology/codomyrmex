@@ -60,7 +60,7 @@ def check_all_defined(init_path: Path) -> tuple[bool, list[str] | None]:
         if isinstance(node, ast.Assign):
             for target in node.targets:
                 if isinstance(target, ast.Name) and target.id == "__all__":
-                    if isinstance(node.value, (ast.list, ast.tuple)):
+                    if isinstance(node.value, (ast.List, ast.Tuple)):
                         names = [
                             elt.value
                             for elt in node.value.elts
@@ -71,7 +71,7 @@ def check_all_defined(init_path: Path) -> tuple[bool, list[str] | None]:
                     return True, None
         if isinstance(node, ast.AnnAssign):
             if isinstance(node.target, ast.Name) and node.target.id == "__all__":
-                if node.value and isinstance(node.value, (ast.list, ast.tuple)):
+                if node.value and isinstance(node.value, (ast.List, ast.Tuple)):
                     names = [
                         elt.value
                         for elt in node.value.elts

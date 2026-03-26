@@ -25,6 +25,7 @@ permissions: {}
 env:
   PYTHON_VERSION: "3.11"
   UV_VERSION: "0.5.7"
+  HYPOTHESIS_NO_NPY: "1"
 
 jobs:
   prepare-release:

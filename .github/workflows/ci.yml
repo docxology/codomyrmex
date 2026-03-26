@@ -17,6 +17,8 @@ env:
   PYTHON_VERSION: "3.11"
   UV_VERSION: "0.5.7"  # Updated to latest version
   NODE_VERSION: "20"
+  # Hypothesis's pytest plugin imports before conftest; conftest cannot set this in time.
+  HYPOTHESIS_NO_NPY: "1"
 
 jobs:
   lint-and-format:

@@ -1,9 +1,9 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/security/secrets
+# Codomyrmex Agents — src/codomyrmex/tests/unit/security/secrets_tests
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Test files and validation suites.
+Tests for `codomyrmex.security.secrets`. The folder is named **`secrets_tests`** (not `secrets`) so that when `tests/unit/security` appears on `sys.path`, `import secrets` still resolves to the **stdlib** module (NumPy and others require `secrets.randbits`).
 
 ## Active Components
 - `PAI.md` – Project file

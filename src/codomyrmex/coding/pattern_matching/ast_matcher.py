@@ -327,7 +327,7 @@ class ASTMatcher:
     @staticmethod
     def _check_mutable_default_arg(tree: ast.Module) -> list[ASTMatchResult]:
         results = []
-        mutable_types = (ast.list, ast.dict, ast.set)
+        mutable_types = (ast.List, ast.Dict, ast.Set)
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 for default in node.args.defaults + node.args.kw_defaults:

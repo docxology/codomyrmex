@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **`CodeReviewer._detect_language`**: Restored extension-to-`Language` mapping on `coding/review/reviewer.py` so `TraditionalMixin` / `PyscnMixin` and `test_reviewer_analysis` run against a real method (regression after mixin refactor).
+- **Security secrets / NumPy `randbits`**: `security/secrets/vault.py` loads stdlib `secrets` with `importlib` + `sysconfig` (no `sys.modules['secrets']` mutation). **`tests/unit/security/secrets/`** renamed to **`secrets_tests/`** so `sys.path` entries under `tests/unit/security` no longer resolve `import secrets` to the test package (fixes `ImportError: cannot import name randbits` in NumPy and Hypothesis). `HYPOTHESIS_NO_NPY=1` remains on CI/release `env`, Makefile `export`, and conftest mirrors; see `RUNNING_TESTS.md` / `CLAUDE.md`.
 - **Pytest / coverage defaults**: Removed `--cov` and related flags from default pytest `addopts` in `pyproject.toml` so `uv run pytest` runs without measuring coverage. The **40%** floor remains in `[tool.coverage.report] fail_under` and is applied when using `--cov` (e.g. `make test`, CI unit job, or manual `--cov-fail-under=40`).
 - **Coverage scope**: `src/codomyrmex/meme/` is listed in `[tool.coverage.run] omit` (experimental module); statement coverage is measured for the rest of `src/codomyrmex/`.
 - **CI**: Added `coverage-gate` job in `.github/workflows/ci.yml` (full `src/codomyrmex/tests/` with `--cov-fail-under=40`, no `continue-on-error`); `build-package` depends on it. **Release** workflow uses `--cov-fail-under=40` on the unit tree.
@@ -27,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Tests
 
 - Added unit coverage for FastMCP scaffolding in `test_new_client_methods.py` and `test_new_mcp_tools.py` (real filesystem writes; no mocks).
+- `secrets_tests/test_secrets.py`: regression test that `generate_secret` leaves stdlib `secrets.randbits` and `numpy.random` usable.
 
 ---
 

@@ -33,8 +33,10 @@ uv sync --all-extras             # Install all optional dependencies
 # Run all tests (no coverage — fast default)
 uv run pytest
 
-# Run tests with coverage and the 40% gate (same idea as `make test`)
-uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=40
+# Run tests with coverage and the 40% gate (same idea as `make test`).
+# Makefile exports HYPOTHESIS_NO_NPY=1; for raw pytest, prefix the command so Hypothesis
+# initializes before conftest (see src/codomyrmex/tests/RUNNING_TESTS.md).
+HYPOTHESIS_NO_NPY=1 uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=40
 
 # Pre-tag / release checklist: ruff + ty + full test tree with 40% coverage floor
 make verify-release
@@ -263,7 +265,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (179703 symbols, 331021 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (179720 symbols, 330187 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
