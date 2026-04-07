@@ -48,8 +48,10 @@ def get_api_key() -> str | None:
                 if content.startswith("OPENROUTER_API_KEY="):
                     return content.split("=", 1)[1].strip().strip('"').strip("'")
                 return content
-        except Exception as e:
-            logger.debug("Could not read config from %s: %s", path, e)
+        except Exception as exc:
+            logger.debug(
+                "Could not read config from %s: %s", path, type(exc).__name__
+            )
 
     return None
 
@@ -74,18 +76,14 @@ def main():
     print("=" * 60)
     print()
 
-    # Check for API key
-    api_key = get_api_key()
-    if not api_key:
-        print("❌ OPENROUTER_API_KEY not found")
-        print("   Get your free API key at: https://openrouter.ai/keys")
-        print("\n   Setup options:")
-        print("   1. export OPENROUTER_API_KEY='your-key-here'")
-        print("   2. echo 'your-key' > ~/.config/openrouter/api_key")
+    auth = get_api_key()
+    if not auth:
+        print("OpenRouter auth not configured.")
+        print("   See https://openrouter.ai/ and the module docstring for setup.")
         return 1
 
     # Create provider
-    config = ProviderConfig(api_key=api_key, timeout=60.0)
+    config = ProviderConfig(api_key=auth, timeout=60.0)
 
     print("📡 Connecting to OpenRouter with free model...")
     print()
@@ -116,10 +114,10 @@ def main():
             completion_tokens = response.usage.get("completion_tokens", 0)
             total_tokens = response.usage.get("total_tokens", 0)
 
-            print("💰 Cost Tracking:")
-            print(f"   Prompt tokens: {prompt_tokens}")
-            print(f"   Completion tokens: {completion_tokens}")
-            print(f"   Total tokens: {total_tokens}")
+            print("💰 Usage (from API):")
+            print(f"   Input units: {prompt_tokens}")
+            print(f"   Output units: {completion_tokens}")
+            print(f"   Total units: {total_tokens}")
             print("   Cost: $0.00 (free model!)")
         else:
             print("⚠️  No usage data returned")

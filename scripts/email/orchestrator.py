@@ -30,11 +30,10 @@ def run_agentmail_demo():
         return
 
     try:
-        # Check for API key
+        # Provider auth from environment (name matches upstream SDK)
         if not os.environ.get("AGENTMAIL_API_KEY"):
-            print("AGENTMAIL_API_KEY not set. Skip live demo.")
-            # We can still show how it would be initialized if we had a key
-            print("Usage: provider = AgentMailProvider(api_key='...')")
+            print("AgentMail provider auth not configured. Skip live demo.")
+            print("Usage: configure provider env per module docs, then AgentMailProvider()")
             return
 
         provider = AgentMailProvider()
@@ -67,10 +66,10 @@ def run_agentmail_demo():
         sent_msg = provider.send_message(draft, inbox_id=inbox.inbox_id)
         print(f"Message sent! ID: {sent_msg.id}")
 
-    except EmailError as e:
-        print(f"AgentMail Error: {e}")
-    except Exception as e:
-        print(f"Unexpected Error: {e}")
+    except EmailError:
+        print("AgentMail Error (details omitted; enable logging for trace)")
+    except Exception as exc:
+        print(f"Unexpected Error: {type(exc).__name__}")
 
 
 def run_gmail_demo():

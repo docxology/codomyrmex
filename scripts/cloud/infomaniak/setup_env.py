@@ -60,9 +60,9 @@ def create_template(output_path: str | None = None):
     print(f"✅ Created template: {path}")
     print("\n📋 Next steps:")
     print("   1. Complete Infomaniak ID verification")
-    print("   2. Create Application Credentials in Public Cloud dashboard")
-    print("   3. Copy credentials into the .env file")
-    print("   4. Run: source .env.infomaniak")
+    print("   2. In the vendor console, finish OpenStack identity setup for this project")
+    print("   3. Fill the generated local env file from the template; keep it out of git")
+    print("   4. Load that file into your shell (see path printed above)")
     print("   5. Test: python setup_env.py --validate")
     return True
 
@@ -72,17 +72,17 @@ def validate_environment():
     print("\n🔍 Validating Infomaniak Environment\n" + "=" * 50)
 
     required = {
-        "INFOMANIAK_APP_CREDENTIAL_ID": "Application Credential ID",
-        "INFOMANIAK_APP_CREDENTIAL_SECRET": "Application Credential Secret",
-        "INFOMANIAK_AUTH_URL": "OpenStack Auth URL",
-        "INFOMANIAK_REGION": "Region",
+        "INFOMANIAK_APP_CREDENTIAL_ID": "OpenStack app ID (env)",
+        "INFOMANIAK_APP_CREDENTIAL_SECRET": "OpenStack app shared value (env)",
+        "INFOMANIAK_AUTH_URL": "OpenStack auth URL (env)",
+        "INFOMANIAK_REGION": "Region (env)",
     }
 
     optional = {
-        "INFOMANIAK_S3_ACCESS_KEY": "S3 Access Key",
-        "INFOMANIAK_S3_SECRET_KEY": "S3 Secret Key",
-        "INFOMANIAK_S3_ENDPOINT": "S3 Endpoint",
-        "INFOMANIAK_PROJECT_ID": "Project ID",
+        "INFOMANIAK_S3_ACCESS_KEY": "S3 access id (env)",
+        "INFOMANIAK_S3_SECRET_KEY": "S3 signing value (env)",
+        "INFOMANIAK_S3_ENDPOINT": "S3 endpoint (env)",
+        "INFOMANIAK_PROJECT_ID": "Project ID (env)",
     }
 
     missing = []
@@ -142,12 +142,12 @@ def test_connection():
 
         return True
 
-    except ImportError as e:
-        print(f"   ❌ Import error: {e}")
+    except ImportError:
+        print("   ❌ Import error (install openstacksdk)")
         print("   Install: pip install openstacksdk")
         return False
-    except Exception as e:
-        print(f"   ❌ Connection failed: {e}")
+    except Exception:
+        print("   ❌ Connection failed (see logs / verify env)")
         return False
 
 

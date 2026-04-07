@@ -72,10 +72,10 @@ async def demo_defense_pipeline():
         poisoned_context = active.poison_context("attacker_1", intensity=0.8)
         print(f"  Poisoned Context generated: {poisoned_context[:50]}...")
 
-        token = active.create_honeytoken(
+        decoy = active.create_honeytoken(
             label="admin_password", context="simulated_vault"
         )
-        print(f"  Created Honeytoken: {token}")
+        print(f"  Created decoy handle (length {len(decoy)}, value not printed)")
 
     print("\n--- 3. Rabbit Hole (Containment) ---")
     hole = RabbitHole()
