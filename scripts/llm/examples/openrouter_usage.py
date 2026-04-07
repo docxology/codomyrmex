@@ -216,11 +216,9 @@ def complete_prompt(
             print("─" * 50)
 
             if response.usage:
-                print_info("\n📊 Token usage:")
-                print(f"   Prompt: {response.usage.get('prompt_tokens', 'N/A')}")
-                print(
-                    f"   Completion: {response.usage.get('completion_tokens', 'N/A')}"
-                )
+                print_info("\n📊 Provider usage (units):")
+                print(f"   Input: {response.usage.get('prompt_tokens', 'N/A')}")
+                print(f"   Output: {response.usage.get('completion_tokens', 'N/A')}")
                 print(f"   Total: {response.usage.get('total_tokens', 'N/A')}")
 
             print_success(f"\n✅ Completion successful (model: {response.model})")
@@ -269,7 +267,7 @@ Examples:
   python openrouter_usage.py --list-models
   python openrouter_usage.py --prompt "What is Python?"
   python openrouter_usage.py --prompt "Write a poem" --stream
-  python openrouter_usage.py --api-key "sk-..." --prompt "Hello"
+  python openrouter_usage.py --api-key "<from-dashboard>" --prompt "Hello"
   python openrouter_usage.py --config ~/.openrouter_key --prompt "Hi"
   python openrouter_usage.py --prompt-key --prompt "Hello"
   python openrouter_usage.py --demo
@@ -300,19 +298,19 @@ Examples:
         "-k",
         type=str,
         default=None,
-        help="OpenRouter API key (overrides env var and config file)",
+        help="OpenRouter auth value (overrides env var and config file)",
     )
     parser.add_argument(
         "--config",
         "-c",
         type=str,
         default=None,
-        help="Path to config file containing API key",
+        help="Path to config file containing auth value",
     )
     parser.add_argument(
         "--prompt-key",
         action="store_true",
-        help="Prompt for API key interactively if not found",
+        help="Prompt for auth value interactively if not found",
     )
 
     args = parser.parse_args()
@@ -346,10 +344,9 @@ Examples:
     # No arguments - show help
     parser.print_help()
     print_info("\n💡 Quick start:")
-    print("   export OPENROUTER_API_KEY='your-key-here'")
+    print("   Set OpenRouter auth per the module docstring, then:")
     print("   python openrouter_usage.py --prompt 'Hello, world!'")
-    print("\n   Or use --api-key to pass directly:")
-    print("   python openrouter_usage.py --api-key 'sk-...' --prompt 'Hello!'")
+    print("\n   Or use --api-key to pass the value directly.")
     return 0
 
 

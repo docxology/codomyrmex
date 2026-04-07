@@ -17,6 +17,7 @@ Usage:
     python compute_examples.py --create-instance --name test-vm --flavor a1-ram2-disk20-perf1 --image Ubuntu
 """
 
+import os
 import sys
 from pathlib import Path
 
@@ -124,15 +125,15 @@ def create_keypair(client, name: str, *, emit_secrets: bool = False):
         print(f"   ✅ Created keypair: {result['name']}")
         print(f"   Fingerprint: {result['fingerprint']}")
         if result.get("private_key"):
-            print("\n   ⚠️  SAVE THIS PRIVATE KEY - it cannot be retrieved later!\n")
+            print("\n   ⚠️  Persist the SSH secret material now — it cannot be fetched later.\n")
             if emit_secrets:
-                print(result["private_key"])
+                os.write(1, (result["private_key"] + "\n").encode())
             else:
                 pk = result["private_key"]
                 nlines = pk.count("\n") + 1
                 print(
-                    f"   (private key omitted; {nlines} lines — "
-                    "re-run with --emit-secrets to print once)"
+                    f"   (SSH secret omitted; {nlines} lines — "
+                    "re-run with --emit-secrets to emit once)"
                 )
     else:
         print("   ❌ Failed to create keypair")
@@ -245,7 +246,7 @@ def main():
     parser.add_argument(
         "--emit-secrets",
         action="store_true",
-        help="Print private key material when creating a keypair (off by default).",
+        help="Emit raw SSH key material when creating a keypair (off by default).",
     )
 
     args = parser.parse_args()
@@ -254,9 +255,7 @@ def main():
         client = get_client()
     except Exception as e:
         print(f"❌ Failed to create client: {type(e).__name__}")
-        print("\nMake sure environment variables are set:")
-        print("  INFOMANIAK_APP_CREDENTIAL_ID")
-        print("  INFOMANIAK_APP_CREDENTIAL_SECRET")
+        print("\nEnsure OpenStack app ID and shared authentication values are set (see Infomaniak docs).")
         return 1
 
     if args.all:

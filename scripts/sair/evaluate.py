@@ -355,7 +355,7 @@ def run_evaluation(
         logger.info("Using Google Gemini provider")
         provider = get_provider(ProviderType.GOOGLE, api_key=api_key_gemini)
     else:
-        logger.error("No API key found. Set OPENROUTER_API_KEY or GEMINI_API_KEY.")
+        logger.error("No API credentials configured for OpenRouter or Google.")
         raise RuntimeError("Missing API key for LLM provider.")
 
     # Run evaluation --------------------------------------------------------

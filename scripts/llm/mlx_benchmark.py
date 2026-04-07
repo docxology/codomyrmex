@@ -100,8 +100,8 @@ def run_benchmark(
 
             if result.success:
                 print(
-                    f"    ✅ {result.tokens_generated} tokens in {result.execution_time:.2f}s "
-                    f"({result.tokens_per_second:.1f} tok/s)"
+                    f"    ✅ {result.tokens_generated} units in {result.execution_time:.2f}s "
+                    f"({result.tokens_per_second:.1f} u/s)"
                 )
             else:
                 print(f"    ❌ {result.error_message}")
@@ -205,8 +205,8 @@ def sweep_tokens(
             "success": result.success,
         }
         results["sweeps"].append(entry)
-        status = f"✅ {result.tokens_per_second:.1f} tok/s" if result.success else "❌"
-        print(f"  max_tokens={count:>4d}: {status} ({result.execution_time:.2f}s)")
+        status = f"✅ {result.tokens_per_second:.1f} u/s" if result.success else "❌"
+        print(f"  max_out={count:>4d}: {status} ({result.execution_time:.2f}s)")
 
     runner.unload_model()
     return results
@@ -222,9 +222,9 @@ def print_summary(results: dict):
 
     if "aggregate" in results:
         agg = results["aggregate"]
-        print(f"  Avg tok/s:   {agg['avg_tokens_per_second']:.1f}")
-        print(f"  Max tok/s:   {agg['max_tokens_per_second']:.1f}")
-        print(f"  Min tok/s:   {agg['min_tokens_per_second']:.1f}")
+        print(f"  Avg u/s:     {agg['avg_tokens_per_second']:.1f}")
+        print(f"  Max u/s:     {agg['max_tokens_per_second']:.1f}")
+        print(f"  Min u/s:     {agg['min_tokens_per_second']:.1f}")
         print(f"  Avg time:    {agg['avg_execution_time']:.2f}s")
         print(f"  Prompts run: {agg['total_prompts']}")
 
@@ -243,7 +243,7 @@ def main():
         help="Model to benchmark",
     )
     parser.add_argument(
-        "--max-tokens", type=int, default=100, help="Max tokens per generation"
+        "--max-tokens", type=int, default=100, help="Max output units per generation"
     )
     parser.add_argument(
         "--prompt", default=None, help="Custom prompt (overrides defaults)"
@@ -258,7 +258,7 @@ def main():
     )
     parser.add_argument("--output", default=None, help="Save results to JSON file")
     parser.add_argument(
-        "--latency", action="store_true", help="Measure first-token latency"
+        "--latency", action="store_true", help="Measure time to first model output"
     )
     parser.add_argument(
         "--latency-trials", type=int, default=5, help="Number of latency trials"
@@ -269,7 +269,7 @@ def main():
         type=int,
         default=None,
         metavar="N",
-        help="Sweep max_tokens values (e.g., 10 50 100 200)",
+        help="Sweep max output lengths (e.g., 10 50 100 200)",
     )
     args = parser.parse_args()
 
@@ -283,7 +283,7 @@ def main():
     print(f"  Model: {args.model}")
 
     if args.latency:
-        print(f"  Mode: First-token latency ({args.latency_trials} trials)")
+        print(f"  Mode: First-output latency ({args.latency_trials} trials)")
         print("=" * 60)
         print()
         results = measure_latency(args.model, args.latency_trials)
@@ -294,7 +294,7 @@ def main():
         print(f"  Max latency:  {results['max_latency_ms']}ms")
 
     elif args.sweep:
-        print(f"  Mode: Token sweep ({args.sweep})")
+        print(f"  Mode: Output-length sweep ({args.sweep})")
         print("=" * 60)
         print()
         results = sweep_tokens(args.model, args.sweep, args.prompt)
@@ -303,7 +303,7 @@ def main():
         prompts = [args.prompt] if args.prompt else DEFAULT_PROMPTS
         if args.preset:
             print(f"  Preset: {args.preset}")
-        print(f"  Max tokens: {args.max_tokens}")
+        print(f"  Max output: {args.max_tokens}")
         print(f"  Prompts:    {len(prompts)}")
         print(f"  Runs:       {args.runs}")
         print("=" * 60)

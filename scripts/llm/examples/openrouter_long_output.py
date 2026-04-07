@@ -604,8 +604,8 @@ Examples:
     # Get API key
     api_key = get_api_key(args.api_key)
     if not api_key:
-        print("❌ OPENROUTER_API_KEY not found")
-        print("   Get your free API key at: https://openrouter.ai/keys")
+        print("OpenRouter auth not configured.")
+        print("   See https://openrouter.ai/ and the module docstring for setup.")
         return 1
 
     # Validate topic is provided for generation

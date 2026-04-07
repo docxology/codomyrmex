@@ -207,7 +207,7 @@ def run_interactive_chat(
     print(f"\n🤖 Model: {model}")
     if system_prompt:
         print(f"📋 System: {system_prompt[:50]}...")
-    print(f"🌡️  Temperature: {temperature} | Max Tokens: {max_tokens}")
+    print(f"🌡️  Temperature: {temperature} | Max output cap: {max_tokens}")
     print("\nCommands: /quit, /save <file>, /history, /clear, /model <name>")
     print("-" * 60 + "\n")
 
@@ -377,7 +377,7 @@ Examples:
         "--max-tokens",
         type=int,
         default=500,
-        help="Maximum tokens per response (default: 500)",
+        help="Maximum completion units per response (default: 500)",
     )
     parser.add_argument(
         "--temperature",
@@ -401,7 +401,7 @@ Examples:
 
     # API key
     parser.add_argument(
-        "--api-key", "-k", type=str, default=None, help="OpenRouter API key"
+        "--api-key", "-k", type=str, default=None, help="OpenRouter auth value"
     )
 
     # List models
@@ -421,12 +421,8 @@ Examples:
     # Get API key
     api_key = get_api_key(args.api_key)
     if not api_key:
-        print("❌ OPENROUTER_API_KEY not found")
-        print("   Get your free API key at: https://openrouter.ai/keys")
-        print("\n   Setup options:")
-        print("     1. export OPENROUTER_API_KEY='your-key'")
-        print("     2. echo 'your-key' > ~/.config/openrouter/api_key")
-        print("     3. python openrouter_chat.py --api-key 'your-key'")
+        print("OpenRouter auth not configured.")
+        print("   See https://openrouter.ai/ and the module docstring for setup.")
         return 1
 
     if args.batch:

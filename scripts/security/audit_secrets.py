@@ -184,7 +184,9 @@ def check_gitignore(path: str) -> list:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Audit repository for secrets")
+    parser = argparse.ArgumentParser(
+        description="Audit repository for sensitive literal patterns"
+    )
     parser.add_argument(
         "--path", "-p", default=".", help="Path to scan (default: current directory)"
     )
@@ -197,7 +199,7 @@ def main():
     args = parser.parse_args()
 
     path = os.path.abspath(args.path)
-    print(f"🔐 Secret Audit: {path}\n")
+    print(f"🔐 Sensitive literal audit: {path}\n")
 
     # Check .gitignore
     gitignore_warnings = check_gitignore(path)
@@ -208,12 +210,12 @@ def main():
         print()
 
     # Scan for secrets
-    print("🔍 Scanning for secrets...")
+    print("🔍 Scanning for sensitive patterns...")
     extensions = None if args.all_files else SCAN_EXTENSIONS
     findings = scan_directory(path, extensions)
 
     if findings:
-        print(f"\n⚠️  Found {len(findings)} potential secrets:\n")
+        print(f"\n⚠️  Found {len(findings)} potential sensitive literals:\n")
 
         # Group by file
         by_file = {}
@@ -232,13 +234,13 @@ def main():
             print()
 
         print("🔧 Recommendations:")
-        print("   1. Remove secrets from code and use environment variables")
-        print("   2. If committed to git, rotate the exposed credentials immediately")
+        print("   1. Move sensitive values out of source and into secure configuration")
+        print("   2. If material was committed, rotate affected authentication values")
         print("   3. Use git-filter-branch or BFG to remove from history if needed")
         print("   4. Add sensitive file patterns to .gitignore")
 
         return 1
-    print("\n✅ No secrets detected")
+    print("\n✅ No sensitive literals matched")
     print("   Scanned file types:", ", ".join(sorted(SCAN_EXTENSIONS)[:8]), "...")
     return 0
 

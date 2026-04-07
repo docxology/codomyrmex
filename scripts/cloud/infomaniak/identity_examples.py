@@ -16,6 +16,7 @@ Usage:
     python identity_examples.py --roles
 """
 
+import os
 import sys
 from pathlib import Path
 
@@ -89,11 +90,11 @@ def list_projects(client):
 
 def list_app_credentials(client):
     """List application credentials."""
-    print("\n🔑 Application Credentials\n" + "=" * 50)
+    print("\n🔑 OpenStack app identities\n" + "=" * 50)
     creds = client.list_application_credentials()
 
     if not creds:
-        print("   No application credentials found.")
+        print("   No matching identities found.")
         return
 
     for cred in creds:
@@ -121,37 +122,35 @@ def create_app_credential(
     emit_secrets: bool = False,
 ):
     """Create an application credential."""
-    print(f"\n🔑 Creating application credential: {name}")
+    print(f"\n🔑 Creating OpenStack app identity: {name}")
 
     result = client.create_application_credential(
         name=name, description=description, expires_at=expires
     )
 
     if result:
-        print("\n   ✅ Created application credential")
-        print(f"   ID: {result['id']}")
-        print(f"   Name: {result['name']}")
-        print("\n   ⚠️  SAVE THESE CREDENTIALS - the secret cannot be retrieved later!")
-        print(f"\n   Application Credential ID: {result['id']}")
+        print("\n   ✅ Created OpenStack app identity")
+        print(f"   OpenStack app ID: {result['id']}")
+        print(f"   Display name: {result['name']}")
+        print("\n   ⚠️  Persist the shared value now; it cannot be fetched again.")
         secret = result.get("secret")
         if emit_secrets and secret is not None:
-            print(f"   Application Credential Secret: {secret}")
+            print("   Shared value (raw, next line):")
+            os.write(1, (secret + "\n").encode())
         elif secret is not None:
-            print(
-                "   Application Credential Secret: (omitted; use --emit-secrets to print once)"
-            )
+            print("   Shared value: (omitted; use --emit-secrets to emit once)")
     else:
-        print("   ❌ Failed to create application credential")
+        print("   ❌ Failed to create OpenStack app identity")
 
 
 def delete_app_credential(client, cred_id: str):
     """Delete an application credential."""
-    print(f"\n🗑️  Deleting application credential: {cred_id}")
+    print(f"\n🗑️  Deleting OpenStack app identity: {cred_id}")
 
     if client.delete_application_credential(cred_id):
-        print("   ✅ Credential deleted")
+        print("   ✅ Identity removed")
     else:
-        print("   ❌ Failed to delete credential")
+        print("   ❌ Failed to remove identity")
 
 
 def list_roles(client):
@@ -186,15 +185,15 @@ def list_user_roles(client):
 
 def list_ec2_credentials(client):
     """List EC2 credentials (for S3)."""
-    print("\n🔑 EC2 Credentials (S3 Access)\n" + "=" * 50)
+    print("\n🔑 S3 access pairs (EC2-style)\n" + "=" * 50)
     creds = client.list_ec2_credentials()
 
     if not creds:
-        print("   No EC2 credentials found.")
+        print("   No S3 access pairs found.")
         return
 
     for cred in creds:
-        print(f"   🔐 Access Key: {_mask_access_key(cred['access'])}")
+        print(f"   🔐 Public part: {_mask_access_key(cred['access'])}")
         print(f"      ID: {cred['id']}")
         print(f"      Project: {cred['project_id']}")
         print()
@@ -202,21 +201,24 @@ def list_ec2_credentials(client):
 
 def create_ec2_credentials(client, *, emit_secrets: bool = False):
     """Create EC2 credentials for S3 access."""
-    print("\n🔑 Creating EC2 credentials for S3 access")
+    print("\n🔑 Creating S3 access pair (EC2-style)")
 
     result = client.create_ec2_credentials()
     if result:
-        print("\n   ✅ Created EC2 credentials")
-        print("\n   ⚠️  SAVE THESE CREDENTIALS!")
+        print("\n   ✅ Created S3 access pair")
+        print("\n   ⚠️  Persist both parts now; they cannot be fetched again.")
         if emit_secrets:
-            print(f"\n   Access Key: {result.get('access')}")
-            print(f"   Secret Key: {result.get('secret')}")
+            print("\n   Raw pair (two lines: public part, then shared part):")
+            access = result.get("access")
+            secret = result.get("secret")
+            if access:
+                os.write(1, (access + "\n").encode())
+            if secret:
+                os.write(1, (secret + "\n").encode())
         else:
-            print(
-                "\n   Access/Secret keys omitted (use --emit-secrets to print once)."
-            )
+            print("\n   Pair omitted (use --emit-secrets to emit once).")
     else:
-        print("   ❌ Failed to create EC2 credentials")
+        print("   ❌ Failed to create S3 access pair")
 
 
 def main():
@@ -245,13 +247,13 @@ def main():
 
     # Application credentials
     parser.add_argument(
-        "--app-credentials", action="store_true", help="List app credentials"
+        "--app-credentials", action="store_true", help="List OpenStack app identities"
     )
     parser.add_argument(
-        "--create-app-cred", action="store_true", help="Create app credential"
+        "--create-app-cred", action="store_true", help="Create OpenStack app identity"
     )
     parser.add_argument(
-        "--delete-app-cred", type=str, metavar="ID", help="Delete app credential"
+        "--delete-app-cred", type=str, metavar="ID", help="Delete OpenStack app identity"
     )
 
     # Roles
@@ -260,14 +262,14 @@ def main():
 
     # EC2 credentials
     parser.add_argument(
-        "--ec2-credentials", action="store_true", help="List EC2 credentials"
+        "--ec2-credentials", action="store_true", help="List S3 access pairs (EC2-style)"
     )
     parser.add_argument(
-        "--create-ec2-cred", action="store_true", help="Create EC2 credentials"
+        "--create-ec2-cred", action="store_true", help="Create S3 access pair (EC2-style)"
     )
 
     # Options
-    parser.add_argument("--name", type=str, help="Credential name")
+    parser.add_argument("--name", type=str, help="Identity display name")
     parser.add_argument("--description", type=str, help="Description")
     parser.add_argument("--expires", type=str, help="Expiration datetime (ISO format)")
 
@@ -276,7 +278,7 @@ def main():
     parser.add_argument(
         "--emit-secrets",
         action="store_true",
-        help="Print newly issued credential secrets (off by default).",
+        help="Emit newly issued shared values once (off by default).",
     )
 
     args = parser.parse_args()
