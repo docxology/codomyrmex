@@ -143,7 +143,7 @@ class TestContentHash:
     def test_md5_algorithm(self):
         from codomyrmex.utils.hashing import content_hash
 
-        expected = hashlib.md5(b"hello").hexdigest()
+        expected = hashlib.md5(b"hello", usedforsecurity=False).hexdigest()
         assert content_hash("hello", "md5") == expected
 
     def test_bytes_input(self):

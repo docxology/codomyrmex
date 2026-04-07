@@ -32,4 +32,4 @@ tests/unit/video/generation/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../video/generation/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../video/)

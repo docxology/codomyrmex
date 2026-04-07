@@ -154,7 +154,9 @@ def _register_arscontexta_skills() -> None:
     tags = ["arscontexta", "knowledge-management", "cognitive-architecture"]
 
     for func, name, desc, params in _SKILL_DEFS:
-        skill_id = hashlib.md5(f"arscontexta.{name}".encode()).hexdigest()[:12]
+        skill_id = hashlib.md5(
+            f"arscontexta.{name}".encode(), usedforsecurity=False
+        ).hexdigest()[:12]
         meta = SkillMetadata(
             id=skill_id,
             name=name,

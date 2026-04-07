@@ -63,7 +63,7 @@ class CacheManager:
             "kwargs": sorted(kwargs.items()) if kwargs else {},
         }
         key_str = json.dumps(key_data, sort_keys=True, default=str)
-        return hashlib.md5(key_str.encode()).hexdigest()
+        return hashlib.md5(key_str.encode(), usedforsecurity=False).hexdigest()
 
     def _is_expired(self, timestamp: float, ttl: int) -> bool:
         """Check if a cache entry has expired."""

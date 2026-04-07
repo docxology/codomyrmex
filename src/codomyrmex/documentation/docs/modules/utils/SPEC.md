@@ -1,12 +1,15 @@
 # Utils -- Technical Specification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.8 | **Status**: Active | **Last Updated**: April 2026
 
 ## Functional Requirements
 
 ### FR-1: Core Functionality
 - The module shall provide utils capabilities as described in the module docstring.
-- The module shall export 44 public symbols via `__all__`.
+- The module shall export 44 public symbols via `__all__` (includes `retry`, `RetryConfig`, `async_retry`; sync/async retry implementation lives in `retry_sync.py`).
+
+### FR-2: Retry documentation
+- Published API docs ([api_specification.md](api_specification.md)) shall describe both package `retry` and `retry_sync` surfaces without implying a `utils/retry.py` submodule.
 
 ## Non-Functional Requirements
 

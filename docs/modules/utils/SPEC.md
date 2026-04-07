@@ -1,8 +1,16 @@
 # Utils Module Specification
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.8 | **Status**: Active | **Last Updated**: April 2026
+
+Canonical copy for `docs/modules/`; implementation: `src/codomyrmex/utils/SPEC.md` (keep in sync).
 
 ## 1. Interface Definition
+
+### Retry surfaces
+
+- **`codomyrmex.utils.retry`** (defined in `__init__.py`): synchronous decorator; parameters `max_attempts`, `delay`, `backoff`, `exceptions`.
+- **`codomyrmex.utils.retry_sync`**: module `retry_sync.py` — `RetryConfig`, synchronous `retry` with jitter and delay caps, and `async_retry` for coroutines. Re-exports `RetryConfig` and `async_retry` also appear in package `__all__` for convenience.
+- **Naming**: there is no `utils/retry.py` package submodule; that name would shadow the package `retry` callable.
 
 ### `ScriptBase`
 
@@ -46,13 +54,13 @@ def run_command(
 
 ## 2. Dependencies
 
-- **Internal**: `codomyrmex.logging_monitoring` (optional, graceful fallback provided).
+- **Internal**: `codomyrmex.logging_monitoring` for `get_logger` (standard path for this package).
 - **External**: `pyyaml` (for config loading).
 
 ## 3. Constraints
 
-- **Zero Circular Dependencies**: This module functions as a leaf node in the dependency graph (except for optional logging import). It must not import from Core or Service layers.
-- **Stability**: API must be backward compatible. Breaking changes require major version bump.
+- **Dependency posture**: Prefer minimal imports; avoid pulling in heavy optional stacks from unrelated modules. Logging is a normal dependency here.
+- **Stability**: Public symbols in `__all__` should remain backward compatible; breaking changes require a major version bump.
 
 ## Testing
 

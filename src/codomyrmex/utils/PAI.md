@@ -1,47 +1,47 @@
 # Personal AI Infrastructure — Utils Module
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.8 | **Status**: Active | **Last Updated**: April 2026
 
 ## Overview
 
-The Utils module provides shared utility functions used across the codomyrmex ecosystem — string manipulation, path helpers, type coercion, hashing, and general-purpose Python utilities.
+Shared utilities across Codomyrmex: safe JSON, file hashing, subprocess execution, script scaffolding, timing, and **retry** helpers. Uses `codomyrmex.logging_monitoring` for structured logs.
 
-## PAI Capabilities
+## PAI capabilities
 
-- Path normalization and resolution utilities
-- String formatting and sanitization helpers
-- Hash computation (MD5, SHA256) for integrity checks
-- Type conversion and coercion utilities
-- Common data structure helpers
+- Path and directory helpers (`ensure_directory`)
+- JSON parse/serialize with safe fallbacks
+- Content and file hashing (algorithm parameter, e.g. `sha256`)
+- Subprocess execution and optional streaming (`process/`)
+- **Retry**: simple package `retry` vs configurable `retry_sync` / `async_retry` (see [API_SPECIFICATION.md](API_SPECIFICATION.md))
 
-## Key Exports
+## Key exports (selected)
 
-| Export | Type | Purpose |
-|--------|------|---------|
-| Path helpers | Various | File path manipulation |
-| String utilities | Various | Formatting and sanitization |
-| Hash functions | Various | Integrity computation |
-| Type coercion | Various | Data type conversions |
+| Export | Notes |
+|--------|--------|
+| `retry` | From `codomyrmex.utils` — sync, exponential delay via `delay` × `backoff`. |
+| `RetryConfig`, `async_retry` | From package `__all__`; defined in `retry_sync.py`. |
+| `run_command`, `run_command_async` | Subprocess with structured results. |
+| `ScriptBase`, `ScriptConfig` | Executable script contract. |
 
-## PAI Algorithm Phase Mapping
+Full list: `codomyrmex.utils.__all__` (see [SPEC.md](SPEC.md)).
 
-| Phase | Utils Contribution |
+## PAI algorithm phase mapping
+
+| Phase | Utils contribution |
 |-------|---------------------|
-| **All Phases** | Cross-cutting utility functions used throughout the system |
+| **All** | Cross-cutting helpers and stable primitives |
 
-## Architecture Role
+## Architecture role
 
-**Foundation Layer** — Lowest-level utility module with zero codomyrmex dependencies. Consumed by virtually all other modules.
+**Foundation** — low-level helpers consumed widely. Keep imports shallow and avoid circular ties to higher layers.
 
-## MCP Tools
+## MCP tools
 
-This module does not expose MCP tools directly. Access its capabilities via:
-- Direct Python import: `from codomyrmex.utils import ...`
-- CLI: `codomyrmex utils <command>`
+Exposed via `mcp_tools.py` for agent surfaces; see [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md).
 
 ## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
-- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Parent**: [../PAI.md](../PAI.md)
+- **Root bridge**: [../../../PAI.md](../../../PAI.md)
 - **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

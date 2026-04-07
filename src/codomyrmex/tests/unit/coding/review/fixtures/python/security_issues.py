@@ -31,8 +31,8 @@ def insecure_function(user_input):
 
 def weak_crypto_example(password):
     """Example of weak cryptographic practices."""
-    # Weak hashing (MD5)
-    hash_obj = hashlib.md5(password.encode())
+    # Weak hashing (MD5) — intentional for security-review fixture
+    hash_obj = hashlib.md5(password.encode())  # nosec B324
     return hash_obj.hexdigest()
 
 

@@ -34,14 +34,14 @@ class FileBasedCache(Cache):
         """Get file path for a cache key."""
         import hashlib
 
-        key_hash = hashlib.md5(key.encode()).hexdigest()
+        key_hash = hashlib.md5(key.encode(), usedforsecurity=False).hexdigest()
         return self.cache_dir / f"{key_hash}.cache"
 
     def _get_meta_path(self, key: str) -> Path:
         """Get metadata file path for a cache key."""
         import hashlib
 
-        key_hash = hashlib.md5(key.encode()).hexdigest()
+        key_hash = hashlib.md5(key.encode(), usedforsecurity=False).hexdigest()
         return self.cache_dir / f"{key_hash}.meta"
 
     def get(self, key: str) -> Any | None:

@@ -4,7 +4,7 @@
 
 ## Overview
 
-PAI agents operating within the Codomyrmex ecosystem integrate through the agent documentation here. This directory governs **41 agent packages** spanning CLI-based, API-based, core infrastructure, infrastructure, and specialized modules.
+PAI agents operating within the Codomyrmex ecosystem integrate through the agent documentation here. This directory governs **39 agent packages** spanning CLI-based, API-based, core infrastructure, infrastructure, and specialized modules.
 
 ## AI Capabilities
 

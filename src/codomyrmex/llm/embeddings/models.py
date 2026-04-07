@@ -50,7 +50,7 @@ class Embedding:
     @property
     def text_hash(self) -> str:
         """Get hash of source text."""
-        return hashlib.md5(self.text.encode()).hexdigest()
+        return hashlib.md5(self.text.encode(), usedforsecurity=False).hexdigest()
 
     def normalize(self) -> "Embedding":
         """Return normalized embedding (L2 norm)."""

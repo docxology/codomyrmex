@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Defines the structure and behavioral standards for agent coordination documentation within the Codomyrmex ecosystem. This directory documents **41 agent packages** under `src/codomyrmex/agents/`, organized into five categories (plus [`rules/`](rules/) here as docs-only).
+Defines the structure and behavioral standards for agent coordination documentation within the Codomyrmex ecosystem. This directory documents **39 agent packages** under `src/codomyrmex/agents/`, organized into five categories (plus [`rules/`](rules/) here as docs-only).
 
 ## Documentation Structure
 

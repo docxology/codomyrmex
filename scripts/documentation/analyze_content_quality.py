@@ -4,8 +4,13 @@
 Checks for:
 - Completeness (headings, sections)
 - Readability (sentence length, complexity)
-- Placeholder/TODO detection
+- Placeholder / actionable marker detection (not prose "TODO" or example.com URLs)
 - Code example coverage
+
+Placeholder counting intentionally ignores:
+- Bare "TODO" in prose (e.g. "TODO queues") — only task-style markers
+  (TODO:, TODO(, **TODO**:, HTML comments) count.
+- example.com URLs — standard documentation examples, not draft placeholders.
 """
 
 import argparse
@@ -23,6 +28,45 @@ class QualityScore(NamedTuple):
     score: int  # 0-100
     issues: list
     metrics: dict
+
+
+# Task-style TODO / FIXME / XXX (avoids prose like "TODO queues").
+_RE_TODO_MARKERS = re.compile(
+    r"(?:"
+    r"\bTODO\b\s*[:[\(]"
+    r"|\*{0,2}TODO\*{0,2}\s*:"
+    r"|<!--\s*TODO\b"
+    r")",
+    re.IGNORECASE | re.MULTILINE,
+)
+_RE_FIXME_MARKERS = re.compile(
+    r"(?:"
+    r"\bFIXME\b\s*[:[\(]"
+    r"|\*{0,2}FIXME\*{0,2}\s*:"
+    r"|<!--\s*FIXME\b"
+    r")",
+    re.IGNORECASE | re.MULTILINE,
+)
+_RE_XXX_MARKERS = re.compile(
+    r"(?:\bXXX\b\s*[:[\(]|<!--\s*XXX\b)",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+
+def count_placeholder_signals(content: str) -> int:
+    """Count actionable placeholder / unfinished markers in markdown text."""
+    n = 0
+    n += len(_RE_TODO_MARKERS.findall(content))
+    n += len(_RE_FIXME_MARKERS.findall(content))
+    n += len(_RE_XXX_MARKERS.findall(content))
+    for pat in (
+        r"\[placeholder\]",
+        r"\[TBD\]",
+        r"\[WIP\]",
+        r"lorem ipsum",
+    ):
+        n += len(re.findall(pat, content, re.IGNORECASE))
+    return n
 
 
 def analyze_file(file_path: Path, repo_root: Path) -> QualityScore:
@@ -46,20 +90,8 @@ def analyze_file(file_path: Path, repo_root: Path) -> QualityScore:
         issues.append("No headings found")
         score -= 15
 
-    # Check for placeholders/TODOs
-    placeholder_patterns = [
-        r"\bTODO\b",
-        r"\bFIXME\b",
-        r"\bXXX\b",
-        r"\[placeholder\]",
-        r"\[TBD\]",
-        r"\[WIP\]",
-        r"lorem ipsum",
-        r"example\.com",
-    ]
-    placeholder_count = 0
-    for pattern in placeholder_patterns:
-        placeholder_count += len(re.findall(pattern, content, re.IGNORECASE))
+    # Actionable placeholders / task markers (see module docstring).
+    placeholder_count = count_placeholder_signals(content)
 
     metrics["placeholder_count"] = placeholder_count
     if placeholder_count > 0:

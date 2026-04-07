@@ -196,7 +196,8 @@ class FunctionSkill(Skill):
 
         # Generate ID from function name
         skill_id = hashlib.md5(
-            f"{func.__module__}.{func.__name__}".encode()
+            f"{func.__module__}.{func.__name__}".encode(),
+            usedforsecurity=False,
         ).hexdigest()[:12]
 
         return SkillMetadata(

@@ -1,10 +1,10 @@
 # Utils Configuration Specification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.8 | **Status**: Active | **Last Updated**: April 2026
 
 ## Overview
 
-Shared utility functions used across the Codomyrmex platform. Provides file handling, string manipulation, process management, and general-purpose helpers. This specification documents the configuration schema and constraints.
+Shared utility functions used across the Codomyrmex platform. Provides file handling, string manipulation, process management, and general-purpose helpers. Runtime retry configuration is per-call (see `codomyrmex.utils.retry` and `codomyrmex.utils.retry_sync`); there is no separate global utils config file. This specification documents the configuration schema and constraints.
 
 ## Configuration Schema
 

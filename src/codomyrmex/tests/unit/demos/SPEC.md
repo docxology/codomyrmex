@@ -1,6 +1,6 @@
 # Demos Test Specification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: April 2026
 
 ## Overview
 
@@ -16,8 +16,6 @@ Specification for the `demos` test suite.
 
 ```
 tests/unit/demos/
-    __init__.py
-    test_generated_example.py
     test_registry.py
 ```
 

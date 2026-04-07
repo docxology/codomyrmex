@@ -50,12 +50,12 @@ def run_command(
 - `command: str`
 - `duration: float`
 
-## 3. Dependencies
+## 2. Dependencies
 
 - **Internal**: `codomyrmex.logging_monitoring` for `get_logger` (standard path for this package).
 - **External**: `pyyaml` (for config loading).
 
-## 4. Constraints
+## 3. Constraints
 
 - **Dependency posture**: Prefer minimal imports; avoid pulling in heavy optional stacks from unrelated modules. Logging is a normal dependency here.
 - **Stability**: Public symbols in `__all__` should remain backward compatible; breaking changes require a major version bump.

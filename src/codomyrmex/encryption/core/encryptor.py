@@ -388,7 +388,7 @@ class Encryptor:
         if alg == "sha512":
             return hashlib.sha512(data).hexdigest()
         if alg == "md5":
-            return hashlib.md5(data).hexdigest()
+            return hashlib.md5(data, usedforsecurity=False).hexdigest()
         raise ValueError(f"Unknown hash algorithm: {algorithm}")
 
     @staticmethod

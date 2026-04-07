@@ -150,13 +150,16 @@ class SyncState:
 
     @classmethod
     def from_data(cls, data: dict[str, Any], version: int) -> SyncState:
-        checksum = hashlib.md5(json.dumps(data, sort_keys=True).encode()).hexdigest()
+        checksum = hashlib.md5(
+            json.dumps(data, sort_keys=True).encode(), usedforsecurity=False
+        ).hexdigest()
         return cls(version=version, data=data, checksum=checksum)
 
     def verify(self) -> bool:
         """Verify data integrity against the stored checksum."""
         expected = hashlib.md5(
-            json.dumps(self.data, sort_keys=True).encode()
+            json.dumps(self.data, sort_keys=True).encode(),
+            usedforsecurity=False,
         ).hexdigest()
         return expected == self.checksum
 

@@ -30,7 +30,7 @@ class EmbeddingCache:
 
     def _make_key(self, text: str, model: str) -> str:
         """Create cache key from text and model."""
-        text_hash = hashlib.md5(text.encode()).hexdigest()
+        text_hash = hashlib.md5(text.encode(), usedforsecurity=False).hexdigest()
         return f"{model}:{text_hash}"
 
     def get(self, text: str, model: str) -> Embedding | None:

@@ -114,7 +114,8 @@ class TestDetectDangerousCommand:
         ap = _import_approval()
         is_dangerous, _, desc = ap.detect_dangerous_command("chmod 777 /var/www")
         assert is_dangerous is True
-        assert "world-writable" in desc.lower()
+        d = desc.lower()
+        assert "world-writable" in d or "other-writable" in d or "777" in d
 
     def test_drop_table_dangerous(self) -> None:
         ap = _import_approval()

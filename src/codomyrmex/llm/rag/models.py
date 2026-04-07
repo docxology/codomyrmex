@@ -32,13 +32,14 @@ class Document:
     @property
     def content_hash(self) -> str:
         """Get hash of content."""
-        return hashlib.md5(self.content.encode()).hexdigest()
+        return hashlib.md5(self.content.encode(), usedforsecurity=False).hexdigest()
 
     @classmethod
     def from_text(cls, text: str, doc_id: str | None = None, **metadata) -> "Document":
         """Create document from plain text."""
         return cls(
-            id=doc_id or hashlib.md5(text.encode()).hexdigest()[:12],
+            id=doc_id
+            or hashlib.md5(text.encode(), usedforsecurity=False).hexdigest()[:12],
             content=text,
             doc_type=DocumentType.TEXT,
             metadata=metadata,

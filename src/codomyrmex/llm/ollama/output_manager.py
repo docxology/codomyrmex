@@ -87,7 +87,9 @@ class OutputManager:
         """
         # Generate unique filename based on content
         timestamp = int(time.time())
-        prompt_hash = hashlib.md5(prompt.encode()).hexdigest()[:8]
+        prompt_hash = hashlib.md5(
+            prompt.encode(), usedforsecurity=False
+        ).hexdigest()[:8]
         filename = f"{model_name}_{timestamp}_{prompt_hash}"
 
         if output_dir:

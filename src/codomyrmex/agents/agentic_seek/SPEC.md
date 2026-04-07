@@ -71,7 +71,7 @@ from codomyrmex.agents.agentic_seek import (
     AgenticSeekBrowserConfig,   # Frozen dataclass
     extract_links,              # URL extraction from text
     clean_links,                # Trailing punct cleanup
-    extract_form_fields,        # [name](value) pattern extraction
+    extract_form_fields,        # HTML name/value attribute extraction
     build_search_prompt,        # Search result selection prompt
     build_navigation_prompt,    # Page navigation prompt
     get_today_date,             # Human-readable date string

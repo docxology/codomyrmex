@@ -1,12 +1,19 @@
 # tests/unit — Behavioral Specification
 
+## Layout
+
+- **`tests/unit/<module>/`** — primary home for `codomyrmex.<module>` tests.
+- **`tests/unit/hermes/`** — Hermes client, session, templates, gateway, monitoring, provider router (not duplicated at `tests/unit/` root).
+- **`tests/unit/agents/hermes/`** — Hermes MCP tools; **`agents/test_agents_hermes_client.py`** complements `hermes/test_hermes_client.py`.
+- **Unit root** — `conftest.py`, `test_coverage_smoke.py`, milestone `test_v1_*.py` / `test_v13*_*.py`, and cross-cutting tests. No duplicate copies of module-scoped suites.
+
 ## Coverage Requirements
 
 | Metric | Baseline | Target | Gate |
 |--------|----------|--------|------|
 | Line coverage | varies per run | 45%+ stretch | CI fails below **40%** floor (`pyproject.toml`) |
-| Tests collected | 10,041 | growing | — |
-| Skipped | 253 | minimize | — |
+| Tests collected | 34,520 (April 2026; `pytest --collect-only`) | growing | `uv run pytest src/codomyrmex/tests/unit --collect-only -q` |
+| Skipped | varies | minimize | — |
 | Failures | 0 | 0 | Blocks merge |
 
 ## Naming Conventions
@@ -106,3 +113,7 @@ uv run pytest src/codomyrmex/tests/unit/ ... --cov=src/codomyrmex --cov-fail-und
 
 Coverage floor is **40%** in `[tool.coverage.report] fail_under` and mirrored on the CI command line.
 All tests must pass and coverage must meet the floor when that job is configured to fail the workflow (see workflow `continue-on-error` flags).
+
+### Baseline note (April 2026 layout refresh)
+
+A full local `uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=40` completed coverage aggregation with **~76%** line coverage on measured `src/codomyrmex` before exit, while the same run reported **multiple failures** tied to optional services,plot backends, and provider SDK drift—**not** to file moves under `tests/unit/`. Treat **CI green** as the release gate; use module-scoped pytest locally when debugging.

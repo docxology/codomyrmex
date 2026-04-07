@@ -45,11 +45,15 @@ def generate_dashboard(repo_root: Path, output_dir: Path | None = None) -> int:
         with open(quality_path) as f:
             quality_data = json.load(f)
             scores = [q["score"] for q in quality_data]
+            placeholder_total = sum(
+                q.get("metrics", {}).get("placeholder_count", 0) for q in quality_data
+            )
             data["quality"] = {
                 "files": len(quality_data),
                 "avg_score": sum(scores) / len(scores) if scores else 0,
                 "min_score": min(scores) if scores else 0,
                 "max_score": max(scores) if scores else 0,
+                "placeholder_total": placeholder_total,
             }
 
     # Load agents validation results
@@ -128,6 +132,10 @@ def generate_dashboard(repo_root: Path, output_dir: Path | None = None) -> int:
                 <div class="metric">
                     <span>Lowest Score</span>
                     <span class="metric-value">{data["quality"].get("min_score", "N/A")}</span>
+                </div>
+                <div class="metric">
+                    <span>Placeholder signals (total)</span>
+                    <span class="metric-value {"warning" if data["quality"].get("placeholder_total", 0) > 100 else "success"}">{data["quality"].get("placeholder_total", 0)}</span>
                 </div>
             </div>
 

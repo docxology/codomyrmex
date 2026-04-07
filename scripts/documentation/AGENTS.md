@@ -23,6 +23,7 @@ Documentation files and guides.
 - `examples/` – Directory containing examples components
 - `fix_docs_readmes.py` – Project file
 - `fix_documentation.py` – Project file
+- `fix_docusaurus_module_links.py` – Rewrites SPEC/PAI/mcp_tools links under `documentation/docs/modules` to repo-root-relative targets (run after syncing module docs)
 - `fix_formatting.py` – Project file
 - `fix_install_sections.py` – Project file
 - `fix_readme_quality.py` – Project file
@@ -56,6 +57,7 @@ Documentation files and guides.
 - `enrich_thin_readmes.py`
 - `fix_docs_readmes.py`
 - `fix_documentation.py`
+- `fix_docusaurus_module_links.py`
 - `fix_formatting.py`
 - `fix_install_sections.py`
 - `fix_readme_quality.py`

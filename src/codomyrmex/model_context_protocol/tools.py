@@ -516,9 +516,9 @@ def checksum_file(path: str, algorithm: str = "sha256") -> dict[str, Any]:
         content = file_path.read_bytes()
 
         if algorithm == "md5":
-            hash_val = hashlib.md5(content).hexdigest()
+            hash_val = hashlib.md5(content, usedforsecurity=False).hexdigest()
         elif algorithm == "sha1":
-            hash_val = hashlib.sha1(content).hexdigest()
+            hash_val = hashlib.sha1(content, usedforsecurity=False).hexdigest()
         else:
             hash_val = hashlib.sha256(content).hexdigest()
 

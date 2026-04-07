@@ -111,20 +111,22 @@ All documentation is written in Markdown (`.md`) or MDX (`.mdx`). MDX allows emb
 
 ### Links
 
--   **Internal Links**: Use relative paths to link to other documentation pages or assets.
-    -   Linking to another page in the same directory: `[Link Text](./other-page.md)`
-    -   Linking to a page in a subdirectory: `[Link Text](./subdirectory/page.md)`
-    -   Linking to a page in a parent directory: `[Link Text](../parent-page.md)`
-    -   Linking to a specific heading: `[Link Text](./other-page.md#heading-id)` (Docusaurus auto-generates heading IDs).
--   **External Links**: Use the full URL.
-    `[Docusaurus Website](https://docusaurus.io/)`
--   **Asset Links**: To link to static assets (like images in `static/img/`), use a path relative to the `static` directory, prefixed with a `/`.
-    `![Alt Text](/img/codomyrmex_logo.png)`
+Examples below are illustrative; they are not live links in this file.
+
+```markdown
+- **Internal Links**: Use relative paths to link to other documentation pages or assets.
+  - Same directory: [Link Text](./other-page.md)
+  - Subdirectory: [Link Text](./subdirectory/page.md)
+  - Parent directory: [Link Text](../parent-page.md)
+  - Heading anchor: [Link Text](./other-page.md#heading-id) (Docusaurus auto-generates heading IDs).
+- **External Links**: Use the full URL, e.g. [Docusaurus Website](https://docusaurus.io/).
+- **Asset Links** (paths are relative to `static/`): ![Alt Text](/img/codomyrmex_logo.png)
+```
 
 ### Images
 
 -   Store images in the `documentation/static/img/` directory, possibly in subfolders for organization.
--   Use descriptive alt text for accessibility: `![Diagram showing data flow through the module](/img/data_flow_diagram.png)`
+-   Use descriptive alt text for accessibility.
 -   Optimize images for the web to reduce file sizes.
 
 ### Tables

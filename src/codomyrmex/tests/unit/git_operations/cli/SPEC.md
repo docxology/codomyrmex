@@ -32,4 +32,4 @@ tests/unit/git_operations/cli/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../git_operations/cli/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../git_operations/)

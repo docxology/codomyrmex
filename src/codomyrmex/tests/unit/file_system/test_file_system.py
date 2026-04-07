@@ -421,7 +421,7 @@ class TestGetHash:
         h = fs.get_hash(path, algorithm="md5")
         import hashlib
 
-        expected = hashlib.md5(b"data").hexdigest()
+        expected = hashlib.md5(b"data", usedforsecurity=False).hexdigest()
         assert h == expected
 
     def test_deterministic(self, fs, td):

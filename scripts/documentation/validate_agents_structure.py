@@ -160,7 +160,11 @@ def validate_agents_file(file_path: Path, repo_root: Path) -> ValidationResult:
 
 
 def validate_agents_structure(
-    repo_root: Path, output_dir: Path | None = None, output_format: str = "both"
+    repo_root: Path,
+    output_dir: Path | None = None,
+    output_format: str = "both",
+    *,
+    fail_on_invalid: bool = False,
 ) -> int:
     """Validate all AGENTS.md files in the repository."""
     print("🤖 Validating AGENTS.md structure...\n")
@@ -257,7 +261,7 @@ def validate_agents_structure(
         print("\n❌ Invalid AGENTS.md files:")
         for r in invalid:
             print(f"   {r.file}: missing {', '.join(r.missing_sections)}")
-        return 1 if "--fail-on-invalid" in sys.argv else 0
+        return 1 if fail_on_invalid else 0
 
     print("\n✅ All AGENTS.md files are valid!")
     return 0
@@ -289,7 +293,12 @@ def main():
     parser.add_argument("--fail-on-invalid", action="store_true")
 
     args = parser.parse_args()
-    return validate_agents_structure(args.repo_root, args.output, args.format)
+    return validate_agents_structure(
+        args.repo_root,
+        args.output,
+        args.format,
+        fail_on_invalid=args.fail_on_invalid,
+    )
 
 
 if __name__ == "__main__":

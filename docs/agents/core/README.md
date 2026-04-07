@@ -4,7 +4,7 @@
 
 ## Overview
 
-Base classes, protocols, configuration, and shared infrastructure for all 41 agent packages under `src/codomyrmex/agents/`. Every agent module inherits from the types defined here.
+Base classes, protocols, configuration, and shared infrastructure for all 39 agent packages under `src/codomyrmex/agents/`. Every agent module inherits from the types defined here.
 
 ## Key Classes
 

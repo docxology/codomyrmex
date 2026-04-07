@@ -10,6 +10,7 @@
 - **Human overview**: [README.md](README.md)
 - **Functional spec**: [SPEC.md](SPEC.md)
 - **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)
+
 ## Purpose
 Test files and validation suites.
 

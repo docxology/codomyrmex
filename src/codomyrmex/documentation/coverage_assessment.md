@@ -89,6 +89,7 @@ The documentation quality is maintained through specialized tools:
 
 ### Validation Tools
 - **`validate_links_comprehensive.py`**: Checks all markdown links for validity
+- **`fix_docusaurus_module_links.py`**: After syncing module docs into Docusaurus, rewrites `SPEC.md` / `PAI.md` / `mcp_tools.py` links under `documentation/docs/modules` to repo-root-relative targets
 - **`analyze_content_quality.py`**: Scores documentation quality (0-100)
 - **`validate_agents_structure.py`**: Ensures AGENTS.md compliance
 
@@ -129,7 +130,8 @@ The documentation quality is maintained through specialized tools:
 
 ```bash
 # Run complete validation suite
-python scripts/documentation/validate_links_comprehensive.py --repo-root . --output output
+python scripts/documentation/validate_links_comprehensive.py --repo-root . --output output --fail-on-broken
+python scripts/documentation/fix_docusaurus_module_links.py
 python scripts/documentation/analyze_content_quality.py --repo-root . --output output
 python scripts/documentation/validate_agents_structure.py --repo-root . --output output
 python scripts/documentation/generate_dashboard.py --repo-root . --output output

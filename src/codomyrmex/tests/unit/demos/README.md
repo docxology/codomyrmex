@@ -1,17 +1,19 @@
-# demos
+# Demos unit tests
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Last updated**: April 2026
 
-## Overview
+Tests live beside this file; primary module is `codomyrmex.demos`. Policy: [SPEC.md](SPEC.md) and parent [SPEC.md](../SPEC.md).
 
-Test files and validation suites.
+## Contents
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `test_generated_example.py` – File
-- `test_registry.py` – File
+- `test_registry.py` — demo registry
+
+## Running
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/demos/ -q
+```
 
 ## Navigation
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: ../../../../../README.md
+
+- [AGENTS.md](AGENTS.md) · [unit](../README.md)

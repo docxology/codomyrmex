@@ -4,7 +4,8 @@
 This script enforces thresholds for:
 - Quality scores
 - Broken link counts
-- Placeholder counts
+- Placeholder counts (sum of per-file placeholder_count from analyze_content_quality.py:
+  task-style TODO/FIXME/XXX and bracket tags; not prose "TODO" or example.com URLs)
 - AGENTS.md validity rates
 """
 

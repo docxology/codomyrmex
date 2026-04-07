@@ -4,7 +4,7 @@
 
 ## Overview
 
-Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **128 top-level modules**, **600** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md)), and **41 agent packages** under `src/codomyrmex/agents/` (see [agents/](agents/)).
+Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **128 top-level modules**, **600** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md)), and **39 agent packages** under `src/codomyrmex/agents/` (see [agents/](agents/)).
 
 ## Documentation Map
 
@@ -24,7 +24,7 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 
 | Section | Purpose | Files |
 |:---|:---|---:|
-| [agents/](agents/) | **41 agent packages** — Claude, Gemini, Jules, Hermes ([skill preload / registry](agents/hermes/skills.md)), and 37 more | 66+ |
+| [agents/](agents/) | **39 agent packages** — Claude, Gemini, Jules, Hermes ([skill preload / registry](agents/hermes/skills.md)), and 35 more | 121 |
 | [agi/](agi/) | AGI theory, perspectives, emergence models | 14 |
 | [bio/](bio/) | Biological simulation documentation | 15 |
 | [cognitive/](cognitive/) | Cognitive architecture, Bayesian inference, active inference | 11 |
@@ -36,7 +36,7 @@ Comprehensive documentation for the Codomyrmex modular coding workspace — a pr
 | [integration/](integration/) | Cross-module integration patterns | 11 |
 | [modules/](modules/) | Module-level documentation (128 top-level packages under `src/codomyrmex/`) | 9+ |
 | [pai/](pai/) | PAI infrastructure, dashboard, skills, memory | 11 |
-| [plans/](plans/) | Project roadmap and release plans | 3 |
+| [plans/](plans/) | Project roadmap and release plans | 6 |
 | [project/](project/) | Project standards, contributing, architecture | 9 |
 | [project_orchestration/](project_orchestration/) | Workflow orchestration, multi-agent coordination | 11 |
 | [reference/](reference/) | API reference, CLI tools, configuration | 16 |

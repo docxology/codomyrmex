@@ -197,13 +197,13 @@ class TestMaskHash:
     def test_md5(self):
         """md5 algorithm works correctly."""
         result = mask_hash("test", algorithm="md5")
-        expected = hashlib.md5(b"test").hexdigest()
+        expected = hashlib.md5(b"test", usedforsecurity=False).hexdigest()
         assert result == expected
 
     def test_sha1(self):
         """sha1 algorithm works correctly."""
         result = mask_hash("test", algorithm="sha1")
-        expected = hashlib.sha1(b"test").hexdigest()
+        expected = hashlib.sha1(b"test", usedforsecurity=False).hexdigest()
         assert result == expected
 
     def test_deterministic(self):
@@ -620,7 +620,7 @@ class TestPrivacyClass:
         p = Privacy()
         p.add_rule(PrivacyRule("secret", "hash", {"algorithm": "md5"}))
         result = p.process({"secret": "password123"})
-        expected = hashlib.md5(b"password123").hexdigest()
+        expected = hashlib.md5(b"password123", usedforsecurity=False).hexdigest()
         assert result["secret"] == expected
 
     def test_process_redact_strategy(self):

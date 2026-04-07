@@ -96,7 +96,11 @@ def validate_link(link: str, file_path: Path, repo_root: Path, line: int) -> Lin
 
 
 def validate_links(
-    repo_root: Path, output_dir: Path | None = None, output_format: str = "both"
+    repo_root: Path,
+    output_dir: Path | None = None,
+    output_format: str = "both",
+    *,
+    fail_on_broken: bool = False,
 ) -> int:
     """Validate all links in markdown files."""
     print("🔗 Validating documentation links...\n")
@@ -183,7 +187,7 @@ def validate_links(
             print(f"   {r.file}:{r.line} → {r.link}")
         if len(broken) > 10:
             print(f"   ... and {len(broken) - 10} more")
-        return 1 if "--fail-on-broken" in sys.argv else 0
+        return 1 if fail_on_broken else 0
 
     print("\n✅ All internal links are valid!")
     return 0
@@ -215,7 +219,12 @@ def main():
     parser.add_argument("--fail-on-broken", action="store_true")
 
     args = parser.parse_args()
-    return validate_links(args.repo_root, args.output, args.format)
+    return validate_links(
+        args.repo_root,
+        args.output,
+        args.format,
+        fail_on_broken=args.fail_on_broken,
+    )
 
 
 if __name__ == "__main__":

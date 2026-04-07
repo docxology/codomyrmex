@@ -1,205 +1,40 @@
-# unit
+# Unit tests (`src/codomyrmex/tests/unit`)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Last updated**: April 2026
 
 ## Overview
 
-Test files and validation suites.
+Tests for the `codomyrmex` package. Policy and gates: **[SPEC.md](SPEC.md)**. Layout and fixtures: **[AGENTS.md](AGENTS.md)**.
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `accessibility/` – Subdirectory
-- `agentic_memory/` – Subdirectory
-- `agents/` – Subdirectory
-- `ai_code_editing/` – Subdirectory
-- `ai_gateway/` – Subdirectory
-- `aider/` – Subdirectory
-- `api/` – Subdirectory
-- `api_documentation/` – Subdirectory
-- `api_standardization/` – Subdirectory
-- `audio/` – Subdirectory
-- `auth/` – Subdirectory
-- `autograd/` – Subdirectory
-- `bio_simulation/` – Subdirectory
-- `build_synthesis/` – Subdirectory
-- `cache/` – Subdirectory
-- `calendar_integration/` – Subdirectory
-- `cerebrum/` – Subdirectory
-- `chaos_engineering/` – Subdirectory
-- `ci_cd_automation/` – Subdirectory
-- `cli/` – Subdirectory
-- `cloud/` – Subdirectory
-- `coding/` – Subdirectory
-- `collaboration/` – Subdirectory
-- `compression/` – Subdirectory
-- `concurrency/` – Subdirectory
-- `config_audits/` – Subdirectory
-- `config_management/` – Subdirectory
-- `config_monitoring/` – Subdirectory
-- `conftest.py` – File
-- `container_optimization/` – Subdirectory
-- `containerization/` – Subdirectory
-- `cost_management/` – Subdirectory
-- `coverage_push/` – Subdirectory
-- `crypto/` – Subdirectory
-- `dark/` – Subdirectory
-- `data_curation/` – Subdirectory
-- `data_lineage/` – Subdirectory
-- `data_visualization/` – Subdirectory
-- `database_management/` – Subdirectory
-- `defense/` – Subdirectory
-- `demos/` – Subdirectory
-- `dependency_injection/` – Subdirectory
-- `deployment/` – Subdirectory
-- `distillation/` – Subdirectory
-- `distributed_training/` – Subdirectory
-- `docs_gen/` – Subdirectory
-- `documentation/` – Subdirectory
-- `documents/` – Subdirectory
-- `dpo/` – Subdirectory
-- `edge_computing/` – Subdirectory
-- `education/` – Subdirectory
-- `email/` – Subdirectory
-- `embodiment/` – Subdirectory
-- `encryption/` – Subdirectory
-- `environment_setup/` – Subdirectory
-- `eval_harness/` – Subdirectory
-- `events/` – Subdirectory
-- `evolutionary_ai/` – Subdirectory
-- `examples/` – Subdirectory
-- `exceptions/` – Subdirectory
-- `feature_flags/` – Subdirectory
-- `feature_store/` – Subdirectory
-- `file_system/` – Subdirectory
-- `finance/` – Subdirectory
-- `formal_verification/` – Subdirectory
-- `fpf/` – Subdirectory
-- `git_analysis/` – Subdirectory
-- `git_operations/` – Subdirectory
-- `governance/` – Subdirectory
-- `graph_rag/` – Subdirectory
-- `i18n/` – Subdirectory
-- `ide/` – Subdirectory
-- `identity/` – Subdirectory
-- `image/` – Subdirectory
-- `inference_optimization/` – Subdirectory
-- `integration/` – Subdirectory
-- `interpretability/` – Subdirectory
-- `languages/` – Subdirectory
-- `llm/` – Subdirectory
-- `logging/` – Subdirectory
-- `logging_monitoring/` – Subdirectory
-- `logistics/` – Subdirectory
-- `logit_processor/` – Subdirectory
-- `lora/` – Subdirectory
-- `maintenance/` – Subdirectory
-- `market/` – Subdirectory
-- `matmul_kernel/` – Subdirectory
-- `mcp/` – Subdirectory
-- `meme/` – Subdirectory
-- `metrics/` – Subdirectory
-- `migration/` – Subdirectory
-- `ml_pipeline/` – Subdirectory
-- `model_context_protocol/` – Subdirectory
-- `model_evaluation/` – Subdirectory
-- `model_merger/` – Subdirectory
-- `model_ops/` – Subdirectory
-- `model_registry/` – Subdirectory
-- `module_template/` – Subdirectory
-- `multimodal/` – Subdirectory
-- `nas/` – Subdirectory
-- `networking/` – Subdirectory
-- `networks/` – Subdirectory
-- `neural/` – Subdirectory
-- `notification/` – Subdirectory
-- `observability/` – Subdirectory
-- `observability_dashboard/` – Subdirectory
-- `operating_system/` – Subdirectory
-- `orchestrator/` – Subdirectory
-- `p3_remediation/` – Subdirectory
-- `pai_pm/` – Subdirectory
-- `pattern_matching/` – Subdirectory
-- `peft/` – Subdirectory
-- `performance/` – Subdirectory
-- `physical_management/` – Subdirectory
-- `plugin_system/` – Subdirectory
-- `privacy/` – Subdirectory
-- `prompt_engineering/` – Subdirectory
-- `prompt_testing/` – Subdirectory
-- `quantization/` – Subdirectory
-- `quantum/` – Subdirectory
-- `rate_limiting/` – Subdirectory
-- `relations/` – Subdirectory
-- `release/` – Subdirectory
-- `rlhf/` – Subdirectory
-- `scheduler/` – Subdirectory
-- `schemas/` – Subdirectory
-- `scrape/` – Subdirectory
-- `search/` – Subdirectory
-- `security/` – Subdirectory
-- `semantic_router/` – Subdirectory
-- `serialization/` – Subdirectory
-- `service_mesh/` – Subdirectory
-- `simulation/` – Subdirectory
-- `skills/` – Subdirectory
-- `slm/` – Subdirectory
-- `smart_contracts/` – Subdirectory
-- `softmax_opt/` – Subdirectory
-- `soul/` – Subdirectory
-- `spatial/` – Subdirectory
-- `ssm/` – Subdirectory
-- `static_analysis/` – Subdirectory
-- `streaming/` – Subdirectory
-- `synthetic_data/` – Subdirectory
-- `system_discovery/` – Subdirectory
-- `telemetry/` – Subdirectory
-- `template/` – Subdirectory
-- `templating/` – Subdirectory
-- `terminal_interface/` – Subdirectory
-- `test_agentic_memory_coverage.py` – File
-- `test_audio_streaming.py` – File
-- `test_cerebrum_coverage.py` – File
-- `test_cerebrum_deep_coverage.py` – File
-- `test_cli_coverage.py` – File
-- `test_cloud_coverage.py` – File
-- `test_cloud_deep_coverage.py` – File
-- `test_collaboration_coverage.py` – File
-- `test_config_management_coverage.py` – File
-- `test_cost_hooks.py` – File
-- `test_coverage_smoke.py` – File
-- `test_credential_rotation.py` – File
-- `test_data_visualization_coverage.py` – File
-- `test_documentation_coverage.py` – File
-- `test_generated_addition.py` – File
-- `test_generated_async_example.py` – File
-- `test_generated_example.py` – File
-- `test_generated_math_functions.py` – File
-- `test_git_operations_coverage.py` – File
-- `test_hermes_client.py` – File
-- `test_hermes_session.py` – File
-- `test_hermes_templates.py` – File
-- `test_physical_management_coverage.py` – File
-- `test_rate_limiter.py` – File
-- `test_vad.py` – File
-- `test_vision.py` – File
-- `testing/` – Subdirectory
-- `text_to_sql/` – Subdirectory
-- `tokenizer/` – Subdirectory
-- `tool_use/` – Subdirectory
-- `tree_sitter/` – Subdirectory
-- `trust_gateway/` – Subdirectory
-- `utils/` – Subdirectory
-- `validation/` – Subdirectory
-- `vector_store/` – Subdirectory
-- `video/` – Subdirectory
-- `vision/` – Subdirectory
-- `visualization/` – Subdirectory
-- `wallet/` – Subdirectory
-- `website/` – Subdirectory
-- `workflow/` – Subdirectory
-- `workflow_testing/` – Subdirectory
+This folder contains many per-module subtrees (`<module>/` mirrors `codomyrmex.<module>`). The auto-generated flat file listing is intentionally omitted here; discover tests with `find` or your editor’s tree, or run pytest with a path prefix.
+
+## Running
+
+From the repository root:
+
+```bash
+# Entire unit tree (slow; may require optional services locally)
+uv run pytest src/codomyrmex/tests/unit/ -q
+
+# Single module
+uv run pytest src/codomyrmex/tests/unit/cloud/ -q
+
+# Coverage gate (40% minimum in `pyproject.toml` / CI)
+uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=40 -q
+```
+
+Full local runs can fail when optional backends (Ollama, Docker, vector DBs, live API tokens) are missing or misconfigured. **CI with declared extras is the usual release gate.** Use narrow `pytest …/path/` loops while developing.
+
+## Hermes
+
+- **`hermes/`** — client, session, templates, gateway, monitoring, provider router, plugins, MCP extended tools.
+- **`agents/hermes/`** — MCP Hermes tool entrypoints.
+- **`agents/test_agents_hermes_client.py`** — CLI argument construction and execution paths for `HermesClient`.
+
+## Shared fixtures
+
+**`conftest.py`**: `src_root`, `project_root`, minimal git/project fixtures, Ollama/registry URL helpers, Docker/Ollama skip markers.
 
 ## Navigation
-- **Parent Directory**: [tests](../README.md)
-- **Project Root**: ../../../../README.md
+
+- [SPEC.md](SPEC.md) · [AGENTS.md](AGENTS.md) · [Parent `tests/`](../README.md) · [Repository root](../../../../README.md)

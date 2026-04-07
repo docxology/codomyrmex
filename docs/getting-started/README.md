@@ -10,7 +10,7 @@ Quick start guides, installation instructions, and introductory tutorials for th
 
 | Document | Description |
 |:---|:---|
-| [GETTING_STARTED_WITH_AGENTS.md](GETTING_STARTED_WITH_AGENTS.md) | Introduction to the 41 agent packages under `agents/` |
+| [GETTING_STARTED_WITH_AGENTS.md](GETTING_STARTED_WITH_AGENTS.md) | Introduction to the 39 agent packages under `agents/` |
 | [full-setup.md](full-setup.md) | Comprehensive setup covering all optional features |
 | [installation.md](installation.md) | Detailed installation guide with all dependencies |
 | [quickstart.md](quickstart.md) | 5-minute quick start — minimal setup to first run |
