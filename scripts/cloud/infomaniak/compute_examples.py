@@ -115,7 +115,7 @@ def list_keypairs(client):
         print()
 
 
-def create_keypair(client, name: str):
+def create_keypair(client, name: str, *, emit_secrets: bool = False):
     """Create a new SSH keypair."""
     print(f"\n🔑 Creating keypair: {name}")
 
@@ -125,7 +125,15 @@ def create_keypair(client, name: str):
         print(f"   Fingerprint: {result['fingerprint']}")
         if result.get("private_key"):
             print("\n   ⚠️  SAVE THIS PRIVATE KEY - it cannot be retrieved later!\n")
-            print(result["private_key"])
+            if emit_secrets:
+                print(result["private_key"])
+            else:
+                pk = result["private_key"]
+                nlines = pk.count("\n") + 1
+                print(
+                    f"   (private key omitted; {nlines} lines — "
+                    "re-run with --emit-secrets to print once)"
+                )
     else:
         print("   ❌ Failed to create keypair")
 
@@ -234,13 +242,18 @@ def main():
 
     # All operations
     parser.add_argument("--all", action="store_true", help="Show all information")
+    parser.add_argument(
+        "--emit-secrets",
+        action="store_true",
+        help="Print private key material when creating a keypair (off by default).",
+    )
 
     args = parser.parse_args()
 
     try:
         client = get_client()
     except Exception as e:
-        print(f"❌ Failed to create client: {e}")
+        print(f"❌ Failed to create client: {type(e).__name__}")
         print("\nMake sure environment variables are set:")
         print("  INFOMANIAK_APP_CREDENTIAL_ID")
         print("  INFOMANIAK_APP_CREDENTIAL_SECRET")
@@ -267,7 +280,7 @@ def main():
     elif args.get_instance:
         get_instance(client, args.get_instance)
     elif args.create_keypair:
-        create_keypair(client, args.create_keypair)
+        create_keypair(client, args.create_keypair, emit_secrets=args.emit_secrets)
     elif args.create_instance:
         if not all([args.name, args.flavor, args.image, args.network]):
             print("❌ --create-instance requires --name, --flavor, --image, --network")

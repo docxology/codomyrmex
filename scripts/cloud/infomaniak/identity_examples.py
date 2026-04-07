@@ -106,8 +106,19 @@ def list_app_credentials(client):
         print()
 
 
+def _mask_access_key(access: str) -> str:
+    if len(access) <= 8:
+        return "****"
+    return f"{access[:4]}…{access[-4:]}"
+
+
 def create_app_credential(
-    client, name: str, description: str | None = None, expires: str | None = None
+    client,
+    name: str,
+    description: str | None = None,
+    expires: str | None = None,
+    *,
+    emit_secrets: bool = False,
 ):
     """Create an application credential."""
     print(f"\n🔑 Creating application credential: {name}")
@@ -122,7 +133,13 @@ def create_app_credential(
         print(f"   Name: {result['name']}")
         print("\n   ⚠️  SAVE THESE CREDENTIALS - the secret cannot be retrieved later!")
         print(f"\n   Application Credential ID: {result['id']}")
-        print(f"   Application Credential Secret: {result.get('secret')}")
+        secret = result.get("secret")
+        if emit_secrets and secret is not None:
+            print(f"   Application Credential Secret: {secret}")
+        elif secret is not None:
+            print(
+                "   Application Credential Secret: (omitted; use --emit-secrets to print once)"
+            )
     else:
         print("   ❌ Failed to create application credential")
 
@@ -177,13 +194,13 @@ def list_ec2_credentials(client):
         return
 
     for cred in creds:
-        print(f"   🔐 Access Key: {cred['access']}")
+        print(f"   🔐 Access Key: {_mask_access_key(cred['access'])}")
         print(f"      ID: {cred['id']}")
         print(f"      Project: {cred['project_id']}")
         print()
 
 
-def create_ec2_credentials(client):
+def create_ec2_credentials(client, *, emit_secrets: bool = False):
     """Create EC2 credentials for S3 access."""
     print("\n🔑 Creating EC2 credentials for S3 access")
 
@@ -191,8 +208,13 @@ def create_ec2_credentials(client):
     if result:
         print("\n   ✅ Created EC2 credentials")
         print("\n   ⚠️  SAVE THESE CREDENTIALS!")
-        print(f"\n   Access Key: {result.get('access')}")
-        print(f"   Secret Key: {result.get('secret')}")
+        if emit_secrets:
+            print(f"\n   Access Key: {result.get('access')}")
+            print(f"   Secret Key: {result.get('secret')}")
+        else:
+            print(
+                "\n   Access/Secret keys omitted (use --emit-secrets to print once)."
+            )
     else:
         print("   ❌ Failed to create EC2 credentials")
 
@@ -251,13 +273,18 @@ def main():
 
     # All operations
     parser.add_argument("--all", action="store_true", help="Show all information")
+    parser.add_argument(
+        "--emit-secrets",
+        action="store_true",
+        help="Print newly issued credential secrets (off by default).",
+    )
 
     args = parser.parse_args()
 
     try:
         client = get_client()
     except Exception as e:
-        print(f"❌ Failed to create client: {e}")
+        print(f"❌ Failed to create client: {type(e).__name__}")
         return 1
 
     if args.all:
@@ -281,7 +308,13 @@ def main():
         if not args.name:
             print("❌ --create-app-cred requires --name")
             return 1
-        create_app_credential(client, args.name, args.description, args.expires)
+        create_app_credential(
+            client,
+            args.name,
+            args.description,
+            args.expires,
+            emit_secrets=args.emit_secrets,
+        )
     elif args.delete_app_cred:
         delete_app_credential(client, args.delete_app_cred)
     elif args.roles:
@@ -291,7 +324,7 @@ def main():
     elif args.ec2_credentials:
         list_ec2_credentials(client)
     elif args.create_ec2_cred:
-        create_ec2_credentials(client)
+        create_ec2_credentials(client, emit_secrets=args.emit_secrets)
     else:
         parser.print_help()
 

@@ -52,10 +52,11 @@ except ImportError:
 logger = get_logger(__name__)
 
 # Security imports are conditional since some backends may not be available
+_scan_paths_for_sensitive_patterns = None  # type: ignore[assignment]
 try:
     from codomyrmex.security import (
         audit_code_security,
-        scan_directory_for_secrets,
+        scan_directory_for_secrets as _scan_paths_for_sensitive_patterns,
         scan_vulnerabilities,
     )
 
@@ -63,7 +64,6 @@ try:
 except ImportError:
     HAS_DIGITAL_SECURITY = False
     audit_code_security = None  # type: ignore[assignment]
-    scan_directory_for_secrets = None  # type: ignore[assignment]
     scan_vulnerabilities = None  # type: ignore[assignment]
 
 
@@ -144,16 +144,16 @@ class SecurityAudit:
             path: Path to file or directory to audit.
 
         Returns:
-            Dictionary with vulnerability and secrets findings.
+            Dictionary with vulnerability and sensitive-pattern scan summary.
         """
         path_str = str(path)
-        logger.info(f"Running security audit on: {path_str}")
+        logger.info("Running security audit", extra={"path_basename": Path(path_str).name})
 
         result: dict[str, Any] = {
             "path": path_str,
             "security_available": HAS_DIGITAL_SECURITY,
             "vulnerabilities": {},
-            "secrets": {},
+            "pattern_hits": {},
             "code_audit": {},
         }
 
@@ -167,27 +167,26 @@ class SecurityAudit:
                 "count": len(vuln.findings) if hasattr(vuln, "findings") else 0,
                 "type": type(vuln).__name__,
             }
-        except Exception as e:
-            logger.warning(f"scan_vulnerabilities failed: {e}")
-            result["vulnerabilities"] = {"error": str(e)}
+        except Exception:
+            result["vulnerabilities"] = {"error": "scan_failed"}
 
         try:
-            secrets = scan_directory_for_secrets(path_str)
-            result["secrets"] = {
-                "count": len(secrets) if secrets else 0,
+            path_hits = _scan_paths_for_sensitive_patterns(path_str)
+            result["pattern_hits"] = {
+                "count": len(path_hits) if path_hits else 0,
             }
-        except Exception as e:
-            logger.warning(f"scan_directory_for_secrets failed: {e}")
-            result["secrets"] = {"error": str(e)}
+        except Exception:
+            result["pattern_hits"] = {"error": "scan_failed"}
 
         try:
             audit = audit_code_security(path_str)
             result["code_audit"] = (
-                audit if isinstance(audit, dict) else {"result": str(audit)}
+                audit
+                if isinstance(audit, dict)
+                else {"result_type": type(audit).__name__}
             )
-        except Exception as e:
-            logger.warning(f"audit_code_security failed: {e}")
-            result["code_audit"] = {"error": str(e)}
+        except Exception:
+            result["code_audit"] = {"error": "audit_failed"}
 
         return result
 

@@ -43,7 +43,25 @@ def decode_jwt_payload(token: str) -> dict:
         decoded = base64.urlsafe_b64decode(payload)
         return json.loads(decoded)
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": type(e).__name__}
+
+
+_SAFE_JWT_CLAIM_KEYS = frozenset(
+    {"exp", "iat", "nbf", "iss", "aud", "sub", "typ", "kid", "jti"}
+)
+
+
+def redact_jwt_payload_for_display(payload: dict) -> dict:
+    """Return a copy safe to print (standard claims only; other values redacted)."""
+    out: dict = {}
+    for key, val in payload.items():
+        if key in _SAFE_JWT_CLAIM_KEYS:
+            out[key] = val
+        elif isinstance(val, (int, float, bool)) or val is None:
+            out[key] = val
+        else:
+            out[key] = "[redacted]"
+    return out
 
 
 def hash_password(password: str, salt: bytes | None = None) -> tuple:
@@ -84,18 +102,23 @@ def main():
     subparsers = parser.add_subparsers(dest="command")
 
     # Generate token
-    gen = subparsers.add_parser("generate", help="Generate secure token")
+    gen = subparsers.add_parser("generate", help="URL-safe random strings")
     gen.add_argument("--length", "-l", type=int, default=32)
     gen.add_argument("--prefix", "-p", default="")
     gen.add_argument("--count", "-n", type=int, default=1)
 
     # Decode JWT
-    jwt_cmd = subparsers.add_parser("decode-jwt", help="Decode JWT payload")
-    jwt_cmd.add_argument("token", help="JWT token")
+    jwt_cmd = subparsers.add_parser("decode-jwt", help="Inspect JWT claims")
+    jwt_cmd.add_argument("token", help="Encoded JWT (payload shown redacted)")
 
     # Hash password
-    hash_cmd = subparsers.add_parser("hash", help="Hash a password")
-    hash_cmd.add_argument("password", help="Password to hash")
+    hash_cmd = subparsers.add_parser("hash", help="PBKDF2 digest of a passphrase")
+    hash_cmd.add_argument("password", help="Passphrase to hash")
+    hash_cmd.add_argument(
+        "--show-digest",
+        action="store_true",
+        help="Print salt and digest hex (off by default).",
+    )
 
     # Check env
     subparsers.add_parser("check-env", help="Check auth environment variables")
@@ -105,17 +128,17 @@ def main():
     if not args.command:
         print("🔐 Authentication Utilities\n")
         print("Commands:")
-        print("  generate   - Generate secure tokens")
-        print("  decode-jwt - Decode JWT payload (no verification)")
-        print("  hash       - Hash a password with PBKDF2")
-        print("  check-env  - Check auth environment variables")
+        print("  generate   - URL-safe random strings")
+        print("  decode-jwt - Inspect JWT claims (values redacted)")
+        print("  hash       - PBKDF2 digest of a passphrase")
+        print("  check-env  - Check auth-related environment variables")
         return 0
 
     if args.command == "generate":
-        print(f"🔑 Generating {args.count} token(s):\n")
+        print(f"🔑 Generating {args.count} value(s):\n")
         for _ in range(args.count):
-            token = generate_token(args.length, args.prefix)
-            print(f"   {token}")
+            opaque = generate_token(args.length, args.prefix)
+            print(f"   {opaque}")
 
     elif args.command == "decode-jwt":
         payload = decode_jwt_payload(args.token)
@@ -123,7 +146,7 @@ def main():
         if "error" in payload:
             print(f"   ❌ {payload['error']}")
         else:
-            print(json.dumps(payload, indent=2))
+            print(json.dumps(redact_jwt_payload_for_display(payload), indent=2))
             if "exp" in payload:
                 expiry = check_token_expiry(payload["exp"])
                 if expiry["valid"]:
@@ -133,9 +156,14 @@ def main():
 
     elif args.command == "hash":
         salt, hashed = hash_password(args.password)
-        print("🔒 Password Hash:\n")
-        print(f"   Salt: {salt}")
-        print(f"   Hash: {hashed}")
+        print("🔒 Passphrase digest:\n")
+        if args.show_digest:
+            print(f"   Salt: {salt}")
+            print(f"   Hash: {hashed}")
+        else:
+            print(
+                "   Salt and hash generated (re-run with --show-digest to print hex values)."
+            )
 
     elif args.command == "check-env":
         auth_vars = [

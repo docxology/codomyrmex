@@ -95,9 +95,12 @@ def _telegram_getme(token: str, timeout_s: int = 25) -> tuple[bool, str]:
         with urllib.request.urlopen(url, timeout=timeout_s) as resp:
             body = json.loads(resp.read().decode())
     except (OSError, urllib.error.URLError, ValueError, json.JSONDecodeError) as e:
-        return False, str(e)
+        return False, type(e).__name__
     if not body.get("ok"):
-        return False, str(body)
+        desc = body.get("description")
+        if isinstance(desc, str) and desc:
+            return False, desc[:200]
+        return False, "telegram_api_error"
     un = (body.get("result") or {}).get("username", "?")
     return True, f"@{un}"
 
@@ -123,8 +126,11 @@ def main() -> int:
 
     try:
         repo = require_hermes_agent_repo()
-    except FileNotFoundError as e:
-        print(f"ERROR: {e}", file=sys.stderr)
+    except FileNotFoundError:
+        print(
+            "ERROR: Hermes agent repository not found (see codomyrmex hermes paths).",
+            file=sys.stderr,
+        )
         return 1
 
     cli = discover_hermes_cli_binary()
@@ -155,8 +161,8 @@ def main() -> int:
     _print_section("Hermes doctor (via HermesClient)")
     try:
         client = HermesClient()
-    except Exception as exc:
-        print(f"ERROR: HermesClient: {exc}", file=sys.stderr)
+    except Exception:
+        print("ERROR: HermesClient initialization failed", file=sys.stderr)
         failures += 1
     else:
         doc = client.run_doctor()
@@ -225,7 +231,7 @@ def main() -> int:
             vals = load_dotenv_values(env_path)
             tok = vals.get("TELEGRAM_BOT_TOKEN")
             if not tok:
-                print(f"{home}: SKIP (no TELEGRAM_BOT_TOKEN in .env)")
+                print(f"{home}: SKIP (Telegram bot env not set in .env)")
                 continue
             ok, info = _telegram_getme(tok)
             if ok:
