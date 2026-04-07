@@ -42,10 +42,10 @@ def create_tag(
         logger.error("Failed to create tag '%s': %s", tag_name, e)
         if e.stderr:
             logger.error("Git error: %s", e.stderr)
-        raise
+        return False
     except Exception as e:
         logger.error("Unexpected error creating tag: %s", e)
-        raise
+        return False
 
 
 @mcp_tool(name="git_list_tags")
@@ -72,7 +72,7 @@ def list_tags(repository_path: str | None = None) -> list[str]:
 
     except subprocess.CalledProcessError as e:
         logger.error("Failed to list tags: %s", e)
-        raise
+        return []
     except Exception as e:
         logger.error("Unexpected error listing tags: %s", e)
-        raise
+        return []

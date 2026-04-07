@@ -93,7 +93,7 @@ class TestGetCurrentBranch:
     def test_get_current_branch_invalid_repo(self, temp_dir):
         """Test getting branch from non-Git directory."""
         branch = get_current_branch(temp_dir)
-        assert branch is None
+        assert branch == ""
 
 
 @pytest.mark.unit

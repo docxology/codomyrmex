@@ -236,6 +236,8 @@ gha-creds-*.json
 .gitnexus
 pytest_output.txt
 /@output
+# Ephemeral dumps from tests/unit/git_operations (recreated when GITHUB_TOKEN runs)
+src/codomyrmex/tests/unit/git_operations/@output/**/*.json
 /~
 /git_analysis/
 /Any
