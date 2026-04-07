@@ -18,5 +18,5 @@
 
 ## Related docs
 
-- [docs/agents/hermes/skills.md](../../../../../docs/agents/hermes/skills.md)
-- [docs/agents/hermes/tools.md](../../../../../docs/agents/hermes/tools.md)
+- [docs/agents/hermes/skills.md](../../../../docs/agents/hermes/skills.md)
+- [docs/agents/hermes/tools.md](../../../../docs/agents/hermes/tools.md)

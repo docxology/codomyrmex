@@ -8,10 +8,10 @@ Meta-agent capabilities — self-reflection, strategy selection, and agent-about
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/meta/`](../../../../src/codomyrmex/agents/meta/)
+Source: [`src/codomyrmex/agents/meta/`](../../../src/codomyrmex/agents/meta/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/meta/](../../../../src/codomyrmex/agents/meta/)
+- **Source**: [src/codomyrmex/agents/meta/](../../../src/codomyrmex/agents/meta/)
 - **Project Root**: [README.md](../../../README.md)

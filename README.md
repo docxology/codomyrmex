@@ -743,7 +743,7 @@ uv run codomyrmex --help
 uv run codomyrmex modules        # List all top-level modules
 uv run codomyrmex status         # Live system status
 
-# 6. Run tests (add `make test` for coverage + 40% gate)
+# 6. Run tests (`make test` for coverage + 40% gate; optional `just test` if you use just)
 uv run pytest src/codomyrmex/tests/ -v --tb=short
 
 # 7. Lint & type-check
@@ -757,6 +757,8 @@ uv run python scripts/agents/mega_swarm_dispatcher.py
 ```
 
 > **New here?** Start with the [Quick Start Guide](docs/getting-started/quickstart.md) or dive into [Agent Operations](docs/getting-started/GETTING_STARTED_WITH_AGENTS.md).
+
+**Containers:** [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml). **Static site entry:** [index.html](index.html) at the repo root redirects to `/output/website/index.html` once the website build has populated `output/website/`. **Bun** lockfiles belong next to Bun `package.json` files (for example `src/codomyrmex/pai_pm/server/`); the repository root uses npm via [package.json](package.json).
 
 ---
 
@@ -781,27 +783,27 @@ Every module follows the **RASP** documentation pattern:
 
 | Category | Workflows | Description |
 |:---|:---|:---|
-| **Core CI/CD** | [ci.yml](workflows/ci.yml), [security.yml](workflows/security.yml), [release.yml](workflows/release.yml), [pre-commit.yml](workflows/pre-commit.yml) | Lint, test, security scan, release |
-| **Code Quality** | [code-health.yml](workflows/code-health.yml), [benchmarks.yml](workflows/benchmarks.yml), [documentation.yml](workflows/documentation.yml), [documentation-validation.yml](workflows/documentation-validation.yml) | Quality gates, benchmarks, docs |
-| **PR Automation** | [auto-merge.yml](workflows/auto-merge.yml), [pr-labeler.yml](workflows/pr-labeler.yml), [pr-title-check.yml](workflows/pr-title-check.yml), [pr-conflict-check.yml](workflows/pr-conflict-check.yml), [pr-coverage-comment.yml](workflows/pr-coverage-comment.yml), [pr-linter-comments.yml](workflows/pr-linter-comments.yml) | Auto-merge, labeling, coverage |
-| **AI Dispatch** | [gemini-dispatch.yml](workflows/gemini-dispatch.yml), [gemini-invoke.yml](workflows/gemini-invoke.yml), [gemini-review.yml](workflows/gemini-review.yml), [gemini-triage.yml](workflows/gemini-triage.yml), [gemini-scheduled-triage.yml](workflows/gemini-scheduled-triage.yml), [jules-dispatch.yml](workflows/jules-dispatch.yml) | Gemini and Jules agent orchestration |
-| **Maintenance** | [maintenance.yml](workflows/maintenance.yml), [cleanup-branches.yml](workflows/cleanup-branches.yml), [lock-threads.yml](workflows/lock-threads.yml), [workflow-coordinator.yml](workflows/workflow-coordinator.yml), [workflow-status.yml](workflows/workflow-status.yml) | Repo health, branch cleanup, status |
-| **Community** | [first-interaction.yml](workflows/first-interaction.yml), [first-pr-merged.yml](workflows/first-pr-merged.yml), [agent-welcome.yml](workflows/agent-welcome.yml), [agent-metrics.yml](workflows/agent-metrics.yml) | Onboarding, agent welcome |
-| **Dependencies** | [dependency-review.yml](workflows/dependency-review.yml), [dependabot-auto-approve.yml](workflows/dependabot-auto-approve.yml), [sbom.yml](workflows/sbom.yml) | Dep review, SBOM generation |
+| **Core CI/CD** | [ci.yml](.github/workflows/ci.yml), [security.yml](.github/workflows/security.yml), [release.yml](.github/workflows/release.yml), [pre-commit.yml](.github/workflows/pre-commit.yml) | Lint, test, security scan, release |
+| **Code Quality** | [code-health.yml](.github/workflows/code-health.yml), [benchmarks.yml](.github/workflows/benchmarks.yml), [documentation.yml](.github/workflows/documentation.yml), [documentation-validation.yml](.github/workflows/documentation-validation.yml) | Quality gates, benchmarks, docs |
+| **PR Automation** | [auto-merge.yml](.github/workflows/auto-merge.yml), [pr-labeler.yml](.github/workflows/pr-labeler.yml), [pr-title-check.yml](.github/workflows/pr-title-check.yml), [pr-conflict-check.yml](.github/workflows/pr-conflict-check.yml), [pr-coverage-comment.yml](.github/workflows/pr-coverage-comment.yml), [pr-linter-comments.yml](.github/workflows/pr-linter-comments.yml) | Auto-merge, labeling, coverage |
+| **AI Dispatch** | [gemini-dispatch.yml](.github/workflows/gemini-dispatch.yml), [gemini-invoke.yml](.github/workflows/gemini-invoke.yml), [gemini-review.yml](.github/workflows/gemini-review.yml), [gemini-triage.yml](.github/workflows/gemini-triage.yml), [gemini-scheduled-triage.yml](.github/workflows/gemini-scheduled-triage.yml), [jules-dispatch.yml](.github/workflows/jules-dispatch.yml) | Gemini and Jules agent orchestration |
+| **Maintenance** | [maintenance.yml](.github/workflows/maintenance.yml), [cleanup-branches.yml](.github/workflows/cleanup-branches.yml), [lock-threads.yml](.github/workflows/lock-threads.yml), [workflow-coordinator.yml](.github/workflows/workflow-coordinator.yml), [workflow-status.yml](.github/workflows/workflow-status.yml) | Repo health, branch cleanup, status |
+| **Community** | [first-interaction.yml](.github/workflows/first-interaction.yml), [first-pr-merged.yml](.github/workflows/first-pr-merged.yml), [agent-welcome.yml](.github/workflows/agent-welcome.yml), [agent-metrics.yml](.github/workflows/agent-metrics.yml) | Onboarding, agent welcome |
+| **Dependencies** | [dependency-review.yml](.github/workflows/dependency-review.yml), [dependabot-auto-approve.yml](.github/workflows/dependabot-auto-approve.yml), [sbom.yml](.github/workflows/sbom.yml) | Dep review, SBOM generation |
 
 ### Community & Configuration Files
 
 | File | Purpose |
 |:---|:---|
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contributor guide with PR process and code standards |
-| [CODEOWNERS](CODEOWNERS) | Auto-assignment of reviewers by file path |
-| [PULL_REQUEST_TEMPLATE.md](PULL_REQUEST_TEMPLATE.md) | Standard PR checklist |
-| [ISSUE_TEMPLATE/](ISSUE_TEMPLATE/) | Bug reports, feature requests, Jules tasks, docs issues |
-| [dependabot.yml](dependabot.yml) | Automated dependency update configuration |
-| [release-drafter.yml](release-drafter.yml) | Auto-generated release notes |
-| [FUNDING.yml](FUNDING.yml) | GitHub Sponsors configuration |
-| [WORKFLOW_IMPROVEMENTS.md](WORKFLOW_IMPROVEMENTS.md) | Planned workflow enhancements |
-| [WORKFLOW_TESTING_GUIDE.md](WORKFLOW_TESTING_GUIDE.md) | Guide for testing GitHub Actions locally |
+| [CODEOWNERS](.github/CODEOWNERS) | Auto-assignment of reviewers by file path |
+| [PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) | Standard PR checklist |
+| [ISSUE_TEMPLATE/](.github/ISSUE_TEMPLATE/) | Bug reports, feature requests, Jules tasks, docs issues |
+| [dependabot.yml](.github/dependabot.yml) | Automated dependency update configuration |
+| [release-drafter.yml](.github/release-drafter.yml) | Auto-generated release notes |
+| [FUNDING.yml](.github/FUNDING.yml) | GitHub Sponsors configuration |
+| [WORKFLOW_IMPROVEMENTS.md](.github/WORKFLOW_IMPROVEMENTS.md) | Planned workflow enhancements |
+| [WORKFLOW_TESTING_GUIDE.md](.github/WORKFLOW_TESTING_GUIDE.md) | Guide for testing GitHub Actions locally |
 
 ---
 

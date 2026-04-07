@@ -41,7 +41,7 @@ graph TD
 
 ## Codomyrmex Skill Discovery
 
-The `PAIBridge.list_skills()` method ([L335-368](../../../src/codomyrmex/agents/pai/pai_bridge.py)) performs real filesystem scanning to discover all installed skill packs:
+The `PAIBridge.list_skills()` method ([L335-368](../../../../src/codomyrmex/agents/pai/pai_bridge.py)) performs real filesystem scanning to discover all installed skill packs:
 
 ```python
 from codomyrmex.agents.pai import PAIBridge
@@ -56,7 +56,7 @@ for skill in bridge.list_skills():
 
 ### PAISkillInfo Data Class
 
-**Source**: [L128-138](../../../src/codomyrmex/agents/pai/pai_bridge.py)
+**Source**: [L128-138](../../../../src/codomyrmex/agents/pai/pai_bridge.py)
 
 | Field | Type | Description |
 |:---|:---|:---|
@@ -125,13 +125,13 @@ sequenceDiagram
 | `{PRINCIPAL.NAME}` | `settings.json → principal.name` | "Daniel" |
 | `{PRINCIPAL.TIMEZONE}` | `settings.json → principal.timezone` | "America/Los_Angeles" |
 
-**Codomyrmex Access**: `PAIBridge.get_settings()` ([L599-605](../../../src/codomyrmex/agents/pai/pai_bridge.py)) loads these values.
+**Codomyrmex Access**: `PAIBridge.get_settings()` ([L599-605](../../../../src/codomyrmex/agents/pai/pai_bridge.py)) loads these values.
 
 ---
 
 ## Codomyrmex as a PAI Skill
 
-Codomyrmex itself registers as a PAI skill pack. The `get_skill_manifest()` function ([L836-993](../../../src/codomyrmex/agents/pai/mcp_bridge.py)) produces a PAI-compatible manifest:
+Codomyrmex itself registers as a PAI skill pack. The `get_skill_manifest()` function ([L836-993](../../../../src/codomyrmex/agents/pai/mcp_bridge.py)) produces a PAI-compatible manifest:
 
 ```json
 {
@@ -162,7 +162,7 @@ This manifest allows PAI's skill routing system to understand:
 
 ## PAI Tool System
 
-Within each skill pack, `Tools/` contains TypeScript CLI tools run via Bun. Codomyrmex discovers these through `PAIBridge.list_tools()` ([L388-410](../../../src/codomyrmex/agents/pai/pai_bridge.py)):
+Within each skill pack, `Tools/` contains TypeScript CLI tools run via Bun. Codomyrmex discovers these through `PAIBridge.list_tools()` ([L388-410](../../../../src/codomyrmex/agents/pai/pai_bridge.py)):
 
 ```python
 for tool in bridge.list_tools():
@@ -171,7 +171,7 @@ for tool in bridge.list_tools():
 
 ### PAIToolInfo Data Class
 
-**Source**: [L140-147](../../../src/codomyrmex/agents/pai/pai_bridge.py)
+**Source**: [L140-147](../../../../src/codomyrmex/agents/pai/pai_bridge.py)
 
 | Field | Type | Description |
 |:---|:---|:---|

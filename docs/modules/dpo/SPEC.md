@@ -28,4 +28,4 @@ DPOLoss, compute_dpo_loss, compute_log_probs
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/dpo/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/dpo/README.md) | [AGENTS.md](AGENTS.md)

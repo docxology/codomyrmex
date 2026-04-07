@@ -1,6 +1,6 @@
 # Codomyrmex Project Index
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: April 2026
 
 > [!TIP]
 > Master index for the Codomyrmex project. Use this as the entry point for navigating the entire repository.
@@ -27,9 +27,10 @@
 | `mcp_tools.py` files (non-test) | 149 | [docs/reference/inventory.md](docs/reference/inventory.md) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Tests collected | 34,320 | `uv run pytest --collect-only -q --no-cov` |
+| Tests collected | 34,950 | `uv run pytest --collect-only -q --no-cov` |
+| GitHub Actions workflows | 37 | `.github/workflows/*.yml` (see `uv run python scripts/doc_inventory.py`) |
 | RASP doc coverage | 100% (128/128) | [AGENTS.md](AGENTS.md) |
-| Version | v1.2.3 | [pyproject.toml](pyproject.toml) |
+| Version | v1.2.7 | [pyproject.toml](pyproject.toml) |
 
 ## Module Layer Browser
 
@@ -80,16 +81,17 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 | Directory | Description |
 | :--- | :--- |
 | [projects/](projects/) | Sub-projects & reference implementations |
-| [plugins/](plugins/) | Plugin ecosystem |
+| [plugin_system](docs/modules/plugin_system/README.md) | Plugin registry and loading (`src/codomyrmex/plugin_system`) |
 | [examples/](examples/) | Top-level examples |
 
 ### Build & Test
 
 | File | Purpose |
 | :--- | :--- |
-| [pyproject.toml](pyproject.toml) | Python project config (uv/pip) |
-| [Makefile](Makefile) | Common dev commands |
-| [pyproject.toml](pyproject.toml) | Pytest and coverage (`[tool.pytest.ini_options]`, `[tool.coverage.*]`) |
+| [pyproject.toml](pyproject.toml) | Python project config (uv/pip), pytest and coverage (`[tool.pytest.ini_options]`, `[tool.coverage.*]`) |
+| [Makefile](Makefile) | Primary dev tasks (`make test`, `make lint`, …) |
+| [justfile](justfile) | Optional [`just`](https://github.com/casey/just) recipes mirroring common Makefile targets |
+| [index.html](index.html) | Root redirect to `/output/website/index.html` for static hosting / GitHub Pages entry |
 | [uv.lock](uv.lock) | Dependency lock file |
 
 ## Index Hierarchy

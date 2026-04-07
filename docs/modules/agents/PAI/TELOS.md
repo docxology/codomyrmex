@@ -57,7 +57,7 @@ graph TD
 
 ## Codomyrmex TELOS Discovery
 
-The `PAIBridge.get_telos_files()` method ([L577-593](../../../src/codomyrmex/agents/pai/pai_bridge.py)) reads the TELOS directory:
+The `PAIBridge.get_telos_files()` method ([L577-593](../../../../src/codomyrmex/agents/pai/pai_bridge.py)) reads the TELOS directory:
 
 ```python
 from codomyrmex.agents.pai import PAIBridge
@@ -72,7 +72,7 @@ print(telos_files)
 
 ### Configuration Path
 
-The TELOS directory path is defined in `PAIConfig.telos_dir` ([L122-125](../../../src/codomyrmex/agents/pai/pai_bridge.py)):
+The TELOS directory path is defined in `PAIConfig.telos_dir` ([L122-125](../../../../src/codomyrmex/agents/pai/pai_bridge.py)):
 
 ```
 ~/.claude/USER/       ← User customizations (upgrade-safe)
@@ -131,7 +131,7 @@ TELOS directly informs the Algorithm's execution:
 
 ## Memory System Integration
 
-TELOS is complemented by PAI's **three-tier memory architecture**, which Codomyrmex discovers via `PAIBridge.list_memory_stores()` ([L508-536](../../../src/codomyrmex/agents/pai/pai_bridge.py)):
+TELOS is complemented by PAI's **three-tier memory architecture**, which Codomyrmex discovers via `PAIBridge.list_memory_stores()` ([L508-536](../../../../src/codomyrmex/agents/pai/pai_bridge.py)):
 
 ```mermaid
 graph TD
@@ -152,7 +152,7 @@ graph TD
 
 ### PAIMemoryStore Data Class
 
-**Source**: [L168-175](../../../src/codomyrmex/agents/pai/pai_bridge.py)
+**Source**: [L168-175](../../../../src/codomyrmex/agents/pai/pai_bridge.py)
 
 | Field | Type | Description |
 |:---|:---|:---|

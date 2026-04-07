@@ -27,7 +27,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/plugin_system/](../../../../src/codomyrmex/plugin_system/)
+- **Source**: [src/codomyrmex/plugin_system/](../../../../plugin_system/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

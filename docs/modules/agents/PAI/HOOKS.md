@@ -71,7 +71,7 @@ PAI defines 8 lifecycle event types that hooks can subscribe to:
 
 ## Codomyrmex Hook Discovery
 
-The `PAIBridge.list_hooks()` method ([L423-453](../../../src/codomyrmex/agents/pai/pai_bridge.py)) scans the hooks directory for all `.hook.*` files:
+The `PAIBridge.list_hooks()` method ([L423-453](../../../../src/codomyrmex/agents/pai/pai_bridge.py)) scans the hooks directory for all `.hook.*` files:
 
 ```python
 from codomyrmex.agents.pai import PAIBridge
@@ -87,7 +87,7 @@ active = bridge.list_active_hooks()
 
 ### PAIHookInfo Data Class
 
-**Source**: [L149-157](../../../src/codomyrmex/agents/pai/pai_bridge.py)
+**Source**: [L149-157](../../../../src/codomyrmex/agents/pai/pai_bridge.py)
 
 | Field | Type | Description |
 |:---|:---|:---|
@@ -104,7 +104,7 @@ SecurityValidator.hook.ts       → Active hook
 OldHook.hook.ts.v25-archived    → Archived (inactive)
 ```
 
-Codomyrmex detects archived hooks by checking for `-archived` in the filename and filters them with `list_active_hooks()` ([L455-457](../../../src/codomyrmex/agents/pai/pai_bridge.py)).
+Codomyrmex detects archived hooks by checking for `-archived` in the filename and filters them with `list_active_hooks()` ([L455-457](../../../../src/codomyrmex/agents/pai/pai_bridge.py)).
 
 ---
 
@@ -159,7 +159,7 @@ graph LR
 
 ### PAI Security Config Discovery
 
-`PAIBridge.get_security_config()` ([L549-571](../../../src/codomyrmex/agents/pai/pai_bridge.py)) reads PAI's security policies:
+`PAIBridge.get_security_config()` ([L549-571](../../../../src/codomyrmex/agents/pai/pai_bridge.py)) reads PAI's security policies:
 
 ```python
 security = bridge.get_security_config()

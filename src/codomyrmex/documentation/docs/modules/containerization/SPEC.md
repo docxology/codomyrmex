@@ -29,7 +29,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/containerization/](../../../../src/codomyrmex/containerization/)
+- **Source**: [src/codomyrmex/containerization/](../../../../containerization/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

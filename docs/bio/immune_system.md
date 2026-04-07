@@ -76,7 +76,7 @@ graph LR
         DEF["defense/<br/>adaptive response"]
         LOG_MON["logging_monitoring/<br/>anomaly detection"]
         IDENT["identity/<br/>CHC-like tokens"]
-        CHAOS["chaos_engineering/<br/>controlled failure"]
+        CHAOS["testing/chaos/<br/>controlled failure"]
     end
 
     SKIN --> VALID
@@ -97,7 +97,7 @@ graph LR
 
 - **[`validation`](../../src/codomyrmex/validation/)** — Epithelial barriers: input validation rejects malformed inputs before they reach deeper layers, like skin preventing pathogen entry. The gut epithelium is instructive — it must be selectively permeable, admitting nutrients while excluding pathogens. Validation similarly must distinguish legitimate from malicious input, not reject everything.
 
-- **[`chaos_engineering`](../../src/codomyrmex/chaos_engineering/)** — Social vaccination: controlled exposure to failure builds resilience, like attenuated vaccines priming immunity without causing disease. Konrad et al.'s social vaccination demonstrates that controlled, survivable exposure produces stronger collective immunity than isolation.
+- **[`testing/chaos`](../../src/codomyrmex/testing/chaos/)** — Social vaccination: controlled exposure to failure builds resilience, like attenuated vaccines priming immunity without causing disease. Konrad et al.'s social vaccination demonstrates that controlled, survivable exposure produces stronger collective immunity than isolation.
 
 ## Design Implications
 

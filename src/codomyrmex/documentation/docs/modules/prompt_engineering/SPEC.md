@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/prompt_engineering/](../../../../src/codomyrmex/prompt_engineering/)
+- **Source**: [src/codomyrmex/prompt_engineering/](../../../../prompt_engineering/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

@@ -3,7 +3,7 @@
 The Algorithm is the core execution protocol for all PAI interactions. It ensures every response follows a structured path from observation to verified learning, producing consistently optimal outputs.
 
 **Upstream**: [Personal AI Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure) | **Version**: v0.2.25
-**Codomyrmex Constant**: [`ALGORITHM_PHASES`](../../../src/codomyrmex/agents/pai/pai_bridge.py) (L181-189)
+**Codomyrmex Constant**: [`ALGORITHM_PHASES`](../../../../src/codomyrmex/agents/pai/pai_bridge.py) (L181-189)
 
 ---
 
@@ -17,7 +17,7 @@ This is the compliance anchor. If a response doesn't begin with this token, the 
 
 ## The Seven Phases
 
-Every non-trivial PAI interaction proceeds through seven sequential phases. Codomyrmex tools are mapped to each phase via [`get_skill_manifest().algorithm_mapping`](../../../src/codomyrmex/agents/pai/mcp_bridge.py) (L934-942):
+Every non-trivial PAI interaction proceeds through seven sequential phases. Codomyrmex tools are mapped to each phase via [`get_skill_manifest().algorithm_mapping`](../../../../src/codomyrmex/agents/pai/mcp_bridge.py) (L934-942):
 
 ```mermaid
 graph LR
@@ -65,7 +65,7 @@ graph TD
 | **ITERATION** | Adjusting work in progress | Condensed: Change + Verify | `RESPONSE_DEPTH_LEVELS[1]` |
 | **MINIMAL** | Pure social (greetings, ratings) | Summary + Voice | `RESPONSE_DEPTH_LEVELS[2]` |
 
-**Codomyrmex Source**: [`RESPONSE_DEPTH_LEVELS`](../../../src/codomyrmex/agents/pai/pai_bridge.py) (L191-195)
+**Codomyrmex Source**: [`RESPONSE_DEPTH_LEVELS`](../../../../src/codomyrmex/agents/pai/pai_bridge.py) (L191-195)
 
 ### Depth Classification via Hooks
 
@@ -148,7 +148,7 @@ flowchart LR
 
 **Variables resolved**: `{DAIDENTITY.NAME}`, `{DAIDENTITY.FULLNAME}`, `{PRINCIPAL.NAME}`, `{PRINCIPAL.TIMEZONE}`
 
-**Codomyrmex Discovery**: `PAIBridge.get_algorithm_version()` ([L314-329](../../../src/codomyrmex/agents/pai/pai_bridge.py)) parses the version from the assembled `SKILL.md`.
+**Codomyrmex Discovery**: `PAIBridge.get_algorithm_version()` ([L314-329](../../../../src/codomyrmex/agents/pai/pai_bridge.py)) parses the version from the assembled `SKILL.md`.
 
 ---
 

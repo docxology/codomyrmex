@@ -41,10 +41,10 @@ client = EveryCodeClient()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/every_code/`](../../../../src/codomyrmex/agents/every_code/)
+Source: [`src/codomyrmex/agents/every_code/`](../../../src/codomyrmex/agents/every_code/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/every_code/](../../../../src/codomyrmex/agents/every_code/)
+- **Source**: [src/codomyrmex/agents/every_code/](../../../src/codomyrmex/agents/every_code/)
 - **Project Root**: [README.md](../../../README.md)

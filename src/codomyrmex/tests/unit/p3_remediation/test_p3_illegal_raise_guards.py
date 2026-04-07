@@ -10,8 +10,8 @@ Zero-Mock compliant — all tests use real functions.
 
 import pytest
 
-# ── utils.retry ────────────────────────────────────────────────────────
-from codomyrmex.utils.retry import async_retry, retry
+# ── utils.retry_sync (submodule; does not shadow codomyrmex.utils.retry) ─
+from codomyrmex.utils.retry_sync import async_retry, retry
 
 
 @pytest.mark.unit
@@ -115,33 +115,12 @@ class TestCircuitBreakerRetryIllegalRaiseGuard:
         assert attempt[0] == 3  # 1 initial + 2 retries
 
 
-# ── utils.__init__.retry ───────────────────────────────────────────────
+# ── utils.__init__.retry (package-level decorator) ─────────────────────
 
-# The function `retry` in utils/__init__.py is shadowed by the submodule
-# utils/retry.py once it's been imported (line 17 above). We retrieve the
-# function directly from the module's __dict__ to avoid the collision.
-import importlib
-
-_utils_init = importlib.import_module("codomyrmex.utils")
-_utils_retry_func = _utils_init.__dict__.get("retry")
-# If shadowed, fall back to reading it from the __all__ export or skip
-if not callable(_utils_retry_func):
-    # The function was clobbered by the submodule; extract via sys.modules
-    import types
-
-    _retry_members = {
-        k: v
-        for k, v in vars(_utils_init).items()
-        if k == "retry" and isinstance(v, types.FunctionType)
-    }
-    _utils_retry_func = _retry_members.get("retry")
+from codomyrmex.utils import retry as utils_package_retry
 
 
 @pytest.mark.unit
-@pytest.mark.skipif(
-    _utils_retry_func is None or not callable(_utils_retry_func),
-    reason="utils.__init__.retry function shadowed by submodule",
-)
 class TestUtilsInitRetryIllegalRaiseGuard:
     """Verify utils-level retry decorator raises captured exception."""
 
@@ -149,7 +128,7 @@ class TestUtilsInitRetryIllegalRaiseGuard:
         """Utils retry re-raises the captured exception on exhaustion."""
         attempt = [0]
 
-        @_utils_retry_func(  # type: ignore
+        @utils_package_retry(
             max_attempts=2, delay=0.001, backoff=1.0, exceptions=(RuntimeError,)
         )
         def utils_always_fails():

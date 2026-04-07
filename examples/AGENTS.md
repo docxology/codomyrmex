@@ -8,6 +8,7 @@ Example implementations and demonstrations.
 ## Active Components
 - `README.md` – Project file
 - `invalid_prompt_demo.py` – Project file
+- `sample_api.py` – FastAPI sample (`uv run python examples/sample_api.py` with `fastapi` and `uvicorn`; not collected by default pytest)
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

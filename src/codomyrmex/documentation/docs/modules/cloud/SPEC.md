@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/cloud/](../../../../src/codomyrmex/cloud/)
+- **Source**: [src/codomyrmex/cloud/](../../../../cloud/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

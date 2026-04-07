@@ -1,9 +1,10 @@
 # Codomyrmex Agents — docs/modules/utils
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.8 | **Status**: Active | **Last Updated**: April 2026
 
 ## Purpose
-Documentation files and guides.
+
+Canonical **docs** for `codomyrmex.utils`: API/SPEC/PAI alongside the implementation in `src/codomyrmex/utils/`. Keep [API_SPECIFICATION.md](API_SPECIFICATION.md) aligned with `retry` vs `retry_sync` (see [README.md](README.md)).
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

@@ -32,4 +32,4 @@ tests/unit/peft/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../peft/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../peft/)

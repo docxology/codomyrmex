@@ -27,7 +27,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/model_ops/](../../../../src/codomyrmex/model_ops/)
+- **Source**: [src/codomyrmex/model_ops/](../../../../model_ops/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

@@ -29,4 +29,4 @@ softmax, log_softmax, online_softmax, safe_softmax
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/softmax_opt/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/softmax_opt/README.md) | [AGENTS.md](AGENTS.md)

@@ -30,4 +30,4 @@ FeatureType, ValueType, FeatureDefinition, FeatureValue, FeatureVector, FeatureG
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/feature_store/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/feature_store/README.md) | [AGENTS.md](AGENTS.md)

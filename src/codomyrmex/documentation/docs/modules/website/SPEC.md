@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/website/](../../../../src/codomyrmex/website/)
+- **Source**: [src/codomyrmex/website/](../../../../website/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

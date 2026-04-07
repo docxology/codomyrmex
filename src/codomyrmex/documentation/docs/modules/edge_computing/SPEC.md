@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/edge_computing/](../../../../src/codomyrmex/edge_computing/)
+- **Source**: [src/codomyrmex/edge_computing/](../../../../edge_computing/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

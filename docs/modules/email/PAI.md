@@ -55,4 +55,4 @@ if AGENTMAIL_AVAILABLE:
 - **Self**: [PAI.md](PAI.md)
 - **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
 - **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
-- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](../../../src/codomyrmex/email/API_SPECIFICATION.md)

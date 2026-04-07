@@ -640,7 +640,7 @@ Add pytest-rerunfailures configuration as specified in TODO.md v1.1.7. Apply @py
 
 Review pyproject.toml for overall project health. Ensure all dependencies are up to date, extras are properly defined, version is correct (1.1.7), and build backend configuration is optimal for uv_build.
 Review all AGENTS.md files across the repository (root and module-level). Ensure each accurately describes how AI agents should interact with that module. Fix any outdated references or missing capability descriptions.
-Review the root README.md. Ensure badges are current, installation instructions work, and the project description accurately reflects current state (**128** top-level modules; **34,320** collected tests — see `docs/reference/inventory.md`).
+Review the root README.md. Ensure badges are current, installation instructions work, and the project description accurately reflects current state (**128** top-level modules; **35,916** collected tests — see `docs/reference/inventory.md`).
 Review CLAUDE.md and ensure it accurately describes the repository structure, development commands (uv run pytest, uv run ruff, uv run ty), and the Zero-Mock policy for Claude Code integration.
 Review .github/workflows/ for all workflow files. Ensure security scanning (Semgrep), CI testing, dependency management, and release automation are all properly configured and reference correct versions.
 Review and improve the CHANGELOG.md or release documentation. Ensure all changes from v1.1.5 through v1.1.7 are properly documented with categorized entries (Added, Changed, Fixed, Removed).

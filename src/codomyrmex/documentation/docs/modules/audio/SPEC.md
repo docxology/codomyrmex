@@ -65,7 +65,7 @@ WAV, MP3, FLAC, OGG, M4A, WEBM, MP4, OPUS
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/audio/](../../../../src/codomyrmex/audio/)
+- **Source**: [src/codomyrmex/audio/](../../../../audio/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

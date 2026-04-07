@@ -29,7 +29,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/documents/](../../../../src/codomyrmex/documents/)
+- **Source**: [src/codomyrmex/documents/](../../../../documents/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

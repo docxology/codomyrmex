@@ -26,10 +26,10 @@ client = O1Client()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/o1/`](../../../../src/codomyrmex/agents/o1/)
+Source: [`src/codomyrmex/agents/o1/`](../../../src/codomyrmex/agents/o1/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/o1/](../../../../src/codomyrmex/agents/o1/)
+- **Source**: [src/codomyrmex/agents/o1/](../../../src/codomyrmex/agents/o1/)
 - **Project Root**: [README.md](../../../README.md)

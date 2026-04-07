@@ -28,7 +28,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/encryption/](../../../../src/codomyrmex/encryption/)
+- **Source**: [src/codomyrmex/encryption/](../../../../encryption/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

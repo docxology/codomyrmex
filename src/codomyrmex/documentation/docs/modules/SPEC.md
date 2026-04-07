@@ -185,4 +185,4 @@ See individual module `SPEC.md` files for detailed interface contracts.
 
 - **Module index**: [README.md](README.md)
 - **Agent integration**: [AGENTS.md](AGENTS.md)
-- **Source modules**: [src/codomyrmex/](../../../src/codomyrmex/)
+- **Source modules**: [src/codomyrmex/](../../../)

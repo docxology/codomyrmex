@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/environment_setup/](../../../../src/codomyrmex/environment_setup/)
+- **Source**: [src/codomyrmex/environment_setup/](../../../../environment_setup/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

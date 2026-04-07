@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/quantum/](../../../../src/codomyrmex/quantum/)
+- **Source**: [src/codomyrmex/quantum/](../../../../quantum/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

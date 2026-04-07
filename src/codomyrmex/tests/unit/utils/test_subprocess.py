@@ -431,7 +431,6 @@ class TestRunCommand:
 # run_command_async
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
-@pytest.mark.asyncio
 class TestRunCommandAsync:
     """Tests for run_command_async."""
 

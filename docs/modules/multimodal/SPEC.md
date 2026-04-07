@@ -27,4 +27,4 @@ ImageGenerator
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/multimodal/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/multimodal/README.md) | [AGENTS.md](AGENTS.md)

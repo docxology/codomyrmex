@@ -42,6 +42,6 @@ This module does not expose MCP tools directly. Access its capabilities via:
 ## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../../PAI.md](../../PAI.md) — Coding module PAI
-- **Root Bridge**: [../../../../../PAI.md](../../../../../PAI.md) — Authoritative PAI system bridge doc
+- **Parent**: [docs/modules/coding/parsers/tree_sitter/PAI.md](../../../docs/modules/coding/parsers/tree_sitter/PAI.md) — Published module PAI
+- **Root Bridge**: [PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
 - **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

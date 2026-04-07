@@ -32,4 +32,4 @@ tests/unit/container_optimization/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../container_optimization/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../container_optimization/)

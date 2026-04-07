@@ -29,4 +29,4 @@ slerp, linear_interpolate, model_soup, ModelMerger
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/model_merger/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/model_merger/README.md) | [AGENTS.md](AGENTS.md)

@@ -300,11 +300,11 @@ git submodule update --init src/codomyrmex/agents/open_gauss
 
 ## Navigation
 
-- **Client wrapper**: [open_gauss_client.py](../../src/codomyrmex/agents/open_gauss/open_gauss_client.py)
-- **Config template**: [config.example.yaml](../../src/codomyrmex/agents/open_gauss/config.example.yaml)
-- **Test suite (upstream)**: [test_open_gauss.py](../../src/codomyrmex/tests/agents/test_open_gauss.py)
-- **Test suite (client)**: [test_open_gauss_client.py](../../src/codomyrmex/tests/agents/test_open_gauss_client.py)
-- **Spec**: [CODOMYRMEX_SPEC.md](../../src/codomyrmex/agents/open_gauss/CODOMYRMEX_SPEC.md)
-- **PAI**: [CODOMYRMEX_PAI.md](../../src/codomyrmex/agents/open_gauss/CODOMYRMEX_PAI.md)
-- **Skill**: [CODOMYRMEX_SKILL.md](../../src/codomyrmex/agents/open_gauss/CODOMYRMEX_SKILL.md)
+- **Client wrapper**: [open_gauss_client.py](../../../src/codomyrmex/agents/open_gauss/open_gauss_client.py)
+- **Config template**: [config.example.yaml](../../../src/codomyrmex/agents/open_gauss/config.example.yaml)
+- **Test suite (upstream)**: [test_open_gauss.py](../../../src/codomyrmex/tests/agents/test_open_gauss.py)
+- **Test suite (client)**: [test_open_gauss_client.py](../../../src/codomyrmex/tests/agents/test_open_gauss_client.py)
+- **Spec**: [CODOMYRMEX_SPEC.md](../../../src/codomyrmex/agents/open_gauss/CODOMYRMEX_SPEC.md)
+- **PAI**: [CODOMYRMEX_PAI.md](../../../src/codomyrmex/agents/open_gauss/CODOMYRMEX_PAI.md)
+- **Skill**: [CODOMYRMEX_SKILL.md](../../../src/codomyrmex/agents/open_gauss/CODOMYRMEX_SKILL.md)
 - **Upstream**: [github.com/math-inc/OpenGauss](https://github.com/math-inc/OpenGauss)

@@ -32,4 +32,4 @@ tests/unit/distillation/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../distillation/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../distillation/)

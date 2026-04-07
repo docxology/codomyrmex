@@ -32,4 +32,4 @@ tests/unit/dpo/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../dpo/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../dpo/)

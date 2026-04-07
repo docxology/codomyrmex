@@ -23,10 +23,10 @@ client = CLIHandler()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/cli/`](../../../../src/codomyrmex/agents/cli/)
+Source: [`src/codomyrmex/agents/cli/`](../../../src/codomyrmex/agents/cli/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/cli/](../../../../src/codomyrmex/agents/cli/)
+- **Source**: [src/codomyrmex/agents/cli/](../../../src/codomyrmex/agents/cli/)
 - **Project Root**: [README.md](../../../README.md)

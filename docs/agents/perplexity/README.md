@@ -27,10 +27,10 @@ client = PerplexityClient()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/perplexity/`](../../../../src/codomyrmex/agents/perplexity/)
+Source: [`src/codomyrmex/agents/perplexity/`](../../../src/codomyrmex/agents/perplexity/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/perplexity/](../../../../src/codomyrmex/agents/perplexity/)
+- **Source**: [src/codomyrmex/agents/perplexity/](../../../src/codomyrmex/agents/perplexity/)
 - **Project Root**: [README.md](../../../README.md)

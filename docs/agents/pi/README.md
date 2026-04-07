@@ -33,7 +33,7 @@ npm install -g @anthropic/pi-coding-agent
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/pi/`](../../../../src/codomyrmex/agents/pi/)
+Source: [`src/codomyrmex/agents/pi/`](../../../src/codomyrmex/agents/pi/)
 
 | File | Purpose |
 |:---|:---|
@@ -44,13 +44,13 @@ Source: [`src/codomyrmex/agents/pi/`](../../../../src/codomyrmex/agents/pi/)
 
 | Document | Path |
 |:---|:---|
-| README | [pi/README.md](../../../../src/codomyrmex/agents/pi/README.md) |
-| SPEC | [pi/SPEC.md](../../../../src/codomyrmex/agents/pi/SPEC.md) |
-| API Spec | [pi/API_SPECIFICATION.md](../../../../src/codomyrmex/agents/pi/API_SPECIFICATION.md) |
-| MCP Tools | [pi/MCP_TOOL_SPECIFICATION.md](../../../../src/codomyrmex/agents/pi/MCP_TOOL_SPECIFICATION.md) |
+| README | [pi/README.md](../../../src/codomyrmex/agents/pi/README.md) |
+| SPEC | [pi/SPEC.md](../../../src/codomyrmex/agents/pi/SPEC.md) |
+| API Spec | [pi/API_SPECIFICATION.md](../../../src/codomyrmex/agents/pi/API_SPECIFICATION.md) |
+| MCP Tools | [pi/MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/agents/pi/MCP_TOOL_SPECIFICATION.md) |
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/pi/](../../../../src/codomyrmex/agents/pi/)
+- **Source**: [src/codomyrmex/agents/pi/](../../../src/codomyrmex/agents/pi/)
 - **Project Root**: [README.md](../../../README.md)

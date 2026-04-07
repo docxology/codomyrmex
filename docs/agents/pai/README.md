@@ -31,10 +31,10 @@ client = PAIBridge()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/pai/`](../../../../src/codomyrmex/agents/pai/)
+Source: [`src/codomyrmex/agents/pai/`](../../../src/codomyrmex/agents/pai/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/pai/](../../../../src/codomyrmex/agents/pai/)
+- **Source**: [src/codomyrmex/agents/pai/](../../../src/codomyrmex/agents/pai/)
 - **Project Root**: [README.md](../../../README.md)

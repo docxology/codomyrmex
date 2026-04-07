@@ -29,10 +29,10 @@ client = OpenClawClient()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/openclaw/`](../../../../src/codomyrmex/agents/openclaw/)
+Source: [`src/codomyrmex/agents/openclaw/`](../../../src/codomyrmex/agents/openclaw/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/openclaw/](../../../../src/codomyrmex/agents/openclaw/)
+- **Source**: [src/codomyrmex/agents/openclaw/](../../../src/codomyrmex/agents/openclaw/)
 - **Project Root**: [README.md](../../../README.md)

@@ -8,10 +8,10 @@ Behavioral rules and operating guidelines for all AI agents within the Codomyrme
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/rules/`](../../../../src/codomyrmex/agents/rules/)
+Source: [Agents package](../../../src/codomyrmex/agents/README.md) (rules are documented here; no separate `agents/rules` package in `src/`)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/rules/](../../../../src/codomyrmex/agents/rules/)
+- **Source**: [Agents package](../../../src/codomyrmex/agents/README.md)
 - **Project Root**: [README.md](../../../README.md)

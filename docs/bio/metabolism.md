@@ -70,18 +70,18 @@ flowchart LR
 |-------------------|--------|----------------------|
 | Energy budget tracking | `performance/` | Cost attribution by module, budget alerts |
 | Metabolic rate measurement | `performance/` | Throughput, latency, resource utilization |
-| Homeostatic regulation | `rate_limiting/` | Negative feedback, steady-state maintenance |
+| Homeostatic regulation | `api/rate_limiting/` | Negative feedback, steady-state maintenance |
 | Metabolic efficiency | `performance/` | Model distillation, quantization, pruning |
 | Fat storage | `cache/` | Expensive computation stored for reuse |
-| Trophallaxis | `streaming/` | Continuous data transfer between producers/consumers |
+| Trophallaxis | `llm/streaming/` | Continuous data transfer between producers/consumers |
 
 **[`performance`](../../src/codomyrmex/performance/)** implements the energy budget. Every operation consumes resources — API calls, GPU time, storage — and performance tracks expenditures against allocated budgets, alerts when limits approach, and reports cost attribution by module. This mirrors measuring per-caste metabolic expenditure. High throughput with low latency indicates metabolic efficiency — more work per unit of resource, like maximizing ATP yield per glucose molecule.
 
-**[`rate_limiting`](../../src/codomyrmex/rate_limiting/)** implements **homeostatic regulation** through negative feedback. Rate limits prevent any single consumer from overwhelming shared resources, maintain steady-state throughput under variable demand, and protect downstream dependencies. The rate limiter is a thermostat for computational metabolism — it prevents metabolic crisis by capping maximum metabolic rate.
+**[`api/rate_limiting`](../../src/codomyrmex/api/rate_limiting/)** implements **homeostatic regulation** through negative feedback. Rate limits prevent any single consumer from overwhelming shared resources, maintain steady-state throughput under variable demand, and protect downstream dependencies. The rate limiter is a thermostat for computational metabolism — it prevents metabolic crisis by capping maximum metabolic rate.
 
 **[`cache`](../../src/codomyrmex/cache/)** functions as **fat storage**. Caching stores expensive computation results for near-zero marginal cost on subsequent requests. Cache hit rates measure how effectively the system exploits stored surplus. Eviction policies correspond to lipolysis — controlled mobilization of reserves when fresh inputs are unavailable.
 
-**[`streaming`](../../src/codomyrmex/streaming/)** implements **trophallaxis**. Rather than batch transfers, streaming passes data continuously in small increments between producers and consumers, mirroring droplet-by-droplet regurgitation between nestmates. Streaming topologies shape information flow as trophallaxis topology shapes nutrient distribution. LeBoeuf et al. (2016) showed trophallaxis transmits not just food but hormones and growth factors — streaming similarly can carry metadata alongside data payload.
+**[`llm/streaming`](../../src/codomyrmex/llm/streaming/)** implements **trophallaxis**. Rather than batch transfers, streaming passes data continuously in small increments between producers and consumers, mirroring droplet-by-droplet regurgitation between nestmates. Streaming topologies shape information flow as trophallaxis topology shapes nutrient distribution. LeBoeuf et al. (2016) showed trophallaxis transmits not just food but hormones and growth factors — streaming similarly can carry metadata alongside data payload.
 
 ## Design Implications
 

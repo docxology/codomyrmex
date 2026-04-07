@@ -42,7 +42,7 @@ items = manager.list(status="pending")
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/droid/`](../../../../src/codomyrmex/agents/droid/)
+Source: [`src/codomyrmex/agents/droid/`](../../../src/codomyrmex/agents/droid/)
 
 | File | Purpose |
 |:---|:---|
@@ -54,5 +54,5 @@ Source: [`src/codomyrmex/agents/droid/`](../../../../src/codomyrmex/agents/droid
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/droid/](../../../../src/codomyrmex/agents/droid/)
+- **Source**: [src/codomyrmex/agents/droid/](../../../src/codomyrmex/agents/droid/)
 - **Project Root**: [README.md](../../../README.md)

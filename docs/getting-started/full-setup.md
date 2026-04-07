@@ -171,12 +171,12 @@ graph TD
   - [Agent Guide](AGENTS.md) - Technical documentation for AI agents
   - [Personal AI Infrastructure](PAI.md) - PAI documentation and capabilities
   - [Functional Spec](SPEC.md) - Functional specification
-  - [Security](SECURITY.md) - Security policies
+  - [Security](../../SECURITY.md) - Security policies
 - **Children**:
-  - [Source Code](src/README.md) - All modules and implementations
+  - [Source Code](../../src/README.md) - All modules and implementations
   - [Documentation](../README.md) - User and developer guides
-  - [Scripts](scripts/README.md) - Automation and orchestration utilities
-  - [Configuration](config/README.md) - Configuration templates
+  - [Scripts](../../scripts/README.md) - Automation and orchestration utilities
+  - [Configuration](../../config/README.md) - Configuration templates
 
 ## Documentation
 
@@ -184,59 +184,59 @@ Comprehensive documentation for users, developers, and contributors. All documen
 
 ### Getting Started
 
-- **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
-- **[Installation Guide](docs/getting-started/installation.md)** - Detailed installation instructions
-- **[Setup Guide](docs/getting-started/setup.md)** - Environment configuration and setup
-- **[Tutorials](docs/getting-started/tutorials/)** - Step-by-step tutorials including [Creating a Module](docs/getting-started/tutorials/creating-a-module.md)
+- **[Quick Start Guide](./quickstart.md)** - Get up and running in 5 minutes
+- **[Installation Guide](./installation.md)** - Detailed installation instructions
+- **[Setup Guide](./setup.md)** - Environment configuration and setup
+- **[Tutorials](./tutorials/)** - Step-by-step tutorials including [Creating a Module](./tutorials/creating-a-module.md)
 
 ### Architecture & Design
 
-- **[Architecture Overview](docs/project/architecture.md)** - System design and principles
-- **[Module System](docs/modules/overview.md)** - Module architecture and relationships
-- **[Module Dependencies](docs/modules/dependency-graph.md)** - Dependency graph and relationships
-- **[Module Relationships](docs/modules/relationships.md)** - How modules interact
+- **[Architecture Overview](../project/architecture.md)** - System design and principles
+- **[Module System](../modules/overview.md)** - Module architecture and relationships
+- **[Module Dependencies](../modules/dependency-graph.md)** - Dependency graph and relationships
+- **[Module Relationships](../modules/relationships.md)** - How modules interact
 
 ### Development Resources
 
-- **[Contributing Guide](docs/project/contributing.md)** - Development guidelines and workflow
-- **[Development Environment](docs/development/environment-setup.md)** - Setting up your development environment
-- **[Testing Strategy](docs/development/testing-strategy.md)** - Testing approaches and best practices
-- **[Documentation Guide](docs/development/documentation.md)** - How to write and maintain documentation
-- **[UV Usage Guide](docs/development/uv-usage-guide.md)** - Using uv for package management
+- **[Contributing Guide](../project/contributing.md)** - Development guidelines and workflow
+- **[Development Environment](../development/environment-setup.md)** - Setting up your development environment
+- **[Testing Strategy](../development/testing-strategy.md)** - Testing approaches and best practices
+- **[Documentation Guide](../development/documentation.md)** - How to write and maintain documentation
+- **[UV Usage Guide](../development/uv-usage-guide.md)** - Using uv for package management
 
 ### Integration
 
-- **[Integration Guide](docs/integration/)** - Integrating Codomyrmex with other systems
-- **[External Systems](docs/integration/external-systems.md)** - Integration with external services
-- **[Fabric AI Integration](docs/integration/fabric-ai-integration.md)** - AI integration patterns
+- **[Integration Guide](../integration/)** - Integrating Codomyrmex with other systems
+- **[External Systems](../integration/external-systems.md)** - Integration with external services
+- **[Fabric AI Integration](../integration/fabric-ai-integration.md)** - AI integration patterns
 
 ### Reference
 
-- **[API Reference](docs/reference/api.md)** - Complete API documentation
-- **[CLI Reference](docs/reference/cli.md)** - Command-line interface documentation
-- **[Troubleshooting](docs/reference/troubleshooting.md)** - Common issues and solutions
-- **[Migration Guide](docs/reference/migration-guide.md)** - Upgrading and migrating
-- **[Performance Guide](docs/reference/performance.md)** - Performance optimization
-- **[Security Guide](docs/reference/security.md)** - Security best practices
+- **[API Reference](../reference/api.md)** - Complete API documentation
+- **[CLI Reference](../reference/cli.md)** - Command-line interface documentation
+- **[Troubleshooting](../reference/troubleshooting.md)** - Common issues and solutions
+- **[Migration Guide](../reference/migration-guide.md)** - Upgrading and migrating
+- **[Performance Guide](../reference/performance.md)** - Performance optimization
+- **[Security Guide](../reference/security.md)** - Security best practices
 
 ### Deployment
 
-- **[Deployment Guide](docs/deployment/)** - Production deployment instructions
-- **[Production Setup](docs/deployment/production.md)** - Production environment configuration
+- **[Deployment Guide](../deployment/)** - Production deployment instructions
+- **[Production Setup](../deployment/production.md)** - Production environment configuration
 
 ### Workflow Orchestration
 
-- **[Project Lifecycle](docs/project_orchestration/project-lifecycle-guide.md)** - Managing project workflows
-- **[Workflow Configuration](docs/project_orchestration/workflow-configuration-schema.md)** - Workflow schemas
-- **[Task Orchestration](docs/project_orchestration/task-orchestration-guide.md)** - Task management
-- **[Logistics Module](src/codomyrmex/logistics/)** - Orchestration, task management, and scheduling
+- **[Project Lifecycle](../project_orchestration/project-lifecycle-guide.md)** - Managing project workflows
+- **[Workflow Configuration](../project_orchestration/workflow-configuration-schema.md)** - Workflow schemas
+- **[Task Orchestration](../project_orchestration/task-orchestration-guide.md)** - Task management
+- **[Logistics Module](../../src/codomyrmex/logistics/)** - Orchestration, task management, and scheduling
 
 ### Examples
 
-- **[Example Scripts](docs/examples/)** - Working examples and demonstrations
-- **[Basic Examples](docs/examples/basic-examples.md)** - Simple usage examples
-- **[Integration Examples](docs/examples/integration-examples.md)** - Integration patterns
-- **[Orchestration Examples](docs/examples/orchestration-examples.md)** - Workflow examples
+- **[Example Scripts](../examples/)** - Working examples and demonstrations
+- **[Basic Examples](../examples/basic-examples.md)** - Simple usage examples
+- **[Integration Examples](../examples/integration-examples.md)** - Integration patterns
+- **[Orchestration Examples](../examples/orchestration-examples.md)** - Workflow examples
 
 **See [Documentation Hub](../README.md) for complete documentation index.**
 
@@ -271,11 +271,11 @@ uv run ty check src/
 
 ### Module Development
 
-See **[Creating a Module Tutorial](docs/getting-started/tutorials/creating-a-module.md)** for detailed guidance on developing new modules.
+See **[Creating a Module Tutorial](./tutorials/creating-a-module.md)** for detailed guidance on developing new modules.
 
 ## Contributing
 
-We welcome contributions! Please see our **[Contributing Guide](docs/project/contributing.md)** for:
+We welcome contributions! Please see our **[Contributing Guide](../project/contributing.md)** for:
 
 - Code standards and best practices
 - Development workflow
@@ -285,7 +285,7 @@ We welcome contributions! Please see our **[Contributing Guide](docs/project/con
 
 ## Security
 
-Security is a priority. See **[SECURITY.md](SECURITY.md)** for:
+Security is a priority. See **[SECURITY.md](../../SECURITY.md)** for:
 
 - Vulnerability reporting
 - Security best practices
@@ -293,7 +293,7 @@ Security is a priority. See **[SECURITY.md](SECURITY.md)** for:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](../../LICENSE) file for details.
 
 Copyright (c) 2025 The Codomyrmex Contributors (@docxology)
 
@@ -323,7 +323,7 @@ Copyright (c) 2025 The Codomyrmex Contributors (@docxology)
 - **Documentation**: [Reference Guides](../README.md)
 - **All Agents**: [AGENTS.md](AGENTS.md)
 - **Functional Spec**: [SPEC.md](SPEC.md)
-- **Source Index**: [src/README.md](src/README.md)
+- **Source Index**: [src/README.md](../../src/README.md)
 - **Architecture Overview**: [architecture-overview.md](../project/architecture-overview.md)
 - **Module Reference**: [module-reference.md](../modules/module-reference.md)
 

@@ -33,4 +33,4 @@ CostCategory, BudgetPeriod, CostEntry, Budget, CostSummary, BudgetAlert, CostSto
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/cost_management/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/cost_management/README.md) | [AGENTS.md](AGENTS.md)

@@ -25,6 +25,12 @@ stdlib-only HTTP client to call them.
 | `free_api_search` | `api` | Filter by query/category/auth/https |
 | `free_api_call` | `api` | Call any API endpoint |
 
+## Dependencies
+
+- Python stdlib only (`urllib`, `json`, path handling).
+- Dataset source: [public-apis/public-apis](https://github.com/public-apis/public-apis).
+- Invoked from PAI MCP tools (`mcp_tools.py`) and `codomyrmex.api` callers.
+
 ## Zero-Mock Policy
 
 - All tests in `tests/unit/api/free_apis/` use real logic — no mocks, no stubs.

@@ -15,7 +15,7 @@
 
 | Metric | Value | Command |
 | :--- | :--- | :--- |
-| **Tests collected** | **34,320** (0 errors) | `uv run pytest --collect-only --no-cov -q` |
+| **Tests collected** | **35,916** (0 errors) | `uv run pytest --collect-only --no-cov -q` |
 | **Ruff errors** | **0** | `uv run ruff check .` |
 | **ty diagnostics** | **296** | `uv run ty check src/` |
 | **Mock violations** | **0** | `grep -rc "from unittest.mock" src/ --include="*.py" \| grep -v ":0$"` |
@@ -75,7 +75,7 @@
 | B4 | **Meme module MCP exposure** | `meme/` | Experimental, needs RASP + `@mcp_tool` |
 | B5 | **Secure Cognitive Layer MCP** | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | Not MCP-exposed via PAI bridge |
 | B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 64→0 errors via import guards in `crypto/currency/__init__.py` and `data_visualization/engines/__init__.py` |
-| B7 | ~~README metric drift~~ | root | ✅ Fixed — aligned with [docs/reference/inventory.md](docs/reference/inventory.md) (34,320 tests, 600 MCP `@mcp_tool` lines) |
+| B7 | ~~README metric drift~~ | root | ✅ Fixed — aligned with [docs/reference/inventory.md](docs/reference/inventory.md) (35,916 tests, 600 MCP `@mcp_tool` lines) |
 | B8 | **Coverage gate** | repo-wide | **40%** in `[tool.coverage.report] fail_under`; `meme/*` omitted from `[tool.coverage.run]`. Enforce with `make test` or `--cov-fail-under=40`. Re-verify after substantive changes. |
 
 ---

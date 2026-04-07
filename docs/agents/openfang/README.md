@@ -43,10 +43,10 @@ client = OpenFangRunner()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/openfang/`](../../../../src/codomyrmex/agents/openfang/)
+Source: [`src/codomyrmex/agents/openfang/`](../../../src/codomyrmex/agents/openfang/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/openfang/](../../../../src/codomyrmex/agents/openfang/)
+- **Source**: [src/codomyrmex/agents/openfang/](../../../src/codomyrmex/agents/openfang/)
 - **Project Root**: [README.md](../../../README.md)

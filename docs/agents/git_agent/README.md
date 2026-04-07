@@ -23,10 +23,10 @@ client = GitAgent()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/git_agent/`](../../../../src/codomyrmex/agents/git_agent/)
+Source: [`src/codomyrmex/agents/git_agent/`](../../../src/codomyrmex/agents/git_agent/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/git_agent/](../../../../src/codomyrmex/agents/git_agent/)
+- **Source**: [src/codomyrmex/agents/git_agent/](../../../src/codomyrmex/agents/git_agent/)
 - **Project Root**: [README.md](../../../README.md)

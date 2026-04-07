@@ -1,147 +1,25 @@
+<!-- agents: curated -->
+
 # Codomyrmex Agents — src/codomyrmex
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: April 2026
+
+## Signposting
+
+- **Path**: `src/codomyrmex`
+- **Human overview**: [README.md](README.md)
+- **Functional spec**: [SPEC.md](SPEC.md)
+- **Repository agents**: [../../AGENTS.md](../../AGENTS.md)
+- **Parent (`src/`)**: [../AGENTS.md](../AGENTS.md)
+- **Live counts**: [docs/reference/inventory.md](../../docs/reference/inventory.md)
 
 ## Purpose
-Contains components for the src system.
 
-## Active Components
-- `INDEX.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `agentic_memory/` – Directory containing agentic_memory components
-- `agents/` – Directory containing agents components
-- `ai_gateway/` – Directory containing ai_gateway components
-- `aider/` – Directory containing aider components
-- `api/` – Directory containing api components
-- `audio/` – Directory containing audio components
-- `auth/` – Directory containing auth components
-- `autograd/` – Directory containing autograd components
-- `bio_simulation/` – Directory containing bio_simulation components
-- `cache/` – Directory containing cache components
-- `calendar_integration/` – Directory containing calendar_integration components
-- `cerebrum/` – Directory containing cerebrum components
-- `ci_cd_automation/` – Directory containing ci_cd_automation components
-- `cli/` – Directory containing cli components
-- `cloud/` – Directory containing cloud components
-- `coding/` – Directory containing coding components
-- `collaboration/` – Directory containing collaboration components
-- `compression/` – Directory containing compression components
-- `concurrency/` – Directory containing concurrency components
-- `config_audits/` – Directory containing config_audits components
-- `config_management/` – Directory containing config_management components
-- `config_monitoring/` – Directory containing config_monitoring components
-- `conftest.py` – Project file
-- `container_optimization/` – Directory containing container_optimization components
-- `containerization/` – Directory containing containerization components
-- `cost_management/` – Directory containing cost_management components
-- `crypto/` – Directory containing crypto components
-- `dark/` – Directory containing dark components
-- `data_curation/` – Directory containing data_curation components
-- `data_lineage/` – Directory containing data_lineage components
-- `data_visualization/` – Directory containing data_visualization components
-- `database_management/` – Directory containing database_management components
-- `defense/` – Directory containing defense components
-- `demos/` – Directory containing demos components
-- `dependency_injection/` – Directory containing dependency_injection components
-- `deployment/` – Directory containing deployment components
-- `distillation/` – Directory containing distillation components
-- `distributed_training/` – Directory containing distributed_training components
-- `docs_gen/` – Directory containing docs_gen components
-- `documentation/` – Directory containing documentation components
-- `documents/` – Directory containing documents components
-- `dpo/` – Directory containing dpo components
-- `edge_computing/` – Directory containing edge_computing components
-- `email/` – Directory containing email components
-- `embodiment/` – Directory containing embodiment components
-- `encryption/` – Directory containing encryption components
-- `environment_setup/` – Directory containing environment_setup components
-- `eval_harness/` – Directory containing eval_harness components
-- `events/` – Directory containing events components
-- `evolutionary_ai/` – Directory containing evolutionary_ai components
-- `examples/` – Directory containing examples components
-- `exceptions/` – Directory containing exceptions components
-- `feature_flags/` – Directory containing feature_flags components
-- `feature_store/` – Directory containing feature_store components
-- `file_system/` – Directory containing file_system components
-- `finance/` – Directory containing finance components
-- `formal_verification/` – Directory containing formal_verification components
-- `fpf/` – Directory containing fpf components
-- `git_analysis/` – Directory containing git_analysis components
-- `git_operations/` – Directory containing git_operations components
-- `graph_rag/` – Directory containing graph_rag components
-- `ide/` – Directory containing ide components
-- `identity/` – Directory containing identity components
-- `image/` – Directory containing image components
-- `interpretability/` – Directory containing interpretability components
-- `languages/` – Directory containing languages components
-- `llm/` – Directory containing llm components
-- `logging_monitoring/` – Directory containing logging_monitoring components
-- `logistics/` – Directory containing logistics components
-- `logit_processor/` – Directory containing logit_processor components
-- `lora/` – Directory containing lora components
-- `maintenance/` – Directory containing maintenance components
-- `market/` – Directory containing market components
-- `matmul_kernel/` – Directory containing matmul_kernel components
-- `meme/` – Directory containing meme components
-- `ml_pipeline/` – Directory containing ml_pipeline components
-- `model_context_protocol/` – Directory containing model_context_protocol components
-- `model_merger/` – Directory containing model_merger components
-- `model_ops/` – Directory containing model_ops components
-- `module_template/` – Directory containing module_template components
-- `multimodal/` – Directory containing multimodal components
-- `nas/` – Directory containing nas components
-- `networking/` – Directory containing networking components
-- `networks/` – Directory containing networks components
-- `neural/` – Directory containing neural components
-- `operating_system/` – Directory containing operating_system components
-- `orchestrator/` – Directory containing orchestrator components
-- `pai_pm/` – Directory containing pai_pm components
-- `peft/` – Directory containing peft components
-- `performance/` – Directory containing performance components
-- `physical_management/` – Directory containing physical_management components
-- `plugin_system/` – Directory containing plugin_system components
-- `privacy/` – Directory containing privacy components
-- `prompt_engineering/` – Directory containing prompt_engineering components
-- `py.typed` – Project file
-- `quantization/` – Directory containing quantization components
-- `quantum/` – Directory containing quantum components
-- `relations/` – Directory containing relations components
-- `release/` – Directory containing release components
-- `rlhf/` – Directory containing rlhf components
-- `scrape/` – Directory containing scrape components
-- `search/` – Directory containing search components
-- `security/` – Directory containing security components
-- `semantic_router/` – Directory containing semantic_router components
-- `serialization/` – Directory containing serialization components
-- `simulation/` – Directory containing simulation components
-- `skills/` – Directory containing skills components
-- `slm/` – Directory containing slm components
-- `softmax_opt/` – Directory containing softmax_opt components
-- `soul/` – Directory containing soul components
-- `spatial/` – Directory containing spatial components
-- `ssm/` – Directory containing ssm components
-- `static_analysis/` – Directory containing static_analysis components
-- `synthetic_data/` – Directory containing synthetic_data components
-- `system_discovery/` – Directory containing system_discovery components
-- `telemetry/` – Directory containing telemetry components
-- `templating/` – Directory containing templating components
-- `terminal_interface/` – Directory containing terminal_interface components
-- `testing/` – Directory containing testing components
-- `tests/` – Directory containing tests components
-- `text_to_sql/` – Directory containing text_to_sql components
-- `tokenizer/` – Directory containing tokenizer components
-- `tool_use/` – Directory containing tool_use components
-- `tree_sitter/` – Directory containing tree_sitter components
-- `utils/` – Directory containing utils components
-- `validation/` – Directory containing validation components
-- `vector_store/` – Directory containing vector_store components
-- `video/` – Directory containing video components
-- `vision/` – Directory containing vision components
-- `wallet/` – Directory containing wallet components
-- `website/` – Directory containing website components
+Installable package root: **128** top-level subpackages (each with `__init__.py`), plus `tests/`, `examples/`, and per-package RASP docs. Programmatic names: `codomyrmex.list_modules()` in [__init__.py](__init__.py). Full directory listing: [README.md](README.md) (Directory Contents).
+
+## Active Components (summary)
+
+Top-level packages are listed in [README.md § Directory Contents](README.md#directory-contents). Do not duplicate that list here; edit the README when the tree changes.
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -149,15 +27,11 @@ Contains components for the src system.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `INDEX.md`
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-- `__init__.py`
-- `conftest.py`
-- `py.typed`
+- `AGENTS.md` — agent coordination (this file)
+- `README.md` — directory overview and module table
+- `INDEX.md`, `PAI.md`, `SPEC.md` — project signposts
+- `__init__.py` — package exports and `list_modules()`
+- `conftest.py`, `py.typed` — test / typing markers
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

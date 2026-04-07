@@ -24,10 +24,10 @@ client = CodeEditor()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/ai_code_editing/`](../../../../src/codomyrmex/agents/ai_code_editing/)
+Source: [`src/codomyrmex/agents/ai_code_editing/`](../../../src/codomyrmex/agents/ai_code_editing/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/ai_code_editing/](../../../../src/codomyrmex/agents/ai_code_editing/)
+- **Source**: [src/codomyrmex/agents/ai_code_editing/](../../../src/codomyrmex/agents/ai_code_editing/)
 - **Project Root**: [README.md](../../../README.md)

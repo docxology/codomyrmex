@@ -23,10 +23,10 @@ client = ContextBuilder()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/context/`](../../../../src/codomyrmex/agents/context/)
+Source: [`src/codomyrmex/agents/context/`](../../../src/codomyrmex/agents/context/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/context/](../../../../src/codomyrmex/agents/context/)
+- **Source**: [src/codomyrmex/agents/context/](../../../src/codomyrmex/agents/context/)
 - **Project Root**: [README.md](../../../README.md)

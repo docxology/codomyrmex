@@ -1,6 +1,8 @@
 # Contributing to Codomyrmex
 
-Thank you for your interest in contributing to Codomyrmex! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Codomyrmex! This document provides a short entry point.
+
+For the full maintainer guide (environment setup, RASP documentation, AI agent workflows, and detailed testing policy), see **[.github/CONTRIBUTING.md](.github/CONTRIBUTING.md)**.
 
 ## Getting Started
 
@@ -23,6 +25,10 @@ uv sync --all-extras --dev
 # Run tests to verify setup
 uv run pytest
 ```
+
+## Files not to commit
+
+Never commit local secrets or generated artifacts, even if they appear in your working tree: `.env`, `.encryption_key`, `memory.db`, `*.log`, `coverage.json`, `cov_config.json`, `codomyrmex_inventory.json`, and similar outputs. They are listed in `.gitignore`. If something sensitive was ever pushed, rotate credentials and remove it from history per [SECURITY.md](SECURITY.md).
 
 ## Development Workflow
 

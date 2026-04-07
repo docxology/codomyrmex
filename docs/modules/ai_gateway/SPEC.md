@@ -31,4 +31,4 @@ AIGateway, Provider, CircuitBreaker, GatewayConfig
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/ai_gateway/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/ai_gateway/README.md) | [AGENTS.md](AGENTS.md)

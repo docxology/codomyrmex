@@ -74,7 +74,7 @@ def api_health_check() -> dict[str, Any]
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/api/](../../../../src/codomyrmex/api/)
+- **Source**: [src/codomyrmex/api/](../../../../api/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

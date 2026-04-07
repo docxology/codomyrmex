@@ -31,7 +31,7 @@ export DEEPSEEK_API_KEY=your-key-here
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/deepseek/`](../../../../src/codomyrmex/agents/deepseek/)
+Source: [`src/codomyrmex/agents/deepseek/`](../../../src/codomyrmex/agents/deepseek/)
 
 | File | Purpose |
 |:---|:---|
@@ -41,5 +41,5 @@ Source: [`src/codomyrmex/agents/deepseek/`](../../../../src/codomyrmex/agents/de
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/deepseek/](../../../../src/codomyrmex/agents/deepseek/)
+- **Source**: [src/codomyrmex/agents/deepseek/](../../../src/codomyrmex/agents/deepseek/)
 - **Project Root**: [README.md](../../../README.md)

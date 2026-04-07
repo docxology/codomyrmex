@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/embodiment/](../../../../src/codomyrmex/embodiment/)
+- **Source**: [src/codomyrmex/embodiment/](../../../../embodiment/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

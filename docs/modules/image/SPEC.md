@@ -27,4 +27,4 @@ gen = ImageGenerator()
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/image/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/image/README.md) | [AGENTS.md](AGENTS.md)

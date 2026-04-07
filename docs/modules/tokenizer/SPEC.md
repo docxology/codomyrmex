@@ -30,4 +30,4 @@ BPETokenizer, Vocabulary
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/tokenizer/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/tokenizer/README.md) | [AGENTS.md](AGENTS.md)

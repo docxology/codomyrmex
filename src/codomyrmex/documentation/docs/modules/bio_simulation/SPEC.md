@@ -39,7 +39,7 @@ class Population:
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/bio_simulation/](../../../../src/codomyrmex/bio_simulation/)
+- **Source**: [src/codomyrmex/bio_simulation/](../../../../bio_simulation/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

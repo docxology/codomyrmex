@@ -21,6 +21,12 @@ except Exception as _exc:
 
 logger = get_logger(__name__)
 
+# HTML comments used by ``apply_curated_markers`` and documentation guidelines
+# (see docs/development/documentation.md). Bootstrap may respect these in future;
+# exporting here keeps a single source of truth for the marker strings.
+AGENTS_CURATED_MARKER = "<!-- agents: curated -->"
+README_CURATED_MARKER = "<!-- readme: curated -->"
+
 
 class DocumentationBootstrapper:
     """Handles bootstrapping of AGENTS.md and README.md files across the repository."""

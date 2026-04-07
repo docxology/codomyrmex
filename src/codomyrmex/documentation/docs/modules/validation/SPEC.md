@@ -29,7 +29,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/validation/](../../../../src/codomyrmex/validation/)
+- **Source**: [src/codomyrmex/validation/](../../../../validation/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

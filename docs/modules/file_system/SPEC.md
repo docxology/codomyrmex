@@ -29,4 +29,4 @@ FileSystemManager, create_file_system_manager
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/file_system/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/file_system/README.md) | [AGENTS.md](AGENTS.md)

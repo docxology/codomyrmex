@@ -1,0 +1,13 @@
+module: demos
+enabled: true
+logging:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  file: logs/demos.log
+performance:
+  max_workers: 2
+  timeout_seconds: 60.0
+  caching: true
+features:
+  experimental: true
+  strict_mode: false

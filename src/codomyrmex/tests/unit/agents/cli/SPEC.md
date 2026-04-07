@@ -32,4 +32,4 @@ tests/unit/agents/cli/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../../agents/cli/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../agents/cli/)

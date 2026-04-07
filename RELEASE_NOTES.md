@@ -1,10 +1,14 @@
-# Codomyrmex v1.2.3 — "Coherence Release"
+# Release notes
 
-## Overview
+**Current package version:** [pyproject.toml](pyproject.toml) (v1.2.7). For the full changelog see [CHANGELOG.md](CHANGELOG.md). The section below summarizes the **v1.2.3** “Coherence Release”.
+
+## Codomyrmex v1.2.3 — "Coherence Release"
+
+### Overview
 
 This release locks down repo-wide structural coherence: 38 missing modules registered, version skew resolved across 7 files, coverage gate unified to 40%, and spurious root files purged. The ecosystem is now a clean single-source-of-truth at v1.2.3 with 128 registered modules.
 
-## Key Advancements
+### Key Advancements
 
 - **Version Coherence**: Reconciled `pyproject.toml` (1.2.2), `__init__.py` (1.1.9), `README.md` (1.1.9), and `SPEC.md` (1.1.9) — all aligned to **v1.2.3** across 7 files.
 - **Module Registration**: 38 modules existed on disk but were absent from `__init__.py` `_submodules` and `__all__` — all 128 now registered and lazy-importable.
@@ -13,7 +17,7 @@ This release locks down repo-wide structural coherence: 38 missing modules regis
 - **Spurious File Removal**: 3 git-tracked junk files at repo root (`Any`, `dict[str,`) created by buggy type-annotation script — deleted.
 - **Sub-level Version Sync**: `src/README.md` (v0.1.0 → v1.2.3) and `src/codomyrmex/AGENTS.md` (v0.1.0 → v1.2.3) updated.
 
-## Metrics Snapshot
+### Metrics Snapshot
 
 | Metric | Before | v1.2.3 |
 |--------|--------|---------|
@@ -21,10 +25,10 @@ This release locks down repo-wide structural coherence: 38 missing modules regis
 | Version files synced | 1 | **7** |
 | Coverage gate | 75/40/33% (inconsistent) | **40%** (unified) |
 | Spurious root files | 3 | **0** |
-| Tests collected | 21,000+ | **34,492** at v1.2.3 snapshot; **34,320** current ([inventory](docs/reference/inventory.md)) |
+| Tests collected | 21,000+ | **34,492** at v1.2.3 snapshot; **34,900** current ([inventory](docs/reference/inventory.md)) |
 | Ruff / ty | 0 | Run locally; targets in `pyproject.toml` |
 
-## Previous Release
+### Previous Release
 
 See [v1.1.9 CHANGELOG entry](CHANGELOG.md#119---2026-03-07---multimodal--streaming) for the Multimodal & Streaming release details.
 

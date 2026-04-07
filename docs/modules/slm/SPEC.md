@@ -30,4 +30,4 @@ SLMConfig, SLM, causal_mask
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/slm/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/slm/README.md) | [AGENTS.md](AGENTS.md)

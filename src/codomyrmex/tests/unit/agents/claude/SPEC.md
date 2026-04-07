@@ -32,4 +32,4 @@ tests/unit/agents/claude/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../../agents/claude/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../agents/claude/)

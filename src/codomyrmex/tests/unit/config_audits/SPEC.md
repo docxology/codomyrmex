@@ -32,4 +32,4 @@ tests/unit/config_audits/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../config_audits/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../config_audits/)

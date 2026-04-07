@@ -4,7 +4,7 @@ description: Full-spectrum coding workspace skill providing ~600 production MCP 
 ---
 # Codomyrmex Skill for PAI
 
-**Version**: v1.0.8 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: ~600 (`@mcp_tool`; see `docs/reference/inventory.md`)
+**Package version**: v1.2.7 (tracks [pyproject.toml](pyproject.toml)) | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 600 production `@mcp_tool` lines ([inventory](docs/reference/inventory.md))
 
 ## Description
 

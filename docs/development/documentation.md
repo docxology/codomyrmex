@@ -134,6 +134,16 @@ Run validation before committing:
 python3 scripts/documentation/validate_module_docs.py
 ```
 
+#### **RASP folder gap scan**
+
+After large doc-tree changes, regenerate the scoped `AGENTS.md` / `README.md` presence report:
+
+```bash
+uv run python scripts/rasp_gap_report.py
+```
+
+Output: [docs/plans/agents-readme-gap-report.md](../plans/agents-readme-gap-report.md). Inclusion roots and path excludes are defined in `scripts/rasp_gap_report.py`.
+
 ## ✍️ Writing Standards
 
 ### **Markdown Style**

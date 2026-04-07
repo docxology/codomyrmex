@@ -32,4 +32,4 @@ tests/unit/interpretability/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../interpretability/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../interpretability/)

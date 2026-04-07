@@ -1,9 +1,10 @@
 # Codomyrmex Agents — src/codomyrmex/utils
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.8 | **Status**: Active | **Last Updated**: April 2026
 
 ## Purpose
-Shared utility functions for process management, retry logic, and common operations.
+
+Shared utilities: subprocess (`process/`), safe JSON, hashing, timing, script base classes, MCP helpers, and **retry** — package-level `retry` (`__init__.py`) plus `retry_sync.py` (`RetryConfig`, sync `retry`, `async_retry`) so submodule layout does not shadow the package decorator.
 
 ## Active Components
 - `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
@@ -22,7 +23,7 @@ Shared utility functions for process management, retry logic, and common operati
 - `process/` – process module implementation
 - `py.typed` – PEP 561 marker for typed package
 - `refined.py` – Refined implementation
-- `retry.py` – Retry implementation
+- `retry_sync.py` – Retry implementation (named to avoid shadowing package ``retry``)
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -46,7 +47,7 @@ Shared utility functions for process management, retry logic, and common operati
 - `metrics.py`
 - `py.typed`
 - `refined.py`
-- `retry.py`
+- `retry_sync.py`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

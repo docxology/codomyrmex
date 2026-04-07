@@ -1,12 +1,13 @@
 {
   "name": "codomyrmex",
   "displayName": "Codomyrmex",
-  "version": "1.0.8",
+  "version": "1.2.7",
   "type": "infrastructure-skill",
   "mcp_server": "codomyrmex-mcp-server",
-  "tools": 407,
+  "tools": 600,
   "skills": 15,
-  "modules": 121,
+  "modules": 128,
+  "mcp_tools_py_files": 149,
   "triggers": [
     "codomyrmex",
     "verify codomyrmex",

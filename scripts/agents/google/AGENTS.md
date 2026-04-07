@@ -3,6 +3,26 @@
 **Parent**: [`scripts/agents/AGENTS.md`](../AGENTS.md)
 **Focus**: Google AI Integration Scripts
 
+## Purpose
+
+Thin orchestration scripts for Google AI (unified `google-genai` SDK, optional Vertex AI). See [README.md](README.md) for invocation examples.
+
+## Key Files
+
+| File | Role |
+|:---|:---|
+| [README.md](README.md) | Flags, env vars, usage |
+| `google_batch_processor.py` | Batch / embedding style workflows |
+| `google_reason_stream.py` | Streaming reasoning helpers |
+| `google_repo_indexer.py` | Repo indexing |
+| `google_vision_analyzer.py` | Vision analysis |
+
+## Dependencies
+
+- `google-genai` (`from google import genai`); avoid legacy `google-generativeai`.
+- Optional Vertex: `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, ADC via `gcloud auth application-default`.
+- Parent hub: [scripts/agents/AGENTS.md](../AGENTS.md).
+
 ## Protocol Directives
 
 1. **SDK Preference**: All scripts MUST rely on the unified `google-genai` SDK (`from google import genai`) rather than the legacy `google-generativeai` SDK.

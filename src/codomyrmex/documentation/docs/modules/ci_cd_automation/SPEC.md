@@ -23,7 +23,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/ci_cd_automation/](../../../../src/codomyrmex/ci_cd_automation/)
+- **Source**: [src/codomyrmex/ci_cd_automation/](../../../../ci_cd_automation/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

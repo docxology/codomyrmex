@@ -328,7 +328,7 @@ if scan_result.has_vulnerabilities:
 
 - [README.md](README.md) — Module overview
 - [AGENTS.md](AGENTS.md) — Agent coordination
-- [AI Code Editing](ai_code_editing/README.md) — Code editing details
+- [AI Code Editing](../../../src/codomyrmex/agents/ai_code_editing/README.md) — Code editing details
 - [MCP Bridge](../model_context_protocol/PAI.md) — MCP integration with PAI
 - [../llm/PAI.md](../llm/PAI.md) — LLM PAI features
 - [Connecting Tutorial](../../../docs/getting-started/tutorials/connecting-pai.md) — Step-by-step PAI setup

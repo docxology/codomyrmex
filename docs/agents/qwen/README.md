@@ -59,7 +59,7 @@ export DASHSCOPE_API_KEY=your-key-here
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/qwen/`](../../../../src/codomyrmex/agents/qwen/)
+Source: [`src/codomyrmex/agents/qwen/`](../../../src/codomyrmex/agents/qwen/)
 
 | File | Purpose |
 |:---|:---|
@@ -70,5 +70,5 @@ Source: [`src/codomyrmex/agents/qwen/`](../../../../src/codomyrmex/agents/qwen/)
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/qwen/](../../../../src/codomyrmex/agents/qwen/)
+- **Source**: [src/codomyrmex/agents/qwen/](../../../src/codomyrmex/agents/qwen/)
 - **Project Root**: [README.md](../../../README.md)

@@ -32,4 +32,4 @@ tests/unit/matmul_kernel/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../matmul_kernel/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../matmul_kernel/)

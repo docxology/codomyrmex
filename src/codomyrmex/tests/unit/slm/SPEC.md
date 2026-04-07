@@ -32,4 +32,4 @@ tests/unit/slm/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../slm/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../slm/)

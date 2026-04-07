@@ -32,4 +32,4 @@ tests/unit/semantic_router/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../semantic_router/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../semantic_router/)

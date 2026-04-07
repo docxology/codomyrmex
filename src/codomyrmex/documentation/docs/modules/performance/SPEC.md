@@ -28,7 +28,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/performance/](../../../../src/codomyrmex/performance/)
+- **Source**: [src/codomyrmex/performance/](../../../../performance/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/exceptions/](../../../../src/codomyrmex/exceptions/)
+- **Source**: [src/codomyrmex/exceptions/](../../../../exceptions/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

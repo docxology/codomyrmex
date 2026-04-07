@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/feature_flags/](../../../../src/codomyrmex/feature_flags/)
+- **Source**: [src/codomyrmex/feature_flags/](../../../../feature_flags/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

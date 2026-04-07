@@ -33,7 +33,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/skills/](../../../../src/codomyrmex/skills/)
+- **Source**: [src/codomyrmex/skills/](../../../../skills/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

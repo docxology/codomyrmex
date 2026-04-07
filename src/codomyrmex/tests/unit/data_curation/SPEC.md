@@ -32,4 +32,4 @@ tests/unit/data_curation/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../data_curation/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../data_curation/)

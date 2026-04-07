@@ -23,10 +23,10 @@ client = Evaluator()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/evaluation/`](../../../../src/codomyrmex/agents/evaluation/)
+Source: [`src/codomyrmex/agents/evaluation/`](../../../src/codomyrmex/agents/evaluation/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/evaluation/](../../../../src/codomyrmex/agents/evaluation/)
+- **Source**: [src/codomyrmex/agents/evaluation/](../../../src/codomyrmex/agents/evaluation/)
 - **Project Root**: [README.md](../../../README.md)

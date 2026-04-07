@@ -30,4 +30,4 @@ NASSearchSpace, ArchConfig, NASSearcher, random_search, evolutionary_search
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/nas/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/nas/README.md) | [AGENTS.md](AGENTS.md)

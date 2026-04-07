@@ -28,4 +28,4 @@ SparseAutoencoder, train_sae, analyze_features
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/interpretability/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/interpretability/README.md) | [AGENTS.md](AGENTS.md)

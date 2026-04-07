@@ -1,9 +1,13 @@
 # Codomyrmex Agents — scripts
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Purpose
 Maintenance and automation utilities for project management.
+
+## Metrics and doc audits
+- `doc_inventory.py` — counts aligned with [docs/reference/inventory.md](../docs/reference/inventory.md) (top-level modules, `@mcp_tool`, `mcp_tools.py`, `.github/workflows/*.yml`; optional `--pytest`, `--manifest`).
+- `rasp_gap_report.py` — writes [docs/plans/agents-readme-gap-report.md](../docs/plans/agents-readme-gap-report.md) for scoped `AGENTS.md` / `README.md` gaps.
 
 ## Active Components
 - `PAI.md` – Project file

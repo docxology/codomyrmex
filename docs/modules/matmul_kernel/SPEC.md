@@ -28,4 +28,4 @@ tiled_matmul, batched_matmul, matmul_flops
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/matmul_kernel/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/matmul_kernel/README.md) | [AGENTS.md](AGENTS.md)

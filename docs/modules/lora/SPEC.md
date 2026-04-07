@@ -28,4 +28,4 @@ LoRALayer, LoRAConfig, apply_lora, merge_lora
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/lora/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/lora/README.md) | [AGENTS.md](AGENTS.md)

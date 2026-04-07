@@ -170,4 +170,4 @@ All tools return an error dict on failure:
 
 - **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
 - **Human Guide**: [README.md](README.md)
-- **Parent**: [codomyrmex](../MCP_TOOL_SPECIFICATION.md)
+- **Parent**: [codomyrmex package](../README.md)

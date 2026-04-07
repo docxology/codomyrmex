@@ -83,5 +83,5 @@ APIHandler (mixin)
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](../PAI.md)
 - Parent: [website](../README.md)

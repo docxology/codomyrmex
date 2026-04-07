@@ -1,5 +1,5 @@
 """
-Unit tests for utils.retry — Zero-Mock compliant.
+Unit tests for utils.retry_sync — Zero-Mock compliant.
 
 Covers: RetryConfig (defaults), _compute_delay (jitter on/off, max_delay),
 retry decorator (success first try, success after retries, exhaustion,
@@ -9,7 +9,7 @@ Uses base_delay=0.0 to avoid real sleeps in tests.
 
 import pytest
 
-from codomyrmex.utils.retry import RetryConfig, _compute_delay, async_retry, retry
+from codomyrmex.utils.retry_sync import RetryConfig, _compute_delay, async_retry, retry
 
 # ── RetryConfig ────────────────────────────────────────────────────────
 

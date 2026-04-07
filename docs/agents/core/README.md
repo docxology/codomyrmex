@@ -71,7 +71,7 @@ blocks = parse_code_blocks(response.content)
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/core/`](../../../../src/codomyrmex/agents/core/)
+Source: [`src/codomyrmex/agents/core/`](../../../src/codomyrmex/agents/core/)
 
 | File | Purpose |
 |:---|:---|
@@ -88,5 +88,5 @@ Source: [`src/codomyrmex/agents/core/`](../../../../src/codomyrmex/agents/core/)
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/core/](../../../../src/codomyrmex/agents/core/)
+- **Source**: [src/codomyrmex/agents/core/](../../../src/codomyrmex/agents/core/)
 - **Project Root**: [README.md](../../../README.md)

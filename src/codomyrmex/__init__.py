@@ -1,8 +1,8 @@
-"""Codomyrmex - A Modular, Extensible Coding Workspace.
+"""Codomyrmex — modular coding workspace.
 
-This package provides a comprehensive suite of specialized modules organized in a
-four-layer architecture for AI-assisted software development, code analysis,
-testing, documentation generation, and workflow automation.
+Specialized subpackages for AI-assisted development, analysis, testing,
+documentation, and workflow automation. See package README and
+``list_modules()`` for the live module list.
 """
 
 __version__ = "1.2.7"

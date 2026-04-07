@@ -29,10 +29,10 @@ client = PaperclipClient()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/paperclip/`](../../../../src/codomyrmex/agents/paperclip/)
+Source: [`src/codomyrmex/agents/paperclip/`](../../../src/codomyrmex/agents/paperclip/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/paperclip/](../../../../src/codomyrmex/agents/paperclip/)
+- **Source**: [src/codomyrmex/agents/paperclip/](../../../src/codomyrmex/agents/paperclip/)
 - **Project Root**: [README.md](../../../README.md)

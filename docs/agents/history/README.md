@@ -23,10 +23,10 @@ client = HistoryManager()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/history/`](../../../../src/codomyrmex/agents/history/)
+Source: [`src/codomyrmex/agents/history/`](../../../src/codomyrmex/agents/history/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/history/](../../../../src/codomyrmex/agents/history/)
+- **Source**: [src/codomyrmex/agents/history/](../../../src/codomyrmex/agents/history/)
 - **Project Root**: [README.md](../../../README.md)

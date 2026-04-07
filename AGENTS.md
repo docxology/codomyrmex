@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.8 | **Status**: Active | **Last Updated**: April 2026
 
 ## Purpose
 
@@ -29,14 +29,18 @@ The repository is organized into distinct surfaces, each with specific responsib
 
 - `README.md` - Primary entry point for users and contributors
 - `AGENTS.md` - This file: agent coordination and navigation
+- `scripts/rasp_gap_report.py` — regenerates [docs/plans/agents-readme-gap-report.md](docs/plans/agents-readme-gap-report.md) (scoped `AGENTS.md` / `README.md` presence under `src/codomyrmex/`, `docs/`, `projects/`, `scripts/`, `config/`, `.github/`; see script docstring for excludes)
+- `scripts/doc_inventory.py` — prints repo doc metrics (module counts, workflows, optional pytest collect); output summarized in [docs/reference/inventory.md](docs/reference/inventory.md)
 - `LICENSE` - MIT License
 - `SECURITY.md` - Security policies and vulnerability reporting
 - `pyproject.toml` - Python package configuration
 - `pyproject.toml` (`[tool.pytest.ini_options]`, `[tool.coverage.*]`) — pytest and coverage configuration
-- `Makefile` - Build and automation tasks
+- `Makefile` - Primary build and automation tasks (`make test` applies the 40% coverage gate)
+- `justfile` - Optional [just](https://github.com/casey/just) recipes mirroring common Makefile targets
+- `index.html` - Root redirect to `/output/website/index.html` for static hosting entry
 - `uv.lock` - Python dependency lock file
 - `start_here.sh` - Interactive entry point for exploration
-- `package.json` - Node.js package configuration
+- `package.json` - Root Node.js config (Playwright, docs scripts); Bun lockfiles live next to Bun projects (e.g. `src/codomyrmex/pai_pm/server/bun.lock`)
 
 ## Dependencies
 
@@ -49,6 +53,12 @@ The repository is organized into distinct surfaces, each with specific responsib
 - **Zero-Mock Policy:** All tests must use real components. No mocks.
 - **Coverage Gate:** **40%** line coverage (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI and `make test` pass `--cov-fail-under=40`; plain `uv run pytest` skips coverage for speed. Experimental `meme/` is omitted from `[tool.coverage.run]` (see `pyproject.toml`). New work must not drop below the floor when measured with `--cov`.
 - **Documentation:** Maintain `AGENTS.md`, `README.md`, and `SPEC.md` parity on structural changes.
+- **Generated leaf docs:** Thousands of per-folder `AGENTS.md` / `README.md` files are produced by tooling, not by hand.
+  - **Bootstrap (inventory + signposts):** from repo root, `uv run python -m codomyrmex.documentation.scripts.bootstrap_agents_readmes` (or `uv run python scripts/documentation/bootstrap_agents_readmes.py`, same implementation). Use `--dry-run` first; use `--agents-only` to touch only `AGENTS.md`. The script skips vendor prefixes (see `codomyrmex.documentation.doc_generation_common.EXCLUDED_DOC_PREFIXES`) and **does not** rewrite trees under `docs/modules/<pkg>/` when `src/codomyrmex/<pkg>/` exists — those stay owned by module enrichment. **Hand-maintained hubs:** put `<!-- agents: curated -->` in the first lines of an `AGENTS.md`, or add prefixes to `PRESERVE_AGENTS_REL_PREFIXES` in `bootstrap_agents_readmes.py` (see [docs/development/documentation.md](docs/development/documentation.md)). `AGENTS.md` with `<!-- agents: curated -->` and `README.md` with `<!-- readme: curated -->` in the file head are not overwritten.
+  - **Lock leaf docs after bootstrap:** `uv run python -m codomyrmex.documentation.scripts.apply_curated_markers --repo-root .` prepends those markers where missing so a later bootstrap pass skips those files.
+  - **Module docs (`docs/modules/<name>/`):** `uv run python scripts/documentation/enrich_module_docs.py` refreshes README/SPEC/AGENTS from `__init__.py` and related sources. Pass **`--force-agents`** to rewrite every `docs/modules/*/AGENTS.md` even when the file is already long (for example after a wide bootstrap pass).
+  - **QA:** `uv run python src/codomyrmex/documentation/scripts/triple_check.py` (optional `--repo-root .`; defaults to cwd). Report: `output/triple_check_report.md`.
+- **Hand-pass freeze (folder README / AGENTS):** While a repo-wide manual refresh of per-directory `README.md` and `AGENTS.md` is in progress or results must be kept as-is, **do not** run `uv run python -m codomyrmex.documentation.scripts.bootstrap_agents_readmes` or `uv run python scripts/documentation/enrich_module_docs.py` on shared branches without an explicit decision. Those commands overwrite generated leaf docs; `<!-- agents: curated -->` skips `AGENTS.md` rewrites, and `<!-- readme: curated -->` skips `README.md` rewrites when present in the file head. See [docs/plans/readme_agents_hand_pass.md](docs/plans/readme_agents_hand_pass.md).
 
 ## Operating Contracts
 
@@ -439,7 +449,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (179720 symbols, 330187 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (190192 symbols, 397739 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

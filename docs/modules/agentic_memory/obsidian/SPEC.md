@@ -134,4 +134,4 @@ All exports are available from `codomyrmex.agentic_memory.obsidian`.
 ## Navigation
 
 - [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md)
-- [Parent SPEC.md](../SPEC.md) | [Source](../../../../../src/codomyrmex/agentic_memory/obsidian/)
+- [Parent SPEC.md](../SPEC.md) | [Source](../../../../src/codomyrmex/agentic_memory/obsidian/)

@@ -32,4 +32,4 @@ tests/unit/lora/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../lora/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../lora/)

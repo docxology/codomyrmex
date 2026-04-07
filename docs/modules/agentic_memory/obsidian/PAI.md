@@ -69,4 +69,4 @@ except ObsidianCLINotAvailable:
 ## Navigation
 
 - [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
-- [Parent PAI.md](../PAI.md) | [Source](../../../../../src/codomyrmex/agentic_memory/obsidian/)
+- [Parent PAI.md](../PAI.md) | [Source](../../../../src/codomyrmex/agentic_memory/obsidian/)

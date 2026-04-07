@@ -31,4 +31,4 @@ PEFTAdapter, LoRAAdapter, PrefixTuningAdapter, IA3Adapter, PEFTConfig
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/peft/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/peft/README.md) | [AGENTS.md](AGENTS.md)

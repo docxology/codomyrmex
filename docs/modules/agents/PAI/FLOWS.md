@@ -2,7 +2,7 @@
 
 Detailed Mermaid diagrams visualizing every major operational sequence in the PAI ↔ Codomyrmex integration.
 
-**Upstream**: [Personal AI Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure) | **Codomyrmex Source**: [`mcp_bridge.py`](../../../src/codomyrmex/agents/pai/mcp_bridge.py), [`trust_gateway.py`](../../../src/codomyrmex/agents/pai/trust_gateway.py)
+**Upstream**: [Personal AI Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure) | **Codomyrmex Source**: [`mcp_bridge.py`](../../../../src/codomyrmex/agents/pai/mcp_bridge.py), [`trust_gateway.py`](../../../../src/codomyrmex/agents/pai/trust_gateway.py)
 
 ---
 

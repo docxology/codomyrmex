@@ -46,13 +46,13 @@ graph TD
 
 ## Layer 1: PAIBridge (Discovery)
 
-**Source**: [pai_bridge.py](../../../src/codomyrmex/agents/pai/pai_bridge.py)
+**Source**: [pai_bridge.py](../../../../src/codomyrmex/agents/pai/pai_bridge.py)
 
 The PAIBridge treats the **filesystem as the single source of truth**. It performs zero network calls — every discovery operation is a real `Path.is_file()` / `Path.iterdir()` call against the user's local `~/.claude/` directory.
 
 ### PAIConfig: The Path Layout
 
-The `PAIConfig` dataclass ([L49-127](../../../src/codomyrmex/agents/pai/pai_bridge.py)) defines the entire PAI filesystem topology:
+The `PAIConfig` dataclass ([L49-127](../../../../src/codomyrmex/agents/pai/pai_bridge.py)) defines the entire PAI filesystem topology:
 
 ```mermaid
 graph TD
@@ -95,13 +95,13 @@ graph TD
 
 ## Layer 2: MCPBridge (Communication)
 
-**Source**: [mcp_bridge.py](../../../src/codomyrmex/agents/pai/mcp_bridge.py)
+**Source**: [mcp_bridge.py](../../../../src/codomyrmex/agents/pai/mcp_bridge.py)
 
 This layer transforms Codomyrmex from a Python library into a **remotely-callable service** that any PAI agent can use.
 
 ### Static Core Tools (15)
 
-These are hardcoded in `_TOOL_DEFINITIONS` ([L275-512](../../../src/codomyrmex/agents/pai/mcp_bridge.py)):
+These are hardcoded in `_TOOL_DEFINITIONS` ([L275-512](../../../../src/codomyrmex/agents/pai/mcp_bridge.py)):
 
 | Tool Name | Category | Description |
 |:---|:---|:---|
@@ -133,7 +133,7 @@ These three tools give PAI agents **unlimited access** to every public function 
 
 ### Dynamic Discovery Engine
 
-The `_discover_dynamic_tools()` function ([L637-684](../../../src/codomyrmex/agents/pai/mcp_bridge.py)) performs two-phase scanning:
+The `_discover_dynamic_tools()` function ([L637-684](../../../../src/codomyrmex/agents/pai/mcp_bridge.py)) performs two-phase scanning:
 
 ```mermaid
 flowchart TD
@@ -148,7 +148,7 @@ flowchart TD
 
 ### Algorithm Mapping
 
-The `get_skill_manifest()` function ([L836-993](../../../src/codomyrmex/agents/pai/mcp_bridge.py)) maps Codomyrmex tools to PAI Algorithm phases:
+The `get_skill_manifest()` function ([L836-993](../../../../src/codomyrmex/agents/pai/mcp_bridge.py)) maps Codomyrmex tools to PAI Algorithm phases:
 
 ```mermaid
 graph LR
@@ -191,7 +191,7 @@ graph LR
 
 ## Layer 3: TrustGateway (Security)
 
-**Source**: [trust_gateway.py](../../../src/codomyrmex/agents/pai/trust_gateway.py)
+**Source**: [trust_gateway.py](../../../../src/codomyrmex/agents/pai/trust_gateway.py)
 
 This layer implements PAI's **Security System** principle: commands are validated before execution.
 
@@ -248,7 +248,7 @@ Trust state is persisted to `~/.codomyrmex/trust_ledger.json`, surviving process
 
 ## Claude Integration Layer
 
-**Source**: [claude_client.py](../../../src/codomyrmex/agents/claude/claude_client.py) + [claude_integration.py](../../../src/codomyrmex/agents/claude/claude_integration.py)
+**Source**: [claude_client.py](../../../../src/codomyrmex/agents/claude/claude_client.py) + [claude_integration.py](../../../../src/codomyrmex/agents/claude/claude_integration.py)
 
 The Claude layer is **not part of PAI itself** but is PAI's primary **execution engine** within Codomyrmex. It implements PAI's Algorithm phases in code:
 

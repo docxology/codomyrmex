@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/tool_use/](../../../../src/codomyrmex/tool_use/)
+- **Source**: [src/codomyrmex/tool_use/](../../../../tool_use/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

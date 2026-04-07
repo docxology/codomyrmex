@@ -53,7 +53,7 @@ graph LR
         EMBOD["embodiment/<br/>ROS2Bridge · sensors"]
         BIOSIM["bio_simulation/<br/>Colony · Ant · PheromoneGrid"]
         RELAT["relations/<br/>typed weighted edges"]
-        GOVERN["governance/<br/>access control · policy"]
+        GOVERN["security/governance/<br/>access control · policy"]
     end
 
     NEST --> SPATIAL
@@ -71,7 +71,7 @@ graph LR
 
 **[relations](../../src/codomyrmex/relations/)** models social network structures. In a colony, nestmate recognition, trophallaxis (food sharing), and antennation form a dynamic interaction network whose topology affects information flow. Gordon (2010) showed that task-switching depends on interaction rates, not central commands — the relations module captures these as typed, weighted edges between agent nodes, enabling the kind of local-information-driven coordination that colonies exhibit.
 
-**[governance](../../src/codomyrmex/governance/)** implements colony-level regulation: access control, policy enforcement, and resource allocation rules. Real colony governance is distributed — the queen's pheromones modulate worker behavior probabilistically, not deterministically. The queen does not command; she chemically biases probability distributions over worker behavior. The governance module similarly defines constraints that shape agent behavior without prescribing it — a **regulatory field** rather than a command hierarchy.
+**[security/governance](../../src/codomyrmex/security/governance/)** implements colony-level regulation: access control, policy enforcement, and resource allocation rules. Real colony governance is distributed — the queen's pheromones modulate worker behavior probabilistically, not deterministically. The queen does not command; she chemically biases probability distributions over worker behavior. The governance module similarly defines constraints that shape agent behavior without prescribing it — a **regulatory field** rather than a command hierarchy.
 
 ## The Colony as Architecture
 

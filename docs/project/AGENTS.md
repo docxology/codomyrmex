@@ -20,3 +20,13 @@ Agent coordination for project-level standards: architecture narratives, contrib
 
 - **Parent**: [docs/AGENTS.md](../AGENTS.md), [docs/README.md](../README.md)
 - **Project root**: [README.md](../../README.md), [AGENTS.md](../../AGENTS.md)
+
+## Dependencies
+
+- [docs/AGENTS.md](../AGENTS.md) — parent doc hub.
+- [src/codomyrmex/](../../src/codomyrmex/) — code referenced by architecture and audit notes.
+
+## Development Guidelines
+
+- Keep [contributing.md](contributing.md) aligned with root [CONTRIBUTING.md](../../CONTRIBUTING.md) when workflow changes.
+- After substantive edits, run `uv run python scripts/documentation/validate_agents_structure.py --fail-on-invalid` from repo root.

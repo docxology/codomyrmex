@@ -30,4 +30,4 @@ SyntheticDataGenerator, DataSchema, TemplateGenerator
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/synthetic_data/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/synthetic_data/README.md) | [AGENTS.md](AGENTS.md)

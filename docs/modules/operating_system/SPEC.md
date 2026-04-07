@@ -31,4 +31,4 @@ OSPlatform, SystemInfo, ProcessInfo, DiskInfo, ServiceInfo, NetworkInfo, Command
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/operating_system/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/operating_system/README.md) | [AGENTS.md](AGENTS.md)

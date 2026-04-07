@@ -10,6 +10,9 @@ Validates:
 - External URLs
 - Anchor links
 - Image references
+
+Fenced code blocks (``` ... ```) are skipped for ``[text](url)`` and raw ``http(s)`` URL
+extraction so inline examples are not counted as navigational links.
 """
 
 import argparse
@@ -30,21 +33,31 @@ class LinkResult(NamedTuple):
     message: str = ""
 
 
-def extract_links(content: str, file_path: Path) -> list[tuple[str, int]]:
-    """Extract all markdown links from content."""
-    links = []
-
-    # Match [text](url) pattern
-    link_pattern = r"\[([^\]]*)\]\(([^)]+)\)"
-
+def _lines_outside_fences(content: str) -> list[tuple[int, str]]:
+    """Return (1-based line number, text) for lines not inside fenced code blocks."""
+    lines_out: list[tuple[int, str]] = []
+    in_fence = False
     for i, line in enumerate(content.split("\n"), 1):
+        stripped = line.strip()
+        if stripped.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if not in_fence:
+            lines_out.append((i, line))
+    return lines_out
+
+
+def extract_links(content: str, _file_path: Path) -> list[tuple[str, int]]:
+    """Extract markdown links and raw http(s) URLs from lines outside fenced blocks."""
+    links: list[tuple[str, int]] = []
+
+    link_pattern = r"\[([^\]]*)\]\(([^)]+)\)"
+    url_pattern = r"https?://[^\s\)<>]+"
+
+    for i, line in _lines_outside_fences(content):
         for match in re.finditer(link_pattern, line):
             url = match.group(2)
             links.append((url, i))
-
-    # Also match raw URLs
-    url_pattern = r"https?://[^\s\)<>]+"
-    for i, line in enumerate(content.split("\n"), 1):
         for match in re.finditer(url_pattern, line):
             url = match.group()
             if (url, i) not in links:
@@ -94,11 +107,27 @@ def validate_links(
 
     results: list[LinkResult] = []
 
-    # Find all markdown files
-    md_files = list(repo_root.rglob("*.md"))
-    md_files = [
-        f for f in md_files if ".git" not in str(f) and "node_modules" not in str(f)
-    ]
+    skip_roots = {
+        ".git",
+        "node_modules",
+        ".venv",
+        ".direnv",
+        "dist",
+        "build",
+        "output",
+        ".agent",
+    }
+    md_files = []
+    for f in repo_root.rglob("*.md"):
+        try:
+            rel_parts = f.resolve().relative_to(repo_root.resolve()).parts
+        except ValueError:
+            continue
+        if rel_parts and rel_parts[0] in skip_roots:
+            continue
+        if any(p in skip_roots for p in rel_parts):
+            continue
+        md_files.append(f)
 
     print(f"📄 Found {len(md_files)} markdown files")
 

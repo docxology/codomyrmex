@@ -30,4 +30,4 @@ Value, Tensor, relu, tanh, sigmoid, softmax
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/autograd/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/autograd/README.md) | [AGENTS.md](AGENTS.md)

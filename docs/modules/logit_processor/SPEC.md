@@ -29,4 +29,4 @@ LogitProcessor, LogitProcessorList, TemperatureProcessor, TopKProcessor, TopPPro
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/logit_processor/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/logit_processor/README.md) | [AGENTS.md](AGENTS.md)

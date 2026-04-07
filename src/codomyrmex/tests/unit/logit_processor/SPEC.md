@@ -32,4 +32,4 @@ tests/unit/logit_processor/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../logit_processor/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../logit_processor/)

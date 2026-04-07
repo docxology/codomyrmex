@@ -59,7 +59,7 @@ vertex_location: "us-central1"
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/gemini/`](../../../../src/codomyrmex/agents/gemini/)
+Source: [`src/codomyrmex/agents/gemini/`](../../../src/codomyrmex/agents/gemini/)
 
 | File | Purpose |
 |:---|:---|
@@ -75,5 +75,5 @@ Source: [`src/codomyrmex/agents/gemini/`](../../../../src/codomyrmex/agents/gemi
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/gemini/](../../../../src/codomyrmex/agents/gemini/)
+- **Source**: [src/codomyrmex/agents/gemini/](../../../src/codomyrmex/agents/gemini/)
 - **Project Root**: [README.md](../../../README.md)

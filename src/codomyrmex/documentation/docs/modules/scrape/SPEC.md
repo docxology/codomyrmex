@@ -27,7 +27,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/scrape/](../../../../src/codomyrmex/scrape/)
+- **Source**: [src/codomyrmex/scrape/](../../../../scrape/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

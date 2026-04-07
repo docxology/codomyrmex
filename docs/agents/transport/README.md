@@ -30,10 +30,10 @@ client = AgentSerializer()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/transport/`](../../../../src/codomyrmex/agents/transport/)
+Source: [`src/codomyrmex/agents/transport/`](../../../src/codomyrmex/agents/transport/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/transport/](../../../../src/codomyrmex/agents/transport/)
+- **Source**: [src/codomyrmex/agents/transport/](../../../src/codomyrmex/agents/transport/)
 - **Project Root**: [README.md](../../../README.md)

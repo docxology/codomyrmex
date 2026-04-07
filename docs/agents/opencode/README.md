@@ -45,10 +45,10 @@ client = OpenCodeClient()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/opencode/`](../../../../src/codomyrmex/agents/opencode/)
+Source: [`src/codomyrmex/agents/opencode/`](../../../src/codomyrmex/agents/opencode/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/opencode/](../../../../src/codomyrmex/agents/opencode/)
+- **Source**: [src/codomyrmex/agents/opencode/](../../../src/codomyrmex/agents/opencode/)
 - **Project Root**: [README.md](../../../README.md)

@@ -29,7 +29,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/model_context_protocol/](../../../../src/codomyrmex/model_context_protocol/)
+- **Source**: [src/codomyrmex/model_context_protocol/](../../../../model_context_protocol/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

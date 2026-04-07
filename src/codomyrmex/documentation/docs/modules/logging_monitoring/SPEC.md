@@ -27,7 +27,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/logging_monitoring/](../../../../src/codomyrmex/logging_monitoring/)
+- **Source**: [src/codomyrmex/logging_monitoring/](../../../../logging_monitoring/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

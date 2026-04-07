@@ -9,7 +9,7 @@ The Tree Sitter module contributes to Personal AI Infrastructure within the Codo
 ## Detailed PAI Documentation
 
 For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/tree_sitter/PAI.md](../../../src/codomyrmex/tree_sitter/PAI.md)
+- [src/codomyrmex/tree_sitter/PAI.md](../../../../../src/codomyrmex/tree_sitter/PAI.md)
 
 ## Configuration
 

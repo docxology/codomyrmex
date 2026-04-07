@@ -30,7 +30,7 @@ def decompress_file(input_path: str, output_path: str | None = None,
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/compression/](../../../../src/codomyrmex/compression/)
+- **Source**: [src/codomyrmex/compression/](../../../../compression/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

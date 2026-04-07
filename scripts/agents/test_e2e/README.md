@@ -1,0 +1,20 @@
+<!-- readme: curated -->
+
+# test_e2e
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
+
+## Overview
+
+Automation and utility scripts for repository maintenance.
+
+Agent-oriented inventory and contracts: [../../../AGENTS.md](../../../AGENTS.md).
+
+## Directory Contents
+- `README.md` – File
+- `observe_hermes.py` – File
+- `observe_hermes.py.bak` – File
+
+## Navigation
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: ../../../README.md

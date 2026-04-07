@@ -53,7 +53,7 @@ jules remote pull <session-id>       # Pull completed patches
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/jules/`](../../../../src/codomyrmex/agents/jules/)
+Source: [`src/codomyrmex/agents/jules/`](../../../src/codomyrmex/agents/jules/)
 
 | File | Purpose |
 |:---|:---|
@@ -65,11 +65,11 @@ Source: [`src/codomyrmex/agents/jules/`](../../../../src/codomyrmex/agents/jules
 
 | Document | Path |
 |:---|:---|
-| README | [jules/README.md](../../../../src/codomyrmex/agents/jules/README.md) |
-| SPEC | [jules/SPEC.md](../../../../src/codomyrmex/agents/jules/SPEC.md) |
+| README | [jules/README.md](../../../src/codomyrmex/agents/jules/README.md) |
+| SPEC | [jules/SPEC.md](../../../src/codomyrmex/agents/jules/SPEC.md) |
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/jules/](../../../../src/codomyrmex/agents/jules/)
+- **Source**: [src/codomyrmex/agents/jules/](../../../src/codomyrmex/agents/jules/)
 - **Project Root**: [README.md](../../../README.md)

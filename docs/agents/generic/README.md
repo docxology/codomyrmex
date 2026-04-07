@@ -8,10 +8,10 @@ Template and scaffolding for creating new agent integrations. Provides boilerpla
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/generic/`](../../../../src/codomyrmex/agents/generic/)
+Source: [`src/codomyrmex/agents/generic/`](../../../src/codomyrmex/agents/generic/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/generic/](../../../../src/codomyrmex/agents/generic/)
+- **Source**: [src/codomyrmex/agents/generic/](../../../src/codomyrmex/agents/generic/)
 - **Project Root**: [README.md](../../../README.md)

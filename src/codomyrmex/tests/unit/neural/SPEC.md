@@ -32,4 +32,4 @@ tests/unit/neural/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../neural/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../neural/)

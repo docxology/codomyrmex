@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/wallet/](../../../../src/codomyrmex/wallet/)
+- **Source**: [src/codomyrmex/wallet/](../../../../wallet/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

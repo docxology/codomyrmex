@@ -31,4 +31,4 @@ DistillationLoss, soft_labels, distillation_loss
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/distillation/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/distillation/README.md) | [AGENTS.md](AGENTS.md)

@@ -257,8 +257,8 @@ Any codomyrmex module can expose tools through MCP by adding an `MCP_TOOL_SPECIF
 - **Self**: [PAI.md](PAI.md)
 - **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
 - **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
-- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)
-- **Web UI**: [web_ui.py](web_ui.py) — Self-contained HTML interface
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](../../../src/codomyrmex/model_context_protocol/API_SPECIFICATION.md)
+- **Web UI**: [web_ui.py](../../../src/codomyrmex/model_context_protocol/transport/web_ui.py) — Self-contained HTML interface
 - **Tutorial**: [Connecting PAI to Codomyrmex](../../../docs/getting-started/tutorials/connecting-pai.md)
 - **Server Script**: [run_mcp_server.py](../../../scripts/model_context_protocol/run_mcp_server.py)
 - **Website Integration**: [../website/PAI.md](../website/PAI.md) — Dashboard probes MCP server for live status

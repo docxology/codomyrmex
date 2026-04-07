@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/serialization/](../../../../src/codomyrmex/serialization/)
+- **Source**: [src/codomyrmex/serialization/](../../../../serialization/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

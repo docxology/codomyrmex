@@ -26,10 +26,10 @@ client = WorkspaceClient()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/google_workspace/`](../../../../src/codomyrmex/agents/google_workspace/)
+Source: [`src/codomyrmex/agents/google_workspace/`](../../../src/codomyrmex/agents/google_workspace/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/google_workspace/](../../../../src/codomyrmex/agents/google_workspace/)
+- **Source**: [src/codomyrmex/agents/google_workspace/](../../../src/codomyrmex/agents/google_workspace/)
 - **Project Root**: [README.md](../../../README.md)

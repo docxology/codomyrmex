@@ -29,4 +29,4 @@ Int8Quantizer, QuantizedTensor, quantize_int8, dequantize_int8, FP4Quantizer, FP
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/quantization/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/quantization/README.md) | [AGENTS.md](AGENTS.md)

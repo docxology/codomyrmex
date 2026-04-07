@@ -32,4 +32,4 @@ tests/unit/softmax_opt/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../softmax_opt/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../softmax_opt/)

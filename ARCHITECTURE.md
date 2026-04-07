@@ -1,6 +1,6 @@
 # Codomyrmex Architecture Overview
 
-Codomyrmex is a modular, AI-first coding workspace enabling robust multi-agent development workflows across **128** top-level functional modules under `src/codomyrmex/` ([docs/reference/inventory.md](docs/reference/inventory.md)).
+Codomyrmex is a modular, AI-first coding workspace enabling robust multi-agent development workflows across **128** top-level functional modules under `src/codomyrmex/` ([docs/reference/inventory.md](docs/reference/inventory.md) — collected test count, workflow count, and related metrics refresh there).
 
 This top-level document serves as a high-level orientation for the system's structural design. For the exhaustive deep-dive, see the [Comprehensive Architecture Document](docs/project/architecture.md).
 
@@ -27,6 +27,11 @@ The codebase is stratified into four distinct operational layers:
 - `docs/`: Comprehensive project documentation, mirroring the source structure (e.g., `docs/agents/`).
 - `scripts/`: Automation utilities and maintenance scripts.
 - `tests/`: Unified and modular integration/unit tests validating the Zero-Mock policy.
+
+## Documentation maintenance
+
+- **Repo metrics** (modules, `@mcp_tool`, workflows, optional pytest collect): `uv run python scripts/doc_inventory.py` — [docs/reference/inventory.md](docs/reference/inventory.md).
+- **RASP folder coverage** (`AGENTS.md` / `README.md` gaps under scoped roots): `uv run python scripts/rasp_gap_report.py` — [docs/plans/agents-readme-gap-report.md](docs/plans/agents-readme-gap-report.md); progress notes [docs/plans/rasp-audit-progress.md](docs/plans/rasp-audit-progress.md).
 
 ## Navigation
 

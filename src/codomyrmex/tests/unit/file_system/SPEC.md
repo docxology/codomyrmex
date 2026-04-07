@@ -33,4 +33,4 @@ tests/unit/file_system/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../file_system/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../file_system/)

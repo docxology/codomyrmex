@@ -85,7 +85,7 @@ These constraints are *beneficial*: they reduce the effective dimensionality of 
 
 Schmidhuber's (2003) Gödel Machine searches for *provably optimal* self-modifications. The search space is the set of all programs expressible in itself (self-referential). When it finds a modification whose improvement can be *formally proved*, it applies the modification.
 
-Codomyrmex approximates this with a weaker verification criterion: modifications must pass *tests and validation*, not *formal proofs*. The **34,320** collected tests (`pytest --collect-only --no-cov`) serve as *empirical evidence* rather than *deductive proof*. The gap between empirical evidence and formal proof is precisely the gap between Σ₁⁰ (testing) and Π₁⁰ (universal correctness) in the arithmetical hierarchy — see [formal_specification.md](./formal_specification.md).
+Codomyrmex approximates this with a weaker verification criterion: modifications must pass *tests and validation*, not *formal proofs*. The **35,916** collected tests (`pytest --collect-only --no-cov`) serve as *empirical evidence* rather than *deductive proof*. The gap between empirical evidence and formal proof is precisely the gap between Σ₁⁰ (testing) and Π₁⁰ (universal correctness) in the arithmetical hierarchy — see [formal_specification.md](./formal_specification.md).
 
 The `evolutionary_ai` module adds a critical capability: **population-based search**. Rather than the Gödel Machine's exhaustive proof search, `evolutionary_ai` maintains a *population* of candidate modifications and applies selection pressure:
 

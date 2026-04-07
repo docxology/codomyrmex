@@ -32,4 +32,4 @@ tests/unit/tokenizer/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../tokenizer/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../tokenizer/)

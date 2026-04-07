@@ -30,10 +30,10 @@ client = MissionControlClient()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/mission_control/`](../../../../src/codomyrmex/agents/mission_control/)
+Source: [`src/codomyrmex/agents/mission_control/`](../../../src/codomyrmex/agents/mission_control/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/mission_control/](../../../../src/codomyrmex/agents/mission_control/)
+- **Source**: [src/codomyrmex/agents/mission_control/](../../../src/codomyrmex/agents/mission_control/)
 - **Project Root**: [README.md](../../../README.md)

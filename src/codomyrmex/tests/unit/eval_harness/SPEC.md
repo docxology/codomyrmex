@@ -32,4 +32,4 @@ tests/unit/eval_harness/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../eval_harness/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../eval_harness/)

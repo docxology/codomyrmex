@@ -29,4 +29,4 @@ FSDPShard, AllReduce, simulate_fsdp_step
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/distributed_training/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/distributed_training/README.md) | [AGENTS.md](AGENTS.md)

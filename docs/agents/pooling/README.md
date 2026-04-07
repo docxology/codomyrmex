@@ -29,10 +29,10 @@ client = AgentPool()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/pooling/`](../../../../src/codomyrmex/agents/pooling/)
+Source: [`src/codomyrmex/agents/pooling/`](../../../src/codomyrmex/agents/pooling/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/pooling/](../../../../src/codomyrmex/agents/pooling/)
+- **Source**: [src/codomyrmex/agents/pooling/](../../../src/codomyrmex/agents/pooling/)
 - **Project Root**: [README.md](../../../README.md)

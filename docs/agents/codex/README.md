@@ -32,7 +32,7 @@ codex login   # Opens browser for OAuth
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/codex/`](../../../../src/codomyrmex/agents/codex/)
+Source: [`src/codomyrmex/agents/codex/`](../../../src/codomyrmex/agents/codex/)
 
 | File | Purpose |
 |:---|:---|
@@ -43,5 +43,5 @@ Source: [`src/codomyrmex/agents/codex/`](../../../../src/codomyrmex/agents/codex
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/codex/](../../../../src/codomyrmex/agents/codex/)
+- **Source**: [src/codomyrmex/agents/codex/](../../../src/codomyrmex/agents/codex/)
 - **Project Root**: [README.md](../../../README.md)

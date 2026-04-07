@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/telemetry/](../../../../src/codomyrmex/telemetry/)
+- **Source**: [src/codomyrmex/telemetry/](../../../../telemetry/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

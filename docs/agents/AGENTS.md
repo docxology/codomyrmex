@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Agent coordination document for the `docs/agents/` directory. This directory contains documentation for all **41 agent packages** under `src/codomyrmex/agents/`, mirroring that tree. The additional [`rules/`](rules/) folder here is documentation-only (no `src` counterpart).
+Agent coordination document for the `docs/agents/` directory. This directory contains documentation for all **39** top-level agent packages under `src/codomyrmex/agents/`, mirroring that tree. The additional [`rules/`](rules/) folder here is documentation-only (no `src` counterpart).
 
 ## Agent Documentation Index
 

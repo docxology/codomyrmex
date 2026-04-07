@@ -23,10 +23,10 @@ client = HealthChecker()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/infrastructure/`](../../../../src/codomyrmex/agents/infrastructure/)
+Source: [`src/codomyrmex/agents/infrastructure/`](../../../src/codomyrmex/agents/infrastructure/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/infrastructure/](../../../../src/codomyrmex/agents/infrastructure/)
+- **Source**: [src/codomyrmex/agents/infrastructure/](../../../src/codomyrmex/agents/infrastructure/)
 - **Project Root**: [README.md](../../../README.md)

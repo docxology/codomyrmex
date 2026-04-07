@@ -30,4 +30,4 @@ MinHash, LSHIndex, DataCurator
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/data_curation/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/data_curation/README.md) | [AGENTS.md](AGENTS.md)

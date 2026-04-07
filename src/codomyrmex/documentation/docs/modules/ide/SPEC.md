@@ -28,7 +28,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/ide/](../../../../src/codomyrmex/ide/)
+- **Source**: [src/codomyrmex/ide/](../../../../ide/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

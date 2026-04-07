@@ -29,7 +29,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/terminal_interface/](../../../../src/codomyrmex/terminal_interface/)
+- **Source**: [src/codomyrmex/terminal_interface/](../../../../terminal_interface/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

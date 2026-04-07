@@ -5,7 +5,7 @@
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [[Module Name] Agents](AGENTS.md)
 - **Children**:
-    - [Subdirectory Name](subdirectory/AGENTS.md) (if applicable)
+    - `subdirectory/AGENTS.md` (if applicable; see [tutorials/AGENTS.md](tutorials/AGENTS.md) for a real child layout)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -38,11 +38,11 @@
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API Specification](docs/API_SPECIFICATION.md) <!-- optional --> - Detailed API specification (if applicable)
-- **Usage Examples**: [Usage Examples](docs/USAGE_EXAMPLES.md) <!-- optional --> - Practical usage demonstrations (if applicable)
+- **API Reference**: [API Specification](API_SPECIFICATION.md) <!-- optional --> - Detailed API specification (if applicable)
+- **Usage Examples**: [Usage Examples](USAGE_EXAMPLES.md) <!-- optional --> - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../README.md) - Main project documentation
-- **Source Root**: [src](../../README.md) - Source code documentation
+- **Source Root**: [src/README](../../../src/README.md) - Source code index
 

@@ -29,10 +29,10 @@ client = AgentArchitecture()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/theory/`](../../../../src/codomyrmex/agents/theory/)
+Source: [`src/codomyrmex/agents/theory/`](../../../src/codomyrmex/agents/theory/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/theory/](../../../../src/codomyrmex/agents/theory/)
+- **Source**: [src/codomyrmex/agents/theory/](../../../src/codomyrmex/agents/theory/)
 - **Project Root**: [README.md](../../../README.md)

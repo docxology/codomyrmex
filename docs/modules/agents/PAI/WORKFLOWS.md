@@ -10,7 +10,7 @@ Workflows are multi-step procedures that compose skills, tools, and prompts into
 
 ### Codomyrmex-Defined Workflows
 
-The `get_skill_manifest()` function ([L888-933](../../../src/codomyrmex/agents/pai/mcp_bridge.py)) defines 5 workflows that PAI agents can invoke:
+The `get_skill_manifest()` function ([L888-933](../../../../src/codomyrmex/agents/pai/mcp_bridge.py)) defines 5 workflows that PAI agents can invoke:
 
 ```mermaid
 graph TD

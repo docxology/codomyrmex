@@ -31,4 +31,4 @@ MultiHeadAttention, scaled_dot_product_attention, flash_attention, verify_flash_
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/neural/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/neural/README.md) | [AGENTS.md](AGENTS.md)

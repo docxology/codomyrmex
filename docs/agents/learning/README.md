@@ -22,10 +22,10 @@ client = Skill()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/learning/`](../../../../src/codomyrmex/agents/learning/)
+Source: [`src/codomyrmex/agents/learning/`](../../../src/codomyrmex/agents/learning/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/learning/](../../../../src/codomyrmex/agents/learning/)
+- **Source**: [src/codomyrmex/agents/learning/](../../../src/codomyrmex/agents/learning/)
 - **Project Root**: [README.md](../../../README.md)

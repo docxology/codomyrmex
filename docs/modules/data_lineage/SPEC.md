@@ -31,4 +31,4 @@ NodeType, EdgeType, LineageNode, LineageEdge, DataAsset, LineageGraph, LineageTr
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/data_lineage/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/data_lineage/README.md) | [AGENTS.md](AGENTS.md)

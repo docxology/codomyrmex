@@ -32,4 +32,4 @@ tests/unit/synthetic_data/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../synthetic_data/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../synthetic_data/)

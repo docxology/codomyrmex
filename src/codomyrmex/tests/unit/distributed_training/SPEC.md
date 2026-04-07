@@ -32,4 +32,4 @@ tests/unit/distributed_training/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../distributed_training/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../distributed_training/)

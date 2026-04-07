@@ -149,7 +149,7 @@ class TestRetryConfig:
     """Tests for RetryConfig dataclass."""
 
     def test_defaults(self):
-        from codomyrmex.utils.retry import RetryConfig
+        from codomyrmex.utils.retry_sync import RetryConfig
 
         cfg = RetryConfig()
         assert cfg.max_attempts == 3
@@ -158,7 +158,7 @@ class TestRetryConfig:
         assert cfg.jitter is True
 
     def test_custom_values(self):
-        from codomyrmex.utils.retry import RetryConfig
+        from codomyrmex.utils.retry_sync import RetryConfig
 
         cfg = RetryConfig(max_attempts=5, base_delay=0.1, jitter=False)
         assert cfg.max_attempts == 5
@@ -170,7 +170,7 @@ class TestComputeDelay:
     """Tests for _compute_delay helper."""
 
     def test_exponential_growth(self):
-        from codomyrmex.utils.retry import RetryConfig, _compute_delay
+        from codomyrmex.utils.retry_sync import RetryConfig, _compute_delay
 
         cfg = RetryConfig(base_delay=1.0, exponential_base=2.0, jitter=False)
         assert _compute_delay(0, cfg) == 1.0
@@ -178,13 +178,13 @@ class TestComputeDelay:
         assert _compute_delay(2, cfg) == 4.0
 
     def test_max_delay_cap(self):
-        from codomyrmex.utils.retry import RetryConfig, _compute_delay
+        from codomyrmex.utils.retry_sync import RetryConfig, _compute_delay
 
         cfg = RetryConfig(base_delay=1.0, max_delay=5.0, jitter=False)
         assert _compute_delay(10, cfg) == 5.0  # Capped at max_delay
 
     def test_jitter_varies_output(self):
-        from codomyrmex.utils.retry import RetryConfig, _compute_delay
+        from codomyrmex.utils.retry_sync import RetryConfig, _compute_delay
 
         cfg = RetryConfig(base_delay=1.0, jitter=True)
         delays = {_compute_delay(1, cfg) for _ in range(20)}
@@ -196,7 +196,7 @@ class TestAsyncRetry:
     """Tests for the async retry decorator."""
 
     def test_async_succeeds(self):
-        from codomyrmex.utils.retry import async_retry
+        from codomyrmex.utils.retry_sync import async_retry
 
         @async_retry(max_attempts=2, base_delay=0.001)
         async def succeed():
@@ -206,7 +206,7 @@ class TestAsyncRetry:
         assert result == "async_ok"
 
     def test_async_retries_then_succeeds(self):
-        from codomyrmex.utils.retry import async_retry
+        from codomyrmex.utils.retry_sync import async_retry
 
         call_count = 0
 
@@ -223,7 +223,7 @@ class TestAsyncRetry:
         assert call_count == 2
 
     def test_async_raises_after_exhaustion(self):
-        from codomyrmex.utils.retry import async_retry
+        from codomyrmex.utils.retry_sync import async_retry
 
         @async_retry(max_attempts=2, base_delay=0.001, jitter=False)
         async def always_fail():

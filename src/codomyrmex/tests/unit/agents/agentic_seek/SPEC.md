@@ -36,4 +36,4 @@ tests/unit/agents/agentic_seek/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../../agents/agentic_seek/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../agents/agentic_seek/)

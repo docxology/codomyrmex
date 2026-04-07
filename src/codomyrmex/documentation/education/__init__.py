@@ -8,12 +8,23 @@ import contextlib
 
 from .curriculum import Curriculum, Difficulty, Lesson
 
-# Optional submodules (not yet implemented)
+Tutor = None
+TutoringSession = None
+Assessment = None
+Certificate = None
+
+# Optional submodules (scaffolded paths; names stay None until implemented)
 with contextlib.suppress(ImportError):
-    from .tutoring import Tutor, TutoringSession
+    from .tutoring import Tutor as _Tutor, TutoringSession as _TutoringSession
+
+    Tutor = _Tutor
+    TutoringSession = _TutoringSession
 
 with contextlib.suppress(ImportError):
-    from .certification import Assessment, Certificate
+    from .certification import Assessment as _Assessment, Certificate as _Certificate
+
+    Assessment = _Assessment
+    Certificate = _Certificate
 
 __all__ = [
     "Assessment",

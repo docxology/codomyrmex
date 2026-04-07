@@ -93,7 +93,7 @@ def my_module_greet(name: str) -> str:
 
 | Metric | Value |
 |--------|-------|
-| Total `@mcp_tool` decorators (production) | 600 ([inventory](../../../reference/inventory.md)) |
+| Total `@mcp_tool` decorators (production) | 600 ([inventory](../../reference/inventory.md)) |
 | Modules with `mcp_tools.py` | 127 / 127 |
 | Tool discovery | Automatic via module scanning |
 

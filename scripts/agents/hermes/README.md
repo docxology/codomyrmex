@@ -127,6 +127,6 @@ uv run python scripts/agents/hermes/new_instance.py \
 ## Navigation
 
 - **Parent Directory**: [agents](../README.md)
-- **Project Root**: [../../../../README.md](../../../../README.md)
-- **Hermes Docs**: [docs/agents/hermes/](../../../../docs/agents/hermes/)
-- **Tests**: [test_hermes_orchestrators.py](../../../../src/codomyrmex/tests/unit/agents/test_hermes_orchestrators.py)
+- **Project Root**: [../../../README.md](../../../README.md)
+- **Hermes Docs**: [docs/agents/hermes/](../../../docs/agents/hermes/)
+- **Tests**: [test_hermes_orchestrators.py](../../../src/codomyrmex/tests/unit/agents/test_hermes_orchestrators.py)

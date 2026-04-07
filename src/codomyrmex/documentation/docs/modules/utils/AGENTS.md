@@ -1,9 +1,10 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/utils
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.8 | **Status**: Active | **Last Updated**: April 2026
 
 ## Purpose
-Documentation files and guides.
+
+Docusaurus-facing copy of utils module docs. Mirror edits from `docs/modules/utils/` and `src/codomyrmex/utils/`; [api_specification.md](api_specification.md) must stay in sync with [API_SPECIFICATION.md](../../../../../../docs/modules/utils/API_SPECIFICATION.md).
 
 ## Active Components
 - `SPEC.md` – Project file

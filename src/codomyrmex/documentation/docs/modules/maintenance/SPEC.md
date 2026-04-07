@@ -28,7 +28,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/maintenance/](../../../../src/codomyrmex/maintenance/)
+- **Source**: [src/codomyrmex/maintenance/](../../../../maintenance/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

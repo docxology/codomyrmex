@@ -30,4 +30,4 @@ ContainerOptimizer, ResourceTuner
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/container_optimization/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/container_optimization/README.md) | [AGENTS.md](AGENTS.md)

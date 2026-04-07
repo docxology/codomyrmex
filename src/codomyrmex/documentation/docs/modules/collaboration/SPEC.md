@@ -22,7 +22,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/collaboration/](../../../../src/codomyrmex/collaboration/)
+- **Source**: [src/codomyrmex/collaboration/](../../../../collaboration/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

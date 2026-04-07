@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/database_management/](../../../../src/codomyrmex/database_management/)
+- **Source**: [src/codomyrmex/database_management/](../../../../database_management/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

@@ -28,7 +28,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/vector_store/](../../../../src/codomyrmex/vector_store/)
+- **Source**: [src/codomyrmex/vector_store/](../../../../vector_store/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

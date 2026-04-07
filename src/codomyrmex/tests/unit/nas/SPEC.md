@@ -32,4 +32,4 @@ tests/unit/nas/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../nas/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../nas/)

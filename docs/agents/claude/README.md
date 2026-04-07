@@ -61,7 +61,7 @@ export ANTHROPIC_API_KEY=your-key-here
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/claude/`](../../../../src/codomyrmex/agents/claude/)
+Source: [`src/codomyrmex/agents/claude/`](../../../src/codomyrmex/agents/claude/)
 
 | File | Purpose |
 |:---|:---|
@@ -74,13 +74,13 @@ Source: [`src/codomyrmex/agents/claude/`](../../../../src/codomyrmex/agents/clau
 
 | Document | Path |
 |:---|:---|
-| README | [claude/README.md](../../../../src/codomyrmex/agents/claude/README.md) |
-| SPEC | [claude/SPEC.md](../../../../src/codomyrmex/agents/claude/SPEC.md) |
-| API Spec | [claude/API_SPECIFICATION.md](../../../../src/codomyrmex/agents/claude/API_SPECIFICATION.md) |
-| MCP Tools | [claude/MCP_TOOL_SPECIFICATION.md](../../../../src/codomyrmex/agents/claude/MCP_TOOL_SPECIFICATION.md) |
+| README | [claude/README.md](../../../src/codomyrmex/agents/claude/README.md) |
+| SPEC | [claude/SPEC.md](../../../src/codomyrmex/agents/claude/SPEC.md) |
+| API Spec | [claude/API_SPECIFICATION.md](../../../src/codomyrmex/agents/claude/API_SPECIFICATION.md) |
+| MCP Tools | [claude/MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/agents/claude/MCP_TOOL_SPECIFICATION.md) |
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/claude/](../../../../src/codomyrmex/agents/claude/)
+- **Source**: [src/codomyrmex/agents/claude/](../../../src/codomyrmex/agents/claude/)
 - **Project Root**: [README.md](../../../README.md)

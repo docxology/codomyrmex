@@ -8,10 +8,10 @@ Autonomous code improvement pipeline. Provides specialized agents for targeted t
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/specialized/`](../../../../src/codomyrmex/agents/specialized/)
+Source: [`src/codomyrmex/agents/specialized/`](../../../src/codomyrmex/agents/specialized/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/specialized/](../../../../src/codomyrmex/agents/specialized/)
+- **Source**: [src/codomyrmex/agents/specialized/](../../../src/codomyrmex/agents/specialized/)
 - **Project Root**: [README.md](../../../README.md)

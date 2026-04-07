@@ -28,7 +28,7 @@ def calendar_update_event(event_id: str, updates: dict) -> dict
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/calendar_integration/](../../../../src/codomyrmex/calendar_integration/)
+- **Source**: [src/codomyrmex/calendar_integration/](../../../../calendar_integration/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

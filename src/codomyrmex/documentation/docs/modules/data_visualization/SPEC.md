@@ -28,7 +28,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/data_visualization/](../../../../src/codomyrmex/data_visualization/)
+- **Source**: [src/codomyrmex/data_visualization/](../../../../data_visualization/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

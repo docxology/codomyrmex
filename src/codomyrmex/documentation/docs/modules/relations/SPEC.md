@@ -27,7 +27,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/relations/](../../../../src/codomyrmex/relations/)
+- **Source**: [src/codomyrmex/relations/](../../../../relations/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

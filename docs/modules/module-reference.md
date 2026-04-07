@@ -278,7 +278,7 @@ Monitoring, telemetry, and operational tooling:
 - **[cli](../../src/codomyrmex/cli/)** - Command-line interface (entry point)
 - **[embodiment](../../src/codomyrmex/embodiment/)** - Physical/robotic embodiment interfaces
 
-**See [Source Code Index](src/README.md) for complete module listing and [Module System Overview](docs/modules/overview.md) for detailed architecture.**
+**See [Source Code Index](../../src/README.md) for complete module listing and [Module System Overview](overview.md) for detailed architecture.**
 
 ## Module Quick Reference
 

@@ -33,4 +33,4 @@ tests/unit/demos/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../demos/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../demos/)

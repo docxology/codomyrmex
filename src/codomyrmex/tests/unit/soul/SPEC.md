@@ -33,4 +33,4 @@ tests/unit/soul/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../soul/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../soul/)

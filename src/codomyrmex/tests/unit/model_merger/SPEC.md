@@ -32,4 +32,4 @@ tests/unit/model_merger/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../model_merger/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../model_merger/)

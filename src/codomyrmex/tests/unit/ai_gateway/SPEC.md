@@ -32,4 +32,4 @@ tests/unit/ai_gateway/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../ai_gateway/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../ai_gateway/)

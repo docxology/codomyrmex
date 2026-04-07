@@ -31,4 +31,4 @@ PPOTrainer, Actor, Critic, RewardModel, ppo_step
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/rlhf/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/rlhf/README.md) | [AGENTS.md](AGENTS.md)

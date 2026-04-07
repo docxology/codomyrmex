@@ -40,10 +40,10 @@ client = AgenticSeekClient()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/agentic_seek/`](../../../../src/codomyrmex/agents/agentic_seek/)
+Source: [`src/codomyrmex/agents/agentic_seek/`](../../../src/codomyrmex/agents/agentic_seek/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/agentic_seek/](../../../../src/codomyrmex/agents/agentic_seek/)
+- **Source**: [src/codomyrmex/agents/agentic_seek/](../../../src/codomyrmex/agents/agentic_seek/)
 - **Project Root**: [README.md](../../../README.md)

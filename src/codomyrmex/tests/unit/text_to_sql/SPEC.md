@@ -32,4 +32,4 @@ tests/unit/text_to_sql/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../text_to_sql/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../text_to_sql/)

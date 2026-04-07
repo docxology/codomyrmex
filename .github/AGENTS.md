@@ -1,12 +1,14 @@
 # .github -- AI Agent Guide
 
-**Status**: Active | **Last Updated**: March 2026
+**Status**: Active | **Last Updated**: April 2026
 
 ## Purpose
 
 This directory holds GitHub-specific configuration: CI/CD workflows, issue/PR templates,
 Dependabot config, CODEOWNERS, Gemini AI command configs, and multi-agent infrastructure.
 This document tells AI agents what they need to know to operate safely within this directory.
+
+**Workflow YAML count:** 37 files under `.github/workflows/` (align with root `README.md` and [docs/reference/inventory.md](../docs/reference/inventory.md); refresh via `uv run python scripts/doc_inventory.py`).
 
 ## Directory Contents
 

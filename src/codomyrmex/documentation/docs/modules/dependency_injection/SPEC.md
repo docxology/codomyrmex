@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/dependency_injection/](../../../../src/codomyrmex/dependency_injection/)
+- **Source**: [src/codomyrmex/dependency_injection/](../../../../dependency_injection/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/privacy/](../../../../src/codomyrmex/privacy/)
+- **Source**: [src/codomyrmex/privacy/](../../../../privacy/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

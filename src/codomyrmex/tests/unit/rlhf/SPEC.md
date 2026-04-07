@@ -32,4 +32,4 @@ tests/unit/rlhf/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../rlhf/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../rlhf/)

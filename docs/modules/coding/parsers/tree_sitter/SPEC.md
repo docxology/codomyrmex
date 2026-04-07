@@ -35,4 +35,4 @@ uv run python -m pytest src/codomyrmex/tests/ -k tree_sitter -v
 
 - [README.md](README.md) — Human-readable documentation
 - [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/tree_sitter/)
+- [Source Code](../../../../../src/codomyrmex/tree_sitter/)

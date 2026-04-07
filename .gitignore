@@ -264,7 +264,6 @@ codomyrmex_inventory.json
 # Generated root-level data files
 memory.db
 scorecard.png
-/index.html
 fail_prompt.py
 review.md
 config_audits/

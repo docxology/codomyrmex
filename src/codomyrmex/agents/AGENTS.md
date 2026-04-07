@@ -35,7 +35,7 @@ LLM provider integrations and agent implementations for Claude, Codex, Gemini, O
 - `google_workspace/` – google workspace module implementation
 - `ghost_architecture/` – ghost architecture framework submodule
 - `hermes/` – hermes module implementation
-- `open_gauss/` – [OpenGauss](https://github.com/math-inc/OpenGauss) submodule — Lean4 theorem proving & autoformalization workflows (SessionDB, GaussProject, swarm manager) | [docs](../../../../../docs/agents/open_gauss/README.md) | [tests](../../tests/agents/test_open_gauss.py) | 77 tests passing
+- `open_gauss/` – [OpenGauss](https://github.com/math-inc/OpenGauss) submodule — Lean4 theorem proving & autoformalization workflows (SessionDB, GaussProject, swarm manager) | [docs](../../../docs/agents/open_gauss/README.md) | [tests](../tests/agents/test_open_gauss.py) | 77 tests passing
 - `history/` – history module implementation
 - `infrastructure/` – infrastructure module implementation
 - `jules/` – jules module implementation

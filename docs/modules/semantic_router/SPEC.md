@@ -30,4 +30,4 @@ SemanticRouter, Route, RouteMatch
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/semantic_router/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/semantic_router/README.md) | [AGENTS.md](AGENTS.md)

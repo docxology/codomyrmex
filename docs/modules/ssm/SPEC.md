@@ -28,4 +28,4 @@ MambaBlock, SelectiveSSM, mamba_forward
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/ssm/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/ssm/README.md) | [AGENTS.md](AGENTS.md)

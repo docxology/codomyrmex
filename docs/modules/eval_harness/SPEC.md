@@ -29,4 +29,4 @@ EvalHarness, EvalTask, EvalResult, ExactMatchMetric, F1Metric
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/eval_harness/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/eval_harness/README.md) | [AGENTS.md](AGENTS.md)

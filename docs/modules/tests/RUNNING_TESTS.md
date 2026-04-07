@@ -2,7 +2,7 @@
 
 **Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
-**Canonical copy:** [src/codomyrmex/tests/RUNNING_TESTS.md](../../../../src/codomyrmex/tests/RUNNING_TESTS.md) — keep this module doc in sync when changing commands or counts.
+**Canonical copy:** [src/codomyrmex/tests/RUNNING_TESTS.md](../../../src/codomyrmex/tests/RUNNING_TESTS.md) — keep this module doc in sync when changing commands or counts.
 
 ## Overview
 
@@ -201,7 +201,7 @@ Typical order when running pieces by hand: **unit** → **integration** → **ex
 
 ### GitHub Actions
 
-CI invokes **`uv run pytest`** on `src/codomyrmex/tests/` with coverage in the **`coverage-gate`** job, and splits **unit** vs **integration** paths in the test matrix. There is no batch shell script in this repository — see [`.github/workflows/ci.yml`](../../../../.github/workflows/ci.yml).
+CI invokes **`uv run pytest`** on `src/codomyrmex/tests/` with coverage in the **`coverage-gate`** job, and splits **unit** vs **integration** paths in the test matrix. There is no batch shell script in this repository — see [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml).
 
 ### Parallel matrix (CI)
 

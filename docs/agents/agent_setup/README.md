@@ -23,10 +23,10 @@ client = AgentSetupValidator()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/agent_setup/`](../../../../src/codomyrmex/agents/agent_setup/)
+Source: [`src/codomyrmex/agents/agent_setup/`](../../../src/codomyrmex/agents/agent_setup/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/agent_setup/](../../../../src/codomyrmex/agents/agent_setup/)
+- **Source**: [src/codomyrmex/agents/agent_setup/](../../../src/codomyrmex/agents/agent_setup/)
 - **Project Root**: [README.md](../../../README.md)

@@ -30,4 +30,4 @@ TextToSQLEngine, SQLSchema, SQLResult
 
 ## Navigation
 
-- [Source README](../../src/codomyrmex/text_to_sql/README.md) | [AGENTS.md](AGENTS.md)
+- [Source README](../../../src/codomyrmex/text_to_sql/README.md) | [AGENTS.md](AGENTS.md)

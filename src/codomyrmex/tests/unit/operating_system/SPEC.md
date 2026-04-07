@@ -32,4 +32,4 @@ tests/unit/operating_system/
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../../operating_system/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source](../../../operating_system/)

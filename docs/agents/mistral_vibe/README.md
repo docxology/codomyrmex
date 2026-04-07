@@ -44,10 +44,10 @@ client = MistralVibeClient()
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/mistral_vibe/`](../../../../src/codomyrmex/agents/mistral_vibe/)
+Source: [`src/codomyrmex/agents/mistral_vibe/`](../../../src/codomyrmex/agents/mistral_vibe/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/mistral_vibe/](../../../../src/codomyrmex/agents/mistral_vibe/)
+- **Source**: [src/codomyrmex/agents/mistral_vibe/](../../../src/codomyrmex/agents/mistral_vibe/)
 - **Project Root**: [README.md](../../../README.md)

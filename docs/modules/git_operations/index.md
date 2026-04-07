@@ -10,7 +10,7 @@ The main `documentation/` module of the Codomyrmex project may compile this cont
 
 - [Technical Overview](./technical_overview.md)
 - [API Specification](../../../src/codomyrmex/git_operations/API_SPECIFICATION.md) (Link to the main API spec)
-- [Usage Examples](../../../src/codomyrmex/git_operations/docs/COMPREHENSIVE_USAGE_EXAMPLES.md) (Link to usage examples)
+- [Usage Examples](../../../src/codomyrmex/git_operations/docs/USAGE_EXAMPLES.md) (Link to usage examples)
 - [Tutorials](./tutorials/)
 - [Contributing Guidelines](../../project/contributing.md) (Link to contribution guide)
 
@@ -18,7 +18,7 @@ The main `documentation/` module of the Codomyrmex project may compile this cont
 
 - Start with the [Technical Overview](./technical_overview.md) for a high-level understanding of the module's architecture.
 - Refer to the [API Specification](../../../src/codomyrmex/git_operations/API_SPECIFICATION.md) for details on how to interact with the module programmatically.
-- Explore the [Usage Examples](../../../src/codomyrmex/git_operations/docs/COMPREHENSIVE_USAGE_EXAMPLES.md) and [Tutorials](./tutorials/) to see the module in action. 
+- Explore the [Usage Examples](../../../src/codomyrmex/git_operations/docs/USAGE_EXAMPLES.md) and [Tutorials](./tutorials/) to see the module in action. 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

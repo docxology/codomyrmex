@@ -18,7 +18,7 @@
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/graph_rag/](../../../../src/codomyrmex/graph_rag/)
+- **Source**: [src/codomyrmex/graph_rag/](../../../../graph_rag/)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

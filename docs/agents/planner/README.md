@@ -8,10 +8,10 @@ Goal decomposition and convergent planning for agents. Breaks complex tasks into
 
 ## Source Module
 
-Source: [`src/codomyrmex/agents/planner/`](../../../../src/codomyrmex/agents/planner/)
+Source: [`src/codomyrmex/agents/planner/`](../../../src/codomyrmex/agents/planner/)
 
 ## Navigation
 
 - **Parent**: [docs/agents/](../README.md)
-- **Source**: [src/codomyrmex/agents/planner/](../../../../src/codomyrmex/agents/planner/)
+- **Source**: [src/codomyrmex/agents/planner/](../../../src/codomyrmex/agents/planner/)
 - **Project Root**: [README.md](../../../README.md)

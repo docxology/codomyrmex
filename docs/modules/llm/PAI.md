@@ -227,6 +227,6 @@ providers:
 
 - [README.md](README.md) - Module overview
 - [AGENTS.md](AGENTS.md) - Agent coordination
-- [ollama/README.md](ollama/README.md) - Ollama integration
-- [fabric/README.md](fabric/README.md) - Fabric integration
+- [Ollama integration](../../../src/codomyrmex/llm/ollama/README.md) - Ollama provider
+- [Fabric integration](../../../src/codomyrmex/llm/fabric/README.md) - Fabric patterns
 - [../agents/PAI.md](../agents/PAI.md) - Agent PAI features
