@@ -1,3 +1,0 @@
-## 2024-05-18 - [Optimize MinHash Shingling]
-**Learning:** In `src/codomyrmex/data_curation/minhash.py`, the `_shingle` method uses MD5 hashing to generate shingle signatures. A naive optimization of using `zlib.crc32` was attempted but broke compatibility because the Jaccard similarity threshold rely on the full 128-bit hash range and exact matchings with existing persistent signatures. To safely optimize MD5 execution, use `int.from_bytes(digest, "big")` to skip string allocations rather than truncating or switching to `crc32`.
-**Action:** Always verify that hashing algorithms map exactly 1:1 to previous values when optimizing persistence-layer components to avoid silent algorithmic degradations or breaking existing data.
