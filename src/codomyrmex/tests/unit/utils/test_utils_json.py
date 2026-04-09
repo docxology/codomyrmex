@@ -63,6 +63,15 @@ class TestSafeJsonLoads:
 
         assert result == 42
 
+    def test_type_error_input(self):
+        """Test input that causes TypeError returns default."""
+        from codomyrmex.utils import safe_json_loads
+
+        # Passing a dict to json.loads raises TypeError
+        result = safe_json_loads({"key": "value"}, default="default")  # type: ignore
+
+        assert result == "default"
+
 
 @pytest.mark.unit
 class TestSafeJsonDumps:
