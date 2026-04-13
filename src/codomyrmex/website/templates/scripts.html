@@ -25,7 +25,8 @@
 
         <form class="script-form" data-script-name="{{ script.path }}" data-script-id="{{ loop.index }}">
             <div style="margin-bottom: 1rem;">
-                <input type="text" name="args" placeholder="Arguments (optional)" style="width: 100%;">
+                <label for="script-args-{{ loop.index }}" class="sr-only">Arguments for {{ script.title }}</label>
+                <input type="text" id="script-args-{{ loop.index }}" name="args" placeholder="Arguments (optional)" style="width: 100%;">
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%;">Run Script</button>
         </form>
