@@ -134,11 +134,12 @@ class HealthChecker:
                         )
                     )
             except Exception as exc:
+                logger.error("Health check failed for %s", name, exc_info=exc)
                 components.append(
                     ComponentHealth(
                         name=name,
                         status=HealthStatus.UNHEALTHY,
-                        message=str(exc),
+                        message="Health check failed",
                         latency_ms=(time.time() - start) * 1000,
                     )
                 )
