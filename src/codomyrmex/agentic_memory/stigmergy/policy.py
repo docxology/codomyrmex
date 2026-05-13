@@ -29,7 +29,9 @@ def boost_importance_value(current: int, trace_strength: float) -> int:
     return max(1, min(4, bumped))
 
 
-def importance_boost_from_trace(trace_strength: float, *, max_bonus_steps: int = 2) -> int:
+def importance_boost_from_trace(
+    trace_strength: float, *, max_bonus_steps: int = 2
+) -> int:
     """Return how many integer steps to add to importance (0 … max_bonus_steps)."""
     if trace_strength <= 0.0:
         return 0

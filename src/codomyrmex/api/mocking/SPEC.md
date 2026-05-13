@@ -109,3 +109,11 @@ uv run pytest src/codomyrmex/tests/unit/api/mocking/
 - Real TCP/HTTP server mode (e.g., wrapping `http.server`) for integration tests that require actual network calls
 - Simulated latency injection using `latency_ms` in `handle_request` via `time.sleep` or async delay
 - OpenAPI/Swagger spec import to auto-generate mock routes from API definitions
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

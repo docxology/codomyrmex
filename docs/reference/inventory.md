@@ -2,7 +2,7 @@
 
 Single source of truth for counts used in documentation and marketing copy. **Refresh** after large changes to modules, tools, or tests.
 
-**Last updated:** 2026-04-07
+**Last updated:** 2026-05-13
 
 ## Definitions
 
@@ -12,7 +12,7 @@ Single source of truth for counts used in documentation and marketing copy. **Re
 | **Agent packages** | Direct child directories of `src/codomyrmex/agents/` with `__init__.py` (excluding `__pycache__`). Documented under `docs/agents/`; **`docs/agents/rules/`** is docs-only. **39** packages. |
 | **`@mcp_tool` count** | Physical lines starting with `@mcp_tool` in `.py` files under `src/codomyrmex/`, excluding paths containing `tests/`. Matches `uv run python scripts/doc_inventory.py`. |
 | **`mcp_tools.py` files** | Files named `mcp_tools.py` under `src/codomyrmex/`, excluding `*/tests/*`. |
-| **Collected tests** | Items reported by `uv run pytest --collect-only -q --no-cov` when collection completes without errors. |
+| **Collected tests** | Items reported by `uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib` when collection completes without errors. |
 
 Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/agents/hermes/codomyrmex_integration.md](../agents/hermes/codomyrmex_integration.md) for Hermes-specific counts.
 
@@ -24,9 +24,9 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | Agent packages (`src/codomyrmex/agents/`) | 39 |
 | `mcp_tools.py` files (non-test) | 149 |
 | Production `@mcp_tool` decorators | 600 |
-| Pytest tests collected | 34,593 (`uv run pytest --collect-only -q --no-cov`; or `uv run python scripts/doc_inventory.py --pytest`) |
+| Pytest tests collected | 34,334 (`uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib`) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
-| Markdown files under `docs/` | 1,168 (`find docs -name '*.md' -type f \| wc -l`) |
+| Markdown files under `docs/` | 1,164 (`find docs -name '*.md' -type f \| wc -l`) |
 
 ## Reproduce
 
@@ -39,7 +39,7 @@ uv run python scripts/doc_inventory.py
 # Or manually:
 # rg '^@mcp_tool' src/codomyrmex --glob '*.py' --no-ignore | grep -v '/tests/' | wc -l
 find src/codomyrmex -name 'mcp_tools.py' -not -path '*/tests/*' | wc -l
-uv run pytest --collect-only -q --no-cov 2>&1 | tail -3
+uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib
 find docs -name '*.md' -type f | wc -l
 ```
 

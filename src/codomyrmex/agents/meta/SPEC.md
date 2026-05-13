@@ -64,3 +64,11 @@ The meta system uses a Strategy Pattern with feedback:
 
 - `MetaAgent.run()` catches all exceptions from `task_fn`, logs via `logger.warning`, records outcome as failure.
 - `OutcomeScorer.score()` uses `max()` guards to prevent division by zero on all dimension calculations.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -54,5 +54,5 @@ watcher.start()
 ## Navigation
 
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Documentation**: [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md) | [PAI.md](PAI.md) | [AGENTS.md](AGENTS.md)
+- **Documentation**: [SPEC.md](../../../../../../src/codomyrmex/config_monitoring/SPEC.md) | [API_SPECIFICATION.md](../../../../../../src/codomyrmex/config_monitoring/API_SPECIFICATION.md) | [PAI.md](../../../../../../src/codomyrmex/config_monitoring/PAI.md) | [AGENTS.md](../../../../../../src/codomyrmex/config_monitoring/AGENTS.md)
 - **Project Root**: [../../../README.md](../../../README.md)

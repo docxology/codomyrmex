@@ -116,3 +116,7 @@ Hermes unified skills: copy [`hermes_skills_profile.example.yaml`](hermes_skills
 
 ## Navigation
 - **Project Root**: ../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

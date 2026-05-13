@@ -54,3 +54,11 @@ Simple repository pattern: `SkillLibrary` holds `Skill` dataclasses in a name-ke
 
 - `ValueError` raised by `add_skill` when a duplicate skill name is detected.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

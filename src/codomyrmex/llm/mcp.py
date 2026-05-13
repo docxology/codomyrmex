@@ -214,7 +214,7 @@ class MCPBridge:
         params: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Create a JSON-RPC request."""
-        request = {
+        request: dict[str, Any] = {
             "jsonrpc": "2.0",
             "id": self._next_request_id(),
             "method": method,
@@ -230,7 +230,7 @@ class MCPBridge:
         error: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Create a JSON-RPC response."""
-        response = {
+        response: dict[str, Any] = {
             "jsonrpc": "2.0",
             "id": request_id,
         }
@@ -246,7 +246,7 @@ class MCPBridge:
         params: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Create a JSON-RPC notification (no id)."""
-        notification = {
+        notification: dict[str, Any] = {
             "jsonrpc": "2.0",
             "method": method,
         }

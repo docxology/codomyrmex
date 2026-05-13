@@ -1,5 +1,8 @@
 # PAI Bridge
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `codomyrmex.agents.pai` | **Category**: Core Infrastructure | **Last Updated**: March 2026
 
 ## Overview
@@ -38,3 +41,8 @@ Source: [`src/codomyrmex/agents/pai/`](../../../src/codomyrmex/agents/pai/)
 - **Parent**: [docs/agents/](../README.md)
 - **Source**: [src/codomyrmex/agents/pai/](../../../src/codomyrmex/agents/pai/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

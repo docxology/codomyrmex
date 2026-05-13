@@ -77,3 +77,11 @@ BaseReport (@dataclass)
 
 - `save()` writes via `Path.write_text()`; file system errors propagate to the caller.
 - No exceptions for empty data; reports render with whatever sections have been added.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

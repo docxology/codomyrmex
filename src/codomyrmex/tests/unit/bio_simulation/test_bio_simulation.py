@@ -119,6 +119,7 @@ def test_colony_resting_recovery():
     # Create colony with no random genome traits to avoid interference
     colony = Colony(population=1)
     ant = colony.ants[0]
+    assert ant.genome is not None
     ant.genome.traits = {"endurance": 0.5}  # recovery = 0.01 * (0.5 + 0.5) = 0.01
     ant.state = AntState.RESTING
     ant.energy = 0.5
@@ -135,6 +136,7 @@ def test_colony_resting_to_foraging():
     """Ants in RESTING state switch to FORAGING when energy is high."""
     colony = Colony(population=1)
     ant = colony.ants[0]
+    assert ant.genome is not None
     ant.genome.traits = {"endurance": 0.5}
     ant.state = AntState.RESTING
     ant.energy = 0.895

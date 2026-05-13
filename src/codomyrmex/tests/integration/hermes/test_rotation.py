@@ -39,7 +39,9 @@ def test_rotation_on_429(
 ) -> None:
     """Verify that the router rotates to model-2 if model-1 fails with 429."""
 
-    def side_effect(prompt: str, provider: str, model: str, timeout: int) -> dict[str, Any]:
+    def side_effect(
+        prompt: str, provider: str, model: str, timeout: int
+    ) -> dict[str, Any]:
         if model == "model-1":
             raise RuntimeError("Error 429: Rate limit exceeded")
         return {
@@ -89,9 +91,7 @@ def test_rotation_all_fail(
 ) -> None:
     """Verify that if all models fail, we return a failure."""
 
-    def always_fail(
-        prompt: str, provider: str, model: str, timeout: int
-    ) -> None:
+    def always_fail(prompt: str, provider: str, model: str, timeout: int) -> None:
         raise RuntimeError("Generic Error")
 
     monkeypatch.setattr(rotation_router, "_dispatch", always_fail)

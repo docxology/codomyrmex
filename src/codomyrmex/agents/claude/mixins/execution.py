@@ -194,9 +194,7 @@ class ExecutionMixin:
 
         return content, tool_calls
 
-    def _stream_impl(
-        self: _ExecutionMixinHost, request: AgentRequest
-    ) -> Iterator[str]:
+    def _stream_impl(self: _ExecutionMixinHost, request: AgentRequest) -> Iterator[str]:
         """Stream Claude API response.
 
         Args:

@@ -1,5 +1,8 @@
 # SPEC.md — Video Generation Scripts
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Scope
 Thin orchestrator scripts that delegate video generation to `codomyrmex.video.generation.VideoGenerator`.
 
@@ -37,3 +40,11 @@ Thin orchestrator scripts that delegate video generation to `codomyrmex.video.ge
 | API call fails | `print_error` + exit 1 |
 | Output dir missing | `mkdir(parents=True, exist_ok=True)` |
 | Video returned as URI | Print URI, do not save bytes |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../README.md)

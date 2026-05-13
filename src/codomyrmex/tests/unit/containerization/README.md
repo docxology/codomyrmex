@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Containerization.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -23,3 +23,7 @@ Test files and validation suites.
 ## Navigation
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -1,5 +1,8 @@
 # SPEC.md — Audio Generation Scripts
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Scope
 Thin orchestrator scripts delegating TTS synthesis to `codomyrmex.audio.text_to_speech.Synthesizer`.
 
@@ -31,3 +34,11 @@ Thin orchestrator scripts delegating TTS synthesis to `codomyrmex.audio.text_to_
 | Primary provider unavailable | Try fallback provider |
 | Both providers fail | `print_error` + exit 1 |
 | Synthesis fails | `print_error` + exit 1 |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../README.md)

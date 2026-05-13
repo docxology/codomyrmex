@@ -49,3 +49,11 @@ Single-class design with `SecretManager` as the primary interface. Encryption ke
 - Key rotation logs per-secret re-encryption failures without aborting the full rotation.
 - Unknown operations in `manage_secrets` raise `CodomyrmexError`.
 - All errors are logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

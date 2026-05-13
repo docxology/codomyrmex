@@ -250,6 +250,7 @@ test_fails.log
 coverage.txt
 .benchmarks/
 fix_*.py
+!scripts/documentation/fix_docusaurus_module_links.py
 /.claude
 .desloppify/
 src/codomyrmex/dark/pdf/vendor/dark-pdf
@@ -268,11 +269,16 @@ fail_prompt.py
 review.md
 config_audits/
 config_monitoring/
+!src/codomyrmex/config_monitoring/
+!src/codomyrmex/config_monitoring/API_SPECIFICATION.md
 db_performance/
 
 # Test artifacts
 config/default.yaml
 MEMORY/
+!docs/agents/memory/
+!docs/agents/memory/AGENTS.md
+!docs/agents/memory/README.md
 /dispatches
 
 # DAF Consulting Project

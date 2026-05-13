@@ -57,3 +57,11 @@ Fields: `deployment_id`, `environment`, `config_version`, `status: DeploymentSta
 
 - All deployment failures are logged via `logger.error` and the deployment status is set to `FAILED` before the exception propagates.
 - Missing environments raise `CodomyrmexError`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

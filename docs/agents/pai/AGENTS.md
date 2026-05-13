@@ -37,3 +37,7 @@ Doc mirror for the **PAI agent package** (`src/codomyrmex/agents/pai/`): MCP too
 
 - **Parent directory**: [agents](../README.md)
 - **Project root**: ../../../README.md
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

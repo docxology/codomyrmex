@@ -103,3 +103,11 @@ uv run pytest src/codomyrmex/tests/unit/api/pagination/
 - Database-aware paginator implementations that push LIMIT/OFFSET or WHERE clauses to the query layer
 - Link header generation (RFC 8288) for HATEOAS-style pagination navigation
 - Async paginator variant for streaming large result sets
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

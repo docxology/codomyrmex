@@ -58,3 +58,11 @@ Constructor: `(repo_url: str, local_path: str)`
 - `_get_head_revision` catches `SubprocessError` and `FileNotFoundError`, logs warning, returns `None`.
 - `sync()` catches `CalledProcessError`, logs error, returns `False`.
 - `get_version()` catches all exceptions, logs warning, returns `None`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

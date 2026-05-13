@@ -1,5 +1,8 @@
 # Pi Coding Agent
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `codomyrmex.agents.pi` | **Category**: CLI-based | **Version**: v1.0.0 | **Last Updated**: March 2026
 
 ## Overview
@@ -54,3 +57,7 @@ Source: [`src/codomyrmex/agents/pi/`](../../../src/codomyrmex/agents/pi/)
 - **Parent**: [docs/agents/](../README.md)
 - **Source**: [src/codomyrmex/agents/pi/](../../../src/codomyrmex/agents/pi/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

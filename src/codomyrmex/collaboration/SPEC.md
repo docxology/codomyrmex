@@ -93,3 +93,11 @@ New in v1.3.0, `coordination/attestation.py` provides HMAC-SHA256 signed attesta
 ```bash
 uv run pytest src/codomyrmex/tests/unit/collaboration/
 ```
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

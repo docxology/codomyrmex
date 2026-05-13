@@ -148,3 +148,8 @@ No external packages required.
 
 - **Parent**: [codomyrmex](../SPEC.md)
 - **Related**: [llm](../llm/SPEC.md), [prompt_engineering](../prompt_engineering/SPEC.md)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

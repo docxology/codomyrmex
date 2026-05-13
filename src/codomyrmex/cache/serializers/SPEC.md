@@ -60,3 +60,11 @@ Accepted types: `"json"`, `"pickle"`, `"string"`, `"typed"`. Raises `ValueError`
 - `json.JSONDecodeError` on malformed JSON in `JSONSerializer.deserialize`.
 - `zlib.error` on corrupt compressed data in `CompressedSerializer.deserialize`.
 - `TypedSerializer._is_json_serializable` logs debug on non-serializable values.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

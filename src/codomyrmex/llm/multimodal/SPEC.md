@@ -51,7 +51,7 @@ Properties: `has_images`, `has_audio`, `image_count`
 |--------|-----------|---------|-------------|
 | `validate` | `content: MediaContent` | `tuple[bool, str]` | Checks type, size, format |
 | `process` | `content: MediaContent` | `dict[str, Any]` | Returns metadata: valid, size_bytes, format, hash |
-| `resize_if_needed` | `content, max_bytes` | `MediaContent` | Marks content for resize (placeholder -- PIL required for actual resize) |
+| `resize_if_needed` | `content, max_bytes` | `MediaContent` | Marks content for deferred resize; PIL/Pillow performs actual resizing when installed |
 
 ### `AudioProcessor`
 
@@ -67,7 +67,7 @@ Properties: `has_images`, `has_audio`, `image_count`
 
 ## Constraints
 
-- `ImageProcessor.resize_if_needed` is a placeholder -- actual resizing requires PIL/Pillow.
+- `ImageProcessor.resize_if_needed` records resize intent; actual byte-level resizing requires PIL/Pillow.
 - `to_dict()` returns a single content object if only one part, or an array for multiple parts.
 - Zero-mock: real data only; `NotImplementedError` for unimplemented paths.
 
@@ -76,3 +76,11 @@ Properties: `has_images`, `has_audio`, `image_count`
 - Processors return `(False, reason)` from `validate()` rather than raising exceptions.
 - `from_file()` raises standard `FileNotFoundError` / `IOError` on missing paths.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

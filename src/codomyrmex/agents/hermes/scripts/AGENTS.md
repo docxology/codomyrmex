@@ -49,3 +49,7 @@ Automation and utility scripts.
 ## Navigation Links
 - **📁 Parent Directory**: [hermes](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../../README.md - Main project documentation
+
+## Related Documents
+
+- **Spec**: [SPEC.md](SPEC.md)

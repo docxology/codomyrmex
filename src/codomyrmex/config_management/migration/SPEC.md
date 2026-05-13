@@ -59,3 +59,11 @@ Fields: `success`, `original_version`, `target_version`, `migrated_config`, `app
 
 - Individual rule failures are captured in `MigrationResult.errors` and halt further rule application.
 - All errors are logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -1,5 +1,8 @@
 # Autograd Engine -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### Computation Graph
@@ -68,3 +71,11 @@ Both `Value` and `Tensor` build a DAG (directed acyclic graph) during forward co
 - Tensor does not support higher-order gradients
 - No GPU acceleration -- NumPy CPU only
 - Not designed for large-scale training (use PyTorch/JAX for that)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

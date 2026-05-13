@@ -442,7 +442,7 @@ class TestJulesOrchestration:
         class TestAgent(BaseAgent):
             """Test suite for Agent."""
 
-            def _execute_impl(self, request):
+            def _execute_impl(self, request, max_tokens: int | None = None):
                 return AgentResponse(content="Test response")
 
             def _stream_impl(self, request):

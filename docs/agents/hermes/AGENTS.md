@@ -1,5 +1,8 @@
 # Hermes Documentation — Agent Coordination
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `docs/agents/hermes/` | **Version**: v0.4.0 | **Last Updated**: March 2026 (73-commit update + v0.4.0)
 
 ## Purpose
@@ -117,3 +120,7 @@ Hermes docs use **flowchart** / **graph** / **sequenceDiagram** blocks. Prefer `
 - **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
 - **Source**: [src/codomyrmex/agents/hermes/AGENTS.md](../../../src/codomyrmex/agents/hermes/AGENTS.md)
 - **Project Root**: [AGENTS.md](../../../AGENTS.md)
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

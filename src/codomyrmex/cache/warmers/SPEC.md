@@ -107,3 +107,11 @@ uv run pytest src/codomyrmex/tests/unit/cache/warmers/
 - Add priority-weighted warming to bias towards high-value keys
 - Implement warming progress callbacks and cancellation support
 - Add TTL-aware warming that pre-warms keys before their cache entries expire
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

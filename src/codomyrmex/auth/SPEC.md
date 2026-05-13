@@ -107,3 +107,7 @@ class APIKeyManager:
 
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [security](../security/AGENTS.md), [api](../api/AGENTS.md)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)

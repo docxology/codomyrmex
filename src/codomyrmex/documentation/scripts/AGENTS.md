@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Scripts.
 
 ## Active Components
 - `PAI.md` – Project file
@@ -37,6 +37,7 @@ Documentation files and guides.
 - `placeholder_check.py` – Project file
 - `py.typed` – Project file
 - `remove_placeholders.py` – Project file
+- `repair_triple_check_completeness.py` – Project file
 - `smart_template_engine.py` – Project file
 - `triple_check.py` – Project file
 - `validate_child_references.py` – Project file
@@ -83,6 +84,7 @@ Documentation files and guides.
 - `placeholder_check.py`
 - `py.typed`
 - `remove_placeholders.py`
+- `repair_triple_check_completeness.py`
 - `smart_template_engine.py`
 - `triple_check.py`
 - `validate_child_references.py`

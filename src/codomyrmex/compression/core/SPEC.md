@@ -54,3 +54,11 @@ Inherits from `CodomyrmexError`. Raised for all compression and decompression fa
 ## Error Handling
 
 - All exceptions are caught, logged via `logger.error`, and re-raised as `CompressionError` with exception chaining (`from e`).
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

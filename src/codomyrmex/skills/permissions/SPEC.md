@@ -78,3 +78,11 @@ uv run pytest src/codomyrmex/tests/unit/skills/permissions/
 - Add persistent storage backend (file or database)
 - Support wildcard or role-based permission grants
 - Add permission inheritance between skills
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

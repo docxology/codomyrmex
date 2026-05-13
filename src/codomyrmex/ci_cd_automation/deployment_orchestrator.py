@@ -5,6 +5,7 @@ Provides comprehensive deployment orchestration, environment management,
 and release coordination capabilities.
 """
 
+import importlib
 import json
 import os
 import shutil
@@ -19,25 +20,29 @@ from typing import Any
 from codomyrmex.validation.schemas.infra import DeploymentStatus
 
 # Optional imports handled gracefully at runtime
+docker: Any | None = None
 try:
-    import docker
+    docker = importlib.import_module("docker")
 except ImportError:
     docker = None
 
+kubernetes: Any | None = None
 try:
-    import kubernetes
-    import kubernetes.client
-    import kubernetes.config
+    kubernetes = importlib.import_module("kubernetes")
+    importlib.import_module("kubernetes.client")
+    importlib.import_module("kubernetes.config")
 except ImportError:
     kubernetes = None
 
+requests: Any | None = None
 try:
-    import requests
+    requests = importlib.import_module("requests")
 except ImportError:
     requests = None
 
+yaml: Any | None = None
 try:
-    import yaml
+    yaml = importlib.import_module("yaml")
 except ImportError:
     yaml = None
 

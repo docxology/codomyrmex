@@ -175,26 +175,25 @@ class TestOrchestrationEngineSessionManagement:
 
     # --- close_session ---
 
-    def test_close_session_existing_fails_on_deallocate(self, engine):
-        """close_session calls resource_manager.deallocate_resources which
-        does not exist on ResourceManager. Documents integration bug."""
+    def test_close_session_existing_releases_and_removes_session(self, engine):
+        """close_session releases resources, emits the close event, and removes state."""
+        events = []
+        engine.register_event_handler("session_closed", lambda e, d: events.append(d))
         sid = engine.create_session()
-        with pytest.raises(AttributeError, match="deallocate_resources"):
-            engine.close_session(sid)
+        assert engine.close_session(sid) is True
+        assert sid not in engine.active_sessions
+        assert events == [{"session_id": sid}]
 
     def test_close_session_nonexistent(self, engine):
         result = engine.close_session("nonexistent-id")
         assert result is False
 
-    def test_close_session_sets_status_before_crash(self, engine):
-        """close_session sets status=SessionStatus.COMPLETED and completed_at
-        before crashing on deallocate_resources."""
+    def test_close_session_sets_completion_before_removal(self, engine):
+        """close_session marks the session completed before removing it."""
         sid = engine.create_session()
         session = engine.active_sessions[sid]
         assert session.completed_at is None
-        with pytest.raises(AttributeError):
-            engine.close_session(sid)
-        # The status was set before the crash
+        assert engine.close_session(sid) is True
         assert session.status is SessionStatus.COMPLETED
         assert session.completed_at is not None
 
@@ -316,16 +315,13 @@ class TestOrchestrationEngineEvents:
         assert events[0]["session_id"] == sid
         assert events[0]["user_id"] == "eve"
 
-    def test_session_closed_event_not_fired_due_to_bug(self, engine):
-        """close_session crashes on deallocate_resources before emitting
-        the session_closed event. Documents this integration bug."""
+    def test_session_closed_event_fired(self, engine):
+        """close_session emits a session_closed event after cleanup."""
         events = []
         engine.register_event_handler("session_closed", lambda e, d: events.append(d))
         sid = engine.create_session()
-        with pytest.raises(AttributeError):
-            engine.close_session(sid)
-        # Event was NOT emitted because the crash happens before emit
-        assert len(events) == 0
+        assert engine.close_session(sid) is True
+        assert events == [{"session_id": sid}]
 
 
 # ---------------------------------------------------------------------------
@@ -452,19 +448,14 @@ class TestOrchestrationEngineShutdown:
         eng.task_orchestrator.start_processing()
         return eng
 
-    def test_shutdown_with_sessions_hits_deallocate_bug(self, engine):
-        """shutdown calls close_session for each active session, which
-        crashes on deallocate_resources. The sessions remain because
-        close_session raises before deleting them."""
+    def test_shutdown_with_sessions_closes_all_sessions(self, engine):
+        """shutdown closes active sessions and stops the task orchestrator."""
         engine.create_session()
         engine.create_session()
         assert len(engine.active_sessions) == 2
-        # shutdown catches errors from close_session implicitly via
-        # __del__ guard, but the direct call propagates the error.
-        # Actually shutdown iterates over session_ids and calls close_session;
-        # close_session raises AttributeError which propagates out of shutdown.
-        with pytest.raises(AttributeError, match="deallocate_resources"):
-            engine.shutdown()
+        engine.shutdown()
+        assert engine.active_sessions == {}
+        assert engine.task_orchestrator._stop_event.is_set()
 
     def test_shutdown_no_sessions_succeeds(self, engine):
         """shutdown with no active sessions completes cleanly."""
@@ -533,10 +524,10 @@ class TestOrchestrationEngineExecuteWorkflow:
 
     def test_execute_workflow_creates_session_then_fails(self, engine):
         """When no session_id, the engine creates one. The workflow
-        execution fails (workflow not found), and the finally block
-        crashes on deallocate_resources."""
-        with pytest.raises(AttributeError, match="deallocate_resources"):
-            engine.execute_workflow("nonexistent_workflow")
+        execution returns a structured failure for an unknown workflow."""
+        result = engine.execute_workflow("nonexistent_workflow")
+        assert result["success"] is False
+        assert "Workflow execution failed" in result["error"]
 
 
 # ---------------------------------------------------------------------------
@@ -594,13 +585,17 @@ class TestOrchestrationEngineExecuteTask:
         assert result["success"] is False
         assert "not found" in result["error"]
 
-    def test_execute_task_with_dict_fails_on_add_task(self, engine):
-        """execute_task calls self.task_orchestrator.add_task which does
-        not exist (it should be submit_task). Expect an error result."""
-        task_dict = {"name": "t1", "module": "m", "action": "echo"}
+    def test_execute_task_with_dict_succeeds(self, engine):
+        """execute_task accepts dict task definitions via the add_task compatibility API."""
+        task_dict = {
+            "name": "t1",
+            "module": "m",
+            "action": "echo",
+            "parameters": {"message": "hello"},
+        }
         result = engine.execute_task(task_dict)
-        assert result["success"] is False
-        assert "error" in result
+        assert result["success"] is True
+        assert result["result"]["result"] == "hello"
 
 
 # ---------------------------------------------------------------------------
@@ -711,14 +706,13 @@ class TestOrchestrationEngineComplexWorkflow:
         assert "not found" in result["error"]
 
     def test_execute_complex_workflow_empty_steps(self, engine):
-        """Empty workflow definition triggers add_task (missing method) or
-        wait_for_completion (missing method) depending on code path."""
+        """An empty workflow completes successfully with no step results."""
         result = engine.execute_complex_workflow({"steps": []})
-        assert result["success"] is False
-        assert "error" in result
+        assert result["success"] is True
+        assert result["results"] == {}
 
-    def test_execute_complex_workflow_with_steps_fails_on_add_task(self, engine):
-        """Steps are parsed into Tasks but add_task does not exist."""
+    def test_execute_complex_workflow_with_steps_succeeds(self, engine):
+        """Steps are parsed into Tasks and executed through the task orchestrator."""
         definition = {
             "steps": [
                 {"name": "s1", "module": "m1", "action": "a1"},
@@ -726,8 +720,8 @@ class TestOrchestrationEngineComplexWorkflow:
             "dependencies": {},
         }
         result = engine.execute_complex_workflow(definition)
-        assert result["success"] is False
-        assert "error" in result
+        assert result["success"] is True
+        assert result["results"]["s1"]["success"] is True
 
 
 # ---------------------------------------------------------------------------
@@ -882,16 +876,12 @@ class TestTaskResultIntegration:
     """Tests verifying TaskResult.to_dict is accessible."""
 
     def test_task_result_has_to_dict(self):
-        """TaskResult from task_orchestrator should be a dataclass; to_dict
-        may or may not exist. Verify the attribute."""
+        """TaskResult exposes a stable dictionary representation."""
         from codomyrmex.logistics.orchestration.project.task_orchestrator import (
             TaskResult,
             TaskStatus,
         )
 
         tr = TaskResult(task_id="t1", status=TaskStatus.COMPLETED, result="ok")
-        # TaskResult is a dataclass -- it may not have to_dict
-        # The engine code calls result.to_dict() which would fail
-        has_to_dict = hasattr(tr, "to_dict")
-        # Document behavior: TaskResult does NOT have to_dict
-        assert not has_to_dict, "TaskResult gained a to_dict method -- update tests"
+        assert tr.to_dict()["success"] is True
+        assert tr.to_dict()["result"] == "ok"

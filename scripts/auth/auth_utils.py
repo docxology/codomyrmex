@@ -55,9 +55,11 @@ def redact_jwt_payload_for_display(payload: dict) -> dict:
     """Return a copy safe to print (standard claims only; other values redacted)."""
     out: dict = {}
     for key, val in payload.items():
-        if key in _SAFE_JWT_CLAIM_KEYS:
-            out[key] = val
-        elif isinstance(val, (int, float, bool)) or val is None:
+        if (
+            key in _SAFE_JWT_CLAIM_KEYS
+            or isinstance(val, (int, float, bool))
+            or val is None
+        ):
             out[key] = val
         else:
             out[key] = "[redacted]"

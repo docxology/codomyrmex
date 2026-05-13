@@ -82,7 +82,9 @@ def test_generate_refactoring_plan_populates_and_priority_high_complexity() -> N
     plan = host.generate_refactoring_plan()
     assert len(plan["complexity_reductions"]) == 1
     assert plan["complexity_reductions"][0]["function"] == "heavy_fn"
-    priorities = [a for a in plan["priority_actions"] if a["type"] == "complexity_reduction"]
+    priorities = [
+        a for a in plan["priority_actions"] if a["type"] == "complexity_reduction"
+    ]
     assert len(priorities) == 1
     assert priorities[0]["priority"] == "high"
 

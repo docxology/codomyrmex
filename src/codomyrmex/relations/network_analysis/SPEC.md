@@ -56,3 +56,11 @@ Properties: `node_count`, `edge_count`, `nodes`.
 - `shortest_path` returns `[]` for missing nodes rather than raising.
 - `get_influence_score` returns `0.0` for absent nodes.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

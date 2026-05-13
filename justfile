@@ -18,11 +18,11 @@ dev:
 # ─── Testing ─────────────────────────────────────────────────────
 # Run all tests with coverage
 test:
-    uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json
+    uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=40
 
 # Run unit tests only
 test-unit:
-    uv run pytest src/codomyrmex/tests/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing
+    uv run pytest src/codomyrmex/tests/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-fail-under=40
 
 # Run integration tests
 test-integration:
@@ -30,7 +30,7 @@ test-integration:
 
 # Fast test run (no coverage overhead)
 test-fast:
-    uv run pytest src/codomyrmex/tests/ -q --no-header --override-ini="addopts="
+    uv run pytest src/codomyrmex/tests/ -q --no-header --override-ini="addopts=" --import-mode=importlib
 
 # Run tests with HTML coverage report
 test-coverage-html: test
@@ -120,12 +120,13 @@ audit:
 # Check documentation status
 docs-check:
     @echo "Checking documentation status..."
-    uv run python scripts/documentation/check_docs_status.py
+    uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root .
+    uv run python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
 
 # Generate missing documentation
 docs-generate:
     @echo "Generating missing documentation..."
-    uv run python scripts/documentation/generate_missing_readmes.py
+    uv run python src/codomyrmex/documentation/scripts/generate_missing_readmes.py --repo-root .
 
 # Full docs pipeline: check + generate + build
 docs: docs-check docs-generate docs-build

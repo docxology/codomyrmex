@@ -22,14 +22,19 @@ import yaml
 
 # Note: sys.path injection for open_gauss is handled in conftest.py.
 # Do not `import utils` — full-suite collection puts codomyrmex.tests.unit.utils on sys.path first.
-_OPEN_GAUSS_DIR = Path(__file__).resolve().parent.parent.parent / "agents" / "open_gauss"
+_OPEN_GAUSS_DIR = (
+    Path(__file__).resolve().parent.parent.parent / "agents" / "open_gauss"
+)
 
 
 def _load_open_gauss_utils():
     path = _OPEN_GAUSS_DIR / "utils.py"
-    spec = importlib.util.spec_from_file_location(
-        "_codomyrmex_open_gauss_utils", path
-    )
+    if not path.is_file():
+        pytest.skip(
+            f"OpenGauss submodule not populated; missing {path}",
+            allow_module_level=True,
+        )
+    spec = importlib.util.spec_from_file_location("_codomyrmex_open_gauss_utils", path)
     if spec is None or spec.loader is None:
         msg = f"Cannot load Open Gauss utils from {path}"
         raise ImportError(msg)
@@ -632,8 +637,9 @@ class TestGaussProjectInit:
 
         lean_dir = self._make_lean_project(tmp_path / "lean-frozen")
         project = initialize_gauss_project(lean_dir)
+        field_name = "name"
         with pytest.raises((FrozenInstanceError, AttributeError)):
-            project.name = "mutated"  # type: ignore
+            setattr(project, field_name, "mutated")
 
     def test_discover_gauss_project_not_found_raises(self, tmp_path):
         from gauss_cli.project import ProjectNotFoundError, discover_gauss_project

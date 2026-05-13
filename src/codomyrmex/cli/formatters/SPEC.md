@@ -85,3 +85,11 @@ Raises `ValueError` for unknown format types.
 - `create_formatter` raises `ValueError` for unrecognized `format_type`.
 - `Column.format_value` converts `None` values to empty string.
 - No formatter method raises exceptions for malformed input; they degrade gracefully via `str()` conversion.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -9,3 +9,11 @@ This specification formally defines the expected behavior, interfaces, and archi
 - **Modularity**: Components must maintain strict modular boundaries.
 - **Real Execution**: The design guarantees executable paths without reliance on stubbed or mocked data.
 - **Data Integrity**: All input and output signatures must be strictly validated.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -1,5 +1,8 @@
 # git_analysis/data — Behavioral Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Purpose
 
 Persistent output storage for `git_analysis` operations. Contains cached analysis
@@ -47,3 +50,11 @@ Format: Markdown with tables. No binary content. UTF-8 encoding.
 - **Do not** auto-commit analysis output from CI (causes noise in git history).
 - **Do not** store session-specific or ephemeral analysis results here.
 - **Do not** write files larger than 1MB (use external storage for large datasets).
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -307,7 +307,7 @@ class TestIterAxes:
         # assigning a plain list of axes (has __iter__, no .flat attribute).
         fig, axes = plt.subplots(1, 3)
         plain_list = list(axes)  # list has __iter__ but no .flat
-        p.current_axes = plain_list
+        object.__setattr__(p, "current_axes", plain_list)
         items = list(p._iter_axes())
         assert len(items) == 3
         plt.close("all")

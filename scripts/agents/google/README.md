@@ -36,3 +36,11 @@ This will automatically configure application-default login and prepare Vertex A
 1. **Zero-Mock Policy:** Follow the rules specified in `/AGENTS.md`. No logic mockups allowed; all dependencies and API calls must resolve to functional components.
 2. **Thin Wrappers:** Logic should be contained to the specific orchestration capability (e.g., handling asynchronous semaphores, streaming output correctly from `types.Part.thought`). Business logic should be kept out.
 3. **Execution Context:** All run via standard `argparse` from CLI. Compatible with Codomyrmex tools (`run_command`).
+
+## Navigation
+
+- **Self**: `README.md`
+- **Parent**: [../README.md](../README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.
+- **Repository Root**: [README.md](../../../README.md)

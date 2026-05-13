@@ -64,3 +64,11 @@ Fields: `name`, `timings` (list of floats), `iterations`. Properties: `mean`, `s
 
 - Profiled functions that raise exceptions still record duration and error message in `ProfileEntry`.
 - `get_stats()` returns `None` for functions with no recorded entries.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

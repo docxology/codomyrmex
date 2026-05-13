@@ -22,3 +22,11 @@ See `API_SPECIFICATION.md` (if available) or `__init__.py` for exact signatures.
 
 - **Performance**: Operations should be non-blocking where possible.
 - **Security**: Validate all inputs; sanity check paths.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../../../README.md)

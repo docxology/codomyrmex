@@ -24,8 +24,8 @@ The `__init__.py` re-exports all 16 symbols for backward compatibility with the 
 |----------|-----------|---------|-------------|
 | `create_physical_management_module` | `prompt: str, description: str` | `str` | Creates full module directory tree and writes 10 files (init, object_manager, simulation_engine, sensor_integration, README, API spec, examples, tests, requirements, architecture docs) |
 | `test_statistics_display` | `prompt: str, description: str` | `str` | Simulates 3 tasks with `time.sleep`, computes avg/min/max timing statistics |
-| `refactor_todo_processing` | `prompt: str, description: str` | `str` | Acknowledges refactoring task (placeholder) |
-| `testing_and_docs` | `prompt: str, description: str` | `str` | Acknowledges testing/docs task (placeholder) |
+| `refactor_todo_processing` | `prompt: str, description: str` | `str` | Acknowledges reserved refactoring task path |
+| `testing_and_docs` | `prompt: str, description: str` | `str` | Acknowledges reserved testing/docs task path |
 | `prompt_engineering` | `prompt: str, description: str` | `str` | Writes `prompt_composition.py` and 3 template files into `ai_code_editing/` |
 | `ollama_module` | `prompt: str, description: str` | `str` | Writes `ollama_client.py`, `ollama_integration.py`, and test file into `ai_code_editing/` |
 
@@ -67,3 +67,11 @@ The `__init__.py` re-exports all 16 symbols for backward compatibility with the 
 - `create_physical_management_module` relies on `Path.mkdir` and `Path.write_text`; `OSError` propagates on filesystem failures.
 - Task handlers log via `logger.info` on success; errors propagate to the droid runner which catches and records them in `DroidMetrics`.
 - All errors logged via `logging_monitoring` before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../../README.md)

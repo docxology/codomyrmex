@@ -1,5 +1,8 @@
 # Orchestration Project -- Functional Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Core implementation of the Codomyrmex orchestration system. Coordinates workflows, tasks, resources, and project lifecycles via DAG-based execution with parallel processing support.
@@ -120,3 +123,7 @@ Context manager wrapping `ThreadPoolExecutor`. `execute_tasks(tasks, dependencie
 - **Specification**: This file
 - **Agent coordination**: [AGENTS.md](AGENTS.md)
 - **Parent**: [orchestration/](../SPEC.md)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)

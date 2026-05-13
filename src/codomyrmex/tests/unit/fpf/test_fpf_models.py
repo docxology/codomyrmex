@@ -160,6 +160,7 @@ class TestRelationship:
 
     def test_with_description(self):
         r = self._make_rel(description="A.1 is the foundation for A.2")
+        assert r.description is not None
         assert "foundation" in r.description
 
 

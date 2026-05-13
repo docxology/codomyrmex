@@ -1,5 +1,8 @@
 # Context Management
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `codomyrmex.agents.context` | **Category**: Infrastructure | **Last Updated**: March 2026
 
 ## Overview
@@ -30,3 +33,8 @@ Source: [`src/codomyrmex/agents/context/`](../../../src/codomyrmex/agents/contex
 - **Parent**: [docs/agents/](../README.md)
 - **Source**: [src/codomyrmex/agents/context/](../../../src/codomyrmex/agents/context/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

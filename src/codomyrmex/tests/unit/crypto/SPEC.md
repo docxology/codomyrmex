@@ -91,3 +91,11 @@ A test run fails if:
 2. Any security test fails.
 3. Coverage drops below the target for any critical-priority submodule.
 4. Performance tests exceed 2x the baseline time (regression detection).
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

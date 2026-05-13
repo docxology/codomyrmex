@@ -19,7 +19,7 @@ logger = get_logger(__name__)
 try:
     KUBERNETES_AVAILABLE = True
 except ImportError:
-    ApiException = Exception  # type: ignore
+    ApiException = Exception
     KUBERNETES_AVAILABLE = False
     logger.warning(
         "Kubernetes client not available. Install with: pip install kubernetes"

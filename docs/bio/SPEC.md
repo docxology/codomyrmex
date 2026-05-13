@@ -98,3 +98,11 @@ Each essay in this series must satisfy:
 - [AGENTS.md](AGENTS.md) — Agent coordination guidelines
 - [PAI.md](PAI.md) — PAI integration context
 - [Project README](../../README.md) — Platform overview
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../README.md)

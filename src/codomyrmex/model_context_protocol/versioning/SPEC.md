@@ -74,3 +74,11 @@ Attaches `_deprecation_info` and `_api_deprecated=True`. Emits `DeprecationWarni
 - `APIVersion.parse()` raises `ValueError`/`IndexError` on malformed version strings (not caught internally).
 - `VersionRegistry.deprecate()` returns `False` for unknown tools rather than raising.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

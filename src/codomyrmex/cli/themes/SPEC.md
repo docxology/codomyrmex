@@ -29,3 +29,11 @@ When implemented, this module would provide:
 - Terminal capability detection for ANSI color support.
 - Integration with `cli/formatters` for theme-aware formatting.
 - User-configurable theme selection via `config_management`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

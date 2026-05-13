@@ -1,5 +1,8 @@
 # documents/search — Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Implements document search via an in-memory inverted index with term-frequency scoring, plus a fluent query builder for constructing structured queries.
@@ -56,3 +59,11 @@ State: `terms: list[str]`, `filters: dict`, `sort_by: str | None`.
 - AND-only query semantics (all terms must match).
 - In-memory storage; index size bounded by available RAM.
 - No stemming or stop-word filtering; tokenization is lowercase whitespace split.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

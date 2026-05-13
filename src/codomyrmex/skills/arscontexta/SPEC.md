@@ -80,3 +80,11 @@ ArsContextaError (base)
 - Python >= 3.10
 - stdlib only (pathlib, dataclasses, enum, typing, json, time, re, hashlib, shutil, logging)
 - Optional: pyyaml (already a core codomyrmex dependency)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

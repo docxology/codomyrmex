@@ -75,3 +75,11 @@ uv run pytest src/codomyrmex/tests/unit/agents/o1/
 
 - Support for o1-pro and o3 model variants as they become available
 - Structured output / tool-use integration for reasoning chains
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

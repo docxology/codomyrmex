@@ -67,3 +67,11 @@ Four subsystems: `DashboardManager` for panel-based dashboard CRUD, `MetricColle
 
 - `AlertManager` handler exceptions: caught, logged at WARNING, evaluation continues.
 - `DashboardManager.get_panel_data()`: returns empty list if dashboard or panel not found.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

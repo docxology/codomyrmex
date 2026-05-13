@@ -63,3 +63,11 @@ These tools inherently require a valid `.codomyrmex/gcal_token.json` payload gen
 - **Initialization:** Requires a valid `google.oauth2.credentials.Credentials` object or an authenticated `Resource` object.
 - **Timezone Handling:** Converts all datetime inputs to ISO-8601 strings, appending 'Z' explicitly if the datetime is naive (though naive datetimes are discouraged).
 - **Graceful Parsing:** Defaults to `(No title)` for missing summaries, handling both date ('date') and datetime ('dateTime') boundaries to accommodate all-day events. All parsed datetimes are converted to aware `datetime` objects in UTC.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

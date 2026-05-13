@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Automation utilities and maintenance commands for Documents.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -17,3 +17,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [scripts](../README.md)
 - **Project Root**: ../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

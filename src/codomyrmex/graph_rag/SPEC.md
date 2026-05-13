@@ -103,3 +103,11 @@ uv run pytest src/codomyrmex/tests/unit/graph_rag/
 - Pluggable persistence backends (e.g., Neo4j, NetworkX) behind the `KnowledgeGraph` interface
 - Embedding-based nearest-neighbor entity search when `embedding_fn` is provided
 - Weighted path finding (Dijkstra) using `Relationship.weight`
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

@@ -49,3 +49,11 @@ All calls apply: `--yes --no-pretty --no-auto-commits`
 - **Detailed SPEC.md**: [src/codomyrmex/aider/SPEC.md](../../../src/codomyrmex/aider/SPEC.md)
 - **API Specification**: [src/codomyrmex/aider/API_SPECIFICATION.md](../../../src/codomyrmex/aider/API_SPECIFICATION.md)
 - **MCP Tools**: [src/codomyrmex/aider/MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/aider/MCP_TOOL_SPECIFICATION.md)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

@@ -82,3 +82,11 @@ MermaidDiagramGenerator (mermaid_generator.py)
 
 - `_save_mermaid_content()` catches all exceptions, logs error, returns `False`.
 - File icon lookup in `_get_file_icon()` falls back to a generic document icon for unknown extensions.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

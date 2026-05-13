@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Documentation tooling, generated references, and publishing assets for Tests.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -17,3 +17,7 @@ Test files and validation suites.
 ## Navigation
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

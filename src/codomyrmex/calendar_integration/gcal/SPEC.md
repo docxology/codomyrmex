@@ -57,3 +57,11 @@ Tries sources in order:
 - `CalendarAPIError`: raised for Google Calendar API errors (wraps `HttpError`).
 - `EventNotFoundError`: raised for HTTP 404 responses on get/update/delete.
 - `InvalidEventError`: raised when API response dicts have unparseable fields.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

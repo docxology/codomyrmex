@@ -20,3 +20,11 @@ All compliance documents follow the Codomyrmex documentation standards.
 
 - [README.md](README.md) — Section overview
 - [AGENTS.md](AGENTS.md) — Agent coordination
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../README.md)

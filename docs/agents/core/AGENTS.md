@@ -37,3 +37,7 @@ Documentation for **core agent infrastructure** shared across providers: transpo
 
 - **Parent directory**: [agents](../README.md)
 - **Project root**: ../../../README.md
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

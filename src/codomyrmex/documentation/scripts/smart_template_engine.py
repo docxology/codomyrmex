@@ -361,7 +361,7 @@ class SmartTemplateEngine:
 
     def generate_readme_content(self, analysis: ModuleAnalysis) -> dict[str, Any]:
         """Generate README content from module analysis."""
-        content = {
+        content: dict[str, Any] = {
             "project_name": analysis.module_name.replace("_", " ").title(),
             "module_name": analysis.module_name,
             "description": analysis.docstring.split("\n")[0]

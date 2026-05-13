@@ -84,7 +84,9 @@ class InvariantRule:
 # ── AST Helpers ──────────────────────────────────────────────────────
 
 
-def _extract_public_functions(source: str) -> dict[str, ast.FunctionDef]:
+def _extract_public_functions(
+    source: str,
+) -> dict[str, ast.FunctionDef | ast.AsyncFunctionDef]:
     """Extract public (non-underscore) function definitions from source.
 
     Args:
@@ -93,7 +95,7 @@ def _extract_public_functions(source: str) -> dict[str, ast.FunctionDef]:
     Returns:
         dict mapping function name to its AST node.
     """
-    result: dict[str, ast.FunctionDef] = {}
+    result: dict[str, ast.FunctionDef | ast.AsyncFunctionDef] = {}
     try:
         tree = ast.parse(source)
     except SyntaxError:
@@ -107,7 +109,7 @@ def _extract_public_functions(source: str) -> dict[str, ast.FunctionDef]:
     return result
 
 
-def _extract_function_params(node: ast.FunctionDef) -> list[str]:
+def _extract_function_params(node: ast.FunctionDef | ast.AsyncFunctionDef) -> list[str]:
     """Extract parameter names from a function definition.
 
     Args:

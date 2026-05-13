@@ -42,3 +42,11 @@ relationship mapping, engagement metrics). Any such implementation must:
 
 - All errors logged before propagation.
 - Missing API credentials must raise an explicit error, not degrade silently.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

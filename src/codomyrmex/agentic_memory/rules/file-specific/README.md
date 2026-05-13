@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for File Specific..
 
 ## Directory Contents
 - `CHANGELOG.cursorrules` – File
@@ -20,3 +20,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [rules](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

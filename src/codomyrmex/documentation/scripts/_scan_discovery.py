@@ -63,7 +63,7 @@ class DocumentationDiscoveryMixin:
                 if config_path.exists():
                     config_files.append(config_path)
 
-        self.results["phase1"]["files_found"]["config_files"] = [  # type: ignore
+        self.results["phase1"]["files_found"]["config_files"] = [
             str(f.relative_to(self.repo_root)) for f in config_files
         ]
         print(f"  ✓ Found {len(config_files)} configuration files")

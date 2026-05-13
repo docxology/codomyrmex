@@ -1,5 +1,8 @@
 # documents/core — Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 The core subpackage provides four complementary classes for document lifecycle operations: reading from disk, writing to disk, parsing in-memory content, and validating document correctness.
@@ -57,3 +60,11 @@ Creates parent directories via `os.makedirs(exist_ok=True)`. Encodes content usi
 - `FileNotFoundError` raised by `DocumentReader.read()` for missing files.
 - `ValidationResult.errors` collects parse errors without raising exceptions.
 - `json.JSONDecodeError` and `yaml.YAMLError` caught and returned as validation errors.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

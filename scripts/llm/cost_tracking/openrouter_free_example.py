@@ -49,9 +49,7 @@ def get_api_key() -> str | None:
                     return content.split("=", 1)[1].strip().strip('"').strip("'")
                 return content
         except Exception as exc:
-            logger.debug(
-                "Could not read config from %s: %s", path, type(exc).__name__
-            )
+            logger.debug("Could not read config from %s: %s", path, type(exc).__name__)
 
     return None
 

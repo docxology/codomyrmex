@@ -26,4 +26,3 @@ __all__ = [
 
 if _HAS_ADVANCED:
     __all__.append("AdvancedPlotter")
-

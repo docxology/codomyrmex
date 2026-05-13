@@ -1,5 +1,8 @@
 # Logistics Orchestration -- Functional Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Orchestration subpackage coordinating workflows, tasks, resources, and project lifecycles. The `orchestration/` directory is a facade; all implementation lives in `project/`.
@@ -107,3 +110,7 @@ Context-manager-compatible executor using `ThreadPoolExecutor`. Accepts task lis
 - **Specification**: This file
 - **Agent coordination**: [AGENTS.md](AGENTS.md)
 - **Parent**: [logistics/](../SPEC.md)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)

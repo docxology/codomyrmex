@@ -59,3 +59,11 @@ Pure-math implementation using nested lists as 3x3 rotation matrices (no NumPy d
 
 - No custom exceptions; relies on Python's built-in `ValueError` and `TypeError` for invalid inputs.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

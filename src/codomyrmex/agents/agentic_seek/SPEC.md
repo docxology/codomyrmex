@@ -123,3 +123,11 @@ uv run pytest src/codomyrmex/tests/unit/agents/agentic_seek/ -v
 - WebSocket-based streaming for real-time output from Docker backend
 - Integration with agenticSeek's session recovery system
 - ML-based router option using `transformers` (optional dependency)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -72,3 +72,11 @@ class TaskDecomposer:
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
 ```
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

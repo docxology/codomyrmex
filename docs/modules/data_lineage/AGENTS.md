@@ -3,7 +3,7 @@
 **Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Data Lineage.
 
 ## Active Components
 - `README.md` – Project file

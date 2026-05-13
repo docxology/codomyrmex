@@ -1,5 +1,8 @@
 # SLM -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### GPT-2 Decoder-Only Transformer
@@ -45,3 +48,11 @@ When `codomyrmex.neural` is not importable, inline fallback classes provide:
 - Random weights: produces random-looking text without training
 - NumPy-only: no GPU acceleration
 - Greedy decoding only (no beam search or sampling)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

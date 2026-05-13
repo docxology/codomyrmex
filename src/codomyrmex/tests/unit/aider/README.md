@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Aider.
 
 ## Directory Contents
 - `README.md` – File
@@ -16,3 +16,8 @@ Test files and validation suites.
 ## Navigation
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: [SPEC.md](SPEC.md)

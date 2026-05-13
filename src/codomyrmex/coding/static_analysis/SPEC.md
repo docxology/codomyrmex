@@ -94,3 +94,11 @@ All methods: `(file_path: str) -> list[AnalysisResult]`. Missing tools return em
 | `ASTError` | AST traversal failure |
 | `MetricsError` | Metrics computation failure |
 | `DependencyAnalysisError` | Dependency graph failure |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

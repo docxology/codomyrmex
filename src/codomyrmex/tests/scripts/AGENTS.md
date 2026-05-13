@@ -10,7 +10,7 @@
 - **Human overview**: [README.md](README.md)
 - **Agent coordination** (repo root): [../../../../AGENTS.md](../../../../AGENTS.md)
 ## Purpose
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Scripts.
 
 ## Active Components
 - Markdown `README.md`
@@ -32,3 +32,7 @@ Test files and validation suites.
 ## Navigation Links
 - **Parent directory**: [tests](../README.md) — parent folder overview
 - **Project root**: ../../../../README.md — repository entry
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

@@ -89,3 +89,11 @@ Three independent modules unified by `__init__.py`:
 - `CircuitOpenError` raised when the circuit is OPEN and requests are rejected; includes `remaining` seconds.
 - Rate limit exhaustion returns `False` from `allow()` rather than raising.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

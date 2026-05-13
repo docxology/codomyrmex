@@ -51,3 +51,11 @@ Command-dispatch pattern: `GitAgent._execute_impl` parses the incoming prompt (J
 - `ValueError` raised for missing required parameters, unknown actions, or repository-not-found conditions.
 - All exceptions are caught in `_execute_impl`, logged via `logger.exception`, and returned as `AgentResponse(error=...)`.
 - No silent fallbacks: invalid prompts return an explicit error response, not empty content.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

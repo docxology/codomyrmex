@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Genomics..
 
 ## Directory Contents
 - `PAI.md` – File
@@ -18,3 +18,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [bio_simulation](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

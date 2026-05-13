@@ -245,7 +245,7 @@ class TablesMixin:
         Returns:
             Row details
         """
-        params = {
+        params: dict[str, Any] = {
             "valueFormat": value_format,
         }
         if use_column_names:

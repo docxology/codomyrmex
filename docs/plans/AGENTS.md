@@ -3,7 +3,7 @@
 **Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Plans.
 
 ## Active Components
 - `2026-03-05-pai-pm-module-integration.md` – Project file
@@ -31,3 +31,7 @@ Documentation files and guides.
 ## Navigation Links
 - **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../README.md - Main project documentation
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

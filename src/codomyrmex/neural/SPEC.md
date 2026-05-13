@@ -1,5 +1,8 @@
 # Neural -- API Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Public API
 
 ### Functions
@@ -57,3 +60,11 @@ Activation functions operating element-wise on `np.ndarray`.
 3. Numerically stable softmax (max subtraction before exp)
 4. Pre-LN residual connections for training stability
 5. Embedding scaling by sqrt(d_model) per Vaswani et al.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

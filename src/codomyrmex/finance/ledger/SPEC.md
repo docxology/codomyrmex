@@ -59,3 +59,11 @@ The `Ledger` class manages a collection of `Account` objects and an ordered list
 
 - `LedgerError` raised for: duplicate account names, unknown account IDs, unbalanced transactions.
 - All errors logged via `logging` before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

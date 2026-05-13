@@ -225,7 +225,10 @@ class TestMCPTool:
 
         assert hasattr(distillation_compute_loss, "_mcp_tool")
         assert distillation_compute_loss._mcp_tool["category"] == "distillation"
-        assert distillation_compute_loss._mcp_tool["description"] == "Compute knowledge distillation loss on synthetic teacher-student data."
+        assert (
+            distillation_compute_loss._mcp_tool["description"]
+            == "Compute knowledge distillation loss on synthetic teacher-student data."
+        )
 
     @pytest.mark.unit
     def test_distillation_compute_loss_params(self):

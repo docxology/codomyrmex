@@ -57,3 +57,11 @@ Boids-algorithm simulation with consensus overlay. `SwarmEngine` manages a popul
 - `reach_consensus` returns `False` for empty agent lists (ratio defaults to 0.0).
 - `quorum_sensing` returns 0.0 for empty agent lists.
 - Division-by-zero protection via `1e-6` epsilon in velocity normalization.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

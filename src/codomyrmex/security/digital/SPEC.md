@@ -61,3 +61,11 @@ Dual-analyzer pattern: `SecurityAnalyzer` performs static analysis using regex p
 - `VulnerabilityScanner.scan_vulnerabilities()` catches top-level exceptions and sets `scan_status = "failed"`.
 - `subprocess.TimeoutExpired`, `json.JSONDecodeError`, and `OSError` are individually handled in tool invocations.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

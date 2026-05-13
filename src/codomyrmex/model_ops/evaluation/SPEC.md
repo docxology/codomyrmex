@@ -65,3 +65,11 @@ Scorer hierarchy uses an ABC (`Scorer`) with concrete implementations (`ExactMat
 - `ValueError` raised by `create_evaluator()` for unknown task type strings.
 - `re.error` caught and logged by `RegexScorer` for invalid patterns (returns 0.0).
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

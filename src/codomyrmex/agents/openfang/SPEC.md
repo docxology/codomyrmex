@@ -1,5 +1,8 @@
 # agents/openfang — Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ```
@@ -102,3 +105,11 @@ build_and_install()   → build_from_source() + install_binary()
 - `test_openfang_hands.py` — parse_list_output, Hand dataclass
 - `test_openfang_update.py` — error paths, filesystem edge cases
 - `test_openfang_mcp_tools.py` — return shapes, guards, all 7 tools
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

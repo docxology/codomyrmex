@@ -178,9 +178,9 @@ class ToolRegistry:
         return tool.execute(**kwargs)
 
 
-def _python_type_to_param_type(python_type: type) -> ParameterType:
+def _python_type_to_param_type(python_type: type[Any]) -> ParameterType:
     """Convert Python type to JSON Schema parameter type."""
-    type_mapping = {
+    type_mapping: dict[type[Any], ParameterType] = {
         str: ParameterType.STRING,
         int: ParameterType.INTEGER,
         float: ParameterType.NUMBER,

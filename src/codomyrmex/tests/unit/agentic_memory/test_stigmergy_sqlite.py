@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from codomyrmex.agentic_memory.stigmergy import SqliteTraceLedger, StigmergyConfig
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def test_sqlite_deposit_reinforce_sense(tmp_path: Path) -> None:

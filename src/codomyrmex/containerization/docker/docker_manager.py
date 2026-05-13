@@ -106,7 +106,7 @@ class DockerManager:
             logger.info("Building Docker image: %s", config.get_full_image_name())
 
             # Prepare build arguments
-            build_kwargs = {
+            build_kwargs: dict[str, Any] = {
                 "path": config.build_context,
                 "tag": config.get_full_image_name(),
                 "rm": True,
@@ -214,7 +214,7 @@ class DockerManager:
             logger.info("Running container: %s", config.get_full_image_name())
 
             # Prepare run arguments
-            run_kwargs = {
+            run_kwargs: dict[str, Any] = {
                 "image": config.get_full_image_name(),
                 "detach": detach,
                 "name": f"{config.image_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",

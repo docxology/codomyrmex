@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Screenshots.
 
 ## Directory Contents
 - `README.md` – File
@@ -29,3 +29,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [pai](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

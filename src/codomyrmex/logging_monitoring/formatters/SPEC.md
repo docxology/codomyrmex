@@ -73,3 +73,11 @@ Default patterns: `password`, `secret`, `token`, `api_key`, `auth`, `credential`
 - `JSONFormatter.format()` uses `default=str` to handle non-serializable values.
 - Exception info is included in output when `record.exc_info` is set.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

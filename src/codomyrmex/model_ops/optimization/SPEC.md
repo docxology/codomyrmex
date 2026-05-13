@@ -70,3 +70,11 @@ Three-layer design: **models** (configuration and result dataclasses), **cache**
 - `RequestBatcher._process_batch()` catches processor exceptions and sets them on all pending `Future` instances.
 - `InferenceOptimizer.infer()` does not catch model exceptions; they propagate to the caller.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

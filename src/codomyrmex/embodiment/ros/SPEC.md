@@ -62,3 +62,11 @@ In-process ROS2-style pub/sub message bridge for embodied agent communication. P
 - Subscriber callback failures are caught via `logger.exception` and do not propagate.
 - Unsubscribe on an already-removed callback logs a debug message and does not raise.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

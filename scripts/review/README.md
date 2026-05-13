@@ -1,5 +1,8 @@
 # scripts/review
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Status**: Active | **Last Updated**: March 2026
 
 Local helpers for diff-based review hints, Python structural checks, SARIF merge/summary, and combined Markdown reports. These tools are advisory; they do not replace CI or human review.
@@ -37,3 +40,7 @@ uv run python scripts/review/review_report_generator.py . \
 - [AGENTS.md](AGENTS.md) — agent coordination for this directory
 - [docs/development/code-review-and-sarif.md](../../docs/development/code-review-and-sarif.md)
 - [scripts/README.md](../README.md)
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

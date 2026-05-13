@@ -519,7 +519,9 @@ def main() -> int:
                 f.writelines(f"- {debt}\n" for debt in data.get("technical_debt", []))
 
                 f.write("\n### Underlying Method Improvements Required:\n")
-                f.writelines(f"- {imp}\n" for imp in data.get("underlying_improvements", []))
+                f.writelines(
+                    f"- {imp}\n" for imp in data.get("underlying_improvements", [])
+                )
 
                 f.write("\n---\n\n")
 

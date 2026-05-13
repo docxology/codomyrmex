@@ -1,4 +1,3 @@
-# type: ignore
 """Functional tests for collaboration module — zero-mock.
 
 Exercises agent lifecycle (AgentPool, AgentCoordinator), messaging

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Executable examples and demonstrations for Examples.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -16,3 +16,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [documents](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

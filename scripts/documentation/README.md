@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Repository documentation tooling, validation commands, content quality gates, and repair scripts for Codomyrmex docs.
 
 ## Local validation
 
@@ -25,6 +25,8 @@ uv run python scripts/documentation/enforce_quality_gate.py \
   --repo-root . --output output \
   --min-quality-score 70 --max-broken-links 10 --max-placeholders 100 \
   --min-agents-valid-rate 80 --allow-warnings
+
+uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root .
 ```
 
 **Placeholders (quality gate):** `enforce_quality_gate.py` sums per-file `metrics.placeholder_count` from `analyze_content_quality.py`. That count reflects actionable markers (task-style `TODO:`, `FIXME:`, HTML comment TODOs, `[TBD]` / `[WIP]`, etc.), not prose like “TODO queues” or `example.com` URLs. See the module docstring in `analyze_content_quality.py` for the exact rules.
@@ -69,8 +71,20 @@ uv run python scripts/documentation/validate_links_comprehensive.py \
 # Fix Docusaurus module copies that still point at sibling SPEC/PAI/mcp_tools
 uv run python scripts/documentation/fix_docusaurus_module_links.py
 uv run python scripts/documentation/fix_docusaurus_module_links.py --dry-run
+
+# Repair generic generated purpose lines without touching submodules
+uv run python -m codomyrmex.documentation.scripts.placeholder_check --repo-root . --dry-run
+uv run python -m codomyrmex.documentation.scripts.placeholder_check --repo-root .
+
+# Repair mechanical triple-check completeness issues without touching submodules
+uv run python -m codomyrmex.documentation.scripts.repair_triple_check_completeness --repo-root . --dry-run
+uv run python -m codomyrmex.documentation.scripts.repair_triple_check_completeness --repo-root .
 ```
 
 ## Navigation
 - **Parent Directory**: [scripts](../README.md)
 - **Project Root**: ../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

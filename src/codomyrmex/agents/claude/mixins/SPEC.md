@@ -81,3 +81,11 @@ Mixin composition pattern: `ClaudeClient(ExecutionMixin, ToolsMixin, SessionMixi
 - `ClaudeError` raised on API failures, tool dispatch failures, and max-retry exhaustion.
 - `_handle_retryable_error` logs warning per retry attempt with delay and error details.
 - All errors logged before propagation via structured `logging_monitoring` loggers.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

@@ -72,3 +72,11 @@ Three-layer design: **models** (dataclasses and enums for version metadata), **s
 - `FileNotFoundError` raised by `InMemoryModelStore.load_artifact()` for missing artifacts.
 - `FileModelStore.delete_artifact()` catches `FileNotFoundError` and logs a warning, returning `False`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

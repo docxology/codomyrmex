@@ -59,3 +59,11 @@ Method: `to_dict() -> dict`
 
 - `rollback_to` raises `KeyError` for unknown versions.
 - No other exceptions are raised; operations are purely in-memory.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

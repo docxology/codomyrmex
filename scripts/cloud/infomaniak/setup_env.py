@@ -60,8 +60,12 @@ def create_template(output_path: str | None = None):
     print(f"✅ Created template: {path}")
     print("\n📋 Next steps:")
     print("   1. Complete Infomaniak ID verification")
-    print("   2. In the vendor console, finish OpenStack identity setup for this project")
-    print("   3. Fill the generated local env file from the template; keep it out of git")
+    print(
+        "   2. In the vendor console, finish OpenStack identity setup for this project"
+    )
+    print(
+        "   3. Fill the generated local env file from the template; keep it out of git"
+    )
     print("   4. Load that file into your shell (see path printed above)")
     print("   5. Test: python setup_env.py --validate")
     return True

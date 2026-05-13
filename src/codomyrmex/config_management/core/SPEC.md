@@ -1,5 +1,8 @@
 # Config Management Core -- Functional Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Multi-source configuration loading, JSON schema validation, and environment-aware configuration management. All classes reside in `config_loader.py`.
@@ -96,3 +99,7 @@ Comprehensive multi-source configuration manager.
 - **Specification**: This file
 - **Agent coordination**: [AGENTS.md](AGENTS.md)
 - **Parent**: [config_management/](../SPEC.md)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)

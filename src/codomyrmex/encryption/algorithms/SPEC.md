@@ -46,3 +46,11 @@ No external configuration. Depends on the `cryptography` library.
 - Tag: 16 bytes (appended to ciphertext by `AESGCM`)
 - Supported key sizes: 128-bit (16B), 192-bit (24B), 256-bit (32B); default is 256-bit
 - Wire format: `nonce (12 bytes) || ciphertext || tag (16 bytes)`
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

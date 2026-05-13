@@ -86,3 +86,11 @@ Server and client implementations for MCP communication over stdio and HTTP tran
 - `MCPClient._send` retries on `TimeoutError`, `OSError`, `ConnectionError`; raises `MCPClientError` after exhausting retries.
 - `MCPClientError` raised for JSON-RPC error responses from the server.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

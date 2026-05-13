@@ -42,3 +42,7 @@ Agentic memory core — models, stores, high-level memory API, consolidation.
 ## Navigation Links
 - **Parent directory**: [agentic_memory](../README.md) — parent folder overview
 - **Project root**: ../../../../README.md — repository entry
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

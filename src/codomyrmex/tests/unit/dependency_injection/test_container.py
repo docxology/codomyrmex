@@ -371,7 +371,7 @@ class TestErrorCases:
     def test_register_instance_none_raises(self):
         c = Container()
         with pytest.raises(TypeError):
-            c.register_instance(Greeter, None)  # type: ignore[arg-type]
+            c.register_instance(Greeter, None)
 
     def test_get_descriptor_returns_none_for_unregistered(self):
         c = Container()

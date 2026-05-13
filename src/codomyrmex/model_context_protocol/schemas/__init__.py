@@ -72,7 +72,7 @@ class FileContent:
     size: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        result = {
+        result: dict[str, Any] = {
             "type": self.type,
             "name": self.name,
             "path": self.path,
@@ -95,7 +95,7 @@ class ToolParameter:
     enum: list[Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        result = {
+        result: dict[str, Any] = {
             "name": self.name,
             "type": self.param_type,
             "description": self.description,
@@ -109,7 +109,7 @@ class ToolParameter:
 
     def to_json_schema(self) -> dict[str, Any]:
         """Convert to JSON Schema format."""
-        schema = {
+        schema: dict[str, Any] = {
             "type": self.param_type,
             "description": self.description,
         }
@@ -205,7 +205,7 @@ class Message:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        result = {
+        result: dict[str, Any] = {
             "role": self.role.value,
             "content": [c.to_dict() for c in self.content],
         }

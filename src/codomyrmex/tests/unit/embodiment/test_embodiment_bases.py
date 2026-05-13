@@ -4,9 +4,14 @@ import asyncio
 
 import pytest
 
-from codomyrmex.embodiment.actuators.base import ActuatorCommand, ActuatorStatus
+from codomyrmex.embodiment.actuators.base import (
+    ActuatorCommand,
+    ActuatorStatus,
+    MockActuator,
+    SimulatedActuator,
+)
 from codomyrmex.embodiment.ros.ros_bridge import ROS2Bridge
-from codomyrmex.embodiment.sensors.base import SensorData
+from codomyrmex.embodiment.sensors.base import MockSensor, SensorData, SimulatedSensor
 
 
 @pytest.mark.unit
@@ -30,6 +35,40 @@ class TestDataclasses:
         assert ac.actuator_id == "a1"
         assert ac.command_type == "move"
         assert ac.parameters == {"p": 1}
+
+    def test_simulated_sensor_lifecycle(self):
+        sensor = SimulatedSensor("s2", default_value=3.5)
+        assert sensor.is_connected is False
+        assert sensor.connect() is True
+        reading = sensor.read()
+        assert reading.sensor_id == "s2"
+        assert reading.data == {"value": 3.5}
+        assert reading.metadata["type"] == "simulated"
+        sensor.disconnect()
+        assert sensor.is_connected is False
+
+    def test_mock_sensor_legacy_metadata(self):
+        sensor = MockSensor("legacy", default_value=1.0)
+        sensor.connect()
+        assert sensor.read().metadata["type"] == "mock"
+
+    def test_simulated_actuator_lifecycle(self):
+        actuator = SimulatedActuator("a2")
+        assert actuator.execute(
+            ActuatorCommand("a2", "move", {"target": 5.0})
+        ) is False
+
+        assert actuator.connect() is True
+        assert actuator.execute(ActuatorCommand("a2", "move", {"target": 5.0}))
+        status = actuator.get_status()
+        assert status.status == "ok"
+        assert status.feedback["position"] == 5.0
+        actuator.disconnect()
+        assert actuator.get_status().status == "disconnected"
+
+    def test_mock_actuator_remains_subclass(self):
+        actuator = MockActuator("legacy")
+        assert isinstance(actuator, SimulatedActuator)
 
 
 @pytest.mark.asyncio

@@ -1,5 +1,8 @@
 # AgentMail Provider — Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Module Identity
 
 | Field | Value |
@@ -102,3 +105,11 @@ Each tool:
 All operations are synchronous. The `AgentMail` (not `AsyncAgentMail`) client
 is used throughout. For async usage, callers should run methods in a thread
 pool executor.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

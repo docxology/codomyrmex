@@ -63,3 +63,11 @@ Sign-extraction and drift-analysis pattern. `SemioticAnalyzer` decodes text into
 - `decode` skips words not in `_SYNONYM_MAP` values.
 - `build_memory_palace` marks overflow items when locations run out.
 - Sign IDs are SHA-256 hashes of `signifier:signified` truncated to 16 characters.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

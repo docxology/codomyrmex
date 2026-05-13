@@ -1,5 +1,8 @@
 # tests/unit — Behavioral Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Layout
 
 - **`tests/unit/<module>/`** — primary home for `codomyrmex.<module>` tests.
@@ -117,3 +120,11 @@ All tests must pass and coverage must meet the floor when that job is configured
 ### Baseline note (April 2026 layout refresh)
 
 A full local `uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=40` completed coverage aggregation with **~76%** line coverage on measured `src/codomyrmex` before exit, while the same run reported **multiple failures** tied to optional services,plot backends, and provider SDK drift—**not** to file moves under `tests/unit/`. Treat **CI green** as the release gate; use module-scoped pytest locally when debugging.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

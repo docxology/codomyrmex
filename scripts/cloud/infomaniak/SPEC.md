@@ -1,5 +1,8 @@
 # Infomaniak Examples Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 CLI example scripts demonstrating all Infomaniak Public Cloud service clients.
@@ -50,3 +53,11 @@ INFOMANIAK_NEWSLETTER_ID
 ---
 
 **Navigation**: [README](README.md) | [Cloud Scripts](../README.md)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

@@ -53,3 +53,11 @@ Gaussian kernel terrain generation pattern. `MapFeature` points are projected on
 
 - `composite` returns an empty 100x100 zero array when given no layers.
 - `MapFeature.__post_init__` converts list positions to numpy arrays automatically.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

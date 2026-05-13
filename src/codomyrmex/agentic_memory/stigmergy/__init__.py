@@ -14,10 +14,10 @@ from codomyrmex.agentic_memory.stigmergy.policy import (
 from codomyrmex.agentic_memory.stigmergy.sqlite_ledger import SqliteTraceLedger
 
 __all__ = [
+    "SqliteTraceLedger",
     "StigmergyConfig",
     "TraceField",
     "TraceMarker",
-    "SqliteTraceLedger",
     "boost_importance_value",
     "importance_boost_from_trace",
 ]

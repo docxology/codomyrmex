@@ -63,3 +63,11 @@ uv run pytest src/codomyrmex/tests/unit/database_management/sharding/
 
 - Implement hash-based and range-based shard routing
 - Add partition management for shard rebalancing and splits
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

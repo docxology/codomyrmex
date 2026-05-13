@@ -35,3 +35,11 @@ Registry pattern via `LanguageManager` class methods. A single class-level `_lan
 
 - `load_language()` catches all exceptions and returns `False` on failure, logging at ERROR level.
 - `discover_languages()` silently skips directories that do not exist.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../../README.md)

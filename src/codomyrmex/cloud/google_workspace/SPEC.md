@@ -1,5 +1,8 @@
 # SPEC.md — cloud/google_workspace
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Module Specification
 
 ### Purpose
@@ -43,3 +46,11 @@ All extend `GoogleWorkspaceBase`:
 
 ### Zero-Mock Policy
 Tests use `@pytest.mark.skipif(importlib.util.find_spec("googleapiclient") is None)` for SDK tests. All `from_env()` calls without credentials raise `GoogleWorkspaceAuthError` (no silent fallback).
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

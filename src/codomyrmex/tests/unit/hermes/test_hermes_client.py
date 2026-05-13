@@ -160,6 +160,7 @@ class TestHermesClientSessionManagement:
         # Let's use a temporary file instead of :memory:
         import os
         import tempfile
+
         fd, temp_db = tempfile.mkstemp()
         os.close(fd)
         client._session_db_path = temp_db
@@ -183,17 +184,41 @@ class TestHermesClientAdvancedOperations:
         client = HermesClient()
         # Might gracefully fail and return None if session is missing or git worktree fails
         # so we monkeypatch subprocess.run to simulate success
-        monkeypatch.setattr("subprocess.run", lambda *args, **kwargs: type("Mock", (), {"returncode": 0, "stdout": b"ok", "stderr": b""}))
+        monkeypatch.setattr(
+            "subprocess.run",
+            lambda *args, **kwargs: type(
+                "Mock", (), {"returncode": 0, "stdout": b"ok", "stderr": b""}
+            ),
+        )
         res = client.create_worktree("test-non-existent")
-        assert res is None or isinstance(res, type(pytest.MonkeyPatch)) or type(res).__name__ in ("PosixPath", "WindowsPath", "NoneType")
+        assert (
+            res is None
+            or isinstance(res, type(pytest.MonkeyPatch))
+            or type(res).__name__ in ("PosixPath", "WindowsPath", "NoneType")
+        )
 
         cleanup = client.cleanup_worktree("test-non-existent")
         assert isinstance(cleanup, bool)
 
     def test_batch_execute(self, monkeypatch: pytest.MonkeyPatch) -> None:
         from codomyrmex.agents.hermes.hermes_client import HermesClient
+
         # Mock class-level execute to catch thread spawns
-        monkeypatch.setattr(HermesClient, "execute", lambda *args, **kwargs: type("Mock", (), {"is_success": lambda: True, "content": "ok", "error": None, "metadata": {}, "execution_time": 0.1}))
+        monkeypatch.setattr(
+            HermesClient,
+            "execute",
+            lambda *args, **kwargs: type(
+                "Mock",
+                (),
+                {
+                    "is_success": lambda: True,
+                    "content": "ok",
+                    "error": None,
+                    "metadata": {},
+                    "execution_time": 0.1,
+                },
+            ),
+        )
         client = HermesClient()
 
         results = client.batch_execute(["prompt 1", "prompt 2"], parallel=True)
@@ -224,17 +249,24 @@ class TestHermesClientAdvancedOperations:
         except Exception:
             pass
 
-    def test_scaffold_fastmcp(self) -> None:
+    def test_scaffold_fastmcp(self, tmp_path) -> None:
         client = HermesClient()
         try:
-            client.scaffold_fastmcp("test_mcp")
+            client.scaffold_fastmcp(str(tmp_path / "test_mcp"), "test_mcp")
         except Exception:
             pass
 
     def test_run_coverage_loop(self, monkeypatch: pytest.MonkeyPatch) -> None:
         client = HermesClient()
         # Mock out the inner loop that calls pytest
-        monkeypatch.setattr("subprocess.run", lambda *args, **kwargs: type("Mock", (), {"returncode": 0, "stdout": b"Coverage: 100%", "stderr": b""}))
+        monkeypatch.setattr(
+            "subprocess.run",
+            lambda *args, **kwargs: type(
+                "Mock",
+                (),
+                {"returncode": 0, "stdout": b"Coverage: 100%", "stderr": b""},
+            ),
+        )
         try:
             res = client._run_coverage_loop("/tmp")
             assert isinstance(res, dict)

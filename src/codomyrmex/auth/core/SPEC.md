@@ -54,3 +54,11 @@ Extends `CodomyrmexError`. Raised when authentication encounters an unexpected e
 - `AuthenticationError`: raised and logged at error level for unexpected authentication failures.
 - Invalid credentials: logged at warning level, `None` returned (no exception).
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

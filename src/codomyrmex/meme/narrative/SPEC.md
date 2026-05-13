@@ -61,3 +61,11 @@ Template-and-arc narrative engine pattern. `NarrativeEngine` analyzes text by ex
 - `analyze` defaults theme to "unidentified" when no significant words are found.
 - `synthesize_myth` defaults hero/shadow names to "The Hero"/"The Shadow" when archetypes lack those roles.
 - Narrative IDs are auto-generated via `uuid4`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

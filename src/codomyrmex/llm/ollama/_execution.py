@@ -6,7 +6,7 @@ Extracted from model_runner.py.
 from __future__ import annotations
 
 import asyncio
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -35,7 +35,7 @@ class OllamaExecutionMixin:
             options = ExecutionOptions()
 
         # Convert options to Ollama format
-        ollama_options = {
+        ollama_options: dict[str, Any] = {
             "temperature": options.temperature,
             "top_p": options.top_p,
             "top_k": options.top_k,

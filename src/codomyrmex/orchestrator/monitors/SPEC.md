@@ -40,3 +40,11 @@ When monitors are added, they should follow this contract:
 
 - Unimplemented monitor methods must raise `NotImplementedError`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

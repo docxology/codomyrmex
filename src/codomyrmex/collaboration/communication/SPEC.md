@@ -65,3 +65,11 @@ Three independent subsystems: (1) `Broadcaster` for one-to-many pub/sub with top
 - `MessageDeliveryError` raised when no handler registered for receiver or handler throws.
 - `asyncio.TimeoutError` raised when request timeout expires.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

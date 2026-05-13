@@ -222,6 +222,9 @@ class HermesSkillBridge:
 
     def _list_via_cli(self) -> list[HermesSkillEntry]:
         """Parse ``hermes skills list`` output into entries."""
+        if not self._hermes_bin:
+            return []
+
         env = {"NO_COLOR": "1"}
         import os
 
@@ -285,7 +288,7 @@ class HermesSkillBridge:
                 try:
                     content = manifest.read_text(encoding="utf-8", errors="replace")
                     if manifest_name.endswith((".yaml", ".yml")):
-                        import yaml  # type: ignore[import-untyped]
+                        import yaml
 
                         data = yaml.safe_load(content) or {}
                         description = data.get("description", "")

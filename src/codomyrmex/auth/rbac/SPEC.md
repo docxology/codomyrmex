@@ -54,3 +54,11 @@ Single-class design with four internal stores: role-permission sets, role hierar
 
 - `check()` never raises; returns `False` for unauthorized access and logs to audit trail.
 - Role registration logged at INFO level.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

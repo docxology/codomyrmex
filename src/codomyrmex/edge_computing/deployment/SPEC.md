@@ -69,3 +69,11 @@ Uses a strategy pattern where `DeploymentManager` delegates execution to private
 - Runtime errors during `deploy()` are caught per-node and tracked in `failed_nodes`.
 - `rollback` iterates `deployed_nodes` and undeploys via the cluster runtime.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -71,3 +71,11 @@ Three-layer design with a closed feedback loop:
 
 - `PlanExecutor.execute()` catches task action exceptions, marks task as FAILED, logs via `logger.warning`, and continues to next task.
 - `FeedbackLoop.run()` logs each iteration with goal, score, and convergence status. Does not propagate task-level exceptions.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

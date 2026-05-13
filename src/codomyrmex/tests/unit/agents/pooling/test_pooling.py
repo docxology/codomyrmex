@@ -254,6 +254,28 @@ class TestFallbackChain:
         with pytest.raises(RuntimeError):
             chain.execute(lambda agent: agent.execute("test"))
 
+    def test_unhandled_exception_does_not_fallback(self):
+        """Unhandled exception types should be re-raised immediately."""
+        chain = FallbackChain[MockAgent](handled_exceptions=(ValueError,))
+        chain.add("primary", MockAgent("Primary"))
+        chain.add("secondary", MockAgent("Secondary"))
+
+        calls: list[str] = []
+
+        def fail(agent: MockAgent) -> str:
+            calls.append(agent.name)
+            raise RuntimeError("boom")
+
+        with pytest.raises(RuntimeError, match="boom"):
+            chain.execute(fail)
+
+        assert calls == ["Primary"]
+
+    def test_invalid_handled_exceptions_rejected(self):
+        """Fallback exception configuration should fail fast when invalid."""
+        with pytest.raises(TypeError, match="Exception subclasses"):
+            FallbackChain(handled_exceptions=(ValueError, "not-an-exception"))
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

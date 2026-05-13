@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Schedule..
 
 ## Directory Contents
 - `PAI.md` – File
@@ -20,3 +20,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [logistics](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -75,6 +75,7 @@ Scripts are stateless utilities. Each reads documentation files, performs analys
 | `audit_directory(root_path)` | `global_doc_auditor.py` | Returns `(total, compliant, issues)` tuple for RASP compliance |
 | `fix_links_in_file(file_path, repo_root)` | `fix_broken_links.py` | Repairs broken relative markdown links |
 | `fix_agents_file(file_path)` | `fix_agents_structure.py` | Ensures Purpose, Active Components, Operating Contracts sections exist |
+| `repair_tree(repo_root, dry_run, include_submodules)` | `repair_triple_check_completeness.py` | Adds missing metadata, navigation, related-doc references, and validation notes for `triple_check.py` completeness |
 
 ## Dependencies
 
@@ -83,8 +84,9 @@ Scripts are stateless utilities. Each reads documentation files, performs analys
 
 ## Constraints
 
-- Fixer scripts default to dry-run; `--fix` flag required for writes.
+- Fixer scripts provide dry-run modes before writes (`--dry-run` or `--fix`, depending on script).
 - Scripts skip hidden directories (`.git`, `.venv`), `__pycache__`, and `node_modules`.
+- Repo-wide repair scripts skip `.gitmodules` submodule paths unless explicitly requested.
 - File encoding assumed UTF-8; `PermissionError` and `UnicodeDecodeError` logged and skipped.
 - Scripts are not importable as a library (`__init__.py` is empty); each runs standalone.
 

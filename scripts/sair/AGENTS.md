@@ -51,3 +51,11 @@ components, and integration points with the broader Codomyrmex ecosystem.
 - **Specification**: [SPEC.md](SPEC.md)
 - **PAI Bridge**: [PAI.md](PAI.md)
 - **Tests**: [tests/scripts/sair/](../../src/codomyrmex/tests/scripts/sair/)
+
+## Navigation
+
+- **Self**: `AGENTS.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Repository Root**: [README.md](../../README.md)

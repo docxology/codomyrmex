@@ -16,3 +16,7 @@ Example implementations and demonstrations.
 ## Navigation
 - **Parent Directory**: [ide](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

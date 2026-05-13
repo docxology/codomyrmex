@@ -122,7 +122,7 @@ class AudioProcessor(MultimodalProcessor):
         """Process audio and return metadata."""
         valid, message = self.validate(content)
 
-        result = {
+        result: dict[str, Any] = {
             "valid": valid,
             "message": message,
             "size_bytes": content.size_bytes,

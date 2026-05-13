@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Ci Cd Automation.
 
 ## Active Components
 - `SPEC.md` – Project file

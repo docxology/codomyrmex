@@ -70,3 +70,11 @@ Constructor: `tools: dict[str, Callable[[str], str]]`, `max_iterations: int = 5`
 
 - All exceptions in `run()` are caught and returned in `ChainResult(success=False, error=str(e))`.
 - No exception propagation from chain execution -- callers check `ChainResult.success`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

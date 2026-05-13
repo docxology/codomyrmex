@@ -88,7 +88,9 @@ class TestHermesClientExecutionShims:
             client._execute_via_ollama(req)
         assert "Model not found" in str(exc.value)
 
-    def test_execute_primary_fallback(self, shim_bin_dir: Path) -> None:
+    def test_execute_primary_fallback(
+        self, shim_bin_dir: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test that HermesClient falls back to Ollama if CLI returns rate limit."""
         hermes_bin = shim_bin_dir / "hermes"
         # Return 429 Rate Limit which triggers fallback
@@ -107,7 +109,7 @@ class TestHermesClientExecutionShims:
         )
         client._active_backend = "cli"
         # Bypass the api key check to let it try to run CLI
-        client._is_cli_configured = lambda: True
+        monkeypatch.setattr(client, "_is_cli_configured", lambda: True)
 
         req = AgentRequest(prompt="test prompt")
 
@@ -136,7 +138,10 @@ class TestHermesClientExecutionShims:
         assert "stream 2" in chunks
 
     def test_chat_session_simple_reply(
-        self, shim_bin_dir: Path, tmp_path: Path
+        self,
+        shim_bin_dir: Path,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test chat_session executes and updates database."""
         hermes_bin = shim_bin_dir / "hermes"
@@ -146,9 +151,10 @@ class TestHermesClientExecutionShims:
         db_path = tmp_path / "test_session.db"
         client = HermesClient(config={"hermes_session_db": str(db_path)})
         client._active_backend = "cli"
-        client._is_cli_configured = lambda: True
+        monkeypatch.setattr(client, "_is_cli_configured", lambda: True)
 
         resp = client.chat_session("Hi there")
         assert resp.is_success()
         assert resp.content.strip() == "Hello user!"
+        assert resp.metadata is not None
         assert "session_id" in resp.metadata

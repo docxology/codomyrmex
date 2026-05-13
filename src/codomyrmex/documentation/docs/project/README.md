@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Project.
 
 ## Directory Contents
 - `CONTRIBUTING_TO_DOCUMENTATION.md` – File
@@ -21,3 +21,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -42,3 +42,11 @@ uv run python -m pytest src/codomyrmex/tests/ -k text_to_speech -v
 - [README.md](README.md)
 - [AGENTS.md](AGENTS.md)
 - [Parent: Audio](../SPEC.md)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

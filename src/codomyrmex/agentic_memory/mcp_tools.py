@@ -82,7 +82,7 @@ def memory_get(memory_id: str) -> dict[str, Any] | None:
         raise ValueError("memory_id must be a non-empty string")
     agent = _agent_memory()()
     mem = agent.store.get(memory_id)
-    return mem.to_dict() if hasattr(mem, "to_dict") else mem  # type: ignore
+    return mem.to_dict() if hasattr(mem, "to_dict") else mem
 
 
 def _format_results(results: list) -> list[dict[str, Any]]:

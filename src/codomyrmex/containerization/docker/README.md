@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Module implementation, resources, and local coordination for Docker.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -22,3 +22,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [containerization](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

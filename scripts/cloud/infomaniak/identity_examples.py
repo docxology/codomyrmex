@@ -253,7 +253,10 @@ def main():
         "--create-app-cred", action="store_true", help="Create OpenStack app identity"
     )
     parser.add_argument(
-        "--delete-app-cred", type=str, metavar="ID", help="Delete OpenStack app identity"
+        "--delete-app-cred",
+        type=str,
+        metavar="ID",
+        help="Delete OpenStack app identity",
     )
 
     # Roles
@@ -262,10 +265,14 @@ def main():
 
     # EC2 credentials
     parser.add_argument(
-        "--ec2-credentials", action="store_true", help="List S3 access pairs (EC2-style)"
+        "--ec2-credentials",
+        action="store_true",
+        help="List S3 access pairs (EC2-style)",
     )
     parser.add_argument(
-        "--create-ec2-cred", action="store_true", help="Create S3 access pair (EC2-style)"
+        "--create-ec2-cred",
+        action="store_true",
+        help="Create S3 access pair (EC2-style)",
     )
 
     # Options

@@ -85,3 +85,8 @@ hermes skills enable bioinformatics
 - **Plugins Reference**: [plugins.md](../../../../docs/agents/hermes/plugins.md)
 - **@ Context References**: [context-references.md](../../../../docs/agents/hermes/context-references.md)
 - **Agent Cache**: [agent-cache.md](../../../../docs/agents/hermes/agent-cache.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: [SPEC.md](SPEC.md)

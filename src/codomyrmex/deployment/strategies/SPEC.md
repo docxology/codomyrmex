@@ -99,3 +99,11 @@ Auto-generates flag name as `ff_{service}_{version}` if not provided. Rollback s
 - `create_strategy` raises `ValueError` for unknown strategy types.
 - Target-based strategy `deploy()` methods catch `Exception` per target and accumulate errors in `DeploymentResult.errors`.
 - Service-based strategies do not catch exceptions internally; callers (e.g., `DeploymentManager`) handle them.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

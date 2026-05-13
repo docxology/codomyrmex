@@ -88,3 +88,11 @@ Dual-model design:
 - `MCPToolRegistry.execute()` catches all handler exceptions and returns `MCPToolResult(status="failure")` with `MCPErrorDetail`.
 - Pydantic `ValidationError` raised when cross-field constraints are violated (e.g., failure status without error).
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

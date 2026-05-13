@@ -561,6 +561,7 @@ class TestPlaceholderCheckFixGeneric:
         content = "Contains components for the src system"
         result = fix_generic_placeholders(content, file_path)
         assert "Contains components for the src system" not in result
+        assert "Mydir" in result
 
     def test_content_without_placeholder_unchanged(self, tmp_path: Path):
         from codomyrmex.documentation.scripts.placeholder_check import (
@@ -581,7 +582,20 @@ class TestPlaceholderCheckFixGeneric:
         file_path.parent.mkdir()
         content = "Contains components for the src system"
         result = fix_generic_placeholders(content, file_path)
-        assert "Documentation" in result or "docs_module" in result
+        assert "Documentation" in result
+        assert "Documentation files and guides." not in result
+
+    def test_test_dir_gets_validation_replacement(self, tmp_path: Path):
+        from codomyrmex.documentation.scripts.placeholder_check import (
+            fix_generic_placeholders,
+        )
+
+        file_path = tmp_path / "tests" / "unit" / "README.md"
+        file_path.parent.mkdir(parents=True)
+        content = "Test files and validation suites."
+        result = fix_generic_placeholders(content, file_path)
+        assert "Validation coverage" in result
+        assert "Test files and validation suites." not in result
 
 
 # ---------------------------------------------------------------------------

@@ -85,3 +85,11 @@ Returns a JSON Schema `{"type": "object", "properties": {...}, "required": [...]
 - `validate_tool_arguments` returns `ValidationResult(valid=False, errors=[...])` on failure; never raises.
 - `ToolTester` and `ServerTester` catch all exceptions per test case, recording them in `TestResult.error`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

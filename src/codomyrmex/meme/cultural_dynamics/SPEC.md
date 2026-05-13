@@ -47,3 +47,11 @@ Engine-and-models pattern: `CulturalDynamicsEngine` operates on immutable datacl
 
 - `oscillation_spectrum` returns a zero-valued `FrequencyMap` for empty time series.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

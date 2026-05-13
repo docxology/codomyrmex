@@ -76,3 +76,11 @@ Single-class design. `KubernetesOrchestrator` initializes both `CoreV1Api` and `
 - `_initialize_client` catches all exceptions and sets `_configured = False` on failure.
 - CRUD methods raise `CodomyrmexError` for non-409 `ApiException` failures.
 - `get_deployment_status` and `list_deployments` catch `ApiException` and return `None` or `[]`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

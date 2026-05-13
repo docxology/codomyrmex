@@ -1,14 +1,13 @@
+"""Image Optimizer for Codomyrmex Containerization."""
+
+import importlib
 import logging
 import re
 from dataclasses import dataclass, field
 from typing import Any
 
-import docker
-
 from codomyrmex.container_optimization.optimizer import OptimizationSuggestion
 from codomyrmex.logging_monitoring import get_logger
-
-"""Image Optimizer for Codomyrmex Containerization."""
 
 # Import logging
 try:
@@ -16,11 +15,19 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
-# Import Docker client
+docker: Any | None = None
+_DOCKER_IMAGE_NOT_FOUND: tuple[type[BaseException], ...] = ()
 try:
-    HAS_DOCKER = True
+    docker = importlib.import_module("docker")
+    docker_image_not_found = getattr(docker.errors, "ImageNotFound", None)
+    if isinstance(docker_image_not_found, type) and issubclass(
+        docker_image_not_found, BaseException
+    ):
+        _DOCKER_IMAGE_NOT_FOUND = (docker_image_not_found,)
 except ImportError:
-    HAS_DOCKER = False
+    docker = None
+
+HAS_DOCKER = docker is not None
 
 
 @dataclass
@@ -64,11 +71,17 @@ class ImageOptimizer:
 
     def __init__(self):
         """Initialize the image optimizer."""
-        self.client = docker.from_env() if HAS_DOCKER else None
-        if not HAS_DOCKER:
+        self.client = None
+        if docker is None:
             logger.warning(
                 "Docker library not available, image optimization features will be limited"
             )
+            return
+
+        try:
+            self.client = docker.from_env()
+        except Exception as e:
+            logger.warning("Docker client not available: %s", e)
 
     def analyze_image(self, image_name: str) -> ImageAnalysis:
         """
@@ -123,7 +136,7 @@ class ImageOptimizer:
 
             return analysis
 
-        except docker.errors.ImageNotFound:
+        except _DOCKER_IMAGE_NOT_FOUND:
             raise ValueError(f"Image '{image_name}' not found") from None
         except Exception as e:
             logger.error("Error analyzing image %s: %s", image_name, e)

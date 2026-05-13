@@ -1,5 +1,8 @@
 # Lineage — Functional Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 The lineage submodule implements a directed graph for tracking data provenance across datasets, transformations, models, and artifacts. It supports upstream/downstream traversal, path finding, and impact analysis with risk classification.
@@ -86,3 +89,11 @@ Fields: `name` (str), `location` (str), `schema` (dict, default empty), `tags` (
 - `get_node` returns `None` for unknown IDs rather than raising.
 - `get_path` returns an empty list when no path exists.
 - `get_upstream` / `get_downstream` return empty lists for unknown node IDs.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

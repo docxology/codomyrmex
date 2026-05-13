@@ -24,3 +24,7 @@ Agent-oriented inventory and contracts: [../../../../AGENTS.md](../../../../AGEN
 ## Navigation
 - **Parent Directory**: [agentic_memory](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

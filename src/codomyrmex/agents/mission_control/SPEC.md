@@ -64,3 +64,11 @@ The Mission Control dashboard provides:
 - **Claude Code bridge**: Read-only integration for Claude Code sessions and team tasks
 - **Skills Hub**: Browse, install, and security-scan agent skills
 - **Memory Knowledge Graph**: Interactive relationship visualization
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

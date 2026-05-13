@@ -71,6 +71,9 @@ class MockCoverageRepairClient(HermesClient):
         prompt: str,
         session_id: str | None = None,
         session_name: str | None = None,
+        max_tokens: int | None = None,
+        hermes_skill: str | None = None,
+        hermes_skills: list[str] | str | None = None,
     ) -> AgentResponse:
         self.call_count += 1
         # The agent receives a traceback about `test_add_correctly` failing because a - b is used

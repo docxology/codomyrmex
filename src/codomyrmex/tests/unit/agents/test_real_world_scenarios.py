@@ -38,7 +38,7 @@ class StubAgent(BaseAgent):
         should_succeed: bool = True,
     ):
         super().__init__(name=name, capabilities=capabilities, config={})
-        self.execution_history = []
+        self.execution_history: list[dict[str, object]] = []
         self.execution_count = 0
         self.should_succeed = should_succeed
 
@@ -279,7 +279,10 @@ class TestComplexScenarios:
         agent = StubAgent("context_agent", [AgentCapabilities.CODE_GENERATION])
 
         # Build up context across operations
-        context = {"project": "test_project", "language": "python"}
+        context: dict[str, object] = {
+            "project": "test_project",
+            "language": "python",
+        }
 
         request1 = AgentRequest(prompt="Generate initial structure", context=context)
         response1 = agent.execute(request1)
@@ -293,9 +296,13 @@ class TestComplexScenarios:
 
         # Verify context was maintained
         assert len(agent.execution_history) == 2
-        assert agent.execution_history[0]["context"]["project"] == "test_project"
-        assert agent.execution_history[1]["context"]["step"] == 2
-        assert "initial_structure" in agent.execution_history[1]["context"]
+        first_context = agent.execution_history[0]["context"]
+        second_context = agent.execution_history[1]["context"]
+        assert isinstance(first_context, dict)
+        assert isinstance(second_context, dict)
+        assert first_context["project"] == "test_project"
+        assert second_context["step"] == 2
+        assert "initial_structure" in second_context
 
     def test_capability_based_workflow(self):
         """Test workflow that selects agents by capability."""

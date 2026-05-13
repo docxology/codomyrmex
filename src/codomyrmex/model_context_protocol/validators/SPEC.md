@@ -82,3 +82,11 @@ Supports `bool()` protocol: `bool(result)` returns `result.valid`.
 - Validators never raise; they return `ValidationResult` with errors/warnings.
 - `ValidationResult.valid` is `False` only when `errors` is non-empty.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

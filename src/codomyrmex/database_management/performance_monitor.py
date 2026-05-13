@@ -163,7 +163,7 @@ class DatabasePerformanceMonitor:
             query_types[query.query_type].append(query.execution_time_ms)
 
         # Calculate statistics for each type
-        analysis = {
+        analysis: dict[str, Any] = {
             "analysis_period_hours": hours,
             "queries_analyzed": len(recent_queries),
             "query_types": {},

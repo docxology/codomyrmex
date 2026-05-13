@@ -1,5 +1,8 @@
 # Knowledge Distillation -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### Soft Label Generation
@@ -51,3 +54,11 @@ L = alpha * T^2 * KL(student_soft || teacher_soft) + (1 - alpha) * CE(student, l
 - CPU only (NumPy, no GPU)
 - No gradient computation (loss value only)
 - 2D input only (batch, classes); no sequence dimension in loss
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

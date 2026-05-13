@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Deployment..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -25,3 +25,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

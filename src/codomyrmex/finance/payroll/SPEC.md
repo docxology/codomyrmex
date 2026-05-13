@@ -68,3 +68,11 @@ Calculates net pay from gross salary by applying federal income tax (via `TaxCal
 
 - `PayrollError` raised for negative salary, unknown pay period, or missing employee fields.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

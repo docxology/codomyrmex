@@ -84,3 +84,11 @@ Evolutionary computation pattern. `Meme` objects have content, type classificati
 - `dissect` returns empty list for empty input.
 - `select` returns empty list for empty population.
 - `population_fitness_stats` returns zeroed dict for empty population.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

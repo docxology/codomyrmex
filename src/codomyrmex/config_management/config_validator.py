@@ -21,7 +21,10 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    import builtins
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +43,7 @@ class SchemaField:
         description: Human-readable description.
     """
 
-    type: type = str
+    type: builtins.type[Any] = str
     required: bool = False
     default: Any = None
     min_val: float | None = None

@@ -64,3 +64,11 @@ Two-class design. `InfomaniakObjectStorageClient` extends `InfomaniakOpenStackBa
 
 - All methods catch `Exception`, log via `logger.error`, and return sentinel values.
 - `get_bucket_policy` additionally checks error strings for `NoSuchBucketPolicy` / `404` to avoid logging non-errors.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

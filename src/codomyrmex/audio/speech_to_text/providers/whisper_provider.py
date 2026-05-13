@@ -13,6 +13,7 @@ import asyncio
 import time
 from collections.abc import AsyncIterator
 from pathlib import Path
+from typing import Any
 
 from codomyrmex.audio.exceptions import (
     AudioFormatError,
@@ -305,7 +306,7 @@ class WhisperProvider(STTProvider):
 
         try:
             # Build transcription parameters
-            params = {
+            params: dict[str, Any] = {
                 "language": config.language,
                 "task": config.task,
                 "beam_size": config.beam_size,

@@ -701,9 +701,7 @@ exclude = ["src/codomyrmex/physical_management/object_manager.py"]
 [tool.ty.rules]
 # v1.1.1: Tightened from initial lenient config
 possibly-unresolved-reference = "ignore"
-possibly-unbound = "warn"
 unresolved-import = "ignore"
-possibly-missing-argument = "ignore"
 unsupported-base = "ignore"
 deprecated = "ignore"
 invalid-argument-type = "ignore"
@@ -732,4 +730,3 @@ do_not_mutate = [
 also_copy = ["src/codomyrmex/tests/unit/mcp/", "src/codomyrmex/tests/unit/agents/", "src/codomyrmex/tests/unit/validation/", "src/codomyrmex/tests/unit/security/", "src/codomyrmex/tests/unit/orchestrator/", "src/codomyrmex/tests/unit/events/", "src/codomyrmex/tests/unit/cache/", "src/codomyrmex/tests/unit/concurrency/", "conftest.py"]
 pytest_add_cli_args = ["--no-cov", "-p", "no:timeout", "-p", "no:benchmark", "--override-ini=addopts=", "--rootdir=.."]
 debug = false
-

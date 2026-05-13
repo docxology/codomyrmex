@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Codomyrmex..
 
 ## Directory Contents
 - `INDEX.md` – File
@@ -147,3 +147,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [src](../README.md)
 - **Project Root**: ../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

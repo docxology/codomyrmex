@@ -69,7 +69,7 @@ class TestReasoningModelABC:
 
     def test_cannot_instantiate_directly(self):
         with pytest.raises(TypeError):
-            ReasoningModel("x", ReasoningType.SYMBOLIC)  # type: ignore[abstract]
+            ReasoningModel("x", ReasoningType.SYMBOLIC)
 
 
 # ===========================================================================

@@ -1,5 +1,8 @@
 # Feature Store - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 > Codomyrmex v1.1.9 | March 2026
 
 ## Overview
@@ -96,3 +99,7 @@ Dependencies flow: `service.py` -> `store.py` -> `models` (from `codomyrmex.feat
 
 - Parent: [model_ops module](../README.md)
 - Root: [codomyrmex](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -130,3 +130,8 @@ uv run python scripts/agents/hermes/new_instance.py \
 - **Project Root**: [../../../README.md](../../../README.md)
 - **Hermes Docs**: [docs/agents/hermes/](../../../docs/agents/hermes/)
 - **Tests**: [test_hermes_orchestrators.py](../../../src/codomyrmex/tests/unit/agents/test_hermes_orchestrators.py)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

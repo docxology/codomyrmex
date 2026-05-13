@@ -10,10 +10,14 @@ Zero-mock policy: all tests use real ``SQLiteSessionStore`` (in-memory).
 from __future__ import annotations
 
 import time
+from typing import TYPE_CHECKING
 
 import pytest
 
 from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -21,7 +25,7 @@ from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
 
 @pytest.fixture
-def inmem_store() -> SQLiteSessionStore:
+def inmem_store() -> Iterator[SQLiteSessionStore]:
     store = SQLiteSessionStore(":memory:")
     yield store
     store.close()
@@ -134,6 +138,7 @@ class TestExportMarkdown:
     ) -> None:
         s = _make_session(inmem_store)
         md = inmem_store.export_markdown(s.session_id)
+        assert md is not None
         assert "## User" in md
         assert "## Assistant" in md
 
@@ -144,11 +149,13 @@ class TestExportMarkdown:
         s.add_message("user", "unique_prompt_content_99")
         inmem_store.save(s)
         md = inmem_store.export_markdown(s.session_id)
+        assert md is not None
         assert "unique_prompt_content_99" in md
 
     def test_export_contains_session_id(self, inmem_store: SQLiteSessionStore) -> None:
         s = _make_session(inmem_store)
         md = inmem_store.export_markdown(s.session_id)
+        assert md is not None
         assert s.session_id in md
 
 

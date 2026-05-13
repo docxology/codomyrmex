@@ -33,7 +33,9 @@ def run_agentmail_demo():
         # Provider auth from environment (name matches upstream SDK)
         if not os.environ.get("AGENTMAIL_API_KEY"):
             print("AgentMail provider auth not configured. Skip live demo.")
-            print("Usage: configure provider env per module docs, then AgentMailProvider()")
+            print(
+                "Usage: configure provider env per module docs, then AgentMailProvider()"
+            )
             return
 
         provider = AgentMailProvider()

@@ -23,3 +23,7 @@ Automation and utility scripts.
 ## Navigation
 - **Parent Directory**: [orchestrator](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

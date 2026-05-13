@@ -3,7 +3,7 @@
 **Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Test files and validation suites.
+Documentation tooling, generated references, and publishing assets for Testing.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

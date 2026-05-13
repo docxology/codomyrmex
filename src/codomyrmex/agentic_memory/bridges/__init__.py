@@ -1,6 +1,5 @@
 """Bridges from agentic memory to external systems (Obsidian, CogniLayer)."""
 
-from codomyrmex.agentic_memory.cognilayer_bridge import COGNILAYER_DB, COGNILAYER_HOME
 from codomyrmex.agentic_memory.bridges.cognilayer_bridge import (
     consolidate_memories,
     get_memory_stats,
@@ -8,6 +7,7 @@ from codomyrmex.agentic_memory.bridges.cognilayer_bridge import (
     store_memory,
 )
 from codomyrmex.agentic_memory.bridges.obsidian_bridge import ObsidianMemoryBridge
+from codomyrmex.agentic_memory.cognilayer_bridge import COGNILAYER_DB, COGNILAYER_HOME
 
 __all__ = [
     "COGNILAYER_DB",

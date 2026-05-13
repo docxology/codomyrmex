@@ -1,11 +1,9 @@
 """Tests for codomyrmex.agents.hermes._provider_router using zero-mock."""
+
 from __future__ import annotations
 
 import json
-from pathlib import Path
-from typing import Any
-
-import pytest
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agents.hermes._provider_router import (
     ContextCompressor,
@@ -13,6 +11,11 @@ from codomyrmex.agents.hermes._provider_router import (
     ProviderRouter,
     UserModel,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import pytest
 
 
 class TestProviderRouter:
@@ -37,24 +40,27 @@ class TestProviderRouter:
         # Write a dummy config
         with open(router._rotation_path, "w") as f:
             json.dump({"rotation_models": [{"model": "m1", "priority": 1}]}, f)
-        
+
         models = router.get_rotation_models()
         assert len(models) == 1
         assert models[0]["model"] == "m1"
 
     def test_call_llm_fallback(self, monkeypatch: pytest.MonkeyPatch) -> None:
         router = ProviderRouter()
+
         # Force a failure in primary dispatch to trigger fallback
-        def _mock_dispatch(prompt: str, provider: str, model: str, timeout: int) -> dict[str, Any]:
+        def _mock_dispatch(
+            prompt: str, provider: str, model: str, timeout: int
+        ) -> dict[str, Any]:
             if provider != "ollama":
                 raise RuntimeError("Primary simulated failure")
             return {"success": True, "content": "fallback works"}
-        
+
         monkeypatch.setattr(router, "_dispatch", _mock_dispatch)
         # Ensure it believes it has credentials
         router._credentials["openrouter"] = "fake"
         router._credentials["ollama"] = "local"
-        
+
         res = router.call_llm("hello", provider="openrouter", model="m1")
         assert res["success"] is True
         assert res["content"] == "fallback works"
@@ -66,10 +72,10 @@ class TestUserModel:
 
     def test_user_model_lifecycle(self, tmp_path: Path) -> None:
         model = UserModel(storage_dir=str(tmp_path))
-        
+
         # Test basic profile
         assert "preferences" in model.profile
-        
+
         # Add facts
         model.set_preference("language", "python")
         model.add_observation("Prefers clear docstrings.")
@@ -78,7 +84,7 @@ class TestUserModel:
         # Reload to verify persistence
         model2 = UserModel(storage_dir=str(tmp_path))
         assert model2.profile["preferences"]["language"] == "python"
-        
+
         # Check context generation
         prompt = model2.get_context_prompt()
         assert "python" in prompt
@@ -95,23 +101,29 @@ class TestModelContextRegistry:
         assert reg.get_context_length("mixtral-8x7b") == 32000
         # Unknown falls back to 128k
         assert reg.get_context_length("unknown-model-xyz") == 128000
-        
+
         # Cache check
         assert "mixtral-8x7b" in reg._cache
 
     def test_fetch_openrouter(self, monkeypatch: pytest.MonkeyPatch) -> None:
         reg = ModelContextRegistry()
+
         # Intercept HTTP request to simulate OR response
         class MockResponse:
             def read(self) -> bytes:
                 return b'{"data": {"context_length": 99999}}'
+
             def __enter__(self):
                 return self
+
             def __exit__(self, exc_type, exc_val, exc_tb):
                 pass
-                
+
         import urllib.request
-        monkeypatch.setattr(urllib.request, "urlopen", lambda req, timeout=10: MockResponse())
-        
+
+        monkeypatch.setattr(
+            urllib.request, "urlopen", lambda req, timeout=10: MockResponse()
+        )
+
         length = reg.get_context_length_safe("mock-model-openrouter")
         assert length == 99999

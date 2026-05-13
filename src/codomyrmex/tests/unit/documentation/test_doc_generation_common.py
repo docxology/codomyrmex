@@ -115,21 +115,16 @@ class TestSkillAndMissionControlHelpers:
             / "ping"
         )
         base.mkdir(parents=True)
-        (base / "route.ts").write_text("export async function GET() {}", encoding="utf-8")
+        (base / "route.ts").write_text(
+            "export async function GET() {}", encoding="utf-8"
+        )
         rel = base.relative_to(tmp_path)
         p = infer_mission_control_purpose(base, rel)
         assert "Mission Control" in p
         assert "route" in p.lower() or "handler" in p.lower()
 
     def test_describe_inventory_mission_control(self, tmp_path: Path) -> None:
-        app = (
-            tmp_path
-            / "src"
-            / "codomyrmex"
-            / "agents"
-            / "mission_control"
-            / "app"
-        )
+        app = tmp_path / "src" / "codomyrmex" / "agents" / "mission_control" / "app"
         app.mkdir(parents=True)
         d = describe_inventory_item_for_directory(app, tmp_path, "route.ts")
         assert "Route Handler" in d or "route" in d.lower()

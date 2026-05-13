@@ -1,5 +1,8 @@
 # Specification: Demos Module
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Goal
 Provide a unified way to register, discover, and execute demonstrations of Codomyrmex modules.
 
@@ -36,3 +39,11 @@ class DemoResult:
 ## Security Considerations
 - Demos should not execute untrusted code without proper sandboxing (leveraging the `coding` module's sandbox if necessary).
 - Demos should not require elevated privileges unless explicitly stated and confirmed.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

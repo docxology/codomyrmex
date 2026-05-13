@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Rollback Plans.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -198,3 +198,7 @@ Test files and validation suites.
 ## Navigation
 - **Parent Directory**: [ci_cd_automation](../README.md)
 - **Project Root**: ../../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

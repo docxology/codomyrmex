@@ -1,5 +1,7 @@
 """MCP Tool definitions for the cost_management module."""
 
+import os
+from pathlib import Path
 from typing import Any
 
 from codomyrmex.cost_management.models import BudgetPeriod
@@ -7,6 +9,12 @@ from codomyrmex.cost_management.stores import JSONCostStore
 from codomyrmex.cost_management.tracker import BudgetManager, CostTracker
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 from codomyrmex.model_context_protocol.response_helpers import error_response
+
+
+def _default_store() -> JSONCostStore:
+    """Return the persistent cost store used by MCP tools."""
+    default_path = Path.home() / ".codomyrmex" / "costs.json"
+    return JSONCostStore(Path(os.getenv("CODOMYRMEX_COST_STORE", default_path)))
 
 
 @mcp_tool(category="cost_management")
@@ -17,7 +25,7 @@ def get_cost_summary(period_str: str = "MONTHLY") -> dict[str, Any]:
         period_str: "DAILY", "WEEKLY", "MONTHLY", "YEARLY", or "ALL"
     """
     try:
-        store = JSONCostStore()
+        store = _default_store()
         tracker = CostTracker(store=store)
 
         period = None
@@ -42,7 +50,7 @@ def get_cost_summary(period_str: str = "MONTHLY") -> dict[str, Any]:
 def check_budgets() -> dict[str, Any]:
     """Check all active budgets and return their utilization status and any alerts."""
     try:
-        store = JSONCostStore()
+        store = _default_store()
         tracker = CostTracker(store=store)
         manager = BudgetManager(tracker=tracker)
 

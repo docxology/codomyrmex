@@ -57,3 +57,11 @@ Controller-based feedback regulation pattern. `CyberneticEngine` manages named `
 
 - `CyberneticEngine.update` silently skips variables not present in both `setpoints` and `current_state`.
 - PID derivative term returns 0.0 when `dt <= 0`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

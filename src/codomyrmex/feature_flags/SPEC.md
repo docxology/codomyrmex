@@ -41,3 +41,11 @@ Supports JSON file storage by default. Custom backends can implement the `FlagSt
 ```bash
 uv run pytest src/codomyrmex/tests/unit/feature_flags/ -v
 ```
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

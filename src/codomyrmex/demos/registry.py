@@ -121,10 +121,12 @@ class DemoRegistry:
                 if "success" in res
                 else (res.get("status") == "passed")
             )
+            output = res.get("stdout", "")
+            error = res.get("stderr") if not success else None
             return (
-                success,
-                res.get("stdout", ""),
-                res.get("stderr") if not success else None,
+                bool(success),
+                str(output),
+                str(error) if error is not None else None,
             )
         if inspect.iscoroutinefunction(info.target):
             import asyncio

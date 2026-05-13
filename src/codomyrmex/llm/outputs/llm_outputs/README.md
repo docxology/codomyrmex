@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Llm Outputs..
 
 ## Directory Contents
 - `PAI.md` – File
@@ -20,3 +20,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [outputs](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

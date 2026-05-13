@@ -1,5 +1,8 @@
 # SPEC.md — agents/google_workspace
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Module Specification
 
 ### Purpose
@@ -39,3 +42,11 @@ Properties: `has_token`, `has_credentials`, `has_auth`.
 ### Zero-Mock Policy
 Tests use `@pytest.mark.skipif(shutil.which("gws") is None)` for subprocess tests.
 No mocking of subprocess calls.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

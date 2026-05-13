@@ -1,5 +1,8 @@
 # Config Management Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## 1. Functional Requirements
 The `config_management` module must:
 - Provide robust implementations of Config Management logic.
@@ -16,3 +19,11 @@ See `API_SPECIFICATION.md` (if available) or `__init__.py` for exact signatures.
 ## 4. Constraints
 - **Performance**: Operations should be non-blocking where possible.
 - **Security**: Validate all inputs; sanity check paths.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../README.md)

@@ -115,9 +115,11 @@ class RedisCache(Cache):
     def delete_pattern(self, pattern: str) -> int:
         """Delete all keys matching a pattern."""
         try:
-            keys = self.client.keys(pattern)
+            raw_keys: Any = self.client.keys(pattern)
+            keys = list(raw_keys)
             if keys:
-                count = self.client.delete(*keys)
+                raw_count: Any = self.client.delete(*keys)
+                count = int(raw_count)
                 self._stats.size = max(0, self._stats.size - count)
                 return count
             return 0

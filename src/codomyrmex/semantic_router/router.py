@@ -7,6 +7,7 @@ The route with highest similarity (above threshold) is selected.
 """
 
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 
@@ -17,9 +18,7 @@ class Route:
 
     name: str
     utterances: list[str]  # Example phrases for this route
-    embeddings: np.ndarray = (
-        None  # Pre-computed embeddings (set during fit)  # type: ignore
-    )
+    embeddings: np.ndarray[tuple[Any, ...], np.dtype[Any]] | None = None
     threshold: float = 0.7  # Cosine similarity threshold
 
 

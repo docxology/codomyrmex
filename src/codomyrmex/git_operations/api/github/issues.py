@@ -1,5 +1,7 @@
 """GitHub API issue operations."""
 
+from typing import Any
+
 import requests
 
 from codomyrmex.logging_monitoring import get_logger
@@ -27,7 +29,7 @@ def create_issue(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
-    data = {"title": title, "body": body}
+    data: dict[str, Any] = {"title": title, "body": body}
     if labels:
         data["labels"] = labels
     if assignees:

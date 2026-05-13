@@ -58,3 +58,11 @@ Single-class design. `InfomaniakComputeClient` extends both `InfomaniakOpenStack
 
 - All methods catch `Exception`, log via `logger.error`, and return sentinel values.
 - No exceptions propagate to callers.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

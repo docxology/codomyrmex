@@ -90,3 +90,11 @@ uv run pytest src/codomyrmex/tests/unit/agents/history/
 
 - FTS5 full-text search index for `SQLiteHistoryStore`
 - Token-budget-aware truncation (trim by token count, not message count)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

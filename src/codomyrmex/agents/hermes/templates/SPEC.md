@@ -34,3 +34,11 @@ agents/hermes/templates/
 | `list_templates()` | — | `list[str]` | List all template names |
 | `register()` | `template` | `None` | Register custom template |
 | `has()` | `name` | `bool` | Check existence |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

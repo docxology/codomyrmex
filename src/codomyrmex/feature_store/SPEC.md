@@ -84,3 +84,11 @@ The `mcp_tools.py` module exposes tools for integrating the Feature Store via th
 - `set_value()` raises `FeatureNotFoundError` if feature not registered.
 - `set_value()` raises `FeatureValidationError` if value type mismatch.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

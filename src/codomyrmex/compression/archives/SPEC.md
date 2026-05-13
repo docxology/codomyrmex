@@ -39,3 +39,11 @@ Inherits from `CodomyrmexError`. Raised when archive creation or extraction fail
 ## Error Handling
 
 - All exceptions during archive operations are caught, logged via `logger.error`, and re-raised as `CompressionError` with the original exception chained (`from e`).
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

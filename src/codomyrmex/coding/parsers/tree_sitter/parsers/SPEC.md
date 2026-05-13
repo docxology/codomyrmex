@@ -52,3 +52,11 @@ Strategy pattern: `Parser` (ABC) defines the contract (`parse`, `get_functions`,
 
 - `ValueError` raised by `get_parser()` for unknown language strings.
 - Tree-sitter load failures logged at ERROR level.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../../README.md)

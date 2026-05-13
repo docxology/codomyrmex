@@ -1,5 +1,8 @@
 # CLI Module - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Version**: v1.1.9 | **Last Updated**: March 2026
 
 ## Overview
@@ -75,3 +78,7 @@ class CheckResult:
 - [readme.md](readme.md) -- Module overview
 - [AGENTS.md](AGENTS.md) -- Agent coordination
 - [Source Module](../../../../cli/)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)

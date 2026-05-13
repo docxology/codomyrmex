@@ -6,6 +6,7 @@ task orchestration, and resource management components. It provides a unified
 interface for complex multi-module workflows.
 """
 
+import logging
 import threading
 import uuid
 from collections.abc import Callable
@@ -20,8 +21,6 @@ try:
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
-
     logger = logging.getLogger(__name__)
 
 try:
@@ -682,11 +681,18 @@ class OrchestrationEngine:
 
     def __del__(self):
         """Cleanup on deletion."""
+        previous_raise_exceptions = logging.raiseExceptions
+        logging.raiseExceptions = False
         try:
             self.shutdown()
         except (AttributeError, RuntimeError, OSError, ValueError) as e:
             # Ignore errors during cleanup - object may be partially destroyed
-            print(f"Warning: error during OrchestrationEngine cleanup: {e}")
+            try:
+                print(f"Warning: error during OrchestrationEngine cleanup: {e}")
+            except (ValueError, OSError):
+                pass
+        finally:
+            logging.raiseExceptions = previous_raise_exceptions
 
 
 # MCP Tool Integration (if available)

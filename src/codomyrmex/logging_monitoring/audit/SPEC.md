@@ -56,3 +56,11 @@ Log output is delegated to Python's `logging` module with `JSONFormatter`.
 - All events are logged to `logging.getLogger("codomyrmex.audit")`.
 - No exceptions raised from `log_event()` under normal operation.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -96,3 +96,7 @@ Constructor: `ReportGenerator(spec: FPFSpec)` -- internally creates `FPFAnalyzer
 
 - **Parent**: [fpf/](../README.md)
 - **Project root**: [../../../../README.md](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

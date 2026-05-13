@@ -57,3 +57,11 @@ agent_setup/
 - Location: `~/.codomyrmex/agents.yaml`
 - Permissions: `0o600` (owner-only read/write)
 - Format: YAML with `agents:` top-level key
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

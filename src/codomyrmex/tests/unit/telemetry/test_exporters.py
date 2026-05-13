@@ -298,13 +298,11 @@ class TestOTLPExporter:
         attrs = exp._convert_attributes({"rate": 3.14})
         assert attrs[0]["value"] == {"doubleValue": 3.14}
 
-    def test_convert_attributes_bool_stored_as_int(self):
-        # bool is a subclass of int in Python, so True maps to intValue
+    def test_convert_attributes_bool_uses_bool_value(self):
         exp = OTLPExporter()
         attrs = exp._convert_attributes({"flag": True})
-        # Actual behavior: int check fires before bool check
         assert attrs[0]["key"] == "flag"
-        assert "flag" not in [a["key"] for a in attrs if a["key"] != "flag"]
+        assert attrs[0]["value"] == {"boolValue": True}
 
     def test_convert_attributes_empty(self):
         exp = OTLPExporter()
@@ -404,20 +402,15 @@ class TestOTLPExporterAttributeTypes:
 
     def test_convert_attributes_bool_true(self):
         exp = OTLPExporter()
-        # bool is a subclass of int; Python isinstance(True, int) is True,
-        # so this hits the int branch and stores intValue
         attrs = exp._convert_attributes({"active": True})
         assert attrs[0]["key"] == "active"
-        # The value dict must have exactly one type key
-        value = attrs[0]["value"]
-        assert len(value) == 1
+        assert attrs[0]["value"] == {"boolValue": True}
 
     def test_convert_attributes_bool_false(self):
         exp = OTLPExporter()
         attrs = exp._convert_attributes({"disabled": False})
         assert attrs[0]["key"] == "disabled"
-        value = attrs[0]["value"]
-        assert len(value) == 1
+        assert attrs[0]["value"] == {"boolValue": False}
 
     def test_convert_attributes_list_falls_back_to_string(self):
         exp = OTLPExporter()

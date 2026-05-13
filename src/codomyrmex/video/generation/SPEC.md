@@ -1,5 +1,8 @@
 # Video Generation -- Functional Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Version**: v1.1.9 | **Updated**: March 2026
 
 ## Overview

@@ -63,3 +63,11 @@ uv run pytest src/codomyrmex/tests/unit/database_management/replication/
 
 - Implement read-replica routing with configurable load-balancing strategies
 - Add replication lag monitoring and automatic failover
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -60,3 +60,11 @@ Re-exports all 16 symbols from the `physical_generators` subpackage, including `
 - `TodoItem.parse` raises `ValueError` if generator output lines are malformed (upstream contract).
 - File I/O errors propagate as `OSError`; callers are expected to handle.
 - All errors logged via `logging_monitoring` before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

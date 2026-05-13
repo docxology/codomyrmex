@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Testing.
 
 ## Active Components
 - `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types

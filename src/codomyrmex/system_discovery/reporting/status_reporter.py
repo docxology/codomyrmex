@@ -74,7 +74,7 @@ class StatusReporter:
         env_info = EnvironmentProfiler.get_environment_info()
         py_info = env_info["python"]
 
-        status = {
+        status: dict[str, Any] = {
             "version": sys.version_info,
             "version_string": py_info["version"].split()[0],
             "executable": py_info["executable"],
@@ -201,7 +201,7 @@ class StatusReporter:
             clean_working_tree, remotes, recent_commits, staged_changes,
             unstaged_changes.
         """
-        status = {
+        status: dict[str, Any] = {
             "is_git_repo": False,
             "git_available": False,
             "current_branch": None,

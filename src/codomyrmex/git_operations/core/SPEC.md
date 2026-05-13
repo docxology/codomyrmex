@@ -1,5 +1,8 @@
 # Core - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Central hub module for git operations. Re-exports 37 functions from `commands/` subpackage organized into 10 categories. Acts as the single import point for all git functionality.
@@ -52,3 +55,11 @@ All functions are listed in `__all__` and importable from `codomyrmex.git_operat
 
 - Performance monitoring import failure falls back to no-op decorators -- never blocks operation.
 - All functions delegate to `commands/` subpackage; `git.py` itself contains no business logic.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

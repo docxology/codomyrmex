@@ -1,5 +1,8 @@
 # FRACTALS SUBMODULE SPECIFICATION
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Context & Motivation
 
 Large tasks often paralyze standard single-agent loops. Codomyrmex required an engine identical to `TinyAGI/fractals` to natively fragment complex issues into smaller atomic components. This specific design creates autonomous self-similar trees bounded explicitly by git structural isolation.
@@ -21,3 +24,11 @@ Large tasks often paralyze standard single-agent loops. Codomyrmex required an e
 ## Security
 
 Agent executions are run tightly within local scopes. The fallback provider maps to internal codomyrmex instances utilizing system API keys securely sourced from `.env` context configurations.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

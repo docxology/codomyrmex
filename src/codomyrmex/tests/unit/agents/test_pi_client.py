@@ -13,6 +13,7 @@ Zero-mock test suite covering:
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import subprocess
 import unittest
@@ -295,6 +296,7 @@ class TestPiPrintMode(unittest.TestCase):
         """Verify pi -p works by asking for a trivial response."""
         # This is a lightweight test that just confirms the binary runs
         pi_bin = shutil.which("pi")
+        assert pi_bin is not None
         result = subprocess.run(
             [pi_bin, "--version"],
             capture_output=True,

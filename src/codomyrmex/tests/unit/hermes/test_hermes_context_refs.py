@@ -15,11 +15,14 @@ Tests cover:
 from __future__ import annotations
 
 import asyncio
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from codomyrmex.agents.hermes.hermes_paths import discover_hermes_agent_repo
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Import helpers

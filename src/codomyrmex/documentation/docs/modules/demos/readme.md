@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Documentation tooling, generated references, and publishing assets for Demos..
 
 ## Directory Contents
 - `PAI.md` – File
@@ -17,3 +17,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -151,7 +151,7 @@ class MessageBus:
             self.subscribers[message_type].append(handler)
 
         # Attach priority to handler for re-sorting
-        handler._priority = priority  # type: ignore[attr-defined]
+        handler._priority = priority
         self.logger.debug(
             "Subscribed handler to message type: %s (priority=%d)",
             message_type,

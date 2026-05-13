@@ -1,5 +1,8 @@
 # RLHF Pipeline -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### PPO Algorithm (Schulman et al. 2017)
@@ -44,3 +47,11 @@ The reward model learns to score responses such that preferred responses receive
 - NumPy-only: no automatic differentiation, no gradient updates
 - Actor/Critic weights are randomly initialized each run
 - Designed for educational/testing use, not production RL training
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

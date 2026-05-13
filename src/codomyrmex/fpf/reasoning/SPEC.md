@@ -106,3 +106,7 @@ Factory: `create_reasoner() -> FirstPrinciplesReasoner`
 
 - **Parent**: [fpf/](../README.md)
 - **Project root**: [../../../../README.md](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

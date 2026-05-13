@@ -105,3 +105,11 @@ uv run pytest src/codomyrmex/tests/unit/api/webhooks/
 - Async transport implementation using `httpx` or `aiohttp` for non-blocking delivery
 - Persistent delivery log (database-backed) for audit and replay of failed deliveries
 - Exponential backoff with jitter in `dispatch_with_retry` (currently uses linear delay)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

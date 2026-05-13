@@ -13,8 +13,8 @@ from pathlib import Path
 
 from codomyrmex.documentation.scripts.bootstrap_agents_readmes import (
     AGENTS_CURATED_MARKER,
-    DocumentationBootstrapper,
     README_CURATED_MARKER,
+    DocumentationBootstrapper,
 )
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 
@@ -84,7 +84,9 @@ def main() -> int:
             readme_n += 1
 
     mode = "DRY RUN" if args.dry_run else "Wrote"
-    print(f"{mode}: curated markers prepended to {agents_n} AGENTS.md, {readme_n} README.md")
+    print(
+        f"{mode}: curated markers prepended to {agents_n} AGENTS.md, {readme_n} README.md"
+    )
     return 0
 
 

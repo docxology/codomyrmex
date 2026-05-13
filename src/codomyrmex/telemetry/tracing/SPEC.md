@@ -116,3 +116,11 @@ uv run pytest src/codomyrmex/tests/unit/telemetry/tracing/
 - Add OTLP/gRPC exporter for integration with Jaeger, Zipkin, and other backends
 - Support async span export with configurable flush intervals
 - Add W3C TraceContext header propagation (`traceparent` / `tracestate`)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

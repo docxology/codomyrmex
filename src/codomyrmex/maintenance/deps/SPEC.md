@@ -76,3 +76,11 @@ the consolidated configuration.
 - `SyntaxError` in scanned files logged as warning and skipped.
 - `subprocess.TimeoutExpired` returns `(False, "", "Command timed out")`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

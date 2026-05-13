@@ -63,3 +63,11 @@ Observer pattern with two registration modes: explicit (`EventListener.on()`) an
 - Handler exceptions in `EventListener` propagate to the event bus (which catches and logs them).
 - `export_logs` may raise `OSError` or `IOError` for filesystem errors -- these are not caught internally.
 - `EventLogEntry.to_dict()` safely handles both enum and non-enum values for event_type and priority via `hasattr` checks.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

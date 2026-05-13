@@ -58,3 +58,11 @@ Follows the GitAgent pattern: a `BaseAgent` subclass receives structured JSON pr
 - `PermissionError` raised by security wrapper when `pre_check` denies the action.
 - `TypeError` raised when extracted params do not match client method signature.
 - All errors logged via `logger.exception` before returning as `AgentResponse.error`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

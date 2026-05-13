@@ -58,3 +58,11 @@ Anthropic, OpenAI, Google Gemini, Google Vertex, Azure OpenAI, Amazon Bedrock, M
 | API key (env var) | `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, `OPENAI_API_KEY` |
 | OAuth (`/login`) | Claude Pro/Max, ChatGPT Plus, GitHub Copilot, Gemini CLI |
 | Custom models.json | Any OpenAI/Anthropic/Google-compatible API |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

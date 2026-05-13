@@ -102,3 +102,11 @@ Values: `HTTP_REQUEST`, `ASSERTION`, `WAIT`, `SCRIPT`, `CONDITIONAL`
 - `ScriptExecutor` catches all exceptions from callable or eval and returns `StepStatus.ERROR`
 - `WorkflowRunner._run_step()` returns `StepStatus.ERROR` with message if no executor is registered for the step type
 - No custom exception classes; relies on `StepResult.error` string field for error reporting
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

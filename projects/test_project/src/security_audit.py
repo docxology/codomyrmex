@@ -56,8 +56,10 @@ _scan_paths_for_sensitive_patterns = None  # type: ignore[assignment]
 try:
     from codomyrmex.security import (
         audit_code_security,
-        scan_directory_for_secrets as _scan_paths_for_sensitive_patterns,
         scan_vulnerabilities,
+    )
+    from codomyrmex.security import (
+        scan_directory_for_secrets as _scan_paths_for_sensitive_patterns,
     )
 
     HAS_DIGITAL_SECURITY = True
@@ -147,7 +149,9 @@ class SecurityAudit:
             Dictionary with vulnerability and sensitive-pattern scan summary.
         """
         path_str = str(path)
-        logger.info("Running security audit", extra={"path_basename": Path(path_str).name})
+        logger.info(
+            "Running security audit", extra={"path_basename": Path(path_str).name}
+        )
 
         result: dict[str, Any] = {
             "path": path_str,

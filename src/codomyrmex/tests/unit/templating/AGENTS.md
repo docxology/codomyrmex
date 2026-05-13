@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Templating.
 
 ## Active Components
 - `PAI.md` – Project file

@@ -51,3 +51,11 @@ Properties: `history` (list of all DeploymentState), `active_deployments` (dict 
 - `DeploymentOrchestrator.execute_deployment` raises `RuntimeError` for invalid plan states.
 - `DeploymentManager.deploy` catches all exceptions, creates a failed `DeploymentState`, and logs the error.
 - `DeploymentManager.rollback` logs a warning and returns `None` when no active deployment exists.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

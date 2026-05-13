@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
-This is the documentation-layer SPEC for `ghost_architecture`. For the authoritative technical specification see the source-level [`SPEC.md`](../../../src/codomyrmex/agents/ghost_architecture/SPEC.md).
+This is the documentation-layer SPEC for `ghost_architecture`. The authoritative source-level SPEC lives inside the initialized `src/codomyrmex/agents/ghost_architecture/` git submodule.
 
 ---
 
@@ -63,13 +63,17 @@ uv run pytest src/codomyrmex/tests/agents/test_ghost_architecture.py -v
 # 18 passed
 ```
 
-See the [source SPEC.md](../../../src/codomyrmex/agents/ghost_architecture/SPEC.md) for the full test coverage table.
+See the source submodule `SPEC.md` for the full test coverage table when the submodule is initialized.
 
 ---
 
 ## Navigation
 
-- **Source SPEC.md**: [`src/codomyrmex/agents/ghost_architecture/SPEC.md`](../../../src/codomyrmex/agents/ghost_architecture/SPEC.md)
-- **Source PAI.md**: [`src/codomyrmex/agents/ghost_architecture/PAI.md`](../../../src/codomyrmex/agents/ghost_architecture/PAI.md)
+- **Source SPEC.md**: `src/codomyrmex/agents/ghost_architecture/SPEC.md` inside the initialized submodule
+- **Source PAI.md**: `src/codomyrmex/agents/ghost_architecture/PAI.md` inside the initialized submodule
 - **Full README**: [`README.md`](README.md)
 - **Parent Docs**: [`docs/agents/SPEC.md`](../SPEC.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Automation utilities and maintenance commands for Documents.
 
 ## Active Components
 - `PAI.md` – Project file

@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import time
 from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -74,7 +75,7 @@ def handle_memory_index(
     print(f"🔨 {'Rebuilding' if rebuild else 'Building'} memory index...")
     start = time.monotonic()
 
-    stats = {
+    stats: dict[str, Any] = {
         "status": "completed",
         "rebuild": rebuild,
     }

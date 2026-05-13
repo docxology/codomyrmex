@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Assets.
 
 ## Directory Contents
 - `README.md` – File
@@ -15,3 +15,8 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: ../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

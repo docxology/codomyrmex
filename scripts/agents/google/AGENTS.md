@@ -1,5 +1,8 @@
 # Codomyrmex Scripts Agents Google Coordination
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Parent**: [`scripts/agents/AGENTS.md`](../AGENTS.md)
 **Focus**: Google AI Integration Scripts
 
@@ -32,3 +35,11 @@ Thin orchestration scripts for Google AI (unified `google-genai` SDK, optional V
 
 ## Cross-Referencing
 Refer to the `Personal AI Infrastructure (PAI)` standards for the exact CLI wrapping expectations for tools executed by agent orchestration arrays.
+
+## Navigation
+
+- **Self**: `AGENTS.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.
+- **Repository Root**: [README.md](../../../README.md)

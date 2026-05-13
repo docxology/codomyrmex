@@ -1,5 +1,8 @@
 # Jules (Google)
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `codomyrmex.agents.jules` | **Category**: CLI-based | **Last Updated**: March 2026
 
 ## Overview
@@ -73,3 +76,7 @@ Source: [`src/codomyrmex/agents/jules/`](../../../src/codomyrmex/agents/jules/)
 - **Parent**: [docs/agents/](../README.md)
 - **Source**: [src/codomyrmex/agents/jules/](../../../src/codomyrmex/agents/jules/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

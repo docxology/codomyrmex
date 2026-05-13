@@ -42,3 +42,11 @@ rendering, and export to common 3D formats. Any such implementation must:
 
 - All errors logged before propagation.
 - Missing optional rendering dependencies must raise `ImportError` explicitly.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -33,3 +33,7 @@ When coordinating with Mission Control via MCP:
 ## Navigation Links
 - **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [../../../../README.md](../../../../README.md) - Main project documentation
+
+## Related Documents
+
+- **Spec**: [SPEC.md](SPEC.md)

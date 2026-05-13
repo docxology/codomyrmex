@@ -34,3 +34,7 @@ The implementation file is named `retry_sync.py` so a `retry` **submodule** cann
 
 - **Parent**: [codomyrmex](../README.md)
 - **Project root**: [../../../README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

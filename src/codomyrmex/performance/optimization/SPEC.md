@@ -47,3 +47,11 @@ Module-level lazy loaders for common heavy dependencies: `matplotlib.pyplot`, `n
 
 - `ImportError` from `importlib.import_module` is re-raised with a descriptive message including the module name.
 - After a failed import, `_module` remains `None`; subsequent attribute access raises `ImportError`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

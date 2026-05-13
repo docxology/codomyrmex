@@ -1,5 +1,8 @@
 # AGENTS.md — free_apis
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 AI agent guidance for the `codomyrmex.api.free_apis` submodule.
 
 ## Module Purpose
@@ -43,3 +46,11 @@ stdlib-only HTTP client to call them.
 - `FreeAPIRegistry` uses TTL-based in-memory caching (default 3 600 s).
 - `FreeAPIClient` returns `APICallResult` for HTTP errors (4xx/5xx) instead of raising — only network/timeout failures raise `APICallError`.
 - All public classes implement `to_dict()` for JSON serialisation.
+
+## Navigation
+
+- **Self**: `AGENTS.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Repository Root**: [README.md](../../../../README.md)

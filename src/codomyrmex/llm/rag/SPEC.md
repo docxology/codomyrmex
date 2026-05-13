@@ -103,3 +103,11 @@ uv run pytest src/codomyrmex/tests/unit/llm/rag/
 - Add hybrid retrieval combining keyword (BM25) and vector search
 - Support PDF parsing via `Document.from_file` for the `PDF` document type
 - Add metadata-filtered retrieval (e.g., filter by document source or date)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

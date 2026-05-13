@@ -1,5 +1,8 @@
 # Specification: container_optimization
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 The `container_optimization` module is designed to provide automated container optimization capabilities within the Codomyrmex ecosystem.
 
@@ -23,3 +26,11 @@ The `container_optimization` module is designed to provide automated container o
 - `docker-py` for interacting with the Docker daemon.
 - `loguru` for logging.
 - `fire` for the CLI orchestrator.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

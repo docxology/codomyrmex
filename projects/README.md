@@ -16,3 +16,7 @@ Project workspace and templates.
 
 ## Navigation
 - **Project Root**: ../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

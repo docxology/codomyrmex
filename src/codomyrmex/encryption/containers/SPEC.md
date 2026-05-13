@@ -46,3 +46,11 @@ The JSON payload structure is:
 ## 5 Configuration
 
 No external configuration. The container delegates all cryptography to `encryption.algorithms.AESGCMEncryptor`. The only required input is a valid AES key.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -14,7 +14,9 @@ REPO_ROOT = Path(__file__).resolve().parents[5]
 def links_mod():
     script = REPO_ROOT / "scripts" / "documentation" / "validate_links_comprehensive.py"
     assert script.is_file(), f"missing {script}"
-    spec = importlib.util.spec_from_file_location("validate_links_comprehensive", script)
+    spec = importlib.util.spec_from_file_location(
+        "validate_links_comprehensive", script
+    )
     mod = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(mod)
@@ -30,7 +32,7 @@ def test_lines_outside_fences_excludes_fenced_lines(links_mod) -> None:
 [keep](good.md)
 """
     lines = links_mod._lines_outside_fences(content)
-    by_num = {n: line for n, line in lines}
+    by_num = dict(lines)
     assert "[keep](good.md)" in by_num.get(5, "")
     assert not any("ignore" in line for _, line in lines)
 

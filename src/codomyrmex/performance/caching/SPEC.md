@@ -57,3 +57,11 @@ The decorated function gains `cache_clear()` and `cache_stats()` helper methods.
 - `pickle.PickleError`, `EOFError`, `OSError` during disk reads are caught and the cache file is removed.
 - `OSError`, `pickle.PickleError` during disk writes are caught and logged at debug level.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

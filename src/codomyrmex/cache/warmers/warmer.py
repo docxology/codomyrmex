@@ -88,7 +88,7 @@ class CacheWarmer(Generic[K, V]):
             batch = keys[i : i + self.config.batch_size]
             try:
                 for key, value in loader.load_batch(batch).items():
-                    self.cache[key] = value  # type: ignore
+                    self.cache[key] = value
                     stats.keys_warmed += 1
             except Exception as e:
                 stats.keys_failed += len(batch)

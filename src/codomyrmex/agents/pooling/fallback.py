@@ -20,9 +20,10 @@ Thread Safety: This implementation is NOT thread-safe.
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeAlias, TypeVar
 
 T = TypeVar("T")
+HandledExceptions: TypeAlias = tuple[type[Exception], ...]
 
 
 @dataclass
@@ -63,7 +64,7 @@ class FallbackChain(Generic[T]):
 
     def __init__(
         self,
-        handled_exceptions: tuple[type, ...] = (
+        handled_exceptions: HandledExceptions = (
             ValueError,
             RuntimeError,
             AttributeError,
@@ -77,7 +78,27 @@ class FallbackChain(Generic[T]):
             handled_exceptions: Exceptions that trigger fallback to next agent.
         """
         self._agents: list[tuple[str, T]] = []
-        self.handled_exceptions = handled_exceptions
+        self.handled_exceptions = self._validate_handled_exceptions(handled_exceptions)
+
+    @staticmethod
+    def _validate_handled_exceptions(
+        handled_exceptions: HandledExceptions,
+    ) -> HandledExceptions:
+        """Validate fallback exception configuration."""
+        if not handled_exceptions:
+            raise ValueError(
+                "handled_exceptions must contain at least one exception type"
+            )
+
+        for exception_type in handled_exceptions:
+            if not isinstance(exception_type, type) or not issubclass(
+                exception_type, Exception
+            ):
+                raise TypeError(
+                    "handled_exceptions must be a tuple of Exception subclasses"
+                )
+
+        return handled_exceptions
 
     def add(self, name: str, agent: T) -> "FallbackChain[T]":
         """Append an agent to the chain. Returns self for chaining.
@@ -157,7 +178,9 @@ class FallbackChain(Generic[T]):
         for name, agent in self._agents:
             try:
                 return func(agent)
-            except self.handled_exceptions as e:
+            except Exception as e:
+                if not isinstance(e, self.handled_exceptions):
+                    raise
                 last_error = e
                 if on_fallback:
                     on_fallback(name, e)
@@ -200,7 +223,9 @@ class FallbackChain(Generic[T]):
                     result=result,
                     attempts=attempts,
                 )
-            except self.handled_exceptions as e:
+            except Exception as e:
+                if not isinstance(e, self.handled_exceptions):
+                    raise
                 last_error = e
                 attempts.append((name, e))
                 if on_fallback:

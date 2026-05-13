@@ -44,3 +44,11 @@ The module follows a data-container plus static-utility pattern. `Dataset` wraps
 - `json.JSONDecodeError` raised if JSONL line is malformed during `from_file()`.
 - Invalid dataset items logged with their index before `validate()` returns `False`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

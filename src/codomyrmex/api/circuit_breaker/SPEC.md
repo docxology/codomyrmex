@@ -106,3 +106,11 @@ uv run pytest src/codomyrmex/tests/unit/api/circuit_breaker/
 - Async-compatible circuit breaker and retry (asyncio-native, no `time.sleep`)
 - Sliding-window error rate tracking instead of cumulative counters
 - Event hooks/callbacks for state transitions (e.g., on_open, on_close, on_half_open)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

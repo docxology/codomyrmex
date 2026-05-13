@@ -88,11 +88,7 @@ def iter_dirs_under(root: Path, base: Path):
     yield base
     for dirpath, dirnames, _files in os.walk(base, topdown=True):
         dp = Path(dirpath)
-        dirnames[:] = [
-            d
-            for d in sorted(dirnames)
-            if not should_skip_dir(dp / d, root)
-        ]
+        dirnames[:] = [d for d in sorted(dirnames) if not should_skip_dir(dp / d, root)]
         for d in dirnames:
             yield dp / d
 
@@ -146,7 +142,9 @@ def main() -> int:
         missing_agents += ta
         missing_readme += tr
         missing_both += tb
-        lines.append(f"- **{rr}/**: dirs with any gap: {len(rows)}; missing AGENTS.md: {ta}; missing README.md: {tr}; missing both: {tb}")
+        lines.append(
+            f"- **{rr}/**: dirs with any gap: {len(rows)}; missing AGENTS.md: {ta}; missing README.md: {tr}; missing both: {tb}"
+        )
 
     lines.extend(
         [

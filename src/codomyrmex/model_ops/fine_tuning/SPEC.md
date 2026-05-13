@@ -45,3 +45,11 @@ Single-class design: `FineTuningJob` encapsulates a fine-tuning run with state m
 
 - All operations logged via `logger.info` before execution.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -72,3 +72,11 @@ pytest tests/validation_schemas/
 
 - JSON Schema draft 7/2020-12 support: add an adapter that maps the existing constraint model to standard JSON Schema, enabling interoperability with external validators and schema registries.
 - Schema versioning and migration: track schema version history and provide migration helpers that transform data conforming to an older schema version into the current schema, reducing manual upgrade work.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

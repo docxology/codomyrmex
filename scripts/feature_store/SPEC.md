@@ -1,5 +1,8 @@
 # Feature Store Orchestrator Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Purpose
 This specification defines the behavior of the `feature_store_demo.py` orchestrator script, which serves as both a demonstration and a functional test for the `codomyrmex.feature_store` module.
 
@@ -13,3 +16,11 @@ This specification defines the behavior of the `feature_store_demo.py` orchestra
 ## Architectural Constraints
 - **Zero-Mock**: The script must use the real `InMemoryFeatureStore` and `FeatureService`.
 - **Reproducibility**: The demo must produce consistent results.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../README.md)

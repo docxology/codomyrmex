@@ -65,3 +65,11 @@ uv run pytest src/codomyrmex/tests/unit/telemetry/sampling/
 
 - Define and export sampling strategy classes (rate-based, adaptive, priority sampling)
 - Implement configurable sampling pipelines for high-volume telemetry streams
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

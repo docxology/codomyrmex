@@ -52,3 +52,11 @@ Exception raised when forecasting cannot proceed (insufficient data, invalid par
 
 - All validation failures raise `ForecastError` with descriptive messages.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -25,3 +25,7 @@ PAI integration: MCP bridge, trust gateway, and skill manifest. Volatile MCP met
 ## Navigation
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

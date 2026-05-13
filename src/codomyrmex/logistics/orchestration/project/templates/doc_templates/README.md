@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Module implementation, resources, and local coordination for Doc Templates.
 
 ## Directory Contents
 - `AGENTS.nested.template.md` – File
@@ -18,3 +18,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [templates](../README.md)
 - **Project Root**: ../../../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

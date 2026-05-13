@@ -1,5 +1,8 @@
 # Agent Pooling
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `codomyrmex.agents.pooling` | **Category**: Infrastructure | **Last Updated**: March 2026
 
 ## Overview
@@ -36,3 +39,8 @@ Source: [`src/codomyrmex/agents/pooling/`](../../../src/codomyrmex/agents/poolin
 - **Parent**: [docs/agents/](../README.md)
 - **Source**: [src/codomyrmex/agents/pooling/](../../../src/codomyrmex/agents/pooling/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

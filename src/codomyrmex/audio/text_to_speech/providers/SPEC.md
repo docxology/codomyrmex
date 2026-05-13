@@ -69,3 +69,11 @@ Returns an initialized `TTSProvider`. Raises `ValueError` for unknown names.
 - `SynthesisError`: raised for empty text or runtime synthesis failures.
 - `VoiceNotFoundError`: raised when a requested voice ID is not available.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

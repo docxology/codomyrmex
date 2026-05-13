@@ -267,6 +267,8 @@ class TestMLXRunnerIntegration:
         result = runner.generate("Say hello in one word.")
         assert result.success is True
         assert len(result.response) > 0
+        assert result.tokens_generated is not None
+        assert result.tokens_per_second is not None
         assert result.tokens_generated > 0
         assert result.tokens_per_second > 0
         runner.unload_model()

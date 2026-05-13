@@ -1,5 +1,8 @@
 # Specification: config_audits
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Purpose
 
 Automated auditing of configuration files for compliance, security, and correctness.
@@ -30,3 +33,11 @@ Automated auditing of configuration files for compliance, security, and correctn
 - **HIGH**: Serious security or operational risk (e.g., debug mode in prod).
 - **MEDIUM**: Best practice violation (e.g., overly permissive permissions).
 - **LOW**: Minor improvement suggested.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

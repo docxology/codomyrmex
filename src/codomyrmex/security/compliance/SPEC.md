@@ -100,3 +100,11 @@ uv run pytest src/codomyrmex/tests/unit/security/compliance/
 - Add full control libraries for HIPAA, GDPR, and PCI-DSS frameworks beyond the current SOC2 starters.
 - Implement persistent report storage with historical trend tracking and compliance score over time.
 - Add evidence collection automation that gathers system state snapshots during control checks.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

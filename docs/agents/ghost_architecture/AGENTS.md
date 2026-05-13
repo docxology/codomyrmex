@@ -22,6 +22,6 @@ Agent coordination document for `docs/agents/ghost_architecture/`. This covers t
 ## Navigation
 
 - **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
-- **Source**: [src/codomyrmex/agents/ghost_architecture/AGENTS.md](../../../src/codomyrmex/agents/ghost_architecture/AGENTS.md)
+- **Source**: `src/codomyrmex/agents/ghost_architecture/AGENTS.md` inside the initialized submodule
 - **Tests**: [src/codomyrmex/tests/agents/test_ghost_architecture.py](../../../src/codomyrmex/tests/agents/test_ghost_architecture.py)
 - **Upstream**: [https://github.com/B-Smith-92/ghost-architecture](https://github.com/B-Smith-92/ghost-architecture)

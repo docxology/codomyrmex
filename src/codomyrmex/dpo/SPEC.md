@@ -1,5 +1,8 @@
 # DPO -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### Loss Function
@@ -48,3 +51,11 @@ Perfect accuracy (1.0) means the policy always prefers the human-chosen winner.
 - CPU only (NumPy, no GPU acceleration)
 - No gradient computation (loss value only, not backward pass)
 - Designed for understanding DPO mechanics, not production RLHF
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

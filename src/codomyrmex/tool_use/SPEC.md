@@ -54,3 +54,11 @@ All tests follow the Zero-Mock policy.
 - [README.md](README.md) — Human-readable documentation
 - [AGENTS.md](AGENTS.md) — Agent coordination guide
 - [Docs](../../../docs/modules/tool_use/)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

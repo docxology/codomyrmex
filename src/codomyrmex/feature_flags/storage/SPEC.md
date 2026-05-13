@@ -59,3 +59,11 @@ Storage follows a simple Repository pattern. `FlagStore` is the interface; concr
 - `FileFlagStore._read` raises `json.JSONDecodeError` with a logged warning on corrupt JSON (no silent fallback).
 - `FileNotFoundError` during read is handled gracefully (returns empty dict).
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

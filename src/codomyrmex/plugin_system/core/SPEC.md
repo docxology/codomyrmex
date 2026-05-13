@@ -1,5 +1,8 @@
 # Core - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Three-layer plugin architecture: `PluginRegistry` for storage and lookup, `PluginLoader` for filesystem discovery and instantiation, and `PluginManager` for coordinated lifecycle management.
@@ -69,3 +72,11 @@ Fields: `name`, `version`, `description`, `author`, `plugin_type` (PluginType), 
 - Duplicate plugin names are rejected at registration time.
 - Hook handler exceptions are caught and logged -- they do not propagate to the emitter.
 - Plugin state machine: UNLOADED -> INITIALIZING -> ACTIVE -> SHUTTING_DOWN -> UNLOADED.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

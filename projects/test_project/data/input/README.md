@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Module implementation, resources, and local coordination for Input.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -15,3 +15,14 @@ Test files and validation suites.
 ## Navigation
 - **Parent Directory**: [data](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+## Maintenance Notes
+
+- Keep this document synchronized with adjacent source files.
+- Update sibling README, AGENTS, and SPEC documents together.
+- Preserve working examples when changing public behavior.
+- Prefer measured validation output over inferred status claims.
+- Record any remaining gaps in TODO.md or the nearest planning document.

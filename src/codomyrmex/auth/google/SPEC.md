@@ -58,3 +58,11 @@ Single-class design: `GoogleAuthenticator` encapsulates the full OAuth2 lifecycl
 - `FileNotFoundError`: raised if `client_secrets_file` does not exist when interactive flow is triggered.
 - Malformed `token.json`: logged as warning, silently ignored, re-authentication initiated.
 - OAuth refresh failures: logged as warning, falls back to interactive flow.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -73,3 +73,11 @@ Abstract base class pattern with `Refactoring` as the base and concrete implemen
 
 - Refactoring failures return `RefactoringResult(success=False, errors=[...])` rather than raising exceptions.
 - Warnings for shadowed builtins and existing names are returned in the result's `warnings` list.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

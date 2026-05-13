@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Fpf..
 
 ## Directory Contents
 - `INTEGRATION_SUMMARY.md` – File
@@ -21,3 +21,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [cerebrum](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

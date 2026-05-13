@@ -16,3 +16,7 @@ Example implementations and demonstrations.
 ## Navigation
 - **Parent Directory**: [plugin_system](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

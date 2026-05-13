@@ -157,14 +157,13 @@ def cerebrum_run_free_energy_loop(
         from codomyrmex.cerebrum.inference.active_inference import (
             ActiveInferenceAgent,
             BeliefState,
-            GenerativeModel,
         )
         from codomyrmex.cerebrum.inference.free_energy_loop import FreeEnergyLoop
 
         # Build a default 2-state generative model
         states = {"nominal": 0.5, "anomalous": 0.5}
         beliefs = BeliefState(states=states)
-        transitions = {
+        transitions_by_action = {
             "stay": {
                 "nominal": {"nominal": 0.9, "anomalous": 0.1},
                 "anomalous": {"nominal": 0.1, "anomalous": 0.9},
@@ -174,16 +173,24 @@ def cerebrum_run_free_energy_loop(
                 "anomalous": {"nominal": 0.7, "anomalous": 0.3},
             },
         }
-        likelihood = {
-            "nominal": dict.fromkeys(observation, 0.8),
-            "anomalous": dict.fromkeys(observation, 0.2),
+        transitions = {
+            f"{state}_{action}": next_states
+            for action, by_state in transitions_by_action.items()
+            for state, next_states in by_state.items()
         }
-        model = GenerativeModel(
-            transitions=transitions,
-            likelihood=likelihood,
-            preferences={"nominal": 0.8, "anomalous": 0.2},
+        observation_keys = list(observation) or ["sensor"]
+        likelihood = {
+            "nominal": dict.fromkeys(observation_keys, 0.8),
+            "anomalous": dict.fromkeys(observation_keys, 0.2),
+        }
+        agent = ActiveInferenceAgent(
+            states=list(states),
+            observations=observation_keys,
+            actions=list(transitions_by_action),
         )
-        agent = ActiveInferenceAgent(beliefs=beliefs, model=model)
+        agent.beliefs = beliefs
+        agent.set_transition_model(transitions)
+        agent.set_observation_model(likelihood)
         loop = FreeEnergyLoop(
             agent=agent,
             max_steps=max_steps,

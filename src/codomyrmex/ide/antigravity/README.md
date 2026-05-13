@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Antigravity..
 
 ## Directory Contents
 - `PAI.md` – File
@@ -28,3 +28,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [ide](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

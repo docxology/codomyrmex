@@ -71,3 +71,11 @@ Validation in `__post_init__`: raises `ValueError` if stages is empty or any val
 - `RuntimeError` raised on invalid state transitions (e.g., advancing a COMPLETED rollout).
 - `ValueError` raised by `RolloutConfig.__post_init__` for invalid stage values.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

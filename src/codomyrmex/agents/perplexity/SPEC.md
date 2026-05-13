@@ -22,3 +22,11 @@ To provide a concrete implementation of `APIAgentBase` targeting the Perplexity 
 ### Testing Standard
 
 Zero-Mock. `TestPerplexityClient` verifies request building, connection test behavior missing/present keys, and executes a real query if keys are present globally.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

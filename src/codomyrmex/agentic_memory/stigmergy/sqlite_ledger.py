@@ -141,9 +141,7 @@ class SqliteTraceLedger:
     def tick(self) -> int:
         removed = 0
         with self._lock, self._conn() as conn:
-            rows = conn.execute(
-                "SELECT key, strength FROM stigmergy_traces"
-            ).fetchall()
+            rows = conn.execute("SELECT key, strength FROM stigmergy_traces").fetchall()
             for row in rows:
                 key = row["key"]
                 new_s = float(row["strength"]) - self.config.evaporation_per_tick
@@ -183,7 +181,5 @@ class SqliteTraceLedger:
 
     def __len__(self) -> int:
         with self._lock, self._conn() as conn:
-            n = conn.execute(
-                "SELECT COUNT(*) FROM stigmergy_traces"
-            ).fetchone()[0]
+            n = conn.execute("SELECT COUNT(*) FROM stigmergy_traces").fetchone()[0]
         return int(n)

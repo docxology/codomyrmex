@@ -1,4 +1,3 @@
-# type: ignore
 """Functional tests for physical_management module — zero-mock.
 
 Exercises data models, ObjectRegistry (registration, spatial queries,

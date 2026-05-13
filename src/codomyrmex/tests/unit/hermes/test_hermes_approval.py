@@ -154,9 +154,7 @@ class TestDetectDangerousCommand:
 
     def test_python_c_dangerous(self) -> None:
         ap = _import_approval()
-        is_dangerous, _, _ = ap.detect_dangerous_command(
-            'python -c "print(\'hello\')"'
-        )
+        is_dangerous, _, _ = ap.detect_dangerous_command("python -c \"print('hello')\"")
         assert is_dangerous is True
 
     def test_dd_dangerous(self) -> None:
@@ -171,7 +169,9 @@ class TestDetectDangerousCommand:
 
     def test_xargs_rm_dangerous(self) -> None:
         ap = _import_approval()
-        is_dangerous, _, _ = ap.detect_dangerous_command("find . -name '*.tmp' | xargs rm")
+        is_dangerous, _, _ = ap.detect_dangerous_command(
+            "find . -name '*.tmp' | xargs rm"
+        )
         assert is_dangerous is True
 
 

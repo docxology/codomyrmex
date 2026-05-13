@@ -75,3 +75,11 @@ stdlib. `MemoryProfiler` uses Python's `gc` module for full-heap traversal.
 - `KeyError` raised by `check()` when benchmark name has no registered baseline.
 - `diff()` returns an empty `MemoryDelta` (object_delta=0, no type_deltas) when either label is not found — no exception raised.
 - All errors logged via `logging_monitoring` before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

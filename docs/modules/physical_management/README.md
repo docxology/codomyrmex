@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Physical Management.
 
 ## Directory Contents
 - `API_REFERENCE.md` – File
@@ -20,3 +20,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

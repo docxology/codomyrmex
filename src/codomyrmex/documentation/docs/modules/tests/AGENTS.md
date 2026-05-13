@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Test files and validation suites.
+Documentation tooling, generated references, and publishing assets for Tests.
 
 ## Active Components
 - `SPEC.md` – Project file

@@ -77,3 +77,11 @@ Three cooperating classes form a pipeline: `TaskQueue` manages ordering and deli
 - `TaskScheduler.assign` returns empty string (not an exception) when no worker is available.
 - `LockManager.acquire_all` raises `ValueError` for unregistered lock names.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

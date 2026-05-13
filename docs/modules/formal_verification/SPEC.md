@@ -55,3 +55,11 @@ Provide deterministic constraint solving capabilities via Z3 SMT solver, impleme
 - ISC verification is advisory (never blocks on UNSAT)
 - MCP tools are stateful within a session, stateless across sessions
 - Solver timeout is configurable (default 30s)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

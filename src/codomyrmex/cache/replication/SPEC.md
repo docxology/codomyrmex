@@ -65,3 +65,11 @@ uv run pytest src/codomyrmex/tests/unit/cache/replication/
 
 - Implement cross-region cache synchronization with configurable consistency models
 - Add conflict resolution strategies for concurrent writes across replicas
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

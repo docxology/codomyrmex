@@ -70,3 +70,11 @@ Verify HMAC using constant-time comparison (`hmac.compare_digest`).
 - **File permissions**: Keys stored with `chmod 0o600` (owner-only read/write).
 - **HKDF**: Uses `cryptography` library HKDF implementation.
 - **HMAC**: Uses stdlib `hmac` module for constant-time comparison.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

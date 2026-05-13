@@ -149,3 +149,11 @@ RuntimeError
 ## Testing
 
 Tests in `tests/unit/agentic_memory/obsidian/` (18 files, 413 tests). CLI integration tests skipped via `pytest.mark.skipif` when `obsidian` binary not on PATH.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

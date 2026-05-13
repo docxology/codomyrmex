@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Module implementation, resources, and local coordination for Search.
 
 ## Active Components
 - `PAI.md` – Project file

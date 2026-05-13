@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Routes..
 
 ## Directory Contents
 - `README.md` – File
@@ -21,3 +21,8 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [server](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: [SPEC.md](SPEC.md)

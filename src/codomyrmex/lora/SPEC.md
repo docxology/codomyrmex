@@ -1,5 +1,8 @@
 # LoRA -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### Weight Decomposition
@@ -54,3 +57,11 @@ For input x in R^{batch x k}:
 - CPU only (NumPy, no GPU acceleration)
 - No dropout implementation on the LoRA path (config field reserved)
 - Not designed for large-scale training (use PEFT/HuggingFace for that)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

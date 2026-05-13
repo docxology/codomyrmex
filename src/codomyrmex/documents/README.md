@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Module implementation, resources, and local coordination for Documents.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -32,3 +32,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

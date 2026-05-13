@@ -100,3 +100,11 @@ uv run pytest src/codomyrmex/tests/unit/llm/guardrails/
 - Add ML-based prompt injection classifier as an optional secondary detector
 - Expand PII patterns for international formats (EU phone, IBAN, passport numbers)
 - Add configurable allow-lists so known-safe patterns bypass detection
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

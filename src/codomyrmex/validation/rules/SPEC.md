@@ -64,3 +64,11 @@ pytest tests/validation_rules/
 - Rule composition and chaining: provide `AND`, `OR`, and `NOT` combinators so complex validation policies can be built by composing simple atomic rules rather than writing monolithic validators.
 - Cross-field validation: add a context-aware rule interface that receives the full data object, enabling constraints that span multiple fields (e.g., `end_date > start_date`).
 - Async rule evaluation: support `async def` rule callables so external lookups (e.g., uniqueness checks against a database) can be performed without blocking the event loop.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

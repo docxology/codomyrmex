@@ -25,7 +25,7 @@ if not _HAS_AGENTS:
 class StubAgent(BaseAgent):
     """Stub agent for configuration testing."""
 
-    def _execute_impl(self, request):
+    def _execute_impl(self, request, max_tokens: int | None = None):
         """Test implementation."""
         return AgentResponse(content="test")
 

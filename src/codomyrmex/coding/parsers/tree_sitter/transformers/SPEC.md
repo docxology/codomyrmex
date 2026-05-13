@@ -20,3 +20,11 @@ Planned: Visitor pattern. A base `ASTTransformer` class will walk a `tree_sitter
 - Transformations must produce syntactically valid output.
 - Source formatting outside the transformation scope must be preserved.
 - Zero-mock: real tree-sitter trees required for transformation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../../README.md)

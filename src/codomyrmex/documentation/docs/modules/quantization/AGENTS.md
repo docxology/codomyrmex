@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Quantization.
 
 ## Active Components
 - `mcp_tool_specification.md` – Project file
@@ -31,3 +31,7 @@ Documentation files and guides.
 ## Navigation Links
 - **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../../../README.md - Main project documentation
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

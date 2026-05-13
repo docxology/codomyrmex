@@ -109,3 +109,11 @@ uv run pytest src/codomyrmex/tests/unit/security/secrets_tests/
 - Replace XOR encryption in `SecretVault` with AES-GCM using the `cryptography` library and PBKDF2 key derivation.
 - Add secret rotation tracking with expiration timestamps and rotation reminders.
 - Support integration with external secrets managers (AWS Secrets Manager, HashiCorp Vault).
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -6,11 +6,14 @@ real subprocess calls (git), and real YAML parsing. No MagicMock patches.
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from codomyrmex.agents.hermes.hermes_paths import discover_hermes_agent_repo
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Helpers to locate the upstream plugins_cmd module

@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Project.
 
 ## Active Components
 - `CONTRIBUTING_TO_DOCUMENTATION.md` – Project file

@@ -12,7 +12,7 @@
 - **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)
 
 ## Purpose
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Hermes.
 
 ## Active Components
 - Markdown `README.md`

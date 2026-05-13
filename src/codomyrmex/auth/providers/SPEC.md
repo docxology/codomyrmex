@@ -52,3 +52,11 @@ Constructor: `prefix: str = "codomyrmex"`
 
 - Invalid keys return `None` from `validate()` rather than raising.
 - Key generation and revocation are logged at INFO level.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

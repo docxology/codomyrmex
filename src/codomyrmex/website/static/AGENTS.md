@@ -32,3 +32,7 @@ Website generation module for Codomyrmex. — subdirectory `static`.
 ## Navigation Links
 - **Parent directory**: [website](../README.md) — parent folder overview
 - **Project root**: ../../../../README.md — repository entry
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

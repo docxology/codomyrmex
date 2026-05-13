@@ -1,5 +1,8 @@
 # Logistics Routing -- Functional Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Vehicle routing and graph pathfinding algorithms. All code lives in `__init__.py` with no sub-modules.
@@ -86,3 +89,7 @@ Standard library only: `heapq`, `math`, `random`, `abc`, `dataclasses`, `enum`.
 - **Specification**: This file
 - **Agent coordination**: [AGENTS.md](AGENTS.md)
 - **Parent**: [logistics/](../SPEC.md)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)

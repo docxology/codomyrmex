@@ -1,5 +1,8 @@
 # Languages Module Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 The module uses a unified Manager pattern for each language. Each language resides in a sub-package (e.g., `src/codomyrmex/languages/python/`) and contains a `Manager` class that adheres to a common structural interface, though Duck Typing is used in `mcp_tools.py` for simplicity.
@@ -17,3 +20,11 @@ Each Manager class (e.g., `PythonManager`) MUST implement the following methods:
 
 Tests for this module MUST actually run the shell processes if the toolchain is installed.
 If a toolchain is not installed on the system running the test, the test may elegantly skip or assert on the expected missing state, but it MUST NOT mock `subprocess`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

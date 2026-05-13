@@ -65,3 +65,11 @@ Uses `pkgutil.walk_packages` with per-module `try/except` isolation. Each discov
 - `ImportError` during root package import returns a `DiscoveryReport` with a single `FailedModule` entry.
 - Per-module exceptions during `scan_package` are caught, logged at debug level, and appended to `failed_modules`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

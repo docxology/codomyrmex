@@ -69,3 +69,11 @@ Three-tier design:
 - `Scheduler._execute_job` catches and logs failures without crashing the scheduler loop.
 - `PersistentScheduler._load_state` catches `json.JSONDecodeError` / `KeyError` and logs warning.
 - `CronTrigger.from_expression` raises `ValueError` for malformed expressions.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

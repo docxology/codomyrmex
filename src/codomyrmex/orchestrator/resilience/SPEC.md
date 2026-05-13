@@ -80,3 +80,11 @@ Constructor: `max_retries=3`, `base_delay=0.01`, `max_delay=1.0`, `backoff_facto
 - `RetryEngine` logs each failed attempt with category classification.
 - `PipelineRetryExecutor` invokes `on_retry` and `on_exhausted` callbacks if configured.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

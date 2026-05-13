@@ -75,3 +75,11 @@ Single client class (`InfomaniakNewsletterClient`) inheriting from `InfomaniakRE
 - All HTTP errors are classified via `classify_http_error()` into `InfomaniakCloudError` subtypes.
 - Errors are logged at `ERROR` level with operation context before returning `None`/`False`.
 - `from_env()` raises `ValueError` if required env vars are missing.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

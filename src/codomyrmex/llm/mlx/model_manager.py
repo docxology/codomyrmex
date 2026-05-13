@@ -146,7 +146,6 @@ class MLXModelManager:
             snapshot_download(
                 repo_id=repo_id,
                 local_dir=str(dest),
-                local_dir_use_symlinks=False,
             )
             logger.info("Download complete: %s", dest)
             return dest

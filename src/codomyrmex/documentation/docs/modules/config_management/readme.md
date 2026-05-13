@@ -27,3 +27,7 @@ Configuration files and templates.
 ## Navigation
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -43,3 +43,11 @@ Wraps the OpenTelemetry SDK to provide global tracer initialization, span creati
 
 - `traced()` decorator catches exceptions, calls `record_exception()` on the active span, then re-raises.
 - `start_span()` with a missing parent falls through to creating a root span.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

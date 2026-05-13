@@ -1,5 +1,8 @@
 # pai_pm — API Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## MCP Tool Schemas
 
 ### `pai_pm_start`
@@ -113,3 +116,11 @@ STARTING ──timeout──► NOT_RUNNING (PaiPmServerError raised)
 | `list_missions` (client) | GET | `/api/missions` |
 | `list_projects` (client) | GET | `/api/projects` |
 | `list_tasks` (client) | GET | `/api/projects/:slug/tasks` |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

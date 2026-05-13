@@ -333,7 +333,7 @@ def get_skill_manifest() -> dict[str, Any]:
     # Deduplicate: dynamic tools override static when names collide
     seen: dict[str, dict[str, Any]] = {}
     for t in static_tools:
-        seen[t["name"]] = t  # type: ignore
+        seen[t["name"]] = t
     for t in dynamic_tools:
         seen[t["name"]] = t  # dynamic wins
     all_tools = sorted(seen.values(), key=lambda t: t["name"])

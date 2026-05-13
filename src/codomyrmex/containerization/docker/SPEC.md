@@ -87,3 +87,11 @@ Dataclass configuring image builds and container runs.
 - `DockerManager` methods catch `Exception`, log via `logger.error`, and return `{"success": False, "error": str(e)}`.
 - `ImageOptimizer.analyze_image` raises `ValueError` for `ImageNotFound` and re-raises other exceptions.
 - `BuildGenerator` methods delegate to internal template methods that may raise on invalid config.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

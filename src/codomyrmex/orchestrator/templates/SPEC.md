@@ -64,3 +64,11 @@ pytest tests/orchestrator_templates/
 - Template inheritance: allow workflow templates to extend a base template, overriding specific steps without duplicating shared structure.
 - Validation at load time: parse and type-check Jinja2 template variables against a declared schema when the template is first registered, surfacing errors before runtime.
 - Hot-reload: watch template files for changes and reload without restarting the orchestrator, enabling live editing of workflow definitions during development.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

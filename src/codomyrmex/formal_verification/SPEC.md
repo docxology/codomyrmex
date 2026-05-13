@@ -81,3 +81,11 @@ New in v1.3.0, `code_change_verifier.py` provides AST-based verification that pr
 ### Extension
 
 Custom rules can be added via `verifier.add_rule(InvariantRule(...))`. The `check_fn` receives a `ChangeProposal` and returns a `RuleResult`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

@@ -66,9 +66,9 @@ def validate_python_version(min_version: str = "3.10") -> bool:
     """
     try:
         # Simple comparison for common version strings
-        min_parts = [int(p) for p in min_version.split(".")]
-        current_parts = list(sys.version_info[: len(min_parts)])
-        return current_parts >= min_parts
+        min_parts = tuple(int(p) for p in min_version.split("."))
+        current_parts = tuple(int(p) for p in sys.version_info[: len(min_parts)])
+        return tuple(current_parts) >= tuple(min_parts)
     except (ValueError, AttributeError) as e:
         logger.error("Invalid min_version format: %s (%s)", min_version, e)
         # Fallback to a safe default

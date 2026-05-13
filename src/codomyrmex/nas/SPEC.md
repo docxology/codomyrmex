@@ -1,5 +1,8 @@
 # NAS -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### Search Space
@@ -43,3 +46,11 @@ Randomly selects one dimension to change:
 - Evolutionary search uses simple tournament selection (top-50%)
 - No crossover operator (mutation only)
 - Parameter estimate assumes transformer encoder architecture
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

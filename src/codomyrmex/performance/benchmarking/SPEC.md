@@ -75,3 +75,11 @@ Statistical functions use standard formulas (sample stddev with Bessel's correct
 - No exceptions raised by benchmark execution; failed thresholds set `passed=False`.
 - `mean()` and `stddev()` handle empty inputs gracefully (return 0.0).
 - Benchmark functions that raise exceptions will propagate up through `run()`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

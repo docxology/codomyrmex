@@ -16,3 +16,7 @@ Hosts core source code and agent-enabled services for the Codomyrmex platform.
 
 ## Navigation
 - **Project Root**: ../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

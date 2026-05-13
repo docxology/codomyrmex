@@ -37,3 +37,7 @@ Documentation for the **Mission Control** agent surface: control-plane UI and AP
 
 - **Parent directory**: [agents](../README.md)
 - **Project root**: ../../../README.md
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

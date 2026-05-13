@@ -20,7 +20,13 @@ import pytest
 
 # sys.path injection handled by conftest.py at collection time
 # (adds src/codomyrmex/agents/open_gauss to path)
-from open_gauss_client import OpenGaussClient, OpenGaussConfig, validate_environment
+open_gauss_client = pytest.importorskip(
+    "open_gauss_client",
+    reason="OpenGauss submodule is not populated in this checkout",
+)
+OpenGaussClient = open_gauss_client.OpenGaussClient
+OpenGaussConfig = open_gauss_client.OpenGaussConfig
+validate_environment = open_gauss_client.validate_environment
 
 # ===========================================================================
 # Fixtures

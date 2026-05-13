@@ -1,5 +1,8 @@
 # SPEC.md — PAI PM Module Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `src/codomyrmex/agents/pai/pm/`
 **Version**: 2.2.0 (github.ts arg-fix + Bike Ride LLM refinements)
 **Runtime**: [Bun](https://bun.sh) ≥ 1.0.0
@@ -132,3 +135,11 @@ The Python `PAIProviderMixin` (in `src/codomyrmex/website/pai_mixin.py`) delegat
 - **Runtime**: Bun ≥ 1.0.0
 - **npm**: `js-yaml` ^4.1.0
 - **External CLIs**: `gh` (GitHub sync), `ollama`/`claude`/`gemini` (dispatch), `say` (TTS)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

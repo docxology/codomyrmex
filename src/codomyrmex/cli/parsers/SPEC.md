@@ -28,3 +28,11 @@ When implemented, this module would provide:
 - Argument validation and normalization utilities.
 - Reusable argument group definitions shared across CLI subcommands.
 - Integration with Click parameter types used in `cli/core.py`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -22,3 +22,7 @@ Automation and utility scripts.
 ## Navigation
 - **Parent Directory**: [scripts](../README.md)
 - **Project Root**: ../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

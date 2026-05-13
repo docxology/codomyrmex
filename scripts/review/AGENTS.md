@@ -32,3 +32,7 @@ Advisory tooling for local pull-request review and SARIF handling: diff heuristi
 - **Parent**: [scripts/AGENTS.md](../AGENTS.md), [scripts/README.md](../README.md)
 - **Doc**: [code-review-and-sarif.md](../../docs/development/code-review-and-sarif.md)
 - **Project root**: [README.md](../../README.md), [AGENTS.md](../../AGENTS.md)
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

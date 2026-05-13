@@ -62,3 +62,11 @@ Three layers: (1) `models.py` defines value types (`KnowledgeEntry`, `ExpertiseP
 - ACL denial returns `False` / `None` (not exceptions) for graceful handling.
 - `KnowledgeRouter.route()` returns `("", 0.0)` when no experts registered.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

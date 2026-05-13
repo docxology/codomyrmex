@@ -1,5 +1,8 @@
 # Core - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Two complementary analysis engines: `GitHistoryAnalyzer` for commit history analytics via GitPython, and `GitNexusBridge` for structural code analysis via the GitNexus Node.js CLI.
@@ -55,3 +58,11 @@ Subprocess-based bridge. Prefers `npx gitnexus`, falls back to `vendor/gitnexus/
 | `GitNexusNotAvailableError` | Neither npx nor vendor GitNexus found |
 | `RuntimeError` | GitNexus CLI returns non-zero exit code |
 | `git.InvalidGitRepositoryError` | Invalid repo path passed to GitHistoryAnalyzer |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

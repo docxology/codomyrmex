@@ -81,3 +81,11 @@ Each subclass adds domain-specific fields and overrides `_render_figure()`:
 - `BasePlot._render_figure()` renders a centered text label as fallback if not overridden.
 - `save()` delegates to `Path.write_text()`; exceptions propagate to caller.
 - Empty data results in blank or minimal plots (no exceptions raised).
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

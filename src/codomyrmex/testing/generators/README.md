@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Module implementation, resources, and local coordination for Generators.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -16,3 +16,7 @@ Test files and validation suites.
 ## Navigation
 - **Parent Directory**: [testing](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

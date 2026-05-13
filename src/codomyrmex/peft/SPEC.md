@@ -1,5 +1,8 @@
 # PEFT -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### LoRA (Low-Rank Adaptation)
@@ -36,3 +39,11 @@
 - NumPy-only (no GPU, no autograd for training)
 - Demonstrates forward pass only (no backward/optimizer)
 - Single-layer adapters (production LoRA applies to multiple layers)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

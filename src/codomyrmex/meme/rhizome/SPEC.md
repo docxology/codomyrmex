@@ -54,3 +54,11 @@ Graph-based network analysis pattern. `RhizomeEngine` wraps a `Graph` of `Node` 
 
 - `analyze_resilience` returns 0.0 for empty graphs.
 - `calculate_centrality` returns 0.0 for all nodes when graph has 0 or 1 nodes.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

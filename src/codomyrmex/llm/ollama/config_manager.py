@@ -7,7 +7,7 @@ preferences for the Codomyrmex Ollama integration.
 
 import json
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -46,14 +46,12 @@ class OllamaConfig:
 
     # Model preferences
     default_model: str = "llama3.1:latest"  # Default model to use
-    preferred_models: list[str] = (
-        None  # list of preferred models (fallback order)  # type: ignore
+    preferred_models: list[str] = field(
+        default_factory=lambda: ["llama3.1:latest", "codellama:latest", "gemma2:2b"]
     )
 
     # Execution defaults
-    default_options: ExecutionOptions = (
-        None  # Default execution options  # type: ignore
-    )
+    default_options: ExecutionOptions = field(default_factory=ExecutionOptions)
 
     # Integration settings
     enable_logging: bool = True  # Enable logging integration
@@ -61,11 +59,7 @@ class OllamaConfig:
     enable_benchmarks: bool = True  # Enable benchmarking features
 
     def __post_init__(self):
-
-        if self.preferred_models is None:
-            self.preferred_models = ["llama3.1:latest", "codellama:latest", "gemma2:2b"]
-        if self.default_options is None:
-            self.default_options = ExecutionOptions()
+        """Normalize path-like config values after dataclass initialization."""
 
 
 class ConfigManager:

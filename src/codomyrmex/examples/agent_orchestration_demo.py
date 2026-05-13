@@ -39,7 +39,13 @@ class SimulatedAgent(AgentInterface):
         self.failure_rate = failure_rate
         self.capabilities = [AgentCapabilities.TEXT_COMPLETION]
 
-    def execute(self, request: AgentRequest) -> AgentResponse:
+    def get_capabilities(self) -> list[AgentCapabilities]:
+        """Get list of capabilities supported by this demo agent."""
+        return self.capabilities
+
+    def execute(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         """Execute the operation."""
         logger.info("[%s] Received request: %s...", self.name, request.prompt[:20])
 

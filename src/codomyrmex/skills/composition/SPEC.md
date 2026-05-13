@@ -55,3 +55,11 @@ Parallel mode: all skills receive `**kwargs`, results keyed by skill metadata na
 - Exceptions from individual skills propagate without wrapping.
 - `ThreadPoolExecutor` exceptions are raised via `future.result()`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

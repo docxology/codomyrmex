@@ -135,3 +135,8 @@ Thin orchestrator scripts in [`scripts/agents/hermes/`](../../../scripts/agents/
 - **Parent**: [docs/agents/](../README.md)
 - **Source Module**: [src/codomyrmex/agents/hermes/](../../../src/codomyrmex/agents/hermes/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

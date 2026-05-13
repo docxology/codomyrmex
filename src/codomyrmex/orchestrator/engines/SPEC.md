@@ -73,3 +73,11 @@ Executes independent tasks concurrently within each dependency level using `Thre
 - Task exceptions are caught and stored in `TaskResult.error`; failed tasks produce `TaskState.FAILED`.
 - Workflow-level exceptions produce a `WorkflowResult` with `success=False` and the error message.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

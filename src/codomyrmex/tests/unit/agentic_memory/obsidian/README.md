@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Obsidian.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -42,3 +42,7 @@ Test files and validation suites.
 ## Navigation
 - **Parent Directory**: [agentic_memory](../README.md)
 - **Project Root**: ../../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

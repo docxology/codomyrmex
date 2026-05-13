@@ -43,12 +43,19 @@ class SensorInterface(ABC):
         """Read a single sample from the sensor."""
 
 
-class MockSensor(SensorInterface):
-    """A generic mock sensor for testing without hardware."""
+class SimulatedSensor(SensorInterface):
+    """In-memory sensor implementation for deterministic local runs."""
 
-    def __init__(self, sensor_id: str, default_value: float = 0.0) -> None:
+    def __init__(
+        self,
+        sensor_id: str,
+        default_value: float = 0.0,
+        *,
+        metadata_type: str = "simulated",
+    ) -> None:
         super().__init__(sensor_id)
         self.value = default_value
+        self.metadata_type = metadata_type
 
     def connect(self) -> bool:
         self._is_connected = True
@@ -63,5 +70,16 @@ class MockSensor(SensorInterface):
         return SensorData(
             sensor_id=self.sensor_id,
             data={"value": self.value},
-            metadata={"type": "mock"},
+            metadata={"type": self.metadata_type},
         )
+
+
+class MockSensor(SimulatedSensor):
+    """Backward-compatible alias for ``SimulatedSensor``.
+
+    New code should prefer ``SimulatedSensor``. The alias preserves the legacy
+    metadata value to avoid changing existing downstream assertions.
+    """
+
+    def __init__(self, sensor_id: str, default_value: float = 0.0) -> None:
+        super().__init__(sensor_id, default_value, metadata_type="mock")

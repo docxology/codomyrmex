@@ -50,3 +50,11 @@ Implements the `EmailProvider` interface for Google Gmail using `google-api-pyth
 - All other `HttpError` responses raise `EmailAPIError`.
 - Malformed message payloads raise `InvalidMessageError`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

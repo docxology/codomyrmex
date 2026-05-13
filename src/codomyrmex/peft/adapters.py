@@ -60,8 +60,8 @@ class LoRAAdapter(PEFTAdapter):
     def adapt(
         self,
         x: np.ndarray,
-        base_output: np.ndarray = None,
-        **kwargs,  # type: ignore
+        base_output: np.ndarray | None = None,
+        **kwargs,
     ) -> np.ndarray:
         """Compute LoRA delta and add to base output."""
         lora_output = (x @ self.a_matrix.T) @ self.b_matrix.T * self.scaling

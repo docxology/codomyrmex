@@ -39,7 +39,7 @@ class UtilsMixin:
         Returns:
             Resolved resource info with API href
         """
-        params = {"url": url}
+        params: dict[str, Any] = {"url": url}
         if degrade_gracefully:
             params["degradeGracefully"] = True
 

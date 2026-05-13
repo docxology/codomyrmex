@@ -1,5 +1,8 @@
 # edge_computing/infrastructure — Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Four modules providing infrastructure services for edge nodes: local caching (`cache.py`), health monitoring (`health.py`), metrics aggregation (`metrics.py`), and state synchronization (`sync.py`).
@@ -66,3 +69,11 @@ Constructor: `EdgeSynchronizer(conflict_strategy=REMOTE_WINS, max_pending=100)`.
 - All storage is in-memory; no disk persistence.
 - `EdgeCache` eviction is O(n) over stored entries.
 - `HealthMonitor` uses naive datetime (no timezone) for heartbeat comparison.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

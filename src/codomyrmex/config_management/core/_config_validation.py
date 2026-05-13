@@ -32,7 +32,7 @@ class ConfigValidationMixin:
             Configuration object if valid, None if validation fails
         """
         try:
-            config = self.load_configuration_from_file(path)  # type: ignore[attr-defined]
+            config = self.load_configuration_from_file(path)
             if not config:
                 return None
 

@@ -102,3 +102,11 @@ uv run pytest src/codomyrmex/tests/unit/llm/embeddings/
 - Integrate `tiktoken` for exact OpenAI token counting in `chunk_text`
 - Add async variants of `EmbeddingProvider.embed` and `embed_batch`
 - Support approximate nearest-neighbor search (e.g., HNSW) in `EmbeddingIndex` for larger datasets
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

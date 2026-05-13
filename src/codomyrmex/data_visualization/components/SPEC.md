@@ -92,3 +92,11 @@ Subclasses add domain-specific fields (e.g., `Alert.level`, `StatBox.delta`) and
 
 - No exceptions are raised by `render()` methods; empty fields result in empty HTML elements.
 - `HeatmapTable` handles empty `rows` gracefully (division-by-zero guarded with `rng = max_v - min_v or 1`).
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -70,7 +70,7 @@ Strategy pattern for delivery (`NotificationProvider` ABC with channel-specific 
 - `NotificationRouter` evaluates rules in insertion order; first match wins.
 - `NotificationService.broadcast()` creates cloned notifications with `{id}_{channel.value}` suffixed IDs.
 - `FileProvider` appends one JSON line per notification; the file is not truncated.
-- `WebhookProvider.send()` stores notifications in `_sent` list but does not perform real HTTP requests (placeholder for real implementation).
+- `WebhookProvider.send()` stores notifications in `_sent` list; real HTTP delivery is reserved for a transport-backed provider.
 - Pre-built templates: `ALERT_TEMPLATE` (HIGH priority), `INFO_TEMPLATE` (LOW), `ERROR_TEMPLATE` (CRITICAL).
 - `NotificationResult.is_success` returns `True` for both SENT and DELIVERED statuses.
 
@@ -80,3 +80,11 @@ Strategy pattern for delivery (`NotificationProvider` ABC with channel-specific 
 - `NotificationService.send()` returns `FAILED` result with descriptive error when no provider is registered for the target channel.
 - `NotificationService.send_from_template()` returns `FAILED` result when the template name is not found.
 - `NotificationTemplate.render()` raises `KeyError` if required variables are missing from `**variables`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

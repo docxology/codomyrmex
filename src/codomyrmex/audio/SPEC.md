@@ -220,3 +220,11 @@ Both STT and TTS provide async methods:
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k audio -v
 ```
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

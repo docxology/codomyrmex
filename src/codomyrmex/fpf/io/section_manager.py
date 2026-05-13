@@ -4,6 +4,8 @@ This module provides functionality to extract individual parts, pattern groups,
 and concept clusters from FPF specifications.
 """
 
+from typing import Any
+
 from codomyrmex.fpf.core.models import FPFSpec
 
 
@@ -153,7 +155,7 @@ class SectionManager:
             r for r in self.spec.relationships if r.type in relationship_type_set
         ]
 
-        result = {
+        result: dict[str, Any] = {
             "relationship_types": sorted(relationship_type_set),
             "relationships": subset_relationships,
         }

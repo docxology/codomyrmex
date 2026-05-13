@@ -1,5 +1,8 @@
 # Distributed Training -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### FSDP (Fully Sharded Data Parallel)
@@ -46,3 +49,11 @@ shards = split(new_params, world_size)
 - 1D parameter vectors only (no multi-dimensional sharding)
 - No mixed precision, gradient scaling, or gradient checkpointing
 - CPU only (NumPy)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

@@ -37,10 +37,10 @@ class Workflow:
 
     def _to_github(self) -> dict[str, Any]:
         """Convert to GitHub Actions format."""
-        jobs = {}
+        jobs: dict[str, Any] = {}
         for stage in self.pipeline.stages:
             job_name = stage.name.replace(" ", "_")
-            github_job = {
+            github_job: dict[str, Any] = {
                 "runs-on": "ubuntu-latest",
                 "steps": [{"uses": "actions/checkout@v4"}],
             }
@@ -66,7 +66,9 @@ class Workflow:
 
     def _to_gitlab(self) -> dict[str, Any]:
         """Convert to GitLab CI format."""
-        gitlab_ci = {"stages": [s.name for s in self.pipeline.stages]}
+        gitlab_ci: dict[str, Any] = {
+            "stages": [s.name for s in self.pipeline.stages]
+        }
         for stage in self.pipeline.stages:
             job_name = stage.name.replace(" ", "_")
             gitlab_ci[job_name] = {
@@ -74,7 +76,7 @@ class Workflow:
                 "script": [cmd for job in stage.jobs for cmd in job.commands],
             }
             if stage.dependencies:
-                gitlab_ci[job_name]["needs"] = [  # type: ignore
+                gitlab_ci[job_name]["needs"] = [
                     dep.replace(" ", "_") for dep in stage.dependencies
                 ]
 

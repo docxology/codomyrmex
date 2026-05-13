@@ -17,3 +17,7 @@ Configuration files and templates.
 ## Navigation
 - **Parent Directory**: [config_management](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

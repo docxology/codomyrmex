@@ -74,3 +74,11 @@ uv run pytest src/codomyrmex/tests/unit/agents/deepseek/
 
 - Support for DeepSeek-V3 and future model variants
 - Configurable base URL for self-hosted DeepSeek deployments
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

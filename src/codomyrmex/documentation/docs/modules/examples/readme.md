@@ -30,3 +30,7 @@ Example implementations and demonstrations.
 ## Navigation
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

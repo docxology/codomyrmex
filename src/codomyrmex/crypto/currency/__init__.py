@@ -110,4 +110,3 @@ if _HAS_WALLET:
         "generate_mnemonic",
         "mnemonic_to_seed",
     ]
-

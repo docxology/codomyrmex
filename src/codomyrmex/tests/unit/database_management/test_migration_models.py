@@ -142,6 +142,7 @@ class TestMigration:
         m = Migration(id="m1", name="test", version="1.0")
         m.add_simple_step(id="s1", name="step", up_fn=lambda: True)
         assert len(m.steps) == 1
+        assert m.steps[0].up_fn is not None
         assert m.steps[0].up_fn() is True
 
     def test_add_simple_step_chainable(self):

@@ -76,3 +76,11 @@ Pub/sub pattern with glob-based topic matching (`fnmatch`). The `EventBus` maint
 - `EventValidationError` — schema validation failure (includes validation_errors list)
 - `EventQueueError` — queue operation failure (includes queue_name, queue_size, max_size)
 - `EventDeliveryError` — delivery failure (includes failed_subscribers, retry_count)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

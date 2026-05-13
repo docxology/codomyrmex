@@ -128,10 +128,10 @@ class CorrelationFilter(logging.Filter):
     """
 
     def filter(self, record: logging.LogRecord) -> bool:
-        record.correlation_id = _correlation_id.get()  # type: ignore[attr-defined]
+        record.correlation_id = _correlation_id.get()
         tags = _log_tags.get() or {}
-        record.log_module = tags.get("module", "")  # type: ignore[attr-defined]
-        record.log_operation = tags.get("operation", "")  # type: ignore[attr-defined]
+        record.log_module = tags.get("module", "")
+        record.log_operation = tags.get("operation", "")
         return True
 
 

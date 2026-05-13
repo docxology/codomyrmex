@@ -8,10 +8,14 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import sys
 
 import pytest
 
 _SDK_INSTALLED = importlib.util.find_spec("googleapiclient") is not None
+_GOOGLE_AUTH_INSTALLED = (
+    importlib.util.find_spec("google.oauth2.service_account") is not None
+)
 _GWS_CREDS_SET = bool(
     os.getenv("GWS_SERVICE_ACCOUNT_FILE") or os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 )
@@ -189,51 +193,35 @@ class TestGoogleCredentialsInit:
         creds = GoogleCredentials(credentials_file="/path.json")
         assert creds._creds is None
 
-    def test_get_credentials_raises_without_sdk(self):
+    def test_get_credentials_raises_without_sdk(
+        self, monkeypatch: pytest.MonkeyPatch
+    ):
         """Raises ImportError when google-auth not installed (no SDK in test env)."""
-        if _SDK_INSTALLED:
+        if _GOOGLE_AUTH_INSTALLED:
             pytest.skip("google-auth SDK is installed — ImportError path not reachable")
 
-        import sys
+        monkeypatch.setitem(sys.modules, "google", None)
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
 
-        # Temporarily hide google module
-        saved = sys.modules.get("google")
-        sys.modules["google"] = None
-        try:
-            from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        with pytest.raises(ImportError, match="google-auth"):
+            creds.get_credentials()
 
-            creds = GoogleCredentials(credentials_file="/nonexistent.json")
-            with pytest.raises(ImportError, match="google-auth"):
-                creds.get_credentials()
-        finally:
-            if saved is None:
-                del sys.modules["google"]
-            else:
-                sys.modules["google"] = saved
-
-    def test_build_service_raises_without_sdk(self):
+    def test_build_service_raises_without_sdk(
+        self, monkeypatch: pytest.MonkeyPatch
+    ):
         """Raises ImportError when google-api-python-client not installed."""
         if _SDK_INSTALLED:
             pytest.skip(
                 "google-api-python-client is installed — ImportError path not reachable"
             )
 
-        import sys
+        monkeypatch.setitem(sys.modules, "googleapiclient", None)
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
 
-        # Temporarily hide googleapiclient module
-        saved = sys.modules.get("googleapiclient")
-        sys.modules["googleapiclient"] = None
-        try:
-            from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
-
-            creds = GoogleCredentials(credentials_file="/nonexistent.json")
-            with pytest.raises(ImportError, match="google-api-python-client"):
-                creds.build_service("drive", "v3")
-        finally:
-            if saved is None:
-                del sys.modules["googleapiclient"]
-            else:
-                sys.modules["googleapiclient"] = saved
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        with pytest.raises(ImportError, match="google-api-python-client"):
+            creds.build_service("drive", "v3")
 
     def test_default_scopes_includes_drive(self):
         from codomyrmex.cloud.google_workspace.auth import _DEFAULT_SCOPES
@@ -751,25 +739,17 @@ class TestGoogleDriveUploadFile:
         os.unlink(tmp_path)
         assert isinstance(result, dict)
 
-    def test_upload_file_raises_import_error_without_sdk(self):
+    def test_upload_file_raises_import_error_without_sdk(
+        self, monkeypatch: pytest.MonkeyPatch
+    ):
         if _SDK_INSTALLED:
             pytest.skip("googleapiclient is installed — ImportError path not reachable")
 
-        import sys
+        monkeypatch.setitem(sys.modules, "googleapiclient", None)
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.drive import GoogleDriveClient
 
-        # Temporarily hide googleapiclient module
-        saved = sys.modules.get("googleapiclient")
-        sys.modules["googleapiclient"] = None
-        try:
-            from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
-            from codomyrmex.cloud.google_workspace.drive import GoogleDriveClient
-
-            creds = GoogleCredentials(credentials_file="/nonexistent.json")
-            client = GoogleDriveClient(creds)
-            with pytest.raises(ImportError, match="google-api-python-client"):
-                client.upload_file("/any/path.txt", "name.txt")
-        finally:
-            if saved is None:
-                del sys.modules["googleapiclient"]
-            else:
-                sys.modules["googleapiclient"] = saved
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleDriveClient(creds)
+        with pytest.raises(ImportError, match="google-api-python-client"):
+            client.upload_file("/any/path.txt", "name.txt")

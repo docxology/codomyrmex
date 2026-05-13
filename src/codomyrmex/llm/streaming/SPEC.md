@@ -102,3 +102,11 @@ uv run pytest src/codomyrmex/tests/unit/llm/streaming/
 - Add async stream support (`AsyncStreamHandler` with `async for` iteration)
 - Support SSE (Server-Sent Events) parsing as a built-in `StreamProcessor`
 - Add JSON array-level incremental parsing in `JSONStreamParser`
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

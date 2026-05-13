@@ -74,3 +74,11 @@ Returns: `LLMProvider` instance. Raises `ValueError` for unsupported provider ty
 - `RuntimeError` raised when SDK not installed and `complete()` called.
 - `ValueError` from `get_provider` for unsupported provider types.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

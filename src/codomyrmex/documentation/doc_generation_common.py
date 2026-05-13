@@ -29,10 +29,7 @@ EXCLUDED_DOC_PREFIXES: tuple[str, ...] = (
 def path_matches_excluded_prefix(rel_path: Path, prefixes: tuple[str, ...]) -> bool:
     """True if rel_path equals or nests under any excluded prefix."""
     s = rel_path.as_posix()
-    for p in prefixes:
-        if s == p or s.startswith(f"{p}/"):
-            return True
-    return False
+    return any(s == p or s.startswith(f"{p}/") for p in prefixes)
 
 
 def extract_init_docstring_first_line(dir_path: Path) -> str:
@@ -50,6 +47,8 @@ def extract_init_docstring_first_line(dir_path: Path) -> str:
     if isinstance(val, ast.Constant) and isinstance(val.value, str):
         raw = val.value
     elif isinstance(val, ast.Str):  # pragma: no cover - py<3.8
+        if not isinstance(val.s, str):
+            return ""
         raw = val.s
     else:
         return ""
@@ -214,7 +213,12 @@ def infer_purpose_for_directory(dir_path: Path, repo_root: Path) -> str:
         )
 
     # Segment-based (avoid false positives from substrings like "doc" in "mydocument")
-    if parts[0] == "docs" and len(parts) > 1 and parts[1] == "modules" and len(parts) > 2:
+    if (
+        parts[0] == "docs"
+        and len(parts) > 1
+        and parts[1] == "modules"
+        and len(parts) > 2
+    ):
         mod = parts[2]
         return (
             f"Published documentation mirror for the `{mod}` module "

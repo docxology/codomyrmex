@@ -83,7 +83,7 @@ class StubAPIAgentBase(APIAgentBase):
             agent_config=agent_config,
         )
 
-    def _execute_impl(self, request):
+    def _execute_impl(self, request, max_tokens: int | None = None):
         """Test implementation."""
         return AgentResponse(content="test response")
 
@@ -324,7 +324,7 @@ class StubAPIAgentBaseExecution:
                     config={"test_api_key": "key"},
                 )
 
-            def _execute_impl(self, request):
+            def _execute_impl(self, request, max_tokens: int | None = None):
                 return AgentResponse(content="test")
 
         agent = IncompleteAgent()

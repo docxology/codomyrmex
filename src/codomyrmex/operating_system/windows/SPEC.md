@@ -1,5 +1,8 @@
 # Windows Provider - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 > Codomyrmex v1.1.9 | March 2026
 
 ## Overview
@@ -93,3 +96,7 @@ windows/
 - Parent: [operating_system module](../README.md)
 - Sibling: [macOS provider](../mac/SPEC.md) | [Linux provider](../linux/SPEC.md)
 - Root: [codomyrmex](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

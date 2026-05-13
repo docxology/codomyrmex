@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
-
-import pytest
+from typing import TYPE_CHECKING
 
 from codomyrmex.agents.hermes import hermes_paths
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import pytest
 
 
 def test_discover_prefers_hermes_agent_repo(

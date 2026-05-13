@@ -1,4 +1,3 @@
-# type: ignore
 """Data models for physical object management.
 
 Enums, dataclasses, and spatial-index structures used by the

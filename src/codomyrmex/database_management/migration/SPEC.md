@@ -1,5 +1,8 @@
 # Migration — Functional Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 The migration submodule provides two independent migration systems: a callable-based step runner (`MigrationRunner`) for programmatic migrations with rollback, and a SQL-based lifecycle manager (`MigrationManager`) for database schema migrations with tracking, dependency resolution, and dry-run support. A `DataMigrator` pipeline handles record-level data transformations.
@@ -108,3 +111,11 @@ Fields: `migration_id` (str), `status` (MigrationStatus), `started_at` (datetime
 - `FieldTypeTransformer` logs `ValueError` / `TypeError` as warnings and leaves the field unchanged.
 - `MigrationManager` raises `CodomyrmexError` for missing dependencies, already-applied migrations, and database failures.
 - `DatabaseConnector` raises `ValueError` for unsupported database URL schemes.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

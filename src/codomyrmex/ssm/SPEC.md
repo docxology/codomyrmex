@@ -1,5 +1,8 @@
 # SSM Module -- API Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Classes
 
 ### SelectiveSSM
@@ -99,3 +102,11 @@ Stack multiple Mamba blocks with residual connections.
 | `block_size` | int | 8 |
 
 **Returns**: `{"status": "success", "output_shape": [...], "max_error_vs_standard": ..., "passed": ...}`
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

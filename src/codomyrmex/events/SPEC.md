@@ -54,3 +54,11 @@ The `events` module provides a high-performance, decoupled communication layer f
 - `handlers/`: Event listening and logging implementations.
 - `notification/`: Service for externalizing events (Email, Slack, Webhooks).
 - `streaming/`: Real-time event streaming via SSE/WebSockets.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

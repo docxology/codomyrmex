@@ -82,3 +82,11 @@ Three-layer design: models (data classes for test cases and results), evaluators
 
 - Executor exceptions during `_run_test` are caught and produce `TestStatus.ERROR` results with the error message preserved.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

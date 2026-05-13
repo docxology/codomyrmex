@@ -51,3 +51,11 @@ Fields: `operation`, `start_time`, `end_time`, `duration`, `snapshots`, `peak_me
 
 - `psutil.AccessDenied` during FD counting: caught, `num_fds` set to 0.
 - Snapshot failures: caught, logged at ERROR, tracking continues.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -53,3 +53,11 @@ Reality-tunnel management pattern. `HyperrealityEngine` maintains named `Reality
 
 - `get_tunnel` returns `None` for unknown tunnel names (no exception).
 - Simulacrum IDs are auto-generated via `uuid4` truncated to 8 characters.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

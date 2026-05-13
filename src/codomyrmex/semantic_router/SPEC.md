@@ -1,5 +1,8 @@
 # Semantic Router -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### Routing Pipeline
@@ -41,3 +44,11 @@ This produces consistent embeddings without external dependencies. Similar texts
 - Hash-based embeddings are not semantic (character-level only)
 - No support for route priorities or fallback chains
 - Single embedding function for all routes
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

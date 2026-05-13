@@ -1,5 +1,8 @@
 # Service Mesh - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Implements four service mesh patterns: circuit breaking, load balancing, retry policies, and service proxying. Models and resilience logic are split across `models.py` and a resilience module.
@@ -53,3 +56,11 @@ Re-exports from models and resilience: `CircuitBreaker`, `LoadBalancer`, `RetryP
 
 - Models module contains only data classes, enums, and exceptions -- no runtime logic.
 - Circuit breaker state transitions and load balancer algorithms are in the resilience module.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

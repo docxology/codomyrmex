@@ -48,7 +48,7 @@ class MigrationRule:
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
-        result = {
+        result: dict[str, Any] = {
             "action": self.action.value,
             "description": self.description,
             "from_version": self.from_version,

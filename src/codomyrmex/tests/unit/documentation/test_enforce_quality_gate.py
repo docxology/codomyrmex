@@ -41,7 +41,17 @@ def _write_gate_fixtures(
 
     out.mkdir(parents=True, exist_ok=True)
     (out / "link_validation.json").write_text(
-        json.dumps([{"file": "x.md", "link": "y.md", "line": 1, "status": link_status, "message": ""}]),
+        json.dumps(
+            [
+                {
+                    "file": "x.md",
+                    "link": "y.md",
+                    "line": 1,
+                    "status": link_status,
+                    "message": "",
+                }
+            ]
+        ),
         encoding="utf-8",
     )
     quality_rows = [

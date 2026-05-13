@@ -60,7 +60,7 @@ class TestSafeToolsConstant:
     def test_safe_tools_immutable(self):
         """SAFE_TOOLS cannot be mutated (frozenset)."""
         with pytest.raises(AttributeError):
-            SAFE_TOOLS.add("new_tool")  # type: ignore[attr-defined]
+            SAFE_TOOLS.add("new_tool")
 
     def test_destructive_tools_not_in_safe(self):
         """write_to_file is NOT in SAFE_TOOLS."""
@@ -234,11 +234,13 @@ class TestGetToolSchema:
     def test_schema_has_description(self):
         """Schema dict for view_file has 'description' key."""
         schema = AntigravityToolProvider.get_tool_schema("view_file")
+        assert schema is not None
         assert "description" in schema
 
     def test_schema_has_parameters(self):
         """Schema dict for view_file has 'parameters' key."""
         schema = AntigravityToolProvider.get_tool_schema("view_file")
+        assert schema is not None
         assert "parameters" in schema
 
     def test_schema_description_is_string(self):

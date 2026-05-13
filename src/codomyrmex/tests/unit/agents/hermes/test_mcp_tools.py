@@ -1,13 +1,13 @@
 """Tests for codomyrmex.agents.hermes.mcp_tools -- zero-mock, zero-stub."""
+
 from __future__ import annotations
 
-import os
-from pathlib import Path
-from typing import Any
-
-import pytest
+from typing import TYPE_CHECKING
 
 from codomyrmex.agents.hermes import mcp_tools
+
+if TYPE_CHECKING:
+    import pytest
 
 
 class TestHermesBasicTools:
@@ -50,6 +50,7 @@ class TestHermesBasicTools:
         assert result["status"] in ("success", "unavailable", "error")
         assert "version" in result
 
+
 class TestHermesSessionTools:
     """Test Hermes MCP tools related to sessions (uses test DB path)."""
 
@@ -63,6 +64,7 @@ class TestHermesSessionTools:
         result = mcp_tools.hermes_session_search("fake_query_abc")
         assert result["status"] in ("success", "error")
 
+
 class TestHermesWorktreeTools:
     """Test worktree MCP tools."""
 
@@ -71,6 +73,7 @@ class TestHermesWorktreeTools:
         assert isinstance(result, dict)
         cleanup = mcp_tools.hermes_worktree_cleanup("fake_session_-1")
         assert isinstance(cleanup, dict)
+
 
 class TestHermesMiscTools:
     def test_hermes_honcho_status(self) -> None:
@@ -93,6 +96,7 @@ class TestHermesMiscTools:
         result = mcp_tools.hermes_health_check()
         assert isinstance(result, dict)
 
+
 class TestHermesExecutionTools:
     """Test Hermes MCP tools related to inference and pipeline execution."""
 
@@ -111,10 +115,17 @@ class TestHermesExecutionTools:
         result = mcp_tools.hermes_chat_session("test", backend="none", timeout=1)
         assert result["status"] in ("success", "error")
 
-    def test_hermes_run_coverage_loop_invalid_path(self, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_hermes_run_coverage_loop_invalid_path(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         # Prevent the actual CLI loop from running infinitely
         from codomyrmex.agents.hermes.hermes_client import HermesClient
-        monkeypatch.setattr(HermesClient, "_run_coverage_loop", lambda self, path: {"status": "error", "message": "Simulated fail"})
+
+        monkeypatch.setattr(
+            HermesClient,
+            "_run_coverage_loop",
+            lambda self, path: {"status": "error", "message": "Simulated fail"},
+        )
         result = mcp_tools.hermes_run_coverage_loop("/invalid/path/to/nothing")
         assert result["status"] in ("success", "error")
 
@@ -124,26 +135,43 @@ class TestHermesExecutionTools:
 
     def test_hermes_doctor(self, monkeypatch: pytest.MonkeyPatch) -> None:
         from codomyrmex.agents.hermes.hermes_client import HermesClient
-        monkeypatch.setattr(HermesClient, "run_doctor", lambda self: {"success": True, "output": "ok"})
+
+        monkeypatch.setattr(
+            HermesClient, "run_doctor", lambda self: {"success": True, "output": "ok"}
+        )
         result = mcp_tools.hermes_doctor()
         assert result["status"] in ("success", "error")
+
 
 class TestHermesRegistryTools:
     """Test tools that query the skills registry and knowledge items."""
 
     def test_hermes_skills_list(self, monkeypatch: pytest.MonkeyPatch) -> None:
         from codomyrmex.agents.hermes.hermes_client import HermesClient
-        monkeypatch.setattr(HermesClient, "list_skills", lambda self: {"success": True, "output": "fake skill list"})
+
+        monkeypatch.setattr(
+            HermesClient,
+            "list_skills",
+            lambda self: {"success": True, "output": "fake skill list"},
+        )
         result = mcp_tools.hermes_skills_list()
         assert result["status"] in ("success", "error")
 
     def test_hermes_skills_resolve(self) -> None:
         result = mcp_tools.hermes_skills_resolve("fake_skill_123")
-        assert getattr(result, "get", lambda x: None)("status") in ("success", "error") or isinstance(result, dict)
+        assert getattr(result, "get", lambda x: None)("status") in (
+            "success",
+            "error",
+        ) or isinstance(result, dict)
 
-    def test_hermes_skills_validate_registry(self, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_hermes_skills_validate_registry(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         from codomyrmex.agents.hermes.hermes_client import HermesClient
-        monkeypatch.setattr(HermesClient, "list_skills", lambda self: {"success": True, "output": "ok"})
+
+        monkeypatch.setattr(
+            HermesClient, "list_skills", lambda self: {"success": True, "output": "ok"}
+        )
         result = mcp_tools.hermes_skills_validate_registry()
         assert result["status"] in ("success", "error", "ok", "skipped", "mismatch")
 
@@ -155,6 +183,7 @@ class TestHermesRegistryTools:
         # Check actual parameters needed, or just pass a few strings
         result = mcp_tools.hermes_search_vault(vault_path="/tmp", query="query")
         assert result["status"] in ("success", "error")
+
 
 class TestHermesSubagentTools:
     """Test tools that dispatch subagents and manage tasks."""
@@ -178,7 +207,23 @@ class TestHermesSubagentTools:
 
     def test_hermes_spawn_agent(self, monkeypatch: pytest.MonkeyPatch) -> None:
         from codomyrmex.agents.hermes.hermes_client import HermesClient
-        monkeypatch.setattr(HermesClient, "execute", lambda *args, **kwargs: type("Mock", (), {"is_success": lambda: True, "content": "fake", "error": "", "metadata": {}}))
-        monkeypatch.setattr("subprocess.Popen", lambda *args, **kwargs: type("Mock", (), {"pid": 123}))
+
+        monkeypatch.setattr(
+            HermesClient,
+            "execute",
+            lambda *args, **kwargs: type(
+                "Mock",
+                (),
+                {
+                    "is_success": lambda: True,
+                    "content": "fake",
+                    "error": "",
+                    "metadata": {},
+                },
+            ),
+        )
+        monkeypatch.setattr(
+            "subprocess.Popen", lambda *args, **kwargs: type("Mock", (), {"pid": 123})
+        )
         result = mcp_tools.hermes_spawn_agent("TestAgent", "Test prompt")
         assert result["status"] in ("success", "error")

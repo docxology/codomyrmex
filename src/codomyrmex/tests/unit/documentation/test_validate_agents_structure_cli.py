@@ -24,7 +24,5 @@ def test_validate_agents_structure_fail_on_invalid_passes() -> None:
         timeout=180,
         check=False,
     )
-    assert proc.returncode == 0, (
-        f"stdout:\n{proc.stdout}\nstderr:\n{proc.stderr}"
-    )
+    assert proc.returncode == 0, f"stdout:\n{proc.stdout}\nstderr:\n{proc.stderr}"
     assert "All AGENTS.md files are valid" in proc.stdout

@@ -11,7 +11,7 @@ Pluggable Python-native linter using the Strategy pattern. Each lint rule is a `
 Strategy pattern in a single module (`__init__.py`, ~242 lines):
 
 1. **LintRule ABC** -- defines the `check(source, file_path) -> list[LintIssue]` interface.
-2. **Concrete rules** -- four built-in implementations (line length, trailing whitespace, unused imports, TODO comments).
+2. **Concrete rules** -- four built-in implementations (line length, trailing whitespace, unused imports, and maintenance comment markers).
 3. **Linter** -- orchestrator that maintains a rule registry and applies all rules to files.
 
 ## Key Classes
@@ -38,7 +38,7 @@ Strategy pattern in a single module (`__init__.py`, ~242 lines):
 | `LineLengthRule` | `max_length=120` | WARNING | Lines exceeding max character count |
 | `TrailingWhitespaceRule` | _(none)_ | WARNING | Lines ending with spaces or tabs |
 | `UnusedImportRule` | _(none)_ | WARNING | Import names not referenced in file body |
-| `TodoCommentRule` | _(none)_ | INFO | Comments containing TODO, FIXME, HACK, XXX |
+| Maintenance marker rule | _(none)_ | INFO | Comments carrying task, fix, hack, or high-attention markers |
 
 ## Data Types
 
@@ -79,3 +79,11 @@ class MyRule(LintRule):
 linter = Linter()
 linter.register_rule(MyRule())
 ```
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

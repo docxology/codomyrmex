@@ -4,7 +4,7 @@
 
 ## Overview
 
-The droid package provides a thread-safe task execution framework built around `DroidController`, `DroidConfig`, and `TodoManager`. It processes structured TODO lists through resolved handler functions, with configurable operation permissions, retry settings, and real-time execution metrics.
+The droid package provides a thread-safe task execution framework built around `DroidController`, `DroidConfig`, and `TodoManager`. It processes structured task lists through resolved handler functions, with configurable operation permissions, retry settings, and real-time execution metrics.
 
 ## Architecture
 
@@ -12,8 +12,8 @@ The package follows a controller-configuration-manager pattern:
 
 - **DroidConfig** (immutable frozen dataclass) holds all settings and is constructed via factory classmethods (`from_dict`, `from_json`, `from_file`, `from_env`).
 - **DroidController** wraps the config with thread-safe lifecycle management (STOPPED -> IDLE -> RUNNING -> ERROR) and delegates task execution to resolved handler callables.
-- **TodoManager** handles file-based TODO persistence in a two-section format (`[TODO]` / `[COMPLETED]`).
-- **run_todo_droid** orchestrates the end-to-end flow: load TODOs, resolve handlers, execute through the controller, display progress, and rotate completed items.
+- **TodoManager** handles file-based task persistence in a two-section pending/completed format.
+- **run_todo_droid** orchestrates the end-to-end flow: load pending tasks, resolve handlers, execute through the controller, display progress, and rotate completed items.
 
 ## Key Classes
 
@@ -65,7 +65,7 @@ The package follows a controller-configuration-manager pattern:
 
 - `DroidConfig` fields are validated on construction: `max_parallel_tasks >= 1`, `max_retry_attempts >= 0`, `retry_backoff_seconds >= 0`, `heartbeat_interval_seconds > 0`.
 - `execute_task` raises `RuntimeError` if controller is STOPPED, `PermissionError` for blocked/unallowed operations or `unsafe_*` handlers in safe mode, and `RuntimeError` if max parallel tasks exceeded.
-- TODO file format requires `[TODO]` and `[COMPLETED]` section headers; entries without a preceding header cause `ValueError`.
+- Task file format requires pending and completed section headers; entries without a preceding header cause `ValueError`.
 - Zero-mock: real data only, `NotImplementedError` for unimplemented paths.
 
 ## Error Handling
@@ -75,3 +75,11 @@ The package follows a controller-configuration-manager pattern:
 - `TodoItem.parse()` raises `ValueError` for lines not matching the expected 3-column pipe format.
 - `TodoManager.load()` logs warnings for malformed lines and continues (does not abort).
 - All errors logged via `logging_monitoring` before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

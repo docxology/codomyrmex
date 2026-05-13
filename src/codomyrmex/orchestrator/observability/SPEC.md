@@ -49,3 +49,11 @@ Event factories follow a pure-function pattern: each function accepts workflow/t
 - `save_log` handles bytes-to-string decoding with `errors="replace"`.
 - `generate_script_documentation` catches `TimeoutExpired`, `ValueError`, `RuntimeError`, `OSError` per script and records failure without aborting.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

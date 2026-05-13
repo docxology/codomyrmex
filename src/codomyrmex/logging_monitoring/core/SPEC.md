@@ -69,3 +69,11 @@ Environment variables read: `CODOMYRMEX_LOG_LEVEL` (INFO), `CODOMYRMEX_LOG_FILE`
 - Invalid log level strings fall back to `logging.INFO`.
 - File handler creation failure prints a warning but does not raise.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

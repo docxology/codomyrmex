@@ -67,3 +67,11 @@ graph TD
 
 - Dependent on external provider APIs.
 - Large datasets may require high-bandwidth networking or specialized storage integration.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

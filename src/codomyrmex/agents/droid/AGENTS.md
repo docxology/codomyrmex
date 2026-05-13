@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Coordinates the Droid task automation package, including file-backed task persistence, handler dispatch, generators, and the command-line runner.
 
 ## Active Components
 - `PAI.md` – Project file
@@ -17,12 +17,12 @@ Contains components for the src system.
 - `run_todo_droid.py` – Project file
 - `tasks.py` – Project file
 - `todo.py` – Project file
-- `todo_list.txt` – Project file
+- `todo_list.txt` – Default task queue file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- Record outcomes in shared telemetry and update task queues when necessary.
 
 ## Key Files
 - `AGENTS.md` - Agent coordination and navigation

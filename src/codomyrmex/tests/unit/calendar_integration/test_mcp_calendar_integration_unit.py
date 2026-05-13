@@ -159,7 +159,9 @@ class TestGetProviderMalformedToken:
     replacement (via direct attribute surgery) instead of monkeypatch.
     """
 
-    def test_malformed_json_raises_runtime_error(self, tmp_path):
+    def test_malformed_json_raises_runtime_error(
+        self, tmp_path, monkeypatch: pytest.MonkeyPatch
+    ):
         """Write a malformed JSON token and verify RuntimeError is raised."""
         from pathlib import Path as _Path
 
@@ -169,15 +171,7 @@ class TestGetProviderMalformedToken:
         token_file = fake_dir / "gcal_token.json"
         token_file.write_text("{ not valid json !!!}")
 
-        # Temporarily override Path.home to return tmp_path
-        original_home = _Path.home
-
-        class _FakeHome:
-            @staticmethod
-            def __call__():
-                return tmp_path
-
-        _Path.home = _FakeHome()
+        monkeypatch.setattr(_Path, "home", staticmethod(lambda: tmp_path))
         try:
             with pytest.raises(RuntimeError) as exc_info:
                 _get_provider()
@@ -187,29 +181,24 @@ class TestGetProviderMalformedToken:
             assert len(msg) > 5
         except ImportError:
             pytest.skip("Google Calendar deps not installed")
-        finally:
-            _Path.home = original_home
 
-    def test_no_token_file_raises_runtime_error(self, tmp_path):
+    def test_no_token_file_raises_runtime_error(
+        self, tmp_path, monkeypatch: pytest.MonkeyPatch
+    ):
         """No token file in the expected location raises RuntimeError."""
         from pathlib import Path as _Path
 
         # tmp_path has no .codomyrmex subdir — token cannot exist
-        original_home = _Path.home
-
-        class _FakeHome:
-            @staticmethod
-            def __call__():
-                return tmp_path
-
-        _Path.home = _FakeHome()
+        monkeypatch.setattr(_Path, "home", staticmethod(lambda: tmp_path))
         try:
-            with pytest.raises(RuntimeError, match="not authenticated"):
+            with pytest.raises(RuntimeError) as exc_info:
                 _get_provider()
+            msg = str(exc_info.value)
+            if "dependencies not installed" in msg:
+                pytest.skip("Google Calendar deps not installed")
+            assert "not authenticated" in msg
         except ImportError:
             pytest.skip("Google Calendar deps not installed")
-        finally:
-            _Path.home = original_home
 
 
 # ── MCP tool error-return paths ───────────────────────────────────────────────

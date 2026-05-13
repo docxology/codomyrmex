@@ -5,6 +5,8 @@ These are the most-imported files in the codebase (20, 11, 6 importers
 respectively) and previously had zero direct test coverage.
 """
 
+import importlib.util
+
 import pytest
 
 # ─── BasePlot ─────────────────────────────────────────────────────────────────
@@ -85,7 +87,7 @@ class TestBasePlotPublicAPI:
         assert decoded[:4] == b"\x89PNG"
 
     @pytest.mark.skipif(
-        not __import__("importlib").util.find_spec("matplotlib"),
+        not importlib.util.find_spec("matplotlib"),
         reason="matplotlib not installed",
     )
     def test_to_html_returns_img_tag(self):
@@ -98,7 +100,7 @@ class TestBasePlotPublicAPI:
         assert 'alt="HTML Test"' in html
 
     @pytest.mark.skipif(
-        not __import__("importlib").util.find_spec("matplotlib"),
+        not importlib.util.find_spec("matplotlib"),
         reason="matplotlib not installed",
     )
     def test_to_html_does_not_mutate_backend(self):

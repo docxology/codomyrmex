@@ -51,7 +51,10 @@ class APISchema:
 
     def to_dict(self) -> dict[str, Any]:
         """Convert schema to OpenAPI format."""
-        schema = {"type": self.schema_type, "properties": self.properties}
+        schema: dict[str, Any] = {
+            "type": self.schema_type,
+            "properties": self.properties,
+        }
 
         if self.required:
             schema["required"] = self.required

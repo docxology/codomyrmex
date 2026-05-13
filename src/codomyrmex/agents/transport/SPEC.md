@@ -69,3 +69,11 @@ Four-component design:
 - `IntegrityError` raised when `verify_signed()` detects HMAC mismatch, with truncated digests in the error message.
 - `Checkpoint.load()` propagates `json.JSONDecodeError` and `OSError` from file operations.
 - `TransportMessage.from_bytes()` propagates `json.JSONDecodeError` and `KeyError` for malformed messages.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

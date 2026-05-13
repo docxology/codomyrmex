@@ -28,7 +28,7 @@ class MockAgent(BaseAgent):
         )
         self.should_succeed = should_succeed
 
-    def _execute_impl(self, request, **kwargs):
+    def _execute_impl(self, request, max_tokens: int | None = None):
         if self.should_succeed:
             return AgentResponse(content=f"Response from {self.name}")
         return AgentResponse(content="", error="Mock error")

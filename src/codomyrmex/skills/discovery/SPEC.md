@@ -71,3 +71,11 @@ Registry pattern with ABC-based skill contracts. `FunctionSkill` infers metadata
 - `validate_params` returns error strings (not exceptions) for missing required parameters.
 - `SkillRegistry.execute` raises `ValueError` for unknown skill IDs or invalid parameters.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

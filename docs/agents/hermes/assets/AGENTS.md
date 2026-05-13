@@ -31,3 +31,7 @@ Documentation files and guides for the Codomyrmex platform.
 ## Navigation Links
 - **Parent directory**: [hermes](../README.md) — parent folder overview
 - **Project root**: ../../../../README.md — repository entry
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

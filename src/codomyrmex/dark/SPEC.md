@@ -86,3 +86,7 @@ def apply_dark_mode(
 
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [performance](../performance/AGENTS.md), [config_management](../config_management/AGENTS.md)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)

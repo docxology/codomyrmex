@@ -63,3 +63,11 @@ environment-variable inspection respectively.
 - All git subprocess errors are caught and logged; partial results are returned.
 - Import failures in `check_dependencies` return `False` per package, not exceptions.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

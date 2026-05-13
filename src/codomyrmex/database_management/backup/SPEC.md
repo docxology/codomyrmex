@@ -1,5 +1,8 @@
 # Backup — Functional Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 The backup submodule provides two complementary backup systems for database persistence: `DatabaseBackup` for direct SQLite/PostgreSQL operations with manifest tracking, and `BackupManager` for a higher-level interface with compression, checksums, and multi-database support.
@@ -82,3 +85,11 @@ Fields: `success` (bool), `backup` (Backup | None), `duration_seconds` (float), 
 - `BackupManager` wraps failures in `BackupResult(success=False, error=str(e))` and logs via structured logger.
 - `DatabaseBackup` raises `FileNotFoundError` for missing source files and `RuntimeError` for subprocess failures.
 - Missing optional database drivers (`psycopg2`, `pymysql`) cause `ImportError` at call time, not at import time.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

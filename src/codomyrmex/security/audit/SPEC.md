@@ -103,3 +103,11 @@ uv run pytest src/codomyrmex/tests/unit/security/audit/
 - Add database-backed `AuditStore` implementation (e.g., SQLite or PostgreSQL) with indexed queries.
 - Support HMAC-based event signatures using a configurable secret key for tamper detection.
 - Add event retention policies and automatic log rotation for `FileAuditStore`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

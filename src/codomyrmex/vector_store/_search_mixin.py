@@ -29,10 +29,10 @@ class _SearchMixin:
         from .models import SearchResult as SR
 
         results = []
-        for entry in self._vectors.values():  # type: ignore[attr-defined]
+        for entry in self._vectors.values():
             if filter_fn and not filter_fn(entry.metadata):
                 continue
-            score = self._distance_fn(query, entry.embedding)  # type: ignore[attr-defined]
+            score = self._distance_fn(query, entry.embedding)
             results.append(
                 SR(
                     id=entry.id,
@@ -41,5 +41,5 @@ class _SearchMixin:
                     metadata=entry.metadata,
                 )
             )
-        results.sort(key=lambda x: x.score, reverse=self._higher_is_better)  # type: ignore[attr-defined]
+        results.sort(key=lambda x: x.score, reverse=self._higher_is_better)
         return results[:k]

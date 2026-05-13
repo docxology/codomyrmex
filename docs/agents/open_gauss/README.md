@@ -1,5 +1,8 @@
 # OpenGauss Agent — Documentation
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `src/codomyrmex/agents/open_gauss/` | **Upstream**: [math-inc/OpenGauss](https://github.com/math-inc/OpenGauss) v0.2.0 | **Status**: Active
 
 ## Overview
@@ -300,11 +303,11 @@ git submodule update --init src/codomyrmex/agents/open_gauss
 
 ## Navigation
 
-- **Client wrapper**: [open_gauss_client.py](../../../src/codomyrmex/agents/open_gauss/open_gauss_client.py)
-- **Config template**: [config.example.yaml](../../../src/codomyrmex/agents/open_gauss/config.example.yaml)
+- **Client wrapper**: `src/codomyrmex/agents/open_gauss/open_gauss_client.py` inside the initialized submodule
+- **Config template**: `src/codomyrmex/agents/open_gauss/config.example.yaml` inside the initialized submodule
 - **Test suite (upstream)**: [test_open_gauss.py](../../../src/codomyrmex/tests/agents/test_open_gauss.py)
 - **Test suite (client)**: [test_open_gauss_client.py](../../../src/codomyrmex/tests/agents/test_open_gauss_client.py)
-- **Spec**: [CODOMYRMEX_SPEC.md](../../../src/codomyrmex/agents/open_gauss/CODOMYRMEX_SPEC.md)
-- **PAI**: [CODOMYRMEX_PAI.md](../../../src/codomyrmex/agents/open_gauss/CODOMYRMEX_PAI.md)
-- **Skill**: [CODOMYRMEX_SKILL.md](../../../src/codomyrmex/agents/open_gauss/CODOMYRMEX_SKILL.md)
+- **Spec**: `src/codomyrmex/agents/open_gauss/CODOMYRMEX_SPEC.md` inside the initialized submodule
+- **PAI**: `src/codomyrmex/agents/open_gauss/CODOMYRMEX_PAI.md` inside the initialized submodule
+- **Skill**: `src/codomyrmex/agents/open_gauss/CODOMYRMEX_SKILL.md` inside the initialized submodule
 - **Upstream**: [github.com/math-inc/OpenGauss](https://github.com/math-inc/OpenGauss)

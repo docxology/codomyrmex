@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Module implementation, resources, and local coordination for Formats.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -24,3 +24,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [documents](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

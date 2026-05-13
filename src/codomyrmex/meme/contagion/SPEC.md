@@ -71,3 +71,11 @@ Compartmental mean-field simulation with cascade detection. Epidemic models part
 
 - Simulations terminate early when infected count reaches zero (extinction).
 - Division by zero prevented in velocity calculation (fallback to `size` when `duration == 0`).
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

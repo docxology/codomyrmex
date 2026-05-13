@@ -164,3 +164,11 @@ The cheatsheet must be **≤ 10,240 bytes** (10KB UTF-8). The `save_cheatsheet` 
 - **Parent**: [scripts/README.md](../README.md)
 - **Agents**: [AGENTS.md](AGENTS.md)
 - **PAI Bridge**: [PAI.md](PAI.md)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../README.md)

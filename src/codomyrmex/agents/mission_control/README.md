@@ -46,3 +46,8 @@ The Mission Control Agent Module integrates builderz-labs' [Mission Control](htt
 ## Navigation
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: [../../../../README.md](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: [SPEC.md](SPEC.md)

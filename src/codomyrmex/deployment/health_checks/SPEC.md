@@ -87,3 +87,11 @@ Constructor: `(name: str, timeout: float = 5.0, critical: bool = True)`
 - All `check()` implementations catch broad `Exception` and return `HealthCheckResult` with UNHEALTHY status and the error message.
 - `CommandHealthCheck` specifically catches `subprocess.TimeoutExpired`.
 - `MemoryHealthCheck` catches `ImportError` for missing `psutil`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

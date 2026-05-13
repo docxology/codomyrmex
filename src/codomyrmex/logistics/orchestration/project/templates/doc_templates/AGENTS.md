@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Documentation files and guides.
+Module implementation, resources, and local coordination for Doc Templates.
 
 ## Active Components
 - `AGENTS.nested.template.md` – Project file

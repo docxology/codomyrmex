@@ -64,3 +64,11 @@ Values: `ERROR`, `WARNING`, `INFO`
 
 - Custom validator failures are caught, logged via `logger.error`, and added as `ERROR` severity issues.
 - All errors are logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

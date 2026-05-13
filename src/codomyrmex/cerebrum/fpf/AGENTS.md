@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Module implementation, resources, and local coordination for Fpf..
 
 ## Active Components
 - `INTEGRATION_SUMMARY.md` – Project file

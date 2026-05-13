@@ -1,5 +1,8 @@
 # Backends - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Provides a pluggable backend architecture for constraint solvers, modeled after the [mcp-solver](https://github.com/szeider/mcp-solver) 6-tool API pattern. Each backend wraps a specific solver engine and exposes identical methods.
@@ -75,3 +78,11 @@ Stores items as Python expression strings. On `solve_model()`, builds a namespac
 | `BackendNotAvailableError` | Z3 not installed |
 | `ModelBuildError` | Invalid index or item execution failure |
 | `SolverTimeoutError` | Z3 exceeds timeout_ms |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

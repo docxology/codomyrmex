@@ -61,3 +61,11 @@ Two independent subsystems: `RepoIndexer` uses Python's `ast` module for static 
 - `OSError` during `os.path.getsize()` defaults file size to 0.
 - Non-existent or non-directory paths passed to `ProjectScanner.scan()` return an empty `ProjectContext`.
 - All successful scans are logged via `logging_monitoring` with file and symbol counts.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

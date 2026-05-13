@@ -138,7 +138,7 @@ class PDFExtractor:
             page_range = range(len(doc))
             if pages:
                 page_range = range(len(doc))
-                page_range = [p - 1 for p in pages if 0 < p <= len(doc)]  # type: ignore[assignment]
+                page_range = [p - 1 for p in pages if 0 < p <= len(doc)]
 
             for i in page_range:
                 page = doc[i]

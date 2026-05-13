@@ -72,3 +72,11 @@ Accepts a 2D list, optional axis labels, colormap name, annotation toggle, and f
 - Empty or mismatched data logs a warning and returns `None`.
 - `save_plot()` catches all exceptions, logs the error, and returns `False`.
 - Theme application failure is logged at debug level and silently ignored.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

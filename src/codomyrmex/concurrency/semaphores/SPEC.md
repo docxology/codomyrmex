@@ -54,3 +54,11 @@ Provides counting semaphore primitives for resource throttling. Two concrete imp
 - Timeout exceeded during async acquire is caught as `asyncio.TimeoutError` and logged as a warning.
 - Generic exceptions during sync acquire are caught, logged as errors, and return `False`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -101,3 +101,11 @@ uv run pytest src/codomyrmex/tests/unit/llm/cost_tracking/
 - Add persistent storage backend (SQLite) for `CostTracker` records
 - Integrate `tiktoken` for exact OpenAI token counting when available
 - Add webhook/alert support in `BudgetGuard` when spend approaches limits
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

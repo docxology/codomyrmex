@@ -61,3 +61,11 @@ Constructor: `level: int = 3`. Raises `ImportError` if `zstandard` not installed
 
 - `ThreadPoolExecutor` futures propagate compression errors from worker threads.
 - `ZstdCompressor` constructor validates `zstandard` availability at init time.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

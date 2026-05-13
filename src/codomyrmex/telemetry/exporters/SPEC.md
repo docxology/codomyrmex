@@ -68,3 +68,11 @@ Fields: `trace_id`, `span_id`, `parent_span_id`, `name`, `kind` (internal/client
 - `OTLPExporter.export()`: network errors caught, logged at WARNING, returns `False`.
 - `MultiExporter`: sub-exporter exceptions caught individually; remaining exporters still execute.
 - `BatchExporter`: queue timeouts caught in worker thread via generic exception handler.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

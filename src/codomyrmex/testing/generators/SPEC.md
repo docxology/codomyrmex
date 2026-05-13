@@ -86,3 +86,11 @@ Values: `STRING`, `INTEGER`, `FLOAT`, `BOOLEAN`, `DATE`, `EMAIL`, `UUID`, `NAME`
 
 - `ChoiceGenerator` raises `IndexError` if initialized with an empty `choices` list (via `random.choice`).
 - No custom exceptions defined; generators rely on stdlib exceptions for invalid configurations.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

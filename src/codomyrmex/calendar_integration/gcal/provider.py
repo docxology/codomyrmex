@@ -26,7 +26,7 @@ try:
 
     GCAL_AVAILABLE = True
 except ImportError:
-    HttpError = Exception  # type: ignore
+    HttpError = Exception
     GCAL_AVAILABLE = False
 
 _GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]
@@ -164,7 +164,7 @@ class GoogleCalendar(CalendarProvider):
             omitted entirely when the corresponding attribute is ``None`` or an
             empty list — they are **not** set to ``null`` or ``[]``.
         """
-        body = {
+        body: dict[str, object] = {
             "summary": event.summary,
             "start": {"dateTime": event.start_time.isoformat()},
             "end": {"dateTime": event.end_time.isoformat()},

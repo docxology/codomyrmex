@@ -72,3 +72,11 @@ Two files: `__init__.py` contains the full protocol stack (enums, data types, ab
 - Protocol `execute()` methods raise `ValueError` when `agents` list is empty.
 - `ConsensusProtocol` raises `ValueError` when consensus not reached or all agents fail.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

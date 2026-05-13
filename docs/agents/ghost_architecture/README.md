@@ -57,26 +57,30 @@ Input (a, b)
 
 ## Source Files
 
+The implementation lives in the `src/codomyrmex/agents/ghost_architecture/`
+git submodule. File names below are intentionally shown as code spans rather
+than direct links because submodule contents may be absent until initialized.
+
 | File | Purpose |
 |------|---------|
-| [`config.py`](../../../src/codomyrmex/agents/ghost_architecture/config.py) | All hyperparameters as dataclasses |
-| [`model.py`](../../../src/codomyrmex/agents/ghost_architecture/model.py) | `GhostTransformer` — full model with per-task `pos_embs` |
-| [`module.py`](../../../src/codomyrmex/agents/ghost_architecture/module.py) | Single transformer module (2-layer, dim 64) |
-| [`module_bank.py`](../../../src/codomyrmex/agents/ghost_architecture/module_bank.py) | Parallel module execution + weighted fusion |
-| [`router.py`](../../../src/codomyrmex/agents/ghost_architecture/router.py) | Signature-based routing + neuromodulation |
-| [`train_manifold.py`](../../../src/codomyrmex/agents/ghost_architecture/train_manifold.py) | Fourier embedding initialization |
-| [`train.py`](../../../src/codomyrmex/agents/ghost_architecture/train.py) | Single-operation training with grok detection + crystallization |
-| [`train_continual.py`](../../../src/codomyrmex/agents/ghost_architecture/train_continual.py) | Continual learning with multi-timescale dynamics |
-| [`visualize.py`](../../../src/codomyrmex/agents/ghost_architecture/visualize.py) | Training curves, module heatmaps, embedding geometry |
-| [`visualize_architecture.py`](../../../src/codomyrmex/agents/ghost_architecture/visualize_architecture.py) | Architecture diagrams |
-| [`sweep.py`](../../../src/codomyrmex/agents/ghost_architecture/sweep.py) | Systematic multi-seed evaluation |
-| [`run_overnight.py`](../../../src/codomyrmex/agents/ghost_architecture/run_overnight.py) | Full pipeline: standalone → transfer → cross-training |
+| `config.py` | All hyperparameters as dataclasses |
+| `model.py` | `GhostTransformer` — full model with per-task `pos_embs` |
+| `module.py` | Single transformer module (2-layer, dim 64) |
+| `module_bank.py` | Parallel module execution + weighted fusion |
+| `router.py` | Signature-based routing + neuromodulation |
+| `train_manifold.py` | Fourier embedding initialization |
+| `train.py` | Single-operation training with grok detection + crystallization |
+| `train_continual.py` | Continual learning with multi-timescale dynamics |
+| `visualize.py` | Training curves, module heatmaps, embedding geometry |
+| `visualize_architecture.py` | Architecture diagrams |
+| `sweep.py` | Systematic multi-seed evaluation |
+| `run_overnight.py` | Full pipeline: standalone → transfer → cross-training |
 
 ---
 
 ## Configuration
 
-All configuration lives in [`config.py`](../../../src/codomyrmex/agents/ghost_architecture/config.py) as dataclasses:
+All configuration lives in `config.py` inside the initialized submodule as dataclasses:
 
 | Config Class | Purpose |
 |---|---|
@@ -175,3 +179,8 @@ uv run pytest src/codomyrmex/tests/agents/test_ghost_architecture.py -v
 - **Upstream**: [https://github.com/B-Smith-92/ghost-architecture](https://github.com/B-Smith-92/ghost-architecture)
 - **Parent Index**: [docs/agents/README.md](../README.md)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: [SPEC.md](SPEC.md)

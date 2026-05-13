@@ -226,3 +226,11 @@ Hermes v0.2.0 integrates with [Honcho](https://docs.honcho.dev) for persistent c
 - **Modes**: `hybrid` (Honcho + local MEMORY.md), `honcho` (Honcho only), `local` (MEMORY.md only)
 - **Dialectic reasoning**: Configurable peer interactions with user context
 - **Session mapping**: `hermes honcho map` maps directories to Honcho sessions
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

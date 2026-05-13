@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Scripts.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -38,6 +38,7 @@ Documentation files and guides.
 - `placeholder_check.py` – File
 - `py.typed` – File
 - `remove_placeholders.py` – File
+- `repair_triple_check_completeness.py` – File
 - `smart_template_engine.py` – File
 - `triple_check.py` – File
 - `validate_child_references.py` – File
@@ -48,3 +49,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [documentation](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

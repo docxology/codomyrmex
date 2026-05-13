@@ -84,3 +84,11 @@ Values: `CRITICAL`, `HIGH`, `MEDIUM`, `LOW`, `INFO`.
 - `ContainerSecurityScanner.scan_image` returns a `SecurityScanResult` with `passed=False` and `error` message on subprocess failure instead of raising.
 - `ContainerOptimizer.collect_metrics` raises `NotImplementedError` for missing Docker CLI, subprocess failures, or JSON parse errors.
 - `ContainerOptimizer.optimize_resources` raises `NotImplementedError` for missing Docker CLI or subprocess failures.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

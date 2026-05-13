@@ -65,3 +65,11 @@ uv run pytest src/codomyrmex/tests/unit/orchestrator/triggers/
 - Cron-based time triggers (schedule workflows at intervals)
 - Event-bus triggers that fire on named events from the `events` module
 - Webhook triggers for HTTP-based pipeline activation
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

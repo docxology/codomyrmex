@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Feature Store..
 
 ## Directory Contents
 - `README.md` – File
@@ -16,3 +16,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [model_ops](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

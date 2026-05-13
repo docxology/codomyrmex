@@ -75,3 +75,7 @@ Curriculum objects aggregate named modules, each containing ordered lists of Les
 - **Parent**: [../README.md](../README.md)
 - **Siblings**: [../quality/SPEC.md](../quality/SPEC.md) | [../scripts/SPEC.md](../scripts/SPEC.md)
 - **Root**: [../../../../README.md](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

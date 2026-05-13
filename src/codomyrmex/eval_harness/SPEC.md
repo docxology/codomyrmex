@@ -1,5 +1,8 @@
 # Eval Harness -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### Evaluation Pipeline
@@ -53,3 +56,11 @@ Each example's latency is measured with `time.perf_counter()` in milliseconds. T
 - Single-threaded evaluation (no parallel model calls)
 - No support for multi-turn or conversational evaluation
 - F1 uses simple whitespace tokenization (no BPE or wordpiece)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

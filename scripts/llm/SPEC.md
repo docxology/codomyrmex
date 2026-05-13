@@ -143,3 +143,11 @@ CompletionResponse(
 | Rate limited | Wait and retry |
 | Invalid model | Return available models list |
 | API error | Log details, raise with context |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../README.md)

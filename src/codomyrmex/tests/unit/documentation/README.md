@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Documentation tooling, generated references, and publishing assets for Documentation.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -29,3 +29,7 @@ Test files and validation suites.
 ## Navigation
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -73,3 +73,11 @@ enabled = bucket < threshold
 - Invalid operator names silently return False (rule does not match).
 - Type mismatches in targeting rule comparisons are caught and logged as warnings.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

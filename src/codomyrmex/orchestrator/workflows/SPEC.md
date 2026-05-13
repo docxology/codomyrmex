@@ -85,3 +85,11 @@ Built-in templates: `ci_cd_template` (lint-build-test-deploy), `code_review_temp
 - `asyncio.TimeoutError` raised per-task when task-level timeout is exceeded.
 - `WorkflowJournal._persist` silently drops persistence if no `MemoryStore` is configured.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

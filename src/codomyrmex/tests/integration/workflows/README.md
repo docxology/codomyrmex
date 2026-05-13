@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Workflows.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -28,3 +28,7 @@ Test files and validation suites.
 ## Navigation
 - **Parent Directory**: [integration](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Pai.
 
 ## Directory Contents
 - `ALGORITHM.md` – File
@@ -23,3 +23,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

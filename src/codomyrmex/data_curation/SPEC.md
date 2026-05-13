@@ -1,5 +1,8 @@
 # Data Curation -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### MinHash
@@ -35,3 +38,11 @@
 - No incremental index updates after deduplication pass
 - MD5 used for shingling hash (not cryptographic -- speed is the goal)
 - Single-threaded processing
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

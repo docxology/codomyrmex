@@ -62,3 +62,11 @@ Constructor: `secret: str` (encoded to bytes internally)
 - `validate_signed_token` catches all exceptions and returns `None` (logs errors).
 - Signature mismatches logged at WARNING level.
 - Token expiry logged at WARNING level.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -6,7 +6,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Review.
 
 Agent-oriented inventory and contracts: [../../../../../AGENTS.md](../../../../../AGENTS.md).
 
@@ -19,3 +19,7 @@ Agent-oriented inventory and contracts: [../../../../../AGENTS.md](../../../../.
 ## Navigation
 - **Parent Directory**: [fixtures](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

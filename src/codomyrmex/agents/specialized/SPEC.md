@@ -78,3 +78,11 @@ Two independent but complementary workflows:
 
 - `ImprovementPipeline.improve()` does not propagate exceptions from fix or test generators; instead returns empty results.
 - `ReviewLoop._review()` catches `SyntaxError` during `compile()` and records it as an issue rather than failing the loop.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

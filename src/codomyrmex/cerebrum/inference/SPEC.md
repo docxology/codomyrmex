@@ -109,3 +109,7 @@ Constructor: `ActiveInferenceAgent(states, observations, actions, precision, pol
 
 - **Parent**: [cerebrum/](../README.md)
 - **Project root**: [../../../../README.md](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

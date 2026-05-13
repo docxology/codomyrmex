@@ -58,8 +58,8 @@ class ActuatorController(ABC):
         """Get the current status of the actuator."""
 
 
-class MockActuator(ActuatorController):
-    """A generic mock actuator for testing without hardware."""
+class SimulatedActuator(ActuatorController):
+    """In-memory actuator implementation for deterministic local runs."""
 
     def __init__(self, actuator_id: str) -> None:
         super().__init__(actuator_id)
@@ -88,3 +88,10 @@ class MockActuator(ActuatorController):
             status="ok" if self.is_connected else "disconnected",
             feedback=self.current_state.copy(),
         )
+
+
+class MockActuator(SimulatedActuator):
+    """Backward-compatible alias for ``SimulatedActuator``.
+
+    New code should prefer ``SimulatedActuator`` for clarity.
+    """

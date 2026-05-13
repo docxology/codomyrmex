@@ -1,5 +1,8 @@
 # edge_computing/scheduling — Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Single-module scheduler (`scheduler.py`) providing in-process job management for edge function invocations with support for one-shot, interval, and cron-like schedule types.
@@ -58,3 +61,11 @@ Standard library only: `threading`, `datetime`, `dataclasses`, `enum`.
 - `CRON_LIKE` schedule type is defined but has no cron-expression parser.
 - Uses naive `datetime.now()` (no timezone awareness).
 - In-process only; for distributed scheduling, integrate with an external scheduler.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

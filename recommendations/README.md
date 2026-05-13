@@ -1,5 +1,8 @@
 # Hermes Sentinel Recommendations Hub
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 This directory is an autonomous staging ground for **Hermes Sentinel** findings.
 
 ## Workflow
@@ -17,3 +20,11 @@ See [AGENTS.md](AGENTS.md) for detailed triage rules and known hallucination pat
 
 ---
 *Self-Aware Remediation Loop v2.4.0*
+
+## Navigation
+
+- **Self**: `README.md`
+- **Parent**: [../README.md](../README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.
+- **Repository Root**: [README.md](../README.md)

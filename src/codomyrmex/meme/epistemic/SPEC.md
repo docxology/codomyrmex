@@ -53,3 +53,11 @@ Evidence-aggregation verification pattern. `EpistemicEngine` maintains an `Epist
 
 - `verify_claim` returns 0.5 (neutral) confidence when no evidence is provided.
 - `calculate_certainty` returns 0.0 for empty belief lists.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

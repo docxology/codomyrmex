@@ -42,6 +42,6 @@ output = ml_pipeline_execute("my_pipeline", {"data": "/path/to/data"})
 ## Navigation
 
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Documentation**: [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md) | [PAI.md](PAI.md) | [AGENTS.md](AGENTS.md)
+- **Documentation**: [SPEC.md](../../../../../../docs/modules/ml_pipeline/SPEC.md) | [API_SPECIFICATION.md](../../../../../../src/codomyrmex/ml_pipeline/API_SPECIFICATION.md) | [PAI.md](../../../../../../src/codomyrmex/ml_pipeline/PAI.md) | [AGENTS.md](../../../../../../docs/modules/ml_pipeline/AGENTS.md)
 - **Related**: [orchestrator](../orchestrator/README.md) | [eval_harness](../eval_harness/README.md)
 - **Project Root**: [../../../README.md](../../../README.md)

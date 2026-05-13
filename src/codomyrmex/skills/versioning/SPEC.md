@@ -65,3 +65,11 @@ pytest tests/skills_versioning/
 - Semantic version conflict detection: when multiple skills declare incompatible version constraints on shared dependencies, surface conflicts with actionable resolution suggestions rather than raising a bare ImportError.
 - Persistent version ledger: write resolved version records to disk so the state survives across sessions, enabling audit trails and reproducible skill environments.
 - Automatic rollback: when a skill upgrade fails its post-install checks, automatically revert to the previously resolved version and log the rollback event.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

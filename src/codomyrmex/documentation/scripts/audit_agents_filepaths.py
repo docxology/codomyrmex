@@ -1,6 +1,7 @@
 import json
 import re
 from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -162,7 +163,7 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> dict:
 
     relative_path = file_path.relative_to(repo_root)
 
-    result = {
+    result: dict[str, Any] = {
         "file": str(relative_path),
         "parent": None,
         "children": [],

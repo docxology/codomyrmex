@@ -1,4 +1,3 @@
-# type: ignore
 """Functional tests for data_visualization module — zero-mock.
 
 Exercises chart classes, dashboard, themes, report builders,

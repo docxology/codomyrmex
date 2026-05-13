@@ -69,3 +69,11 @@ pi --version  # Should show 0.57.x+
 - **Client**: Python 3.11+ (stdlib only — subprocess, json, threading)
 - **Protocol**: JSONL over stdin/stdout (RPC mode)
 - **Upstream**: [github.com/badlogic/pi-mono](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent)
+
+## Navigation
+
+- **Self**: `README.md`
+- **Parent**: [../README.md](../README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Repository Root**: [README.md](../../../../README.md)

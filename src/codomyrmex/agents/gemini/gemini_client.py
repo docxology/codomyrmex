@@ -97,7 +97,9 @@ class GeminiClient(
                 self.client = genai.Client(**client_kwargs)
                 logger.debug("Initialized Gemini Client with Vertex AI")
             elif not self.api_key:
-                logger.debug("No GEMINI_API_KEY found; client operations that need the API will fail until a key is set.")
+                logger.debug(
+                    "No GEMINI_API_KEY found; client operations that need the API will fail until a key is set."
+                )
             else:
                 client_kwargs = {"api_key": self.api_key}
                 self.client = genai.Client(**client_kwargs)

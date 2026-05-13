@@ -51,3 +51,11 @@ Agent coordination document for the `paperclip/` submodule within `agents/`. Def
 - **README**: [README.md](README.md)
 - **SPEC**: [SPEC.md](SPEC.md)
 - **PAI**: [PAI.md](PAI.md)
+
+## Navigation
+
+- **Self**: `AGENTS.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Repository Root**: [README.md](../../../../README.md)

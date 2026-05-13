@@ -7,6 +7,7 @@ including resize, crop, rotate, convert, filter, trim, and merge operations.
 import importlib.util
 import time
 from pathlib import Path
+from typing import Any
 
 from codomyrmex.video.config import get_config
 from codomyrmex.video.exceptions import (
@@ -395,7 +396,7 @@ class VideoProcessor:
 
         try:
             with VideoFileClip(str(input_path)) as clip:
-                write_params = {
+                write_params: dict[str, Any] = {
                     "verbose": False,
                     "logger": None,
                 }

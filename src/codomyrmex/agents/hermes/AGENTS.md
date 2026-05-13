@@ -69,3 +69,7 @@ When coordinating with Hermes via MCP:
 - [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) — MCP surface and tags
 - **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [../../../../README.md](../../../../README.md) - Main project documentation
+
+## Related Documents
+
+- **Spec**: [SPEC.md](SPEC.md)

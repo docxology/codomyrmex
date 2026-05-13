@@ -54,3 +54,11 @@ Raised when skill execution fails for any reason: parameter validation failure, 
 - All exceptions from skill execution are caught, logged, and re-raised as `SkillExecutionError` with the original exception chained via `from e`.
 - `SkillExecutionError` from validation is re-raised directly without wrapping.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

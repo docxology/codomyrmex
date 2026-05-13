@@ -64,3 +64,11 @@ pytest tests/orchestrator_state/
 - Distributed state sync: persist workflow state to an external store (Redis/PostgreSQL) so orchestrator restarts resume in-progress workflows without data loss.
 - Checkpoint/resume: emit periodic state snapshots mid-workflow; allow agents to resume from last checkpoint rather than restarting from scratch after a failure.
 - State diff and merge: provide utilities to compare two workflow state snapshots and merge non-conflicting transitions, enabling safe parallel state updates.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

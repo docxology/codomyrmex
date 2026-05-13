@@ -59,7 +59,7 @@ When productized, the following tools are candidates for MCP exposure:
 
 ## Navigation
 
-- **Source SPEC.md**: [SPEC.md](../../../src/codomyrmex/agents/ghost_architecture/SPEC.md)
-- **Source PAI.md**: [PAI.md](../../../src/codomyrmex/agents/ghost_architecture/PAI.md)
+- **Source SPEC.md**: `src/codomyrmex/agents/ghost_architecture/SPEC.md` inside the initialized submodule
+- **Source PAI.md**: `src/codomyrmex/agents/ghost_architecture/PAI.md` inside the initialized submodule
 - **Docs README**: [README.md](README.md)
 - **Parent PAI.md**: [docs/agents/PAI.md](../PAI.md)

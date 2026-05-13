@@ -1,5 +1,8 @@
 # Codomyrmex PAI Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Purpose
 
 This specification details the expected behavior and HTTP interface definitions for the `scripts/pai/` orchestrator and the underlying modular PAI PM server (`pm/server.ts`).
@@ -129,3 +132,11 @@ All error responses follow a consistent JSON format:
 | `POST /api/email/compose` | 120s | LLM inference may take 30–90s depending on model and backend |
 | `POST /api/dispatch/execute` | 300s | Agentic dispatch jobs are streamed via WebSocket |
 | All other endpoints | 30s | Standard HTTP timeout |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../README.md)

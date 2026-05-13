@@ -1,5 +1,8 @@
 # free_apis
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 Structured index and HTTP client for the [public-apis](https://github.com/public-apis/public-apis) catalogue — ~1 400 free, publicly accessible APIs organised by category.
 
 ## Features
@@ -139,3 +142,11 @@ uv run pytest src/codomyrmex/tests/unit/api/free_apis/ -v
 # Include network tests
 CODOMYRMEX_NETWORK_TESTS=1 uv run pytest src/codomyrmex/tests/unit/api/free_apis/ -v
 ```
+
+## Navigation
+
+- **Self**: `README.md`
+- **Parent**: [../README.md](../README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -44,3 +44,11 @@ Client → [AudioChunk] → Server.process_chunk() → [TranscriptionEvent] → 
 - `RuntimeError` for server already running / client not connected
 - `ImportError` for missing `websockets` dependency
 - `FileNotFoundError` for missing audio files in `chunks_from_file()`
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

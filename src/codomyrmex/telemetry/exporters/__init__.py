@@ -207,19 +207,19 @@ class OTLPExporter(SpanExporter):
         }
         return mapping.get(kind, 1)
 
-    def _convert_attributes(self, attributes: dict[str, Any]) -> list[dict]:
+    def _convert_attributes(self, attributes: dict[str, Any]) -> list[dict[str, Any]]:
         """Convert attributes to OTLP format."""
-        result = []
+        result: list[dict[str, Any]] = []
         for key, value in attributes.items():
-            attr = {"key": key}
+            attr: dict[str, Any] = {"key": key}
             if isinstance(value, str):
                 attr["value"] = {"stringValue": value}
+            elif isinstance(value, bool):
+                attr["value"] = {"boolValue": value}
             elif isinstance(value, int):
                 attr["value"] = {"intValue": value}
             elif isinstance(value, float):
                 attr["value"] = {"doubleValue": value}
-            elif isinstance(value, bool):
-                attr["value"] = {"boolValue": value}
             else:
                 attr["value"] = {"stringValue": str(value)}
             result.append(attr)

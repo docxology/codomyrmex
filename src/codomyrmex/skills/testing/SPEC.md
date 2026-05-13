@@ -1,5 +1,8 @@
 # Testing - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Framework for validating, running, and benchmarking Codomyrmex skills. Provides three capabilities: test case execution with expected-value comparison, metadata validation, and performance measurement.
@@ -57,3 +60,11 @@ Method: `to_dict() -> dict[str, Any]` -- excludes None fields.
 - All timing uses `time.monotonic()` for benchmark accuracy.
 - Exception during `test_skill` execution is caught and recorded as a failed result with error message.
 - Exception during `benchmark_skill` increments error count but does not halt the benchmark.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

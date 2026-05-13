@@ -64,3 +64,11 @@ When triaging, watch for these known patterns from `llama3.2`:
 - **Sibling**: [README.md](README.md) — Workflow overview
 - **Observer Script**: [observer.py](../src/codomyrmex/agents/hermes/scripts/observer.py)
 - **Observer Prompt**: [observer_prompt.md](../src/codomyrmex/agents/hermes/templates/observer_prompt.md)
+
+## Navigation
+
+- **Self**: `AGENTS.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.
+- **Repository Root**: [README.md](../README.md)

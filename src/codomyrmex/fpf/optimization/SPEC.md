@@ -1,6 +1,6 @@
 # Constraint Optimization -- Technical Specification
 
-**Version**: v1.0.0 | **Status**: Placeholder | **Last Updated**: March 2026
+**Version**: v1.0.0 | **Status**: Reserved | **Last Updated**: May 2026
 
 ## Overview
 
@@ -8,7 +8,7 @@ Reserved submodule for optimization solvers within the FPF (Fetch-Parse-Format) 
 
 ## Architecture
 
-This submodule currently contains only an empty `__init__.py` with `__all__ = []`. It serves as a namespace placeholder for future optimization solver implementations. When populated, it is expected to provide solver interfaces compatible with the `fpf.constraints` constraint definitions.
+This submodule currently reserves an import namespace with `__all__ = []`. When populated, it is expected to provide solver interfaces compatible with the `fpf.constraints` constraint definitions.
 
 ## Planned Components
 
@@ -22,7 +22,7 @@ This submodule currently contains only an empty `__init__.py` with `__all__ = []
 ## Dependencies
 
 - **Internal**: Expected to consume `fpf.constraints` for constraint definitions and `fpf.models` for domain data
-- **External**: Potentially `z3-solver` or `scipy` for optimization (TBD)
+- **External**: Potential solver backends include `z3-solver` or `scipy`, selected by the concrete adapter
 
 ## Constraints
 
@@ -34,3 +34,11 @@ This submodule currently contains only an empty `__init__.py` with `__all__ = []
 
 - Unimplemented features raise `NotImplementedError`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

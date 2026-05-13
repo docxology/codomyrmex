@@ -1,5 +1,8 @@
 # Codomyrmex — `src/codomyrmex/tests/unit`
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Status**: Active | **Last updated**: April 2026
 
 ## Purpose

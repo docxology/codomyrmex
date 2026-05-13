@@ -1,5 +1,8 @@
 # Text-to-SQL -- Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Architecture
 
 ### Pattern Matching Engine
@@ -43,3 +46,11 @@
 - Single-table queries only (no JOINs)
 - WHERE clause requires explicit "where column = value" format
 - No subqueries or complex expressions
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

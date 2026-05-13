@@ -31,3 +31,7 @@ Example implementations and demonstrations.
 
 ## Navigation Links
 - **🏠 Project Root**: ../README.md - Main project documentation
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

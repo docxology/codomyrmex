@@ -71,3 +71,11 @@ Three-layer design: **Models** (dataclasses and enums for pipeline/stage/job), *
 - Job failures with `allow_failure=True` are logged but do not propagate.
 - `AsyncPipelineManager` methods return `AsyncPipelineResult` with `error` field rather than raising on HTTP failures.
 - `PipelineMonitor.finish_monitoring` raises `CodomyrmexError` if the execution_id is unknown.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

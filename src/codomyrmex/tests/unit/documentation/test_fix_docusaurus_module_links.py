@@ -25,12 +25,20 @@ def fixer_mod():
 def test_transform_content_rewrites_spec_pai_mcp(fixer_mod, tmp_path: Path) -> None:
     root = tmp_path
     (root / "docs" / "modules" / "footest").mkdir(parents=True)
-    (root / "docs" / "modules" / "footest" / "SPEC.md").write_text("# spec\n", encoding="utf-8")
-    (root / "docs" / "modules" / "footest" / "PAI.md").write_text("# pai\n", encoding="utf-8")
+    (root / "docs" / "modules" / "footest" / "SPEC.md").write_text(
+        "# spec\n", encoding="utf-8"
+    )
+    (root / "docs" / "modules" / "footest" / "PAI.md").write_text(
+        "# pai\n", encoding="utf-8"
+    )
     (root / "src" / "codomyrmex" / "footest").mkdir(parents=True)
-    (root / "src" / "codomyrmex" / "footest" / "mcp_tools.py").write_text("#\n", encoding="utf-8")
+    (root / "src" / "codomyrmex" / "footest" / "mcp_tools.py").write_text(
+        "#\n", encoding="utf-8"
+    )
 
-    parent = root / "src" / "codomyrmex" / "documentation" / "docs" / "modules" / "footest"
+    parent = (
+        root / "src" / "codomyrmex" / "documentation" / "docs" / "modules" / "footest"
+    )
     parent.mkdir(parents=True)
     text = "See [s](SPEC.md#h) [p](PAI.md) [m](mcp_tools.py)\n"
     out = fixer_mod.transform_content(text, "footest", parent, root)
@@ -44,9 +52,15 @@ def test_transform_content_rewrites_spec_pai_mcp(fixer_mod, tmp_path: Path) -> N
 def test_transform_content_idempotent_after_rewrite(fixer_mod, tmp_path: Path) -> None:
     root = tmp_path
     (root / "docs" / "modules" / "footest").mkdir(parents=True)
-    (root / "docs" / "modules" / "footest" / "SPEC.md").write_text("#\n", encoding="utf-8")
-    (root / "docs" / "modules" / "footest" / "PAI.md").write_text("#\n", encoding="utf-8")
-    parent = root / "src" / "codomyrmex" / "documentation" / "docs" / "modules" / "footest"
+    (root / "docs" / "modules" / "footest" / "SPEC.md").write_text(
+        "#\n", encoding="utf-8"
+    )
+    (root / "docs" / "modules" / "footest" / "PAI.md").write_text(
+        "#\n", encoding="utf-8"
+    )
+    parent = (
+        root / "src" / "codomyrmex" / "documentation" / "docs" / "modules" / "footest"
+    )
     parent.mkdir(parents=True)
     first = fixer_mod.transform_content("[x](SPEC.md)", "footest", parent, root)
     second = fixer_mod.transform_content(first, "footest", parent, root)
@@ -54,13 +68,19 @@ def test_transform_content_idempotent_after_rewrite(fixer_mod, tmp_path: Path) -
 
 
 @pytest.mark.unit
-def test_hrefs_fallback_docs_pai_when_module_pai_missing(fixer_mod, tmp_path: Path) -> None:
+def test_hrefs_fallback_docs_pai_when_module_pai_missing(
+    fixer_mod, tmp_path: Path
+) -> None:
     root = tmp_path
     (root / "docs").mkdir(parents=True)
     (root / "docs" / "PAI.md").write_text("#\n", encoding="utf-8")
     (root / "docs" / "modules" / "nomodpai").mkdir(parents=True)
-    (root / "docs" / "modules" / "nomodpai" / "SPEC.md").write_text("#\n", encoding="utf-8")
-    parent = root / "src" / "codomyrmex" / "documentation" / "docs" / "modules" / "nomodpai"
+    (root / "docs" / "modules" / "nomodpai" / "SPEC.md").write_text(
+        "#\n", encoding="utf-8"
+    )
+    parent = (
+        root / "src" / "codomyrmex" / "documentation" / "docs" / "modules" / "nomodpai"
+    )
     parent.mkdir(parents=True)
     spec_h, pai_h, mcp_h = fixer_mod.hrefs_for_module("nomodpai", parent, root)
     assert spec_h is not None and "docs/modules/nomodpai/SPEC.md" in spec_h

@@ -186,7 +186,9 @@ if BaseAgent is not None:
             """Connect the underlying client."""
             self.client.connect()
 
-        def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+        def _execute_impl(
+            self, request: AgentRequest, max_tokens: int | None = None
+        ) -> AgentResponse:
             """Execute a request by routing to the appropriate Antigravity tool.
 
             Args:

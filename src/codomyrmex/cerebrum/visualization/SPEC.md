@@ -96,3 +96,7 @@ Themed matplotlib visualization library for cerebrum analysis outputs. Renders B
 
 - **Parent**: [cerebrum/](../README.md)
 - **Project root**: [../../../../README.md](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

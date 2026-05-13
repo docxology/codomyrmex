@@ -102,3 +102,8 @@ def quantization_error(original: np.ndarray, reconstructed: np.ndarray) -> dict
 
 - **Parent**: [codomyrmex](../SPEC.md)
 - **Related**: [compression](../compression/SPEC.md), [model_ops](../model_ops/SPEC.md)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

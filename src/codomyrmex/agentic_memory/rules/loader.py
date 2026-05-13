@@ -86,7 +86,7 @@ class RuleLoader:
             start = m.end()
             end = matches[i + 1].start() if i + 1 < len(matches) else len(raw)
             num = int(m.group(1))
-            title = (m.group(2).strip() or f"Section {num}")
+            title = m.group(2).strip() or f"Section {num}"
             sections.append(
                 RuleSection(
                     number=num,

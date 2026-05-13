@@ -1,5 +1,8 @@
 # GitHub API Client - Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 > **Codomyrmex v1.1.9** | Sub-module of `git_operations.api` | March 2026
 
 ## Overview

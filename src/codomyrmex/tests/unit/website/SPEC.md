@@ -32,3 +32,7 @@ Tests ensuring correctness, security, and regression prevention for the `codomyr
 
 - **Parent**: [../README.md](../README.md)
 - **Root**: [../../../../README.md](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

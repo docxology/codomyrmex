@@ -1,4 +1,3 @@
-# type: ignore
 """Functional tests for cloud module — zero-mock.
 
 Exercises Coda.io models, error hierarchy, S3-compatible client classes,

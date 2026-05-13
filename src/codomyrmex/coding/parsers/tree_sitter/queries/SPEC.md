@@ -20,3 +20,11 @@ Planned: catalog of pre-built `.scm` query strings (functions, classes, imports,
 - Query strings must be valid tree-sitter S-expressions.
 - All query results return lists of `(node, capture_name)` tuples.
 - Zero-mock: real tree-sitter query execution required.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../../README.md)

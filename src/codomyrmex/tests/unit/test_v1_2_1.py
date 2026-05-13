@@ -127,7 +127,7 @@ class TestLogContext:
         record = logging.LogRecord("test", logging.INFO, "", 0, "msg", (), None)
         with LogContext(correlation_id="xyz789"):
             f.filter(record)
-            assert record.correlation_id == "xyz789"  # type: ignore[attr-defined]
+            assert record.correlation_id == "xyz789"
 
 
 # ── C1: Skill Health Checker ──────────────────────────────────────

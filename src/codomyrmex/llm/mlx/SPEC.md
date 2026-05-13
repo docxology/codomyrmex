@@ -90,3 +90,11 @@ manager.delete_model("mlx-community/Llama-3.2-3B-Instruct-4bit")
 ## Security
 
 All inference runs entirely on-device. No data leaves the machine. Model downloads use HTTPS from HuggingFace Hub.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

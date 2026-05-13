@@ -74,3 +74,11 @@ All locks extend `BaseLock` (ABC) which defines `acquire`/`release` and a contex
 - `LockManager.acquire_all` logs error and releases any already-acquired locks on failure.
 - `LocalLock.release` logs at DEBUG level if lock file removal fails (non-fatal).
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

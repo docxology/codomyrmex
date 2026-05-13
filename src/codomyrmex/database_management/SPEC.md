@@ -42,3 +42,11 @@ Provides a unified, safe, and observable interface for database operations, incl
 
 - **Zero-Mock Policy**: All unit tests for this module must interact with a real SQLite database (often in-memory) to verify actual SQL execution and database behavior.
 - **Integration Tests**: Verify cross-database compatibility where drivers are available.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

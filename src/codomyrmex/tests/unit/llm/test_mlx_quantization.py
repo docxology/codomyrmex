@@ -49,8 +49,9 @@ class TestQuantizationPresets:
     def test_preset_frozen(self):
         from codomyrmex.llm.mlx.quantization import QUANTIZATION_PRESETS
 
+        field_name = "bits"
         with pytest.raises(AttributeError):
-            QUANTIZATION_PRESETS["q4"].bits = 99
+            setattr(QUANTIZATION_PRESETS["q4"], field_name, 99)
 
 
 # ===========================================================================

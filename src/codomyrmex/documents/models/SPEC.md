@@ -1,5 +1,8 @@
 # documents/models — Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Defines the canonical data models for the document management subsystem. Two main dataclasses (`Document` and `DocumentMetadata`) plus two enums (`DocumentType` and `DocumentFormat`) form the schema that all document operations share.
@@ -70,3 +73,11 @@ Methods: `to_dict() -> dict`, `from_dict(data) -> DocumentMetadata` (classmethod
 ## Dependencies
 
 Standard library only: `dataclasses`, `datetime`, `uuid`, `typing`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

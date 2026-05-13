@@ -16,3 +16,7 @@ Example implementations and demonstrations.
 ## Navigation
 - **Parent Directory**: [model_context_protocol](../README.md)
 - **Project Root**: ../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

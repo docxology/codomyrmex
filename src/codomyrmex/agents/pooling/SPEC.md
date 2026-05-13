@@ -96,3 +96,11 @@ uv run pytest src/codomyrmex/tests/unit/agents/pooling/
 
 - Active health probes (periodic ping/heartbeat for proactive status updates)
 - Async-native `AgentPool` variant for use with `asyncio` event loops
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

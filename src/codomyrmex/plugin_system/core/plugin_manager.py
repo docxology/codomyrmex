@@ -151,7 +151,7 @@ class PluginManager:
 
     def get_plugin_status(self, plugin_name: str) -> dict[str, Any]:
         """Get status of a plugin."""
-        status = {
+        status: dict[str, Any] = {
             "name": plugin_name,
             "registered": False,
             "loaded": False,

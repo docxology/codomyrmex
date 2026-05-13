@@ -38,3 +38,11 @@ Agent coordination document for the Pi coding agent integration within Codomyrme
 - **Parent**: [agents/AGENTS.md](../AGENTS.md)
 - **Siblings**: [claude/](../claude/), [codex/](../codex/), [hermes/](../hermes/), [mission_control/](../mission_control/)
 - **Upstream**: [github.com/badlogic/pi-mono](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent)
+
+## Navigation
+
+- **Self**: `AGENTS.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Repository Root**: [README.md](../../../../README.md)

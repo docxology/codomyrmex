@@ -137,3 +137,11 @@ python -c "from codomyrmex.agents.qwen import QwenClient, QWEN_MODELS; print(f'{
 - **Agent Coordination**: [AGENTS.md](AGENTS.md)
 - **PAI Integration**: [PAI.md](PAI.md)
 - **Parent Module**: [agents/](../README.md)
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

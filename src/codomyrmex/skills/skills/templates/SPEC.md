@@ -1,5 +1,8 @@
 # Skill Templates - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 > Codomyrmex v1.1.9 | March 2026
 
 ## Overview
@@ -80,3 +83,7 @@ Every template YAML file must contain:
 - Parent: [skills module](../../README.md)
 - Related: [skills MCP tools](../../mcp_tools.py)
 - Root: [codomyrmex](../../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

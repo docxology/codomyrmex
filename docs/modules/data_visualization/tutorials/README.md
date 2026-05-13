@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides.
+Documentation tooling, generated references, and publishing assets for Tutorials.
 
 ## Directory Contents
 - `PAI.md` – File
@@ -20,3 +20,7 @@ Documentation files and guides.
 ## Navigation
 - **Parent Directory**: [data_visualization](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

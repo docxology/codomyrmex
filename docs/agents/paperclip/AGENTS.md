@@ -37,3 +37,7 @@ Documentation for the **Paperclip** integration agent: coordination with the Pap
 
 - **Parent directory**: [agents](../README.md)
 - **Project root**: ../../../README.md
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

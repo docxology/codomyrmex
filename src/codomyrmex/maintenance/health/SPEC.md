@@ -1,5 +1,8 @@
 # Health - Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Two-part framework: `HealthChecker` for on-demand system health probes with aggregated reporting, and `MaintenanceScheduler` for recurring task execution with priority ordering and retry logic.
@@ -58,3 +61,11 @@ Property: `task_count -> int`.
 |-------|---------|
 | `KeyError` | `run()` or `execute()` called with unregistered name |
 | Exception capture | Health check exceptions caught and returned as UNHEALTHY result |
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

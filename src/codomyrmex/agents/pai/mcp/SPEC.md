@@ -78,3 +78,11 @@ Thread-safe, TTL-cached discovery. Uses `_find_mcp_modules()` to locate all pack
 - `call_tool()` catches `KeyError` (unknown tool), `SecurityError` (trust violation), `ValueError` (validation failure), `TimeoutError`, and generic `Exception`, returning structured error dicts.
 - Proxy tools return `{"error": ...}` dicts rather than raising, ensuring MCP protocol compatibility.
 - Discovery failures for individual modules are logged and skipped; overall discovery continues.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

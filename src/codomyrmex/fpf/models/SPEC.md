@@ -1,6 +1,6 @@
 # Domain Models -- Technical Specification
 
-**Version**: v1.0.0 | **Status**: Placeholder | **Last Updated**: March 2026
+**Version**: v1.0.0 | **Status**: Reserved | **Last Updated**: May 2026
 
 ## Overview
 
@@ -8,7 +8,7 @@ Reserved submodule for domain model definitions within the FPF (Fetch-Parse-Form
 
 ## Architecture
 
-This submodule currently contains only an empty `__init__.py` with `__all__ = []`. It serves as a namespace placeholder for future model definitions. When populated, it is expected to provide immutable dataclass-based models that flow through the fetch, parse, and format stages.
+This submodule currently reserves an import namespace with `__all__ = []`. When populated, it is expected to provide immutable dataclass-based models that flow through the fetch, parse, and format stages.
 
 ## Planned Components
 
@@ -27,10 +27,18 @@ This submodule currently contains only an empty `__init__.py` with `__all__ = []
 ## Constraints
 
 - No implementation exists yet; all access will raise `ImportError` or `NotImplementedError`.
-- Zero-mock: when implemented, models must represent real data; no placeholder/fake values.
+- Zero-mock: when implemented, models must represent real data; no synthetic stand-ins in production flows.
 - All models should be serializable to JSON for pipeline checkpointing.
 
 ## Error Handling
 
 - Unimplemented features raise `NotImplementedError`.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

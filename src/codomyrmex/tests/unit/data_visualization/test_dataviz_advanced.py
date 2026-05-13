@@ -5,6 +5,9 @@ from pathlib import Path
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pytest
+from matplotlib.container import BarContainer
+
+pytest.importorskip("seaborn", reason="advanced_plotter requires seaborn")
 
 # Use non-interactive backend for testing
 mpl.use("Agg")
@@ -138,7 +141,7 @@ class TestAdvancedPlotter:
         plotter = AdvancedPlotter()
         plotter.create_figure()
         bars = plotter.plot_bar(["A", "B"], [10, 20])
-        assert isinstance(bars, mpl.container.BarContainer)
+        assert isinstance(bars, BarContainer)
         plotter.clear_figures()
 
     def test_plot_histogram(self):

@@ -80,3 +80,11 @@ Three complementary engines, each independently usable:
 - `ASTMatcher.parse_code()` raises `SyntaxError` for invalid Python source.
 - `CodeSimilarity` returns `0.0` similarity for files that fail to tokenize.
 - `PatternAnalyzer` logs and skips files that cannot be read, continuing with remaining files.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

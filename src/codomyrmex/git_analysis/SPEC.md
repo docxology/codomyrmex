@@ -103,3 +103,11 @@ Installation options:
 1. `npm install -g gitnexus` — global install
 2. `npx gitnexus` — automatic download on first use (zero-install)
 3. Vendor build — `npm install && npm run build` in `vendor/gitnexus/`
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

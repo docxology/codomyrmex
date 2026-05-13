@@ -5,6 +5,7 @@ Uses strictly zero-stub tests with the Stub class.
 """
 
 import sys
+from typing import Any, cast
 
 import pytest
 from _stubs import Stub
@@ -16,17 +17,18 @@ stub_boto3 = Stub()
 stub_botocore = Stub()
 stub_google = Stub()
 stub_azure = Stub()
+module_cache = cast("dict[str, Any]", sys.modules)
 
-sys.modules["boto3"] = stub_boto3
-sys.modules["botocore"] = stub_botocore
-sys.modules["botocore.exceptions"] = stub_botocore.exceptions
-sys.modules["google"] = stub_google
-sys.modules["google.cloud"] = stub_google.cloud
-sys.modules["google.cloud.storage"] = stub_google.cloud.storage
-sys.modules["azure"] = stub_azure
-sys.modules["azure.identity"] = stub_azure.identity
-sys.modules["azure.storage"] = stub_azure.storage
-sys.modules["azure.storage.blob"] = stub_azure.storage.blob
+module_cache["boto3"] = stub_boto3
+module_cache["botocore"] = stub_botocore
+module_cache["botocore.exceptions"] = stub_botocore.exceptions
+module_cache["google"] = stub_google
+module_cache["google.cloud"] = stub_google.cloud
+module_cache["google.cloud.storage"] = stub_google.cloud.storage
+module_cache["azure"] = stub_azure
+module_cache["azure.identity"] = stub_azure.identity
+module_cache["azure.storage"] = stub_azure.storage
+module_cache["azure.storage.blob"] = stub_azure.storage.blob
 
 from codomyrmex.cloud.aws import S3Client
 from codomyrmex.cloud.azure import AzureBlobClient

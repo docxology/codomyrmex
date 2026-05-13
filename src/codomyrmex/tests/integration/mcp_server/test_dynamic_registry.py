@@ -1,4 +1,3 @@
-
 import pytest
 
 from codomyrmex.model_context_protocol.discovery import MCPDiscovery

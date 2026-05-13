@@ -49,3 +49,11 @@ Single-class design. `InfomaniakMeteringClient` extends `InfomaniakOpenStackBase
 - Usage methods catch broad `Exception` per service and return empty dicts.
 - `list_resources_with_usage` logs warnings (not errors) for per-type failures and continues collecting other resource types.
 - Quota methods catch exceptions and return empty dicts.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

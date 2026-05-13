@@ -62,3 +62,11 @@ Constructor: `StatsDClient(host?, port?, prefix="codomyrmex")`. Defaults from `S
 
 - `StatsDClient` constructor raises if `statsd` package is not installed.
 - `PrometheusExporter` constructor raises if `prometheus_client` package is not installed.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

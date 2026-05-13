@@ -17,9 +17,9 @@ The implementation file is named `retry_sync.py` so a `retry` **submodule** cann
 
 ## Key references
 
-- [API_SPECIFICATION.md](API_SPECIFICATION.md) — function-level API
-- [SPEC.md](SPEC.md) — design contracts
-- [PAI.md](PAI.md) — PAI integration notes
+- [API_SPECIFICATION.md](../../../../../../docs/modules/utils/API_SPECIFICATION.md) — function-level API
+- [SPEC.md](../../../../../../docs/modules/utils/SPEC.md) — design contracts
+- [PAI.md](../../../../../../docs/modules/utils/PAI.md) — PAI integration notes
 - Tests: `uv run pytest src/codomyrmex/tests/unit/utils/ -q`
 
 ## Directory contents
@@ -34,3 +34,7 @@ The implementation file is named `retry_sync.py` so a `retry` **submodule** cann
 
 - **Parent**: [codomyrmex](../README.md)
 - **Project root**: [../../../README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

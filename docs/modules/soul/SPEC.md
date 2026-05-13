@@ -34,3 +34,11 @@ See source module for available exports.
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k soul -v
 ```
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

@@ -35,3 +35,11 @@ The intended design is a curriculum engine that sequences learning objectives an
 
 - All errors logged before propagation.
 - Unimplemented features must raise `NotImplementedError`, never return stub data.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

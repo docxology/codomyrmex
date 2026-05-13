@@ -119,7 +119,7 @@ def retry(
 
             raise last_exc  # type: ignore[misc]
 
-        wrapper._retry_config = {  # type: ignore[attr-defined]
+        wrapper._retry_config = {
             "max_attempts": max_attempts,
             "base_delay": base_delay,
             "max_delay": max_delay,

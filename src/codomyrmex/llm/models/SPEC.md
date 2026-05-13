@@ -73,3 +73,11 @@ round-trip fidelity.
 - `ValueError` from `ThinkingDepth(invalid_value)`.
 - `KeyError` from `from_dict()` when required fields are missing.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

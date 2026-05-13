@@ -147,7 +147,8 @@ class ROS2Bridge:
             # For simulation, we might still want it to work or fail.
             # Given SPEC requirements, let's assume it needs connection.
 
-        self.create_topic(topic)
+        if topic not in self._topic_meta:
+            self.create_topic(topic)
         msg = Message(topic=topic, payload=payload, sender=self.node_name)
 
         # Store history
@@ -187,7 +188,8 @@ class ROS2Bridge:
         Returns:
             An unsubscribe callable — call it to remove this subscription.
         """
-        self.create_topic(topic)
+        if topic not in self._topic_meta:
+            self.create_topic(topic)
         self._subscribers[topic].append(callback)
         self._topic_meta[topic].subscriber_count += 1
 

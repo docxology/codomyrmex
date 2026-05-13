@@ -72,3 +72,11 @@ Extends `CostStore` with thread-safe JSON file-based persistence. Ideal for loca
 - `CostTracker.record()` delegates to `CostStore.save_entry()` -- store implementations are responsible for error propagation.
 - `BudgetManager.can_spend()` returns `True` if no budgets are matched by the provided category and tags (permissive default).
 - All errors logged via `codomyrmex.logging_monitoring` before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

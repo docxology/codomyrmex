@@ -1,5 +1,8 @@
 # git_analysis/vendor — Behavioral Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Purpose
 
 Contains vendored third-party tools required by `git_analysis`. Currently houses
@@ -55,3 +58,11 @@ they are declared as dependencies in `pyproject.toml` or `package.json`.
 
 4. **Submodule initialized on clone**: The `.gitmodules` file at project root registers
    this submodule. New contributors must run `git submodule update --init` after cloning.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

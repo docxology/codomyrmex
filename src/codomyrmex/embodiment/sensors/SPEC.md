@@ -1,35 +1,44 @@
 # Sensor Interfaces -- Technical Specification
 
-**Version**: v1.0.0 | **Status**: Placeholder | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: May 2026
 
 ## Overview
 
-Reserved submodule for sensor interfaces (camera, lidar, IMU) within the embodiment system. Intended to provide a hardware-abstraction layer for reading sensor data from embodied agents and feeding it into the perception pipeline.
+Sensor interface primitives for the embodiment system. The submodule provides a hardware-abstraction layer for reading sensor data from embodied agents and feeding it into perception or ROS bridge pipelines.
 
 ## Architecture
 
-This submodule currently contains only an empty `__init__.py` with `__all__ = []`. It serves as a namespace placeholder for future sensor implementations. When populated, it is expected to follow the same pattern as the `ros` sibling module -- providing dataclass-based sensor readings and callback-driven data delivery.
+This submodule exposes `SensorData`, `SensorInterface`, and a deterministic `SimulatedSensor` implementation. The legacy `MockSensor` name remains as a compatibility alias for callers that imported the earlier class. Concrete hardware integrations should subclass `SensorInterface` and return timestamped `SensorData` objects.
 
-## Planned Components
+## Components
 
 | Component | Purpose |
 |-----------|---------|
-| Camera interface | Image capture, resolution configuration, frame rate control |
-| Lidar interface | Point cloud acquisition, scan parameters, range filtering |
-| IMU interface | Accelerometer, gyroscope, magnetometer data with calibration |
+| `SensorData` | Dataclass carrying `sensor_id`, timestamp, metadata, and payload |
+| `SensorInterface` | Abstract connect/disconnect/read contract for sensor adapters |
+| `SimulatedSensor` | In-memory deterministic implementation for local runs |
+| `MockSensor` | Backward-compatible alias preserving legacy metadata |
 
 ## Dependencies
 
-- **Internal**: Expected to publish sensor data via `embodiment.ros.ROS2Bridge` topics
-- **External**: Hardware-specific libraries (TBD based on target platform)
+- **Internal**: Can publish sensor data via `embodiment.ros.ROS2Bridge` topics
+- **External**: Hardware-specific libraries are adapter-specific and not required by the base module
 
 ## Constraints
 
-- No implementation exists yet; all access will raise `ImportError` or `NotImplementedError`.
-- Zero-mock: when implemented, real sensor data only; simulation via synthetic data generators.
+- Base interfaces are synchronous and intentionally small; async fan-out belongs in `embodiment.ros`.
+- Zero-mock: hardware adapters should read real devices; deterministic local behavior uses `SimulatedSensor`.
 - Sensor readings must include timestamps for temporal alignment.
 
 ## Error Handling
 
-- Unimplemented features raise `NotImplementedError`.
-- All errors logged before propagation.
+- Reading before `connect()` raises `RuntimeError`.
+- Hardware adapters should log device errors before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

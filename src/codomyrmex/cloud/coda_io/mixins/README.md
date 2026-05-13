@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Mixins..
 
 ## Directory Contents
 - `README.md` – File
@@ -22,3 +22,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [coda_io](../README.md)
 - **Project Root**: ../../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -187,8 +187,34 @@ class TestTripleCheck:
 
         from codomyrmex.documentation.scripts.triple_check import find_placeholders
 
-        phs = find_placeholders("TODO: fix this\nXXX placeholder", Path("test.py"))
-        assert isinstance(phs, list)
+        phs = find_placeholders("TODO: fix this\nXXX: placeholder", Path("test.md"))
+        assert [issue["description"] for issue in phs] == [
+            "TODO marker",
+            "XXX marker",
+        ]
+
+    def test_find_placeholders_ignores_prose_and_identifiers(self):
+        from pathlib import Path
+
+        from codomyrmex.documentation.scripts.triple_check import find_placeholders
+
+        content = (
+            "Record outcomes and update TODO queues when necessary.\n"
+            "Files include `todo.py` and `run_todo_droid.py`.\n"
+            "This guide discusses placeholder replacement as a maintenance topic.\n"
+        )
+        assert find_placeholders(content, Path("test.md")) == []
+
+    def test_find_placeholders_ignores_markdown_code(self):
+        from pathlib import Path
+
+        from codomyrmex.documentation.scripts.triple_check import find_placeholders
+
+        content = (
+            "Use inline `TODO: example` in documentation prose.\n"
+            "```markdown\nTODO: sample task marker\n```\n"
+        )
+        assert find_placeholders(content, Path("test.md")) == []
 
 
 class TestTripleCheckDeep:
@@ -201,6 +227,23 @@ class TestTripleCheckDeep:
         f.write_text("# Title\n\nContent here.\n## Section\nMore content.")
         result = analyze_file(f, tmp_path)
         assert isinstance(result, dict)
+
+    def test_collect_doc_files_skips_gitmodules(self, tmp_path):
+        from codomyrmex.documentation.scripts.triple_check import _collect_doc_files
+
+        (tmp_path / ".gitmodules").write_text(
+            '[submodule "vendor/pkg"]\n\tpath = vendor/pkg\n'
+        )
+        (tmp_path / "README.md").write_text("# Root")
+        vendor = tmp_path / "vendor" / "pkg"
+        vendor.mkdir(parents=True)
+        (vendor / "README.md").write_text("# Vendor")
+
+        collected = {
+            path.relative_to(tmp_path).as_posix()
+            for path in _collect_doc_files(tmp_path)
+        }
+        assert collected == {"README.md"}
 
     def test_find_placeholders_none(self, tmp_path):
         from codomyrmex.documentation.scripts.triple_check import find_placeholders

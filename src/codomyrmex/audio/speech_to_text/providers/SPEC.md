@@ -61,3 +61,11 @@ Returns an initialized `STTProvider`. Raises `ValueError` for unknown names.
 - `AudioFormatError`: raised for unsupported audio file formats.
 - `TranscriptionError`: raised for runtime transcription failures.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

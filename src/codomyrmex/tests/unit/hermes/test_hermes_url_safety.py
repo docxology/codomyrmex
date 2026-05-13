@@ -122,7 +122,10 @@ class TestIsSafeUrl:
 
     def test_blocked_hostname_metadata_google(self) -> None:
         us = _import_url_safety()
-        assert us.is_safe_url("http://metadata.google.internal/computeMetadata/v1/") is False
+        assert (
+            us.is_safe_url("http://metadata.google.internal/computeMetadata/v1/")
+            is False
+        )
 
     def test_blocked_hostname_metadata_goog(self) -> None:
         us = _import_url_safety()
@@ -148,7 +151,12 @@ class TestIsSafeUrl:
     def test_dns_failure_blocked(self) -> None:
         us = _import_url_safety()
         # Intentionally unresolvable hostname → fail closed
-        assert us.is_safe_url("http://this-domain-definitely-does-not-exist-xyz123.invalid/") is False
+        assert (
+            us.is_safe_url(
+                "http://this-domain-definitely-does-not-exist-xyz123.invalid/"
+            )
+            is False
+        )
 
     def test_malformed_url_blocked(self) -> None:
         us = _import_url_safety()

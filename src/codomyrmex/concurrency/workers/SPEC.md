@@ -78,3 +78,11 @@ Three independent modules cooperate: `channels.py` provides Go-style communicati
 - `AsyncWorkerPool.submit` raises `RuntimeError` after shutdown; task failures are captured, not propagated.
 - Pool task failures logged as warnings via module logger.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

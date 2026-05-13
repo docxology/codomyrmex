@@ -26,3 +26,7 @@ See [API_SPECIFICATION.md](API_SPECIFICATION.md) for signatures and examples.
 - **Parent**: [modules](../README.md)
 - **Project root**: [../../../README.md](../../../README.md)
 - **Source tree**: [src/codomyrmex/utils/README.md](../../../src/codomyrmex/utils/README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

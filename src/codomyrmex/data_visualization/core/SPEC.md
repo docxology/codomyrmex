@@ -78,3 +78,11 @@ Pre-built instances: `DEFAULT_THEME` (light), `DARK_THEME` (dark blue/green).
 
 - `Dashboard.render(output_path=...)` writes via `Path.write_text()`; exceptions propagate to the caller.
 - `Theme.__init__` uses `kwargs.get()` with defaults for all optional parameters.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

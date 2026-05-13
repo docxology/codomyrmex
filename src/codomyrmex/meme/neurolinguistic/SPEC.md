@@ -58,3 +58,11 @@ Frame-and-pattern detection engine. `NeurolinguisticEngine` maintains a registry
 - `spin` returns original text unchanged if target frame is not registered.
 - `reframe` returns original content if either frame has no keywords.
 - `analyze_frames` returns empty list when no frames match.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

@@ -112,3 +112,7 @@ def refactor_code_snippet(
 
 - Parent: [`agents/ai_code_editing/`](../README.md)
 - Grandparent: [`agents/`](../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

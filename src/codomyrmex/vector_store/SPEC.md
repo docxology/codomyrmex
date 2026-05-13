@@ -59,3 +59,11 @@ pytest tests/unit/test_vector_store.py -v
 ## Dependencies
 
 See `src/codomyrmex/vector_store/__init__.py` for import dependencies.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

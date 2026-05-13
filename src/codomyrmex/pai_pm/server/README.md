@@ -4,7 +4,7 @@
 
 ## Overview
 
-Contains components for the src system.
+Module implementation, resources, and local coordination for Server..
 
 ## Directory Contents
 - `AddTask.ts` – File
@@ -41,3 +41,7 @@ Contains components for the src system.
 ## Navigation
 - **Parent Directory**: [pai_pm](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

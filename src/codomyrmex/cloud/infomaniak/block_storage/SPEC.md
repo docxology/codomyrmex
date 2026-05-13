@@ -56,3 +56,11 @@ Single-class design. `InfomaniakVolumeClient` extends `InfomaniakOpenStackBase` 
 
 - All methods follow the pattern: try/except with `logger.error` on failure, returning `None`, `False`, or `[]`.
 - No exceptions are raised to callers; all errors are absorbed and logged.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

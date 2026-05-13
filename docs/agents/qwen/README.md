@@ -1,5 +1,8 @@
 # Qwen (Alibaba)
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `codomyrmex.agents.qwen` | **Category**: API-based | **Version**: v1.2.3 | **Last Updated**: March 2026
 
 ## Overview
@@ -72,3 +75,8 @@ Source: [`src/codomyrmex/agents/qwen/`](../../../src/codomyrmex/agents/qwen/)
 - **Parent**: [docs/agents/](../README.md)
 - **Source**: [src/codomyrmex/agents/qwen/](../../../src/codomyrmex/agents/qwen/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

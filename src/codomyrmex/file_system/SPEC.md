@@ -1,5 +1,8 @@
 # File System Module SPEC
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 The `file_system` module provides a comprehensive, high-level interface for file and directory operations within the Codomyrmex ecosystem. It aims to simplify common FS tasks with a consistent API, prioritizing safety, efficiency, and clarity.
 
@@ -40,3 +43,11 @@ The `file_system` module provides a comprehensive, high-level interface for file
 - **Naming**: `snake_case` for functions/variables, `PascalCase` for classes.
 - **Typing**: Strict type hinting using `typing` and `pathlib.Path`.
 - **Logging**: Integration with `codomyrmex.logging_monitoring`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

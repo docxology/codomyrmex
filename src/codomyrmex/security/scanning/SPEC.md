@@ -104,3 +104,11 @@ uv run pytest src/codomyrmex/tests/unit/security/scanning/
 - Add AST-based taint analysis for Python to reduce false positives on SQL injection and command injection rules.
 - Map findings to CWE identifiers and attach CVSS v3.1 base scores.
 - Support multi-language scanning (JavaScript, Go, Java) with language-specific rule sets.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

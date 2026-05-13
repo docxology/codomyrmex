@@ -97,3 +97,11 @@ Three independent classes, each following a simple append/query model with no ex
 - No custom exceptions defined; errors propagate from standard library operations.
 - All classes use `codomyrmex.logging_monitoring.get_logger` for structured logging.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

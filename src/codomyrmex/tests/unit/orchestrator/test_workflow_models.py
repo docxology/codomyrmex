@@ -148,6 +148,7 @@ class TestTask:
         t.error = ValueError("bad input")
         r = t.get_result()
         assert r.success is False
+        assert r.error is not None
         assert "bad input" in r.error
 
     def test_get_result_no_error(self):

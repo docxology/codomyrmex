@@ -1018,8 +1018,8 @@ class HermesClient(CLIAgentBase):
         forwards the stack traces to a nested Hermes session for automated repair
         until the tests pass or max_turns is exhausted.
         """
-        import subprocess
         import os
+        import subprocess
 
         # Check if target_path exists
         if not os.path.exists(target_path):

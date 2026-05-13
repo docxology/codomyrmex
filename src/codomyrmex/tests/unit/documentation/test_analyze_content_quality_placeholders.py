@@ -14,9 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[5]
 def analyze_module():
     script = REPO_ROOT / "scripts" / "documentation" / "analyze_content_quality.py"
     assert script.is_file(), f"missing {script}"
-    spec = importlib.util.spec_from_file_location(
-        "analyze_content_quality", script
-    )
+    spec = importlib.util.spec_from_file_location("analyze_content_quality", script)
     mod = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(mod)

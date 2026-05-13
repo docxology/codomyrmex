@@ -77,3 +77,11 @@ uv run pytest src/codomyrmex/tests/unit/skills/marketplace/
 - Implement Git-based remote search and clone-to-install workflow
 - Add local metadata cache for offline browsing of remote skill catalogs
 - Support versioned skill installation and dependency resolution
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

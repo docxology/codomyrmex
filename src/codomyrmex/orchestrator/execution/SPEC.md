@@ -68,3 +68,11 @@ Returns a dict with keys: `script`, `name`, `status`, `exit_code`, `stdout`, `st
 - `AsyncParallelRunner` catches `CancelledError` separately and records as `cancelled` count.
 - `AsyncScheduler` logs job failures and records error string on `AsyncJob.error`.
 - All errors logged before propagation via `logging_monitoring`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

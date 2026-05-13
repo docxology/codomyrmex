@@ -69,3 +69,11 @@ Method `get_auth_header()` returns `"Bearer {token}"` if `token` is set, otherwi
 - `push_image`, `pull_image`, and `build_and_push` raise `CodomyrmexError` on Docker failures.
 - `pull_image` raises `CodomyrmexError` for `ImageNotFound`.
 - `list_images` catches `DockerException` and returns `[]`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

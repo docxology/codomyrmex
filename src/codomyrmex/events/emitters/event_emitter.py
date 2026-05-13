@@ -236,7 +236,7 @@ class EventEmitter:
             status: Status message
             data: Additional data
         """
-        event_data = {
+        event_data: dict[str, Any] = {
             "operation": operation_name,
             "phase": "progress",
             "correlation_id": correlation_id,

@@ -52,3 +52,11 @@ vision/
 - `ImportError` for missing `pymupdf`
 - `RuntimeError` for Ollama connection failures
 - JSON parse fallback for malformed VLM responses
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

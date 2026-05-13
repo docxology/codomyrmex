@@ -1,9 +1,21 @@
+import importlib
 import re
 from dataclasses import dataclass, field
 from typing import Any
 
-import docker
 from loguru import logger
+
+docker: Any | None = None
+_DOCKER_IMAGE_NOT_FOUND: tuple[type[BaseException], ...] = ()
+try:
+    docker = importlib.import_module("docker")
+    docker_image_not_found = getattr(docker.errors, "ImageNotFound", None)
+    if isinstance(docker_image_not_found, type) and issubclass(
+        docker_image_not_found, BaseException
+    ):
+        _DOCKER_IMAGE_NOT_FOUND = (docker_image_not_found,)
+except ImportError:
+    docker = None
 
 
 @dataclass
@@ -67,8 +79,15 @@ class ContainerOptimizer:
     Docker image optimizer with comprehensive analysis and optimization capabilities.
     """
 
-    def __init__(self, client: docker.DockerClient | None = None):
+    def __init__(self, client: Any | None = None):
         """Initialize the image optimizer."""
+        if docker is None and client is None:
+            logger.warning(
+                "Docker library not available, image optimization features will be limited"
+            )
+            self.client = None
+            return
+
         try:
             self.client = client or docker.from_env()
         except Exception as e:
@@ -120,7 +139,7 @@ class ContainerOptimizer:
             analysis.optimization_score = self._calculate_score(analysis)
 
             return analysis
-        except docker.errors.ImageNotFound as exc:
+        except _DOCKER_IMAGE_NOT_FOUND as exc:
             raise ValueError(f"Image '{image_name}' not found") from exc
         except Exception as e:
             logger.error("Failed to analyze image %s: %s", image_name, e)
@@ -186,7 +205,7 @@ class ContainerOptimizer:
             else "optimized",
         }
 
-    def _extract_base_image(self, image: docker.models.images.Image) -> str:
+    def _extract_base_image(self, image: Any) -> str:
         """Extract base image from history."""
         try:
             history = image.history()

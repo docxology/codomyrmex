@@ -6,7 +6,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Hermes.
 
 Agent-oriented inventory and contracts: [../../../../../../AGENTS.md](../../../../../../AGENTS.md).
 

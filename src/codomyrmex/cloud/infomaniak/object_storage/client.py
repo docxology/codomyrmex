@@ -218,7 +218,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     def create_bucket(self, name: str, region: str | None = None) -> bool:
         """Create a bucket."""
         try:
-            kwargs = {"Bucket": name}
+            kwargs: dict[str, Any] = {"Bucket": name}
             if region:
                 kwargs["CreateBucketConfiguration"] = {"LocationConstraint": region}
             self._client.create_bucket(**kwargs)

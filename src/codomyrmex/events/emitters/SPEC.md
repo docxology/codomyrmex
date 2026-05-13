@@ -64,3 +64,11 @@ Facade pattern over `EventBus`. Emitters encapsulate a source identifier and del
 - `RuntimeError` and `AttributeError` from `EventBus.publish` are caught and logged in `emit()`.
 - `emit_batch_async` uses `return_exceptions=True` in `asyncio.gather` to prevent one failure from blocking others.
 - `EventOperationContext` does not suppress exceptions; it emits a failure event and re-raises.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

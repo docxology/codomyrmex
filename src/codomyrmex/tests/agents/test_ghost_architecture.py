@@ -2,7 +2,11 @@ import os
 import sys
 
 import pytest
-import torch
+
+torch = pytest.importorskip(
+    "torch",
+    reason="Ghost architecture tests require PyTorch and the populated submodule",
+)
 
 # Resolve path to submodule regardless of working directory
 _GHOST_PATH = os.path.abspath(

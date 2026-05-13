@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Test files and validation suites.
+Validation coverage, fixtures, and regression checks for Google Workspace.
 
 ## Active Components
 - `README.md` – Project file
@@ -37,3 +37,7 @@ Test files and validation suites.
 ## Navigation Links
 - **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../../../README.md - Main project documentation
+
+## Related Documents
+
+- **Spec**: [SPEC.md](SPEC.md)

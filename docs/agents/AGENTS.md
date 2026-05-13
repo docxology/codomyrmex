@@ -87,3 +87,8 @@ Agent coordination document for the `docs/agents/` directory. This directory con
 - **Root**: [AGENTS.md](../../AGENTS.md) — Root agent coordination
 - **Source**: [src/codomyrmex/agents/](../../src/codomyrmex/agents/) — Source code
 - **Comparison**: [AGENT_COMPARISON.md](../../src/codomyrmex/agents/AGENT_COMPARISON.md) — Agent comparison matrix
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)
+- **Spec**: [SPEC.md](SPEC.md)

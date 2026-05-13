@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help dev install setup submodules test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release
+.PHONY: help dev install setup submodules test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check docs-generate serve-docs
 
 # Hypothesis loads its pytest plugin (and may bind NumPy RNG) before any conftest runs.
 # Export for all subprocesses so `uv run pytest` sees it even when not using a shell wrapper.
@@ -23,13 +23,14 @@ help:
 	@echo "  test-coverage - Run tests with coverage report"
 	@echo "  test-coverage-html - Open HTML coverage report in browser"
 	@echo "  test-obsidian - Run Obsidian module tests only"
-	@echo "  test-fast    - Run tests with minimal addopts (no verbose/timeout from ini)"
+	@echo "  test-fast    - Run tests with minimal addopts while preserving importlib collection"
 	@echo "  lint         - Run code linting with ruff"
 	@echo "  format       - Format code with ruff"
 	@echo "  type-check   - Run type checking with ty"
 	@echo "  security     - Run security scanning"
 	@echo "  docs         - Generate and check documentation"
 	@echo "  serve-docs   - Serve documentation locally"
+	@echo "  dev-server   - Start development server placeholder"
 	@echo "  clean        - Clean build artifacts and caches"
 	@echo "  analyze      - Run project analysis"
 	@echo "  check-deps   - Check and validate dependencies"
@@ -72,8 +73,8 @@ test-obsidian:
 	uv run pytest src/codomyrmex/tests/unit/agentic_memory/obsidian/ -v --tb=short --override-ini="addopts="
 
 test-fast:
-	@echo "Running tests with minimal addopts (override ini)..."
-	uv run pytest src/codomyrmex/tests/ -q --no-header --override-ini="addopts="
+	@echo "Running tests with minimal addopts while preserving importlib collection..."
+	uv run pytest src/codomyrmex/tests/ -q --no-header --override-ini="addopts=" --import-mode=importlib
 
 test-coverage:
 	@echo "Running tests with coverage report..."
@@ -109,7 +110,7 @@ security:
 	@echo "Running security scanning..."
 	uv run python -m bandit -r src/codomyrmex/
 	@echo "Checking for vulnerabilities..."
-	uv run python -m pip-audit
+	uv run python -m pip_audit
 
 # Performance Benchmarks
 benchmark-mcp:
@@ -127,11 +128,12 @@ docs: docs-check docs-generate
 
 docs-check:
 	@echo "Checking documentation status..."
-	uv run python scripts/documentation/check_docs_status.py
+	uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root .
+	uv run python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
 
 docs-generate:
 	@echo "Generating missing documentation..."
-	uv run python scripts/documentation/generate_missing_readmes.py
+	uv run python src/codomyrmex/documentation/scripts/generate_missing_readmes.py --repo-root .
 
 serve-docs:
 	@echo "Serving documentation locally..."
@@ -155,7 +157,7 @@ ci: lint type-check security test docs-check
 	@echo "CI pipeline completed successfully!"
 
 # Development server
-dev:
+dev-server:
 	@echo "Starting development server..."
 	@echo "Note: This requires additional setup for web server"
 	@echo "See docs/development/environment-setup.md"

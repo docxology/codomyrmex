@@ -104,3 +104,11 @@ uv run pytest src/codomyrmex/tests/unit/database_management/connections/
 - Add async pool implementation using `asyncio.Queue`
 - Implement accurate waiter counting for backpressure metrics
 - Support connection pre-ping on checkout to catch stale-but-valid connections
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

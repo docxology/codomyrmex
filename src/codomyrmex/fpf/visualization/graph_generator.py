@@ -261,13 +261,13 @@ class GraphGenerator:
             importances = dict(G.degree())
 
         if not importances:
-            return [300] * len(G.nodes())
+            return [300.0] * len(G.nodes())
 
         max_importance = max(importances.values()) if importances.values() else 1
         min_importance = min(importances.values()) if importances.values() else 0
 
         if max_importance == min_importance:
-            return [300] * len(G.nodes())
+            return [300.0] * len(G.nodes())
 
         # Scale to 100-2000 range
         sizes = [

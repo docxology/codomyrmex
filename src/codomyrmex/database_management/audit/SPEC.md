@@ -63,3 +63,11 @@ uv run pytest src/codomyrmex/tests/unit/database_management/audit/
 
 - Implement query logging with configurable verbosity levels
 - Add slow-query detection with threshold-based alerting
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

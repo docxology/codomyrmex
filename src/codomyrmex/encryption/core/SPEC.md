@@ -55,3 +55,11 @@ No external configuration is required. The module depends on the `cryptography` 
 ## Deprecation Notice
 
 AES-CBC mode (used by `Encryptor(algorithm="AES")`) does not provide authentication and emits a `DeprecationWarning`. Use `encryption.algorithms.AESGCMEncryptor` for authenticated encryption in new code.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

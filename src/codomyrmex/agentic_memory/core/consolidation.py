@@ -7,13 +7,14 @@ and content length.
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agentic_memory.core.models import Memory, MemoryImportance
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from codomyrmex.agentic_memory.rules.engine import RuleEngine
 
 

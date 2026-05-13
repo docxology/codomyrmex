@@ -1,5 +1,8 @@
 # Core Agent Infrastructure
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `codomyrmex.agents.core` | **Category**: Infrastructure | **Last Updated**: March 2026
 
 ## Overview
@@ -90,3 +93,8 @@ Source: [`src/codomyrmex/agents/core/`](../../../src/codomyrmex/agents/core/)
 - **Parent**: [docs/agents/](../README.md)
 - **Source**: [src/codomyrmex/agents/core/](../../../src/codomyrmex/agents/core/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

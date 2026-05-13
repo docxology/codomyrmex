@@ -62,3 +62,11 @@ Constructor: `Span(name, context?, kind="internal")`. Context defaults to `SpanC
 
 - `Tracer.span()` context manager records exceptions on the span then re-raises.
 - `SpanProcessor` methods are thread-safe via `threading.Lock`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

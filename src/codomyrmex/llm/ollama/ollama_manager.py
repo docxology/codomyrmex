@@ -753,7 +753,7 @@ class OllamaManager:
         """Get statistics about available models."""
         models = self.list_models()
 
-        stats = {
+        stats: dict[str, Any] = {
             "total_models": len(models),
             "total_size_bytes": sum(model.size for model in models),
             "total_size_mb": sum(model.size for model in models) / (1024 * 1024),

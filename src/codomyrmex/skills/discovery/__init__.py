@@ -44,7 +44,7 @@ class ParameterSchema:
     enum_values: list[Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        result = {
+        result: dict[str, Any] = {
             "name": self.name,
             "type": self.param_type,
             "description": self.description,

@@ -1,5 +1,8 @@
 # Agent Transport
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `codomyrmex.agents.transport` | **Category**: Infrastructure | **Last Updated**: March 2026
 
 ## Overview
@@ -37,3 +40,8 @@ Source: [`src/codomyrmex/agents/transport/`](../../../src/codomyrmex/agents/tran
 - **Parent**: [docs/agents/](../README.md)
 - **Source**: [src/codomyrmex/agents/transport/](../../../src/codomyrmex/agents/transport/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

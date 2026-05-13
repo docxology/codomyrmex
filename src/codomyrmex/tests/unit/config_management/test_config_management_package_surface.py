@@ -1,4 +1,3 @@
-# type: ignore
 """Functional tests for config_management module — zero-mock.
 
 Exercises Configuration, ConfigurationManager, ConfigSchema,

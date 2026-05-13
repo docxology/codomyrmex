@@ -36,3 +36,11 @@ from codomyrmex.pai_pm import *
 - **Source**: [src/codomyrmex/pai_pm/](../../../src/codomyrmex/pai_pm/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Navigation
+
+- **Self**: `AGENTS.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Repository Root**: [README.md](../../../README.md)

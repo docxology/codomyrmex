@@ -7,7 +7,7 @@ from a provided schema. Pure Python, no LLM dependency.
 """
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -15,9 +15,9 @@ class SQLSchema:
     """Database schema for context-aware SQL generation."""
 
     tables: dict[str, list[str]]  # {table_name: [column_name, ...]}
-    primary_keys: dict[str, str] = None  # {table_name: pk_column}  # type: ignore
-    foreign_keys: list[tuple] = (
-        None  # [(table, col, ref_table, ref_col), ...]  # type: ignore
+    primary_keys: dict[str, str] = field(default_factory=dict)
+    foreign_keys: list[tuple[str, str, str, str]] = field(
+        default_factory=list
     )
 
     def __post_init__(self):

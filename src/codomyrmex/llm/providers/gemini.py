@@ -88,7 +88,7 @@ class GeminiProvider(LLMProvider):
         """Convert a google-genai GenerateContentResponse to CompletionResponse."""
         content = ""
         if response.candidates and response.candidates[0].content:
-            for part in response.candidates[0].content.parts:  # type: ignore
+            for part in response.candidates[0].content.parts:
                 if part.text:
                     content += part.text
 

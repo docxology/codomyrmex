@@ -1,10 +1,13 @@
 # Droid — Task Management
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 **Module**: `codomyrmex.agents.droid` | **Category**: Core Infrastructure | **Last Updated**: March 2026
 
 ## Overview
 
-Task management and automation framework (the "TODO Droid"). Provides priority queues, status tracking, and cross-agent task coordination with persistent SQLite storage.
+Task management and automation framework for the droid agent lane. Provides priority queues, status tracking, and cross-agent task coordination with persistent storage.
 
 ## Key Classes
 
@@ -16,7 +19,7 @@ Task management and automation framework (the "TODO Droid"). Provides priority q
 | `DroidMode` | Operating modes (autonomous, supervised, manual) |
 | `DroidStatus` | Status enum (pending, running, complete, failed) |
 | `TodoItem` | Individual task representation |
-| `TodoManager` | CRUD operations on TODO items |
+| `TodoManager` | CRUD operations on task items |
 
 ## Key Functions
 
@@ -56,3 +59,8 @@ Source: [`src/codomyrmex/agents/droid/`](../../../src/codomyrmex/agents/droid/)
 - **Parent**: [docs/agents/](../README.md)
 - **Source**: [src/codomyrmex/agents/droid/](../../../src/codomyrmex/agents/droid/)
 - **Project Root**: [README.md](../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.

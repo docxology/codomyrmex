@@ -99,3 +99,7 @@ Optional `codomyrmex.performance.monitor_performance` decorator applied where av
 
 - **Parent**: [review](../SPEC.md)
 - **Root**: [codomyrmex](../../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

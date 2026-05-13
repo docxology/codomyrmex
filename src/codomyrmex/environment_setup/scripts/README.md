@@ -17,3 +17,7 @@ Automation and utility scripts.
 ## Navigation
 - **Parent Directory**: [environment_setup](../README.md)
 - **Project Root**: ../../../../README.md
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

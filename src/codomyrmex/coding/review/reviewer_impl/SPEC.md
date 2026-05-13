@@ -69,3 +69,11 @@ Mixin composition pattern. `CodeReviewer` inherits all five; method resolution o
 - Individual tool failures (tool not on PATH, non-zero exit) are logged at WARNING level and return empty result lists.
 - `AnalysisPatternsMixin` raises `CodeReviewError` if `project_path` does not exist.
 - `ReportingMixin` raises `ValueError` for unsupported format strings.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../../README.md)

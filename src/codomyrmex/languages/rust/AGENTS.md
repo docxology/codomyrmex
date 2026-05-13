@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Contains components for the src system.
+Module implementation, resources, and local coordination for Rust..
 
 ## Active Components
 - `README.md` – Project file
@@ -33,3 +33,7 @@ Contains components for the src system.
 ## Navigation Links
 - **📁 Parent Directory**: [languages](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../README.md - Main project documentation
+
+## Related Documents
+
+- **Spec**: [SPEC.md](SPEC.md)

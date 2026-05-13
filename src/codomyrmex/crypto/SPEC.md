@@ -161,3 +161,7 @@ def derive_hkdf(input_key: bytes, info: bytes, salt: bytes | None = None, ...) -
 
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [encryption](../encryption/SPEC.md), [security](../security/SPEC.md)
+
+## Related Documents
+
+- **Readme**: [README.md](README.md)

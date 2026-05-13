@@ -58,8 +58,10 @@ def highly_complex_function(data, config, options):
                     for i, sub_item in enumerate(item):
                         if i % 2 == 0:
                             result.append(sub_item)
-                        else:
+                        elif isinstance(sub_item, (int, float)):
                             result.append(sub_item * 2)
+                        else:
+                            result.append(sub_item)
                 else:
                     result.append("EMPTY_LIST")
             else:

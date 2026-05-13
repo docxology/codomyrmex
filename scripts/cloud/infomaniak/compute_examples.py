@@ -125,7 +125,9 @@ def create_keypair(client, name: str, *, emit_secrets: bool = False):
         print(f"   ✅ Created keypair: {result['name']}")
         print(f"   Fingerprint: {result['fingerprint']}")
         if result.get("private_key"):
-            print("\n   ⚠️  Persist the SSH secret material now — it cannot be fetched later.\n")
+            print(
+                "\n   ⚠️  Persist the SSH secret material now — it cannot be fetched later.\n"
+            )
             if emit_secrets:
                 os.write(1, (result["private_key"] + "\n").encode())
             else:
@@ -255,7 +257,9 @@ def main():
         client = get_client()
     except Exception as e:
         print(f"❌ Failed to create client: {type(e).__name__}")
-        print("\nEnsure OpenStack app ID and shared authentication values are set (see Infomaniak docs).")
+        print(
+            "\nEnsure OpenStack app ID and shared authentication values are set (see Infomaniak docs)."
+        )
         return 1
 
     if args.all:

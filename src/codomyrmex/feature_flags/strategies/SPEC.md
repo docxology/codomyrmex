@@ -101,3 +101,11 @@ Each strategy extends `EvaluationStrategy` (ABC) and implements three methods: `
 - `create_strategy` raises `ValueError` for unknown strategy type strings.
 - `AttributeStrategy._check_condition` catches `TypeError` / `ValueError` and logs a warning.
 - All errors logged before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

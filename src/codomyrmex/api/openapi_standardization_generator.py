@@ -244,7 +244,7 @@ class StandardizationOpenAPIGenerator:
         if path not in self.spec.spec["paths"]:
             self.spec.spec["paths"][path] = {}
 
-        operation = {
+        operation: dict[str, Any] = {
             "summary": endpoint.summary or f"{method.upper()} {path}",
             "description": endpoint.description or "",
             "responses": {},

@@ -63,3 +63,11 @@ Dataclass representing a single feature flag.
 - `load_from_file` propagates `FileNotFoundError` and `json.JSONDecodeError` from the underlying file read.
 - `is_enabled` never raises on missing flags; returns `default` instead.
 - All errors logged via the module-level `logger` before propagation.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

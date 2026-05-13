@@ -1,5 +1,8 @@
 # edge_computing/core — Technical Specification
 
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+
 ## Overview
 
 Three modules providing the foundational layer for edge computing: `models.py` (data types and enums), `cluster.py` (multi-node orchestration), and `runtime.py` (per-node function execution with metrics).
@@ -75,3 +78,11 @@ Created via `SyncState.from_data(data, version)` which computes MD5 checksum. `v
 - `EdgeExecutionError` raised when function invocation fails.
 - `ValueError` raised when invoking a non-existent function.
 - `TimeoutError` raised post-execution if elapsed time exceeds `timeout_seconds`.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

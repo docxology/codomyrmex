@@ -91,3 +91,7 @@ mac/
 - Parent: [operating_system module](../README.md)
 - Sibling: [Linux provider](../linux/SPEC.md) | [Windows provider](../windows/SPEC.md)
 - Root: [codomyrmex](../../../../README.md)
+
+## Related Documents
+
+- **Agents**: [AGENTS.md](AGENTS.md)

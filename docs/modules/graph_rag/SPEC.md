@@ -71,3 +71,11 @@ pytest tests/graph_rag/
 - Graph database backend integration (Neo4j, NetworkX) to lift the current 100K-node ceiling on in-memory graphs.
 - Persistent graph storage across sessions: serialize the knowledge graph to disk and reload incrementally rather than rebuilding from source on every session start.
 - Multi-hop reasoning chains: expose a query interface that traces paths of configurable depth through the graph and returns confidence-weighted inference chains.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../README.md)

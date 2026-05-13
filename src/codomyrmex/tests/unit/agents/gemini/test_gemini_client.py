@@ -25,9 +25,7 @@ from codomyrmex.agents.core.exceptions import GeminiError
 from codomyrmex.agents.gemini.gemini_client import GeminiClient
 
 _EXPECTED_DEFAULT_GEMINI_MODEL = next(
-    f.default
-    for f in dataclasses.fields(AgentConfig)
-    if f.name == "gemini_model"
+    f.default for f in dataclasses.fields(AgentConfig) if f.name == "gemini_model"
 )
 
 # ---------------------------------------------------------------------------

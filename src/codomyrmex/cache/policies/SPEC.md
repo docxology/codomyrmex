@@ -70,3 +70,11 @@ Accepted names: `"lru"`, `"lfu"`, `"ttl"`, `"fifo"`. Raises `ValueError` for unk
 
 - Expired entries are silently removed on `get()` and return `None`.
 - `create_policy` raises `ValueError` for unknown policy names.
+
+## Navigation
+
+- **Self**: `SPEC.md`
+- **Parent**: [../README.md](../README.md)
+- **Readme**: [README.md](README.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [README.md](../../../../README.md)

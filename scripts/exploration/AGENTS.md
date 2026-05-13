@@ -69,3 +69,7 @@ Automation and utility scripts.
 ## Navigation Links
 - **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../README.md - Main project documentation
+
+## Related Documents
+
+- **Spec**: `SPEC.md` is inherited from the nearest parent scope.
