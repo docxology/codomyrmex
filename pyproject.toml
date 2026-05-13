@@ -40,7 +40,7 @@ dependencies = [
     "jsonschema>=4.23.0",
     # For static analysis
     "pylint>=3.0.0",
-    "bandit>=1.8.0",
+    "bandit>=1.9.4",
     "radon>=6.0.0",
     "lizard>=1.17.0",
     # For git operations
