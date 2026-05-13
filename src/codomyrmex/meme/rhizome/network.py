@@ -34,7 +34,7 @@ def build_graph(num_nodes: int, topology: NetworkTopology) -> Graph:
         # Barabási–Albert preferential attachment
         m = 2  # New edges per node
         # Initial core
-        initial_count = max(m + 1, 5)
+        initial_count = min(max(m + 1, 5), num_nodes)
         for i in range(initial_count):
             for j in range(i + 1, initial_count):
                 src, tgt = node_ids[i], node_ids[j]
@@ -43,25 +43,32 @@ def build_graph(num_nodes: int, topology: NetworkTopology) -> Graph:
                 g.nodes[src].connections.add(tgt)
                 g.nodes[tgt].connections.add(src)
 
+        # Fast Preferential Attachment via node repetition list
+        # This replaces the O(N^2) sorting loop with O(m) weighted random choice
+        repeated_nodes = []
+        for i in range(initial_count):
+            repeated_nodes.extend([node_ids[i]] * max(0, initial_count - 1))
+
         # Add remaining nodes
         for i in range(initial_count, num_nodes):
             targets = set()
-            # Probability proportional to degree
-            # Simplified: just pick from existing list weighted by degree
-            existing = node_ids[:i]
-            # Since strict PA is expensive O(N^2), use random sample approximation
-            # or just pick m nodes if small
-            candidates = random.sample(existing, min(len(existing), m * 2))
-            # Sort by degree
-            candidates.sort(key=lambda nid: len(g.nodes[nid].connections), reverse=True)
-            targets = set(candidates[:m])
+            # If not enough nodes to pick from, pick what we can
+            available_distinct = i
+            target_count = min(m, available_distinct)
 
+            # Pick distinct targets
+            if target_count > 0 and len(repeated_nodes) > 0:
+                while len(targets) < target_count:
+                    target = random.choice(repeated_nodes)
+                    targets.add(target)
+
+            src = node_ids[i]
             for t in targets:
-                src, tgt = node_ids[i], t
-                edge = Edge(source=src, target=tgt)
+                edge = Edge(source=src, target=t)
                 g.edges.append(edge)
-                g.nodes[src].connections.add(tgt)
-                g.nodes[tgt].connections.add(src)
+                g.nodes[src].connections.add(t)
+                g.nodes[t].connections.add(src)
+                repeated_nodes.extend([src, t])
 
     return g
 
