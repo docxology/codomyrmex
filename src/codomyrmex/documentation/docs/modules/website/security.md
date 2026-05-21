@@ -1,6 +1,6 @@
-# Security Policy for Standard Implementation Details
+# Security Policy for Website
 
-This document outlines security procedures and policies for the Standard Implementation Details module.
+This document outlines security procedures and policies for the Website module.
 
 ## Reporting a Vulnerability
 
@@ -9,8 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email Standard Implementation Details with the subject line: "SECURITY Vulnerability Report: Standard Implementation Details - Standard Implementation Details".
-<!-- IMPORTANT: When using this template for a new module, replace Standard Implementation Details and Standard Implementation Details above. Ensure the email is appropriate for security disclosures. -->
+Instead, contact the Codomyrmex maintainers with the subject line: "SECURITY Vulnerability Report: Website module".
 
 Please include the following information in your report:
 
@@ -30,15 +29,18 @@ Security patches and updates for this module will be documented in the module ch
 
 ## Scope
 
-This security policy applies only to the `Standard Implementation Details` module within the Codomyrmex project. For project-wide security concerns, please refer to the main project's security policy (if available) or contact the core project maintainers.
+This security policy applies only to the `website` module within the Codomyrmex project. For project-wide security concerns, please refer to the main project's security policy (if available) or contact the core project maintainers.
 
 ## Best Practices for Using This Module
 
 - Always use the latest stable version of the module.
 - Follow the principle of least privilege when configuring access or permissions related to this module.
 - Regularly review configurations and logs for suspicious activity.
+- Bind the development server to localhost unless an explicit deployment wrapper supplies authentication and transport security.
+- Keep script execution constrained to the project `scripts/` directory; path containment is enforced with resolved paths, not string-prefix checks.
+- Treat `/api/config` writes as privileged local-development operations and avoid exposing them on untrusted networks.
 
-Thank you for helping keep Codomyrmex and the Standard Implementation Details module secure. 
+Thank you for helping keep Codomyrmex and the Website module secure. 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

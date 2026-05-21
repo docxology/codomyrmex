@@ -44,7 +44,7 @@ The examples module integrates with:
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
+- **Human Documentation**: [README.md](readme.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)

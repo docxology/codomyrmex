@@ -114,6 +114,6 @@ Both `InMemoryVectorStore` and `NamespacedVectorStore` use `threading.Lock` for 
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
-- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
+- **Human Documentation**: [README.md](readme.md)
+- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](mcp_tool_specification.md)
 - **Parent Directory**: [codomyrmex](../README.md)

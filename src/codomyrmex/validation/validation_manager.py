@@ -7,8 +7,9 @@ validation profiles, and aggregate reporting.
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -16,10 +17,10 @@ from .contextual import ContextualValidator, ValidationIssue
 from .summary import ValidationSummary
 from .validator import ValidationResult, Validator
 
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
 logger = get_logger(__name__)
+
+ValidatorFn = Callable[[Any, Any], ValidationResult | bool]
+ContextualRuleFn = Callable[[dict[str, Any]], ValidationIssue | str | None]
 
 
 @dataclass
@@ -47,13 +48,13 @@ class ValidationManager:
     """
 
     def __init__(self) -> None:
-        self._validators: dict[str, Callable] = {}
+        self._validators: dict[str, ValidatorFn] = {}
         self._default_validator = Validator()
-        self._profiles: dict[str, list[tuple[str, Callable]]] = {}
+        self._profiles: dict[str, list[tuple[str, ContextualRuleFn]]] = {}
         self._history: list[ValidationRun] = []
         self._contextual = ContextualValidator()
 
-    def register_validator(self, name: str, validator: Callable) -> None:
+    def register_validator(self, name: str, validator: ValidatorFn) -> None:
         """Register a custom validator function.
 
         Args:
@@ -63,12 +64,12 @@ class ValidationManager:
         self._validators[name] = validator
         logger.info("Registered custom validator: %s", name)
 
-    def get_validator(self, name: str) -> Callable | None:
+    def get_validator(self, name: str) -> ValidatorFn | None:
         """Get a registered validator."""
         return self._validators.get(name)
 
     def list_validators(self) -> list[str]:
-        """list registered validator names."""
+        """List registered validator names."""
         return sorted(self._validators.keys())
 
     # ── Core Validation ─────────────────────────────────────────────
@@ -86,7 +87,7 @@ class ValidationManager:
         Returns:
             ValidationResult.
         """
-        start = time.time()
+        start = time.perf_counter()
         if validator_type in self._validators:
             validator_func = self._validators[validator_type]
             validator = Validator(validator_type="custom")
@@ -106,7 +107,7 @@ class ValidationManager:
                 ),
                 validator_type=validator_type,
                 success=result.is_valid,
-                duration_ms=(time.time() - start) * 1000,
+                duration_ms=(time.perf_counter() - start) * 1000,
                 issue_count=len(result.errors),
             )
         )
@@ -142,7 +143,7 @@ class ValidationManager:
     # ── Profiles ────────────────────────────────────────────────────
 
     def create_profile(
-        self, name: str, rules: list[tuple[str, Callable]] | None = None
+        self, name: str, rules: list[tuple[str, ContextualRuleFn]] | None = None
     ) -> None:
         """Create a named validation profile with a set of rules.
 

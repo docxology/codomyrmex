@@ -17,4 +17,4 @@ This module is currently a reserved namespace with no public exports. Planned fu
 
 ## 4. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/image/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/image/PAI.md)

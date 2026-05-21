@@ -196,6 +196,12 @@ class KnowledgeSearch:
         }
 
         try:
+            import importlib.util
+
+            if importlib.util.find_spec("z3") is None:
+                result["error"] = "z3-solver not installed"
+                return result
+
             solver = ConstraintSolver()
             result["solver_available"] = True
 

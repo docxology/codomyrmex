@@ -93,4 +93,4 @@ result = eval_harness_score(
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/eval_harness/SPEC.md)

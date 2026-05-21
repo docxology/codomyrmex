@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
@@ -14,7 +14,7 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 40px;
@@ -22,17 +22,17 @@
             margin-bottom: 30px;
             text-align: center;
         }
-        
+
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
         }
-        
+
         .header .subtitle {
             opacity: 0.9;
             font-size: 1.1em;
         }
-        
+
         .section {
             background: #16213e;
             padding: 24px;
@@ -40,20 +40,20 @@
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-        
+
         .section h2 {
             margin-bottom: 20px;
             font-size: 1.4em;
             border-bottom: 2px solid #667eea;
             padding-bottom: 10px;
         }
-        
+
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 16px;
         }
-        
+
         .metric-card {
             background: #1a1a2e;
             padding: 20px;
@@ -62,45 +62,45 @@
             border: 1px solid rgba(255,255,255,0.1);
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .metric-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
         }
-        
+
         .metric-icon {
             font-size: 1.8em;
             display: block;
             margin-bottom: 8px;
         }
-        
+
         .metric-value {
             font-size: 2em;
             font-weight: bold;
             color: #667eea;
             display: block;
         }
-        
+
         .metric-label {
             color: #888;
             font-size: 0.9em;
         }
-        
+
         .bar-chart {
             padding: 10px 0;
         }
-        
+
         .bar-row {
             display: flex;
             align-items: center;
             margin: 12px 0;
         }
-        
+
         .bar-label {
             width: 140px;
             font-size: 0.95em;
         }
-        
+
         .bar-container {
             flex: 1;
             background: #1a1a2e;
@@ -109,30 +109,30 @@
             height: 24px;
             overflow: hidden;
         }
-        
+
         .bar {
             background: linear-gradient(90deg, #667eea, #764ba2);
             height: 100%;
             border-radius: 6px;
             transition: width 0.3s ease;
         }
-        
+
         .bar-value {
             width: 50px;
             text-align: right;
             color: #e94560;
             font-weight: bold;
         }
-        
+
         .table-container {
             overflow-x: auto;
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        
+
         th {
             background: #667eea;
             color: white;
@@ -140,34 +140,34 @@
             text-align: left;
             font-weight: 600;
         }
-        
+
         td {
             padding: 12px 14px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        
+
         tr:hover {
             background: rgba(102, 126, 234, 0.1);
         }
-        
+
         .file-cell {
             max-width: 200px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        
+
         .number-cell {
             text-align: center;
             font-family: monospace;
         }
-        
+
         .patterns-cell {
             display: flex;
             gap: 4px;
             flex-wrap: wrap;
         }
-        
+
         .badge {
             background: #667eea;
             color: white;
@@ -175,22 +175,22 @@
             border-radius: 10px;
             font-size: 0.75em;
         }
-        
+
         .issue-count-warning {
             color: #e94560;
             font-weight: bold;
         }
-        
+
         .issue-count-ok {
             color: #4ade80;
         }
-        
+
         .issues-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-        
+
         .issue-item {
             background: #1a1a2e;
             padding: 12px;
@@ -199,7 +199,7 @@
             align-items: center;
             gap: 12px;
         }
-        
+
         .issue-severity {
             padding: 4px 8px;
             border-radius: 4px;
@@ -207,17 +207,17 @@
             font-weight: bold;
             color: white;
         }
-        
+
         .issue-file {
             font-family: monospace;
             color: #888;
             min-width: 150px;
         }
-        
+
         .issue-message {
             flex: 1;
         }
-        
+
         .muted {
             color: #888;
             font-size: 0.9em;
@@ -230,8 +230,8 @@
         <div class="header">
             <h1>🔬 Code Analysis Dashboard</h1>
             <p class="subtitle">
-                <strong>Target:</strong> /private/var/folders/l5/5t5z6z8d0tn3pth_0f7970q40000gn/T/pytest-of-mini/pytest-334/test_result_to_dict0 | 
-                <strong>Generated:</strong> 2026-02-21 12:33:39
+                <strong>Target:</strong> /Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src |
+                <strong>Generated:</strong> 2026-05-21 10:13:27
             </p>
         </div>
         
@@ -240,38 +240,91 @@
             <div class="metrics-grid">
             <div class="metric-card">
                 <span class="metric-icon">📁</span>
-                <span class="metric-value">3</span>
+                <span class="metric-value">12</span>
                 <span class="metric-label">Files Analyzed</span>
             </div>
             
             <div class="metric-card">
                 <span class="metric-icon">📝</span>
-                <span class="metric-value">11</span>
+                <span class="metric-value">3196</span>
                 <span class="metric-label">Lines of Code</span>
             </div>
             
             <div class="metric-card">
                 <span class="metric-icon">⚡</span>
-                <span class="metric-value">2</span>
+                <span class="metric-value">85</span>
                 <span class="metric-label">Functions</span>
             </div>
             
             <div class="metric-card">
                 <span class="metric-icon">🏗️</span>
-                <span class="metric-value">1</span>
+                <span class="metric-value">16</span>
                 <span class="metric-label">Classes</span>
             </div>
             
             <div class="metric-card">
                 <span class="metric-icon">⚠️</span>
-                <span class="metric-value">4</span>
+                <span class="metric-value">0</span>
                 <span class="metric-label">Issues</span>
             </div>
             
             <div class="metric-card">
                 <span class="metric-icon">📊</span>
-                <span class="metric-value">3.7</span>
+                <span class="metric-value">266.3</span>
                 <span class="metric-label">Avg Lines/File</span>
+            </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Patterns Detected</h2>
+            <div class="bar-chart">
+            <div class="bar-row">
+                <span class="bar-label">Context Managers</span>
+                <div class="bar-container">
+                    <div class="bar" style="width: 100.0%"></div>
+                </div>
+                <span class="bar-value">11</span>
+            </div>
+            
+            <div class="bar-row">
+                <span class="bar-label">Type Hints</span>
+                <div class="bar-container">
+                    <div class="bar" style="width: 90.9090909090909%"></div>
+                </div>
+                <span class="bar-value">10</span>
+            </div>
+            
+            <div class="bar-row">
+                <span class="bar-label">Decorators</span>
+                <div class="bar-container">
+                    <div class="bar" style="width: 63.63636363636363%"></div>
+                </div>
+                <span class="bar-value">7</span>
+            </div>
+            
+            <div class="bar-row">
+                <span class="bar-label">Template Method</span>
+                <div class="bar-container">
+                    <div class="bar" style="width: 36.36363636363637%"></div>
+                </div>
+                <span class="bar-value">4</span>
+            </div>
+            
+            <div class="bar-row">
+                <span class="bar-label">Dataclasses</span>
+                <div class="bar-container">
+                    <div class="bar" style="width: 36.36363636363637%"></div>
+                </div>
+                <span class="bar-value">4</span>
+            </div>
+            
+            <div class="bar-row">
+                <span class="bar-label">Factory</span>
+                <div class="bar-container">
+                    <div class="bar" style="width: 18.181818181818183%"></div>
+                </div>
+                <span class="bar-value">2</span>
             </div>
             </div>
         </div>
@@ -292,63 +345,114 @@
                     </thead>
                     <tbody>
             <tr>
-                <td class="file-cell" title="/private/var/folders/l5/5t5z6z8d0tn3pth_0f7970q40000gn/T/pytest-of-mini/pytest-334/test_result_to_dict0/utils.py">utils.py</td>
-                <td class="number-cell">3</td>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/git_workflow.py">git_workflow.py</td>
+                <td class="number-cell">174</td>
+                <td class="number-cell">4</td>
                 <td class="number-cell">1</td>
-                <td class="number-cell">0</td>
-                <td class="patterns-cell"></td>
-                <td class="number-cell issue-count-warning">1</td>
+                <td class="patterns-cell"><span class="badge">type_hints</span><span class="badge">decorators</span><span class="badge">context_managers</span></td>
+                <td class="number-cell issue-count-ok">0</td>
             </tr>
             
             <tr>
-                <td class="file-cell" title="/private/var/folders/l5/5t5z6z8d0tn3pth_0f7970q40000gn/T/pytest-of-mini/pytest-334/test_result_to_dict0/main.py">main.py</td>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/agent_brain.py">agent_brain.py</td>
+                <td class="number-cell">133</td>
                 <td class="number-cell">5</td>
                 <td class="number-cell">1</td>
-                <td class="number-cell">0</td>
-                <td class="patterns-cell"></td>
-                <td class="number-cell issue-count-warning">1</td>
+                <td class="patterns-cell"><span class="badge">type_hints</span><span class="badge">decorators</span><span class="badge">context_managers</span></td>
+                <td class="number-cell issue-count-ok">0</td>
             </tr>
             
             <tr>
-                <td class="file-cell" title="/private/var/folders/l5/5t5z6z8d0tn3pth_0f7970q40000gn/T/pytest-of-mini/pytest-334/test_result_to_dict0/subdir/module.py">module.py</td>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/security_audit.py">security_audit.py</td>
+                <td class="number-cell">224</td>
+                <td class="number-cell">5</td>
+                <td class="number-cell">1</td>
+                <td class="patterns-cell"><span class="badge">type_hints</span><span class="badge">context_managers</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/reporter.py">reporter.py</td>
+                <td class="number-cell">518</td>
+                <td class="number-cell">10</td>
+                <td class="number-cell">2</td>
+                <td class="patterns-cell"><span class="badge">template_method</span><span class="badge">dataclasses</span><span class="badge">type_hints</span><span class="badge">+2</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/analyzer.py">analyzer.py</td>
+                <td class="number-cell">310</td>
+                <td class="number-cell">10</td>
+                <td class="number-cell">2</td>
+                <td class="patterns-cell"><span class="badge">template_method</span><span class="badge">dataclasses</span><span class="badge">type_hints</span><span class="badge">+2</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/__init__.py">__init__.py</td>
+                <td class="number-cell">76</td>
+                <td class="number-cell">0</td>
+                <td class="number-cell">0</td>
+                <td class="patterns-cell"><span class="badge">context_managers</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/llm_inference.py">llm_inference.py</td>
+                <td class="number-cell">169</td>
+                <td class="number-cell">6</td>
+                <td class="number-cell">1</td>
+                <td class="patterns-cell"><span class="badge">type_hints</span><span class="badge">context_managers</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/pipeline.py">pipeline.py</td>
+                <td class="number-cell">454</td>
+                <td class="number-cell">18</td>
+                <td class="number-cell">4</td>
+                <td class="patterns-cell"><span class="badge">template_method</span><span class="badge">dataclasses</span><span class="badge">type_hints</span><span class="badge">+2</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/knowledge_search.py">knowledge_search.py</td>
+                <td class="number-cell">176</td>
+                <td class="number-cell">7</td>
+                <td class="number-cell">1</td>
+                <td class="patterns-cell"><span class="badge">factory</span><span class="badge">type_hints</span><span class="badge">context_managers</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/mcp_explorer.py">mcp_explorer.py</td>
+                <td class="number-cell">223</td>
+                <td class="number-cell">5</td>
+                <td class="number-cell">1</td>
+                <td class="patterns-cell"><span class="badge">decorators</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/main.py">main.py</td>
+                <td class="number-cell">171</td>
                 <td class="number-cell">3</td>
                 <td class="number-cell">0</td>
-                <td class="number-cell">1</td>
-                <td class="patterns-cell"></td>
-                <td class="number-cell issue-count-warning">2</td>
+                <td class="patterns-cell"><span class="badge">type_hints</span><span class="badge">context_managers</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/Users/4d/Documents/GitHub/codomyrmex/projects/test_project/src/visualizer.py">visualizer.py</td>
+                <td class="number-cell">568</td>
+                <td class="number-cell">12</td>
+                <td class="number-cell">2</td>
+                <td class="patterns-cell"><span class="badge">factory</span><span class="badge">template_method</span><span class="badge">dataclasses</span><span class="badge">+3</span></td>
+                <td class="number-cell issue-count-ok">0</td>
             </tr>
             </tbody>
                 </table>
-            </div>
-            
-        </div>
-        
-        <div class="section">
-            <h2>⚠️ Issues Found (4)</h2>
-            <div class="issues-list">
-            <div class="issue-item">
-                <span class="issue-severity" style="background: #667eea">INFO</span>
-                <span class="issue-file">utils.py:3</span>
-                <span class="issue-message">Missing function or method docstring</span>
-            </div>
-            
-            <div class="issue-item">
-                <span class="issue-severity" style="background: #667eea">INFO</span>
-                <span class="issue-file">main.py:3</span>
-                <span class="issue-message">Missing function or method docstring</span>
-            </div>
-            
-            <div class="issue-item">
-                <span class="issue-severity" style="background: #667eea">INFO</span>
-                <span class="issue-file">module.py:3</span>
-                <span class="issue-message">Missing class docstring</span>
-            </div>
-            
-            <div class="issue-item">
-                <span class="issue-severity" style="background: #ffa500">WARNING</span>
-                <span class="issue-file">module.py:3</span>
-                <span class="issue-message">Too few public methods (0/2)</span>
-            </div>
             </div>
             
         </div>

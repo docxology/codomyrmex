@@ -335,6 +335,7 @@ dev = [
     "hypothesis>=6.151.9",
     "sarif-tools>=3.0.0",
     "desloppify[full]>=0.9.14",
+    "import-linter>=2.0",
 ]
 docs = [
     "mkdocs>=1.6.1",
@@ -730,3 +731,39 @@ do_not_mutate = [
 also_copy = ["src/codomyrmex/tests/unit/mcp/", "src/codomyrmex/tests/unit/agents/", "src/codomyrmex/tests/unit/validation/", "src/codomyrmex/tests/unit/security/", "src/codomyrmex/tests/unit/orchestrator/", "src/codomyrmex/tests/unit/events/", "src/codomyrmex/tests/unit/cache/", "src/codomyrmex/tests/unit/concurrency/", "conftest.py"]
 pytest_add_cli_args = ["--no-cov", "-p", "no:timeout", "-p", "no:benchmark", "--override-ini=addopts=", "--rootdir=.."]
 debug = false
+
+# LP5 leverage point (Meadows "rules of the system"): enforce the
+# Foundation → Core → Service → Application layering documented in CLAUDE.md
+# and docs/reference/inventory.md. Without this gate the layering exists only
+# as prose. Run locally: `uv run lint-imports --config pyproject.toml`
+[tool.importlinter]
+root_packages = ["codomyrmex"]
+include_external_packages = false
+
+[[tool.importlinter.contracts]]
+name = "Foundation/Core/Service/Application layering"
+type = "layers"
+layers = [
+  "codomyrmex.cli : codomyrmex.system_discovery",
+  "codomyrmex.ci_cd_automation : codomyrmex.documentation : codomyrmex.containerization : codomyrmex.orchestrator",
+  "codomyrmex.agents : codomyrmex.coding : codomyrmex.llm : codomyrmex.git_operations : codomyrmex.crypto",
+  "codomyrmex.logging_monitoring : codomyrmex.environment_setup : codomyrmex.model_context_protocol : codomyrmex.terminal_interface : codomyrmex.exceptions",
+]
+# Day-1 carve-outs: 5 known violations already flagged with `# review:layering`
+# comments in source. The gate enforces "no new violations" while these get
+# addressed. Remove each entry once the underlying file is fixed.
+ignore_imports = [
+  # TODO: layering — remove after fix (terminal_interface/shells/_shell_demo.py:156)
+  "codomyrmex.terminal_interface.shells._shell_demo -> codomyrmex.coding",
+  # TODO: layering — remove after fix (agents/planner/plan_evaluator.py:19)
+  "codomyrmex.agents.planner.plan_evaluator -> codomyrmex.orchestrator.workflows.workflow_engine",
+  # TODO: layering — remove after fix (agents/planner/feedback_loop.py:24)
+  "codomyrmex.agents.planner.feedback_loop -> codomyrmex.orchestrator.workflows.workflow_engine",
+  # TODO: layering — remove after fix (agents/hermes/mcp_tools.py:1930)
+  "codomyrmex.agents.hermes.mcp_tools -> codomyrmex.orchestrator.integration",
+  # NOTE: agents/droid/generators/documentation.py has `# review:layering` markers
+  # for imports of codomyrmex.documentation.quality.* but those imports live inside
+  # generator-string test bodies and are invisible to grimp's static graph, so no
+  # ignore entry is needed today. If the imports get hoisted to module scope, add
+  # them here.
+]

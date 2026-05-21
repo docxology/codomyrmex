@@ -1,6 +1,6 @@
 # Cognitive Security: Epistemic Defense and Information Warfare
 
-**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Security Epistemics
+**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Security Epistemics | **Last Updated**: March 2026
 
 ## The Theory
 

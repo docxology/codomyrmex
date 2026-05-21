@@ -26,6 +26,6 @@ Modules that wish to expose prompt engineering capabilities via MCP should wrap 
 
 ## Navigation
 
-- **Parent**: [README.md](README.md)
-- **API Spec**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
-- **PAI Integration**: [PAI.md](PAI.md)
+- **Parent**: [README.md](readme.md)
+- **API Spec**: [API_SPECIFICATION.md](api_specification.md)
+- **PAI Integration**: [PAI.md](../../../../../../docs/modules/prompt_engineering/PAI.md)

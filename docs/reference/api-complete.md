@@ -305,7 +305,7 @@ class RepositoryManager:
 ## 📋 Pattern Matching API
 
 ### **Repository Analysis**
-**Source**: `src/codomyrmex/pattern_matching/run_codomyrmex_analysis.py`
+**Source**: `src/codomyrmex/coding/pattern_matching/run_codomyrmex_analysis.py`
 
 ```python
 def analyze_repository_path(path_to_analyze: str, relative_output_dir_name: str,

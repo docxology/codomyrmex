@@ -1,6 +1,6 @@
 # Immune Systems and Digital Defense
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md)
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Last Updated**: March 2026
 
 The immune system must detect and neutralize an unbounded space of pathogens while tolerating the body's own tissues and commensal microbiota. This discrimination problem — distinguishing dangerous from benign — maps directly onto central challenges in software security.
 

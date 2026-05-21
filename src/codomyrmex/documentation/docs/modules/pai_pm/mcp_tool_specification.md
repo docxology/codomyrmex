@@ -2,7 +2,7 @@
 
 ## Overview
 
-PAI Project Manager server lifecycle and HTTP API. Auto-discovered from [`mcp_tools.py`](mcp_tools.py). Category: `pai_pm`.
+PAI Project Manager server lifecycle and HTTP API. Auto-discovered from [`mcp_tools.py`](../../../../../../src/codomyrmex/pai_pm/mcp_tools.py). Category: `pai_pm`.
 
 ## Tools
 

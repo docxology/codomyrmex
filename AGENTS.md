@@ -50,7 +50,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 
 ## Development Guidelines
 
-- **Zero-Mock Policy:** All tests must use real components. No mocks.
+- **Zero-Mock Policy:** All tests must use real components. No mocks. Narrow `monkeypatch.setenv`/`delenv`/`chdir` and `tmp_path` fixtures are permitted for test-input isolation — see [docs/development/testing-strategy.md § Zero-Mock Policy (clarified)](docs/development/testing-strategy.md#zero-mock-policy-clarified) and [issue #175](https://github.com/docxology/codomyrmex/issues/175).
 - **Coverage Gate:** **40%** line coverage (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI and `make test` pass `--cov-fail-under=40`; plain `uv run pytest` skips coverage for speed. Experimental `meme/` is omitted from `[tool.coverage.run]` (see `pyproject.toml`). New work must not drop below the floor when measured with `--cov`.
 - **Documentation:** Maintain `AGENTS.md`, `README.md`, and `SPEC.md` parity on structural changes.
 - **Generated leaf docs:** Thousands of per-folder `AGENTS.md` / `README.md` files are produced by tooling, not by hand.

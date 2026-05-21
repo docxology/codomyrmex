@@ -257,6 +257,30 @@ def test_something():
     # What are we actually testing?
 ```
 
+### Zero-Mock Policy (clarified)
+
+The Zero-Mock Policy distinguishes **two kinds of test interventions**. The hazard the policy was authored to prevent is *verification theater* — tests that pass against fake behavior the production code doesn't actually exhibit. Controlling test-time inputs (environment variables, temp dirs, optional dependency availability) is **not** the same thing as faking behavior, and the policy reflects that distinction.
+
+**Disallowed (prohibited):**
+
+- `unittest.mock.Mock`, `MagicMock`, `patch` — substituting fake objects for real ones
+- `pytest-mock` (third-party mocking framework)
+- `monkeypatch.setattr(<module>, "<method>", lambda ...)` — replacing methods with stubs that change behavior
+- Hand-rolled fake clients that bypass the real implementation and silently change return shapes
+- Test doubles that mask real network/IO failures the production code would surface
+
+**Allowed when narrowly scoped:**
+
+- `monkeypatch.setenv` / `monkeypatch.delenv` — environment variable isolation. Tests that depend on environment state MUST use this rather than mutating `os.environ` directly so cleanup is automatic. See `src/codomyrmex/tests/unit/utils/test_utils_core.py` for the canonical `get_env` pattern.
+- `monkeypatch.chdir` — temporary working directory changes
+- `tmp_path`, `tmp_path_factory` — pytest tempdir fixtures
+- `FakeLLMClient`, `FakeSwarm`, or similar named test doubles when the real service is unavailable and the test exercises higher-layer logic. These MUST be explicitly named `Fake*` (not `Mock*`), live in a `tests/_fakes/` or `tests/_doubles/` location, and document what production behavior they preserve.
+- `@pytest.mark.skipif(...)` guards for tests that require optional dependencies (e.g., `z3`, Ollama, network access)
+
+**Verification:** `import-linter` enforces the layering boundary so test doubles cannot smuggle through layer violations. CI also greps test files for forbidden imports (`unittest.mock`, `pytest_mock`) via the `lint` job.
+
+**Why this distinction matters:** Environment isolation (`monkeypatch.setenv`) doesn't change the behavior of the code under test — it just controls test-time inputs. Behavior mocking does, and is the actual hazard. See [issue #175](https://github.com/docxology/codomyrmex/issues/175) for the resolution thread.
+
 ## ⚡ Running Tests
 
 ### **Local Development**

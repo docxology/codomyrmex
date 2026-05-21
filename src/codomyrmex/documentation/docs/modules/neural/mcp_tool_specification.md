@@ -77,4 +77,4 @@ result = attention_forward(seq_len=10, d_model=64, n_heads=8)
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/neural/SPEC.md)

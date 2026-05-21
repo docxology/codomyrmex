@@ -2,7 +2,7 @@
 
 ## Overview
 
-Named pipeline DAG create/execute. Auto-discovered from [`mcp_tools.py`](mcp_tools.py).
+Named pipeline DAG create/execute. Auto-discovered from [`mcp_tools.py`](../../../../../../src/codomyrmex/ml_pipeline/mcp_tools.py).
 
 ## Tool: `ml_pipeline_create`
 

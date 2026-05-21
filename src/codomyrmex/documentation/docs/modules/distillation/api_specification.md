@@ -35,4 +35,4 @@ loss = distillation_loss(student_logits, teacher_logits, labels, temperature=3.0
 
 ## 4. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/distillation/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/distillation/PAI.md)

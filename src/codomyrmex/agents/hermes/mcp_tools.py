@@ -1925,6 +1925,7 @@ def hermes_spawn_agent(
         dict with status, role, agent, result (or error).
     """
     try:
+        # TODO(layering): tracked via pyproject.toml [tool.importlinter] ignore_imports — see CLAUDE.md "Architecture Overview" → Layer Hierarchy.
         from codomyrmex.orchestrator.integration import AgentOrchestrator
 
         profile = capability_profile or {role: [role]}

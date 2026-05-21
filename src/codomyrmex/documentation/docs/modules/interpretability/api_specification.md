@@ -35,4 +35,4 @@ print(f"Active features: {analysis['num_active_features']}")
 
 ## 4. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/interpretability/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/interpretability/PAI.md)

@@ -91,4 +91,4 @@ result = slm_forward(batch_size=2, seq_len=16, d_model=64, n_heads=4)
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/slm/SPEC.md)

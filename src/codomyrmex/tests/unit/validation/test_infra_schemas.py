@@ -1,7 +1,7 @@
 """
 Unit tests for validation.schemas.infra — Zero-Mock compliant.
 
-Covers: DeploymentStatus (all 6 values), PipelineStatus (all 5 values),
+Covers: DeploymentStatus (all 10 values), PipelineStatus (all 5 values),
 MetricType (all 4 values), Deployment (defaults, to_dict), Pipeline (defaults,
 to_dict), Resource (defaults, to_dict), BuildArtifact (defaults, to_dict),
 Metric (defaults, to_dict), WorkflowStep (defaults, to_dict).
@@ -31,6 +31,18 @@ class TestDeploymentStatus:
     def test_pending_value(self):
         assert DeploymentStatus.PENDING.value == "pending"
 
+    def test_running_value(self):
+        assert DeploymentStatus.RUNNING.value == "running"
+
+    def test_success_value(self):
+        assert DeploymentStatus.SUCCESS.value == "success"
+
+    def test_failure_value(self):
+        assert DeploymentStatus.FAILURE.value == "failure"
+
+    def test_cancelled_value(self):
+        assert DeploymentStatus.CANCELLED.value == "cancelled"
+
     def test_in_progress_value(self):
         assert DeploymentStatus.IN_PROGRESS.value == "in_progress"
 
@@ -46,8 +58,9 @@ class TestDeploymentStatus:
     def test_rolled_back_value(self):
         assert DeploymentStatus.ROLLED_BACK.value == "rolled_back"
 
-    def test_six_members(self):
-        assert len(DeploymentStatus) == 6
+    def test_member_count(self):
+        # Canonical enum covers deployment, ci_cd_automation, and config_management.
+        assert len(DeploymentStatus) == 10
 
 
 # ── PipelineStatus ────────────────────────────────────────────────────

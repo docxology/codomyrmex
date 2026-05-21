@@ -1,3 +1,11 @@
+"""Codomyrmex CLI core entry point.
+
+Wires the ``codomyrmex`` command via :mod:`fire`, importing handlers from
+``codomyrmex.cli.handlers`` and exposing the full CLI surface (environment
+checks, AI generation, project build, FPF, orchestration, skills, etc.).
+This is the module referenced by ``[project.scripts]`` in ``pyproject.toml``.
+"""
+
 import json
 import sys
 

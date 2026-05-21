@@ -58,4 +58,4 @@ output = block(x)
 
 ## 4. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/neural/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/neural/PAI.md)

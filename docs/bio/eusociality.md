@@ -1,6 +1,6 @@
 # Eusociality and the Division of Labor
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md)
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Last Updated**: March 2026
 
 Eusociality represents the most complex form of social organization in the animal kingdom. Its structural principles — cooperative brood care, overlapping generations, and reproductive division of labor — provide a rigorous biological framework for reasoning about multi-agent software architectures.
 

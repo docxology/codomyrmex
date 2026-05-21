@@ -28,4 +28,4 @@ limits = tuner.recommend(cpu_usage=[0.3, 0.5, 0.8], memory_mb=[256, 512, 384])
 
 ## 4. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/container_optimization/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/container_optimization/PAI.md)

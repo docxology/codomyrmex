@@ -42,7 +42,7 @@ PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on 
 │  └─────────────────────────────────┘  │
 │                                      │
 │  ┌─────────────────────────────────┐  │
-│  │ 126 Codomyrmex Modules          │  │
+│  │ 128 Codomyrmex Modules          │  │
 │  │ (coding, llm, security, ...)    │  │
 │  └─────────────────────────────────┘  │
 └──────────────────────────────────────┘

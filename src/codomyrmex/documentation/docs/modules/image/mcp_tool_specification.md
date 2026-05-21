@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lightweight image format introspection (local files). Auto-discovered from [`mcp_tools.py`](mcp_tools.py). Category: `image`.
+Lightweight image format introspection (local files). Auto-discovered from [`mcp_tools.py`](../../../../../../src/codomyrmex/image/mcp_tools.py). Category: `image`.
 
 ## Tool: `image_detect_format`
 

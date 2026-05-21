@@ -2,7 +2,7 @@
 
 ## Overview
 
-Docker image analysis and resource tuning. Auto-discovered from [`mcp_tools.py`](mcp_tools.py). Category: `container_optimization`. Requires Docker when exercising image/container paths.
+Docker image analysis and resource tuning. Auto-discovered from [`mcp_tools.py`](../../../../../../src/codomyrmex/container_optimization/mcp_tools.py). Category: `container_optimization`. Requires Docker when exercising image/container paths.
 
 ## Tool: `container_optimization_analyze`
 

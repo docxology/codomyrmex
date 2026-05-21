@@ -1,6 +1,6 @@
 # Metabolism, Energy Budgets, and Resource Flow
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Topic**: Energy Economics and Scaling Laws
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Topic**: Energy Economics and Scaling Laws | **Last Updated**: March 2026
 
 ## The Biology
 

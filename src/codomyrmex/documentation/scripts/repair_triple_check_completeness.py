@@ -167,7 +167,9 @@ def _required_sibling_names(file_name: str) -> tuple[str, ...]:
 def _ensure_references(content: str, path: Path) -> tuple[str, bool]:
     """Ensure required sibling-document names appear somewhere in the file."""
 
-    missing = [name for name in _required_sibling_names(path.name) if name not in content]
+    missing = [
+        name for name in _required_sibling_names(path.name) if name not in content
+    ]
     if not missing:
         return content, False
 
@@ -189,7 +191,9 @@ def _ensure_navigation(content: str, path: Path, repo_root: Path) -> tuple[str, 
 
     parent_readme = path.parent.parent / "README.md"
     if parent_readme.exists() and parent_readme != path:
-        lines.append(f"- **Parent**: {_markdown_link(path, parent_readme, '../README.md')}")
+        lines.append(
+            f"- **Parent**: {_markdown_link(path, parent_readme, '../README.md')}"
+        )
 
     for name in _required_sibling_names(path.name):
         label = name.removesuffix(".md").title()
@@ -197,7 +201,9 @@ def _ensure_navigation(content: str, path: Path, repo_root: Path) -> tuple[str, 
 
     root_readme = repo_root / "README.md"
     if root_readme.exists() and root_readme != path:
-        lines.append(f"- **Repository Root**: {_markdown_link(path, root_readme, 'README.md')}")
+        lines.append(
+            f"- **Repository Root**: {_markdown_link(path, root_readme, 'README.md')}"
+        )
 
     return content.rstrip() + "\n" + "\n".join(lines) + "\n", True
 
@@ -224,7 +230,9 @@ def _ensure_maintenance_notes(content: str) -> tuple[str, bool]:
     return content.rstrip() + "\n" + block.lstrip(), True
 
 
-def repair_content(content: str, path: Path, repo_root: Path) -> tuple[str, RepairStats]:
+def repair_content(
+    content: str, path: Path, repo_root: Path
+) -> tuple[str, RepairStats]:
     """Repair one document and return updated content plus stats."""
 
     stats = RepairStats(scanned=1)
@@ -255,7 +263,9 @@ def repair_content(content: str, path: Path, repo_root: Path) -> tuple[str, Repa
     return content, stats
 
 
-def repair_tree(repo_root: Path, dry_run: bool, include_submodules: bool) -> RepairStats:
+def repair_tree(
+    repo_root: Path, dry_run: bool, include_submodules: bool
+) -> RepairStats:
     """Repair all documentation files under repo_root."""
 
     repo_root = repo_root.resolve()

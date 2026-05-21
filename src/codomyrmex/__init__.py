@@ -311,7 +311,6 @@ __all__ = [
     "templating",
     "terminal_interface",
     "testing",
-    "tests",
     "text_to_sql",
     "tokenizer",
     "tool_use",

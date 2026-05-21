@@ -1,6 +1,6 @@
 # Industrialization: Process Engineering for Cognitive Systems at Scale
 
-**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Process Engineering and Production Systems
+**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Process Engineering and Production Systems | **Last Updated**: March 2026
 
 ## The Theory
 

@@ -16,6 +16,8 @@ from codomyrmex.agents.planner.feedback_config import FeedbackConfig
 from codomyrmex.agents.planner.plan_engine import Plan, PlanEngine, PlanTask, TaskState
 from codomyrmex.agents.planner.plan_evaluator import PlanEvaluator, PlanScore
 from codomyrmex.logging_monitoring import get_logger
+
+# TODO(layering): tracked via pyproject.toml [tool.importlinter] ignore_imports — see CLAUDE.md "Architecture Overview" → Layer Hierarchy.
 from codomyrmex.orchestrator.workflows.workflow_engine import (
     WorkflowResult,
     WorkflowRunner,

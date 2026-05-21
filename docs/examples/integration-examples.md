@@ -1,5 +1,7 @@
 # Integration Examples Guide
 
+> **Status: stale (2026-05).** The shell pipelines referenced below (`scripts/examples/integration/*.sh`) were retired during the orchestrator consolidation and **do not exist on disk**. Likewise, the Python snippets import `codomyrmex.project_orchestration`, which has been renamed to `codomyrmex.orchestrator` (see `src/codomyrmex/orchestrator/__init__.py`). For current runnable demos, see `src/codomyrmex/examples/agent_orchestration_demo.py` and `src/codomyrmex/examples/ambitious_swarm_demo.py`. The rest of this page is preserved for historical reference until the integration-demo set is rebuilt.
+
 Documentation for integration examples demonstrating multi-module workflows and coordination patterns.
 
 ## Overview

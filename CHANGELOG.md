@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`HermesClient.scaffold_fastmcp()`**: New client helper that resolves and executes the scaffold script with overwrite protection.
 - **`hermes_fastmcp_scaffold` MCP tool**: Exposes FastMCP scaffolding through the Hermes MCP surface.
 - **DAF Paperclip release milestone**: `projects/daf-consulting` advanced to `v0.4.1` with health-attempt telemetry artifacts, executable bootstrap artifact audit CLI, and end-to-end zero-mock CLI coverage for setup/audit flows.
+- **Import-linter contract (LP5)**: `pyproject.toml` now declares a 4-layer architectural contract (Foundation → Core → Service → Application) enforced via `uv run lint-imports`. 5 known violations carved out with TODO comments for follow-up.
+- **`config_management.defaults` constants**: Three new constants centralize hardcoded URLs — `DEFAULT_PAPERCLIP_URL`, `DEFAULT_VIDEO_TRANSCRIPTION_URL`, `DEFAULT_CORS_ALLOWED_ORIGINS`. All resolve via `os.getenv()` for env-var overrides.
+- **Version stamp headers** on `docs/PAI_DASHBOARD.md`, `docs/DEPENDENCIES.md`, `docs/index.md` (previously missing).
+- **Doc frontmatter `Last Updated`** field added to all 7 `docs/cognitive/*.md` + 11 `docs/bio/*.md` files (previously had it only in `docs/agi/`).
+- **Cross-link** between `docs/bio/superorganism.md` and `docs/agi/the_colony_thesis.md`.
 
 ### Changed
 
@@ -25,11 +30,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Makefile**: `verify-release` target runs `lint`, `type-check`, and `test` (40% gate).
 - **Code Health & Zero-Mock Enforcement**: Resolved 446 `ruff` diagnostic errors across the ecosystem. Enforced strict Zero-Mock compliance by removing legacy mock-dependent test adapters for the `open_gauss` agent.
 - **Paperclip workspace surfaces**: Root and `projects/` docs now explicitly track Paperclip adapter/integration workspaces; `projects/hermes-paperclip-adapter` is treated as an intentional standalone nested repository pending writable upstream publication.
+- **Doc version stamps** harmonized to v1.2.7 across all 19 `docs/` subdirectories (previously 14 were stale at v1.2.3).
+- **`docs/reference/inventory.md`** — timestamp refreshed (2026-05-13 → 2026-05-21); `Markdown files under docs/` count updated 1,164 → 1,172 (caught drift).
+- **`docs/pai/tools-reference.md`** — static-tool count corrected 22 → 20 (matches `TOOL_DEFINITIONS` length empirically).
+- **`docs/AGENTS.md`** — "200+ markdown files" → "1,172" with link to `inventory.md`.
+- **`docs/index.md`** — "15-tab SPA dashboard" → "14-tab" + link to `PAI_DASHBOARD.md` (matches the canonical 14-subsystem list).
+- **`docs/agi/`** module-count contradictions reconciled to 128 across `scaffolding.md` (line 17), `the_colony_thesis.md` (lines 173, 218), `recursive_self_improvement.md` (line 82); `memory_and_continuity.md` heading "Four-Tier" → "Five-Tier" to match content.
+- **`docs/bio/myrmecology.md`** — Formicidae species count corrected from "over 22,000 described" to "over 14,000 valid extant species (Bolton 2024 / AntCat), with several thousand additional subspecies and fossil taxa" (the 22k figure conflated extant + subspecific + fossil taxa).
+- **`docs/agi/emergence_and_scale.md`** line 21: clarified bond-percolation vs site-percolation interpretation of Molloy-Reed threshold.
+- **`docs/cognitive/active_inference.md`** line 11: added "F measured in nats; multiply by 1/ln 2 ≈ 1.443 for bits" units clarification.
+- **`docs/agi/the_colony_thesis.md`** line 79: added Hofstadter strange-loop vs tangled-hierarchy distinction.
+- **`projects/test_project/src/llm_inference.py`**: `OllamaModel.get()` (dict access on dataclass) → `getattr()`; `OllamaManager.list_models()` now returns 7 models on systems with Ollama running (was 0); `TaskDecomposer.decompose()` called with `description` string instead of `Task` object (decomposer uses `.lower()` internally).
+- **`projects/test_project/src/security_audit.py`**: `SystemDiscovery.discover_modules()` (missing method) → `scan_system()`.
+- **`projects/test_project/src/mcp_explorer.py`**: `MCPDiscovery.discover()` → `scan_package() + list_tools()`; `generate_taxonomy_report()` and `categorize_all_tools()` now passed required `tool_names` arg; `SkillRegistry.list_skills()` → `build_index() + get_categories()`.
+- **`projects/test_project/src/knowledge_search.py`**: `verify_constraints()` now uses `importlib.util.find_spec("z3")` guard, returns clean error message instead of `NameError: name 'z3' is not defined`.
+- **`projects/test_project/src/{README,SPEC,PAI}.md`**: regenerated content from boilerplate "Validation coverage" stub to accurate descriptions of the zero-mock reference implementation; `SPEC.md` mermaid diagram now includes the 6 integration-layer modules (`agent_brain`, `git_workflow`, `knowledge_search`, `security_audit`, `mcp_explorer`, `llm_inference`); `PAI.md` tree expanded from 5 to 11 src files.
+- **`src/codomyrmex/agentic_memory/core/memory.py`**: hardcoded `http://localhost:11434/api/embed` → `os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")` per "No silent fallbacks" + "No hardcoded values" policies.
+- **`src/codomyrmex/agentic_memory/memory.py`**: 528-line byte-near-identical duplicate of `core/memory.py` collapsed to 19-line re-export shim. Surfaced and fixed a latent `rr.relevance` → `rr.relevance_score` `AttributeError` carried by the old duplicate.
+- **`src/codomyrmex/cli/core.py`**: module docstring added (entry point listed in `[project.scripts]`).
+- **`src/codomyrmex/cli/mcp_tools.py`** + **`src/codomyrmex/agents/pai/trust_gateway.py`**: docstring capitalizations + stale line-reference comment removal.
+- **`src/codomyrmex/__init__.py`**: `"tests"` removed from `__all__` (kept in `_submodules` lazy-load list for legitimate internal use).
+- **`src/codomyrmex/video/transcription.py`**: `_DEFAULT_API_URL` now reads `os.getenv("VIDEO_TRANSCRIPTION_URL", DEFAULT_VIDEO_TRANSCRIPTION_URL)`.
+- **`src/codomyrmex/agents/paperclip/{paperclip_api_client,paperclip_client,mcp_tools}.py`**: 4 hardcoded `http://localhost:3100` defaults replaced with `base_url or os.getenv("PAPERCLIP_BASE_URL", DEFAULT_PAPERCLIP_URL)` sentinel pattern.
+- **`src/codomyrmex/website/server.py`**: CORS allow-list now reads `os.getenv("CORS_ALLOWED_ORIGINS", DEFAULT_CORS_ALLOWED_ORIGINS)`.
+- **`src/codomyrmex/website/pai_mixin.py`**: localhost host now reads `os.getenv("PM_SERVER_HOST", "localhost")`.
 
 ### Tests
 
 - Added unit coverage for FastMCP scaffolding in `test_new_client_methods.py` and `test_new_mcp_tools.py` (real filesystem writes; no mocks).
 - `secrets_tests/test_secrets.py`: regression test that `generate_secret` leaves stdlib `secrets.randbits` and `numpy.random` usable.
+
+### Documentation
+
+- **Deep-review pass (rounds 1+2)**: 8 specialist + 7 specialist agent dispatches across two rounds; 95+ files modified outside the pre-existing Docusaurus mirror; ~16/16 round-2 ISCs `[x]` with quoted artifacts in `~/.claude/PAI/MEMORY/WORK/codomyrmex-deep-review-2026-05-21/ISA.md`.
 
 ---
 

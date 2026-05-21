@@ -1,5 +1,7 @@
 # Dependency Compatibility Guide
 
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
+
 ## Installation
 
 ```bash

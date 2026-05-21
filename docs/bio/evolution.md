@@ -1,6 +1,6 @@
 # Evolution, Selection, and Fitness Landscapes
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md)
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Last Updated**: March 2026
 
 Evolution by natural selection is the only known process that reliably produces complex adaptive systems without centralized design. Its core logic — **variation, selection, inheritance** — applies wherever entities replicate with modification under differential survival, making evolutionary theory both an architectural metaphor and a direct algorithmic framework.
 

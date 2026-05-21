@@ -109,4 +109,4 @@ result = tokenizer_decode(token_ids=[72, 101, 108, 108, 111])
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/tokenizer/SPEC.md)

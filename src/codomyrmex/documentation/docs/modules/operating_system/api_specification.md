@@ -64,4 +64,4 @@ for p in processes:
 
 ## 4. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/operating_system/PAI.md)

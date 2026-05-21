@@ -77,4 +77,4 @@ result = rlhf_reward_score(d_state=16, batch_size=8)
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/rlhf/SPEC.md)

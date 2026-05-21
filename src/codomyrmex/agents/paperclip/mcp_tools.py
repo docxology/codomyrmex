@@ -6,9 +6,16 @@ All tools lazy-import the underlying clients to avoid circular dependencies.
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
+from codomyrmex.config_management.defaults import DEFAULT_PAPERCLIP_URL
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+
+
+def _resolve_paperclip_base_url(base_url: str | None) -> str:
+    """Resolve the Paperclip base URL from arg, env, or default."""
+    return base_url or os.getenv("PAPERCLIP_BASE_URL", DEFAULT_PAPERCLIP_URL)
 
 
 @mcp_tool(
@@ -60,13 +67,14 @@ def paperclip_execute(
     ),
 )
 def paperclip_list_companies(
-    base_url: str = "http://localhost:3100",
+    base_url: str | None = None,
     api_key: str | None = None,
 ) -> dict[str, Any]:
     """list companies from the Paperclip API.
 
     Args:
-        base_url: Paperclip server URL.
+        base_url: Paperclip server URL. Defaults to ``$PAPERCLIP_BASE_URL``
+            or ``DEFAULT_PAPERCLIP_URL``.
         api_key: Optional bearer token.
 
     Returns:
@@ -77,7 +85,8 @@ def paperclip_list_companies(
             PaperclipAPIClient,
         )
 
-        client = PaperclipAPIClient(base_url=base_url, api_key=api_key)
+        resolved_base_url = _resolve_paperclip_base_url(base_url)
+        client = PaperclipAPIClient(base_url=resolved_base_url, api_key=api_key)
         return {"status": "success", "data": client.list_companies()}
     except Exception as exc:
         return {"status": "error", "data": None, "error": str(exc)}
@@ -91,7 +100,7 @@ def paperclip_create_issue(
     company_id: str,
     title: str,
     description: str | None = None,
-    base_url: str = "http://localhost:3100",
+    base_url: str | None = None,
     api_key: str | None = None,
 ) -> dict[str, Any]:
     """Create an issue in a Paperclip company.
@@ -100,7 +109,8 @@ def paperclip_create_issue(
         company_id: Company identifier.
         title: Issue title.
         description: Optional issue description.
-        base_url: Paperclip server URL.
+        base_url: Paperclip server URL. Defaults to ``$PAPERCLIP_BASE_URL``
+            or ``DEFAULT_PAPERCLIP_URL``.
         api_key: Optional bearer token.
 
     Returns:
@@ -111,7 +121,8 @@ def paperclip_create_issue(
             PaperclipAPIClient,
         )
 
-        client = PaperclipAPIClient(base_url=base_url, api_key=api_key)
+        resolved_base_url = _resolve_paperclip_base_url(base_url)
+        client = PaperclipAPIClient(base_url=resolved_base_url, api_key=api_key)
         result = client.create_issue(
             company_id=company_id,
             title=title,
@@ -130,14 +141,15 @@ def paperclip_create_issue(
 )
 def paperclip_trigger_heartbeat(
     agent_id: str,
-    base_url: str = "http://localhost:3100",
+    base_url: str | None = None,
     api_key: str | None = None,
 ) -> dict[str, Any]:
     """Trigger a heartbeat via the Paperclip API.
 
     Args:
         agent_id: Agent identifier.
-        base_url: Paperclip server URL.
+        base_url: Paperclip server URL. Defaults to ``$PAPERCLIP_BASE_URL``
+            or ``DEFAULT_PAPERCLIP_URL``.
         api_key: Optional bearer token.
 
     Returns:
@@ -148,7 +160,8 @@ def paperclip_trigger_heartbeat(
             PaperclipAPIClient,
         )
 
-        client = PaperclipAPIClient(base_url=base_url, api_key=api_key)
+        resolved_base_url = _resolve_paperclip_base_url(base_url)
+        client = PaperclipAPIClient(base_url=resolved_base_url, api_key=api_key)
         result = client.trigger_heartbeat(agent_id=agent_id)
         return {"status": "success", "data": result}
     except Exception as exc:

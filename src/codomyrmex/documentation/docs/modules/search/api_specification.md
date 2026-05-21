@@ -132,6 +132,6 @@ Empty queries return empty result lists without raising.
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
-- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
+- **Human Documentation**: [README.md](readme.md)
+- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](mcp_tool_specification.md)
 - **Parent Directory**: [codomyrmex](../README.md)

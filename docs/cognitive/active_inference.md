@@ -1,12 +1,14 @@
 # Active Inference: The Free Energy Principle in Executable Code
 
-**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Computational Neuroscience
+**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Computational Neuroscience | **Last Updated**: March 2026
 
 ## The Theory
 
 Karl Friston's free energy principle (2006, 2010) proposes that biological systems maintain their integrity by minimizing variational free energy -- an information-theoretic quantity that upper-bounds surprise. The variational free energy of a system is:
 
     F = -log P(o|s) + KL[q(s) || p(s)]
+
+(F measured in nats; multiply by 1/ln 2 ≈ 1.443 for bits)
 
 where P(o|s) is the likelihood of observations given hidden states, q(s) is the agent's approximate posterior (beliefs about states), and p(s) is the prior. The first term is *accuracy* (how well beliefs predict observations); the second is *complexity* (how far beliefs diverge from priors). Perception minimizes F by updating q(s) -- making beliefs more accurate. Action minimizes F by changing observations o -- making the world conform to predictions.
 

@@ -51,4 +51,4 @@ result = lora_apply(weight_shape=[768, 768], rank=8, alpha=16.0)
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/lora/SPEC.md)

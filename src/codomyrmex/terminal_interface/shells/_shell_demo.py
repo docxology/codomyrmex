@@ -149,6 +149,7 @@ class ShellDemoMixin:
     def _demo_code_execution(self):
         """Demo the code execution sandbox."""
         try:
+            # TODO(layering): tracked via pyproject.toml [tool.importlinter] ignore_imports — see CLAUDE.md "Architecture Overview" → Layer Hierarchy.
             from codomyrmex.coding import execute_code
 
             print("   🏃 Executing sample Python code in sandbox...")

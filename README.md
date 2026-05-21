@@ -26,7 +26,7 @@
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **600** production `@mcp_tool` lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **34,334** collected tests (`uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib`), **1,164** Markdown files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
+Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **600** production `@mcp_tool` lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **34,334** collected tests (`uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib`), **1,172** Markdown files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
 
 ```bash
 # Install
@@ -504,7 +504,7 @@ sequenceDiagram
 codomyrmex/
 ├── .github/                  # 37 GitHub Actions workflows, templates, docs
 ├── config/                   # 128 module-specific config.yaml files
-├── docs/                     # 1,164 Markdown files (see inventory); 18+ top-level sections
+├── docs/                     # 1,172 Markdown files (see inventory); 18+ top-level sections
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
@@ -542,7 +542,7 @@ codomyrmex/
 | **Total Modules** | 128 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
 | **Collected tests** | 34,334 (`uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib`) |
-| **Documentation Files** | 1,164 Markdown under `docs/` (`find docs -name '*.md'`) |
+| **Documentation Files** | 1,172 Markdown under `docs/` (`find docs -name '*.md'`) |
 | **GitHub Workflows** | 37 (`.github/workflows/*.yml`) |
 | **MCP Tools** | 600 (`@mcp_tool` lines, production tree) |
 | **`mcp_tools.py` files** | 149 (non-test) |
@@ -830,7 +830,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>128 modules · 600 MCP tools · 34,334 tests · 1,164 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>128 modules · 600 MCP tools · 34,334 tests · 1,172 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

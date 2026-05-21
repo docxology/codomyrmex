@@ -115,12 +115,12 @@ Examples below are illustrative; they are not live links in this file.
 
 ```markdown
 - **Internal Links**: Use relative paths to link to other documentation pages or assets.
-  - Same directory: [Link Text](./other-page.md)
-  - Subdirectory: [Link Text](./subdirectory/page.md)
-  - Parent directory: [Link Text](../parent-page.md)
-  - Heading anchor: [Link Text](./other-page.md#heading-id) (Docusaurus auto-generates heading IDs).
-- **External Links**: Use the full URL, e.g. [Docusaurus Website](https://docusaurus.io/).
-- **Asset Links** (paths are relative to `static/`): ![Alt Text](/img/codomyrmex_logo.png)
+  - Same directory: `[Link Text](./other-page.md)`
+  - Subdirectory: `[Link Text](./subdirectory/page.md)`
+  - Parent directory: `[Link Text](../parent-page.md)`
+  - Heading anchor: `[Link Text](./other-page.md#heading-id)` (Docusaurus auto-generates heading IDs).
+- **External Links**: Use the full URL, e.g. `[Docusaurus Website](https://docusaurus.io/)`.
+- **Asset Links** (paths are relative to `static/`): `![Alt Text](/img/codomyrmex_logo.png)`
 ```
 
 ### Images

@@ -1,5 +1,7 @@
 # PAI Control Dashboard Functionality Matrix
 
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
+
 The PAI Control Dashboard, orchestrating the `~/.claude/MEMORY` system via `PMServer.ts`, exposes an extensive GUI on `http://localhost:8888`. It acts as the primary cockpit for tracking cross-module tasks, LLM context windows, and structural awareness.
 
 ## 1. Global Navigation & Action Bar

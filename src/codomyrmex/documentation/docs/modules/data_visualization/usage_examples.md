@@ -252,7 +252,7 @@ A PNG file `heatmap_example.png` will be saved in the `./plot_outputs` directory
 
 The Data Visualization module also exposes its plotting functions as MCP tools. This allows AI agents or other Codomyrmex modules to request plot generation programmatically.
 
-Full details for each MCP tool, including all parameters, are available in the [MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md).
+Full details for each MCP tool, including all parameters, are available in the [MCP Tool Specification](mcp_tool_specification.md).
 
 Below are a couple of examples of how these tools might be invoked.
 
@@ -352,7 +352,7 @@ Below are a couple of examples of how these tools might be invoked.
 -   **Error Handling**: MCP tool calls will return an error structure in the JSON response if plot generation fails (e.g., due to invalid data or parameters). Check the `MCP_TOOL_SPECIFICATION.md` for details on error responses.
 -   **Data Types**: Ensure data passed in the `arguments` field matches the types specified in the `MCP_TOOL_SPECIFICATION.md` (e.g., arrays of numbers for `x_data`, `y_data`).
 
-For detailed specifications of all available MCP plotting tools, including `create_scatter_plot`, `create_histogram`, `create_pie_chart`, and `create_heatmap`, please refer to the [Data Visualization MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md).
+For detailed specifications of all available MCP plotting tools, including `create_scatter_plot`, `create_histogram`, `create_pie_chart`, and `create_heatmap`, please refer to the [Data Visualization MCP Tool Specification](mcp_tool_specification.md).
 
 ## Common Pitfalls & Troubleshooting
 

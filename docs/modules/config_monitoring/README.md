@@ -1,26 +1,26 @@
-# config_monitoring
+# Config Monitoring Module
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: May 2026
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Config Monitoring.
+`codomyrmex.config_monitoring` tracks configuration changes over time. It supports file hashing, change records, environment snapshots, drift detection, audit history, and watcher-based hot reload workflows.
 
-## Directory Contents
-- `README.md` – File
+## Source of Truth
+
+- Source implementation: [../../../src/codomyrmex/config_monitoring/](../../../src/codomyrmex/config_monitoring/)
+- Source README: [../../../src/codomyrmex/config_monitoring/README.md](../../../src/codomyrmex/config_monitoring/README.md)
+- Source SPEC: [../../../src/codomyrmex/config_monitoring/SPEC.md](../../../src/codomyrmex/config_monitoring/SPEC.md)
+- Source AGENTS: [../../../src/codomyrmex/config_monitoring/AGENTS.md](../../../src/codomyrmex/config_monitoring/AGENTS.md)
+
+## Operating Notes
+
+- Keep hashing deterministic and stream large files safely.
+- Stop watchers cleanly; avoid unbounded background threads.
+- Treat snapshot and audit files as local operational state, not source-controlled deliverables.
+- Validate path containment before scanning or writing monitoring state.
 
 ## Navigation
+
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../README.md
-
-## Related Documents
-
-- **Agents**: `AGENTS.md` is inherited from the nearest parent scope.
-- **Spec**: `SPEC.md` is inherited from the nearest parent scope.
-## Maintenance Notes
-
-- Keep this document synchronized with adjacent source files.
-- Update sibling README, AGENTS, and SPEC documents together.
-- Preserve working examples when changing public behavior.
-- Prefer measured validation output over inferred status claims.
-- Record any remaining gaps in TODO.md or the nearest planning document.
+- **Project Root**: [../../../README.md](../../../README.md)

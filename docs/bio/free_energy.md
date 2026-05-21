@@ -1,6 +1,6 @@
 # The Free Energy Principle and Active Inference
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Topic**: Predictive Processing and Surprise Minimization
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Topic**: Predictive Processing and Surprise Minimization | **Last Updated**: March 2026
 
 ## The Biology
 

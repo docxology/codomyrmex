@@ -1,6 +1,6 @@
 # Cognitive Architecture: Case-Based Reasoning, Working Memory, and the Cerebrum
 
-**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Cognitive Architecture Theory
+**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Cognitive Architecture Theory | **Last Updated**: March 2026
 
 ## The Theory
 

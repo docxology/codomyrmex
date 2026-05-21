@@ -1,6 +1,6 @@
 # Stigmergy and the Pheromone Trail
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md)
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Last Updated**: March 2026
 
 ## The Biology
 

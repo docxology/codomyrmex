@@ -18,7 +18,7 @@ For random graphs with mean degree ⟨k⟩, the Molloy-Reed criterion gives:
 
 $$p_c = \frac{1}{\langle k \rangle} = \frac{1}{440/128} \approx 0.291$$
 
-This means that when ≥29% of modules are functional, a giant component exists. In practice, `system_discovery` reports ~96% module health (124/128 pass import checks), placing the system deep into the supercritical regime — well above the percolation threshold.
+This means that when ≥29% of inter-module edges are functional (bond-percolation interpretation; for site percolation the threshold differs), a giant component exists. In practice, `system_discovery` reports ~96% module health (124/128 pass import checks), placing the system deep into the supercritical regime — well above the percolation threshold.
 
 ```mermaid
 graph TB

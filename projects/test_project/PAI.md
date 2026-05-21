@@ -32,13 +32,19 @@ test_project/
 ├── reports/         # Generated reports and visualizations
 │   ├── templates/   # Report templates
 │   └── output/      # Generated outputs
-├── src/             # Python source modules
-│   ├── main.py      # Entry point
-│   ├── analyzer.py  # Static analysis integration
-│   ├── visualizer.py# Data visualization
-│   ├── reporter.py  # Documentation generation
-│   └── pipeline.py  # Orchestration workflows
-└── tests/           # Test suite
+├── src/                  # Python source modules (11 files)
+│   ├── main.py           # Entry point
+│   ├── analyzer.py       # Static analysis integration
+│   ├── visualizer.py     # Data visualization
+│   ├── reporter.py       # Documentation generation
+│   ├── pipeline.py       # Orchestration workflows
+│   ├── agent_brain.py    # agents + agentic_memory
+│   ├── git_workflow.py   # git_operations + git_analysis
+│   ├── knowledge_search.py # search + scrape + formal_verification
+│   ├── security_audit.py # security + crypto + system_discovery
+│   ├── mcp_explorer.py   # model_context_protocol + skills + plugin_system
+│   └── llm_inference.py  # llm + collaboration
+└── tests/                # Test suite (zero-mock integration tests)
 ```
 
 ### 3. Key Patterns

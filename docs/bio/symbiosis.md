@@ -1,6 +1,6 @@
 # Symbiosis, Mutualism, and the Holobiont
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Topic**: Interspecies Cooperation and Composite Organisms
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Topic**: Interspecies Cooperation and Composite Organisms | **Last Updated**: March 2026
 
 ## The Biology
 

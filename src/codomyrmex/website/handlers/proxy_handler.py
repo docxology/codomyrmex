@@ -8,8 +8,9 @@ from __future__ import annotations
 
 import json
 import os
+from typing import TYPE_CHECKING, Any
 
-import requests
+import requests  # type: ignore[import-untyped]
 
 from codomyrmex.config_management.defaults import (
     DEFAULT_OLLAMA_MODEL,
@@ -38,6 +39,15 @@ class ProxyHandler:
     - self.rfile: request input stream
     - self.send_json_response(data, status): JSON response sender
     """
+
+    if TYPE_CHECKING:
+        data_provider: Any
+        headers: Any
+        rfile: Any
+
+        def send_json_response(
+            self, data: dict[str, Any] | list[Any], status: int = 200
+        ) -> None: ...
 
     def _resolve_model(self, requested: str | None) -> str:
         """Return the model to use: requested > data_provider default > _DEFAULT_MODEL."""

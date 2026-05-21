@@ -1,6 +1,6 @@
-# Standard Implementation Details - Documentation
+# Website - Documentation
 
-Welcome to the detailed documentation for the Standard Implementation Details module.
+Welcome to the detailed documentation for the Website module.
 
 This documentation provides in-depth information beyond the main `README.md` for this module. It is intended for developers working on or with this module, and for users seeking a deeper understanding of its capabilities and design.
 

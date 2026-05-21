@@ -86,4 +86,4 @@ output = ml_pipeline_execute(
 
 ## 6. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/ml_pipeline/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/ml_pipeline/PAI.md)

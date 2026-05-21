@@ -175,4 +175,4 @@ candidates = lsh.query(query_sig)
 
 ## 6. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md) | [MCP_TOOL_SPECIFICATION](MCP_TOOL_SPECIFICATION.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/data_curation/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/data_curation/PAI.md) | [MCP_TOOL_SPECIFICATION](mcp_tool_specification.md)

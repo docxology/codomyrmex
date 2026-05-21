@@ -35,4 +35,4 @@ merged = model_soup([model_a, model_b], weights=[0.6, 0.4])
 
 ## 4. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/model_merger/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/model_merger/PAI.md)

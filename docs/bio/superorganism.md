@@ -1,6 +1,6 @@
 # The Superorganism
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md)
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Last Updated**: March 2026
 
 The superorganism concept treats the insect colony not as a collection of cooperating individuals but as a higher-order biological entity — an organism composed of organisms, with emergent physiology, metabolism, and behavior that cannot be predicted from constituent properties.
 
@@ -125,4 +125,5 @@ graph LR
 - [Metabolism and Resource Management](./metabolism.md) — Colony energy budget as superorganism metabolism
 - [Immune System Analogies](./immune_system.md) — Social immunity as superorganism immune response
 - [Free Energy and Active Inference](./free_energy.md) — Markov blankets and colony boundaries
+- [The Colony Thesis (AGI Perspectives)](../agi/the_colony_thesis.md) — superorganism as substrate for distributed cognition; recasts Wheeler/Hölldobler in computational terms.
 - [Project README](../../README.md) | [PAI Integration](../../PAI.md)

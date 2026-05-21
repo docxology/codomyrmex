@@ -19,6 +19,11 @@ class _SearchMixin:
         _higher_is_better (bool)
     """
 
+    _vectors: dict[str, Any]
+    _lock: Any
+    _distance_fn: Any
+    _higher_is_better: bool
+
     def search(
         self,
         query: list[float],
@@ -29,7 +34,13 @@ class _SearchMixin:
         from .models import SearchResult as SR
 
         results = []
-        for entry in self._vectors.values():
+        lock = self._lock
+        if lock is None:
+            entries = list(self._vectors.values())
+        else:
+            with lock:
+                entries = list(self._vectors.values())
+        for entry in entries:
             if filter_fn and not filter_fn(entry.metadata):
                 continue
             score = self._distance_fn(query, entry.embedding)

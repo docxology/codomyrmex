@@ -11,6 +11,8 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from codomyrmex.agents.planner.feedback_config import FeedbackConfig
+
+# TODO(layering): tracked via pyproject.toml [tool.importlinter] ignore_imports — see CLAUDE.md "Architecture Overview" → Layer Hierarchy.
 from codomyrmex.orchestrator.workflows.workflow_engine import StepStatus, WorkflowResult
 
 

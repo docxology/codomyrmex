@@ -31,4 +31,4 @@ print(f"Result shape: {result.shape}, FLOPs: {flops:,}")
 
 ## 4. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/matmul_kernel/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/matmul_kernel/PAI.md)

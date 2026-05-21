@@ -236,7 +236,7 @@ _on_trust_change: Callable[[TrustLevel, TrustLevel], None] | None = None
 def set_trust_change_callback(
     callback: Callable[[TrustLevel, TrustLevel], None] | None,
 ) -> None:
-    """set a callback to be invoked when global trust level changes."""
+    """Set a callback to be invoked when global trust level changes."""
     global _on_trust_change
     _on_trust_change = callback
 
@@ -596,7 +596,7 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     Raises:
         PermissionError: If the tool's trust level is insufficient.
         KeyError: If the tool is unknown.
-        jsonschema.ValidationError: If arguments match schema.
+        ValueError: If arguments fail schema validation.
     """
     # Validate tool exists first (raises KeyError for unknown tools).
     registry = get_tool_registry()
@@ -629,7 +629,7 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         )
 
     # Destructive Tool Confirmation
-    if _REQUIRE_CONFIRMATION and name in DESTRUCTIVE_TOOLS:
+    if _REQUIRE_CONFIRMATION and _is_destructive(name):
         with _confirmations_lock:
             _cleanup_expired_confirmations_locked()
 
@@ -725,11 +725,6 @@ def reset_trust() -> None:
     old_level = TrustLevel(_registry.get_aggregate_level())
     _registry.reset()
     _trigger_trust_change(old_level, TrustLevel.UNTRUSTED)
-
-
-# =====================================================================
-# Constants (use the lazy definitions from lines ~198-199)
-# =====================================================================
 
 
 __all__ = [

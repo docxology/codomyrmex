@@ -59,7 +59,7 @@ The code module handles potentially untrusted code execution and requires strict
 
 ## Navigation Links
 
-- **Parent**: [Code Module](README.md)
+- **Parent**: [Code Module](readme.md)
 - **Root Security**: [SECURITY.md](../../../SECURITY.md)
 
 ## Detailed Architecture and Implementation

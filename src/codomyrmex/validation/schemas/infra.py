@@ -10,18 +10,22 @@ from typing import Any
 
 
 class DeploymentStatus(Enum):
-    """Status of a deployment."""
+    """Status of a deployment.
+
+    Values cover the original deployment lifecycle plus CI/CD deployment
+    orchestration states used by `ci_cd_automation` and `config_management`.
+    """
 
     PENDING = "pending"
     RUNNING = "running"
     SUCCESS = "success"
     FAILURE = "failure"
-    ROLLED_BACK = "rolled_back"
     CANCELLED = "cancelled"
-    # Legacy / extended values
     IN_PROGRESS = "in_progress"
     DEPLOYED = "deployed"
+    FAILED = "failed"
     ROLLING_BACK = "rolling_back"
+    ROLLED_BACK = "rolled_back"
 
 
 class PipelineStatus(Enum):

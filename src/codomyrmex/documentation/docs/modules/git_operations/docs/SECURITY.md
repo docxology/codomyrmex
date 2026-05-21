@@ -101,7 +101,7 @@ This security policy applies to the `Git Operations` module within Codomyrmex. I
 Thank you for helping keep Codomyrmex and the Git Operations module secure. 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
+- **Parent**: [Project Overview](../readme.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)

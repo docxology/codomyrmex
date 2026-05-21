@@ -197,15 +197,15 @@ data = manager.auto_deserialize("config.toml")
 - `codomyrmex.exceptions` for error handling
 
 ### Related Modules
-- [`config_management`](../config_management/API_SPECIFICATION.md) - Configuration files
-- [`documents`](../documents/API_SPECIFICATION.md) - Document handling
-- [`cache`](../cache/API_SPECIFICATION.md) - Cache serialization
+- [`config_management`](../config_management/api_specification.md) - Configuration files
+- [`documents`](../documents/api_specification.md) - Document handling
+- [`cache`](../cache/api_specification.md) - Cache serialization
 
 ---
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
+- **Human Documentation**: [README.md](readme.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent**: [codomyrmex](../AGENTS.md)

@@ -45,5 +45,5 @@ Documentation tooling, generated references, and publishing assets for Docs.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
-- **📁 Parent Directory**: [git_operations](../README.md) - Parent directory documentation
+- **📁 Parent Directory**: [git_operations](../readme.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../README.md - Main project documentation

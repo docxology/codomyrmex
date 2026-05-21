@@ -7,6 +7,7 @@ and /api/awareness endpoints.
 from __future__ import annotations
 
 import sys
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -25,6 +26,20 @@ class HealthHandler:
     # Persistent telemetry collector shared across requests
     _telemetry_collector = None
     _telemetry_dm = None
+
+    if TYPE_CHECKING:
+        data_provider: Any
+
+        def send_json_response(
+            self, data: dict[str, Any] | list[Any], status: int = 200
+        ) -> None: ...
+
+        def send_error(
+            self,
+            code: int,
+            message: str | None = None,
+            explain: str | None = None,
+        ) -> None: ...
 
     def handle_status(self) -> None:
         """Handle /api/status -- quick system status."""

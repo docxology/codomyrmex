@@ -66,6 +66,11 @@ jobs:
         run: |
           uv run ty check --exclude src/codomyrmex/physical_management/object_manager.py src/
 
+      - name: Enforce architectural layering (LP5)
+        continue-on-error: false
+        run: |
+          uv run lint-imports --config pyproject.toml
+
       - name: Verify package build
         run: |
           uv build

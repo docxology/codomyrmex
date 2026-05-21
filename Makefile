@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help dev install setup submodules test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check docs-generate serve-docs
+.PHONY: help dev install setup submodules test lint lint-imports format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check docs-generate serve-docs
 
 # Hypothesis loads its pytest plugin (and may bind NumPy RNG) before any conftest runs.
 # Export for all subprocesses so `uv run pytest` sees it even when not using a shell wrapper.
@@ -25,6 +25,7 @@ help:
 	@echo "  test-obsidian - Run Obsidian module tests only"
 	@echo "  test-fast    - Run tests with minimal addopts while preserving importlib collection"
 	@echo "  lint         - Run code linting with ruff"
+	@echo "  lint-imports - Enforce 4-layer architectural contract (import-linter)"
 	@echo "  format       - Format code with ruff"
 	@echo "  type-check   - Run type checking with ty"
 	@echo "  security     - Run security scanning"
@@ -90,13 +91,17 @@ test-coverage-html:
 		echo "No coverage report found. Run 'make test-coverage' first."; \
 	fi
 
-verify-release: lint type-check test
+verify-release: lint lint-imports type-check test
 	@echo "verify-release: all checks passed."
 
 # Code quality
 lint:
 	@echo "Running linting with ruff..."
 	uv run ruff check .
+
+lint-imports:
+	@echo "Enforcing architectural layering (LP5) via import-linter..."
+	uv run lint-imports --config pyproject.toml
 
 format:
 	@echo "Formatting code with ruff..."
@@ -153,7 +158,7 @@ check-dependencies:
 	@echo "Checking module dependency hierarchy..."
 	uv run python -m codomyrmex.tools.dependency_analyzer
 
-ci: lint type-check security test docs-check
+ci: lint lint-imports type-check security test docs-check
 	@echo "CI pipeline completed successfully!"
 
 # Development server

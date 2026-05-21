@@ -11,7 +11,7 @@ If, in the future, specific Git operations are identified as beneficial to be ex
 For now, this specification is N/A (Not Applicable). 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
+- **Parent**: [Project Overview](../readme.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)

@@ -75,6 +75,15 @@ graph TB
         Reporter[reporter.py<br/>Reporting]
     end
 
+    subgraph "Integration Layer"
+        AgentBrain[agent_brain.py<br/>agents + agentic_memory]
+        GitWorkflow[git_workflow.py<br/>git_operations + git_analysis]
+        KnowledgeSearch[knowledge_search.py<br/>search + scrape + formal_verification]
+        SecurityAudit[security_audit.py<br/>security + crypto + system_discovery]
+        MCPExplorer[mcp_explorer.py<br/>model_context_protocol + skills + plugin_system]
+        LLMInference[llm_inference.py<br/>llm + collaboration]
+    end
+
     subgraph "Data Layer"
         Config[config/<br/>Configuration]
         Data[data/<br/>Input/Output]

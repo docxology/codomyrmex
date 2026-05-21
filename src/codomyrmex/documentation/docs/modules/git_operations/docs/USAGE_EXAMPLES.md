@@ -385,7 +385,7 @@ For more detailed function signatures and parameters, see [API_SPECIFICATION.md]
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
+- **Parent**: [Project Overview](../readme.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)

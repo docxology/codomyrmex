@@ -225,13 +225,14 @@ class SecurityAudit:
             return result
 
         try:
-            modules = self.discovery.discover_modules()
-            result["modules_found"] = len(modules) if modules else 0
+            scan = self.discovery.scan_system()
+            modules = scan.get("modules", {}) if isinstance(scan, dict) else {}
+            result["modules_found"] = len(modules)
             result["module_names"] = (
                 list(modules.keys())[:10] if isinstance(modules, dict) else []
             )
         except Exception as e:
-            logger.warning(f"discover_modules failed: {e}")
+            logger.warning(f"scan_system failed: {e}")
             result["error"] = str(e)
 
         return result

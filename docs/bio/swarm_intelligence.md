@@ -1,6 +1,6 @@
 # Swarm Intelligence and Collective Decision-Making
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md)
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Last Updated**: March 2026
 
 Swarm intelligence describes the collective behavior of decentralized, self-organized systems composed of simple agents following local rules that produce globally coherent and often near-optimal behavior. The core insight is that insect colonies solve complex computational problems — shortest-path routing, optimal site selection, efficient allocation — without any individual possessing a global representation of the problem.
 

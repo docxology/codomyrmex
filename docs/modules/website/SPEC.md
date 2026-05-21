@@ -65,13 +65,21 @@ class DataProvider:
 ### WebsiteServer
 
 ```python
-class WebsiteServer(http.server.SimpleHTTPRequestHandler):
+class WebsiteServer(APIHandler, HealthHandler, ProxyHandler, http.server.SimpleHTTPRequestHandler):
     root_dir: Path
     data_provider: DataProvider | None
     def do_GET(self) -> None: ...
     def do_POST(self) -> None: ...
     def send_json_response(self, data: Any, status: int = 200) -> None: ...
 ```
+
+The handler mixins own focused endpoint groups: `APIHandler` covers module,
+agent, script, config, docs, tests, PAI, and dispatch endpoints;
+`HealthHandler` covers status, telemetry, and security posture endpoints; and
+`ProxyHandler` covers Ollama-backed chat and awareness summary endpoints. Each
+mixin declares a type-only host contract for `root_dir`, `data_provider`,
+request headers/body, and JSON/error response methods so the mixins can be
+checked independently.
 
 ## API Endpoints
 

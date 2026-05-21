@@ -83,4 +83,4 @@ result = autograd_gradient_check(func_name="sigmoid", inputs=[0.0, 1.0, -1.0])
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/autograd/SPEC.md)

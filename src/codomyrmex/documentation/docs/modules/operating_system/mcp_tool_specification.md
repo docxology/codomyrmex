@@ -159,4 +159,4 @@ result = os_environment_variables(prefix="PYTHON")
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

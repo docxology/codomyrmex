@@ -120,7 +120,7 @@ This module follows the general versioning strategy of the Codomyrmex project. A
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
+- **Human Documentation**: [README.md](readme.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)

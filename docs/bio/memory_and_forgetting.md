@@ -1,6 +1,6 @@
 # Memory, Forgetting, and the Engram
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md)
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Hub**: [myrmecology.md](./myrmecology.md) | **Last Updated**: March 2026
 
 Memory is not passive recording. It is an active, reconstructive process shaped by encoding conditions, interference, and retrieval context. Equally important, **forgetting is not failure** — it is an adaptive mechanism that maintains the relevance and efficiency of stored information.
 

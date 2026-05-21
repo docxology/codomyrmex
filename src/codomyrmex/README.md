@@ -1,10 +1,10 @@
 # codomyrmex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: April 2026
 
 ## Overview
 
-Module implementation, resources, and local coordination for Codomyrmex..
+Installable package root for Codomyrmex. This directory contains the public package facade, module implementations, MCP tool surfaces, agent integrations, shared foundation modules, and source-level tests. Volatile module and MCP counts are tracked in [../../docs/reference/inventory.md](../../docs/reference/inventory.md).
 
 ## Directory Contents
 - `INDEX.md` – File

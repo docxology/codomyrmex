@@ -6,12 +6,12 @@
 
 Codomyrmex exposes tools to PAI via two mechanisms:
 
-1. **Static tools** (22): Defined in `mcp_bridge.py`, always available (17 core + 3 universal proxy + 2 maintenance)
+1. **Static tools** (20): Defined in `src/codomyrmex/agents/pai/mcp/definitions.py::TOOL_DEFINITIONS`. Verify with `python -c "from codomyrmex.agents.pai.mcp.definitions import TOOL_DEFINITIONS; print(len(TOOL_DEFINITIONS))"`.
 2. **Dynamic tools** (variable): Auto-discovered from module public functions at runtime
 
 The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 
-## Static Tools (22)
+## Static Tools (20)
 
 ### File Operations
 
@@ -196,9 +196,9 @@ These tools provide generic access to **any** Codomyrmex module's public API:
 
 ## Dynamic Tool Discovery
 
-Beyond the 9 static proxy tools, the MCP bridge auto-discovers additional tools at runtime:
+Beyond the 20 static tools (see line above; the 9-entry "Static proxy" row in the Tool Count Summary is a sub-category), the MCP bridge auto-discovers additional tools at runtime:
 
-1. **Decorated tools**: Functions with `@mcp_tool` decorator in any `mcp_tools.py` submodule — **141 modules auto-discovered**
+1. **Decorated tools**: Functions with `@mcp_tool` decorator in any `mcp_tools.py` submodule — **149 modules auto-discovered**
 2. **pkgutil scan**: All `mcp_tools.py` files are scanned at startup (5-minute TTL cache)
 
 ### Trust Classification for Dynamic Tools
@@ -266,13 +266,13 @@ The Email tab in the PAI Dashboard provides a browser-accessible interface for a
 
 | Category | Count | Trust |
 |----------|-------|-------|
-| Static proxy | 9 | Auto-VERIFIED |
+| Static proxy (subset of the 20 static tools) | 9 | Auto-VERIFIED |
 | Static destructive | 4 | Requires TRUSTED |
 | Dynamic safe | ~299 | Pattern-classified, auto-VERIFIED |
 | Dynamic destructive | 4 | Requires TRUSTED |
 | **Total** | **~303** | — |
 
-> Run `/codomyrmexVerify` to get the current exact count. Total reflects 141 auto-discovered modules (Sprint 22).
+> Run `/codomyrmexVerify` to get the current exact count. Total reflects 149 auto-discovered modules (see [reference/inventory.md](../reference/inventory.md)).
 
 ## Navigation
 

@@ -14,7 +14,7 @@ This essay argues that codomyrmex satisfies five scaffolding preconditions for A
 
 Goertzel's analysis of OpenCog identifies *combinatorial composability* as the first requirement. We can formalize this using category theory. Define a category **Mod** where:
 
-- **Objects** are codomyrmex modules (|Ob(**Mod**)| = 127)
+- **Objects** are codomyrmex modules (|Ob(**Mod**)| = 128)
 - **Morphisms** are valid module invocations via MCP tool calls
 - **Composition** is sequential tool chaining: if `f: A → B` and `g: B → C`, then `g ∘ f: A → C`
 
@@ -138,7 +138,7 @@ $$\chi_{safe} : \text{Hom}(\textbf{Mod}) \to \Omega$$
 
 A tool call is safe iff χ(tool) ≥ agent's trust level. This is safety as a topological property — not a binary predicate but a continuous variable in a partially ordered truth-value space.
 
-The **internal language** of thistopos is the language of allowed tool compositions at a given trust level. An `UNTRUSTED` agent speaks a restricted sublanguage; a `TRUSTED` agent speaks the full language. The trust gateway is a **logical functor** that maps between sub-toposes of different richness.
+The **internal language** of this topos is the language of allowed tool compositions at a given trust level. An `UNTRUSTED` agent speaks a restricted sublanguage; a `TRUSTED` agent speaks the full language. The trust gateway is a **logical functor** that maps between sub-toposes of different richness.
 
 ## The Scaffolding Spectrum
 

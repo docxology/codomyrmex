@@ -1,6 +1,6 @@
 # modules
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -74,6 +74,7 @@ Documentation tooling, generated references, and publishing assets for Modules.
 - `ide/` – Subdirectory
 - `identity/` – Subdirectory
 - `image/` – Subdirectory
+- `languages/` – Subdirectory
 - `interpretability/` – Subdirectory
 - `llm/` – Subdirectory
 - `logging_monitoring/` – Subdirectory
@@ -98,6 +99,7 @@ Documentation tooling, generated references, and publishing assets for Modules.
 - `ollama.md` – File
 - `operating_system/` – Subdirectory
 - `orchestrator/` – Subdirectory
+- `pai_pm/` – Subdirectory
 - `overview.md` – File
 - `peft/` – Subdirectory
 - `performance/` – Subdirectory
@@ -139,6 +141,7 @@ Documentation tooling, generated references, and publishing assets for Modules.
 - `validation/` – Subdirectory
 - `vector_store/` – Subdirectory
 - `video/` – Subdirectory
+- `vision/` – Subdirectory
 - `wallet/` – Subdirectory
 - `website/` – Subdirectory
 

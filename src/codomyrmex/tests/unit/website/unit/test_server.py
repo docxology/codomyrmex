@@ -334,6 +334,17 @@ class TestPOSTEndpoints:
         )
         assert status == 403
 
+    def test_execute_rejects_sibling_scripts_prefix(self, live_server):
+        """Reject scripts that resolve beside, not inside, the scripts directory."""
+        sibling_dir = live_server.root / "scripts_evil"
+        sibling_dir.mkdir()
+        (sibling_dir / "evil.py").write_text('print("should not run")\n')
+
+        status, _data = live_server.post(
+            "/api/execute", {"script": "../scripts_evil/evil.py"}
+        )
+        assert status == 403
+
     def test_execute_rejects_missing_script(self, live_server):
         """Test /api/execute returns 403 for non-existent script."""
         status, _data = live_server.post(
@@ -454,6 +465,19 @@ class TestConfigSave:
 
         # Verify actual file was updated
         assert "[updated]" in (live_server.root / "test_config.toml").read_text()
+
+    def test_empty_content_save_is_allowed(self, live_server):
+        """Saving an intentionally empty config file should not be treated as missing content."""
+        target = live_server.root / "empty_config.toml"
+        target.write_text("original")
+
+        status, data = live_server.post(
+            "/api/config",
+            {"filename": "empty_config.toml", "content": ""},
+        )
+        assert status == 200
+        assert data.get("success") is True
+        assert target.read_text() == ""
 
     def test_missing_filename_returns_400(self, live_server):
         """Test that missing filename returns 400."""

@@ -1,6 +1,6 @@
-# Standard Implementation Details - Technical Overview
+# Website - Technical Overview
 
-This document provides a detailed technical overview of the Standard Implementation Details module.
+This document provides a detailed technical overview of the Website module.
 
 ## 1. Introduction and Purpose
 

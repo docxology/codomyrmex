@@ -80,4 +80,4 @@ result = file_system_list_directory(path="/Users/mini/Documents/GitHub/codomyrme
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/file_system/SPEC.md)

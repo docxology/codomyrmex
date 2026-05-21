@@ -1,10 +1,12 @@
 # Codomyrmex System Architecture
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-This document visualizes the full dependency graph across all **128** top-level Codomyrmex modules, auto-generated from static import analysis. Modules are organized into four architectural layers:
+This document is a static import-analysis snapshot of the Codomyrmex architecture. Live inventory counts are maintained in [reference/inventory.md](reference/inventory.md) and regenerated with `uv run python scripts/doc_inventory.py`; use that file as the source of truth for module totals and MCP decorator counts.
+
+The diagram groups observed import-time dependencies into four architectural layers:
 
 - **Foundation** — Essential infrastructure (logging, config, environment, MCP, telemetry, terminal)
 - **Core** — Primary development capabilities (coding, search, encryption, data visualization, LLM, etc.)

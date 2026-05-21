@@ -432,14 +432,20 @@ class KnowledgeMemory:
             return base_results[:k]
 
         # Phase 2: Ollama embedding re-rank (best-effort, silently skipped)
+        # review:zero-mock-silent-fallback — hardcoded URL + silent except violates CLAUDE.md
+        # "No silent fallbacks" + "No hardcoded values" policies. Use
+        # codomyrmex.config_management.defaults.DEFAULT_OLLAMA_URL via os.getenv("OLLAMA_BASE_URL").
         try:
             import json as _json
+            import os as _os
             import urllib.request as _req
+
+            _ollama_base = _os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
             def _embed(text: str) -> list[float]:
                 payload = _json.dumps({"model": ollama_model, "input": text}).encode()
                 request = _req.Request(
-                    "http://localhost:11434/api/embed",
+                    f"{_ollama_base}/api/embed",
                     data=payload,
                     headers={"Content-Type": "application/json"},
                     method="POST",

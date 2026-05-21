@@ -106,4 +106,4 @@ def with_retry(max_retries: int = 3, delay: float = 1.0) -> Callable: ...
 
 ## Related Documents
 
-- **Readme**: [README.md](README.md)
+- **Readme**: [README.md](readme.md)

@@ -31,10 +31,10 @@ from codomyrmex.documentation.education.curriculum import Curriculum, Difficulty
 
 @pytest.mark.unit
 def test_module_import():
-    """education module is importable."""
-    from codomyrmex.agents import education
+    """education curriculum module is importable from its canonical location."""
+    from codomyrmex.documentation.education import curriculum
 
-    assert education is not None
+    assert curriculum is not None
 
 
 @pytest.mark.unit

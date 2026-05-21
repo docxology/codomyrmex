@@ -1,6 +1,6 @@
 # Signal, Entropy, and the Channel
 
-**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Information Theory
+**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Information Theory | **Last Updated**: March 2026
 
 ## The Theory
 

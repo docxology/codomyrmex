@@ -44,7 +44,7 @@ for understanding git_operations capabilities.
 ## Navigation
 
 - **Self**: `SPEC.md`
-- **Parent**: [../README.md](../README.md)
+- **Parent**: [../README.md](../readme.md)
 - **Readme**: [README.md](README.md)
 - **Agents**: [AGENTS.md](AGENTS.md)
 - **Repository Root**: [README.md](../../../../../../../README.md)

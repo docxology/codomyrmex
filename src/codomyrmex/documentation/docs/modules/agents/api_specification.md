@@ -126,6 +126,6 @@ AgentError (base)
 
 ## 6. Navigation
 
-- **README**: [README.md](README.md)
+- **README**: [README.md](readme.md)
 - **Specification**: [SPEC.md](SPEC.md)
-- **Comparison**: [AGENT_COMPARISON.md](AGENT_COMPARISON.md)
+- **Comparison**: [AGENT_COMPARISON.md](../../../../../../docs/modules/agents/AGENT_COMPARISON.md)

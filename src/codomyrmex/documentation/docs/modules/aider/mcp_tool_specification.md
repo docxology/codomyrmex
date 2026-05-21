@@ -244,8 +244,8 @@ None.
 
 ## Navigation
 
-- **Module README**: [README.md](README.md)
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Module README**: [README.md](readme.md)
+- **API Reference**: [API_SPECIFICATION.md](api_specification.md)
 - **Agent Capabilities**: [AGENTS.md](AGENTS.md)
-- **Technical Spec**: [SPEC.md](SPEC.md)
-- **PAI Integration**: [PAI.md](PAI.md)
+- **Technical Spec**: [SPEC.md](../../../../../../docs/modules/aider/SPEC.md)
+- **PAI Integration**: [PAI.md](../../../../../../src/codomyrmex/aider/PAI.md)

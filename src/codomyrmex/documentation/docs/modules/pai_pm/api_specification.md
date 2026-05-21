@@ -55,4 +55,4 @@ if HAS_BUN:
 
 ## 5. Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [README](readme.md) | [SPEC](../../../../../../docs/modules/pai_pm/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../docs/modules/pai_pm/PAI.md)

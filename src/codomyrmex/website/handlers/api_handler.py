@@ -13,9 +13,13 @@ import subprocess
 import sys
 import threading
 import time
+from typing import TYPE_CHECKING, Any, cast
 from urllib.parse import urlparse
 
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = get_logger(__name__)
 
@@ -35,6 +39,29 @@ class APIHandler:
 
     # Store latest test results for async retrieval
     _test_results: dict | None = None
+
+    if TYPE_CHECKING:
+        data_provider: Any
+        root_dir: Path
+        headers: Any
+        rfile: Any
+        path: str
+        _test_lock: Any
+        _test_running: bool
+        _dispatch_lock: Any
+        _dispatch_orch: Any
+        _dispatch_thread: Any
+
+        def send_json_response(
+            self, data: dict[str, Any] | list[Any], status: int = 200
+        ) -> None: ...
+
+        def send_error(
+            self,
+            code: int,
+            message: str | None = None,
+            explain: str | None = None,
+        ) -> None: ...
 
     # Config files must carry one of these extensions to be readable/writable.
     _ALLOWED_CONFIG_EXTENSIONS: frozenset[str] = frozenset(
@@ -170,7 +197,7 @@ class APIHandler:
             parsed_path = urlparse(self.path)
             filename = parsed_path.path.replace("/api/config/", "")
 
-        if not content or not filename:
+        if content is None or not filename:
             self.send_error(400, "Missing filename or content")
             return
 
@@ -259,10 +286,13 @@ class APIHandler:
         script_path = (self.root_dir / "scripts" / script_name).resolve()
         scripts_root = (self.root_dir / "scripts").resolve()
 
-        if (
-            not str(script_path).startswith(str(scripts_root))
-            or not script_path.exists()
-        ):
+        try:
+            script_path.relative_to(scripts_root)
+        except ValueError:
+            self.send_error(403, f"Invalid script path: {script_name}")
+            return
+
+        if not script_path.exists():
             self.send_error(403, f"Invalid script path: {script_name}")
             return
 
@@ -631,7 +661,7 @@ class APIHandler:
                     WebsiteServer._dispatch_orch = ConversationOrchestrator.dev_loop(
                         todo_path=todo_path,
                         channel=f"dispatch-{int(time.time())}",
-                        agents=agents,
+                        agents=cast("Any", agents),
                     )
                 else:
                     default_agents = [
@@ -649,7 +679,7 @@ class APIHandler:
                     WebsiteServer._dispatch_orch = ConversationOrchestrator(
                         channel=f"dispatch-{int(time.time())}",
                         seed_prompt=seed_prompt,
-                        agents=agents or default_agents,
+                        agents=cast("Any", agents or default_agents),
                     )
 
                 def run_orch():

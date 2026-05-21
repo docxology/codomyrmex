@@ -251,15 +251,15 @@ client.close()
 - `codomyrmex.exceptions` for error handling
 
 ### Related Modules
-- [`api`](../api/API_SPECIFICATION.md) - API infrastructure
-- [`scrape`](../scrape/API_SPECIFICATION.md) - Web scraping
-- [`cloud`](../cloud/API_SPECIFICATION.md) - Cloud service integrations
+- [`api`](../api/api_specification.md) - API infrastructure
+- [`scrape`](../scrape/api_specification.md) - Web scraping
+- [`cloud`](../cloud/api_specification.md) - Cloud service integrations
 
 ---
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
+- **Human Documentation**: [README.md](readme.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent**: [codomyrmex](../AGENTS.md)

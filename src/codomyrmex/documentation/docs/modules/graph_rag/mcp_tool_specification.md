@@ -38,5 +38,5 @@ This module integrates with the Codomyrmex Model Context Protocol system defined
 
 ## Navigation
 
-- **Parent**: [README.md](README.md)
+- **Parent**: [README.md](readme.md)
 - **Project Root**: [../../README.md](../../README.md)

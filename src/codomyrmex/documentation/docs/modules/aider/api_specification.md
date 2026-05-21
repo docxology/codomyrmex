@@ -193,8 +193,8 @@ Raised when a required API key is missing or invalid for the selected model. Cur
 
 ## Navigation
 
-- **Module README**: [README.md](README.md)
-- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
+- **Module README**: [README.md](readme.md)
+- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](mcp_tool_specification.md)
 - **Agent Capabilities**: [AGENTS.md](AGENTS.md)
-- **Technical Spec**: [SPEC.md](SPEC.md)
-- **PAI Integration**: [PAI.md](PAI.md)
+- **Technical Spec**: [SPEC.md](../../../../../../docs/modules/aider/SPEC.md)
+- **PAI Integration**: [PAI.md](../../../../../../src/codomyrmex/aider/PAI.md)

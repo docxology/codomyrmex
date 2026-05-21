@@ -31,5 +31,18 @@ DEFAULT_API_BASE_URL = "http://localhost:8000"
 # Telemetry Defaults
 DEFAULT_OTEL_ENDPOINT = "http://localhost:4317"
 
+# Paperclip Service Defaults
+DEFAULT_PAPERCLIP_URL = "http://localhost:3100"
+
+# Video Transcription Defaults
+DEFAULT_VIDEO_TRANSCRIPTION_URL = "http://127.0.0.1:8099/transcribe"
+
 # Website Defaults
 DEFAULT_CORS_ORIGINS = "http://localhost:8787"
+DEFAULT_CORS_ALLOWED_ORIGINS = (
+    "http://127.0.0.1:8787,"
+    "http://localhost:8888,"
+    "http://127.0.0.1:8888,"
+    "http://localhost:8889,"
+    "http://127.0.0.1:8889"
+)

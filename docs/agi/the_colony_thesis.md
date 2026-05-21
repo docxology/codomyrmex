@@ -76,7 +76,7 @@ graph TB
 
 In ant colonies, the queen does not command — she provides *reproductive coherence*. The colony's behavior emerges from individual worker decisions governed by local rules and pheromone gradients. Similarly, codomyrmex's `orchestrator` does not micromanage modules — it defines *workflow DAGs* that coordinate module invocations without controlling internal logic.
 
-The "queen paradox" is deeper: the orchestrator is *itself a module* in the colony. It does not stand above the system — it participates in it. The colony has no external control point; coordination emerges from the same substrate as computation. This is Hofstadter's (1979) **strange loop**: the controller is contained within the controlled, and the system's coherence arises from this self-referential architecture.
+The "queen paradox" is deeper: the orchestrator is *itself a module* in the colony. It does not stand above the system — it participates in it. The colony has no external control point; coordination emerges from the same substrate as computation. This is Hofstadter's (1979) **strange loop**: the controller is contained within the controlled, and the system's coherence arises from this self-referential architecture. (Hofstadter distinguishes: the *strange loop* is the experiential phenomenon, the *tangled hierarchy* is the underlying recursive structure that generates it.)
 
 ## The Tangled Hierarchy
 
@@ -170,7 +170,7 @@ graph LR
         DEFENSE2["defense/<br/><i>prevent harmful actions</i>"]
         TRUST2["trust_gateway<br/><i>gate capability access</i>"]
         SEARCH2["search + system_discovery<br/><i>environmental sensing</i>"]
-        MODULES2["130 domain modules<br/><i>specialized processors</i>"]
+        MODULES2["128 domain modules<br/><i>specialized processors</i>"]
     end
 
     K_LINE --> AMEM2
@@ -215,7 +215,7 @@ The generality of the colony grows *monotonically* with module count — each ne
 
 There is an analogue to Chalmers' (1995) "hard problem of consciousness": even if we explain every causal mechanism in the colony — every tool invocation, every event, every trust-level transition — we have not explained *why the colony seems to understand software development*. The hard problem of colony intelligence:
 
-**Why does the interaction of 130 specialized modules, none of which understands software, produce a system that appears to understand software?**
+**Why does the interaction of 128 specialized modules, none of which understands software, produce a system that appears to understand software?**
 
 This is the emergence question from [emergence_and_scale.md](./emergence_and_scale.md) restated in the starkest terms. The Colony Thesis does not answer it — it simply observes that the same question applies to ant colonies, to brains, and to economies. In each case, the answer appears to be: *there is no understanding inside*. There is only interaction. The colony's "understanding" of software is the colony-level pattern of tool invocations over time — a pattern that an external observer interprets as understanding but that has no internal locus.
 

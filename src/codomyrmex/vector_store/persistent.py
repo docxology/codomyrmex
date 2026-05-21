@@ -37,7 +37,7 @@ class PersistentVectorStore(_SearchMixin, VectorStore):
         self._auto_save = auto_save
         self._save_interval = save_interval
         self._operation_count = 0
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
         # set up distance function
         if distance_metric == "cosine":
@@ -62,7 +62,7 @@ class PersistentVectorStore(_SearchMixin, VectorStore):
         """Load vectors from file."""
         if self._path.exists():
             try:
-                with open(self._path) as f:
+                with open(self._path, encoding="utf-8") as f:
                     data = json.load(f)
 
                 for item in data.get("vectors", []):
@@ -91,7 +91,7 @@ class PersistentVectorStore(_SearchMixin, VectorStore):
             ],
         }
 
-        with open(self._path, "w") as f:
+        with open(self._path, "w", encoding="utf-8") as f:
             json.dump(data, f)
 
     def _maybe_save(self) -> None:
@@ -119,7 +119,8 @@ class PersistentVectorStore(_SearchMixin, VectorStore):
 
     def get(self, id: str) -> VectorEntry | None:
         """Get a vector by ID."""
-        return self._vectors.get(id)
+        with self._lock:
+            return self._vectors.get(id)
 
     def delete(self, id: str) -> bool:
         """Delete a vector."""
@@ -132,7 +133,8 @@ class PersistentVectorStore(_SearchMixin, VectorStore):
 
     def count(self) -> int:
         """Get vector count."""
-        return len(self._vectors)
+        with self._lock:
+            return len(self._vectors)
 
     def clear(self) -> None:
         """Clear all vectors."""

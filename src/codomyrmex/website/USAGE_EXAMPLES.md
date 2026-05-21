@@ -1,4 +1,4 @@
-# Standard Implementation Details - Usage Examples
+# Website - Usage Examples
 
 ## Example 1: Basic Usage
 

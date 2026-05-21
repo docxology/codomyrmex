@@ -1,6 +1,7 @@
 """Paperclip REST API client for Codomyrmex agents.
 
-HTTP client for the Paperclip server at ``localhost:3100``.
+HTTP client for the Paperclip server (default URL from
+``DEFAULT_PAPERCLIP_URL`` / ``$PAPERCLIP_BASE_URL``).
 Uses only ``urllib.request`` (stdlib) — no external HTTP dependency.
 
 See: https://github.com/paperclipai/paperclip
@@ -9,11 +10,13 @@ See: https://github.com/paperclipai/paperclip
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 import urllib.request
 from typing import Any
 
 from codomyrmex.agents.core.exceptions import PaperclipError
+from codomyrmex.config_management.defaults import DEFAULT_PAPERCLIP_URL
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -22,24 +25,29 @@ logger = get_logger(__name__)
 class PaperclipAPIClient:
     """HTTP client for the Paperclip REST API.
 
-    All methods hit the Paperclip server (default ``http://localhost:3100``)
+    All methods hit the Paperclip server (default from
+    ``$PAPERCLIP_BASE_URL`` or ``DEFAULT_PAPERCLIP_URL``)
     and return parsed JSON responses.
     """
 
     def __init__(
         self,
-        base_url: str = "http://localhost:3100",
+        base_url: str | None = None,
         api_key: str | None = None,
         timeout: int = 30,
     ):
         """Initialize the API client.
 
         Args:
-            base_url: Paperclip server URL (default ``http://localhost:3100``).
+            base_url: Paperclip server URL. Defaults to
+                ``$PAPERCLIP_BASE_URL`` or ``DEFAULT_PAPERCLIP_URL``.
             api_key: Optional bearer token for authenticated endpoints.
             timeout: HTTP request timeout in seconds.
         """
-        self.base_url = base_url.rstrip("/")
+        resolved_base_url = base_url or os.getenv(
+            "PAPERCLIP_BASE_URL", DEFAULT_PAPERCLIP_URL
+        )
+        self.base_url = resolved_base_url.rstrip("/")
         self.api_key = api_key
         self.timeout = timeout
 

@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
+- **Parent**: [Project Overview](../readme.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)

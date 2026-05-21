@@ -98,31 +98,45 @@ class MCPExplorer:
             "taxonomy_report": {},
         }
 
+        tool_names: list[str] = []
         try:
-            report = self.discovery.discover()
-            result["tool_count"] = (
-                report.total_tools if hasattr(report, "total_tools") else 0
-            )
+            # MCPDiscovery exposes scan_package() / list_tools(); there is no
+            # discover() method. Scan the codomyrmex package then read off
+            # discovered tools.
+            report = self.discovery.scan_package("codomyrmex")
+            discovered_tools = self.discovery.list_tools()
+            tool_names = [
+                getattr(t, "name", str(t)) for t in (discovered_tools or [])
+            ]
+            result["tool_count"] = len(tool_names)
             result["failed_modules"] = (
-                report.failed_count if hasattr(report, "failed_count") else 0
+                len(report.failed_modules)
+                if hasattr(report, "failed_modules") and report.failed_modules
+                else 0
             )
         except Exception as e:
-            logger.warning(f"MCPDiscovery.discover() failed: {e}")
+            logger.warning(f"MCPDiscovery.scan_package() failed: {e}")
             result["discovery_error"] = str(e)
 
         try:
-            taxonomy = generate_taxonomy_report()
+            # generate_taxonomy_report requires a list of tool names.
+            taxonomy = generate_taxonomy_report(tool_names)
             result["taxonomy_report"] = (
-                taxonomy.__dict__ if hasattr(taxonomy, "__dict__") else str(taxonomy)
+                taxonomy.summary()
+                if hasattr(taxonomy, "summary")
+                else (taxonomy.__dict__ if hasattr(taxonomy, "__dict__") else str(taxonomy))
             )
         except Exception as e:
             logger.warning(f"generate_taxonomy_report failed: {e}")
+            result["taxonomy_error"] = str(e)
 
         try:
-            categorized = categorize_all_tools()
+            # categorize_all_tools requires a list of tool names.
+            categorized = categorize_all_tools(tool_names)
             result["categorized_count"] = len(categorized) if categorized else 0
         except Exception as e:
             logger.warning(f"categorize_all_tools failed: {e}")
+            result["categorize_error"] = str(e)
 
         return result
 
@@ -149,18 +163,27 @@ class MCPExplorer:
         }
 
         try:
-            skills = self.skill_registry.list_skills()
-            result["skill_count"] = len(skills) if skills else 0
-            result["skills"] = list(skills)[:20] if skills else []
+            # SkillRegistry exposes build_index() (returns category->name->data)
+            # and get_categories(); there is no list_skills() method.
+            index = self.skill_registry.build_index()
+            skill_names: list[str] = []
+            for skills_in_cat in (index or {}).values():
+                if isinstance(skills_in_cat, dict):
+                    skill_names.extend(skills_in_cat.keys())
+            result["skill_count"] = len(skill_names)
+            result["skills"] = skill_names[:20]
+            result["categories"] = self.skill_registry.get_categories()
         except Exception as e:
-            logger.warning(f"SkillRegistry.list_skills() failed: {e}")
+            logger.warning(f"SkillRegistry.build_index() failed: {e}")
             result["error"] = str(e)
 
         try:
-            runnable = list_runnable_skills()
+            # list_runnable_skills() requires the SkillRegistry as positional arg.
+            runnable = list_runnable_skills(self.skill_registry)
             result["runnable_count"] = len(runnable) if runnable else 0
         except Exception as e:
             logger.warning(f"list_runnable_skills() failed: {e}")
+            result["runnable_error"] = str(e)
 
         return result
 

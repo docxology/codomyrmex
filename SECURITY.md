@@ -2,12 +2,13 @@
 
 ## Supported Versions
 
-We actively support the following versions of Codomyrmex with security updates:
+We actively support the following versions of Codomyrmex with security updates (current release: **v1.2.7** — see [pyproject.toml](pyproject.toml) and [CHANGELOG.md](CHANGELOG.md)):
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
-| 0.1.x   | :x:                |
+| 1.2.x   | :white_check_mark: |
+| 1.1.x   | :white_check_mark: (best-effort) |
+| < 1.1   | :x:                |
 
 ## Reporting a Vulnerability
 
@@ -187,6 +188,7 @@ For security-related questions or concerns:
 - **[Module Security Details](src/codomyrmex/coding/SECURITY.md)** - Code execution sandbox security
 - **[AI Security Details](src/codomyrmex/agents/ai_code_editing/SECURITY.md)** - AI integration security considerations
 - **[Git Operations Security](src/codomyrmex/git_operations/SECURITY.md)** - Version control security
+- **[PAI Trust Gateway](src/codomyrmex/agents/pai/trust_gateway.py)** - Three-tier (UNTRUSTED / VERIFIED / TRUSTED) gate for destructive MCP tools; see [PAI.md](PAI.md#trust-model)
 
 ---
 

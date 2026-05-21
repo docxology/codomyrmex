@@ -9,11 +9,13 @@ Reddit, Vimeo, and thousands of others).
 
 Two execution modes:
 
-* **CLI mode** (default): calls ``transcribe_url.py`` from a local clone of
+* **Auto mode** (default): uses CLI mode when ``transcribe_url.py`` exists in a
+  local ``universal-video-transcriber`` clone, otherwise falls back to REST.
+* **CLI mode**: calls ``transcribe_url.py`` from a local clone of
   ``universal-video-transcriber``, so no server process is needed.
-* **REST mode**: hits the running API server at
-  ``http://127.0.0.1:8099/transcribe`` (start with
-  ``python3 run_api.py`` inside the skill).
+* **REST mode**: hits the running API server (URL from
+  ``$VIDEO_TRANSCRIPTION_URL`` or ``DEFAULT_VIDEO_TRANSCRIPTION_URL``;
+  start the server with ``python3 run_api.py`` inside the skill).
 
 Usage::
 
@@ -45,6 +47,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.config_management.defaults import DEFAULT_VIDEO_TRANSCRIPTION_URL
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -63,7 +66,9 @@ _DEFAULT_SCRIPT = (
     / "scripts"
     / "transcribe_url.py"
 )
-_DEFAULT_API_URL = "http://127.0.0.1:8099/transcribe"
+_DEFAULT_API_URL = os.getenv(
+    "VIDEO_TRANSCRIPTION_URL", DEFAULT_VIDEO_TRANSCRIPTION_URL
+)
 
 # Whisper model size options
 WHISPER_MODELS = ("tiny", "base", "small", "medium", "large-v2", "large-v3")
@@ -237,8 +242,8 @@ class VideoTranscriber:
         skill_dir: Path to the local clone of ``universal-video-transcriber``.
             Defaults to ``~/.hermes/skills/research/universal-video-transcriber``.
         api_url: Base URL for the REST API server (mode ``"rest"``).
-        mode: ``"cli"`` (default) or ``"rest"``.  ``"auto"`` picks CLI if the
-            script exists, else REST.
+        mode: ``"auto"`` (default), ``"cli"``, or ``"rest"``. ``"auto"``
+            picks CLI if the script exists, else REST.
 
     """
 

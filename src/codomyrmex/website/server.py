@@ -16,9 +16,11 @@ import json
 import os
 import threading
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 from codomyrmex.config_management.defaults import (
+    DEFAULT_CORS_ALLOWED_ORIGINS,
     DEFAULT_CORS_ORIGINS,
 )
 from codomyrmex.logging_monitoring import get_logger
@@ -32,13 +34,16 @@ logger = get_logger(__name__)
 _CORS_ORIGINS = os.getenv(
     "CODOMYRMEX_CORS_ORIGINS",
     DEFAULT_CORS_ORIGINS
-    + ",http://127.0.0.1:8787,http://localhost:8888,http://127.0.0.1:8888,http://localhost:8889,http://127.0.0.1:8889",
+    + ","
+    + os.getenv("CORS_ALLOWED_ORIGINS", DEFAULT_CORS_ALLOWED_ORIGINS),
 )
 
-# Allowed origins for CORS/CSRF validation
-_ALLOWED_ORIGINS = frozenset(
+# Allowed origins for CORS/CSRF validation. Keep an ordered tuple for deterministic
+# fallback headers and a set for membership checks.
+_ALLOWED_ORIGINS_ORDERED = tuple(
     origin.strip() for origin in _CORS_ORIGINS.split(",") if origin.strip()
 )
+_ALLOWED_ORIGINS = frozenset(_ALLOWED_ORIGINS_ORDERED)
 
 
 class WebsiteServer(
@@ -62,8 +67,8 @@ class WebsiteServer(
     _test_lock = threading.Lock()
     _test_running = False
     _dispatch_lock = threading.Lock()
-    _dispatch_orch = None
-    _dispatch_thread = None
+    _dispatch_orch: Any = None
+    _dispatch_thread: threading.Thread | None = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -78,7 +83,7 @@ class WebsiteServer(
         clean_origin = origin.replace("\r", "").replace("\n", "")
         if clean_origin in _ALLOWED_ORIGINS:
             return clean_origin
-        return next(iter(_ALLOWED_ORIGINS))
+        return _ALLOWED_ORIGINS_ORDERED[0] if _ALLOWED_ORIGINS_ORDERED else "null"
 
     def do_OPTIONS(self) -> None:
         """Handle CORS preflight requests."""

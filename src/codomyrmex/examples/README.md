@@ -29,7 +29,7 @@ Example implementations and demonstrations.
 
 ## Navigation
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- **Project Root**: [README.md](../../../README.md)
 
 ## Related Documents
 

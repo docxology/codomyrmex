@@ -12,7 +12,7 @@ $$I_{effective} \leq I_{single\_session} + I_{memory}(O_1, O_2, \ldots, O_n)$$
 
 where I_memory is the mutual information between stored observations and future tasks. Maximizing I_memory is the *memory design problem*.
 
-## The Four-Tier Architecture
+## The Five-Tier Architecture
 
 ```mermaid
 graph TB

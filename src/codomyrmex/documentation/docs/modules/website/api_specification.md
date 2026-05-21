@@ -535,10 +535,10 @@ class DataProvider:
 
 ### Class: `WebsiteServer`
 
-HTTP request handler extending `http.server.SimpleHTTPRequestHandler`. Serves static files and handles API endpoints.
+HTTP request handler composed from `APIHandler`, `HealthHandler`, `ProxyHandler`, and `http.server.SimpleHTTPRequestHandler`. Serves static files and handles API endpoints; handler mixins declare type-only host contracts so they can be checked independently.
 
 ```python
-class WebsiteServer(http.server.SimpleHTTPRequestHandler):
+class WebsiteServer(APIHandler, HealthHandler, ProxyHandler, http.server.SimpleHTTPRequestHandler):
     root_dir: Path         # Class-level: project root directory
     data_provider: DataProvider | None  # Class-level: data provider instance
 ```
@@ -579,7 +579,7 @@ No API versioning. Single version served by `WebsiteServer`.
 
 ## Navigation Links
 
-- **Parent**: [Website README](./README.md)
+- **Parent**: [Website README](readme.md)
 - **Module Index**: [All Modules](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

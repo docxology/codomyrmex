@@ -1,6 +1,6 @@
 # The Naming and Nature of Codomyrmex
 
-**Series**: [Biological & Cognitive Perspectives](./README.md) | **Role**: Hub Document
+**Series**: [Biological & Cognitive Perspectives](./README.md) | **Role**: Hub Document | **Last Updated**: March 2026
 
 ## The Science of Ants
 
@@ -10,7 +10,7 @@ Ants are compelling models for distributed computation because individual ants o
 
 ### Taxonomic Context
 
-The family Formicidae contains over 22,000 described species organized into ~25 subfamilies (Bolton, 2024). Codomyrmex's name evokes no specific taxon but draws on principles observed across the family tree — from the leaf-cutter agriculture of *Atta* and *Acromyrmex* (tribe Attini) to the army ant raiding columns of *Eciton* (Dorylinae), the slave-making social parasitism of *Polyergus* (Formicinae), and the supercolonial invasions of *Linepithema humile* (Dolichoderinae). Each lineage exhibits distinct solutions to the same fundamental challenges: coordination without central control, defense without immune system centralization, and optimization without global state representation.
+The family Formicidae contains over 14,000 valid extant species (Bolton 2024 / AntCat), with several thousand additional subspecies and fossil taxa, organized into ~25 subfamilies. Codomyrmex's name evokes no specific taxon but draws on principles observed across the family tree — from the leaf-cutter agriculture of *Atta* and *Acromyrmex* (tribe Attini) to the army ant raiding columns of *Eciton* (Dorylinae), the slave-making social parasitism of *Polyergus* (Formicinae), and the supercolonial invasions of *Linepithema humile* (Dolichoderinae). Each lineage exhibits distinct solutions to the same fundamental challenges: coordination without central control, defense without immune system centralization, and optimization without global state representation.
 
 ```mermaid
 graph TD

@@ -47,8 +47,59 @@ class Result:
 
     @property
     def ok(self) -> bool:
-        """Ok."""
+        """Return True when the result completed successfully."""
         return self.status == ResultStatus.SUCCESS
+
+    @classmethod
+    def success(
+        cls,
+        data: Any = None,
+        message: str = "",
+        metadata: dict[str, Any] | None = None,
+        duration_ms: float | None = None,
+    ) -> "Result":
+        """Create a successful operation result."""
+        return cls(
+            status=ResultStatus.SUCCESS,
+            data=data,
+            message=message,
+            metadata=metadata or {},
+            duration_ms=duration_ms,
+        )
+
+    @classmethod
+    def failure(
+        cls,
+        message: str,
+        errors: list[str] | None = None,
+        data: Any = None,
+        metadata: dict[str, Any] | None = None,
+        duration_ms: float | None = None,
+    ) -> "Result":
+        """Create a failed operation result."""
+        return cls(
+            status=ResultStatus.FAILURE,
+            data=data,
+            message=message,
+            errors=errors or [],
+            metadata=metadata or {},
+            duration_ms=duration_ms,
+        )
+
+    @classmethod
+    def from_dict(cls, payload: dict[str, Any]) -> "Result":
+        """Create a Result from its dictionary representation."""
+        status = payload.get("status", ResultStatus.FAILURE)
+        if not isinstance(status, ResultStatus):
+            status = ResultStatus(str(status))
+        return cls(
+            status=status,
+            data=payload.get("data"),
+            message=str(payload.get("message", "")),
+            errors=list(payload.get("errors", [])),
+            metadata=dict(payload.get("metadata", {})),
+            duration_ms=payload.get("duration_ms"),
+        )
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -93,6 +144,24 @@ class Task:
             "metadata": self.metadata,
         }
 
+    @classmethod
+    def from_dict(cls, payload: dict[str, Any]) -> "Task":
+        """Create a Task from its dictionary representation."""
+        status = payload.get("status", TaskStatus.PENDING)
+        if not isinstance(status, TaskStatus):
+            status = TaskStatus(str(status))
+        return cls(
+            id=str(payload["id"]),
+            name=str(payload["name"]),
+            status=status,
+            description=str(payload.get("description", "")),
+            module=str(payload.get("module", "")),
+            input_data=dict(payload.get("input_data", {})),
+            output_data=dict(payload.get("output_data", {})),
+            dependencies=list(payload.get("dependencies", [])),
+            metadata=dict(payload.get("metadata", {})),
+        )
+
 
 @dataclass
 class Config:
@@ -108,7 +177,7 @@ class Config:
         return self.values.get(key, default)
 
     def set(self, key: str, value: Any) -> None:
-        """set the value."""
+        """Set the requested configuration value."""
         self.values[key] = value
 
 

@@ -53,7 +53,7 @@ class InMemoryVectorStore(_SearchMixin, VectorStore):
 
     def __init__(self, distance_metric: str = "cosine"):
         self._vectors: dict[str, VectorEntry] = {}
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
         if distance_metric == "cosine":
             self._distance_fn = DistanceMetric.cosine
@@ -95,7 +95,8 @@ class InMemoryVectorStore(_SearchMixin, VectorStore):
 
     def get(self, id: str) -> VectorEntry | None:
         """Get a vector by ID."""
-        return self._vectors.get(id)
+        with self._lock:
+            return self._vectors.get(id)
 
     def delete(self, id: str) -> bool:
         """Delete a vector by ID."""
@@ -107,7 +108,8 @@ class InMemoryVectorStore(_SearchMixin, VectorStore):
 
     def count(self) -> int:
         """Get total number of vectors."""
-        return len(self._vectors)
+        with self._lock:
+            return len(self._vectors)
 
     def clear(self) -> None:
         """Clear all vectors."""
@@ -115,8 +117,9 @@ class InMemoryVectorStore(_SearchMixin, VectorStore):
             self._vectors.clear()
 
     def list_ids(self) -> list[str]:
-        """list all vector IDs."""
-        return list(self._vectors.keys())
+        """List all vector IDs."""
+        with self._lock:
+            return list(self._vectors.keys())
 
 
 class NamespacedVectorStore(VectorStore):

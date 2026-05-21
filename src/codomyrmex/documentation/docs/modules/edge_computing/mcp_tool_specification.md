@@ -288,5 +288,5 @@ Each node object:
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
-- **API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **API Specification**: [API_SPECIFICATION.md](api_specification.md)
 - **Home**: [Root README](../../../README.md)

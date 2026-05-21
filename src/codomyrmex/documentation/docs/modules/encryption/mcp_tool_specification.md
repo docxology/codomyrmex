@@ -32,5 +32,5 @@ If MCP tool exposure is needed in the future, consider:
 
 ## Navigation
 
-- **API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
-- **Module README**: [README.md](README.md)
+- **API Specification**: [API_SPECIFICATION.md](api_specification.md)
+- **Module README**: [README.md](readme.md)

@@ -2,7 +2,7 @@
 
 ## Overview
 
-In-process feature definitions and vectors. Auto-discovered from [`mcp_tools.py`](mcp_tools.py). Category: `feature_store`.
+In-process feature definitions and vectors. Auto-discovered from [`mcp_tools.py`](../../../../../../src/codomyrmex/feature_store/mcp_tools.py). Category: `feature_store`.
 
 ## Tools
 

@@ -1,5 +1,7 @@
 # Basic Examples Guide
 
+> **Status: stale (2026-05).** The shell scripts referenced below (`scripts/examples/basic/*.sh`) were retired during the orchestrator consolidation and **do not exist on disk**. The current runnable demos live in `src/codomyrmex/examples/` (e.g. `agent_orchestration_demo.py`, `ambitious_swarm_demo.py`, `paperclip_mission_control.py`). The rest of this page is preserved for historical reference until the basic-demo set is rebuilt.
+
 Documentation for basic single-module examples demonstrating individual Codomyrmex capabilities.
 
 ## Overview

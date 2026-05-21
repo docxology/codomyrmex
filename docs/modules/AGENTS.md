@@ -73,6 +73,7 @@ Documentation tooling, generated references, and publishing assets for Modules.
 - `ide/` – Directory containing ide components
 - `identity/` – Directory containing identity components
 - `image/` – Directory containing image components
+- `languages/` – Directory containing languages components
 - `interpretability/` – Directory containing interpretability components
 - `llm/` – Directory containing llm components
 - `logging_monitoring/` – Directory containing logging_monitoring components
@@ -97,6 +98,7 @@ Documentation tooling, generated references, and publishing assets for Modules.
 - `ollama.md` – Project file
 - `operating_system/` – Directory containing operating_system components
 - `orchestrator/` – Directory containing orchestrator components
+- `pai_pm/` – Directory containing pai_pm components
 - `overview.md` – Project file
 - `peft/` – Directory containing peft components
 - `performance/` – Directory containing performance components
@@ -138,6 +140,7 @@ Documentation tooling, generated references, and publishing assets for Modules.
 - `validation/` – Directory containing validation components
 - `vector_store/` – Directory containing vector_store components
 - `video/` – Directory containing video components
+- `vision/` – Directory containing vision components
 - `wallet/` – Directory containing wallet components
 - `website/` – Directory containing website components
 

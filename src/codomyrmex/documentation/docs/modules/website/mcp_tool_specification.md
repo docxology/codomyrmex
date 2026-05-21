@@ -10,7 +10,7 @@ This document specifies the Model Context Protocol (MCP) tools provided by the `
 *No MCP tools are currently exposed by this module.*
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
+- **Human Documentation**: [README.md](readme.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [codomyrmex](../README.md)
 - **🏠 Project Root**: [README](../../../README.md)

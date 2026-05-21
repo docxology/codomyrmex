@@ -27,7 +27,7 @@
 | `mcp_tools.py` files (non-test) | 149 | [docs/reference/inventory.md](docs/reference/inventory.md) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Tests collected | 34,593 | `uv run pytest --collect-only -q --no-cov` |
+| Tests collected | 34,334 | `uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib` ([inventory](docs/reference/inventory.md)) |
 | GitHub Actions workflows | 37 | `.github/workflows/*.yml` (see `uv run python scripts/doc_inventory.py`) |
 | RASP doc coverage | 100% (128/128) | [AGENTS.md](AGENTS.md) |
 | Version | v1.2.7 | [pyproject.toml](pyproject.toml) |

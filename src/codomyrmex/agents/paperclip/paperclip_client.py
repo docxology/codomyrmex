@@ -7,6 +7,7 @@ governance, and agent coordination.
 See: https://github.com/paperclipai/paperclip
 """
 
+import os
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
@@ -22,6 +23,7 @@ from codomyrmex.agents.core.exceptions import (
     PaperclipError,
 )
 from codomyrmex.agents.generic import CLIAgentBase
+from codomyrmex.config_management.defaults import DEFAULT_PAPERCLIP_URL
 
 
 class PaperclipClient(CLIAgentBase):
@@ -41,7 +43,8 @@ class PaperclipClient(CLIAgentBase):
                 - ``paperclip_timeout``: Default timeout in seconds (default 120)
                 - ``paperclip_working_dir``: Working directory for CLI
                 - ``paperclip_agent_id``: Default agent ID for heartbeat runs
-                - ``paperclip_api_base``: API base URL (default ``http://localhost:3100``)
+                - ``paperclip_api_base``: API base URL (default from
+                  ``$PAPERCLIP_BASE_URL`` or ``DEFAULT_PAPERCLIP_URL``)
                 - ``paperclip_config_path``: Path to Paperclip config file
         """
         super().__init__(
@@ -77,7 +80,7 @@ class PaperclipClient(CLIAgentBase):
         )
         self.api_base: str = (
             self.get_config_value("paperclip_api_base", config=config)
-            or "http://localhost:3100"
+            or os.getenv("PAPERCLIP_BASE_URL", DEFAULT_PAPERCLIP_URL)
         )
         self.config_path: str | None = self.get_config_value(
             "paperclip_config_path", config=config

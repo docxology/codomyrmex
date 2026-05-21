@@ -21,21 +21,29 @@ import os
 import re
 import urllib.error
 import urllib.request
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import yaml
+import yaml  # type: ignore[import-untyped]
 
 from codomyrmex.logging_monitoring import get_logger
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 logger = get_logger(__name__)
 
-# PM Server base URL — configurable via PAI_PM_PORT env var
+# PM Server base URL — host/port configurable via PM_SERVER_HOST / PAI_PM_PORT env vars
 _PM_SERVER_PORT = os.environ.get("PAI_PM_PORT", "8888")
-_PM_SERVER_BASE = f"http://localhost:{_PM_SERVER_PORT}"
+_PM_SERVER_HOST = os.getenv("PM_SERVER_HOST", "localhost")
+_PM_SERVER_BASE = f"http://{_PM_SERVER_HOST}:{_PM_SERVER_PORT}"
 
 
 class PAIProviderMixin:
     """Mixin providing PAI awareness data methods."""
+
+    if TYPE_CHECKING:
+        _PAI_ROOT: Path
+        _ws_clients: set[Any]
 
     def start_websocket_push(self, host: str = "0.0.0.0", port: int = 8890) -> None:
         """Start a background thread that pushes PAI awareness and health data over WebSockets every 15s.

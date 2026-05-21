@@ -124,7 +124,7 @@ class LLMInference:
             manager = OllamaManager()
             models = manager.list_models()
             result["ollama_available"] = True
-            result["models"] = [m.get("name", str(m)) for m in (models or [])]
+            result["models"] = [getattr(m, "name", str(m)) for m in (models or [])]
             result["model_count"] = len(result["models"])
         except Exception as e:
             logger.warning(f"OllamaManager.list_models() failed: {e}")
@@ -172,7 +172,9 @@ class LLMInference:
                 description=description,
                 priority=task_priority.value,
             )
-            subtasks = decomposer.decompose(task)
+            # TaskDecomposer.decompose() takes a task description string,
+            # not a Task object (uses keyword heuristics via str.lower()).
+            subtasks = decomposer.decompose(description)
             result["task_submitted"] = True
             result["subtask_count"] = len(subtasks) if subtasks else 0
             result["task_id"] = task.id

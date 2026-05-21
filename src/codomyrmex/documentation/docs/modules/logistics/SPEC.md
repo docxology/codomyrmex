@@ -103,4 +103,4 @@ class ResourceManager:
 
 ## Related Documents
 
-- **Readme**: [README.md](README.md)
+- **Readme**: [README.md](readme.md)

@@ -1,6 +1,6 @@
 # Cognitive Ergonomics: Human Factors and the Operator Interface
 
-**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Human Factors Engineering
+**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Human Factors Engineering | **Last Updated**: March 2026
 
 ## The Theory
 

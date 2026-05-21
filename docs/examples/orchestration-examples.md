@@ -1,5 +1,7 @@
 # Orchestration Examples Guide
 
+> **Status: stale (2026-05).** Every Python snippet on this page imports from `codomyrmex.project_orchestration` and references `scripts/project_orchestration/examples.py`. That module was renamed to `codomyrmex.orchestrator` (live at `src/codomyrmex/orchestrator/__init__.py`) and the helper functions `get_orchestration_engine`, `get_workflow_manager`, `get_task_orchestrator`, and `get_resource_manager` are no longer part of the public API. The `scripts/project_orchestration/` directory does not exist. For current usage see `src/codomyrmex/orchestrator/README.md`, `API_SPECIFICATION.md`, and `src/codomyrmex/examples/agent_orchestration_demo.py`. The rest of this page is preserved for historical reference until the orchestration-demo set is rebuilt against the new API.
+
 Documentation for orchestration examples demonstrating task, project, and workflow orchestration with complete configuration files.
 
 ## Overview

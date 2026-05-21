@@ -329,6 +329,14 @@ def enhance_code_pipeline(source_code):
    - Integration patterns with other modules
    - Security considerations and best practices
 
+### **Module-Specific Configuration**
+
+Module-specific configuration should live beside the module that consumes it, with defaults documented in the module's README, SPEC, and API reference. Prefer environment variables and typed configuration helpers over hard-coded paths or credentials.
+
+### **Interactive Module Exploration**
+
+Use the CLI and website surfaces to inspect module metadata, run examples, and verify health checks before wiring modules into larger workflows. When adding new interactive surfaces, keep them backed by source modules rather than duplicating module lists in docs or UI code.
+
 ## 🔍 Module Health and Monitoring
 
 ### **Module Status Checking**

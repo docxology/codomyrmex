@@ -211,7 +211,7 @@ manager.initialize()
 
 ## Related Documentation
 
-- [Module README](./README.md)
+- [Module README](readme.md)
 - [API Specification](./AGENTS.md)
 - [Functional Specification](./SPEC.md)
 

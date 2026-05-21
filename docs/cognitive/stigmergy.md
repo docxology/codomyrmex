@@ -1,6 +1,6 @@
 # Algorithmic Stigmergy: Marker-Based Coordination
 
-**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Multi-Agent Coordination Theory
+**Series**: [Cognitive Perspectives](./README.md) | **Topic**: Multi-Agent Coordination Theory | **Last Updated**: March 2026
 
 ## The Theory
 

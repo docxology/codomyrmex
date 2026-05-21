@@ -78,4 +78,4 @@ result = nas_random_search(n_trials=50, seed=42)
 
 ## Navigation
 
-- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/nas/SPEC.md)
