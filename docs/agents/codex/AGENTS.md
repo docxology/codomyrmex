@@ -2,7 +2,7 @@
 
 # Codomyrmex Agents — docs/agents/codex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: June 2026
 
 ## Signposting
 
@@ -14,6 +14,12 @@ Documentation files and guides for the Codomyrmex platform.
 
 ## Active Components
 - Markdown `README.md`
+- Markdown `access.md`
+
+## Key Files
+
+- `README.md` - Human-facing Codex module overview.
+- `access.md` - Safe Codex access and dispatch catalog guide.
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -34,4 +40,5 @@ Documentation files and guides for the Codomyrmex platform.
 
 ## Related Documents
 
+- **Access Guide**: [access.md](access.md)
 - **Spec**: `SPEC.md` is inherited from the nearest parent scope.

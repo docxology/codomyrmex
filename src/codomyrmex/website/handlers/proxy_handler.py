@@ -10,7 +10,7 @@ import json
 import os
 from typing import TYPE_CHECKING, Any
 
-import requests  # type: ignore[import-untyped]
+import requests
 
 from codomyrmex.config_management.defaults import (
     DEFAULT_OLLAMA_MODEL,

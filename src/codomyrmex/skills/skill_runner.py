@@ -50,8 +50,10 @@ def run_skill(
 
     logger.info("Running skill %s with params: %s", skill_id, list(params.keys()))
 
-    # Validate params against the skill's schema
-    skill.validate_params(**params)
+    # Validate params against the skill's schema.
+    errors = skill.validate_params(**params) or []
+    if errors:
+        raise ValueError(f"Invalid parameters for {skill_id!r}: {', '.join(errors)}")
 
     result = skill.execute(**params)
     logger.info("Skill %s completed successfully", skill_id)

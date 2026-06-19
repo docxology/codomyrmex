@@ -344,13 +344,21 @@ ANTHROPIC_API_KEY=test_anthropic_key
 
 @pytest.fixture
 def real_docker_available():
-    """Check actual Docker availability (not mocked)."""
+    """Check actual Docker daemon availability (not mocked)."""
     try:
         result = subprocess.run(
-            ["docker", "--version"], capture_output=True, text=True, timeout=5
+            ["docker", "info", "--format", "{{json .ServerVersion}}"],
+            capture_output=True,
+            text=True,
+            timeout=5,
         )
         return result.returncode == 0
-    except (subprocess.SubprocessError, FileNotFoundError, subprocess.TimeoutExpired):
+    except (
+        subprocess.SubprocessError,
+        FileNotFoundError,
+        OSError,
+        subprocess.TimeoutExpired,
+    ):
         return False
 
 

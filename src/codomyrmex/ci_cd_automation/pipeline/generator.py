@@ -66,9 +66,7 @@ class Workflow:
 
     def _to_gitlab(self) -> dict[str, Any]:
         """Convert to GitLab CI format."""
-        gitlab_ci: dict[str, Any] = {
-            "stages": [s.name for s in self.pipeline.stages]
-        }
+        gitlab_ci: dict[str, Any] = {"stages": [s.name for s in self.pipeline.stages]}
         for stage in self.pipeline.stages:
             job_name = stage.name.replace(" ", "_")
             gitlab_ci[job_name] = {

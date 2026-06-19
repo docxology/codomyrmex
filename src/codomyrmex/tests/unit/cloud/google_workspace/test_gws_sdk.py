@@ -193,9 +193,7 @@ class TestGoogleCredentialsInit:
         creds = GoogleCredentials(credentials_file="/path.json")
         assert creds._creds is None
 
-    def test_get_credentials_raises_without_sdk(
-        self, monkeypatch: pytest.MonkeyPatch
-    ):
+    def test_get_credentials_raises_without_sdk(self, monkeypatch: pytest.MonkeyPatch):
         """Raises ImportError when google-auth not installed (no SDK in test env)."""
         if _GOOGLE_AUTH_INSTALLED:
             pytest.skip("google-auth SDK is installed — ImportError path not reachable")
@@ -207,9 +205,7 @@ class TestGoogleCredentialsInit:
         with pytest.raises(ImportError, match="google-auth"):
             creds.get_credentials()
 
-    def test_build_service_raises_without_sdk(
-        self, monkeypatch: pytest.MonkeyPatch
-    ):
+    def test_build_service_raises_without_sdk(self, monkeypatch: pytest.MonkeyPatch):
         """Raises ImportError when google-api-python-client not installed."""
         if _SDK_INSTALLED:
             pytest.skip(

@@ -451,6 +451,16 @@ filterwarnings = [
 target-version = "py311"
 line-length = 88
 src = ["src"]
+extend-exclude = [
+    "src/codomyrmex/agents/ghost_architecture",
+    "src/codomyrmex/agents/hermes/evolution",
+    "src/codomyrmex/agents/mission_control/app",
+    "src/codomyrmex/agents/open_gauss",
+    "src/codomyrmex/agents/openfang/vendor/openfang",
+    "src/codomyrmex/dark/pdf/vendor/dark-pdf",
+    "src/codomyrmex/git_analysis/vendor/gitnexus",
+    "src/codomyrmex/skills/skills/upstream",
+]
 
 [tool.ruff.lint]
 select = ["ALL"]
@@ -697,7 +707,17 @@ python-version = "3.11"
 # Excluded: ty panics on this module (infer_expression_type_impl cycle limit).
 [tool.ty.src]
 include = ["src/codomyrmex"]
-exclude = ["src/codomyrmex/physical_management/object_manager.py"]
+exclude = [
+    "src/codomyrmex/agents/ghost_architecture",
+    "src/codomyrmex/agents/hermes/evolution",
+    "src/codomyrmex/agents/mission_control/app",
+    "src/codomyrmex/agents/open_gauss",
+    "src/codomyrmex/agents/openfang/vendor/openfang",
+    "src/codomyrmex/dark/pdf/vendor/dark-pdf",
+    "src/codomyrmex/git_analysis/vendor/gitnexus",
+    "src/codomyrmex/physical_management/object_manager.py",
+    "src/codomyrmex/skills/skills/upstream",
+]
 
 [tool.ty.rules]
 # v1.1.1: Tightened from initial lenient config

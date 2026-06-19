@@ -15,6 +15,29 @@ Single-turn execution against the Codex API via `CodexClient`.
 
 **Returns:** `status`, `content`, `error`, `metadata`.
 
+## Tool: `codex_access_status`
+
+Read-only Codex access probe for MCP, skills, trust, Hermes, Codex client, and
+dispatch readiness.
+
+| Parameter | Type | Required | Default | Description |
+|:----------|:-----|:---------|:--------|:------------|
+| none | - | - | - | No input parameters |
+
+**Returns:** `status`, `repo_root`, `surfaces`, `surface_statuses`, `dispatch`,
+and `entrypoints`.
+
+## Tool: `codex_dispatch_catalog`
+
+Read-only catalog of multiagent dispatch surfaces and safety classifications.
+
+| Parameter | Type | Required | Default | Description |
+|:----------|:-----|:---------|:--------|:------------|
+| none | - | - | - | No input parameters |
+
+**Returns:** `dispatchers` and `summary`. Dispatch entries are classified as
+`read_only`, `dry_run`, or `side_effectful`.
+
 ## Navigation
 
 - **Parent**: [agents](../README.md)

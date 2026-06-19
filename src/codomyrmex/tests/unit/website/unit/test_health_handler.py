@@ -93,8 +93,10 @@ class _FakeHealthHandler(HealthHandler):
     def send_json_response(self, data, status=200):
         self.responses.append({"status": status, "data": data})
 
-    def send_error(self, code, msg=""):
-        self.errors.append((code, msg))
+    def send_error(
+        self, code: int, message: str | None = None, explain: str | None = None
+    ):
+        self.errors.append((code, message, explain))
 
 
 # ── handle_status ────────────────────────────────────────────────────────

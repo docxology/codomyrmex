@@ -16,9 +16,7 @@ class SQLSchema:
 
     tables: dict[str, list[str]]  # {table_name: [column_name, ...]}
     primary_keys: dict[str, str] = field(default_factory=dict)
-    foreign_keys: list[tuple[str, str, str, str]] = field(
-        default_factory=list
-    )
+    foreign_keys: list[tuple[str, str, str, str]] = field(default_factory=list)
 
     def __post_init__(self):
         if self.primary_keys is None:

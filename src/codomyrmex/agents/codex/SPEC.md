@@ -1,10 +1,12 @@
 # codex - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: June 2026
 
 ## Purpose
 
-The `codex` submodule provides integration with OpenAI Codex API. It includes a client for interacting with Codex API and integration adapters for Codomyrmex modules.
+The `codex` submodule provides OpenAI Codex API integration, adapters for
+Codomyrmex modules, and safe read-only probes that let Codex inspect available
+Codomyrmex tools, skill packs, trust state, Hermes skills, and dispatch paths.
 
 ## Design Principles
 
@@ -14,6 +16,8 @@ The `codex` submodule provides integration with OpenAI Codex API. It includes a 
 - **Streaming Support**: Supports streaming responses
 - **Error Handling**: Handles API errors gracefully
 - **Integration**: Provides adapters for Codomyrmex modules
+- **Safe Inspection**: Exposes access status and dispatch catalogs without
+  launching agents or calling model APIs.
 
 ## Navigation
 
@@ -48,4 +52,3 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 ### Technical Implementation
 
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-

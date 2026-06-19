@@ -60,6 +60,19 @@ from codomyrmex.skills import (
 )
 ```
 
+Two registries have similar names but different contracts:
+
+- `codomyrmex.skills.SkillRegistry` indexes YAML skill packs through
+  `SkillLoader`.
+- `codomyrmex.skills.discovery.SkillRegistry` stores executable Python
+  `Skill` and `FunctionSkill` objects discovered at runtime.
+
+Codex should inspect both through the read-only access probe:
+
+```bash
+uv run python scripts/agents/codex_access.py --json
+```
+
 ## Cross-References
 
 **Markdown skill packs in this repo** (PAI / Cursor / agentskills-style): root [`SKILL.md`](../../SKILL.md), [`src/codomyrmex/agents/pai/SKILL.md`](../../src/codomyrmex/agents/pai/SKILL.md), [`src/codomyrmex/orchestrator/fractals/SKILL.md`](../../src/codomyrmex/orchestrator/fractals/SKILL.md), [`.agent/skills/`](../../.agent/skills/), [`.cursor/skills/`](../../.cursor/skills/) (Cursor stubs). Optional `~/.claude/skills/` installs are documented in [CLAUDE.md](../../CLAUDE.md).

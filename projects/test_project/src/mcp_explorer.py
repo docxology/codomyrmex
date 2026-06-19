@@ -105,9 +105,7 @@ class MCPExplorer:
             # discovered tools.
             report = self.discovery.scan_package("codomyrmex")
             discovered_tools = self.discovery.list_tools()
-            tool_names = [
-                getattr(t, "name", str(t)) for t in (discovered_tools or [])
-            ]
+            tool_names = [getattr(t, "name", str(t)) for t in (discovered_tools or [])]
             result["tool_count"] = len(tool_names)
             result["failed_modules"] = (
                 len(report.failed_modules)
@@ -124,7 +122,11 @@ class MCPExplorer:
             result["taxonomy_report"] = (
                 taxonomy.summary()
                 if hasattr(taxonomy, "summary")
-                else (taxonomy.__dict__ if hasattr(taxonomy, "__dict__") else str(taxonomy))
+                else (
+                    taxonomy.__dict__
+                    if hasattr(taxonomy, "__dict__")
+                    else str(taxonomy)
+                )
             )
         except Exception as e:
             logger.warning(f"generate_taxonomy_report failed: {e}")

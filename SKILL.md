@@ -34,6 +34,22 @@ trust_all()             # Step 2: Grant full execution trust
 result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 ```
 
+## Codex Access Probe
+
+Codex sessions can inspect the repo-native agentic surface without mutating the
+workspace or launching agents:
+
+```bash
+uv run python scripts/agents/codex_access.py --json
+uv run python scripts/agents/codex_access.py --check --json
+uv run python scripts/agents/improve_src.py --dry-run --limit 2 --json
+```
+
+The same read-only payloads are exposed as MCP tools:
+
+- `codomyrmex.codex_access_status` - MCP, skills, trust, Hermes, and Codex readiness.
+- `codomyrmex.codex_dispatch_catalog` - multiagent dispatch paths classified as `read_only`, `dry_run`, or `side_effectful`.
+
 ## Skill Domains (15)
 
 | Skill | Domain | Key Triggers |

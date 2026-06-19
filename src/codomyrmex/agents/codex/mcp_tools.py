@@ -46,3 +46,31 @@ def codex_execute(
         }
     except Exception as exc:
         return {"status": "error", "content": "", "error": str(exc), "metadata": {}}
+
+
+@mcp_tool(
+    category="codex",
+    description=(
+        "Return a read-only Codex access status payload for Codomyrmex MCP, "
+        "skills, trust, Hermes, and dispatch surfaces."
+    ),
+)
+def codex_access_status() -> dict[str, Any]:
+    """Inspect Codex-visible Codomyrmex capabilities without side effects."""
+    from codomyrmex.agents.codex.access import get_codex_access_status
+
+    return get_codex_access_status()
+
+
+@mcp_tool(
+    category="codex",
+    description=(
+        "Return the read-only catalog of Codomyrmex multiagent dispatch "
+        "surfaces and their safety classifications."
+    ),
+)
+def codex_dispatch_catalog() -> dict[str, Any]:
+    """List Codomyrmex dispatch surfaces without launching agents."""
+    from codomyrmex.agents.codex.access import get_codex_dispatch_catalog
+
+    return get_codex_dispatch_catalog()

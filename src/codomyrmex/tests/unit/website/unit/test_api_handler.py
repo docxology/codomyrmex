@@ -12,6 +12,7 @@ handle_pai_action, handle_agent_dispatch, handle_agent_dispatch_status.
 import contextlib
 import io
 import json
+from pathlib import Path
 
 import pytest
 
@@ -63,7 +64,7 @@ class FakeAPIHandler(APIHandler):
         self.headers = {"Content-Length": str(content_length)}
         self.rfile = io.BytesIO(body)
         self.data_provider = data_provider
-        self.root_dir = root_dir
+        self.root_dir = root_dir or Path.cwd()
         self.responses: list[dict] = []
         self.errors: list[tuple] = []
         # Thread-safety locks referenced in handle_tests_run / handle_agent_dispatch
@@ -76,8 +77,10 @@ class FakeAPIHandler(APIHandler):
     def send_json_response(self, data, status=200):
         self.responses.append({"status": status, "data": data})
 
-    def send_error(self, code, msg=""):
-        self.errors.append((code, msg))
+    def send_error(
+        self, code: int, message: str | None = None, explain: str | None = None
+    ):
+        self.errors.append((code, message, explain))
 
 
 # ── handle_config_get ─────────────────────────────────────────────────────

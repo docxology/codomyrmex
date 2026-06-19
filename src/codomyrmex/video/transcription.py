@@ -66,9 +66,7 @@ _DEFAULT_SCRIPT = (
     / "scripts"
     / "transcribe_url.py"
 )
-_DEFAULT_API_URL = os.getenv(
-    "VIDEO_TRANSCRIPTION_URL", DEFAULT_VIDEO_TRANSCRIPTION_URL
-)
+_DEFAULT_API_URL = os.getenv("VIDEO_TRANSCRIPTION_URL", DEFAULT_VIDEO_TRANSCRIPTION_URL)
 
 # Whisper model size options
 WHISPER_MODELS = ("tiny", "base", "small", "medium", "large-v2", "large-v3")

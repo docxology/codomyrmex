@@ -4,7 +4,7 @@ description: Full-spectrum coding workspace skill providing ~600 production MCP 
 ---
 # Codomyrmex Skill for PAI
 
-**Version**: v1.0.8 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: ~600 (`@mcp_tool`; see `docs/reference/inventory.md`)
+**Version**: v1.2.7 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: ~600 (`@mcp_tool`; see `docs/reference/inventory.md`)
 
 Canonical copy for install-from-repo: [SKILL.md](../../../../SKILL.md) at repository root. This file stays aligned with that manifest for PAI pack resolution.
 
@@ -50,6 +50,21 @@ m["workflows"]    # bundled workflow definitions
 ```
 
 Refresh documented **decorator** and **file** counts after MCP changes: `uv run python scripts/doc_inventory.py` (optional: `--manifest` for runtime tool count).
+
+## Codex access probe
+
+For Codex, sibling agents, or PAI checks that need one safe inventory payload:
+
+```bash
+uv run python scripts/agents/codex_access.py --json
+uv run python scripts/agents/codex_access.py --check --json
+uv run python scripts/agents/improve_src.py --dry-run --limit 2 --json
+```
+
+MCP equivalents:
+
+- `codomyrmex.codex_access_status` - read-only MCP, skill, trust, Hermes, and Codex readiness.
+- `codomyrmex.codex_dispatch_catalog` - dispatch paths classified before any agent launch.
 
 ## Skill Domains (15)
 

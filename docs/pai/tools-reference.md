@@ -194,6 +194,23 @@ These tools provide generic access to **any** Codomyrmex module's public API:
 - **Parameters**: none
 - **Returns**: `{status: "cleared", caches: [...]}`
 
+### Codex Access (2 tools)
+
+These tools let Codex and PAI inspect the agentic surface before trust changes
+or dispatches:
+
+| Tool | Trust | Description |
+|------|-------|-------------|
+| `codomyrmex.codex_access_status` | Safe | Read-only status for MCP, skills, trust, Hermes, Codex, and dispatch readiness |
+| `codomyrmex.codex_dispatch_catalog` | Safe | Dispatch path catalog with `read_only`, `dry_run`, and `side_effectful` classifications |
+
+CLI equivalents:
+
+```bash
+uv run python scripts/agents/codex_access.py --json
+uv run python scripts/agents/improve_src.py --dry-run --limit 2 --json
+```
+
 ## Dynamic Tool Discovery
 
 Beyond the 20 static tools (see line above; the 9-entry "Static proxy" row in the Tool Count Summary is a sub-category), the MCP bridge auto-discovers additional tools at runtime:

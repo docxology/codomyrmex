@@ -167,7 +167,8 @@ def execute_code(
         - stderr (str): Standard error output
         - exit_code (int): Process exit code (0 for success)
         - execution_time (float): Actual execution time in seconds
-        - status (str): Execution status ("success", "timeout", "error", "setup_error")
+        - status (str): Execution status ("success", "timeout",
+          "execution_error", "setup_error")
         - error_message (str): Detailed error message if status is not "success"
 
     Raises:

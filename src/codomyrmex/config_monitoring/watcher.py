@@ -53,7 +53,9 @@ class ConfigWatcher:
                 daemon=True,
             )
             self._thread.start()
-            logger.info("Started watching %s (interval=%ss)", self.file_path, self.interval)
+            logger.info(
+                "Started watching %s (interval=%ss)", self.file_path, self.interval
+            )
 
     def stop(self) -> None:
         """Stop the watcher thread."""
@@ -75,13 +77,21 @@ class ConfigWatcher:
                     try:
                         self.callback()
                     except Exception as e:
-                        logger.error("Error in ConfigWatcher callback for %s: %s", self.file_path, e)
+                        logger.error(
+                            "Error in ConfigWatcher callback for %s: %s",
+                            self.file_path,
+                            e,
+                        )
                 elif current_mtime < self._last_mtime and current_mtime == 0:
                     # File disappeared
                     logger.warning("Watched file disappeared: %s", self.file_path)
                     self._last_mtime = 0
             except Exception as e:
-                logger.error("Unexpected error in ConfigWatcher loop for %s: %s", self.file_path, e)
+                logger.error(
+                    "Unexpected error in ConfigWatcher loop for %s: %s",
+                    self.file_path,
+                    e,
+                )
 
             # Wait for interval, but wake up quickly if stop_event is set
             self._stop_event.wait(self.interval)

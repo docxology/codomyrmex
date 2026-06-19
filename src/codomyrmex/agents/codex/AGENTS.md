@@ -1,15 +1,17 @@
 # Codomyrmex Agents — src/codomyrmex/agents/codex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: June 2026
 
 ## Purpose
-Module implementation, resources, and local coordination for Codex..
+OpenAI Codex integration and read-only Codex access probes for Codomyrmex
+agentic surfaces.
 
 ## Active Components
 - `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
+- `access.py` – Project file
 - `codex_client.py` – Project file
 - `codex_integration.py` – Project file
 - `mcp_tools.py` – Project file
@@ -27,9 +29,10 @@ Module implementation, resources, and local coordination for Codex..
 - `README.md`
 - `SPEC.md`
 - `__init__.py`
+- `access.py` - Read-only Codex access status and dispatch catalog helpers.
 - `codex_client.py`
 - `codex_integration.py`
-- `mcp_tools.py`
+- `mcp_tools.py` - Codex MCP tools, including safe access/catalog probes.
 - `py.typed`
 
 ## Dependencies

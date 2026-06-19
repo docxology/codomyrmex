@@ -62,7 +62,10 @@ def test_collect_doc_files_skips_gitmodules_by_default(tmp_path: Path) -> None:
     vendor.mkdir(parents=True)
     (vendor / "README.md").write_text("# Vendor\n", encoding="utf-8")
 
-    collected = {path.relative_to(tmp_path).as_posix() for path in _collect_doc_files(tmp_path, False)}
+    collected = {
+        path.relative_to(tmp_path).as_posix()
+        for path in _collect_doc_files(tmp_path, False)
+    }
 
     assert collected == {"README.md"}
 

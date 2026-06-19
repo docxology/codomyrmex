@@ -54,9 +54,7 @@ class TestDataclasses:
 
     def test_simulated_actuator_lifecycle(self):
         actuator = SimulatedActuator("a2")
-        assert actuator.execute(
-            ActuatorCommand("a2", "move", {"target": 5.0})
-        ) is False
+        assert actuator.execute(ActuatorCommand("a2", "move", {"target": 5.0})) is False
 
         assert actuator.connect() is True
         assert actuator.execute(ActuatorCommand("a2", "move", {"target": 5.0}))

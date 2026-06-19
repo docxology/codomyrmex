@@ -14,6 +14,12 @@
 
 Coordinate documentation and review work for visual document processing. The source package owns extraction logic, VLM integration, and result models; this docs folder provides the module-level map.
 
+## Key Files
+
+- `README.md` — module overview and source signposts
+- `SPEC.md` — functional expectations for this docs module
+- `../../../src/codomyrmex/vision/` — source-owned implementation and API documentation
+
 ## Operating Contracts
 
 - Keep provider-specific behavior isolated in `vlm_client.py` or a provider adapter rather than spreading it across extraction modules.

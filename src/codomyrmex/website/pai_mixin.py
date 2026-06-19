@@ -23,7 +23,7 @@ import urllib.error
 import urllib.request
 from typing import TYPE_CHECKING, Any
 
-import yaml  # type: ignore[import-untyped]
+import yaml
 
 from codomyrmex.logging_monitoring import get_logger
 

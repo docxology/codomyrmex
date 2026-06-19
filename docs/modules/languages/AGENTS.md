@@ -14,6 +14,12 @@
 
 Coordinate edits to the language runtime abstraction layer. The source package owns adapters and MCP tools for language-specific code operations; this docs folder explains the module-level role and links to source-owned details.
 
+## Key Files
+
+- `README.md` — module overview and source signposts
+- `SPEC.md` — functional expectations for this docs module
+- `../../../src/codomyrmex/languages/` — source-owned adapters, MCP tools, and subpackage docs
+
 ## Operating Contracts
 
 - Keep language-specific behavior in subpackages such as `python/`, `javascript/`, `go/`, or `rust/`; avoid centralizing unrelated behavior in `base.py`.

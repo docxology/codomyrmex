@@ -38,18 +38,24 @@ def cli_commands():
     def _list_skills():
         """list available skills."""
         try:
-            registry = SkillRegistry()  # type: ignore
-            skills = registry.list_skills()
+            manager = get_skills_manager()
+            if not manager.initialize():
+                print("Skills: failed to initialize skills manager")
+                return
+            skills = manager.list_skills()
             for skill in skills:
-                print(f"  {skill}")
+                category = skill.get("category", "?")
+                name = skill.get("name", "?")
+                print(f"  {category}/{name}")
         except Exception as _exc:
             print("Skills: use SkillRegistry to discover available skills")
 
     def _info_skill():
         """Show skill info."""
         try:
-            registry = SkillRegistry()  # type: ignore
-            print(f"Skills registry: {registry}")
+            manager = get_skills_manager()
+            print(f"Skills manager: {manager}")
+            print(f"Skills directory: {manager.skills_dir}")
             print(f"Upstream: {DEFAULT_UPSTREAM_REPO}")
             print(f"Branch: {DEFAULT_UPSTREAM_BRANCH}")
         except Exception as _exc:
@@ -64,21 +70,22 @@ def cli_commands():
 
 
 __all__ = [
+    "HermesSkillBridge",
+    "HermesSkillEntry",
     "SkillLoader",
     "SkillRegistry",
     "SkillSync",
     "SkillsManager",
-    # Submodules
     "arscontexta",
     "cli_commands",
     "composition",
     "discovery",
     "execution",
+    "get_skills_manager",
     "list_runnable_skills",
     "marketplace",
     "mcp_tools",
     "permissions",
-    # Runner
     "run_skill",
     "run_skill_by_name",
     "testing",

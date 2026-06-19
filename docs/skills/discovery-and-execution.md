@@ -78,7 +78,19 @@ results = registry.search(
 
 The separate `SkillRegistry` in `skill_registry.py` provides YAML-level
 indexing with `build_index()`, `search_by_pattern()`, and `search_skills()`
-for text-based search across skill descriptions and pattern names.
+for text-based search across skill descriptions and pattern names. Import the
+registry you actually need:
+
+```python
+from codomyrmex.skills import SkillRegistry as YamlSkillRegistry
+from codomyrmex.skills.discovery import SkillRegistry as RuntimeSkillRegistry
+```
+
+For a Codex-readable inventory of both surfaces, use:
+
+```bash
+uv run python scripts/agents/codex_access.py --json
+```
 
 ## Execution: The Workbench
 

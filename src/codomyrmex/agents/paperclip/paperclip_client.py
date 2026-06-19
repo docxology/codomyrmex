@@ -78,10 +78,9 @@ class PaperclipClient(CLIAgentBase):
         self.agent_id: str | None = self.get_config_value(
             "paperclip_agent_id", config=config
         )
-        self.api_base: str = (
-            self.get_config_value("paperclip_api_base", config=config)
-            or os.getenv("PAPERCLIP_BASE_URL", DEFAULT_PAPERCLIP_URL)
-        )
+        self.api_base: str = self.get_config_value(
+            "paperclip_api_base", config=config
+        ) or os.getenv("PAPERCLIP_BASE_URL", DEFAULT_PAPERCLIP_URL)
         self.config_path: str | None = self.get_config_value(
             "paperclip_config_path", config=config
         )

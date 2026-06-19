@@ -1,5 +1,6 @@
 """Comprehensive unit tests for code.execution and code.sandbox modules."""
 
+import shutil
 import sys
 
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
@@ -35,6 +36,22 @@ class TestCodeExecutionSandboxComprehensive:
         assert isinstance(result, bool)
         # Result should match actual Docker availability
         assert result == real_docker_available
+
+    def test_check_docker_available_requires_daemon(
+        self, code_dir, monkeypatch, tmp_path
+    ):
+        """Test Docker availability reports false when the daemon is unreachable."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        if shutil.which("docker") is None:
+            pytest.skip("Docker CLI not available")
+
+        from codomyrmex.coding.sandbox.container import check_docker_available
+
+        monkeypatch.setenv("DOCKER_HOST", f"unix://{tmp_path / 'missing.sock'}")
+
+        assert check_docker_available() is False
 
     def test_validate_language_supported(self, code_dir):
         """Test validate_language with supported languages."""
@@ -139,6 +156,66 @@ class TestCodeExecutionSandboxComprehensive:
         assert "execution_time" in result
         assert "status" in result
 
+    def test_run_code_in_docker_reports_setup_error_for_missing_daemon(
+        self, code_dir, monkeypatch, tmp_path
+    ):
+        """Test Docker daemon failures are reported as setup errors."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        if shutil.which("docker") is None:
+            pytest.skip("Docker CLI not available")
+
+        from codomyrmex.coding.sandbox.container import run_code_in_docker
+
+        code_file = tmp_path / "code.py"
+        code_file.write_text("print('Hello, World!')")
+        monkeypatch.setenv("DOCKER_HOST", f"unix://{tmp_path / 'missing.sock'}")
+
+        result = run_code_in_docker(
+            language="python",
+            code_file_path="code.py",
+            temp_dir=str(tmp_path),
+            stdin_file=None,
+            timeout=10,
+            session_id="test-session-id",
+        )
+
+        assert result["status"] == "setup_error", (
+            f"stdout={result['stdout']!r}, stderr={result['stderr']!r}, "
+            f"error_message={result['error_message']!r}"
+        )
+        assert result["exit_code"] != 0
+        assert "docker" in result["error_message"].lower()
+
+    def test_run_code_in_docker_nonzero_exit_is_execution_error(
+        self, code_dir, real_docker_available, tmp_path
+    ):
+        """Test user-code failures are reported separately from setup errors."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        if not real_docker_available:
+            pytest.skip("Docker not available - install Docker to run this test")
+
+        from codomyrmex.coding.sandbox.container import run_code_in_docker
+
+        code_file = tmp_path / "code.py"
+        code_file.write_text("raise SystemExit(7)")
+
+        result = run_code_in_docker(
+            language="python",
+            code_file_path="code.py",
+            temp_dir=str(tmp_path),
+            stdin_file=None,
+            timeout=10,
+            session_id="test-session-id",
+        )
+
+        assert result["status"] == "execution_error"
+        assert result["exit_code"] == 7
+        assert "error" in result["error_message"].lower()
+
     def test_execute_code_success(self, code_dir, real_docker_available):
         """Test execute_code successful execution with real implementation."""
         if str(code_dir) not in sys.path:
@@ -166,6 +243,55 @@ class TestCodeExecutionSandboxComprehensive:
         # If execution succeeded with exit_code 0, verify output
         if result.get("status") == "success" and result.get("exit_code") == 0:
             assert "Hello, World!" in result.get("stdout", "")
+
+    def test_execute_code_reports_setup_error_for_missing_daemon(
+        self, code_dir, monkeypatch, tmp_path
+    ):
+        """Test execute_code stops early when Docker daemon is unreachable."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        if shutil.which("docker") is None:
+            pytest.skip("Docker CLI not available")
+
+        from codomyrmex.coding.execution.executor import execute_code
+
+        monkeypatch.setenv("DOCKER_HOST", f"unix://{tmp_path / 'missing.sock'}")
+
+        result = execute_code(
+            language="python",
+            code="print('Hello, World!')",
+            timeout=10,
+            session_id="test-session-id",
+        )
+
+        assert result["status"] == "setup_error"
+        assert result["exit_code"] == -1
+        assert "docker" in result["error_message"].lower()
+
+    def test_execute_code_nonzero_exit_is_execution_error(
+        self, code_dir, real_docker_available
+    ):
+        """Test execute_code returns execution_error for user-code failures."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        if not real_docker_available:
+            pytest.skip("Docker not available - install Docker to run this test")
+
+        from codomyrmex.coding.execution.executor import execute_code
+
+        result = execute_code(
+            language="python",
+            code="raise RuntimeError('boom')",
+            timeout=10,
+            session_id="test-session-id",
+        )
+
+        assert result["status"] == "execution_error"
+        assert result["exit_code"] != 0
+        assert "RuntimeError" in result["stderr"]
+        assert "error" in result["error_message"].lower()
 
     def test_supported_languages(self, code_dir):
         """Test that all supported languages are properly configured."""

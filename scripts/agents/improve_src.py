@@ -12,6 +12,7 @@ Usage:
 """
 
 import argparse
+import json
 import subprocess
 import sys
 import time
@@ -61,6 +62,35 @@ def generate_prompt(module_path: Path) -> str:
     )
 
 
+def build_improvement_tasks(limit: int | None = None) -> list[dict[str, str]]:
+    """Build improvement task prompts for core modules."""
+    modules = get_core_modules()
+    tasks = [{"module": m.name, "prompt": generate_prompt(m)} for m in modules]
+    if limit:
+        return tasks[:limit]
+    return tasks
+
+
+def build_dry_run_manifest(
+    tasks: list[dict[str, str]], batch_size: int, delay: float
+) -> dict[str, object]:
+    """Build a machine-readable manifest without dispatching agents."""
+    return {
+        "schema_version": 1,
+        "mode": "dry_run",
+        "classification": "dry_run",
+        "repo": REPO_NAME,
+        "repo_root": str(REPO_ROOT),
+        "source_dir": str(SRC_DIR),
+        "task_count": len(tasks),
+        "batch_size": batch_size,
+        "delay_seconds": delay,
+        "side_effects": [],
+        "real_dispatch_command": "jules new --repo docxology/codomyrmex <prompt>",
+        "tasks": tasks,
+    }
+
+
 def dispatch_agent(prompt: str, dry_run: bool) -> bool:
     if dry_run:
         return True
@@ -89,21 +119,30 @@ def main():
     )
     parser.add_argument("--batch-size", type=int, default=DEFAULT_BATCH_SIZE)
     parser.add_argument("--delay", type=float, default=DEFAULT_BATCH_DELAY)
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit a machine-readable dry-run manifest with --dry-run",
+    )
     args = parser.parse_args()
 
-    modules = get_core_modules()
-    if not modules:
+    tasks = build_improvement_tasks(limit=args.limit)
+    if not tasks:
         logger.error("No modules found.")
         sys.exit(1)
-
-    tasks = [{"module": m.name, "prompt": generate_prompt(m)} for m in modules]
-
-    if args.limit:
-        tasks = tasks[: args.limit]
 
     logger.info(f"Generated {len(tasks)} improvement tasks for src/codomyrmex/")
 
     if args.dry_run:
+        if args.json:
+            print(
+                json.dumps(
+                    build_dry_run_manifest(tasks, args.batch_size, args.delay),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            sys.exit(0)
         print("\n--- DRY RUN PREVIEW ---")
         for i, t in enumerate(tasks, 1):
             print(f"[{i}] Module: {t['module']}")

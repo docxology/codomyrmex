@@ -17,17 +17,39 @@ from .resource_limits import DEFAULT_DOCKER_ARGS
 
 logger = get_logger(__name__)
 
+_DOCKER_SETUP_ERROR_MARKERS = (
+    "cannot connect to the docker daemon",
+    "failed to connect to the docker api",
+    "is the docker daemon running",
+    "docker.sock",
+    "error during connect",
+    "docker daemon",
+    "github.com/docker/cli",
+    "github.com/docker/docker",
+    "github.com/moby/moby/client",
+)
+
+
+def _is_docker_setup_error(stderr: str) -> bool:
+    """Return True when Docker failed before user code could run."""
+    stderr_lower = stderr.lower()
+    return any(marker in stderr_lower for marker in _DOCKER_SETUP_ERROR_MARKERS)
+
 
 def check_docker_available() -> bool:
-    """Check if Docker is available on the system."""
+    """Check if Docker CLI and daemon are available on the system."""
     try:
         result = subprocess.run(
-            ["docker", "--version"],
+            ["docker", "info", "--format", "{{json .ServerVersion}}"],
             capture_output=True,
+            text=True,
             timeout=5,
         )
-        return result.returncode == 0
-    except (subprocess.SubprocessError, FileNotFoundError) as e:
+        if result.returncode == 0:
+            return True
+        logger.warning("Docker daemon check failed: %s", result.stderr.strip())
+        return False
+    except (subprocess.SubprocessError, FileNotFoundError, OSError) as e:
         logger.warning("Docker availability check failed: %s", e)
         return False
 
@@ -117,8 +139,21 @@ def run_code_in_docker(
         try:
             stdout, stderr = process.communicate(timeout=docker_timeout)
             exit_code = process.returncode
-            status = "success"
-            error_message = None
+            docker_output = f"{stderr}\n{stdout}"
+            if exit_code == 0:
+                status = "success"
+                error_message = None
+            elif _is_docker_setup_error(docker_output):
+                error_detail = stderr.strip() or stdout.strip()
+                status = "setup_error"
+                error_message = (
+                    f"Docker setup error: {error_detail}"
+                    if error_detail
+                    else "Docker setup error: container failed to start"
+                )
+            else:
+                status = "execution_error"
+                error_message = f"Execution error: process exited with code {exit_code}"
 
         except subprocess.TimeoutExpired:
             # Kill the container if it times out
@@ -156,7 +191,7 @@ def run_code_in_docker(
                     "Container cleanup error — orphaned container may remain: %s", e
                 )
 
-    except subprocess.SubprocessError as e:
+    except (subprocess.SubprocessError, OSError) as e:
         stdout = ""
         stderr = f"Failed to run Docker container: {e!s}"
         exit_code = -1
