@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import docker
+import docker.errors # noqa
 from loguru import logger
 
 

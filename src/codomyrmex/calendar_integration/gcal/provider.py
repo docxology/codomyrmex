@@ -26,7 +26,7 @@ try:
 
     GCAL_AVAILABLE = True
 except ImportError:
-    HttpError = Exception
+    class HttpError(Exception): pass
     GCAL_AVAILABLE = False
 
 _GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]

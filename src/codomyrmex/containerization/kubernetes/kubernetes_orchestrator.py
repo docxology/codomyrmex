@@ -17,9 +17,11 @@ logger = get_logger(__name__)
 
 # Try to import kubernetes client
 try:
+    import kubernetes # noqa
+    from kubernetes.client.rest import ApiException
     KUBERNETES_AVAILABLE = True
 except ImportError:
-    ApiException = Exception
+    class ApiException(Exception): pass
     KUBERNETES_AVAILABLE = False
     logger.warning(
         "Kubernetes client not available. Install with: pip install kubernetes"

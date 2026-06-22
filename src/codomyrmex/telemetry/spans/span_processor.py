@@ -16,6 +16,7 @@ class BatchSpanProcessor(OTBatchSpanProcessor):
 
 def add_span_processor(processor: SpanProcessor) -> None:
     """Add a span processor to the global tracer provider."""
+    from opentelemetry.sdk.trace import TracerProvider
     provider = trace.get_tracer_provider()
-    if hasattr(provider, "add_span_processor"):
+    if isinstance(provider, TracerProvider):
         provider.add_span_processor(processor)
