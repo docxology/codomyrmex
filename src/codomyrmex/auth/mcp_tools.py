@@ -57,7 +57,9 @@ def auth_validate_token(token_value: str) -> dict:
 
     try:
         authenticator = get_authenticator()
-        result = authenticator.token_manager.validator.validate_signed_token(token_value)
+        result = authenticator.token_manager.validator.validate_signed_token(
+            token_value
+        )
         if result is None:
             return {"valid": False, "reason": "invalid or expired token"}
         return {"valid": True, "reason": "ok"}
