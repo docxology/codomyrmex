@@ -6,6 +6,8 @@
 Configuration files and templates.
 
 ## Active Components
+- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
+- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
 - `PAI.md` – Public API Interface — integration patterns and usage guidelines
 - `README.md` – Module overview — quick start, features, and usage examples
 - `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
@@ -24,6 +26,8 @@ Configuration files and templates.
 ## Key Files
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview
+- `API_SPECIFICATION.md`
+- `MCP_TOOL_SPECIFICATION.md`
 - `PAI.md`
 - `README.md`
 - `SPEC.md`

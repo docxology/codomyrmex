@@ -8,12 +8,12 @@ used to decide whether to re-plan or accept the result.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agents.planner.feedback_config import FeedbackConfig
 
-# TODO(layering): tracked via pyproject.toml [tool.importlinter] ignore_imports — see CLAUDE.md "Architecture Overview" → Layer Hierarchy.
-from codomyrmex.orchestrator.workflows.workflow_engine import StepStatus, WorkflowResult
+if TYPE_CHECKING:
+    from codomyrmex.agents.planner._workflow_types import WorkflowResultLike
 
 
 @dataclass
@@ -68,7 +68,7 @@ class PlanEvaluator:
 
     def evaluate(
         self,
-        workflow_result: WorkflowResult,
+        workflow_result: WorkflowResultLike,
         iteration: int = 1,
         memory_hits: int = 0,
         memory_queries: int = 0,
@@ -92,7 +92,9 @@ class PlanEvaluator:
         # Success rate: fraction of steps that completed
         if total_steps > 0:
             completed = sum(
-                1 for s in workflow_result.steps if s.status == StepStatus.COMPLETED
+                1
+                for step in workflow_result.steps
+                if _status_value(step.status) == "completed"
             )
             success_rate = completed / total_steps
         else:
@@ -169,6 +171,12 @@ class PlanEvaluator:
             return False
         improvement = self.compare(scores[-2], scores[-1])
         return improvement < self._config.convergence_threshold
+
+
+def _status_value(status: Any) -> str:
+    """Normalize enum-like or string status values."""
+    value = getattr(status, "value", status)
+    return str(value).lower()
 
 
 __all__ = ["PlanEvaluator", "PlanScore"]

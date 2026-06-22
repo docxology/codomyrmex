@@ -16,8 +16,10 @@ System introspection, dependency mapping, health reporting, and module profiling
 - `core/` – Core abstractions and base classes
 - `health/` – health module implementation
 - `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
+- `module_catalog.py` – Read-only top-level module, support-surface, and docs/modules catalog
 - `py.typed` – PEP 561 marker for typed package
 - `reporting/` – reporting module implementation
+- `structure_audit.py` – Read-only source module structure gate, including stale docs/modules detection
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -35,7 +37,9 @@ System introspection, dependency mapping, health reporting, and module profiling
 - `SPEC.md`
 - `__init__.py`
 - `mcp_tools.py`
+- `module_catalog.py`
 - `py.typed`
+- `structure_audit.py`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

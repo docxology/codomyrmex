@@ -1911,9 +1911,9 @@ def hermes_spawn_agent(
 ) -> dict[str, Any]:
     """Dispatch a capability-scoped task to a matching agent.
 
-    Instantiates an :class:`~codomyrmex.orchestrator.integration.AgentOrchestrator`
-    with the provided *capability_profile*, registers the built-in Hermes client
-    under the role's first allowed prefix, then calls :meth:`spawn_agent`.
+    Uses a Hermes-local dispatcher with the provided *capability_profile*,
+    registers the built-in Hermes client under the requested role, then runs the
+    best matching callable.
 
     Args:
         role: Capability role name (e.g. ``"code_reviewer"``, ``"summariser"``).
@@ -1925,11 +1925,9 @@ def hermes_spawn_agent(
         dict with status, role, agent, result (or error).
     """
     try:
-        # TODO(layering): tracked via pyproject.toml [tool.importlinter] ignore_imports — see CLAUDE.md "Architecture Overview" → Layer Hierarchy.
-        from codomyrmex.orchestrator.integration import AgentOrchestrator
+        from codomyrmex.agents.hermes._dispatch import spawn_agent
 
         profile = capability_profile or {role: [role]}
-        orch = AgentOrchestrator(capability_profile=profile)
 
         # Wire a real HermesClient agent behind the requested role.
         # Falls back to a thin delegate when the hermes binary is unavailable
@@ -1960,9 +1958,12 @@ def hermes_spawn_agent(
                     "note": "Hermes agent delegated (stub)",
                 }
 
-        orch.register_agent(role, _hermes_agent)
-
-        return orch.spawn_agent(role, task)
+        return spawn_agent(
+            role,
+            task,
+            agents={role: _hermes_agent},
+            capability_profile=profile,
+        )
     except Exception as exc:
         return {"status": "error", "role": role, "message": str(exc)}
 

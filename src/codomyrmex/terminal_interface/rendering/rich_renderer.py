@@ -27,6 +27,14 @@ from rich.theme import Theme
 T = TypeVar("T")
 
 
+class _VisibleStatus(Status):
+    """Status context that emits its initial message in captured terminals."""
+
+    def __enter__(self) -> Status:
+        self.console.print(self.status, highlight=False)
+        return super().__enter__()
+
+
 class RichRenderer:
     """
     High-level renderer using the 'rich' library.
@@ -45,9 +53,17 @@ class RichRenderer:
             force_terminal: Force terminal output even if not a TTY.
         """
         custom_theme = Theme(theme) if theme else None
-        self.console = Console(theme=custom_theme, force_terminal=force_terminal)
+        console_kwargs: dict[str, Any] = {
+            "theme": custom_theme,
+            "force_terminal": force_terminal,
+        }
+        if force_terminal:
+            console_kwargs["color_system"] = "standard"
+            console_kwargs["no_color"] = False
+        self.console = Console(**console_kwargs)
         self.error_console = Console(
-            theme=custom_theme, force_terminal=force_terminal, stderr=True
+            **console_kwargs,
+            stderr=True,
         )
 
     def print(self, *args: Any, style: Optional[str] = None, **kwargs: Any) -> None:
@@ -116,7 +132,7 @@ class RichRenderer:
             with renderer.status("Working..."):
                 do_work()
         """
-        return self.console.status(message, spinner=spinner)
+        return _VisibleStatus(message, console=self.console, spinner=spinner)
 
     def prompt(
         self,

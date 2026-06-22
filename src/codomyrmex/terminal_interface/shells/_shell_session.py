@@ -197,6 +197,7 @@ class ShellSessionMixin:
             "discoveries_made": [],
             "demos_run": 0,
         }
+        self.command_history = []
 
     def do_history(self, arg: str):
         """

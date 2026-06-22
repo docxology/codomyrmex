@@ -25,6 +25,7 @@ class ShellCapabilitiesMixin:
         print("🛠️  " + "=" * 60)
         print("   CAPABILITY INVENTORY")
         print("=" * 60)
+        self.session_data["commands_run"] += 1
 
         if not self.discovery or not self.discovery.modules:
             print("📡 First scanning for modules...")
@@ -71,8 +72,6 @@ class ShellCapabilitiesMixin:
             print(f"\n🎯 Total Capabilities: {len(all_caps)}")
             print("\n💡 Use 'capabilities <type>' to see details for a specific type")
             print("💡 Example: 'capabilities function' or 'capabilities class'")
-
-        self.session_data["commands_run"] += 1
 
     def do_dive(self, arg: str):
         """

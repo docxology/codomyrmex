@@ -58,7 +58,7 @@ Three-layer design with a closed feedback loop:
 
 ## Dependencies
 
-- **Internal**: `codomyrmex.logging_monitoring`, `codomyrmex.agents.memory.store`, `codomyrmex.orchestrator.workflows.workflow_engine`
+- **Internal**: `codomyrmex.logging_monitoring`, `codomyrmex.agents.memory.store`, planner-local workflow adapter types
 - **External**: Standard library only (`hashlib`, `time`, `dataclasses`, `enum`)
 
 ## Constraints

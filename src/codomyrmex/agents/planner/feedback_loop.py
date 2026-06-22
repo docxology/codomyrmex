@@ -12,17 +12,15 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agents.memory.store import MemoryStore
-from codomyrmex.agents.planner.feedback_config import FeedbackConfig
-from codomyrmex.agents.planner.plan_engine import Plan, PlanEngine, PlanTask, TaskState
-from codomyrmex.agents.planner.plan_evaluator import PlanEvaluator, PlanScore
-from codomyrmex.logging_monitoring import get_logger
-
-# TODO(layering): tracked via pyproject.toml [tool.importlinter] ignore_imports — see CLAUDE.md "Architecture Overview" → Layer Hierarchy.
-from codomyrmex.orchestrator.workflows.workflow_engine import (
+from codomyrmex.agents.planner._workflow_adapter import (
     WorkflowResult,
     WorkflowRunner,
     WorkflowStep,
 )
+from codomyrmex.agents.planner.feedback_config import FeedbackConfig
+from codomyrmex.agents.planner.plan_engine import Plan, PlanEngine, PlanTask, TaskState
+from codomyrmex.agents.planner.plan_evaluator import PlanEvaluator, PlanScore
+from codomyrmex.logging_monitoring import get_logger
 
 if TYPE_CHECKING:
     from collections.abc import Callable

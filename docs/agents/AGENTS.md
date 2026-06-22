@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Agent coordination document for the `docs/agents/` directory. This directory contains documentation for all **39** top-level agent packages under `src/codomyrmex/agents/`, mirroring that tree. The additional [`rules/`](rules/) folder here is documentation-only (no `src` counterpart).
+Agent coordination document for the `docs/agents/` directory. This directory contains documentation for all **40** top-level agent packages under `src/codomyrmex/agents/`, mirroring that tree. The additional [`rules/`](rules/) folder here is documentation-only (no `src` counterpart).
 
 ## Agent Documentation Index
 
@@ -63,11 +63,10 @@ Agent coordination document for the `docs/agents/` directory. This directory con
 | Pooling | [pooling/](pooling/) | `src/codomyrmex/agents/pooling/` |
 | Transport | [transport/](transport/) | `src/codomyrmex/agents/transport/` |
 
-### Specialized (6)
+### Specialized (5)
 
 | Module | Documentation | Source Module |
 |:---|:---|:---|
-| Ghost Architecture | [ghost_architecture/](ghost_architecture/) | `src/codomyrmex/agents/ghost_architecture/` |
 | Git Agent | [git_agent/](git_agent/) | `src/codomyrmex/agents/git_agent/` |
 | Google Workspace | [google_workspace/](google_workspace/) | `src/codomyrmex/agents/google_workspace/` |
 | Mission Control | [mission_control/](mission_control/) | `src/codomyrmex/agents/mission_control/` |

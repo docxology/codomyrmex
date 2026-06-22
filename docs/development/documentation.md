@@ -37,6 +37,7 @@ Counts for modules, MCP tools, and tests drift quickly. **Do not hand-edit** bro
 
 - [docs/reference/inventory.md](../reference/inventory.md) — definitions, dated table, reproduce commands
 - `uv run python scripts/doc_inventory.py` — print current counts (`--pytest` includes collected test total, ~30s)
+- `uv run python scripts/src_structure_audit.py --json` — run the read-only source module structure gate for docs/API/MCP/test parity, stale docs/modules directories, and PEP 561 markers
 
 Hermes-specific examples and agent-doc rules: [docs/agents/hermes/AGENTS.md](../agents/hermes/AGENTS.md) (Diagram conventions).
 

@@ -13,28 +13,43 @@ Optional: pass --manifest for runtime merged MCP tool count via get_skill_manife
 from __future__ import annotations
 
 import argparse
-import os
+import importlib.util
 import re
 import subprocess
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from types import ModuleType
 
 
 def repo_root() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
+def load_module_catalog(root: Path) -> ModuleType:
+    """Load the pure filesystem module catalog without importing codomyrmex."""
+    catalog_path = (
+        root / "src" / "codomyrmex" / "system_discovery" / "module_catalog.py"
+    )
+    spec = importlib.util.spec_from_file_location(
+        "_codomyrmex_module_catalog",
+        catalog_path,
+    )
+    if spec is None or spec.loader is None:
+        msg = f"Could not load module catalog from {catalog_path}"
+        raise RuntimeError(msg)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
 def count_top_level_modules(root: Path) -> int:
-    pkg = root / "src" / "codomyrmex"
-    skip = {"tests", "__pycache__"}
-    n = 0
-    for name in os.listdir(pkg):
-        if name in skip:
-            continue
-        d = pkg / name
-        if d.is_dir() and (d / "__init__.py").is_file():
-            n += 1
-    return n
+    catalog_module = load_module_catalog(root)
+    catalog = catalog_module.build_module_catalog(root)
+    return int(catalog.runtime_module_count)
 
 
 def iter_py_files_under_codomyrmex(root: Path) -> list[Path]:

@@ -17,7 +17,6 @@ Validation coverage, fixtures, and regression checks for Agents.
 - Markdown `README.md`
 - Markdown `SPEC.md`
 - Python source `conftest.py`
-- Python source `test_ghost_architecture.py`
 - Python source `test_open_gauss.py`
 - Python source `test_open_gauss_client.py`
 

@@ -35,6 +35,7 @@ class ShellForageMixin:
             )
         )
         print()
+        self.session_data["commands_run"] += 1
 
         if not self.discovery or not self.discovery.modules:
             print("📡 First scanning for modules...")
@@ -52,8 +53,6 @@ class ShellForageMixin:
             self._forage_search(arg.strip(), all_caps)
         else:
             self._forage_random(all_caps)
-
-        self.session_data["commands_run"] += 1
 
     def _forage_search(self, search_term: str, all_caps: list):
         """Search for specific capabilities."""

@@ -8,7 +8,7 @@
 
 This document describes how to run and filter the Codomyrmex test suite. Canonical counts and inventory live in [docs/reference/inventory.md](../../reference/inventory.md).
 
-**Collected tests (repo-wide):** **34,422** — `uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths.
+**Collected tests (repo-wide):** **34,451** — `uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths.
 
 ### Zero-Mock Policy
 
@@ -24,13 +24,13 @@ This document describes how to run and filter the Codomyrmex test suite. Canonic
 
 | Category | Location | Count (indicative) | Notes |
 |----------|----------|--------------------|--------|
-| **All collected** | under `src/codomyrmex/` (`tests/` + `tests/**`) | **34,422** | Single source of truth: scoped `pytest --collect-only` (with CI-parity extras) |
+| **All collected** | under `src/codomyrmex/` (`tests/` + `tests/**`) | **34,451** | Single source of truth: scoped `pytest --collect-only` (with CI-parity extras) |
 | **`unit` marker** | mostly `tests/unit/**` | **21,024** | `pytest -m unit --collect-only` |
 | **`integration` marker** | mixed | **253** | `pytest -m integration --collect-only` |
 | **Integration tree** | `tests/integration/` | **339** | `pytest tests/integration/ --collect-only` |
 | **Example tests** | `tests/unit/examples/` | **24** | Example validation lives under unit tree |
 | **Performance tree** | `tests/performance/` | **59** | Benchmark-style jobs |
-| **Unit test files** | `tests/unit/**/test_*.py` | **1,117+** | `find` count; changes as tests are added |
+| **Unit test files** | `tests/unit/**/test_*.py` | **1,156** | `find` count; changes as tests are added |
 
 Full-suite wall time varies widely (often **tens of minutes**); use markers, `-k`, scoped directories, or `make test-unit` / `make test-integration` for tighter loops.
 

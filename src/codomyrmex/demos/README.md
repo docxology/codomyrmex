@@ -7,12 +7,15 @@
 Executable examples and demonstrations for Demos..
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
 - `py.typed` – File
 - `registry.py` – File
+- `terminal.py` – File
 
 ## Navigation
 - **Parent Directory**: [codomyrmex](../README.md)

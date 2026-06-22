@@ -48,6 +48,47 @@ class StatusReporter:
     def alert_on_issues(self, issues: List[str]) -> None
 ```
 
+### Module Catalog
+
+Read-only filesystem catalog for top-level `src/codomyrmex` entries.
+
+```python
+from codomyrmex.system_discovery import build_module_catalog
+
+catalog = build_module_catalog()
+catalog.runtime_module_count
+catalog.docs_module_count
+catalog.mcp_tool_modules_missing_specs
+catalog.api_spec_missing
+catalog.docs_modules_without_source_entries
+```
+
+The catalog preserves the existing `codomyrmex.list_modules()` behavior by
+remaining additive. It classifies runtime modules separately from support
+surfaces such as `tests`, reports docs/API/MCP/test parity, flags stale
+`docs/modules/<name>` directories without source counterparts, and has no
+write side effects.
+
+### Structure Audit
+
+Read-only gate-friendly audit built on the module catalog.
+
+```python
+from codomyrmex.system_discovery import audit_module_structure
+
+audit = audit_module_structure()
+audit.passed
+audit.errors
+audit.to_dict()
+audit.to_markdown()
+```
+
+The structure audit checks runtime-module docs/API/MCP/test parity, PEP 561
+`py.typed` markers, support surface docs, docs/modules counterparts, and
+retired module names. It also fails stale `docs/modules/<name>` directories
+that no longer have top-level source entries. It writes no files and exits
+cleanly through `scripts/src_structure_audit.py`.
+
 ## Key Functions
 
 ### Discovery Operations

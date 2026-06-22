@@ -46,6 +46,8 @@ watcher.start()
 
 | File | Purpose |
 | :--- | :--- |
+| `API_SPECIFICATION.md` | Public Python and MCP interface contract |
+| `MCP_TOOL_SPECIFICATION.md` | MCP tool contract |
 | `config_monitor.py` | Core monitoring engine (560 lines) |
 | `watcher.py` | Hot-reload file watcher (94 lines) |
 | `mcp_tools.py` | MCP tool definitions (3 tools) |

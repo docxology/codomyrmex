@@ -79,8 +79,6 @@ def _agents_path_skipped(rel_posix: str) -> bool:
         return True
     if "src/codomyrmex/agents/open_gauss/" in rel_posix:
         return True
-    if "src/codomyrmex/agents/ghost_architecture/" in rel_posix:
-        return True
     if ".egg-info/" in rel_posix:
         return True
     if "/.next/" in rel_posix:

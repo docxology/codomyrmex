@@ -7,6 +7,8 @@
 Configuration files and templates.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File

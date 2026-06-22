@@ -8,6 +8,7 @@ Maintenance and automation utilities for project management.
 ## Metrics and doc audits
 - `doc_inventory.py` — counts aligned with [docs/reference/inventory.md](../docs/reference/inventory.md) (top-level modules, `@mcp_tool`, `mcp_tools.py`, `.github/workflows/*.yml`; optional `--pytest`, `--manifest`).
 - `rasp_gap_report.py` — writes [docs/plans/agents-readme-gap-report.md](../docs/plans/agents-readme-gap-report.md) for scoped `AGENTS.md` / `README.md` gaps.
+- `src_structure_audit.py` — read-only `src/codomyrmex` structure gate for module docs/API/MCP/test parity, PEP 561 `py.typed` markers, docs/modules counterparts, stale docs/modules directories, support-surface docs, and retired module names.
 
 ## Active Components
 - `PAI.md` – Project file
@@ -121,6 +122,7 @@ Maintenance and automation utilities for project management.
 - `website/` – Directory containing website components
 - `workflow_execution/` – Directory containing workflow_execution components
 - `workflow_testing/` – Directory containing workflow_testing components
+- `src_structure_audit.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -141,6 +143,7 @@ Maintenance and automation utilities for project management.
 - `index.html`
 - `run_all_scripts.py`
 - `setup_submodules.sh`
+- `src_structure_audit.py`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

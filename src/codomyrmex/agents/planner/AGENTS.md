@@ -10,6 +10,8 @@ Module implementation, resources, and local coordination for Planner..
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
+- `_workflow_adapter.py` – Planner-local workflow runner used by feedback loops
+- `_workflow_types.py` – Structural workflow protocols used by scoring
 - `executor.py` – Project file
 - `feedback_config.py` – Project file
 - `feedback_loop.py` – Project file
@@ -29,6 +31,8 @@ Module implementation, resources, and local coordination for Planner..
 - `README.md`
 - `SPEC.md`
 - `__init__.py`
+- `_workflow_adapter.py`
+- `_workflow_types.py`
 - `executor.py`
 - `feedback_config.py`
 - `feedback_loop.py`

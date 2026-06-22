@@ -32,7 +32,7 @@ Universal protocols specific to this module:
 - **FastMCP scaffold lane** (`optional-skills/mcp/fastmcp/scaffold_fastmcp.py`, `HermesClient.scaffold_fastmcp`, `hermes_fastmcp_scaffold`): generates a minimal FastMCP server package for Codomyrmex↔Hermes MCP exposure with deterministic file layout.
 - **Session Engine** (`session.py`): `InMemorySessionStore`, `SQLiteSessionStore` (FTS5 BM25), session `close()` KI lifecycle hook.
 - **Knowledge Codification** (Sprint 34): `hermes_build_memory_graph`, `hermes_extract_ki`, `hermes_search_knowledge_items`, `hermes_deduplicate_ki`, `hermes_archive_sessions`.
-- **Swarm Orchestration** (Sprint 34): `hermes_spawn_agent` (capability profile routing), backed by `AgentOrchestrator.spawn_agent` + `filter_tools`.
+- **Swarm Orchestration** (Sprint 34): `hermes_spawn_agent` (capability profile routing), backed by Hermes-local dispatch helpers that preserve the `status`/`role`/`agent`/`result` response contract without importing the orchestrator layer.
 - **Template Library** (`templates/`): Parameterized prompt templates for code review, debugging, documentation, and task decomposition.
 - **Instance Templates** (`instance_templates/`): Config template, `.env.example`, `SOUL.md` persona, and `hermes_example.py`.
 - **Spawn Script** (`scripts/spawn_instance.sh`): One-shot instance creation script.

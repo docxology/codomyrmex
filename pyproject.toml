@@ -452,7 +452,6 @@ target-version = "py311"
 line-length = 88
 src = ["src"]
 extend-exclude = [
-    "src/codomyrmex/agents/ghost_architecture",
     "src/codomyrmex/agents/hermes/evolution",
     "src/codomyrmex/agents/mission_control/app",
     "src/codomyrmex/agents/open_gauss",
@@ -708,7 +707,6 @@ python-version = "3.11"
 [tool.ty.src]
 include = ["src/codomyrmex"]
 exclude = [
-    "src/codomyrmex/agents/ghost_architecture",
     "src/codomyrmex/agents/hermes/evolution",
     "src/codomyrmex/agents/mission_control/app",
     "src/codomyrmex/agents/open_gauss",
@@ -769,21 +767,6 @@ layers = [
   "codomyrmex.agents : codomyrmex.coding : codomyrmex.llm : codomyrmex.git_operations : codomyrmex.crypto",
   "codomyrmex.logging_monitoring : codomyrmex.environment_setup : codomyrmex.model_context_protocol : codomyrmex.terminal_interface : codomyrmex.exceptions",
 ]
-# Day-1 carve-outs: 5 known violations already flagged with `# review:layering`
-# comments in source. The gate enforces "no new violations" while these get
-# addressed. Remove each entry once the underlying file is fixed.
-ignore_imports = [
-  # TODO: layering — remove after fix (terminal_interface/shells/_shell_demo.py:156)
-  "codomyrmex.terminal_interface.shells._shell_demo -> codomyrmex.coding",
-  # TODO: layering — remove after fix (agents/planner/plan_evaluator.py:19)
-  "codomyrmex.agents.planner.plan_evaluator -> codomyrmex.orchestrator.workflows.workflow_engine",
-  # TODO: layering — remove after fix (agents/planner/feedback_loop.py:24)
-  "codomyrmex.agents.planner.feedback_loop -> codomyrmex.orchestrator.workflows.workflow_engine",
-  # TODO: layering — remove after fix (agents/hermes/mcp_tools.py:1930)
-  "codomyrmex.agents.hermes.mcp_tools -> codomyrmex.orchestrator.integration",
-  # NOTE: agents/droid/generators/documentation.py has `# review:layering` markers
-  # for imports of codomyrmex.documentation.quality.* but those imports live inside
-  # generator-string test bodies and are invisible to grimp's static graph, so no
-  # ignore entry is needed today. If the imports get hoisted to module scope, add
-  # them here.
-]
+# Known layer violations have been burned down. Keep this list empty so
+# import-linter fails on any newly introduced boundary crossing.
+ignore_imports = []

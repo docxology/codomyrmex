@@ -14,7 +14,6 @@ Agent-oriented inventory and contracts: [../../../../AGENTS.md](../../../../AGEN
 - `README.md` – File
 - `SPEC.md` – File
 - `conftest.py` – File
-- `test_ghost_architecture.py` – File
 - `test_open_gauss.py` – File
 - `test_open_gauss_client.py` – File
 

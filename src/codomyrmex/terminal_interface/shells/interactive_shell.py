@@ -8,12 +8,14 @@ structured nest.
 
 import cmd
 import logging
+from collections.abc import Callable
 from typing import TypedDict
 
 from codomyrmex.logging_monitoring import get_logger
 
 from ._shell_capabilities import ShellCapabilitiesMixin
 from ._shell_demo import ShellDemoMixin
+from ._shell_discovery import TerminalDiscoveryView
 from ._shell_explore import ShellExploreMixin
 from ._shell_forage import ShellForageMixin
 from ._shell_session import ShellSessionMixin
@@ -67,14 +69,14 @@ Type 'explore' to begin your foraging adventure!
 
     prompt = "🐜 codomyrmex> "
 
-    def __init__(self):
+    def __init__(self, demo_runner: Callable[[str], bool] | None = None):
         """Initialize the interactive shell."""
         super().__init__()
 
-        # SystemDiscovery (Application layer) is NOT imported here — this module
-        # is Foundation layer.  _ensure_discovery() uses pkgutil for module names.
-        self.discovery = None
         self._module_names: list[str] = []
+        self.discovery = TerminalDiscoveryView(self._load_module_names)
+        self.demo_runner = demo_runner
+        self.command_history: list[str] = []
 
         # Track session data
         self.session_data: SessionData = {
@@ -103,8 +105,8 @@ Type 'explore' to begin your foraging adventure!
 
         Populates ``self._module_names`` without importing any Core/Application
         layer modules, preserving the Foundation → Core layer boundary.
-        ``self.discovery`` remains ``None``; commands that need rich discovery
-        data report limited-mode status as designed.
+        The shell stores a terminal-local discovery view, not a
+        ``codomyrmex.system_discovery`` instance, to preserve the import layer.
         """
         if not self._module_names:
             try:
@@ -118,6 +120,11 @@ Type 'explore' to begin your foraging adventure!
             except (ImportError, AttributeError, OSError) as exc:
                 logger.warning("pkgutil module scan failed: %s", exc)
                 self._module_names = []
+
+    def _load_module_names(self) -> list[str]:
+        """Return cached package module names for the terminal discovery view."""
+        self._ensure_discovery()
+        return self._module_names
 
     def precmd(self, line: str) -> str:
         """Ensure discovery engine is initialised before any command runs."""
