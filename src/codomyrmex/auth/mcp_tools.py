@@ -53,12 +53,12 @@ def auth_validate_token(token_value: str) -> dict:
     Returns:
         Dictionary with 'valid' bool and 'reason' string.
     """
-    from codomyrmex.auth import TokenValidator
+    from codomyrmex.auth import get_authenticator
 
-    validator = TokenValidator(secret="mcp_tool_validation_key")
     try:
-        result = validator.validate_signed_token(token_value)
-        if result is None:
+        authenticator = get_authenticator()
+        is_valid = authenticator.token_manager.validate_token(token_value)
+        if not is_valid:
             return {"valid": False, "reason": "invalid or expired token"}
         return {"valid": True, "reason": "ok"}
     except Exception as exc:
