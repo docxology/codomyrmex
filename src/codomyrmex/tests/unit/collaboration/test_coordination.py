@@ -443,6 +443,28 @@ class TestRotatingLeadership:
 
         assert rotation.get_current_leader() is agent
 
+
+    def test_rotating_add_agent_non_empty(self):
+        """Test adding agent to non-empty rotation."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        rotation = RotatingLeadership([agent1])
+        agent2 = CollaborativeAgent(name="Agent 2")
+
+        rotation.add_agent(agent2)
+
+        assert rotation._agents == [agent1, agent2]
+        assert rotation.get_current_leader() is agent1
+
+    def test_rotating_add_duplicate_agent(self):
+        """Test adding a duplicate agent to rotation."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        rotation = RotatingLeadership([agent1])
+
+        rotation.add_agent(agent1)
+
+        assert len(rotation._agents) == 1
+        assert rotation._agents == [agent1]
+
     def test_rotating_rotate(self):
         """Test rotating leadership."""
         agent1 = CollaborativeAgent(name="Agent 1")
