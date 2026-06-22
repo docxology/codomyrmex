@@ -19,7 +19,7 @@ Wraps the OpenTelemetry SDK to provide global tracer initialization, span creati
 ### Module-level Functions
 
 | Function | Signature | Description |
-|----------|-----------|-------------|
+| ---------- | ----------- | ------------- |
 | `start_span` | `(name, attributes?, parent?) -> Span` | Create a new OTel span, optionally nested under a parent |
 | `get_current_span` | `() -> Span` | Retrieve the active span from OpenTelemetry context |
 | `record_exception` | `(span, exception, escaped=True)` | Record exception event and set ERROR status |

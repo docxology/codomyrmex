@@ -17,7 +17,7 @@ Generate synthetic datasets for ML training, testing, and benchmarking without r
 ## Core Classes
 
 | Class | Description |
-|-------|-------------|
+| ------- | ------------- |
 | `SyntheticDataGenerator` | Central generator for all data types |
 | `DataSchema` | Field type definitions for structured data |
 | `TemplateGenerator` | Template-based text generation |
@@ -25,7 +25,7 @@ Generate synthetic datasets for ML training, testing, and benchmarking without r
 ## Field Types
 
 | Type | Parameters | Output |
-|------|-----------|--------|
+| ------ | ----------- | -------- |
 | `str` | `length` | Random lowercase string |
 | `int` | `min`, `max` | Random integer in range |
 | `float` | `min`, `max` | Random float in range |

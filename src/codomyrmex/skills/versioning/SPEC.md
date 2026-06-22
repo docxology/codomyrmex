@@ -40,6 +40,7 @@ from codomyrmex.skills.versioning import parse_version
 ### 3.2 Configuration
 
 Environment variables:
+
 - `CODOMYRMEX_*`: Configuration options
 
 ## 4. Implementation Notes

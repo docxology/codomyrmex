@@ -3,7 +3,7 @@
 ## Phase Mapping
 
 | PAI Phase | Tool | Usage |
-|-----------|------|-------|
+| ----------- | ------ | ------- |
 | BUILD | `ssm_forward` | Generate Mamba SSM outputs for sequence modeling tasks |
 | BUILD | `flash_attention_forward` | Run Flash Attention with correctness verification |
 | VERIFY | `flash_attention_forward` | Verify flash vs standard attention numerical accuracy |
@@ -12,10 +12,12 @@
 ## Capabilities
 
 ### Sequence Modeling (BUILD)
+
 - `ssm_forward(sequence_length=128, d_model=64, d_state=16, n_layers=4)` -- run stacked Mamba
 - `flash_attention_forward(seq_len=64, d_model=32, block_size=8)` -- memory-efficient attention
 
 ### Correctness Verification (VERIFY)
+
 - `flash_attention_forward` returns `max_error_vs_standard` and `passed` boolean
 - Error should be < 1e-4 for float32 inputs
 

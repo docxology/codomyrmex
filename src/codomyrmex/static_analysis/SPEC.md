@@ -42,7 +42,7 @@ export detection, and unused function detection across the Codomyrmex package.
 The canonical layer membership:
 
 | Layer | Modules |
-|-------|---------|
+| ------- | --------- |
 | Foundation | `config_management`, `environment_setup`, `logging_monitoring`, `model_context_protocol`, `telemetry`, `terminal_interface` |
 | Core | `cache`, `coding`, `compression`, `data_visualization`, `documents`, `encryption`, `git_operations`, `llm`, `networking`, `performance`, `scrape`, `search`, `security`, `serialization`, `static_analysis` |
 | Service | `api`, `auth`, `ci_cd_automation`, `cloud`, `containerization`, `database_management`, `deployment`, `documentation`, `logistics`, `orchestrator` |
@@ -101,7 +101,7 @@ All functions return Python data structures (lists of dicts or tuples). There is
 no file-based output format -- consumers handle serialization.
 
 | Function | Return Type |
-|----------|-------------|
+| ---------- | ------------- |
 | `scan_imports` | `list[dict[str, Any]]` -- edge dicts |
 | `check_layer_violations` | `list[dict[str, Any]]` -- violation dicts (superset of edge fields + `reason`) |
 | `extract_imports_ast` | `list[str]` -- module names |

@@ -41,7 +41,7 @@ class SoulAgent:
 ### Parameters
 
 | Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
+| ----------- | ------ | --------- | ------------- |
 | `soul_path` | `str` | `"SOUL.md"` | Path to the agent identity file |
 | `memory_path` | `str` | `"MEMORY.md"` | Path to the conversation log |
 | `provider` | `str` | `"anthropic"` | LLM provider: `'anthropic'`, `'openai'`, `'openai-compatible'` |
@@ -101,7 +101,7 @@ def memory_stats(self) -> dict[str, Any]:
 Return a dictionary with:
 
 | Key | Type | Description |
-|-----|------|-------------|
+| ----- | ------ | ------------- |
 | `soul_path` | `str` | SOUL.md path |
 | `memory_path` | `str` | MEMORY.md path |
 | `provider` | `str` | LLM provider |

@@ -29,7 +29,7 @@ DependencyGraph
 ### ModuleMetadata
 
 | Field | Type | Notes |
-|-------|------|-------|
+| ------- | ------ | ------- |
 | `name` | `str` | Module name (e.g., `"agents"`) |
 | `path` | `Path` | Absolute path to module directory |
 | `version` | `str` | From `__init__.py` or `"0.0.0"` |
@@ -41,7 +41,7 @@ DependencyGraph
 ### DiscoveryEngine Methods
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| -------- | --------- | ------------- |
 | `discover()` | `list[ModuleMetadata]` | Scan source tree, populate registry |
 | `get_module(name)` | `ModuleMetadata` | Lookup by name; `KeyError` if missing |
 | `list_modules()` | `list[ModuleMetadata]` | All modules, alphabetically sorted |
@@ -50,7 +50,7 @@ DependencyGraph
 ### DependencyGraph Methods
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| -------- | --------- | ------------- |
 | `add_node(name)` | `None` | Register a module node |
 | `add_edge(src, dst)` | `None` | Declare dependency edge |
 | `topological_sort()` | `list[str]` | Load order respecting dependencies |

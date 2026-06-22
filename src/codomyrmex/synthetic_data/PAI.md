@@ -11,7 +11,7 @@ and preference pairs for RLHF/DPO alignment training.
 ## MCP Tools
 
 | Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
+| ------ | ------------- | ------------- | ---------- |
 | `codomyrmex.synth_generate_structured` | Generate structured records from schema | Safe | synthetic_data |
 | `codomyrmex.synth_generate_classification` | Generate classification features/labels | Safe | synthetic_data |
 | `codomyrmex.synth_generate_preference_pairs` | Generate RLHF/DPO preference pairs | Safe | synthetic_data |
@@ -19,7 +19,7 @@ and preference pairs for RLHF/DPO alignment training.
 ## PAI Algorithm Phase Mapping
 
 | Phase | Contribution | Key Functions |
-|-------|-------------|---------------|
+| ------- | ------------- | --------------- |
 | **BUILD** (4/7) | Generate training data for ML workflows | `generate_structured()`, `generate_classification()` |
 | **VERIFY** (6/7) | Create test datasets for validation | `generate_preference_pairs()` |
 | **LEARN** (7/7) | Generate data for learning experiments | All generators |
