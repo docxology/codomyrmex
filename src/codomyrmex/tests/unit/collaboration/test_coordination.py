@@ -3,6 +3,7 @@ Tests for collaboration coordination submodule.
 """
 
 import pytest
+from unittest.mock import patch
 
 from codomyrmex.collaboration.agents import CollaborativeAgent
 from codomyrmex.collaboration.coordination import (
@@ -148,7 +149,8 @@ class TestTaskManager:
         assert manager.get_pending_count() == 0
         assert manager.get_running_count() == 0
 
-    def test_manager_submit(self):
+    @patch("codomyrmex.collaboration.coordination.task_manager.logger")
+    def test_manager_submit(self, mock_logger):
         """Test submitting a task."""
         manager = TaskManager()
         task = Task(name="Submit Task")
@@ -159,6 +161,15 @@ class TestTaskManager:
         assert len(task_id) > 0
         assert manager.get_pending_count() == 1
         assert manager.get_task_status(task_id) == TaskStatus.QUEUED
+
+        # Verify internal state
+        assert task_id in manager._queue._tasks
+        assert task_id in manager._graph._dependencies
+
+        # Verify logging
+        mock_logger.info.assert_called_once_with(
+            "Task submitted: %s (%s)", "Submit Task", task_id
+        )
 
     def test_manager_submit_batch(self):
         """Test submitting multiple tasks."""
