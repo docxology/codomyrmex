@@ -468,6 +468,27 @@ class TestRotatingLeadership:
         assert result is True
         assert rotation.get_current_leader() is agent2
 
+    def test_rotating_get_current_leader(self):
+        """Test getting current leader."""
+        # Empty rotation
+        rotation = RotatingLeadership()
+        assert rotation.get_current_leader() is None
+
+        # Single agent
+        agent1 = CollaborativeAgent(name="Agent 1")
+        rotation = RotatingLeadership([agent1])
+        assert rotation.get_current_leader() is agent1
+
+        # Multiple agents
+        agent2 = CollaborativeAgent(name="Agent 2")
+        agent3 = CollaborativeAgent(name="Agent 3")
+        rotation = RotatingLeadership([agent1, agent2, agent3])
+        assert rotation.get_current_leader() is agent1
+
+        # Test index wrap-around explicitly bypassing rotate()
+        rotation._current_index = 5
+        assert rotation.get_current_leader() is agent3
+
     def test_rotating_term_count(self):
         """Test term count tracking."""
         agent = CollaborativeAgent(name="Agent")
