@@ -982,7 +982,7 @@ video = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "desloppify", extra = ["full"] },
+    { name = "desloppify" },
     { name = "fakeredis" },
     { name = "fire" },
     { name = "hypothesis" },
@@ -1151,7 +1151,7 @@ provides-extras = ["scientific", "api", "deployment", "code-review", "language-m
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "desloppify", extras = ["full"], specifier = ">=0.9.14" },
+    { name = "desloppify", specifier = ">=0.9.14" },
     { name = "fakeredis", specifier = ">=2.0.0" },
     { name = "fire", specifier = ">=0.5.0" },
     { name = "hypothesis", specifier = ">=6.0.0" },
@@ -1536,31 +1536,12 @@ wheels = [
 ]
 
 [[package]]
-name = "defusedxml"
-version = "0.7.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/0f/d5/c66da9b79e5bdb124974bfe172b4daf3c984ebd9c2a06e2b8a4dc7331c72/defusedxml-0.7.1.tar.gz", hash = "sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69", size = 75520, upload-time = "2021-03-08T10:59:26.269Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/07/6c/aa3f2f849e01cb6a001cd8554a88d4c77c5c1a31c95bdf1cf9301e6d9ef4/defusedxml-0.7.1-py2.py3-none-any.whl", hash = "sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61", size = 25604, upload-time = "2021-03-08T10:59:24.45Z" },
-]
-
-[[package]]
 name = "desloppify"
 version = "0.9.14"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e4/db/4b6158b919035cf70d35fe3cec3fd7c0a0d80b45ace0c706eb89ff8be803/desloppify-0.9.14.tar.gz", hash = "sha256:f19e61c44c0d94734a82f021f5411984d412e60998a82b2cca67f8d73aa424b9", size = 1187765, upload-time = "2026-03-24T01:11:07.267Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0d/e6/72e041e5144853dc1cd9ad4018c2a32352bbdca1424cd439b0b269bb7836/desloppify-0.9.14-py3-none-any.whl", hash = "sha256:1a340a72ac26d43ec3dd3450aed297fdc5ca1da4996e6de57c0fcc934bfea40b", size = 1661733, upload-time = "2026-03-24T01:11:05.769Z" },
-]
-
-[package.optional-dependencies]
-full = [
-    { name = "bandit" },
-    { name = "defusedxml" },
-    { name = "pillow" },
-    { name = "pyyaml" },
-    { name = "tree-sitter" },
-    { name = "tree-sitter-language-pack" },
 ]
 
 [[package]]
