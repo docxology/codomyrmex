@@ -137,6 +137,36 @@ class TestDependencyGraph:
 
         assert graph.get_dependencies("t1") == set()
 
+    def test_graph_remove_task_with_dependencies(self):
+        """Test removing a task clears it from dependents and dependencies."""
+        graph = DependencyGraph()
+
+        task1 = Task(name="Task 1", id="t1")
+        task2 = Task(name="Task 2", id="t2", dependencies=["t1"])
+        task3 = Task(name="Task 3", id="t3", dependencies=["t2"])
+
+        graph.add_task(task1)
+        graph.add_task(task2)
+        graph.add_task(task3)
+
+        # Before removal: t2 depends on t1 (t1 has dependent t2)
+        # t3 depends on t2 (t2 has dependent t3)
+        assert "t2" in graph.get_dependents("t1")
+        assert "t1" in graph.get_dependencies("t2")
+        assert "t3" in graph.get_dependents("t2")
+        assert "t2" in graph.get_dependencies("t3")
+
+        # Remove t2
+        graph.remove_task("t2")
+
+        # After removal: t2 shouldn't be in t1's dependents
+        assert "t2" not in graph.get_dependents("t1")
+        # t2 shouldn't be in t3's dependencies
+        assert "t2" not in graph.get_dependencies("t3")
+        # t2 should be completely removed
+        assert graph.get_dependencies("t2") == set()
+        assert graph.get_dependents("t2") == set()
+
 
 class TestTaskManager:
     """Tests for TaskManager."""
