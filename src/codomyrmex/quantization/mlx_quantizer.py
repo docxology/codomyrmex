@@ -7,7 +7,13 @@ within constrained memory boundaries (<2GB).
 
 import dataclasses
 
-import mlx.core as mx
+try:
+    import mlx.core as mx
+
+    MLX_AVAILABLE = True
+except ImportError:
+    mx = None
+    MLX_AVAILABLE = False
 
 
 @dataclasses.dataclass
@@ -31,8 +37,8 @@ class QuantizationConfig:
 
 
 def quantize_array(
-    array: mx.array, config: QuantizationConfig
-) -> tuple[mx.array, mx.array | None, mx.array | None]:
+    array: "mx.array", config: QuantizationConfig
+) -> tuple["mx.array", "mx.array | None", "mx.array | None"]:
     """Quantize an MLX array into lower precision (e.g. INT4 or INT8).
 
     Args:
@@ -44,6 +50,9 @@ def quantize_array(
         If config.bits is 16, falls back to direct float16 cast,
         returning (fp16_weights, None, None).
     """
+    if not MLX_AVAILABLE:
+        raise ImportError("MLX is not available on this system.")
+
     if config.bits == 16:
         # Fallback to standard FP16 without structural quantization
         return array.astype(mx.float16), None, None
@@ -53,11 +62,11 @@ def quantize_array(
 
 
 def dequantize_array(
-    wq: mx.array,
-    scales: mx.array | None,
-    biases: mx.array | None,
+    wq: "mx.array",
+    scales: "mx.array | None",
+    biases: "mx.array | None",
     config: QuantizationConfig,
-) -> mx.array:
+) -> "mx.array":
     """Dequantize an MLX array back into a continuous floating point format.
 
     Args:
@@ -69,6 +78,9 @@ def dequantize_array(
     Returns:
         The reconstructed MLX array in standard precision.
     """
+    if not MLX_AVAILABLE:
+        raise ImportError("MLX is not available on this system.")
+
     if config.bits == 16:
         # Array is already in raw form (fp16 fallback)
         return wq
