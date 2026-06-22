@@ -119,6 +119,52 @@ class TestDependencyGraph:
         ready_after = g.get_ready_tasks(completed={t1.id})
         assert t2.id in ready_after
 
+    def test_get_ready_tasks_multiple_dependencies(self):
+        """Task with multiple dependencies is only ready when all are completed."""
+        from codomyrmex.collaboration.coordination.task_manager import DependencyGraph
+        from codomyrmex.collaboration.models import Task
+
+        g = DependencyGraph()
+        t1 = Task(name="a")
+        t2 = Task(name="b")
+        t3 = Task(name="c", dependencies=[t1.id, t2.id])
+        g.add_task(t1)
+        g.add_task(t2)
+        g.add_task(t3)
+
+        # None completed
+        ready = g.get_ready_tasks(completed=set())
+        assert t1.id in ready
+        assert t2.id in ready
+        assert t3.id not in ready
+
+        # One completed
+        ready = g.get_ready_tasks(completed={t1.id})
+        assert t1.id in ready
+        assert t2.id in ready
+        assert t3.id not in ready
+
+        # All completed
+        ready = g.get_ready_tasks(completed={t1.id, t2.id})
+        assert t1.id in ready
+        assert t2.id in ready
+        assert t3.id in ready
+
+    def test_get_ready_tasks_ignores_extra_completed(self):
+        """Extra unrelated completed tasks don't affect readiness."""
+        from codomyrmex.collaboration.coordination.task_manager import DependencyGraph
+        from codomyrmex.collaboration.models import Task
+
+        g = DependencyGraph()
+        t1 = Task(name="a")
+        t2 = Task(name="b", dependencies=[t1.id])
+        g.add_task(t1)
+        g.add_task(t2)
+
+        ready = g.get_ready_tasks(completed={t1.id, "unrelated_task_id"})
+        assert t1.id in ready
+        assert t2.id in ready
+
 
 class TestTaskManagerDeep:
     """Behavioral tests for TaskManager submit and scheduling strategy."""
