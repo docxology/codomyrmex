@@ -443,7 +443,6 @@ class TestRotatingLeadership:
 
         assert rotation.get_current_leader() is agent
 
-
     def test_rotating_add_agent_non_empty(self):
         """Test adding agent to non-empty rotation."""
         agent1 = CollaborativeAgent(name="Agent 1")
