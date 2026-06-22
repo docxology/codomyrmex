@@ -468,6 +468,68 @@ class TestRotatingLeadership:
         assert result is True
         assert rotation.get_current_leader() is agent2
 
+    def test_rotating_remove_unknown_agent(self):
+        """Test removing an agent not in rotation."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        rotation = RotatingLeadership([agent1])
+        result = rotation.remove_agent("unknown-id")
+        assert result is False
+        assert rotation.get_current_leader() is agent1
+
+    def test_rotating_remove_agent_before_current(self):
+        """Test removing an agent before the current index."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        agent2 = CollaborativeAgent(name="Agent 2")
+        agent3 = CollaborativeAgent(name="Agent 3")
+        rotation = RotatingLeadership([agent1, agent2, agent3])
+        # Rotate so current_leader is agent2 (index 1)
+        rotation.rotate()
+        assert rotation._current_index == 1
+
+        # Remove agent1 (index 0)
+        result = rotation.remove_agent(agent1.agent_id)
+        assert result is True
+        # Index should be decremented to 0 to keep pointing to agent2
+        assert rotation._current_index == 0
+        assert rotation.get_current_leader() is agent2
+
+    def test_rotating_remove_agent_after_current(self):
+        """Test removing an agent after the current index."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        agent2 = CollaborativeAgent(name="Agent 2")
+        agent3 = CollaborativeAgent(name="Agent 3")
+        rotation = RotatingLeadership([agent1, agent2, agent3])
+        # Rotate so current_leader is agent2 (index 1)
+        rotation.rotate()
+        assert rotation._current_index == 1
+
+        # Remove agent3 (index 2)
+        result = rotation.remove_agent(agent3.agent_id)
+        assert result is True
+        # Index should remain 1
+        assert rotation._current_index == 1
+        assert rotation.get_current_leader() is agent2
+
+    def test_rotating_remove_current_leader(self):
+        """Test removing the current leader."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        agent2 = CollaborativeAgent(name="Agent 2")
+        agent3 = CollaborativeAgent(name="Agent 3")
+        rotation = RotatingLeadership([agent1, agent2, agent3])
+        # Rotate so current_leader is agent2 (index 1)
+        rotation.rotate()
+        assert rotation._current_index == 1
+
+        # Remove agent2 (index 1)
+        result = rotation.remove_agent(agent2.agent_id)
+        assert result is True
+        # Index should decrement to 0, which points to agent1 (the agent before the removed one),
+        # but technically the agent at the removed index is now agent3
+        # In current implementation it decrements to 0, so next leader is agent1.
+        # This matches `i <= self._current_index` and `self._current_index > 0` decrement logic
+        assert rotation._current_index == 0
+        assert rotation.get_current_leader() is agent1
+
     def test_rotating_term_count(self):
         """Test term count tracking."""
         agent = CollaborativeAgent(name="Agent")
