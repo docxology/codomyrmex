@@ -174,8 +174,12 @@ class TestSupervisorAgent:
         assert supervisor.name == "Test Supervisor"
         assert supervisor.has_capability("supervision") is True
 
-    def test_supervisor_add_worker(self):
+    def test_supervisor_add_worker(self, caplog):
         """Test adding workers to supervisor."""
+        import logging
+
+        caplog.set_level(logging.INFO)
+
         supervisor = SupervisorAgent(name="Boss")
         worker1 = WorkerAgent(name="Worker 1")
         worker2 = WorkerAgent(name="Worker 2")
@@ -185,6 +189,23 @@ class TestSupervisorAgent:
 
         workers = supervisor.get_workers()
         assert len(workers) == 2
+
+        # Verify internal dictionary mapping
+        assert supervisor._workers[worker1.agent_id] == worker1
+        assert supervisor._workers[worker2.agent_id] == worker2
+
+        # Verify logging
+        assert "Supervisor Boss added worker: Worker 1" in caplog.text
+        assert "Supervisor Boss added worker: Worker 2" in caplog.text
+
+        # Verify updating an existing worker replaces it
+        worker1_updated = WorkerAgent(agent_id=worker1.agent_id, name="Worker 1 Updated")
+        supervisor.add_worker(worker1_updated)
+
+        assert len(supervisor.get_workers()) == 2
+        assert supervisor._workers[worker1.agent_id] == worker1_updated
+        assert supervisor._workers[worker1.agent_id].name == "Worker 1 Updated"
+        assert "Supervisor Boss added worker: Worker 1 Updated" in caplog.text
 
     def test_supervisor_remove_worker(self):
         """Test removing workers from supervisor."""
