@@ -6,6 +6,7 @@ discoverable by Claude Code and other MCP-compatible agents.
 
 from __future__ import annotations
 
+import asyncio
 from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -22,7 +23,7 @@ def _get_task_decomposer() -> Any:
     """Lazy-import TaskDecomposer to avoid circular imports."""
     from codomyrmex.collaboration.swarm import TaskDecomposer
 
-    return TaskDecomposer
+    return TaskDecomposer()
 
 
 @mcp_tool(
@@ -54,11 +55,24 @@ def swarm_submit_task(
                 name=agent_spec.get("name", "agent"),
                 role=agent_spec.get("role", "worker"),
             )
-            swarm.add_agent(proxy)
+            swarm.register_agent(proxy)
     else:
-        swarm.add_agent(AgentProxy(name="default_agent", role="worker"))
+        swarm.register_agent(AgentProxy(name="default_agent", role="worker"))
 
-    results = swarm.execute(mission)
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
+    if loop and loop.is_running():
+        # if there is an active event loop, run in a separate thread
+        import concurrent.futures
+
+        pool = concurrent.futures.ThreadPoolExecutor()
+        future = pool.submit(asyncio.run, swarm.execute_mission(mission))
+        results = future.result()
+    else:
+        results = asyncio.run(swarm.execute_mission(mission))
 
     # Also decompose the mission for reporting
     decomposer = _get_task_decomposer()
