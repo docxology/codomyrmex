@@ -59,7 +59,7 @@ class TestDeploymentOrchestrator:
         """Test deployment with a failing pre-deploy hook."""
         orchestrator = DeploymentOrchestrator(config_file)
         env = orchestrator.environments["staging"]
-        env.pre_deploy_hooks = ["exit 1"]
+        env.pre_deploy_hooks = ["false"]
 
         deployment = orchestrator.create_deployment("fail-hook", "1.0", "staging", [])
         # We don't rollback if it's not a real failure during deployment itself

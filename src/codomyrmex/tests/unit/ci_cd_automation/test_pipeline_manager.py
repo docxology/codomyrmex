@@ -556,10 +556,12 @@ class TestCancelPipeline:
             result = mgr.cancel_pipeline("test_pipeline")
             assert result is True
             assert mgr.pipelines["test_pipeline"].status == PipelineStatus.CANCELLED
-            # task.cancel() puts it in "cancelling" state; it only becomes
-            # "cancelled" after the event loop processes it. Verify cancel
-            # was requested:
-            assert task.cancelling() > 0 or task.cancelled()
+            # Wait for event loop to process cancellation
+            try:
+                loop.run_until_complete(task)
+            except asyncio.CancelledError:
+                pass
+            assert task.cancelled()
         finally:
             loop.close()
 
