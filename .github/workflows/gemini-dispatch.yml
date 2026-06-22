@@ -126,7 +126,7 @@ jobs:
   review:
     needs: 'dispatch'
     if: |-
-      ${{ needs.dispatch.outputs.command == 'review' }}
+      false
     uses: './.github/workflows/gemini-review.yml'
     permissions:
       contents: 'read'

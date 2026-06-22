@@ -141,6 +141,7 @@ serialization = [
 
 parsing = [
     "tree-sitter>=0.20.0",
+    "tree-sitter-language-pack>=1.1.0",
 ]
 
 modeling_3d = [
