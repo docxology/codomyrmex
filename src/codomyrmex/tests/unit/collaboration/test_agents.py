@@ -199,7 +199,9 @@ class TestSupervisorAgent:
         assert "Supervisor Boss added worker: Worker 2" in caplog.text
 
         # Verify updating an existing worker replaces it
-        worker1_updated = WorkerAgent(agent_id=worker1.agent_id, name="Worker 1 Updated")
+        worker1_updated = WorkerAgent(
+            agent_id=worker1.agent_id, name="Worker 1 Updated"
+        )
         supervisor.add_worker(worker1_updated)
 
         assert len(supervisor.get_workers()) == 2
