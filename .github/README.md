@@ -790,7 +790,7 @@ Every module follows the **RASP** documentation pattern:
 | **AI Dispatch** | [gemini-dispatch.yml](workflows/gemini-dispatch.yml), [gemini-invoke.yml](workflows/gemini-invoke.yml), [gemini-review.yml](workflows/gemini-review.yml), [gemini-triage.yml](workflows/gemini-triage.yml), [gemini-scheduled-triage.yml](workflows/gemini-scheduled-triage.yml), [jules-dispatch.yml](workflows/jules-dispatch.yml) | Gemini and Jules agent orchestration |
 | **Maintenance** | [maintenance.yml](workflows/maintenance.yml), [cleanup-branches.yml](workflows/cleanup-branches.yml), [lock-threads.yml](workflows/lock-threads.yml), [workflow-coordinator.yml](workflows/workflow-coordinator.yml), [workflow-status.yml](workflows/workflow-status.yml) | Repo health, branch cleanup, status |
 | **Community** | [first-interaction.yml](workflows/first-interaction.yml), [first-pr-merged.yml](workflows/first-pr-merged.yml), [agent-welcome.yml](workflows/agent-welcome.yml), [agent-metrics.yml](workflows/agent-metrics.yml) | Onboarding, agent welcome |
-| **Dependencies** | [dependency-review.yml](workflows/dependency-review.yml), [dependabot-auto-approve.yml](workflows/dependabot-auto-approve.yml), [sbom.yml](workflows/sbom.yml) | Dep review, SBOM generation |
+| **Dependencies** | [dependabot-auto-approve.yml](workflows/dependabot-auto-approve.yml), [sbom.yml](workflows/sbom.yml) | Dependabot, SBOM generation |
 
 ### Community & Configuration Files
 

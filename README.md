@@ -789,7 +789,7 @@ Every module follows the **RASP** documentation pattern:
 | **AI Dispatch** | [gemini-dispatch.yml](.github/workflows/gemini-dispatch.yml), [gemini-invoke.yml](.github/workflows/gemini-invoke.yml), [gemini-review.yml](.github/workflows/gemini-review.yml), [gemini-triage.yml](.github/workflows/gemini-triage.yml), [gemini-scheduled-triage.yml](.github/workflows/gemini-scheduled-triage.yml), [jules-dispatch.yml](.github/workflows/jules-dispatch.yml) | Gemini and Jules agent orchestration |
 | **Maintenance** | [maintenance.yml](.github/workflows/maintenance.yml), [cleanup-branches.yml](.github/workflows/cleanup-branches.yml), [lock-threads.yml](.github/workflows/lock-threads.yml), [workflow-coordinator.yml](.github/workflows/workflow-coordinator.yml), [workflow-status.yml](.github/workflows/workflow-status.yml) | Repo health, branch cleanup, status |
 | **Community** | [first-interaction.yml](.github/workflows/first-interaction.yml), [first-pr-merged.yml](.github/workflows/first-pr-merged.yml), [agent-welcome.yml](.github/workflows/agent-welcome.yml), [agent-metrics.yml](.github/workflows/agent-metrics.yml) | Onboarding, agent welcome |
-| **Dependencies** | [dependency-review.yml](.github/workflows/dependency-review.yml), [dependabot-auto-approve.yml](.github/workflows/dependabot-auto-approve.yml), [sbom.yml](.github/workflows/sbom.yml) | Dep review, SBOM generation |
+| **Dependencies** | [dependabot-auto-approve.yml](.github/workflows/dependabot-auto-approve.yml), [sbom.yml](.github/workflows/sbom.yml) | Dependabot, SBOM generation |
 
 ### Community & Configuration Files
 

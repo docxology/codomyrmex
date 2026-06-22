@@ -102,6 +102,21 @@ def test_orchestrator_run_dag_rejects_unknown_topology() -> None:
     )
 
 
+def test_orchestrator_run_dag_safe_eval_blocks_malicious_code() -> None:
+    from codomyrmex.orchestrator.mcp_tools import orchestrator_run_dag
+
+    tasks = [{"id": "t1", "fn_expr": "__import__('os').system('ls')"}]
+    result = orchestrator_run_dag("fan_out", tasks)
+    assert result["status"] == "error"
+    assert "Double underscores are not allowed" in result["message"]
+
+    tasks2 = [{"id": "t2", "fn_expr": "len('hello')"}]
+    result2 = orchestrator_run_dag("fan_out", tasks2)
+    assert result2["status"] == "success"
+    assert len(result2["results"]) == 1
+    assert result2["results"][0]["output"] == 5
+
+
 # ── EventStore-backed IntegrationBus durability ───────────────────────────────
 
 
