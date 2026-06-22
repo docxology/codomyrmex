@@ -11,12 +11,18 @@ from typing import Any
 try:
     import mlx.core as mx
 except ImportError:
-    mx: Any = None
+    mx = None
 
 
 @dataclasses.dataclass
 class QuantizationConfig:
-    """Configuration for MLX array quantization."""
+    """Configuration for MLX array quantization.
+
+    Attributes:
+        bits: Number of bits per parameter (4 or 8).
+              If 16, falls back to raw fp16 without quantization.
+        group_size: Group size for quantization parameters (default 64).
+    """
 
     bits: int = 4
     group_size: int = 64
@@ -28,21 +34,57 @@ class QuantizationConfig:
             raise ValueError("QuantizationConfig group_size must be positive.")
 
 
-def quantize_array(array, config: QuantizationConfig):
+def quantize_array(
+    array: Any, config: QuantizationConfig
+) -> tuple[Any, Any | None, Any | None]:
+    """Quantize an MLX array into lower precision (e.g. INT4 or INT8).
+
+    Args:
+        array: The source continuous MLX array (e.g., float32 or float16).
+        config: The quantization parameters (bits and group_size).
+
+    Returns:
+        A tuple of (quantized_weights, scales, biases).
+        If config.bits is 16, falls back to direct float16 cast,
+        returning (fp16_weights, None, None).
+    """
     if mx is None:
         raise ImportError("mlx is not installed")
     if config.bits == 16:
+        # Fallback to standard FP16 without structural quantization
         return array.astype(mx.float16), None, None
+
+    # Native MLX quantization for lower bit depths
     return mx.quantize(array, group_size=config.group_size, bits=config.bits)
 
 
-def dequantize_array(wq, scales, biases, config: QuantizationConfig):
+def dequantize_array(
+    wq: Any,
+    scales: Any | None,
+    biases: Any | None,
+    config: QuantizationConfig,
+) -> Any:
+    """Dequantize an MLX array back into a continuous floating point format.
+
+    Args:
+        wq: The quantized weights array.
+        scales: The associated scaling factors (None if bits=16 fallback).
+        biases: The associated bias offsets (None if bits=16 fallback).
+        config: The quantization parameters the weights were compressed with.
+
+    Returns:
+        The reconstructed MLX array in standard precision.
+    """
     if mx is None:
         raise ImportError("mlx is not installed")
     if config.bits == 16:
+        # Array is already in raw form (fp16 fallback)
         return wq
+
     if scales is None or biases is None:
         raise ValueError("Scales and biases must be provided for bits < 16")
+
+    # Native MLX dequantization
     return mx.dequantize(
         wq, scales, biases, group_size=config.group_size, bits=config.bits
     )
