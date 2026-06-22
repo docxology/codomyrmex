@@ -35,7 +35,7 @@ def scan_secrets(file_path: str) -> dict:
     Returns:
         A dictionary containing identified secrets or confirmation of validation.
     """
-    from codomyrmex.security import scan_file_for_secrets as _scan_secrets
+    from codomyrmex.security import scan_secrets as _scan_secrets
 
     try:
         results = _scan_secrets(file_path)

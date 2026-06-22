@@ -26,7 +26,7 @@ class SecretType(Enum):
     AWS_KEY = "aws_key"
     GITHUB_TOKEN = "github_token"
     PRIVATE_KEY = "private_key"
-    PASSWORD = "password"
+    PASSWORD = "password_type"
     JWT = "jwt"
     DATABASE_URL = "database_url"
     GENERIC = "generic"
