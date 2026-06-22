@@ -75,6 +75,33 @@ class TestTaskQueue:
         assert result is True
         assert queue.pop() is None
 
+        # Test removing a nonexistent task ID
+        result_nonexistent = queue.remove("nonexistent_id")
+        assert result_nonexistent is False
+
+    def test_queue_peek_lazy_removal(self):
+        """Test peeking after a lazy removal."""
+        queue = TaskQueue()
+        task1 = Task(name="Task 1", priority=10)
+        task2 = Task(name="Task 2", priority=5)
+
+        queue.push(task1)
+        queue.push(task2)
+
+        # Remove the highest priority task (task1) lazily
+        queue.remove(task1.id)
+
+        # Peek should bypass the lazily removed task and return task2
+        peeked = queue.peek()
+        assert peeked is not None
+        assert peeked.name == "Task 2"
+
+        # Remove task2 lazily
+        queue.remove(task2.id)
+
+        # Peek should return None as all items are removed lazily
+        assert queue.peek() is None
+
     def test_queue_get(self):
         """Test getting a task by ID."""
         queue = TaskQueue()
