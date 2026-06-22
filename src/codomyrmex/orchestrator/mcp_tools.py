@@ -137,7 +137,20 @@ def orchestrator_run_dag(
                     return getattr(mod, parts[1])
             if "fn_expr" in task_dict:
                 expr = task_dict["fn_expr"]
-                return lambda *_a, **_kw: eval(expr)
+                if "__" in expr:
+                    raise ValueError(
+                        "Double underscores are not allowed in fn_expr for security reasons."
+                    )
+
+                safe_locals = {
+                    "len": len,
+                    "sum": sum,
+                    "min": min,
+                    "max": max,
+                    "abs": abs,
+                    "round": round,
+                }
+                return lambda *_a, **_kw: eval(expr, {"__builtins__": {}}, safe_locals)
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 
