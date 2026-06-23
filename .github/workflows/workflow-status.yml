@@ -195,47 +195,47 @@ jobs:
           EOF
           
           python3 -c "
-          import json
-          from datetime import datetime
-          
-          with open('workflow-status.json', 'r') as f:
-              data = json.load(f)
-          
-          def get_status_emoji(status):
-              if status == 'success':
-                  return '✅'
-              elif status == 'failure':
-                  return '❌'
-              elif status == 'cancelled':
-                  return '⏹️'
-              elif status in ['in_progress', 'queued']:
-                  return '🔄'
-              else:
-                  return '❓'
-          
-          print()
-          print('| Workflow | Status | Last Run | Branch | Event |')
-          print('|----------|--------|----------|---------|-------|')
-          
-          for name, info in data['workflows'].items():
-              emoji = get_status_emoji(info['status'])
-              status = info['status'].title()
-              
-              # Format date
-              if info['updatedAt']:
-                  try:
-                      date_obj = datetime.fromisoformat(info['updatedAt'].replace('Z', '+00:00'))
-                      date_str = date_obj.strftime('%Y-%m-%d %H:%M')
-                  except:
-                      date_str = info['updatedAt'][:16]
-              else:
-                  date_str = 'N/A'
-              
-              url = info['url'] if info['url'] else '#'
-              branch = info['branch'] if info['branch'] else 'N/A'
-              event = info['event'] if info['event'] else 'N/A'
-              
-              print(f'| [{name}]({url}) | {emoji} {status} | {date_str} | {branch} | {event} |')
+import json
+from datetime import datetime
+
+with open('workflow-status.json', 'r') as f:
+    data = json.load(f)
+
+def get_status_emoji(status):
+    if status == 'success':
+        return '✅'
+    elif status == 'failure':
+        return '❌'
+    elif status == 'cancelled':
+        return '⏹️'
+    elif status in ['in_progress', 'queued']:
+        return '🔄'
+    else:
+        return '❓'
+
+print()
+print('| Workflow | Status | Last Run | Branch | Event |')
+print('|----------|--------|----------|---------|-------|')
+
+for name, info in data['workflows'].items():
+    emoji = get_status_emoji(info['status'])
+    status = info['status'].title()
+
+    # Format date
+    if info['updatedAt']:
+        try:
+            date_obj = datetime.fromisoformat(info['updatedAt'].replace('Z', '+00:00'))
+            date_str = date_obj.strftime('%Y-%m-%d %H:%M')
+        except:
+            date_str = info['updatedAt'][:16]
+    else:
+        date_str = 'N/A'
+
+    url = info['url'] if info['url'] else '#'
+    branch = info['branch'] if info['branch'] else 'N/A'
+    event = info['event'] if info['event'] else 'N/A'
+
+    print(f'| [{name}]({url}) | {emoji} {status} | {date_str} | {branch} | {event} |')
           " >> workflow-status.md
           
           echo "" >> workflow-status.md
@@ -252,22 +252,22 @@ jobs:
           
           # Calculate success rates
           python3 -c "
-          import json
-          
-          with open('workflow-status.json', 'r') as f:
-              data = json.load(f)
-          
-          total = len(data['workflows'])
-          successful = sum(1 for w in data['workflows'].values() if w['status'] == 'success')
-          failed = sum(1 for w in data['workflows'].values() if w['status'] == 'failure')
-          other = total - successful - failed
-          
-          success_rate = (successful / total * 100) if total > 0 else 0
-          
-          print(f'- **Total Workflows**: {total}')
-          print(f'- **Currently Successful**: {successful} ({success_rate:.1f}%)')
-          print(f'- **Currently Failed**: {failed}')
-          print(f'- **Other States**: {other}')
+import json
+
+with open('workflow-status.json', 'r') as f:
+    data = json.load(f)
+
+total = len(data['workflows'])
+successful = sum(1 for w in data['workflows'].values() if w['status'] == 'success')
+failed = sum(1 for w in data['workflows'].values() if w['status'] == 'failure')
+other = total - successful - failed
+
+success_rate = (successful / total * 100) if total > 0 else 0
+
+print(f'- **Total Workflows**: {total}')
+print(f'- **Currently Successful**: {successful} ({success_rate:.1f}%)')
+print(f'- **Currently Failed**: {failed}')
+print(f'- **Other States**: {other}')
           " >> workflow-status.md
           
           echo "" >> workflow-status.md
@@ -292,36 +292,36 @@ jobs:
           
           # Show current status in summary
           python3 -c "
-          import json
-          
-          with open('workflow-status.json', 'r') as f:
-              data = json.load(f)
-          
-          def get_status_emoji(status):
-              if status == 'success':
-                  return '✅'
-              elif status == 'failure':
-                  return '❌'
-              elif status == 'cancelled':
-                  return '⏹️'
-              elif status in ['in_progress', 'queued']:
-                  return '🔄'
-              else:
-                  return '❓'
-          
-          print('## Current Workflow Status')
-          print()
-          
-          for name, info in data['workflows'].items():
-              emoji = get_status_emoji(info['status'])
-              status = info['status'].title()
-              print(f'{emoji} **{name}**: {status}')
-          
-          print()
-          total = len(data['workflows'])
-          successful = sum(1 for w in data['workflows'].values() if w['status'] == 'success')
-          success_rate = (successful / total * 100) if total > 0 else 0
-          print(f'**Overall Health**: {successful}/{total} workflows successful ({success_rate:.1f}%)')
+import json
+
+with open('workflow-status.json', 'r') as f:
+    data = json.load(f)
+
+def get_status_emoji(status):
+    if status == 'success':
+        return '✅'
+    elif status == 'failure':
+        return '❌'
+    elif status == 'cancelled':
+        return '⏹️'
+    elif status in ['in_progress', 'queued']:
+        return '🔄'
+    else:
+        return '❓'
+
+print('## Current Workflow Status')
+print()
+
+for name, info in data['workflows'].items():
+    emoji = get_status_emoji(info['status'])
+    status = info['status'].title()
+    print(f'{emoji} **{name}**: {status}')
+
+print()
+total = len(data['workflows'])
+successful = sum(1 for w in data['workflows'].values() if w['status'] == 'success')
+success_rate = (successful / total * 100) if total > 0 else 0
+print(f'*Success Rate: {success_rate:.1f}%*')
           " >> $GITHUB_STEP_SUMMARY
 
       - name: Post status to issue (if failures detected)

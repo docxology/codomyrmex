@@ -93,10 +93,12 @@ def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, No
         memory_bytes = limits.memory_limit * 1024 * 1024  # Convert MB to bytes
         if hard != resource.RLIM_INFINITY:
             memory_bytes = min(memory_bytes, hard)
-        try:
-            resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
-        except (ValueError, OSError) as e:
-            logger.warning("Failed to set memory limit: %s", e)
+        # We don't enforce RLIMIT_AS on the main process anymore because it causes
+        # MemoryError when spawning threads or other modules due to Python runtime overhead.
+        # Subprocesses / Docker containers are properly resource limited by other means
+        # (Docker limits or prlimit equivalents in isolation runner).
+        # We keep the function for compatibility but remove the RLIMIT_AS restriction
+        # on the main process.
 
         yield
 
