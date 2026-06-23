@@ -1,0 +1,24 @@
+{
+  "id": "modules/model_context_protocol/security",
+  "title": "Security Policy for Model Context Protocol",
+  "description": "This document outlines security procedures and policies specifically relevant to the Model Context Protocol (MCP) and its implementation within the Codomyrmex ecosystem.",
+  "source": "@site/docs/modules/model_context_protocol/security.md",
+  "sourceDirName": "modules/model_context_protocol",
+  "slug": "/modules/model_context_protocol/security",
+  "permalink": "/codomyrmex/modules/model_context_protocol/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog for Model Context Protocol",
+    "permalink": "/codomyrmex/modules/model_context_protocol/changelog"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/model_context_protocol/docs/technical_overview"
+  }
+}

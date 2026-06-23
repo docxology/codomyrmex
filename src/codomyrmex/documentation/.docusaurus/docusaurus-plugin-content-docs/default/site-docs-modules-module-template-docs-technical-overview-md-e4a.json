@@ -1,0 +1,15 @@
+{
+  "id": "modules/module_template/docs/technical_overview",
+  "title": "[Module Name] - Technical Overview",
+  "description": "This document provides a detailed technical overview of the [Module Name] module.",
+  "source": "@site/docs/modules/module_template/docs/technical_overview.md",
+  "sourceDirName": "modules/module_template/docs",
+  "slug": "/modules/module_template/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/module_template/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/module_template/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

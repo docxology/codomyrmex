@@ -1,0 +1,24 @@
+{
+  "id": "modules/code_execution_sandbox/mcp_tool_specification",
+  "title": "Code Execution Sandbox - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the Code Execution Sandbox module that are intended to be integrated with the Model Context Protocol (MCP).",
+  "source": "@site/docs/modules/code_execution_sandbox/mcp_tool_specification.md",
+  "sourceDirName": "modules/code_execution_sandbox",
+  "slug": "/modules/code_execution_sandbox/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/code_execution_sandbox/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Code Execution Sandbox - API Specification",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/api_specification"
+  },
+  "next": {
+    "title": "Code Execution Sandbox - Usage Examples",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/usage_examples"
+  }
+}

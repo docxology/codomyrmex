@@ -1,0 +1,15 @@
+{
+  "id": "modules/pattern_matching/security",
+  "title": "Security Policy for Pattern Matching",
+  "description": "This document outlines security procedures and policies for the Pattern Matching module.",
+  "source": "@site/docs/modules/pattern_matching/security.md",
+  "sourceDirName": "modules/pattern_matching",
+  "slug": "/modules/pattern_matching/security",
+  "permalink": "/codomyrmex/modules/pattern_matching/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

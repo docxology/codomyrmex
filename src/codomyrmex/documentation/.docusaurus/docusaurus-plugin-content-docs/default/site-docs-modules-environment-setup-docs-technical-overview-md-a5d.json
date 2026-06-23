@@ -1,0 +1,24 @@
+{
+  "id": "modules/environment_setup/docs/technical_overview",
+  "title": "Environment Setup - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Environment Setup module.",
+  "source": "@site/docs/modules/environment_setup/docs/technical_overview.md",
+  "sourceDirName": "modules/environment_setup/docs",
+  "slug": "/modules/environment_setup/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/environment_setup/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy for Environment Setup",
+    "permalink": "/codomyrmex/modules/environment_setup/security"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/environment-setup/tutorials"
+  }
+}

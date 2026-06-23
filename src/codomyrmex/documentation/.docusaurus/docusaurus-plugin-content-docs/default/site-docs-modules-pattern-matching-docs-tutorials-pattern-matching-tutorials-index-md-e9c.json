@@ -1,0 +1,27 @@
+{
+  "id": "modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index",
+  "title": "Pattern Matching - Tutorials",
+  "description": "Welcome to the Pattern Matching tutorials. These step-by-step guides will help you learn how to use the various features of the Pattern Matching module.",
+  "source": "@site/docs/modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index.md",
+  "sourceDirName": "modules/pattern_matching/docs/tutorials",
+  "slug": "/modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index",
+  "permalink": "/codomyrmex/modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex/tree/main/docs/modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Tutorials",
+    "title": "Pattern Matching - Tutorials"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/pattern_matching/docs/pattern-matching-technical-overview"
+  },
+  "next": {
+    "title": "Getting Started Tutorial",
+    "permalink": "/codomyrmex/modules/pattern_matching/docs/tutorials/pattern-matching-example-tutorial"
+  }
+}

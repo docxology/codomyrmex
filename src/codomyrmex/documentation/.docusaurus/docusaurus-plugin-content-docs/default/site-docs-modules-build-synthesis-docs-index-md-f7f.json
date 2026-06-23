@@ -1,0 +1,15 @@
+{
+  "id": "modules/build_synthesis/docs/index",
+  "title": "Build Synthesis - Documentation",
+  "description": "Welcome to the detailed documentation for the Build Synthesis module.",
+  "source": "@site/docs/modules/build_synthesis/docs/index.md",
+  "sourceDirName": "modules/build_synthesis/docs",
+  "slug": "/modules/build_synthesis/docs/",
+  "permalink": "/codomyrmex/modules/build_synthesis/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/build_synthesis/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

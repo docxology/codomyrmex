@@ -1,0 +1,24 @@
+{
+  "id": "modules/static_analysis/README",
+  "title": "Static Analysis",
+  "description": "Overview",
+  "source": "@site/docs/modules/static_analysis/README.md",
+  "sourceDirName": "modules/static_analysis",
+  "slug": "/modules/static_analysis/",
+  "permalink": "/codomyrmex/modules/static_analysis/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/static_analysis/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Pattern Matching - Example Tutorial: Getting Started with [Feature X]",
+    "permalink": "/codomyrmex/modules/pattern_matching/docs/tutorials/example_tutorial"
+  },
+  "next": {
+    "title": "Static Analysis - API Specification",
+    "permalink": "/codomyrmex/modules/static_analysis/api_specification"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "modules/ai_code_editing/security",
+  "title": "Security Policy for Ai Code Editing",
+  "description": "This document outlines security procedures and policies for the Ai Code Editing module.",
+  "source": "@site/docs/modules/ai_code_editing/security.md",
+  "sourceDirName": "modules/ai_code_editing",
+  "slug": "/modules/ai_code_editing/security",
+  "permalink": "/codomyrmex/modules/ai_code_editing/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/ai_code_editing/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog for Ai Code Editing",
+    "permalink": "/codomyrmex/modules/ai_code_editing/changelog"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/ai_code_editing/docs/technical_overview"
+  }
+}

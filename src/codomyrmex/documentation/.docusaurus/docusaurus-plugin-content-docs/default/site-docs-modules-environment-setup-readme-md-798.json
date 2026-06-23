@@ -1,0 +1,24 @@
+{
+  "id": "modules/environment_setup/README",
+  "title": "Environment Setup Module (environment_setup)",
+  "description": "For general project development environment setup instructions (covering prerequisites, cloning, virtual environments, Python dependencies, API keys, Docusaurus, linters, and tests for the entire Codomyrmex project), please refer to the \"Getting Started: Development Environment Setup\" section in the main project README.md.",
+  "source": "@site/docs/modules/environment_setup/README.md",
+  "sourceDirName": "modules/environment_setup",
+  "slug": "/modules/environment_setup/",
+  "permalink": "/codomyrmex/modules/environment_setup/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Adding New Module Docs",
+    "permalink": "/codomyrmex/modules/documentation/docs/tutorials/example_tutorial"
+  },
+  "next": {
+    "title": "Environment Setup - API Specification",
+    "permalink": "/codomyrmex/modules/environment_setup/api_specification"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "modules/data_visualization/docs/tutorials/mcp_heatmap_tutorial",
+  "title": "Data Visualization - Tutorial: Generating a Heatmap via MCP",
+  "description": "This tutorial will guide you through generating a heatmap using the Data Visualization module's create_heatmap Model Context Protocol (MCP) tool.",
+  "source": "@site/docs/modules/data_visualization/docs/tutorials/mcp_heatmap_tutorial.md",
+  "sourceDirName": "modules/data_visualization/docs/tutorials",
+  "slug": "/modules/data_visualization/docs/tutorials/mcp_heatmap_tutorial",
+  "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/mcp_heatmap_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/data_visualization/docs/tutorials/mcp_heatmap_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Data Visualization - Tutorial: Generating a Scatter Plot",
+    "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/generating_a_scatter_plot_tutorial"
+  },
+  "next": {
+    "title": "Documentation Module",
+    "permalink": "/codomyrmex/modules/documentation"
+  }
+}

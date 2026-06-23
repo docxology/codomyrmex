@@ -1,0 +1,24 @@
+{
+  "id": "modules/model_context_protocol/docs/tutorials/example_tutorial",
+  "title": "Model Context Protocol - Example Tutorial: Getting Started with [Feature X]",
+  "description": "This tutorial will guide you through the process of using [Feature X] of the Model Context Protocol module.",
+  "source": "@site/docs/modules/model_context_protocol/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/model_context_protocol/docs/tutorials",
+  "slug": "/modules/model_context_protocol/docs/tutorials/example_tutorial",
+  "permalink": "/codomyrmex/modules/model_context_protocol/docs/tutorials/example_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/model-context-protocol/tutorials"
+  },
+  "next": {
+    "title": "Pattern Matching Module (Leveraging cased/kit)",
+    "permalink": "/codomyrmex/modules/pattern_matching/"
+  }
+}

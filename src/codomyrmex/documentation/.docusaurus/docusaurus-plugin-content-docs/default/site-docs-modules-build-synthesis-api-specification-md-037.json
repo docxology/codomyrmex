@@ -1,0 +1,24 @@
+{
+  "id": "modules/build_synthesis/api_specification",
+  "title": "Build Synthesis - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/build_synthesis/api_specification.md",
+  "sourceDirName": "modules/build_synthesis",
+  "slug": "/modules/build_synthesis/api_specification",
+  "permalink": "/codomyrmex/modules/build_synthesis/api_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/build_synthesis/api_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Build Synthesis",
+    "permalink": "/codomyrmex/modules/build_synthesis/"
+  },
+  "next": {
+    "title": "Build Synthesis - MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/build_synthesis/mcp_tool_specification"
+  }
+}

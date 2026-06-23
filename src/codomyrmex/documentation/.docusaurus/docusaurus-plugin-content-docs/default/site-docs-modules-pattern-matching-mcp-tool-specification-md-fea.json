@@ -1,0 +1,15 @@
+{
+  "id": "modules/pattern_matching/mcp_tool_specification",
+  "title": "Pattern Matching - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the Pattern Matching module that are intended to be integrated with the Model Context Protocol (MCP). These tools leverage the cased/kit toolkit for various code analysis and search functionalities.",
+  "source": "@site/docs/modules/pattern_matching/mcp_tool_specification.md",
+  "sourceDirName": "modules/pattern_matching",
+  "slug": "/modules/pattern_matching/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/pattern_matching/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

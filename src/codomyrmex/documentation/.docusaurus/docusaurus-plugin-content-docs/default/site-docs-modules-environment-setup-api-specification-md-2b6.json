@@ -1,0 +1,24 @@
+{
+  "id": "modules/environment_setup/api_specification",
+  "title": "Environment Setup - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/environment_setup/api_specification.md",
+  "sourceDirName": "modules/environment_setup",
+  "slug": "/modules/environment_setup/api_specification",
+  "permalink": "/codomyrmex/modules/environment_setup/api_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/api_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Environment Setup Module (environment_setup)",
+    "permalink": "/codomyrmex/modules/environment_setup/"
+  },
+  "next": {
+    "title": "Environment Setup - MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/environment_setup/mcp_tool_specification"
+  }
+}

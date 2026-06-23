@@ -1,0 +1,24 @@
+{
+  "id": "modules/ai_code_editing/docs/technical_overview",
+  "title": "Ai Code Editing - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Ai Code Editing module.",
+  "source": "@site/docs/modules/ai_code_editing/docs/technical_overview.md",
+  "sourceDirName": "modules/ai_code_editing/docs",
+  "slug": "/modules/ai_code_editing/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/ai_code_editing/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/ai_code_editing/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy for Ai Code Editing",
+    "permalink": "/codomyrmex/modules/ai_code_editing/security"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/ai-code-editing/tutorials"
+  }
+}

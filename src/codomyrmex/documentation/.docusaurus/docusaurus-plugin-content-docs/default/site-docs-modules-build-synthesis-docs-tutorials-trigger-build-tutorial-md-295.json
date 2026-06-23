@@ -1,0 +1,24 @@
+{
+  "id": "modules/build_synthesis/docs/tutorials/trigger_build_tutorial",
+  "title": "Build Synthesis - Tutorial: Triggering a Python Module Build with trigger_build",
+  "description": "This tutorial will guide you through using the trigger_build MCP tool from the Build Synthesis module to build a Python package (wheel) for a hypothetical Codomyrmex utility module.",
+  "source": "@site/docs/modules/build_synthesis/docs/tutorials/trigger_build_tutorial.md",
+  "sourceDirName": "modules/build_synthesis/docs/tutorials",
+  "slug": "/modules/build_synthesis/docs/tutorials/trigger_build_tutorial",
+  "permalink": "/codomyrmex/modules/build_synthesis/docs/tutorials/trigger_build_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/build_synthesis/docs/tutorials/trigger_build_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/build-synthesis/tutorials"
+  },
+  "next": {
+    "title": "Build Synthesis - Tutorial: Synthesizing a New Codomyrmex Module with synthesize_component_from_spec",
+    "permalink": "/codomyrmex/modules/build_synthesis/docs/tutorials/synthesize_code_component_tutorial"
+  }
+}

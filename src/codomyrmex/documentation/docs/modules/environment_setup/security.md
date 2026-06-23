@@ -54,7 +54,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email **&lt;blanket@activeinference.institute&gt;** with the subject line: "**SECURITY Vulnerability Report: Environment Setup - Security Issue**".
+Instead, please email **<blanket@activeinference.institute>** with the subject line: "**SECURITY Vulnerability Report: Environment Setup - Security Issue**".
 
 Please include the following information in your report:
 

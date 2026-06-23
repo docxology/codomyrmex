@@ -1,0 +1,24 @@
+{
+  "id": "modules/environment_setup/changelog",
+  "title": "Changelog for Environment Setup",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/environment_setup/changelog.md",
+  "sourceDirName": "modules/environment_setup",
+  "slug": "/modules/environment_setup/changelog",
+  "permalink": "/codomyrmex/modules/environment_setup/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Environment Setup - Usage Examples",
+    "permalink": "/codomyrmex/modules/environment_setup/usage_examples"
+  },
+  "next": {
+    "title": "Security Policy for Environment Setup",
+    "permalink": "/codomyrmex/modules/environment_setup/security"
+  }
+}

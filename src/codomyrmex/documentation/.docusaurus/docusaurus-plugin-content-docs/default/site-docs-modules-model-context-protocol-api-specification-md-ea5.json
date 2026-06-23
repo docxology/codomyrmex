@@ -1,0 +1,24 @@
+{
+  "id": "modules/model_context_protocol/api_specification",
+  "title": "Model Context Protocol - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/model_context_protocol/api_specification.md",
+  "sourceDirName": "modules/model_context_protocol",
+  "slug": "/modules/model_context_protocol/api_specification",
+  "permalink": "/codomyrmex/modules/model_context_protocol/api_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/api_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Model Context Protocol",
+    "permalink": "/codomyrmex/modules/model_context_protocol/"
+  },
+  "next": {
+    "title": "Model Context Protocol (MCP) - Meta-Specification for Tool Definitions",
+    "permalink": "/codomyrmex/modules/model_context_protocol/mcp_tool_specification"
+  }
+}

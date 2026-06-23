@@ -1,0 +1,24 @@
+{
+  "id": "modules/build_synthesis/docs/tutorials/synthesize_code_component_tutorial",
+  "title": "Build Synthesis - Tutorial: Synthesizing a New Codomyrmex Module with synthesize_component_from_spec",
+  "description": "This tutorial guides you through using the synthesizecomponentfrom_spec MCP tool from the Build Synthesis module to scaffold a new, standard Codomyrmex module structure using a specification and template.",
+  "source": "@site/docs/modules/build_synthesis/docs/tutorials/synthesize_code_component_tutorial.md",
+  "sourceDirName": "modules/build_synthesis/docs/tutorials",
+  "slug": "/modules/build_synthesis/docs/tutorials/synthesize_code_component_tutorial",
+  "permalink": "/codomyrmex/modules/build_synthesis/docs/tutorials/synthesize_code_component_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/build_synthesis/docs/tutorials/synthesize_code_component_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Build Synthesis - Tutorial: Triggering a Python Module Build with trigger_build",
+    "permalink": "/codomyrmex/modules/build_synthesis/docs/tutorials/trigger_build_tutorial"
+  },
+  "next": {
+    "title": "Code Execution Sandbox",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/"
+  }
+}

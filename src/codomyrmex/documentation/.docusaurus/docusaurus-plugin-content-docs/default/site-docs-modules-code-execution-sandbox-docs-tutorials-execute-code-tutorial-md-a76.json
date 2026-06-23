@@ -1,0 +1,24 @@
+{
+  "id": "modules/code_execution_sandbox/docs/tutorials/execute_code_tutorial",
+  "title": "Code Execution Sandbox - Tutorial: Using execute_code",
+  "description": "This tutorial will guide you through using the execute_code MCP tool from the Code Execution Sandbox module to run code snippets in different languages, handle inputs/outputs, and understand resource limits and error reporting.",
+  "source": "@site/docs/modules/code_execution_sandbox/docs/tutorials/execute_code_tutorial.md",
+  "sourceDirName": "modules/code_execution_sandbox/docs/tutorials",
+  "slug": "/modules/code_execution_sandbox/docs/tutorials/execute_code_tutorial",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/tutorials/execute_code_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/code_execution_sandbox/docs/tutorials/execute_code_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/code-execution-sandbox/tutorials"
+  },
+  "next": {
+    "title": "Data Visualization",
+    "permalink": "/codomyrmex/modules/data_visualization/"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "project/code-of-conduct",
+  "title": "Code of Conduct",
+  "description": "Our Pledge",
+  "source": "@site/docs/project/code-of-conduct.md",
+  "sourceDirName": "project",
+  "slug": "/project/code-of-conduct",
+  "permalink": "/codomyrmex/project/code-of-conduct",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/project/code-of-conduct.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "code-of-conduct",
+    "title": "Code of Conduct",
+    "sidebar_label": "Code of Conduct"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Contributing",
+    "permalink": "/codomyrmex/project/contributing"
+  },
+  "next": {
+    "title": "License",
+    "permalink": "/codomyrmex/project/license"
+  }
+}

@@ -33,7 +33,7 @@ including standard, log-softmax, and online softmax implementations.
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | `logits` | `list[float]` | Yes | -- | Raw unnormalized scores |
-| `temperature` | `float` | No | `1.0` | Temperature scaling (&gt;1 = more uniform, &lt;1 = more peaked) |
+| `temperature` | `float` | No | `1.0` | Temperature scaling (>1 = more uniform, <1 = more peaked) |
 | `variant` | `str` | No | `"standard"` | Softmax variant: `"standard"`, `"log"`, or `"online"` |
 
 **Returns**: `dict` — Dictionary with `status`, `probabilities` (list), `log_probs` (list), `entropy` (float), `max_prob` (float), and `sum_check` (float, should be ~1.0).
