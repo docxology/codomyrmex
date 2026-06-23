@@ -347,11 +347,15 @@ print(f'- Invalid files: {total - valid}')
             
             comment += '\n[View detailed dashboard →](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
             
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });
+            try {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.log('Could not create PR comment - this is normal if running from a fork without permissions: ' + error.message);
+            }
 
 
