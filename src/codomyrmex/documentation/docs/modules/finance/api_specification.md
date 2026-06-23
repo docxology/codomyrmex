@@ -75,7 +75,7 @@ This document specifies the Application Programming Interface (API) for the Fina
 - **Module**: `codomyrmex.finance.visualization`
 - **Parameters/Arguments**:
     - `ledger` (Ledger): The ledger instance to visualize
-- **Returns/Response**: `LinePlot` - A line chart of transaction amounts by index, titled "Transaction Volume (Since {start_date})".
+- **Returns/Response**: `LinePlot` - A line chart of transaction amounts by index, titled "Transaction Volume (Since \{start_date\})".
 
 ## Data Models
 

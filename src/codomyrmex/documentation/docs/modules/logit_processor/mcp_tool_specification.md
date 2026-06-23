@@ -30,14 +30,14 @@ in `mcp_tools.py` and surfaced as part of the ~303 dynamic tools available to Cl
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | `logits` | `list[float]` | Yes | -- | Raw logit values from language model |
-| `temperature` | `float` | No | `1.0` | Scaling factor (>1=diverse, <1=focused, 1=unchanged) |
+| `temperature` | `float` | No | `1.0` | Scaling factor (&gt;1=diverse, &lt;1=focused, 1=unchanged) |
 | `top_k` | `int` | No | `0` | Keep only top-k tokens (0=disabled) |
 | `top_p` | `float` | No | `1.0` | Nucleus sampling threshold (1.0=disabled) |
-| `repetition_penalty` | `float` | No | `1.0` | Penalize repeated tokens (1.0=disabled, >1.0=penalize) |
+| `repetition_penalty` | `float` | No | `1.0` | Penalize repeated tokens (1.0=disabled, &gt;1.0=penalize) |
 | `previous_tokens` | `list[int] \ | None` | No | `None` Previously generated token IDs for repetition penalty |
 | `seed` | `int \ | None` | No | `None` Random seed for reproducibility |
 
-**Returns**: `dict` -- Dictionary with sampled_token, greedy_token, top5_tokens (list of {id, prob}), and entropy.
+**Returns**: `dict` -- Dictionary with sampled_token, greedy_token, top5_tokens (list of \{id, prob\}), and entropy.
 
 **Example**:
 ```python
