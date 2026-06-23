@@ -41,8 +41,7 @@ class TTLManager:
 
     def _run(self):
         """Run the operation."""
-        while not self._stop_event.is_set():
-            time.sleep(self.cleanup_interval)
+        while not self._stop_event.wait(self.cleanup_interval):
             self.cleanup()
 
     def cleanup(self):
