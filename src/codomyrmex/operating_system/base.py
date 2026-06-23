@@ -8,6 +8,7 @@ that each platform-specific provider must implement.
 from __future__ import annotations
 
 import os
+import shlex
 import subprocess
 import time
 from abc import ABC, abstractmethod
@@ -19,9 +20,12 @@ from typing import Any
 def run_shell(cmd: str, timeout: float = 10.0) -> str:
     """Run a shell command and return stripped stdout."""
     try:
+        # On Windows, string commands can be executed with shell=False.
+        # On POSIX, use shlex.split to safely parse arguments without stripping Windows paths if used elsewhere.
+        args = cmd if os.name == "nt" else shlex.split(cmd)
         result = subprocess.run(
-            cmd,
-            shell=True,
+            args,
+            shell=False,
             capture_output=True,
             text=True,
             timeout=timeout,
@@ -248,9 +252,10 @@ class OSProviderBase(ABC):
         """
         start = time.time()
         try:
+            args = command if os.name == "nt" else shlex.split(command)
             result = subprocess.run(
-                command,
-                shell=True,
+                args,
+                shell=False,
                 capture_output=True,
                 text=True,
                 timeout=timeout,

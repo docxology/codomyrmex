@@ -70,9 +70,22 @@ class MacOSProvider(OSProviderBase):
     # ── Processes ───────────────────────────────────────────────────
 
     def list_processes(self, limit: int = 50) -> list[ProcessInfo]:
-        raw = run_shell(f"ps -eo pid,stat,user,%cpu,rss,comm | head -n {limit + 1}")
+        import subprocess
+
+        try:
+            ps_result = subprocess.run(
+                ["ps", "-eo", "pid,stat,user,%cpu,rss,comm"],
+                capture_output=True,
+                text=True,
+                shell=False,
+            )
+            raw = ps_result.stdout
+        except FileNotFoundError:
+            raw = ""
+
         processes: list[ProcessInfo] = []
-        for line in raw.splitlines()[1:]:  # skip header
+        lines = raw.splitlines()[1 : limit + 1]  # skip header, apply limit
+        for line in lines:
             parts = line.split(None, 5)
             if len(parts) < 6:
                 continue
