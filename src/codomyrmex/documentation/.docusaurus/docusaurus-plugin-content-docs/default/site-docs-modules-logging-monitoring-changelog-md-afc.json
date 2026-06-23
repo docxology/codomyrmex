@@ -1,0 +1,24 @@
+{
+  "id": "modules/logging_monitoring/changelog",
+  "title": "Changelog for Logging Monitoring",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/logging_monitoring/changelog.md",
+  "sourceDirName": "modules/logging_monitoring",
+  "slug": "/modules/logging_monitoring/changelog",
+  "permalink": "/codomyrmex/modules/logging_monitoring/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/logging_monitoring/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Logging Monitoring - Usage Examples",
+    "permalink": "/codomyrmex/modules/logging_monitoring/usage_examples"
+  },
+  "next": {
+    "title": "Security Policy for Logging & Monitoring",
+    "permalink": "/codomyrmex/modules/logging_monitoring/security"
+  }
+}

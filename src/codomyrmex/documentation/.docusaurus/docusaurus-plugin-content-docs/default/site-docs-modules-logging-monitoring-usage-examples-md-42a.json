@@ -1,0 +1,24 @@
+{
+  "id": "modules/logging_monitoring/usage_examples",
+  "title": "Logging Monitoring - Usage Examples",
+  "description": "This document provides usage examples for the Logging Monitoring module.",
+  "source": "@site/docs/modules/logging_monitoring/usage_examples.md",
+  "sourceDirName": "modules/logging_monitoring",
+  "slug": "/modules/logging_monitoring/usage_examples",
+  "permalink": "/codomyrmex/modules/logging_monitoring/usage_examples",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/logging_monitoring/usage_examples.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Logging & Monitoring - MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/logging_monitoring/mcp_tool_specification"
+  },
+  "next": {
+    "title": "Changelog for Logging Monitoring",
+    "permalink": "/codomyrmex/modules/logging_monitoring/changelog"
+  }
+}

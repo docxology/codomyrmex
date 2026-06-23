@@ -1,0 +1,15 @@
+{
+  "id": "development/DocumentationMaintenance",
+  "title": "Documentation Maintenance Guide",
+  "description": "This guide explains the Codomyrmex documentation maintenance system designed to prevent errors from accumulating across versions.",
+  "source": "@site/docs/development/DocumentationMaintenance.md",
+  "sourceDirName": "development",
+  "slug": "/development/DocumentationMaintenance",
+  "permalink": "/codomyrmex/development/DocumentationMaintenance",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/development/DocumentationMaintenance.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

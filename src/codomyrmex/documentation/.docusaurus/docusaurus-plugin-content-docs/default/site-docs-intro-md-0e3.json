@@ -1,0 +1,24 @@
+{
+  "id": "intro",
+  "title": "Welcome to Codomyrmex",
+  "description": "Codomyrmex is a modular and extensible coding workspace designed to enhance developer productivity through intelligent tools and seamless integration of AI capabilities.",
+  "source": "@site/docs/intro.md",
+  "sourceDirName": ".",
+  "slug": "/",
+  "permalink": "/codomyrmex/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/intro.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "slug": "/"
+  },
+  "sidebar": "tutorialSidebar",
+  "next": {
+    "title": "Project Overview",
+    "permalink": "/codomyrmex/project-overview"
+  }
+}

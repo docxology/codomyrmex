@@ -1,0 +1,24 @@
+{
+  "id": "modules/model_context_protocol/README",
+  "title": "Model Context Protocol",
+  "description": "Overview",
+  "source": "@site/docs/modules/model_context_protocol/README.md",
+  "sourceDirName": "modules/model_context_protocol",
+  "slug": "/modules/model_context_protocol/",
+  "permalink": "/codomyrmex/modules/model_context_protocol/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Logging Monitoring - Tutorial: Setting Up and Using Centralized Logging",
+    "permalink": "/codomyrmex/modules/logging_monitoring/docs/tutorials/example_tutorial"
+  },
+  "next": {
+    "title": "Model Context Protocol - API Specification",
+    "permalink": "/codomyrmex/modules/model_context_protocol/api_specification"
+  }
+}

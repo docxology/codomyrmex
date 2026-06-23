@@ -1,0 +1,15 @@
+{
+  "id": "modules/pattern_matching/changelog",
+  "title": "Changelog for Pattern Matching",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/pattern_matching/changelog.md",
+  "sourceDirName": "modules/pattern_matching",
+  "slug": "/modules/pattern_matching/changelog",
+  "permalink": "/codomyrmex/modules/pattern_matching/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

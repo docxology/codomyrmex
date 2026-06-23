@@ -1,0 +1,28 @@
+{
+  "id": "project/contributing",
+  "title": "Contributing to Codomyrmex",
+  "description": "Thank you for your interest in contributing to the Codomyrmex project! We appreciate the community's efforts to help us improve and grow this modular, extensible coding workspace.",
+  "source": "@site/docs/project/contributing.md",
+  "sourceDirName": "project",
+  "slug": "/project/contributing",
+  "permalink": "/codomyrmex/project/contributing",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/project/contributing.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "contributing",
+    "title": "Contributing to Codomyrmex",
+    "sidebar_label": "Contributing"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Contributing to Documentation",
+    "permalink": "/codomyrmex/project/CONTRIBUTING_TO_DOCUMENTATION"
+  },
+  "next": {
+    "title": "Code of Conduct",
+    "permalink": "/codomyrmex/project/code-of-conduct"
+  }
+}

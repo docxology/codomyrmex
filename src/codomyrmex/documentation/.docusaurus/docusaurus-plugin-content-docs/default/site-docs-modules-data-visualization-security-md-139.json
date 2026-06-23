@@ -1,0 +1,24 @@
+{
+  "id": "modules/data_visualization/security",
+  "title": "Security Policy for Data Visualization",
+  "description": "This document outlines security procedures, policies, and critical considerations for the Data Visualization module. While primarily focused on generating image files from provided data, several aspects require careful security attention, especially concerning input data handling, output path management, and resource consumption.",
+  "source": "@site/docs/modules/data_visualization/security.md",
+  "sourceDirName": "modules/data_visualization",
+  "slug": "/modules/data_visualization/security",
+  "permalink": "/codomyrmex/modules/data_visualization/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/data_visualization/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog for Data Visualization",
+    "permalink": "/codomyrmex/modules/data_visualization/changelog"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/data_visualization/docs/technical_overview"
+  }
+}

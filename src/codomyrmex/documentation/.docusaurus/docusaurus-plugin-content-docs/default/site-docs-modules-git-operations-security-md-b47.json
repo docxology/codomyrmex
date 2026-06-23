@@ -1,0 +1,24 @@
+{
+  "id": "modules/git_operations/security",
+  "title": "Security Policy for Git Operations",
+  "description": "This document outlines security procedures, policies, and critical considerations for the Git Operations module. This module provides tools to programmatically interact with Git repositories, which has inherent security implications.",
+  "source": "@site/docs/modules/git_operations/security.md",
+  "sourceDirName": "modules/git_operations",
+  "slug": "/modules/git_operations/security",
+  "permalink": "/codomyrmex/modules/git_operations/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/git_operations/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog for Git Operations",
+    "permalink": "/codomyrmex/modules/git_operations/changelog"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/git_operations/docs/technical_overview"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "modules/build_synthesis/docs/technical_overview",
+  "title": "Build Synthesis - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Build Synthesis module.",
+  "source": "@site/docs/modules/build_synthesis/docs/technical_overview.md",
+  "sourceDirName": "modules/build_synthesis/docs",
+  "slug": "/modules/build_synthesis/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/build_synthesis/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/build_synthesis/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy for Build Synthesis",
+    "permalink": "/codomyrmex/modules/build_synthesis/security"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/build-synthesis/tutorials"
+  }
+}

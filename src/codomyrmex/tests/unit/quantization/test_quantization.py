@@ -3,7 +3,6 @@
 import numpy as np
 import pytest
 
-pytest.importorskip("mlx")
 from codomyrmex.quantization import (
     FP4Quantizer,
     Int8Quantizer,

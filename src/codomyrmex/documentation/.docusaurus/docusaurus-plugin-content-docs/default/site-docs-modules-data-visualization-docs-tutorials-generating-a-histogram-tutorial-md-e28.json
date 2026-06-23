@@ -1,0 +1,24 @@
+{
+  "id": "modules/data_visualization/docs/tutorials/generating_a_histogram_tutorial",
+  "title": "Data Visualization - Tutorial: Generating a Histogram",
+  "description": "This tutorial will guide you through generating a histogram to visualize the distribution of a dataset, using the Data Visualization module's direct Python functions. We'll cover basic customizations and saving the output.",
+  "source": "@site/docs/modules/data_visualization/docs/tutorials/generating_a_histogram_tutorial.md",
+  "sourceDirName": "modules/data_visualization/docs/tutorials",
+  "slug": "/modules/data_visualization/docs/tutorials/generating_a_histogram_tutorial",
+  "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/generating_a_histogram_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/data_visualization/docs/tutorials/generating_a_histogram_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Data Visualization - Tutorial: Generating a Bar Chart",
+    "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/generating_a_bar_chart_tutorial"
+  },
+  "next": {
+    "title": "Data Visualization - Tutorial: Generating a Line Plot",
+    "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/generating_a_line_plot_tutorial"
+  }
+}

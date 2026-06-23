@@ -397,7 +397,7 @@ jobs:
           cp uv.lock uv.lock.backup
           
           # Update dependencies
-          uv sync --upgrade
+          uv sync --upgrade || true
           
           # Check if there are changes
           if ! diff -q uv.lock uv.lock.backup > /dev/null; then

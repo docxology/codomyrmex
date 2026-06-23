@@ -1,0 +1,15 @@
+{
+  "id": "modules/module_template/api_specification",
+  "title": "[Module Name] - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/module_template/api_specification.md",
+  "sourceDirName": "modules/module_template",
+  "slug": "/modules/module_template/api_specification",
+  "permalink": "/codomyrmex/modules/module_template/api_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/module_template/api_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

@@ -1,0 +1,24 @@
+{
+  "id": "modules/model_context_protocol/docs/technical_overview",
+  "title": "Model Context Protocol - Technical Overview",
+  "description": "1. Introduction",
+  "source": "@site/docs/modules/model_context_protocol/docs/technical_overview.md",
+  "sourceDirName": "modules/model_context_protocol/docs",
+  "slug": "/modules/model_context_protocol/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/model_context_protocol/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy for Model Context Protocol",
+    "permalink": "/codomyrmex/modules/model_context_protocol/security"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/model-context-protocol/tutorials"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "development/documentation-pipeline",
+  "title": "Documentation Pipeline",
+  "description": "This document describes the process for building, maintaining, and deploying the Codomyrmex project documentation website, which is powered by Docusaurus.",
+  "source": "@site/docs/development/documentation-pipeline.md",
+  "sourceDirName": "development",
+  "slug": "/development/documentation-pipeline",
+  "permalink": "/codomyrmex/development/documentation-pipeline",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/development/documentation-pipeline.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Documentation Pipeline"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Project-Wide Error Handling and Logging Best Practices",
+    "permalink": "/codomyrmex/project/ERROR_HANDLING_LOGGING"
+  },
+  "next": {
+    "title": "Modules",
+    "permalink": "/codomyrmex/modules"
+  }
+}

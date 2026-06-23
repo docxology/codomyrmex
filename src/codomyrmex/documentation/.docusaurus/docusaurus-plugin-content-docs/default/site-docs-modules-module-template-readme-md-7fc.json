@@ -1,0 +1,15 @@
+{
+  "id": "modules/module_template/README",
+  "title": "[Module Name] - Module Template README",
+  "description": "Note for Developers: This is a template README.md for new Codomyrmex modules. When creating a new module, copy this file (and the entire template/module_template/ directory structure) to your new module's root. Then, replace all bracketed placeholders (e.g., [Module Name], [Your specific component...]) and instructional text in parentheses (...) with information specific to your module.",
+  "source": "@site/docs/modules/module_template/README.md",
+  "sourceDirName": "modules/module_template",
+  "slug": "/modules/module_template/",
+  "permalink": "/codomyrmex/modules/module_template/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/module_template/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

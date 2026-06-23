@@ -1,0 +1,24 @@
+{
+  "id": "modules/logging_monitoring/docs/technical_overview",
+  "title": "Logging Monitoring - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Logging Monitoring module.",
+  "source": "@site/docs/modules/logging_monitoring/docs/technical_overview.md",
+  "sourceDirName": "modules/logging_monitoring/docs",
+  "slug": "/modules/logging_monitoring/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/logging_monitoring/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/logging_monitoring/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy for Logging & Monitoring",
+    "permalink": "/codomyrmex/modules/logging_monitoring/security"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/logging-monitoring/tutorials"
+  }
+}

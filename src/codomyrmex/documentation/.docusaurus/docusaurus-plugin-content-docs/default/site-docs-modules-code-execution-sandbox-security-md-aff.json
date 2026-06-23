@@ -1,0 +1,24 @@
+{
+  "id": "modules/code_execution_sandbox/security",
+  "title": "Security Policy for Code Execution Sandbox",
+  "description": "This document outlines security procedures, policies, and critical considerations for the Code Execution Sandbox module. This module is highly security-sensitive. Its primary purpose is to execute untrusted code, and therefore, its design, implementation, configuration, and usage must prioritize security above all else.",
+  "source": "@site/docs/modules/code_execution_sandbox/security.md",
+  "sourceDirName": "modules/code_execution_sandbox",
+  "slug": "/modules/code_execution_sandbox/security",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/code_execution_sandbox/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog for Code Execution Sandbox",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/changelog"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/technical_overview"
+  }
+}

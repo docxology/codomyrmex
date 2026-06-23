@@ -1,0 +1,24 @@
+{
+  "id": "modules/code_execution_sandbox/usage_examples",
+  "title": "Code Execution Sandbox - Usage Examples",
+  "description": "This document provides examples of how to use the Code Execution Sandbox module within the Codomyrmex project.",
+  "source": "@site/docs/modules/code_execution_sandbox/usage_examples.md",
+  "sourceDirName": "modules/code_execution_sandbox",
+  "slug": "/modules/code_execution_sandbox/usage_examples",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/usage_examples",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/code_execution_sandbox/usage_examples.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Code Execution Sandbox - MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/mcp_tool_specification"
+  },
+  "next": {
+    "title": "Changelog for Code Execution Sandbox",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/changelog"
+  }
+}

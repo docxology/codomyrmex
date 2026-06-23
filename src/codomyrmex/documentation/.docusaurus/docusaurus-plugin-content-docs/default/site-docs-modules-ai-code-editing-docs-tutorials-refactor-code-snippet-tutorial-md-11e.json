@@ -1,0 +1,24 @@
+{
+  "id": "modules/ai_code_editing/docs/tutorials/refactor_code_snippet_tutorial",
+  "title": "Ai Code Editing - Tutorial: Refactoring Python Code with refactor_code_snippet",
+  "description": "This tutorial will guide you through the process of using the refactorcodesnippet tool of the Ai Code Editing module to improve existing Python code.",
+  "source": "@site/docs/modules/ai_code_editing/docs/tutorials/refactor_code_snippet_tutorial.md",
+  "sourceDirName": "modules/ai_code_editing/docs/tutorials",
+  "slug": "/modules/ai_code_editing/docs/tutorials/refactor_code_snippet_tutorial",
+  "permalink": "/codomyrmex/modules/ai_code_editing/docs/tutorials/refactor_code_snippet_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/ai_code_editing/docs/tutorials/refactor_code_snippet_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Ai Code Editing - Tutorial: Generating a Python Function with generate_code_snippet",
+    "permalink": "/codomyrmex/modules/ai_code_editing/docs/tutorials/generate_code_snippet_tutorial"
+  },
+  "next": {
+    "title": "Build Synthesis",
+    "permalink": "/codomyrmex/modules/build_synthesis/"
+  }
+}

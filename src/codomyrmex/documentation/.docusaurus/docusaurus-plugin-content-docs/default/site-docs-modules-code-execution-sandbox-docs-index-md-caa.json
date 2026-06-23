@@ -1,0 +1,15 @@
+{
+  "id": "modules/code_execution_sandbox/docs/index",
+  "title": "Code Execution Sandbox - Documentation",
+  "description": "Welcome to the detailed documentation for the Code Execution Sandbox module.",
+  "source": "@site/docs/modules/code_execution_sandbox/docs/index.md",
+  "sourceDirName": "modules/code_execution_sandbox/docs",
+  "slug": "/modules/code_execution_sandbox/docs/",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/code_execution_sandbox/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

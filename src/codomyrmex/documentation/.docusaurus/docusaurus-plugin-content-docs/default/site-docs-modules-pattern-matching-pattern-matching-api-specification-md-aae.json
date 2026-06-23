@@ -1,0 +1,27 @@
+{
+  "id": "modules/pattern_matching/pattern-matching-api-specification",
+  "title": "Pattern Matching - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/pattern_matching/pattern-matching-api-specification.md",
+  "sourceDirName": "modules/pattern_matching",
+  "slug": "/modules/pattern_matching/pattern-matching-api-specification",
+  "permalink": "/codomyrmex/modules/pattern_matching/pattern-matching-api-specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/pattern-matching-api-specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "API Specification",
+    "title": "Pattern Matching - API Specification"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Pattern Matching Module (Leveraging cased/kit)",
+    "permalink": "/codomyrmex/modules/pattern_matching/"
+  },
+  "next": {
+    "title": "MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/pattern_matching/pattern-matching-mcp-tool-specification"
+  }
+}
