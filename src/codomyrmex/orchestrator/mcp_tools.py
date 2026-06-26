@@ -165,7 +165,9 @@ def orchestrator_run_dag(
                     ast.UAdd: operator.pos,
                 }
 
-                def _safe_eval_ast(node: ast.AST) -> float:
+                from typing import Any
+
+                def _safe_eval_ast(node: ast.AST) -> Any:
                     """Recursively evaluate an AST node containing only arithmetic and specific functions."""
                     if isinstance(node, ast.Expression):
                         return _safe_eval_ast(node.body)
