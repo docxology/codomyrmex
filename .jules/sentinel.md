@@ -1,0 +1,4 @@
+## 2025-02-23 - Prevent Code Injection in Swarm Topology Execution
+**Vulnerability:** The `orchestrator_run_dag` MCP tool was using `eval` on the `fn_expr` parameter directly from a task dictionary. While it restricted builtins and used a `__` double underscore check, a malicious input could still access powerful functions via reflection or bypass checks by string parsing or avoiding `__`, resulting in remote code execution (RCE).
+**Learning:** Python's `eval()` is incredibly dangerous even when passed empty `__builtins__`. Attackers can use string manipulation, reflection, or AST loopholes to bypass the restrictions.
+**Prevention:** Using `ast.parse` and explicitly defining which AST nodes (e.g. `ast.BinOp`, `ast.Call` on specific `safe_locals`) are permitted ensures that only mathematically and functionally safe operations can run, completely preventing code injection. Never use `eval` on untrusted input; use restricted AST parsers instead.
