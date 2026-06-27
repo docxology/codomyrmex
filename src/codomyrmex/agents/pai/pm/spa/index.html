@@ -2630,7 +2630,7 @@
         return '<div class="queue-item" data-id="' + item.id + '">' +
           '<span class="queue-item-info">' + item.entityType + '/' + item.entityId + ' - ' + item.action + '</span>' +
           '<span class="queue-item-backend">' + item.backend + '</span>' +
-          '<button class="btn btn-sm btn-ghost" onclick="removeFromQueue(\'' + item.id + '\')">✕</button>' +
+          '<button class="btn btn-sm btn-ghost" aria-label="Remove from queue" onclick="removeFromQueue(\'' + item.id + '\')">✕</button>' +
           '</div>';
       }).join('');
 
@@ -6800,7 +6800,7 @@
         var prjList = allProjects();
         for (var ci = 0; ci < prjList.length; ci++) prjOpts += '<option value="' + esc(prjList[ci].id) + '">' + esc(prjList[ci].title) + '</option>';
         createForm = '<div style="background:var(--panel);border:1px solid var(--primary);border-radius:8px;padding:16px;margin-bottom:12px;">' +
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-weight:700;font-size:0.95rem;">New Calendar Event</span><button class="btn btn-ghost btn-sm" onclick="calState.showCreateForm=false;renderCalendarView()">&#x2715;</button></div>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-weight:700;font-size:0.95rem;">New Calendar Event</span><button class="btn btn-ghost btn-sm" aria-label="Close" onclick="calState.showCreateForm=false;renderCalendarView()">&#x2715;</button></div>' +
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
           '<div style="grid-column:1/-1;"><input id="cal-new-summary" placeholder="Event title..." style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:0.85rem;"></div>' +
           '<div><label style="font-size:0.75rem;color:var(--text-muted);">Date</label><input id="cal-new-date" type="date" value="' + calState.createDate + '" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
@@ -6818,9 +6818,9 @@
       var monthNav = '';
       if (calState.view === 'month') {
         monthNav = '<div style="display:flex;align-items:center;gap:12px;padding:4px 0 12px;">' +
-          '<button class="btn btn-ghost btn-sm" onclick="calNav(-1)">&#8592;</button>' +
+          '<button class="btn btn-ghost btn-sm" aria-label="Previous month" onclick="calNav(-1)">&#8592;</button>' +
           '<span style="font-size:1.1rem;font-weight:600;min-width:180px;text-align:center;">' + monthNames[mon] + ' ' + yr + '</span>' +
-          '<button class="btn btn-ghost btn-sm" onclick="calNav(1)">&#8594;</button>' +
+          '<button class="btn btn-ghost btn-sm" aria-label="Next month" onclick="calNav(1)">&#8594;</button>' +
           '<button class="btn btn-ghost btn-sm" onclick="calGoToday()">Today</button>' +
           '</div>';
       }
@@ -6917,7 +6917,7 @@
           (se.description ? '<div style="color:var(--text-dim);font-size:0.85rem;margin-top:8px;">' + esc(se.description) + '</div>' : '') +
           (se.location ? '<div style="color:var(--text-muted);font-size:0.8rem;margin-top:4px;">📍 ' + esc(se.location) + '</div>' : '') +
           '</div>' +
-          '<button class="btn btn-ghost btn-sm" onclick="calState.selectedEvent=null;renderCalendarView()">✕</button>' +
+          '<button class="btn btn-ghost btn-sm" aria-label="Close event details" onclick="calState.selectedEvent=null;renderCalendarView()">✕</button>' +
           '</div>';
         if (!se._synthetic) {
           detailPanel += '<div style="margin-top:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
@@ -7793,7 +7793,7 @@
           var voicePanelHtml = '<div class="bikeride-voice-panel' + (isRecording ? ' recording' : '') + '">' +
             '<div class="bikeride-voice-header">' +
             '<div class="bikeride-voice-title"><span style="font-size:14px;">🎤</span> Voice Reply</div>' +
-            '<button class="bikeride-mic-btn' + (isRecording ? ' recording' : '') + '" onclick="bikeRideToggleMic(' + idx + ')" title="' + (isRecording ? 'Stop Recording' : 'Start Dictation') + '">' +
+            '<button class="bikeride-mic-btn' + (isRecording ? ' recording' : '') + '" aria-label="' + (isRecording ? 'Stop Recording' : 'Start Dictation') + '" onclick="bikeRideToggleMic(' + idx + ')" title="' + (isRecording ? 'Stop Recording' : 'Start Dictation') + '">' +
             (isRecording ? '⬛' : '🎙️') +
             '</button>' +
             '</div>' +
