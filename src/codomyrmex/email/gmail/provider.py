@@ -1,3 +1,5 @@
+from typing import Any
+
 """Gmail implementation of the EmailProvider interface."""
 
 from __future__ import annotations
@@ -35,7 +37,7 @@ try:
 
     GMAIL_AVAILABLE = True
 except ImportError:
-    HttpError = Exception
+    HttpError: type[Exception] = Exception
     GMAIL_AVAILABLE = False
 
 _GMAIL_SCOPES = [

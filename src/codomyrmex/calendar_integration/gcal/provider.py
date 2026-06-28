@@ -1,3 +1,5 @@
+from typing import Any
+
 """Google Calendar implementation of the CalendarProvider interface."""
 
 import logging
@@ -26,7 +28,7 @@ try:
 
     GCAL_AVAILABLE = True
 except ImportError:
-    HttpError = Exception
+    HttpError: type[Exception] = Exception
     GCAL_AVAILABLE = False
 
 _GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]
