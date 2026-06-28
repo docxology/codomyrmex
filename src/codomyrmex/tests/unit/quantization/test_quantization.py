@@ -1,9 +1,7 @@
-import pytest
-
-pytest.importorskip("mlx")
 """Unit tests for Int8 and FP4 quantization."""
 
 import numpy as np
+import pytest
 
 from codomyrmex.quantization import (
     FP4Quantizer,

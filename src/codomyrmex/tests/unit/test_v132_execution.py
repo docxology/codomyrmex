@@ -1,11 +1,9 @@
-import pytest
-
-pytest.importorskip("mlx")
 """Unit tests for Codomyrmex v1.3.2 Execution Capabilities deliverables.
 
 Strict zero-mock policy on macOS host ensuring all bridges are fully concrete.
 """
 
+import pytest
 
 from codomyrmex.plugin_system.wasm import WasmSandbox, WasmSandboxError
 from codomyrmex.quantization import QuantizationConfig, dequantize_array, quantize_array

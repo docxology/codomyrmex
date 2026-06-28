@@ -32,7 +32,7 @@ except ImportError:
 try:
     import networkx as nx
 except ImportError:
-    nx: Any = None
+    nx = None
 
 if TYPE_CHECKING:
     pass
