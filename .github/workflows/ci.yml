@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2.2.2
 
       - name: Cache dependencies and tools
         uses: actions/cache@v4
@@ -92,7 +92,7 @@ jobs:
     needs: lint-and-format
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -124,7 +124,7 @@ jobs:
     needs: lint-and-format
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -171,7 +171,7 @@ jobs:
     timeout-minutes: 120
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -210,7 +210,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2.2.2
 
       - name: Install UV (Unix)
         if: runner.os != 'Windows'
@@ -302,7 +302,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -337,7 +337,7 @@ jobs:
     needs: [test-matrix, security-scan, coverage-gate]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -373,7 +373,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5

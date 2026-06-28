@@ -6,6 +6,7 @@ Strict zero-mock policy on macOS host ensuring all bridges are fully concrete.
 import pytest
 
 from codomyrmex.plugin_system.wasm import WasmSandbox, WasmSandboxError
+pytest.importorskip('mlx')
 from codomyrmex.quantization import QuantizationConfig, dequantize_array, quantize_array
 from codomyrmex.spatial.coordinates.geodesic import generate_icosahedron
 from codomyrmex.spatial.three_d.engine_3d import Vector3D
