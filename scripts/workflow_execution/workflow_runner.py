@@ -158,7 +158,7 @@ def main():
         if r.get("output"):
             print(f"      Output: {r['output'][:80]}...")
 
-    successful = sum(1 for r in results if r["status"] in ["success", "dry_run"])
+    successful = sum(1 for r in results if r["status"] in {"success", "dry_run"})
     print(f"\n📊 Results: {successful}/{len(results)} steps completed")
 
     return 0 if successful == len(results) else 1
