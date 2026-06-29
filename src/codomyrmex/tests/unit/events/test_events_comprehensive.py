@@ -1149,3 +1149,34 @@ class TestDeadLetterDataclass:
         assert restored.payload == original.payload
         assert restored.error == original.error
         assert restored.error_type == original.error_type
+
+
+@pytest.mark.unit
+class TestEventLoggerModuleFunctions:
+    """Tests for module-level functions in event_logger."""
+
+    def test_get_recent_events_module_function(self):
+        """get_recent_events() returns the most recent *limit* events from the singleton EventLogger."""
+        from codomyrmex.events.handlers.event_logger import (
+            get_event_logger,
+            get_recent_events,
+            log_event_to_monitoring,
+        )
+
+        logger = get_event_logger()
+        logger.clear()
+
+        # Emit some events
+        for i in range(5):
+            event = Event(event_type=EventType.METRIC_UPDATE, source=f"test-source-{i}")
+            log_event_to_monitoring(event)
+
+        # Retrieve recent events using the module-level function
+        recent = get_recent_events(limit=3)
+
+        assert len(recent) == 3
+        # The most recent ones should be at the end of the emitted sequence
+        sources = [entry.event.source for entry in recent]
+        assert "test-source-4" in sources
+        assert "test-source-3" in sources
+        assert "test-source-2" in sources
