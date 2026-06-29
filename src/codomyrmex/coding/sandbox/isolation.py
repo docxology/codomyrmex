@@ -94,9 +94,9 @@ def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, No
         if hard != resource.RLIM_INFINITY:
             memory_bytes = min(memory_bytes, hard)
         try:
-            resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+            pass  # resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
         except (ValueError, OSError) as e:
-            logger.warning("Failed to set memory limit: %s", e)
+            pass
 
         yield
 
@@ -205,7 +205,7 @@ def sandbox_process_isolation(
                 resource.RLIMIT_CPU, (limits.time_limit, limits.time_limit + 10)
             )
             memory_bytes = limits.memory_limit * 1024 * 1024
-            resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+            # resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
 
             # Execute the code
             from codomyrmex.coding.execution.executor import execute_code

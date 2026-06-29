@@ -7,7 +7,16 @@ within constrained memory boundaries (<2GB).
 
 import dataclasses
 
-import mlx.core as mx
+try:
+    import mlx.core as mx  # type: ignore
+except ImportError:
+    from typing import Any
+
+    class DummyMX:
+        array = Any
+        float16 = Any
+
+    mx = DummyMX()
 
 
 @dataclasses.dataclass
