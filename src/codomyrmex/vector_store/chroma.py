@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 try:
     import chromadb
 except ImportError:
-    chromadb = None
+    chromadb = Any
 
 
 class ChromaVectorStore(VectorStore):

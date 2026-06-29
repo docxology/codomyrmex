@@ -103,7 +103,7 @@ def retry(
                 raise last_exception
             raise RuntimeError("Retry exhausted without capturing an exception")
 
-        return wrapper  # type: ignore
+        return cast(F, wrapper)
 
     return decorator
 

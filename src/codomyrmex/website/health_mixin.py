@@ -259,7 +259,7 @@ class HealthProviderMixin:
             "message": "Ollama not reachable — start Ollama to enable chat",
         }
 
-    def _get_git_info(self) -> dict[str, str]:
+    def _get_git_info(self) -> dict[str, Any]:
         """Get current git repository information."""
         try:
             branch = subprocess.run(
@@ -301,7 +301,7 @@ class HealthProviderMixin:
                 ]
             )
 
-            return {  # type: ignore
+            return {
                 "branch": branch,
                 "last_commit": last_commit,
                 "commit_count": commit_count,
