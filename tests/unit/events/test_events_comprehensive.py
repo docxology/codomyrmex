@@ -937,6 +937,28 @@ class TestEventLoggerExtended:
 
         assert len(recent) <= 5
 
+    def test_get_event_stats_returns_singleton_stats(self):
+        """get_event_stats() correctly returns statistics from the singleton EventLogger."""
+        from codomyrmex.events.handlers.event_logger import (
+            get_event_logger,
+            get_event_stats,
+            log_event_to_monitoring,
+        )
+
+        logger = get_event_logger()
+        logger.clear()
+
+        try:
+            event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+            log_event_to_monitoring(event)
+
+            stats = get_event_stats()
+
+            assert stats["total_events"] == 1
+            assert stats["event_counts"][EventType.SYSTEM_STARTUP.value] == 1
+        finally:
+            logger.clear()
+
 
 # ===========================================================================
 # AsyncStream (async_stream.py)
