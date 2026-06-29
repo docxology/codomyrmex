@@ -53,9 +53,9 @@ def auth_validate_token(token_value: str) -> dict:
     Returns:
         Dictionary with 'valid' bool and 'reason' string.
     """
-    from codomyrmex.auth import TokenValidator
+    from codomyrmex.auth import get_authenticator
 
-    validator = TokenValidator(secret="mcp_tool_validation_key")
+    validator = get_authenticator().token_manager.validator
     try:
         result = validator.validate_signed_token(token_value)
         if result is None:
