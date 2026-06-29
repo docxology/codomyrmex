@@ -24,10 +24,12 @@ if TYPE_CHECKING:
     from codomyrmex.agentic_memory.core.stores import InMemoryStore
     from codomyrmex.vector_store import VectorStore
 
+from typing import Any
+
 try:
     from sentence_transformers import SentenceTransformer
 except ImportError:
-    SentenceTransformer = None
+    SentenceTransformer: Any = None
 
 # ── helpers ──────────────────────────────────────────────────────────
 

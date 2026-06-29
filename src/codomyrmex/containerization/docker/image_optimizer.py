@@ -19,7 +19,8 @@ docker: Any | None = None
 _DOCKER_IMAGE_NOT_FOUND: tuple[type[BaseException], ...] = ()
 try:
     docker = importlib.import_module("docker")
-    docker_image_not_found = getattr(docker.errors, "ImageNotFound", None)
+    docker_errors = getattr(docker, "errors", None)
+    docker_image_not_found = getattr(docker_errors, "ImageNotFound", None)
     if isinstance(docker_image_not_found, type) and issubclass(
         docker_image_not_found, BaseException
     ):

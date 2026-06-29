@@ -73,6 +73,7 @@ repos:
     hooks:
       - id: markdownlint
         args: [--disable=MD013, MD033, MD041]
+        exclude: src/codomyrmex/fpf/FPF-Spec\.md
 
   # Trailing whitespace
   - repo: https://github.com/pre-commit/pre-commit-hooks

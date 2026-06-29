@@ -3,6 +3,11 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import docker
+
+try:
+    import docker.errors
+except ImportError:
+    pass
 from loguru import logger
 
 
