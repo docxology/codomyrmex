@@ -32,6 +32,20 @@ class TestTaskQueue:
         assert len(queue) == 0
         assert bool(queue) is False
 
+    def test_queue_push(self):
+        """Test pushing tasks."""
+        queue = TaskQueue()
+
+        task1 = Task(name="Single Task", priority=5)
+
+        queue.push(task1)
+
+        assert len(queue) == 1
+        assert bool(queue) is True
+        assert queue.get(task1.id) == task1
+        # Test counter is updated
+        assert queue._counter == 1
+
     def test_queue_push_pop(self):
         """Test pushing and popping tasks."""
         queue = TaskQueue()
