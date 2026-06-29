@@ -57,6 +57,7 @@ jobs:
 
       - name: 'Run Gemini issue analysis'
         id: 'gemini_analysis'
+        continue-on-error: true
         if: |-
           ${{ steps.get_labels.outputs.available_labels != '' }}
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude

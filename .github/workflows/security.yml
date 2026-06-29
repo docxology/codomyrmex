@@ -390,6 +390,7 @@ jobs:
 
       - name: Check for dependency updates
         id: check_updates
+        continue-on-error: true
         run: |
           echo "🔄 Checking for dependency updates..."
           

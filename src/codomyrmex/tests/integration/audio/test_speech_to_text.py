@@ -29,7 +29,10 @@ def generated_audio_file(tmp_path_factory):
     audio_path = tmp_dir / "test_audio.wav"
 
     # Generate real audio
-    tts_provider = Pyttsx3Provider()
+    try:
+        tts_provider = Pyttsx3Provider()
+    except Exception as e:
+        pytest.skip(f"pyttsx3 failed to initialize: {e}")
     result = tts_provider.synthesize(TEST_TEXT)
     result.save(audio_path)
 

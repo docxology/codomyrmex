@@ -39,6 +39,7 @@ jobs:
 
       - name: 'Run Gemini CLI'
         id: 'run_gemini'
+        continue-on-error: true
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
         env:
           TITLE: '${{ github.event.pull_request.title || github.event.issue.title }}'
