@@ -11,6 +11,8 @@ try:
 except Exception as _exc:
     logger = logging.getLogger(__name__)
 
+from typing import Any
+
 from codomyrmex.calendar_integration.exceptions import (
     CalendarAPIError,
     CalendarAuthError,
@@ -26,7 +28,7 @@ try:
 
     GCAL_AVAILABLE = True
 except ImportError:
-    HttpError = Exception
+    HttpError: type[Exception] = Exception
     GCAL_AVAILABLE = False
 
 _GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]
