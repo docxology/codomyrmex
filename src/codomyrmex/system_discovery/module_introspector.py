@@ -122,11 +122,23 @@ class ModuleIntrospector:
                 mcp_count += content.count("@mcp_tool")
 
                 tree = ast.parse(content, filename=str(f))
+                is_main_init = f == mod_dir / "__init__.py"
+
                 for node in ast.walk(tree):
                     if isinstance(node, ast.ClassDef):
                         total_classes += 1
                     elif isinstance(node, ast.FunctionDef) and node.col_offset == 0:
                         total_functions += 1
+                    elif is_main_init and isinstance(node, ast.Assign):
+                        for target in node.targets:
+                            if isinstance(target, ast.Name) and target.id == "__all__":
+                                if isinstance(node.value, ast.List):
+                                    info.exports = [
+                                        elt.value
+                                        for elt in node.value.elts
+                                        if isinstance(elt, ast.Constant)
+                                        and isinstance(elt.value, str)
+                                    ]
             except Exception:
                 continue
 
@@ -142,25 +154,6 @@ class ModuleIntrospector:
 
         # Test detection
         info.has_tests = bool(list(mod_dir.rglob("test_*.py")))
-
-        # Exports from __init__.py
-        init_path = mod_dir / "__init__.py"
-        if init_path.exists():
-            try:
-                tree = ast.parse(init_path.read_text(errors="replace"))
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.Assign):
-                        for target in node.targets:
-                            if isinstance(target, ast.Name) and target.id == "__all__":
-                                if isinstance(node.value, ast.List):
-                                    info.exports = [
-                                        elt.value
-                                        for elt in node.value.elts
-                                        if isinstance(elt, ast.Constant)
-                                        and isinstance(elt.value, str)
-                                    ]
-            except Exception:
-                pass
 
         # Submodule counting
         info.submodule_count = sum(
