@@ -119,7 +119,9 @@ def orchestrator_run_dag(
         Aggregated result dict with per-task outputs, success/error counts.
     """
     try:
+        import ast
         import importlib
+        import operator
 
         from codomyrmex.orchestrator.swarm_topology import (
             SwarmTopology,
@@ -150,7 +152,48 @@ def orchestrator_run_dag(
                     "abs": abs,
                     "round": round,
                 }
-                return lambda *_a, **_kw: eval(expr, {"__builtins__": {}}, safe_locals)
+
+                _ALLOWED_OPS = {
+                    ast.Add: operator.add,
+                    ast.Sub: operator.sub,
+                    ast.Mult: operator.mul,
+                    ast.Div: operator.truediv,
+                    ast.FloorDiv: operator.floordiv,
+                    ast.Mod: operator.mod,
+                    ast.Pow: operator.pow,
+                    ast.USub: operator.neg,
+                    ast.UAdd: operator.pos,
+                }
+
+                from typing import Any
+
+                def _safe_eval_ast(node: ast.AST) -> Any:
+                    """Recursively evaluate an AST node containing only arithmetic and specific functions."""
+                    if isinstance(node, ast.Expression):
+                        return _safe_eval_ast(node.body)
+                    if isinstance(node, ast.Constant) and isinstance(
+                        node.value, (int, float, str)
+                    ):
+                        return node.value
+                    if isinstance(node, ast.BinOp) and type(node.op) in _ALLOWED_OPS:
+                        return _ALLOWED_OPS[type(node.op)](
+                            _safe_eval_ast(node.left),
+                            _safe_eval_ast(node.right),  # type: ignore
+                        )
+                    if isinstance(node, ast.UnaryOp) and type(node.op) in _ALLOWED_OPS:
+                        return _ALLOWED_OPS[type(node.op)](_safe_eval_ast(node.operand))  # type: ignore
+                    if (
+                        isinstance(node, ast.Call)
+                        and isinstance(node.func, ast.Name)
+                        and node.func.id in safe_locals
+                    ):
+                        args = [_safe_eval_ast(arg) for arg in node.args]
+                        return safe_locals[node.func.id](*args)
+                    raise ValueError(f"Unsupported expression: {ast.dump(node)}")
+
+                # SECURITY: Uses AST-based evaluator instead of eval() to prevent code injection
+                tree = ast.parse(expr, mode="eval")
+                return lambda *_a, **_kw: _safe_eval_ast(tree)
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 
