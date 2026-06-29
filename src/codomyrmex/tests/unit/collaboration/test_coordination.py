@@ -19,6 +19,7 @@ from codomyrmex.collaboration.coordination import (
     VoteType,
     VotingMechanism,
 )
+from codomyrmex.collaboration.exceptions import TaskNotFoundError
 from codomyrmex.collaboration.models import Task, TaskResult, TaskStatus
 
 
@@ -216,6 +217,97 @@ class TestTaskManager:
         manager.complete_task(result)
 
         assert manager.get_completed_count() == 1
+        assert manager.get_task_status(assigned.id) == TaskStatus.COMPLETED
+
+    def test_manager_complete_task_missing(self):
+        """Test completing a missing task."""
+        manager = TaskManager()
+        result = TaskResult(
+            task_id="nonexistent",
+            success=True,
+            output="Done",
+            agent_id="agent1",
+        )
+        with pytest.raises(TaskNotFoundError):
+            manager.complete_task(result)
+
+    def test_manager_complete_task_failure(self):
+        """Test completing a task with failure result."""
+        manager = TaskManager()
+        task = Task(name="Fail Me")
+        agent = CollaborativeAgent(name="Worker")
+
+        manager.submit(task)
+        assigned = manager.get_next_task(agent)
+
+        result = TaskResult(
+            task_id=assigned.id,
+            success=False,
+            error="Failed to process",
+            agent_id=agent.agent_id,
+        )
+        manager.complete_task(result)
+
+        assert manager.get_failed_count() == 1
+        assert manager.get_task_status(assigned.id) == TaskStatus.FAILED
+
+    def test_manager_complete_task_with_callback(self):
+        """Test completing a task triggers callback."""
+        manager = TaskManager()
+        task = Task(name="Callback Me")
+        agent = CollaborativeAgent(name="Worker")
+
+        callback_called = False
+
+        def my_callback(cb_task, cb_result):
+            nonlocal callback_called
+            callback_called = True
+            assert cb_task.id == task.id
+            assert cb_result.success is True
+
+        manager.add_callback(my_callback)
+
+        manager.submit(task)
+        assigned = manager.get_next_task(agent)
+
+        result = TaskResult(
+            task_id=assigned.id,
+            success=True,
+            output="Done",
+            agent_id=agent.agent_id,
+        )
+        manager.complete_task(result)
+
+        assert callback_called is True
+
+    def test_manager_complete_task_callback_error(self):
+        """Test completing a task handles callback error."""
+        manager = TaskManager()
+        task = Task(name="Callback Error Me")
+        agent = CollaborativeAgent(name="Worker")
+
+        callback_called = False
+
+        def my_callback(cb_task, cb_result):
+            nonlocal callback_called
+            callback_called = True
+            raise ValueError("Simulated callback error")
+
+        manager.add_callback(my_callback)
+
+        manager.submit(task)
+        assigned = manager.get_next_task(agent)
+
+        result = TaskResult(
+            task_id=assigned.id,
+            success=True,
+            output="Done",
+            agent_id=agent.agent_id,
+        )
+        # Exception should be caught and logged
+        manager.complete_task(result)
+
+        assert callback_called is True
         assert manager.get_task_status(assigned.id) == TaskStatus.COMPLETED
 
 
