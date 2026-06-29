@@ -32,7 +32,7 @@ class TestSecretType:
         assert SecretType.AWS_KEY.value == "aws_key"
         assert SecretType.GITHUB_TOKEN.value == "github_token"
         assert SecretType.PRIVATE_KEY.value == "private_key"
-        assert SecretType.PASSWORD.value == "password"
+        assert SecretType.PASSWORD.value == "password_type"
         assert SecretType.JWT.value == "jwt"
         assert SecretType.DATABASE_URL.value == "database_url"
         assert SecretType.GENERIC.value == "generic"
