@@ -26,6 +26,8 @@ _DOCKER_SETUP_ERROR_MARKERS = (
     "docker daemon",
     "github.com/docker/cli",
     "github.com/docker/docker",
+    "failed to mount",
+    "error response from daemon",
     "github.com/moby/moby/client",
 )
 

@@ -35,28 +35,41 @@ class LinuxProvider(OSProviderBase):
         cpu_count = os.cpu_count() or 1
 
         # Distribution version
-        platform_version = run_shell(
-            "cat /etc/os-release 2>/dev/null | grep ^PRETTY_NAME | cut -d= -f2 | tr -d '\"'"
-        )
+        platform_version = ""
+        try:
+            with open("/etc/os-release") as f:
+                for line in f:
+                    if line.startswith("PRETTY_NAME="):
+                        platform_version = line.strip().split("=", 1)[1].strip('"')
+                        break
+        except FileNotFoundError:
+            pass
         if not platform_version:
             platform_version = run_shell("uname -r")
 
         kernel_version = run_shell("uname -r") or platform.release()
 
         # Memory from /proc/meminfo
-        mem_raw = run_shell(
-            "grep MemTotal /proc/meminfo 2>/dev/null | awk '{print $2}'"
-        )
+        memory_total = 0
         try:
-            memory_total = int(mem_raw) * 1024  # /proc/meminfo reports in kB
-        except (ValueError, TypeError):
+            with open("/proc/meminfo") as f:
+                for line in f:
+                    if line.startswith("MemTotal:"):
+                        parts = line.split()
+                        if len(parts) >= 2:
+                            memory_total = int(parts[1]) * 1024
+                        break
+        except (FileNotFoundError, ValueError, TypeError):
             memory_total = 0
 
         # Uptime from /proc/uptime
-        uptime_raw = run_shell("cat /proc/uptime 2>/dev/null | awk '{print $1}'")
+        uptime = 0.0
         try:
-            uptime = float(uptime_raw)
-        except (ValueError, TypeError):
+            with open("/proc/uptime") as f:
+                content = f.read().strip()
+                if content:
+                    uptime = float(content.split()[0])
+        except (FileNotFoundError, ValueError, TypeError):
             uptime = 0.0
 
         return SystemInfo(
@@ -73,11 +86,23 @@ class LinuxProvider(OSProviderBase):
     # ── Processes ───────────────────────────────────────────────────
 
     def list_processes(self, limit: int = 50) -> list[ProcessInfo]:
-        raw = run_shell(
-            f"ps -eo pid,stat,user,%cpu,rss,comm --no-headers | head -n {limit}"
-        )
+        import subprocess
+
+        # Avoid shell pipelines: use subprocess.run directly for pipeline simulation
+        try:
+            ps_result = subprocess.run(
+                ["ps", "-eo", "pid,stat,user,%cpu,rss,comm", "--no-headers"],
+                capture_output=True,
+                text=True,
+                shell=False,
+            )
+            raw = ps_result.stdout
+        except FileNotFoundError:
+            raw = ""
+
         processes: list[ProcessInfo] = []
-        for line in raw.splitlines():
+        lines = raw.splitlines()[:limit]
+        for line in lines:
             parts = line.split(None, 5)
             if len(parts) < 6:
                 continue
@@ -111,9 +136,29 @@ class LinuxProvider(OSProviderBase):
     # ── Disk Usage ──────────────────────────────────────────────────
 
     def get_disk_usage(self) -> list[DiskInfo]:
-        raw = run_shell(
-            "df -kT --exclude-type=tmpfs --exclude-type=devtmpfs --exclude-type=squashfs 2>/dev/null || df -k"
-        )
+        import subprocess
+
+        try:
+            df_result = subprocess.run(
+                [
+                    "df",
+                    "-kT",
+                    "--exclude-type=tmpfs",
+                    "--exclude-type=devtmpfs",
+                    "--exclude-type=squashfs",
+                ],
+                capture_output=True,
+                text=True,
+                shell=False,
+            )
+            if df_result.returncode != 0:
+                df_result = subprocess.run(
+                    ["df", "-k"], capture_output=True, text=True, shell=False
+                )
+            raw = df_result.stdout
+        except FileNotFoundError:
+            raw = ""
+
         disks: list[DiskInfo] = []
         for line in raw.splitlines()[1:]:
             parts = line.split()
@@ -167,9 +212,24 @@ class LinuxProvider(OSProviderBase):
     # ── Services ────────────────────────────────────────────────────
 
     def get_services(self, pattern: str = "") -> list[ServiceInfo]:
-        raw = run_shell(
-            "systemctl list-units --type=service --no-pager --no-legend 2>/dev/null"
-        )
+        import subprocess
+
+        try:
+            systemctl_result = subprocess.run(
+                [
+                    "systemctl",
+                    "list-units",
+                    "--type=service",
+                    "--no-pager",
+                    "--no-legend",
+                ],
+                capture_output=True,
+                text=True,
+                shell=False,
+            )
+            raw = systemctl_result.stdout
+        except FileNotFoundError:
+            raw = ""
         services: list[ServiceInfo] = []
         for line in raw.splitlines():
             parts = line.split(None, 4)
@@ -196,7 +256,18 @@ class LinuxProvider(OSProviderBase):
 
     def get_network_interfaces(self) -> list[NetworkInfo]:
         # Try ip command first, fall back to ifconfig
-        raw = run_shell("ip -o addr show 2>/dev/null")
+        import subprocess
+
+        try:
+            ip_result = subprocess.run(
+                ["ip", "-o", "addr", "show"],
+                capture_output=True,
+                text=True,
+                shell=False,
+            )
+            raw = ip_result.stdout
+        except FileNotFoundError:
+            raw = ""
         interfaces: list[NetworkInfo] = []
 
         if raw:
@@ -218,7 +289,16 @@ class LinuxProvider(OSProviderBase):
                         is_up=True,
                     )
             # Get MAC addresses
-            link_raw = run_shell("ip -o link show 2>/dev/null")
+            try:
+                link_result = subprocess.run(
+                    ["ip", "-o", "link", "show"],
+                    capture_output=True,
+                    text=True,
+                    shell=False,
+                )
+                link_raw = link_result.stdout
+            except FileNotFoundError:
+                link_raw = ""
             for line in link_raw.splitlines():
                 m_iface = re.match(r"^\d+:\s+(\S+):", line)
                 m_mac = re.search(r"link/ether\s+([0-9a-f:]+)", line)
@@ -234,7 +314,16 @@ class LinuxProvider(OSProviderBase):
             interfaces = list(seen.values())
         else:
             # Fallback: ifconfig
-            raw = run_shell("ifconfig -a 2>/dev/null")
+            try:
+                ifconfig_result = subprocess.run(
+                    ["ifconfig", "-a"],
+                    capture_output=True,
+                    text=True,
+                    shell=False,
+                )
+                raw = ifconfig_result.stdout
+            except FileNotFoundError:
+                raw = ""
             current_iface = ""
             ip_addr = ""
             mac_addr = ""

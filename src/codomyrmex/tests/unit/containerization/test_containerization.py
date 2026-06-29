@@ -19,7 +19,7 @@ def check_docker_available():
         client = docker.from_env()
         client.ping()
         return True
-    except (docker.errors.DockerException, Exception):
+    except (getattr(getattr(docker, "errors", None), "DockerException", Exception), Exception):
         return False
 
 
