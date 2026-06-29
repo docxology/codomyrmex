@@ -7,7 +7,6 @@ documentation, and workflow automation. See package README and
 
 __version__ = "1.2.7"
 
-import os
 import pkgutil
 from pathlib import Path
 
