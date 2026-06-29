@@ -202,7 +202,7 @@ class TestTaskManager:
         assert manager.get_pending_count() == 3
 
     def test_manager_cancel(self):
-        """Test cancelling a task."""
+        """Test cancelling a pending task."""
         manager = TaskManager()
         task = Task(name="Cancel Me")
 
@@ -211,6 +211,29 @@ class TestTaskManager:
 
         assert result is True
         assert manager.get_pending_count() == 0
+        assert task.status == TaskStatus.CANCELLED
+
+    def test_manager_cancel_running_task(self):
+        """Test failing to cancel a running task."""
+        manager = TaskManager()
+        task = Task(name="Running Task")
+        agent = CollaborativeAgent(name="Worker")
+
+        task_id = manager.submit(task)
+        manager.get_next_task(agent)  # Move to running
+
+        result = manager.cancel(task_id)
+
+        assert result is False
+        assert task.status == TaskStatus.RUNNING
+
+    def test_manager_cancel_nonexistent_task(self):
+        """Test failing to cancel a nonexistent task."""
+        manager = TaskManager()
+
+        result = manager.cancel("made_up_task_id")
+
+        assert result is False
 
     def test_manager_get_next_task(self):
         """Test getting next task for an agent."""
