@@ -91,6 +91,7 @@ class TestDeploymentStatusEnum:
             "RUNNING",
             "SUCCESS",
             "FAILURE",
+            "FAILED",
             "ROLLED_BACK",
             "CANCELLED",
             "IN_PROGRESS",

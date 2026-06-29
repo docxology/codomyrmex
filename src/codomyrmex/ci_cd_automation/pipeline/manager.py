@@ -201,7 +201,12 @@ class PipelineManager(
         """
         # Create event loop if one doesn't exist
         try:
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
+        try:
             if loop.is_running():
                 # If loop is running, we need to handle differently
 

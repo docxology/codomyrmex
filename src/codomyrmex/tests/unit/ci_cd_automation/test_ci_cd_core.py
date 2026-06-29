@@ -128,7 +128,7 @@ class TestDeploymentStatusEnum:
 
     @pytest.mark.unit
     def test_deployment_status_member_count(self):
-        assert len(DeploymentStatus) == 9
+        assert len(DeploymentStatus) == 10
 
 
 class TestEnvironmentTypeEnum:
