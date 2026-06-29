@@ -79,7 +79,7 @@ class TestCapabilityScanner:
         assert scanner is not None
 
     def test_init_with_root(self):
-        root = Path("/Users/mini/Documents/GitHub/codomyrmex")
+        root = Path("/app")
         scanner = CapabilityScanner(project_root=root)
         assert scanner is not None
 
@@ -134,7 +134,7 @@ CONSTANT = 42
 
     def test_scan_all_modules(self):
         scanner = CapabilityScanner(
-            project_root=Path("/Users/mini/Documents/GitHub/codomyrmex")
+            project_root=Path("/app")
         )
         modules = scanner.scan_all_modules()
         assert isinstance(modules, dict)
