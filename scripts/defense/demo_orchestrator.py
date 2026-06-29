@@ -70,7 +70,7 @@ async def demo_defense_pipeline():
         print(f"  Threat Report: {report}")
 
         poisoned_context = active.poison_context("attacker_1", intensity=0.8)
-        print(f"  Poisoned Context generated: {poisoned_context[:50]}...")
+        print(f"  Poisoned Context generated: {str(poisoned_context)[:50]}...")
 
         decoy = active.create_honeytoken(
             label="admin_password", context="simulated_vault"
@@ -94,6 +94,7 @@ async def demo_defense_pipeline():
     # Auto-injected: Load configuration
     from pathlib import Path
 
+    import aiofiles
     import yaml
 
     config_path = (
@@ -103,8 +104,9 @@ async def demo_defense_pipeline():
         / "config.yaml"
     )
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
+        async with aiofiles.open(config_path) as f:
+            content = await f.read()
+            yaml.safe_load(content) or {}
             print("Loaded config from config/defense/config.yaml")
 
 
