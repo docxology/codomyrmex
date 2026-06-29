@@ -20,6 +20,7 @@ try:
         gwei_to_wei,
         wei_to_ether,
     )
+    from codomyrmex.wallet.contracts.builders import build_batch
 
     HAS_MODULE = True
 except ImportError:
@@ -549,6 +550,49 @@ class TestContractRegistryDeep:
         registry.register("token", empty_contract)
         result = registry.get("token")
         assert result is empty_contract
+
+
+@pytest.mark.unit
+class TestBuildBatch:
+    """Test suite for build_batch."""
+
+    def test_build_batch_success(self, eth_address):
+        transfers = [
+            {"to": Address(value=VALID_ETH_ADDRESS), "value": 100},
+            {"to": Address(value=VALID_ETH_ADDRESS), "value": 200, "data": "0xdata"},
+        ]
+
+        txs = build_batch(
+            from_address=eth_address,
+            transfers=transfers,
+            starting_nonce=5,
+            gas_price=50,
+        )
+
+        assert len(txs) == 2
+
+        # First tx
+        assert txs[0].from_address == eth_address
+        assert txs[0].to_address.value == VALID_ETH_ADDRESS
+        assert txs[0].value == 100
+        assert txs[0].nonce == 5
+        assert txs[0].gas_price == 50
+        assert txs[0].data == ""
+
+        # Second tx
+        assert txs[1].from_address == eth_address
+        assert txs[1].to_address.value == VALID_ETH_ADDRESS
+        assert txs[1].value == 200
+        assert txs[1].nonce == 6
+        assert txs[1].gas_price == 50
+        assert txs[1].data == "0xdata"
+
+    def test_build_batch_empty_transfers(self, eth_address):
+        txs = build_batch(
+            from_address=eth_address, transfers=[], starting_nonce=0, gas_price=10
+        )
+
+        assert len(txs) == 0
 
 
 @pytest.mark.unit
