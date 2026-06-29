@@ -80,10 +80,7 @@ async function handleAPI(req: Request): Promise<Response> {
 
     // Serve SPA for non-API routes
     if (!path.startsWith("/api/")) {
-        // TODO: In Phase 2b, load from spa/index.html instead of embedding
-        return new Response("PMServer modular — SPA pending extraction. Use monolithic PMServer.ts for now.", {
-            status: 200, headers: { "Content-Type": "text/plain" },
-        });
+        return new Response(Bun.file(import.meta.dir + "/spa/index.html"));
     }
 
     return error("Not found", 404);
