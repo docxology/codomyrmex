@@ -5,6 +5,7 @@ import pytest
 # Check Docker availability
 try:
     import docker
+    import docker.errors
 
     DOCKER_AVAILABLE = True
 except ImportError:
