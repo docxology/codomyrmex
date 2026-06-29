@@ -224,7 +224,7 @@ def orchestrator_run_dag(
                                 if not val:
                                     return val
                             return val
-                        elif isinstance(node.op, ast.Or):
+                        if isinstance(node.op, ast.Or):
                             for val_node in node.values:
                                 val = _safe_eval(val_node)
                                 if val:
