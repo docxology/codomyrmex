@@ -1,0 +1,4 @@
+## 2026-03-XX - [Critical] Replace eval() with AST Parsing in MCP Tools
+**Vulnerability:** Arbitrary Code Execution via `eval()` even with empty `__builtins__`. The orchestrator (`orchestrator_run_dag`) and autograd (`autograd_compute`) MCP tools accepted Python expressions and evaluated them using `eval()`.
+**Learning:** `eval()` can be bypassed to execute arbitrary system commands (e.g., `[c for c in ().__class__.__base__.__subclasses__() if c.__name__ == 'BuiltinImporter'][0]().load_module('os').system('echo pwned')`). Passing `{"__builtins__": {}}` is insufficient for security.
+**Prevention:** Never use `eval()` for untrusted input. Instead, use `ast.parse(expr, mode='eval')` to convert the expression to an Abstract Syntax Tree, and evaluate it strictly using a recursive whitelist approach (as implemented via `_safe_eval` checking `ast.Constant`, `ast.Name`, `ast.BinOp`, etc.).
