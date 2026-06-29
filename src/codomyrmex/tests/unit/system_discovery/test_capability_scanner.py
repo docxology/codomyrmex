@@ -133,8 +133,9 @@ CONSTANT = 42
         assert len(classes) >= 1
 
     def test_scan_all_modules(self):
+        project_root = Path(__file__).resolve().parent.parent.parent.parent.parent.parent
         scanner = CapabilityScanner(
-            project_root=Path("/Users/mini/Documents/GitHub/codomyrmex")
+            project_root=project_root
         )
         modules = scanner.scan_all_modules()
         assert isinstance(modules, dict)
