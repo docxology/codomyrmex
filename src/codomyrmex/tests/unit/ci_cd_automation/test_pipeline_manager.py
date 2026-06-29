@@ -549,7 +549,10 @@ class TestCancelPipeline:
         try:
 
             async def _dummy():
-                await asyncio.sleep(100)
+                try:
+                    await asyncio.sleep(100)
+                except asyncio.CancelledError:
+                    pass
 
             task = loop.create_task(_dummy())
             mgr.active_executions["test_pipeline"] = task
@@ -560,6 +563,10 @@ class TestCancelPipeline:
             # "cancelled" after the event loop processes it. Verify cancel
             # was requested:
             assert task.cancelling() > 0 or task.cancelled()
+            try:
+                loop.run_until_complete(task)
+            except asyncio.CancelledError:
+                pass
         finally:
             loop.close()
 
