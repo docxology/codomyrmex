@@ -81,12 +81,14 @@ dependencies = [
     # mnemonic               → uv sync --extra crypto
     "psutil>=6.0.0",
     "email-validator>=2.3.0",
-    "mlx-lm>=0.31.1",
+    "mlx-lm>=0.31.1; sys_platform == 'darwin'",
     "wasmtime>=42.0.0",
     "matplotlib>=3.10.8",
     # OpenGauss in-tree agent (CLI + ACP adapter tests import these)
     "prompt-toolkit>=3.0.0",
     "agent-client-protocol>=0.8.0",
+    "tree-sitter-language-pack==1.1.4",
+    "mlx>=0.31.1; sys_platform == 'darwin'",
 ]
 
 [project.optional-dependencies]
@@ -178,7 +180,7 @@ physical_management = [
     "pyserial>=3.5",
 
     "smbus2>=0.4.0",
-    "sqlalchemy>=1.4.0",
+    "sqlalchemy==2.0.51",
     "websockets>=10.0",
 ]
 
