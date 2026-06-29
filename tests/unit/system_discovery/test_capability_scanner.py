@@ -80,8 +80,8 @@ class TestCapabilityScanner:
         scanner = CapabilityScanner()
         assert scanner is not None
 
-    def test_init_with_root(self):
-        root = Path("/Users/mini/Documents/GitHub/codomyrmex")
+    def test_init_with_root(self, tmp_path):
+        root = tmp_path
         scanner = CapabilityScanner(project_root=root)
         assert scanner is not None
 
