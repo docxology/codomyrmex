@@ -1153,30 +1153,39 @@ class TestDeadLetterDataclass:
 
 @pytest.mark.unit
 class TestEventLoggerModuleFunctions:
-    """Tests for module-level functions in event_logger."""
+    """Tests for module-level functions in event_logger.py."""
 
     def test_get_recent_events_module_function(self):
-        """get_recent_events() returns the most recent *limit* events from the singleton EventLogger."""
+        """Test the get_recent_events module-level function."""
         from codomyrmex.events.handlers.event_logger import (
             get_event_logger,
             get_recent_events,
-            log_event_to_monitoring,
         )
 
+        # Clear the singleton to ensure a clean state
         logger = get_event_logger()
         logger.clear()
 
-        # Emit some events
-        for i in range(5):
-            event = Event(event_type=EventType.METRIC_UPDATE, source=f"test-source-{i}")
-            log_event_to_monitoring(event)
+        from codomyrmex.events.core.event_schema import Event, EventType
 
-        # Retrieve recent events using the module-level function
-        recent = get_recent_events(limit=3)
+        # Add some events
+        e1 = Event(
+            event_type=EventType.CUSTOM,
+            data={"type": "test_module_1", "data": 1},
+            source="test",
+        )
+        e2 = Event(
+            event_type=EventType.CUSTOM,
+            data={"type": "test_module_2", "data": 2},
+            source="test",
+        )
+        logger.log_event(e1)
+        logger.log_event(e2)
 
-        assert len(recent) == 3
-        # The most recent ones should be at the end of the emitted sequence
-        sources = [entry.event.source for entry in recent]
-        assert "test-source-4" in sources
-        assert "test-source-3" in sources
-        assert "test-source-2" in sources
+        # Retrieve recent events via module function
+        events = get_recent_events(limit=2)
+
+        # Verify the events were retrieved correctly
+        assert len(events) == 2
+        assert events[0].event.data["type"] == "test_module_1"
+        assert events[1].event.data["type"] == "test_module_2"

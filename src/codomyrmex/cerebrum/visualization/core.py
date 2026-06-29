@@ -33,7 +33,7 @@ except ImportError:
 try:
     import networkx as nx
 except ImportError:
-    nx: Any = None
+    nx = None
 
 logger = get_logger(__name__)
 

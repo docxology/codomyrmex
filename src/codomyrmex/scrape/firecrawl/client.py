@@ -62,7 +62,7 @@ class FirecrawlClient:
         formats: list[str] | None = None,
         actions: list[dict[str, Any]] | None = None,
         wait_for: str | None = None,
-    ) -> Any:
+    ) -> dict[str, Any]:
         """Scrape a single URL.
 
         Args:
@@ -122,7 +122,7 @@ class FirecrawlClient:
         url: str,
         limit: int | None = None,
         scrape_options: dict[str, Any] | None = None,
-    ) -> Any:
+    ) -> dict[str, Any]:
         """Start a crawl job for a URL.
 
         Args:
@@ -173,7 +173,7 @@ class FirecrawlClient:
                 f"Firecrawl error crawling {url}: {e}", firecrawl_error=e
             ) from e
 
-    def map_url(self, url: str, search: str | None = None) -> Any:
+    def map_url(self, url: str, search: str | None = None) -> dict[str, Any]:
         """Map the structure of a website.
 
         Args:
@@ -227,7 +227,7 @@ class FirecrawlClient:
         query: str,
         limit: int | None = None,
         scrape_options: dict[str, Any] | None = None,
-    ) -> Any:
+    ) -> dict[str, Any]:
         """Search the web and optionally scrape results.
 
         Args:
@@ -278,7 +278,7 @@ class FirecrawlClient:
         urls: list[str],
         schema: dict[str, Any] | None = None,
         prompt: str | None = None,
-    ) -> Any:
+    ) -> dict[str, Any]:
         """Extract structured data from URLs using LLM.
 
         Args:
