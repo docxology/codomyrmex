@@ -136,6 +136,9 @@ def orchestrator_run_dag(
                     mod = importlib.import_module(parts[0])
                     return getattr(mod, parts[1])
             if "fn_expr" in task_dict:
+                import ast
+                import operator
+
                 expr = task_dict["fn_expr"]
                 if "__" in expr:
                     raise ValueError(
@@ -150,7 +153,113 @@ def orchestrator_run_dag(
                     "abs": abs,
                     "round": round,
                 }
-                return lambda *_a, **_kw: eval(expr, {"__builtins__": {}}, safe_locals)
+
+                # Setup safe evaluator
+                def _safe_eval(node: ast.AST):
+                    if isinstance(node, ast.Expression):
+                        return _safe_eval(node.body)
+                    if isinstance(node, ast.Constant):
+                        return node.value
+                    if isinstance(node, ast.Name):
+                        if node.id in safe_locals:
+                            return safe_locals[node.id]
+                        raise ValueError(f"Unknown variable or function: {node.id}")
+                    if isinstance(node, ast.Call):
+                        if (
+                            isinstance(node.func, ast.Name)
+                            and node.func.id in safe_locals
+                        ):
+                            func = safe_locals[node.func.id]
+                            args = [_safe_eval(arg) for arg in node.args]
+                            return func(*args)
+                        raise ValueError(f"Unsupported function call: {ast.dump(node)}")
+                    if isinstance(node, ast.List):
+                        return [_safe_eval(elt) for elt in node.elts]
+                    if isinstance(node, ast.Tuple):
+                        return tuple(_safe_eval(elt) for elt in node.elts)
+                    if isinstance(node, ast.Dict):
+                        return {
+                            _safe_eval(k): _safe_eval(v)
+                            for k, v in zip(node.keys, node.values, strict=False)
+                            if k is not None
+                        }
+
+                    if isinstance(node, ast.Attribute):
+                        obj = _safe_eval(node.value)
+                        # Avoid getattr on unsafe classes
+                        if str(node.attr).startswith("_"):
+                            raise ValueError(f"Accessing private attribute not allowed: {node.attr}")
+                        return getattr(obj, node.attr)
+
+                    if isinstance(node, ast.Subscript):
+                        obj = _safe_eval(node.value)
+                        key = _safe_eval(node.slice)
+                        return obj[key]
+
+                    _cmp_ops = {
+                        ast.Eq: operator.eq,
+                        ast.NotEq: operator.ne,
+                        ast.Lt: operator.lt,
+                        ast.LtE: operator.le,
+                        ast.Gt: operator.gt,
+                        ast.GtE: operator.ge,
+                        ast.In: lambda a, b: a in b,
+                        ast.NotIn: lambda a, b: a not in b,
+                    }
+                    if isinstance(node, ast.Compare):
+                        left = _safe_eval(node.left)
+                        for op, right_node in zip(node.ops, node.comparators, strict=False):
+                            right = _safe_eval(right_node)
+                            if type(op) not in _cmp_ops:
+                                raise ValueError(f"Unsupported comparison operator: {type(op)}")
+                            if not _cmp_ops[type(op)](left, right):
+                                return False
+                            left = right
+                        return True
+
+                    if isinstance(node, ast.BoolOp):
+                        if isinstance(node.op, ast.And):
+                            for val_node in node.values:
+                                val = _safe_eval(val_node)
+                                if not val:
+                                    return val
+                            return val
+                        elif isinstance(node.op, ast.Or):
+                            for val_node in node.values:
+                                val = _safe_eval(val_node)
+                                if val:
+                                    return val
+                            return val
+
+                    _ops = {
+                        ast.Add: operator.add,
+                        ast.Sub: operator.sub,
+                        ast.Mult: operator.mul,
+                        ast.Div: operator.truediv,
+                        ast.FloorDiv: operator.floordiv,
+                        ast.Mod: operator.mod,
+                        ast.Pow: operator.pow,
+                        ast.USub: operator.neg,
+                        ast.UAdd: operator.pos,
+                    }
+                    if isinstance(node, ast.BinOp) and type(node.op) in _ops:
+                        return _ops[type(node.op)](
+                            _safe_eval(node.left),
+                            _safe_eval(node.right),
+                        )
+                    if isinstance(node, ast.UnaryOp) and type(node.op) in _ops:
+                        return _ops[type(node.op)](_safe_eval(node.operand))
+
+                    raise ValueError(
+                        f"Unsupported expression component: {type(node).__name__}"
+                    )
+
+                try:
+                    tree = ast.parse(expr, mode="eval")
+                except SyntaxError as e:
+                    raise ValueError(f"Invalid expression syntax: {e}") from e
+
+                return lambda *_a, **_kw: _safe_eval(tree)
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 

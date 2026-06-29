@@ -7,6 +7,7 @@ Protocol so that AI agents can evaluate expressions and verify gradients.
 
 from __future__ import annotations
 
+import ast
 import operator
 from typing import Any
 
@@ -20,11 +21,49 @@ from .ops import relu, sigmoid, tanh
 # ---------------------------------------------------------------------------
 
 _ALLOWED_OPS = {
-    "+": operator.add,
-    "-": operator.sub,
-    "*": operator.mul,
-    "**": operator.pow,
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Div: operator.truediv,
+    ast.Pow: operator.pow,
+    ast.USub: operator.neg,
+    ast.UAdd: operator.pos,
 }
+
+_ALLOWED_FUNCS = {
+    "relu": relu,
+    "tanh": tanh,
+    "sigmoid": sigmoid,
+}
+
+
+def _safe_eval(node: ast.AST, namespace: dict) -> Any:
+    """Recursively evaluate an AST node containing math and variable lookups."""
+    if isinstance(node, ast.Expression):
+        return _safe_eval(node.body, namespace)
+    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+        return float(node.value)
+    if isinstance(node, ast.Name):
+        if node.id in namespace:
+            return namespace[node.id]
+        raise ValueError(f"Unknown variable or function: {node.id}")
+    if isinstance(node, ast.Call):
+        if isinstance(node.func, ast.Name) and node.func.id in _ALLOWED_FUNCS:
+            func = _ALLOWED_FUNCS[node.func.id]
+            if len(node.args) != 1:
+                raise ValueError(f"Function {node.func.id} expects exactly 1 argument")
+            arg = _safe_eval(node.args[0], namespace)
+            return func(arg)
+        raise ValueError(f"Unsupported function call: {ast.dump(node)}")
+    if isinstance(node, ast.BinOp) and type(node.op) in _ALLOWED_OPS:
+        return _ALLOWED_OPS[type(node.op)](
+            _safe_eval(node.left, namespace),
+            _safe_eval(node.right, namespace),
+        )
+    if isinstance(node, ast.UnaryOp) and type(node.op) in _ALLOWED_OPS:
+        return _ALLOWED_OPS[type(node.op)](_safe_eval(node.operand, namespace))
+
+    raise ValueError(f"Unsupported expression component: {type(node).__name__}")
 
 
 # ---------------------------------------------------------------------------
@@ -60,13 +99,13 @@ def autograd_compute(expression: str, variables: dict) -> dict:
         var_values[name] = v
         namespace[name] = v
 
-    # Compile and evaluate
+    # Parse and evaluate
     try:
-        code = compile(expression, "<autograd_compute>", "eval")
+        tree = ast.parse(expression, mode="eval")
     except SyntaxError as exc:
         raise ValueError(f"Invalid expression syntax: {exc}") from exc
 
-    result = eval(code, namespace)
+    result = _safe_eval(tree, namespace)
 
     if not isinstance(result, Value):
         result = Value(float(result))
