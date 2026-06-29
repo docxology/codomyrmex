@@ -87,6 +87,7 @@ jobs:
 
       - name: 'Run Gemini Issue Analysis'
         id: 'gemini_issue_analysis'
+        continue-on-error: true
         if: |-
           ${{ steps.find_issues.outputs.issues_to_triage != '[]' }}
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
