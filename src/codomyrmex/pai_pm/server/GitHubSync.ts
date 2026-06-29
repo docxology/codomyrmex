@@ -67,6 +67,7 @@
 
 import { existsSync, readFileSync, writeFileSync, readdirSync, mkdirSync } from "fs";
 import { join } from "path";
+import { load as parseYaml } from "js-yaml";
 import { homedir } from "os";
 import { execFileSync } from "child_process";
 
@@ -322,51 +323,6 @@ function loadMissionSyncMapping(missionSlug: string): MissionSyncMapping | null 
 // ============================================================================
 // PAI Data Helpers
 // ============================================================================
-
-// TODO(M9): Replace with js-yaml for proper YAML spec compliance
-function parseSimpleYaml(content: string): Record<string, any> {
-  const result: Record<string, any> = {};
-  let currentArrayKey: string | null = null;
-  const currentArray: string[] = [];
-
-  for (const line of content.split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-
-    if (trimmed.startsWith("- ") && currentArrayKey) {
-      let value = trimmed.slice(2).trim();
-      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-        value = value.slice(1, -1);
-      }
-      currentArray.push(value);
-      continue;
-    }
-
-    if (currentArrayKey && currentArray.length > 0) {
-      result[currentArrayKey] = [...currentArray];
-      currentArray.length = 0;
-      currentArrayKey = null;
-    }
-
-    const colonIdx = trimmed.indexOf(":");
-    if (colonIdx === -1) continue;
-
-    const key = trimmed.slice(0, colonIdx).trim();
-    let value = trimmed.slice(colonIdx + 1).trim();
-
-    if (!value) { currentArrayKey = key; continue; }
-
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-      value = value.slice(1, -1);
-    }
-    result[key] = value;
-  }
-
-  if (currentArrayKey && currentArray.length > 0) {
-    result[currentArrayKey] = [...currentArray];
-  }
-  return result;
-}
 
 interface ParsedTasks {
   header: string;
@@ -887,7 +843,7 @@ export function pullFromGitHub(projectSlug: string, dryRun = false): SyncResult 
     tasks = parseTasksMd(readFileSync(tasksPath, "utf-8"));
   } else {
     const yamlPath = join(PROJECTS_DIR, projectSlug, "PROJECT.yaml");
-    const yaml = existsSync(yamlPath) ? parseSimpleYaml(readFileSync(yamlPath, "utf-8")) : {};
+    const yaml = (existsSync(yamlPath) ? parseYaml(readFileSync(yamlPath, "utf-8")) as Record<string, any> : {}) || {};
     tasks = {
       header: `# ${yaml.title || projectSlug} Tasks\n\n${yaml.goal || ""}\n\n---`,
       completed: [], in_progress: [], remaining: [],
