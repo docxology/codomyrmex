@@ -17,6 +17,10 @@ class DeploymentStatus(Enum):
     """
 
     PENDING = "pending"
+    RUNNING = "running"
+    SUCCESS = "success"
+    FAILURE = "failure"
+    CANCELLED = "cancelled"
     IN_PROGRESS = "in_progress"
     DEPLOYED = "deployed"
     FAILED = "failed"

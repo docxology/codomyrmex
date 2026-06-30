@@ -5,6 +5,7 @@ Covers edge cases, boundary conditions, and integration paths not in test_thin.p
 """
 
 import asyncio
+import inspect
 import os
 import tempfile
 import time
@@ -744,7 +745,7 @@ class TestRetryEdgeCases:
         """retry() returns a callable async wrapper."""
         wrapped = retry(lambda: "ok", max_attempts=2, delay=0.01)
         assert callable(wrapped)
-        assert asyncio.iscoroutinefunction(wrapped)
+        assert inspect.iscoroutinefunction(wrapped)
 
 
 # ---------------------------------------------------------------------------
@@ -951,7 +952,7 @@ class TestModuleExports:
 
     def test_run_async_is_coroutine_function(self):
         """run_async is a coroutine function."""
-        assert asyncio.iscoroutinefunction(run_async)
+        assert inspect.iscoroutinefunction(run_async)
 
     def test_pipe_is_callable(self):
         """pipe is a callable function."""
