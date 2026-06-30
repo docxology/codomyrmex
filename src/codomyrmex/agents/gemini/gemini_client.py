@@ -13,9 +13,6 @@ import os
 from collections.abc import Iterator
 from typing import Any
 
-from google import genai
-from google.genai import types
-
 try:
     from PIL import Image as PILImage
 except ImportError:
@@ -55,6 +52,15 @@ class GeminiClient(
     """
 
     def __init__(self, config: dict[str, Any] | None = None):
+        # Lazy imports: avoid _UnionGenericAlias DeprecationWarning at collection time
+        # (google-genai 1.68 uses typing._UnionGenericAlias which Python 3.14 deprecates)
+        try:
+            from google import genai as _genai
+            from google.genai import types as _types
+        except ImportError:
+            _genai = None  # type: ignore[assignment]
+            _types = None  # type: ignore[assignment]
+
         super().__init__(
             name="gemini",
             capabilities=[
@@ -70,8 +76,12 @@ class GeminiClient(
             config=config or {},
         )
 
-        if genai is None:
+        if _genai is None:
             raise ImportError("google-genai package not found. Please install it.")
+
+        # Store as instance references for use in methods
+        self._genai = _genai
+        self._types = _types
 
         self.use_vertex = self.get_config_value(
             "use_vertex_ai", default=False, config=config
@@ -94,7 +104,7 @@ class GeminiClient(
                     client_kwargs["project"] = self.vertex_project
                 if self.vertex_location:
                     client_kwargs["location"] = self.vertex_location
-                self.client = genai.Client(**client_kwargs)
+                self.client = self._genai.Client(**client_kwargs)
                 logger.debug("Initialized Gemini Client with Vertex AI")
             elif not self.api_key:
                 logger.debug(
@@ -102,7 +112,7 @@ class GeminiClient(
                 )
             else:
                 client_kwargs = {"api_key": self.api_key}
-                self.client = genai.Client(**client_kwargs)
+                self.client = self._genai.Client(**client_kwargs)
                 logger.debug("Initialized Gemini Client with API Key")
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error("Failed to initialize Gemini Client: %s", e)
@@ -154,11 +164,11 @@ class GeminiClient(
                 if isinstance(tool, str):
                     if tool == "code_execution":
                         tools_config.append(
-                            types.Tool(code_execution=types.CodeExecution())
+                            self._types.Tool(code_execution=self._types.CodeExecution())
                         )
                     elif tool == "google_search":
                         tools_config.append(
-                            types.Tool(google_search=types.GoogleSearch())
+                            self._types.Tool(google_search=self._types.GoogleSearch())
                         )
                 else:
                     tools_config.append(tool)
@@ -177,7 +187,7 @@ class GeminiClient(
             response = self.client.models.generate_content(
                 model=model,
                 contents=contents,
-                config=types.GenerateContentConfig(**config_params)
+                config=self._types.GenerateContentConfig(**config_params)
                 if config_params
                 else None,
             )
@@ -235,7 +245,7 @@ class GeminiClient(
             response_stream = self.client.models.generate_content_stream(
                 model=model,
                 contents=contents,
-                config=types.GenerateContentConfig(**config_params)
+                config=self._types.GenerateContentConfig(**config_params)
                 if config_params
                 else None,
             )

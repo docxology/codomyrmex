@@ -8,9 +8,6 @@ with contextlib.suppress(ImportError):
     from openai import OpenAI
 with contextlib.suppress(ImportError):
     from anthropic import Anthropic
-with contextlib.suppress(ImportError):
-    from google import genai
-
 try:
     from codomyrmex.llm.providers.ollama_manager import OLLAMA_AVAILABLE, OllamaManager
 except ImportError:
@@ -100,6 +97,9 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
 
     elif provider == "google":
         try:
+            from google import (
+                genai,  # lazy import: avoids _UnionGenericAlias DeprecationWarning at collection time
+            )
             # Check for API key (support both variations)
             api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get(
                 "GOOGLE_API_KEY"

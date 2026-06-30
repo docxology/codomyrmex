@@ -442,6 +442,8 @@ filterwarnings = [
     "ignore:.*doesn't match a supported version.*:Warning",
     # google.api_core without grpcio-status; optional for storage client import chains during test collection.
     "ignore:Please install grpcio-status.*:ImportWarning",
+    # google-genai 1.68 uses typing._UnionGenericAlias which Python 3.14 marks as deprecated.
+    "ignore:'_UnionGenericAlias' is deprecated:DeprecationWarning",
 ]
 
 

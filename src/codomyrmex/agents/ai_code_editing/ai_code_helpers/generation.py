@@ -3,8 +3,6 @@
 import contextlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-with contextlib.suppress(ImportError):
-    from google.genai import types
 try:
     from codomyrmex.performance import monitor_performance
 except ImportError:
@@ -116,14 +114,19 @@ def generate_code_snippet(
             )
 
         elif provider == "google":
+            _genai_types = None
+            with contextlib.suppress(ImportError):
+                from google.genai import (
+                    types as _genai_types,  # lazy import: avoids _UnionGenericAlias DeprecationWarning at collection time
+                )
             response = client.models.generate_content(
                 model=model,
                 contents=full_prompt,
-                config=types.GenerateContentConfig(
+                config=_genai_types.GenerateContentConfig(
                     max_output_tokens=max_length or 2000,
                     temperature=temperature,
                 )
-                if types
+                if _genai_types
                 else None,
             )
             generated_code = response.text
