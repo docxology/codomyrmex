@@ -52,7 +52,7 @@ cd codomyrmex
 # 2. Install all dependencies (including dev extras)
 uv sync
 
-# 3. Run the full test suite — must yield 433 passing tests, 0 failures
+# 3. Run the full test suite — must yield {{RESULT_TEST_COUNT}} passing tests, 0 failures
 HYPOTHESIS_NO_NPY=1 uv run pytest src/codomyrmex/tests/ -v \
     --cov=src/codomyrmex \
     --cov-report=term-missing \
@@ -74,7 +74,7 @@ uv run python scripts/z_generate_manuscript_variables.py \
 grep -r "{{" docs/manuscript_rendered/ || echo "All tokens resolved"
 ```
 
-The expected terminal summary after step 3 is `433 passed` with branch coverage at or above the 40% floor. Deviations indicate either a dependency mismatch (resolve with `uv sync` against the pinned `uv.lock`) or an environment difference captured in the software specification below.
+The expected terminal summary after step 3 is `{{RESULT_TEST_COUNT}} passed` with branch coverage at or above the 40% floor. Deviations indicate either a dependency mismatch (resolve with `uv sync` against the pinned `uv.lock`) or an environment difference captured in the software specification below.
 
 ## Software Environment Specification {#sec:sw-env}
 
@@ -143,7 +143,7 @@ This manuscript demonstrates the template's token-injection ("madlib") capabilit
 
 The script writes a single substitution map (key → value) and the rendering stage applies it to every `*.md` file in `docs/manuscript/`, writing resolved copies to `docs/manuscript_rendered/`. The substitution is applied with a single-pass regex replace; no token appears in the rendered output.
 
-**The config.yaml token substitution pipeline as a reproducibility mechanism.** The madlib system is not merely a convenience — it is the primary mechanism by which this manuscript's numeric claims are reproducible. Every quantity cited in the abstract, results table, and gate summary traces to a named constant in `docs/manuscript/config.yaml` or to a computed value emitted by the pipeline. There is no disconnected prose claim that could silently diverge from the underlying measurement. Concretely: the gate weight formula (0.30 × correctness + 0.30 × safety + 0.25 × efficiency + 0.15 × communication) is defined once in `config.yaml` under `gates.weights` and referenced symbolically wherever it appears; a change to any weight coefficient is immediately reflected in all rendered sections or triggers an unresolved-token gate failure. Similarly, the test count (433) is not hand-typed — it is the `RESULT_TEST_COUNT` token emitted by the pytest JSON report at render time. A reader who disagrees with a reported number can trace it to its generating script in under two grep operations.
+**The config.yaml token substitution pipeline as a reproducibility mechanism.** The madlib system is not merely a convenience — it is the primary mechanism by which this manuscript's numeric claims are reproducible. Every quantity cited in the abstract, results table, and gate summary traces to a named constant in `docs/manuscript/config.yaml` or to a computed value emitted by the pipeline. There is no disconnected prose claim that could silently diverge from the underlying measurement. Concretely: the gate weight formula (0.30 × budget + 0.30 × risk + 0.25 × trust + 0.15 × completeness) is defined once in `config.yaml` under `gates.weights` and referenced symbolically wherever it appears; a change to any weight coefficient is immediately reflected in all rendered sections or triggers an unresolved-token gate failure. Similarly, the test count ({{RESULT_TEST_COUNT}}) is not hand-typed — it is the `RESULT_TEST_COUNT` token emitted by the pytest JSON report at render time. A reader who disagrees with a reported number can trace it to its generating script in under two grep operations.
 
 **To verify all tokens resolved**:
 

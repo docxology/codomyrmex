@@ -225,10 +225,12 @@ experiment:
   # The standalone FalsificationWorker (used by colony_falsify_plan MCP tool)
   # applies 5 deterministic attack vectors: missing_rollback, underfunded_budget,
   # circular_dependency, untested_assumption, blast_radius.
-  # The kernel's internal FalsificationWorker (used by propose_action) runs
-  # 6 checks: rollback_coverage, evidence_sufficiency, pheromone_pressure,
-  # security_exposure, budget_self_report, rationale_depth.
-  falsification_vectors: 5
+  # The FalsificationWorker (used by both propose_action and colony_falsify_plan)
+  # applies 10 deterministic adversarial attack vectors (see §5.6 and §2 AttackVector table):
+  # NO_ROLLBACK, NO_TEST_VALUE, SCOPE_CREEP, FALSE_METRIC, CIRCULAR_ARCHITECTURE,
+  # DEPENDENCY_RISK, SECURITY_RISK, OVER_BROAD_MODULE, HIDDEN_MAINTENANCE_COST,
+  # PREMATURE_ABSTRACTION.
+  falsification_vectors: 10
 
   # Colony Control Plane subsystem count — the 8 design subsystems:
   # pheromone_gradients, resource_budget, actuation_gate, consequence_memory,
@@ -242,6 +244,19 @@ experiment:
   # Number of config.yaml files managed across the colony (including this file).
   # Used as a manifest integrity check token in z_generate_manuscript_variables.py.
   config_yaml_files: 3
+
+  # Number of agents initialised per trial at AgentRole.SANDBOX with trust_score = 0.1.
+  # Referenced in 05_experimental_setup.md §5.0.4 as {{CONFIG_AGENT_COUNT}}.
+  agent_count: 5
+
+  # Number of task subtrees in the fixed workload corpus used per trial.
+  # Referenced in 05_experimental_setup.md §5.0.4 as {{CONFIG_WORKLOAD_TASK_COUNT}}.
+  workload_task_count: 50
+
+  # Scheduler ticks designated as warm-up at the start of each trial.
+  # Warm-up outcomes are excluded from dependent-variable computations.
+  # Referenced in 05_experimental_setup.md §5.0.4 and §5.0.5 as {{CONFIG_WARMUP_TICKS}}.
+  warmup_ticks: 10
 
   # Number of independent trial runs used in the evaluation benchmark suite.
   # Seeds 0 .. (trial_count - 1) are drawn from a pre-registered seed table.

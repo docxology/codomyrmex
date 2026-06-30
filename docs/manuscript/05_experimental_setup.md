@@ -225,9 +225,9 @@ factor at each tick.
 
 | Class | `DecayRate` value | Effective rate at default base | Characteristic half-life | `SignalType` variants |
 |-------|-------------------|-------------------------------|--------------------------|----------------------|
-| FAST | 3.0 | 0.3/tick | ~1 tick | `FAILURE`, `RISK` |
-| NORMAL | 1.0 | 0.1/tick | ~3 ticks | `NEED` |
-| SLOW | 0.2 | 0.02/tick | ~15 ticks | `SUCCESS`, `DEPENDENCY`, `HUMAN_PRIORITY` |
+| FAST | 3.0 | 0.3/tick | ~2 ticks (2.31) | `FAILURE`, `RISK` |
+| NORMAL | 1.0 | 0.1/tick | ~7 ticks (6.93) | `NEED` |
+| SLOW | 0.2 | 0.02/tick | ~35 ticks (34.66) | `SUCCESS`, `DEPENDENCY`, `HUMAN_PRIORITY` |
 
 `DecayRate` members are plain numeric floats on the enum (`FAST = 3.0`, `NORMAL = 1.0`,
 `SLOW = 0.2`). They are evaporation multipliers, not lambda functions; the scheduler applies

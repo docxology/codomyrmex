@@ -18,18 +18,18 @@ functional tests, and branch coverage. Table 1 summarises the outcome of every g
 |------|--------|--------|
 | `ruff` (lint) | Pass | 0 lint violations |
 | `ty` (type checker) | Pass | 0 type diagnostics |
-| `pytest` (colony_kernel scope) | Pass | 433 tests collected; 0 failures, 0 errors (scoped to the colony_kernel module; full project suite contains additional integration tests) |
-| `pytest` (full suite) | Pass | 457 tests collected; 0 failures, 0 errors |
+| `pytest` (colony_kernel scope) | Pass | {{RESULT_TEST_COUNT}} tests collected; 0 failures, 0 errors (scoped to the colony_kernel module; full project suite contains additional integration tests) |
+| `pytest` (full suite) | Pass | {{RESULT_TEST_COUNT}} tests collected; 0 failures, 0 errors (includes cross-module integration paths) |
 | Coverage | Pass | {{RESULT_COVERAGE_PCT}}% branch coverage (floor: 40%) |
 
-**Scope note.** The 433-test count covers only `src/codomyrmex/colony_kernel/` (the
-`--cov` target for this manuscript); the full-suite count of 457 includes additional
+**Scope note.** The {{RESULT_TEST_COUNT}}-test count covers only `src/codomyrmex/colony_kernel/` (the
+`--cov` target for this manuscript); the full-suite count includes additional
 tests that exercise cross-module integration paths (`agents/`, `config_loader/`, and
 `mcp_bridge`) that import but are not part of the Colony Kernel package itself. All
 claims in this section use the colony_kernel-scoped run unless otherwise stated;
 [@sec:reproducibility] provides the exact `pytest` invocation for each count.
 
-The 433 tests decompose into 65 module-level (`def test_`) functions and 368
+The {{RESULT_TEST_COUNT}} tests decompose into 65 module-level (`def test_`) functions and 368
 class-method (`    def test_`) functions spread across 9 test files in
 `src/codomyrmex/tests/unit/colony_kernel/`:
 `test_actuation_gate.py`, `test_consequence_memory.py`, `test_falsification_worker.py`,
@@ -45,7 +45,7 @@ the twelve source files in `src/codomyrmex/colony_kernel/` (ten subsystem module
 confirming that the Pydantic v2 model hierarchy, the `TypeAlias` role ladder, and the
 generic consequence-memory type parameters are mutually consistent.
 
-The 433-test colony_kernel suite exercises each of the eight subsystems — `models`,
+The {{RESULT_TEST_COUNT}}-test colony_kernel suite exercises each of the eight subsystems — `models`,
 `pheromone_store`, `resource_ledger`, `consequence_memory`, `actuation_gate`,
 `role_adapter`, `falsification_worker`, and `pruning_daemon` — plus integration paths
 through `kernel.py` and the MCP surface. Coverage at {{RESULT_COVERAGE_PCT}}% substantially exceeds the 40%
@@ -76,13 +76,13 @@ record exists [@apt2003principles].
 Trust accumulates via the `ColonyKernel.record_outcome` pathway. Each successful outcome
 increments the agent's trust by the canonical delta defined in `consequence_memory.py`
 (`_DELTA_TESTS_PASSED = +{{CONFIG_TRUST_DELTA_PASS}}`), and each repair-needed event decrements it by the
-corresponding penalty constant (`_DELTA_REPAIR_NEEDED = -0.10`). The full set of trust
+corresponding penalty constant (`_DELTA_REPAIR_NEEDED = -0.05`). The full set of trust
 delta constants in `consequence_memory.py` is:
 
 - `_TRUST_BASE = 0.5` — starting trust for agents instantiated with no prior history
 - `_DELTA_TESTS_PASSED = +{{CONFIG_TRUST_DELTA_PASS}}` — bonus per outcome where `tests_passed=True`
 - `_DELTA_FEEDBACK_ACCEPTED = +0.02` — bonus when human feedback score ≥ 0.5
-- `_DELTA_REPAIR_NEEDED = -0.10` — penalty when `repair_needed=True`
+- `_DELTA_REPAIR_NEEDED = -0.05` — penalty when `repair_needed=True`
 - `_DELTA_FEEDBACK_REJECTED = -0.15` — penalty when human feedback score ≤ -0.5
 
 Starting from $t_0 = {{RESULT_TRUST_AT_0}}$ and applying 12 consecutive successes yields
@@ -114,7 +114,7 @@ presenting only clean, test-passing outcomes requires approximately 6 successful
 to exit `SANDBOX` — a deliberate calibration that makes credential-building neither
 trivially fast (which would undermine the trust signal) nor prohibitively slow (which
 would block legitimate agents from ever contributing). The asymmetry between the penalty
-for repair-needed outcomes ($-0.10$) and the bonus for test-passing outcomes ($+{{CONFIG_TRUST_DELTA_PASS}}$)
+for repair-needed outcomes ($-0.05$) and the bonus for test-passing outcomes ($+{{CONFIG_TRUST_DELTA_PASS}}$)
 encodes a conservative prior: trust is expensive to build and cheap to lose. An agent
 that alternates successes and failures converges to a stable low-trust equilibrium, while
 an agent with a clean record accumulates credentials monotonically.
@@ -122,8 +122,11 @@ an agent with a clean record accumulates credentials monotonically.
 Promotion occurs atomically inside a single `record_outcome` call once the trust
 threshold is crossed. At outcome 6 the agent transitions from `SANDBOX` to `REPAIR_ANT`,
 gaining access to gate evaluation for its proposals. The gate score for a `REPAIR_ANT`
-agent with trust $t = 0.34$ (all other factors at 1.0) falls in the `HOLD` band, routing
-proposals through the falsification queue before final evaluation. Continued successful
+agent with trust $t = 0.34$ (all other factors at 1.0) falls in the `EXECUTE` band
+($g = 0.30 \times 1.0 + 0.30 \times 1.0 + 0.25 \times 0.5 + 0.15 \times 1.0 = 0.875$); the `HOLD` band
+is reached when additional pressure is present — for example, elevated pheromone risk
+reducing `risk_ok` to 0.5, which lowers $g$ to 0.725 and routes proposals through the
+falsification queue before final evaluation. Continued successful
 outcomes raise trust toward the `EXECUTE` threshold ($t \geq 0.75$); this progressive
 credential-building sequence is enforced by the default `roles.yaml` configuration
 [@sec:methodology].
@@ -194,8 +197,8 @@ rate of 0.1 per tick. The three `DecayRate` tiers apply fixed multipliers to thi
 - `SLOW`: base × 0.2 = **0.02 / tick** — for inhibition and long-horizon coordination signals that must persist across many ticks
 
 The 15× difference between `FAST` and `SLOW` decay rates gives the colony a wide dynamic
-range for signal persistence. An alarm signal at `FAST` decay loses 90% of its strength
-within 8 ticks; an inhibition signal at `SLOW` decay retains 86% of its strength over the
+range for signal persistence. An alarm signal at `FAST` decay loses {{RESULT_PHEROMONE_FAST_LOSS_8_TICK_PCT}}% of its strength
+within 8 ticks; an inhibition signal at `SLOW` decay retains {{RESULT_PHEROMONE_SLOW_RETENTION_8_TICK_PCT}}% of its strength over the
 same window. This asymmetry enables the kernel to represent both rapid transient responses
 and slow structural coordination preferences within the same substrate, without requiring
 separate data structures for different temporal scales.

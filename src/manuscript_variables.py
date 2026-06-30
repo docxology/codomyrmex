@@ -205,6 +205,11 @@ def compute_variables(
     config_yaml_files: int = int(experiment.get("config_yaml_files", 3))
     falsification_vectors: int = int(experiment.get("falsification_vectors", 10))
 
+    # Trial-level experiment parameters — referenced in 05_experimental_setup.md §5.0.4/§5.0.5.
+    agent_count: int = int(experiment.get("agent_count", 5))
+    workload_task_count: int = int(experiment.get("workload_task_count", 50))
+    warmup_ticks: int = int(experiment.get("warmup_ticks", 10))
+
     # Trust delta constants (canonical: sourced from config, match models.py constants)
     trust_delta_pass: float = float(experiment.get("trust_delta_pass", 0.04))
     trust_delta_fail: float = float(experiment.get("trust_delta_fail", -0.08))
@@ -226,6 +231,12 @@ def compute_variables(
     pheromone_retention_slow_pct:   int = round(pheromone_retention_slow   * 100)  # 98
     pheromone_retention_normal_pct: int = round(pheromone_retention_normal * 100)  # 90
     pheromone_retention_fast_pct:   int = round(pheromone_retention_fast   * 100)  # 74
+
+    # 8-tick pheromone strength claims used in 03_results.md §pheromone discussion.
+    # FAST: fraction of strength lost after 8 ticks = 1 - retention^8 ≈ 90–91%
+    # SLOW: fraction of strength retained after 8 ticks = retention^8 ≈ 85–86%
+    pheromone_fast_loss_8_tick_pct:       int = round((1 - pheromone_retention_fast ** 8) * 100)   # ≈ 91
+    pheromone_slow_retention_8_tick_pct:  int = round(pheromone_retention_slow ** 8 * 100)          # ≈ 85
 
     # Trust trajectory at outcome checkpoints [0, 3, 6, 9, 12] for a clean-run agent.
     # Formula: t_n = clamp(trust_sandbox_score + n * trust_delta_pass, 0.0, 1.0)
@@ -408,6 +419,9 @@ def compute_variables(
         "CONFIG_BUDGET_MAX_SECURITY": str(budget_max_security),
         "CONFIG_YAML_CONFIG_FILES": str(config_yaml_files),
         "CONFIG_FALSIFICATION_VECTORS": str(falsification_vectors),
+        "CONFIG_AGENT_COUNT": str(agent_count),
+        "CONFIG_WORKLOAD_TASK_COUNT": str(workload_task_count),
+        "CONFIG_WARMUP_TICKS": str(warmup_ticks),
         "CONFIG_ROLE_COUNT": str(role_count),
         "CONFIG_TRUST_DELTA_PASS": str(trust_delta_pass),
         "CONFIG_TRUST_DELTA_FAIL": str(trust_delta_fail),
@@ -417,6 +431,10 @@ def compute_variables(
         "CONFIG_PHEROMONE_RETENTION_SLOW_PCT": str(pheromone_retention_slow_pct),
         "CONFIG_PHEROMONE_RETENTION_NORMAL_PCT": str(pheromone_retention_normal_pct),
         "CONFIG_PHEROMONE_RETENTION_FAST_PCT": str(pheromone_retention_fast_pct),
+        # 8-tick pheromone claims tokenized so decay-constant changes propagate automatically.
+        # Referenced in 03_results.md pheromone discussion ("90%... 86%").
+        "RESULT_PHEROMONE_FAST_LOSS_8_TICK_PCT": str(pheromone_fast_loss_8_tick_pct),
+        "RESULT_PHEROMONE_SLOW_RETENTION_8_TICK_PCT": str(pheromone_slow_retention_8_tick_pct),
         "RESULT_TRUST_AT_0":  trust_at_0,
         "RESULT_TRUST_AT_3":  trust_at_3,
         "RESULT_TRUST_AT_6":  trust_at_6,
@@ -431,6 +449,9 @@ def compute_variables(
         "CONFIG_HASH": config_hash,
         # RESULT tokens
         "RESULT_TEST_COUNT": str(test_count),
+        # CONFIG_TEST_COUNT: alias for RESULT_TEST_COUNT — 05_experimental_setup.md line 11
+        # uses the CONFIG_ prefix to reference the same live pytest-collected count.
+        "CONFIG_TEST_COUNT": str(test_count),
         "RESULT_COVERAGE_PCT": str(coverage_pct),
         "RESULT_RUFF_ERRORS": str(ruff_errors),
         "RESULT_TY_ERRORS": str(ty_errors),

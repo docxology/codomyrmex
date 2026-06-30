@@ -11,7 +11,7 @@ Citation syntax throughout the manuscript uses the Pandoc-native `[@key]` form (
 
 ## Bibliography Coverage
 
-The bibliography contains 24 entries spanning the five primary citation domains of this manuscript: stigmergy and self-organizing systems, multi-agent trust and reputation, reinforcement learning and consequence memory, capability-based security and least authority, and agentic software engineering frameworks.
+The bibliography contains 28 entries spanning the five primary citation domains of this manuscript: stigmergy and self-organizing systems, multi-agent trust and reputation, reinforcement learning and consequence memory, capability-based security and least authority, and agentic software engineering frameworks.
 
 **Citation key inventory** (all keys cited in the manuscript body have corresponding entries in `references.bib`):
 
@@ -40,6 +40,11 @@ The bibliography contains 24 entries spanning the five primary citation domains 
 | `popper1959logic` | Popper 1959 — Logic of Scientific Discovery | Falsification |
 | `peng2011reproducible` | Peng 2011 — Reproducible Research in Computational Science | Reproducibility |
 | `dorigo2004ant` | Dorigo & Stützle 2004 — Ant Colony Optimization (alternate key) | Stigmergy / ACO |
+| `crewai2024` | CrewAI 2024 — Role-based agent teams and hierarchical task delegation | Agentic SE |
+| `bai2022constitutional` | Bai et al. 2022 — Constitutional AI: Harmlessness from AI Feedback | RL / Alignment |
+| `christiano2017deep` | Christiano et al. 2017 — Deep Reinforcement Learning from Human Preferences | RL / Alignment |
+| `lightman2023let` | Lightman et al. 2023 — Let's Verify Step by Step (Process Reward Models) | RL / PRMs |
+| `uesato2022solving` | Uesato et al. 2022 — Solving Math Word Problems with Process- and Outcome-Based Feedback | RL / PRMs |
 
 **Unresolved keys:** none. Every `[@key]` citation in the manuscript body has a corresponding entry in `references.bib`. Run the validation command above before submission to confirm.
 
