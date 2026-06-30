@@ -39,13 +39,13 @@ The class-method tests (85% of the suite) cluster around subsystem invariants an
 boundary conditions; the module-level tests cover integration paths and property-based
 checks.
 
-Zero ruff violations were recorded across all 6,538 lines of implementation code spanning
-the twelve source files in `src/codomyrmex/colony_kernel/` (ten subsystem modules plus
+Zero ruff violations were recorded across all {{RESULT_COLONY_KERNEL_LOC}} lines of implementation code spanning
+the {{RESULT_COLONY_KERNEL_FILES}} source files in `src/codomyrmex/colony_kernel/` (ten subsystem modules plus
 `kernel.py` and `mcp_tools.py`). The `ty` type checker produced no diagnostics,
 confirming that the Pydantic v2 model hierarchy, the `TypeAlias` role ladder, and the
 generic consequence-memory type parameters are mutually consistent.
 
-The {{RESULT_TEST_COUNT}}-test colony_kernel suite exercises each of the eight subsystems — `models`,
+The {{RESULT_TEST_COUNT}}-test colony_kernel suite exercises each of the {{CONFIG_COLONY_KERNEL_SUBSYSTEMS}} subsystems — `models`,
 `pheromone_store`, `resource_ledger`, `consequence_memory`, `actuation_gate`,
 `role_adapter`, `falsification_worker`, and `pruning_daemon` — plus integration paths
 through `kernel.py` and the MCP surface. Coverage at {{RESULT_COVERAGE_PCT}}% substantially exceeds the 40%
@@ -272,7 +272,7 @@ understand decay mathematics.
 
 ### Documentation Completeness
 
-The 8-subsystem Colony Kernel ships documentation at two scopes. The
+The {{CONFIG_COLONY_KERNEL_SUBSYSTEMS}}-subsystem Colony Kernel ships documentation at two scopes. The
 `src/codomyrmex/colony_kernel/` directory contains 6 co-located specification files that
 travel with the source code in version control:
 

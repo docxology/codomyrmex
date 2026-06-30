@@ -1,11 +1,11 @@
 ---
 scope: project
-version: v1.2.7
+version: v1.3.0
 ---
 
 # CLAUDE.md
 
-**Version**: v1.2.7 | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Last Updated**: March 2026
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 

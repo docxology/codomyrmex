@@ -10,7 +10,7 @@ paper:
   # RASP Standard: Title must be descriptive and objective
   title: "Codomyrmex: An Artificial Ecology for Agentic Software Development"
   subtitle: "Colony Control Plane, Stigmergic Pressure, and Falsification-Gated Actuation"
-  version: "1.2.7"
+  version: "1.3.0"
   date: "2026-06-29" # Auto-generated via `infrastructure/validation/output/validator.py` if empty
   cover:
     image: "figures/cover.png"  # resolved from output/ by _pdf_title_page.py

@@ -1,6 +1,6 @@
 # Colony Kernel — PAI Algorithm Integration
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: June 2026
 
 ## Overview
 
@@ -113,28 +113,29 @@ the environment without passing three sequential checks.
 
 **Subsystem**: `kernel.ColonyKernel.propose_action` (the actuation gate)
 
-**Gate checks in order**:
+**Gate score formula** (`ActuationGate.evaluate`):
 
-1. **Falsification** (weight 0.4): Re-runs `FalsificationWorker` on the serialised
-   proposal. A fresh evaluation on the fully-populated `ActionProposal` object
-   may catch issues missed when the plan was a bare dict in THINK.
+```
+base_score = (
+    pressure_component × 0.30   # normalised net pheromone pressure at target
+  + rollback_component × 0.30   # 1.0 if rollback_plan non-empty, else 0.5
+  + trust_score        × 0.25   # agent AgentTrustProfile.trust_score
+  + evidence_component × 0.15   # 1.0 if evidence dict non-empty, else 0.5
+)
+gate_score = base_score × (1.0 − falsification_penalty)
+gate_score = clamp(gate_score, 0.0, 1.0)
+```
 
-2. **Budget** (weight 0.3): `ResourceLedger.can_afford` checks the proposal's
-   `budget_estimate` against the colony's per-hour LLM call cap, runtime cap,
-   risk cap, security exposure cap, and merge risk cap.
+**Routing thresholds**:
 
-3. **Trust** (weight 0.3): The proposing agent's `AgentTrustProfile.trust_score`
-   must meet the minimum for its current role:
-
-   | Role | Min trust to EXECUTE |
-   |------|---------------------|
-   | `SANDBOX` | 0.05 |
-   | `REPAIR_ANT` | 0.20 |
-   | `MEMORY_ANT` | 0.15 |
-   | `DISPATCHER` | 0.25 |
-   | `GUARD_ANT` | 0.30 |
-
-**Composite gate score** = `(1 - falsification_severity) * 0.4 + budget_ok * 0.3 + trust_ratio * 0.3`
+| Condition | Decision |
+|-----------|----------|
+| `budget_approved == False` | HOLD |
+| `profile.role == SANDBOX` | REFUSE (unconditional) |
+| CRITICAL falsification finding present | REFUSE |
+| `gate_score ≥ 0.75` | EXECUTE |
+| `0.50 ≤ gate_score < 0.75` | HOLD |
+| `gate_score < 0.50` | REFUSE |
 
 **Gate outcomes**:
 - `GateDecision.EXECUTE`: proceed; ledger records the cost; DEPENDENCY
@@ -176,14 +177,15 @@ VERIFY is not optional. Every EXECUTE that receives `GateDecision.EXECUTE` must
 be followed by a `colony_record_outcome` call. An agent that executes but never
 records outcomes cannot accumulate trust and cannot earn a specialist role.
 
-**Trust delta formula** (applied by `RoleAdapter._compute_trust_delta`):
+**Trust delta formula** (applied by `ConsequenceMemory._compute_delta`):
 
 ```
-delta = +0.05 if tests_passed else -0.05
-delta += human_feedback * 0.03   # human_feedback in [-1.0, +1.0]
-delta -= 0.04 if repair_needed else 0
-delta = clamp(delta, -0.10, +0.10)
+delta  = +0.04  if tests_passed  else  -0.08
+delta += -0.05  if repair_needed
+delta +=  human_feedback × 0.03   # human_feedback ∈ [-1.0, +1.0]
 ```
+
+Result: `trust_score = clamp(trust_score + delta, 0.0, 1.0)`
 
 **Pheromone deposited at VERIFY**:
 - `tests_passed=True` and `repair_needed=False` → SUCCESS signal (strength 2.0)
@@ -393,7 +395,7 @@ The colony responds:
 - SUCCESS signal (strength 2.0) deposited at `codomyrmex.git_operations.core`
 - FAILURE signal at that location evaporates faster (it was FAST decay; SUCCESS
   reinforcement counters it)
-- `engineer-claude-e3-001` trust delta: `+0.05 (tests) + 0.027 (feedback) = +0.077`
+- `engineer-claude-e3-001` trust delta: `+0.04 (tests) + 0.027 (feedback) = +0.067`
 - If the agent has enough `patch_file`/`bug_repair` successes, role advances to
   REPAIR_ANT on next update
 

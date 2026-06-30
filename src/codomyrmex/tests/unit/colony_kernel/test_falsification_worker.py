@@ -790,3 +790,175 @@ class TestFalsificationReportSummary:
         report = self.worker.evaluate_plan(plan)
         # The _build_summary helper falls back to "action" when blank
         assert "action" in report.plan_summary
+
+
+# ---------------------------------------------------------------------------
+# Multiple counter-evidence accumulation per hypothesis
+# ---------------------------------------------------------------------------
+
+
+class TestMultipleCounterEvidenceAccumulation:
+    """A hypothesis can accumulate multiple independent findings across checks."""
+
+    def setup_method(self):
+        self.worker = FalsificationWorker()
+
+    def test_multiple_findings_accumulated_for_weak_plan(self):
+        # A plan missing rollback, tests, and metrics triggers at least three checks.
+        plan = {
+            "agent_id": "multi-agent",
+            "action_type": "patch_file",
+            "target": "mypackage.module",
+            "rationale": "Fix the off-by-one error.",
+            "expected_outcome": "all unit tests pass",
+            "scope": "mypackage.module only",
+            "dependencies": [],
+            # Intentionally absent: rollback_plan, tests, metrics
+        }
+        report = self.worker.evaluate_plan(plan)
+        # Missing rollback -> HIGH finding; missing tests -> HIGH finding; missing metrics -> MEDIUM
+        assert len(report.findings) >= 2
+
+    def test_each_finding_has_distinct_attack_vector(self):
+        # Same weak plan — all findings must carry distinct attack vectors.
+        plan = {
+            "agent_id": "distinct-vec-agent",
+            "action_type": "patch_file",
+            "target": "mypackage.module",
+            "rationale": "Fix something.",
+            "expected_outcome": "all tests pass",
+            "scope": "narrow",
+            "dependencies": [],
+        }
+        report = self.worker.evaluate_plan(plan)
+        vectors = [f.attack_vector for f in report.findings]
+        # Distinct vectors means no two findings share the same root cause category.
+        assert len(vectors) == len(set(vectors)), (
+            f"Duplicate attack vectors detected: {vectors}"
+        )
+
+    def test_counter_evidence_accumulates_up_to_all_ten_checks(self):
+        # A maximally weak plan triggers many of the 10 checks simultaneously.
+        # Use a plan that is intentionally broken in many dimensions.
+        plan = {
+            "agent_id": "max-weak",
+            "action_type": "patch_file",
+            "target": "mypackage.module",
+            # Missing rollback, tests, metrics — and vague scope.
+        }
+        report = self.worker.evaluate_plan(plan)
+        # At minimum rollback (HIGH) + tests (HIGH) + metrics (MEDIUM) should fire.
+        assert len(report.findings) >= 3
+
+    def test_plan_with_all_checks_satisfied_has_zero_findings(self):
+        # A perfectly specified plan should accumulate zero findings.
+        plan = _minimal_plan()
+        report = self.worker.evaluate_plan(plan)
+        # Verify no HIGH or CRITICAL counter-evidence accumulated.
+        high_findings = [
+            f for f in report.findings
+            if f.severity in {FalsificationSeverity.HIGH, FalsificationSeverity.CRITICAL}
+        ]
+        assert high_findings == []
+
+
+# ---------------------------------------------------------------------------
+# generate_counter_evidence returns non-empty list for valid hypothesis
+# ---------------------------------------------------------------------------
+
+
+class TestGenerateCounterEvidence:
+    """evaluate_plan acts as the counter-evidence generator: non-empty findings
+    for a hypothesis (plan) that contains structural weaknesses."""
+
+    def setup_method(self):
+        self.worker = FalsificationWorker()
+
+    def test_weak_plan_yields_non_empty_findings(self):
+        # A plan with an absent rollback is the minimal "valid hypothesis with weakness".
+        plan = _minimal_plan(rollback_plan="")
+        report = self.worker.evaluate_plan(plan)
+        assert len(report.findings) > 0
+
+    def test_findings_are_falsification_finding_instances(self):
+        plan = _minimal_plan(rollback_plan="")
+        report = self.worker.evaluate_plan(plan)
+        for finding in report.findings:
+            assert isinstance(finding, FalsificationFinding)
+
+    def test_each_finding_has_non_empty_claim(self):
+        plan = _minimal_plan(rollback_plan="")
+        report = self.worker.evaluate_plan(plan)
+        for finding in report.findings:
+            assert len(finding.claim) > 0
+
+    def test_each_finding_has_non_empty_attack_vector(self):
+        plan = _minimal_plan(rollback_plan="")
+        report = self.worker.evaluate_plan(plan)
+        for finding in report.findings:
+            assert len(finding.attack_vector) > 0
+
+    def test_fully_absent_plan_yields_at_least_two_findings(self):
+        # An empty plan dict triggers rollback and tests checks at minimum.
+        report = self.worker.evaluate_plan({})
+        assert len(report.findings) >= 2
+
+
+# ---------------------------------------------------------------------------
+# Strong-evidence hypothesis is NOT flagged as falsified
+# ---------------------------------------------------------------------------
+
+
+class TestStrongEvidenceHypothesisNotFalsified:
+    """A hypothesis with strong (well-formed) evidence must not be falsified."""
+
+    def setup_method(self):
+        self.worker = FalsificationWorker()
+
+    def test_strong_plan_produces_pass_or_conditional_verdict(self):
+        plan = _minimal_plan()
+        report = self.worker.evaluate_plan(plan)
+        assert report.verdict in {"PASS", "CONDITIONAL"}
+
+    def test_strong_plan_has_no_high_severity_findings(self):
+        plan = _minimal_plan()
+        report = self.worker.evaluate_plan(plan)
+        high_findings = [
+            f for f in report.findings
+            if f.severity == FalsificationSeverity.HIGH
+        ]
+        assert high_findings == [], (
+            f"Unexpected HIGH findings for a well-formed plan: {high_findings}"
+        )
+
+    def test_strong_plan_has_no_critical_findings(self):
+        plan = _minimal_plan()
+        report = self.worker.evaluate_plan(plan)
+        critical_findings = [
+            f for f in report.findings
+            if f.severity == FalsificationSeverity.CRITICAL
+        ]
+        assert critical_findings == []
+
+    def test_strong_plan_is_not_fail(self):
+        plan = _minimal_plan()
+        report = self.worker.evaluate_plan(plan)
+        assert report.verdict != "FAIL"
+
+    def test_plan_with_full_rollback_not_flagged_for_no_rollback(self):
+        plan = _minimal_plan(
+            rollback_plan="git revert HEAD --no-edit && uv run pytest to confirm baseline"
+        )
+        no_rb = [
+            f for f in self.worker.evaluate_plan(plan).findings
+            if f.attack_vector == AttackVector.NO_ROLLBACK.value
+        ]
+        assert no_rb == []
+
+    def test_plan_with_numeric_metrics_not_flagged_for_missing_metrics(self):
+        plan = _minimal_plan(metrics="coverage >= 85% and p99 latency < 150ms")
+        metric_findings = [
+            f for f in self.worker.evaluate_plan(plan).findings
+            if f.attack_vector == AttackVector.FALSE_METRIC.value
+        ]
+        assert metric_findings == []

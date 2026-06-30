@@ -767,3 +767,208 @@ class TestHasTestsViaScanNoTests:
         candidates = daemon.scan_no_tests()
         assert len(candidates) == 1
         assert candidates[0].confidence == pytest.approx(0.60, abs=1e-6)
+
+
+# ---------------------------------------------------------------------------
+# Sandbox floor eligibility — agents below floor are pruning candidates
+# ---------------------------------------------------------------------------
+
+
+class TestSandboxFloorEligibility:
+    """scan() must respect the sandbox floor signalled via the pheromone store.
+
+    Modules with DEPENDENCY signal < 2.0 are eligible for pruning;
+    modules with DEPENDENCY signal >= 2.0 are protected and must NOT be pruned.
+    The PruningDaemon.scan() method (kernel API) takes a module_registry dict
+    and exposes the floor logic directly.
+    """
+
+    def test_agent_below_floor_is_eligible_for_pruning(self) -> None:
+        """A module with call_count=0 and last_used=0.0 (no pheromone) -> candidate."""
+        daemon = PruningDaemon(pheromone_store=None, repo_root=".")
+        registry = {
+            "codomyrmex.below_floor_mod": {
+                "last_used": 0.0,
+                "call_count": 0,
+                "duplicate_of": None,
+            }
+        }
+        candidates = daemon.scan(registry)
+        assert len(candidates) == 1
+        assert "below_floor_mod" in candidates[0].module_path
+
+    def test_multiple_agents_below_floor_all_eligible(self) -> None:
+        """All modules with zero usage in the registry are flagged."""
+        daemon = PruningDaemon(pheromone_store=None, repo_root=".")
+        registry = {
+            "mod_alpha": {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
+            "mod_beta":  {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
+            "mod_gamma": {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
+        }
+        candidates = daemon.scan(registry)
+        assert len(candidates) == 3
+
+    def test_below_floor_candidate_has_minimum_confidence(self) -> None:
+        """Never-used candidates must have confidence >= 0.5 (pruning minimum)."""
+        daemon = PruningDaemon(pheromone_store=None, repo_root=".")
+        registry = {
+            "codomyrmex.never_used": {
+                "last_used": 0.0,
+                "call_count": 0,
+                "duplicate_of": None,
+            }
+        }
+        candidates = daemon.scan(registry)
+        assert len(candidates) == 1
+        assert candidates[0].confidence >= 0.5
+
+
+# ---------------------------------------------------------------------------
+# Agents above the sandbox floor are NOT pruned
+# ---------------------------------------------------------------------------
+
+
+class TestAboveSandboxFloorNotPruned:
+    """Modules signalled by pheromone DEPENDENCY >= 2.0 must be protected."""
+
+    def _make_pheromone_store(self, protected_modules: dict[str, float]):
+        """Build a minimal real pheromone-store stand-in using a plain object.
+
+        Zero-mock policy: we build a real class, not a MagicMock.
+        The sense() contract: returns the float value registered for the key,
+        or 0.0 for unknown keys.  SignalType.DEPENDENCY is the gate signal.
+        """
+        from codomyrmex.colony_kernel.models import SignalType
+
+        class _MinimalPheromoneStore:
+            def __init__(self, protected: dict[str, float]) -> None:
+                self._data = protected
+
+            def sense(self, location: str, signal_type: SignalType) -> float:
+                if signal_type == SignalType.DEPENDENCY:
+                    return self._data.get(location, 0.0)
+                return 0.0
+
+        return _MinimalPheromoneStore(protected_modules)
+
+    def test_agent_above_floor_not_in_candidates(self) -> None:
+        """A module with DEPENDENCY pheromone >= 2.0 must be skipped."""
+        from codomyrmex.colony_kernel.models import SignalType  # noqa: F401
+
+        store = self._make_pheromone_store({"protected_mod": 2.0})
+        daemon = PruningDaemon(pheromone_store=store, repo_root=".")
+        registry = {
+            "protected_mod": {
+                "last_used": 0.0,
+                "call_count": 0,
+                "duplicate_of": None,
+            }
+        }
+        candidates = daemon.scan(registry)
+        module_paths = [c.module_path for c in candidates]
+        assert not any("protected_mod" in p for p in module_paths)
+
+    def test_mix_protected_and_unprotected(self) -> None:
+        """Only the unprotected module appears in candidates."""
+        store = self._make_pheromone_store({"guarded_module": 3.0})
+        daemon = PruningDaemon(pheromone_store=store, repo_root=".")
+        registry = {
+            "guarded_module":   {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
+            "exposed_module":   {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
+        }
+        candidates = daemon.scan(registry)
+        module_paths = [c.module_path for c in candidates]
+        assert not any(p == "guarded_module" for p in module_paths)
+        assert any(p == "exposed_module" for p in module_paths)
+
+    def test_signal_below_threshold_not_protected(self) -> None:
+        """DEPENDENCY signal of 1.9 is below the 2.0 floor — module IS eligible."""
+        store = self._make_pheromone_store({"borderline_mod": 1.9})
+        daemon = PruningDaemon(pheromone_store=store, repo_root=".")
+        registry = {
+            "borderline_mod": {
+                "last_used": 0.0,
+                "call_count": 0,
+                "duplicate_of": None,
+            }
+        }
+        candidates = daemon.scan(registry)
+        # 1.9 < 2.0 → not protected → appears as candidate
+        assert len(candidates) == 1
+        assert "borderline_mod" in candidates[0].module_path
+
+
+# ---------------------------------------------------------------------------
+# Pruning report contains the pruned agent IDs
+# ---------------------------------------------------------------------------
+
+
+class TestPruningReportContainsPrunedAgentIDs:
+    """report() dict values must include the module_path of each pruned agent."""
+
+    def test_unused_bucket_contains_module_path(self, tmp_path) -> None:
+        src = tmp_path / "src" / "codomyrmex"
+        src.mkdir(parents=True)
+        mod = src / "pruned_agent"
+        mod.mkdir()
+        (mod / "__init__.py").write_text("")
+
+        daemon = PruningDaemon(str(tmp_path))
+        result = daemon.report()
+
+        unused_paths = [c.module_path for c in result["unused"]]
+        assert any("pruned_agent" in p for p in unused_paths)
+
+    def test_duplicate_bucket_contains_module_path(
+        self, daemon_two_similar: PruningDaemon, repo_with_two_similar_modules
+    ) -> None:
+        result = daemon_two_similar.report()
+        duplicate_paths = [c.module_path for c in result["duplicate"]]
+        # Should contain at least one of the two similar modules
+        all_paths = " ".join(duplicate_paths)
+        assert "alpha" in all_paths or "beta" in all_paths
+
+    def test_scan_returns_candidate_ids_matching_filesystem_names(self, tmp_path) -> None:
+        """scan_unused_tools must return candidates whose module_path includes the dir name."""
+        src = tmp_path / "src" / "codomyrmex"
+        src.mkdir(parents=True)
+        for name in ("agent_a", "agent_b"):
+            m = src / name
+            m.mkdir()
+            (m / "__init__.py").write_text("")
+
+        daemon = PruningDaemon(str(tmp_path))
+        candidates = daemon.scan_unused_tools()
+        paths = [c.module_path for c in candidates]
+        assert any("agent_a" in p for p in paths)
+        assert any("agent_b" in p for p in paths)
+
+    def test_report_unused_ids_are_strings(self, tmp_path) -> None:
+        src = tmp_path / "src" / "codomyrmex"
+        src.mkdir(parents=True)
+        mod = src / "str_agent"
+        mod.mkdir()
+        (mod / "__init__.py").write_text("")
+
+        daemon = PruningDaemon(str(tmp_path))
+        result = daemon.report()
+        for candidate in result["unused"]:
+            assert isinstance(candidate.module_path, str)
+            assert len(candidate.module_path) > 0
+
+    def test_scan_result_module_paths_are_non_empty(self, tmp_path) -> None:
+        """Every PruningCandidate returned by any scan must have a non-empty module_path."""
+        src = tmp_path / "src" / "codomyrmex"
+        src.mkdir(parents=True)
+        for name in ("x_mod", "y_mod"):
+            m = src / name
+            m.mkdir()
+            (m / "__init__.py").write_text("")
+
+        daemon = PruningDaemon(str(tmp_path))
+        result = daemon.report()
+        for candidates in result.values():
+            for c in candidates:
+                assert c.module_path.strip() != "", (
+                    f"Empty module_path found in candidate: {c}"
+                )

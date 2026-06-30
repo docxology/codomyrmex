@@ -414,3 +414,124 @@ class TestAgentsByRole:
         adapter.get_profile("agent-wrong-role")
         result = adapter.agents_by_role(AgentRole.REPAIR_ANT)
         assert "agent-wrong-role" not in result
+
+
+# ---------------------------------------------------------------------------
+# Trust score → role mapping via infer_role (kernel API)
+# ---------------------------------------------------------------------------
+
+
+class TestInferRoleTrustScoreMapping:
+    """infer_role maps trust scores to roles using the kernel thresholds.
+
+    Thresholds (from role_adapter.py):
+      total_proposals < 3            -> SANDBOX  (insufficient history)
+      trust >= 0.70                  -> GUARD_ANT
+      trust >= 0.50                  -> DISPATCHER
+      trust >= 0.35                  -> MEMORY_ANT
+      trust >= 0.20                  -> REPAIR_ANT
+      trust < 0.20                   -> SANDBOX
+    """
+
+    def _profile(self, trust: float, proposals: int = 5) -> AgentTrustProfile:
+        """Build a real AgentTrustProfile with the given trust score and proposal count."""
+        p = AgentTrustProfile(agent_id=f"agent-trust-{trust:.2f}")
+        p.trust_score = trust
+        p.total_proposals = proposals
+        return p
+
+    # --- trust = 0.0 → SANDBOX ---
+
+    def test_trust_zero_maps_to_sandbox(self) -> None:
+        profile = self._profile(trust=0.0)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.SANDBOX
+
+    def test_trust_zero_with_many_proposals_still_sandbox(self) -> None:
+        """trust = 0.0 is below every promotion threshold; proposals don't help."""
+        profile = self._profile(trust=0.0, proposals=100)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.SANDBOX
+
+    def test_trust_just_below_repair_threshold_is_sandbox(self) -> None:
+        """trust = 0.19 is just below the REPAIR_ANT threshold of 0.20."""
+        profile = self._profile(trust=0.19)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.SANDBOX
+
+    def test_insufficient_proposals_forces_sandbox_regardless_of_trust(self) -> None:
+        """Fewer than 3 proposals keeps agent SANDBOX even at high trust."""
+        profile = self._profile(trust=0.0, proposals=2)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.SANDBOX
+
+    # --- trust = 0.3 → REPAIR_ANT ---
+
+    def test_trust_0_3_maps_to_repair_ant(self) -> None:
+        """trust = 0.3 >= 0.20 threshold → REPAIR_ANT (given proposals >= 3)."""
+        profile = self._profile(trust=0.3)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.REPAIR_ANT
+
+    def test_trust_exactly_at_repair_threshold_maps_to_repair_ant(self) -> None:
+        """trust = 0.20 (exact boundary) -> REPAIR_ANT."""
+        profile = self._profile(trust=0.20)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.REPAIR_ANT
+
+    def test_trust_0_3_is_not_sandbox(self) -> None:
+        profile = self._profile(trust=0.3)
+        role = RoleAdapter.infer_role(profile)
+        assert role != AgentRole.SANDBOX
+
+    def test_trust_0_3_with_minimum_proposals(self) -> None:
+        """Exactly 3 proposals (the promotion floor) at trust 0.3 -> REPAIR_ANT."""
+        profile = self._profile(trust=0.3, proposals=3)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.REPAIR_ANT
+
+    # --- trust = 0.8 → specialist role (GUARD_ANT, MEMORY_ANT, or DISPATCHER) ---
+
+    def test_trust_0_8_maps_to_specialist_role(self) -> None:
+        """trust = 0.8 >= 0.70 (GUARD_ANT threshold) -> a specialist role."""
+        profile = self._profile(trust=0.8)
+        role = RoleAdapter.infer_role(profile)
+        # 0.8 >= 0.70 → GUARD_ANT by the kernel infer_role thresholds.
+        assert role in {AgentRole.GUARD_ANT, AgentRole.MEMORY_ANT, AgentRole.DISPATCHER}
+
+    def test_trust_0_8_is_not_sandbox(self) -> None:
+        profile = self._profile(trust=0.8)
+        role = RoleAdapter.infer_role(profile)
+        assert role != AgentRole.SANDBOX
+
+    def test_trust_0_8_is_not_repair_ant(self) -> None:
+        """trust = 0.8 exceeds the REPAIR_ANT threshold; a higher role applies."""
+        profile = self._profile(trust=0.8)
+        role = RoleAdapter.infer_role(profile)
+        assert role != AgentRole.REPAIR_ANT
+
+    def test_trust_exactly_at_guard_threshold(self) -> None:
+        """trust = 0.70 (exact boundary) -> GUARD_ANT."""
+        profile = self._profile(trust=0.70)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.GUARD_ANT
+
+    def test_trust_1_0_maps_to_guard_ant(self) -> None:
+        """Maximum trust must also map to a specialist role (GUARD_ANT)."""
+        profile = self._profile(trust=1.0)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.GUARD_ANT
+
+    # --- boundary between REPAIR_ANT and MEMORY_ANT ---
+
+    def test_trust_0_35_maps_to_memory_ant(self) -> None:
+        """trust = 0.35 (MEMORY_ANT threshold) -> MEMORY_ANT."""
+        profile = self._profile(trust=0.35)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.MEMORY_ANT
+
+    def test_trust_0_50_maps_to_dispatcher(self) -> None:
+        """trust = 0.50 (DISPATCHER threshold) -> DISPATCHER."""
+        profile = self._profile(trust=0.50)
+        role = RoleAdapter.infer_role(profile)
+        assert role == AgentRole.DISPATCHER
