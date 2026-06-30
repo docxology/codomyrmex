@@ -39,8 +39,6 @@ def scan_secrets(file_path: str) -> dict:
 
     try:
         results = _scan_secrets(file_path)
-        if hasattr(results, "to_dict"):
-            results = results.to_dict()
         return {"status": "success", "findings": results}
     except Exception as e:
         return {"status": "error", "message": str(e)}

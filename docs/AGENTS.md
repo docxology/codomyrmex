@@ -19,6 +19,11 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 ## Dependencies
 
 - **Source of truth**: `src/codomyrmex/` and root `SPEC.md` / `AGENTS.md`; this tree explains and links, it does not replace code.
+- **Authoritative numbers**: volatile counts (tests, MCP tools, gate weights) live in `docs/manuscript/config.yaml` and `docs/reference/inventory.md` — never hard-code them in prose.
+  - Gate weights: `docs/manuscript/config.yaml` → `experiment.gate_score_weights` (budget: 0.30 / risk: 0.30 / trust: 0.25 / completeness: 0.15)
+  - Colony kernel subsystems: 8 — PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel (coordinator); source: `src/codomyrmex/colony_kernel/kernel.py`
+  - MCP tools: 8 exposed by the colony control plane; source: `src/codomyrmex/colony_kernel/mcp_tools.py`
+  - Attack vectors: `CIRCULAR_ARCHITECTURE` (not `CIRCULAR_DEPS`) — see `src/codomyrmex/colony_kernel/falsification_worker.py`
 - **Tooling**: `uv` for scripts (`scripts/doc_inventory.py`, `scripts/documentation/validate_agents_structure.py`); optional site build per `pyproject.toml` / Docusaurus under `src/codomyrmex/documentation/` when publishing.
 
 ## Development Guidelines

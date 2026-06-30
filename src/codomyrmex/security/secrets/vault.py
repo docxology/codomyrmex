@@ -10,6 +10,8 @@ import string
 import sysconfig
 from pathlib import Path
 
+from codomyrmex.encryption import AESGCMEncryptor
+
 
 class SecretVault:
     """
@@ -25,36 +27,41 @@ class SecretVault:
     def __init__(self, path: str | None = None, master_password: str | None = None):
         self.path = Path(path) if path else None
         self._secrets: dict[str, str] = {}
-        self._key = self._derive_key(master_password) if master_password else None
+        self._salt: bytes | None = None
+        self._master_password: str | None = master_password
+        self._derived_key: bytes | None = None
 
-        if self.path and self.path.exists() and self._key:
+        if master_password:
+            self._salt = os.urandom(32)
+            self._derived_key = self._derive_key(master_password, self._salt)
+
+        if self.path and self.path.exists() and master_password:
             self._load()
 
-    def _derive_key(self, password: str) -> bytes:
+    def _derive_key(self, password: str, salt: bytes) -> bytes:
         """Derive encryption key from password using PBKDF2."""
         return hashlib.pbkdf2_hmac(
             "sha256",
             password.encode(),
-            b"codomyrmex-vault-salt",
+            salt,
             iterations=600_000,
         )
 
     def _encrypt(self, value: str) -> str:
-        """Simple XOR encryption (use proper encryption in production)."""
-        if not self._key:
+        """Encrypt value using AES-GCM."""
+        if not self._derived_key:
             return base64.b64encode(value.encode()).decode()
-        key = self._key
-        encrypted = bytes(c ^ key[i % len(key)] for i, c in enumerate(value.encode()))
+        encryptor = AESGCMEncryptor(self._derived_key)
+        encrypted = encryptor.encrypt(value.encode())
         return base64.b64encode(encrypted).decode()
 
     def _decrypt(self, encrypted: str) -> str:
         """Decrypt a value."""
         data = base64.b64decode(encrypted)
-        if not self._key:
+        if not self._derived_key:
             return data.decode()
-        key = self._key
-        decrypted = bytes(c ^ key[i % len(key)] for i, c in enumerate(data))
-        return decrypted.decode()
+        encryptor = AESGCMEncryptor(self._derived_key)
+        return encryptor.decrypt(data).decode()
 
     def set(self, name: str, value: str) -> None:
         """Store a secret."""
@@ -80,14 +87,26 @@ class SecretVault:
     def save(self) -> None:
         """Save vault to disk."""
         if self.path:
+            payload: dict[str, object] = {"secrets": self._secrets}
+            if self._salt is not None:
+                payload["salt"] = base64.b64encode(self._salt).decode()
             with open(self.path, "w") as f:
-                json.dump(self._secrets, f)
+                json.dump(payload, f)
 
     def _load(self) -> None:
         """Load vault from disk."""
         if self.path and self.path.exists():
             with open(self.path) as f:
-                self._secrets = json.load(f)
+                data = json.load(f)
+            if isinstance(data, dict) and "secrets" in data:
+                if "salt" in data and self._master_password:
+                    self._salt = base64.b64decode(data["salt"])
+                    self._derived_key = self._derive_key(
+                        self._master_password, self._salt
+                    )
+                self._secrets = data["secrets"]
+            else:
+                self._secrets = data
 
 
 def get_secret_from_env(name: str, default: str | None = None) -> str | None:

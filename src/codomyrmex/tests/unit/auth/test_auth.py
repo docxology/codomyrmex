@@ -463,8 +463,7 @@ class TestAuthenticator:
 
     def test_authenticate_with_username_password(self, authenticator):
         """Test authentication with username/password."""
-        # Add a user
-        authenticator._users["testuser"] = {"password": "testpass"}
+        authenticator.register_user("testuser", "testpass")
 
         token = authenticator.authenticate(
             {"username": "testuser", "password": "testpass"}
@@ -474,7 +473,7 @@ class TestAuthenticator:
 
     def test_authenticate_with_wrong_password(self, authenticator):
         """Test authentication fails with wrong password."""
-        authenticator._users["testuser"] = {"password": "testpass"}
+        authenticator.register_user("testuser", "testpass")
 
         token = authenticator.authenticate(
             {"username": "testuser", "password": "wrongpass"}

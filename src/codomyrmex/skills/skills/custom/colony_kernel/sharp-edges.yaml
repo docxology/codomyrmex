@@ -1,0 +1,170 @@
+# Colony Kernel Sharp Edges
+# Critical mistakes that undermine the colony's trust and stigmergic integrity
+
+sharp_edges:
+  - id: skipping-record-outcome
+    summary: Agent proposes an action but never records the outcome
+    severity: critical
+    situation: Agent calls colony_propose_action, receives EXECUTE, performs the action, but never calls colony_record_outcome
+    why: |
+      Without record_outcome, the trust loop is broken. The agent's trust score
+      never updates, the budget ledger doesn't consume the estimate, and the
+      pheromone field doesn't reflect what actually happened. Over time, the
+      colony's memory becomes stale and the gate makes decisions based on
+      incomplete data. An agent that caused a 5-hour repair cycle last week
+      appears identical to one that delivered clean code.
+    solution: |
+      Always pair colony_propose_action with colony_record_outcome.
+      The sequence is mandatory:
+      1. propose_action → get gate verdict
+      2. If EXECUTE: perform the action
+      3. record_outcome → update trust, budget, pheromones
+
+      If the action was never executed (gate returned HOLD/REFUSE), do NOT
+      call record_outcome with tests_passed=True — that would be a lie that
+      corrupts the trust model.
+    symptoms:
+      - Trust scores stuck at 0.1 (initial value) for active agents
+      - Budget ledger shows zero consumption despite many executed actions
+      - Pheromone field has only DEPENDENCY signals but no SUCCESS/FAILURE
+    detection_pattern: 'propose_action(?!.*record_outcome)'
+
+  - id: sandbox-agent-bypass
+    summary: Treating SANDBOX agent gate responses as actionable
+    severity: critical
+    situation: Agent in SANDBOX role receives REFUSE (score 0.0) and proceeds anyway
+    why: |
+      SANDBOX agents have an unconditional block in ActuationGate. The gate
+      returns decision=REFUSE with gate_score=0.0 specifically because the agent
+      has not earned trust. Bypassing this — e.g. by calling record_outcome
+      directly without going through propose_action — corrupts the trust model
+      and allows untrusted agents to write to the codebase without any gate
+      evaluation.
+    solution: |
+      Respect the SANDBOX block. To earn write access, an agent must:
+      1. Accumulate ≥3 proposals (stays in SANDBOX until then)
+      2. Build trust through record_outcome calls on proposals that pass
+      3. Let RoleAdapter promote the agent to REPAIR_ANT automatically
+
+      The role ladder is deterministic — there is no way to skip it.
+    symptoms:
+      - Agents with trust_score=0.1 performing write operations
+      - gate_score=0.0 treated as approval
+      - Direct record_outcome calls without prior propose_action
+    detection_pattern: 'SANDBOX.*write|sandbox.*execute|bypass.*gate'
+    decision_tree: |
+      ```mermaid
+      flowchart TD
+          A["Agent wants to perform action"] --> B{"Agent role?"}
+          B -->|"SANDBOX"| C["Gate returns REFUSE<br/>gate_score = 0.0"]
+          B -->|"REPAIR_ANT+"| D["Gate evaluates normally"]
+          C --> E["Agent must NOT proceed"]
+          E --> F["Build trust instead"]
+          F --> G["Submit proposals<br/>Record clean outcomes"]
+          G --> H{"trust ≥ 0.20<br/>AND proposals ≥ 3?"}
+          H -->|"No"| F
+          H -->|"Yes"| I["Auto-promoted to REPAIR_ANT"]
+          I --> D
+          D --> J["Gate decides: EXECUTE/HOLD/REFUSE"]
+      ```
+
+  - id: circular-pheromone-deposit
+    summary: Depositing SUCCESS pheromone for an action that hasn't been executed
+    severity: high
+    situation: Agent calls colony_record_outcome with tests_passed=True before running tests
+    why: |
+      The pheromone field is the colony's shared memory. Depositing SUCCESS
+      for untested code creates a false signal that lowers the gate threshold
+      for the next agent at the same location. If that next agent also deposits
+      false SUCCESS, the location becomes "blind" to real failures. The colony
+      loses its ability to learn from mistakes.
+    solution: |
+      Only deposit SUCCESS if you have actually verified the outcome:
+      - Tests ran and passed → tests_passed=True
+      - Human reviewed and approved → human_feedback=1.0
+      - Neither → tests_passed=False (this deposits FAILURE, which is honest)
+
+      The colony's value is not in how many green signals it has — it is in
+      whether those signals are truthful.
+    symptoms:
+      - High SUCCESS pheromone at locations with frequent test failures
+      - Gate score high despite real bugs
+      - Multiple agents report "clean" at a location that breaks in CI
+    detection_pattern: 'tests_passed=True.*before.*pytest|record.*before.*test'
+
+  - id: ignoring-budget-hold
+    summary: Repeatedly resubmitting the same proposal after budget HOLD
+    severity: medium
+    situation: Agent receives HOLD due to budget ceiling exceeded, immediately resubmits
+    why: |
+      ResourceLedger HOLD means the colony's budget envelope cannot absorb the
+      estimated cost. Resubmitting without reducing the estimate or waiting for
+      the period to reset wastes gate cycles and adds noise to the pheromone
+      field. The budget exists to prevent resource exhaustion — ignoring it
+      defeats the purpose.
+    solution: |
+      On HOLD:
+      1. Check required_evidence in GateResult — it names the violated dimension
+      2. Either reduce the budget_estimate (fewer LLM calls, less runtime)
+      3. Or wait for the ledger period to reset (default: 24 hours)
+      4. Then resubmit
+
+      The colony's budget is a hard constraint, not a suggestion.
+    symptoms:
+      - Same proposal submitted dozens of times in a row
+      - Budget violations accumulate without resolution
+      - Ledger history shows repeated HOLD for same agent/target
+    detection_pattern: 'HOLD.*resubmit|budget.*ignore|ceiling.*retry'
+
+  - id: manual-role-assignment
+    summary: Hard-assigning agent roles instead of letting RoleAdapter infer from trust
+    severity: high
+    situation: Code or agent sets profile.role = "guard_ant" directly
+    why: |
+      Roles are emergent from consequence history. RoleAdapter deterministically
+      infers the role from trust score and proposal count. Manual assignment
+      breaks the trust model — an agent with trust_score=0.1 that is manually
+      set to GUARD_ANT bypasses all the colony's safety mechanisms. The gate
+      checks role on every proposal, so a manually-promoted agent gets write
+      access it hasn't earned.
+    solution: |
+      Never set profile.role directly. Let RoleAdapter.update() handle it.
+      The promotion ladder is:
+        SANDBOX (< 3 proposals or trust < 0.20)
+        → REPAIR_ANT  (trust ≥ 0.20)
+        → MEMORY_ANT  (trust ≥ 0.35)
+        → DISPATCHER  (trust ≥ 0.50)
+        → GUARD_ANT   (trust ≥ 0.70)
+
+      If an agent needs higher trust, the only path is clean outcomes.
+    symptoms:
+      - profile.role != RoleAdapter.infer(trust_score, proposal_count)
+      - Agents with low trust in high-privilege roles
+      - Trust score decreases not triggering demotion
+    detection_pattern: 'profile\\.role.*=.*guard_ant|role.*=.*dispatcher'
+
+  - id: stale-pheromone-accumulation
+    summary: Never calling colony_tick(), letting pheromone field grow unbounded
+    severity: medium
+    situation: Colony runs for thousands of proposals without tick() being called
+    why: |
+      Pheromone traces decay on each tick() call. Without tick(), the field
+      accumulates signals forever. Old failure signals from weeks ago continue
+      to suppress gate scores at those locations, even if the issues have been
+      fixed. The colony becomes stuck in a "learned pessimism" where no location
+      can ever recover its gate score.
+    solution: |
+      Call colony_tick() periodically (e.g. after every N proposals, or on a
+      schedule). Each tick:
+      - Evaporates all traces by their decay rate
+      - Removes traces at or below min_strength
+      - Resets the resource ledger period if elapsed
+
+      FAST signals (FAILURE, RISK) decay quickly. SLOW signals (SUCCESS,
+      HUMAN_PRIORITY) persist. This is by design — the colony remembers what
+      worked longer than what broke.
+    symptoms:
+      - Gate scores stuck low at previously-failing locations
+      - Pheromone field size grows without bound
+      - Old failures suppress new proposals at the same target
+    detection_pattern: 'never.*tick|tick.*never|pheromone.*unbounded'

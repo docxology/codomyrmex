@@ -184,6 +184,12 @@
 | `wallet` | Crypto wallet and contract registry |
 | `identity` | Digital identity management |
 
+## Colony Kernel
+
+| Module | Description |
+|--------|-------------|
+| `colony_kernel` | Artificial ecology control plane — pheromone pressure gradients, resource ledger, actuation gate (+1/0/-1), consequence memory, role adapter, pruning daemon, falsification worker, and MCP tool bridge. Closes the pressure→proposal→gate→action→consequence→memory→role→pressure loop. |
+
 ---
 
 > For API boundaries between adjacent modules, see each module's `README.md`.

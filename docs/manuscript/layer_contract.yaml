@@ -1,0 +1,26 @@
+# Codomyrmex exemplar: infrastructure adapters limited to the integration boundary.
+#
+# The colony_kernel/ modules (kernel.py, actuation_gate.py, falsification_worker.py,
+# pheromone_store.py, pruning_daemon.py, consequence_memory.py, resource_ledger.py,
+# role_adapter.py, models.py, config_loader.py) are the main scientific layer and
+# MUST remain infrastructure-free.  They import only stdlib and internal codomyrmex
+# packages so the colony control-plane is forkable as a standalone package.
+#
+# Only the two files listed below are sanctioned to import infrastructure.*:
+#
+#   src/manuscript_variables.py
+#     — the manuscript-variable generator; reads manuscript/config.yaml via the
+#       shared infrastructure rendering/config surface and emits experiment-derived
+#       tokens for LaTeX injection.  Declared here because it is the only src/ file
+#       whose job is to bridge the scientific layer to the publication pipeline.
+#
+#   src/codomyrmex/_infra.py
+#     — thin monorepo adapter; registers the codomyrmex config-schema extension
+#       with infrastructure.config and wires the shared logging/telemetry handles.
+#       The intended seam between the package and the surrounding template
+#       infrastructure, not a layer leak.
+#
+# Everything else under src/codomyrmex/ must stay free of infrastructure.* imports.
+allow_infrastructure_imports:
+  - src/manuscript_variables.py
+  - src/codomyrmex/_infra.py

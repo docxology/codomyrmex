@@ -1,0 +1,668 @@
+# Colony Kernel — Scope Document
+
+> **Status:** Fully implemented and tested. All 4 phases complete.
+> **Phase target:** 4 phases across 9 subsystems.
+> **Location:** `src/codomyrmex/colony_kernel/`
+
+## Implementation Status
+
+| Subsystem | File | Status | Tests | Coverage |
+|-----------|------|--------|-------|----------|
+| Shared Contract | `models.py` | Implemented | covered across suite | 94% |
+| PheromoneStore | `pheromone_store.py` | Implemented | 38 | 86% |
+| ResourceLedger | `resource_ledger.py` | Implemented | 37 | 100% |
+| ActuationGate | `actuation_gate.py` | Implemented | 31 | 100% |
+| ConsequenceMemory | `consequence_memory.py` | Implemented | 57 | 99% |
+| RoleAdapter | `role_adapter.py` | Implemented | 26 | 96% |
+| PruningDaemon | `pruning_daemon.py` | Implemented | 61 | 70% |
+| FalsificationWorker | `falsification_worker.py` | Implemented | 77 | 89% |
+| ColonyKernel + MCP | `kernel.py` + `mcp_tools.py` | Implemented | 71 + 59 = 130 | 87% / 80% |
+
+**Total: 457 tests, 86% overall coverage** (gate requires 40%). Run: `uv run pytest src/codomyrmex/tests/unit/colony_kernel/`
+
+---
+
+## Executive Summary — The Artificial Ecology Thesis
+
+Codomyrmex is an artificial ecology where agent actions earn permission through pressure, consequence, and memory — not through bare availability. The Colony Kernel is the control plane that closes this loop.
+
+A real ant colony has no central authority. Ants leave pheromone traces; other ants follow strong traces and avoid weak ones. Permission is never granted — it emerges from accumulated signal. The weakest worker eventually starves of signal and stops. The most successful one gets reinforced.
+
+The Colony Kernel applies this model to autonomous software agents:
+
+- **Pheromone signals** replace trust-by-default. An agent that consistently ships broken code generates failure signals that weaken its gate score. An agent that repairs tests leaves success traces that open future gates.
+- **Resource budgets** replace unlimited execution. Every action has a cost (LLM calls, runtime, merge risk, human attention). The ledger enforces scarcity.
+- **Roles** emerge from consequence history, not assignment. A repair-capable agent that demonstrates that capability repeatedly becomes the repair ant. A guard agent that catches real vulnerabilities earns higher gate authority.
+- **Pruning** keeps the colony lean. Modules that draw no signal die. Exports that nothing calls get flagged for archival.
+- **Falsification** is a first-class workflow. Before any plan executes, an adversarial worker attacks it. Only plans that survive falsification proceed.
+
+The loop that makes this real:
+
+```
+pressure → proposal → gate → action → consequence → memory → role change → future pressure
+```
+
+This is not a metaphor. It is the literal execution path of every agent action in the system.
+
+---
+
+## What Exists Already
+
+### Stigmergy (`src/codomyrmex/agentic_memory/stigmergy/`)
+
+The stigmergy subsystem is the pheromone substrate. It is already implemented and tested:
+
+| Component | Purpose |
+|-----------|---------|
+| `models.py` — `TraceMarker`, `StigmergyConfig` | Value objects: strength, decay rate, metadata |
+| `field.py` — `TraceField` | In-memory dict-backed trace store: deposit, reinforce, sense, tick (evaporate), top_k |
+| `sqlite_ledger.py` — `SqliteTraceLedger` | Thread-safe persistent version with identical API |
+| `policy.py` — `boost_importance_value`, `importance_boost_from_trace` | Policy helpers bridging trace strength to memory importance |
+
+**What stigmergy lacks for Colony Kernel use:**
+- No `signal_type` (failure vs. success vs. risk — all traces are generic)
+- No `source` attribution (who deposited this trace?)
+- No `decay_rate` stratification (urgent signals should fade faster than long-term markers)
+- No `location` binding (which module/file/function is this trace about?)
+- No link from trace to agent identity
+
+Colony Kernel's `pheromone_store.py` wraps stigmergy with these semantics.
+
+### Agentic Memory (`src/codomyrmex/agentic_memory/`)
+
+`AgentMemory` provides episodic memory with recency and relevance scoring. It is an independent primitive — the Colony Kernel uses it via `consequence_memory.py` to store the full proposal→action→result trail.
+
+### Agents Core (`src/codomyrmex/agents/core/`)
+
+`BaseAgent`, `AgentConfig`, `ToolRegistry`, `AgentSession` — the colony subsystems interact with but do not replace these. The `role_adapter.py` wraps agent config to inject role-specific constraints.
+
+---
+
+## Colony Kernel Architecture — 8 Subsystems
+
+### Subsystem Map
+
+```
+colony_kernel/
+    models.py               # Shared contract — all value objects and enums
+    pheromone_store.py      # Signal type + location + source extension over stigmergy
+    resource_ledger.py      # Budget tracking: LLM, runtime, risk, human attention
+    actuation_gate.py       # +1/0/-1 gate: EXECUTE | HOLD | REFUSE
+    consequence_memory.py   # Records outcome, updates trust scores, feeds gate
+    role_adapter.py         # Maps consequence history to role assignment
+    pruning_daemon.py       # Scans stale exports, reports pruning candidates
+    falsification_worker.py # Adversarial attack on any plan before execution
+    kernel.py               # ColonyKernel: wires all components
+    mcp_tools.py            # @mcp_tool exposure to MCP clients
+```
+
+---
+
+### 1. `models.py` — Shared Contract
+
+**Purpose:** Every subsystem imports from here. No cross-module imports between subsystems.
+
+**Key types:**
+- `SignalType` enum: `FAILURE`, `SUCCESS`, `RISK`, `NEED`, `DEPENDENCY`, `HUMAN_PRIORITY`
+- `DecayRate` enum: `FAST` (0.3/tick), `NORMAL` (0.1/tick), `SLOW` (0.02/tick)
+- `SignalSource` enum: `TEST`, `HUMAN`, `AGENT`, `SECURITY`, `RUNTIME`
+- `ColonySignal` dataclass: the enriched trace primitive
+- `ResourceCost` dataclass: the budget estimate for any action
+- `ActionProposal` dataclass: the atomic unit the gate evaluates
+- `GateDecision` enum + `GateResult` dataclass: the gate's verdict
+- `ConsequenceRecord` dataclass: the outcome after execution
+- `AgentRole` enum: `REPAIR_ANT`, `MEMORY_ANT`, `GUARD_ANT`, `DISPATCHER`, `SANDBOX`
+- `AgentTrustProfile` dataclass: per-agent trust state
+- `PruningCandidate` dataclass: stale module report entry
+- `FalsificationFinding` dataclass: single adversarial finding
+
+**Inputs:** None (pure value types).
+**Outputs:** Imported by all other subsystems.
+
+---
+
+### 2. `pheromone_store.py` — Enriched Trace Field
+
+**Purpose:** Wrap `TraceField` (or `SqliteTraceLedger`) with colony semantics: signal type, source, location, stratified decay.
+
+**Key class:** `PheromoneStore`
+
+**Operations:**
+- `deposit_signal(signal: ColonySignal) -> ColonySignal` — delegates to underlying `TraceField.deposit` with compound key `f"{signal.location}:{signal.signal_type.value}"`; stores colony metadata in `TraceMarker.metadata`
+- `sense_pressure(location: str, signal_type: SignalType | None = None) -> list[ColonySignal]` — returns all active signals at a location, optionally filtered by type
+- `tick(signal_type: SignalType | None = None) -> int` — calls `TraceField.tick()` respecting per-signal `decay_rate`; FAST signals decay 3x faster than NORMAL
+- `top_signals(k: int = 10, signal_type: SignalType | None = None) -> list[ColonySignal]` — strongest signals, optionally filtered
+- `total_pressure(location: str) -> float` — sum of all signal strengths at a location; gate uses this as one input
+
+**Decay stratification:** Each `ColonySignal` carries its own `DecayRate`. The store applies per-signal decay multipliers during `tick()`:
+- `FAST`: evaporation × 3.0
+- `NORMAL`: evaporation × 1.0
+- `SLOW`: evaporation × 0.2
+
+**Inputs:** `ColonySignal` value objects, stigmergy config.
+**Outputs:** `ColonySignal` reads, pressure floats for the gate.
+
+**Integration with existing stigmergy:** `PheromoneStore.__init__` accepts an existing `TraceField` or `SqliteTraceLedger` via dependency injection. Colony metadata is serialised into `TraceMarker.metadata` so the underlying store remains generic.
+
+---
+
+### 3. `resource_ledger.py` — Colony Budget
+
+**Purpose:** Track and enforce resource budgets across all agent actions. Scarcity is the mechanism that prevents runaway agents.
+
+**Key class:** `ResourceLedger`
+
+**State:** Per-agent and global rolling windows of `ResourceCost` consumption.
+
+**Operations:**
+- `record(agent_id: str, cost: ResourceCost) -> None` — log actual cost after action
+- `estimate_remaining(agent_id: str) -> ResourceCost` — budget minus consumed (rolling 24h window)
+- `can_afford(agent_id: str, estimate: ResourceCost) -> tuple[bool, str]` — returns (approved, reason); checked by gate before any EXECUTE
+- `set_budget(agent_id: str, budget: ResourceCost) -> None` — operator sets per-agent budget
+- `global_remaining() -> ResourceCost` — colony-wide budget state
+- `top_consumers(k: int = 5) -> list[tuple[str, ResourceCost]]` — most expensive agents
+
+**Budget dimensions from `ResourceCost`:**
+- `llm_calls: int` — cumulative API calls (hard-capped per agent per hour)
+- `runtime_seconds: float` — wall-clock execution time
+- `risk_level: float` (0.0–1.0) — estimated blast radius of the action
+- `human_attention_minutes: float` — expected review time required
+- `merge_risk: float` (0.0–1.0) — probability of breaking main branch
+- `doc_debt: float` — documentation gap introduced
+- `security_exposure: float` — CVSS-approximate risk score
+
+**Inputs:** `ResourceCost` estimates (from `ActionProposal.budget_estimate`), actual post-action costs.
+**Outputs:** Approval decisions to `actuation_gate.py`.
+
+---
+
+### 4. `actuation_gate.py` — +1/0/-1 Gate
+
+**Purpose:** The only path from proposal to execution. Every agent action passes through here; no exceptions. The gate aggregates three independent signals into a single verdict.
+
+**Key class:** `ActuationGate`
+
+**Verdict logic:**
+```
+gate_score = (
+    w_trust    * trust_component    +   # from AgentTrustProfile.trust_score
+    w_pressure * pressure_component +   # from PheromoneStore.total_pressure(target)
+    w_budget   * budget_component       # from ResourceLedger.can_afford()
+)
+
+if gate_score >= EXECUTE_THRESHOLD:   decision = EXECUTE
+elif gate_score >= HOLD_THRESHOLD:    decision = HOLD
+else:                                 decision = REFUSE
+```
+
+Default weights: `w_trust=0.4`, `w_pressure=0.3`, `w_budget=0.3`.
+Default thresholds: `EXECUTE_THRESHOLD=0.65`, `HOLD_THRESHOLD=0.35`.
+
+**Operations:**
+- `evaluate(proposal: ActionProposal) -> GateResult` — main entry point; returns `GateResult` synchronously
+- `register_override(agent_id: str, decision: GateDecision, ttl_seconds: int) -> None` — human operator can pin a decision for a time window (e.g., force-EXECUTE a recovery action)
+- `set_weights(trust: float, pressure: float, budget: float) -> None` — tune signal weights
+- `audit_log() -> list[tuple[ActionProposal, GateResult]]` — recent decisions for review
+
+**Pressure component:** `SUCCESS` signals at `proposal.target` raise the score; `FAILURE` and `RISK` signals lower it; `HUMAN_PRIORITY` signals from `SignalSource.HUMAN` get a 2× multiplier.
+
+**Budget component:** if `ResourceLedger.can_afford()` returns False, this component is clamped to 0.0 and the gate can never reach `EXECUTE_THRESHOLD` regardless of trust/pressure.
+
+**Inputs:** `ActionProposal`, `AgentTrustProfile` (from `consequence_memory`), pheromone pressure (from `pheromone_store`), budget state (from `resource_ledger`).
+**Outputs:** `GateResult` with `GateDecision`.
+
+---
+
+### 5. `consequence_memory.py` — Outcome Recorder
+
+**Purpose:** Close the feedback loop. Every action that passes the gate produces a `ConsequenceRecord`. That record updates the agent's trust score and deposits new pheromone signals.
+
+**Key class:** `ConsequenceMemory`
+
+**Operations:**
+- `record_outcome(record: ConsequenceRecord) -> AgentTrustProfile` — store the record, compute `trust_delta`, update profile, deposit feedback signals
+- `get_profile(agent_id: str) -> AgentTrustProfile | None` — retrieve current trust state
+- `recent_consequences(agent_id: str, n: int = 10) -> list[ConsequenceRecord]` — last N outcomes for an agent
+- `all_profiles() -> list[AgentTrustProfile]` — full colony trust state snapshot
+
+**Trust delta formula:**
+```python
+# ConsequenceRecord carries trust_delta pre-computed by the caller or estimated here
+base_delta = +0.05 if tests_passed else -0.10
+repair_bonus = +0.03 if repair_needed and action_succeeded else 0.0
+human_feedback_delta = human_feedback * 0.02  # human_feedback is -1..+1
+trust_delta = base_delta + repair_bonus + human_feedback_delta
+```
+
+**Pheromone feedback:** after recording, `consequence_memory` deposits:
+- `ColonySignal(signal_type=SUCCESS, ...)` if `tests_passed and not repair_needed`
+- `ColonySignal(signal_type=FAILURE, decay_rate=FAST, ...)` if `not tests_passed`
+- `ColonySignal(signal_type=RISK, ...)` if `repair_needed`
+
+**Persistence:** `ConsequenceRecord` rows stored in SQLite alongside trust profiles. Trust scores survive restarts.
+
+**Inputs:** `ConsequenceRecord` (caller-provided), `PheromoneStore` reference (to deposit feedback signals).
+**Outputs:** Updated `AgentTrustProfile`; pheromone deposits.
+
+---
+
+### 6. `role_adapter.py` — Emergent Role Assignment
+
+**Purpose:** Roles are not assigned at startup — they emerge from what agents have actually done. An agent that has repaired 10 tests and been trusted by the gate 8 times is a repair ant. One that has never been let through the gate is a sandbox.
+
+**Key class:** `RoleAdapter`
+
+**Role definitions:**
+
+| Role | Trust range | Min accepted proposals | Primary capability |
+|------|------------|----------------------|-------------------|
+| `SANDBOX` | 0.0–0.30 | any | Read-only; no write gate passes |
+| `REPAIR_ANT` | 0.30–0.60 | ≥3 | Patch, test-fix, doc-update |
+| `MEMORY_ANT` | 0.40–0.70 | ≥5 | Archive, index, summarise |
+| `DISPATCHER` | 0.55–0.85 | ≥8 | Delegate, coordinate, route |
+| `GUARD_ANT` | 0.65–1.0 | ≥10, security evidence | Security review, gate audit |
+
+**Operations:**
+- `infer_role(profile: AgentTrustProfile) -> AgentRole` — compute role from trust score + history; called after every `consequence_memory.record_outcome()`
+- `apply_role_constraints(proposal: ActionProposal, role: AgentRole) -> ActionProposal` — inject role-specific `budget_estimate` adjustments or raise `RoleConstraintViolation` if action type is forbidden for this role
+- `role_history(agent_id: str) -> list[tuple[float, AgentRole]]` — timestamped role transitions
+
+**Role change events:** when `infer_role()` produces a different role than the current one, `role_adapter` deposits a `ColonySignal(signal_type=NEED, ...)` at the agent's location, notifying the kernel of the transition.
+
+**Inputs:** `AgentTrustProfile`, `ActionProposal`.
+**Outputs:** `AgentRole`, constrained `ActionProposal`, role-change signals.
+
+---
+
+### 7. `pruning_daemon.py` — Stale Module Scanner
+
+**Purpose:** A colony that never prunes accumulates dead weight. `pruning_daemon` scans module exports against actual usage, identifies stale symbols, and produces `PruningCandidate` records for operator review. It never deletes anything — it only reports.
+
+**Key class:** `PruningDaemon`
+
+**Operations:**
+- `scan(module_root: str, usage_window_days: int = 30) -> list[PruningCandidate]` — walk `module_root`, extract `__all__` from each `__init__.py`, cross-reference against pheromone traces (call-frequency signals), AST import graph, and git blame recency
+- `report(candidates: list[PruningCandidate]) -> str` — Markdown table of candidates ranked by confidence
+- `archive_candidate(candidate: PruningCandidate, archive_dir: str) -> None` — move module to archive with a provenance file; only callable by `GUARD_ANT` or `DISPATCHER` role after operator approval
+
+**Signal integration:** `pruning_daemon` reads pheromone traces where `signal_type=DEPENDENCY` — modules that are frequently imported leave strong dependency traces. A module with zero dependency traces for N days is a pruning candidate.
+
+**Candidate scoring:**
+- `call_count == 0` for `usage_window_days` → confidence 0.9
+- `call_count < 3` and `duplicate_of` found via AST similarity → confidence 0.85
+- `last_used` older than `usage_window_days * 3` → confidence 0.7
+
+**Inputs:** Module root path, pheromone store (for dependency trace reads).
+**Outputs:** `list[PruningCandidate]`, Markdown report.
+
+---
+
+### 8. `falsification_worker.py` — Adversarial Plan Attacker
+
+**Purpose:** Every plan that reaches the gate has already been falsified. `falsification_worker` takes an `ActionProposal`, attacks it with adversarial probes, and returns a `FalsificationReport`. The gate uses the report's severity to adjust its score.
+
+**Key class:** `FalsificationWorker`
+
+**Attack vectors (built-in):**
+
+| Vector | What it checks |
+|--------|---------------|
+| `PRECONDITION_MISSING` | Does the proposal assume file/module/service state that may not hold? |
+| `SIDE_EFFECT_UNMODELED` | Does the action modify state beyond `proposal.target`? |
+| `ROLLBACK_INCOMPLETE` | Is `proposal.rollback_plan` sufficient to reverse the action? |
+| `BUDGET_UNDERESTIMATED` | Is `budget_estimate` below historical averages for similar actions? |
+| `TRUST_LAUNDERING` | Does the proposal delegate to an agent with higher trust than the proposer? |
+| `SECURITY_SURFACE` | Does the action touch security-sensitive paths? |
+| `DOC_DRIFT_RISK` | Will the action create documentation debt? |
+
+**Operations:**
+- `falsify(proposal: ActionProposal, context: dict | None = None) -> FalsificationReport` — run all built-in attack vectors; return findings
+- `register_attack(name: str, fn: Callable[[ActionProposal], list[FalsificationFinding]]) -> None` — extend with custom attack vectors
+- `severity_score(report: FalsificationReport) -> float` — aggregate severity; gate subtracts this from gate_score
+
+**FalsificationReport:**
+```python
+@dataclass
+class FalsificationReport:
+    proposal_id: str
+    findings: list[FalsificationFinding]
+    severity_score: float          # 0.0 = clean, 1.0 = do not execute
+    attacked_at: float
+    attack_vectors_run: list[str]
+```
+
+**Inputs:** `ActionProposal`, optional context dict.
+**Outputs:** `FalsificationReport` with `list[FalsificationFinding]`.
+
+---
+
+## The Pressure Loop — Full Trace
+
+```
+1. PRESSURE
+   - Tests fail in CI → consequence_memory deposits FAILURE signal (FAST decay)
+   - Human marks a module high-priority → HUMAN_PRIORITY signal (SLOW decay)
+   - Agent imports a module → DEPENDENCY signal reinforced
+
+2. PROPOSAL
+   - Agent constructs ActionProposal with rationale, budget_estimate, rollback_plan
+   - role_adapter.apply_role_constraints() checks role compatibility
+
+3. GATE
+   - falsification_worker.falsify() attacks the proposal
+   - actuation_gate.evaluate() aggregates trust + pressure + budget + falsification severity
+   - Returns GateResult(EXECUTE | HOLD | REFUSE)
+
+4. ACTION
+   - Only EXECUTE reaches execution
+   - HOLD queues for re-evaluation after budget recovery or trust growth
+   - REFUSE deposits a FAILURE signal at the agent location
+
+5. CONSEQUENCE
+   - Actual outcome recorded in ConsequenceRecord
+   - Tests pass / fail measured
+   - Human feedback collected (async, -1..+1)
+
+6. MEMORY
+   - consequence_memory.record_outcome() updates AgentTrustProfile
+   - Feedback pheromone deposited (SUCCESS or FAILURE)
+   - ResourceLedger updated with actual cost
+
+7. ROLE CHANGE
+   - role_adapter.infer_role() recomputes role from updated trust
+   - Role-change NEED signal deposited if role changed
+
+8. FUTURE PRESSURE
+   - Updated trust score affects next gate evaluation
+   - Feedback pheromone at target location affects pressure component
+   - Budget consumption affects budget component
+   → loop repeats
+```
+
+---
+
+## Implementation Phases
+
+### Phase 1 — Foundation
+
+**Deliverables:** `models.py`, `pheromone_store.py`, `resource_ledger.py`
+
+**Goal:** The data contract and the two measurement subsystems are in place. No decision logic yet — only sensing and recording.
+
+**Acceptance criteria:**
+- `models.py` imports cleanly; all dataclasses instantiate with defaults; all enums have expected members
+- `PheromoneStore.deposit_signal` roundtrips through `TraceField` with no data loss; `sense_pressure` returns only signals matching `signal_type` filter; `tick` applies per-signal decay multipliers correctly (FAST 3×, SLOW 0.2×)
+- `ResourceLedger.can_afford` returns `(False, reason)` when any dimension exceeds budget; `record` accumulates correctly in a 24h rolling window; `top_consumers` returns sorted list
+
+**Tests:** `tests/unit/colony_kernel/test_models.py`, `test_pheromone_store.py`, `test_resource_ledger.py`
+
+---
+
+### Phase 2 — Gate
+
+**Deliverables:** `actuation_gate.py`, `consequence_memory.py`
+
+**Goal:** The gate and feedback loop exist. Agents can submit proposals and receive decisions. Outcomes update trust.
+
+**Acceptance criteria:**
+- `ActuationGate.evaluate` returns `EXECUTE` for a high-trust agent with success signals and budget; returns `REFUSE` when budget is exhausted; returns `HOLD` for borderline cases
+- Human override via `register_override` produces expected decision for TTL duration, then reverts
+- `ConsequenceMemory.record_outcome` correctly increments `total_proposals`, `accepted_proposals`, and applies trust delta clamped to [0.0, 1.0]
+- Pheromone feedback deposits appear in `PheromoneStore` after `record_outcome`
+- Trust profiles persist across `ConsequenceMemory` restart (SQLite backend)
+
+**Tests:** `test_actuation_gate.py`, `test_consequence_memory.py`
+
+---
+
+### Phase 3 — Ecology
+
+**Deliverables:** `role_adapter.py`, `pruning_daemon.py`, `falsification_worker.py`
+
+**Goal:** Roles emerge, dead code is flagged, plans are attacked before execution.
+
+**Acceptance criteria:**
+- `RoleAdapter.infer_role` returns `SANDBOX` for trust < 0.30; returns `GUARD_ANT` only when trust ≥ 0.65 and accepted_proposals ≥ 10
+- `apply_role_constraints` raises `RoleConstraintViolation` when a `SANDBOX` agent proposes a write action
+- Role transitions deposit `NEED` signals in the pheromone store
+- `PruningDaemon.scan` identifies a stub module with zero call-count as a candidate with confidence ≥ 0.9
+- `PruningDaemon.archive_candidate` is blocked unless caller holds `GUARD_ANT` or `DISPATCHER` role
+- `FalsificationWorker.falsify` returns at least one `TRUST_LAUNDERING` finding when a `SANDBOX` agent proposes delegating to a `GUARD_ANT`
+- `FalsificationWorker.severity_score` returns 0.0 for a clean proposal with no findings
+
+**Tests:** `test_role_adapter.py`, `test_pruning_daemon.py`, `test_falsification_worker.py`
+
+---
+
+### Phase 4 — Integration
+
+**Deliverables:** `kernel.py`, `mcp_tools.py`, docs, full integration tests
+
+**Goal:** `ColonyKernel` wires everything into a single entry point. MCP tools expose the kernel to external clients.
+
+**Acceptance criteria:**
+- `ColonyKernel.submit_proposal` executes the full loop (falsify → gate → execute_callback → record_outcome → role_update) for a happy-path proposal
+- `ColonyKernel.submit_proposal` deposits a `REFUSE` pheromone and raises `ProposalRefusedError` for a refused proposal without calling `execute_callback`
+- All MCP tools respond with `{"status": "success", ...}` or `{"status": "error", "message": ...}`; no unhandled exceptions escape
+- `colony_kernel_submit_proposal` MCP tool roundtrips through the kernel
+- Integration test: a new agent starts as `SANDBOX`, submits and passes 10 proposals, and transitions to `REPAIR_ANT`
+
+**Tests:** `test_kernel.py`, `test_mcp_tools.py`, `tests/integration/test_colony_kernel_loop.py`
+
+---
+
+## API Sketches
+
+### `pheromone_store.py`
+
+```python
+class PheromoneStore:
+    def __init__(
+        self,
+        backend: TraceField | SqliteTraceLedger | None = None,
+        config: StigmergyConfig | None = None,
+    ) -> None: ...
+
+    def deposit_signal(self, signal: ColonySignal) -> ColonySignal: ...
+    def sense_pressure(
+        self, location: str, signal_type: SignalType | None = None
+    ) -> list[ColonySignal]: ...
+    def total_pressure(self, location: str) -> float: ...
+    def tick(self, signal_type: SignalType | None = None) -> int: ...
+    def top_signals(
+        self, k: int = 10, signal_type: SignalType | None = None
+    ) -> list[ColonySignal]: ...
+    def __len__(self) -> int: ...
+```
+
+### `resource_ledger.py`
+
+```python
+class ResourceLedger:
+    def __init__(self, window_hours: float = 24.0) -> None: ...
+
+    def set_budget(self, agent_id: str, budget: ResourceCost) -> None: ...
+    def record(self, agent_id: str, cost: ResourceCost) -> None: ...
+    def estimate_remaining(self, agent_id: str) -> ResourceCost: ...
+    def can_afford(self, agent_id: str, estimate: ResourceCost) -> tuple[bool, str]: ...
+    def global_remaining(self) -> ResourceCost: ...
+    def top_consumers(self, k: int = 5) -> list[tuple[str, ResourceCost]]: ...
+```
+
+### `actuation_gate.py`
+
+```python
+class ActuationGate:
+    def __init__(
+        self,
+        pheromone_store: PheromoneStore,
+        resource_ledger: ResourceLedger,
+        consequence_memory: ConsequenceMemory,
+        execute_threshold: float = 0.65,
+        hold_threshold: float = 0.35,
+    ) -> None: ...
+
+    def evaluate(self, proposal: ActionProposal) -> GateResult: ...
+    def register_override(
+        self,
+        agent_id: str,
+        decision: GateDecision,
+        ttl_seconds: int,
+    ) -> None: ...
+    def set_weights(self, trust: float, pressure: float, budget: float) -> None: ...
+    def audit_log(self) -> list[tuple[ActionProposal, GateResult]]: ...
+```
+
+### `consequence_memory.py`
+
+```python
+class ConsequenceMemory:
+    def __init__(
+        self,
+        db_path: str,
+        pheromone_store: PheromoneStore,
+    ) -> None: ...
+
+    def record_outcome(self, record: ConsequenceRecord) -> AgentTrustProfile: ...
+    def get_profile(self, agent_id: str) -> AgentTrustProfile | None: ...
+    def recent_consequences(
+        self, agent_id: str, n: int = 10
+    ) -> list[ConsequenceRecord]: ...
+    def all_profiles(self) -> list[AgentTrustProfile]: ...
+```
+
+### `role_adapter.py`
+
+```python
+class RoleConstraintViolation(Exception): ...
+
+class RoleAdapter:
+    def __init__(self, consequence_memory: ConsequenceMemory) -> None: ...
+
+    def infer_role(self, profile: AgentTrustProfile) -> AgentRole: ...
+    def apply_role_constraints(
+        self,
+        proposal: ActionProposal,
+        role: AgentRole,
+    ) -> ActionProposal: ...
+    def role_history(
+        self, agent_id: str
+    ) -> list[tuple[float, AgentRole]]: ...
+```
+
+### `pruning_daemon.py`
+
+```python
+class PruningDaemon:
+    def __init__(
+        self,
+        pheromone_store: PheromoneStore,
+        caller_role: AgentRole = AgentRole.SANDBOX,
+    ) -> None: ...
+
+    def scan(
+        self,
+        module_root: str,
+        usage_window_days: int = 30,
+    ) -> list[PruningCandidate]: ...
+    def report(self, candidates: list[PruningCandidate]) -> str: ...
+    def archive_candidate(
+        self,
+        candidate: PruningCandidate,
+        archive_dir: str,
+    ) -> None: ...
+```
+
+### `falsification_worker.py`
+
+```python
+@dataclass
+class FalsificationReport:
+    proposal_id: str
+    findings: list[FalsificationFinding]
+    severity_score: float
+    attacked_at: float
+    attack_vectors_run: list[str]
+
+class FalsificationWorker:
+    def __init__(self) -> None: ...
+
+    def falsify(
+        self,
+        proposal: ActionProposal,
+        context: dict | None = None,
+    ) -> FalsificationReport: ...
+    def register_attack(
+        self,
+        name: str,
+        fn: Callable[[ActionProposal], list[FalsificationFinding]],
+    ) -> None: ...
+    def severity_score(self, report: FalsificationReport) -> float: ...
+```
+
+### `kernel.py`
+
+```python
+class ProposalRefusedError(Exception): ...
+
+class ColonyKernel:
+    def __init__(
+        self,
+        pheromone_store: PheromoneStore,
+        resource_ledger: ResourceLedger,
+        consequence_memory: ConsequenceMemory,
+        actuation_gate: ActuationGate,
+        role_adapter: RoleAdapter,
+        falsification_worker: FalsificationWorker,
+    ) -> None: ...
+
+    def submit_proposal(
+        self,
+        proposal: ActionProposal,
+        execute_callback: Callable[[ActionProposal], ConsequenceRecord],
+    ) -> ConsequenceRecord: ...
+
+    def tick(self) -> dict[str, int]: ...  # evaporate signals, purge stale budgets
+    def status(self) -> dict: ...          # colony health snapshot
+```
+
+---
+
+## Integration with Existing Stigmergy
+
+`PheromoneStore` is a thin semantic layer over the existing stigmergy API:
+
+```
+ColonySignal → compound key f"{location}:{signal_type.value}" → TraceMarker
+```
+
+The compound key makes every `(location, signal_type)` pair an independent trace. Colony-specific fields (`source`, `decay_rate`, `evidence`) ride in `TraceMarker.metadata` as JSON. This means:
+
+1. The existing `SqliteTraceLedger` can persist colony signals without schema changes.
+2. `TraceField.top_k()` still works — it ranks by strength across all signal types.
+3. `StigmergyConfig.evaporation_per_tick` is the base rate; `pheromone_store.tick()` multiplies by the per-signal `DecayRate` factor before delegating.
+4. The existing `boost_importance_value` / `importance_boost_from_trace` policy helpers work unchanged — `consequence_memory` uses them to feed memory importance from pheromone strength.
+
+No changes required to `stigmergy/` to implement Colony Kernel Phase 1.
+
+---
+
+## File Locations
+
+| File | Path |
+|------|------|
+| Scope document (this file) | `docs/todo/COLONY_KERNEL.md` |
+| Shared contract | `src/codomyrmex/colony_kernel/models.py` |
+| Pheromone store | `src/codomyrmex/colony_kernel/pheromone_store.py` |
+| Resource ledger | `src/codomyrmex/colony_kernel/resource_ledger.py` |
+| Actuation gate | `src/codomyrmex/colony_kernel/actuation_gate.py` |
+| Consequence memory | `src/codomyrmex/colony_kernel/consequence_memory.py` |
+| Role adapter | `src/codomyrmex/colony_kernel/role_adapter.py` |
+| Pruning daemon | `src/codomyrmex/colony_kernel/pruning_daemon.py` |
+| Falsification worker | `src/codomyrmex/colony_kernel/falsification_worker.py` |
+| Integration kernel | `src/codomyrmex/colony_kernel/kernel.py` |
+| MCP tools | `src/codomyrmex/colony_kernel/mcp_tools.py` |
+| Package init | `src/codomyrmex/colony_kernel/__init__.py` |
+| Unit tests | `tests/unit/colony_kernel/` |
+| Integration tests | `tests/integration/test_colony_kernel_loop.py` |
+| Docs | `docs/modules/colony_kernel/` |

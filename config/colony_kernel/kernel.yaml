@@ -1,0 +1,28 @@
+# ColonyKernelConfig — primary kernel configuration
+# db_path: null = in-memory (for testing); set to ~/.codomyrmex/colony.db in production
+db_path: null
+repo_root: "."
+
+budget:
+  max_llm_calls: 500
+  max_runtime_seconds: 3600.0
+  max_risk_level: 0.8
+  max_human_attention_minutes: 120.0
+  max_merge_risk: 0.7
+  max_doc_debt: 1000.0
+  max_security_exposure: 0.5
+  period_seconds: 86400.0
+
+pheromone:
+  evaporation_per_tick: 0.1
+  reinforce_on_read_delta: 0.15
+  min_strength: 0.0
+  max_strength: 10.0
+
+gate:
+  execute_threshold: 0.75
+  hold_threshold: 0.50
+  trust_hard_refuse: 0.3
+  trust_hold_threshold: 0.6
+  high_risk_pheromone: 6.0
+  medium_risk_pheromone: 3.0

@@ -244,6 +244,113 @@ def check_workflows() -> list[CheckResult]:
     return results
 
 
+def check_colony_kernel() -> list[CheckResult]:
+    """Check Colony Kernel health: import, gate, MCP tools, lifecycle."""
+    results: list[CheckResult] = []
+
+    # 1. Import check
+    try:
+        from codomyrmex.colony_kernel.kernel import ColonyKernel
+        from codomyrmex.colony_kernel.mcp_tools import (
+            colony_propose_action,
+            colony_record_outcome,
+            colony_status,
+            colony_tick,
+        )
+
+        results.append(
+            CheckResult(
+                "colony_kernel_imports",
+                CheckResult.OK,
+                "ColonyKernel and MCP tools import OK",
+            )
+        )
+    except Exception as exc:
+        results.append(
+            CheckResult("colony_kernel_imports", CheckResult.ERROR, str(exc))
+        )
+        return results  # Can't proceed if imports fail
+
+    # 2. Instantiate kernel
+    try:
+        kernel = ColonyKernel()
+        results.append(
+            CheckResult(
+                "colony_kernel_init",
+                CheckResult.OK,
+                "ColonyKernel instantiated (all 8 subsystems ready)",
+            )
+        )
+    except Exception as exc:
+        results.append(CheckResult("colony_kernel_init", CheckResult.ERROR, str(exc)))
+        return results
+
+    # 3. Propose → Record → Status lifecycle
+    try:
+        proposal_result = colony_propose_action(
+            agent_id="doctor-agent",
+            action_type="patch_file",
+            target="codomyrmex.doctor.check",
+            rationale="Doctor health check lifecycle verification.",
+            rollback_plan="git revert HEAD",
+        )
+        decision = proposal_result.get("decision", "error")
+        results.append(
+            CheckResult(
+                "colony_kernel_propose",
+                CheckResult.OK
+                if decision in ("execute", "hold", "refuse")
+                else CheckResult.ERROR,
+                f"propose_action returned decision={decision}",
+            )
+        )
+    except Exception as exc:
+        results.append(
+            CheckResult("colony_kernel_propose", CheckResult.ERROR, str(exc))
+        )
+
+    # 4. Record outcome
+    try:
+        record_result = colony_record_outcome(
+            agent_id="doctor-agent",
+            action_type="patch_file",
+            target="codomyrmex.doctor.check",
+            actual_outcome="Doctor health check completed.",
+            tests_passed=True,
+        )
+        status = record_result.get("status", "error")
+        results.append(
+            CheckResult(
+                "colony_kernel_record",
+                CheckResult.OK if status == "recorded" else CheckResult.ERROR,
+                f"record_outcome status={status}, trust={record_result.get('trust_score', 'N/A')}",
+            )
+        )
+    except Exception as exc:
+        results.append(CheckResult("colony_kernel_record", CheckResult.ERROR, str(exc)))
+
+    # 5. Status
+    try:
+        status = colony_status()
+        has_keys = all(
+            k in status
+            for k in ("pheromone_summary", "budget_usage", "role_distribution")
+        )
+        results.append(
+            CheckResult(
+                "colony_kernel_status",
+                CheckResult.OK if has_keys else CheckResult.ERROR,
+                f"colony_status returns {len(status)} keys"
+                if has_keys
+                else "missing required keys",
+            )
+        )
+    except Exception as exc:
+        results.append(CheckResult("colony_kernel_status", CheckResult.ERROR, str(exc)))
+
+    return results
+
+
 # ─── Fix functions ───────────────────────────────────────────────────
 
 _RASP_TEMPLATES: dict[str, str] = {
@@ -406,6 +513,7 @@ def run_doctor(
     rasp: bool = False,
     workflows: bool = False,
     imports: bool = False,
+    colony: bool = False,
     all_checks: bool = False,
     fix: bool = False,
     output_json: bool = False,
@@ -418,6 +526,7 @@ def run_doctor(
         rasp: Run RASP documentation completeness check.
         workflows: Run workflow file validity check.
         imports: Run module import check.
+        colony: Run Colony Kernel health check.
         all_checks: Run all checks.
         fix: Auto-fix detected issues (creates missing docs, .env, etc.).
         output_json: Output results as JSON.
@@ -427,7 +536,7 @@ def run_doctor(
     """
     checks: list[CheckResult] = []
 
-    if not any([pai, mcp, rasp, workflows, imports, all_checks, fix]):
+    if not any([pai, mcp, rasp, workflows, imports, colony, all_checks, fix]):
         imports = True
 
     if imports or all_checks:
@@ -440,6 +549,8 @@ def run_doctor(
         checks.extend(check_rasp())
     if workflows or all_checks:
         checks.extend(check_workflows())
+    if colony or all_checks:
+        checks.extend(check_colony_kernel())
 
     if fix:
         checks.extend(fix_rasp())

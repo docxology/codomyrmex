@@ -442,9 +442,29 @@ graph TD
   website --> validation
 ```
 
+## Colony Control Plane — Kernel Subsystems
+
+The `src/codomyrmex/colony_kernel/` package implements the Colony Control Plane as **8 coordinated subsystems** wired together by `ColonyKernel` (the top-level coordinator):
+
+| Subsystem | Class | Role |
+|:---|:---|:---|
+| PheromoneStore | `PheromoneStore` | Stigmergic signal bus: deposits, decays, and queries colony-wide coordination signals |
+| ResourceLedger | `ResourceLedger` | Budget tracking across LLM calls, wall-time, risk score, and security violations |
+| ActuationGate | `ActuationGate` | Composite gate scoring (budget 0.30 / risk 0.30 / trust 0.25 / completeness 0.15); issues EXECUTE / HOLD / REFUSE |
+| ConsequenceMemory | `ConsequenceMemory` | Per-agent outcome history used by the gate to compute trust weight |
+| RoleAdapter | `RoleAdapter` | Maps current trust score to the role ladder (SANDBOX → REPAIR_ANT → MEMORY_ANT → DISPATCHER → GUARD_ANT) |
+| PruningDaemon | `PruningDaemon` | Raises `PruningCandidate` reports for stale pheromone entries; never deletes autonomously |
+| FalsificationWorker | `FalsificationWorker` | Applies 10 adversarial attack vectors to every proposal (including `CIRCULAR_ARCHITECTURE` for import-cycle detection) |
+| ColonyKernel | `ColonyKernel` | Top-level integration class: owns subsystem lifecycle and exposes the high-level API |
+
+Authoritative gate weights and thresholds: `docs/manuscript/config.yaml` → `experiment.gate_score_weights` and `experiment.gate_execute_threshold`.
+MCP surface: 8 tools defined in `src/codomyrmex/colony_kernel/mcp_tools.py`.
+
 ## Navigation
 
 - **Parent**: [docs/README.md](README.md) — Documentation hub
 - **Detailed Architecture**: [project/architecture.md](project/architecture.md) — Design principles and relationships
 - **Module Overview**: [modules/overview.md](modules/overview.md) — Module system guide
+- **Colony Kernel Source**: [../src/codomyrmex/colony_kernel/](../src/codomyrmex/colony_kernel/) — Implementation
+- **Colony Kernel Spec**: [../src/codomyrmex/colony_kernel/SPEC.md](../src/codomyrmex/colony_kernel/SPEC.md) — Formal behavioural spec
 - **Project Root**: [../README.md](../README.md) — Main project README

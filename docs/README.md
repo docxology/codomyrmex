@@ -46,6 +46,19 @@ Volatile counts (module totals, MCP decorators, and test collection) are kept in
 | [skills/](skills/) | Agent skill creation and management | Skill authoring/reference |
 | [assets/](assets/) | Static assets (images, diagrams) | Documentation assets |
 
+## Authoritative Numbers
+
+Volatile counts that appear in prose must be sourced from these files — never hard-coded:
+
+| Metric | Authoritative source |
+|:---|:---|
+| Test count (colony_kernel scope) | `{{RESULT_TEST_COUNT}}` in rendered manuscript; currently **433** |
+| Gate weights (budget/risk/trust/completeness) | `docs/manuscript/config.yaml` → `experiment.gate_score_weights` (0.30 / 0.30 / 0.25 / 0.15) |
+| Colony kernel subsystems (8) | `src/codomyrmex/colony_kernel/kernel.py` — PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel |
+| MCP tools (8) | `src/codomyrmex/colony_kernel/mcp_tools.py` |
+| Falsification attack vector name | `CIRCULAR_ARCHITECTURE` (not `CIRCULAR_DEPS`) |
+| Module, MCP decorator, and file totals | [reference/inventory.md](reference/inventory.md) — refresh with `uv run python scripts/doc_inventory.py` |
+
 ## Quick Navigation
 
 ### For Users

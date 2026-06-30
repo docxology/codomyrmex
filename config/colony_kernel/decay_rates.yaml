@@ -1,0 +1,16 @@
+# Pheromone decay rate multipliers
+# Each named tier is a multiplier applied to pheromone.evaporation_per_tick from kernel.yaml.
+# A FAST signal decays 3x faster than the base rate; SLOW decays at 0.2x.
+
+FAST: 3.0    # multiplier on base evaporation
+NORMAL: 1.0
+SLOW: 0.2
+
+# Default decay tier assigned to each signal type
+signal_defaults:
+  FAILURE: FAST
+  SUCCESS: SLOW
+  RISK: NORMAL
+  NEED: NORMAL
+  DEPENDENCY: SLOW
+  HUMAN_PRIORITY: SLOW

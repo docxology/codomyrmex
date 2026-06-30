@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Colony Kernel** (v1.3.0-dev): Artificial ecology control plane — pheromone pressure gradients, resource ledger, actuation gate (+1/0/-1), consequence memory, role adapter, pruning daemon, falsification worker, and MCP tool bridge. Closes the pressure→proposal→gate→action→consequence→memory→role→pressure loop.
 - **Hermes FastMCP scaffold lane**: Added bundled scaffold script at `src/codomyrmex/agents/hermes/optional-skills/mcp/fastmcp/scaffold_fastmcp.py` to generate minimal FastMCP server packages for Codomyrmex↔Hermes MCP exposure.
 - **`HermesClient.scaffold_fastmcp()`**: New client helper that resolves and executes the scaffold script with overwrite protection.
 - **`hermes_fastmcp_scaffold` MCP tool**: Exposes FastMCP scaffolding through the Hermes MCP surface.

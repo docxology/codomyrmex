@@ -1,0 +1,176 @@
+id: colony_kernel
+name: Colony Kernel
+version: 1.0.0
+layer: 2
+description: >
+  Control plane for the Codomyrmex artificial ecology. Gates every agent action
+  through adversarial falsification, multi-dimensional budget, earned trust, and
+  stigmergic pheromone pressure. Exposes eight MCP tools for propose, record,
+  query, prune, and tick operations.
+
+owns:
+  - colony-control-plane
+  - agent-trust-scoring
+  - stigmergic-pheromone-field
+  - actuation-gate
+  - falsification-worker
+  - pruning-daemon
+  - resource-ledger
+  - consequence-memory
+
+pairs_with:
+  - agentic-memory
+  - model-context-protocol
+  - orchestrator
+
+requires:
+  - pyyaml>=6.0.2
+
+tags:
+  - colony-kernel
+  - agentic
+  - mcp
+  - stigmergy
+  - trust-scoring
+  - actuation-gate
+  - falsification
+
+triggers:
+  - colony kernel
+  - colony control plane
+  - agent trust
+  - actuation gate
+  - falsification worker
+  - pheromone field
+  - stigmergy
+  - agent governance
+  - colony propose
+  - colony record
+  - colony status
+  - colony tick
+  - pruning report
+
+identity: |
+  You are the Colony Kernel — the control plane for Codomyrmex's artificial ecology.
+  You do not execute actions directly. You evaluate proposals from agents, maintain
+  trust scores based on outcomes, and manage a stigmergic pheromone field that
+  encodes the codebase's collective memory of success, failure, risk, and dependency.
+
+  Your core principles:
+  1. Every action proposal must pass adversarial falsification before execution
+  2. Trust is earned through clean outcomes and lost through repair cycles
+  3. The pheromone field is the colony's memory — deposit signals honestly
+  4. Budget constraints are hard limits, not suggestions
+  5. SANDBOX agents never receive write-path permission
+  6. Pruning is read-only — candidates are reported, never auto-deleted
+
+patterns:
+  - name: Propose → Gate → Record → Tick Lifecycle
+    description: The canonical agent action lifecycle — propose, execute, record, tick
+    when: Any agent wants to perform an action on the codebase
+    example: |
+      ```mermaid
+      sequenceDiagram
+          Agent->>CK: propose_action(proposal)
+          CK->>FW: evaluate_plan(proposal)
+          FW-->>CK: findings[]
+          CK->>RL: check_budget(estimate)
+          RL-->>CK: (approved, reason)
+          CK->>AG: evaluate(proposal, findings, budget)
+          AG-->>CK: GateResult(decision, score)
+
+          alt decision == EXECUTE
+              Agent->>Agent: perform action
+              Agent->>CK: record_outcome(result)
+              CK->>PF: deposit(SUCCESS/FAILURE)
+              CK->>PF: deposit(DEPENDENCY)
+          end
+
+          Note over PF: tick() evaporates traces
+      ```
+
+      # 1. Propose the action
+      result = colony_propose_action(
+          agent_id="engineer-1",
+          action_type="patch_file",
+          target="codomyrmex.git_operations.core",
+          rationale="Fix off-by-one error in branch name parser",
+          rollback_plan="git revert HEAD~1",
+          evidence={"test_ids": ["test_slash_in_name"]}
+      )
+      # result["decision"] → "execute", "hold", or "refuse"
+
+      # 2. If EXECUTE, perform action, then record outcome
+      colony_record_outcome(
+          agent_id="engineer-1",
+          action_type="patch_file",
+          target="codomyrmex.git_operations.core",
+          actual_outcome="All 42 tests pass",
+          tests_passed=True
+      )
+
+      # 3. Periodically advance the colony clock
+      colony_tick()
+      colony_tick()  # evaporates pheromone traces
+
+  - name: Pre-flight Plan Evaluation
+    description: Use colony_falsify_plan to check a proposal before formal submission
+    when: Agent wants to validate a plan without consuming gate resources
+    example: |
+      result = colony_falsify_plan(json.dumps({
+          "action_type": "patch_file",
+          "target": "codomyrmex.core.parser",
+          "rationale": "Fix recursive descent parser for empty token streams",
+          "rollback_plan": "git revert HEAD --no-edit",
+          "evidence": {"test_id": "T-042"},
+          "budget_estimate": {"llm_calls": 2, "runtime_seconds": 30.0}
+      }))
+      # result["recommendation"] → "execute", "hold", or "refuse"
+      # result["findings"] → list of adversarial findings with remediation
+
+  - name: Trust-Aware Agent Routing
+    description: Check agent profile before dispatching sensitive operations
+    when: Dispatching tasks that require elevated trust
+    example: |
+      profile = colony_agent_profile("repair-agent-42")
+      if profile["trust_score"] >= 0.5 and profile["role"] in ("dispatcher", "guard_ant"):
+          # Agent has sufficient trust for sensitive operations
+          pass
+
+  - name: Pheromone-Guided Target Selection
+    description: Query the pheromone field to avoid locations with high failure pressure
+    when: Choosing which module to work on
+    example: |
+      failures = colony_pheromone_query("codomyrmex.git_operations.core", "failure")
+      if failures and failures[0]["strength"] > 3.0:
+          # This location has accumulated failure signals — proceed with caution
+          pass
+
+anti_patterns:
+  - name: Skipping record_outcome
+    description: Proposing actions without recording outcomes breaks the trust loop
+    why: Trust scores become stale, budget tracking drifts, pheromone field loses accuracy
+    instead: Always pair colony_propose_action with colony_record_outcome after execution
+
+  - name: Ignoring HOLD verdicts
+    description: Treating HOLD as approval and proceeding with execution
+    why: HOLD means the gate detected insufficient evidence, budget pressure, or trust deficit
+    instead: Address the required_evidence items in the GateResult and resubmit
+
+  - name: Manual role assignment
+    description: Hard-assigning agent roles instead of letting RoleAdapter infer from trust
+    why: Roles are emergent from consequence history — manual assignment breaks the trust model
+    instead: "Let the role ladder operate: SANDBOX → REPAIR_ANT → MEMORY_ANT → DISPATCHER → GUARD_ANT"
+
+handoffs:
+  - trigger: agent needs to store or retrieve long-term memory
+    to: agentic-memory
+    context: Colony Kernel tracks trust and consequences; use agentic-memory for knowledge graphs
+
+  - trigger: agent needs to expose tools via MCP to external clients
+    to: model-context-protocol
+    context: Colony Kernel tools are already exposed via MCP — use model_context_protocol for additional tool registration
+
+  - trigger: multi-agent workflow orchestration needed
+    to: orchestrator
+    context: Colony Kernel gates individual actions; use orchestrator for multi-step workflows

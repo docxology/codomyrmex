@@ -133,6 +133,7 @@ class Cli:
         rasp=False,
         workflows=False,
         imports=False,
+        colony=False,
         all_checks=False,
         output_json=False,
     ):
@@ -145,6 +146,7 @@ class Cli:
             rasp=rasp,
             workflows=workflows,
             imports=imports,
+            colony=colony,
             all_checks=all_checks,
             output_json=output_json,
         )

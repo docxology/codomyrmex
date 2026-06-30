@@ -1,0 +1,72 @@
+# Colony Kernel Collaboration
+# How the colony kernel coordinates with other systems
+
+collaboration:
+  - trigger: agent needs long-term knowledge graph or semantic memory
+    to: agentic_memory
+    context: |
+      Colony Kernel tracks trust, consequences, and pheromone signals. For
+      knowledge graphs, semantic retrieval, or embedding-based memory, use
+      agentic_memory. The pheromone field is not a knowledge graph — it is a
+      stigmergic signal landscape for coordination.
+    handshake: |
+      ```mermaid
+      flowchart LR
+          CK["ColonyKernel"] -->|"deposits DEPENDENCY signals"| PF["Pheromone Field"]
+          AM["agentic_memory"] -->|"can sense active modules"| PF
+          AM -->|"builds knowledge graph"| KG["Knowledge Graph"]
+          CK -->|"trust scores"| RA["RoleAdapter"]
+          KG -->|"enriches"| RA
+      ```
+
+  - trigger: agent needs to register tools for external MCP clients
+    to: model_context_protocol
+    context: |
+      Colony Kernel's 8 tools are already registered via @mcp_tool decorators.
+      If additional tools are needed (e.g. custom trust queries), register them
+      in a new mcp_tools.py file following the same pattern.
+    handshake: |
+      @mcp_tool(category="colony_kernel")
+      def colony_custom_query(...): ...
+
+  - trigger: multi-step workflow or orchestration needed
+    to: orchestrator
+    context: |
+      Colony Kernel gates individual actions. For multi-step workflows
+      (e.g. plan → search → synth → eval → report), use the orchestrator
+      to sequence steps, with each write-action gated by the colony.
+    handshake: |
+      Orchestrator calls colony_propose_action before each write step.
+      On HOLD, orchestrator waits or reduces budget. On REFUSE, orchestrator
+      escalates or replans.
+
+  - trigger: agent needs to render manuscript or generate PDF
+    to: manuscript
+    context: |
+      The manuscript module handles rendering. Colony Kernel provides
+      trust and gate services during the rendering pipeline (e.g. gating
+      which sections to regenerate based on accumulated evidence).
+    handshake: |
+      Manuscript pipeline can query colony_status to determine which
+      modules have sufficient trust for auto-generated content.
+
+  - trigger: configuration needs to be loaded from YAML
+    to: config_management
+    context: |
+      Colony Kernel's config_loader.py loads from config/colony_kernel/.
+      For global configuration, use config_management. The two systems
+      are independent but compatible.
+    handshake: |
+      config/colony_kernel/kernel.yaml → ColonyKernelConfig
+      config/global.yaml → global config_management
+
+  - trigger: security audit or threat assessment needed
+    to: security
+    context: |
+      Colony Kernel's FalsificationWorker performs adversarial checks.
+      For deeper security analysis (SAST, dependency scanning), use
+      the security module. The colony's gate is not a replacement
+      for security tooling.
+    handshake: |
+      Security scanner results can be deposited as pheromone signals
+      (SignalSource.SECURITY) to influence gate scores at affected locations.

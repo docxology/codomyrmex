@@ -1,0 +1,24 @@
+# Agent role thresholds and defaults
+# Each named role defines the trust floor and action-type allowlist an agent
+# must satisfy before being assigned that role by the kernel.
+
+thresholds:
+  guard_ant:
+    min_trust: 0.85
+    required_action_types: ["security_scan", "vulnerability_fix", "audit"]
+  repair_ant:
+    min_trust: 0.80
+    required_action_types: ["test_fix", "bug_repair", "patch_file"]
+  memory_ant:
+    min_trust: 0.80
+    required_action_types: ["doc_write", "memory_index", "archive"]
+  dispatcher:
+    min_trust: 0.70
+    min_total_proposals: 20
+    min_acceptance_rate: 0.70
+  sandbox:
+    max_trust: 0.30
+
+defaults:
+  new_agent_trust: 0.1
+  new_agent_role: sandbox

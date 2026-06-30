@@ -4,6 +4,9 @@ Authentication and authorization module.
 
 from __future__ import annotations
 
+import hashlib
+import os
+import secrets
 import threading
 from typing import Any
 
@@ -54,7 +57,7 @@ class Authenticator:
 
         Args:
             username: Unique username
-            password: Password (plaintext for demonstration, should be hashed in production)
+            password: Password to hash and store
             roles: Initial roles to assign
 
         Returns:
@@ -66,7 +69,9 @@ class Authenticator:
             )
             return False
 
-        self._users[username] = {"password": password, "roles": roles or ["default"]}
+        salt = os.urandom(32)
+        password_hash = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 600_000)
+        self._users[username] = {"salt": salt, "password_hash": password_hash, "roles": roles or ["default"]}
 
         # Register user in RBAC
         for role in roles or ["default"]:
@@ -184,4 +189,11 @@ class Authenticator:
     def _validate_password(self, username: str, password: str) -> bool:
         """Validate username and password."""
         user = self._users.get(username)
-        return bool(user and user.get("password") == password)
+        if not user:
+            return False
+        salt = user.get("salt")
+        stored_hash = user.get("password_hash")
+        if not salt or not stored_hash:
+            return False
+        candidate = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 600_000)
+        return secrets.compare_digest(candidate, stored_hash)

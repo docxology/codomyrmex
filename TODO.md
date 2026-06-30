@@ -59,6 +59,21 @@
 
 ---
 
+## 🌱 Colony Kernel — v1.3.0 Sprint 36
+
+| # | Deliverable | Module | Status | Technical Detail |
+| :--- | :--- | :--- | :--- | :--- |
+| v1.3.0.1 | **Pheromone Store** | `colony_kernel/pheromone_store.py` | ✅ Done | Append-only pressure log: `emit(signal, intensity, source)` → eviction queue; `read_gradient(signal)` returns sorted `(timestamp, intensity, source)` tuples; SQLite-backed, thread-safe |
+| v1.3.0.2 | **Resource Ledger** | `colony_kernel/resource_ledger.py` | ✅ Done | Double-entry resource accounting: `credit/debit(resource, amount, agent_id)` → `LedgerEntry`; `balance(resource)` enforces non-negative invariant; persisted via `SQLiteStore` |
+| v1.3.0.3 | **Actuation Gate** | `colony_kernel/actuation_gate.py` | ✅ Done | Three-valued gate: `+1` (approve), `0` (defer), `-1` (veto); policy chain evaluates resource headroom + role clearance + consequence history; `ActuationDecision` dataclass with rationale |
+| v1.3.0.4 | **Consequence Memory** | `colony_kernel/consequence_memory.py` | ✅ Done | Action→outcome record: `record(action_id, outcome, delta_resources, signal_changes)`; `recall(action_type, k)` returns ranked `ConsequenceRecord` list for gate policy |
+| v1.3.0.5 | **Role Adapter** | `colony_kernel/role_adapter.py` | ✅ Done | Dynamic role assignment: `assign(agent_id, role, constraints)` with quorum check; `revoke`; `list_by_role`; roles carry clearance bitmask used by actuation gate |
+| v1.3.0.6 | **Pruning Daemon** | `colony_kernel/pruning_daemon.py` | ✅ Done | Background eviction: configurable TTL per signal class; runs as `asyncio.Task`; emits `pruned` event on removal; `stop()` is graceful with drain timeout |
+| v1.3.0.7 | **Falsification Worker** | `colony_kernel/falsification_worker.py` | ✅ Done | Conjecture stress-tester: pulls proposals from pheromone store, applies registered `Falsifier` callables, writes `FalsificationResult` to consequence memory; zero-mock (real callable chain) |
+| v1.3.0.8 | **Kernel + MCP Tools** | `colony_kernel/__init__.py` + `colony_kernel/mcp_tools.py` | ✅ Done | `ColonyKernel` assembles all 8 subsystems; 8 `@mcp_tool` decorators: `colony_propose_action`, `colony_record_outcome`, `colony_agent_profile`, `colony_status`, `colony_pheromone_query`, `colony_falsify_plan`, `colony_pruning_report`, `colony_tick` |
+
+---
+
 ## 🔭 v1.2.9+ — Horizon (Unscoped)
 
 > **Theme**: Cryptographic persistence, spatial world modeling, omnimodal processing.

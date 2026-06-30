@@ -1,0 +1,121 @@
+# Colony Kernel Validations
+# QA probes and validation gates for the colony control plane
+
+validations:
+  - id: gate-decision-is-valid
+    description: Gate decision must be one of the three valid enum values
+    severity: critical
+    probe: |
+      result = colony_propose_action(...)
+      assert result["decision"] in ("execute", "hold", "refuse")
+    expected: decision is always a valid GateDecision enum value
+    failure_mode: Invalid decision string corrupts downstream logic
+
+  - id: trust-delta-is-bounded
+    description: Trust score must remain in [0.0, 1.0] after any outcome
+    severity: critical
+    probe: |
+      for _ in range(100):
+          colony_record_outcome(agent_id="stress", tests_passed=True)
+      profile = colony_agent_profile("stress")
+      assert 0.0 <= profile["trust_score"] <= 1.0
+    expected: Trust score is always clamped to [0.0, 1.0]
+    failure_mode: Trust score overflow/underflow corrupts role assignment
+
+  - id: sandbox-always-refused
+    description: SANDBOX agent always receives REFUSE from propose_action
+    severity: high
+    probe: |
+      result = colony_propose_action(agent_id="brand-new-agent", ...)
+      profile = colony_agent_profile("brand-new-agent")
+      if profile["role"] == "sandbox":
+          assert result["decision"] == "refuse"
+          assert result["gate_score"] == 0.0
+    expected: SANDBOX agents never receive EXECUTE
+    failure_mode: Untrusted agents can write to codebase
+    invariant_diagram: |
+      ```mermaid
+      stateDiagram-v2
+          [*] --> Proposal: colony_propose_action()
+          Proposal --> CheckRole{"profile.role?"}
+          CheckRole -->|"SANDBOX"| REFUSE: return decision=REFUSE, score=0.0
+          CheckRole -->|"REPAIR_ANT+"| GateEval: run falsification → budget → gate
+          GateEval --> EXECUTE: score ≥ 0.75
+          GateEval --> HOLD: 0.50 ≤ score < 0.75
+          GateEval --> REFUSE: score < 0.50
+
+          classDef red fill:#dc2626,color:#fff
+          classDef green fill:#0f766e,color:#fff
+          class REFUSE red
+          class EXECUTE green
+      ```
+
+  - id: budget-hold-on-violation
+    description: Proposals exceeding budget receive HOLD (not REFUSE)
+    severity: high
+    probe: |
+      # Fill the budget first
+      from codomyrmex.colony_kernel.resource_ledger import ResourceBudget
+      # ... create kernel with tight budget, then exceed it
+      result = colony_propose_action(...)
+      assert result["decision"] == "hold"
+      assert result["budget_approved"] is False
+    expected: Budget violation produces HOLD with budget_approved=False
+    failure_mode: Budget violations treated as REFUSE lose information
+
+  - id: pheromone-deposited-on-refuse
+    description: REFUSE verdict deposits FAILURE pheromone at target
+    severity: medium
+    probe: |
+      target = "codomyrmex.test.refuse_target"
+      colony_propose_action(agent_id="refuse-test", action_type="delete", target=target, ...)
+      failures = colony_pheromone_query(target, "failure")
+      assert len(failures) >= 1
+    expected: FAILURE signal present at refused target
+    failure_mode: Refused actions leave no trace — colony can't learn from failures
+
+  - id: dependency-deposited-on-record
+    description: record_outcome deposits DEPENDENCY pheromone at target
+    severity: medium
+    probe: |
+      target = "codomyrmex.test.dep_target"
+      colony_record_outcome(target=target, ...)
+      deps = colony_pheromone_query(target, "dependency")
+      assert len(deps) >= 1
+    expected: DEPENDENCY signal present after outcome recording
+    failure_mode: PruningDaemon incorrectly flags active modules as stale
+
+  - id: falsify-plan-returns-recommendation
+    description: colony_falsify_plan always returns a recommendation
+    severity: medium
+    probe: |
+      result = colony_falsify_plan("{}")
+      assert "recommendation" in result
+      assert result["recommendation"] in ("execute", "hold", "refuse")
+      assert "findings" in result
+      assert "severity_score" in result
+    expected: Falsify plan returns structured evaluation
+    failure_mode: Malformed response crashes agents expecting standard format
+
+  - id: pruning-report-has-correct-structure
+    description: colony_pruning_report returns candidates with confidence scores
+    severity: low
+    probe: |
+      result = colony_pruning_report()
+      assert "candidates" in result
+      assert "total_candidates" in result
+      assert result["total_candidates"] == len(result["candidates"])
+      for c in result["candidates"]:
+          assert 0.0 <= c["confidence"] <= 1.0
+    expected: Pruning report has valid structure
+    failure_mode: Invalid confidence scores mislead pruning decisions
+
+  - id: tick-does-not-raise
+    description: colony_tick never raises on empty or populated field
+    severity: low
+    probe: |
+      result = colony_tick()
+      assert isinstance(result, dict)
+      assert "error" not in result
+    expected: Tick always succeeds
+    failure_mode: Tick failure blocks colony clock advancement
