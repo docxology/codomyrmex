@@ -853,7 +853,7 @@ class TestAboveSandboxFloorNotPruned:
 
     def test_agent_above_floor_not_in_candidates(self) -> None:
         """A module with DEPENDENCY pheromone >= 2.0 must be skipped."""
-        from codomyrmex.colony_kernel.models import SignalType  # noqa: F401
+        from codomyrmex.colony_kernel.models import SignalType
 
         store = self._make_pheromone_store({"protected_mod": 2.0})
         daemon = PruningDaemon(pheromone_store=store, repo_root=".")

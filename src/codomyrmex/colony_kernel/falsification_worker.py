@@ -13,6 +13,7 @@ supplied.
 from __future__ import annotations
 
 import ast
+import logging
 import os
 import re
 from collections import deque
@@ -22,10 +23,15 @@ from typing import Any
 
 from codomyrmex.colony_kernel.models import (
     ActionProposal,
+    ColonySignal,
+    DecayRate,
     FalsificationFinding,
     FalsificationSeverity,
+    SignalSource,
     SignalType,
 )
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Attack vector taxonomy
@@ -167,17 +173,25 @@ class FalsificationWorker:
             for finding in findings:
                 if _rank(finding.severity) >= 3:
                     try:
-                        key = f"{target}:falsification_failure"
-                        self._pheromone_store.deposit(
-                            key,
-                            initial=float(_rank(finding.severity)),
-                            metadata={
+                        signal = ColonySignal(
+                            location=str(target),
+                            signal_type=SignalType.FAILURE,
+                            strength=float(_rank(finding.severity)),
+                            decay_rate=DecayRate.FAST,
+                            source=SignalSource.AGENT,
+                            evidence={
                                 "attack_vector": finding.attack_vector,
                                 "claim": finding.claim,
                             },
                         )
+                        self._pheromone_store.deposit(signal)
                     except Exception:
-                        pass  # pheromone deposit is best-effort; never block review
+                        logger.warning(
+                            "PheromoneStore deposit failed for target %r (finding: %s): ",
+                            target,
+                            finding.attack_vector,
+                            exc_info=True,
+                        )
 
         summary = self._build_summary(plan)
         return FalsificationReport(

@@ -29,15 +29,11 @@ tests that exercise cross-module integration paths (`agents/`, `config_loader/`,
 claims in this section use the colony_kernel-scoped run unless otherwise stated;
 [@sec:reproducibility] provides the exact `pytest` invocation for each count.
 
-The {{RESULT_TEST_COUNT}} tests decompose into 65 module-level (`def test_`) functions and 368
-class-method (`    def test_`) functions spread across 9 test files in
+The {{RESULT_TEST_COUNT}} tests span 9 test files covering all 8 subsystems in
 `src/codomyrmex/tests/unit/colony_kernel/`:
 `test_actuation_gate.py`, `test_consequence_memory.py`, `test_falsification_worker.py`,
 `test_kernel.py`, `test_mcp_tools.py`, `test_pheromone_store.py`,
 `test_pruning_daemon.py`, `test_resource_ledger.py`, and `test_role_adapter.py`.
-The class-method tests (85% of the suite) cluster around subsystem invariants and
-boundary conditions; the module-level tests cover integration paths and property-based
-checks.
 
 Zero ruff violations were recorded across all {{RESULT_COLONY_KERNEL_LOC}} lines of implementation code spanning
 the {{RESULT_COLONY_KERNEL_FILES}} source files in `src/codomyrmex/colony_kernel/` (ten subsystem modules plus

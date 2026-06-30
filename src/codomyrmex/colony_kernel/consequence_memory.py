@@ -415,6 +415,27 @@ class ConsequenceMemory:
             })
         return result
 
+    def recent_failures(self, agent_id: str, window: int = 10) -> int:
+        """Return the count of failure records in the most recent *window* records for *agent_id*.
+
+        A record is a failure when ``tests_passed`` is ``False`` or
+        ``repair_needed`` is ``True``.  Only the most recent *window* records
+        are examined so that old failures do not permanently penalise a
+        reformed agent.
+
+        Args:
+            agent_id: The agent whose recent history is inspected.
+            window: How many of the most-recent records to scan (default 10).
+
+        Returns:
+            Count of failure records in the examined window (0 when the agent
+            has no history).
+        """
+        records = self._fetch_agent_records(agent_id, limit=window)
+        return sum(
+            1 for r in records if not r.tests_passed or r.repair_needed
+        )
+
     def role_distribution(self) -> dict[str, int]:
         """Return a count of agents per role."""
         if self._in_memory is not None:

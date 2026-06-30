@@ -54,6 +54,7 @@ class PruningDaemon:
 
         self._pheromone = resolved_store
         self._repo_root = root_path
+        self._last_scan_count: int = 0
 
     # ------------------------------------------------------------------
     # Internal helpers
@@ -143,6 +144,7 @@ class PruningDaemon:
                 candidates.append(candidate)
 
         candidates.sort(key=lambda c: c.confidence, reverse=True)
+        self._last_scan_count = len(candidates)
         return candidates
 
     # ------------------------------------------------------------------

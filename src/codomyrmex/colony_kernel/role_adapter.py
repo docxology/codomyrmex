@@ -232,7 +232,7 @@ class RoleAdapter:
 
     def agents_by_role(self, role: AgentRole) -> list[str]:
         """Return the sorted agent IDs currently assigned to *role*."""
-        if not isinstance(self._memory, ConsequenceMemory):
+        if not hasattr(self._memory, "all_profiles"):
             return []
         return sorted(
             p.agent_id
@@ -246,7 +246,7 @@ class RoleAdapter:
         All AgentRole values are always present (with count 0 if none).
         """
         counts: dict[AgentRole, int] = dict.fromkeys(AgentRole, 0)
-        if not isinstance(self._memory, ConsequenceMemory):
+        if not hasattr(self._memory, "all_profiles"):
             return counts
         for profile in self._memory.all_profiles():
             # Refresh role for each profile before counting

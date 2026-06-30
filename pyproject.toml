@@ -550,6 +550,7 @@ ignore = [
     "S607",     # partial executable path (315 — scripts call local tooling)
     "T201",     # print statement in library code (2,464 — keep in scripts/)
     "PGH003",   # bare type: ignore without code (100 — mypy→ty migration)
+    "TC003",    # stdlib import in type-checking block (pathlib.Path used at runtime in tests)
 
     # v1.1.3: Phase 3 triage additions
     "EXE001",   # shebang not executable (303 — scripts are run via python, not directly)

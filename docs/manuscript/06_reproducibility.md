@@ -82,7 +82,7 @@ Exact software versions are pinned in `uv.lock` at the repository root. The foll
 
 | Component | Version used | Minimum required | Notes |
 | --------- | ------------ | ---------------- | ----- |
-| Python    | 3.12.x       | 3.10             | CPython; tested on macOS arm64 and Ubuntu 22.04 x86\_64 |
+| Python    | {{PYTHON_VERSION}}       | 3.10             | CPython; tested on macOS arm64 and Ubuntu 22.04 x86\_64 |
 | uv        | ≥0.4.0       | 0.4.0            | Dependency resolver and virtual-environment manager |
 | pytest    | ≥8.0         | 7.0              | Test runner; JSON report via `--json-report` |
 | pytest-cov| ≥5.0         | 4.0              | Branch coverage measurement |

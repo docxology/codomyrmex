@@ -338,7 +338,7 @@ class ColonyKernel:
             "recent_consequences": self.consequence_memory.recent_consequences(
                 limit=10
             ),
-            "pruning_candidates_count": 0,  # populated when scan() is called externally
+            "pruning_candidates_count": self.pruning_daemon._last_scan_count,
         }
 
     # ------------------------------------------------------------------
