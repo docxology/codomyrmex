@@ -405,6 +405,12 @@ addopts = [
     "--tb=short",
     "--timeout=300",
     "--timeout-method=thread",
+    # Exclude git submodule test dirs: separate dep sets (litellm, swerex, tinker)
+    # and plugin-registration conflicts with the main suite's conftest.
+    "--ignore=src/codomyrmex/agents/open_gauss/mini-swe-agent",
+    "--ignore=src/codomyrmex/agents/open_gauss/tinker-atropos",
+    "--ignore=src/codomyrmex/agents/open_gauss/tests",
+    "--ignore=src/codomyrmex/agents/hermes/evolution",
 ]
 markers = [
     "unit: Unit tests (fast, isolated)",
