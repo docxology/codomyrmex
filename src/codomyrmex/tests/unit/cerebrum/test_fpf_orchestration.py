@@ -25,8 +25,9 @@ try:
         CerebrumEngine,
     )
     from codomyrmex.cerebrum.fpf.orchestration import FPFOrchestrator, main
+    from codomyrmex.fpf import FPFAnalyzer as _FPFAnalyzer
 
-    _HAS_DEPS = True
+    _HAS_DEPS = _FPFAnalyzer is not None
 except ImportError:
     _HAS_DEPS = False
 

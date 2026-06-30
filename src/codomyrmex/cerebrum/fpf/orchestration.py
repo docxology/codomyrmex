@@ -69,6 +69,8 @@ class FPFOrchestrator(FPFVisualizationMixin, FPFReportMixin):
         )
         self.cerebrum = CerebrumEngine(config)
 
+        if FPFAnalyzer is None:
+            raise ImportError("networkx is required for FPFOrchestrator — install it with: uv sync --extra cerebrum")
         self.fpf_analyzer = FPFAnalyzer(self.spec)
         self.term_analyzer = TermAnalyzer()
 

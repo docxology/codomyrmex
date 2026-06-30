@@ -20,8 +20,9 @@ _SKIP_REASON = "Requires network access and matplotlib/networkx/numpy"
 try:
     from codomyrmex.cerebrum import Case, CerebrumEngine
     from codomyrmex.cerebrum.fpf.combinatorics import FPFCombinatoricsAnalyzer
+    from codomyrmex.fpf import FPFAnalyzer as _FPFAnalyzer
 
-    _HAS_DEPS = True
+    _HAS_DEPS = _FPFAnalyzer is not None
 except ImportError:
     _HAS_DEPS = False
 
