@@ -4,6 +4,7 @@ Uses asyncio.create_task to ensure I/O polling does not block the main event loo
 """
 
 import asyncio
+import inspect
 from collections.abc import Callable
 from typing import Any
 
@@ -43,7 +44,7 @@ class CronTicker:
     async def _execute_job(self, job: Callable[[], Any]) -> None:
         """Execute a single job gracefully without blocking others."""
         try:
-            if asyncio.iscoroutinefunction(job):
+            if inspect.iscoroutinefunction(job):
                 await job()
             else:
                 job()
