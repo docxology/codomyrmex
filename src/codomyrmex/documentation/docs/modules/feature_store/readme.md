@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Feature Store..
+Module implementation, resources, and local coordination for Feature Store..
 
 ## Directory Contents
 - `PAI.md` – File

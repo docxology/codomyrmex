@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Performance..
+Module implementation, resources, and local coordination for Performance..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

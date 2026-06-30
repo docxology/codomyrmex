@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Cost Management..
+Module implementation, resources, and local coordination for Cost Management..
 
 ## Directory Contents
 - `PAI.md` – File

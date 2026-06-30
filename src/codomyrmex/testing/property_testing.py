@@ -57,12 +57,17 @@ def property_test(
 
             duration = (datetime.now() - start).total_seconds()
 
-            return PropertyTestResult(
+            result = PropertyTestResult(
                 passed=len(failures) == 0,
                 iterations=iterations,
                 failures=failures[:10],  # Limit stored failures
                 duration_seconds=duration,
             )
+            if not result.passed:
+                raise AssertionError(
+                    f"Property test failed {len(result.failures)} time(s) out of "
+                    f"{iterations} iterations. First failure: {result.failures[0]}"
+                )
 
         return wrapper
 

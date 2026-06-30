@@ -571,7 +571,7 @@ This comprehensive repository management system provides everything needed to ef
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../readme.md)
+- **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)

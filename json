@@ -1,0 +1,9 @@
+{
+  "build_id": "test_123",
+  "success": true,
+  "duration": 25.3,
+  "artifacts": [
+    "app",
+    "lib"
+  ]
+}

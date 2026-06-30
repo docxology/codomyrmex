@@ -137,6 +137,6 @@ metrics.summary()                              # -> dict with all above
 
 ## 6. Navigation
 
-- **Human Documentation**: [README.md](readme.md)
-- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](mcp_tool_specification.md)
+- **Human Documentation**: [README.md](README.md)
+- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
 - **Parent Directory**: [codomyrmex](../README.md)

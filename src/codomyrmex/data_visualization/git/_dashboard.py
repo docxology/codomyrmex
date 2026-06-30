@@ -80,9 +80,11 @@ class GitDashboardMixin:
         for commit in commits[:20]:
             try:
                 date_str = commit.get("date", "")
+                if not isinstance(date_str, str):
+                    continue
                 date = datetime.fromisoformat(date_str)
                 dates.append(date)
-            except (ValueError, KeyError, AttributeError):
+            except (ValueError, KeyError, AttributeError, TypeError):
                 continue
 
         if dates:
@@ -151,9 +153,11 @@ class GitDashboardMixin:
         for commit in commits:
             try:
                 date_str = commit.get("date", "")
+                if not isinstance(date_str, str):
+                    continue
                 date = datetime.fromisoformat(date_str)
                 commit_dates.append(date)
-            except (ValueError, KeyError, AttributeError):
+            except (ValueError, KeyError, AttributeError, TypeError):
                 continue
 
         if not commit_dates:

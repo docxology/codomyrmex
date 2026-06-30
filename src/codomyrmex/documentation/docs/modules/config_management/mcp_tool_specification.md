@@ -181,6 +181,6 @@ Validate configuration consistency and completeness for a given namespace. Retur
 
 ## Navigation Links
 
-- **Parent**: [Module README](readme.md)
+- **Parent**: [Module README](./README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Home**: [Root README](../../../README.md)

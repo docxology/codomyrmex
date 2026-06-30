@@ -78,4 +78,4 @@ result = text_to_sql_validate(sql="SELECT COUNT(*) FROM users WHERE created_at >
 
 ## Navigation
 
-- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/text_to_sql/SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

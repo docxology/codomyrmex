@@ -1,0 +1,743 @@
+# Colony Kernel — MCP Tool Specification
+
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: June 2026
+
+All eight tools route through a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`). The singleton is an instance of the full `ColonyKernel` class from `kernel.py` (not a simplified duplicate). State is shared and persistent for the lifetime of the MCP server process. The singleton is lazily initialised on first call.
+
+```mermaid
+graph TD
+    subgraph clients["MCP Clients"]
+        C1["Claude"]
+        C2["GPT-4o"]
+        C3["Gemini"]
+        C4["Custom Agent"]
+    end
+
+    subgraph mcp["MCP Tool Surface"]
+        T1["colony_propose_action"]
+        T2["colony_record_outcome"]
+        T3["colony_agent_profile"]
+        T4["colony_status"]
+        T5["colony_pheromone_query"]
+        T6["colony_falsify_plan"]
+        T7["colony_pruning_report"]
+        T8["colony_tick"]
+    end
+
+    subgraph kernel["ColonyKernel Singleton"]
+        CK["ColonyKernel<br/>(lazy init, thread-safe)"]
+    end
+
+    subgraph subsystems["Subsystems"]
+        PS["PheromoneStore"]
+        RL["ResourceLedger"]
+        AG["ActuationGate"]
+        CM["ConsequenceMemory"]
+        RA["RoleAdapter"]
+        PD["PruningDaemon"]
+    end
+
+    C1 & C2 & C3 & C4 --> T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8
+    T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8 --> CK
+    CK --> PS & RL & AG & CM & RA & PD
+
+    style CK fill:#1e3a8a,color:#fff,stroke:#3b82f6
+    style AG fill:#7c3aed,color:#fff
+    style T1 fill:#0f766e,color:#fff
+    style T2 fill:#0f766e,color:#fff
+    style T3 fill:#0f766e,color:#fff
+    style T4 fill:#0f766e,color:#fff
+    style T5 fill:#0f766e,color:#fff
+    style T6 fill:#0f766e,color:#fff
+    style T7 fill:#0f766e,color:#fff
+    style T8 fill:#0f766e,color:#fff
+```
+
+**Category**: `colony_kernel` (all tools)
+
+---
+
+## colony_propose_action
+
+**Description**: Submit an action proposal to the Colony actuation gate. Runs adversarial falsification, budget check, and trust evaluation before returning a gate verdict. On REFUSE, deposits a FAILURE pheromone at the target location.
+
+### Input Schema
+
+```json
+{
+  "type": "object",
+  "required": ["agent_id", "action_type", "target", "rationale", "rollback_plan"],
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "description": "Unique identifier of the proposing agent (e.g. 'engineer-1')."
+    },
+    "action_type": {
+      "type": "string",
+      "description": "Type of action being proposed. Examples: 'patch_file', 'archive_module', 'run_tests', 'exec_code', 'merge_pr'."
+    },
+    "target": {
+      "type": "string",
+      "description": "Dotted module path or file path the action will affect (e.g. 'codomyrmex.git_operations.core')."
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Explanation of why this action is necessary. Must be at least 20 characters to avoid a LOW falsification finding."
+    },
+    "rollback_plan": {
+      "type": "string",
+      "description": "Concrete description of how to undo the action. Required (non-empty) for destructive action types to avoid a HIGH falsification finding."
+    },
+    "evidence": {
+      "type": "string",
+      "default": "{}",
+      "description": "JSON-serialised dict of supporting evidence (test IDs, PR URLs, error logs). Defaults to '{}'."
+    }
+  }
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "decision": {
+      "type": "string",
+      "enum": ["execute", "hold", "refuse"],
+      "description": "Gate verdict."
+    },
+    "gate_score": {
+      "type": "number",
+      "description": "Composite gate score in [0.0, 1.0]. Higher is better."
+    },
+    "reason": {
+      "type": "string",
+      "description": "Human-readable explanation of the decision."
+    },
+    "required_evidence": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Actions the agent should take before re-submitting (present on HOLD)."
+    },
+    "budget_approved": {
+      "type": "boolean",
+      "description": "Whether the ResourceLedger cleared the budget estimate."
+    },
+    "falsification_severity": {
+      "type": "number",
+      "description": "Maximum falsification penalty weight in [0.0, 1.0]. 0.0 = no findings."
+    },
+    "error": {
+      "type": "string",
+      "description": "Present only if an exception occurred; all other fields absent."
+    }
+  }
+}
+```
+
+### Example Invocation
+
+```json
+{
+  "agent_id": "repair-agent-42",
+  "action_type": "patch_file",
+  "target": "codomyrmex.git_operations.core",
+  "rationale": "Fix off-by-one error in branch name parser identified in test_branch_names.py test suite",
+  "rollback_plan": "git revert HEAD~1 and re-run pytest to confirm regression is cleared",
+  "evidence": "{\"test_ids\": [\"test_branch_names.py::test_slash_in_name\"], \"error\": \"IndexError at line 47\"}"
+}
+```
+
+```json
+{
+  "decision": "execute",
+  "gate_score": 0.712,
+  "reason": "gate score 0.712 ≥ execute threshold",
+  "required_evidence": [],
+  "budget_approved": true,
+  "falsification_severity": 0.0
+}
+```
+
+---
+
+## colony_record_outcome
+
+**Description**: Record the real consequence of a previously executed action. Updates the agent's trust profile (stored in SQLite), deposits SUCCESS or FAILURE pheromone at the target, and records a DEPENDENCY trace.
+
+### Input Schema
+
+```json
+{
+  "type": "object",
+  "required": ["agent_id", "action_type", "target", "actual_outcome", "tests_passed"],
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "description": "The agent that executed the action."
+    },
+    "action_type": {
+      "type": "string",
+      "description": "The action type that was executed (should match the original proposal)."
+    },
+    "target": {
+      "type": "string",
+      "description": "The target of the executed action."
+    },
+    "actual_outcome": {
+      "type": "string",
+      "description": "Human-readable description of what actually happened."
+    },
+    "tests_passed": {
+      "type": "boolean",
+      "description": "Whether automated tests passed after the action completed."
+    },
+    "human_feedback": {
+      "type": "number",
+      "default": 0.0,
+      "minimum": -1.0,
+      "maximum": 1.0,
+      "description": "Operator feedback in [-1.0, 1.0]. 0.0 = no feedback, +1.0 = approved, -1.0 = rejected."
+    }
+  }
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["recorded"],
+      "description": "Always 'recorded' on success."
+    },
+    "consequence_id": {
+      "type": "string",
+      "description": "UUID of the newly created ConsequenceRecord."
+    },
+    "trust_score": {
+      "type": "number",
+      "description": "Agent's updated trust_score after applying the delta."
+    },
+    "role": {
+      "type": "string",
+      "enum": ["sandbox", "repair_ant", "memory_ant", "dispatcher", "guard_ant"],
+      "description": "Agent's current role (may have changed after trust update)."
+    },
+    "error": {
+      "type": "string",
+      "description": "Present only if an exception occurred."
+    }
+  }
+}
+```
+
+### Example Invocation
+
+```json
+{
+  "agent_id": "repair-agent-42",
+  "action_type": "patch_file",
+  "target": "codomyrmex.git_operations.core",
+  "actual_outcome": "Patch applied; all 42 git_operations tests pass; no regressions detected",
+  "tests_passed": true,
+  "human_feedback": 1.0
+}
+```
+
+```json
+{
+  "status": "recorded",
+  "consequence_id": "c3d4e5f6-7890-abcd-ef01-234567890abc",
+  "trust_score": 0.173,
+  "role": "sandbox"
+}
+```
+
+---
+
+## colony_agent_profile
+
+**Description**: Return the current trust profile for an agent. If the agent is unknown, a SANDBOX profile with `trust_score=0.1` is created on demand.
+
+### Input Schema
+
+```json
+{
+  "type": "object",
+  "required": ["agent_id"],
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "description": "Unique identifier of the agent to look up."
+    }
+  }
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "agent_id": {"type": "string"},
+    "role": {
+      "type": "string",
+      "enum": ["sandbox", "repair_ant", "memory_ant", "dispatcher", "guard_ant"]
+    },
+    "trust_score": {
+      "type": "number",
+      "description": "Current trust score in [0.0, 1.0]."
+    },
+    "total_proposals": {
+      "type": "integer",
+      "description": "Total proposals submitted (accepted + rejected + held)."
+    },
+    "accepted_proposals": {
+      "type": "integer",
+      "description": "Proposals that passed all checks (tests_passed=True, repair_needed=False)."
+    },
+    "consequence_history": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Consequence UUIDs in chronological order (most recent last); max 200 entries."
+    },
+    "last_updated": {
+      "type": "number",
+      "description": "Unix timestamp of last trust score update."
+    },
+    "error": {"type": "string"}
+  }
+}
+```
+
+### Example Invocation
+
+```json
+{"agent_id": "repair-agent-42"}
+```
+
+```json
+{
+  "agent_id": "repair-agent-42",
+  "role": "sandbox",
+  "trust_score": 0.173,
+  "total_proposals": 3,
+  "accepted_proposals": 1,
+  "consequence_history": ["c3d4e5f6-..."],
+  "last_updated": 1751234567.0
+}
+```
+
+---
+
+## colony_status
+
+**Description**: Return a dashboard snapshot of the colony's current state including pheromone summary, budget usage, role distribution, recent consequences, and pruning candidate count.
+
+### Input Schema
+
+```json
+{
+  "type": "object",
+  "properties": {},
+  "description": "No inputs required."
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "pheromone_summary": {
+      "type": "object",
+      "description": "Snapshot of the pheromone field.",
+      "properties": {
+        "total_signals": {"type": "integer", "description": "Total live traces in the field."},
+        "top_signals": {
+          "type": "array",
+          "description": "Top-10 signals by strength.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {"type": "string", "description": "Compound key '{location}:{signal_type}'."},
+              "location": {"type": "string"},
+              "signal_type": {"type": "string"},
+              "strength": {"type": "number"},
+              "updated_at": {"type": "number", "description": "Unix timestamp."}
+            }
+          }
+        }
+      }
+    },
+    "budget_usage": {
+      "type": "object",
+      "description": "Current period resource consumption vs budget ceiling per dimension."
+    },
+    "role_distribution": {
+      "type": "object",
+      "description": "Map of role name to agent count (e.g. {'sandbox': 3, 'repair_ant': 1})."
+    },
+    "recent_consequences": {
+      "type": "array",
+      "description": "Last 10 consequence records (most recent first).",
+      "items": {"type": "object"}
+    },
+    "pruning_candidates_count": {
+      "type": "integer",
+      "description": "Number of stale modules flagged by the pruning daemon (0 unless scan() was called externally)."
+    },
+    "error": {"type": "string"}
+  }
+}
+```
+
+### Example Invocation
+
+```json
+{}
+```
+
+```json
+{
+  "pheromone_summary": {
+    "total_signals": 2,
+    "top_signals": [
+      {"key": "codomyrmex.git_operations.core:success", "location": "codomyrmex.git_operations.core", "signal_type": "success", "strength": 3.8, "updated_at": 1751234500.0},
+      {"key": "codomyrmex.crypto.hmac:failure", "location": "codomyrmex.crypto.hmac", "signal_type": "failure", "strength": 2.1, "updated_at": 1751234400.0}
+    ]
+  },
+  "budget_usage": {
+    "llm_calls": {"used": 9, "max": 500},
+    "runtime_seconds": {"used": 47.2, "max": 3600.0}
+  },
+  "role_distribution": {"sandbox": 3},
+  "recent_consequences": [],
+  "pruning_candidates_count": 0
+}
+```
+
+---
+
+## colony_pheromone_query
+
+**Description**: Sense pheromone pressure at a specific location for a given signal type. Returns the matching `ColonySignal` objects (typically zero or one per location/type pair).
+
+### Input Schema
+
+```json
+{
+  "type": "object",
+  "required": ["location", "signal_type"],
+  "properties": {
+    "location": {
+      "type": "string",
+      "description": "Dotted module path or file path to query (e.g. 'codomyrmex.git_operations.core')."
+    },
+    "signal_type": {
+      "type": "string",
+      "enum": ["failure", "success", "risk", "need", "dependency", "human_priority"],
+      "description": "The type of signal to sense."
+    }
+  }
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "array",
+  "description": "List of matching ColonySignal dicts; empty list if none present.",
+  "items": {
+    "type": "object",
+    "properties": {
+      "location": {"type": "string"},
+      "signal_type": {"type": "string"},
+      "strength": {"type": "number", "description": "Current pheromone strength ≥ 0.0."},
+      "decay_rate": {
+        "type": "number",
+        "description": "Evaporation multiplier (FAST=3.0, NORMAL=1.0, SLOW=0.2)."
+      },
+      "source": {
+        "type": "string",
+        "enum": ["test", "human", "agent", "security", "runtime"]
+      },
+      "evidence": {"type": "object"},
+      "last_reinforced": {"type": "number", "description": "Unix timestamp."},
+      "error": {"type": "string"}
+    }
+  }
+}
+```
+
+### Example Invocation
+
+```json
+{
+  "location": "codomyrmex.git_operations.core",
+  "signal_type": "failure"
+}
+```
+
+```json
+[
+  {
+    "location": "codomyrmex.git_operations.core",
+    "signal_type": "failure",
+    "strength": 2.1,
+    "decay_rate": 1.0,
+    "source": "test",
+    "evidence": {"proposal_id": "a1b2c3d4-...", "action_type": "patch_file"},
+    "last_reinforced": 1751234400.0
+  }
+]
+```
+
+---
+
+## colony_falsify_plan
+
+**Description**: Adversarially evaluate a plan dict without running the full gate. Applies five attack vectors and returns findings, a composite severity score, and a recommendation. Safe to call as a pre-flight check before submitting a formal proposal.
+
+### Input Schema
+
+```json
+{
+  "type": "object",
+  "required": ["plan_json"],
+  "properties": {
+    "plan_json": {
+      "type": "string",
+      "description": "JSON-serialised plan dict. Recognised keys: 'action_type', 'target', 'rationale', 'evidence', 'rollback_plan', 'budget_estimate' (nested dict), 'agent_id'. Unknown keys are silently ignored."
+    }
+  }
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "findings": {
+      "type": "array",
+      "description": "List of FalsificationFinding dicts.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim": {"type": "string", "description": "The specific assumption being attacked."},
+          "attack_vector": {
+            "type": "string",
+            "enum": ["missing_rollback", "underfunded_budget", "circular_dependency", "untested_assumption", "blast_radius"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"]
+          },
+          "evidence": {"type": "object"},
+          "remediation": {"type": "string", "description": "Concrete suggestion to address the finding."}
+        }
+      }
+    },
+    "severity_score": {
+      "type": "number",
+      "description": "Mean severity weight in [0.0, 1.0]. 0.0 = no findings."
+    },
+    "recommendation": {
+      "type": "string",
+      "enum": ["execute", "hold", "refuse"],
+      "description": "execute if score < 0.4; hold if 0.4–0.75; refuse if ≥ 0.75."
+    },
+    "error": {"type": "string"}
+  }
+}
+```
+
+### Example Invocation
+
+```json
+{
+  "plan_json": "{\"action_type\": \"archive_module\", \"target\": \"codomyrmex.dark\", \"rationale\": \"Unused\", \"rollback_plan\": \"\", \"budget_estimate\": {\"llm_calls\": 0, \"runtime_seconds\": 0}}"
+}
+```
+
+```json
+{
+  "findings": [
+    {
+      "claim": "plan specifies a safe rollback path",
+      "attack_vector": "missing_rollback",
+      "severity": "high",
+      "evidence": {"rollback_plan": ""},
+      "remediation": "Provide a concrete rollback_plan describing how to undo the action."
+    },
+    {
+      "claim": "budget estimate reflects real expected resource consumption",
+      "attack_vector": "underfunded_budget",
+      "severity": "medium",
+      "evidence": {"budget_estimate": {"llm_calls": 0, "runtime_seconds": 0}},
+      "remediation": "Set llm_calls and/or runtime_seconds in budget_estimate to reflect real expected cost."
+    },
+    {
+      "claim": "action blast radius is bounded and reversible",
+      "attack_vector": "blast_radius",
+      "severity": "medium",
+      "evidence": {"action_type": "archive_module", "risk_level": 0.0},
+      "remediation": "Add a scope-limiting rollback checkpoint and reduce risk_level or break into smaller reversible steps."
+    }
+  ],
+  "severity_score": 0.5,
+  "recommendation": "hold"
+}
+```
+
+---
+
+## colony_pruning_report
+
+**Description**: Run the pruning daemon against the current pheromone field and return a list of module locations that are stale, broken, or dormant. The daemon never writes or deletes anything; the report is advisory only.
+
+### Input Schema
+
+```json
+{
+  "type": "object",
+  "properties": {},
+  "description": "No inputs required."
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "candidates": {
+      "type": "array",
+      "description": "PruningCandidate dicts sorted by confidence descending.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "module_path": {"type": "string", "description": "Location key from the pheromone field."},
+          "last_used": {"type": "number", "description": "Unix timestamp of last DEPENDENCY signal; 0.0 if never."},
+          "call_count": {"type": "integer", "description": "Estimated call count (0 for pheromone-only inference)."},
+          "duplicate_of": {"type": ["string", "null"], "description": "Dotted path of surviving equivalent, if known."},
+          "reason": {"type": "string", "description": "Human-readable staleness explanation."},
+          "confidence": {"type": "number", "description": "Confidence score in [0.0, 1.0]. Only candidates ≥ 0.50 are reported."}
+        }
+      }
+    },
+    "total_candidates": {
+      "type": "integer",
+      "description": "Number of candidates returned."
+    },
+    "generated_at": {
+      "type": "number",
+      "description": "Unix timestamp when the report was generated."
+    },
+    "error": {"type": "string"}
+  }
+}
+```
+
+### Example Invocation
+
+```json
+{}
+```
+
+```json
+{
+  "candidates": [
+    {
+      "module_path": "codomyrmex.dark",
+      "last_used": 0.0,
+      "call_count": 0,
+      "duplicate_of": null,
+      "reason": "No DEPENDENCY signal for >168h; last seen 0.0h ago.",
+      "confidence": 0.73
+    }
+  ],
+  "total_candidates": 1,
+  "generated_at": 1751234700.0
+}
+```
+
+---
+
+## colony_tick
+
+**Description**: Advance the Colony one time-step. Evaporates all pheromone traces according to their decay rate and the `StigmergyConfig.evaporation_per_tick` setting. Traces that fall to or below `min_strength` are removed from the field. Returns the post-tick colony status (same shape as `colony_status` output).
+
+### Input Schema
+
+```json
+{
+  "type": "object",
+  "properties": {},
+  "description": "No inputs required."
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "object",
+  "description": "Colony status dict (same shape as colony_status output).",
+  "properties": {
+    "pheromone_summary": {"type": "object", "description": "Snapshot of the pheromone field after evaporation."},
+    "budget_usage": {"type": "object"},
+    "role_distribution": {"type": "object"},
+    "recent_consequences": {"type": "array"},
+    "pruning_candidates_count": {"type": "integer"},
+    "error": {"type": "string"}
+  }
+}
+```
+
+### Example Invocation
+
+```json
+{}
+```
+
+```json
+{
+  "pheromone_summary": {
+    "total_signals": 1,
+    "top_signals": [
+      {"key": "codomyrmex.git_operations.core:success", "location": "codomyrmex.git_operations.core", "signal_type": "success", "strength": 3.42, "updated_at": 1751234500.0}
+    ]
+  },
+  "budget_usage": {
+    "llm_calls": {"used": 9, "max": 500},
+    "runtime_seconds": {"used": 47.2, "max": 3600.0}
+  },
+  "role_distribution": {"sandbox": 3},
+  "recent_consequences": [],
+  "pruning_candidates_count": 0
+}
+```
+
+---
+
+## Navigation Links
+
+- **Module Overview**: [README.md](README.md)
+- **Agents Reference**: [AGENTS.md](AGENTS.md)
+- **Formal Specification**: [SPEC.md](SPEC.md)
+- **Source (MCP tools)**: [mcp_tools.py](mcp_tools.py)
+- **Source (kernel)**: [kernel.py](kernel.py)
+- **Source (models)**: [models.py](models.py)

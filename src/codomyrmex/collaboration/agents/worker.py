@@ -5,6 +5,7 @@ with capability-based routing and configurable execution handlers.
 """
 
 import asyncio
+import inspect
 from collections.abc import Callable
 from typing import Any
 
@@ -97,7 +98,7 @@ class WorkerAgent(CollaborativeAgent):
 
         logger.info("Worker %s executing task: %s", self.name, task.name)
 
-        if asyncio.iscoroutinefunction(handler):
+        if inspect.iscoroutinefunction(handler):
             result = await handler(task)
         else:
             result = handler(task)

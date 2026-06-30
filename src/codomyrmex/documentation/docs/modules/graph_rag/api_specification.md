@@ -33,5 +33,5 @@ Thread safety varies by component. See individual class documentation for detail
 
 ## Navigation
 
-- **Parent**: [README.md](readme.md)
+- **Parent**: [README.md](README.md)
 - **Project Root**: [../../README.md](../../README.md)

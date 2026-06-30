@@ -49,4 +49,4 @@ print(result["provider"], result["latency_ms"])
 
 ## 5. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../docs/modules/ai_gateway/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/ai_gateway/PAI.md) | [MCP Tools](mcp_tool_specification.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md) | [MCP Tools](MCP_TOOL_SPECIFICATION.md)

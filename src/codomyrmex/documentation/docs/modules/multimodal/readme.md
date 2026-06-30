@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Multimodal..
+Module implementation, resources, and local coordination for Multimodal..
 
 ## Directory Contents
 - `PAI.md` – File

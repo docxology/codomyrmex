@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Model Context Protocol..
+Module implementation, resources, and local coordination for Model Context Protocol..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

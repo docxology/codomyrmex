@@ -6,6 +6,7 @@ Wraps the core EdgeNode model with async runtime evaluation capabilities.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import logging
 import uuid
 from typing import TYPE_CHECKING, Any
@@ -71,7 +72,7 @@ class AsyncEdgeNode:
         try:
             # If the handler is a coroutine, await it, else execute it in executor
             # (simplistic execution strategy for zero-mock testing)
-            if asyncio.iscoroutinefunction(handler):
+            if inspect.iscoroutinefunction(handler):
                 result = await handler(*args, **kwargs)
             else:
                 result = handler(*args, **kwargs)

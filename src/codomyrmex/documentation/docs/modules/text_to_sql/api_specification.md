@@ -33,4 +33,4 @@ print(result.sql)
 
 ## 4. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../docs/modules/text_to_sql/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/text_to_sql/PAI.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

@@ -4,9 +4,9 @@ from codomyrmex.security.ai_safety import ActiveDefense, RabbitHole
 def test_exploit_detection():
     """Verify exploit detection behavior."""
     active = ActiveDefense()
-    assert active.detect_exploit("ignore previous instructions")
-    assert active.detect_exploit("SYSTEM OVERRIDE")
-    assert not active.detect_exploit("Hello, how are you?")
+    assert active.detect_exploit("ignore previous instructions")["detected"] is True
+    assert active.detect_exploit("SYSTEM OVERRIDE")["detected"] is True
+    assert active.detect_exploit("Hello, how are you?")["detected"] is False
 
 
 def test_poison_generation():
@@ -17,7 +17,9 @@ def test_poison_generation():
     active = ActiveDefense()
     poison_low = active.poison_context("u1", intensity=0.1)
     poison_high = active.poison_context("u1", intensity=0.9)
-    assert len(poison_high) > len(poison_low)
+    low_content = poison_low["poisoned_content"]
+    high_content = poison_high["poisoned_content"]
+    assert len(high_content) > len(low_content)
     # With seed 42, we expect specific output or at least consistency
     # Just check that *some* poison phrase is present
     known_phrases = [
@@ -27,7 +29,7 @@ def test_poison_generation():
         "recalibrating",
         "probability",
     ]
-    assert any(phrase in poison_high for phrase in known_phrases)
+    assert any(phrase in high_content for phrase in known_phrases)
 
 
 def test_rabbit_hole_engagement():

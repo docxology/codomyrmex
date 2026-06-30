@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Soul..
+Module implementation, resources, and local coordination for Soul..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -51,4 +51,4 @@ result = dpo_compute_loss(beta=0.2, batch_size=8, seed=123)
 
 ## Navigation
 
-- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/dpo/SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

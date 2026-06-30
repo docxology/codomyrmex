@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Bio Simulation..
+Module implementation, resources, and local coordination for Bio Simulation..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

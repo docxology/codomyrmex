@@ -8,6 +8,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [1.3.0] - 2026-06-30 — "Colony Kernel"
+
+### Added
+
+- **Colony Kernel** (8 subsystems, 8 MCP tools): `PheromoneStore`, `ResourceLedger`, `ActuationGate`, `ConsequenceMemory`, `RoleAdapter`, `PruningDaemon`, `FalsificationWorker`, `ColonyKernel` — artificial ecology control plane. Gate formula: `budget×0.30 + risk×0.30 + trust×0.25 + completeness×0.15`; EXECUTE≥0.75, HOLD 0.50–0.74, REFUSE<0.50. Trust deltas: PASS=+0.04, FAIL=−0.08, REPAIR=−0.05, HUMAN_WEIGHT=0.03.
+- **Colony Kernel test suite** (625 tests, 11 files): `test_config_loader.py` (13 — `load_kernel_yaml`, `default_budget_from_yaml`, malformed YAML); `test_models.py` (55 — `make_trace_key`, `compute_trust_delta`, `ResourceCost.__add__`); `test_resource_ledger.py` (+11); `test_consequence_memory.py` (+19 — SQLite vs in-memory); `test_actuation_gate.py` (+4 — HOLD/EXECUTE boundary at 0.75); `test_pheromone_store.py` (+7); `test_role_adapter.py` (+6 — MEMORY_ANT trust≥0.8); `test_kernel.py` (+2 — 13 record_outcome calls → EXECUTE); `test_pruning_daemon.py` (+6); `test_falsification_worker.py`; `test_mcp_tools.py`.
+- **`open_gauss` submodule RASP docs**: 34 files (AGENTS.md + README.md for 17 subdirectories) committed at submodule commit `032e9a9c`.
+- **Colony Kernel `PAI.md`**: gate formula corrected (was 0.4+0.3+0.3, now 0.30+0.30+0.25+0.15); version bumped to v1.3.0.
+- **Manuscript pandoc-crossref integration**: `scripts/compile_manuscript.py` now auto-detects `pandoc-crossref` and inserts `-F pandoc-crossref` before `--citeproc`; all `[@sec:xxx]`, `[@fig:xxx]`, `[@eq:xxx]` cross-references resolve correctly. Section IDs added to all 9 manuscript chapters.
+- **Manuscript token system** (71 tokens): `{{CONFIG_FALSIFICATION_VECTORS}}`, `{{PYTHON_VERSION}}`, and LOC tokens replace stale hardcoded values; `src/manuscript_variables.py` now sources them from live code introspection.
+
+### Fixed
+
+- **`colony_kernel/consequence_memory.py`**: added missing `recent_failures(agent_id, window=10)` method (latent `AttributeError` in `ActuationGate._check_trust`).
+- **`colony_kernel/role_adapter.py`**: `isinstance`/`hasattr` → `getattr(self._memory, "all_profiles", None)` pattern so `ty` type-checker accepts calling `all_profiles_fn()` after None guard on the protocol type.
+- **`colony_kernel/falsification_worker.py`**: pheromone deposit now constructs a proper `ColonySignal` (`location`, `signal_type=FAILURE`, `strength=float(_rank(...))`, `decay_rate=FAST`, `source=AGENT`); narrowed bare `except Exception: pass` to `logger.warning(..., exc_info=True)`.
+- **`colony_kernel/pruning_daemon.py`**: added `self._last_scan_count: int = 0` and updates it at end of `scan()`.
+- **`colony_kernel/kernel.py`**: `colony_status()` now reads `self.pruning_daemon._last_scan_count` instead of hardcoded `0`.
+- **`colony_kernel/mcp_tools.py`**: `colony_record_outcome` now captures `record = kernel.record_outcome(...)` and returns `record.consequence_id` (was constructing a local ephemeral `ConsequenceRecord`).
+- **`agents/hermes/gateway/cron.py`**: `asyncio.iscoroutinefunction(job)` → `inspect.iscoroutinefunction(job)` (Python 3.14 deprecation-as-error fix; `import inspect` added).
+
+### Changed
+
+- **Version**: 1.2.7 → 1.3.0.
+- **`pyproject.toml`**: TC003 added to ruff ignore list; `--ignore` addopts entries for submodule test dirs.
+
+### Tests
+
+- **Colony Kernel**: 441 → 625 tests (+184 new tests across 11 files).
+- Added `src/codomyrmex/tests/unit/colony_kernel/AGENTS.md` documenting all 11 test files and their subsystem coverage.
+
+### Documentation
+
+- **Manuscript**: all 14 cross-references (`[@sec:xxx]`, `[@fig:xxx]`, `[@eq:xxx]`) resolve via pandoc-crossref; no citeproc warnings. Test count token updated to 625; Python version and falsification vector count tokenized.
+
+---
+
+## [1.2.7-pre] — Colony Kernel pre-release items
+
 ### Added
 
 - **Colony Kernel** (v1.3.0-dev): Artificial ecology control plane — pheromone pressure gradients, resource ledger, actuation gate (+1/0/-1), consequence memory, role adapter, pruning daemon, falsification worker, and MCP tool bridge. Closes the pressure→proposal→gate→action→consequence→memory→role→pressure loop.

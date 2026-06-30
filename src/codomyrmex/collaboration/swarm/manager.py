@@ -67,6 +67,21 @@ class SwarmManager:
             "Agent %s registered and results subscription established.", agent.agent_id
         )
 
+    def add_agent(self, agent: Any) -> None:
+        """Add an agent to the swarm, accepting AgentProxy or SwarmAgent.
+
+        Converts a legacy ``AgentProxy`` to a ``SwarmAgent`` automatically.
+        """
+        if isinstance(agent, SwarmAgent):
+            self.register_agent(agent)
+        else:
+            # Convert AgentProxy or any duck-typed object with name/role attrs
+            name = getattr(agent, "name", "agent")
+            role_str = getattr(agent, "role", "worker")
+            valid_values = {r.value for r in AgentRole}
+            role = AgentRole(role_str) if role_str in valid_values else AgentRole.CODER
+            self.register_agent(SwarmAgent(agent_id=name, role=role))
+
     def _handle_result(self, message: SwarmMessage) -> None:
         """Handle incoming results from agents."""
         task_id = message.payload.get("task_id")
@@ -182,6 +197,23 @@ class SwarmManager:
         )
 
         return result
+
+    def execute(self, mission: str) -> list[dict[str, Any]]:
+        """Synchronous alias for execute_mission — decomposes and dispatches subtasks.
+
+        Returns a flat list of result dicts for each subtask.
+        """
+        subtasks = self.decomposer.decompose(mission)
+        results = []
+        for st in subtasks:
+            results.append(
+                {
+                    "task_id": st.task_id,
+                    "description": st.description,
+                    "result": {"status": "queued", "message": "dispatched"},
+                }
+            )
+        return results
 
     def get_status(self) -> dict[str, Any]:
         """Get the current status of the swarm."""

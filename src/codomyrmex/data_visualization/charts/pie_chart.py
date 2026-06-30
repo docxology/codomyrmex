@@ -52,15 +52,12 @@ def create_pie_chart(
     fig, ax = plt.subplots(figsize=figure_size)
     if theme is not None:
         apply_theme_to_axes(ax, theme)
-    # Add a check for sum of sizes to avoid division by zero in autopct if all sizes are 0
+    # Guard against all-zero sizes: matplotlib raises RuntimeWarning (div-by-zero
+    # in autopct/shadow paths). Raise an explicit RuntimeError instead.
     if sum(s for s in sizes if isinstance(s, (int, float))) == 0:
-        logger.warning(
-            "All sizes are zero for pie chart '%s'. Plotting with equal segments if labels exist, but percentages might be misleading.",
-            title,
+        raise RuntimeError(
+            f"Cannot create pie chart '{title}': all segment sizes are zero."
         )
-        # Optionally, plot equal segments or skip autopct
-        # sizes = [1] * len(labels) # Plot equal segments
-        # autopct = None
 
     ax.pie(
         sizes,
@@ -79,7 +76,10 @@ def create_pie_chart(
         save_plot(fig, output_path)
 
     if show_plot:
-        plt.show()
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            plt.show()
     else:
         plt.close(fig)
     logger.info("Pie chart '%s' generated successfully.", title)

@@ -36,4 +36,4 @@ print(f"Route: {match.name}, Score: {match.score:.3f}")
 
 ## 4. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../docs/modules/semantic_router/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/semantic_router/PAI.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

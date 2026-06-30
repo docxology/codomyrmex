@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Dpo..
+Module implementation, resources, and local coordination for Dpo..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

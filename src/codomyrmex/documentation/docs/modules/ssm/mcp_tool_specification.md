@@ -81,4 +81,4 @@ result = flash_attention_forward(seq_len=32, d_model=64, block_size=16)
 
 ## Navigation
 
-- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/ssm/SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

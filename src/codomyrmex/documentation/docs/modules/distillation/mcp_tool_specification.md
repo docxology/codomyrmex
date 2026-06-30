@@ -60,4 +60,4 @@ result = distillation_compute_loss(
 
 ## Navigation
 
-- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/distillation/SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

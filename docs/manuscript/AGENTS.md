@@ -8,6 +8,31 @@ version: "1.2.7"
 
 Repository-wide agent rules live in [`../AGENTS.md`](../AGENTS.md). This file covers **manuscript-specific** editing: file roles, `{{VARIABLE}}` token protocol, and the section modification workflow.
 
+## Purpose
+
+This directory contains the Codomyrmex manuscript source files, configuration, and token-injection pipeline. It is the authoritative source for the paper content rendered into PDF via the infrastructure rendering pipeline.
+
+## Key Files
+
+- `config.yaml` — Paper metadata and gate/trust/decay parameters.
+- `00_abstract.md` through `07_scope_and_related_work.md` — Manuscript sections.
+- `99_references.md` — Bibliography.
+- `SYNTAX.md` — Pandoc syntax reference.
+- `layer_contract.yaml` — Infrastructure import boundary declarations.
+
+## Dependencies
+
+- `infrastructure.rendering` — PDF rendering pipeline.
+- `src/manuscript_variables.py` — Token computation (`compute_variables()`).
+- `scripts/z_generate_manuscript_variables.py` — Token injection orchestrator.
+
+## Development Guidelines
+
+- Never hardcode numeric results; use `{{TOKEN}}` syntax for all computed values.
+- Run `scripts/z_generate_manuscript_variables.py` after any parameter or result change.
+- Keep `tests/test_manuscript_variables.py` assertions in sync with all tokens.
+- Follow the Section Modification Protocol below for all prose edits.
+
 ## Current State (ground truth)
 
 Key facts agents must use when editing or cross-referencing this manuscript — **do not substitute stale numbers**:

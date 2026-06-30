@@ -544,24 +544,24 @@ class TestCancelPipeline:
         config = _minimal_config()
         path = _write_config(tmp_path, config)
         mgr.create_pipeline(path)
-        # Simulate an active execution with a real asyncio.Task
-        loop = asyncio.new_event_loop()
-        try:
 
+        async def _run_cancel():
             async def _dummy():
                 await asyncio.sleep(100)
 
-            task = loop.create_task(_dummy())
+            task = asyncio.create_task(_dummy())
             mgr.active_executions["test_pipeline"] = task
             result = mgr.cancel_pipeline("test_pipeline")
             assert result is True
             assert mgr.pipelines["test_pipeline"].status == PipelineStatus.CANCELLED
-            # task.cancel() puts it in "cancelling" state; it only becomes
-            # "cancelled" after the event loop processes it. Verify cancel
-            # was requested:
-            assert task.cancelling() > 0 or task.cancelled()
-        finally:
-            loop.close()
+            # Let the event loop process the cancellation
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
+            assert task.cancelled() or task.cancelling() > 0
+
+        asyncio.run(_run_cancel())
 
 
 @pytest.mark.unit

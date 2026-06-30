@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Tree Sitter..
+Module implementation, resources, and local coordination for Tree Sitter..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

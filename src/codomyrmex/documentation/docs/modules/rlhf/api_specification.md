@@ -38,4 +38,4 @@ print(f"PPO loss: {metrics['policy_loss']:.4f}")
 
 ## 4. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../docs/modules/rlhf/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/rlhf/PAI.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

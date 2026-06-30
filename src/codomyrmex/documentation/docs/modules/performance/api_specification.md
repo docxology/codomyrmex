@@ -51,9 +51,9 @@ result = function_name(param1="value")
 
 ## Related Documentation
 
-- [Module README](readme.md)
+- [Module README](./README.md)
 - [Usage Examples](../README.md) (See README for examples)
-- [MCP Tool Specification](mcp_tool_specification.md) (if applicable)
+- [MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md) (if applicable)
 
 ---
 

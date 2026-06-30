@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Embodiment..
+Module implementation, resources, and local coordination for Embodiment..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

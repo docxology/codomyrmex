@@ -33,4 +33,4 @@ assert np.allclose(probs, streaming_probs)
 
 ## 4. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../docs/modules/softmax_opt/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/softmax_opt/PAI.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

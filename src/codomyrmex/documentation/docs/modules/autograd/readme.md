@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Autograd..
+Module implementation, resources, and local coordination for Autograd..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

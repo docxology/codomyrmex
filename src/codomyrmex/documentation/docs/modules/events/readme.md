@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Events..
+Module implementation, resources, and local coordination for Events..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

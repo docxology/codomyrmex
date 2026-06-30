@@ -19,7 +19,7 @@ Documentation tooling, generated references, and publishing assets for Docs.
 - `USAGE_EXAMPLES.md` – File
 
 ## Navigation
-- **Parent Directory**: [git_operations](../readme.md)
+- **Parent Directory**: [git_operations](../README.md)
 - **Project Root**: ../../../../README.md
 
 ## Related Documents

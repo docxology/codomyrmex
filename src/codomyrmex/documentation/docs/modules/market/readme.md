@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Market..
+Module implementation, resources, and local coordination for Market..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

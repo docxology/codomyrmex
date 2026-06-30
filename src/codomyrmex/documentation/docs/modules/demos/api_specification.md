@@ -35,4 +35,4 @@ registry.run("hello_world")
 
 ## 4. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../docs/modules/demos/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/demos/PAI.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

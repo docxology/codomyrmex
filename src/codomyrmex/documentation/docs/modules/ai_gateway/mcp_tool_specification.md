@@ -93,4 +93,4 @@ result = gateway_health(
 
 ## Navigation
 
-- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/ai_gateway/SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

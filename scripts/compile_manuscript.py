@@ -145,6 +145,12 @@ def _run_pandoc_html(
 
     cmd: list[str] = ["pandoc"]
     cmd += [str(s) for s in sections]
+    # pandoc-crossref MUST come before --citeproc so @fig:, @sec:, @eq: labels
+    # are resolved before citeproc sees the remaining citation keys.
+    if shutil.which("pandoc-crossref"):
+        cmd += ["-F", "pandoc-crossref"]
+    else:
+        print("  NOTE: pandoc-crossref not found — cross-references will be unresolved")
     cmd += [
         "--standalone",
         "--toc",
@@ -181,6 +187,12 @@ def _run_pandoc_pdf(
 
     cmd: list[str] = ["pandoc"]
     cmd += [str(s) for s in sections]
+    # pandoc-crossref MUST come before --citeproc so @fig:, @sec:, @eq: labels
+    # are resolved before citeproc sees the remaining citation keys.
+    if shutil.which("pandoc-crossref"):
+        cmd += ["-F", "pandoc-crossref"]
+    else:
+        print("  NOTE: pandoc-crossref not found — cross-references will be unresolved")
     cmd += [
         "--standalone",
         "--toc",
@@ -192,11 +204,6 @@ def _run_pandoc_pdf(
     ]
     if preamble and preamble.exists():
         cmd += ["-H", str(preamble)]
-    # pandoc-crossref handles @eq:, @fig:, @tbl:, @sec: cross-references
-    if shutil.which("pandoc-crossref"):
-        cmd += ["--filter", "pandoc-crossref"]
-    else:
-        print("  NOTE: pandoc-crossref not found — cross-references will be unresolved")
     cmd += _build_pandoc_metadata_args(variables)
     cmd += ["-o", str(output_path)]
 

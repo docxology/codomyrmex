@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Prompt Engineering..
+Module implementation, resources, and local coordination for Prompt Engineering..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

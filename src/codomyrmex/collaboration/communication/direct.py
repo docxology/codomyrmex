@@ -4,6 +4,7 @@ Provides request-response patterns and direct agent-to-agent messaging.
 """
 
 import asyncio
+import inspect
 import uuid
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
@@ -115,7 +116,7 @@ class DirectMessenger:
 
         try:
             handler = self._handlers[receiver_id]
-            if asyncio.iscoroutinefunction(handler):
+            if inspect.iscoroutinefunction(handler):
                 await handler(message)
             else:
                 handler(message)
@@ -184,7 +185,7 @@ class DirectMessenger:
         try:
             # Deliver the message
             handler = self._handlers[receiver_id]
-            if asyncio.iscoroutinefunction(handler):
+            if inspect.iscoroutinefunction(handler):
                 result = await handler(message)
             else:
                 result = handler(message)

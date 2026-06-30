@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Fpf..
+Module implementation, resources, and local coordination for Fpf..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

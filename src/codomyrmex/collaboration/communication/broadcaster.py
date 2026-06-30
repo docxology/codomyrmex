@@ -4,6 +4,7 @@ Provides topic-based pub/sub patterns for agent swarms.
 """
 
 import asyncio
+import inspect
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -123,7 +124,7 @@ class Broadcaster:
             for message in self._retained_messages[topic]:
                 if filter_fn is None or filter_fn(message):
                     try:
-                        if asyncio.iscoroutinefunction(handler):
+                        if inspect.iscoroutinefunction(handler):
                             asyncio.create_task(handler(message))
                         else:
                             handler(message)
@@ -191,7 +192,7 @@ class Broadcaster:
                     continue
 
                 try:
-                    if asyncio.iscoroutinefunction(subscription.handler):
+                    if inspect.iscoroutinefunction(subscription.handler):
                         await subscription.handler(message)
                     else:
                         subscription.handler(message)
@@ -225,7 +226,7 @@ class Broadcaster:
                     continue
 
                 try:
-                    if asyncio.iscoroutinefunction(subscription.handler):
+                    if inspect.iscoroutinefunction(subscription.handler):
                         asyncio.create_task(subscription.handler(message))
                     else:
                         subscription.handler(message)

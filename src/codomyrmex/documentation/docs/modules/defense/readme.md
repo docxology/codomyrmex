@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Defense..
+Module implementation, resources, and local coordination for Defense..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

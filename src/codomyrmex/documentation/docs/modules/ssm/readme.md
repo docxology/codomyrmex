@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Ssm..
+Module implementation, resources, and local coordination for Ssm..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

@@ -213,6 +213,6 @@ Measures specific qubits in a previously simulated circuit state, returning coll
 
 ## Navigation Links
 
-- **API Specification**: [API_SPECIFICATION.md](api_specification.md)
-- **Human Documentation**: [README.md](readme.md)
+- **API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Human Documentation**: [README.md](README.md)
 - **Parent Directory**: [codomyrmex](../README.md)

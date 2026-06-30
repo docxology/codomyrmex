@@ -297,7 +297,7 @@ All methods may raise:
 
 ## Examples
 
-See [README.md](readme.md) for usage examples.
+See [README.md](README.md) for usage examples.
 
 
 ## Navigation Links

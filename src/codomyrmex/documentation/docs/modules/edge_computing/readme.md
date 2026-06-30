@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Edge Computing..
+Module implementation, resources, and local coordination for Edge Computing..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

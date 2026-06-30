@@ -272,15 +272,15 @@ code = engine.render(python_template, {
 - `codomyrmex.exceptions` for error handling
 
 ### Related Modules
-- [`documentation`](../../../../../../docs/modules/documentation/API_SPECIFICATION.md) - Documentation generation
-- [`deployment`](../deployment/api_specification.md) - Code generation
-- [`module_template`](../module_template/api_specification.md) - Module scaffolding
+- [`documentation`](../documentation/API_SPECIFICATION.md) - Documentation generation
+- [`deployment`](../deployment/API_SPECIFICATION.md) - Code generation
+- [`module_template`](../module_template/API_SPECIFICATION.md) - Module scaffolding
 
 ---
 
 ## Navigation
 
-- **Human Documentation**: [README.md](readme.md)
+- **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent**: [codomyrmex](../AGENTS.md)

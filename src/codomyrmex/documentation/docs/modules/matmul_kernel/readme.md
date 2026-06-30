@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Matmul Kernel..
+Module implementation, resources, and local coordination for Matmul Kernel..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

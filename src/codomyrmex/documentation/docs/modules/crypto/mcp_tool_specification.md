@@ -184,6 +184,6 @@ Generate a cryptographic key using a cryptographically secure random number gene
 
 ## Navigation Links
 
-- **Parent**: [Module README](readme.md)
+- **Parent**: [Module README](./README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Home**: [Root README](../../../README.md)

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Release..
+Module implementation, resources, and local coordination for Release..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

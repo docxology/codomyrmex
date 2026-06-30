@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Cache..
+Module implementation, resources, and local coordination for Cache..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

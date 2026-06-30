@@ -12,6 +12,7 @@ transport layer while keeping the same API surface.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import time
 from collections import deque
 from dataclasses import dataclass, field
@@ -159,7 +160,7 @@ class ROS2Bridge:
         # Deliver to subscribers
         for callback in self._subscribers.get(topic, []):
             try:
-                if asyncio.iscoroutinefunction(callback):
+                if inspect.iscoroutinefunction(callback):
                     await callback(msg)
                 else:
                     callback(msg)
@@ -202,7 +203,7 @@ class ROS2Bridge:
             try:
                 msg = self._latched[topic]
                 if msg:
-                    if asyncio.iscoroutinefunction(callback):
+                    if inspect.iscoroutinefunction(callback):
                         await callback(msg)
                     else:
                         callback(msg)
@@ -244,7 +245,7 @@ class ROS2Bridge:
         """
         msg = Message(topic=topic, payload=payload, sender="__simulator__")
         for callback in self._subscribers.get(topic, []):
-            if asyncio.iscoroutinefunction(callback):
+            if inspect.iscoroutinefunction(callback):
                 # In synchronous simulate_message, we can't easily await.
                 # This is why we have the async publish.
                 # For simulation, maybe we should have an async version too.

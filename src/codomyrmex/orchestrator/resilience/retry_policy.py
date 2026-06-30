@@ -7,6 +7,7 @@ with exponential backoff, circuit breaker integration, and dead letter routing.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import random
 import time
 from collections.abc import Callable
@@ -229,7 +230,7 @@ def with_retry(
     def decorator(func: F) -> F:
         import functools
 
-        if asyncio.iscoroutinefunction(func):
+        if inspect.iscoroutinefunction(func):
 
             @functools.wraps(func)
             async def async_wrapper(*args: Any, **kwargs: Any) -> Any:

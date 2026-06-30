@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Collaboration..
+Module implementation, resources, and local coordination for Collaboration..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

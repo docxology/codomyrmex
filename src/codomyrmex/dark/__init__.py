@@ -36,7 +36,8 @@ __version__ = "0.1.0"
 try:
     from . import pdf
 
-    PDF_AVAILABLE = True
+    # FILTERS_AVAILABLE is False when PyMuPDF isn't installed
+    PDF_AVAILABLE = getattr(pdf, "FILTERS_AVAILABLE", False)
 except ImportError:
     PDF_AVAILABLE = False
 

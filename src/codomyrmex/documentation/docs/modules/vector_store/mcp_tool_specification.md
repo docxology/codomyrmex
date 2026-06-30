@@ -211,5 +211,5 @@ Yes. Read-only operation.
 
 ## Navigation Links
 
-- **Parent**: [README.md](readme.md)
-- **API Spec**: [API_SPECIFICATION.md](api_specification.md)
+- **Parent**: [README.md](README.md)
+- **API Spec**: [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -49,4 +49,4 @@ print(f"MSE: {error['mse']:.6f}, SNR: {error['snr_db']:.1f} dB")
 
 ## 4. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../docs/modules/quantization/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/quantization/PAI.md) | [MCP Tools](mcp_tool_specification.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md) | [MCP Tools](MCP_TOOL_SPECIFICATION.md)

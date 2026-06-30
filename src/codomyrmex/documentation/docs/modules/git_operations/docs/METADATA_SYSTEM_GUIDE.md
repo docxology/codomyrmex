@@ -633,7 +633,7 @@ This comprehensive metadata system provides complete visibility and control over
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../readme.md)
+- **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)

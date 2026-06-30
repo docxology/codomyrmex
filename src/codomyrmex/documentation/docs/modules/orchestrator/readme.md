@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Orchestrator..
+Module implementation, resources, and local coordination for Orchestrator..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

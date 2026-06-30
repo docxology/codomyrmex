@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Skills..
+Module implementation, resources, and local coordination for Skills..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

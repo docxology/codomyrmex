@@ -1,4 +1,4 @@
-# Methodology
+# Methodology {#sec:methodology}
 
 ## Colony Kernel Architecture
 
@@ -88,9 +88,9 @@ The actuation gate is the colony's central permission layer: it aggregates signa
 
 ### Gate Scoring Formula
 
-The gate score $g$ is a weighted linear combination of four normalised components (Equation {@eq:gate_score_detail}):
+The gate score $g$ is a weighted linear combination of four normalised components ([@eq:gate_score_detail]):
 
-$$g = 0.30 \cdot \text{budget\_ok} + 0.30 \cdot \text{risk\_ok} + 0.25 \cdot \text{trust\_ok} + 0.15 \cdot \text{completeness} \tag{1}$$ {#eq:gate_score_detail}
+$$g = 0.30 \cdot \text{budget\_ok} + 0.30 \cdot \text{risk\_ok} + 0.25 \cdot \text{trust\_ok} + 0.15 \cdot \text{completeness}$$ {#eq:gate_score_detail}
 
 clamped to $[0, 1]$ after summation: $g \leftarrow \max(0.0,\; \min(1.0,\; g))$.
 

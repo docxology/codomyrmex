@@ -80,4 +80,4 @@ result = sae_analyze(d_input=128, d_features=512, n_samples=500, seed=42)
 
 ## Navigation
 
-- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/interpretability/SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

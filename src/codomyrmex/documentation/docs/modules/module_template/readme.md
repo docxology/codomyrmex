@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Module Template..
+Module implementation, resources, and local coordination for Module Template..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

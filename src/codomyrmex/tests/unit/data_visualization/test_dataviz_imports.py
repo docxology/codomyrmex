@@ -109,6 +109,10 @@ class TestImports:
         assert callable(Plotter)
 
     def test_engines_advanced_plotter_class(self):
+        import codomyrmex.data_visualization.engines as engines_mod
+
+        if not getattr(engines_mod, "_HAS_ADVANCED", False):
+            pytest.skip("seaborn/matplotlib not installed — AdvancedPlotter unavailable")
         from codomyrmex.data_visualization.engines import AdvancedPlotter
 
         assert callable(AdvancedPlotter)

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Distillation..
+Module implementation, resources, and local coordination for Distillation..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

@@ -1,4 +1,4 @@
-# 5. Experimental Setup
+# 5. Experimental Setup {#sec:experimental_setup}
 
 This section is structured in two parts. Section 5.0 defines the experimental design proper:
 independent variables, baseline conditions, dependent variables, trial structure, and analysis

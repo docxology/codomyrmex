@@ -189,15 +189,15 @@ compressed = output_buffer.getvalue()
 - `codomyrmex.exceptions` for error handling
 
 ### Related Modules
-- [`documents`](../documents/api_specification.md) - Document compression
-- [`deployment`](../deployment/api_specification.md) - Build artifact compression
-- [`cache`](../cache/api_specification.md) - Cache compression
+- [`documents`](../documents/API_SPECIFICATION.md) - Document compression
+- [`deployment`](../deployment/API_SPECIFICATION.md) - Build artifact compression
+- [`cache`](../cache/API_SPECIFICATION.md) - Cache compression
 
 ---
 
 ## Navigation
 
-- **Human Documentation**: [README.md](readme.md)
+- **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent**: [codomyrmex](../AGENTS.md)

@@ -13,6 +13,7 @@ Features:
 """
 
 import asyncio
+import inspect
 import time
 from collections.abc import Callable
 from typing import Any
@@ -444,7 +445,7 @@ class Workflow:
                 # Allow tasks to access previous results
                 kwargs["_task_results"] = self.task_results
 
-            if asyncio.iscoroutinefunction(task.action):
+            if inspect.iscoroutinefunction(task.action):
                 if task.timeout:
                     return await asyncio.wait_for(
                         task.action(*task.args, **kwargs), timeout=task.timeout

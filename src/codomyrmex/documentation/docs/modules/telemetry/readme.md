@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Telemetry..
+Module implementation, resources, and local coordination for Telemetry..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

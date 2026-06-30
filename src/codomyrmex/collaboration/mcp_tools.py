@@ -22,7 +22,7 @@ def _get_task_decomposer() -> Any:
     """Lazy-import TaskDecomposer to avoid circular imports."""
     from codomyrmex.collaboration.swarm import TaskDecomposer
 
-    return TaskDecomposer
+    return TaskDecomposer()
 
 
 @mcp_tool(

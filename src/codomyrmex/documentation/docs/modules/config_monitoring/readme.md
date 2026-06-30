@@ -46,6 +46,8 @@ watcher.start()
 
 | File | Purpose |
 | :--- | :--- |
+| `API_SPECIFICATION.md` | Public Python and MCP interface contract |
+| `MCP_TOOL_SPECIFICATION.md` | MCP tool contract |
 | `config_monitor.py` | Core monitoring engine (560 lines) |
 | `watcher.py` | Hot-reload file watcher (94 lines) |
 | `mcp_tools.py` | MCP tool definitions (3 tools) |
@@ -54,5 +56,5 @@ watcher.start()
 ## Navigation
 
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Documentation**: [SPEC.md](../../../../../../src/codomyrmex/config_monitoring/SPEC.md) | [API_SPECIFICATION.md](../../../../../../src/codomyrmex/config_monitoring/API_SPECIFICATION.md) | [PAI.md](../../../../../../src/codomyrmex/config_monitoring/PAI.md) | [AGENTS.md](../../../../../../src/codomyrmex/config_monitoring/AGENTS.md)
+- **Documentation**: [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md) | [PAI.md](PAI.md) | [AGENTS.md](AGENTS.md)
 - **Project Root**: [../../../README.md](../../../README.md)

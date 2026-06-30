@@ -22,6 +22,7 @@ Example usage:
 """
 
 import asyncio
+import inspect
 import os
 import subprocess
 import time
@@ -487,7 +488,7 @@ def retry(
 
         for attempt in range(1, max_attempts + 1):
             try:
-                if asyncio.iscoroutinefunction(action):
+                if inspect.iscoroutinefunction(action):
                     return await action(*args, **kwargs)
                 return action(*args, **kwargs)
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -523,7 +524,7 @@ def timeout(seconds: float) -> Callable:
         """Decorator."""
 
         async def wrapper(*args, **kwargs):
-            if asyncio.iscoroutinefunction(action):
+            if inspect.iscoroutinefunction(action):
                 return await asyncio.wait_for(action(*args, **kwargs), timeout=seconds)
             loop = asyncio.get_event_loop()
             return await asyncio.wait_for(

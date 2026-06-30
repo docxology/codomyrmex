@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Data Visualization..
+Module implementation, resources, and local coordination for Data Visualization..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Container Optimization..
+Module implementation, resources, and local coordination for Container Optimization..
 
 ## Directory Contents
 - `PAI.md` – File

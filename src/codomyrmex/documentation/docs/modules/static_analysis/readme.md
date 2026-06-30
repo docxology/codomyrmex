@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Static Analysis..
+Module implementation, resources, and local coordination for Static Analysis..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -32,4 +32,4 @@ result.save("output.png")
 
 ## 5. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../docs/modules/multimodal/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/multimodal/PAI.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

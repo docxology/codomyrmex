@@ -7,6 +7,7 @@ communication within a swarm.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import re
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -128,7 +129,7 @@ class MessageBus:
         tasks = []
         for sub in self._subscriptions:
             if self._topic_matches(sub.topic, topic):
-                if asyncio.iscoroutinefunction(sub.handler):
+                if inspect.iscoroutinefunction(sub.handler):
                     # For async handlers, we MUST wait for them if we want sequential execution in the demo,
                     # but typically pub/sub is fire-and-forget.
                     # HOWEVER, in our demo, the "agent" is on the same loop.

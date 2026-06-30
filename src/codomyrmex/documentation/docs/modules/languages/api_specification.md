@@ -28,4 +28,4 @@ register_mcp_tools()
 
 ## 4. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../src/codomyrmex/languages/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/languages/PAI.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

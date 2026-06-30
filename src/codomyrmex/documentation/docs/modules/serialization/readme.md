@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Serialization..
+Module implementation, resources, and local coordination for Serialization..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

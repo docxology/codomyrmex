@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for File System..
+Module implementation, resources, and local coordination for File System..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

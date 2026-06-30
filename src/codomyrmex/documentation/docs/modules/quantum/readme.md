@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Quantum..
+Module implementation, resources, and local coordination for Quantum..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

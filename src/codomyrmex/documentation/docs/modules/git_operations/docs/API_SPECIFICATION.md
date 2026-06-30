@@ -275,7 +275,7 @@ For comprehensive documentation with detailed examples, parameter descriptions, 
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../readme.md)
+- **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)

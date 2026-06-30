@@ -7,12 +7,6 @@ the First Principles Framework specification for use in prompt/context engineeri
 import contextlib
 from pathlib import Path
 
-from .analysis.analyzer import FPFAnalyzer
-from .analysis.indexer import FPFIndexer
-from .analysis.report_generator import ReportGenerator
-from .analysis.term_analyzer import TermAnalyzer
-from .core.context_builder import ContextBuilder
-from .core.extractor import FPFExtractor
 from .core.models import (
     Concept,
     ConceptType,
@@ -24,14 +18,37 @@ from .core.models import (
     RelationshipType,
 )
 from .core.parser import FPFParser
+from .core.extractor import FPFExtractor
+from .core.context_builder import ContextBuilder
 from .io.exporter import FPFExporter
 from .io.fetcher import FPFFetcher
 from .io.section_exporter import SectionExporter
 from .io.section_importer import SectionImporter
 from .io.section_manager import SectionManager
-from .visualization.graph_generator import GraphGenerator
-from .visualization.visualizer import FPFVisualizer
-from .visualization.visualizer_png import FPFVisualizerPNG
+
+# Analysis and visualization modules require optional dependencies (networkx, matplotlib).
+# Import them with graceful fallback so the core models remain available.
+FPFAnalyzer = None
+FPFIndexer = None
+ReportGenerator = None
+TermAnalyzer = None
+GraphGenerator = None
+FPFVisualizer = None
+FPFVisualizerPNG = None
+with contextlib.suppress(ImportError):
+    from .analysis.analyzer import FPFAnalyzer  # type: ignore[assignment]
+with contextlib.suppress(ImportError):
+    from .analysis.indexer import FPFIndexer  # type: ignore[assignment]
+with contextlib.suppress(ImportError):
+    from .analysis.report_generator import ReportGenerator  # type: ignore[assignment]
+with contextlib.suppress(ImportError):
+    from .analysis.term_analyzer import TermAnalyzer  # type: ignore[assignment]
+with contextlib.suppress(ImportError):
+    from .visualization.graph_generator import GraphGenerator  # type: ignore[assignment]
+with contextlib.suppress(ImportError):
+    from .visualization.visualizer import FPFVisualizer  # type: ignore[assignment]
+with contextlib.suppress(ImportError):
+    from .visualization.visualizer_png import FPFVisualizerPNG  # type: ignore[assignment]
 
 # Shared schemas for cross-module interop
 with contextlib.suppress(ImportError):

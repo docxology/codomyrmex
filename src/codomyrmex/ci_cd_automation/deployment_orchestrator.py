@@ -17,7 +17,19 @@ from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
-from codomyrmex.validation.schemas.infra import DeploymentStatus
+
+class DeploymentStatus(Enum):
+    """Status of a CI/CD deployment lifecycle."""
+
+    PENDING = "pending"
+    RUNNING = "running"
+    SUCCESS = "success"
+    FAILURE = "failure"
+    CANCELLED = "cancelled"
+    IN_PROGRESS = "in_progress"
+    DEPLOYED = "deployed"
+    ROLLING_BACK = "rolling_back"
+    ROLLED_BACK = "rolled_back"
 
 # Optional imports handled gracefully at runtime
 docker: Any | None = None

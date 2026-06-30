@@ -304,7 +304,7 @@ perms = pm.list_permissions("skill-123")  # ["execute"]
 
 ## Navigation
 
-- [Module README](readme.md)
-- [MCP Tool Specification](mcp_tool_specification.md)
+- [Module README](./README.md)
+- [MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md)
 - [Functional Specification](./SPEC.md)
 - [Full Documentation](../../../docs/modules/skills/)

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Model Merger..
+Module implementation, resources, and local coordination for Model Merger..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

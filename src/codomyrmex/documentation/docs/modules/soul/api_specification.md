@@ -184,7 +184,7 @@ except SoulProviderError as exc:
 
 ## Navigation
 
-- **Human Guide**: [README.md](readme.md)
-- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](mcp_tool_specification.md)
-- **Technical Spec**: [SPEC.md](../../../../../../docs/modules/soul/SPEC.md)
+- **Human Guide**: [README.md](README.md)
+- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
+- **Technical Spec**: [SPEC.md](SPEC.md)
 - **Parent**: [codomyrmex package](../README.md)

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Peft..
+Module implementation, resources, and local coordination for Peft..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

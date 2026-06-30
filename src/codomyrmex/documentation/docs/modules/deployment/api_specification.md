@@ -102,4 +102,4 @@ The Deployment module provides tools for managing application deployments, inclu
 
 ## Navigation
 
-- [README](readme.md) | [SPEC](SPEC.md) | [AGENTS.md](AGENTS.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS.md](AGENTS.md)

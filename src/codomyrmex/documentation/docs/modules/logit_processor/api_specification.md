@@ -48,4 +48,4 @@ processed = topk(temp(logits))
 
 ## 5. Navigation
 
-- [README](readme.md) | [SPEC](../../../../../../docs/modules/logit_processor/SPEC.md) | [AGENTS](AGENTS.md) | [PAI](../../../../../../src/codomyrmex/logit_processor/PAI.md) | [MCP Tools](mcp_tool_specification.md)
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md) | [MCP Tools](MCP_TOOL_SPECIFICATION.md)

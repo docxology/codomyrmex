@@ -13,8 +13,9 @@ from __future__ import annotations
 import contextlib
 from typing import Any
 
+z3 = None
 with contextlib.suppress(ImportError):
-    import z3
+    import z3  # type: ignore[assignment]
 
 from codomyrmex.formal_verification.exceptions import (
     BackendNotAvailableError,

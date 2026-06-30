@@ -16,6 +16,6 @@ See `model_context_protocol` module documentation for details on exposing tools 
 
 ## Navigation
 
-- **Parent**: [README.md](readme.md)
-- **API Spec**: [API_SPECIFICATION.md](api_specification.md)
-- **PAI Integration**: [PAI.md](../../../../../../docs/modules/tool_use/PAI.md)
+- **Parent**: [README.md](README.md)
+- **API Spec**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **PAI Integration**: [PAI.md](PAI.md)

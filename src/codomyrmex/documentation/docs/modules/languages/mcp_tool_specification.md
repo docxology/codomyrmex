@@ -2,7 +2,7 @@
 
 ## Overview
 
-Multi-language install checks and script execution. Implementations live in [`mcp_tools.py`](../../../../../../src/codomyrmex/languages/mcp_tools.py).
+Multi-language install checks and script execution. Implementations live in [`mcp_tools.py`](mcp_tools.py).
 
 **PAI bridge:** tools are registered via `register_mcp_tools(mcp_server)` as:
 

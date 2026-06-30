@@ -155,6 +155,6 @@ No external configuration. All parameters are passed at construction or call tim
 
 ## Navigation
 
-- **Human Documentation**: [README.md](readme.md)
-- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](mcp_tool_specification.md)
+- **Human Documentation**: [README.md](README.md)
+- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
 - **Parent Directory**: [codomyrmex](../README.md)

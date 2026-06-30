@@ -1,3 +1,5 @@
+# Scope, Related Work, and Positioning {#sec:scope}
+
 ## Agentic Software Engineering {#sec:agentic-se}
 
 The emergence of LLM-based software agents has produced a wave of frameworks for orchestrating tool-using models in engineering contexts. SWE-bench [@yang2024swebench] established the first systematic evaluation of agent-generated patches against real GitHub issues, revealing that even strong models fail on the majority of tasks when operating without structured oversight. LangGraph [@langgraph2024] provides a graph-based state machine for multi-step agent pipelines, and AutoGen [@wu2023autogen] enables conversational multi-agent workflows where agents negotiate task decomposition through natural language. CrewAI [@crewai2024] extends this model with role-based agent teams, pre-defined workflows, and hierarchical task delegation. All three frameworks excel at composing individual agent turns but lack a persistent, inspectable control plane: there is no first-class concept of trust accumulation, no cross-session consequence memory, and no signal-based coordination between concurrent agents.

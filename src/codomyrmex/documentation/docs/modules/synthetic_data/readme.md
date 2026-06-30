@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Synthetic Data..
+Module implementation, resources, and local coordination for Synthetic Data..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

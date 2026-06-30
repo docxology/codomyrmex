@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Exceptions..
+Module implementation, resources, and local coordination for Exceptions..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

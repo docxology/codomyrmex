@@ -165,6 +165,6 @@ Run a free-energy minimization loop with an active inference agent. Creates a de
 
 ## Navigation Links
 
-- **Parent**: [Module README](readme.md)
+- **Parent**: [Module README](./README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Home**: [Root README](../../../README.md)

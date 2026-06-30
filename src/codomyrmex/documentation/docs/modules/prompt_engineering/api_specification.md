@@ -222,7 +222,7 @@ PromptEvaluator(criteria: list[EvaluationCriteria] | None = None)
 
 ## Navigation
 
-- **Human Documentation**: [README.md](readme.md)
-- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](mcp_tool_specification.md)
-- **PAI Integration**: [PAI.md](../../../../../../docs/modules/prompt_engineering/PAI.md)
+- **Human Documentation**: [README.md](README.md)
+- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
+- **PAI Integration**: [PAI.md](PAI.md)
 - **Parent Directory**: [codomyrmex](../README.md)

@@ -486,5 +486,5 @@ def set_config(config: DocumentsConfig) -> None
 
 ## Navigation
 
-- **Human Documentation**: [README.md](readme.md)
-- **Usage Examples**: [USAGE_EXAMPLES.md](usage_examples.md)
+- **Human Documentation**: [README.md](README.md)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md)

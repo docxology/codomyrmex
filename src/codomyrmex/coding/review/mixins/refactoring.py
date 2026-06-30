@@ -242,14 +242,13 @@ class RefactoringMixin:
 
     def _suggest_proper_name(self, current_name: str) -> str:
         """Suggest a proper name for a file."""
-        if "test" in current_name.lower() and not current_name.startswith("test_"):
-            # Convert test_file.py to test_file.py (add test_ prefix)
-            if not current_name.startswith("test_"):
-                return f"test_{current_name}"
-        elif current_name.endswith("_test.py") and not current_name.startswith("test_"):
-            # Convert file_test.py to test_file.py
-            base_name = current_name.replace("_test.py", ".py")
+        # Handle suffix-style test naming first (foo_test.py -> test_foo.py)
+        if current_name.endswith("_test.py") and not current_name.startswith("test_"):
+            base_name = current_name[: -len("_test.py")] + ".py"
             return f"test_{base_name}"
+        # Handle files containing 'test' anywhere but not prefixed with test_
+        if "test" in current_name.lower() and not current_name.startswith("test_"):
+            return f"test_{current_name}"
 
         return current_name
 

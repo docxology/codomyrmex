@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Formal Verification..
+Module implementation, resources, and local coordination for Formal Verification..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

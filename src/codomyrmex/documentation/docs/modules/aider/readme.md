@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Aider..
+Module implementation, resources, and local coordination for Aider..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

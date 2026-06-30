@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Pai Pm..
+Module implementation, resources, and local coordination for Pai Pm..
 
 ## Directory Contents
 - `PAI.md` – File

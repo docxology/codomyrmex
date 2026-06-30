@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Ci Cd Automation..
+Module implementation, resources, and local coordination for Ci Cd Automation..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

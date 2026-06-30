@@ -30,6 +30,24 @@ All implementation details live in the source package:
 | `tests/` | Full pytest suite (~3000 tests) |
 | `tools/` | Tool registry and 38+ tool implementations |
 
+## Key Files
+
+- `src/codomyrmex/agents/open_gauss/__init__.py` — Public module API.
+- `src/codomyrmex/agents/open_gauss/run_agent.py` — Main agent entry point.
+- `src/codomyrmex/agents/open_gauss/tools/` — Tool registry and implementations.
+
+## Dependencies
+
+- `logging_monitoring` — Structured logging.
+- `model_context_protocol` — MCP interfaces.
+- `environment_setup` — Dependency validation.
+
+## Development Guidelines
+
+- Keep tool definitions in `tools/` and register them via the tool registry.
+- Use the gateway abstraction for all messaging platform integrations.
+- Never hardcode platform-specific credentials; use environment variables.
+
 ## Navigation
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: [../../../../README.md](../../../../README.md)

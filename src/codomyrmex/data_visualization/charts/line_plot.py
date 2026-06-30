@@ -82,7 +82,10 @@ def create_line_plot(
 
     if show_plot:
         logger.debug("Displaying plot: %s", title)
-        plt.show()
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            plt.show()
     else:
         plt.close(fig)  # Close the figure to free memory if not shown
 

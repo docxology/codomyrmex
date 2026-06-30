@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Semantic Router..
+Module implementation, resources, and local coordination for Semantic Router..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

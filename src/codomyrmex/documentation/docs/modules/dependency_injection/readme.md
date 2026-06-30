@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Dependency Injection..
+Module implementation, resources, and local coordination for Dependency Injection..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

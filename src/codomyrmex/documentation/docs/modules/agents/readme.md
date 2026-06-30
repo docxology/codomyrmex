@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Agents..
+Module implementation, resources, and local coordination for Agents..
 
 ## Directory Contents
 - `AGENT_COMPARISON.md` – File

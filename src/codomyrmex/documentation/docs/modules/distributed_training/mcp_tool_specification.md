@@ -52,4 +52,4 @@ result = fsdp_simulate_step(param_size=2048, world_size=8, learning_rate=0.001)
 
 ## Navigation
 
-- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/distributed_training/SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

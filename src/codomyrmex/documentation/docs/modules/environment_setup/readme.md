@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Environment Setup..
+Module implementation, resources, and local coordination for Environment Setup..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

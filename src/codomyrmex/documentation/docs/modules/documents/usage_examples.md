@@ -347,9 +347,9 @@ for md_file in input_dir.glob("*.md"):
 
 ## Navigation
 
-- **Human Documentation**: [README.md](readme.md)
+- **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **API Reference**: [API_SPECIFICATION.md](api_specification.md)
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
 
 
 

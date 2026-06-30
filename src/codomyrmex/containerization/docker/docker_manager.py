@@ -4,7 +4,10 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
-import docker
+try:
+    import docker
+except ImportError:
+    docker = None  # type: ignore[assignment]
 
 from codomyrmex.logging_monitoring import get_logger
 

@@ -10,7 +10,7 @@ MCP tools are typically designed for discrete, invocable actions or queries that
 
 If future enhancements introduce features appropriate for MCP (e.g., a tool to query container registrations at runtime, or to dynamically register services via external command), this document will be updated accordingly.
 
-For details on how to use the dependency injection facilities within your Python code, refer to the module's [README.md](readme.md) and [API_SPECIFICATION.md](api_specification.md).
+For details on how to use the dependency injection facilities within your Python code, refer to the module's [README.md](README.md) and [API_SPECIFICATION.md](API_SPECIFICATION.md).
 
 ## Navigation Links
 

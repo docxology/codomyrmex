@@ -19,8 +19,29 @@ PROJECT_ROOT = str(Path(__file__).parents[5])
 
 
 def _gitnexus_available() -> bool:
-    """Check if gitnexus is available for guarding integration tests."""
-    return GitNexusBridge(PROJECT_ROOT).check_availability()
+    """Check if gitnexus is available and fully functional for integration tests.
+
+    check_availability() only verifies the npx binary exists; the native
+    LadybugDB binary may still be missing. Probe with a quick ``--version``
+    call to detect broken installs early.
+    """
+    import subprocess
+
+    bridge = GitNexusBridge(PROJECT_ROOT)
+    if not bridge.check_availability():
+        return False
+    try:
+        cmd = bridge._resolve_cmd() + ["--version"]
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            cwd=PROJECT_ROOT,
+        )
+        return result.returncode == 0 and "missing" not in result.stderr.lower()
+    except Exception:
+        return False
 
 
 @pytest.mark.unit

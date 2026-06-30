@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Website..
+Module implementation, resources, and local coordination for Website..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

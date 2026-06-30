@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Agentic Memory..
+Module implementation, resources, and local coordination for Agentic Memory..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

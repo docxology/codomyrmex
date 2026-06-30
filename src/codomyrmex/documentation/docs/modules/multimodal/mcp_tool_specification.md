@@ -2,7 +2,7 @@
 
 ## Overview
 
-Image generation via Google AI SDK. Auto-discovered from [`mcp_tools.py`](../../../../../../src/codomyrmex/multimodal/mcp_tools.py). Category: `multimodal`.
+Image generation via Google AI SDK. Auto-discovered from [`mcp_tools.py`](mcp_tools.py). Category: `multimodal`.
 
 ## Tool: `multimodal_generate_image`
 

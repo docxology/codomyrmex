@@ -56,4 +56,4 @@ result = compute_softmax(logits=[1.0, 2.0, 3.0], temperature=0.5, variant="stand
 
 ## Navigation
 
-- [README.md](readme.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](../../../../../../docs/modules/softmax_opt/SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

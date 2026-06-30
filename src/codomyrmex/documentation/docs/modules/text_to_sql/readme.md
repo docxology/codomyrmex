@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Text To Sql..
+Module implementation, resources, and local coordination for Text To Sql..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

@@ -32,6 +32,13 @@ try:
 except ImportError:
     GMAIL_AVAILABLE = False
     EMAIL_AVAILABLE = False
+    GmailProvider = None  # type: ignore[assignment,misc]
+
+# If the google SDK isn't installed, GMAIL_AVAILABLE is False even though the
+# import above succeeded (the class is defined with a runtime guard).  Expose
+# None so callers can do ``if email_module.GmailProvider is None`` checks.
+if not GMAIL_AVAILABLE:
+    GmailProvider = None  # type: ignore[assignment,misc]
 
 try:
     from .agentmail import AGENTMAIL_AVAILABLE, AgentMailProvider

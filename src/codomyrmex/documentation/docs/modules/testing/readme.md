@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Testing.
+Validation coverage, fixtures, and regression checks for Testing.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

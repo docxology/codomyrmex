@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Ide..
+Module implementation, resources, and local coordination for Ide..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

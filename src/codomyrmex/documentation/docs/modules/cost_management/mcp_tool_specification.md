@@ -2,7 +2,7 @@
 
 ## Overview
 
-Budget and cost summaries. Auto-discovered from [`mcp_tools.py`](../../../../../../src/codomyrmex/cost_management/mcp_tools.py). Category: `cost_management`.
+Budget and cost summaries. Auto-discovered from [`mcp_tools.py`](mcp_tools.py). Category: `cost_management`.
 
 ## Tool: `get_cost_summary`
 
@@ -18,7 +18,7 @@ No parameters. **Returns:** `budgets` (utilization list), `alerts`.
 
 ## FastMCP registration
 
-[`register_mcp_tools`](../../../../../../src/codomyrmex/cost_management/mcp_tools.py) also exposes `mcp_get_cost_summary` and `mcp_check_budgets` wrapping the same functions.
+[`register_mcp_tools`](mcp_tools.py) also exposes `mcp_get_cost_summary` and `mcp_check_budgets` wrapping the same functions.
 
 ## Navigation
 

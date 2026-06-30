@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Networking..
+Module implementation, resources, and local coordination for Networking..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

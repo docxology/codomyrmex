@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Maintenance..
+Module implementation, resources, and local coordination for Maintenance..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

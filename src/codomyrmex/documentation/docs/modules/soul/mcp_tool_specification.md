@@ -168,6 +168,6 @@ All tools return an error dict on failure:
 
 ## Navigation
 
-- **API Reference**: [API_SPECIFICATION.md](api_specification.md)
-- **Human Guide**: [README.md](readme.md)
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Human Guide**: [README.md](README.md)
 - **Parent**: [codomyrmex package](../README.md)

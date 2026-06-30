@@ -5,6 +5,7 @@ message handling, and error recovery.
 """
 
 import asyncio
+import inspect
 import json
 from collections.abc import Callable
 from typing import Any
@@ -122,7 +123,7 @@ class WebSocketClient:
 
         for handler in self._handlers:
             try:
-                if asyncio.iscoroutinefunction(handler):
+                if inspect.iscoroutinefunction(handler):
                     await handler(data)
                 else:
                     handler(data)

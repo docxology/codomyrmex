@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Softmax Opt..
+Module implementation, resources, and local coordination for Softmax Opt..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

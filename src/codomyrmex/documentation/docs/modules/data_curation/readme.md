@@ -46,5 +46,5 @@ print(f"Kept {stats['unique_documents']}/{stats['total_documents']}")
 ## Navigation
 
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Documentation**: [SPEC.md](../../../../../../docs/modules/data_curation/SPEC.md) | [API_SPECIFICATION.md](../../../../../../src/codomyrmex/data_curation/API_SPECIFICATION.md) | [PAI.md](../../../../../../src/codomyrmex/data_curation/PAI.md) | [AGENTS.md](../../../../../../docs/modules/data_curation/AGENTS.md) | [MCP_TOOL_SPECIFICATION.md](../../../../../../src/codomyrmex/data_curation/MCP_TOOL_SPECIFICATION.md)
+- **Documentation**: [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md) | [PAI.md](PAI.md) | [AGENTS.md](AGENTS.md) | [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
 - **Project Root**: [../../../README.md](../../../README.md)

@@ -579,7 +579,7 @@ No API versioning. Single version served by `WebsiteServer`.
 
 ## Navigation Links
 
-- **Parent**: [Website README](readme.md)
+- **Parent**: [Website README](./README.md)
 - **Module Index**: [All Modules](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

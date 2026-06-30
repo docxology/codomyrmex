@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation tooling, generated references, and publishing assets for Lora..
+Module implementation, resources, and local coordination for Lora..
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File
