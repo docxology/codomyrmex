@@ -30,7 +30,6 @@ from codomyrmex.colony_kernel.models import (
     ActionProposal,
     AgentTrustProfile,
     ColonySignal,
-    ConsequenceRecord,
     DecayRate,
     FalsificationFinding,
     FalsificationSeverity,
@@ -194,15 +193,7 @@ def colony_record_outcome(
             rationale="Outcome recorded via colony_record_outcome MCP tool.",
             expected_outcome=actual_outcome,
         )
-        record = ConsequenceRecord(
-            proposal=proposal,
-            action_taken=f"{action_type} on {target}",
-            actual_outcome=actual_outcome,
-            tests_passed=tests_passed,
-            human_feedback=float(human_feedback),
-            repair_needed=not tests_passed,
-        )
-        kernel.record_outcome(
+        record = kernel.record_outcome(
             proposal=proposal,
             outcome={
                 "summary": actual_outcome,

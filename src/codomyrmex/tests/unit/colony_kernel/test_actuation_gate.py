@@ -696,3 +696,230 @@ def test_gate_thresholds() -> None:
     assert _GATE_SCORE_HOLD == 0.50
     # Formula: pressure*0.30 + rollback*0.30 + trust*0.25 + evidence*0.15
     assert abs(0.30 + 0.30 + 0.25 + 0.15 - 1.0) < 1e-9
+
+
+# ---------------------------------------------------------------------------
+# Test 14 — HOLD decision pinned (score-level assertions, not just "HOLD or REFUSE")
+#
+# Gate formula: budget_ok*0.30 + risk_ok*0.30 + trust_ok*0.25 + completeness*0.15
+#
+# Discrete component values used below:
+#   budget_ok   = 1.0   (UnlimitedLedger, no hard-override triggered)
+#   risk_ok     : 0.0 (pressure >= 6.0)  |  0.5 (3.0–5.99)  |  1.0 (< 3.0)
+#   trust_ok    : 0.5 (0.30 <= trust < 0.60)  |  1.0 (trust >= 0.60)
+#                 after 3-failure penalty: subtract 0.25 (floor at 0.0)
+#   completeness: max(0, 1 - missing_count * 0.35)
+#                 0 missing → 1.00  |  1 missing → 0.65  |  2 missing → 0.30
+# ---------------------------------------------------------------------------
+
+
+def _gate_for_hold_tests(
+    target: str,
+    risk_pressure: float,
+    failures: int = 0,
+) -> ActuationGate:
+    """Build a gate with a specific RISK pheromone pressure at *target*.
+
+    Uses StigmergyConfig(max_strength=100.0) so the deposited strength is
+    stored without clamping.
+    """
+    field = TraceField(StigmergyConfig(max_strength=100.0))
+    key = f"{target}:{SignalType.RISK.value}"
+    field.deposit(key, initial=risk_pressure)
+    return ActuationGate(
+        pheromone_store=field,
+        resource_ledger=_UnlimitedLedger(),
+        consequence_memory_ref=_CountingMemory(failures=failures) if failures else None,
+    )
+
+
+class TestHoldDecisionPinned:
+    """Pin HOLD decisions to specific score ranges.
+
+    Every test asserts ``decision is GateDecision.HOLD`` (not merely
+    ``decision in {HOLD, REFUSE}`` as earlier tests do) and confirms the
+    exact computed gate_score.
+    """
+
+    def test_hold_score_exactly_at_lower_boundary(self) -> None:
+        """Score = 0.5125 — the lowest achievable HOLD score (just above 0.50).
+
+        Component derivation (working backwards from the formula):
+          budget_ok  = 1.0  (unlimited ledger)
+          risk_ok    = 0.0  (RISK pressure 7.0 >= _HIGH_RISK_THRESHOLD 6.0)
+          trust_ok   = 0.25 (trust 0.35 in [0.30, 0.60) → base 0.5;
+                             3 recent failures apply _FAILURE_PENALTY 0.25 → 0.25)
+          completeness = 1.0 (all three fields present: rollback_plan, evidence,
+                              expected_outcome)
+
+          score = 0.30 + 0.0*0.30 + 0.25*0.25 + 1.0*0.15
+                = 0.30 + 0 + 0.0625 + 0.15 = 0.5125
+        """
+        target = "codomyrmex.hold.lower_boundary"
+        gate = _gate_for_hold_tests(target, risk_pressure=7.0, failures=3)
+
+        proposal = ActionProposal(
+            agent_id="hold-lower-agent",
+            agent_type="REPAIR_ANT",
+            action_type="patch_file",
+            target=target,
+            rationale="Patch a failing integration test.",
+            expected_outcome="Integration test passes after patch.",
+            budget_estimate=ResourceCost(llm_calls=1, runtime_seconds=3.0),
+            rollback_plan="git revert HEAD",               # present
+            evidence={"test_id": "test_integration::tc1"}, # present
+        )
+        profile = AgentTrustProfile(
+            agent_id="hold-lower-agent",
+            role=AgentRole.REPAIR_ANT,
+            trust_score=0.35,  # in [0.30, 0.60) → trust_ok base = 0.5
+        )
+        result = gate.evaluate(proposal, profile)
+
+        expected_score = 0.30 + 0.0 * 0.30 + 0.25 * 0.25 + 1.0 * 0.15  # 0.5125
+        assert abs(result.gate_score - expected_score) < 1e-9, (
+            f"Expected gate_score {expected_score:.4f}, got {result.gate_score:.4f}"
+        )
+        assert result.decision is GateDecision.HOLD, (
+            f"Expected HOLD but got {result.decision}; score={result.gate_score:.4f}"
+        )
+
+    def test_hold_score_exactly_at_upper_boundary(self) -> None:
+        """Score = 0.7450 — the highest achievable HOLD score (just below 0.75).
+
+        Component derivation:
+          budget_ok    = 1.0
+          risk_ok      = 0.5  (RISK pressure 4.0 in [3.0, 6.0))
+          trust_ok     = 1.0  (trust 0.75 >= 0.60; no failure penalty)
+          completeness = 0.30 (2 missing fields: rollback_plan empty,
+                               evidence empty → missing_count=2;
+                               max(0, 1 - 2*0.35) = 0.30)
+
+          score = 0.30 + 0.5*0.30 + 1.0*0.25 + 0.30*0.15
+                = 0.30 + 0.15 + 0.25 + 0.045 = 0.7450
+        """
+        target = "codomyrmex.hold.upper_boundary"
+        gate = _gate_for_hold_tests(target, risk_pressure=4.0, failures=0)
+
+        proposal = ActionProposal(
+            agent_id="hold-upper-agent",
+            agent_type="REPAIR_ANT",
+            action_type="patch_file",
+            target=target,
+            rationale="Refactor module to reduce complexity.",
+            expected_outcome="Complexity metrics improved.",
+            budget_estimate=ResourceCost(llm_calls=3, runtime_seconds=10.0),
+            rollback_plan="",   # missing (empty string)
+            evidence={},        # missing (empty dict)
+        )
+        profile = AgentTrustProfile(
+            agent_id="hold-upper-agent",
+            role=AgentRole.REPAIR_ANT,
+            trust_score=0.75,  # >= 0.60 → trust_ok = 1.0
+        )
+        result = gate.evaluate(proposal, profile)
+
+        expected_score = 0.30 + 0.5 * 0.30 + 1.0 * 0.25 + 0.30 * 0.15  # 0.7450
+        assert abs(result.gate_score - expected_score) < 1e-9, (
+            f"Expected gate_score {expected_score:.4f}, got {result.gate_score:.4f}"
+        )
+        assert result.decision is GateDecision.HOLD, (
+            f"Expected HOLD but got {result.decision}; score={result.gate_score:.4f}. "
+            "EXECUTE threshold is 0.75; score 0.7450 must be HOLD."
+        )
+
+    def test_hold_score_midpoint(self) -> None:
+        """Score = 0.6200 — mid-range HOLD (between 0.50 and 0.75).
+
+        Component derivation:
+          budget_ok    = 1.0
+          risk_ok      = 0.5  (RISK pressure 4.0 in [3.0, 6.0))
+          trust_ok     = 0.5  (trust 0.50 in [0.30, 0.60); no failure penalty)
+          completeness = 0.30 (2 missing fields: rollback_plan empty,
+                               evidence empty; max(0, 1-2*0.35)=0.30)
+
+          score = 0.30 + 0.5*0.30 + 0.5*0.25 + 0.30*0.15
+                = 0.30 + 0.15 + 0.125 + 0.045 = 0.6200
+        """
+        target = "codomyrmex.hold.midpoint"
+        gate = _gate_for_hold_tests(target, risk_pressure=4.0, failures=0)
+
+        proposal = ActionProposal(
+            agent_id="hold-mid-agent",
+            agent_type="REPAIR_ANT",
+            action_type="patch_file",
+            target=target,
+            rationale="Update dependency to resolve CVE.",
+            expected_outcome="CVE resolved; tests remain green.",
+            budget_estimate=ResourceCost(llm_calls=2, runtime_seconds=8.0),
+            rollback_plan="",  # missing
+            evidence={},       # missing
+        )
+        profile = AgentTrustProfile(
+            agent_id="hold-mid-agent",
+            role=AgentRole.REPAIR_ANT,
+            trust_score=0.50,  # in [0.30, 0.60) → trust_ok = 0.5
+        )
+        result = gate.evaluate(proposal, profile)
+
+        expected_score = 0.30 + 0.5 * 0.30 + 0.5 * 0.25 + 0.30 * 0.15  # 0.6200
+        assert abs(result.gate_score - expected_score) < 1e-9, (
+            f"Expected gate_score {expected_score:.4f}, got {result.gate_score:.4f}"
+        )
+        assert result.decision is GateDecision.HOLD, (
+            f"Expected HOLD but got {result.decision}; score={result.gate_score:.4f}"
+        )
+
+    def test_execute_boundary(self) -> None:
+        """Score = 0.7600 — the lowest achievable EXECUTE score (>= 0.75).
+
+        Component derivation:
+          budget_ok    = 1.0
+          risk_ok      = 1.0  (no RISK pheromone deposited → pressure 0.0 < 3.0)
+          trust_ok     = 0.25 (trust 0.35 in [0.30, 0.60) → base 0.5;
+                               3 recent failures → penalty 0.25 → trust_ok = 0.25)
+          completeness = 0.65 (1 missing field: rollback_plan empty;
+                               evidence present, expected_outcome present;
+                               max(0, 1-1*0.35) = 0.65)
+
+          score = 0.30 + 1.0*0.30 + 0.25*0.25 + 0.65*0.15
+                = 0.30 + 0.30 + 0.0625 + 0.0975 = 0.7600
+
+        Asserts decision is EXECUTE (not HOLD), pinning that 0.76 clears the
+        threshold and confirming the boundary lies between 0.7450 (HOLD) and
+        0.7600 (EXECUTE).
+        """
+        target = "codomyrmex.execute.boundary"
+        # No risk pheromone deposited → pressure = 0.0 → risk_ok = 1.0
+        gate = ActuationGate(
+            pheromone_store=TraceField(StigmergyConfig()),
+            resource_ledger=_UnlimitedLedger(),
+            consequence_memory_ref=_CountingMemory(failures=3),
+        )
+
+        proposal = ActionProposal(
+            agent_id="execute-boundary-agent",
+            agent_type="REPAIR_ANT",
+            action_type="patch_file",
+            target=target,
+            rationale="Apply security patch with full test coverage.",
+            expected_outcome="Security vulnerability resolved.",
+            budget_estimate=ResourceCost(llm_calls=2, runtime_seconds=5.0),
+            rollback_plan="",                                   # missing (1 field)
+            evidence={"pr_url": "https://github.com/org/repo/pull/42"},  # present
+        )
+        profile = AgentTrustProfile(
+            agent_id="execute-boundary-agent",
+            role=AgentRole.REPAIR_ANT,
+            trust_score=0.35,  # in [0.30, 0.60) → base trust_ok 0.5 − 0.25 = 0.25
+        )
+        result = gate.evaluate(proposal, profile)
+
+        expected_score = 0.30 + 1.0 * 0.30 + 0.25 * 0.25 + 0.65 * 0.15  # 0.7600
+        assert abs(result.gate_score - expected_score) < 1e-9, (
+            f"Expected gate_score {expected_score:.4f}, got {result.gate_score:.4f}"
+        )
+        assert result.decision is GateDecision.EXECUTE, (
+            f"Expected EXECUTE but got {result.decision}; score={result.gate_score:.4f}. "
+            "Score 0.7600 must clear the 0.75 EXECUTE threshold."
+        )

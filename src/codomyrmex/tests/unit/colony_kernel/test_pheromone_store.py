@@ -501,3 +501,96 @@ class TestSummary:
         summary = store.summary()
 
         assert summary["mean_strength"] == pytest.approx(3.0)
+
+
+# ---------------------------------------------------------------------------
+# deposit  (kernel-compatible alias)
+# ---------------------------------------------------------------------------
+
+
+class TestDeposit:
+    def test_deposit_accepts_colony_signal(self, store: PheromoneStore) -> None:
+        """store.deposit(signal) with a real ColonySignal must not raise."""
+        sig = _signal("dep.a", SignalType.NEED, strength=1.0, source=SignalSource.AGENT)
+        # Should complete without raising any exception.
+        store.deposit(sig)
+
+    def test_deposit_increases_store_length(self, store: PheromoneStore) -> None:
+        """len(store) must increase by 1 after a single deposit."""
+        assert len(store) == 0
+        sig = _signal("dep.b", SignalType.SUCCESS, strength=2.0)
+        store.deposit(sig)
+        assert len(store) == 1
+
+    def test_deposit_signal_queryable(self, store: PheromoneStore) -> None:
+        """After deposit, query_pressure for the same location must return a non-empty
+        list with positive strength."""
+        sig = _signal("dep.c", SignalType.DEPENDENCY, strength=3.0, source=SignalSource.RUNTIME)
+        store.deposit(sig)
+
+        results = store.query_pressure("dep.c", SignalType.DEPENDENCY)
+
+        assert len(results) > 0
+        assert results[0].strength > 0.0
+
+    def test_deposit_multiplier_applied(self, store: PheromoneStore) -> None:
+        """Depositing identical raw strength via TEST (multiplier 1.5) vs AGENT (1.0)
+        should produce different effective strengths in the store.
+
+        _SOURCE_MULTIPLIER["test"] == 1.5, _SOURCE_MULTIPLIER["agent"] == 1.0.
+        """
+        raw_strength = 2.0
+        sig_test = _signal(
+            "dep.d.test", SignalType.FAILURE, strength=raw_strength, source=SignalSource.TEST
+        )
+        sig_agent = _signal(
+            "dep.d.agent", SignalType.FAILURE, strength=raw_strength, source=SignalSource.AGENT
+        )
+
+        store.deposit(sig_test)
+        store.deposit(sig_agent)
+
+        test_results = store.query_pressure("dep.d.test", SignalType.FAILURE)
+        agent_results = store.query_pressure("dep.d.agent", SignalType.FAILURE)
+
+        assert len(test_results) == 1
+        assert len(agent_results) == 1
+
+        # TEST multiplier (1.5) > AGENT multiplier (1.0) → TEST signal should be stronger.
+        assert test_results[0].strength > agent_results[0].strength
+        assert test_results[0].strength == pytest.approx(raw_strength * 1.5)
+        assert agent_results[0].strength == pytest.approx(raw_strength * 1.0)
+
+
+# ---------------------------------------------------------------------------
+# sense  (kernel-compatible alias)
+# ---------------------------------------------------------------------------
+
+
+class TestSense:
+    def test_sense_returns_zero_for_empty_store(self, store: PheromoneStore) -> None:
+        """sense() on an unknown location must return 0.0."""
+        result = store.sense("unknown.location", SignalType.FAILURE)
+        assert result == pytest.approx(0.0)
+
+    def test_sense_returns_pressure_after_deposit(self, store: PheromoneStore) -> None:
+        """After depositing a signal, sense() for the same (location, signal_type)
+        must return a value > 0."""
+        sig = _signal("sns.a", SignalType.RISK, strength=4.5, source=SignalSource.SECURITY)
+        store.deposit_signal(sig)
+
+        result = store.sense("sns.a", SignalType.RISK)
+
+        assert result > 0.0
+
+    def test_sense_consistent_with_query_pressure(self, store: PheromoneStore) -> None:
+        """sense(location, signal_type) and query_pressure(location, signal_type) must
+        report the same strength value for the same (location, signal_type) pair."""
+        sig = _signal("sns.b", SignalType.HUMAN_PRIORITY, strength=7.0, source=SignalSource.HUMAN)
+        store.deposit_signal(sig)
+
+        sense_value = store.sense("sns.b", SignalType.HUMAN_PRIORITY)
+        qp_results = store.query_pressure("sns.b", SignalType.HUMAN_PRIORITY)
+
+        assert len(qp_results) == 1
+        assert sense_value == pytest.approx(qp_results[0].strength)

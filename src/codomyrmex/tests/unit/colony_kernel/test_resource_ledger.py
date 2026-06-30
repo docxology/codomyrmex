@@ -415,3 +415,159 @@ class TestMostExpensiveAgents:
         # bot-x has 8+1=9 total, bot-y has 5
         assert ranked[0][0] == "bot-x"
         assert ranked[0][1].llm_calls == 9
+
+
+# ---------------------------------------------------------------------------
+# usage_summary
+# ---------------------------------------------------------------------------
+
+
+class TestUsageSummary:
+    def test_usage_summary_returns_all_dimensions(self, ledger: ResourceLedger) -> None:
+        """usage_summary keys cover all 7 budget dimensions."""
+        ledger.record_cost(
+            _cost(
+                llm_calls=3,
+                runtime_seconds=10.0,
+                risk_level=0.2,
+                human_attention_minutes=2.0,
+                merge_risk=0.1,
+                doc_debt=5.0,
+                security_exposure=0.05,
+            ),
+            agent_id="agent-a",
+        )
+        summary = ledger.usage_summary()
+
+        expected_dimensions = {
+            "llm_calls",
+            "runtime_seconds",
+            "risk_level",
+            "human_attention_minutes",
+            "merge_risk",
+            "doc_debt",
+            "security_exposure",
+        }
+        assert expected_dimensions.issubset(summary.keys())
+
+        assert summary["llm_calls"]["used"] == 3
+        assert summary["runtime_seconds"]["used"] == pytest.approx(10.0)
+        assert summary["risk_level"]["used"] == pytest.approx(0.2)
+        assert summary["human_attention_minutes"]["used"] == pytest.approx(2.0)
+        assert summary["merge_risk"]["used"] == pytest.approx(0.1)
+        assert summary["doc_debt"]["used"] == pytest.approx(5.0)
+        assert summary["security_exposure"]["used"] == pytest.approx(0.05)
+
+    def test_usage_summary_zero_on_fresh_ledger(self, ledger: ResourceLedger) -> None:
+        """Fresh ledger reports zero usage for all dimensions."""
+        summary = ledger.usage_summary()
+
+        assert summary["llm_calls"]["used"] == 0
+        assert summary["runtime_seconds"]["used"] == pytest.approx(0.0)
+        assert summary["risk_level"]["used"] == pytest.approx(0.0)
+        assert summary["human_attention_minutes"]["used"] == pytest.approx(0.0)
+        assert summary["merge_risk"]["used"] == pytest.approx(0.0)
+        assert summary["doc_debt"]["used"] == pytest.approx(0.0)
+        assert summary["security_exposure"]["used"] == pytest.approx(0.0)
+
+
+# ---------------------------------------------------------------------------
+# consume
+# ---------------------------------------------------------------------------
+
+
+class TestConsume:
+    def test_consume_records_cost(self, ledger: ResourceLedger) -> None:
+        """consume() records the cost; current_usage reflects the change."""
+        cost = _cost(llm_calls=4, runtime_seconds=1.5)
+        ledger.consume(cost)
+
+        usage = ledger.current_usage()
+        assert usage.llm_calls == 4
+        assert usage.runtime_seconds == pytest.approx(1.5)
+
+    def test_consume_within_budget_does_not_exceed(self, ledger: ResourceLedger) -> None:
+        """After consume() the accumulated total stays within default budget."""
+        ledger.consume(_cost(llm_calls=2))
+
+        ok, _ = ledger.can_afford(_cost(llm_calls=1))
+        assert ok is True
+
+    def test_consume_increments_accumulated_usage(self, ledger: ResourceLedger) -> None:
+        """Two consume() calls accumulate correctly."""
+        ledger.consume(_cost(llm_calls=5, doc_debt=3.0))
+        ledger.consume(_cost(llm_calls=7, doc_debt=1.5))
+
+        usage = ledger.current_usage()
+        assert usage.llm_calls == 12
+        assert usage.doc_debt == pytest.approx(4.5)
+
+
+# ---------------------------------------------------------------------------
+# check_budget
+# ---------------------------------------------------------------------------
+
+
+class TestCheckBudget:
+    def test_check_budget_within_limits_returns_ok(self, ledger: ResourceLedger) -> None:
+        """Small cost on fresh default ledger → approved with reason string."""
+        ok, reason = ledger.check_budget(_cost(llm_calls=1))
+
+        assert ok is True
+        assert reason is not None  # check_budget always returns a string
+
+    def test_check_budget_exceeded_returns_reason(self) -> None:
+        """Cost exceeding llm_calls cap → rejected with reason mentioning 'llm_calls'."""
+        budget = ResourceBudget(max_llm_calls_per_hour=3)
+        ledger = ResourceLedger(budget=budget)
+
+        ok, reason = ledger.check_budget(_cost(llm_calls=10))
+
+        assert ok is False
+        assert "llm_calls" in reason
+
+    def test_check_budget_does_not_mutate_accumulator(self, ledger: ResourceLedger) -> None:
+        """check_budget is read-only: accumulated usage unchanged after the call."""
+        before = ledger.current_usage().llm_calls
+        ledger.check_budget(_cost(llm_calls=5))
+        after = ledger.current_usage().llm_calls
+
+        assert before == after
+
+
+# ---------------------------------------------------------------------------
+# reset_period
+# ---------------------------------------------------------------------------
+
+
+class TestResetPeriod:
+    def test_reset_period_clears_current_usage(self, ledger: ResourceLedger) -> None:
+        """After reset_period(), current_usage is zeroed on all dimensions."""
+        ledger.record_cost(
+            _cost(
+                llm_calls=10,
+                runtime_seconds=30.0,
+                human_attention_minutes=5.0,
+                doc_debt=8.0,
+            ),
+            agent_id="agent-a",
+        )
+        ledger.reset_period()
+
+        usage = ledger.current_usage()
+        assert usage.llm_calls == 0
+        assert usage.runtime_seconds == pytest.approx(0.0)
+        assert usage.human_attention_minutes == pytest.approx(0.0)
+        assert usage.doc_debt == pytest.approx(0.0)
+
+    def test_reset_period_preserves_history(self, ledger: ResourceLedger) -> None:
+        """History entries recorded before reset_period() are still accessible."""
+        ledger.record_cost(_cost(llm_calls=3), agent_id="agent-b")
+        ledger.record_cost(_cost(llm_calls=7), agent_id="agent-c")
+        pre_reset_count = len(ledger.history())
+
+        ledger.reset_period()
+
+        assert len(ledger.history()) == pre_reset_count
+        assert ledger.history()[0][0] == "agent-b"
+        assert ledger.history()[1][0] == "agent-c"

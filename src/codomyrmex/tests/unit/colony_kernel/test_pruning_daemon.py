@@ -972,3 +972,77 @@ class TestPruningReportContainsPrunedAgentIDs:
                 assert c.module_path.strip() != "", (
                     f"Empty module_path found in candidate: {c}"
                 )
+
+
+# ---------------------------------------------------------------------------
+# PruningDaemon.scan_stale_docs() — stub contract
+# ---------------------------------------------------------------------------
+
+
+class TestScanStaleDocsStub:
+    """scan_stale_docs() is a documented stub pending git-history integration.
+
+    Its contract: always return an empty list.  These tests pin that contract so
+    that a future implementation cannot silently change the return value without
+    a test failure prompting an explicit review.
+    """
+
+    def test_scan_stale_docs_returns_empty_list(
+        self, daemon_empty: PruningDaemon
+    ) -> None:
+        """scan_stale_docs() must return [] (stub contract)."""
+        result = daemon_empty.scan_stale_docs()
+        assert result == []
+
+    def test_scan_stale_docs_return_type(
+        self, daemon_empty: PruningDaemon
+    ) -> None:
+        """Return value is a list — not None, not a generator, not any other iterable."""
+        result = daemon_empty.scan_stale_docs()
+        assert isinstance(result, list)
+
+    def test_scan_stale_docs_with_module_still_empty(
+        self, daemon_one_module: PruningDaemon
+    ) -> None:
+        """Even with a real module on disk the stub returns no candidates."""
+        result = daemon_one_module.scan_stale_docs()
+        assert result == []
+
+    def test_scan_stale_docs_idempotent(
+        self, daemon_empty: PruningDaemon
+    ) -> None:
+        """Calling scan_stale_docs() twice returns [] both times."""
+        assert daemon_empty.scan_stale_docs() == []
+        assert daemon_empty.scan_stale_docs() == []
+
+
+# ---------------------------------------------------------------------------
+# PruningDaemon.scan_no_tests() — NameError audit
+#
+# A previous audit flagged a potential NameError where _has_tests might be
+# unreachable.  Inspection of pruning_daemon.py shows _has_tests is defined
+# at module scope (line 381) and is called correctly in scan_no_tests().
+# The bug does NOT exist in the current source; these tests document the
+# working behavior so any future regression is caught immediately.
+# ---------------------------------------------------------------------------
+
+
+class TestScanNoTestsNameErrorResolved:
+    """scan_no_tests() must NOT raise NameError; _has_tests is module-scope."""
+
+    def test_scan_no_tests_does_not_raise(
+        self, daemon_one_module: PruningDaemon
+    ) -> None:
+        """scan_no_tests() must complete without raising NameError."""
+        # If the _has_tests NameError bug were present this would raise.
+        result = daemon_one_module.scan_no_tests()
+        # Result is a list — type check confirms no exception path was taken.
+        assert isinstance(result, list)
+
+    def test_scan_no_tests_returns_list_not_none(
+        self, daemon_empty: PruningDaemon
+    ) -> None:
+        """Return value is always a list, never None."""
+        result = daemon_empty.scan_no_tests()
+        assert result is not None
+        assert isinstance(result, list)

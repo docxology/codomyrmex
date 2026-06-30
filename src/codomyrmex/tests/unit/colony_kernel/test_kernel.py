@@ -912,3 +912,137 @@ class TestRoleChangeTriggeredSaveProfile:
         profile = kernel.agent_profile(agent_id)
         # After 3 passing outcomes the agent should have been promoted from SANDBOX
         assert profile.role != AgentRole.SANDBOX
+
+
+# ---------------------------------------------------------------------------
+# propose_action() — EXECUTE branch
+# ---------------------------------------------------------------------------
+
+class TestProposeActionExecuteBranch:
+    """The EXECUTE branch requires:
+    - Agent trust_score >= 0.60  (trust_ok = 1.0)
+    - No SANDBOX role            (total_proposals >= 3 after 3 record_outcome calls)
+    - No CRITICAL falsification  (clean pheromone field, no FAILURE signals)
+    - Budget approved            (default budget has plenty of headroom)
+    - All proposal fields present (rollback_plan, evidence, expected_outcome)
+
+    Trust delta per successful record_outcome (no repair, no human_feedback):
+        compute_trust_delta → +_TRUST_DELTA_PASS = +0.04
+
+    Starting trust = 0.1; need >= 0.60 for trust_ok = 1.0.
+    Calls needed:  ceil((0.60 - 0.10) / 0.04) = ceil(12.5) = 13
+
+    After 13 calls:
+        trust_score  = 0.1 + 13 * 0.04 = 0.62  (>= 0.60 → trust_ok = 1.0)
+        total_proposals = 13             (>= 3  → role != SANDBOX)
+        role         = MEMORY_ANT        (0.35 <= 0.62 < 0.70)
+
+    Gate score with a perfect proposal (all fields, zero risk pheromone):
+        budget_ok=1.0  * 0.30 = 0.30
+        risk_ok=1.0    * 0.30 = 0.30
+        trust_ok=1.0   * 0.25 = 0.25
+        completeness=1 * 0.15 = 0.15
+        ─────────────────────────────
+        total              = 1.00  >= 0.75 → EXECUTE
+    """
+
+    _AGENT_ID = "promoted-execute-agent"
+    _TRUST_DELTA_PASS = 0.04   # _TRUST_DELTA_PASS from models.py
+    _INITIAL_TRUST = 0.10      # AgentTrustProfile default trust_score
+    _EXECUTE_TRUST_THRESHOLD = 0.60  # trust >= 0.60 → trust_ok = 1.0 in gate
+    _N_OUTCOMES_NEEDED = 13    # ceil((0.60 - 0.10) / 0.04)
+
+    @staticmethod
+    def _seed_successful_outcomes(kernel: ColonyKernel, agent_id: str, n: int) -> None:
+        """Call kernel.record_outcome n times with tests_passed=True for agent_id."""
+        for i in range(n):
+            p = ActionProposal(
+                agent_id=agent_id,
+                agent_type="repair_ant",
+                action_type="run_tests",
+                target=f"mod.trust.seed.{i}",
+                rationale="Seeding successful outcomes to build agent trust above EXECUTE threshold.",
+                expected_outcome="all tests pass",
+                rollback_plan="git revert HEAD --no-edit",
+                evidence={"seed_index": i},
+            )
+            kernel.record_outcome(p, outcome={"summary": "ok"}, tests_passed=True)
+
+    @staticmethod
+    def _make_execute_proposal(agent_id: str) -> ActionProposal:
+        """Return a fully-populated ActionProposal that scores 1.00 at the gate."""
+        return ActionProposal(
+            agent_id=agent_id,
+            agent_type="repair_ant",
+            action_type="patch_file",
+            target="mod.execute.target",
+            rationale=(
+                "Apply a well-understood, low-risk patch with full test coverage, "
+                "a rollback plan, and documented evidence."
+            ),
+            expected_outcome="all unit tests pass; coverage unchanged",
+            budget_estimate=ResourceCost(
+                llm_calls=1,
+                runtime_seconds=5.0,
+                risk_level=0.05,
+            ),
+            rollback_plan="git revert HEAD --no-edit && uv run pytest",
+            evidence={
+                "test_ids": ["tests/unit/test_patch.py::test_main"],
+                "pr_url": "https://example.com/pr/99",
+            },
+        )
+
+    def test_propose_action_execute_with_promoted_agent(self, kernel: ColonyKernel):
+        """After 13 successful record_outcome calls, propose_action must return EXECUTE."""
+        self._seed_successful_outcomes(kernel, self._AGENT_ID, self._N_OUTCOMES_NEEDED)
+
+        # Verify the trust precondition was actually met before calling propose_action
+        profile = kernel.agent_profile(self._AGENT_ID)
+        assert profile.trust_score >= self._EXECUTE_TRUST_THRESHOLD, (
+            f"Precondition failed: expected trust >= {self._EXECUTE_TRUST_THRESHOLD}, "
+            f"got {profile.trust_score:.4f} after {self._N_OUTCOMES_NEEDED} outcomes"
+        )
+        assert profile.role != AgentRole.SANDBOX, (
+            f"Precondition failed: agent must not be SANDBOX, got {profile.role}"
+        )
+
+        proposal = self._make_execute_proposal(self._AGENT_ID)
+        result = kernel.propose_action(proposal)
+
+        assert result.decision == GateDecision.EXECUTE, (
+            f"Expected EXECUTE but got {result.decision}. "
+            f"gate_score={result.gate_score:.4f}, reason={result.reason!r}, "
+            f"trust={profile.trust_score:.4f}, role={profile.role}"
+        )
+
+    def test_execute_result_has_correct_fields(self, kernel: ColonyKernel):
+        """An EXECUTE GateResult must have gate_score >= 0.75 and no block reason."""
+        self._seed_successful_outcomes(kernel, self._AGENT_ID, self._N_OUTCOMES_NEEDED)
+
+        proposal = self._make_execute_proposal(self._AGENT_ID)
+        result = kernel.propose_action(proposal)
+
+        # Decision
+        assert result.decision == GateDecision.EXECUTE
+
+        # Score at or above the execute threshold
+        assert result.gate_score >= 0.75, (
+            f"gate_score {result.gate_score:.4f} is below the 0.75 execute threshold"
+        )
+
+        # Budget must have been approved
+        assert result.budget_approved is True
+
+        # EXECUTE results have empty required_evidence (no blocking items)
+        assert result.required_evidence == [], (
+            f"Expected empty required_evidence for EXECUTE, got {result.required_evidence}"
+        )
+
+        # Falsification severity must be below the CRITICAL threshold (1.0).
+        # The FalsificationWorker may still raise LOW/MEDIUM/HIGH findings from
+        # proposal heuristics; CRITICAL (weight=1.0) is the only hard REFUSE trigger.
+        assert result.falsification_severity < 1.0, (
+            f"Expected falsification_severity < 1.0 (non-CRITICAL) for EXECUTE, "
+            f"got {result.falsification_severity}"
+        )

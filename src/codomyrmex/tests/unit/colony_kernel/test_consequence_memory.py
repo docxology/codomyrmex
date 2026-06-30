@@ -544,3 +544,246 @@ def test_sqlite_trust_score_consistent_across_instances(tmp_path: Path) -> None:
         score_reload = mem2.trust_score("stable-agent")
 
     assert abs(score_original - score_reload) < 1e-9
+
+
+# ---------------------------------------------------------------------------
+# Test 12 — TestGetProfile
+# ---------------------------------------------------------------------------
+
+
+class TestGetProfile:
+    def test_get_profile_returns_default_for_unknown_agent(
+        self, memory: ConsequenceMemory
+    ) -> None:
+        """get_profile for a never-seen agent returns a valid AgentTrustProfile.
+
+        In-memory mode computes from records (trust=_TRUST_BASE when no records).
+        SQLite mode returns the stored default (trust_score=0.1 from the dataclass
+        default when no row exists).  Both cases must return a profile whose
+        trust_score is in [0.0, 1.0] and whose agent_id matches the requested id.
+        """
+        profile = memory.get_profile("never-seen-agent")
+        assert profile.agent_id == "never-seen-agent"
+        assert 0.0 <= profile.trust_score <= 1.0
+
+    def test_get_profile_returns_saved_profile(self, memory: ConsequenceMemory) -> None:
+        """save_profile followed by get_profile returns the same agent_id.
+
+        In-memory mode ignores save_profile (no-op); get_profile still returns
+        a profile with the correct agent_id because it's computed on-the-fly.
+        SQLite mode persists the profile and retrieves it.
+        """
+        from codomyrmex.colony_kernel.models import AgentRole, AgentTrustProfile
+
+        profile = AgentTrustProfile(
+            agent_id="saved-agent",
+            role=AgentRole.SANDBOX,
+            trust_score=0.7,
+        )
+        memory.save_profile(profile)
+        retrieved = memory.get_profile("saved-agent")
+        assert retrieved.agent_id == "saved-agent"
+
+
+# ---------------------------------------------------------------------------
+# Test 13 — TestSaveProfile
+# ---------------------------------------------------------------------------
+
+
+class TestSaveProfile:
+    def test_save_profile_persists_across_get_sqlite(self, tmp_path: Path) -> None:
+        """In SQLite mode, a saved trust_score=0.6 is returned by get_profile."""
+        from codomyrmex.colony_kernel.models import AgentRole, AgentTrustProfile
+
+        db_path = str(tmp_path / "sp_persist.db")
+        with ConsequenceMemory(db_path=db_path) as mem:
+            profile = AgentTrustProfile(
+                agent_id="persist-agent",
+                role=AgentRole.SANDBOX,
+                trust_score=0.6,
+            )
+            mem.save_profile(profile)
+            retrieved = mem.get_profile("persist-agent")
+            assert abs(retrieved.trust_score - 0.6) < 1e-9
+
+    def test_save_profile_overwrites_existing_sqlite(self, tmp_path: Path) -> None:
+        """In SQLite mode, a second save_profile replaces the first value."""
+        from codomyrmex.colony_kernel.models import AgentRole, AgentTrustProfile
+
+        db_path = str(tmp_path / "sp_overwrite.db")
+        with ConsequenceMemory(db_path=db_path) as mem:
+            p1 = AgentTrustProfile(
+                agent_id="ow-agent",
+                role=AgentRole.SANDBOX,
+                trust_score=0.4,
+            )
+            mem.save_profile(p1)
+
+            p2 = AgentTrustProfile(
+                agent_id="ow-agent",
+                role=AgentRole.SANDBOX,
+                trust_score=0.9,
+            )
+            mem.save_profile(p2)
+            retrieved = mem.get_profile("ow-agent")
+            assert abs(retrieved.trust_score - 0.9) < 1e-9
+
+    def test_save_profile_noop_in_memory_mode(self) -> None:
+        """In pure in-memory mode, save_profile is a no-op (does not raise)."""
+        from codomyrmex.colony_kernel.models import AgentRole, AgentTrustProfile
+
+        mem = ConsequenceMemory(db_path=None)
+        profile = AgentTrustProfile(
+            agent_id="noop-agent",
+            role=AgentRole.SANDBOX,
+            trust_score=0.8,
+        )
+        # Must not raise; get_profile returns computed value (0.5 base, no records)
+        mem.save_profile(profile)
+        retrieved = mem.get_profile("noop-agent")
+        assert retrieved.agent_id == "noop-agent"
+        # In-memory: no records -> trust_score == _TRUST_BASE (0.5)
+        assert abs(retrieved.trust_score - _TRUST_BASE) < 1e-9
+        mem.close()
+
+
+# ---------------------------------------------------------------------------
+# Test 14 — TestRecentConsequences
+# ---------------------------------------------------------------------------
+
+
+class TestRecentConsequences:
+    def test_recent_consequences_empty_for_new_memory(
+        self, memory: ConsequenceMemory
+    ) -> None:
+        """A fresh ConsequenceMemory returns an empty list from recent_consequences."""
+        result = memory.recent_consequences(limit=10)
+        assert result == []
+
+    def test_recent_consequences_returns_last_n(
+        self, memory: ConsequenceMemory
+    ) -> None:
+        """Recording 5 consequences and requesting limit=3 returns exactly 3."""
+        import time as _time
+
+        now = _time.time()
+        for i in range(5):
+            rec = ConsequenceRecord(
+                proposal=_proposal(agent_id=f"rc-agent-{i}"),
+                action_taken=f"action-{i}",
+                actual_outcome="ok",
+                tests_passed=True,
+                recorded_at=now + i,
+            )
+            memory.record(rec)
+        result = memory.recent_consequences(limit=3)
+        assert len(result) == 3
+
+    def test_recent_consequences_ordering(self, memory: ConsequenceMemory) -> None:
+        """recent_consequences returns records most-recent-first."""
+        import time as _time
+
+        now = _time.time()
+        records = []
+        for i in range(4):
+            rec = ConsequenceRecord(
+                proposal=_proposal(agent_id="order-agent"),
+                action_taken=f"step-{i}",
+                actual_outcome="ok",
+                tests_passed=True,
+                recorded_at=now + i,
+            )
+            memory.record(rec)
+            records.append(rec)
+
+        result = memory.recent_consequences(limit=4)
+        assert len(result) == 4
+        timestamps = [r["recorded_at"] for r in result]
+        assert timestamps == sorted(timestamps, reverse=True)
+
+    def test_recent_consequences_dict_keys_present(
+        self, memory: ConsequenceMemory
+    ) -> None:
+        """Each item returned by recent_consequences has the expected keys."""
+        memory.record(_success_record(agent_id="key-check-agent"))
+        result = memory.recent_consequences(limit=1)
+        assert len(result) == 1
+        row = result[0]
+        for key in ("consequence_id", "agent_id", "action_type", "tests_passed",
+                    "trust_delta", "recorded_at"):
+            assert key in row, f"Missing key '{key}' in recent_consequences row"
+
+
+# ---------------------------------------------------------------------------
+# Test 15 — TestRoleDistribution
+# ---------------------------------------------------------------------------
+
+
+class TestRoleDistribution:
+    def test_role_distribution_empty_for_no_data_in_memory(self) -> None:
+        """In pure in-memory mode, role_distribution always returns {} (no profile store)."""
+        mem = ConsequenceMemory(db_path=None)
+        dist = mem.role_distribution()
+        assert dist == {}
+        mem.close()
+
+    def test_role_distribution_empty_for_no_saved_profiles_sqlite(
+        self, tmp_path: Path
+    ) -> None:
+        """SQLite mode with no saved profiles returns an empty dict."""
+        db_path = str(tmp_path / "rd_empty.db")
+        with ConsequenceMemory(db_path=db_path) as mem:
+            dist = mem.role_distribution()
+            assert dist == {}
+
+    def test_role_distribution_reflects_saved_profiles(
+        self, tmp_path: Path
+    ) -> None:
+        """Saving 2 SANDBOX + 1 GUARD_ANT profiles yields matching distribution counts."""
+        from codomyrmex.colony_kernel.models import AgentRole, AgentTrustProfile
+
+        db_path = str(tmp_path / "rd_roles.db")
+        with ConsequenceMemory(db_path=db_path) as mem:
+            for i in range(2):
+                mem.save_profile(
+                    AgentTrustProfile(
+                        agent_id=f"sandbox-agent-{i}",
+                        role=AgentRole.SANDBOX,
+                        trust_score=0.5,
+                    )
+                )
+            mem.save_profile(
+                AgentTrustProfile(
+                    agent_id="guard-agent-0",
+                    role=AgentRole.GUARD_ANT,
+                    trust_score=0.8,
+                )
+            )
+
+            dist = mem.role_distribution()
+            assert dist.get(AgentRole.SANDBOX.value, 0) == 2
+            assert dist.get(AgentRole.GUARD_ANT.value, 0) == 1
+
+    def test_role_distribution_update_on_overwrite(self, tmp_path: Path) -> None:
+        """Saving a profile again for the same agent_id does not double-count."""
+        from codomyrmex.colony_kernel.models import AgentRole, AgentTrustProfile
+
+        db_path = str(tmp_path / "rd_overwrite.db")
+        with ConsequenceMemory(db_path=db_path) as mem:
+            mem.save_profile(
+                AgentTrustProfile(
+                    agent_id="dual-agent",
+                    role=AgentRole.SANDBOX,
+                    trust_score=0.5,
+                )
+            )
+            mem.save_profile(
+                AgentTrustProfile(
+                    agent_id="dual-agent",
+                    role=AgentRole.SANDBOX,
+                    trust_score=0.6,
+                )
+            )
+            dist = mem.role_distribution()
+            # Only 1 row for this agent despite 2 saves
+            assert dist.get(AgentRole.SANDBOX.value, 0) == 1

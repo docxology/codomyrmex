@@ -535,3 +535,140 @@ class TestInferRoleTrustScoreMapping:
         profile = self._profile(trust=0.50)
         role = RoleAdapter.infer_role(profile)
         assert role == AgentRole.DISPATCHER
+
+
+# ---------------------------------------------------------------------------
+# MEMORY_ANT via specialization-based assign_role (Rule 2)
+# ---------------------------------------------------------------------------
+
+
+class TestMemoryAntAssignment:
+    """assign_role Rule 2: trust >= 0.8 AND doc_write/memory_index -> MEMORY_ANT.
+
+    Rule priority order in assign_role:
+      5 (SANDBOX for low trust / failures) -> 3 (GUARD_ANT) -> 1 (REPAIR_ANT)
+      -> 2 (MEMORY_ANT) -> 4 (DISPATCHER) -> 6 (default SANDBOX)
+
+    MEMORY_ANT is returned when trust >= 0.8, the agent has successful
+    memory-category actions, and does NOT have any security-category successes
+    (which would trigger Rule 3 first).
+
+    Trust range that reliably produces MEMORY_ANT via assign_role: [0.80, 0.85).
+    At trust >= 0.85 the agent could earn GUARD_ANT if security actions exist,
+    so we use 0.82 (safely inside [0.80, 0.85)) to keep the test unambiguous.
+    """
+
+    def _make_memory_ant_adapter(self, agent_id: str, action_type: str = "doc_write") -> RoleAdapter:
+        """Return a RoleAdapter whose agent qualifies for MEMORY_ANT via Rule 2.
+
+        Trust is set to 0.82 (in [0.80, 0.85)) with successful memory-category
+        actions and no security-category actions, so Rule 2 fires before Rule 3.
+        """
+        memory = ConsequenceMemory()
+        adapter = RoleAdapter(memory)
+
+        adapter.get_profile(agent_id)
+
+        # Store successful memory-category records.
+        for _ in range(5):
+            record = _make_record(agent_id, action_type=action_type, tests_passed=True)
+            memory.store_record(record)
+            profile = memory.get_profile(agent_id)
+            assert profile is not None
+            profile.total_proposals += 1
+            profile.accepted_proposals += 1
+            profile.consequence_history.append(record.consequence_id)
+
+        # Force trust into [0.80, 0.85) so Rule 3 (GUARD_ANT) cannot fire.
+        profile = memory.get_profile(agent_id)
+        assert profile is not None
+        profile.trust_score = 0.82
+        memory.save_profile(profile)
+
+        return adapter
+
+    def test_assign_role_returns_memory_ant_at_qualifying_trust(self) -> None:
+        """trust = 0.82 with successful doc_write actions -> MEMORY_ANT (Rule 2)."""
+        agent_id = "agent-memory-doc-write"
+        adapter = self._make_memory_ant_adapter(agent_id, action_type="doc_write")
+        role = adapter.assign_role(agent_id)
+        assert role == AgentRole.MEMORY_ANT
+
+    def test_assign_role_returns_memory_ant_for_memory_index(self) -> None:
+        """memory_index is the second qualifying action type for MEMORY_ANT."""
+        agent_id = "agent-memory-index"
+        adapter = self._make_memory_ant_adapter(agent_id, action_type="memory_index")
+        role = adapter.assign_role(agent_id)
+        assert role == AgentRole.MEMORY_ANT
+
+    def test_memory_ant_stable_with_same_trust(self) -> None:
+        """Calling assign_role twice with the same trust returns MEMORY_ANT both times."""
+        agent_id = "agent-memory-stable"
+        adapter = self._make_memory_ant_adapter(agent_id, action_type="doc_write")
+        role_first = adapter.assign_role(agent_id)
+        role_second = adapter.assign_role(agent_id)
+        assert role_first == AgentRole.MEMORY_ANT
+        assert role_second == AgentRole.MEMORY_ANT
+
+    def test_memory_ant_not_sandbox(self) -> None:
+        """MEMORY_ANT trust (0.82) is strictly above the sandbox floor (0.3)."""
+        agent_id = "agent-memory-above-sandbox"
+        adapter = self._make_memory_ant_adapter(agent_id, action_type="doc_write")
+        profile = adapter.get_profile(agent_id)
+        # Confirm trust is well above the SANDBOX threshold of 0.3.
+        assert profile.trust_score > 0.3
+        # And the role itself is not SANDBOX.
+        role = adapter.assign_role(agent_id)
+        assert role != AgentRole.SANDBOX
+
+    def test_memory_ant_requires_memory_action(self) -> None:
+        """Without a memory-category action, trust alone does not produce MEMORY_ANT."""
+        agent_id = "agent-memory-no-action"
+        memory = ConsequenceMemory()
+        adapter = RoleAdapter(memory)
+
+        adapter.get_profile(agent_id)
+        profile = memory.get_profile(agent_id)
+        assert profile is not None
+        # High trust but only non-memory action type.
+        profile.trust_score = 0.82
+        memory.save_profile(profile)
+
+        # Store a successful test_fix record (not a memory action).
+        record = _make_record(agent_id, action_type="test_fix", tests_passed=True)
+        memory.store_record(record)
+        profile = memory.get_profile(agent_id)
+        assert profile is not None
+        profile.total_proposals += 1
+        profile.accepted_proposals += 1
+        profile.consequence_history.append(record.consequence_id)
+        memory.save_profile(profile)
+
+        role = adapter.assign_role(agent_id)
+        # Should be REPAIR_ANT (Rule 1 fires before Rule 2), not MEMORY_ANT.
+        assert role != AgentRole.MEMORY_ANT
+
+    def test_memory_ant_not_assigned_below_trust_threshold(self) -> None:
+        """trust < 0.8 with memory actions does not produce MEMORY_ANT."""
+        agent_id = "agent-memory-low-trust"
+        memory = ConsequenceMemory()
+        adapter = RoleAdapter(memory)
+
+        adapter.get_profile(agent_id)
+
+        for _ in range(5):
+            record = _make_record(agent_id, action_type="doc_write", tests_passed=True)
+            memory.store_record(record)
+            profile = memory.get_profile(agent_id)
+            assert profile is not None
+            profile.total_proposals += 1
+            profile.accepted_proposals += 1
+            profile.consequence_history.append(record.consequence_id)
+
+        profile = memory.get_profile(agent_id)
+        assert profile is not None
+        profile.trust_score = 0.75  # below 0.8 threshold
+        memory.save_profile(profile)
+
+        role = adapter.assign_role(agent_id)
+        assert role != AgentRole.MEMORY_ANT
