@@ -213,7 +213,17 @@ class TestTaskManager:
         ids = manager.submit_batch(tasks)
 
         assert len(ids) == 3
+        assert ids == [t.id for t in tasks]
         assert manager.get_pending_count() == 3
+
+    def test_manager_submit_batch_empty(self):
+        """Test submitting an empty list of tasks."""
+        manager = TaskManager()
+
+        ids = manager.submit_batch([])
+
+        assert len(ids) == 0
+        assert manager.get_pending_count() == 0
 
     def test_manager_cancel(self):
         """Test cancelling a pending task."""

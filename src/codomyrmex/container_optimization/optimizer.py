@@ -5,10 +5,10 @@ from typing import Any
 
 from loguru import logger
 
-docker: Any | None = None
 _DOCKER_IMAGE_NOT_FOUND: tuple[type[BaseException], ...] = ()
 try:
-    docker = importlib.import_module("docker")
+    import docker
+    import docker.errors # noqa
     docker_image_not_found = getattr(docker.errors, "ImageNotFound", None)
     if isinstance(docker_image_not_found, type) and issubclass(
         docker_image_not_found, BaseException

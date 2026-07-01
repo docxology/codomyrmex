@@ -17,11 +17,14 @@ logger = get_logger(__name__)
 
 # Try to import Docker SDK
 try:
+    import docker # noqa
+    from docker.errors import APIError, DockerException, ImageNotFound
     DOCKER_AVAILABLE = True
 except ImportError:
-    APIError = Exception
-    DockerException = Exception
-    ImageNotFound = Exception
+    # Use dummy classes to avoid invalid-assignment type errors
+    class APIError(Exception): pass
+    class DockerException(Exception): pass
+    class ImageNotFound(Exception): pass
     DOCKER_AVAILABLE = False
     logger.warning("Docker SDK not available. Install with: pip install docker")
 
