@@ -1149,3 +1149,43 @@ class TestDeadLetterDataclass:
         assert restored.payload == original.payload
         assert restored.error == original.error
         assert restored.error_type == original.error_type
+
+
+@pytest.mark.unit
+class TestEventLoggerModuleFunctions:
+    """Tests for module-level functions in event_logger.py."""
+
+    def test_get_recent_events_module_function(self):
+        """Test the get_recent_events module-level function."""
+        from codomyrmex.events.handlers.event_logger import (
+            get_event_logger,
+            get_recent_events,
+        )
+
+        # Clear the singleton to ensure a clean state
+        logger = get_event_logger()
+        logger.clear()
+
+        from codomyrmex.events.core.event_schema import Event, EventType
+
+        # Add some events
+        e1 = Event(
+            event_type=EventType.CUSTOM,
+            data={"type": "test_module_1", "data": 1},
+            source="test",
+        )
+        e2 = Event(
+            event_type=EventType.CUSTOM,
+            data={"type": "test_module_2", "data": 2},
+            source="test",
+        )
+        logger.log_event(e1)
+        logger.log_event(e2)
+
+        # Retrieve recent events via module function
+        events = get_recent_events(limit=2)
+
+        # Verify the events were retrieved correctly
+        assert len(events) == 2
+        assert events[0].event.data["type"] == "test_module_1"
+        assert events[1].event.data["type"] == "test_module_2"
