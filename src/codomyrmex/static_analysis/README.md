@@ -7,6 +7,7 @@
 Module implementation, resources, and local coordination for Static Analysis..
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -19,6 +20,7 @@ Module implementation, resources, and local coordination for Static Analysis..
 - `py.typed` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
 

@@ -69,17 +69,17 @@ jobs:
         run: |
           if [ -f output/link_validation.json ]; then
             python3 -c "
-            import json
-            with open('output/link_validation.json') as f:
-                data = json.load(f)
-            broken = sum(1 for r in data if r.get('status') == 'broken')
-            ok = sum(1 for r in data if r.get('status') == 'ok')
-            ext = sum(1 for r in data if r.get('status') == 'external')
-            print('\n## Link Validation Summary')
-            print(f'- Total link checks: {len(data)}')
-            print(f'- OK: {ok}')
-            print(f'- Broken: {broken}')
-            print(f'- External: {ext}')
+import json
+with open('output/link_validation.json') as f:
+    data = json.load(f)
+broken = sum(1 for r in data if r.get('status') == 'broken')
+ok = sum(1 for r in data if r.get('status') == 'ok')
+ext = sum(1 for r in data if r.get('status') == 'external')
+print('\n## Link Validation Summary')
+print(f'- Total link checks: {len(data)}')
+print(f'- OK: {ok}')
+print(f'- Broken: {broken}')
+print(f'- External: {ext}')
             "
           fi
 
@@ -129,18 +129,18 @@ jobs:
         run: |
           if [ -f output/content_quality.json ]; then
             python3 -c "
-            import json
-            with open('output/content_quality.json') as f:
-                data = json.load(f)
-            n = len(data)
-            avg = sum(q['score'] for q in data) / n if n else 0
-            ph = sum(q['metrics'].get('placeholder_count', 0) for q in data)
-            low = sum(1 for q in data if q['score'] < 60)
-            print('\n## Content Quality Summary')
-            print(f'- Files analyzed: {n}')
-            print(f'- Average score: {avg:.1f}/100')
-            print(f'- Total placeholders: {ph}')
-            print(f'- Files below 60: {low}')
+import json
+with open('output/content_quality.json') as f:
+    data = json.load(f)
+n = len(data)
+avg = sum(q['score'] for q in data) / n if n else 0
+ph = sum(q['metrics'].get('placeholder_count', 0) for q in data)
+low = sum(1 for q in data if q['score'] < 60)
+print('\n## Content Quality Summary')
+print(f'- Files analyzed: {n}')
+print(f'- Average score: {avg:.1f}/100')
+print(f'- Total placeholders: {ph}')
+print(f'- Files below 60: {low}')
             "
           fi
 
@@ -189,15 +189,15 @@ jobs:
         run: |
           if [ -f output/agents_validation.json ]; then
             python3 -c "
-            import json
-            with open('output/agents_validation.json') as f:
-                data = json.load(f)
-            total = len(data)
-            valid = sum(1 for a in data if a.get('valid'))
-            print('\n## AGENTS.md Structure Summary')
-            print(f'- Total files: {total}')
-            print(f'- Valid files: {valid}')
-            print(f'- Invalid files: {total - valid}')
+import json
+with open('output/agents_validation.json') as f:
+    data = json.load(f)
+total = len(data)
+valid = sum(1 for a in data if a.get('valid'))
+print('\n## AGENTS.md Structure Summary')
+print(f'- Total files: {total}')
+print(f'- Valid files: {valid}')
+print(f'- Invalid files: {total - valid}')
             "
           fi
 
@@ -304,6 +304,7 @@ jobs:
 
       - name: Comment PR with results
         if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |

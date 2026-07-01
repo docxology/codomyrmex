@@ -7,6 +7,7 @@
 Module implementation, resources, and local coordination for Ssm..
 
 ## Directory Contents
+
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -17,6 +18,7 @@ Module implementation, resources, and local coordination for Ssm..
 - `py.typed` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
 

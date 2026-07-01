@@ -7,6 +7,7 @@
 Module implementation, resources, and local coordination for Three D..
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -20,6 +21,7 @@ Module implementation, resources, and local coordination for Three D..
 - `rendering_pipeline.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [spatial](../README.md)
 - **Project Root**: ../../../../README.md
 

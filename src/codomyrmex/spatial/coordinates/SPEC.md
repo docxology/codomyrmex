@@ -29,7 +29,7 @@ haversine_distance(a: GeoPoint, b: GeoPoint) -> float
 ### Point
 
 | Field | Type | Notes |
-|-------|------|-------|
+| ------- | ------ | ------- |
 | `x` | `float` | X coordinate |
 | `y` | `float` | Y coordinate |
 | `z` | `float` | Z coordinate (default 0.0) |
@@ -38,7 +38,7 @@ haversine_distance(a: GeoPoint, b: GeoPoint) -> float
 ### GeoPoint
 
 | Field | Type | Notes |
-|-------|------|-------|
+| ------- | ------ | ------- |
 | `latitude` | `float` | Degrees, -90 to 90 |
 | `longitude` | `float` | Degrees, -180 to 180 |
 | `altitude` | `float` | Meters above sea level (default 0.0) |
@@ -46,7 +46,7 @@ haversine_distance(a: GeoPoint, b: GeoPoint) -> float
 ### Transform Methods
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| -------- | --------- | ------------- |
 | `convert(point, target)` | `Point` | System-to-system conversion |
 | `to_geographic(point)` | `GeoPoint` | Convert any Point to GeoPoint |
 | `from_geographic(geo)` | `Point` | Convert GeoPoint to cartesian Point |

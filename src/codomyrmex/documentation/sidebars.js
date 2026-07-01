@@ -216,7 +216,7 @@ const sidebars = {
               type: 'category',
               label: 'Technical Overview',
               link: {type: 'doc', id: 'modules/documentation/docs/technical_overview'},
-              items: [] 
+              items: []
             },
             {
               type: 'category',
@@ -224,7 +224,7 @@ const sidebars = {
               link: {
                 type: 'generated-index',
                 title: 'Documentation Module Tutorials',
-                slug: '/modules/documentation-meta/tutorials' 
+                slug: '/modules/documentation-meta/tutorials'
               },
               items: [
                 'modules/documentation/docs/tutorials/example_tutorial',

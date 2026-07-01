@@ -7,6 +7,7 @@
 Module implementation, resources, and local coordination for World Models..
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -14,6 +15,7 @@ Module implementation, resources, and local coordination for World Models..
 - `py.typed` – File
 
 ## Navigation
+
 - **Parent Directory**: [spatial](../README.md)
 - **Project Root**: ../../../../README.md
 

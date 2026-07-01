@@ -1,6 +1,5 @@
 # Skill Templates - Technical Specification
 
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
 
 > Codomyrmex v1.1.9 | March 2026
@@ -33,7 +32,7 @@ Templates are loaded by `SkillsManager` via the `SkillLoader` class, which scans
 Every template YAML file must contain:
 
 | Field | Type | Required | Description |
-|-------|------|----------|-------------|
+| ------- | ------ | ---------- | ------------- |
 | `description` | string | Yes | Multi-line description of the skill domain |
 | `patterns` | list[Pattern] | Yes | Recommended patterns with examples |
 | `anti_patterns` | list[AntiPattern] | Yes | Patterns to avoid with explanations |
@@ -43,7 +42,7 @@ Every template YAML file must contain:
 ### Pattern Object
 
 | Field | Type | Required |
-|-------|------|----------|
+| ------- | ------ | ---------- |
 | `name` | string | Yes |
 | `description` | string | Yes |
 | `example` | string (multiline) | No |
@@ -52,7 +51,7 @@ Every template YAML file must contain:
 ### AntiPattern Object
 
 | Field | Type | Required |
-|-------|------|----------|
+| ------- | ------ | ---------- |
 | `name` | string | Yes |
 | `why_bad` | string | Yes |
 | `example` | string (multiline) | No |
@@ -66,7 +65,7 @@ Every template YAML file must contain:
 ## Dependencies
 
 | Dependency | Purpose |
-|------------|---------|
+| ------------ | --------- |
 | `PyYAML` | Template parsing (transitive via codomyrmex core) |
 | `SkillLoader` | Template discovery during skill initialization |
 | `SkillsManager` | Custom skill creation using template schemas |

@@ -7,6 +7,7 @@
 Module implementation, resources, and local coordination for Spatial..
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -23,6 +24,7 @@ Module implementation, resources, and local coordination for Spatial..
 - `world_models/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
 

@@ -45,7 +45,7 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 ## Error Conditions
 
 | Error | Trigger | Resolution |
-|-------|---------|------------|
+| ------- | --------- | ------------ |
 | `ModuleNotFoundError` | Requested module is not installed or not discoverable via `pkgutil` | Install the module with `uv sync --extra <module>`; check module `__init__.py` exists |
 | `ScanTimeoutError` | Full system scan exceeds the configured timeout (default 30s) | Increase timeout via `health_check(timeout=60)`; reduce scan scope with `modules=["specific"]` |
 | `DependencyError` | Module has unmet dependencies (missing optional SDK, incompatible version) | Install missing dependencies; check `pyproject.toml` optional-dependencies for the module |
@@ -137,7 +137,7 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 ## Performance SLOs
 
 | Operation | Target Latency | Notes |
-|-----------|---------------|-------|
+| ----------- | --------------- | ------- |
 | `health_check()` (full scan) | < 5s | Scans all **128** top-level modules; parallelized per-module checks |
 | `health_check(modules=["X"])` | < 500ms | Single module health probe |
 | `list_modules()` | < 100ms | In-memory registry; cached after first scan |
@@ -146,6 +146,7 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 | Module import check | < 200ms | Per-module `importlib.import_module` attempt |
 
 **Cache Behavior:**
+
 - Module list cached for 60 seconds after first scan
 - Health check results cached for 30 seconds
 - Dependency tree cached for 5 minutes (invalidated on module install/uninstall)
@@ -163,7 +164,7 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 ## PAI Algorithm Integration
 
 | Phase | Usage | Example |
-|-------|-------|---------|
+| ------- | ------- | --------- |
 | **OBSERVE** | Discover system capabilities before task planning | `list_modules()` to see what tools are available |
 | **THINK** | Analyze dependency graph for impact assessment | `dependency_tree()` to understand what breaks if a module changes |
 | **PLAN** | Check health before relying on specific modules | `health_check(modules=["coding", "security"])` before a build task |
