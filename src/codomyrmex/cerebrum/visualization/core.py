@@ -20,20 +20,20 @@ try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
-    plt = Any  # type: ignore
+    plt = Any
 
     class _MockNP:
         def __getattr__(self, name):
             return Any
 
-    np = _MockNP()  # type: ignore
-    Figure = Any  # type: ignore
-    Patch = Any  # type: ignore
+    np = _MockNP()
+    Figure = Any
+    Patch = Any
 
 try:
     import networkx as nx
 except ImportError:
-    nx = None
+    nx = Any
 
 logger = get_logger(__name__)
 

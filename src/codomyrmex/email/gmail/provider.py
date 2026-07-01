@@ -35,7 +35,7 @@ try:
 
     GMAIL_AVAILABLE = True
 except ImportError:
-    HttpError = Exception
+    HttpError = type[Exception]
     GMAIL_AVAILABLE = False
 
 _GMAIL_SCOPES = [

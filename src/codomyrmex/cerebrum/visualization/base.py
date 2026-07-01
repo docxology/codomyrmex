@@ -18,21 +18,21 @@ try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
-    mpl = Any  # type: ignore
-    plt = Any  # type: ignore
+    mpl = Any
+    plt = Any
 
     class _MockNP:
         def __getattr__(self, name):
             return Any
 
-    np = _MockNP()  # type: ignore
-    Figure = Any  # type: ignore
-    Axes = Any  # type: ignore
+    np = _MockNP()
+    Figure = Any
+    Axes = Any
 
 try:
     import networkx as nx
 except ImportError:
-    nx = None
+    nx = Any
 
 if TYPE_CHECKING:
     pass
@@ -507,4 +507,4 @@ class BaseHeatmapVisualizer(BaseVisualizer):
         cbar = plt.colorbar(im, ax=ax)
         cbar.ax.tick_params(labelsize=self.theme.font.tick_size)
 
-        return fig, ax  # type: ignore
+        return fig, ax

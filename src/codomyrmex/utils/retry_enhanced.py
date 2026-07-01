@@ -126,7 +126,7 @@ def retry(
             "backoff_factor": backoff_factor,
             "jitter": jitter,
         }
-        return wrapper  # type: ignore[return-value]
+        return cast(F, wrapper)
 
     return decorator
 

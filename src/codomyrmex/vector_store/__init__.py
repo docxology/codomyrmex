@@ -23,10 +23,12 @@ from .store import (
 with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
 
+from typing import Any
+
 try:
     from .chroma import ChromaVectorStore
 except ImportError:
-    ChromaVectorStore = None  # type: ignore
+    ChromaVectorStore = Any
 
 
 def cli_commands():

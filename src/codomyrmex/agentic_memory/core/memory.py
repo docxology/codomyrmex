@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 try:
     from sentence_transformers import SentenceTransformer
 except ImportError:
-    SentenceTransformer = None
+    SentenceTransformer = Any
 
 # ── helpers ──────────────────────────────────────────────────────────
 

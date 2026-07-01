@@ -142,8 +142,8 @@ def timing_decorator(func: Callable[..., T]) -> Callable[..., T]:
         result = func(*args, **kwargs)
         elapsed = (time.perf_counter() - start) * 1000
 
-        if isinstance(result, dict):
-            result["execution_time_ms"] = round(elapsed, 2)  # type: ignore
+        if isinstance(result, dict) and hasattr(result, "__setitem__"):
+            result.__setitem__("execution_time_ms", round(elapsed, 2))
 
         return result
 

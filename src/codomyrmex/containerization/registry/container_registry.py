@@ -19,9 +19,9 @@ logger = get_logger(__name__)
 try:
     DOCKER_AVAILABLE = True
 except ImportError:
-    APIError = Exception
-    DockerException = Exception
-    ImageNotFound = Exception
+    APIError = type[Exception]
+    DockerException = type[Exception]
+    ImageNotFound = type[Exception]
     DOCKER_AVAILABLE = False
     logger.warning("Docker SDK not available. Install with: pip install docker")
 
