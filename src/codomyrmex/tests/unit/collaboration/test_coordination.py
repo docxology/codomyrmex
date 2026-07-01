@@ -282,6 +282,55 @@ class TestTaskManager:
         assert manager.get_completed_count() == 1
         assert manager.get_task_status(assigned.id) == TaskStatus.COMPLETED
 
+    def test_manager_get_task_status(self):
+        """Test getting task status."""
+        manager = TaskManager()
+        agent = CollaborativeAgent(name="Worker")
+
+        # Unknown task
+        assert manager.get_task_status("unknown") is None
+
+        # Queued task
+        task1 = Task(name="Task 1")
+        t1_id = manager.submit(task1)
+        assert manager.get_task_status(t1_id) == TaskStatus.QUEUED
+
+        # Running task
+        task2 = Task(name="Task 2")
+        t2_id = manager.submit(task2)
+        assigned = manager.get_next_task(agent)
+        # Because we submitted task1 first, get_next_task might return task1 depending on priority.
+        # So we should check the status of whatever task was assigned.
+        assert manager.get_task_status(assigned.id) == TaskStatus.RUNNING
+
+        # Let's cancel task1 to clear it out for the next tests
+        manager.cancel(t1_id)
+
+        t2_id = assigned.id
+
+        # Completed task
+        result_success = TaskResult(
+            task_id=t2_id,
+            success=True,
+            output="Done",
+            agent_id=agent.agent_id,
+        )
+        manager.complete_task(result_success)
+        assert manager.get_task_status(t2_id) == TaskStatus.COMPLETED
+
+        # Failed task
+        task3 = Task(name="Task 3")
+        t3_id = manager.submit(task3)
+        assigned3 = manager.get_next_task(agent)
+        result_failed = TaskResult(
+            task_id=assigned3.id,
+            success=False,
+            error="Error",
+            agent_id=agent.agent_id,
+        )
+        manager.complete_task(result_failed)
+        assert manager.get_task_status(assigned3.id) == TaskStatus.FAILED
+
 
 class TestVotingMechanism:
     """Tests for VotingMechanism."""
