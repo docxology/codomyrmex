@@ -30,6 +30,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -50,6 +51,21 @@ def _find_project_root() -> Path:
         if (candidate / "pyproject.toml").exists():
             return candidate
     return here.parent
+
+
+def _extract_latex_from_preamble(preamble_md: Path) -> str:
+    """Extract the raw LaTeX inside a ```latex ... ``` fence from preamble.md.
+
+    The preamble.md file is a Markdown document that contains prose plus one
+    fenced code block marked ```latex. Only that block's contents should be
+    passed verbatim to xelatex via pandoc -H; the surrounding Markdown would
+    cause LaTeX to choke on bare # characters from headings.
+    """
+    text = preamble_md.read_text(encoding="utf-8")
+    match = re.search(r"```latex\s*\n(.*?)```", text, re.DOTALL)
+    if match:
+        return match.group(1)
+    return ""
 
 
 def _load_variables(project_root: Path) -> dict[str, str]:
@@ -203,7 +219,16 @@ def _run_pandoc_pdf(
         "--pdf-engine=xelatex",
     ]
     if preamble and preamble.exists():
-        cmd += ["-H", str(preamble)]
+        latex_src = _extract_latex_from_preamble(preamble)
+        if latex_src:
+            tmp = tempfile.NamedTemporaryFile(
+                mode="w", suffix=".tex", delete=False, encoding="utf-8"
+            )
+            tmp.write(latex_src)
+            tmp.flush()
+            cmd += ["-H", tmp.name]
+        else:
+            cmd += ["-H", str(preamble)]
     cmd += _build_pandoc_metadata_args(variables)
     cmd += ["-o", str(output_path)]
 

@@ -39,34 +39,26 @@ This file contains LaTeX packages and commands that are automatically injected i
     pdfsubject={Codomyrmex -- integrity-verified manuscript},
     pdfkeywords={codomyrmex, integrity, verification, manuscript}
 }
-\usepackage{natbib}
+% natbib omitted — pandoc --citeproc manages all citation formatting.
+% Adding \usepackage{natbib} conflicts with citeproc and causes a fatal error.
 
 % ── Unicode-capable mono font for code listings ──────────────────────
-% JuliaMono (TeX Live 2026) covers the full math/Greek glyph set used in
-% Codomyrmex manuscript code blocks; the default lmmono lacks \alpha/\mu/\partial/\nabla.
+% JuliaMono preferred when installed (TeX Live 2026+). Uncomment the block
+% below and install JuliaMono to get full math/Greek glyph coverage in code
+% blocks. Without it xelatex falls back to its default mono font; the
+% document still compiles correctly.
 %
-% The hardcoded TeX Live 2026 path below is portable to most macOS / Linux
-% TeX Live installs that placed JuliaMono under the default texmf-dist path.
-% If your TeX Live version differs (e.g., 2025, 2027) or your distribution
-% installs fonts elsewhere, comment out the explicit Path = line — fontspec
-% will then search the system font path. If JuliaMono is not installed at
-% all, comment out the whole block; xelatex falls back to lmmono with
-% reduced Unicode coverage but the document still compiles.
-\usepackage{fontspec}
-\setmonofont{JuliaMono-Regular}[
-  Path           = /usr/local/texlive/2026/texmf-dist/fonts/truetype/public/juliamono/,
-  Extension      = .ttf,
-  UprightFont    = *,
-  BoldFont       = JuliaMono-Bold,
-  ItalicFont     = JuliaMono-RegularItalic,
-  BoldItalicFont = JuliaMono-BoldItalic,
-  Scale          = MatchLowercase,
-]
-
-% Math font for unicode-math: Latin Modern Math (TeX Live) has full BMP
-% coverage including U+2223 (\mid), U+226A/226B (\ll/\gg), and the Greek/
-% blackboard letters used in equations. Without an explicit \setmathfont,
-% unicode-math falls back to lmroman text font which lacks several glyphs
-% and emits "Missing character" warnings on every \mid in math mode.
-\setmathfont{latinmodern-math.otf}
+% \usepackage{fontspec}
+% \setmonofont{JuliaMono-Regular}[
+%   Path           = /usr/local/texlive/2026/texmf-dist/fonts/truetype/public/juliamono/,
+%   Extension      = .ttf,
+%   UprightFont    = *,
+%   BoldFont       = JuliaMono-Bold,
+%   ItalicFont     = JuliaMono-RegularItalic,
+%   BoldItalicFont = JuliaMono-BoldItalic,
+%   Scale          = MatchLowercase,
+% ]
+%
+% Math font (requires \usepackage{unicode-math} above):
+% \setmathfont{latinmodern-math.otf}
 ```
