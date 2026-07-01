@@ -142,12 +142,21 @@ class TestDependencyGraph:
 
         task1 = Task(name="Task 1", id="t1")
         task2 = Task(name="Task 2", id="t2", dependencies=["t1"])
+        task3 = Task(name="Task 3", id="t3", dependencies=["t1", "t2"])
 
         graph.add_task(task1)
         graph.add_task(task2)
+        graph.add_task(task3)
 
-        deps = graph.get_dependencies("t2")
-        assert "t1" in deps
+        # Check dependencies
+        assert graph.get_dependencies("t1") == set()
+        assert graph.get_dependencies("t2") == {"t1"}
+        assert graph.get_dependencies("t3") == {"t1", "t2"}
+
+        # Check dependents
+        assert graph.get_dependents("t1") == {"t2", "t3"}
+        assert graph.get_dependents("t2") == {"t3"}
+        assert graph.get_dependents("t3") == set()
 
     def test_graph_get_ready_tasks(self):
         """Test getting ready tasks."""
