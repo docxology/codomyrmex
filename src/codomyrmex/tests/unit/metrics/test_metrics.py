@@ -377,9 +377,9 @@ class TestMetrics:
 
     def test_metrics_counter_with_labels(self, metrics_instance):
         """Test counter with labels creates unique keys."""
-        counter1 = metrics_instance.counter("requests_total", {"method": "GET"})
-        counter2 = metrics_instance.counter("requests_total", {"method": "POST"})
-        counter3 = metrics_instance.counter("requests_total", {"method": "GET"})
+        counter1 = metrics_instance.counter("requests_total", labels={"method": "GET"})
+        counter2 = metrics_instance.counter("requests_total", labels={"method": "POST"})
+        counter3 = metrics_instance.counter("requests_total", labels={"method": "GET"})
 
         assert counter1 is not counter2
         assert counter1 is counter3
@@ -451,7 +451,7 @@ class TestMetrics:
 
     def test_metrics_prometheus_export_counter_with_labels(self, metrics_instance):
         """Test Prometheus export format for counter with labels."""
-        counter = metrics_instance.counter("requests_total", {"method": "GET"})
+        counter = metrics_instance.counter("requests_total", labels={"method": "GET"})
         counter.inc(50)
 
         output = metrics_instance.export_prometheus()
@@ -722,7 +722,7 @@ class TestMetricsIntegration:
         m = get_metrics()
 
         # Register various metrics
-        request_counter = m.counter("http_requests_total", {"method": "GET"})
+        request_counter = m.counter("http_requests_total", labels={"method": "GET"})
         response_time = m.histogram("http_response_time_seconds")
         active_connections = m.gauge("http_active_connections")
         request_summary = m.summary("http_request_duration")
@@ -754,10 +754,10 @@ class TestMetricsIntegration:
         m = get_metrics()
 
         # Create metrics with different label combinations
-        m.counter("requests", {"method": "GET", "status": "200"}).inc(100)
-        m.counter("requests", {"method": "GET", "status": "404"}).inc(10)
-        m.counter("requests", {"method": "POST", "status": "200"}).inc(50)
-        m.counter("requests", {"method": "POST", "status": "500"}).inc(5)
+        m.counter("requests", labels={"method": "GET", "status": "200"}).inc(100)
+        m.counter("requests", labels={"method": "GET", "status": "404"}).inc(10)
+        m.counter("requests", labels={"method": "POST", "status": "200"}).inc(50)
+        m.counter("requests", labels={"method": "POST", "status": "500"}).inc(5)
 
         export = m.export()
         counters = export["counters"]

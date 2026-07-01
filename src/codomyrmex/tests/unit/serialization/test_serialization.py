@@ -405,6 +405,7 @@ class TestPickleSerialization:
 # ==============================================================================
 
 
+@pytest.mark.skipif(not MSGPACK_AVAILABLE, reason="msgpack not installed")
 class TestMsgpackSerialization:
     """Tests for MessagePack binary serialization."""
 
@@ -455,6 +456,7 @@ class TestMsgpackSerialization:
 # ==============================================================================
 
 
+@pytest.mark.skipif(not AVRO_AVAILABLE, reason="fastavro not installed")
 class TestAvroSerialization:
     """Tests for Apache Avro serialization."""
 

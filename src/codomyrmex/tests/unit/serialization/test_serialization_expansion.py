@@ -13,6 +13,9 @@ try:
 except ImportError:
     SERIALIZATION_AVAILABLE = False
 
+MSGPACK_AVAILABLE = SERIALIZATION_AVAILABLE and MsgpackSerializer is not None  # type: ignore[possibly-undefined]
+AVRO_AVAILABLE = SERIALIZATION_AVAILABLE and AvroSerializer is not None  # type: ignore[possibly-undefined]
+
 try:
     import pandas as pd
     import pyarrow as pa
@@ -29,6 +32,7 @@ pytestmark = pytest.mark.skipif(
 
 
 @pytest.mark.unit
+@pytest.mark.skipif(not MSGPACK_AVAILABLE, reason="msgpack not installed")
 def test_msgpack_serialization():
     """Test Msgpack serialization/deserialization."""
     data = {"key": "value", "list": [1, 2, 3], "bool": True}
@@ -38,6 +42,7 @@ def test_msgpack_serialization():
 
 
 @pytest.mark.unit
+@pytest.mark.skipif(not AVRO_AVAILABLE, reason="fastavro not installed")
 def test_avro_serialization():
     """Test Avro serialization/deserialization."""
     schema = {

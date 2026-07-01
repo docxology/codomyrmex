@@ -7,6 +7,8 @@ the First Principles Framework specification for use in prompt/context engineeri
 import contextlib
 from pathlib import Path
 
+from .core.context_builder import ContextBuilder
+from .core.extractor import FPFExtractor
 from .core.models import (
     Concept,
     ConceptType,
@@ -18,8 +20,6 @@ from .core.models import (
     RelationshipType,
 )
 from .core.parser import FPFParser
-from .core.extractor import FPFExtractor
-from .core.context_builder import ContextBuilder
 from .io.exporter import FPFExporter
 from .io.fetcher import FPFFetcher
 from .io.section_exporter import SectionExporter
@@ -44,11 +44,15 @@ with contextlib.suppress(ImportError):
 with contextlib.suppress(ImportError):
     from .analysis.term_analyzer import TermAnalyzer  # type: ignore[assignment]
 with contextlib.suppress(ImportError):
-    from .visualization.graph_generator import GraphGenerator  # type: ignore[assignment]
+    from .visualization.graph_generator import (
+        GraphGenerator,  # type: ignore[assignment]
+    )
 with contextlib.suppress(ImportError):
     from .visualization.visualizer import FPFVisualizer  # type: ignore[assignment]
 with contextlib.suppress(ImportError):
-    from .visualization.visualizer_png import FPFVisualizerPNG  # type: ignore[assignment]
+    from .visualization.visualizer_png import (
+        FPFVisualizerPNG,  # type: ignore[assignment]
+    )
 
 # Shared schemas for cross-module interop
 with contextlib.suppress(ImportError):

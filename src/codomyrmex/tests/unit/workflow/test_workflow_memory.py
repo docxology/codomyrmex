@@ -9,6 +9,7 @@ import pytest
 from codomyrmex.agents.memory.conversation import ConversationHistory
 from codomyrmex.agents.memory.journal import LearningJournal
 from codomyrmex.agents.memory.store import MemoryStore
+from codomyrmex.exceptions.orchestration import WorkflowError
 from codomyrmex.orchestrator.workflows.workflow_engine import (
     WorkflowRunner,
     WorkflowStep,
@@ -69,7 +70,7 @@ class TestWorkflowRunner:
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a", depends_on=["b"]))
         runner.add_step(WorkflowStep("b", depends_on=["a"]))
-        with pytest.raises(ValueError):
+        with pytest.raises((ValueError, WorkflowError)):
             runner.run()
 
     def test_context_passing(self) -> None:

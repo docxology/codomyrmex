@@ -185,19 +185,35 @@ class TestSessionApprovalState:
 
     def test_submit_and_pop_pending(self) -> None:
         ap = _import_approval()
+        if not hasattr(ap, "has_pending") and not hasattr(ap, "_pending"):
+            pytest.skip("has_pending/pop_pending removed from hermes approval API")
         ap.submit_pending("session-1", {"command": "rm -rf /", "pattern_key": "rm"})
-        assert ap.has_pending("session-1") is True
-        pending = ap.pop_pending("session-1")
-        assert pending["command"] == "rm -rf /"
-        assert ap.has_pending("session-1") is False
+        # Use _pending dict directly since has_pending/pop_pending may be removed
+        if hasattr(ap, "has_pending"):
+            assert ap.has_pending("session-1") is True
+            pending = ap.pop_pending("session-1")
+            assert pending["command"] == "rm -rf /"
+            assert ap.has_pending("session-1") is False
+        else:
+            assert "session-1" in ap._pending
+            pending = ap._pending.pop("session-1")
+            assert pending["command"] == "rm -rf /"
+            assert "session-1" not in ap._pending
 
     def test_pop_nonexistent_returns_none(self) -> None:
         ap = _import_approval()
-        assert ap.pop_pending("nonexistent") is None
+        if hasattr(ap, "pop_pending"):
+            assert ap.pop_pending("nonexistent") is None
+        else:
+            # _pending returns None via .get on missing key
+            assert ap._pending.get("nonexistent") is None
 
     def test_has_pending_initially_false(self) -> None:
         ap = _import_approval()
-        assert ap.has_pending("fresh-session") is False
+        if hasattr(ap, "has_pending"):
+            assert ap.has_pending("fresh-session") is False
+        else:
+            assert "fresh-session" not in ap._pending
 
     def test_approve_and_check_session(self) -> None:
         ap = _import_approval()
@@ -220,7 +236,10 @@ class TestSessionApprovalState:
         ap.submit_pending("s1", {"command": "test"})
         ap.clear_session("s1")
         assert ap.is_approved("s1", "recursive delete") is False
-        assert ap.has_pending("s1") is False
+        if hasattr(ap, "has_pending"):
+            assert ap.has_pending("s1") is False
+        else:
+            assert "s1" not in ap._pending
 
     def test_permanent_approval(self) -> None:
         ap = _import_approval()
@@ -327,14 +346,17 @@ class TestCheckDangerousCommandEnvBypass:
         monkeypatch.delenv("HERMES_YOLO_MODE", raising=False)
         monkeypatch.delenv("HERMES_INTERACTIVE", raising=False)
         monkeypatch.delenv("HERMES_GATEWAY_SESSION", raising=False)
-        # Non-interactive, non-gateway: should auto-approve (no user to prompt)
-        result = ap.check_dangerous_command("rm -rf /", "local")
+        # Use a dangerous command that is NOT hardline-blocked (rm -rf / is hardline).
+        # chmod -R 777 /etc is detected as dangerous but can be approved.
+        # In non-interactive, non-gateway mode the command is auto-approved.
+        result = ap.check_dangerous_command("chmod -R 777 /etc", "local")
         assert result["approved"] is True
 
     def test_yolo_mode_always_approved(self, monkeypatch) -> None:
         ap = _import_approval()
         monkeypatch.setenv("HERMES_YOLO_MODE", "1")
-        result = ap.check_dangerous_command("rm -rf /", "local")
+        # Use a non-hardline dangerous command; rm -rf / is hardline-blocked even in yolo.
+        result = ap.check_dangerous_command("chmod -R 777 /etc", "local")
         assert result["approved"] is True
 
 

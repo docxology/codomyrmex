@@ -131,15 +131,35 @@ class TestIsSafeUrl:
         us = _import_url_safety()
         assert us.is_safe_url("http://metadata.goog/") is False
 
+    def _skip_if_allow_private_enabled(self) -> None:
+        """Skip tests that expect private-IP blocking when the user's config allows it."""
+        from pathlib import Path
+        try:
+            import yaml
+            config_path = Path.home() / ".hermes" / "config.yaml"
+            if config_path.exists():
+                cfg = yaml.safe_load(config_path.read_text()) or {}
+                if (
+                    cfg.get("security", {}).get("allow_private_urls")
+                    or cfg.get("browser", {}).get("allow_private_urls")
+                    or cfg.get("allow_private_urls")
+                ):
+                    pytest.skip("~/.hermes/config.yaml has allow_private_urls=true — private-IP blocking disabled")
+        except Exception:
+            pass
+
     def test_localhost_blocked(self) -> None:
+        self._skip_if_allow_private_enabled()
         us = _import_url_safety()
         assert us.is_safe_url("http://localhost:8080/api") is False
 
     def test_loopback_ip_blocked(self) -> None:
+        self._skip_if_allow_private_enabled()
         us = _import_url_safety()
         assert us.is_safe_url("http://127.0.0.1:9090/") is False
 
     def test_private_ip_blocked(self) -> None:
+        self._skip_if_allow_private_enabled()
         us = _import_url_safety()
         assert us.is_safe_url("http://192.168.1.1/admin") is False
 

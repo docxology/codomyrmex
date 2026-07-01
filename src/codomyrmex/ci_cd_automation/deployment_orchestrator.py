@@ -14,6 +14,7 @@ import subprocess
 import tempfile
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from enum import Enum
 from typing import Any
 
 from codomyrmex.validation.schemas.infra import DeploymentStatus

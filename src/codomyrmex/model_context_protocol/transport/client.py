@@ -398,12 +398,15 @@ class _HTTPTransport(_Transport):
     async def _get_session(self) -> Any:
         if self._session is None:
             try:
+                import sys
+
                 import aiohttp
 
-                connector = aiohttp.TCPConnector(
-                    limit=self._pool_size,
-                    enable_cleanup_closed=True,
-                )
+                connector_kwargs: dict = {"limit": self._pool_size}
+                # enable_cleanup_closed was deprecated in Python 3.14.4 (CPython fix applied)
+                if sys.version_info < (3, 14, 4):
+                    connector_kwargs["enable_cleanup_closed"] = True
+                connector = aiohttp.TCPConnector(**connector_kwargs)
                 self._session = aiohttp.ClientSession(connector=connector)
             except ImportError:
                 raise MCPClientError(

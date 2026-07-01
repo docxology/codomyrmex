@@ -90,14 +90,26 @@ class TestLazyDependencies:
 # ── benchmark_startup utilities ───────────────────────────────────────
 
 
+import os
+import pathlib
+
+# Locate scripts/performance relative to the repo root (two levels up from
+# src/codomyrmex/tests/performance/) so the tests are not tied to a
+# developer-specific absolute path.
+_REPO_ROOT = pathlib.Path(__file__).resolve().parents[5]
+_BENCHMARK_STARTUP_DIR = _REPO_ROOT / "scripts" / "performance"
+_BENCHMARK_STARTUP_AVAILABLE = (_BENCHMARK_STARTUP_DIR / "benchmark_startup.py").exists()
+
+
 class TestBenchmarkStartupUtilities:
     """Verify benchmark_startup.py works correctly."""
 
     def test_measure_import_time_returns_dict(self) -> None:
         """measure_import_time should return a proper dict."""
-        sys.path.insert(
-            0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance"
-        )
+        if not _BENCHMARK_STARTUP_AVAILABLE:
+            import pytest
+            pytest.skip("benchmark_startup.py not found at scripts/performance/")
+        sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
         try:
             from benchmark_startup import measure_import_time
 
@@ -111,9 +123,10 @@ class TestBenchmarkStartupUtilities:
 
     def test_measure_import_time_nonexistent_module(self) -> None:
         """Nonexistent module should return negative time."""
-        sys.path.insert(
-            0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance"
-        )
+        if not _BENCHMARK_STARTUP_AVAILABLE:
+            import pytest
+            pytest.skip("benchmark_startup.py not found at scripts/performance/")
+        sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
         try:
             from benchmark_startup import measure_import_time
 
@@ -124,9 +137,10 @@ class TestBenchmarkStartupUtilities:
 
     def test_benchmark_cli_startup_returns_dict(self) -> None:
         """benchmark_cli_startup should return timing data."""
-        sys.path.insert(
-            0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance"
-        )
+        if not _BENCHMARK_STARTUP_AVAILABLE:
+            import pytest
+            pytest.skip("benchmark_startup.py not found at scripts/performance/")
+        sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
         try:
             from benchmark_startup import benchmark_cli_startup
 
@@ -144,9 +158,10 @@ class TestBenchmarkStartupUtilities:
 
     def test_analyse_import_weights(self) -> None:
         """analyse_import_weights should return sorted list."""
-        sys.path.insert(
-            0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance"
-        )
+        if not _BENCHMARK_STARTUP_AVAILABLE:
+            import pytest
+            pytest.skip("benchmark_startup.py not found at scripts/performance/")
+        sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
         try:
             from benchmark_startup import analyse_import_weights
 

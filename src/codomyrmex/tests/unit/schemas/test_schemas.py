@@ -558,9 +558,13 @@ class TestDeploymentStatusEnum:
         assert DeploymentStatus.FAILED.value == "failed"
         assert DeploymentStatus.ROLLING_BACK.value == "rolling_back"
         assert DeploymentStatus.ROLLED_BACK.value == "rolled_back"
+        assert DeploymentStatus.RUNNING.value == "running"
+        assert DeploymentStatus.SUCCESS.value == "success"
+        assert DeploymentStatus.FAILURE.value == "failure"
+        assert DeploymentStatus.CANCELLED.value == "cancelled"
 
     def test_member_count(self):
-        assert len(DeploymentStatus) == 6
+        assert len(DeploymentStatus) == 10
 
 
 @pytest.mark.unit

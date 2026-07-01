@@ -162,10 +162,14 @@ class TestLinePlot:
         assert os.path.exists(out)
 
     def test_create_line_plot_empty_data(self):
+        import pytest
+
         from codomyrmex.data_visualization.charts.line_plot import create_line_plot
 
-        result = create_line_plot([], [], title="Empty")
-        assert result is None
+        # create_line_plot raises ValueError for empty data — the source explicitly
+        # rejects empty inputs rather than returning None.
+        with pytest.raises(ValueError, match="Empty data"):
+            create_line_plot([], [], title="Empty")
 
     def test_create_line_plot_multiple_lines(self, tmp_path):
         from codomyrmex.data_visualization.charts.line_plot import create_line_plot
@@ -277,7 +281,16 @@ Please submit a PR.
         )
 
         analyzer = DocumentationQualityAnalyzer()
-        content = "overview installation usage api examples ```code``` http://link"
+        # _assess_completeness looks for section headings via regex ^#+.*<keyword>
+        # so content must have proper markdown headings to score well.
+        content = (
+            "# Overview\nThis module does X.\n\n"
+            "# Installation\nRun pip install.\n\n"
+            "# Usage\nImport and call.\n\n"
+            "# API\nSee below.\n\n"
+            "# Examples\n```python\nprint('hello')\n```\n\n"
+            "More at http://link\n"
+        )
         score = analyzer._assess_completeness(content)
         assert score >= 80.0
 

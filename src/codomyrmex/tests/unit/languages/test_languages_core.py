@@ -18,11 +18,31 @@ from __future__ import annotations
 import inspect
 import os
 import shutil
+import subprocess as _subprocess
 import tempfile
 
 import pytest
 
 from codomyrmex.languages.base import BaseLanguageManager
+
+
+def _java_runtime_available() -> bool:
+    """Return True only when a functional Java runtime (not macOS stub) is present."""
+    if not shutil.which("javac"):
+        return False
+    try:
+        result = _subprocess.run(
+            ["javac", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        return result.returncode == 0
+    except Exception:
+        return False
+
+
+_JAVA_AVAILABLE = _java_runtime_available()
 from codomyrmex.languages.bash.manager import BashManager
 from codomyrmex.languages.cpp.manager import CppManager
 from codomyrmex.languages.csharp.manager import CSharpManager
@@ -425,7 +445,7 @@ class TestRustManager:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not shutil.which("javac"), reason="javac (JDK) not installed")
+@pytest.mark.skipif(not _JAVA_AVAILABLE, reason="javac (JDK) not installed or macOS stub only")
 class TestJavaManager:
     def test_is_installed_returns_true(self):
         assert JavaManager().is_installed() is True

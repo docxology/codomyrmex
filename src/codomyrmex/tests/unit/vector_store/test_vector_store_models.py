@@ -122,7 +122,11 @@ class TestVectorEntry:
         t_before = time.time()
         ve.update_embedding([2.0])
         t_after = time.time()
-        assert t_before <= ve.updated_at.timestamp() <= t_after
+        # Allow a small tolerance for floating-point rounding in datetime.timestamp()
+        # conversions (datetime uses microsecond precision while time.time() uses
+        # sub-microsecond precision, causing rounding differences of ~1e-6 s).
+        tolerance = 1e-5
+        assert t_before - tolerance <= ve.updated_at.timestamp() <= t_after + tolerance
 
     def test_to_dict_keys(self):
         ve = VectorEntry(id="doc-7", embedding=[0.5, -0.5])

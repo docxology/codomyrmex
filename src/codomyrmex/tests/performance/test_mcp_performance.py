@@ -145,7 +145,7 @@ class TestRetryDecoratorOverhead:
             return 42
 
         def run_async_noop():
-            return asyncio.get_event_loop().run_until_complete(async_noop())
+            return asyncio.run(async_noop())
 
         result = benchmark.pedantic(run_async_noop, rounds=100, warmup_rounds=5)
         assert result == 42
@@ -169,7 +169,7 @@ class TestAsyncRunnerOverhead:
             return await runner.run(tasks)
 
         def do_run():
-            return asyncio.get_event_loop().run_until_complete(run_10())
+            return asyncio.run(run_10())
 
         result = benchmark.pedantic(do_run, rounds=20, warmup_rounds=3)
         assert result.total == 10
@@ -186,7 +186,7 @@ class TestAsyncRunnerOverhead:
             return await runner.run(tasks)
 
         def do_run():
-            return asyncio.get_event_loop().run_until_complete(run_100())
+            return asyncio.run(run_100())
 
         result = benchmark.pedantic(do_run, rounds=10, warmup_rounds=2)
         assert result.total == 100
@@ -211,7 +211,7 @@ class TestAsyncSchedulerOverhead:
             return await sched.run_all()
 
         def do_run():
-            return asyncio.get_event_loop().run_until_complete(run_10())
+            return asyncio.run(run_10())
 
         benchmark.pedantic(do_run, rounds=20, warmup_rounds=3)
 
@@ -228,7 +228,7 @@ class TestAsyncSchedulerOverhead:
             return await sched.run_all()
 
         def do_run():
-            return asyncio.get_event_loop().run_until_complete(run_100())
+            return asyncio.run(run_100())
 
         result = benchmark.pedantic(do_run, rounds=5, warmup_rounds=1)
         assert result is not None

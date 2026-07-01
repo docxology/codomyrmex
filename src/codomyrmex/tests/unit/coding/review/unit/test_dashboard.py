@@ -348,10 +348,10 @@ class TestSuggestProperName:
         assert reviewer._suggest_proper_name("test_example.py") == "test_example.py"
 
     def test_test_suffix_converted(self, reviewer: _ConcreteReviewer):
-        # The first branch catches any name containing 'test' that lacks the prefix,
-        # so "example_test.py" becomes "test_example_test.py" (prepend only).
+        # _suggest_proper_name strips the _test suffix and prepends test_:
+        # "example_test.py" -> strip "_test.py" -> "example.py" -> "test_example.py"
         result = reviewer._suggest_proper_name("example_test.py")
-        assert result == "test_example_test.py"
+        assert result == "test_example.py"
 
     def test_no_test_in_name(self, reviewer: _ConcreteReviewer):
         assert reviewer._suggest_proper_name("utils.py") == "utils.py"

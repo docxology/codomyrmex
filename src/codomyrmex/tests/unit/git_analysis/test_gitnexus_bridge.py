@@ -22,8 +22,11 @@ def _gitnexus_available() -> bool:
     """Check if gitnexus is available and fully functional for integration tests.
 
     check_availability() only verifies the npx binary exists; the native
-    LadybugDB binary may still be missing. Probe with a quick ``--version``
-    call to detect broken installs early.
+    LadybugDB binary may still be missing.  ``--version`` returns 0 even when
+    the native binary is absent (it's a fast path before loading NAPI modules).
+
+    Instead, run ``gitnexus status`` which exercises the database layer and will
+    fail with a non-zero exit or error output if LadybugDB is missing.
     """
     import subprocess
 
@@ -31,7 +34,7 @@ def _gitnexus_available() -> bool:
     if not bridge.check_availability():
         return False
     try:
-        cmd = bridge._resolve_cmd() + ["--version"]
+        cmd = [*bridge._resolve_cmd(), "status"]
         result = subprocess.run(
             cmd,
             capture_output=True,
@@ -39,7 +42,13 @@ def _gitnexus_available() -> bool:
             timeout=30,
             cwd=PROJECT_ROOT,
         )
-        return result.returncode == 0 and "missing" not in result.stderr.lower()
+        combined = (result.stdout + result.stderr).lower()
+        if result.returncode != 0:
+            return False
+        # Detect LadybugDB missing even on exit-0 runs
+        if "missing" in combined or "lbugjs" in combined or "native binary" in combined:
+            return False
+        return True
     except Exception:
         return False
 
@@ -129,6 +138,13 @@ def test_analyze_returns_dict_with_indexed_key() -> None:
     """analyze() on the actual codomyrmex repo returns a dict with 'indexed' key."""
     # Use the real codomyrmex repo — avoids NAPI crashes on synthetic minimal repos
     bridge = GitNexusBridge(PROJECT_ROOT)
-    result = bridge.analyze()
+    try:
+        result = bridge.analyze()
+    except RuntimeError as exc:
+        # Native LadybugDB binary may be missing even when gitnexus binary exists.
+        err = str(exc).lower()
+        if "native binary" in err or "lbugjs" in err or "lifecycle" in err:
+            pytest.skip(f"gitnexus native binary (LadybugDB) not installed: {exc}")
+        raise
     assert isinstance(result, dict)
     assert result.get("indexed") is True

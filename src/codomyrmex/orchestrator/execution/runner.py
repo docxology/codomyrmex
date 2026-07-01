@@ -234,7 +234,15 @@ def run_function(
     timeout: int = 60,
     memory_limit_mb: int | None = None,
 ) -> dict[str, Any]:
-    """Run a python function in a monitored separate process."""
+    """Run a python function in a monitored separate process.
+
+    Uses the 'fork' start method on platforms that support it (macOS, Linux)
+    to avoid module-shadowing issues that arise when the 'spawn' start method
+    re-imports modules in a fresh Python process where project source paths
+    on sys.path can shadow stdlib modules (e.g. a project 'email' package
+    shadowing the stdlib 'email' module via importlib.metadata).
+    Falls back to the platform default when 'fork' is not available.
+    """
     kwargs = kwargs or {}
     func_name = getattr(func, "__name__", "unknown_function")
 
@@ -249,10 +257,17 @@ def run_function(
         "stdout": "",
     }
 
-    queue: multiprocessing.Queue = multiprocessing.Queue()
+    # Prefer 'fork' to avoid stdlib module shadowing issues caused by project
+    # source directories on sys.path when using 'spawn' (the macOS/Windows default).
+    try:
+        mp_ctx = multiprocessing.get_context("fork")
+    except ValueError:
+        mp_ctx = multiprocessing
+
+    queue = mp_ctx.Queue()
     start_time = time.time()
 
-    p = multiprocessing.Process(
+    p = mp_ctx.Process(
         target=_target_wrapper, args=(queue, func, args, kwargs, memory_limit_mb)
     )
     p.start()

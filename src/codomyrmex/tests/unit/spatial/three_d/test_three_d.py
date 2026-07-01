@@ -146,7 +146,7 @@ class TestThreeD:
         from codomyrmex.spatial import three_d
 
         assert hasattr(three_d, "__version__")
-        assert three_d.__version__ == "0.1.0"
+        assert three_d.__version__ == "0.3.0"
 
     def test_three_d_all_exports(self, code_dir):
         """Test that three_d exports all expected symbols."""
