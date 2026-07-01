@@ -37,7 +37,7 @@ jobs:
       is_prerelease: ${{ steps.extract-version.outputs.is_prerelease }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 
@@ -84,7 +84,7 @@ jobs:
     needs: prepare-release
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -135,7 +135,7 @@ jobs:
             build_cmd: "uv build --wheel"
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -177,7 +177,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 
@@ -379,7 +379,7 @@ jobs:
     if: needs.prepare-release.outputs.is_prerelease == 'false'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 

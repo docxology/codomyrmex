@@ -7,7 +7,12 @@ within constrained memory boundaries (<2GB).
 
 import dataclasses
 
-import mlx.core as mx
+import sys
+try:
+    import mlx.core as mx
+except ImportError:
+    mx = None
+
 
 
 @dataclasses.dataclass
