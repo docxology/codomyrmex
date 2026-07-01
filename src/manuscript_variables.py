@@ -67,13 +67,17 @@ def _count_loc(directory: Path) -> int:
 
 
 def _count_top_level_modules(src_package_dir: Path) -> int:
-    """Count immediate sub-directories of a package dir that contain __init__.py."""
+    """Count immediate sub-directories of a package dir that contain __init__.py.
+    
+    The `tests` directory is a support surface, not a runtime module.
+    """
     if not src_package_dir.is_dir():
         return 0
+    skip_names = {"tests", "__pycache__"}
     return sum(
         1
         for d in src_package_dir.iterdir()
-        if d.is_dir() and (d / "__init__.py").exists()
+        if d.is_dir() and (d / "__init__.py").exists() and d.name not in skip_names
     )
 
 

@@ -38,8 +38,8 @@ This directory contains the Codomyrmex manuscript source files, configuration, a
 Key facts agents must use when editing or cross-referencing this manuscript — **do not substitute stale numbers**:
 
 | Fact | Value | Authoritative source |
-|:---|:---|:---|
-| Colony kernel test count | **433** | `RESULT_TEST_COUNT` token; `uv run pytest src/codomyrmex/colony_kernel/tests/` |
+|:-----|:-----|:---------------------|
+|| Colony kernel test count | **{{RESULT_TEST_COUNT}}** | `RESULT_TEST_COUNT` token; `uv run pytest src/codomyrmex/tests/unit/colony_kernel/` |
 | Gate weight: budget | **0.30** | `config.yaml` → `experiment.gate_score_weights.budget` |
 | Gate weight: risk | **0.30** | `config.yaml` → `experiment.gate_score_weights.risk` |
 | Gate weight: trust | **0.25** | `config.yaml` → `experiment.gate_score_weights.trust` |
