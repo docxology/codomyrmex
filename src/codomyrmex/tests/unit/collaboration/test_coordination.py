@@ -67,6 +67,31 @@ class TestTaskQueue:
 
         assert queue.pop() is None
 
+    def test_queue_pop_lazily_deleted(self):
+        """Test popping a task that was lazily deleted."""
+        queue = TaskQueue()
+
+        task1 = Task(name="Low Priority", priority=1)
+        task2 = Task(name="High Priority", priority=10)
+        task3 = Task(name="Medium Priority", priority=5)
+
+        queue.push(task1)
+        queue.push(task2)
+        queue.push(task3)
+
+        # Lazily remove the high priority task
+        queue.remove(task2.id)
+
+        # The pop operation should skip the lazily deleted task
+        # and return the next highest priority task
+        popped = queue.pop()
+        assert popped.name == "Medium Priority"
+
+        popped = queue.pop()
+        assert popped.name == "Low Priority"
+
+        assert queue.pop() is None
+
     def test_queue_peek(self):
         """Test peeking at the queue."""
         queue = TaskQueue()
