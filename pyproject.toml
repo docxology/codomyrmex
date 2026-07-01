@@ -95,7 +95,7 @@ dependencies = [
 # Or install all: uv sync --all-extras
 
 scientific = [
-    "numpy>=2.2.0",
+    "numpy>=2.4.4",
     "scipy>=1.7.0",
     "networkx>=3.0.0",
 ]
