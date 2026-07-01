@@ -552,6 +552,14 @@ class TestJinja2LikeEngine:
 class TestMustacheEngine:
     """Tests for the MustacheEngine."""
 
+    def test_render(self):
+        engine = MustacheEngine()
+        template = "Hello, {{#user}}{{name}}{{/user}}!"
+        context = {"user": {"name": "World"}}
+        result = engine.render(template, context)
+        assert isinstance(result, str)
+        assert result == "Hello, World!"
+
     def test_simple_variable(self):
         engine = MustacheEngine()
         result = engine.render("Hello, {{name}}!", {"name": "World"})
