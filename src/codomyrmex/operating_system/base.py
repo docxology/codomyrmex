@@ -16,12 +16,12 @@ from enum import Enum
 from typing import Any
 
 
-def run_shell(cmd: str, timeout: float = 10.0) -> str:
-    """Run a shell command and return stripped stdout."""
+def run_shell(cmd: list[str], timeout: float = 10.0) -> str:
+    """Run a command and return stripped stdout."""
     try:
         result = subprocess.run(
             cmd,
-            shell=True,
+            shell=False,
             capture_output=True,
             text=True,
             timeout=timeout,
