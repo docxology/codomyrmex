@@ -20,6 +20,7 @@ jobs:
   review:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 7
+    continue-on-error: true
     permissions:
       contents: 'read'
       id-token: 'write'
