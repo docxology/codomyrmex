@@ -221,7 +221,7 @@ audio = [
 
 video = [
     "moviepy>=1.0.3",         # Video processing
-    "opencv-python>=4.8.0",   # Frame extraction, analysis
+    "opencv-python>=4.13.0.92",   # Frame extraction, analysis
     "pillow>=10.0.0",         # Image processing
 ]
 
