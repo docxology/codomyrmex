@@ -199,6 +199,107 @@ class TestTaskManagerDeep:
         names = {s.name for s in SchedulingStrategy}
         assert {"FIFO", "PRIORITY", "SHORTEST_FIRST", "ROUND_ROBIN"}.issubset(names)
 
+    def test_get_next_task_assigns_ready_task(self):
+        """get_next_task assigns a ready task to an agent."""
+        from unittest.mock import MagicMock
+        from codomyrmex.collaboration.coordination.task_manager import TaskManager
+        from codomyrmex.collaboration.models import Task, TaskStatus
+        from codomyrmex.collaboration.agents.base import CollaborativeAgent
+
+        tm = TaskManager()
+        task = Task(name="simple_task")
+        tm.submit(task)
+
+        mock_agent = MagicMock(spec=CollaborativeAgent)
+        mock_agent.agent_id = "agent_1"
+        mock_agent.get_capabilities.return_value = []
+        mock_agent.name = "Mock Agent"
+
+        assigned_task = tm.get_next_task(mock_agent)
+
+        assert assigned_task is not None
+        assert assigned_task.id == task.id
+        assert assigned_task.status == TaskStatus.RUNNING
+        assert assigned_task.assigned_agent_id == "agent_1"
+        assert tm._running[task.id] == task
+        assert "agent_1" in tm._agent_tasks
+        assert task.id in tm._agent_tasks["agent_1"]
+
+    def test_get_next_task_respects_max_concurrent(self):
+        """get_next_task returns None if agent has reached max_concurrent tasks."""
+        from unittest.mock import MagicMock
+        from codomyrmex.collaboration.coordination.task_manager import TaskManager
+        from codomyrmex.collaboration.models import Task
+        from codomyrmex.collaboration.agents.base import CollaborativeAgent
+
+        tm = TaskManager(max_concurrent=1)
+        task1 = Task(name="task1")
+        task2 = Task(name="task2")
+        tm.submit(task1)
+        tm.submit(task2)
+
+        mock_agent = MagicMock(spec=CollaborativeAgent)
+        mock_agent.agent_id = "agent_1"
+        mock_agent.get_capabilities.return_value = []
+        mock_agent.name = "Mock Agent"
+
+        # Assign first task
+        first_task = tm.get_next_task(mock_agent)
+        assert first_task is not None
+
+        # Second assignment should fail because max_concurrent is 1
+        second_task = tm.get_next_task(mock_agent)
+        assert second_task is None
+
+    def test_get_next_task_respects_dependencies(self):
+        """get_next_task ignores tasks with unmet dependencies and re-queues them."""
+        from unittest.mock import MagicMock
+        from codomyrmex.collaboration.coordination.task_manager import TaskManager
+        from codomyrmex.collaboration.models import Task
+        from codomyrmex.collaboration.agents.base import CollaborativeAgent
+
+        tm = TaskManager()
+        t1 = Task(name="a")
+        t2 = Task(name="b", dependencies=[t1.id])
+
+        # Keep same priorities so t2 gets popped first, then requeued behind t1
+        tm.submit(t2)
+        tm.submit(t1)
+
+        mock_agent = MagicMock(spec=CollaborativeAgent)
+        mock_agent.agent_id = "agent_1"
+        mock_agent.get_capabilities.return_value = []
+        mock_agent.name = "Mock Agent"
+
+        # t2 is blocked by t1. t1 should be assigned.
+        assigned_task = tm.get_next_task(mock_agent)
+        assert assigned_task is not None
+        assert assigned_task.id == t1.id
+
+    def test_get_next_task_respects_capabilities(self):
+        """get_next_task ignores tasks requiring capabilities the agent lacks."""
+        from unittest.mock import MagicMock
+        from codomyrmex.collaboration.coordination.task_manager import TaskManager
+        from codomyrmex.collaboration.models import Task
+        from codomyrmex.collaboration.agents.base import CollaborativeAgent
+
+        tm = TaskManager()
+        t1 = Task(name="needs_python", required_capabilities=["python"])
+        t2 = Task(name="needs_nothing")
+
+        tm.submit(t1)
+        tm.submit(t2)
+
+        mock_agent = MagicMock(spec=CollaborativeAgent)
+        mock_agent.agent_id = "agent_1"
+        mock_agent.get_capabilities.return_value = [] # lacks python
+        mock_agent.name = "Mock Agent"
+
+        # t1 needs python, mock_agent doesn't have it. t2 should be assigned.
+        assigned_task = tm.get_next_task(mock_agent)
+        assert assigned_task is not None
+        assert assigned_task.id == t2.id
+
 
 class TestTaskQueue:
     """Tests for TaskQueue priority ordering and basic operations."""
