@@ -78,6 +78,22 @@ class TestTaskQueue:
         assert peeked.name == "Peek Task"
         assert len(queue) == 1  # Still in queue
 
+    def test_queue_peek_empty(self):
+        """Test peeking at an empty queue."""
+        queue = TaskQueue()
+        assert queue.peek() is None
+
+    def test_queue_peek_removed_task(self):
+        """Test peeking skips tasks that have been lazily removed."""
+        queue = TaskQueue()
+        task = Task(name="Peek Task Removed", priority=5)
+
+        queue.push(task)
+        queue.remove(task.id)
+
+        # peek should clear the removed item from heap and return None
+        assert queue.peek() is None
+
     def test_queue_remove(self):
         """Test removing a task by ID."""
         queue = TaskQueue()
