@@ -692,6 +692,14 @@ class TestMustacheEngine:
         result = engine.render("{{&missing}}", {})
         assert result == ""
 
+    def test_render_file(self, tmp_path):
+        engine = MustacheEngine()
+        template_file = tmp_path / "template.mustache"
+        template_file.write_text("Hello {{name}}!")
+
+        result = engine.render_file(str(template_file), {"name": "World"})
+        assert result == "Hello World!"
+
 
 # ---------------------------------------------------------------------------
 # create_engine factory
