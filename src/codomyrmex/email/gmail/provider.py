@@ -35,7 +35,7 @@ try:
 
     GMAIL_AVAILABLE = True
 except ImportError:
-    HttpError = Exception
+    class HttpError(Exception): pass
     GMAIL_AVAILABLE = False
 
 _GMAIL_SCOPES = [

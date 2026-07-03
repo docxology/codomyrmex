@@ -16,6 +16,7 @@ def check_docker_available():
     if not DOCKER_AVAILABLE:
         return False
     try:
+        import docker.errors # noqa
         client = docker.from_env()
         client.ping()
         return True

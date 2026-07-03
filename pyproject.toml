@@ -334,7 +334,7 @@ dev = [
     {include-group = "test"},
     "hypothesis>=6.151.9",
     "sarif-tools>=3.0.0",
-    "desloppify[full]>=0.9.14",
+    "desloppify>=0.9.14",
     "import-linter>=2.0",
 ]
 docs = [

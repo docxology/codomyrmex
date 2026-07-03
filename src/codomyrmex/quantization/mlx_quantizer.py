@@ -7,7 +7,17 @@ within constrained memory boundaries (<2GB).
 
 import dataclasses
 
-import mlx.core as mx
+from typing import Any
+
+try:
+    import mlx.core as mx
+    MLX_AVAILABLE = True
+except ImportError:
+    mx = Any # type: ignore
+    MLX_AVAILABLE = False
+    class _MockArray:
+        pass
+    mx.array = _MockArray
 
 
 @dataclasses.dataclass
