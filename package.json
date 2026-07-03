@@ -1,12 +1,12 @@
 {
   "name": "codomyrmex",
-  "version": "1.0.8",
+  "version": "1.3.0",
   "description": "Codomyrmex - AI-powered code analysis and automation toolkit",
   "private": true,
   "scripts": {
-    "serve": "cd documentation && npm run serve",
-    "start": "cd documentation && npm run start",
-    "build": "cd documentation && npm run build",
+    "serve": "uv run python -m http.server 8000 --directory docs",
+    "start": "uv run python -m http.server 8000 --directory docs",
+    "build": "uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root .",
     "test": "pytest src/codomyrmex/tests/unit"
   },
   "repository": {

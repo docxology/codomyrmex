@@ -1,6 +1,6 @@
 # Codomyrmex Module Index
 
-**Version**: v1.2.3 | **Top-level modules**: 128 | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Top-level modules**: 129 | **Last Updated**: March 2026
 
 > [!TIP]
 > This INDEX confirms and catalogs every module directory in `src/codomyrmex/`.
@@ -15,7 +15,7 @@
 | [AGENTS.md](AGENTS.md) | Agent coordination & module listing |
 | [SPEC.md](SPEC.md) | Functional specification & architecture |
 | [PAI.md](PAI.md) | Personal AI Infrastructure mapping |
-| [**init**.py](__init__.py) | Canonical Python exports (128 top-level modules; see [docs/reference/inventory.md](../../docs/reference/inventory.md)) |
+| [**init**.py](__init__.py) | Canonical Python exports (129 top-level modules; see [docs/reference/inventory.md](../../docs/reference/inventory.md)) |
 
 ---
 

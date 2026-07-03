@@ -26,6 +26,7 @@ from codomyrmex.colony_kernel.resource_ledger import ResourceBudget
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _write_yaml(directory: Path, filename: str, content: str) -> Path:
     """Write *content* to *directory/filename* and return the path."""
     path = directory / filename
@@ -41,7 +42,9 @@ def _write_yaml(directory: Path, filename: str, content: str) -> Path:
 class TestLoadKernelYaml:
     """Tests for load_kernel_yaml() using CODOMYRMEX_COLONY_CONFIG env override."""
 
-    def test_valid_yaml_returns_expected_dict(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_valid_yaml_returns_expected_dict(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """A well-formed kernel.yaml is parsed into a nested dict."""
         _write_yaml(
             tmp_path,
@@ -65,7 +68,9 @@ gate:
         assert result["gate"]["score_execute"] == pytest.approx(0.60)
         assert result["gate"]["score_hold"] == pytest.approx(0.35)
 
-    def test_non_existent_path_returns_empty_dict(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_non_existent_path_returns_empty_dict(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """When kernel.yaml is absent the loader returns {} without raising."""
         absent_dir = tmp_path / "no_such_dir"
         monkeypatch.setenv("CODOMYRMEX_COLONY_CONFIG", str(absent_dir))
@@ -74,7 +79,9 @@ gate:
 
         assert result == {}
 
-    def test_malformed_yaml_returns_empty_dict(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_malformed_yaml_returns_empty_dict(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Malformed YAML content causes a graceful fallback to {} and emits a warning."""
         _write_yaml(
             tmp_path,
@@ -87,7 +94,9 @@ budget: {
         )
         monkeypatch.setenv("CODOMYRMEX_COLONY_CONFIG", str(tmp_path))
 
-        with pytest.warns(UserWarning, match="Failed to load colony_kernel config file"):
+        with pytest.warns(
+            UserWarning, match="Failed to load colony_kernel config file"
+        ):
             result = _cl.load_kernel_yaml()
 
         assert result == {}
@@ -101,7 +110,9 @@ budget: {
 class TestLoadRolesYaml:
     """Tests for load_roles_yaml()."""
 
-    def test_valid_roles_yaml_returns_expected_dict(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_valid_roles_yaml_returns_expected_dict(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """A well-formed roles.yaml is parsed into the expected structure."""
         _write_yaml(
             tmp_path,
@@ -126,7 +137,9 @@ min_proposals_for_promotion: 3
         assert result["dispatcher"]["min_trust"] == pytest.approx(0.50)
         assert result["min_proposals_for_promotion"] == 3
 
-    def test_missing_roles_yaml_returns_empty_dict(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_missing_roles_yaml_returns_empty_dict(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Absent roles.yaml returns {} without raising."""
         monkeypatch.setenv("CODOMYRMEX_COLONY_CONFIG", str(tmp_path))
 
@@ -143,7 +156,9 @@ min_proposals_for_promotion: 3
 class TestLoadDecayYaml:
     """Tests for load_decay_yaml()."""
 
-    def test_valid_decay_rates_yaml_returns_expected_dict(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_valid_decay_rates_yaml_returns_expected_dict(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """A well-formed decay_rates.yaml is parsed with correct float values."""
         _write_yaml(
             tmp_path,
@@ -165,7 +180,9 @@ permanent: 0.0
         assert result["slow"] == pytest.approx(0.03)
         assert result["permanent"] == pytest.approx(0.0)
 
-    def test_missing_decay_yaml_returns_empty_dict(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_missing_decay_yaml_returns_empty_dict(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Absent decay_rates.yaml returns {} without raising."""
         monkeypatch.setenv("CODOMYRMEX_COLONY_CONFIG", str(tmp_path))
 

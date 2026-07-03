@@ -112,7 +112,7 @@ def hermes_system_health() -> dict[str, Any]:
     """Retrieve realtime hardware usage metrics.
 
     Returns:
-        dict with keys: status, metrics (cpu_percent, ram_usage_percent, swap_usage_percent)
+        dict with status and hardware metrics.
 
     """
     try:

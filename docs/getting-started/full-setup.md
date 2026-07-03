@@ -101,7 +101,7 @@ codomyrmex/
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
 │   ├── /src/codomyrmex/coding/static_analysis/ # Code quality analysis
 │   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
-│   └── ...                  # 128 top-level modules
+│   └── ...                  # 129 top-level modules
 ├── /scripts/                 # Maintenance and automation utilities
 │   ├── /scripts/documentation/       # Documentation maintenance scripts
 │   ├── /scripts/development/         # Development utilities
@@ -299,9 +299,9 @@ Copyright (c) 2025 The Codomyrmex Contributors (@docxology)
 
 ## Key Metrics
 
-- **Lines of Code**: ~100K+ across **128** top-level modules
+- **Lines of Code**: ~100K+ across **129** top-level modules
 - **Test Coverage**: Run `uv run pytest --cov=src/codomyrmex` (gate in `pyproject.toml`)
-- **Module Count**: **128** top-level packages — see [reference/inventory.md](../reference/inventory.md) and `codomyrmex modules` for health
+- **Module Count**: **129** top-level packages — see [reference/inventory.md](../reference/inventory.md) and `codomyrmex modules` for health
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

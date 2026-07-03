@@ -525,7 +525,9 @@ class TestDeposit:
     def test_deposit_signal_queryable(self, store: PheromoneStore) -> None:
         """After deposit, query_pressure for the same location must return a non-empty
         list with positive strength."""
-        sig = _signal("dep.c", SignalType.DEPENDENCY, strength=3.0, source=SignalSource.RUNTIME)
+        sig = _signal(
+            "dep.c", SignalType.DEPENDENCY, strength=3.0, source=SignalSource.RUNTIME
+        )
         store.deposit(sig)
 
         results = store.query_pressure("dep.c", SignalType.DEPENDENCY)
@@ -541,10 +543,16 @@ class TestDeposit:
         """
         raw_strength = 2.0
         sig_test = _signal(
-            "dep.d.test", SignalType.FAILURE, strength=raw_strength, source=SignalSource.TEST
+            "dep.d.test",
+            SignalType.FAILURE,
+            strength=raw_strength,
+            source=SignalSource.TEST,
         )
         sig_agent = _signal(
-            "dep.d.agent", SignalType.FAILURE, strength=raw_strength, source=SignalSource.AGENT
+            "dep.d.agent",
+            SignalType.FAILURE,
+            strength=raw_strength,
+            source=SignalSource.AGENT,
         )
 
         store.deposit(sig_test)
@@ -576,7 +584,9 @@ class TestSense:
     def test_sense_returns_pressure_after_deposit(self, store: PheromoneStore) -> None:
         """After depositing a signal, sense() for the same (location, signal_type)
         must return a value > 0."""
-        sig = _signal("sns.a", SignalType.RISK, strength=4.5, source=SignalSource.SECURITY)
+        sig = _signal(
+            "sns.a", SignalType.RISK, strength=4.5, source=SignalSource.SECURITY
+        )
         store.deposit_signal(sig)
 
         result = store.sense("sns.a", SignalType.RISK)
@@ -586,7 +596,9 @@ class TestSense:
     def test_sense_consistent_with_query_pressure(self, store: PheromoneStore) -> None:
         """sense(location, signal_type) and query_pressure(location, signal_type) must
         report the same strength value for the same (location, signal_type) pair."""
-        sig = _signal("sns.b", SignalType.HUMAN_PRIORITY, strength=7.0, source=SignalSource.HUMAN)
+        sig = _signal(
+            "sns.b", SignalType.HUMAN_PRIORITY, strength=7.0, source=SignalSource.HUMAN
+        )
         store.deposit_signal(sig)
 
         sense_value = store.sense("sns.b", SignalType.HUMAN_PRIORITY)

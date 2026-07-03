@@ -1,7 +1,7 @@
 # Compliance — Functional Specification
 
-**Section**: `docs/compliance`  
-**Version**: v1.2.3  
+**Section**: `docs/compliance`
+**Version**: v1.3.0
 **Status**: Active
 
 ## 1. Overview

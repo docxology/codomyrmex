@@ -13,7 +13,9 @@ import json
 import logging
 import os
 import shutil
+import signal
 import subprocess
+from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -311,20 +313,36 @@ class ProviderRouter:
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
             env=env,
+            start_new_session=True,
         )
 
         if proc.stdout is None or proc.stderr is None:
             return
 
         yielded_any = False
-        while True:
-            chunk = await proc.stdout.read(64)  # read small chunks to force rapid yield
-            if not chunk:
-                break
-            yielded_any = True
-            yield chunk.decode("utf-8", errors="replace")
+        try:
+            while True:
+                chunk = await asyncio.wait_for(
+                    proc.stdout.read(64),
+                    timeout=timeout,
+                )
+                if not chunk:
+                    break
+                yielded_any = True
+                yield chunk.decode("utf-8", errors="replace")
 
-        await proc.wait()
+            await asyncio.wait_for(proc.wait(), timeout=timeout)
+            with suppress(TimeoutError):
+                await asyncio.wait_for(proc.stderr.read(), timeout=1)
+        except TimeoutError as exc:
+            if hasattr(os, "killpg"):
+                with suppress(ProcessLookupError):
+                    os.killpg(proc.pid, signal.SIGKILL)
+            with suppress(ProcessLookupError):
+                proc.kill()
+            with suppress(TimeoutError):
+                await asyncio.wait_for(proc.communicate(), timeout=5)
+            raise RuntimeError(f"Streaming timed out after {timeout} seconds") from exc
 
         if proc.returncode != 0 and not yielded_any:
             err = await proc.stderr.read()

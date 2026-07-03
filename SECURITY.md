@@ -2,12 +2,12 @@
 
 ## Supported Versions
 
-We actively support the following versions of Codomyrmex with security updates (current release: **v1.2.7** — see [pyproject.toml](pyproject.toml) and [CHANGELOG.md](CHANGELOG.md)):
+We actively support the following versions of Codomyrmex with security updates (current release: **v1.3.0** — see [pyproject.toml](pyproject.toml) and [CHANGELOG.md](CHANGELOG.md)):
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.2.x   | :white_check_mark: |
-| 1.1.x   | :white_check_mark: (best-effort) |
+| 1.3.x   | :white_check_mark: |
+| 1.2.x   | :white_check_mark: (best-effort) |
 | < 1.1   | :x:                |
 
 ## Reporting a Vulnerability

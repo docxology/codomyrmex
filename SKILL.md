@@ -1,14 +1,14 @@
 ---
 name: Codomyrmex
-description: Full-spectrum coding workspace skill providing ~600 production MCP `@mcp_tool` lines across 128 top-level modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
+description: Full-spectrum coding workspace skill providing ~610 production MCP `@mcp_tool` lines across 129 top-level modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
 ---
 # Codomyrmex Skill for PAI
 
-**Package version**: v1.2.7 (tracks [pyproject.toml](pyproject.toml)) | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 600 production `@mcp_tool` lines ([inventory](docs/reference/inventory.md))
+**Package version**: v1.3.0 (tracks [pyproject.toml](pyproject.toml)) | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 610 production `@mcp_tool` lines ([inventory](docs/reference/inventory.md))
 
 ## Description
 
-Full-spectrum coding workspace skill providing ~600 production `@mcp_tool` lines across 128 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
+Full-spectrum coding workspace skill providing ~610 production `@mcp_tool` lines across 129 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
 
 ## Installation
 
@@ -69,13 +69,13 @@ The same read-only payloads are exposed as MCP tools:
 | `CodomyrmexDeploy` | Infrastructure | "docker build", "list instances" |
 | `CodomyrmexTest` | Testing | "run tests", "benchmark" |
 
-## Tools Summary (~600)
+## Tools Summary (~610)
 
 Most tools are read-only; a small set is destructive (require `/codomyrmexTrust`). Run `/codomyrmexVerify` for the live safe/destructive split.
 
 - **Destructive**: `write_file`, `run_command`, `run_tests`, `call_module_function`
 
-Auto-discovered from **149** `mcp_tools.py` files across the package tree (128 top-level modules), including agents, cerebrum, coding, containerization, crypto, data_visualization, documentation, events, formal_verification, git_analysis, git_operations, llm, logging_monitoring, maintenance, orchestrator, performance, plugin_system, relations, scrape, search, security, and more.
+Auto-discovered from **150** `mcp_tools.py` files across the package tree (129 top-level modules), including agents, cerebrum, coding, containerization, crypto, data_visualization, documentation, events, formal_verification, git_analysis, git_operations, llm, logging_monitoring, maintenance, orchestrator, performance, plugin_system, relations, scrape, search, security, and more.
 
 ## Resources
 
@@ -100,7 +100,7 @@ Auto-discovered from **149** `mcp_tools.py` files across the package tree (128 t
 | ------- | -------- | ------------ |
 | `UNTRUSTED` | None | Default state |
 | `VERIFIED` | Read-only tools | `/codomyrmexVerify` |
-| `TRUSTED` | All dynamic tools (~600 production `@mcp_tool` lines in Python tree; see inventory) plus PAI static proxy tools | `/codomyrmexTrust` |
+| `TRUSTED` | All dynamic tools (~610 production `@mcp_tool` lines in Python tree; see inventory) plus PAI static proxy tools | `/codomyrmexTrust` |
 
 ## Repository
 

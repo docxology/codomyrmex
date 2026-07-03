@@ -1,6 +1,6 @@
 # Codomyrmex Agents — config/colony_kernel
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
@@ -12,8 +12,8 @@ dynamics, and proposal gate decisions.
 
 - `kernel.yaml` — Top-level `ColonyKernelConfig`: db path, repo root, budget caps,
   pheromone parameters, and gate thresholds.
-- `roles.yaml` — Role promotion thresholds and per-role action-type allowlists
-  governing when an agent is elevated from `sandbox` to a named role.
+- `roles.yaml` — Kernel-facing role promotion thresholds and defaults for the
+  0.20/0.35/0.50/0.70 role ladder.
 - `decay_rates.yaml` — Named pheromone decay-rate multipliers and per-signal-type
   default tier assignments.
 - `README.md` — Human-readable reference: what each file controls and how to
@@ -39,7 +39,7 @@ dynamics, and proposal gate decisions.
 - `AGENTS.md` — Agent coordination and navigation (this file)
 - `README.md` — Directory overview and override instructions
 - `kernel.yaml` — Primary kernel config (budget, pheromone, gate)
-- `roles.yaml` — Role thresholds and defaults
+- `roles.yaml` — Kernel role thresholds and defaults
 - `decay_rates.yaml` — Decay-rate multipliers and signal defaults
 
 ## Dependencies
@@ -62,4 +62,6 @@ dynamics, and proposal gate decisions.
 ## Navigation Links
 
 - **Parent Directory**: [config](../README.md) - Parent directory documentation
-- **Project Root**: ../../README.md - Main project documentation
+- **Directory README**: [README.md](README.md) - Configuration reference
+- **Source SPEC**: [../../src/codomyrmex/colony_kernel/SPEC.md](../../src/codomyrmex/colony_kernel/SPEC.md) - Runtime contract
+- **Project Root**: [../../README.md](../../README.md) - Main project documentation

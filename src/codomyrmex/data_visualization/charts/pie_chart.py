@@ -77,6 +77,7 @@ def create_pie_chart(
 
     if show_plot:
         import warnings
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", UserWarning)
             plt.show()

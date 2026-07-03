@@ -108,7 +108,7 @@ flowchart LR
 ## See Also
 
 - [Myrmecology and Software Architecture](./myrmecology.md) — The foundational colony metaphor
-- [The Superorganism](./superorganism.md) — Colony-level metabolic regulation as emergent property
+- [The Superorganism](./superorganism.md) — Colony-level metabolic regulation as system-level behavior
 - [The Free Energy Principle and Active Inference](./free_energy.md) — The informational cost of maintaining accurate models
 - [Eusociality and the Division of Labor](./eusociality.md) — Caste ratios as metabolic allocation strategies
 - [Stigmergy and Indirect Coordination](./stigmergy.md) — Pheromone trails as metabolic investment

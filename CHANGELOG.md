@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Colony Kernel** (8 subsystems, 8 MCP tools): `PheromoneStore`, `ResourceLedger`, `ActuationGate`, `ConsequenceMemory`, `RoleAdapter`, `PruningDaemon`, `FalsificationWorker`, `ColonyKernel` — artificial ecology control plane. Gate formula: `budget×0.30 + risk×0.30 + trust×0.25 + completeness×0.15`; EXECUTE≥0.75, HOLD 0.50–0.74, REFUSE<0.50. Trust deltas: PASS=+0.04, FAIL=−0.08, REPAIR=−0.05, HUMAN_WEIGHT=0.03.
-- **Colony Kernel test suite** (625 tests, 11 files): `test_config_loader.py` (13 — `load_kernel_yaml`, `default_budget_from_yaml`, malformed YAML); `test_models.py` (55 — `make_trace_key`, `compute_trust_delta`, `ResourceCost.__add__`); `test_resource_ledger.py` (+11); `test_consequence_memory.py` (+19 — SQLite vs in-memory); `test_actuation_gate.py` (+4 — HOLD/EXECUTE boundary at 0.75); `test_pheromone_store.py` (+7); `test_role_adapter.py` (+6 — MEMORY_ANT trust≥0.8); `test_kernel.py` (+2 — 13 record_outcome calls → EXECUTE); `test_pruning_daemon.py` (+6); `test_falsification_worker.py`; `test_mcp_tools.py`.
+- **Colony Kernel test suite** (641 tests, 12 files): `test_config_loader.py`, `test_models.py`, `test_resource_ledger.py`, `test_consequence_memory.py`, `test_actuation_gate.py`, `test_pheromone_store.py`, `test_role_adapter.py`, `test_kernel.py`, `test_pruning_daemon.py`, `test_falsification_worker.py`, `test_mcp_tools.py`, and `test_manuscript_consistency.py`.
 - **`open_gauss` submodule RASP docs**: 34 files (AGENTS.md + README.md for 17 subdirectories) committed at submodule commit `032e9a9c`.
 - **Colony Kernel `PAI.md`**: gate formula corrected (was 0.4+0.3+0.3, now 0.30+0.30+0.25+0.15); version bumped to v1.3.0.
 - **Manuscript pandoc-crossref integration**: `scripts/compile_manuscript.py` now auto-detects `pandoc-crossref` and inserts `-F pandoc-crossref` before `--citeproc`; all `[@sec:xxx]`, `[@fig:xxx]`, `[@eq:xxx]` cross-references resolve correctly. Section IDs added to all 9 manuscript chapters.
@@ -38,12 +38,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Tests
 
-- **Colony Kernel**: 441 → 625 tests (+184 new tests across 11 files).
-- Added `src/codomyrmex/tests/unit/colony_kernel/AGENTS.md` documenting all 11 test files and their subsystem coverage.
+- **Colony Kernel**: 441 → 641 tests (+200 new tests across 12 files).
+- Added `src/codomyrmex/tests/unit/colony_kernel/AGENTS.md` documenting all 12 test files and their subsystem coverage.
 
 ### Documentation
 
-- **Manuscript**: all 14 cross-references (`[@sec:xxx]`, `[@fig:xxx]`, `[@eq:xxx]`) resolve via pandoc-crossref; no citeproc warnings. Test count token updated to 625; Python version and falsification vector count tokenized.
+- **Manuscript**: all 14 cross-references (`[@sec:xxx]`, `[@fig:xxx]`, `[@eq:xxx]`) resolve via pandoc-crossref; no citeproc warnings. Test count token updated from the live scoped run; Python version and falsification vector count tokenized.
 
 ---
 
@@ -72,7 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Makefile**: `verify-release` target runs `lint`, `type-check`, and `test` (40% gate).
 - **Code Health & Zero-Mock Enforcement**: Resolved 446 `ruff` diagnostic errors across the ecosystem. Enforced strict Zero-Mock compliance by removing legacy mock-dependent test adapters for the `open_gauss` agent.
 - **Paperclip workspace surfaces**: Root and `projects/` docs now explicitly track Paperclip adapter/integration workspaces; `projects/hermes-paperclip-adapter` is treated as an intentional standalone nested repository pending writable upstream publication.
-- **Doc version stamps** harmonized to v1.2.7 across all 19 `docs/` subdirectories (previously 14 were stale at v1.2.3).
+- **Doc version stamps** harmonized to the then-current release across all 19 `docs/` subdirectories (previously 14 were stale).
 - **`docs/reference/inventory.md`** — timestamp refreshed (2026-05-13 → 2026-05-21); `Markdown files under docs/` count updated 1,164 → 1,172 (caught drift).
 - **`docs/pai/tools-reference.md`** — static-tool count corrected 22 → 20 (matches `TOOL_DEFINITIONS` length empirically).
 - **`docs/AGENTS.md`** — "200+ markdown files" → "1,172" with link to `inventory.md`.

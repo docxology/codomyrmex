@@ -16,7 +16,8 @@ Network tests guarded by module-level skipif.
 
 import json
 import os
-import socket
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import pytest
 import yaml
@@ -28,22 +29,31 @@ from codomyrmex.config_management.core.config_loader import (
     validate_configuration,
 )
 
-# ---------------------------------------------------------------------------
-# Network availability guard
-# ---------------------------------------------------------------------------
 
+@pytest.fixture
+def local_json_url():
+    class JsonHandler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            body = json.dumps({"slideshow": {"title": "local fixture"}}).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
 
-def _http_available() -> bool:
-    """Quick port check for httpbin.org:443 — avoids long test hangs."""
+        def log_message(self, _format, *_args):
+            pass
+
+    server = HTTPServer(("127.0.0.1", 0), JsonHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
     try:
-        socket.setdefaulttimeout(3)
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("httpbin.org", 443))
-        return True
-    except OSError:
-        return False
+        yield f"http://127.0.0.1:{server.server_port}/json"
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
 
-
-_NETWORK_AVAILABLE = _http_available()
 
 # ---------------------------------------------------------------------------
 # _load_from_url — success path: JSON response (lines 328-334)
@@ -51,25 +61,22 @@ _NETWORK_AVAILABLE = _http_available()
 
 
 @pytest.mark.unit
-@pytest.mark.skipif(
-    not _NETWORK_AVAILABLE,
-    reason="No network access — set CODOMYRMEX_TEST_NETWORK=1 or ensure httpbin.org:443 reachable",
-)
 class TestLoadFromUrlSuccessJson:
     """Exercise the _load_from_url success path returning JSON (lines 328-334)."""
 
-    def test_load_from_url_returns_json_dict(self, tmp_path):
+    def test_load_from_url_returns_json_dict(self, tmp_path, local_json_url):
         """A successful HTTP fetch with JSON content-type returns a dict (line 334)."""
         manager = ConfigurationManager(config_dir=str(tmp_path))
-        result = manager._load_from_url("https://httpbin.org/json")
-        # httpbin.org/json returns {"slideshow": {...}}
+        result = manager._load_from_url(local_json_url)
         assert result is not None
         assert isinstance(result, dict)
 
-    def test_load_source_https_dispatches_to_load_from_url(self, tmp_path):
+    def test_load_source_https_dispatches_to_load_from_url(
+        self, tmp_path, local_json_url
+    ):
         """_load_source dispatches https:// URLs to _load_from_url (line 301-303)."""
         manager = ConfigurationManager(config_dir=str(tmp_path))
-        result = manager._load_source("https://httpbin.org/json")
+        result = manager._load_source(local_json_url)
         assert result is not None
         assert isinstance(result, dict)
 

@@ -1,5 +1,7 @@
 # AGENTS.md — docs/todo
 
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
+
 > Technical reference for AI agents and contributors working in this directory.
 
 ## Purpose
@@ -18,14 +20,15 @@
 - Each file is a **scope document**, not a flat task list. It includes: executive summary, implementation phases, acceptance criteria per phase, and current status.
 - Status fields use the values: `Planned`, `In Progress`, `Implemented`, `Blocked`.
 - When a module's scope document is fully implemented and its items are closed, move completed acceptance criteria to the module's `SPEC.md` and archive the scope document with a `## Status: Complete` header.
-- Do not duplicate content already in `TO-DO.md` at the project root. `docs/todo/` files are module-scoped; `TO-DO.md` tracks cross-cutting backlog rows.
+- Do not duplicate content already in `TODO.md` at the project root. `docs/todo/` files are module-scoped; `TODO.md` tracks cross-cutting backlog rows.
 
-## Relationship to TO-DO.md
+## Relationship to TODO.md
 
-`TO-DO.md` at the project root contains repo-wide, cross-cutting backlog rows. Module scope documents here contain per-module phase plans and detailed acceptance criteria. If a row in `TO-DO.md` references a module, the detailed spec lives in the corresponding file here.
+`TODO.md` at the project root contains repo-wide, cross-cutting backlog rows. Module scope documents here contain per-module phase plans and detailed acceptance criteria. If a row in `TODO.md` references a module, the detailed spec lives in the corresponding file here.
 
 ## Navigation
 
-- **Project root backlog**: [../../TO-DO.md](../../TO-DO.md)
+- **Directory README**: [README.md](README.md)
+- **Project root backlog**: [../../TODO.md](../../TODO.md)
 - **Module docs**: [../modules/](../modules/)
 - **Source**: [../../src/codomyrmex/](../../src/codomyrmex/)

@@ -17,7 +17,9 @@ async def test_streaming_yield_time_to_first_token() -> None:
     # If the environment lacks ollama `llama3.2`, we catch and gracefully handle it or just assert the logic runs.
     # To assure Zero Mock, we assert the type and async iteration mechanism directly.
 
-    stream = router.call_llm_stream("Count from 1 to 5 slowly.", provider="ollama")
+    stream = router.call_llm_stream(
+        "Count from 1 to 5 slowly.", provider="ollama", timeout=5
+    )
 
     first_token_time = None
     final_time = None

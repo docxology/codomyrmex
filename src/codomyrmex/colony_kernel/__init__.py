@@ -18,6 +18,14 @@ from codomyrmex.colony_kernel.config_loader import (
 )
 from codomyrmex.colony_kernel.consequence_memory import ConsequenceMemory
 from codomyrmex.colony_kernel.falsification_worker import FalsificationWorker
+from codomyrmex.colony_kernel.invariants import (
+    all_invariants_hold,
+    check_enum_values_no_conflict,
+    check_gate_weights_sum_to_one,
+    check_pheromone_strength_bounds,
+    check_role_ladder_monotonic,
+    check_trust_score_in_range,
+)
 from codomyrmex.colony_kernel.kernel import ColonyKernel, ColonyKernelConfig
 from codomyrmex.colony_kernel.models import (
     ActionProposal,
@@ -39,20 +47,19 @@ from codomyrmex.colony_kernel.models import (
 )
 from codomyrmex.colony_kernel.pheromone_store import PheromoneStore
 from codomyrmex.colony_kernel.pruning_daemon import PruningDaemon
-from codomyrmex.colony_kernel.resource_ledger import ResourceBudget, ResourceLedger
+from codomyrmex.colony_kernel.resource_ledger import (
+    ResourceBudget,
+    ResourceLedger,
+    ThreadSafeResourceLedger,
+)
 from codomyrmex.colony_kernel.role_adapter import RoleAdapter
 
 __all__ = [
-    # Config loader
     "COLONY_KERNEL_CONFIG_DIR",
-    # Value objects
     "ActionProposal",
-    # Subsystem classes
     "ActuationGate",
-    # Enums
     "AgentRole",
     "AgentTrustProfile",
-    # Integration
     "ColonyKernel",
     "ColonyKernelConfig",
     "ColonySignal",
@@ -73,8 +80,14 @@ __all__ = [
     "RoleAdapter",
     "SignalSource",
     "SignalType",
+    "ThreadSafeResourceLedger",
+    "all_invariants_hold",
+    "check_enum_values_no_conflict",
+    "check_gate_weights_sum_to_one",
+    "check_pheromone_strength_bounds",
+    "check_role_ladder_monotonic",
+    "check_trust_score_in_range",
     "compute_trust_delta",
-    # Config loader functions
     "default_budget_from_yaml",
     "default_gate_config_from_yaml",
     "load_decay_yaml",
@@ -82,3 +95,4 @@ __all__ = [
     "load_roles_yaml",
     "make_trace_key",
 ]
+

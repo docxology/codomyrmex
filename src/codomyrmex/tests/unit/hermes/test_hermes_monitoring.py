@@ -18,16 +18,23 @@ class TestGetSystemMetrics:
         assert isinstance(result, dict)
 
     def test_has_required_keys(self) -> None:
-        """Should contain cpu_percent, ram_usage_percent, swap_usage_percent."""
         result = _get_system_metrics()
         assert "cpu_percent" in result
         assert "ram_usage_percent" in result
+        assert "ram_available_mb" in result
+        assert "ram_total_mb" in result
         assert "swap_usage_percent" in result
 
     def test_values_are_numeric(self) -> None:
         """All metric values should be numeric (int or float)."""
         result = _get_system_metrics()
-        for key in ("cpu_percent", "ram_usage_percent", "swap_usage_percent"):
+        for key in (
+            "cpu_percent",
+            "ram_usage_percent",
+            "ram_available_mb",
+            "ram_total_mb",
+            "swap_usage_percent",
+        ):
             assert isinstance(result[key], (int, float)), (
                 f"{key} should be numeric, got {type(result[key])}"
             )

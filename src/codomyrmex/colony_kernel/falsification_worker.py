@@ -131,7 +131,7 @@ class FalsificationWorker:
     # ------------------------------------------------------------------
 
     def evaluate_plan(self, plan: dict[str, Any]) -> FalsificationReport:
-        """Run all 10 heuristic checks against *plan* and return a report.
+        """Run heuristic checks across all 10 attack-vector categories.
 
         Expected plan keys (all optional — missing keys produce findings):
         ``target``, ``rationale``, ``rollback_plan``, ``tests``, ``metrics``,
@@ -159,6 +159,7 @@ class FalsificationWorker:
             self._check_security_risk(plan),
             self._check_false_metric(plan),
             self._check_over_broad_module(plan),
+            self._check_hidden_maintenance_cost(plan),
             self._check_premature_abstraction(plan),
         ]
 
@@ -167,31 +168,48 @@ class FalsificationWorker:
         verdict = self._compute_verdict(findings)
         required_changes = [f.remediation for f in findings if f.remediation]
 
-        # Deposit pheromone trace for high-severity findings
+        # Deposit pheromone traces for findings
+        #   FAILURE for severity >= HIGH — strong avoidance signal
+        #   RISK   for severity >= MEDIUM — caution marker (gate reads RISK pressure)
         if self._pheromone_store is not None:
             target = plan.get("target", "unknown")
             for finding in findings:
-                if _rank(finding.severity) >= 3:
-                    try:
-                        signal = ColonySignal(
-                            location=str(target),
-                            signal_type=SignalType.FAILURE,
-                            strength=float(_rank(finding.severity)),
-                            decay_rate=DecayRate.FAST,
-                            source=SignalSource.AGENT,
-                            evidence={
-                                "attack_vector": finding.attack_vector,
-                                "claim": finding.claim,
-                            },
+                try:
+                    if _rank(finding.severity) >= 3:
+                        self._pheromone_store.deposit(
+                            ColonySignal(
+                                location=str(target),
+                                signal_type=SignalType.FAILURE,
+                                strength=float(_rank(finding.severity)),
+                                decay_rate=DecayRate.FAST,
+                                source=SignalSource.AGENT,
+                                evidence={
+                                    "attack_vector": finding.attack_vector,
+                                    "claim": finding.claim,
+                                },
+                            )
                         )
-                        self._pheromone_store.deposit(signal)
-                    except Exception:
-                        logger.warning(
-                            "PheromoneStore deposit failed for target %r (finding: %s): ",
-                            target,
-                            finding.attack_vector,
-                            exc_info=True,
+                    elif _rank(finding.severity) >= 2:
+                        self._pheromone_store.deposit(
+                            ColonySignal(
+                                location=str(target),
+                                signal_type=SignalType.RISK,
+                                strength=float(_rank(finding.severity)) * 0.5,
+                                decay_rate=DecayRate.FAST,
+                                source=SignalSource.AGENT,
+                                evidence={
+                                    "attack_vector": finding.attack_vector,
+                                    "claim": finding.claim,
+                                },
+                            )
                         )
+                except Exception:
+                    logger.warning(
+                        "PheromoneStore deposit failed for target %r (finding: %s): ",
+                        target,
+                        finding.attack_vector,
+                        exc_info=True,
+                    )
 
         summary = self._build_summary(plan)
         return FalsificationReport(
@@ -200,7 +218,6 @@ class FalsificationWorker:
             verdict=verdict,
             required_changes=required_changes,
         )
-
 
     def analyze(self, proposal: ActionProposal) -> list[FalsificationFinding]:
         """Run all falsification checks against *proposal*.
@@ -770,6 +787,55 @@ class FalsificationWorker:
             )
 
         return None
+
+    def _check_hidden_maintenance_cost(
+        self, plan: dict[str, Any]
+    ) -> FalsificationFinding | None:
+        action_type = str(plan.get("action_type", "")).strip().lower()
+        target = str(plan.get("target", "")).strip().lower()
+        rationale = str(plan.get("rationale", "")).strip()
+        scope_str = str(plan.get("scope", "")).strip()
+        combined = f"{action_type} {target} {rationale} {scope_str}"
+
+        durable_change_patterns = [
+            r"\b(create|add|introduce|migrate|refactor|replace)\b",
+            r"\b(module|service|framework|platform|pipeline|integration)\b",
+            r"\bnew\s+(api|schema|storage|dependency|subsystem)\b",
+        ]
+        durable_signals = [
+            pattern
+            for pattern in durable_change_patterns
+            if re.search(pattern, combined, re.IGNORECASE)
+        ]
+        if len(durable_signals) < 2:
+            return None
+
+        maintenance_fields = (
+            "maintenance_plan",
+            "owner",
+            "ownership",
+            "deprecation_plan",
+            "runbook",
+        )
+        acknowledged = any(
+            str(plan.get(field, "")).strip() for field in maintenance_fields
+        )
+        if acknowledged:
+            return None
+
+        return FalsificationFinding(
+            claim="The plan accounts for long-term ownership and maintenance burden.",
+            attack_vector=AttackVector.HIDDEN_MAINTENANCE_COST.value,
+            severity=FalsificationSeverity.MEDIUM,
+            evidence={
+                "durable_change_signals": durable_signals,
+                "maintenance_fields_checked": list(maintenance_fields),
+            },
+            remediation=(
+                "Add an owner, maintenance_plan, runbook, or deprecation_plan that explains "
+                "who will operate the durable change and how future upkeep will be handled."
+            ),
+        )
 
     def _check_premature_abstraction(
         self, plan: dict[str, Any]

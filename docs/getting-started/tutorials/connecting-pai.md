@@ -4,7 +4,7 @@
 
 ## Overview
 
-This tutorial walks you through connecting the [PAI system](../../PAI.md) (`~/.claude/PAI/`) to codomyrmex via the Model Context Protocol (MCP). Once connected, PAI agents can use codomyrmex's **128** top-level modules as tools during Algorithm execution.
+This tutorial walks you through connecting the [PAI system](../../PAI.md) (`~/.claude/PAI/`) to codomyrmex via the Model Context Protocol (MCP). Once connected, PAI agents can use codomyrmex's **129** top-level modules as tools during Algorithm execution.
 
 ## Prerequisites
 

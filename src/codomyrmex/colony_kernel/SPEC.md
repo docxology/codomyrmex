@@ -1,12 +1,20 @@
 # Colony Kernel — Formal Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
+
+## Navigation
+
+- **README**: [README.md](README.md)
+- **Agent Guide**: [AGENTS.md](AGENTS.md)
+- **MCP Tool Specification**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
+- **Public API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Package Docs Mirror**: [../../../docs/modules/colony_kernel/](../../../docs/modules/colony_kernel/)
 
 ## Overview
 
 Colony Kernel implements a stigmergy-based actuation control plane for codomyrmex. The central thesis is that a multi-agent codebase can self-organise through pheromone signals rather than explicit coordination: agents deposit chemical-analogy traces at locations (module paths or file paths), those traces decay over time, and every proposed change is gated against the accumulated signal landscape plus the proposing agent's earned trust score. The kernel enforces no side-effects on the codebase itself; it only decides whether a proposed change may proceed (EXECUTE), should wait (HOLD), or must be refused (REFUSE).
 
-All shared types are defined in `models.py`. No subsystem module imports from another subsystem module; all cross-subsystem communication flows through the `ColonyKernel` integration class.
+All shared types are defined in `models.py`. Canonical subsystem implementations live in standalone modules and exchange typed value objects; cross-subsystem sequencing flows through the `ColonyKernel` integration class.
 
 ---
 
@@ -14,7 +22,7 @@ All shared types are defined in `models.py`. No subsystem module imports from an
 
 ### 1. PheromoneStore
 
-**File**: `kernel.py` — class `PheromoneStore`
+**File**: `pheromone_store.py` — class `PheromoneStore` (`kernel.py` re-exports it for compatibility)
 
 **Purpose**: Pheromone (stigmergy) layer with colony semantics. Wraps `TraceField` from `agentic_memory.stigmergy`.
 
@@ -45,7 +53,7 @@ All shared types are defined in `models.py`. No subsystem module imports from an
 
 ### 2. ResourceLedger
 
-**File**: `kernel.py` — class `ResourceLedger`
+**File**: `resource_ledger.py` — class `ResourceLedger` (`kernel.py` re-exports it for compatibility)
 
 **Purpose**: Period-scoped multi-dimensional budget tracker. Checks that accumulated cost plus the proposed estimate will not breach any budget ceiling.
 
@@ -74,27 +82,28 @@ All shared types are defined in `models.py`. No subsystem module imports from an
 
 ### 3. ActuationGate
 
-**File**: `kernel.py` — class `ActuationGate`
+**File**: `actuation_gate.py` — class `ActuationGate` (`kernel.py` re-exports it for compatibility)
 
-**Purpose**: Computes a composite gate score from four components minus a falsification penalty and routes to EXECUTE / HOLD / REFUSE.
+**Purpose**: Computes a weighted additive gate score from four components, applies hard overrides, and routes to EXECUTE / HOLD / REFUSE.
 
 **Gate score formula**:
 
 ```
-base_score = (
-    pressure_component   × 0.30   # normalised net pheromone pressure at target
-  + rollback_component   × 0.30   # 1.0 if rollback_plan non-empty, else 0.5
-  + trust_score          × 0.25   # agent trust_score from AgentTrustProfile
-  + evidence_component   × 0.15   # 1.0 if evidence dict non-empty, else 0.5
+gate_score = (
+    budget_ok    * 0.30
+  + risk_ok      * 0.30
+  + trust_ok     * 0.25
+  + completeness * 0.15
 )
-gate_score = base_score × (1.0 − falsification_penalty)
 gate_score = clamp(gate_score, 0.0, 1.0)
 ```
 
-**Pressure component**:
+**Risk component**:
 ```
-net_pressure = success_strength − failure_strength − risk_strength × 0.5
-pressure_component = clamp(0.5 + net_pressure / 10.0, 0.0, 1.0)
+risk_pressure = PheromoneStore.sense(target, RISK)
+risk_ok = 0.0 if risk_pressure >= 6.0
+       or 0.5 if risk_pressure >= 3.0
+       or 1.0 otherwise
 ```
 
 **Falsification penalty** (max weight across all findings):
@@ -110,8 +119,10 @@ pressure_component = clamp(0.5 + net_pressure / 10.0, 0.0, 1.0)
 
 | Condition | Decision |
 |-----------|----------|
-| `budget_approved == False` | HOLD |
+| `budget_approved == False` supplied by kernel | HOLD |
+| standalone ledger budget check fails | REFUSE |
 | `profile.role == SANDBOX` | REFUSE (unconditional) |
+| `profile.trust_score < 0.30` | REFUSE (unconditional) |
 | CRITICAL falsification finding present | REFUSE |
 | `gate_score ≥ 0.75` | EXECUTE |
 | `0.50 ≤ gate_score < 0.75` | HOLD |
@@ -205,37 +216,31 @@ Resulting delta is applied to `trust_score` via `AgentTrustProfile.apply_delta`,
 
 ### 7. FalsificationWorker
 
-**File**: `kernel.py` — class `FalsificationWorker` (gate-level checks); `mcp_tools.py` — class `FalsificationWorker` (plan-dict checks)
+**File**: `falsification_worker.py` — class `FalsificationWorker` (shared by kernel gate checks and MCP pre-flight plan checks)
 
 **Purpose**: Adversarial claim validation. Returns `FalsificationFinding` lists. All checks are deterministic and do not call any LLM.
 
-**`kernel.py` attack vectors** (operate on `ActionProposal`):
+**Attack vectors** (operate on `ActionProposal` or plan dictionaries):
 
 | Check | Attack Vector | Triggers When | Severity |
 |-------|--------------|---------------|----------|
-| Rollback coverage | `rollback_coverage` | Security-sensitive action_type with no rollback_plan | HIGH |
-| Evidence sufficiency | `evidence_sufficiency` | Destructive or risk_level ≥ 0.5 with empty evidence | MEDIUM |
-| Pheromone pressure | `pheromone_pressure` | FAILURE strength ≥ 3.0 (HIGH) or ≥ 6.0 (CRITICAL) at target; RISK ≥ 2.0 (MEDIUM) | HIGH / CRITICAL / MEDIUM |
-| Security exposure | `security_exposure` | Security-sensitive action_type with security_exposure ≥ 0.4 | HIGH |
-| Budget self-report | `budget_self_report` | risk_level ≥ 0.9 | MEDIUM |
-| Rationale depth | `rationale_depth` | rationale.strip() length < 20 | LOW |
+| Dependency risk | `dependency_risk` | dependency list references broad, unstable, or wildcard dependency sets | MEDIUM |
+| Security risk | `security_risk` | security-sensitive action without credible safeguards | HIGH |
+| Circular architecture | `circular_architecture` | proposed target/source relationship creates an architectural cycle | HIGH |
+| False metric | `false_metric` | metrics absent, placeholder, or disconnected from the claimed outcome | MEDIUM |
+| Over-broad module | `over_broad_module` | target/scope spans too many modules for one safe action | MEDIUM |
+| Hidden maintenance cost | `hidden_maintenance_cost` | durable change lacks an owner, maintenance plan, or follow-up path | MEDIUM |
+| No rollback | `no_rollback` | rollback_plan absent, empty, or placeholder | HIGH |
+| No test value | `no_test_value` | tests absent or too vague to verify the changed behavior | HIGH |
+| Scope creep | `scope_creep` | destructive, broad, or high-risk action lacks bounded scope | HIGH |
+| Premature abstraction | `premature_abstraction` | abstraction proposed before repeated use or evidence justifies it | LOW |
 
-**`mcp_tools.py` attack vectors** (operate on plan dict):
-
-| Check | Attack Vector | Triggers When | Severity |
-|-------|--------------|---------------|----------|
-| Missing rollback | `missing_rollback` | rollback_plan absent or empty | HIGH |
-| Underfunded budget | `underfunded_budget` | llm_calls == 0 and runtime_seconds == 0.0 | MEDIUM |
-| Circular dependency | `circular_dependency` | target == agent_id / source | HIGH |
-| Untested assumption | `untested_assumption` | No evidence and rationale < 50 chars | MEDIUM |
-| Blast radius | `blast_radius` | action_type in {delete, archive, purge, rename, replace, migrate} or risk_level > 0.6 | HIGH / MEDIUM |
-
-**Composite severity score** (mcp_tools.py version): mean of `{LOW: 0.25, MEDIUM: 0.5, HIGH: 0.75, CRITICAL: 1.0}` weights across all findings.
+**Composite severity score** (MCP pre-flight version): mean of `{LOW: 0.05, MEDIUM: 0.20, HIGH: 0.45, CRITICAL: 1.0}` weights across all findings.
 
 | Method | Output |
 |--------|--------|
-| `analyze(proposal)` | `list[FalsificationFinding]` (kernel.py) |
-| `evaluate_plan(plan)` | `dict` with keys `findings`, `severity_score`, `recommendation` (mcp_tools.py) |
+| `analyze(proposal)` | `list[FalsificationFinding]` |
+| `evaluate_plan(plan)` | `FalsificationReport` with findings, severity-derived verdict, and required changes |
 
 ---
 
@@ -297,7 +302,7 @@ delta +=  record.human_feedback * 0.03   # human_feedback ∈ [-1.0, +1.0]
 
 ## Budget Enforcement Rules
 
-The `ResourceLedger` enforces seven independent ceilings. Exceeding any one ceiling triggers a HOLD (not REFUSE) so the agent can retry after the period resets or cost is redistributed.
+The `ResourceLedger` enforces seven independent ceilings. In the integrated `ColonyKernel.propose_action` path, exceeding any one ceiling triggers HOLD so the agent can retry after the period resets or cost is redistributed. In standalone `ActuationGate.evaluate` usage with an internally supplied ledger, the same budget failure returns REFUSE because no kernel requeue loop owns the proposal.
 
 **Default `ResourceBudget` values**:
 
@@ -389,14 +394,15 @@ score = mean([SEVERITY_WEIGHTS[f.severity.value] for f in findings])
 | 0.40 – 0.75 | `"hold"` |
 | < 0.40 | `"execute"` |
 
-**Gate-level falsification penalty** (`kernel.py` `ActuationGate.evaluate`):
+**Gate-level falsification override** (`actuation_gate.py` `ActuationGate.evaluate`):
 
 ```python
 falsification_penalty = max(FALSIFICATION_WEIGHT[f.severity] for f in findings)
-gate_score = base_score × (1.0 − falsification_penalty)
+if falsification_penalty >= FALSIFICATION_WEIGHT[CRITICAL]:
+    return GateResult(REFUSE, gate_score=0.0)
 ```
 
-A CRITICAL finding (`falsification_penalty == 1.0`) drives `gate_score` to 0.0 and triggers an unconditional REFUSE before threshold routing.
+A CRITICAL finding (`falsification_penalty == 1.0`) triggers an unconditional REFUSE before weighted additive scoring.
 
 ---
 

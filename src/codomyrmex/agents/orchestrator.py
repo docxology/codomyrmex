@@ -58,6 +58,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 logger = get_logger(__name__)
+INFINITE_TURN_TIMEOUT_SECONDS = 10.0
 
 
 # ── Data Structures ──────────────────────────────────────────────────
@@ -436,7 +437,14 @@ class ConversationOrchestrator:
                 if not self._running:
                     break
 
-                turn = self._execute_turn(spec, context, round_num, max_tokens_per_turn)
+                request_timeout = INFINITE_TURN_TIMEOUT_SECONDS if rounds == 0 else None
+                turn = self._execute_turn(
+                    spec,
+                    context,
+                    round_num,
+                    max_tokens_per_turn,
+                    request_timeout,
+                )
                 self.log.turns.append(turn)
                 context = turn.content  # next agent responds to this
 
@@ -571,6 +579,7 @@ class ConversationOrchestrator:
         context: str,
         round_num: int,
         max_tokens: int,
+        request_timeout: float | None = None,
     ) -> ConversationTurn:
         """Execute a single turn: prompt → real LLM → relay → log."""
         client = self.clients[spec.identity]
@@ -612,7 +621,7 @@ class ConversationOrchestrator:
         )
 
         # Real LLM call with retry.
-        req = AgentRequest(prompt=prompt)
+        req = AgentRequest(prompt=prompt, timeout=request_timeout)
         content = ""
         start = time.monotonic()
         last_error: Exception | None = None

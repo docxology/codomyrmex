@@ -22,6 +22,7 @@ from codomyrmex.colony_kernel.models import (
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _minimal_plan(**overrides) -> dict:
     """Return a plan dict that passes all 10 checks (PASS verdict) unless overridden."""
     base = {
@@ -44,8 +45,8 @@ def _minimal_plan(**overrides) -> dict:
 # check_no_rollback
 # ---------------------------------------------------------------------------
 
-class TestCheckNoRollback:
 
+class TestCheckNoRollback:
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -57,10 +58,20 @@ class TestCheckNoRollback:
         assert finding.severity == FalsificationSeverity.HIGH
 
     def test_placeholder_na_returns_high_finding(self):
-        for placeholder in ("n/a", "N/A", "none", "TODO", "tbd", "unknown", "not applicable"):
+        for placeholder in (
+            "n/a",
+            "N/A",
+            "none",
+            "TODO",
+            "tbd",
+            "unknown",
+            "not applicable",
+        ):
             plan = _minimal_plan(rollback_plan=placeholder)
             finding = self.worker.check_no_rollback(plan)
-            assert finding is not None, f"Expected finding for placeholder: {placeholder!r}"
+            assert finding is not None, (
+                f"Expected finding for placeholder: {placeholder!r}"
+            )
             assert finding.severity == FalsificationSeverity.HIGH
 
     def test_very_short_rollback_returns_medium_finding(self):
@@ -95,8 +106,8 @@ class TestCheckNoRollback:
 # check_no_test_value
 # ---------------------------------------------------------------------------
 
-class TestCheckNoTestValue:
 
+class TestCheckNoTestValue:
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -140,8 +151,8 @@ class TestCheckNoTestValue:
 # evaluate_plan — complete plan → PASS verdict
 # ---------------------------------------------------------------------------
 
-class TestEvaluatePlanCompletePass:
 
+class TestEvaluatePlanCompletePass:
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -190,8 +201,8 @@ class TestEvaluatePlanCompletePass:
 # evaluate_plan — plans with severe findings → FAIL verdict
 # ---------------------------------------------------------------------------
 
-class TestEvaluatePlanFailVerdict:
 
+class TestEvaluatePlanFailVerdict:
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -237,8 +248,8 @@ class TestEvaluatePlanFailVerdict:
 # evaluate_plan — returns FalsificationReport with correct shape
 # ---------------------------------------------------------------------------
 
-class TestFalsificationReportShape:
 
+class TestFalsificationReportShape:
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -274,7 +285,8 @@ class TestFalsificationReportShape:
         plan = _minimal_plan(rollback_plan="")
         report = self.worker.evaluate_plan(plan)
         no_rb_findings = [
-            f for f in report.findings
+            f
+            for f in report.findings
             if f.attack_vector == AttackVector.NO_ROLLBACK.value
         ]
         assert len(no_rb_findings) >= 1
@@ -283,7 +295,8 @@ class TestFalsificationReportShape:
         plan = _minimal_plan(scope="mypackage.module only")
         report = self.worker.evaluate_plan(plan)
         creep_findings = [
-            f for f in report.findings
+            f
+            for f in report.findings
             if f.attack_vector == AttackVector.SCOPE_CREEP.value
         ]
         assert len(creep_findings) == 0
@@ -293,8 +306,8 @@ class TestFalsificationReportShape:
 # FalsificationFinding model validation (models.py contract)
 # ---------------------------------------------------------------------------
 
-class TestFalsificationFindingModel:
 
+class TestFalsificationFindingModel:
     def test_requires_non_empty_claim(self):
         with pytest.raises(ValueError, match="claim"):
             FalsificationFinding(
@@ -330,7 +343,6 @@ class TestFalsificationFindingModel:
 
 
 class TestCheckScopeCreep:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -341,7 +353,9 @@ class TestCheckScopeCreep:
 
     def test_vague_language_two_hits_returns_medium(self):
         # "various" + "as needed" → 2 vague pattern hits → MEDIUM
-        plan = _minimal_plan(scope="Covers various modules and applies changes as needed.")
+        plan = _minimal_plan(
+            scope="Covers various modules and applies changes as needed."
+        )
         finding = self.worker.check_scope_creep(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
@@ -378,7 +392,6 @@ class TestCheckScopeCreep:
 
 
 class TestCheckMissingMetrics:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -421,7 +434,6 @@ class TestCheckMissingMetrics:
 
 
 class TestCheckCircularDeps:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -475,7 +487,6 @@ class TestCheckCircularDeps:
 
 
 class TestCheckCircularDepsFilesystem:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -514,7 +525,6 @@ class TestCheckCircularDepsFilesystem:
 
 
 class TestCheckDependencyRisk:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -550,7 +560,6 @@ class TestCheckDependencyRisk:
 
 
 class TestCheckSecurityRisk:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -576,8 +585,7 @@ class TestCheckSecurityRisk:
         # Mentioning "security review" alongside sensitive terms should suppress.
         plan = _minimal_plan(
             rationale=(
-                "Refactor authentication flow. "
-                "A security review has been scheduled."
+                "Refactor authentication flow. A security review has been scheduled."
             )
         )
         finding = self.worker._check_security_risk(plan)
@@ -604,7 +612,6 @@ class TestCheckSecurityRisk:
 
 
 class TestCheckFalseMetric:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -642,7 +649,6 @@ class TestCheckFalseMetric:
 
 
 class TestCheckOverBroadModule:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -686,7 +692,6 @@ class TestCheckOverBroadModule:
 
 
 class TestCheckPrematureAbstraction:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -721,13 +726,38 @@ class TestCheckPrematureAbstraction:
         assert finding is None
 
 
+class TestCheckHiddenMaintenanceCost:
+    def setup_method(self):
+        self.worker = FalsificationWorker()
+
+    def test_durable_change_without_owner_returns_medium(self):
+        plan = _minimal_plan(
+            action_type="add",
+            target="mypackage.new_service",
+            rationale="Introduce a new service module for task routing.",
+        )
+        finding = self.worker._check_hidden_maintenance_cost(plan)
+        assert finding is not None
+        assert finding.severity == FalsificationSeverity.MEDIUM
+        assert finding.attack_vector == AttackVector.HIDDEN_MAINTENANCE_COST.value
+
+    def test_durable_change_with_maintenance_plan_returns_none(self):
+        plan = _minimal_plan(
+            action_type="add",
+            target="mypackage.new_service",
+            rationale="Introduce a new service module for task routing.",
+            maintenance_plan="Owned by platform; runbook in docs/runbooks/task-routing.md.",
+        )
+        finding = self.worker._check_hidden_maintenance_cost(plan)
+        assert finding is None
+
+
 # ---------------------------------------------------------------------------
 # evaluate_plan — CONDITIONAL verdict (low/medium findings only, ≤2)
 # ---------------------------------------------------------------------------
 
 
 class TestEvaluatePlanConditionalVerdict:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -764,7 +794,6 @@ class TestEvaluatePlanConditionalVerdict:
 
 
 class TestFalsificationReportSummary:
-
     def setup_method(self):
         self.worker = FalsificationWorker()
 
@@ -856,8 +885,10 @@ class TestMultipleCounterEvidenceAccumulation:
         report = self.worker.evaluate_plan(plan)
         # Verify no HIGH or CRITICAL counter-evidence accumulated.
         high_findings = [
-            f for f in report.findings
-            if f.severity in {FalsificationSeverity.HIGH, FalsificationSeverity.CRITICAL}
+            f
+            for f in report.findings
+            if f.severity
+            in {FalsificationSeverity.HIGH, FalsificationSeverity.CRITICAL}
         ]
         assert high_findings == []
 
@@ -924,8 +955,7 @@ class TestStrongEvidenceHypothesisNotFalsified:
         plan = _minimal_plan()
         report = self.worker.evaluate_plan(plan)
         high_findings = [
-            f for f in report.findings
-            if f.severity == FalsificationSeverity.HIGH
+            f for f in report.findings if f.severity == FalsificationSeverity.HIGH
         ]
         assert high_findings == [], (
             f"Unexpected HIGH findings for a well-formed plan: {high_findings}"
@@ -935,8 +965,7 @@ class TestStrongEvidenceHypothesisNotFalsified:
         plan = _minimal_plan()
         report = self.worker.evaluate_plan(plan)
         critical_findings = [
-            f for f in report.findings
-            if f.severity == FalsificationSeverity.CRITICAL
+            f for f in report.findings if f.severity == FalsificationSeverity.CRITICAL
         ]
         assert critical_findings == []
 
@@ -950,7 +979,8 @@ class TestStrongEvidenceHypothesisNotFalsified:
             rollback_plan="git revert HEAD --no-edit && uv run pytest to confirm baseline"
         )
         no_rb = [
-            f for f in self.worker.evaluate_plan(plan).findings
+            f
+            for f in self.worker.evaluate_plan(plan).findings
             if f.attack_vector == AttackVector.NO_ROLLBACK.value
         ]
         assert no_rb == []
@@ -958,7 +988,8 @@ class TestStrongEvidenceHypothesisNotFalsified:
     def test_plan_with_numeric_metrics_not_flagged_for_missing_metrics(self):
         plan = _minimal_plan(metrics="coverage >= 85% and p99 latency < 150ms")
         metric_findings = [
-            f for f in self.worker.evaluate_plan(plan).findings
+            f
+            for f in self.worker.evaluate_plan(plan).findings
             if f.attack_vector == AttackVector.FALSE_METRIC.value
         ]
         assert metric_findings == []

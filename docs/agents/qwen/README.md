@@ -3,7 +3,7 @@
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
 
-**Module**: `codomyrmex.agents.qwen` | **Category**: API-based | **Version**: v1.2.3 | **Last Updated**: March 2026
+**Module**: `codomyrmex.agents.qwen` | **Category**: API-based | **Version**: v1.3.0 | **Last Updated**: March 2026
 
 ## Overview
 

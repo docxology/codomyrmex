@@ -113,18 +113,22 @@ def load_kernel_yaml() -> dict[str, Any]:
     Example layout of ``kernel.yaml``::
 
         budget:
-          max_llm_calls: 200
-          max_runtime_seconds: 1800.0
-          max_risk_level: 0.7
-          max_human_attention_minutes: 60.0
-          max_merge_risk: 0.6
-          max_doc_debt: 500.0
-          max_security_exposure: 0.4
-          period_seconds: 43200.0
+          max_llm_calls: 500
+          max_runtime_seconds: 3600.0
+          max_risk_level: 0.8
+          max_human_attention_minutes: 120.0
+          max_merge_risk: 0.7
+          max_doc_debt: 1000.0
+          max_security_exposure: 0.5
+          period_seconds: 86400.0
 
         gate:
-          score_execute: 0.60
-          score_hold: 0.35
+          execute_threshold: 0.75
+          hold_threshold: 0.50
+
+    The ``gate.execute_threshold`` key maps to the actuation gate's
+    ``_GATE_SCORE_EXECUTE`` constant; ``gate.hold_threshold`` maps to
+    ``_GATE_SCORE_HOLD``.
     """
     return _load_yaml_file(_resolve_config_dir() / "kernel.yaml")
 
@@ -136,17 +140,25 @@ def load_roles_yaml() -> dict[str, Any]:
 
     Example layout of ``roles.yaml``::
 
-        sandbox:
-          max_proposals: 0
-        repair_ant:
-          min_trust: 0.20
-        memory_ant:
-          min_trust: 0.35
-        dispatcher:
-          min_trust: 0.50
-        guard_ant:
-          min_trust: 0.70
-        min_proposals_for_promotion: 3
+        thresholds:
+          repair_ant:
+            min_trust: 0.20
+            min_total_proposals: 3
+          memory_ant:
+            min_trust: 0.35
+            min_total_proposals: 3
+          dispatcher:
+            min_trust: 0.50
+            min_total_proposals: 3
+          guard_ant:
+            min_trust: 0.70
+            min_total_proposals: 3
+          sandbox:
+            max_trust: 0.30
+
+        defaults:
+          new_agent_trust: 0.1
+          new_agent_role: sandbox
     """
     return _load_yaml_file(_resolve_config_dir() / "roles.yaml")
 
@@ -158,10 +170,18 @@ def load_decay_yaml() -> dict[str, Any]:
 
     Example layout of ``decay_rates.yaml``::
 
-        fast: 0.30
-        normal: 0.10
-        slow: 0.03
-        permanent: 0.0
+        FAST: 3.0    # multiplier on base evaporation (base rate: 0.1/tick)
+        NORMAL: 1.0
+        SLOW: 0.2
+
+        # Default decay tier assigned to each signal type
+        signal_defaults:
+          FAILURE: FAST
+          SUCCESS: SLOW
+          RISK: FAST
+          NEED: NORMAL
+          DEPENDENCY: SLOW
+          HUMAN_PRIORITY: SLOW
     """
     return _load_yaml_file(_resolve_config_dir() / "decay_rates.yaml")
 
@@ -219,10 +239,41 @@ def default_gate_config_from_yaml() -> dict[str, Any]:
     use ``dict.get`` with their own defaults::
 
         gate_cfg = default_gate_config_from_yaml()
-        score_execute = gate_cfg.get("score_execute", 0.55)
+        execute_threshold = gate_cfg.get("execute_threshold", 0.75)
+        hold_threshold = gate_cfg.get("hold_threshold", 0.50)
+
+    The canonical key names in ``kernel.yaml`` are:
+      - ``execute_threshold`` (maps to ``_GATE_SCORE_EXECUTE`` in actuation_gate.py)
+      - ``hold_threshold``    (maps to ``_GATE_SCORE_HOLD`` in actuation_gate.py)
+
+    Note: Legacy YAML files may use ``score_execute`` / ``score_hold`` as key
+    names — those are also accepted but the canonical names are preferred.
+
+    Raises:
+        None — all errors fall back to returning ``{}``.
     """
     data = load_kernel_yaml()
-    return data.get("gate", {})
+    gate_section = data.get("gate", {})
+
+    # Validate gate score weights sum constraints
+    if gate_section:
+        execute = gate_section.get("execute_threshold", gate_section.get("score_execute"))
+        hold = gate_section.get("hold_threshold", gate_section.get("score_hold"))
+        if execute is not None and hold is not None:
+            try:
+                execute_f = float(execute)
+                hold_f = float(hold)
+                if not (0.0 < hold_f < execute_f <= 1.0):
+                    warnings.warn(
+                        f"kernel.yaml gate thresholds are inconsistent: "
+                        f"hold_threshold={hold_f} must be < execute_threshold={execute_f} "
+                        f"and both must be in (0.0, 1.0]. Using raw values anyway.",
+                        stacklevel=2,
+                    )
+            except (TypeError, ValueError):
+                pass
+
+    return gate_section
 
 
 # ---------------------------------------------------------------------------

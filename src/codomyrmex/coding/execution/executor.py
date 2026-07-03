@@ -34,6 +34,39 @@ logger = get_logger(__name__)
 DEFAULT_TIMEOUT = 30
 MAX_TIMEOUT = 300
 MIN_TIMEOUT = 1
+CRITICAL_MEMORY_USAGE_PERCENT = 95.0
+MIN_SANDBOX_AVAILABLE_MEMORY_MB = 512.0
+
+
+def _memory_precheck_error(metrics: dict[str, float]) -> dict[str, Any] | None:
+    ram_usage_percent = metrics.get("ram_usage_percent", 0.0)
+    ram_available_mb = metrics.get("ram_available_mb")
+    if ram_usage_percent <= CRITICAL_MEMORY_USAGE_PERCENT:
+        return None
+    if (
+        ram_available_mb is not None
+        and ram_available_mb >= MIN_SANDBOX_AVAILABLE_MEMORY_MB
+    ):
+        logger.warning(
+            "System RAM usage is %.1f%%, but %.1f MB remains available; allowing "
+            "bounded sandbox execution.",
+            ram_usage_percent,
+            ram_available_mb,
+        )
+        return None
+    return {
+        "stdout": "",
+        "stderr": (
+            "Operation aborted. System memory is at critical capacity "
+            f"(>{CRITICAL_MEMORY_USAGE_PERCENT:.0f}%) with less than "
+            f"{MIN_SANDBOX_AVAILABLE_MEMORY_MB:.0f} MB available. "
+            "Please clear memory or restart processes before proceeding."
+        ),
+        "exit_code": -1,
+        "execution_time": 0,
+        "status": "setup_error",
+        "error_message": "System memory constraint exceeded",
+    }
 
 
 def _compress_trace(text: str) -> str:
@@ -215,15 +248,9 @@ def execute_code(
         from codomyrmex.agents.hermes.monitoring import _get_system_metrics
 
         metrics = _get_system_metrics()
-        if metrics.get("ram_usage_percent", 0) > 95.0:
-            return {
-                "stdout": "",
-                "stderr": "Operation aborted. System memory is at critical capacity (>95%). Repeating this action may crash the environment. Please clear memory or restart processes before proceeding.",
-                "exit_code": -1,
-                "execution_time": 0,
-                "status": "setup_error",
-                "error_message": "System memory constraint exceeded",
-            }
+        memory_error = _memory_precheck_error(metrics)
+        if memory_error:
+            return memory_error
     except ImportError:
         pass
 

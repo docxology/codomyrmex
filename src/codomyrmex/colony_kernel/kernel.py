@@ -17,7 +17,7 @@ Dependency graph:
     └── ColonyKernel
         ├── PheromoneStore      (pheromone_store.py — wraps TraceField, ColonySignal)
         ├── ResourceLedger      (resource_ledger.py — tracks consumed vs budgeted)
-        ├── ActuationGate       (actuation_gate.py — trust × pressure → GateDecision)
+        ├── ActuationGate       (actuation_gate.py — additive score + hard overrides)
         ├── ConsequenceMemory   (consequence_memory.py — SQLite consequence log)
         ├── RoleAdapter         (role_adapter.py — infers AgentRole from history)
         ├── PruningDaemon       (pruning_daemon.py — identifies stale modules)
@@ -26,6 +26,7 @@ Dependency graph:
 
 from __future__ import annotations
 
+import logging
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -110,7 +111,6 @@ class ColonyKernelConfig:
 # ---------------------------------------------------------------------------
 
 
-
 class ColonyKernel:
     """Top-level integration class: wires all Colony Control Plane subsystems.
 
@@ -128,6 +128,7 @@ class ColonyKernel:
     def __init__(self, config: ColonyKernelConfig | None = None) -> None:
         """Initialise all subsystems from *config* (uses sensible defaults if None)."""
         self._config = config or ColonyKernelConfig()
+        self._tick_count: int = 0
 
         self.pheromone_store = PheromoneStore(config=self._config.pheromone_config)
         self.resource_ledger = ResourceLedger(budget=self._config.budget)
@@ -182,7 +183,7 @@ class ColonyKernel:
             budget_approved=budget_approved,
         )
 
-        # Step 5 — deposit FAILURE pheromone on refusal
+        # Step 5 — deposit signals based on outcome
         if result.decision == GateDecision.REFUSE:
             signal = ColonySignal(
                 location=proposal.target,
@@ -196,6 +197,35 @@ class ColonyKernel:
                 },
             )
             self.pheromone_store.deposit(signal, trust_factor=profile.trust_score)
+
+        # Deposit RISK signal when falsification findings exist at MEDIUM+, so
+        # the gate's risk_pressure reading reflects live adversarial concern
+        # at the target location — even if the proposal passed the gate.
+        elif findings:
+            risk_findings = [
+                f
+                for f in findings
+                if f.severity.value in ("medium", "high", "critical")
+            ]
+            if risk_findings:
+                risk_strength = min(3.0, len(risk_findings) * 0.8)
+                risk_signal = ColonySignal(
+                    location=proposal.target,
+                    signal_type=SignalType.RISK,
+                    strength=risk_strength,
+                    decay_rate=DecayRate.FAST,
+                    source=SignalSource.AGENT,
+                    evidence={
+                        "proposal_id": proposal.proposal_id,
+                        "finding_count": len(risk_findings),
+                        "max_severity": max(
+                            f.severity.value for f in risk_findings
+                        ),
+                    },
+                )
+                self.pheromone_store.deposit(
+                    risk_signal, trust_factor=profile.trust_score
+                )
 
         return result
 
@@ -322,13 +352,15 @@ class ColonyKernel:
         """Return a dashboard snapshot of the colony's current state.
 
         Keys:
-          pheromone_summary    — top-10 strongest signals
-          budget_usage         — current period consumption vs ceiling
-          role_distribution    — agent count per role
-          recent_consequences  — last 10 consequence records
+          tick_count               — number of ticks elapsed since kernel init
+          pheromone_summary        — top-10 strongest signals
+          budget_usage             — current period consumption vs ceiling
+          role_distribution        — agent count per role
+          recent_consequences      — last 10 consequence records
           pruning_candidates_count — number of stale modules flagged
         """
         return {
+            "tick_count": self._tick_count,
             "pheromone_summary": {
                 "total_signals": len(self.pheromone_store.top_signals(k=200)),
                 "top_signals": self.pheromone_store.top_signals(k=10),
@@ -392,11 +424,69 @@ class ColonyKernel:
 
         - Evaporates all pheromone traces (removes those at floor strength).
         - Resets resource ledger period if the budget period has elapsed.
+        - Increments the internal tick counter (queryable via colony_status).
         """
         self.pheromone_store.tick()
         # ResourceLedger auto-resets on _maybe_reset; force-reset only when
         # an explicit period boundary is crossed.  We check via the public API.
         self.resource_ledger._maybe_reset()
+        self._tick_count += 1
+
+    def calm_down(self, reason: str = "emergency_brake") -> dict[str, Any]:
+        """Emergency brake — reset the colony to a quiescent state.
+
+        Intended for use in a crisis (runaway agent loop, budget overflow,
+        or unexpected cascading failures).  Callers should pass a descriptive
+        *reason* string so the reset is logged.
+
+        Effects:
+          - Clears all pheromone signals from the store.
+          - Resets the resource ledger's accumulated spend.
+          - Resets the tick counter to 0.
+
+        Does NOT clear consequence memory (historical records are preserved
+        for post-mortem analysis) nor does it reset agent trust scores.
+
+        Args:
+            reason: Human-readable explanation for the emergency reset.  Not
+                    used computationally; surfaced in the returned status dict.
+
+        Returns:
+            dict with keys ``reset_reason`` (str), ``tick_count_before`` (int),
+            ``signals_cleared`` (int).
+        """
+        _logger = logging.getLogger(__name__)
+
+        tick_before = self._tick_count
+        # Count signals before clearing
+        signals_cleared = len(self.pheromone_store)
+
+        # Clear the pheromone field by evaporating everything to zero
+        # We drain by setting all strengths to floor — tick enough times
+        # (up to 1000) or directly zero out markers.
+        for key in list(self.pheromone_store._field._markers.keys()):
+            del self.pheromone_store._field._markers[key]
+        self.pheromone_store._key_evaporation.clear()
+
+        # Reset the ledger period
+        self.resource_ledger.reset_period()
+
+        # Reset tick counter
+        self._tick_count = 0
+
+        _logger.warning(
+            "colony_kernel.calm_down triggered: reason=%r, tick_count_before=%d, "
+            "signals_cleared=%d",
+            reason,
+            tick_before,
+            signals_cleared,
+        )
+
+        return {
+            "reset_reason": reason,
+            "tick_count_before": tick_before,
+            "signals_cleared": signals_cleared,
+        }
 
 
 # ---------------------------------------------------------------------------

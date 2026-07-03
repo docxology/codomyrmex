@@ -432,4 +432,10 @@ class TestAgentRoleEnum:
 
     def test_all_five_canonical_values_present(self) -> None:
         role_values = {r.value for r in AgentRole}
-        assert role_values == {"sandbox", "repair_ant", "memory_ant", "dispatcher", "guard_ant"}
+        assert role_values == {
+            "sandbox",
+            "repair_ant",
+            "memory_ant",
+            "dispatcher",
+            "guard_ant",
+        }

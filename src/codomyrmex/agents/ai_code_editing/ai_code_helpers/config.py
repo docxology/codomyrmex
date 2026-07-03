@@ -100,6 +100,7 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
             from google import (
                 genai,  # lazy import: avoids _UnionGenericAlias DeprecationWarning at collection time
             )
+
             # Check for API key (support both variations)
             api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get(
                 "GOOGLE_API_KEY"

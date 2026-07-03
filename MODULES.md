@@ -1,6 +1,6 @@
 # Codomyrmex Module Index
 
-128 top-level modules grouped by domain. Install extras with `uv sync --extra <group>`. Counts: [docs/reference/inventory.md](docs/reference/inventory.md).
+129 top-level modules grouped by domain. Install extras with `uv sync --extra <group>`. Counts: [docs/reference/inventory.md](docs/reference/inventory.md).
 
 ## AI / ML Core
 

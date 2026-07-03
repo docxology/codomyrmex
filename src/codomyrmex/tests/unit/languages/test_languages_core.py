@@ -445,7 +445,9 @@ class TestRustManager:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not _JAVA_AVAILABLE, reason="javac (JDK) not installed or macOS stub only")
+@pytest.mark.skipif(
+    not _JAVA_AVAILABLE, reason="javac (JDK) not installed or macOS stub only"
+)
 class TestJavaManager:
     def test_is_installed_returns_true(self):
         assert JavaManager().is_installed() is True

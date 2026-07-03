@@ -458,7 +458,12 @@ class TestColonyFalsifyPlan:
                     "The recursive descent parser mis-handles empty token streams, "
                     "causing an IndexError on blank input — confirmed by test T-042."
                 ),
+                "expected_outcome": "unit test T-042 passes and coverage remains >= 80%",
                 "rollback_plan": "git revert HEAD --no-edit && uv run pytest",
+                "tests": [
+                    "tests/unit/codomyrmex/core/test_parser.py::test_blank_input"
+                ],
+                "metrics": "coverage >= 80% and T-042 passes",
                 "evidence": {"test_id": "T-042", "error": "IndexError on line 87"},
                 "budget_estimate": {"llm_calls": 2, "runtime_seconds": 30.0},
             }
@@ -478,9 +483,9 @@ class TestColonyFalsifyPlan:
         )
         result = colony_falsify_plan(plan)
         vectors = [f.get("attack_vector") for f in result["findings"]]
-        assert "missing_rollback" in vectors
+        assert "no_rollback" in vectors
 
-    def test_high_risk_delete_action_triggers_blast_radius(self) -> None:
+    def test_high_risk_delete_action_triggers_scope_creep(self) -> None:
         plan = json.dumps(
             {
                 "action_type": "delete",
@@ -493,10 +498,9 @@ class TestColonyFalsifyPlan:
         )
         result = colony_falsify_plan(plan)
         vectors = [f.get("attack_vector") for f in result["findings"]]
-        assert "blast_radius" in vectors
+        assert "scope_creep" in vectors
 
     def test_circular_dependency_detected(self) -> None:
-        """When target == agent_id the circular_dependency check fires."""
         plan = json.dumps(
             {
                 "action_type": "patch_file",
@@ -508,7 +512,23 @@ class TestColonyFalsifyPlan:
         )
         result = colony_falsify_plan(plan)
         vectors = [f.get("attack_vector") for f in result["findings"]]
-        assert "circular_dependency" in vectors
+        assert "circular_architecture" in vectors
+
+    def test_hidden_maintenance_cost_uses_canonical_vector(self) -> None:
+        plan = json.dumps(
+            {
+                "action_type": "add",
+                "target": "codomyrmex.routing.new_service",
+                "rationale": "Introduce a new service module for task routing.",
+                "expected_outcome": "unit test T-099 passes and coverage remains >= 80%",
+                "rollback_plan": "git revert HEAD --no-edit && uv run pytest",
+                "tests": ["tests/unit/codomyrmex/routing/test_new_service.py"],
+                "metrics": "coverage >= 80% and T-099 passes",
+            }
+        )
+        result = colony_falsify_plan(plan)
+        vectors = [f.get("attack_vector") for f in result["findings"]]
+        assert "hidden_maintenance_cost" in vectors
 
     def test_invalid_json_returns_error(self) -> None:
         result = colony_falsify_plan("{not valid json}")
@@ -616,6 +636,7 @@ class TestMcpToolSchemas:
             "role_distribution",
             "recent_consequences",
             "pruning_candidates_count",
+            "tick_count",
         }
 
     def test_colony_tick_exact_keys(self) -> None:
@@ -626,6 +647,7 @@ class TestMcpToolSchemas:
             "role_distribution",
             "recent_consequences",
             "pruning_candidates_count",
+            "tick_count",
         }
 
     def test_colony_pruning_report_exact_keys(self) -> None:

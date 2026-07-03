@@ -206,7 +206,7 @@ def test_missing_rollback_plan_penalises_score(gate: ActuationGate) -> None:
         rationale="Fix failing unit test.",
         expected_outcome="Tests pass.",
         budget_estimate=ResourceCost(llm_calls=1, runtime_seconds=2.0),
-        rollback_plan="",          # intentionally empty
+        rollback_plan="",  # intentionally empty
         evidence={"test_id": "t1"},
     )
     result = gate.evaluate(proposal, _high_trust_profile())
@@ -226,8 +226,8 @@ def test_missing_rollback_and_evidence_holds_or_refuses(gate: ActuationGate) -> 
         rationale="Fix failing unit test.",
         expected_outcome="Tests pass.",
         budget_estimate=ResourceCost(),
-        rollback_plan="",    # missing
-        evidence={},         # missing
+        rollback_plan="",  # missing
+        evidence={},  # missing
     )
     result = gate.evaluate(proposal, _high_trust_profile())
     # completeness = max(0, 1 - 2*0.35) = 0.30
@@ -531,7 +531,7 @@ def test_score_based_refuse_branch() -> None:
     target = "codomyrmex.score.refuse"
     field = TraceField(StigmergyConfig(max_strength=100.0))
     key = f"{target}:{SignalType.RISK.value}"
-    field.deposit(key, initial=7.0)   # combined_pressure = 7.0 >= 6.0 → risk_ok=0.0
+    field.deposit(key, initial=7.0)  # combined_pressure = 7.0 >= 6.0 → risk_ok=0.0
 
     gate = ActuationGate(
         pheromone_store=field,
@@ -544,15 +544,15 @@ def test_score_based_refuse_branch() -> None:
         action_type="patch_file",
         target=target,
         rationale="Minimal rationale.",
-        expected_outcome=" ",   # whitespace → missing
+        expected_outcome=" ",  # whitespace → missing
         budget_estimate=ResourceCost(),
-        rollback_plan="",       # missing
-        evidence={},            # missing
+        rollback_plan="",  # missing
+        evidence={},  # missing
     )
     low_trust = AgentTrustProfile(
         agent_id="refuse-agent",
         role=AgentRole.REPAIR_ANT,
-        trust_score=0.30,       # exactly at floor but not below; trust_ok=0.5 - 0.25 = 0.25
+        trust_score=0.30,  # exactly at floor but not below; trust_ok=0.5 - 0.25 = 0.25
     )
     result = gate.evaluate(proposal, low_trust)
     assert result.decision is GateDecision.REFUSE
@@ -640,7 +640,7 @@ def test_witness_state_missing_evidence_lowers_completeness_flag(
         rationale="Rationale text here.",
         expected_outcome="tests pass",
         rollback_plan="git revert HEAD",
-        evidence={},   # empty → missing
+        evidence={},  # empty → missing
     )
     snapshot = gate.witness_state(proposal)
     assert snapshot["completeness_flags"]["has_evidence"] is False
@@ -659,7 +659,9 @@ def test_witness_state_completeness_score_lower_without_evidence(
         role=AgentRole.REPAIR_ANT,
         trust_score=0.55,
     )
-    full_result = gate.evaluate(_good_proposal(agent_id="completeness-agent"), medium_trust)
+    full_result = gate.evaluate(
+        _good_proposal(agent_id="completeness-agent"), medium_trust
+    )
     incomplete = ActionProposal(
         agent_id="completeness-agent",
         agent_type="REPAIR_ANT",
@@ -669,10 +671,11 @@ def test_witness_state_completeness_score_lower_without_evidence(
         expected_outcome="All tests pass; no regressions.",
         budget_estimate=ResourceCost(llm_calls=2, runtime_seconds=5.0),
         rollback_plan="Revert via git revert HEAD.",
-        evidence={},   # missing
+        evidence={},  # missing
     )
     incomplete_result = gate.evaluate(incomplete, medium_trust)
     assert full_result.gate_score >= incomplete_result.gate_score
+
 
 # ---------------------------------------------------------------------------
 # Test 13 — gate threshold and formula coefficient regression
@@ -766,8 +769,8 @@ class TestHoldDecisionPinned:
             rationale="Patch a failing integration test.",
             expected_outcome="Integration test passes after patch.",
             budget_estimate=ResourceCost(llm_calls=1, runtime_seconds=3.0),
-            rollback_plan="git revert HEAD",               # present
-            evidence={"test_id": "test_integration::tc1"}, # present
+            rollback_plan="git revert HEAD",  # present
+            evidence={"test_id": "test_integration::tc1"},  # present
         )
         profile = AgentTrustProfile(
             agent_id="hold-lower-agent",
@@ -809,8 +812,8 @@ class TestHoldDecisionPinned:
             rationale="Refactor module to reduce complexity.",
             expected_outcome="Complexity metrics improved.",
             budget_estimate=ResourceCost(llm_calls=3, runtime_seconds=10.0),
-            rollback_plan="",   # missing (empty string)
-            evidence={},        # missing (empty dict)
+            rollback_plan="",  # missing (empty string)
+            evidence={},  # missing (empty dict)
         )
         profile = AgentTrustProfile(
             agent_id="hold-upper-agent",
@@ -853,7 +856,7 @@ class TestHoldDecisionPinned:
             expected_outcome="CVE resolved; tests remain green.",
             budget_estimate=ResourceCost(llm_calls=2, runtime_seconds=8.0),
             rollback_plan="",  # missing
-            evidence={},       # missing
+            evidence={},  # missing
         )
         profile = AgentTrustProfile(
             agent_id="hold-mid-agent",
@@ -905,7 +908,7 @@ class TestHoldDecisionPinned:
             rationale="Apply security patch with full test coverage.",
             expected_outcome="Security vulnerability resolved.",
             budget_estimate=ResourceCost(llm_calls=2, runtime_seconds=5.0),
-            rollback_plan="",                                   # missing (1 field)
+            rollback_plan="",  # missing (1 field)
             evidence={"pr_url": "https://github.com/org/repo/pull/42"},  # present
         )
         profile = AgentTrustProfile(

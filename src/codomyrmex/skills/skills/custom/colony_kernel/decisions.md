@@ -89,8 +89,9 @@ decisions:
     rationale: |
       Falsification is cheap (deterministic checks, no LLM calls). Running it
       before the gate means bad proposals never reach the scoring stage. The
-      FalsificationWorker applies 5 attack vectors: missing rollback, underfunded
-      budget, circular dependency, untested assumption, blast radius. Each finding
+      FalsificationWorker applies 10 attack vectors, including rollback,
+      test-value, scope, metric, circular-architecture, dependency, security,
+      module breadth, maintenance-cost, and abstraction checks. Each finding
       carries a severity and concrete remediation.
     consequences:
       - Bad proposals are caught early

@@ -151,9 +151,7 @@ class PruningDaemon:
     # Standalone scan methods
     # ------------------------------------------------------------------
 
-    def scan_unused_tools(
-        self, threshold_days: int = 30
-    ) -> list[PruningCandidate]:
+    def scan_unused_tools(self, threshold_days: int = 30) -> list[PruningCandidate]:
         """Return modules under src/codomyrmex/ with no recorded pheromone usage.
 
         Always produces last_used=0.0 and call_count=0 since this method has
@@ -225,7 +223,7 @@ class PruningDaemon:
         candidates: list[PruningCandidate] = []
         names = list(spec_contents.keys())
         for i, name_a in enumerate(names):
-            for name_b in names[i + 1:]:
+            for name_b in names[i + 1 :]:
                 a_lines = spec_contents[name_a]
                 b_lines = spec_contents[name_b]
                 union = a_lines | b_lines
@@ -315,9 +313,7 @@ class PruningDaemon:
     # Archive
     # ------------------------------------------------------------------
 
-    def archive(
-        self, candidate: PruningCandidate, dry_run: bool = True
-    ) -> str:
+    def archive(self, candidate: PruningCandidate, dry_run: bool = True) -> str:
         """Archive or plan to archive a pruning candidate.
 
         Args:

@@ -4,9 +4,9 @@
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml/badge.svg" alt="Auto-Merge"></a>
   <br>
-  <img src="https://img.shields.io/badge/Codomyrmex-v1.2.7-blue?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/Modules-128-green?style=for-the-badge" alt="Modules">
-  <img src="https://img.shields.io/badge/MCP_Tools-602-orange?style=for-the-badge" alt="MCP Tools">
+  <img src="https://img.shields.io/badge/Codomyrmex-v1.3.0-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Modules-129-green?style=for-the-badge" alt="Modules">
+  <img src="https://img.shields.io/badge/MCP_Runtime-593-orange?style=for-the-badge" alt="MCP runtime tools">
   <img src="https://img.shields.io/badge/Workflows-37-purple?style=for-the-badge" alt="Workflows">
   <img src="https://img.shields.io/badge/Zero--Mock-100%25-brightgreen?style=for-the-badge" alt="Zero Mock">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
@@ -19,14 +19,14 @@
   <img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/code%20style-ruff-D7FF64?style=flat-square&logo=ruff&logoColor=black" alt="Ruff">
   <img src="https://img.shields.io/badge/types-ty-blue?style=flat-square" alt="ty">
-  <img src="https://img.shields.io/badge/tests-34%2C451-brightgreen?style=flat-square" alt="Tests">
+  <img src="https://img.shields.io/badge/tests-35%2C137-brightgreen?style=flat-square" alt="Tests">
 </p>
 
 # 🐜 Codomyrmex
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **128 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **602** production `@mcp_tool` lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **34,451** collected tests (`uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib`), **1,169** Markdown files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
+Codomyrmex is a production-grade library of **129 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **593** runtime MCP tools in the generated manifest and **610** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **35,137** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,195** Markdown files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
 
 ```bash
 # Install
@@ -64,9 +64,9 @@ uv run codomyrmex doctor --all
 
 | | |
 |---|---|
-| 🧩 **128 Top-Level Modules** | Packages under `src/codomyrmex/` — composable, independently versioned, zero-mock tested |
-| 🤖 **602 MCP Tool Decorators** | See [inventory](docs/reference/inventory.md) |
-| 🧪 **34,451 Collected Tests** | `uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib`; zero-mock policy |
+| 🧩 **129 Top-Level Modules** | Packages under `src/codomyrmex/` — composable, independently versioned, zero-mock tested |
+| 🤖 **593 Runtime MCP Tools** | 610 source `@mcp_tool` decorator lines; see [inventory](docs/reference/inventory.md) |
+| 🧪 **35,137 Collected Tests** | `uv run python scripts/doc_inventory.py --pytest`; zero-mock policy |
 | 🔒 **Security First** | GitGuardian, SBOM, GGSHIELD pre-commit, detect-secrets integration |
 | 🎛️ **13+ Agent Providers** | Claude, Gemini, GPT-4o, DeepSeek, Mistral, Jules, Codex, Pi, and more |
 | 🔬 **ML Research Ready** | LoRA, RLHF, DPO, distillation, quantization, NAS, Mamba SSM, autograd |
@@ -97,7 +97,7 @@ uv run codomyrmex doctor --all
 | [**docs/getting-started/**](docs/getting-started/) | 9 | Quick start, installation, setup, tutorials |
 | [**docs/development/**](docs/development/) | 10 | Dev environment, testing strategy, contribution guides |
 | [**docs/reference/**](docs/reference/) | 16 | API reference, CLI reference, troubleshooting |
-| [**docs/modules/**](docs/modules/) | 128 pkgs | Per-module documentation (README, SPEC, AGENTS, PAI per module) |
+| [**docs/modules/**](docs/modules/) | 129 pkgs | Per-module documentation (README, SPEC, AGENTS, PAI per module) |
 | [**docs/agents/**](docs/agents/) | 118 | Agent rules, coordination, per-provider docs (mirror `src/codomyrmex/agents/`) |
 | [**docs/integration/**](docs/integration/) | 11 | External service integration (Google, GitHub, etc.) |
 | [**docs/deployment/**](docs/deployment/) | 5 | Production deployment guides and checklists |
@@ -209,7 +209,7 @@ graph TB
 ## 🗂️ Complete Module Inventory
 
 > Every module links directly to its **source**, **docs**, **config**, and **scripts** directories.
-> 128 top-level modules across 10 capability layers — from foundation utilities to ML training primitives.
+> 129 top-level modules across 10 capability layers — from foundation utilities to ML training primitives.
 
 ### 🧠 Core Intelligence Modules
 
@@ -483,7 +483,7 @@ sequenceDiagram
     User->>CLI: codomyrmex run --task "analyze codebase"
     CLI->>Orchestrator: Create workflow
     Orchestrator->>MCP: Register available tools
-    MCP->>Tools: Discover ~602 tools (128 top-level modules)
+    MCP->>Tools: Discover 593 runtime tools (610 source decorators; 129 top-level modules)
     Orchestrator->>Agents: Dispatch agent
     Agents->>LLM: Generate completion (Gemini 2.5 Pro)
     LLM-->>Agents: Response + tool calls
@@ -503,16 +503,16 @@ sequenceDiagram
 ```text
 codomyrmex/
 ├── .github/                  # 37 GitHub Actions workflows, templates, docs
-├── config/                   # 128 module-specific config.yaml files
-├── docs/                     # 1,169 Markdown files (see inventory); 18+ top-level sections
+├── config/                   # 102 top-level config dirs, 96 config.yaml files
+├── docs/                     # 1,180 Markdown files (see inventory); 18+ top-level sections
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
 │   ├── PAI.md                # Personal AI reference
 │   ├── PAI_DASHBOARD.md      # PAI dashboard reference
 │   ├── index.md              # MkDocs site index
-│   ├── getting-started/      # 9 quick-start docs
-│   ├── development/          # 10 dev guides
+│   ├── getting-started/      # 21 quick-start docs
+│   ├── development/          # 11 dev guides
 │   ├── modules/              # Per-module doc directories (see inventory for counts)
 │   ├── security/             # 11 security guides
 │   ├── agi/                  # 14 AGI theory docs
@@ -522,7 +522,7 @@ codomyrmex/
 │   ├── maintenance/          # Config generation, health checks
 │   └── ... (90+ module scripts)
 ├── projects/                 # Project workspaces and adapter integrations (daf-consulting v0.4.1, hermes-paperclip-adapter)
-├── src/codomyrmex/           # Main source (128 modules)
+├── src/codomyrmex/           # Main source (129 modules)
 │   ├── agents/               # 168 files
 │   ├── llm/                  # 41 files
 │   ├── security/             # 47 files
@@ -539,15 +539,16 @@ codomyrmex/
 
 | Metric | Value |
 |:---|:---:|
-| **Total Modules** | 128 (top-level under `src/codomyrmex/`) |
+| **Total Modules** | 129 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
-| **Collected tests** | 34,451 (`uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib`) |
-| **Documentation Files** | 1,169 Markdown under `docs/` (`find docs -name '*.md'`) |
+| **Collected tests** | 35,137 (`uv run python scripts/doc_inventory.py --pytest`) |
+| **Documentation Files** | 1,180 Markdown under `docs/` (`find docs -name '*.md'`) |
 | **GitHub Workflows** | 37 (`.github/workflows/*.yml`) |
-| **MCP Tools** | 602 (`@mcp_tool` lines, production tree) |
-| **`mcp_tools.py` files** | 149 (non-test) |
+| **MCP Runtime Tools** | 593 (generated runtime manifest) |
+| **MCP Tool Decorators** | 610 (`@mcp_tool` lines, production tree) |
+| **`mcp_tools.py` files** | 150 (non-test) |
 | **PAI Skills** | 81 installed |
-| **RASP Doc Compliance** | 128/128 |
+| **RASP Gap Report** | `uv run python scripts/rasp_gap_report.py` |
 | **Ruff / ty** | Run locally; targets in `pyproject.toml` |
 | **Testing Policy** | Zero-Mock (100% real methods) |
 | **Coverage Gate** | **40%** (`fail_under` in `pyproject.toml`; CI + `make test` use `--cov-fail-under=40`; plain `uv run pytest` skips `--cov`; `meme/` omitted from coverage run; stretch toward 45%+) |
@@ -593,7 +594,7 @@ graph TD
         Harvester["mega_swarm_harvester.py"]
     end
 
-    subgraph Targets["Target Modules - 128"]
+    subgraph Targets["Target Modules - 129"]
         M1["agentic_memory"]
         M2["agents"]
         Mdots["..."]
@@ -655,7 +656,7 @@ uv run ty check src/         # type check
 
 ## 🗺️ Configuration Architecture
 
-> See [config/](config/) for all 128 module configurations.
+> See [config/](config/) for 102 top-level configuration directories and 96 live `config.yaml` files.
 
 ```mermaid
 graph TB
@@ -663,7 +664,7 @@ graph TB
         C1["agents/config.yaml"]
         C2["llm/config.yaml"]
         C3["security/config.yaml"]
-        Cdots["... 128 total"]
+        Cdots["... 96 config.yaml files"]
     end
 
     subgraph Scripts["scripts/"]
@@ -830,7 +831,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>128 modules · 602 MCP tools · 34,451 tests · 1,169 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>129 modules · 593 runtime MCP tools · 610 decorators · 35,137 tests · 1,195 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

@@ -1,6 +1,6 @@
 # colony_kernel
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Overview
 
@@ -13,10 +13,9 @@ YAML files are loaded at kernel startup and validated against the
 
 - `kernel.yaml` — Top-level `ColonyKernelConfig`: database path, repository root,
   budget caps, pheromone tuning parameters, and gate accept/hold thresholds.
-- `roles.yaml` — Role promotion thresholds and per-role action-type allowlists.
-  Controls which trust score and action history an agent needs before it is
-  promoted from `sandbox` to `guard_ant`, `repair_ant`, `memory_ant`, or
-  `dispatcher`.
+- `roles.yaml` — Kernel-facing role promotion thresholds and new-agent
+  defaults. It records the 0.20/0.35/0.50/0.70 ladder plus the three-proposal
+  minimum before an agent can leave `sandbox`.
 - `decay_rates.yaml` — Named decay-rate multipliers (`FAST`, `NORMAL`, `SLOW`)
   applied to `pheromone.evaporation_per_tick`, plus the default tier assigned to
   each signal type (`FAILURE`, `SUCCESS`, `RISK`, etc.).
@@ -40,9 +39,7 @@ YAML files are loaded at kernel startup and validated against the
 | Section | Controls |
 |---|---|
 | `thresholds.<role>.min_trust` | Minimum trust score required for promotion to this role |
-| `thresholds.<role>.required_action_types` | Action types the agent must have executed at least once |
-| `thresholds.dispatcher.min_total_proposals` | Minimum lifetime proposals before dispatcher eligibility |
-| `thresholds.dispatcher.min_acceptance_rate` | Acceptance rate floor for dispatcher eligibility |
+| `thresholds.<role>.min_total_proposals` | Minimum lifetime proposals before promotion eligibility |
 | `thresholds.sandbox.max_trust` | Trust ceiling above which an agent is no longer sandbox-only |
 | `defaults.new_agent_trust` | Trust assigned to a newly registered agent |
 | `defaults.new_agent_role` | Role assigned to a newly registered agent |

@@ -42,6 +42,7 @@ from codomyrmex.colony_kernel.models import (
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def kernel() -> ColonyKernel:
     """A ColonyKernel with an ephemeral :memory: SQLite database."""
@@ -83,8 +84,8 @@ def sandbox_proposal() -> ActionProposal:
 # Initialisation — all subsystems present
 # ---------------------------------------------------------------------------
 
-class TestColonyKernelInit:
 
+class TestColonyKernelInit:
     def test_kernel_has_pheromone_store(self, kernel: ColonyKernel):
         assert isinstance(kernel.pheromone_store, PheromoneStore)
 
@@ -120,45 +121,63 @@ class TestColonyKernelInit:
 # propose_action returns GateResult
 # ---------------------------------------------------------------------------
 
-class TestProposeAction:
 
+class TestProposeAction:
     def test_returns_gate_result(self, kernel: ColonyKernel, proposal: ActionProposal):
         result = kernel.propose_action(proposal)
         assert isinstance(result, GateResult)
 
-    def test_gate_result_has_decision(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_gate_result_has_decision(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         result = kernel.propose_action(proposal)
         assert isinstance(result.decision, GateDecision)
 
-    def test_gate_result_has_gate_score(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_gate_result_has_gate_score(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         result = kernel.propose_action(proposal)
         assert 0.0 <= result.gate_score <= 1.0
 
-    def test_gate_result_has_reason_string(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_gate_result_has_reason_string(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         result = kernel.propose_action(proposal)
         assert isinstance(result.reason, str)
         assert len(result.reason) > 0
 
-    def test_gate_result_has_budget_approved_bool(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_gate_result_has_budget_approved_bool(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         result = kernel.propose_action(proposal)
         assert isinstance(result.budget_approved, bool)
 
-    def test_gate_result_has_required_evidence_list(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_gate_result_has_required_evidence_list(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         result = kernel.propose_action(proposal)
         assert isinstance(result.required_evidence, list)
 
-    def test_sandbox_agent_receives_refuse(self, kernel: ColonyKernel, sandbox_proposal: ActionProposal):
+    def test_sandbox_agent_receives_refuse(
+        self, kernel: ColonyKernel, sandbox_proposal: ActionProposal
+    ):
         # A brand-new agent (0 prior proposals) is SANDBOX — gate must REFUSE
         result = kernel.propose_action(sandbox_proposal)
         assert result.decision == GateDecision.REFUSE
 
-    def test_refuse_deposits_failure_pheromone(self, kernel: ColonyKernel, sandbox_proposal: ActionProposal):
+    def test_refuse_deposits_failure_pheromone(
+        self, kernel: ColonyKernel, sandbox_proposal: ActionProposal
+    ):
         # After a REFUSE the failure signal at the target should be > 0
         kernel.propose_action(sandbox_proposal)
-        strength = kernel.pheromone_store.sense(sandbox_proposal.target, SignalType.FAILURE)
+        strength = kernel.pheromone_store.sense(
+            sandbox_proposal.target, SignalType.FAILURE
+        )
         assert strength > 0.0
 
-    def test_budget_overrun_causes_hold(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_budget_overrun_causes_hold(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         # Exhaust the llm_calls budget first
         tight_budget = ResourceBudget(max_llm_calls=1)
         cfg = ColonyKernelConfig(db_path=":memory:", budget=tight_budget)
@@ -169,14 +188,18 @@ class TestProposeAction:
         assert result.decision == GateDecision.HOLD
         assert not result.budget_approved
 
-    def test_propose_does_not_consume_budget(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_propose_does_not_consume_budget(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         before = kernel.resource_ledger.usage_summary()["llm_calls"]["used"]
         kernel.propose_action(proposal)
         after = kernel.resource_ledger.usage_summary()["llm_calls"]["used"]
         # propose_action must NOT consume — only record_outcome does
         assert before == after
 
-    def test_multiple_proposals_do_not_raise(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_multiple_proposals_do_not_raise(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         for _ in range(5):
             result = kernel.propose_action(proposal)
             assert isinstance(result, GateResult)
@@ -186,9 +209,11 @@ class TestProposeAction:
 # record_outcome updates trust
 # ---------------------------------------------------------------------------
 
-class TestRecordOutcome:
 
-    def test_returns_consequence_record(self, kernel: ColonyKernel, proposal: ActionProposal):
+class TestRecordOutcome:
+    def test_returns_consequence_record(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         record = kernel.record_outcome(
             proposal,
             outcome={"summary": "applied patch", "action_taken": "patch_file"},
@@ -196,7 +221,9 @@ class TestRecordOutcome:
         )
         assert isinstance(record, ConsequenceRecord)
 
-    def test_record_has_trust_delta_computed(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_record_has_trust_delta_computed(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         record = kernel.record_outcome(
             proposal,
             outcome={"summary": "applied patch"},
@@ -205,7 +232,9 @@ class TestRecordOutcome:
         # trust_delta must be non-zero (ConsequenceMemory.record computed it)
         assert record.trust_delta != 0.0
 
-    def test_passing_tests_increases_trust(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_passing_tests_increases_trust(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         # Get baseline trust
         profile_before = kernel.consequence_memory.get_profile(proposal.agent_id)
         trust_before = profile_before.trust_score
@@ -219,7 +248,9 @@ class TestRecordOutcome:
         profile_after = kernel.consequence_memory.get_profile(proposal.agent_id)
         assert profile_after.trust_score > trust_before
 
-    def test_failing_tests_decreases_trust(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_failing_tests_decreases_trust(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         profile_before = kernel.consequence_memory.get_profile(proposal.agent_id)
         trust_before = profile_before.trust_score
 
@@ -232,7 +263,9 @@ class TestRecordOutcome:
         profile_after = kernel.consequence_memory.get_profile(proposal.agent_id)
         assert profile_after.trust_score < trust_before
 
-    def test_record_persists_in_consequence_memory(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_record_persists_in_consequence_memory(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         kernel.record_outcome(
             proposal,
             outcome={"summary": "patch applied"},
@@ -242,7 +275,9 @@ class TestRecordOutcome:
         assert len(recent) >= 1
         assert recent[0]["agent_id"] == proposal.agent_id
 
-    def test_passing_outcome_reinforces_success_pheromone(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_passing_outcome_reinforces_success_pheromone(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         kernel.record_outcome(
             proposal,
             outcome={"summary": "success"},
@@ -251,7 +286,9 @@ class TestRecordOutcome:
         strength = kernel.pheromone_store.sense(proposal.target, SignalType.SUCCESS)
         assert strength > 0.0
 
-    def test_failing_outcome_deposits_failure_pheromone(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_failing_outcome_deposits_failure_pheromone(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         kernel.record_outcome(
             proposal,
             outcome={"summary": "tests failed"},
@@ -260,7 +297,9 @@ class TestRecordOutcome:
         strength = kernel.pheromone_store.sense(proposal.target, SignalType.FAILURE)
         assert strength > 0.0
 
-    def test_outcome_consumes_budget(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_outcome_consumes_budget(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         before = kernel.resource_ledger.usage_summary()["llm_calls"]["used"]
         kernel.record_outcome(
             proposal,
@@ -270,7 +309,9 @@ class TestRecordOutcome:
         after = kernel.resource_ledger.usage_summary()["llm_calls"]["used"]
         assert after >= before + proposal.budget_estimate.llm_calls
 
-    def test_human_feedback_good_boosts_trust(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_human_feedback_good_boosts_trust(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         profile_before = kernel.consequence_memory.get_profile(proposal.agent_id)
         trust_before = profile_before.trust_score
 
@@ -284,7 +325,9 @@ class TestRecordOutcome:
         profile_after = kernel.consequence_memory.get_profile(proposal.agent_id)
         assert profile_after.trust_score > trust_before
 
-    def test_human_feedback_bad_reduces_trust_relative_to_none(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_human_feedback_bad_reduces_trust_relative_to_none(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         # Record with "bad" feedback — trust delta should be smaller than with None
         import uuid
 
@@ -310,8 +353,12 @@ class TestRecordOutcome:
             rollback_plan="git revert HEAD",
             evidence={"x": 1},
         )
-        record_bad = kernel.record_outcome(p_bad, {"summary": "done"}, tests_passed=True, human_feedback="bad")
-        record_none = kernel.record_outcome(p_none, {"summary": "done"}, tests_passed=True, human_feedback=None)
+        record_bad = kernel.record_outcome(
+            p_bad, {"summary": "done"}, tests_passed=True, human_feedback="bad"
+        )
+        record_none = kernel.record_outcome(
+            p_none, {"summary": "done"}, tests_passed=True, human_feedback=None
+        )
         assert record_bad.trust_delta < record_none.trust_delta
 
 
@@ -319,8 +366,8 @@ class TestRecordOutcome:
 # colony_status returns expected keys
 # ---------------------------------------------------------------------------
 
-class TestColonyStatus:
 
+class TestColonyStatus:
     def test_returns_dict(self, kernel: ColonyKernel):
         status = kernel.colony_status()
         assert isinstance(status, dict)
@@ -376,9 +423,7 @@ class TestColonyStatus:
     def test_status_after_outcome_shows_consequence(
         self, kernel: ColonyKernel, proposal: ActionProposal
     ):
-        kernel.record_outcome(
-            proposal, outcome={"summary": "done"}, tests_passed=True
-        )
+        kernel.record_outcome(proposal, outcome={"summary": "done"}, tests_passed=True)
         status = kernel.colony_status()
         assert len(status["recent_consequences"]) >= 1
 
@@ -387,8 +432,8 @@ class TestColonyStatus:
 # tick() does not raise
 # ---------------------------------------------------------------------------
 
-class TestTick:
 
+class TestTick:
     def test_tick_does_not_raise_on_empty_kernel(self, kernel: ColonyKernel):
         kernel.tick()  # should complete silently
 
@@ -412,13 +457,17 @@ class TestTick:
             source=SignalSource.TEST,
         )
         kernel.pheromone_store.deposit(signal)
-        initial_strength = kernel.pheromone_store.sense("mypackage.old", SignalType.FAILURE)
+        initial_strength = kernel.pheromone_store.sense(
+            "mypackage.old", SignalType.FAILURE
+        )
         assert initial_strength > 0.0  # guard: we actually deposited something
         # Tick many times to let FAST-decay evaporation reduce the strength
         for _ in range(50):
             kernel.tick()
         # After 50 ticks the trace should have evaporated (removed → 0.0) or be lower
-        final_strength = kernel.pheromone_store.sense("mypackage.old", SignalType.FAILURE)
+        final_strength = kernel.pheromone_store.sense(
+            "mypackage.old", SignalType.FAILURE
+        )
         assert final_strength < initial_strength
 
     def test_multiple_ticks_do_not_raise(self, kernel: ColonyKernel):
@@ -428,9 +477,7 @@ class TestTick:
     def test_tick_after_record_outcome_does_not_raise(
         self, kernel: ColonyKernel, proposal: ActionProposal
     ):
-        kernel.record_outcome(
-            proposal, outcome={"summary": "done"}, tests_passed=True
-        )
+        kernel.record_outcome(proposal, outcome={"summary": "done"}, tests_passed=True)
         kernel.tick()  # must not raise
 
     def test_tick_reduces_pheromone_count_eventually(self, kernel: ColonyKernel):
@@ -455,8 +502,8 @@ class TestTick:
 # agent_profile helper
 # ---------------------------------------------------------------------------
 
-class TestAgentProfile:
 
+class TestAgentProfile:
     def test_unknown_agent_returns_sandbox_profile(self, kernel: ColonyKernel):
         profile = kernel.agent_profile("totally-unknown-agent")
         assert isinstance(profile, AgentTrustProfile)
@@ -465,9 +512,7 @@ class TestAgentProfile:
     def test_known_agent_returns_profile_after_record(
         self, kernel: ColonyKernel, proposal: ActionProposal
     ):
-        kernel.record_outcome(
-            proposal, outcome={"summary": "done"}, tests_passed=True
-        )
+        kernel.record_outcome(proposal, outcome={"summary": "done"}, tests_passed=True)
         profile = kernel.agent_profile(proposal.agent_id)
         assert profile.agent_id == proposal.agent_id
         assert profile.total_proposals == 1
@@ -476,6 +521,7 @@ class TestAgentProfile:
 # ---------------------------------------------------------------------------
 # tick() evaporation path — explicit signal reduction
 # ---------------------------------------------------------------------------
+
 
 class TestTickEvaporation:
     """Tick must call pheromone_store.tick() and reduce signal strength."""
@@ -519,6 +565,7 @@ class TestTickEvaporation:
 # ---------------------------------------------------------------------------
 # record_outcome() — tests_passed=False and repair_needed=True paths
 # ---------------------------------------------------------------------------
+
 
 class TestRecordOutcomeFailurePaths:
     """Cover FAILURE pheromone deposit and repair_needed trust penalty."""
@@ -597,6 +644,7 @@ class TestRecordOutcomeFailurePaths:
 # propose_action() — CRITICAL falsification → REFUSE
 # ---------------------------------------------------------------------------
 
+
 class TestProposeActionCriticalFalsification:
     """When pheromone pressure at target is >= 6.0 (FAILURE), FalsificationWorker
     returns a CRITICAL finding and the kernel's ActuationGate must REFUSE."""
@@ -625,7 +673,9 @@ class TestProposeActionCriticalFalsification:
             expected_outcome="tests pass after patch",
             rollback_plan="git revert HEAD --no-edit",
             evidence={"test_id": "t1"},
-            budget_estimate=ResourceCost(llm_calls=2, runtime_seconds=5.0, risk_level=0.1),
+            budget_estimate=ResourceCost(
+                llm_calls=2, runtime_seconds=5.0, risk_level=0.1
+            ),
         )
         # Pre-seed the agent with enough history to avoid SANDBOX block
         for _ in range(3):
@@ -668,7 +718,9 @@ class TestProposeActionCriticalFalsification:
             expected_outcome="tests pass",
             rollback_plan="git revert HEAD --no-edit",
             evidence={"test_id": "t1"},
-            budget_estimate=ResourceCost(llm_calls=1, runtime_seconds=5.0, risk_level=0.1),
+            budget_estimate=ResourceCost(
+                llm_calls=1, runtime_seconds=5.0, risk_level=0.1
+            ),
         )
         # Seed trust
         for _ in range(3):
@@ -693,6 +745,7 @@ class TestProposeActionCriticalFalsification:
 # save_profile() public method on ConsequenceMemory
 # ---------------------------------------------------------------------------
 
+
 class TestSaveProfile:
     """ConsequenceMemory.save_profile() persists an AgentTrustProfile."""
 
@@ -708,10 +761,10 @@ class TestSaveProfile:
         loaded = kernel.consequence_memory.get_profile("persist-agent")
         assert abs(loaded.trust_score - 0.75) < 1e-9
 
-    def test_save_profile_overwrites_existing(self, kernel: ColonyKernel, proposal: ActionProposal):
-        kernel.record_outcome(
-            proposal, outcome={"summary": "done"}, tests_passed=True
-        )
+    def test_save_profile_overwrites_existing(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
+        kernel.record_outcome(proposal, outcome={"summary": "done"}, tests_passed=True)
         profile = kernel.consequence_memory.get_profile(proposal.agent_id)
         original_trust = profile.trust_score
 
@@ -743,6 +796,7 @@ class TestSaveProfile:
 # close() on ConsequenceMemory
 # ---------------------------------------------------------------------------
 
+
 class TestConsequenceMemoryClose:
     """ConsequenceMemory.close() must close the underlying SQLite connection."""
 
@@ -766,10 +820,13 @@ class TestConsequenceMemoryClose:
 # record_outcome() — outcome["cost"] dict path
 # ---------------------------------------------------------------------------
 
+
 class TestRecordOutcomeCostDict:
     """When outcome contains a 'cost' dict, record_outcome must use it."""
 
-    def test_explicit_cost_dict_is_consumed(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_explicit_cost_dict_is_consumed(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         before = kernel.resource_ledger.usage_summary()["llm_calls"]["used"]
         # Pass an explicit cost dict with 5 llm_calls
         kernel.record_outcome(
@@ -806,10 +863,13 @@ class TestRecordOutcomeCostDict:
 # _parse_human_feedback — numeric and unknown-string paths
 # ---------------------------------------------------------------------------
 
+
 class TestParseHumanFeedback:
     """Exercise the numeric-parse and unknown-string paths of _parse_human_feedback."""
 
-    def test_numeric_string_is_parsed(self, kernel: ColonyKernel, proposal: ActionProposal):
+    def test_numeric_string_is_parsed(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ):
         """Passing "0.5" as human_feedback should increase trust more than None."""
         record = kernel.record_outcome(
             proposal,
@@ -882,6 +942,7 @@ class TestParseHumanFeedback:
 # role change triggers save_profile via record_outcome
 # ---------------------------------------------------------------------------
 
+
 class TestRoleChangeTriggeredSaveProfile:
     """When record_outcome causes a role change, save_profile must be called."""
 
@@ -918,6 +979,7 @@ class TestRoleChangeTriggeredSaveProfile:
 # propose_action() — EXECUTE branch
 # ---------------------------------------------------------------------------
 
+
 class TestProposeActionExecuteBranch:
     """The EXECUTE branch requires:
     - Agent trust_score >= 0.60  (trust_ok = 1.0)
@@ -947,10 +1009,10 @@ class TestProposeActionExecuteBranch:
     """
 
     _AGENT_ID = "promoted-execute-agent"
-    _TRUST_DELTA_PASS = 0.04   # _TRUST_DELTA_PASS from models.py
-    _INITIAL_TRUST = 0.10      # AgentTrustProfile default trust_score
+    _TRUST_DELTA_PASS = 0.04  # _TRUST_DELTA_PASS from models.py
+    _INITIAL_TRUST = 0.10  # AgentTrustProfile default trust_score
     _EXECUTE_TRUST_THRESHOLD = 0.60  # trust >= 0.60 → trust_ok = 1.0 in gate
-    _N_OUTCOMES_NEEDED = 13    # ceil((0.60 - 0.10) / 0.04)
+    _N_OUTCOMES_NEEDED = 13  # ceil((0.60 - 0.10) / 0.04)
 
     @staticmethod
     def _seed_successful_outcomes(kernel: ColonyKernel, agent_id: str, n: int) -> None:

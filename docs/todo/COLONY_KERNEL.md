@@ -1,7 +1,7 @@
 # Colony Kernel — Scope Document
 
 > **Status:** Fully implemented and tested. All 4 phases complete.
-> **Phase target:** 4 phases across 9 subsystems.
+> **Phase target:** 4 phases across 8 subsystems.
 > **Location:** `src/codomyrmex/colony_kernel/`
 
 ## Implementation Status
@@ -18,7 +18,7 @@
 | FalsificationWorker | `falsification_worker.py` | Implemented | 77 | 89% |
 | ColonyKernel + MCP | `kernel.py` + `mcp_tools.py` | Implemented | 71 + 59 = 130 | 87% / 80% |
 
-**Total: 457 tests, 86% overall coverage** (gate requires 40%). Run: `uv run pytest src/codomyrmex/tests/unit/colony_kernel/`
+**Total: 641 tests, 83.3% branch coverage** for the colony-kernel scoped suite (gate requires 40%). Run: `uv run pytest src/codomyrmex/tests/unit/colony_kernel/`
 
 ---
 
@@ -178,35 +178,39 @@ colony_kernel/
 
 ### 4. `actuation_gate.py` — +1/0/-1 Gate
 
-**Purpose:** The only path from proposal to execution. Every agent action passes through here; no exceptions. The gate aggregates three independent signals into a single verdict.
+**Purpose:** The only path from proposal to execution. Every agent action passes through here; no exceptions. The gate computes a weighted additive score with hard overrides for budget, SANDBOX role, trust floor, and CRITICAL falsification.
 
 **Key class:** `ActuationGate`
 
 **Verdict logic:**
 ```
 gate_score = (
-    w_trust    * trust_component    +   # from AgentTrustProfile.trust_score
-    w_pressure * pressure_component +   # from PheromoneStore.total_pressure(target)
-    w_budget   * budget_component       # from ResourceLedger.can_afford()
+    0.30 * budget_ok +
+    0.30 * risk_ok +
+    0.25 * trust_ok +
+    0.15 * completeness
 )
 
-if gate_score >= EXECUTE_THRESHOLD:   decision = EXECUTE
-elif gate_score >= HOLD_THRESHOLD:    decision = HOLD
+if budget fails in kernel mode:       decision = HOLD
+elif budget fails in standalone mode: decision = REFUSE
+elif role is SANDBOX:                 decision = REFUSE
+elif trust_score < 0.30:              decision = REFUSE
+elif CRITICAL finding exists:         decision = REFUSE
+elif gate_score >= 0.75:              decision = EXECUTE
+elif gate_score >= 0.50:              decision = HOLD
 else:                                 decision = REFUSE
 ```
 
-Default weights: `w_trust=0.4`, `w_pressure=0.3`, `w_budget=0.3`.
-Default thresholds: `EXECUTE_THRESHOLD=0.65`, `HOLD_THRESHOLD=0.35`.
+Default weights: `budget=0.30`, `risk=0.30`, `trust=0.25`, `completeness=0.15`.
+Default thresholds: `EXECUTE_THRESHOLD=0.75`, `HOLD_THRESHOLD=0.50`.
 
 **Operations:**
-- `evaluate(proposal: ActionProposal) -> GateResult` — main entry point; returns `GateResult` synchronously
-- `register_override(agent_id: str, decision: GateDecision, ttl_seconds: int) -> None` — human operator can pin a decision for a time window (e.g., force-EXECUTE a recovery action)
-- `set_weights(trust: float, pressure: float, budget: float) -> None` — tune signal weights
-- `audit_log() -> list[tuple[ActionProposal, GateResult]]` — recent decisions for review
+- `evaluate(proposal: ActionProposal, profile: AgentTrustProfile, findings: list[FalsificationFinding] | None = None, budget_approved: bool | None = None) -> GateResult` — main entry point; returns `GateResult` synchronously
+- `witness_state(proposal: ActionProposal) -> dict[str, Any]` — read-only diagnostic snapshot used by tests and gate reasoning
 
 **Pressure component:** `SUCCESS` signals at `proposal.target` raise the score; `FAILURE` and `RISK` signals lower it; `HUMAN_PRIORITY` signals from `SignalSource.HUMAN` get a 2× multiplier.
 
-**Budget component:** if `ResourceLedger.can_afford()` returns False, this component is clamped to 0.0 and the gate can never reach `EXECUTE_THRESHOLD` regardless of trust/pressure.
+**Budget component:** if the kernel supplies `budget_approved=False`, the gate returns HOLD so the proposal can be retried after budget reset. If standalone `ActuationGate.evaluate()` computes a failed internal budget check, it returns REFUSE because no caller-owned requeue loop exists.
 
 **Inputs:** `ActionProposal`, `AgentTrustProfile` (from `consequence_memory`), pheromone pressure (from `pheromone_store`), budget state (from `resource_ledger`).
 **Outputs:** `GateResult` with `GateDecision`.
@@ -228,10 +232,10 @@ Default thresholds: `EXECUTE_THRESHOLD=0.65`, `HOLD_THRESHOLD=0.35`.
 **Trust delta formula:**
 ```python
 # ConsequenceRecord carries trust_delta pre-computed by the caller or estimated here
-base_delta = +0.05 if tests_passed else -0.10
-repair_bonus = +0.03 if repair_needed and action_succeeded else 0.0
-human_feedback_delta = human_feedback * 0.02  # human_feedback is -1..+1
-trust_delta = base_delta + repair_bonus + human_feedback_delta
+delta  = +0.04 if tests_passed else -0.08
+delta += -0.05 if repair_needed
+delta += human_feedback * 0.03  # human_feedback is -1..+1
+trust_delta = delta
 ```
 
 **Pheromone feedback:** after recording, `consequence_memory` deposits:
@@ -254,17 +258,17 @@ trust_delta = base_delta + repair_bonus + human_feedback_delta
 
 **Role definitions:**
 
-| Role | Trust range | Min accepted proposals | Primary capability |
-|------|------------|----------------------|-------------------|
-| `SANDBOX` | 0.0–0.30 | any | Read-only; no write gate passes |
-| `REPAIR_ANT` | 0.30–0.60 | ≥3 | Patch, test-fix, doc-update |
-| `MEMORY_ANT` | 0.40–0.70 | ≥5 | Archive, index, summarise |
-| `DISPATCHER` | 0.55–0.85 | ≥8 | Delegate, coordinate, route |
-| `GUARD_ANT` | 0.65–1.0 | ≥10, security evidence | Security review, gate audit |
+| Role | Promotion condition | Primary capability |
+|------|--------------------|-------------------|
+| `SANDBOX` | fewer than 3 proposals, or trust < 0.20 | Read-only; no write gate passes |
+| `REPAIR_ANT` | trust >= 0.20 and proposals >= 3 | Patch, test-fix, doc-update |
+| `MEMORY_ANT` | trust >= 0.35 and proposals >= 3 | Archive, index, summarise |
+| `DISPATCHER` | trust >= 0.50 and proposals >= 3 | Delegate, coordinate, route |
+| `GUARD_ANT` | trust >= 0.70 and proposals >= 3 | Security review, gate audit |
 
 **Operations:**
 - `infer_role(profile: AgentTrustProfile) -> AgentRole` — compute role from trust score + history; called after every `consequence_memory.record_outcome()`
-- `apply_role_constraints(proposal: ActionProposal, role: AgentRole) -> ActionProposal` — inject role-specific `budget_estimate` adjustments or raise `RoleConstraintViolation` if action type is forbidden for this role
+- `update(profile: AgentTrustProfile) -> bool` — recompute and persist the deterministic role on an existing profile object
 - `role_history(agent_id: str) -> list[tuple[float, AgentRole]]` — timestamped role transitions
 
 **Role change events:** when `infer_role()` produces a different role than the current one, `role_adapter` deposits a `ColonySignal(signal_type=NEED, ...)` at the agent's location, notifying the kernel of the transition.
@@ -307,18 +311,20 @@ trust_delta = base_delta + repair_bonus + human_feedback_delta
 
 | Vector | What it checks |
 |--------|---------------|
-| `PRECONDITION_MISSING` | Does the proposal assume file/module/service state that may not hold? |
-| `SIDE_EFFECT_UNMODELED` | Does the action modify state beyond `proposal.target`? |
-| `ROLLBACK_INCOMPLETE` | Is `proposal.rollback_plan` sufficient to reverse the action? |
-| `BUDGET_UNDERESTIMATED` | Is `budget_estimate` below historical averages for similar actions? |
-| `TRUST_LAUNDERING` | Does the proposal delegate to an agent with higher trust than the proposer? |
-| `SECURITY_SURFACE` | Does the action touch security-sensitive paths? |
-| `DOC_DRIFT_RISK` | Will the action create documentation debt? |
+| `DEPENDENCY_RISK` | Does the plan introduce risky new dependency coupling? |
+| `SECURITY_RISK` | Does the action touch security-sensitive paths or expose credentials? |
+| `CIRCULAR_ARCHITECTURE` | Does the plan create import-cycle or circular ownership risk? |
+| `FALSE_METRIC` | Does the rationale rely on unverifiable or misleading metrics? |
+| `OVER_BROAD_MODULE` | Does the target span too broad a module surface? |
+| `HIDDEN_MAINTENANCE_COST` | Does the plan hide future upkeep or migration burden? |
+| `NO_ROLLBACK` | Is `proposal.rollback_plan` absent or insufficient? |
+| `NO_TEST_VALUE` | Is evidence missing meaningful test or validation value? |
+| `SCOPE_CREEP` | Does the plan exceed its declared target and rationale? |
+| `PREMATURE_ABSTRACTION` | Does the plan introduce abstraction before evidence warrants it? |
 
 **Operations:**
-- `falsify(proposal: ActionProposal, context: dict | None = None) -> FalsificationReport` — run all built-in attack vectors; return findings
-- `register_attack(name: str, fn: Callable[[ActionProposal], list[FalsificationFinding]]) -> None` — extend with custom attack vectors
-- `severity_score(report: FalsificationReport) -> float` — aggregate severity; gate subtracts this from gate_score
+- `evaluate_plan(plan: dict[str, Any]) -> FalsificationReport` — run all built-in attack vectors; return findings and recommendation
+- `severity_score(report: FalsificationReport) -> float` — aggregate severity for reporting and routing
 
 **FalsificationReport:**
 ```python
@@ -346,11 +352,13 @@ class FalsificationReport:
 
 2. PROPOSAL
    - Agent constructs ActionProposal with rationale, budget_estimate, rollback_plan
-   - role_adapter.apply_role_constraints() checks role compatibility
 
 3. GATE
-   - falsification_worker.falsify() attacks the proposal
-   - actuation_gate.evaluate() aggregates trust + pressure + budget + falsification severity
+   - falsification_worker.evaluate_plan() attacks the proposal
+   - resource_ledger.check_budget() supplies budget verdict
+   - consequence_memory.get_profile() supplies trust profile
+   - role_adapter.update() refreshes deterministic role
+   - actuation_gate.evaluate() computes weighted additive score and hard overrides
    - Returns GateResult(EXECUTE | HOLD | REFUSE)
 
 4. ACTION
@@ -406,7 +414,6 @@ class FalsificationReport:
 
 **Acceptance criteria:**
 - `ActuationGate.evaluate` returns `EXECUTE` for a high-trust agent with success signals and budget; returns `REFUSE` when budget is exhausted; returns `HOLD` for borderline cases
-- Human override via `register_override` produces expected decision for TTL duration, then reverts
 - `ConsequenceMemory.record_outcome` correctly increments `total_proposals`, `accepted_proposals`, and applies trust delta clamped to [0.0, 1.0]
 - Pheromone feedback deposits appear in `PheromoneStore` after `record_outcome`
 - Trust profiles persist across `ConsequenceMemory` restart (SQLite backend)
@@ -422,13 +429,13 @@ class FalsificationReport:
 **Goal:** Roles emerge, dead code is flagged, plans are attacked before execution.
 
 **Acceptance criteria:**
-- `RoleAdapter.infer_role` returns `SANDBOX` for trust < 0.30; returns `GUARD_ANT` only when trust ≥ 0.65 and accepted_proposals ≥ 10
-- `apply_role_constraints` raises `RoleConstraintViolation` when a `SANDBOX` agent proposes a write action
-- Role transitions deposit `NEED` signals in the pheromone store
+- `RoleAdapter.infer_role` keeps agents with fewer than 3 proposals in `SANDBOX`; after that, it returns `REPAIR_ANT` at trust >= 0.20, `MEMORY_ANT` at >= 0.35, `DISPATCHER` at >= 0.50, and `GUARD_ANT` at >= 0.70
+- `ActuationGate.evaluate` refuses all write-path proposals from `SANDBOX`
+- Role transitions are deterministic and persisted by the caller
 - `PruningDaemon.scan` identifies a stub module with zero call-count as a candidate with confidence ≥ 0.9
 - `PruningDaemon.archive_candidate` is blocked unless caller holds `GUARD_ANT` or `DISPATCHER` role
-- `FalsificationWorker.falsify` returns at least one `TRUST_LAUNDERING` finding when a `SANDBOX` agent proposes delegating to a `GUARD_ANT`
-- `FalsificationWorker.severity_score` returns 0.0 for a clean proposal with no findings
+- `FalsificationWorker.evaluate_plan` covers all 10 `AttackVector` enum values and reports severity-weighted findings
+- `FalsificationReport.severity_score` returns 0.0 for a clean proposal with no findings
 
 **Tests:** `test_role_adapter.py`, `test_pruning_daemon.py`, `test_falsification_worker.py`
 
@@ -441,10 +448,10 @@ class FalsificationReport:
 **Goal:** `ColonyKernel` wires everything into a single entry point. MCP tools expose the kernel to external clients.
 
 **Acceptance criteria:**
-- `ColonyKernel.submit_proposal` executes the full loop (falsify → gate → execute_callback → record_outcome → role_update) for a happy-path proposal
-- `ColonyKernel.submit_proposal` deposits a `REFUSE` pheromone and raises `ProposalRefusedError` for a refused proposal without calling `execute_callback`
+- `ColonyKernel.propose_action` executes the full loop (falsify → budget → profile → role_update → gate) for a happy-path proposal
+- `ColonyKernel.record_outcome` stores consequence memory, consumes actual cost, deposits feedback signals, and updates role
 - All MCP tools respond with `{"status": "success", ...}` or `{"status": "error", "message": ...}`; no unhandled exceptions escape
-- `colony_kernel_submit_proposal` MCP tool roundtrips through the kernel
+- `colony_propose_action` MCP tool roundtrips through the kernel
 - Integration test: a new agent starts as `SANDBOX`, submits and passes 10 proposals, and transitions to `REPAIR_ANT`
 
 **Tests:** `test_kernel.py`, `test_mcp_tools.py`, `tests/integration/test_colony_kernel_loop.py`
@@ -496,21 +503,18 @@ class ActuationGate:
     def __init__(
         self,
         pheromone_store: PheromoneStore,
-        resource_ledger: ResourceLedger,
-        consequence_memory: ConsequenceMemory,
-        execute_threshold: float = 0.65,
-        hold_threshold: float = 0.35,
+        resource_ledger: ResourceLedger | None = None,
+        consequence_memory_ref: ConsequenceMemory | None = None,
     ) -> None: ...
 
-    def evaluate(self, proposal: ActionProposal) -> GateResult: ...
-    def register_override(
+    def witness_state(self, proposal: ActionProposal) -> dict[str, Any]: ...
+    def evaluate(
         self,
-        agent_id: str,
-        decision: GateDecision,
-        ttl_seconds: int,
-    ) -> None: ...
-    def set_weights(self, trust: float, pressure: float, budget: float) -> None: ...
-    def audit_log(self) -> list[tuple[ActionProposal, GateResult]]: ...
+        proposal: ActionProposal,
+        profile: AgentTrustProfile,
+        findings: list[FalsificationFinding] | None = None,
+        budget_approved: bool | None = None,
+    ) -> GateResult: ...
 ```
 
 ### `consequence_memory.py`
@@ -534,20 +538,12 @@ class ConsequenceMemory:
 ### `role_adapter.py`
 
 ```python
-class RoleConstraintViolation(Exception): ...
-
 class RoleAdapter:
     def __init__(self, consequence_memory: ConsequenceMemory) -> None: ...
 
     def infer_role(self, profile: AgentTrustProfile) -> AgentRole: ...
-    def apply_role_constraints(
-        self,
-        proposal: ActionProposal,
-        role: AgentRole,
-    ) -> ActionProposal: ...
-    def role_history(
-        self, agent_id: str
-    ) -> list[tuple[float, AgentRole]]: ...
+    def update(self, profile: AgentTrustProfile) -> bool: ...
+    def role_stats(self) -> dict[AgentRole, int]: ...
 ```
 
 ### `pruning_daemon.py`
@@ -616,14 +612,17 @@ class ColonyKernel:
         falsification_worker: FalsificationWorker,
     ) -> None: ...
 
-    def submit_proposal(
+    def propose_action(self, proposal: ActionProposal) -> GateResult: ...
+    def record_outcome(
         self,
         proposal: ActionProposal,
-        execute_callback: Callable[[ActionProposal], ConsequenceRecord],
+        outcome: Mapping[str, Any],
+        tests_passed: bool,
+        human_feedback: str | float | None = None,
     ) -> ConsequenceRecord: ...
-
-    def tick(self) -> dict[str, int]: ...  # evaporate signals, purge stale budgets
-    def status(self) -> dict: ...          # colony health snapshot
+    def agent_profile(self, agent_id: str) -> AgentTrustProfile: ...
+    def colony_status(self) -> dict[str, Any]: ...
+    def tick(self) -> None: ...
 ```
 
 ---

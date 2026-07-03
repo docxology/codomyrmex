@@ -379,7 +379,7 @@ def handle_jules_command(args):
             if result.get("stdout"):
                 print("STDOUT:", result.get("stdout"))
 
-        return result.get("success", False)
+        return bool(result.get("success", False))
 
     except Exception as e:
         logger.exception("Error executing Jules command")
@@ -439,7 +439,7 @@ def handle_opencode_version(args):
                 context=version_info.get("error", "Unknown error"),
             )
 
-        return version_info.get("available", False)
+        return bool(version_info.get("available", False))
 
     except Exception as e:
         logger.exception("Error getting OpenCode version")

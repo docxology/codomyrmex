@@ -3,6 +3,8 @@
 Split from ``skill_generator.py`` to keep the parent file under 800 LOC.
 """
 
+# SIZE_OK: This generated skill taxonomy is safer as one auditable table.
+
 from __future__ import annotations
 
 # ---------------------------------------------------------------------------
@@ -338,8 +340,8 @@ SKILL_DESCRIPTIONS: dict[str, str] = {
         "read settings, or update settings."
     ),
     "Codomyrmex": (
-        "Full-spectrum coding workspace skill providing ~600 production MCP @mcp_tool lines "
-        "across 128 top-level modules (see docs/reference/inventory.md). "
+        "Full-spectrum coding workspace skill providing 610 production MCP @mcp_tool lines "
+        "across 129 top-level modules (see docs/reference/inventory.md). "
         "USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', "
         "'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', "
         "'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', "

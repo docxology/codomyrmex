@@ -8,8 +8,8 @@ authors:
 repository-code: "https://github.com/docxology/codomyrmex"
 url: "https://docxology.github.io/codomyrmex/"
 license: MIT
-version: "1.2.7"
-date-released: "2026-04-07"
+version: "1.3.0"
+date-released: "2026-07-02"
 keywords:
   - ai-agents
   - model-context-protocol
@@ -20,8 +20,8 @@ keywords:
   - python
   - zero-mock-testing
 abstract: >-
-  Codomyrmex is a modular, AI-native coding workspace with 128 top-level
-  modules and 600 production MCP tool decorators. It provides multi-agent
+  Codomyrmex is a modular, AI-native coding workspace with 129 top-level
+  modules and 610 production MCP tool decorators. It provides multi-agent
   orchestration for Claude, Gemini, GPT, and 10+ agent providers,
   integrated with the Personal AI Infrastructure (PAI) via the Model
   Context Protocol.

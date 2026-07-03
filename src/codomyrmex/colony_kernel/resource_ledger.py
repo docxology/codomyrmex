@@ -1,7 +1,6 @@
 """Resource ledger — tracks colony action budgets and enforces spending caps.
 
-All Colony Kernel modules import models from models.py. This module depends
-only on models.py and stdlib; no cross-subsystem imports.
+This module imports only models.py and stdlib.
 
 No external dependencies beyond stdlib.
 """
@@ -227,6 +226,46 @@ class ResourceLedger:
 
         return (True, None)
 
+    def check_and_consume(
+        self,
+        cost: ResourceCost,
+        agent_id: str = "",
+    ) -> tuple[bool, str]:
+        """Atomically check budget and consume if affordable.
+
+        This is the safe combined alternative to calling ``check_budget``
+        followed by ``consume`` separately, which has a TOCTOU gap in
+        concurrent environments.
+
+        If affordable, the cost is consumed immediately and the method returns
+        ``(True, "consumed")``.  If not affordable, nothing is consumed and
+        the method returns ``(False, reason_string)``.
+
+        Note: This class is not thread-safe — if concurrent access is required,
+        wrap the ledger with a ``threading.Lock`` (see :class:`ThreadSafeResourceLedger`)
+        or use external locking around this call.
+
+        Args:
+            cost: The cost to check and potentially consume.
+            agent_id: Optional agent identifier for per-agent history tracking.
+                When non-empty, records the cost via ``record_cost`` rather than
+                the anonymous ``consume`` path so the agent's history is updated.
+
+        Returns:
+            ``(True, "consumed")`` if within budget (cost is consumed),
+            ``(False, reason)`` if budget would be exceeded (not consumed).
+        """
+        self._maybe_reset()
+        ok, reason = self.can_afford(cost)
+        if not ok:
+            return (False, reason or "budget exceeded")
+
+        if agent_id:
+            self.record_cost(cost, agent_id)
+        else:
+            self.consume(cost)
+        return (True, "consumed")
+
     def current_usage(self) -> ResourceCost:
         """Return the accumulated cost since the last :meth:`reset`.
 
@@ -325,10 +364,95 @@ class ResourceLedger:
 
 
 # ---------------------------------------------------------------------------
+# Thread-safe wrapper
+# ---------------------------------------------------------------------------
+
+
+class ThreadSafeResourceLedger:
+    """Thread-safe wrapper around ResourceLedger using a ``threading.Lock``.
+
+    All public methods are delegated to the underlying ``ResourceLedger`` with
+    the lock held.  Use this wrapper when multiple threads share a ledger
+    (e.g. a multi-threaded web server calling ``check_and_consume`` concurrently).
+
+    Example::
+
+        from threading import Lock
+        ledger = ThreadSafeResourceLedger(ResourceLedger(budget=budget))
+        ok, reason = ledger.check_and_consume(cost, agent_id="worker-1")
+
+    Note: The lock is **not** re-entrant.  Do not call one public method from
+    within another public method of the same instance or a deadlock will occur.
+    """
+
+    def __init__(self, ledger: ResourceLedger) -> None:
+        import threading
+        self._ledger = ledger
+        self._lock = threading.Lock()
+
+    # Delegate all public methods with lock held.
+
+    def check_budget(self, estimate: ResourceCost) -> tuple[bool, str]:
+        with self._lock:
+            return self._ledger.check_budget(estimate)
+
+    def can_afford(self, cost: ResourceCost) -> tuple[bool, str | None]:
+        with self._lock:
+            return self._ledger.can_afford(cost)
+
+    def check_and_consume(
+        self, cost: ResourceCost, agent_id: str = ""
+    ) -> tuple[bool, str]:
+        with self._lock:
+            return self._ledger.check_and_consume(cost, agent_id)
+
+    def consume(self, cost: ResourceCost) -> None:
+        with self._lock:
+            self._ledger.consume(cost)
+
+    def record_cost(self, cost: ResourceCost, agent_id: str) -> None:
+        with self._lock:
+            self._ledger.record_cost(cost, agent_id)
+
+    def reset(self, period: str = "hourly") -> None:
+        with self._lock:
+            self._ledger.reset(period)
+
+    def reset_period(self) -> None:
+        with self._lock:
+            self._ledger.reset_period()
+
+    def current_usage(self) -> ResourceCost:
+        with self._lock:
+            return self._ledger.current_usage()
+
+    def usage_summary(self) -> dict[str, Any]:
+        with self._lock:
+            return self._ledger.usage_summary()
+
+    def history(self) -> list[tuple[str, ResourceCost, float]]:
+        with self._lock:
+            return self._ledger.history()
+
+    def agent_spend(self, agent_id: str) -> ResourceCost:
+        with self._lock:
+            return self._ledger.agent_spend(agent_id)
+
+    def most_expensive_agents(self, k: int = 5) -> list[tuple[str, ResourceCost]]:
+        with self._lock:
+            return self._ledger.most_expensive_agents(k)
+
+    @property
+    def budget(self) -> ResourceBudget:
+        return self._ledger.budget
+
+
+# ---------------------------------------------------------------------------
 # Public exports
 # ---------------------------------------------------------------------------
 
 __all__ = [
     "ResourceBudget",
     "ResourceLedger",
+    "ThreadSafeResourceLedger",
 ]

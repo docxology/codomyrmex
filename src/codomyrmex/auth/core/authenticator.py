@@ -71,7 +71,11 @@ class Authenticator:
 
         salt = os.urandom(32)
         password_hash = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 600_000)
-        self._users[username] = {"salt": salt, "password_hash": password_hash, "roles": roles or ["default"]}
+        self._users[username] = {
+            "salt": salt,
+            "password_hash": password_hash,
+            "roles": roles or ["default"],
+        }
 
         # Register user in RBAC
         for role in roles or ["default"]:

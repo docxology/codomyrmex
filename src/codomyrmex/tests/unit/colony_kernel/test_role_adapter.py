@@ -137,20 +137,26 @@ class TestHighTrustTestFixAgentBecomesRepairAnt:
 
     def test_repair_ant_via_test_fix(self) -> None:
         agent_id = "agent-repair-test-fix"
-        adapter = _build_high_trust_adapter(agent_id, action_type="test_fix", final_trust=0.82)
+        adapter = _build_high_trust_adapter(
+            agent_id, action_type="test_fix", final_trust=0.82
+        )
         role = adapter.assign_role(agent_id)
         assert role == AgentRole.REPAIR_ANT
 
     def test_repair_ant_via_bug_repair(self) -> None:
         agent_id = "agent-repair-bug"
-        adapter = _build_high_trust_adapter(agent_id, action_type="bug_repair", final_trust=0.80)
+        adapter = _build_high_trust_adapter(
+            agent_id, action_type="bug_repair", final_trust=0.80
+        )
         role = adapter.assign_role(agent_id)
         assert role == AgentRole.REPAIR_ANT
 
     def test_below_trust_threshold_stays_sandbox(self) -> None:
         """Even with test_fix actions, trust < 0.8 keeps agent in SANDBOX."""
         agent_id = "agent-repair-low-trust"
-        adapter = _build_high_trust_adapter(agent_id, action_type="test_fix", final_trust=0.75)
+        adapter = _build_high_trust_adapter(
+            agent_id, action_type="test_fix", final_trust=0.75
+        )
         role = adapter.assign_role(agent_id)
         # Rule 1 requires trust >= 0.8; this agent falls through to Rule 6 (SANDBOX).
         assert role == AgentRole.SANDBOX
@@ -558,7 +564,9 @@ class TestMemoryAntAssignment:
     so we use 0.82 (safely inside [0.80, 0.85)) to keep the test unambiguous.
     """
 
-    def _make_memory_ant_adapter(self, agent_id: str, action_type: str = "doc_write") -> RoleAdapter:
+    def _make_memory_ant_adapter(
+        self, agent_id: str, action_type: str = "doc_write"
+    ) -> RoleAdapter:
         """Return a RoleAdapter whose agent qualifies for MEMORY_ANT via Rule 2.
 
         Trust is set to 0.82 (in [0.80, 0.85)) with successful memory-category

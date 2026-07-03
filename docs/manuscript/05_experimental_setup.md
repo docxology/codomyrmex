@@ -1,32 +1,33 @@
-# 5. Experimental Setup {#sec:experimental_setup}
+# Experimental Setup {#sec:experimental_setup}
 
-This section is structured in two parts. Section 5.0 defines the experimental design proper:
+This section is structured in two parts. [@sec:experimental-design] defines the experimental design proper:
 independent variables, baseline conditions, dependent variables, trial structure, and analysis
-procedure. Sections 5.1–5.9 document configuration parameters in sufficient detail to reproduce
+procedure. The remaining subsections document configuration parameters in sufficient detail to reproduce
 reported results; YAML parameter tables are consolidated there so that the experimental narrative
 above remains uncluttered.
 
-Three distinct evaluation contexts are reported and kept separate throughout:
+Three distinct evaluation contexts are defined and kept separate throughout:
 
-- **Unit and integration test suite** — {{CONFIG_TEST_COUNT}} pytest tests gated by CI; these verify
+- **Colony-kernel unit and integration test suite** — {{CONFIG_TEST_COUNT}} pytest tests gated by CI; these verify
   behavioral contracts, not performance claims.
-- **20-trial benchmark suite** — the primary empirical surface; each trial is a self-contained
-  colony run against the shared workload corpus (see §5.0.4 for trial definition).
-- **Analytical derivations** — closed-form results (e.g., gate refusal rate as a function of the
-  scoring formula and the empirical trust distribution) that are computed from first principles and
-  verified against the benchmark observations.
+- **Configured 20-trial benchmark protocol** — a reproducible synthetic workload design; each trial
+  is specified as a self-contained colony run against the shared workload corpus (see [@sec:trial-structure] for
+  trial definition). Raw trial traces are not shipped with this manuscript snapshot.
+- **Analytical contract checks** — deterministic results derived from the gate formula, trust ladder,
+  and checked-in fixtures; these support configuration consistency rather than production
+  performance claims.
 
-Readers should not conflate these contexts: the 20-trial count is the benchmark sample, not the
-test-suite size, and analytic results do not depend on the trial sample.
+Readers should not conflate these contexts: the 20-trial count is a configured protocol size, not the
+test-suite size, and analytic contract checks do not depend on benchmark trace availability.
 
 All numeric values are drawn directly from the YAML configuration files versioned alongside the
 codebase (config version {{CONFIG_VERSION}}).
 
 ---
 
-## 5.0 Experimental Design
+## Experimental Design {#sec:experimental-design}
 
-### 5.0.1 Independent Variables
+### Independent Variables {#sec:independent-variables}
 
 The primary independent variable is the gating strategy applied to every proposed agent action.
 Four conditions are evaluated:
@@ -43,7 +44,9 @@ Four conditions are evaluated:
 Conditions 2–4 are implemented as drop-in replacements for the composite gate and share the
 identical task workload and colony configuration.
 
-### 5.0.2 Dependent Variables
+### Dependent Variables {#sec:dependent-variables}
+
+[@tbl:dependent_variables] defines the measured outcomes for the configured protocol.
 
 | Dependent variable | Operationalisation |
 |--------------------|--------------------|
@@ -52,8 +55,9 @@ identical task workload and colony configuration.
 | Budget efficiency | LLM calls consumed per successfully completed task subtree |
 | Trust stability | Mean absolute deviation of agent trust scores across scheduler ticks |
 | Throughput | Task subtrees closed (terminal `SignalType.SUCCESS`) per experiment run |
+: Dependent variables for the configured benchmark protocol. {#tbl:dependent_variables}
 
-### 5.0.3 Baseline Conditions and Hypotheses
+### Baseline Conditions and Hypotheses {#sec:baseline-conditions}
 
 Each baseline isolates a single gating dimension to attribute the performance of the full
 Codomyrmex gate to its component contributions:
@@ -65,10 +69,10 @@ Codomyrmex gate to its component contributions:
 - **H3** (vs. no-gate): Codomyrmex reduces error rate and cumulative security exposure at the cost
   of a bounded throughput reduction, establishing that the gate's safety overhead is proportionate.
 
-### 5.0.4 Trial Structure and Replications
+### Trial Structure and Replications {#sec:trial-structure}
 
-The benchmark suite consists of {{CONFIG_TRIAL_COUNT}} independent trials. Each trial is defined
-as follows:
+The benchmark protocol consists of {{CONFIG_TRIAL_COUNT}} independent trials. Each trial is defined
+as follows for reproducibility and future external execution:
 
 - **Task workload** — a fixed sequence of {{CONFIG_WORKLOAD_TASK_COUNT}} task subtrees drawn from
   the shared workload corpus in identical order across conditions within each seed; this removes
@@ -82,20 +86,20 @@ as follows:
   that trust distributions have non-trivial structure before performance measurement begins.
 - **Termination** — a trial ends when either the workload corpus is exhausted or the
   wall-clock budget cap ({{CONFIG_BUDGET_MAX_RUNTIME}} seconds) is reached, whichever is first.
-- **Seed registration** — each run uses a fixed random seed drawn from a pre-registered seed
-  table (seeds 0–{{CONFIG_TRIAL_COUNT_MINUS_1}}, registered at `tests/integration/seeds.txt`
-  prior to data collection).
+- **Trial indexing** — deterministic trial indices run from 0 to
+  {{CONFIG_TRIAL_COUNT_MINUS_1}}. The colony-kernel code path does not invoke
+  random-number generators, so no external seed registry is required for the
+  reported benchmark snapshot.
 
-With {{CONFIG_TRIAL_COUNT}} trials, power is sufficient to detect medium effect sizes
-(Cohen's $h \approx 0.5$ for proportion comparisons, Cohen's $d \approx 0.8$ for continuous
-outcomes) at $\alpha = 0.05$ with $\beta \leq 0.20$. Confidence intervals are reported for all
-primary outcomes; readers should treat point estimates as indicative given the modest sample.
+Because raw benchmark traces are not included in this release artifact, the configured trial count
+is not used to claim statistical power, confidence intervals, or production effect sizes. The
+checked-in validation surface is the deterministic test suite plus generated consistency checks.
 
-### 5.0.5 Trust Initialization and Colony Warm-Up Procedure
+### Trust Initialization and Colony Warm-Up Procedure {#sec:trust-initialization}
 
 All agents enter each trial at `AgentTrustProfile(trust_score=0.1, role=AgentRole.SANDBOX,
 total_proposals=0)`. The starting score of 0.1 places agents below the REPAIR_ANT promotion
-threshold (0.20 as defined by `_ROLE_REPAIR_MIN_TRUST` in `kernel.py`) so that no agent enters
+threshold (0.20 as defined by `_ROLE_REPAIR_MIN_TRUST` in `role_adapter.py`) so that no agent enters
 the measurement phase with inherited authority.
 
 The warm-up phase serves two purposes: (a) it allows pheromone trails to accumulate from the
@@ -118,38 +122,31 @@ Clamping is applied by `apply_delta`, not by `compute_trust_delta` itself. The a
 (+0.04 gain vs. −0.08 loss) models conservative trust: agents must pass roughly two tasks cleanly
 to recover from a single failure, creating a natural filter for agents that act carelessly.
 
-### 5.0.6 Analysis Procedure
+### Analysis Procedure {#sec:analysis-procedure}
 
-Gate decision distributions are compared across conditions using Fisher's exact test (four cells:
-EXECUTE / HOLD / REFUSE / total per condition pair). Error rates are compared with a two-sample
-proportion z-test with Bonferroni correction for three pairwise comparisons ($\alpha = 0.05 / 3$).
-Effect sizes are reported as Cramér's $V$ for categorical distributions and Cohen's $h$ for
-proportions. Throughput and budget efficiency are compared with Mann–Whitney U tests (non-parametric
-because run-level distributions are right-skewed). Confidence intervals for proportions use the
-Wilson score method (preferred over the normal approximation at small $n$).
-
-All analysis code is in `scripts/analysis/compare_conditions.py`; outputs are written to
-`output/analysis/`. Analytical derivations of the gate refusal rate are in
-`scripts/analysis/analytical_gate_rate.py`, which numerically integrates the scoring formula
-over the empirical trust score distribution from the benchmark runs.
+When benchmark traces are produced, gate decision distributions should be compared across conditions
+using Fisher's exact test over EXECUTE / HOLD / REFUSE counts; error rates should be compared with
+two-sample proportion tests with correction for planned pairwise comparisons. The current manuscript
+does not ship those trace files or analysis outputs. Reported gate-refusal and trust-trajectory
+values instead come from deterministic contract fixtures regenerated by
+`scripts/z_generate_manuscript_variables.py`.
 
 ---
 
-## 5.1 Gate Configuration
+## Gate Configuration {#sec:gate-configuration}
 
 The execution gate evaluates every proposed action against four dimensions and routes it to one of
-three outcomes. Table 1 lists the decision thresholds. These thresholds are defined in
+three outcomes. [@tbl:experimental_gate_thresholds] lists the decision thresholds. These thresholds are defined in
 `kernel.yaml` and enforced by `colony_kernel/kernel.py` (constants `_GATE_SCORE_EXECUTE = 0.75`
 and `_GATE_SCORE_HOLD = 0.50`); they are the sole numeric authority — no threshold value is
 duplicated elsewhere.
-
-**Table 1 — Gate Decision Thresholds**
 
 | Outcome | Condition | Interpretation |
 |---------|-----------|----------------|
 | EXECUTE | composite score ≥ {{CONFIG_GATE_EXECUTE_THRESHOLD}} | Action is approved and dispatched immediately |
 | HOLD | {{CONFIG_GATE_HOLD_THRESHOLD}} ≤ score < {{CONFIG_GATE_EXECUTE_THRESHOLD}} | Action is queued pending additional context or human review |
 | REFUSE | composite score < {{CONFIG_GATE_HOLD_THRESHOLD}} | Action is rejected; rationale is logged to the pheromone trail |
+: Gate decision thresholds for experimental configuration. {#tbl:experimental_gate_thresholds}
 
 On a REFUSE outcome the kernel deposits a `ColonySignal(SignalType.FAILURE,
 strength=1.0 + falsification_severity * 3.0)` at `proposal.target`, amplifying the inhibitory
@@ -170,12 +167,10 @@ method on the public API; callers always go through `propose_action()`.
 
 ---
 
-## 5.2 Gate Score Weights
+## Gate Score Weights {#sec:gate-score-weights}
 
 The composite gate score is a weighted sum of four independently computed dimension scores.
-Table 2 gives the weight assigned to each dimension. Weights sum to 1.00.
-
-**Table 2 — Gate Score Dimension Weights**
+[@tbl:experimental_gate_weights] gives the weight assigned to each dimension. Weights sum to 1.00.
 
 | Dimension | Weight | Rationale |
 |-----------|--------|-----------|
@@ -183,6 +178,7 @@ Table 2 gives the weight assigned to each dimension. Weights sum to 1.00.
 | Risk | 0.30 | Inverse of estimated action risk; higher risk reduces this component |
 | Trust | 0.25 | Normalised agent trust score at the time of the gate evaluation |
 | Completeness | 0.15 | Coverage of required fields and preconditions in the action specification |
+: Gate score dimension weights for experimental configuration. {#tbl:experimental_gate_weights}
 
 The budget and risk dimensions share equal weight (0.30 each, combined 0.60), reflecting the
 design priority of keeping resource expenditure and operational risk as the primary regulators
@@ -192,14 +188,14 @@ actions even when trust is high. Completeness carries the smallest weight (0.15)
 incomplete specification is more often a recoverable quality issue than a safety concern; HOLD
 (not REFUSE) is the expected outcome for specification gaps alone.
 
-The 0.30/0.30/0.25/0.15 vector was derived iteratively from simulation runs over the workload
-corpus, holding the decision thresholds fixed, and selecting the weight vector that minimised
-a joint cost function penalising both error rate and throughput loss. The final vector was
-then validated on held-out workload seeds before the benchmark suite was run.
+The 0.30/0.30/0.25/0.15 vector is a design-prior weighting: budget and risk jointly dominate the
+ordinary score, trust is secondary, and completeness is intentionally recoverable through HOLD.
+Future benchmark traces may calibrate these weights, but the implementation and manuscript treat
+the current vector as a fixed, auditable configuration contract.
 
 ---
 
-## 5.3 Pheromone Configuration
+## Pheromone Configuration {#sec:pheromone-configuration}
 
 The stigmergic coordination layer maintains {{CONFIG_SIGNAL_TYPES_COUNT}} distinct signal types
 drawn from the `SignalType` enum defined in `models.py`, each with its own decay rate. Decay is
@@ -221,13 +217,14 @@ factor at each tick.
 6. `SignalType.HUMAN_PRIORITY` — deposited when a HOLD outcome is escalated to human review;
    persists until acknowledged
 
-**Table 3 — Pheromone Decay Rate Classes**
+[@tbl:experimental_decay_rates] records the configured pheromone decay classes.
 
 | Class | `DecayRate` value | Effective rate at default base | Characteristic half-life | `SignalType` variants |
 |-------|-------------------|-------------------------------|--------------------------|----------------------|
 | FAST | 3.0 | 0.3/tick | ~2 ticks (2.31) | `FAILURE`, `RISK` |
 | NORMAL | 1.0 | 0.1/tick | ~7 ticks (6.93) | `NEED` |
 | SLOW | 0.2 | 0.02/tick | ~35 ticks (34.66) | `SUCCESS`, `DEPENDENCY`, `HUMAN_PRIORITY` |
+: Pheromone decay rate classes for experimental configuration. {#tbl:experimental_decay_rates}
 
 `DecayRate` members are plain numeric floats on the enum (`FAST = 3.0`, `NORMAL = 1.0`,
 `SLOW = 0.2`). They are evaporation multipliers, not lambda functions; the scheduler applies
@@ -240,13 +237,15 @@ no subsequent automated action proceeds on an escalated item before a human deci
 
 ---
 
-## 5.4 Resource Budget Caps
+## Resource Budget Caps {#sec:resource-budget-caps}
 
-All experiments are bounded by the hard caps defined in `config/colony_kernel/kernel.yaml`.
+All experimental and protocol runs are bounded by the hard caps defined in `config/colony_kernel/kernel.yaml`.
 The kernel enforces these caps via `ResourceLedger`; any action whose projected cost would breach
-a cap receives an automatic REFUSE decision regardless of gate score.
+a cap bypasses ordinary gate scoring with `gate_score = 0.0`. Standalone gate evaluation returns
+`REFUSE` for that condition, while the integrated `ColonyKernel` path returns `HOLD` so the action
+can be requeued after the budget period resets.
 
-**Table 4 — Resource Budget Caps (`kernel.yaml`)**
+[@tbl:resource_budget_caps] lists the hard caps enforced by `ResourceLedger`.
 
 | Budget Dimension | Cap | Unit |
 |-----------------|-----|------|
@@ -254,16 +253,17 @@ a cap receives an automatic REFUSE decision regardless of gate score.
 | Wall-clock runtime | {{CONFIG_BUDGET_MAX_RUNTIME}} | seconds |
 | Cumulative risk | {{CONFIG_BUDGET_MAX_RISK}} | normalised risk units (0–1) |
 | Security exposure | {{CONFIG_BUDGET_MAX_SECURITY}} | normalised exposure score (0–1) |
+: Resource budget caps from `kernel.yaml`. {#tbl:resource_budget_caps}
 
 The `llm_calls` cap of {{CONFIG_BUDGET_MAX_LLM_CALLS}} was chosen to allow complex multi-agent
-workflows while remaining within single-run cost budgets during evaluation. The `runtime` cap of
+workflows while remaining within single-run cost budgets during protocol execution. The `runtime` cap of
 {{CONFIG_BUDGET_MAX_RUNTIME}} seconds (5 minutes) provides a wall-clock backstop independent of
 call-count accounting; it is intentionally tight to surface runaway-agent behaviour before it
 accumulates significant cost.
 
 ---
 
-## 5.5 Role Configuration
+## Role Configuration {#sec:role-configuration}
 
 Agent roles are defined by the `AgentRole` enum in `models.py`. The colony operates
 {{CONFIG_ROLE_COUNT}} roles, each corresponding to an `AgentRole` variant:
@@ -280,7 +280,7 @@ Roles are inferred — never hard-assigned at startup. The `AgentRole` docstring
 explicitly: *"Roles are inferred by RoleAdapter — never hard-assigned at startup. Each role
 carries implicit permission constraints enforced by the gate."*
 
-**Table 5 — `AgentRole` Variants, Promotion Thresholds, and Permitted Actions**
+[@tbl:role_ladder] records the experimental role ladder.
 
 | `AgentRole` variant | Promotion trust threshold | Minimum proposals | Permitted action types |
 |---------------------|--------------------------|-------------------|------------------------|
@@ -289,33 +289,25 @@ carries implicit permission constraints enforced by the gate."*
 | `MEMORY_ANT` | trust ≥ 0.35 | ≥ 3 total proposals | read, write, archive, index, summarise |
 | `DISPATCHER` | trust ≥ 0.50 | ≥ 3 total proposals | full task dispatch; may delegate, coordinate, route |
 | `GUARD_ANT` | trust ≥ 0.70 | ≥ 3 total proposals | gate other agents; security review, gate audit, archive authority |
+: `AgentRole` variants, promotion thresholds, and permitted actions. {#tbl:role_ladder}
 
-**Two distinct role-inference algorithms exist in the codebase and must not be conflated:**
-
-1. **`kernel.py` inlined `RoleAdapter`** — uses the 0.20/0.35/0.50/0.70 threshold ladder shown
-   above (constants `_ROLE_REPAIR_MIN_TRUST`, `_ROLE_MEMORY_MIN_TRUST`,
-   `_ROLE_DISPATCHER_MIN_TRUST`, `_ROLE_GUARD_MIN_TRUST`). An agent with fewer than
-   `_ROLE_MIN_PROPOSALS_FOR_PROMOTION = 3` total proposals stays SANDBOX regardless of trust
-   score. Promotion is determined by the highest threshold the agent's current trust clears.
-
-2. **`role_adapter.py` `RoleAdapter`** — uses an action-type-based algorithm with different
-   thresholds (REPAIR_ANT: trust ≥ 0.80 and successful types intersect `{test_fix, bug_repair}`;
-   MEMORY_ANT: trust ≥ 0.80 and successful types intersect `{doc_write, memory_index}`;
-   GUARD_ANT: trust ≥ 0.85 and successful types intersect `{security_scan, vulnerability_fix}`;
-   DISPATCHER: ≥ 20 proposals with ≥ 70% acceptance rate; forced SANDBOX if trust < 0.30 or
-   consecutive failures ≥ 3). The thresholds 0.20/0.35/0.50/0.70 do **not** appear in
-   `role_adapter.py`.
-
-The kernel instantiates the `role_adapter.py` `RoleAdapter` as a subsystem
-(`self.role_adapter = RoleAdapter()`); the inlined `kernel.py` `RoleAdapter` is a local class
-used for the trust-ladder computation within the kernel's own role-evaluation logic.
+The `role_adapter.py` `RoleAdapter` exposes two APIs that must not be conflated. The kernel-facing
+`infer_role(profile)` / `update(profile)` path uses the 0.20/0.35/0.50/0.70 threshold ladder shown
+above (constants `_ROLE_REPAIR_MIN_TRUST`, `_ROLE_MEMORY_MIN_TRUST`,
+`_ROLE_DISPATCHER_MIN_TRUST`, `_ROLE_GUARD_MIN_TRUST`). An agent with fewer than
+`_ROLE_MIN_PROPOSALS_FOR_PROMOTION = 3` total proposals stays SANDBOX regardless of trust score.
+The standalone `assign_role(agent_id)` specialization path additionally considers action history:
+REPAIR_ANT and MEMORY_ANT require trust >= 0.80 with matching successful action types,
+GUARD_ANT requires trust >= 0.85 with security action history, and DISPATCHER requires at least
+20 proposals with at least 70% acceptance. The manuscript's trust-ladder claims use the
+kernel-facing `infer_role` path.
 
 Demotion is automatic: a trust score drop below the entry threshold of the current role triggers
 an immediate reassignment to the highest role whose threshold the new score still clears.
 
 ---
 
-## 5.6 Falsification Vectors
+## Falsification Vectors {#sec:falsification-vectors}
 
 The experimental design incorporates {{CONFIG_FALSIFICATION_VECTORS}} adversarial falsification
 vectors to probe the gate and trust subsystems. Each vector targets a distinct failure mode.
@@ -355,34 +347,37 @@ vectors to probe the gate and trust subsystems. Each vector targets a distinct f
     silently drop one update; the post-tick trust score must equal the algebraically correct
     composition of both events.
 
-Each vector is implemented as a pytest parametrised test case in
-`tests/integration/test_falsification.py`. A vector is considered passing when the system
-produces the expected rejection or alarm outcome with no side-effects on unrelated state.
+The 10-vector worker is exercised in
+`src/codomyrmex/tests/unit/colony_kernel/test_falsification_worker.py`, and manuscript/doc drift is
+covered by `src/codomyrmex/tests/unit/colony_kernel/test_manuscript_consistency.py`. A vector is
+considered passing when the system produces the expected finding or gate influence with no
+side-effects on unrelated state.
 
 ---
 
-## 5.7 YAML Configuration Files
+## YAML Configuration Files {#sec:yaml-configuration-files}
 
 The colony kernel reads {{CONFIG_YAML_CONFIG_FILES}} YAML files from `config/colony_kernel/` at
 startup. No configuration is hardcoded in Python source; all numeric parameters exposed in this
 section trace to one of these files.
 
 **`kernel.yaml`**
-Defines the top-level budget caps (Table 4), the gate decision thresholds (Table 1), the pheromone
-signal type registry, and the overall gate score weight vector (Table 2).
+Defines the top-level budget caps ([@tbl:resource_budget_caps]), the gate decision thresholds
+([@tbl:experimental_gate_thresholds]), the pheromone signal type registry, and the overall gate
+score weight vector ([@tbl:experimental_gate_weights]).
 
-**Important:** the trust promotion thresholds (0.20, 0.35, 0.50, 0.70) and the minimum-proposals
-gate (`_ROLE_MIN_PROPOSALS_FOR_PROMOTION = 3`) are defined as module-level private constants in
-`kernel.py` — they are not read from any YAML file and are not configurable at runtime.
+**Important:** the kernel-facing trust promotion thresholds (0.20, 0.35, 0.50, 0.70) and the
+minimum-proposals gate (`_ROLE_MIN_PROPOSALS_FOR_PROMOTION = 3`) are defined as module-level
+private constants in `role_adapter.py`; they are not read from YAML and are not configurable at
+runtime.
 
 **`roles.yaml`**
 Defines the {{CONFIG_ROLE_COUNT}} `AgentRole` variants (`SANDBOX`, `REPAIR_ANT`, `MEMORY_ANT`,
-`DISPATCHER`, `GUARD_ANT`), including the action types permitted at each role and the demotion
-rules applied when trust falls below a role's entry threshold. Promotion trust thresholds are
-code-defined in `kernel.py` and are not overridable via this file.
+`DISPATCHER`, `GUARD_ANT`) and documentation-facing role labels/defaults. Kernel-facing promotion
+and demotion thresholds are code-defined in `role_adapter.py` and are not overridable via this file.
 
 **`decay_rates.yaml`**
-Provides per-`SignalType` decay rate overrides (Table 3). `SignalType` variants not listed in this
+Provides per-`SignalType` decay rate overrides ([@tbl:experimental_decay_rates]). `SignalType` variants not listed in this
 file inherit the NORMAL decay rate (multiplier {{CONFIG_DECAY_RATE_NORMAL}}). The file is the
 single authoritative source for decay parameters; the kernel reads it at startup and caches values
 for the lifetime of the colony process. The `SignalType` variant name is used as the YAML key —
@@ -391,11 +386,11 @@ defaulting, ensuring that renamed variants are caught immediately.
 
 ---
 
-## 5.8 Software Environment
+## Software Environment {#sec:software-environment-setup}
 
 All experiments were conducted with the following software stack.
 
-**Table 6 — Software Environment**
+[@tbl:software_environment] lists the software stack used for the manuscript snapshot.
 
 | Component | Value |
 |-----------|-------|
@@ -406,6 +401,7 @@ All experiments were conducted with the following software stack.
 | Test runner | pytest with coverage |
 | Config version | {{CONFIG_VERSION}} |
 | Generated | {{GENERATION_TIMESTAMP}} |
+: Software environment for the manuscript snapshot. {#tbl:software_environment}
 
 The zero-error and zero-diagnostic policies mean that CI blocks any merge that introduces a ruff
 finding or a ty type error, providing a continuous correctness baseline across the codebase.
@@ -418,25 +414,32 @@ all validation is performed at the gate boundary before proposals enter the loop
 
 ---
 
-## 5.9 Pipeline Ordering
+## Pipeline Ordering {#sec:pipeline-ordering}
 
 Manuscript variables are produced by a three-stage pipeline that must be executed in order.
 Running stages out of order produces stale or missing variable substitutions.
 
-**Stage 1 — `colony_analysis.py`**
-Runs the full colony simulation or replays a recorded experiment trace. Produces
-`experiment_results.json` containing raw gate decisions, trust trajectories, pheromone snapshots,
-and budget consumption traces.
+**Stage 1 — `z_generate_manuscript_variables.py`**
+Runs the colony-kernel scoped pytest coverage gate, reads the YAML
+configuration and source-code constants, and writes
+`output/data/manuscript_variables.json` plus
+`output/data/colony_kernel_coverage.json`. This file pair is the auditable
+snapshot for all manuscript token substitutions used across the manuscript
+sections.
 
-**Stage 2 — `z_generate_manuscript_variables.py`**
-Reads `experiment_results.json` and the three YAML config files, computes all derived statistics,
-and writes `manuscript_variables.yaml`. This file is the single source for all `{{TOKEN}}`
-substitutions used across the manuscript sections.
+**Stage 2 — `generate_manuscript_figures.py`**
+Reads the generated variable snapshot, `docs/manuscript/config.yaml`, and
+`config/colony_kernel/roles.yaml`, then renders the seven figure assets under
+`output/figures/` for embedding into the tracked HTML and PDF artifacts. Each
+figure carries a small provenance note containing the manuscript version,
+configuration hash, and generation date so visual claims remain tied to the same
+source snapshot as the prose tokens.
 
-**Stage 3 — `03_render_pdf.py`**
-Reads every manuscript Markdown section, substitutes `{{TOKEN}}` values from
-`manuscript_variables.yaml`, passes the result through the LaTeX pipeline, and produces the final
-PDF. Unresolved tokens cause the render to abort with an error listing the missing variables.
+**Stage 3 — `compile_manuscript.py`**
+Reads every manuscript Markdown section, substitutes token values from
+`output/data/manuscript_variables.json`, writes `output/paper.html`, and
+optionally produces the final PDF. Unresolved tokens cause the render to abort
+with an error listing the missing variables.
 
 ---
 

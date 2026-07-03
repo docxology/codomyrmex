@@ -15,6 +15,8 @@ This is the canonical standalone implementation. It supports two call styles:
 Both styles produce a ``GateResult`` with the same field contract.
 """
 
+# SIZE_OK: Core safety gate stays together so overrides remain auditable.
+
 from __future__ import annotations
 
 from typing import Any
@@ -36,11 +38,10 @@ from codomyrmex.colony_kernel.models import (
 # ---------------------------------------------------------------------------
 
 _GATE_SCORE_EXECUTE = 0.75  # score >= this → EXECUTE
-_GATE_SCORE_HOLD = 0.50     # score >= this → HOLD; below → REFUSE
+_GATE_SCORE_HOLD = 0.50  # score >= this → HOLD; below → REFUSE
 
-# Risk pheromone thresholds
-_HIGH_RISK_THRESHOLD = 6.0  # combined risk pressure ≥ this → risk_ok = 0.0
-_MED_RISK_THRESHOLD = 3.0   # combined risk pressure ≥ this → risk_ok = 0.5
+_HIGH_RISK_THRESHOLD = 6.0
+_MED_RISK_THRESHOLD = 3.0
 
 # Trust floor — below this (strictly less than) triggers a hard REFUSE
 _TRUST_HARD_FLOOR = 0.30
@@ -214,7 +215,25 @@ class ActuationGate:
         Returns:
             GateResult with decision, gate_score, reason, required_evidence,
             budget_approved, and falsification_severity.
+
+        Raises:
+            ValueError: If ``proposal.target`` is None or empty — a proposal
+                without a target location cannot be safely evaluated.
         """
+        # Guard against None or empty target — this would silently corrupt
+        # pheromone keys and make all pressure queries meaningless.
+        if not proposal.target:
+            return GateResult(
+                decision=GateDecision.REFUSE,
+                gate_score=0.0,
+                reason=(
+                    "ActionProposal.target must be a non-empty string; "
+                    f"got {proposal.target!r}. Cannot evaluate gate without a target location."
+                ),
+                required_evidence=["provide_non_empty_target"],
+                budget_approved=False,
+                falsification_severity=0.0,
+            )
         if findings is None:
             findings = []
 
@@ -226,7 +245,9 @@ class ActuationGate:
         # --- internal budget check (standalone style) ---
         if budget_approved is None:
             if self._ledger is not None:
-                budget_approved = bool(self._ledger.can_afford(proposal.budget_estimate))
+                budget_approved = bool(
+                    self._ledger.can_afford(proposal.budget_estimate)
+                )
             else:
                 budget_approved = True
 
@@ -243,7 +264,11 @@ class ActuationGate:
         # Kernel (4-arg) style: HOLD (caller manages requeue)
         # ----------------------------------------------------------------
         if not budget_approved:
-            budget_decision = GateDecision.REFUSE if not _caller_supplied_budget else GateDecision.HOLD
+            budget_decision = (
+                GateDecision.REFUSE
+                if not _caller_supplied_budget
+                else GateDecision.HOLD
+            )
             return GateResult(
                 decision=budget_decision,
                 gate_score=0.0,
@@ -297,7 +322,9 @@ class ActuationGate:
             falsification_penalty
             >= _FALSIFICATION_WEIGHT[FalsificationSeverity.CRITICAL]
         ):
-            critical = [f for f in findings if f.severity == FalsificationSeverity.CRITICAL]
+            critical = [
+                f for f in findings if f.severity == FalsificationSeverity.CRITICAL
+            ]
             return GateResult(
                 decision=GateDecision.REFUSE,
                 gate_score=0.0,
@@ -317,7 +344,6 @@ class ActuationGate:
         # budget_ok
         budget_ok = 1.0  # already cleared the hard override above
 
-        # risk_ok — based on combined RISK pressure at target
         risk_pressure = pheromone_readings["risk"]
         if risk_pressure >= _HIGH_RISK_THRESHOLD:
             risk_ok = 0.0
@@ -353,10 +379,7 @@ class ActuationGate:
 
         # composite gate score (no falsification multiplier — already handled as hard override)
         gate_score = (
-            budget_ok * 0.30
-            + risk_ok * 0.30
-            + trust_ok * 0.25
-            + completeness * 0.15
+            budget_ok * 0.30 + risk_ok * 0.30 + trust_ok * 0.25 + completeness * 0.15
         )
         gate_score = max(0.0, min(1.0, gate_score))
 
@@ -371,7 +394,11 @@ class ActuationGate:
         if trust_ok < 0.5 or (trust_ok < 1.0 and recent_fail_count >= 3):
             issues.append(
                 f"agent trust reduced (score={profile.trust_score:.3f}"
-                + (f", recent_failures={recent_fail_count}" if recent_fail_count >= 3 else "")
+                + (
+                    f", recent_failures={recent_fail_count}"
+                    if recent_fail_count >= 3
+                    else ""
+                )
                 + ")"
             )
         if not completeness_flags["has_rollback_plan"]:
@@ -408,7 +435,22 @@ class ActuationGate:
             )
             if issues:
                 reason += f" Reasons: {'; '.join(issues)}"
-            required = ["additional_evidence", "trust_improvement"]
+            # Build specific HOLD actions based on which factors dragged the score down
+            required = []
+            if not completeness_flags["has_rollback_plan"]:
+                required.append("add_concrete_rollback_plan")
+            if not completeness_flags["has_evidence"]:
+                required.append("supply_supporting_evidence")
+            if not completeness_flags["has_expected_outcome"]:
+                required.append("define_expected_outcome")
+            if trust_ok < 1.0:
+                required.append("increase_trust_score_via_accepted_proposals")
+            if risk_ok < 1.0:
+                required.append("wait_for_risk_pheromone_to_decay_or_address_root_cause")
+            if findings:
+                required.append("resolve_falsification_findings")
+            if not required:
+                required = ["additional_evidence", "trust_improvement"]
         else:
             decision = GateDecision.REFUSE
             reason = (

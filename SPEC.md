@@ -1,6 +1,6 @@
 # Codomyrmex Functional Specification
 
-**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## System Concept
 
@@ -33,7 +33,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ### Internal Coherence
 
-- Consistent directory structure and naming conventions across all 128 top-level modules.
+- Consistent directory structure and naming conventions across all 129 top-level modules.
 - Unified documentation patterns: every module carries the same set of specification files.
 - Shared configuration idioms via standardized `Config` objects and `pyproject.toml` extras.
 

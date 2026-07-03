@@ -548,3 +548,22 @@ class TestProviderRouterExecution:
         full_text = "".join(chunks)
         assert "chunk1" in full_text
         assert "chunk2" in full_text
+
+    @pytest.mark.asyncio
+    async def test_call_llm_stream_times_out_waiting_for_first_chunk(
+        self, shim_bin_dir: Path
+    ) -> None:
+        import stat
+
+        hermes_bin = shim_bin_dir / "hermes"
+        hermes_bin.write_text("#!/bin/sh\nsleep 5\necho 'late chunk'\nexit 0\n")
+        hermes_bin.chmod(hermes_bin.stat().st_mode | stat.S_IEXEC)
+
+        router = ProviderRouter(primary_provider="openrouter")
+        router._credentials["openrouter"] = "key"
+
+        with pytest.raises(RuntimeError, match="Streaming timed out"):
+            async for _chunk in router.call_llm_stream(
+                "test prompt", provider="openrouter", timeout=1
+            ):
+                pass

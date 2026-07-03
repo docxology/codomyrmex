@@ -228,9 +228,7 @@ class ConsequenceMemory:
                 score += _delta_for_record(rec)
             trust = max(0.0, min(1.0, score))
             total = len(records)
-            accepted = sum(
-                1 for r in records if r.tests_passed and not r.repair_needed
-            )
+            accepted = sum(1 for r in records if r.tests_passed and not r.repair_needed)
             return AgentTrustProfile(
                 agent_id=agent_id,
                 trust_score=trust,
@@ -404,15 +402,17 @@ class ConsequenceMemory:
         result = []
         for r in rows2:
             proposal_data = json.loads(r[3])
-            result.append({
-                "consequence_id": r[0],
-                "agent_id": r[1],
-                "action_type": r[2],
-                "target": proposal_data.get("target", ""),
-                "tests_passed": bool(r[4]),
-                "trust_delta": r[5],
-                "recorded_at": r[6],
-            })
+            result.append(
+                {
+                    "consequence_id": r[0],
+                    "agent_id": r[1],
+                    "action_type": r[2],
+                    "target": proposal_data.get("target", ""),
+                    "tests_passed": bool(r[4]),
+                    "trust_delta": r[5],
+                    "recorded_at": r[6],
+                }
+            )
         return result
 
     def recent_failures(self, agent_id: str, window: int = 10) -> int:
@@ -432,9 +432,7 @@ class ConsequenceMemory:
             has no history).
         """
         records = self._fetch_agent_records(agent_id, limit=window)
-        return sum(
-            1 for r in records if not r.tests_passed or r.repair_needed
-        )
+        return sum(1 for r in records if not r.tests_passed or r.repair_needed)
 
     def role_distribution(self) -> dict[str, int]:
         """Return a count of agents per role."""
@@ -498,7 +496,9 @@ class ConsequenceMemory:
     # Private — storage layer abstraction
     # ------------------------------------------------------------------
 
-    def _fetch_agent_records(self, agent_id: str, limit: int) -> list[ConsequenceRecord]:
+    def _fetch_agent_records(
+        self, agent_id: str, limit: int
+    ) -> list[ConsequenceRecord]:
         if self._in_memory is not None:
             filtered = [r for r in self._in_memory if r.proposal.agent_id == agent_id]
             filtered.sort(key=lambda r: r.recorded_at, reverse=True)

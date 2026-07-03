@@ -5,14 +5,25 @@ documentation, and workflow automation. See package README and
 ``list_modules()`` for the live module list.
 """
 
-__version__ = "1.2.7"
+# SIZE_OK: The package root intentionally centralizes the lazy module registry.
 
 import pkgutil
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
+
+def _package_version() -> str:
+    try:
+        return version("codomyrmex")
+    except PackageNotFoundError:
+        return "1.3.0"
+
+
+__version__ = _package_version()
 
 
 def get_version() -> str:
@@ -49,6 +60,7 @@ _submodules = [
     "cli",
     "cloud",
     "coding",
+    "colony_kernel",
     "collaboration",
     "compression",
     "concurrency",
@@ -64,7 +76,6 @@ _submodules = [
     "data_lineage",
     "data_visualization",
     "database_management",
-    "defense",
     "demos",
     "dependency_injection",
     "deployment",
@@ -76,7 +87,6 @@ _submodules = [
     "dpo",
     "edge_computing",
     "email",
-    "embodiment",
     "encryption",
     "environment_setup",
     "eval_harness",
@@ -207,6 +217,7 @@ __all__ = [
     "cloud",
     "coding",
     "collaboration",
+    "colony_kernel",
     "compression",
     "concurrency",
     "config_audits",
@@ -221,7 +232,6 @@ __all__ = [
     "data_lineage",
     "data_visualization",
     "database_management",
-    "defense",
     "demos",
     "dependency_injection",
     "deployment",
@@ -233,7 +243,6 @@ __all__ = [
     "dpo",
     "edge_computing",
     "email",
-    "embodiment",
     "encryption",
     "environment_setup",
     "eval_harness",

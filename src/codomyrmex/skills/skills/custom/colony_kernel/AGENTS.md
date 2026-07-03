@@ -1,5 +1,7 @@
 # AGENTS.md — src/codomyrmex/skills/skills/custom/colony_kernel
 
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
+
 > Technical reference for AI agents and contributors working in this skill directory.
 
 ## Purpose
@@ -36,6 +38,8 @@ Holds the Colony Kernel custom skill definition — the machine-readable and pro
 ## Navigation
 
 - **Source**: [../../../../colony_kernel/](../../../../colony_kernel/)
+- **README**: [README.md](README.md)
+- **Source SPEC**: [../../../../colony_kernel/SPEC.md](../../../../colony_kernel/SPEC.md)
 - **Module docs**: [../../../../../../docs/modules/colony_kernel/](../../../../../../docs/modules/colony_kernel/)
 - **Scope document**: [../../../../../../docs/todo/COLONY_KERNEL.md](../../../../../../docs/todo/COLONY_KERNEL.md)
 - **Skills index**: [../](../)

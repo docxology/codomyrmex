@@ -1,6 +1,6 @@
 # Config Monitoring MCP Tool Specification
 
-**Version**: v1.2.7 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: June 2026
 
 ## Tools
 

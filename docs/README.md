@@ -1,10 +1,10 @@
 # Codomyrmex Documentation
 
-**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **128 top-level modules**, **600** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md)), and **39 agent packages** under `src/codomyrmex/agents/` (see [agents/](agents/)).
+Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **129 top-level modules**, **610** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md)), and **39 agent packages** under `src/codomyrmex/agents/` (see [agents/](agents/)).
 
 ## Documentation Map
 
@@ -52,9 +52,9 @@ Volatile counts that appear in prose must be sourced from these files — never 
 
 | Metric | Authoritative source |
 |:---|:---|
-| Test count (colony_kernel scope) | `{{RESULT_TEST_COUNT}}` in rendered manuscript; currently **433** |
+| Test count (colony_kernel scope) | `RESULT_TEST_COUNT` in `output/data/manuscript_variables.json` |
 | Gate weights (budget/risk/trust/completeness) | `docs/manuscript/config.yaml` → `experiment.gate_score_weights` (0.30 / 0.30 / 0.25 / 0.15) |
-| Colony kernel subsystems (8) | `src/codomyrmex/colony_kernel/kernel.py` — PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel |
+| Colony kernel subsystems (8) | `src/codomyrmex/colony_kernel/*` standalone modules plus `kernel.py` coordinator — PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel |
 | MCP tools (8) | `src/codomyrmex/colony_kernel/mcp_tools.py` |
 | Falsification attack vector name | `CIRCULAR_ARCHITECTURE` (not `CIRCULAR_DEPS`) |
 | Module, MCP decorator, and file totals | [reference/inventory.md](reference/inventory.md) — refresh with `uv run python scripts/doc_inventory.py` |

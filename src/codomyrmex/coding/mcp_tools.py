@@ -6,6 +6,7 @@ tools for agent consumption.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -59,9 +60,13 @@ def code_list_languages() -> dict[str, Any]:
 def code_review_file(path: str) -> dict[str, Any]:
     """Review a file for code quality."""
     try:
+        target = Path(path)
+        if not target.is_file():
+            return {"status": "error", "message": f"File not found: {path}"}
+
         from . import analyze_file
 
-        result = analyze_file(path)
+        result = analyze_file(str(target))
         return {"status": "success", "analysis": result}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
@@ -74,9 +79,13 @@ def code_review_file(path: str) -> dict[str, Any]:
 def code_review_project(path: str) -> dict[str, Any]:
     """Review an entire project."""
     try:
+        target = Path(path)
+        if not target.is_dir():
+            return {"status": "error", "message": f"Directory not found: {path}"}
+
         from . import analyze_project
 
-        result = analyze_project(path)
+        result = analyze_project(str(target))
         return {"status": "success", "analysis": result}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

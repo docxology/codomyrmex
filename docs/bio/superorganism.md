@@ -108,7 +108,7 @@ graph LR
 
 **The boundary is as important as the interior.** Wheeler noted that colony identity depends on maintaining its boundary. The MCP layer defining module interfaces is **constitutive** of system identity and integrity. Interface discipline preserves the modularity enabling emergent coordination. This connects to the Markov blanket concept in [free_energy.md](./free_energy.md) — the boundary defines the statistical separation between inside and outside.
 
-**A superorganism's death is not component failure.** Colonies die when coordination fails, not when individual ants die. System failure is typically an emergent property: the system "dies" when too many components become disconnected, misaligned, or unable to coordinate — even if each component still runs. Resilience engineering should focus on maintaining *coordination capacity*, not just component uptime.
+**A superorganism's death is not component failure.** Colonies die when coordination fails, not when individual ants die. System failure is typically a system-level outcome: the system "dies" when too many components become disconnected, misaligned, or unable to coordinate — even if each component still runs. Resilience engineering should focus on maintaining *coordination capacity*, not just component uptime.
 
 ## Further Reading
 

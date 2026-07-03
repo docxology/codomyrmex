@@ -1,15 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/colony_kernel
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
-Colony Kernel is the control plane for codomyrmex's artificial ecology. It gates every agent action through a multi-factor pipeline (adversarial falsification → budget check → trust evaluation → actuation gate), persists outcomes in SQLite, and maintains a stigmergic pheromone field that encodes the codebase's collective memory of success, failure, risk, and active dependencies. Agents do not require centralised coordination: the pheromone landscape and per-agent trust profiles provide the shared state from which emergent role assignment and pruning decisions arise.
+Colony Kernel is the control plane for codomyrmex's artificial ecology. It gates every agent action through a multi-factor pipeline (adversarial falsification → budget check → trust evaluation → actuation gate), persists outcomes in SQLite, and maintains a stigmergic pheromone field that encodes the codebase's collective memory of success, failure, risk, and active dependencies. The pheromone landscape and per-agent trust profiles provide the shared state from which deterministic role assignment and configured pruning nominations arise.
 
 ## Active Components
 
-- `models.py` — Shared value-object and enum contract; no cross-subsystem imports allowed
-- `kernel.py` — `ColonyKernel` integration class + all subsystem implementations (`PheromoneStore`, `ResourceLedger`, `ActuationGate`, `ConsequenceMemory`, `RoleAdapter`, `PruningDaemon`, `FalsificationWorker`)
+- `models.py` — Shared value-object and enum contract for subsystem exchange
+- `kernel.py` — `ColonyKernel` integration class plus compatibility re-exports for subsystem classes
 - `mcp_tools.py` — Eight `@mcp_tool`-decorated functions; thin wrappers over the kernel singleton; includes a standalone `FalsificationWorker` for pre-flight plan evaluation
 - `config_loader.py` — YAML config loading from `config/colony_kernel/` (kernel.yaml, roles.yaml, decay_rates.yaml)
 - `resource_ledger.py` — Standalone `ResourceLedger` / `ResourceBudget` (used by kernel.py and independently)
@@ -27,14 +27,14 @@ Colony Kernel is the control plane for codomyrmex's artificial ecology. It gates
 |--------|--------|------|
 | `ColonyKernel` | `kernel.py` | Top-level integration class; primary entrypoint |
 | `ColonyKernelConfig` | `kernel.py` | Configuration dataclass (db_path, budget, pheromone_config) |
-| `ResourceBudget` | `kernel.py` | Period-scoped ceiling for seven cost dimensions |
-| `PheromoneStore` | `kernel.py` | Wraps `TraceField`; deposit, reinforce, sense, tick |
-| `ResourceLedger` | `kernel.py` | Accumulates and checks multi-dimensional resource cost |
-| `ActuationGate` | `kernel.py` | Computes composite gate score; routes EXECUTE / HOLD / REFUSE |
-| `ConsequenceMemory` | `kernel.py` | SQLite persistence for consequence records and trust profiles |
-| `RoleAdapter` | `kernel.py` | Deterministic role inference from trust score and proposal count |
-| `PruningDaemon` | `kernel.py` | Identifies stale/duplicate module locations via pheromone field |
-| `FalsificationWorker` | `kernel.py` | Ten deterministic adversarial checks against a proposal |
+| `ResourceBudget` | `resource_ledger.py` | Period-scoped ceiling for seven cost dimensions |
+| `PheromoneStore` | `pheromone_store.py` | Wraps `TraceField`; deposit, reinforce, sense, tick |
+| `ResourceLedger` | `resource_ledger.py` | Accumulates and checks multi-dimensional resource cost |
+| `ActuationGate` | `actuation_gate.py` | Computes weighted additive gate score; routes EXECUTE / HOLD / REFUSE with hard overrides |
+| `ConsequenceMemory` | `consequence_memory.py` | SQLite persistence for consequence records and trust profiles |
+| `RoleAdapter` | `role_adapter.py` | Deterministic role inference from trust score and proposal count |
+| `PruningDaemon` | `pruning_daemon.py` | Identifies stale/duplicate module locations via pheromone field |
+| `FalsificationWorker` | `falsification_worker.py` | Ten deterministic adversarial checks against a proposal |
 | `ActionProposal` | `models.py` | Atomic unit submitted to the gate |
 | `GateResult` | `models.py` | Gate verdict: decision, score, reason, required_evidence |
 | `ConsequenceRecord` | `models.py` | Full lifecycle record: proposal → action → result |
@@ -57,11 +57,13 @@ Colony Kernel is the control plane for codomyrmex's artificial ecology. It gates
 - `sqlite3` — ConsequenceMemory persistence (WAL mode)
 - `dataclasses`, `uuid`, `time`, `json`, `pathlib` — models and utility
 
-### No other codomyrmex module imports are permitted inside colony_kernel.
+### Expected external codomyrmex imports
+
+The listed external dependencies are the expected cross-package imports for colony_kernel. Keep any new dependency explicit and documented here.
 
 ## MCP Tools
 
-All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`), which is an instance of the full `kernel.py` `ColonyKernel` class. State is therefore persistent for the lifetime of the MCP server process and benefits from the complete subsystem implementations (ActuationGate, PheromoneStore, ConsequenceMemory, RoleAdapter, PruningDaemon).
+All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`), which is an instance of the integration class re-exported from `kernel.py`. State is therefore persistent for the lifetime of the MCP server process and benefits from the canonical subsystem implementations (ActuationGate, PheromoneStore, ConsequenceMemory, RoleAdapter, PruningDaemon).
 
 | Tool | Category | Description |
 |------|----------|-------------|
@@ -70,7 +72,7 @@ All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` i
 | `colony_agent_profile` | `colony_kernel` | Read an agent's current `AgentTrustProfile` (role, trust_score, history length) |
 | `colony_status` | `colony_kernel` | Dashboard snapshot: pheromone_summary, budget_usage, role_distribution, recent_consequences, pruning_candidates_count |
 | `colony_pheromone_query` | `colony_kernel` | Sense pheromone strength at a given location and signal type |
-| `colony_falsify_plan` | `colony_kernel` | Adversarial plan evaluation (5 attack vectors) without running the full gate; returns findings + recommendation |
+| `colony_falsify_plan` | `colony_kernel` | Adversarial plan evaluation (10 attack vectors) without running the full gate; returns findings + recommendation |
 | `colony_pruning_report` | `colony_kernel` | Stale or broken module locations identified by `PruningDaemon.scan()` |
 | `colony_tick` | `colony_kernel` | Advance one colony time-step; evaporates pheromone traces; returns post-tick status |
 

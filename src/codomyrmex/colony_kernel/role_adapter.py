@@ -1,7 +1,13 @@
 """Role adapter — agents earn roles through consequence history.
 
-Roles are never hard-assigned at startup; they emerge from the observable
-track record of each agent. Two assignment algorithms coexist:
+Roles are inferred deterministically from observable trust and proposal
+history. Two assignment algorithms coexist:
+
+Trust-score-based (kernel API, infer_role/update):
+  SANDBOX -> REPAIR_ANT (trust >= 0.20, proposals >= 3)
+  REPAIR_ANT -> MEMORY_ANT (trust >= 0.35)
+  MEMORY_ANT -> DISPATCHER (trust >= 0.50)
+  DISPATCHER -> GUARD_ANT (trust >= 0.70)
 
 Specialization-based (standalone API, assign_role):
   1. trust >= 0.8 AND test_fix/bug_repair actions -> REPAIR_ANT
@@ -10,12 +16,6 @@ Specialization-based (standalone API, assign_role):
   4. total_proposals >= 20 AND acceptance >= 70% -> DISPATCHER
   5. trust < 0.3 OR recent_consecutive_failures >= 3 -> SANDBOX
   6. default -> SANDBOX (new agents start in sandbox)
-
-Trust-score-based (kernel API, infer_role/update):
-  SANDBOX -> REPAIR_ANT (trust >= 0.20, proposals >= 3)
-  REPAIR_ANT -> MEMORY_ANT (trust >= 0.35)
-  MEMORY_ANT -> DISPATCHER (trust >= 0.50)
-  DISPATCHER -> GUARD_ANT (trust >= 0.70)
 
 No external dependencies; relies only on stdlib and the models contract.
 """
@@ -119,7 +119,13 @@ def _successful_action_types(records: list[ConsequenceRecord]) -> set[str]:
 
 
 def _consecutive_failures(records: list[ConsequenceRecord]) -> int:
-    """Count consecutive failures at the end of the record history."""
+    """Count consecutive failures at the end of the record history.
+
+    Complexity: O(n) in the worst case (all records are failures), O(1) on
+    average when the most recent records pass.  For typical agent histories
+    (hundreds of records) this is negligible; callers processing very large
+    histories should pre-slice to the last N records before calling this.
+    """
     count = 0
     for record in reversed(records):
         if not record.tests_passed:
@@ -135,7 +141,7 @@ def _consecutive_failures(records: list[ConsequenceRecord]) -> int:
 
 
 class RoleAdapter:
-    """Assigns roles to agents based on their consequence history.
+    """Assign roles to agents from consequence history.
 
     Provides two APIs:
     - Specialization-based (standalone): assign_role(agent_id), get_profile(),
@@ -155,6 +161,8 @@ class RoleAdapter:
             self._memory: ConsequenceMemoryProtocol = ConsequenceMemory()
         else:
             self._memory = consequence_memory
+        # Re-entry guard for update() to prevent nested role inference cycles.
+        self._update_in_progress: bool = False
 
     # ------------------------------------------------------------------
     # Specialization-based API (standalone)
@@ -235,11 +243,7 @@ class RoleAdapter:
         all_profiles_fn = getattr(self._memory, "all_profiles", None)
         if all_profiles_fn is None:
             return []
-        return sorted(
-            p.agent_id
-            for p in all_profiles_fn()
-            if p.role == role
-        )
+        return sorted(p.agent_id for p in all_profiles_fn() if p.role == role)
 
     def role_stats(self) -> dict[AgentRole, int]:
         """Return a dict mapping AgentRole to the count of agents in that role.
@@ -286,13 +290,23 @@ class RoleAdapter:
         """Recompute and update role on *profile* in-place using trust-score algorithm.
 
         Returns True if the role changed, False otherwise.
+
+        Re-entry guard: if this method is called recursively (e.g. from a
+        ConsequenceMemory callback triggered inside infer_role), the nested
+        call is a no-op and returns False to prevent infinite cycles.
         """
-        new_role = self.infer_role(profile)
-        if new_role != profile.role:
-            profile.role = new_role
-            profile.last_updated = time.time()
-            return True
-        return False
+        if self._update_in_progress:
+            return False
+        self._update_in_progress = True
+        try:
+            new_role = self.infer_role(profile)
+            if new_role != profile.role:
+                profile.role = new_role
+                profile.last_updated = time.time()
+                return True
+            return False
+        finally:
+            self._update_in_progress = False
 
 
 __all__ = [

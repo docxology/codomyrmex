@@ -12,6 +12,7 @@ Example:
     ...     print(f"{func['name']}: complexity={func['complexity']}")
 """
 
+import contextlib
 import glob
 import json
 import os
@@ -143,6 +144,30 @@ class PyscnAnalyzer:
                 "Error running pyscn complexity analysis on %s: %s", file_path, e
             )
             return []
+
+    @monitor_performance("pyscn_analyze_code")
+    def analyze_code(
+        self, code: str, file_path: str | None = None
+    ) -> list[dict[str, Any]]:
+        temp_path: str | None = None
+        target_path = file_path
+        if not target_path or not os.path.exists(target_path):
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".py", delete=False, encoding="utf-8"
+            ) as handle:
+                handle.write(code)
+                temp_path = handle.name
+                target_path = handle.name
+
+        try:
+            findings: list[dict[str, Any]] = []
+            findings.extend(self.analyze_complexity(target_path))
+            findings.extend(self.detect_dead_code(target_path))
+            return findings
+        finally:
+            if temp_path:
+                with contextlib.suppress(OSError):
+                    os.unlink(temp_path)
 
     @monitor_performance("pyscn_detect_dead_code")
     def detect_dead_code(self, file_path: str) -> list[dict[str, Any]]:

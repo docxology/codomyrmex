@@ -47,9 +47,7 @@ def repo_with_two_similar_modules(tmp_path):
     src = tmp_path / "src" / "codomyrmex"
     src.mkdir(parents=True)
 
-    spec_content = "\n".join(
-        [f"# Shared Title Line {i}" for i in range(50)]
-    )
+    spec_content = "\n".join([f"# Shared Title Line {i}" for i in range(50)])
 
     for name in ("alpha", "beta"):
         mod = src / name
@@ -215,9 +213,13 @@ class TestReport:
     def test_all_values_are_lists(self, daemon_empty: PruningDaemon) -> None:
         result = daemon_empty.report()
         for key, value in result.items():
-            assert isinstance(value, list), f"Expected list for key '{key}', got {type(value)}"
+            assert isinstance(value, list), (
+                f"Expected list for key '{key}', got {type(value)}"
+            )
 
-    def test_list_items_are_pruning_candidates(self, daemon_one_module: PruningDaemon) -> None:
+    def test_list_items_are_pruning_candidates(
+        self, daemon_one_module: PruningDaemon
+    ) -> None:
         """Any non-empty scan bucket must contain PruningCandidate instances.
 
         scan_no_tests() has a pre-existing NameError in pruning_daemon.py
@@ -239,7 +241,9 @@ class TestReport:
                     f"Key '{key}' contains non-PruningCandidate item: {type(item)}"
                 )
 
-    def test_empty_repo_all_buckets_are_lists(self, daemon_empty: PruningDaemon) -> None:
+    def test_empty_repo_all_buckets_are_lists(
+        self, daemon_empty: PruningDaemon
+    ) -> None:
         result = daemon_empty.report()
         for key in ("unused", "duplicate", "stale_docs", "no_tests"):
             assert isinstance(result[key], list)
@@ -456,7 +460,10 @@ class TestScanUnusedToolsStaleVsRecent:
         daemon = PruningDaemon(str(tmp_path))
         candidates = daemon.scan_unused_tools()
         assert len(candidates) == 1
-        assert "No invocation record" in candidates[0].reason or "invocation" in candidates[0].reason.lower()
+        assert (
+            "No invocation record" in candidates[0].reason
+            or "invocation" in candidates[0].reason.lower()
+        )
 
     def test_multiple_stale_modules_all_flagged(self, tmp_path) -> None:
         src = tmp_path / "src" / "codomyrmex"
@@ -490,7 +497,6 @@ class TestScanUnusedToolsStaleVsRecent:
 
 
 class TestScanUnusedToolsThreshold:
-
     def test_threshold_zero_still_flags_never_used(self, tmp_path) -> None:
         src = tmp_path / "src" / "codomyrmex"
         src.mkdir(parents=True)
@@ -523,7 +529,6 @@ class TestScanUnusedToolsThreshold:
 
 
 class TestScanDuplicatePatterns:
-
     def test_two_similar_modules_yields_one_candidate(
         self, daemon_two_similar: PruningDaemon
     ) -> None:
@@ -802,7 +807,7 @@ class TestSandboxFloorEligibility:
         daemon = PruningDaemon(pheromone_store=None, repo_root=".")
         registry = {
             "mod_alpha": {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
-            "mod_beta":  {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
+            "mod_beta": {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
             "mod_gamma": {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
         }
         candidates = daemon.scan(registry)
@@ -873,8 +878,8 @@ class TestAboveSandboxFloorNotPruned:
         store = self._make_pheromone_store({"guarded_module": 3.0})
         daemon = PruningDaemon(pheromone_store=store, repo_root=".")
         registry = {
-            "guarded_module":   {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
-            "exposed_module":   {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
+            "guarded_module": {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
+            "exposed_module": {"last_used": 0.0, "call_count": 0, "duplicate_of": None},
         }
         candidates = daemon.scan(registry)
         module_paths = [c.module_path for c in candidates]
@@ -928,7 +933,9 @@ class TestPruningReportContainsPrunedAgentIDs:
         all_paths = " ".join(duplicate_paths)
         assert "alpha" in all_paths or "beta" in all_paths
 
-    def test_scan_returns_candidate_ids_matching_filesystem_names(self, tmp_path) -> None:
+    def test_scan_returns_candidate_ids_matching_filesystem_names(
+        self, tmp_path
+    ) -> None:
         """scan_unused_tools must return candidates whose module_path includes the dir name."""
         src = tmp_path / "src" / "codomyrmex"
         src.mkdir(parents=True)
@@ -994,9 +1001,7 @@ class TestScanStaleDocsStub:
         result = daemon_empty.scan_stale_docs()
         assert result == []
 
-    def test_scan_stale_docs_return_type(
-        self, daemon_empty: PruningDaemon
-    ) -> None:
+    def test_scan_stale_docs_return_type(self, daemon_empty: PruningDaemon) -> None:
         """Return value is a list — not None, not a generator, not any other iterable."""
         result = daemon_empty.scan_stale_docs()
         assert isinstance(result, list)
@@ -1008,9 +1013,7 @@ class TestScanStaleDocsStub:
         result = daemon_one_module.scan_stale_docs()
         assert result == []
 
-    def test_scan_stale_docs_idempotent(
-        self, daemon_empty: PruningDaemon
-    ) -> None:
+    def test_scan_stale_docs_idempotent(self, daemon_empty: PruningDaemon) -> None:
         """Calling scan_stale_docs() twice returns [] both times."""
         assert daemon_empty.scan_stale_docs() == []
         assert daemon_empty.scan_stale_docs() == []

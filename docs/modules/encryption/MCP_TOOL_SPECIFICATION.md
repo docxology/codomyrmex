@@ -1,6 +1,6 @@
 # Encryption Module - MCP Tool Specification
 
-**Version**: v1.2.3 | **Status**: Not Applicable | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Not Applicable | **Last Updated**: March 2026
 
 ## Overview
 

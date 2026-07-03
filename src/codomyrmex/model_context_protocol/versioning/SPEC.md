@@ -19,9 +19,9 @@ Two modules:
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `parse` | `version_str: str` | `APIVersion` | Parse `"v1.2.3"` or `"1.2.3"` into an `APIVersion` instance |
+| `parse` | `version_str: str` | `APIVersion` | Parse `"v1.3.0"` or `"1.2.3"` into an `APIVersion` instance |
 | `is_compatible` | `other: APIVersion` | `bool` | True if same major and `other >= self` |
-| `__str__` | — | `str` | Returns `"v1.2.3"` format |
+| `__str__` | — | `str` | Returns `"v1.3.0"` format |
 
 Frozen dataclass with natural ordering on `(major, minor, patch)`.
 

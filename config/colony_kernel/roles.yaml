@@ -1,21 +1,26 @@
-# Agent role thresholds and defaults
-# Each named role defines the trust floor and action-type allowlist an agent
-# must satisfy before being assigned that role by the kernel.
-
+# Colony Kernel role promotion thresholds and new-agent defaults.
+#
+# Cross-references:
+#   - Loaded by:   src/codomyrmex/colony_kernel/config_loader.py  (load_roles_yaml)
+#   - Documented:  config/colony_kernel/README.md §roles.yaml
+#   - Agent guide: config/colony_kernel/AGENTS.md
+#   - Source spec: src/codomyrmex/colony_kernel/SPEC.md §Trust Lifecycle
+#   - PAI usage:   src/codomyrmex/colony_kernel/PAI.md §Agent Role ↔ PAI Agent Type Mapping
+#   - Validated:   src/codomyrmex/tests/unit/colony_kernel/test_manuscript_consistency.py::test_roles_yaml_matches_kernel_role_ladder_contract
+#
 thresholds:
-  guard_ant:
-    min_trust: 0.85
-    required_action_types: ["security_scan", "vulnerability_fix", "audit"]
   repair_ant:
-    min_trust: 0.80
-    required_action_types: ["test_fix", "bug_repair", "patch_file"]
+    min_trust: 0.20
+    min_total_proposals: 3
   memory_ant:
-    min_trust: 0.80
-    required_action_types: ["doc_write", "memory_index", "archive"]
+    min_trust: 0.35
+    min_total_proposals: 3
   dispatcher:
+    min_trust: 0.50
+    min_total_proposals: 3
+  guard_ant:
     min_trust: 0.70
-    min_total_proposals: 20
-    min_acceptance_rate: 0.70
+    min_total_proposals: 3
   sandbox:
     max_trust: 0.30
 

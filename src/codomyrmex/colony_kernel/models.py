@@ -95,6 +95,19 @@ class ColonySignal:
         if self.strength < 0.0:
             raise ValueError("ColonySignal.strength must be non-negative")
 
+    def __str__(self) -> str:
+        return (
+            f"ColonySignal({self.signal_type.value}@{self.location!r} "
+            f"strength={self.strength:.3f} source={self.source.value})"
+        )
+
+    def __repr__(self) -> str:
+        return (
+            f"ColonySignal(location={self.location!r}, "
+            f"signal_type={self.signal_type!r}, strength={self.strength!r}, "
+            f"decay_rate={self.decay_rate!r}, source={self.source!r})"
+        )
+
 
 # ---------------------------------------------------------------------------
 # Resource budget
@@ -219,6 +232,19 @@ class GateResult:
     required_evidence: list[str] = field(default_factory=list)  # for HOLD
     budget_approved: bool = True
     falsification_severity: float = 0.0  # 0.0 = clean, 1.0 = do not execute
+
+    def __str__(self) -> str:
+        return (
+            f"GateResult({self.decision.value} score={self.gate_score:.3f} "
+            f"budget_ok={self.budget_approved})"
+        )
+
+    def __repr__(self) -> str:
+        return (
+            f"GateResult(decision={self.decision!r}, gate_score={self.gate_score!r}, "
+            f"reason={self.reason!r}, budget_approved={self.budget_approved!r}, "
+            f"falsification_severity={self.falsification_severity!r})"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -372,6 +398,19 @@ class FalsificationFinding:
         if not self.attack_vector:
             raise ValueError("FalsificationFinding.attack_vector must be non-empty")
 
+    def __str__(self) -> str:
+        return (
+            f"FalsificationFinding({self.severity.value}: {self.claim[:60]}...)"
+            if len(self.claim) > 60
+            else f"FalsificationFinding({self.severity.value}: {self.claim})"
+        )
+
+    def __repr__(self) -> str:
+        return (
+            f"FalsificationFinding(severity={self.severity!r}, "
+            f"attack_vector={self.attack_vector!r}, claim={self.claim!r})"
+        )
+
 
 # ---------------------------------------------------------------------------
 # Shared compound-key factory
@@ -445,3 +484,27 @@ def compute_trust_delta(record: ConsequenceRecord) -> float:
         delta += _TRUST_DELTA_REPAIR
     delta += record.human_feedback * _TRUST_DELTA_HUMAN_WEIGHT
     return delta
+
+
+# ---------------------------------------------------------------------------
+# Public exports
+# ---------------------------------------------------------------------------
+
+__all__ = [
+    "ActionProposal",
+    "AgentRole",
+    "AgentTrustProfile",
+    "ColonySignal",
+    "ConsequenceRecord",
+    "DecayRate",
+    "FalsificationFinding",
+    "FalsificationSeverity",
+    "GateDecision",
+    "GateResult",
+    "PruningCandidate",
+    "ResourceCost",
+    "SignalSource",
+    "SignalType",
+    "compute_trust_delta",
+    "make_trace_key",
+]

@@ -9,11 +9,13 @@ Usage:
 
 Workflow:
     1. Run z_generate_manuscript_variables.py to inject tokens
-    2. Verify no {{TOKEN}} remain in output/manuscript/*.md
-    3. Collect sections 00_abstract through 99_references in lexicographic order
+    2. Generate output/manuscript/00_01_contents.md after the cover page
+    3. Verify no {{TOKEN}} remain in output/manuscript/*.md
+    4. Collect sections 00_00_cover through 99_references in lexicographic order
        (skips 00_00_transmission_begin.md and 99_zz_transmission_end.md by default —
        those are PDF-only bookends with pending DOI/QR placeholders)
-    4. Run pandoc to produce output/paper.html (always) and output/paper.pdf (--pdf flag)
+    5. Run pandoc with pandoc-crossref and citeproc to produce output/paper.html
+       (always) and output/paper.pdf (--pdf flag)
 
 Bookend files (00_00 / 99_zz) contain:
     - LaTeX raw blocks (```{=latex} ... ```)
@@ -22,16 +24,22 @@ Bookend files (00_00 / 99_zz) contain:
     They are excluded by default and only included when --bookends is passed.
 """
 
+# SIZE_OK: Renderer orchestration stays single-file for artifact auditability.
+
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+from datetime import date
 from pathlib import Path
+
+import yaml
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -39,7 +47,12 @@ from pathlib import Path
 
 MANUSCRIPT_SECTIONS_GLOB = "[0-9]*.md"
 BOOKEND_NAMES = {"00_00_transmission_begin.md", "99_zz_transmission_end.md"}
-TOKEN_PATTERN = re.compile(r"\{\{[A-Z_]+\}\}")
+GENERATED_CONTENTS_NAME = "00_01_contents.md"
+COVER_NAME = "00_00_cover.md"
+TOKEN_PATTERN = re.compile(r"\{\{[A-Z0-9_]+\}\}")
+HEADING_PATTERN = re.compile(
+    r"^(?P<level>#{1,3})\s+(?P<title>.+?)(?:\s+\{(?P<attrs>[^}]*)\})?\s*$"
+)
 
 PAPER_TITLE = "Codomyrmex: An Artificial Ecology for Agentic Software Development"
 
@@ -83,7 +96,9 @@ def _run_generate_variables(project_root: Path) -> bool:
     """Run z_generate_manuscript_variables.py; return True on success."""
     script = project_root / "scripts" / "z_generate_manuscript_variables.py"
     if not script.exists():
-        print(f"  WARNING: {script.relative_to(project_root)} not found — skipping variable generation")
+        print(
+            f"  WARNING: {script.relative_to(project_root)} not found — skipping variable generation"
+        )
         return False
     print("Generating manuscript variables...")
     result = subprocess.run(
@@ -92,17 +107,110 @@ def _run_generate_variables(project_root: Path) -> bool:
         capture_output=False,
     )
     if result.returncode != 0:
-        print(f"  WARNING: z_generate_manuscript_variables.py exited with code {result.returncode}")
+        print(
+            f"  WARNING: z_generate_manuscript_variables.py exited with code {result.returncode}"
+        )
         return False
     return True
 
 
-def _collect_sections(manuscript_dir: Path, include_bookends: bool = False) -> list[Path]:
+def _collect_sections(
+    manuscript_dir: Path, include_bookends: bool = False
+) -> list[Path]:
     """Return section .md files in lexicographic order, excluding bookends unless requested."""
     files = sorted(manuscript_dir.glob(MANUSCRIPT_SECTIONS_GLOB))
+    files = [f for f in files if f.name != GENERATED_CONTENTS_NAME]
     if not include_bookends:
         files = [f for f in files if f.name not in BOOKEND_NAMES]
     return files
+
+
+def _heading_id(title: str, attrs: str | None) -> str:
+    if attrs:
+        match = re.search(r"#([A-Za-z0-9_.:-]+)", attrs)
+        if match:
+            return match.group(1)
+    slug = re.sub(r"`([^`]*)`", r"\1", title)
+    slug = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", slug)
+    slug = re.sub(r"[^A-Za-z0-9 _.-]+", "", slug).strip().lower()
+    slug = re.sub(r"[\s_]+", "-", slug)
+    return slug or "section"
+
+
+def _heading_title(title: str) -> str:
+    cleaned = re.sub(r"`([^`]*)`", r"\1", title)
+    cleaned = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", cleaned)
+    cleaned = re.sub(r"[*_~]", "", cleaned)
+    return cleaned.strip()
+
+
+def _toc_entries(sections: list[Path]) -> list[tuple[int, str, str]]:
+    entries: list[tuple[int, str, str]] = []
+    for section in sections:
+        if section.name in {COVER_NAME, GENERATED_CONTENTS_NAME, *BOOKEND_NAMES}:
+            continue
+        for line in section.read_text(encoding="utf-8").splitlines():
+            match = HEADING_PATTERN.match(line)
+            if not match:
+                continue
+            level = len(match.group("level"))
+            title = _heading_title(match.group("title"))
+            identifier = _heading_id(match.group("title"), match.group("attrs"))
+            entries.append((level, title, identifier))
+    return entries
+
+
+def _build_html_toc(entries: list[tuple[int, str, str]]) -> str:
+    lines = [
+        '<nav id="TOC" role="doc-toc" aria-label="Table of contents">',
+        "<h1>Contents</h1>",
+        "<ul>",
+    ]
+    for level, title, identifier in entries:
+        safe_title = html_lib.escape(title)
+        safe_identifier = html_lib.escape(identifier, quote=True)
+        lines.append(
+            f'  <li class="toc-level-{level}"><a href="#{safe_identifier}">{safe_title}</a></li>'
+        )
+    lines += ["</ul>", "</nav>"]
+    return "\n".join(lines)
+
+
+def _write_generated_contents_section(
+    contents_path: Path, entries: list[tuple[int, str, str]]
+) -> None:
+    html_toc = _build_html_toc(entries)
+    contents_path.write_text(
+        f"""```{{=latex}}
+\\clearpage
+\\phantomsection
+\\tableofcontents
+\\clearpage
+```
+
+```{{=html}}
+{html_toc}
+```
+""",
+        encoding="utf-8",
+    )
+
+
+def _sections_with_generated_contents(
+    sections: list[Path], manuscript_dir: Path
+) -> list[Path]:
+    contents_path = manuscript_dir / GENERATED_CONTENTS_NAME
+    _write_generated_contents_section(contents_path, _toc_entries(sections))
+    with_contents: list[Path] = []
+    inserted = False
+    for section in sections:
+        with_contents.append(section)
+        if section.name == COVER_NAME:
+            with_contents.append(contents_path)
+            inserted = True
+    if not inserted:
+        with_contents.insert(0, contents_path)
+    return with_contents
 
 
 def _check_unresolved_tokens(sections: list[Path]) -> list[tuple[Path, list[str]]]:
@@ -121,19 +229,44 @@ def _check_unresolved_tokens(sections: list[Path]) -> list[tuple[Path, list[str]
     return findings
 
 
-def _build_pandoc_metadata_args(variables: dict[str, str]) -> list[str]:
+def _strip_trailing_whitespace(path: Path) -> None:
+    text = path.read_text(encoding="utf-8")
+    cleaned = "\n".join(line.rstrip() for line in text.splitlines())
+    if text.endswith("\n"):
+        cleaned += "\n"
+    path.write_text(cleaned, encoding="utf-8")
+
+
+def _publication_date(project_root: Path, variables: dict[str, str]) -> str:
+    config_path = project_root / "docs" / "manuscript" / "config.yaml"
+    if config_path.exists():
+        config = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+        paper = config.get("paper", {})
+        configured_date = str(paper.get("date") or "").strip()
+        if configured_date and configured_date.lower() not in {"auto", "today"}:
+            return configured_date
+        return date.today().isoformat()
+    timestamp = variables.get("GENERATION_TIMESTAMP", "")
+    return timestamp[:10] if timestamp else ""
+
+
+def _build_pandoc_metadata_args(
+    variables: dict[str, str], project_root: Path
+) -> list[str]:
     """Construct -M key=value args from manuscript_variables.json."""
-    title = PAPER_TITLE
+    title = variables.get("CONFIG_TITLE", PAPER_TITLE)
     author = variables.get("CONFIG_FIRST_AUTHOR", "The Codomyrmex Contributors")
     version = variables.get("CONFIG_VERSION", "")
     keywords = variables.get("CONFIG_KEYWORDS", "")
-    timestamp = variables.get("GENERATION_TIMESTAMP", "")
-    # Use just the date portion of the ISO timestamp
-    date = timestamp[:10] if timestamp else ""
+    date = _publication_date(project_root, variables)
 
     args: list[str] = [
-        "-M", f"title={title}",
-        "-M", f"author={author}",
+        "-M",
+        f"pagetitle={title}",
+        "-M",
+        f"title-meta={title}",
+        "-M",
+        f"author-meta={author}",
     ]
     if date:
         args += ["-M", f"date={date}"]
@@ -145,6 +278,41 @@ def _build_pandoc_metadata_args(variables: dict[str, str]) -> list[str]:
     return args
 
 
+def _require_executable(name: str) -> bool:
+    if shutil.which(name):
+        return True
+    print(
+        f"ERROR: {name} not found on PATH. Install {name} and retry.", file=sys.stderr
+    )
+    return False
+
+
+def _pandoc_crossref_args() -> list[str]:
+    return [
+        "-F",
+        "pandoc-crossref",
+        "--number-sections",
+        "-M",
+        "link-citations=true",
+        "-M",
+        "linkReferences=true",
+        "-M",
+        "nameInLink=true",
+        "-M",
+        "chapters=false",
+        "-M",
+        "secPrefix=Section",
+        "-M",
+        "figPrefix=Figure",
+        "-M",
+        "tblPrefix=Table",
+        "-M",
+        "eqnPrefix=Equation",
+        "-M",
+        "reference-section-title=References",
+    ]
+
+
 def _run_pandoc_html(
     sections: list[Path],
     output_path: Path,
@@ -153,35 +321,39 @@ def _run_pandoc_html(
     project_root: Path,
 ) -> bool:
     """Run pandoc to produce HTML output; return True on success."""
-    if not shutil.which("pandoc"):
-        print("ERROR: pandoc not found on PATH. Install pandoc and retry.", file=sys.stderr)
+    if not _require_executable("pandoc") or not _require_executable("pandoc-crossref"):
         return False
 
     print(f"Compiling HTML → {output_path.relative_to(project_root)} ...")
 
     cmd: list[str] = ["pandoc"]
     cmd += [str(s) for s in sections]
-    # pandoc-crossref MUST come before --citeproc so @fig:, @sec:, @eq: labels
-    # are resolved before citeproc sees the remaining citation keys.
-    if shutil.which("pandoc-crossref"):
-        cmd += ["-F", "pandoc-crossref"]
-    else:
-        print("  NOTE: pandoc-crossref not found — cross-references will be unresolved")
+    cmd += _pandoc_crossref_args()
     cmd += [
         "--standalone",
-        "--toc",
-        "--toc-depth=3",
+        "--embed-resources",
+        "--mathml",
+        "--css",
+        str(project_root / "docs" / "manuscript" / "manuscript.css"),
         "--citeproc",
-        "--from", "markdown+yaml_metadata_block",
-        "--bibliography", str(bibliography),
+        "--from",
+        "markdown+yaml_metadata_block",
+        "--bibliography",
+        str(bibliography),
+        "--resource-path",
+        f"{project_root / 'output'}:{project_root / 'output' / 'manuscript'}:{project_root}",
     ]
-    cmd += _build_pandoc_metadata_args(variables)
+    cmd += _build_pandoc_metadata_args(variables, project_root)
     cmd += ["-o", str(output_path)]
 
     result = subprocess.run(cmd, cwd=str(project_root), capture_output=False)
     if result.returncode != 0:
-        print(f"ERROR: pandoc HTML compilation failed (exit {result.returncode})", file=sys.stderr)
+        print(
+            f"ERROR: pandoc HTML compilation failed (exit {result.returncode})",
+            file=sys.stderr,
+        )
         return False
+    _strip_trailing_whitespace(output_path)
     print(f"  HTML written: {output_path.relative_to(project_root)}")
     return True
 
@@ -195,28 +367,36 @@ def _run_pandoc_pdf(
     project_root: Path,
 ) -> bool:
     """Run pandoc to produce PDF output; return True on success."""
-    if not shutil.which("pandoc"):
-        print("ERROR: pandoc not found on PATH. Install pandoc and retry.", file=sys.stderr)
+    if not _require_executable("pandoc") or not _require_executable("pandoc-crossref"):
         return False
 
     print(f"Compiling PDF → {output_path.relative_to(project_root)} ...")
 
     cmd: list[str] = ["pandoc"]
     cmd += [str(s) for s in sections]
-    # pandoc-crossref MUST come before --citeproc so @fig:, @sec:, @eq: labels
-    # are resolved before citeproc sees the remaining citation keys.
-    if shutil.which("pandoc-crossref"):
-        cmd += ["-F", "pandoc-crossref"]
-    else:
-        print("  NOTE: pandoc-crossref not found — cross-references will be unresolved")
+    cmd += _pandoc_crossref_args()
     cmd += [
         "--standalone",
-        "--toc",
-        "--toc-depth=3",
         "--citeproc",
-        "--from", "markdown+yaml_metadata_block",
-        "--bibliography", str(bibliography),
+        "--from",
+        "markdown+yaml_metadata_block",
+        "--bibliography",
+        str(bibliography),
         "--pdf-engine=xelatex",
+        "--resource-path",
+        f"{project_root / 'output'}:{project_root / 'output' / 'manuscript'}:{project_root}",
+        "-V",
+        "colorlinks=true",
+        "-V",
+        "linkcolor=red",
+        "-V",
+        "urlcolor=red",
+        "-V",
+        "citecolor=red",
+        "-V",
+        "filecolor=red",
+        "-V",
+        "toccolor=red",
     ]
     if preamble and preamble.exists():
         latex_src = _extract_latex_from_preamble(preamble)
@@ -229,12 +409,15 @@ def _run_pandoc_pdf(
             cmd += ["-H", tmp.name]
         else:
             cmd += ["-H", str(preamble)]
-    cmd += _build_pandoc_metadata_args(variables)
+    cmd += _build_pandoc_metadata_args(variables, project_root)
     cmd += ["-o", str(output_path)]
 
     result = subprocess.run(cmd, cwd=str(project_root), capture_output=False)
     if result.returncode != 0:
-        print(f"ERROR: pandoc PDF compilation failed (exit {result.returncode})", file=sys.stderr)
+        print(
+            f"ERROR: pandoc PDF compilation failed (exit {result.returncode})",
+            file=sys.stderr,
+        )
         return False
     print(f"  PDF written: {output_path.relative_to(project_root)}")
     return True
@@ -243,6 +426,7 @@ def _run_pandoc_pdf(
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(
@@ -278,21 +462,29 @@ def main() -> int:
 
     # Step 1: Regenerate tokens unless skipped
     if not args.skip_generate:
-        _run_generate_variables(project_root)
+        if not _run_generate_variables(project_root):
+            return 1
     else:
         print("Skipping variable generation (--skip-generate).")
 
     # Step 2: Locate manuscript files
     manuscript_dir = project_root / "output" / "manuscript"
     if not manuscript_dir.exists():
-        print(f"ERROR: output/manuscript/ does not exist: {manuscript_dir}", file=sys.stderr)
-        print("  Run without --skip-generate to generate manuscript files first.", file=sys.stderr)
+        print(
+            f"ERROR: output/manuscript/ does not exist: {manuscript_dir}",
+            file=sys.stderr,
+        )
+        print(
+            "  Run without --skip-generate to generate manuscript files first.",
+            file=sys.stderr,
+        )
         return 1
 
     sections = _collect_sections(manuscript_dir, include_bookends=args.bookends)
     if not sections:
         print("ERROR: no section files found in output/manuscript/", file=sys.stderr)
         return 1
+    sections = _sections_with_generated_contents(sections, manuscript_dir)
 
     print(f"Sections ({len(sections)}):")
     for s in sections:

@@ -48,7 +48,9 @@ class OllamaClient:
         """Execute request using Ollama."""
         return self.execute_with_session(request)
 
-    def _call_ollama(self, url: str, payload: dict) -> tuple[str, str | None]:
+    def _call_ollama(
+        self, url: str, payload: dict, timeout: float = 120.0
+    ) -> tuple[str, str | None]:
         """POST payload to Ollama and return (content, error)."""
         try:
             req = urllib.request.Request(
@@ -56,7 +58,7 @@ class OllamaClient:
                 data=json.dumps(payload).encode("utf-8"),
                 headers={"Content-Type": "application/json"},
             )
-            with urllib.request.urlopen(req, timeout=120.0) as response:
+            with urllib.request.urlopen(req, timeout=timeout) as response:
                 if response.status == 200:
                     data = json.loads(response.read().decode("utf-8"))
                     return data.get("message", {}).get("content", ""), None
@@ -93,8 +95,11 @@ class OllamaClient:
             messages.append({"role": "system", "content": request.metadata["system"]})
         messages.append({"role": "user", "content": request.prompt})
         payload = {"model": self.model, "messages": messages, "stream": False}
+        request_timeout = (
+            float(request.timeout) if request.timeout is not None else 120.0
+        )
         start_time = time.monotonic()
-        content, error = self._call_ollama(url, payload)
+        content, error = self._call_ollama(url, payload, timeout=request_timeout)
         elapsed = time.monotonic() - start_time
         return AgentResponse(
             content=content,

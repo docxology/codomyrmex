@@ -1,5 +1,7 @@
 # open_gauss — Documentation Module
 
+**Version**: v1.3.0 | **Status**: Mirror Stub | **Last Updated**: July 2026
+
 > Documentation mirror entry for the `codomyrmex.agents.open_gauss` subpackage.
 
 ## Overview
@@ -7,8 +9,8 @@
 
 ## Quick Links
 - [Source implementation](../../../../src/codomyrmex/agents/open_gauss/)
-- [Source AGENTS.md](../../../../src/codomyrmex/agents/open_gauss/AGENTS.md) — development reference
-- [Source README](../../../../src/codomyrmex/agents/open_gauss/README.md) — overview and usage
+- [Local SPEC.md](SPEC.md) — mirror contract and submodule boundary
+- [Local AGENTS.md](AGENTS.md) — development reference for this docs mirror
 
 ## Key Subpackages
 | Subpackage | Purpose |
@@ -22,4 +24,5 @@
 
 ## Navigation
 - **Parent**: [agents](../README.md)
+- **Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [../../../../README.md](../../../../README.md)

@@ -1,6 +1,15 @@
 # Pheromone decay rate multipliers
 # Each named tier is a multiplier applied to pheromone.evaporation_per_tick from kernel.yaml.
 # A FAST signal decays 3x faster than the base rate; SLOW decays at 0.2x.
+#
+# Cross-references:
+#   - Loaded by:   src/codomyrmex/colony_kernel/config_loader.py  (load_decay_yaml)
+#   - Documented:  config/colony_kernel/README.md §decay_rates.yaml
+#   - Agent guide: config/colony_kernel/AGENTS.md
+#   - Source spec: src/codomyrmex/colony_kernel/SPEC.md §Pheromone Signal Types
+#   - PAI usage:   src/codomyrmex/colony_kernel/PAI.md §OBSERVE → Pheromone Pressure Query (decay table)
+#   - Manuscript:  docs/manuscript/config.yaml §experiment.decay_rates
+#
 
 FAST: 3.0    # multiplier on base evaporation
 NORMAL: 1.0
@@ -10,7 +19,7 @@ SLOW: 0.2
 signal_defaults:
   FAILURE: FAST
   SUCCESS: SLOW
-  RISK: NORMAL
+  RISK: FAST
   NEED: NORMAL
   DEPENDENCY: SLOW
   HUMAN_PRIORITY: SLOW

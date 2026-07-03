@@ -11,9 +11,12 @@ from __future__ import annotations
 import pytest
 
 from codomyrmex.coding.execution.executor import (
+    CRITICAL_MEMORY_USAGE_PERCENT,
     DEFAULT_TIMEOUT,
     MAX_TIMEOUT,
+    MIN_SANDBOX_AVAILABLE_MEMORY_MB,
     MIN_TIMEOUT,
+    _memory_precheck_error,
     validate_timeout,
 )
 from codomyrmex.coding.execution.language_support import (
@@ -21,6 +24,45 @@ from codomyrmex.coding.execution.language_support import (
     validate_language,
 )
 from codomyrmex.coding.execution.session_manager import validate_session_id
+
+
+@pytest.mark.unit
+class TestMemoryPrecheck:
+    def test_allows_critical_percent_when_sandbox_floor_available(self):
+        result = _memory_precheck_error(
+            {
+                "ram_usage_percent": CRITICAL_MEMORY_USAGE_PERCENT + 1.0,
+                "ram_available_mb": MIN_SANDBOX_AVAILABLE_MEMORY_MB + 1.0,
+            }
+        )
+        assert result is None
+
+    def test_blocks_critical_percent_below_sandbox_floor(self):
+        result = _memory_precheck_error(
+            {
+                "ram_usage_percent": CRITICAL_MEMORY_USAGE_PERCENT + 1.0,
+                "ram_available_mb": MIN_SANDBOX_AVAILABLE_MEMORY_MB - 1.0,
+            }
+        )
+        assert result is not None
+        assert result["status"] == "setup_error"
+        assert result["error_message"] == "System memory constraint exceeded"
+
+    def test_blocks_critical_percent_without_available_memory_metric(self):
+        result = _memory_precheck_error(
+            {"ram_usage_percent": CRITICAL_MEMORY_USAGE_PERCENT + 1.0}
+        )
+        assert result is not None
+        assert result["status"] == "setup_error"
+
+    def test_allows_noncritical_percent(self):
+        result = _memory_precheck_error(
+            {
+                "ram_usage_percent": CRITICAL_MEMORY_USAGE_PERCENT,
+                "ram_available_mb": 0.0,
+            }
+        )
+        assert result is None
 
 
 @pytest.mark.unit

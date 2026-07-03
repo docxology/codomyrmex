@@ -30,7 +30,9 @@ def test_unknown_tool_raises_key_error():
         # New behaviour: returns structured error dict
         assert "error" in result
         err = result["error"]
-        assert "Unknown tool" in err.get("message", "") or err.get("code") == "NOT_FOUND"
+        assert (
+            "Unknown tool" in err.get("message", "") or err.get("code") == "NOT_FOUND"
+        )
     except KeyError as exc:
         # Old behaviour: raises KeyError — also acceptable
         assert "Unknown tool" in str(exc) or "nonexistent" in str(exc)

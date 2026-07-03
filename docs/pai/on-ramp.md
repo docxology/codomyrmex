@@ -1,6 +1,6 @@
 # On Ramp — Graded Flexibility for PAI-Codomyrmex
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 > **Codomyrmex** is the orchestration, testing, and training environment for agentic functions. Smaller repositories — directly derived or constructed from its patterns — are where modular functions get built. This document maps the rapid curriculum of a tutoring session: five levels of increasing flexibility, each unlocking new capabilities.
 
@@ -35,7 +35,7 @@ You can browse everything without changing anything.
 
 | Concept | What It Means |
 |---------|--------------|
-| **Codomyrmex** | 128-module Python toolbox — orchestration, testing, discovery |
+| **Codomyrmex** | 129-module Python toolbox — orchestration, testing, discovery |
 | **PAI** | Personal AI Infrastructure — runs The Algorithm on every prompt |
 | **MCP** | Model Context Protocol — how PAI talks to Codomyrmex |
 | **Derived repo** | A smaller repository built using Codomyrmex patterns and tools |
@@ -69,7 +69,7 @@ uv run python scripts/pai/dashboard.py
 
 At this level you can **ask questions** but not **change answers**:
 
-- Browse all **128** top-level modules, read their READMEs and SPECs
+- Browse all **129** top-level modules, read their READMEs and SPECs
 - Search across the codebase for patterns, imports, dependencies
 - Analyze any Python file for classes, functions, metrics
 - Query PAI state — missions, projects, tasks, TELOS identity
@@ -143,7 +143,7 @@ At this level you can **modify the orchestration** — Codomyrmex itself:
 ```text
 Codomyrmex (this repo)                    Derived Repo (e.g., QuadCraft)
 ┌─────────────────────────┐              ┌──────────────────────┐
-│ 128 modules             │              │ Focused codebase     │
+│ 129 modules             │              │ Focused codebase     │
 │ Testing infrastructure  │──creates──→  │ Single responsibility│
 │ MCP tool discovery      │              │ Own CI/CD            │
 │ PAI Dashboard           │──manages──→  │ Linked via GitHub    │

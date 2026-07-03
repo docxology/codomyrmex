@@ -128,10 +128,11 @@ class OpenCodeClient(CLIAgentBase):
 
         try:
             result = self._execute_command(args=["--init"], cwd=working_path)
+            success = bool(result.get("success", False))
             return {
-                "success": result.get("success", False),
+                "success": success,
                 "output": result.get("stdout", ""),
-                "error": result.get("stderr") if not result.get("success") else None,
+                "error": result.get("stderr") if not success else None,
                 "exit_code": result.get("exit_code", 0),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -144,10 +145,11 @@ class OpenCodeClient(CLIAgentBase):
         """Get OpenCode version information."""
         try:
             result = self._execute_command(args=["--version"], timeout=5)
+            available = bool(result.get("success", False))
             return {
                 "version": result.get("stdout", "").strip(),
                 "exit_code": result.get("exit_code", 0),
-                "available": result.get("success", False),
+                "available": available,
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning("Failed to get OpenCode version: %s", e)

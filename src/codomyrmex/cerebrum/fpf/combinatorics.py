@@ -51,7 +51,9 @@ class FPFCombinatoricsAnalyzer(
 
         # Initialize CEREBRUM
         if FPFAnalyzer is None:
-            raise ImportError("networkx is required for FPFCombinatoricsAnalyzer — install it with: uv sync --extra cerebrum")
+            raise ImportError(
+                "networkx is required for FPFCombinatoricsAnalyzer — install it with: uv sync --extra cerebrum"
+            )
         self.cerebrum = CerebrumEngine()
         self.fpf_analyzer = FPFAnalyzer(self.spec)
         self.term_analyzer = TermAnalyzer()

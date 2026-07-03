@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Tools Reference
 
-**Version**: v1.2.3 | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Last Updated**: March 2026
 
 ## Overview
 
@@ -289,7 +289,7 @@ The Email tab in the PAI Dashboard provides a browser-accessible interface for a
 | Dynamic destructive | 4 | Requires TRUSTED |
 | **Total** | **~303** | — |
 
-> Run `/codomyrmexVerify` to get the current exact count. Total reflects 149 auto-discovered modules (see [reference/inventory.md](../reference/inventory.md)).
+> Run `/codomyrmexVerify` to get the current exact count. Total reflects 150 non-test `mcp_tools.py` files (see [reference/inventory.md](../reference/inventory.md)).
 
 ## Navigation
 

@@ -327,7 +327,7 @@ def test_pattern_success_rate_repair_needed_counts_as_failure(
         action_taken="Patched but left a loose end.",
         actual_outcome="Tests green but manual cleanup needed.",
         tests_passed=True,
-        repair_needed=True,   # disqualifies from 'successful'
+        repair_needed=True,  # disqualifies from 'successful'
     )
     memory.record(mixed)
     rate = memory.pattern_success_rate("tricky_patch")
@@ -709,8 +709,14 @@ class TestRecentConsequences:
         result = memory.recent_consequences(limit=1)
         assert len(result) == 1
         row = result[0]
-        for key in ("consequence_id", "agent_id", "action_type", "tests_passed",
-                    "trust_delta", "recorded_at"):
+        for key in (
+            "consequence_id",
+            "agent_id",
+            "action_type",
+            "tests_passed",
+            "trust_delta",
+            "recorded_at",
+        ):
             assert key in row, f"Missing key '{key}' in recent_consequences row"
 
 
@@ -736,9 +742,7 @@ class TestRoleDistribution:
             dist = mem.role_distribution()
             assert dist == {}
 
-    def test_role_distribution_reflects_saved_profiles(
-        self, tmp_path: Path
-    ) -> None:
+    def test_role_distribution_reflects_saved_profiles(self, tmp_path: Path) -> None:
         """Saving 2 SANDBOX + 1 GUARD_ANT profiles yields matching distribution counts."""
         from codomyrmex.colony_kernel.models import AgentRole, AgentTrustProfile
 

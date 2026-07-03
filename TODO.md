@@ -1,28 +1,28 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.2.8-draft | **Date**: 2026-05-13 | **Modules**: 128 | **Sprint**: 35 health sweep
+**Version**: v1.3.0 | **Date**: 2026-07-02 | **Modules**: 129 | **Sprint**: 36 colony-kernel publication sweep
 
-> **Current release**: v1.2.7 "Multi-Agent Swarm Orchestration" (2026-03-19).
-> **Next release**: v1.2.8 (Sprint 35)
-> **Archived**: v1.2.4–v1.2.7 → [CHANGELOG.md](CHANGELOG.md)
+> **Current release**: v1.3.0 "Colony Kernel" (2026-06-30).
+> **Next release**: v1.3.1 (publication hardening)
+> **Archived**: v1.2.4–v1.2.8 → [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
-## 📊 Measured Metrics (2026-06-20)
+## 📊 Measured Metrics (2026-07-02)
 
 > All values below are **measured**, not estimated. Command and timestamp documented.
 
 | Metric | Value | Command |
 | :--- | :--- | :--- |
-| **Tests collected** | **34,451** (0 errors) | `uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib` |
+| **Tests collected** | **35,137** (0 errors) | `uv run python scripts/doc_inventory.py --pytest` |
 | **Ruff errors** | **0** | `uv run ruff check .` |
 | **ty diagnostics** | **0** | `uv run ty check --output-format concise src/` |
 | **Mock violations** | **0** | `rg -n "from unittest\\.mock" src --glob '*.py'` |
-| **MCP tool decorators** | **602** | `uv run python scripts/doc_inventory.py` (production tree; lines starting with `@mcp_tool`) |
-| **Top-level modules** | **128** | `find src/codomyrmex -maxdepth 1 -type d` |
-| **pyproject.toml version** | **1.2.7** | `grep version pyproject.toml \| head -1` |
-| **AGENTS validation** | **1,336 / 1,336 valid** | `make docs-check` |
+| **MCP tool decorators** | **610** | `uv run python scripts/doc_inventory.py` (production tree; lines starting with `@mcp_tool`) |
+| **Top-level modules** | **129** | `uv run python scripts/doc_inventory.py --pytest` |
+| **pyproject.toml version** | **1.3.0** | `grep version pyproject.toml \| head -1` |
+| **AGENTS validation** | **1,342 / 1,342 valid** | `make docs-check` |
 | **Doc triple-check debt** | **0 files with issues; 0 broken links; 0 placeholders; 0 completeness issues** | `make docs-check` |
 | **RASP doc gaps** | **10 dir-rows with gaps; 6 missing both README/AGENTS** | `uv run python scripts/rasp_gap_report.py` |
 
@@ -54,8 +54,8 @@
 | v1.2.8.12 | **Hermes 0.4.0 Upstream Sync** | `agents/hermes/` | ✅ Done | Synchronized workspace with Hermes v0.4.0, upgraded dependencies via `uv lock --upgrade`, verified agent test stability. |
 | v1.2.8.13 | **Repo health orchestration sweep** | repo-wide | ✅ Done | Repaired Make/just docs targets, made `triple_check.py` repo-root aware, added Docusaurus module-link fixer, restored ignored-but-required docs, guarded optional submodule tests, and tightened `agents/pooling/FallbackChain` type behavior. |
 | v1.2.8.14 | **Type safety zero baseline** | repo-wide | ✅ Done | Burned down production and test `ty` diagnostics to 0 via typed dictionary shapes, optional SDK import guards, correct agent override signatures, safer monkeypatching, and explicit optional-result assertions. |
-| v1.2.8.15 | **Documentation placeholder burn-down** | repo-wide docs | ✅ Done | Tightened triple-check marker detection, skipped `.gitmodules` vendor trees, repaired 2,296 generated README/AGENTS generic purpose lines, and verified `make docs-check`: 0 placeholders, 0 broken links, 1,336/1,336 AGENTS valid. |
-| v1.2.8.16 | **Documentation completeness zero baseline** | repo-wide docs | ✅ Done | Added `repair_triple_check_completeness.py`, repaired 2,718 README/AGENTS/SPEC completeness gaps outside submodules, and verified `make docs-check`: 4,892 docs checked, 0 files with issues, 1,336/1,336 AGENTS valid. |
+| v1.2.8.15 | **Documentation placeholder burn-down** | repo-wide docs | ✅ Done | Tightened triple-check marker detection, skipped `.gitmodules` vendor trees, repaired 2,296 generated README/AGENTS generic purpose lines, and verified `make docs-check`: 0 placeholders, 0 broken links, 1,342/1,342 AGENTS valid. |
+| v1.2.8.16 | **Documentation completeness zero baseline** | repo-wide docs | ✅ Done | Added `repair_triple_check_completeness.py`, repaired 2,718 README/AGENTS/SPEC completeness gaps outside submodules, and verified `make docs-check`: 4,911 docs checked, 0 files with issues, 1,342/1,342 AGENTS valid. |
 
 ---
 
@@ -95,11 +95,11 @@
 | B3 | **Video module depth** | `video/` | Partial impl (processor, extractor, analyzer, transcription paths); not a thin stub — see `video/README.md` / `SPEC.md` |
 | B4 | **Meme module MCP exposure** | `meme/` | Experimental, needs RASP + `@mcp_tool` |
 | B5 | **Secure Cognitive Layer MCP** | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | Not MCP-exposed via PAI bridge |
-| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 34,451 tests collect with 0 errors via import guards and optional submodule skips |
-| B7 | **README / inventory metric drift watch** | root | Current measured baseline: 34,451 collected tests, 602 MCP `@mcp_tool` lines, 128 modules |
+| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,137 tests collect with 0 errors via import guards and optional submodule skips |
+| B7 | **README / inventory metric drift watch** | root | Current measured baseline: 35,137 collected tests, 610 MCP `@mcp_tool` lines, 129 modules |
 | B8 | **Coverage gate** | repo-wide | **40%** in `[tool.coverage.report] fail_under`; `meme/*` omitted from `[tool.coverage.run]`. Enforce with `make test` or `--cov-fail-under=40`. Re-verify after substantive changes. |
 | B9 | ~~Type safety burn-down~~ | repo-wide | ✅ Fixed — `uv run ty check --output-format concise src/` now reports 0 diagnostics. Keep this zero baseline in CI/local gates. |
-| B10 | ~~Documentation completeness burn-down~~ | `docs/`, `src/codomyrmex/**` | ✅ Fixed — `make docs-check` reports 4,892 docs checked, 0 placeholders, 0 broken links, 0 completeness issues, and 1,336/1,336 AGENTS valid. |
+| B10 | ~~Documentation completeness burn-down~~ | `docs/`, `src/codomyrmex/**` | ✅ Fixed — `make docs-check` reports 4,911 docs checked, 0 placeholders, 0 broken links, 0 completeness issues, and 1,342/1,342 AGENTS valid. |
 
 ---
 
@@ -110,7 +110,7 @@
 | Requirement | Command | Threshold | Status |
 | :--- | :--- | :--- | :--- |
 | **Zero-Mock Policy** | `rg -n "from unittest\\.mock" src --glob '*.py'` | 0 `unittest.mock` imports | ✅ PASSED (0 violations) |
-| **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 40% gate) | 🟡 PENDING (34,451 collected with 0 errors; needs full run) |
+| **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 40% gate) | 🟡 PENDING (35,137 collected with 0 errors; needs full run) |
 | **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED (0 errors) |
 | **Type Safety** | `uv run ty check --output-format concise src/` | 0 diagnostics | ✅ PASSED (0 diagnostics) |
 | **Coverage Gate** | `make test` or `uv run pytest src/codomyrmex/tests/ ... --cov-fail-under=40` | ≥40% | 🟡 Confirm on CI / local green run — `meme/*` omitted from coverage (`pyproject.toml`); one dev unit+cov snapshot showed ~73% of ~135k statements (Mar 2026) |
@@ -165,8 +165,8 @@ codomyrmex/
 ├── README.md            ← Overview
 ├── SECURITY.md          ← Security policies
 ├── PAI.md               ← Personal AI Infrastructure
-├── pyproject.toml       ← Package config (version: 1.2.7)
-└── src/codomyrmex/      ← 128 modules
+├── pyproject.toml       ← Package config (version: 1.3.0)
+└── src/codomyrmex/      ← 129 modules
 ```
 
 ---

@@ -1,8 +1,8 @@
 # Getting Started with Agents
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
-A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **128** top-level Python modules, **~600** production `@mcp_tool` decorators, **81 PAI skills**, and **15 Antigravity workflows**. Live counts: [reference/inventory.md](../reference/inventory.md).
+A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **129** top-level Python modules, **610** production `@mcp_tool` decorators, **81 PAI skills**, and **15 Antigravity workflows**. Live counts: [reference/inventory.md](../reference/inventory.md).
 
 ---
 
@@ -55,7 +55,7 @@ graph TB
         EVENTS["EventBus<br/>phase transitions"]
     end
 
-    subgraph MODULES["🐜 Codomyrmex (128 modules)"]
+    subgraph MODULES["🐜 Codomyrmex (129 modules)"]
         direction LR
         SKILLS_MOD["Skills<br/>81 installed"]
         MEMORY_MOD["Agentic Memory<br/>rules + obsidian"]
@@ -330,7 +330,7 @@ flowchart LR
 | **PAI Bridge** | `pai_bridge.py` | Discovery, validation — reads PAI's filesystem (read-only) |
 | **Trust Gateway** | `trust_gateway.py` | 3-tier security gating for tool execution |
 | **MCP Bridge** | `mcp_bridge.py` | JSON-RPC protocol for tool invocation |
-| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers **149** `mcp_tools.py` files (non-test) |
+| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers **150** `mcp_tools.py` files (non-test) |
 | **PAI Webhook** | `pai_webhook.py` | FastAPI router for bidirectional PAI ↔ Codomyrmex |
 | **PAI Client** | `pai_client.py` | HTTP client to push events to PAI |
 
@@ -399,11 +399,11 @@ sequenceDiagram
 
 ## 5. MCP Tool Integration
 
-Every module exposes functionality through `mcp_tools.py` files. **149** `mcp_tools.py` entry points back **600** production `@mcp_tool` lines in the Python tree (`uv run python scripts/doc_inventory.py`), plus **9** static proxy tools on the PAI bridge (counted separately; see [inventory](../reference/inventory.md)).
+Every module exposes functionality through `mcp_tools.py` files. **150** `mcp_tools.py` entry points back **610** production `@mcp_tool` lines in the Python tree (`uv run python scripts/doc_inventory.py`), plus **9** static proxy tools on the PAI bridge (counted separately; see [inventory](../reference/inventory.md)).
 
 ```mermaid
 pie title MCP-related surface (two layers)
-    "Python @mcp_tool lines" : 600
+    "Python @mcp_tool lines" : 610
     "PAI static proxy tools" : 9
 ```
 
@@ -496,7 +496,7 @@ Skills are also accessible as **Claude Code plugins** via `~/.claude/skills/` an
 | Skill | Source | Version | Slash Commands |
 |-------|--------|---------|---------------|
 | **visual-explainer** | [nicobailon/visual-explainer](https://github.com/nicobailon/visual-explainer) | v0.4.4 | `/generate-web-diagram`, `/generate-visual-plan`, `/generate-slides`, `/diff-review`, `/plan-review`, `/project-recap`, `/fact-check` |
-| **Codomyrmex** | This repo | v1.2.3 | `/codomyrmexVerify`, `/codomyrmexTrust`, `/codomyrmexAnalyze`, `/codomyrmexSearch`, `/codomyrmexDocs`, `/codomyrmexStatus`, `/codomyrmexMemory` |
+| **Codomyrmex** | This repo | v1.3.0 | `/codomyrmexVerify`, `/codomyrmexTrust`, `/codomyrmexAnalyze`, `/codomyrmexSearch`, `/codomyrmexDocs`, `/codomyrmexStatus`, `/codomyrmexMemory` |
 
 ---
 

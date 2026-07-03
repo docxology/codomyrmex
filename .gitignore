@@ -117,6 +117,9 @@ bower_components
 *.log
 logs/
 
+# Local agent workflow state and evidence
+.omo/
+
 # Build directories
 build/
 dist/

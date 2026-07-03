@@ -1,19 +1,19 @@
 # Codomyrmex Manuscript Configuration
 # An Artificial Ecology for Agentic Software Development
 # This file serves as a meta-artifact linking the prose of the manuscript to the execution
-# layer. It is loaded by `yaml.safe_load` inside `infrastructure/rendering/_pdf_combined_renderer.py`
-# (manuscript metadata) and `projects/codomyrmex/scripts/z_generate_manuscript_variables.py`
+# layer. It is loaded by `yaml.safe_load` inside `scripts/compile_manuscript.py`
+# (manuscript metadata) and `scripts/z_generate_manuscript_variables.py`
 # (experiment parameters).
 
-# Consumed by: `infrastructure/rendering/pdf_renderer.py` and `infrastructure/reporting/pipeline_report_model.py`
+# Consumed by: `scripts/compile_manuscript.py`
 paper:
   # RASP Standard: Title must be descriptive and objective
   title: "Codomyrmex: An Artificial Ecology for Agentic Software Development"
   subtitle: "Colony Control Plane, Stigmergic Pressure, and Falsification-Gated Actuation"
   version: "1.3.0"
-  date: "2026-06-29" # Auto-generated via `infrastructure/validation/output/validator.py` if empty
+  date: "auto"
   cover:
-    image: "figures/cover.png"  # resolved from output/ by _pdf_title_page.py
+    image: "figures/cover.png"
 
 # Consumed by: `infrastructure.publishing.extract_publication_metadata` (in `infrastructure/publishing/metadata.py`)
 authors:
@@ -21,6 +21,7 @@ authors:
     alias: "docxology"
     email: "contributors@docxology.github.io"
     affiliation: "Docxology Open Source"
+    orcid: "forthcoming"
     corresponding: true
 
 # Consumed by: `infrastructure.publishing.publish_to_zenodo` (in `infrastructure/publishing/platforms.py`)
@@ -34,8 +35,8 @@ publication:
   # _pdf_title_page.py: if doi is non-empty → renders as hyperlink; else renders doi_status as plain text.
   doi: ""
   doi_status: "forthcoming"  # Displayed on cover page and transmission bookend until real DOI is assigned
-  version_doi: "10.5281/zenodo.placeholder_version" # Latest Zenodo deposit (updated by publish_project_release.py)
-  version_record: "https://zenodo.org/records/placeholder_version"
+  version_doi: ""
+  version_record: ""
   github_repository: "docxology/codomyrmex"
   # transmission_bookends: front and back bookend pages injected into the PDF at release time.
   # Bookend pages are written by `infrastructure/publishing/transmission_bookends.py` →
@@ -101,8 +102,7 @@ steganography:
 # log `[skip] <format> rendering disabled in config` and emit no artifacts.
 # Consumed by: `infrastructure/rendering/config.py::RenderingConfig.from_project_config`.
 # Documented in `docs/operational/logging/output-design.md`.
-# PDF rendering pipeline: manuscript/ markdown → _pdf_combined_renderer.py → LaTeX → PDF
-#   → steganography post-processing (secure_run.sh) → transmission bookend injection (release).
+# PDF rendering pipeline: manuscript/ markdown -> scripts/compile_manuscript.py -> Pandoc/LaTeX -> PDF.
 # The integrity manifest (SHA-256/SHA-512 sidecar JSON) is written alongside the PDF.
 render:
   formats:
@@ -112,8 +112,8 @@ render:
     docx: true
     epub: true
 
-# Consumed by: `infrastructure.llm.LLMClient` (in `infrastructure/llm/core/client.py`)
-# See projects/codomyrmex/docs/ for details
+# Consumed by manuscript review tooling.
+# See docs/ for details
 llm:
   reviews:
     # Explicitly enabled for this exemplar to demonstrate AI-aided analysis
@@ -144,14 +144,15 @@ experiment:
   gate_hold_threshold: 0.50
 
   # Trust score boundaries for agent role lifecycle:
-  #   SANDBOX entry:     trust < 0.20 → remain in SANDBOX (minimum trust 0.05 to avoid eviction)
-  #   REPAIR_ANT:        trust ≥ 0.20 (minimum trust 0.20)
-  #   MEMORY_ANT:        trust ≥ 0.35 (minimum trust 0.15)
-  #   DISPATCHER:        trust ≥ 0.50 (minimum trust 0.25)
-  #   GUARD_ANT:         trust ≥ 0.70 (minimum trust 0.30)
-  #   Hard floor:        trust < 0.05 → agent is evicted (below SANDBOX minimum)
+  #   New agent default: trust = 0.10, role = SANDBOX
+  #   Minimum proposals before promotion: 3
+  #   REPAIR_ANT:        trust >= 0.20
+  #   MEMORY_ANT:        trust >= 0.35
+  #   DISPATCHER:        trust >= 0.50
+  #   GUARD_ANT:         trust >= 0.70
+  #   Gate hard floor:   trust < 0.30 -> REFUSE before scoring
   trust_sandbox_score: 0.10
-  trust_hard_floor: 0.05
+  trust_hard_floor: 0.30
   trust_promote_threshold: 0.20
 
   # Pheromone / stigmergic signal types broadcast on the colony bus.
@@ -217,15 +218,12 @@ experiment:
   # Canonical trust score deltas per outcome type.
   # Sourced from models.py constants (_TRUST_DELTA_PASS / _TRUST_DELTA_FAIL).
   # Changing these values propagates automatically to manuscript Tables 2 and 3
-  # via {{CONFIG_TRUST_DELTA_PASS}} / {{CONFIG_TRUST_DELTA_FAIL}} tokens.
+  # via CONFIG_TRUST_DELTA_PASS / CONFIG_TRUST_DELTA_FAIL tokens.
   trust_delta_pass: 0.04     # +0.04 per successful outcome (no repair)
   trust_delta_fail: -0.08    # -0.08 per failed outcome
 
   # Falsification attack vectors applied per actuation proposal.
-  # The standalone FalsificationWorker (used by colony_falsify_plan MCP tool)
-  # applies 5 deterministic attack vectors: missing_rollback, underfunded_budget,
-  # circular_dependency, untested_assumption, blast_radius.
-  # The FalsificationWorker (used by both propose_action and colony_falsify_plan)
+  # The FalsificationWorker used by both propose_action and colony_falsify_plan
   # applies 10 deterministic adversarial attack vectors (see §5.6 and §2 AttackVector table):
   # NO_ROLLBACK, NO_TEST_VALUE, SCOPE_CREEP, FALSE_METRIC, CIRCULAR_ARCHITECTURE,
   # DEPENDENCY_RISK, SECURITY_RISK, OVER_BROAD_MODULE, HIDDEN_MAINTENANCE_COST,
@@ -246,16 +244,16 @@ experiment:
   config_yaml_files: 3
 
   # Number of agents initialised per trial at AgentRole.SANDBOX with trust_score = 0.1.
-  # Referenced in 05_experimental_setup.md §5.0.4 as {{CONFIG_AGENT_COUNT}}.
+  # Referenced in 05_experimental_setup.md §5.0.4 as CONFIG_AGENT_COUNT.
   agent_count: 5
 
   # Number of task subtrees in the fixed workload corpus used per trial.
-  # Referenced in 05_experimental_setup.md §5.0.4 as {{CONFIG_WORKLOAD_TASK_COUNT}}.
+  # Referenced in 05_experimental_setup.md §5.0.4 as CONFIG_WORKLOAD_TASK_COUNT.
   workload_task_count: 50
 
   # Scheduler ticks designated as warm-up at the start of each trial.
   # Warm-up outcomes are excluded from dependent-variable computations.
-  # Referenced in 05_experimental_setup.md §5.0.4 and §5.0.5 as {{CONFIG_WARMUP_TICKS}}.
+  # Referenced in 05_experimental_setup.md §5.0.4 and §5.0.5 as CONFIG_WARMUP_TICKS.
   warmup_ticks: 10
 
   # Number of independent trial runs used in the evaluation benchmark suite.

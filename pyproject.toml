@@ -435,9 +435,6 @@ markers = [
 filterwarnings = [
     # Any warning not matched by a later rule becomes a test failure.
     "error",
-    "ignore:The embodiment module is deprecated:DeprecationWarning",
-    "ignore:codomyrmex\\.collaboration\\.protocols\\.swarm is deprecated:DeprecationWarning",
-    "ignore:codomyrmex\\.defense is deprecated:DeprecationWarning",
     "ignore:builtin type Swig.*has no __module__ attribute:DeprecationWarning",
     "ignore:ast\\.Str is deprecated:DeprecationWarning",
     "ignore:The verify_requirements argument is now a no-op:DeprecationWarning",

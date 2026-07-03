@@ -1,5 +1,7 @@
 # AGENTS.md — docs/modules/agents/open_gauss
 
+**Version**: v1.3.0 | **Status**: Mirror Stub | **Last Updated**: July 2026
+
 > Technical reference for AI agents working in this directory.
 
 ## Purpose
@@ -8,8 +10,8 @@ Documentation module mirror for `codomyrmex.agents.open_gauss` — navigation en
 ## Source of Truth
 All implementation details live in the source package:
 - Implementation: [`src/codomyrmex/agents/open_gauss/`](../../../../src/codomyrmex/agents/open_gauss/)
-- Source AGENTS.md: [`src/codomyrmex/agents/open_gauss/AGENTS.md`](../../../../src/codomyrmex/agents/open_gauss/AGENTS.md)
-- Source README: [`src/codomyrmex/agents/open_gauss/README.md`](../../../../src/codomyrmex/agents/open_gauss/README.md)
+- Mirror README: [README.md](README.md)
+- Mirror SPEC: [SPEC.md](SPEC.md)
 
 ## Module Summary
 `codomyrmex.agents.open_gauss` is the embedded gauss-agent — a full-featured AI coding and task agent with 90+ tools, persistent memory, multi-platform messaging gateway (Telegram, Discord, WhatsApp, Slack, Signal), ACP IDE integration, cron scheduling, RL training environments (Atropos), and a data-driven CLI skin/theme engine.
@@ -50,4 +52,6 @@ All implementation details live in the source package:
 
 ## Navigation
 - **Parent Directory**: [agents](../README.md)
+- **README**: [README.md](README.md)
+- **Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [../../../../README.md](../../../../README.md)

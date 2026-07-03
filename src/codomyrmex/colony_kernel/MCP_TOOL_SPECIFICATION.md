@@ -1,6 +1,6 @@
 # Colony Kernel — MCP Tool Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 All eight tools route through a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`). The singleton is an instance of the full `ColonyKernel` class from `kernel.py` (not a simplified duplicate). State is shared and persistent for the lifetime of the MCP server process. The singleton is lazily initialised on first call.
 
@@ -35,11 +35,12 @@ graph TD
         CM["ConsequenceMemory"]
         RA["RoleAdapter"]
         PD["PruningDaemon"]
+        FW["FalsificationWorker"]
     end
 
     C1 & C2 & C3 & C4 --> T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8
     T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8 --> CK
-    CK --> PS & RL & AG & CM & RA & PD
+    CK --> PS & RL & AG & CM & RA & PD & FW
 
     style CK fill:#1e3a8a,color:#fff,stroke:#3b82f6
     style AG fill:#7c3aed,color:#fff
@@ -506,7 +507,7 @@ graph TD
 
 ## colony_falsify_plan
 
-**Description**: Adversarially evaluate a plan dict without running the full gate. Applies five attack vectors and returns findings, a composite severity score, and a recommendation. Safe to call as a pre-flight check before submitting a formal proposal.
+**Description**: Adversarially evaluate a plan dict without running the full gate. Applies ten attack vectors and returns findings, a composite severity score, and a recommendation. Safe to call as a pre-flight check before submitting a formal proposal.
 
 ### Input Schema
 
@@ -538,7 +539,18 @@ graph TD
           "claim": {"type": "string", "description": "The specific assumption being attacked."},
           "attack_vector": {
             "type": "string",
-            "enum": ["missing_rollback", "underfunded_budget", "circular_dependency", "untested_assumption", "blast_radius"]
+            "enum": [
+              "dependency_risk",
+              "security_risk",
+              "circular_architecture",
+              "false_metric",
+              "over_broad_module",
+              "hidden_maintenance_cost",
+              "no_rollback",
+              "no_test_value",
+              "scope_creep",
+              "premature_abstraction"
+            ]
           },
           "severity": {
             "type": "string",
@@ -551,7 +563,7 @@ graph TD
     },
     "severity_score": {
       "type": "number",
-      "description": "Mean severity weight in [0.0, 1.0]. 0.0 = no findings."
+      "description": "Mean severity weight in [0.0, 1.0]. Weights are low=0.05, medium=0.20, high=0.45, critical=1.0; 0.0 = no findings."
     },
     "recommendation": {
       "type": "string",
@@ -567,7 +579,7 @@ graph TD
 
 ```json
 {
-  "plan_json": "{\"action_type\": \"archive_module\", \"target\": \"codomyrmex.dark\", \"rationale\": \"Unused\", \"rollback_plan\": \"\", \"budget_estimate\": {\"llm_calls\": 0, \"runtime_seconds\": 0}}"
+  "plan_json": "{\"action_type\": \"delete\", \"target\": \"codomyrmex.dark\", \"rationale\": \"Unused\", \"rollback_plan\": \"\", \"budget_estimate\": {\"llm_calls\": 0, \"runtime_seconds\": 0}}"
 }
 ```
 
@@ -576,27 +588,27 @@ graph TD
   "findings": [
     {
       "claim": "plan specifies a safe rollback path",
-      "attack_vector": "missing_rollback",
+      "attack_vector": "no_rollback",
       "severity": "high",
       "evidence": {"rollback_plan": ""},
       "remediation": "Provide a concrete rollback_plan describing how to undo the action."
     },
     {
-      "claim": "budget estimate reflects real expected resource consumption",
-      "attack_vector": "underfunded_budget",
-      "severity": "medium",
-      "evidence": {"budget_estimate": {"llm_calls": 0, "runtime_seconds": 0}},
-      "remediation": "Set llm_calls and/or runtime_seconds in budget_estimate to reflect real expected cost."
+      "claim": "The plan includes automated test coverage.",
+      "attack_vector": "no_test_value",
+      "severity": "high",
+      "evidence": {"tests": "<key absent>"},
+      "remediation": "Add a `tests` key listing the test file paths or test IDs that will exercise the changed behaviour."
     },
     {
       "claim": "action blast radius is bounded and reversible",
-      "attack_vector": "blast_radius",
-      "severity": "medium",
-      "evidence": {"action_type": "archive_module", "risk_level": 0.0},
-      "remediation": "Add a scope-limiting rollback checkpoint and reduce risk_level or break into smaller reversible steps."
+      "attack_vector": "scope_creep",
+      "severity": "high",
+      "evidence": {"action_type": "delete", "target": "codomyrmex.dark"},
+      "remediation": "Destructive actions require a `scope` field enumerating all affected files, callers, and dependent modules."
     }
   ],
-  "severity_score": 0.5,
+  "severity_score": 0.45,
   "recommendation": "hold"
 }
 ```

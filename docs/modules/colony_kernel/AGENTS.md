@@ -1,6 +1,6 @@
 # Codomyrmex Agents — docs/modules/colony_kernel
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 Documentation tooling, generated references, and publishing assets for the Colony Kernel — the control plane for Codomyrmex's artificial ecology.
@@ -9,23 +9,22 @@ Documentation tooling, generated references, and publishing assets for the Colon
 - `AGENTS.md` — Agent coordination and navigation
 - `README.md` — Module overview, quick-start, architecture diagram
 - `SPEC.md` — Formal specification with API contracts and invariants
-- `MCP_TOOL_SPECIFICATION.md` — Full JSON schema for each of the 8 MCP tools
-- `API_SPECIFICATION.md` — Public API reference
-- `PAI.md` — Public API Interface for integration patterns
+- `../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md` — Full JSON schema for each of the 8 MCP tools
+- `../../../src/codomyrmex/colony_kernel/API_SPECIFICATION.md` — Public API reference
+- `../../../src/codomyrmex/colony_kernel/PAI.md` — Public API Interface for integration patterns
 
 ## Subsystem Documentation
 
 | Subsystem | Source File | Description |
 |-----------|-------------|-------------|
-| ColonyKernel | `kernel.py:1104` | Top-level integration class; owns all 8 subsystems |
-| PheromoneStore | `kernel.py:121` | Wraps TraceField with ColonySignal semantics |
-| ResourceLedger | `kernel.py:220` | Period-scoped multi-dimensional budget tracker |
-| ActuationGate | `kernel.py:339` | Multi-factor gate: pressure × rollback × trust × evidence × falsification |
-| ConsequenceMemory | `kernel.py:495` | SQLite-backed consequence log + trust profiles |
-| RoleAdapter | `kernel.py:712` | Deterministic role inference from trust + proposals |
-| PruningDaemon | `kernel.py:811` | Identifies stale/duplicate modules via pheromone analysis |
-| FalsificationWorker | `kernel.py:939` | 6-check adversarial claim validator (kernel-internal) |
-| FalsificationWorker | `mcp_tools.py:86` | 5-check standalone evaluator (pre-flight, no kernel needed) |
+| ColonyKernel | `kernel.py` | Top-level integration class; owns all 8 subsystems |
+| PheromoneStore | `pheromone_store.py` | Wraps TraceField with ColonySignal semantics |
+| ResourceLedger | `resource_ledger.py` | Period-scoped multi-dimensional budget tracker |
+| ActuationGate | `actuation_gate.py` | Weighted additive gate with hard overrides for budget, role, trust, and critical falsification |
+| ConsequenceMemory | `consequence_memory.py` | SQLite-backed consequence log + trust profiles |
+| RoleAdapter | `role_adapter.py` | Deterministic role inference from trust + proposals |
+| PruningDaemon | `pruning_daemon.py` | Identifies stale/duplicate modules via pheromone analysis |
+| FalsificationWorker | `falsification_worker.py` | 10-vector adversarial plan validator shared by kernel and MCP pre-flight flows |
 | Config Loader | `config_loader.py` | YAML config from config/colony_kernel/ |
 | Resource Ledger | `resource_ledger.py` | Standalone ResourceLedger/ResourceBudget |
 | Actuation Gate | `actuation_gate.py` | Protocol-based ActuationGate with pheromone queries |
@@ -40,7 +39,7 @@ Documentation tooling, generated references, and publishing assets for the Colon
 | `colony_agent_profile` | colony_kernel | Read agent trust profile and role |
 | `colony_status` | colony_kernel | Dashboard: pheromone_summary, budget_usage, role_distribution |
 | `colony_pheromone_query` | colony_kernel | Sense pheromone at location/signal_type |
-| `colony_falsify_plan` | colony_kernel | Adversarial plan evaluation (5 vectors) |
+| `colony_falsify_plan` | colony_kernel | Adversarial plan evaluation (10 vectors) |
 | `colony_pruning_report` | colony_kernel | Stale module candidates from PruningDaemon |
 | `colony_tick` | colony_kernel | Advance colony clock; evaporate pheromones |
 
@@ -55,8 +54,8 @@ Documentation tooling, generated references, and publishing assets for the Colon
 - `AGENTS.md` — Agent coordination and navigation
 - `README.md` — Module overview, quick-start, architecture diagram
 - `SPEC.md` — Formal specification with API contracts and invariants
-- `MCP_TOOL_SPECIFICATION.md` — Full JSON schema for each MCP tool
-- `kernel.py` — ColonyKernel integration class + all subsystem implementations
+- `../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md` — Full JSON schema for each MCP tool
+- `kernel.py` — ColonyKernel integration class plus compatibility re-exports for subsystem classes
 - `mcp_tools.py` — 8 @mcp_tool-decorated functions; thin wrappers over kernel singleton
 - `models.py` — Shared value-object and enum contract (star topology centre)
 - `config_loader.py` — YAML config loading from config/colony_kernel/
@@ -85,6 +84,6 @@ uv run python -m codomyrmex.cli doctor --colony
 
 ## Navigation Links
 - **Parent Directory**: [modules](../README.md) — Parent directory documentation
-- **Source**: [src/codomyrmex/colony_kernel/](../../src/codomyrmex/colony_kernel/) — Source code
-- **Project Root**: ../../../README.md — Main project documentation
-- **Manuscript**: [docs/manuscript/](../../docs/manuscript/) — Codomyrmex thesis and results
+- **Source**: [src/codomyrmex/colony_kernel/](../../../src/codomyrmex/colony_kernel/) — Source code
+- **Project Root**: [../../../README.md](../../../README.md) — Main project documentation
+- **Manuscript**: [docs/manuscript/](../../manuscript/) — Codomyrmex thesis and results

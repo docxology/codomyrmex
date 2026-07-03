@@ -344,16 +344,6 @@ def colony_falsify_plan(plan_json: str) -> dict[str, Any]:
             result["recommendation"] = "hold"
         else:
             result["recommendation"] = "refuse"
-        # Translate internal attack_vector names to MCP-published names
-        _vector_alias = {
-            "no_rollback": "missing_rollback",
-            "scope_creep": "blast_radius",
-            "circular_architecture": "circular_dependency",
-        }
-        for finding in result.get("findings", []):
-            av = finding.get("attack_vector")
-            if av in _vector_alias:
-                finding["attack_vector"] = _vector_alias[av]
         return result
     except json.JSONDecodeError as exc:
         return {"error": f"plan_json is not valid JSON: {exc}"}

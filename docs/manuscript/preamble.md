@@ -2,7 +2,7 @@
 
 This file contains LaTeX packages and commands that are automatically injected into the document compilation process.
 
-> **Infrastructure Note**: This file is parsed by `infrastructure/rendering/latex_utils.py` and combined with the configuration output by `infrastructure/rendering/pdf_renderer.py` before final Pandoc execution to generate the physical PDF holding this text.
+> **Rendering Note**: This file is included by `scripts/compile_manuscript.py` before final Pandoc execution to generate the physical PDF holding this text.
 
 ```latex
 % Core mathematics
@@ -28,6 +28,16 @@ This file contains LaTeX packages and commands that are automatically injected i
 % Typography and formatting
 \usepackage{microtype}
 \usepackage{xcolor}
+\usepackage{fontspec}
+\setmainfont{STIX Two Text}
+\setsansfont{STIX Two Text}
+\setmonofont{Menlo}[Scale=MatchLowercase]
+\usepackage{newunicodechar}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
 
 % Cross-references and citations
 \usepackage{hyperref}

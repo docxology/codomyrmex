@@ -1,6 +1,14 @@
 # colony_kernel skill
 
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
+
 > Custom skill definition for the Colony Kernel — teaches agents how to govern actions through the Codomyrmex artificial ecology control plane.
+
+## Navigation
+
+- **Agent Guide**: [AGENTS.md](AGENTS.md)
+- **Source SPEC**: [../../../../colony_kernel/SPEC.md](../../../../colony_kernel/SPEC.md)
+- **Module Docs**: [../../../../../../docs/modules/colony_kernel/](../../../../../../docs/modules/colony_kernel/)
 
 ## Overview
 
@@ -44,5 +52,6 @@ result = colony_propose_action(
 ## Related
 
 - **Source module**: [../../../../colony_kernel/](../../../../colony_kernel/)
+- **Source specification**: [../../../../colony_kernel/SPEC.md](../../../../colony_kernel/SPEC.md)
 - **Module docs**: [../../../../../../docs/modules/colony_kernel/](../../../../../../docs/modules/colony_kernel/)
 - **Agent coordination**: [AGENTS.md](AGENTS.md)

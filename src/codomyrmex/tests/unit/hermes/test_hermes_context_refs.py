@@ -319,7 +319,9 @@ class TestPreprocessContextReferencesAsync:
         # Accept either: a warning containing "binary" OR an expanded block indicating
         # the file type was handled (block mentions the path or "binary").
         binary_in_warnings = any("binary" in w.lower() for w in result.warnings)
-        binary_in_message = "binary" in result.message.lower() or str(f.name) in result.message
+        binary_in_message = (
+            "binary" in result.message.lower() or str(f.name) in result.message
+        )
         assert binary_in_warnings or binary_in_message or result.expanded
 
     def test_folder_reference_expanded(self, tmp_path):

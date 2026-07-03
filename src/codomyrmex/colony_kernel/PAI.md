@@ -51,10 +51,10 @@ colony_pruning_report()  # stale/broken modules from PruningDaemon
 |-------------|---------------------|------------|
 | `FAILURE` | Something broke here recently | FAST (0.30/tick) |
 | `NEED` | Explicit attention request deposited | NORMAL (0.10/tick) |
-| `RISK` | Caution marker, not yet a failure | NORMAL |
+| `RISK` | Caution marker, clear quickly | FAST |
 | `DEPENDENCY` | Actively imported/called | SLOW (0.02/tick) |
 | `HUMAN_PRIORITY` | Operator-injected, highest trust weight | SLOW |
-| `SUCCESS` | Previous action worked here | FAST |
+| `SUCCESS` | Previous action worked here | SLOW (0.02/tick) |
 
 Trust source weighting during OBSERVE: `HUMAN` signals carry a 2x weight in
 gate scoring. When reading pheromone pressure, give operator-deposited signals
@@ -70,19 +70,24 @@ exactly to PAI's THINK phase goal: generate a plan and then attack it.
 
 **Subsystem**: `falsification_worker.FalsificationWorker`
 
-`FalsificationWorker.evaluate_plan` applies five attack vectors to any plan
-dict. A plan that clears all five attack vectors with a `severity_score < 0.4`
+`FalsificationWorker.evaluate_plan` applies ten attack vectors to any plan
+dict. A plan that clears all ten attack vectors with a `severity_score < 0.4`
 receives `recommendation: "execute"` — it passes the THINK-phase gate.
 
-**The five attack vectors**:
+**The ten attack vectors**:
 
 | Attack vector | What it tests | Severity if triggered |
 |---|---|---|
-| `missing_rollback` | No rollback strategy | HIGH |
-| `underfunded_budget` | `llm_calls == 0` and `runtime_seconds == 0` | MEDIUM |
-| `circular_dependency` | `target == agent_id` (self-referential loop) | HIGH |
-| `untested_assumption` | No evidence and rationale < 50 chars | MEDIUM |
-| `blast_radius` | High-risk action type or `risk_level > 0.6` | MEDIUM or HIGH |
+| `NO_ROLLBACK` | No concrete rollback strategy | HIGH |
+| `NO_TEST_VALUE` | No automated test value | HIGH |
+| `SCOPE_CREEP` | Scope exceeds target or rationale | MEDIUM/HIGH |
+| `FALSE_METRIC` | Expected outcome is absent or non-falsifiable | LOW/MEDIUM |
+| `CIRCULAR_ARCHITECTURE` | Import or architecture cycle risk | MEDIUM/HIGH |
+| `DEPENDENCY_RISK` | Too many unvetted dependencies | MEDIUM |
+| `SECURITY_RISK` | Security-sensitive change without review evidence | HIGH |
+| `OVER_BROAD_MODULE` | Module responsibility is too broad | MEDIUM |
+| `HIDDEN_MAINTENANCE_COST` | Long-term upkeep burden is ignored | MEDIUM |
+| `PREMATURE_ABSTRACTION` | Generic abstraction without demonstrated need | LOW |
 
 **Composite scoring**:
 - `severity_score < 0.4` → `"execute"` (THINK phase: proceed to EXECUTE)
@@ -116,13 +121,12 @@ the environment without passing three sequential checks.
 **Gate score formula** (`ActuationGate.evaluate`):
 
 ```
-base_score = (
-    pressure_component × 0.30   # normalised net pheromone pressure at target
-  + rollback_component × 0.30   # 1.0 if rollback_plan non-empty, else 0.5
-  + trust_score        × 0.25   # agent AgentTrustProfile.trust_score
-  + evidence_component × 0.15   # 1.0 if evidence dict non-empty, else 0.5
+gate_score = (
+    budget_ok    * 0.30
+  + risk_ok      * 0.30
+  + trust_ok     * 0.25
+  + completeness * 0.15
 )
-gate_score = base_score × (1.0 − falsification_penalty)
 gate_score = clamp(gate_score, 0.0, 1.0)
 ```
 
@@ -130,8 +134,10 @@ gate_score = clamp(gate_score, 0.0, 1.0)
 
 | Condition | Decision |
 |-----------|----------|
-| `budget_approved == False` | HOLD |
+| `budget_approved == False` supplied by kernel | HOLD |
+| standalone ledger budget check fails | REFUSE |
 | `profile.role == SANDBOX` | REFUSE (unconditional) |
+| `profile.trust_score < 0.30` | REFUSE (unconditional) |
 | CRITICAL falsification finding present | REFUSE |
 | `gate_score ≥ 0.75` | EXECUTE |
 | `0.50 ≤ gate_score < 0.75` | HOLD |
@@ -216,21 +222,22 @@ naturally earns — and operates within — the corresponding colony role.
 
 | Colony role | PAI agent type | Trust threshold | How they earn the role |
 |---|---|---|---|
-| `SANDBOX` | any new agent | trust < 0.3 | Default for all agents at startup |
-| `REPAIR_ANT` | Engineer | ≥ 0.8 + `test_fix` or `bug_repair` successes | Accumulate passing test runs and bug repairs |
-| `MEMORY_ANT` | Scribe / Documenter | ≥ 0.8 + `doc_write` or `memory_index` successes | Document systems, index knowledge, archive modules |
-| `DISPATCHER` | Architect | ≥ 20 proposals + 70% acceptance rate | Coordinate and delegate across modules at scale |
-| `GUARD_ANT` | Security Reviewer | ≥ 0.85 + `security_scan` or `vulnerability_fix` successes | Run security scans, fix vulnerabilities |
+| `SANDBOX` | any new agent | entry role; `trust_score = 0.10` | Default for all agents at startup |
+| `REPAIR_ANT` | Engineer | ≥ 0.20 and ≥ 3 proposals | Accumulate passing test runs and bug repairs |
+| `MEMORY_ANT` | Scribe / Documenter | ≥ 0.35 and ≥ 3 proposals | Document systems, index knowledge, archive modules |
+| `DISPATCHER` | Architect | ≥ 0.50 and ≥ 3 proposals | Coordinate and delegate across modules at scale |
+| `GUARD_ANT` | Security Reviewer | ≥ 0.70 and ≥ 3 proposals | Run security scans, fix vulnerabilities |
 
-**Role promotion is automatic**. `RoleAdapter.update_profile` re-derives the
-role on every `ConsequenceRecord`. A PAI Engineer subagent that completes
-enough `test_fix` and `bug_repair` actions with `tests_passed=True` will
-be promoted from SANDBOX to REPAIR_ANT without any manual intervention.
+**Role promotion is automatic**. The kernel-facing `RoleAdapter.update(profile)`
+path re-derives the role from the profile's trust score and proposal count.
+The standalone `assign_role(agent_id)` path is stricter and also considers
+successful action types (`test_fix`, `bug_repair`, `doc_write`, `memory_index`,
+`security_scan`, and `vulnerability_fix`); do not use its specialization
+thresholds as the kernel promotion ladder.
 
 **Gate permissions by role** are enforced automatically. A SANDBOX agent cannot
-execute high-risk actions — its trust floor (0.05) will cause the gate's trust
-component to score near zero, resulting in HOLD or REFUSE on any proposal
-with a realistic budget.
+execute high-risk actions: new agents start at trust 0.10, and the gate
+hard-refuses trust below 0.30 before ordinary scoring.
 
 **PAI Architect agents** are the natural DISPATCHER role. Because Architects
 coordinate rather than execute directly, their action types are typically

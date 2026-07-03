@@ -1,12 +1,12 @@
 # Running Codomyrmex Tests
 
-**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 This document describes how to run and filter the Codomyrmex test suite. Canonical counts and inventory live in [docs/reference/inventory.md](../../../docs/reference/inventory.md).
 
-**Collected tests (repo-wide):** **34,451** — `uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths.
+**Collected tests (repo-wide):** **35,124** — `uv run python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths.
 
 ### Zero-Mock Policy
 
@@ -22,7 +22,7 @@ This document describes how to run and filter the Codomyrmex test suite. Canonic
 
 | Category | Location | Count (indicative) | Notes |
 |----------|----------|--------------------|--------|
-| **All collected** | under `src/codomyrmex/` (`tests/` + `tests/**`) | **34,451** | Single source of truth: scoped `pytest --collect-only` (with CI-parity extras) |
+| **All collected** | under `src/codomyrmex/` (`tests/` + `tests/**`) | **35,124** | Single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
 | **`unit` marker** | mostly `tests/unit/**` | **21,024** | `pytest -m unit --collect-only` |
 | **`integration` marker** | mixed | **253** | `pytest -m integration --collect-only` |
 | **Integration tree** | `tests/integration/` | **339** | `pytest tests/integration/ --collect-only` |

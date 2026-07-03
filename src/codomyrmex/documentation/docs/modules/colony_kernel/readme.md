@@ -1,6 +1,6 @@
 # colony_kernel
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
@@ -16,11 +16,11 @@ graph TB
     subgraph subsystems["Colony Control Plane — 8 Subsystems"]
         PS["PheromoneStore<br/>Stigmergy + Signal semantics"]
         RL["ResourceLedger<br/>7-dimension budget"]
-        AG["ActuationGate<br/>Trust × Pressure × Evidence"]
+        AG["ActuationGate<br/>Weighted additive score"]
         CM["ConsequenceMemory<br/>SQLite + Trust deltas"]
         RA["RoleAdapter<br/>Deterministic role ladder"]
         PD["PruningDaemon<br/>Stale module detection"]
-        FW["FalsificationWorker<br/>5 adversarial vectors"]
+        FW["FalsificationWorker<br/>10 adversarial vectors"]
     end
 
     CK --> PS & RL & AG & CM & RA & PD & FW

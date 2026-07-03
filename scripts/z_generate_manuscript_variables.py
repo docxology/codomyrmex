@@ -6,7 +6,7 @@ This script drives the pipeline:
   1. Resolve project root and config paths.
   2. Delegate variable computation to manuscript_variables.py.
   3. Write output/data/manuscript_variables.json.
-  4. Inject tokens into docs/manuscript/*.md → output/manuscript/*.md.
+  4. Inject tokens into manuscript section Markdown → output/manuscript/.
 """
 
 from __future__ import annotations
@@ -38,11 +38,28 @@ def _write_json(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
 
 
-def _inject_tokens(manuscript_dir: Path, output_dir: Path, variables: dict[str, str]) -> list[Path]:
-    """Replace {{TOKEN}} placeholders in every *.md under manuscript_dir."""
+def _clean_output_dir(output_dir: Path) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for pattern in ("*.md", "*.bib", "config.yaml"):
+        for path in output_dir.glob(pattern):
+            if path.is_file():
+                path.unlink()
+
+
+def _manuscript_sources(manuscript_dir: Path) -> list[Path]:
+    sources = sorted(manuscript_dir.glob("[0-9]*.md"))
+    preamble = manuscript_dir / "preamble.md"
+    if preamble.exists():
+        sources.append(preamble)
+    return sources
+
+
+def _inject_tokens(
+    manuscript_dir: Path, output_dir: Path, variables: dict[str, str]
+) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
-    for src_file in sorted(manuscript_dir.glob("*.md")):
+    for src_file in _manuscript_sources(manuscript_dir):
         content = src_file.read_text(encoding="utf-8")
         for key, value in variables.items():
             content = content.replace("{{" + key + "}}", str(value))
@@ -82,11 +99,13 @@ def main() -> int:
     # Inject into manuscript markdown files.
     manuscript_dir = project_root / "docs" / "manuscript"
     output_manuscript = project_root / "output" / "manuscript"
+    _clean_output_dir(output_manuscript)
 
     # Try infrastructure rendering injection first.
     injected_via_infra = False
     try:
         import manuscript_variables as mv2  # already imported
+
         if hasattr(mv2, "inject_via_infrastructure"):
             mv2.inject_via_infrastructure(
                 manuscript_dir=manuscript_dir,
@@ -108,10 +127,13 @@ def main() -> int:
     # project_root/manuscript/ exists, but codomyrmex uses docs/manuscript/ —
     # so we handle the copy here.
     import shutil
+
     for copy_src in [config_path, *sorted(manuscript_dir.glob("*.bib"))]:
         copy_dst = output_manuscript / copy_src.name
         shutil.copy2(copy_src, copy_dst)
-        print(f"[z_generate] copied {copy_src.name} → {copy_dst.relative_to(project_root)}")
+        print(
+            f"[z_generate] copied {copy_src.name} → {copy_dst.relative_to(project_root)}"
+        )
 
     print(f"[z_generate] done — {len(variables)} variables computed")
     return 0

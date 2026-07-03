@@ -98,7 +98,9 @@ import pathlib
 # developer-specific absolute path.
 _REPO_ROOT = pathlib.Path(__file__).resolve().parents[5]
 _BENCHMARK_STARTUP_DIR = _REPO_ROOT / "scripts" / "performance"
-_BENCHMARK_STARTUP_AVAILABLE = (_BENCHMARK_STARTUP_DIR / "benchmark_startup.py").exists()
+_BENCHMARK_STARTUP_AVAILABLE = (
+    _BENCHMARK_STARTUP_DIR / "benchmark_startup.py"
+).exists()
 
 
 class TestBenchmarkStartupUtilities:
@@ -108,6 +110,7 @@ class TestBenchmarkStartupUtilities:
         """measure_import_time should return a proper dict."""
         if not _BENCHMARK_STARTUP_AVAILABLE:
             import pytest
+
             pytest.skip("benchmark_startup.py not found at scripts/performance/")
         sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
         try:
@@ -125,6 +128,7 @@ class TestBenchmarkStartupUtilities:
         """Nonexistent module should return negative time."""
         if not _BENCHMARK_STARTUP_AVAILABLE:
             import pytest
+
             pytest.skip("benchmark_startup.py not found at scripts/performance/")
         sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
         try:
@@ -139,6 +143,7 @@ class TestBenchmarkStartupUtilities:
         """benchmark_cli_startup should return timing data."""
         if not _BENCHMARK_STARTUP_AVAILABLE:
             import pytest
+
             pytest.skip("benchmark_startup.py not found at scripts/performance/")
         sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
         try:
@@ -160,6 +165,7 @@ class TestBenchmarkStartupUtilities:
         """analyse_import_weights should return sorted list."""
         if not _BENCHMARK_STARTUP_AVAILABLE:
             import pytest
+
             pytest.skip("benchmark_startup.py not found at scripts/performance/")
         sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
         try:

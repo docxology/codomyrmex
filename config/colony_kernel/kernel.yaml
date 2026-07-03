@@ -1,5 +1,13 @@
 # ColonyKernelConfig — primary kernel configuration
 # db_path: null = in-memory (for testing); set to ~/.codomyrmex/colony.db in production
+#
+# Cross-references:
+#   - Loaded by:   src/codomyrmex/colony_kernel/config_loader.py  (load_kernel_yaml / default_budget_from_yaml / default_gate_config_from_yaml)
+#   - Documented:  config/colony_kernel/README.md §kernel.yaml
+#   - Agent guide: config/colony_kernel/AGENTS.md
+#   - Source spec: src/codomyrmex/colony_kernel/SPEC.md §Gate Scoring Model
+#   - PAI usage:   src/codomyrmex/colony_kernel/PAI.md §EXECUTE → Actuation Gate
+#   - Manuscript:  docs/manuscript/config.yaml §experiment (gate thresholds mirror values here)
 db_path: null
 repo_root: "."
 
@@ -22,6 +30,16 @@ pheromone:
 gate:
   execute_threshold: 0.75
   hold_threshold: 0.50
+
+  # NOTE: The following values are DOCUMENTATION mirrors of code-defined
+  # constants in actuation_gate.py and role_adapter.py, NOT runtime
+  # configuration. The actual constants are read from Python source:
+  #   _TRUST_HARD_FLOOR = 0.30     (actuation_gate.py)
+  #   trust_ok tiering at 0.60     (actuation_gate.py evaluate method)
+  #   _ROLE_REPAIR_MIN_TRUST = 0.20 through _ROLE_GUARD_MIN_TRUST = 0.70
+  #                               (role_adapter.py)
+  # See docs/manuscript/05_experimental_setup.md §5.5 and manuscript §2.4
+  # for the full role ladder and gate-scoring derivation.
   trust_hard_refuse: 0.3
   trust_hold_threshold: 0.6
   high_risk_pheromone: 6.0

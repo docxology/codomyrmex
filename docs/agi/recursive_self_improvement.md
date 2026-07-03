@@ -79,13 +79,13 @@ Strong epistasis implies that combinatorial improvements (modifying multiple mod
 
 Kauffman's (1993) NK model predicts that ruggedness increases with epistasis (K), making search harder but potentially placing higher peaks available. Codomyrmex's modular architecture implements what developmental biologists call **developmental constraints** (Maynard Smith et al., 1985): the module boundaries channel modification along specific directions, just as compartmentalized body plans channel evolutionary change.
 
-These constraints are *beneficial*: they reduce the effective dimensionality of the search space. A modification confined to one module (dimension ≤ dim(module)) is far easier to evaluate than a cross-cutting change (dimension ~ dim(codebase)). The 128-module partition creates 128 *quasi-independent* optimization cells.
+These constraints are *beneficial*: they reduce the effective dimensionality of the search space. A modification confined to one module (dimension ≤ dim(module)) is far easier to evaluate than a cross-cutting change (dimension ~ dim(codebase)). The 129-module partition creates 129 *quasi-independent* optimization cells.
 
 ## The Gödel Machine Connection
 
 Schmidhuber's (2003) Gödel Machine searches for *provably optimal* self-modifications. The search space is the set of all programs expressible in itself (self-referential). When it finds a modification whose improvement can be *formally proved*, it applies the modification.
 
-Codomyrmex approximates this with a weaker verification criterion: modifications must pass *tests and validation*, not *formal proofs*. The **34,451** collected tests (`uv run pytest src/codomyrmex/tests/ --collect-only -q --no-header --override-ini='addopts=' --import-mode=importlib`) serve as *empirical evidence* rather than *deductive proof*. The gap between empirical evidence and formal proof is precisely the gap between Σ₁⁰ (testing) and Π₁⁰ (universal correctness) in the arithmetical hierarchy — see [formal_specification.md](./formal_specification.md).
+Codomyrmex approximates this with a weaker verification criterion: modifications must pass *tests and validation*, not *formal proofs*. The **35,137** collected tests (`uv run python scripts/doc_inventory.py --pytest`) serve as *empirical evidence* rather than *deductive proof*. The gap between empirical evidence and formal proof is precisely the gap between Σ₁⁰ (testing) and Π₁⁰ (universal correctness) in the arithmetical hierarchy — see [formal_specification.md](./formal_specification.md).
 
 The `evolutionary_ai` module adds a critical capability: **population-based search**. Rather than the Gödel Machine's exhaustive proof search, `evolutionary_ai` maintains a *population* of candidate modifications and applies selection pressure:
 

@@ -1,6 +1,14 @@
 # Colony Kernel — Module Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
+
+## Navigation
+
+- **Module README**: [README.md](README.md)
+- **Agent Guide**: [AGENTS.md](AGENTS.md)
+- **Source Module**: [../../../src/codomyrmex/colony_kernel/](../../../src/codomyrmex/colony_kernel/)
+- **Source MCP Spec**: [../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md)
+- **Tests**: [../../../src/codomyrmex/tests/unit/colony_kernel/](../../../src/codomyrmex/tests/unit/colony_kernel/)
 
 ## Purpose
 
@@ -40,20 +48,17 @@ The ActuationGate computes a composite score in [0.0, 1.0]:
 
 ```mermaid
 flowchart TD
-    P["Pheromone Pressure<br/>sense(SUCCESS) - sense(FAILURE) - 0.5×sense(RISK)"]
-    R["Rollback Quality<br/>bool(rollback_plan.strip())"]
-    T["Trust Component<br/>profile.trust_score"]
-    E["Evidence Quality<br/>bool(proposal.evidence)"]
-    FP["Falsification Penalty<br/>max severity weight from findings"]
+    B["Budget Headroom<br/>budget_ok"]
+    R["Risk Clearance<br/>risk_ok"]
+    T["Trust Tier<br/>trust_ok"]
+    E["Evidence Completeness<br/>completeness"]
 
-    subgraph scoring["Base Score Calculation"]
-        P -->|"× 0.30"| BS["base_score"]
-        R -->|"× 0.30"| BS
-        T -->|"× 0.25"| BS
-        E -->|"× 0.15"| BS
+    subgraph scoring["Weighted Additive Score"]
+        B -->|"0.30"| GS["gate_score"]
+        R -->|"0.30"| GS
+        T -->|"0.25"| GS
+        E -->|"0.15"| GS
     end
-
-    BS -->|"× (1.0 - falsification_penalty)"| GS["gate_score"]
 
     GS -->|"≥ 0.75"| EX["EXECUTE"]
     GS -->|"0.50 – 0.74"| HOLD["HOLD"]
@@ -61,7 +66,7 @@ flowchart TD
 
     SANDBOX["SANDBOX role"] -->|"always"| REF
     CRITICAL["CRITICAL finding"] -->|"always"| REF
-    BUDGET["Budget exceeded"] -->|"always"| HOLD
+    BUDGET["Budget exceeded"] -->|"kernel: HOLD<br/>standalone: REFUSE"| HOLD
 
     style EX fill:#0f766e,color:#fff
     style HOLD fill:#b45309,color:#fff
@@ -71,8 +76,7 @@ flowchart TD
 
 Formula:
 ```
-base_score = pressure × 0.30 + rollback × 0.30 + trust × 0.25 + evidence × 0.15
-gate_score = base_score × (1.0 - falsification_penalty)
+gate_score = budget_ok * 0.30 + risk_ok * 0.30 + trust_ok * 0.25 + completeness * 0.15
 ```
 
 ## Trust Lifecycle
@@ -86,10 +90,10 @@ stateDiagram-v2
     MEMORY_ANT --> DISPATCHER : trust ≥ 0.50
     DISPATCHER --> GUARD_ANT : trust ≥ 0.70
 
-    REPAIR_ANT --> SANDBOX : trust < 0.15<br/>(demotion)
-    MEMORY_ANT --> REPAIR_ANT : trust < 0.20
-    DISPATCHER --> MEMORY_ANT : trust < 0.35
-    GUARD_ANT --> DISPATCHER : trust < 0.50
+    REPAIR_ANT --> SANDBOX : trust < 0.20<br/>(demotion)
+    MEMORY_ANT --> REPAIR_ANT : trust < 0.35
+    DISPATCHER --> MEMORY_ANT : trust < 0.50
+    GUARD_ANT --> DISPATCHER : trust < 0.70
 
     state SANDBOX {
         [*] --> NoWrite : gate_score = 0.0
@@ -118,9 +122,9 @@ delta += human_feedback × 0.03
 ```mermaid
 graph LR
     subgraph signals["Signal Taxonomy"]
-        FAILURE["FAILURE<br/>decay: NORMAL (1.0)"]
+        FAILURE["FAILURE<br/>decay: FAST (3.0)"]
         SUCCESS["SUCCESS<br/>decay: SLOW (0.2)"]
-        RISK["RISK<br/>decay: NORMAL (1.0)"]
+        RISK["RISK<br/>decay: FAST (3.0)"]
         NEED["NEED<br/>decay: NORMAL (1.0)"]
         DEPENDENCY["DEPENDENCY<br/>decay: SLOW (0.2)"]
         HUMAN_PRIORITY["HUMAN_PRIORITY<br/>decay: SLOW (0.2)"]
@@ -140,9 +144,9 @@ graph LR
         SLOW["SLOW (0.2)<br/>Persistent memory<br/>Clears in ~50 ticks"]
     end
 
-    FAILURE --> NORMAL
+    FAILURE --> FAST
     SUCCESS --> SLOW
-    RISK --> NORMAL
+    RISK --> FAST
     NEED --> NORMAL
     DEPENDENCY --> SLOW
     HUMAN_PRIORITY --> SLOW
@@ -178,7 +182,7 @@ All 8 tools route through a module-level `ColonyKernel` singleton. State persist
 
 1. **Zero-mock**: All tests use real ColonyKernel instances; no unittest.mock.
 2. **Idempotent registration**: `register_all()` is idempotent.
-3. **Star topology**: `models.py` is the centre; no cross-subsystem imports.
+3. **Typed subsystem exchange**: `models.py` is the shared value-object contract; `ColonyKernel` owns cross-subsystem sequencing.
 4. **Trust clamping**: Trust scores are always in [0.0, 1.0].
 5. **Budget enforcement**: Any single dimension exceeded → HOLD.
 6. **SANDBOX block**: SANDBOX agents always receive REFUSE.
@@ -189,11 +193,13 @@ All 8 tools route through a module-level `ColonyKernel` singleton. State persist
 
 ```bash
 uv run pytest src/codomyrmex/tests/unit/colony_kernel/ -v
-# 456 tests, 0 failures
+# 641 tests, 0 failures
 ```
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/colony_kernel/](../../src/codomyrmex/colony_kernel/)
-- **MCP Spec**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
-- **Tests**: [src/codomyrmex/tests/unit/colony_kernel/](../../src/codomyrmex/tests/unit/colony_kernel/)
+- **README**: [README.md](README.md)
+- **Agent Guide**: [AGENTS.md](AGENTS.md)
+- **Source**: [src/codomyrmex/colony_kernel/](../../../src/codomyrmex/colony_kernel/)
+- **MCP Spec**: [src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md)
+- **Tests**: [src/codomyrmex/tests/unit/colony_kernel/](../../../src/codomyrmex/tests/unit/colony_kernel/)

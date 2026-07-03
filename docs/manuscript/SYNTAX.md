@@ -1,6 +1,6 @@
 # Manuscript Syntax Reference (codomyrmex)
 
-Project-specific overlay on the canonical [`docs/guides/manuscript-semantics.md`](../../../../docs/guides/manuscript-semantics.md) — read that file first; this file documents the **codomyrmex**-specific equation label registry, table label registry, section labels, `{{TOKEN}}` table, and prose conventions.
+Project-specific overlay for the **codomyrmex** manuscript. This file documents the equation label registry, table label registry, section labels, `{{TOKEN}}` table, and prose conventions used by the local rendering scripts.
 
 ## Citation Syntax (Pandoc)
 
@@ -18,7 +18,7 @@ Project-specific overlay on the canonical [`docs/guides/manuscript-semantics.md`
 @grasse1959reconstruction described how ants coordinate...
 ```
 
-All citation keys must exist in [`references.bib`](references.bib). Pandoc with `--natbib` converts `[@key]` to the right LaTeX cite command automatically; **never** write raw `\cite{}` in Markdown.
+All citation keys must exist in [`references.bib`](references.bib). `scripts/compile_manuscript.py` renders citations with Pandoc citeproc (`--citeproc`) and linked citation metadata; **never** write raw `\cite{}` in Markdown.
 
 ## Equation Environments
 
@@ -26,10 +26,10 @@ All citation keys must exist in [`references.bib`](references.bib). Pandoc with 
 <!-- Numbered equation with label (preferred Pandoc-crossref form) -->
 $$
 \text{gate\_score} = w_b \cdot b + w_r \cdot r + w_t \cdot t + w_c \cdot c
-$$ {#eq:gate_score}
+$$ {#eq:gate_score_detail}
 
 <!-- Reference in text (parenthetical) -->
-[@eq:gate_score] gives the actuation-gate scoring model.
+[@eq:gate_score_detail] gives the actuation-gate scoring model.
 
 <!-- Reference in text (narrative) -->
 @eq:gate_score_detail expands the weight assignments...
@@ -41,18 +41,22 @@ Reference equations with `[@eq:label]` (parenthetical) or `@eq:label` (narrative
 
 | Label | Equation | Source file |
 |---|---|---|
-| `{#eq:gate_score}` | $\text{gate\_score} = 0.30 \cdot \text{budget\_ok} + 0.30 \cdot \text{risk\_ok} + 0.25 \cdot \text{trust\_ok} + 0.15 \cdot \text{completeness}$ | `01_introduction.md` |
-| `{#eq:gate_score_detail}` | $g = w_b \cdot b + w_r \cdot r + w_t \cdot t + w_c \cdot c$ with $w_b=0.30,\ w_r=0.30,\ w_t=0.25,\ w_c=0.15$ | `02_methodology.md` |
-| `{#eq:trust_update}` | $\Delta_\text{trust} = \Delta_\text{pass/fail} + \Delta_\text{repair} + h \cdot \Delta_\text{human}$ | `02_methodology.md` |
-| `{#eq:pheromone_decay}` | $s_{t+1} = s_t \cdot e^{-\lambda \cdot r}$ where $r$ is the `DecayRate` class multiplier | `02_methodology.md` |
+| `{#eq:effective_strength}` | Signal strength scaled by source multiplier and agent trust factor | `02_methodology.md` |
+| `{#eq:gate_score_detail}` | $g = 0.30 \cdot \text{budget\_ok} + 0.30 \cdot \text{risk\_ok} + 0.25 \cdot \text{trust\_ok} + 0.15 \cdot \text{completeness}$ | `02_methodology.md` |
+| `{#eq:trust_penalty}` | Local trust-component penalty for recent failure streaks | `02_methodology.md` |
+| `{#eq:proposal_completeness}` | Completeness score as a function of missing evidence fields | `02_methodology.md` |
+| `{#eq:worked_example_execute}` | Worked EXECUTE score under clean budget/risk and medium trust | `02_methodology.md` |
+| `{#eq:worked_example_failure_streak}` | Worked score after recent-failure trust penalty | `02_methodology.md` |
+| `{#eq:worked_example_hold}` | Worked HOLD score after failure streak and medium risk pressure | `02_methodology.md` |
+| `{#eq:trust_delta}` | $\Delta_\text{trust} = \Delta_\text{pass/fail} + \Delta_\text{repair} + h \cdot \Delta_\text{human}$ | `02_methodology.md` |
 
 ## Section Labels
 
-Every H1 in this manuscript carries a `{#sec:<name>}` label so cross-section references (`[@sec:methodology]`) survive reordering:
+Every H1 in this manuscript carries a `{#sec:<name>}` label so cross-section references (`[@sec:methodology]`) survive reordering. Abstract and references are explicitly unnumbered; numbered body sections start at the introduction.
 
 | File | Section H1 | Label |
 |---|---|---|
-| `00_abstract.md` | Abstract | `{#sec:abstract}` |
+| `00_abstract.md` | Abstract | `{#sec:abstract .unnumbered}` |
 | `01_introduction.md` | Introduction | `{#sec:introduction}` |
 | `02_methodology.md` | Methodology | `{#sec:methodology}` |
 | `03_results.md` | Colony Kernel Implementation Results | `{#sec:results}` |
@@ -60,7 +64,7 @@ Every H1 in this manuscript carries a `{#sec:<name>}` label so cross-section ref
 | `05_experimental_setup.md` | Experimental Setup | `{#sec:experimental_setup}` |
 | `06_reproducibility.md` | Reproducibility Certification | `{#sec:reproducibility}` |
 | `07_scope_and_related_work.md` | Scope, Related Work, and Positioning | `{#sec:scope}` |
-| `99_references.md` | References | `{#sec:references}` |
+| `99_references.md` | References | `{#sec:references .unnumbered}` |
 
 ## Table References
 
@@ -79,23 +83,45 @@ Every H1 in this manuscript carries a `{#sec:<name>}` label so cross-section ref
 
 | Label | Caption summary | Source file |
 |---|---|---|
-| `{#tbl:gate_thresholds}` | Gate decision thresholds (EXECUTE / HOLD / REFUSE) with score ranges | `05_experimental_setup.md` |
-| `{#tbl:trust_trajectory}` | Trust score and role at representative outcome checkpoints for a new agent | `03_results.md` |
+| `{#tbl:subsystem_overview}` | Colony Control Plane subsystem overview | `02_methodology.md` |
+| `{#tbl:signal_types}` | Pheromone signal types and gate effects | `02_methodology.md` |
+| `{#tbl:methodology_decay_rates}` | Pheromone decay classes and retention constants | `02_methodology.md` |
+| `{#tbl:resource_dimensions}` | Resource budget dimensions enforced by `ResourceLedger` | `02_methodology.md` |
+| `{#tbl:risk_pressure_mapping}` | RISK pheromone pressure mapping used by the gate | `02_methodology.md` |
+| `{#tbl:trust_mapping}` | Trust-score mapping used by the gate | `02_methodology.md` |
+| `{#tbl:gate_decision_thresholds}` | Actuation-gate decision thresholds | `02_methodology.md` |
+| `{#tbl:role_ladder_methodology}` | Kernel role ladder and action permissions | `02_methodology.md` |
+| `{#tbl:pruning_confidence}` | Pruning-daemon candidate confidence tiers | `02_methodology.md` |
+| `{#tbl:falsification_taxonomy}` | Falsification-worker attack vector taxonomy | `02_methodology.md` |
 | `{#tbl:quality_gates}` | ruff / ty / pytest / coverage gate outcomes for the Colony Kernel | `03_results.md` |
+| `{#tbl:trust_trajectory}` | Trust score and role at representative outcome checkpoints for a new agent | `03_results.md` |
+| `{#tbl:gate_outcomes}` | Gate-score outcomes under varied agent and proposal conditions | `03_results.md` |
 | `{#tbl:mcp_tools}` | Colony Kernel MCP tool inventory — 8 tools with name and purpose | `03_results.md` |
+| `{#tbl:dependent_variables}` | Dependent variables for the configured benchmark protocol | `05_experimental_setup.md` |
+| `{#tbl:experimental_gate_thresholds}` | Gate decision thresholds for experimental configuration | `05_experimental_setup.md` |
+| `{#tbl:experimental_gate_weights}` | Gate score dimension weights for experimental configuration | `05_experimental_setup.md` |
+| `{#tbl:experimental_decay_rates}` | Pheromone decay rate classes for experimental configuration | `05_experimental_setup.md` |
+| `{#tbl:resource_budget_caps}` | Resource budget caps from `kernel.yaml` | `05_experimental_setup.md` |
+| `{#tbl:role_ladder}` | `AgentRole` variants, promotion thresholds, and permitted actions | `05_experimental_setup.md` |
+| `{#tbl:software_environment}` | Software environment for the manuscript snapshot | `05_experimental_setup.md` |
+| `{#tbl:configuration_provenance}` | Configuration provenance for the rendered manuscript | `06_reproducibility.md` |
+| `{#tbl:artifact_registry}` | Generated artifact registry for the manuscript pipeline | `06_reproducibility.md` |
+| `{#tbl:quality_gate_summary}` | Quality gate summary used by the reproducibility certificate | `06_reproducibility.md` |
+| `{#tbl:software_versions}` | Software versions used by the reproducibility certificate | `06_reproducibility.md` |
+| `{#tbl:evaluation_snapshot}` | Evaluation snapshot inputs and generated artifacts | `06_reproducibility.md` |
 
 ## Figure References
 
 Figures are referenced using pandoc-crossref syntax:
 
 ```markdown
-![Caption text.](../output/figures/filename.png){#fig:label width=80%}
+![Caption text.](figures/filename.png){#fig:label width=80%}
 
 <!-- Reference in text -->
 [@fig:label] shows the architecture.
 ```
 
-Figure source PNG files live in `output/figures/` and are generated by `scripts/generate_manuscript_figures.py`. Re-run the script to regenerate all figures before rendering.
+Figure source PNG files live in `output/figures/` and are generated by `scripts/generate_manuscript_figures.py`. The generator reads `output/data/manuscript_variables.json`, `docs/manuscript/config.yaml`, and `config/colony_kernel/roles.yaml` before drawing the assets, then stamps each figure with the manuscript version, config hash, and generation date. Re-run the script to regenerate all figures before rendering.
 
 ### Figure label registry
 
@@ -110,76 +136,106 @@ Figure source PNG files live in `output/figures/` and are generated by `scripts/
 
 ## `{{VARIABLE}}` Token Table
 
-All `{{TOKEN}}` placeholders are resolved at render time by `scripts/z_generate_manuscript_variables.py`, which writes `manuscript_variables.yaml`. An unresolved token causes a non-zero exit before the PDF renderer runs.
+All `{{TOKEN}}` placeholders are resolved at render time by `scripts/z_generate_manuscript_variables.py`, which writes `output/data/manuscript_variables.json` and substituted Markdown under `output/manuscript/`. An unresolved token causes a non-zero exit before the PDF renderer runs. The table below is the complete v1.3.0 generated variable inventory; tokens marked "generated map only" are emitted for reproducibility or downstream templates but are not currently referenced by the numbered manuscript sections.
 
-| Token | Source | Section(s) |
+| Token | Category | Section(s) |
 |---|---|---|
-| `{{CONFIG_VERSION}}` | `config.yaml` → `paper.version` | `00_abstract.md`, `05_experimental_setup.md`, `06_reproducibility.md` |
-| `{{CONFIG_FIRST_AUTHOR}}` | `config.yaml` → `authors[0].name` | `00_abstract.md`, `06_reproducibility.md` |
-| `{{CONFIG_KEYWORDS}}` | `config.yaml` → `keywords` (joined) | `00_abstract.md`, `06_reproducibility.md` |
-| `{{CONFIG_COLONY_KERNEL_SUBSYSTEMS}}` | `config.yaml` → `experiment.colony_kernel_subsystems` | `00_abstract.md` |
-| `{{CONFIG_GATE_EXECUTE_THRESHOLD}}` | `config.yaml` → `experiment.gate_execute_threshold` | `00_abstract.md`, `05_experimental_setup.md` |
-| `{{CONFIG_GATE_HOLD_THRESHOLD}}` | `config.yaml` → `experiment.gate_hold_threshold` | `05_experimental_setup.md` |
-| `{{CONFIG_TRUST_SANDBOX_SCORE}}` | `config.yaml` → `experiment.trust_sandbox_score` | `00_abstract.md`, `05_experimental_setup.md` |
-| `{{CONFIG_TRUST_HARD_FLOOR}}` | `config.yaml` → `experiment.trust_hard_floor` | `05_experimental_setup.md` |
-| `{{CONFIG_TRUST_PROMOTE_THRESHOLD}}` | `config.yaml` → `experiment.trust_promote_threshold` | `05_experimental_setup.md` |
-| `{{CONFIG_ROLE_COUNT}}` | `config.yaml` → `experiment.agent_roles` (count) | `00_abstract.md`, `05_experimental_setup.md` |
-| `{{CONFIG_SIGNAL_TYPES_COUNT}}` | `config.yaml` → `experiment.colony_signal_types` (count) | `00_abstract.md`, `05_experimental_setup.md` |
-| `{{CONFIG_MCP_TOOL_COUNT}}` | `config.yaml` → `experiment.mcp_tool_count` | `00_abstract.md` |
-| `{{CONFIG_MODULE_COUNT}}` | live filesystem count of `src/codomyrmex/` top-level packages | `00_abstract.md` |
-| `{{CONFIG_GATE_WEIGHT_BUDGET}}` | `config.yaml` → `experiment.gate_score_weights.budget` | `05_experimental_setup.md` |
-| `{{CONFIG_GATE_WEIGHT_RISK}}` | `config.yaml` → `experiment.gate_score_weights.risk` | `05_experimental_setup.md` |
-| `{{CONFIG_GATE_WEIGHT_TRUST}}` | `config.yaml` → `experiment.gate_score_weights.trust` | `05_experimental_setup.md` |
-| `{{CONFIG_GATE_WEIGHT_COMPLETENESS}}` | `config.yaml` → `experiment.gate_score_weights.completeness` | `05_experimental_setup.md` |
-| `{{CONFIG_DECAY_RATE_FAST}}` | `config.yaml` → `experiment.decay_rates[FAST]` | `05_experimental_setup.md` |
-| `{{CONFIG_DECAY_RATE_NORMAL}}` | `config.yaml` → `experiment.decay_rates[NORMAL]` | `05_experimental_setup.md` |
-| `{{CONFIG_DECAY_RATE_SLOW}}` | `config.yaml` → `experiment.decay_rates[SLOW]` | `05_experimental_setup.md` |
-| `{{CONFIG_FALSIFICATION_VECTORS}}` | `config.yaml` → `experiment.falsification_vectors` | `05_experimental_setup.md` |
-| `{{CONFIG_TRUST_DELTA_PASS}}` | `config.yaml` → `experiment.trust_delta_pass` | `03_results.md` |
-| `{{CONFIG_TRUST_DELTA_FAIL}}` | `config.yaml` → `experiment.trust_delta_fail` | `03_results.md` |
-| `{{CONFIG_PHEROMONE_RETENTION_SLOW}}` | computed: `exp(-decay_rate_slow)` ≈ 0.819 | `02_methodology.md` |
-| `{{CONFIG_PHEROMONE_RETENTION_NORMAL}}` | computed: `exp(-decay_rate_normal)` ≈ 0.368 | `02_methodology.md` |
-| `{{CONFIG_PHEROMONE_RETENTION_FAST}}` | computed: `exp(-decay_rate_fast)` ≈ 0.050 | `02_methodology.md` |
-| `{{CONFIG_PHEROMONE_RETENTION_SLOW_PCT}}` | computed: `round(exp(-decay_rate_slow)*100)` = 82 | `02_methodology.md` |
-| `{{CONFIG_PHEROMONE_RETENTION_NORMAL_PCT}}` | computed: `round(exp(-decay_rate_normal)*100)` = 37 | `02_methodology.md` |
-| `{{CONFIG_PHEROMONE_RETENTION_FAST_PCT}}` | computed: `round(exp(-decay_rate_fast)*100)` = 5 | `02_methodology.md` |
-| `{{RESULT_TRUST_AT_0}}` | computed: `trust_sandbox_score + 0 * trust_delta_pass` = 0.100 | `03_results.md` |
-| `{{RESULT_TRUST_AT_3}}` | computed: `trust_sandbox_score + 3 * trust_delta_pass` = 0.220 | `03_results.md` |
-| `{{RESULT_TRUST_AT_6}}` | computed: `trust_sandbox_score + 6 * trust_delta_pass` = 0.340 | `03_results.md` |
-| `{{RESULT_TRUST_AT_9}}` | computed: `trust_sandbox_score + 9 * trust_delta_pass` = 0.460 | `03_results.md` |
-| `{{RESULT_TRUST_AT_12}}` | computed: `trust_sandbox_score + 12 * trust_delta_pass` = 0.580 | `03_results.md` |
-| `{{CONFIG_BUDGET_MAX_LLM_CALLS}}` | `config.yaml` → `experiment.budget_max_llm_calls` | `05_experimental_setup.md` |
-| `{{CONFIG_BUDGET_MAX_RUNTIME}}` | `config.yaml` → `experiment.budget_max_runtime` | `05_experimental_setup.md` |
-| `{{CONFIG_BUDGET_MAX_RISK}}` | `config.yaml` → `experiment.budget_max_risk` | `05_experimental_setup.md` |
-| `{{CONFIG_BUDGET_MAX_SECURITY}}` | `config.yaml` → `experiment.budget_max_security` | `05_experimental_setup.md` |
-| `{{CONFIG_YAML_CONFIG_FILES}}` | `config.yaml` → `experiment.config_yaml_files` | `05_experimental_setup.md` |
-| `{{CONFIG_HASH}}` | SHA-256 of `config.yaml` (truncated, computed at render time) | `06_reproducibility.md` |
-| `{{PYTHON_VERSION}}` | `python --version` at render time | `05_experimental_setup.md` |
-| `{{GENERATION_TIMESTAMP}}` | ISO-8601 UTC timestamp at render time | `05_experimental_setup.md`, `06_reproducibility.md` |
-| `{{RESULT_TEST_COUNT}}` | `pytest --collect-only -q` count from `src/codomyrmex/colony_kernel/` | `00_abstract.md`, `06_reproducibility.md` |
-| `{{RESULT_COVERAGE_PCT}}` | branch coverage percentage from `pytest --cov` | `00_abstract.md`, `06_reproducibility.md` |
-| `{{RESULT_RUFF_ERRORS}}` | `ruff check src/` error count | `00_abstract.md`, `06_reproducibility.md` |
-| `{{RESULT_TY_ERRORS}}` | `ty check src/` diagnostic count | `00_abstract.md`, `06_reproducibility.md` |
-| `{{RESULT_COLONY_KERNEL_FILES}}` | live count of `.py` files under `src/codomyrmex/colony_kernel/` | `06_reproducibility.md` |
-| `{{RESULT_MODULE_DOCS_COUNT}}` | live count of documentation files under `src/codomyrmex/colony_kernel/` | `06_reproducibility.md` |
-| `{{ARTIFACT_TEST_SUITES}}` | live count of test suite files under `src/codomyrmex/` | `06_reproducibility.md` |
-| `{{ARTIFACT_CONFIG_FILES}}` | live count of YAML files under `config/colony_kernel/` | `06_reproducibility.md` |
-| `{{ARTIFACT_MCP_TOOLS}}` | live count of `@mcp_tool`-decorated functions in `colony_kernel/` | `06_reproducibility.md` |
+| `{{ARTIFACT_CONFIG_FILES}}` | ARTIFACT | `06_reproducibility.md` |
+| `{{ARTIFACT_MCP_TOOLS}}` | ARTIFACT | `06_reproducibility.md` |
+| `{{ARTIFACT_TEST_SUITES}}` | ARTIFACT | `03_results.md`, `06_reproducibility.md` |
+| `{{CONFIG_AGENT_COUNT}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_AUTHOR_ORCID}}` | CONFIG | `00_00_cover.md` |
+| `{{CONFIG_BASE_EVAPORATION_RATE}}` | CONFIG | `02_methodology.md` |
+| `{{CONFIG_BUDGET_DIMENSIONS_COUNT}}` | CONFIG | generated map only |
+| `{{CONFIG_BUDGET_MAX_LLM_CALLS}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_BUDGET_MAX_RISK}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_BUDGET_MAX_RUNTIME}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_BUDGET_MAX_SECURITY}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_COLONY_KERNEL_SUBSYSTEMS}}` | CONFIG | `00_abstract.md`, `03_results.md` |
+| `{{CONFIG_DECAY_RATES_COUNT}}` | CONFIG | generated map only |
+| `{{CONFIG_DECAY_RATE_FAST}}` | CONFIG | generated map only |
+| `{{CONFIG_DECAY_RATE_NORMAL}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_DECAY_RATE_SLOW}}` | CONFIG | generated map only |
+| `{{CONFIG_DOI}}` | CONFIG | `00_00_cover.md` |
+| `{{CONFIG_FALSIFICATION_VECTORS}}` | CONFIG | `01_introduction.md`, `05_experimental_setup.md` |
+| `{{CONFIG_FIRST_AUTHOR}}` | CONFIG | `00_00_cover.md`, `00_abstract.md`, `06_reproducibility.md` |
+| `{{CONFIG_GATE_EXECUTE_THRESHOLD}}` | CONFIG | `00_abstract.md`, `01_introduction.md`, `05_experimental_setup.md` |
+| `{{CONFIG_GATE_HOLD_THRESHOLD}}` | CONFIG | `01_introduction.md`, `05_experimental_setup.md` |
+| `{{CONFIG_GATE_WEIGHT_BUDGET}}` | CONFIG | `01_introduction.md` |
+| `{{CONFIG_GATE_WEIGHT_COMPLETENESS}}` | CONFIG | generated map only |
+| `{{CONFIG_GATE_WEIGHT_RISK}}` | CONFIG | generated map only |
+| `{{CONFIG_GATE_WEIGHT_TRUST}}` | CONFIG | generated map only |
+| `{{CONFIG_GITHUB_REPOSITORY}}` | CONFIG | `00_00_cover.md` |
+| `{{CONFIG_HASH}}` | CONFIG | `06_reproducibility.md` |
+| `{{CONFIG_KEYWORDS}}` | CONFIG | `00_abstract.md`, `06_reproducibility.md` |
+| `{{CONFIG_MCP_TOOL_COUNT}}` | CONFIG | `00_abstract.md` |
+| `{{CONFIG_MODULE_COUNT}}` | CONFIG | `00_abstract.md` |
+| `{{CONFIG_PHEROMONE_RETENTION_FAST}}` | CONFIG | generated map only |
+| `{{CONFIG_PHEROMONE_RETENTION_FAST_PCT}}` | CONFIG | `02_methodology.md` |
+| `{{CONFIG_PHEROMONE_RETENTION_NORMAL}}` | CONFIG | generated map only |
+| `{{CONFIG_PHEROMONE_RETENTION_NORMAL_PCT}}` | CONFIG | `02_methodology.md` |
+| `{{CONFIG_PHEROMONE_RETENTION_SLOW}}` | CONFIG | generated map only |
+| `{{CONFIG_PHEROMONE_RETENTION_SLOW_PCT}}` | CONFIG | `02_methodology.md` |
+| `{{CONFIG_PUBLICATION_DATE}}` | CONFIG | generated map only |
+| `{{CONFIG_PUBLICATION_DATE_DISPLAY}}` | CONFIG | `00_00_cover.md` |
+| `{{CONFIG_ROLE_COUNT}}` | CONFIG | `00_abstract.md`, `05_experimental_setup.md` |
+| `{{CONFIG_SIGNAL_TYPES_COUNT}}` | CONFIG | `00_abstract.md`, `05_experimental_setup.md` |
+| `{{CONFIG_SUBTITLE}}` | CONFIG | `00_00_cover.md` |
+| `{{CONFIG_TEST_COUNT}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_TITLE}}` | CONFIG | `00_00_cover.md` |
+| `{{CONFIG_TRIAL_COUNT}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_TRIAL_COUNT_MINUS_1}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_TRUST_DELTA_FAIL}}` | CONFIG | `07_scope_and_related_work.md` |
+| `{{CONFIG_TRUST_DELTA_PASS}}` | CONFIG | `03_results.md`, `07_scope_and_related_work.md` |
+| `{{CONFIG_TRUST_HARD_FLOOR}}` | CONFIG | `01_introduction.md` |
+| `{{CONFIG_TRUST_PROMOTE_THRESHOLD}}` | CONFIG | generated map only |
+| `{{CONFIG_TRUST_SANDBOX_SCORE}}` | CONFIG | `00_abstract.md` |
+| `{{CONFIG_VERSION}}` | CONFIG | `00_abstract.md`, `05_experimental_setup.md`, `06_reproducibility.md` |
+| `{{CONFIG_WARMUP_TICKS}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_WORKLOAD_TASK_COUNT}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_YAML_CONFIG_FILES}}` | CONFIG | `05_experimental_setup.md` |
+| `{{GENERATION_TIMESTAMP}}` | ENVIRONMENT | `05_experimental_setup.md`, `06_reproducibility.md` |
+| `{{PLATFORM}}` | ENVIRONMENT | generated map only |
+| `{{PYTHON_VERSION}}` | ENVIRONMENT | `05_experimental_setup.md`, `06_reproducibility.md` |
+| `{{RESULT_COLONY_KERNEL_FILES}}` | RESULT | `03_results.md`, `06_reproducibility.md` |
+| `{{RESULT_COLONY_KERNEL_LOC}}` | RESULT | `03_results.md` |
+| `{{RESULT_COVERAGE_PCT}}` | RESULT | `00_abstract.md`, `03_results.md`, `06_reproducibility.md` |
+| `{{RESULT_GATE_REFUSAL_RATE}}` | RESULT | `00_abstract.md` |
+| `{{RESULT_GATE_SCORE_PROMOTED}}` | RESULT | generated map only |
+| `{{RESULT_GATE_SCORE_SANDBOX}}` | RESULT | generated map only |
+| `{{RESULT_MODULE_DOCS_COUNT}}` | RESULT | `06_reproducibility.md` |
+| `{{RESULT_PHEROMONE_FAST_LOSS_8_TICK_PCT}}` | RESULT | `03_results.md` |
+| `{{RESULT_PHEROMONE_SLOW_RETENTION_8_TICK_PCT}}` | RESULT | `03_results.md` |
+| `{{RESULT_PROPOSALS_TO_PROMOTION}}` | RESULT | generated map only |
+| `{{RESULT_RUFF_ERRORS}}` | RESULT | `00_abstract.md`, `06_reproducibility.md` |
+| `{{RESULT_TEST_COUNT}}` | RESULT | `00_abstract.md`, `03_results.md`, `06_reproducibility.md` |
+| `{{RESULT_TRUST_AFTER_PROMOTION}}` | RESULT | generated map only |
+| `{{RESULT_TRUST_AT_0}}` | RESULT | `03_results.md` |
+| `{{RESULT_TRUST_AT_12}}` | RESULT | `03_results.md` |
+| `{{RESULT_TRUST_AT_3}}` | RESULT | `03_results.md` |
+| `{{RESULT_TRUST_AT_6}}` | RESULT | `03_results.md` |
+| `{{RESULT_TRUST_AT_9}}` | RESULT | `03_results.md` |
+| `{{RESULT_TRUST_CONVERGENCE_STEPS}}` | RESULT | `00_abstract.md` |
+| `{{RESULT_TRUST_INITIAL}}` | RESULT | generated map only |
+| `{{RESULT_TY_ERRORS}}` | RESULT | `00_abstract.md`, `06_reproducibility.md` |
 
 ## Preamble Injection
 
 [`preamble.md`](preamble.md) contains the LaTeX packages that Pandoc consumes:
 
 ```markdown
----
-header-includes:
-  - \usepackage{amsmath}
-  - \usepackage[capitalise,noabbrev]{cleveref}
-  - \usepackage{natbib}
----
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    allcolors=red
+}
 ```
 
-Do **not** duplicate package imports already in the infrastructure renderer.
+The HTML renderer also loads [`manuscript.css`](manuscript.css), which applies the same red hyperlink contract to browser output.
+
+`scripts/compile_manuscript.py` fails closed when `pandoc-crossref` is missing. The filter runs before `--citeproc`; PDF output uses XeLaTeX and red links, while HTML output uses linked citations, linked cross-references, generated `nav#TOC`, and MathML for equations.
+
+Do **not** duplicate package imports already loaded by this preamble.
 
 ## BibTeX Entry Format
 
@@ -207,6 +263,8 @@ Do **not** duplicate package imports already in the infrastructure renderer.
 ## Section Numbering
 
 ```text
+00_00_cover.md             → Cover (unnumbered)
+00_01_contents.md          → Contents (generated under output/manuscript/)
 00_abstract.md              → Abstract (unnumbered in PDF)
 01_introduction.md          → Section 1
 02_methodology.md           → Section 2
@@ -215,10 +273,10 @@ Do **not** duplicate package imports already in the infrastructure renderer.
 05_experimental_setup.md    → Section 5
 06_reproducibility.md       → Section 6
 07_scope_and_related_work.md → Section 7
-99_references.md            → References (Pandoc --natbib bibliography)
+99_references.md            → References (Pandoc citeproc bibliography)
 ```
 
-Files are assembled in lexicographic order by `infrastructure/rendering/pdf_renderer.py`. The `00_` prefix ensures the abstract renders first; `99_` ensures the references come last.
+Files are assembled by `scripts/compile_manuscript.py` using lexicographic manuscript section order with generated contents inserted after `00_00_cover.md` and before `00_abstract.md`. The explicit cover file renders first, and `99_` ensures the references anchor comes last.
 
 ## Prose Conventions
 
@@ -232,7 +290,7 @@ Files are assembled in lexicographic order by `infrastructure/rendering/pdf_rend
 
 ## See Also
 
-- [`../../../../docs/guides/manuscript-semantics.md`](../../../../docs/guides/manuscript-semantics.md) — Repository-wide canonical semantics
+- [`README.md`](README.md) — Manuscript directory overview
 - [`AGENTS.md`](AGENTS.md) — RASP protocol and AI agent constraints for this manuscript
 - [`config.yaml`](config.yaml) — Authoritative source for all `CONFIG_*` token values
 - [`preamble.md`](preamble.md) — Active LaTeX preamble

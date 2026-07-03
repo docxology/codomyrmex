@@ -1,6 +1,6 @@
 # Demos MCP Tool Specification
 
-**Version**: v1.2.7 | **Status**: Not MCP-exposed | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Not MCP-exposed | **Last Updated**: June 2026
 
 ## Current MCP Surface
 

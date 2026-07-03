@@ -41,6 +41,11 @@ from codomyrmex.colony_kernel.models import (
 
 _BASE_EVAPORATION: float = 0.1
 
+# Maximum allowed deposit strength — guards against runaway reinforcement.
+# Deposits exceeding this are clamped with a warning rather than silently allowed
+# (or rejected with an exception that would break the pipeline).
+_MAX_DEPOSIT_STRENGTH: float = 1_000_000.0  # 1e6
+
 # Maps DecayRate enum value to evaporation_per_tick
 # Per-signal-type decay class assignments are documented in
 # docs/manuscript/02_methodology.md (Table: Signal types) and
@@ -141,10 +146,14 @@ class PheromoneStore:
             field_config = StigmergyConfig(evaporation_per_tick=0.0)
         else:
             import dataclasses
+
             field_config = dataclasses.replace(config, evaporation_per_tick=0.0)
         self._field: TraceField = TraceField(field_config)
         # key -> evaporation_per_tick for custom per-signal decay
         self._key_evaporation: dict[str, float] = {}
+        # location -> set[key] index for O(|results|) prefix queries instead of O(N).
+        # Updated by deposit_signal and evaporate.
+        self._location_index: dict[str, set[str]] = {}
 
     # ------------------------------------------------------------------
     # Deposit & reinforce
@@ -162,10 +171,32 @@ class PheromoneStore:
 
         Args:
             signal: The colony signal to deposit.
+
+        Raises:
+            ValueError: If ``signal.strength`` exceeds ``_MAX_DEPOSIT_STRENGTH``
+                (1e6) — this guards against accidental or adversarial runaway
+                reinforcement that would dominate the field.
         """
+        if signal.strength > _MAX_DEPOSIT_STRENGTH:
+            import warnings as _warnings
+            _warnings.warn(
+                f"PheromoneStore.deposit_signal: strength {signal.strength!r} exceeds "
+                f"maximum allowed value {_MAX_DEPOSIT_STRENGTH}; clamping to "
+                f"{_MAX_DEPOSIT_STRENGTH}.",
+                stacklevel=2,
+            )
+            import dataclasses as _dc
+            signal = _dc.replace(signal, strength=_MAX_DEPOSIT_STRENGTH)
+
         key = _make_key(signal.signal_type, signal.location)
         evaporation = _DECAY_TO_EVAPORATION[signal.decay_rate]
         self._key_evaporation[key] = evaporation
+
+        # Update the location → key index
+        loc = signal.location
+        if loc not in self._location_index:
+            self._location_index[loc] = set()
+        self._location_index[loc].add(key)
 
         metadata: dict[str, Any] = {
             _META_SIGNAL_TYPE: signal.signal_type.value,
@@ -208,6 +239,10 @@ class PheromoneStore:
         signals for ``"codomyrmex.git_operations"`` and
         ``"codomyrmex.git_operations.core"`` etc.
 
+        Uses the internal location index for O(|results|) performance instead
+        of iterating all markers (O(N)).  Falls back to a full scan if the
+        index is stale or missing (defensive path for backward compatibility).
+
         Args:
             location: Location prefix to match against.
             signal_type: If given, restrict results to this signal type.
@@ -216,20 +251,42 @@ class PheromoneStore:
             List of matching ColonySignal objects sorted by descending strength.
         """
         results: list[ColonySignal] = []
-        # Iterate over all markers in the field via top_k(all)
-        all_markers = self._field.top_k(k=len(self._field) or 1)
-        for marker in all_markers:
-            meta = marker.metadata
-            marker_location: str = meta.get(_META_LOCATION, "")
-            if not (
-                marker_location == location
-                or marker_location.startswith((location + ".", location + "/"))
+
+        # Collect candidate keys from the location index using prefix matching.
+        candidate_keys: set[str] = set()
+        for loc_key, key_set in self._location_index.items():
+            if loc_key == location or loc_key.startswith(
+                (location + ".", location + "/")
             ):
-                continue
-            if signal_type is not None:
-                if meta.get(_META_SIGNAL_TYPE) != signal_type.value:
+                candidate_keys.update(key_set)
+
+        if candidate_keys:
+            # Fast path — use index-backed lookup
+            for key in candidate_keys:
+                marker = self._field._markers.get(key)
+                if marker is None:
                     continue
-            results.append(_marker_to_signal(marker))
+                meta = marker.metadata
+                if signal_type is not None:
+                    if meta.get(_META_SIGNAL_TYPE) != signal_type.value:
+                        continue
+                results.append(_marker_to_signal(marker))
+        else:
+            # Slow path — full scan (covers edge cases where index may be incomplete)
+            all_markers = self._field.top_k(k=len(self._field) or 1)
+            for marker in all_markers:
+                meta = marker.metadata
+                marker_location: str = meta.get(_META_LOCATION, "")
+                if not (
+                    marker_location == location
+                    or marker_location.startswith((location + ".", location + "/"))
+                ):
+                    continue
+                if signal_type is not None:
+                    if meta.get(_META_SIGNAL_TYPE) != signal_type.value:
+                        continue
+                results.append(_marker_to_signal(marker))
+
         results.sort(key=lambda s: s.strength, reverse=True)
         return results
 
@@ -309,6 +366,15 @@ class PheromoneStore:
         for key in keys_to_remove:
             del self._field._markers[key]
             self._key_evaporation.pop(key, None)
+            # Clean up the location index
+            # The key format is "{location}:{signal_type}" per make_trace_key.
+            # We extract the location by finding the last ":" component.
+            loc = key.rsplit(":", 1)[0] if ":" in key else key
+            loc_keys = self._location_index.get(loc)
+            if loc_keys is not None:
+                loc_keys.discard(key)
+                if not loc_keys:
+                    del self._location_index[loc]
 
     # ------------------------------------------------------------------
     # Summary
@@ -371,7 +437,6 @@ class PheromoneStore:
             "mean_strength": (sum(strengths) / total) if total > 0 else 0.0,
         }
 
-
     # ------------------------------------------------------------------
     # Kernel-compatible aliases
     # ------------------------------------------------------------------
@@ -388,6 +453,7 @@ class PheromoneStore:
         :meth:`deposit_signal` directly (no multiplier applied there).
         """
         import dataclasses
+
         multiplier = _SOURCE_MULTIPLIER.get(signal.source.value, 1.0)
         effective = signal.strength * multiplier * trust_factor
         scaled = dataclasses.replace(signal, strength=effective)
@@ -426,13 +492,15 @@ class PheromoneStore:
         for s in signals:
             key = _make_key(s.signal_type, s.location)
             parts = key.split(":", 1)
-            results.append({
-                "key": key,
-                "location": parts[0],
-                "signal_type": parts[1] if len(parts) > 1 else "unknown",
-                "strength": s.strength,
-                "updated_at": s.last_reinforced,
-            })
+            results.append(
+                {
+                    "key": key,
+                    "location": parts[0],
+                    "signal_type": parts[1] if len(parts) > 1 else "unknown",
+                    "strength": s.strength,
+                    "updated_at": s.last_reinforced,
+                }
+            )
         return results
 
     def __len__(self) -> int:

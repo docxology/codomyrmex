@@ -320,7 +320,7 @@ EOF
 
 ---
 
-**📝 Documentation Status**: ✅ **Verified & Signed** | _Last reviewed: March 2026_ | _Maintained by: Codomyrmex Documentation Team_ | _Version: v1.2.3_
+**📝 Documentation Status**: ✅ **Verified & Signed** | _Last reviewed: March 2026_ | _Maintained by: Codomyrmex Documentation Team_ | _Version: v1.3.0_
 
 ## 🎓 Common Workflows
 

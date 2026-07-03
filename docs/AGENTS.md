@@ -1,6 +1,6 @@
 # Codomyrmex Agents — docs/
 
-**Version**: v1.2.7 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -21,7 +21,7 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 - **Source of truth**: `src/codomyrmex/` and root `SPEC.md` / `AGENTS.md`; this tree explains and links, it does not replace code.
 - **Authoritative numbers**: volatile counts (tests, MCP tools, gate weights) live in `docs/manuscript/config.yaml` and `docs/reference/inventory.md` — never hard-code them in prose.
   - Gate weights: `docs/manuscript/config.yaml` → `experiment.gate_score_weights` (budget: 0.30 / risk: 0.30 / trust: 0.25 / completeness: 0.15)
-  - Colony kernel subsystems: 8 — PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel (coordinator); source: `src/codomyrmex/colony_kernel/kernel.py`
+  - Colony kernel subsystems: 8 — PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel (coordinator); sources: standalone modules under `src/codomyrmex/colony_kernel/` plus `kernel.py`
   - MCP tools: 8 exposed by the colony control plane; source: `src/codomyrmex/colony_kernel/mcp_tools.py`
   - Attack vectors: `CIRCULAR_ARCHITECTURE` (not `CIRCULAR_DEPS`) — see `src/codomyrmex/colony_kernel/falsification_worker.py`
 - **Tooling**: `uv` for scripts (`scripts/doc_inventory.py`, `scripts/documentation/validate_agents_structure.py`); optional site build per `pyproject.toml` / Docusaurus under `src/codomyrmex/documentation/` when publishing.
@@ -34,7 +34,7 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 
 ## Documentation Architecture
 
-The `docs/` directory is organized into **19 thematic sections** containing **1,172 markdown files** ([reference/inventory.md](reference/inventory.md)):
+The `docs/` directory is organized into **19 thematic sections** containing **1,180 markdown files** ([reference/inventory.md](reference/inventory.md)):
 
 ### Core references (top level)
 
@@ -63,7 +63,7 @@ Volatile counts (modules, MCP tools, tests) live in [reference/inventory.md](ref
 | `examples/` | Tutorials | Executable demos and integration examples |
 | `getting-started/` | Onboarding | Quickstart, installation, learning path |
 | `integration/` | Cross-module | Integration patterns, MCP bridges |
-| `modules/` | Module docs | **128** top-level packages; ownership hub [modules/AGENTS.md](modules/AGENTS.md) (see [reference/inventory.md](reference/inventory.md)) |
+| `modules/` | Module docs | **129** top-level packages; ownership hub [modules/AGENTS.md](modules/AGENTS.md) (see [reference/inventory.md](reference/inventory.md)) |
 | `pai/` | PAI system | Dashboard, skills, memory, dispatch |
 | `plans/` | Roadmap | Release plans, version targets |
 | `project/` | Standards | Contributing, architecture, coding style |

@@ -1,18 +1,26 @@
 # docs/todo
 
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
+
 > Per-module scope documents tracking outstanding implementation work, open design questions, and phase-by-phase acceptance criteria.
+
+## Navigation
+
+- **Agent Guide**: [AGENTS.md](AGENTS.md)
+- **Root Backlog**: [../../TODO.md](../../TODO.md)
+- **Module Docs**: [../modules/](../modules/)
 
 ## Overview
 
 Each file in this directory is a scope document for one Codomyrmex module. Scope documents are more detailed than a task list: they describe the executive summary of the module's purpose, break work into phases with explicit acceptance criteria, and record the current implementation status per subsystem.
 
-This directory is distinct from the root `TO-DO.md`, which holds repo-wide, cross-cutting backlog rows. When a `TO-DO.md` row references a specific module, the detailed spec and acceptance criteria live here.
+This directory is distinct from the root `TODO.md`, which holds repo-wide, cross-cutting backlog rows. When a `TODO.md` row references a specific module, the detailed spec and acceptance criteria live here.
 
 ## Contents
 
 | File | Module | Status |
 |------|--------|--------|
-| `COLONY_KERNEL.md` | Colony Kernel (control plane, 8 MCP tools, 9 subsystems) | Fully implemented — all 4 phases complete, 457 tests |
+| `COLONY_KERNEL.md` | Colony Kernel (control plane, 8 MCP tools, 8 subsystems) | Fully implemented — all 4 phases complete, 641 tests |
 
 ## File Naming Convention
 
@@ -29,6 +37,6 @@ When starting work on a new module:
 
 ## Related
 
-- **Root backlog**: [../../TO-DO.md](../../TO-DO.md)
+- **Root backlog**: [../../TODO.md](../../TODO.md)
 - **Module docs**: [../modules/](../modules/)
 - **Agent coordination**: [AGENTS.md](AGENTS.md)

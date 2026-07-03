@@ -134,8 +134,10 @@ class TestIsSafeUrl:
     def _skip_if_allow_private_enabled(self) -> None:
         """Skip tests that expect private-IP blocking when the user's config allows it."""
         from pathlib import Path
+
         try:
             import yaml
+
             config_path = Path.home() / ".hermes" / "config.yaml"
             if config_path.exists():
                 cfg = yaml.safe_load(config_path.read_text()) or {}
@@ -144,7 +146,9 @@ class TestIsSafeUrl:
                     or cfg.get("browser", {}).get("allow_private_urls")
                     or cfg.get("allow_private_urls")
                 ):
-                    pytest.skip("~/.hermes/config.yaml has allow_private_urls=true — private-IP blocking disabled")
+                    pytest.skip(
+                        "~/.hermes/config.yaml has allow_private_urls=true — private-IP blocking disabled"
+                    )
         except Exception:
             pass
 

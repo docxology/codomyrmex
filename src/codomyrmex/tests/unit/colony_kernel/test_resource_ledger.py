@@ -72,7 +72,9 @@ class TestCanAffordAffordable:
         assert ok is True
         assert reason is None
 
-    def test_accumulated_plus_new_still_under_budget(self, ledger: ResourceLedger) -> None:
+    def test_accumulated_plus_new_still_under_budget(
+        self, ledger: ResourceLedger
+    ) -> None:
         ledger.record_cost(_cost(llm_calls=50), agent_id="agent-a")
         ok, reason = ledger.can_afford(_cost(llm_calls=49))
         assert ok is True
@@ -130,7 +132,9 @@ class TestCanAffordExceeded:
         assert reason is not None
         assert "risk_level" in reason
 
-    def test_human_attention_minutes_exceeded(self, tight_budget: ResourceBudget) -> None:
+    def test_human_attention_minutes_exceeded(
+        self, tight_budget: ResourceBudget
+    ) -> None:
         ledger = ResourceLedger(budget=tight_budget)
         ok, reason = ledger.can_afford(_cost(human_attention_minutes=6.0))
         assert ok is False
@@ -158,7 +162,9 @@ class TestCanAffordExceeded:
         assert reason is not None
         assert "security_exposure" in reason
 
-    def test_accumulated_cost_pushes_over_budget(self, tight_budget: ResourceBudget) -> None:
+    def test_accumulated_cost_pushes_over_budget(
+        self, tight_budget: ResourceBudget
+    ) -> None:
         """Accumulated spend of 3 + new cost of 3 = 6 > max 5."""
         ledger = ResourceLedger(budget=tight_budget)
         ledger.record_cost(_cost(llm_calls=3), agent_id="agent-a")
@@ -198,14 +204,18 @@ class TestRecordCost:
         usage = ledger.current_usage()
         assert usage.llm_calls == 10
 
-    def test_record_cost_accumulates_runtime_seconds(self, ledger: ResourceLedger) -> None:
+    def test_record_cost_accumulates_runtime_seconds(
+        self, ledger: ResourceLedger
+    ) -> None:
         ledger.record_cost(_cost(runtime_seconds=1.5), agent_id="a")
         ledger.record_cost(_cost(runtime_seconds=2.5), agent_id="a")
 
         usage = ledger.current_usage()
         assert usage.runtime_seconds == pytest.approx(4.0)
 
-    def test_record_cost_accumulates_human_attention(self, ledger: ResourceLedger) -> None:
+    def test_record_cost_accumulates_human_attention(
+        self, ledger: ResourceLedger
+    ) -> None:
         ledger.record_cost(_cost(human_attention_minutes=5.0), agent_id="a")
         ledger.record_cost(_cost(human_attention_minutes=3.0), agent_id="a")
 
@@ -219,7 +229,9 @@ class TestRecordCost:
         usage = ledger.current_usage()
         assert usage.doc_debt == pytest.approx(15.5)
 
-    def test_record_cost_risk_level_clamped_at_one(self, ledger: ResourceLedger) -> None:
+    def test_record_cost_risk_level_clamped_at_one(
+        self, ledger: ResourceLedger
+    ) -> None:
         ledger.record_cost(_cost(risk_level=0.7), agent_id="a")
         ledger.record_cost(_cost(risk_level=0.8), agent_id="a")
 
@@ -243,7 +255,9 @@ class TestRecordCost:
         assert history[0][0] == "agent-x"
         assert history[1][0] == "agent-y"
 
-    def test_record_cost_history_entries_have_timestamp(self, ledger: ResourceLedger) -> None:
+    def test_record_cost_history_entries_have_timestamp(
+        self, ledger: ResourceLedger
+    ) -> None:
         import time as _time
 
         before = _time.time()
@@ -340,7 +354,9 @@ class TestMostExpensiveAgents:
         ranked = ledger.most_expensive_agents(k=5)
         assert ranked == []
 
-    def test_most_expensive_agents_ranked_by_llm_calls(self, ledger: ResourceLedger) -> None:
+    def test_most_expensive_agents_ranked_by_llm_calls(
+        self, ledger: ResourceLedger
+    ) -> None:
         ledger.record_cost(_cost(llm_calls=1), agent_id="cheap")
         ledger.record_cost(_cost(llm_calls=10), agent_id="expensive")
         ledger.record_cost(_cost(llm_calls=5), agent_id="medium")
@@ -355,8 +371,12 @@ class TestMostExpensiveAgents:
         self, ledger: ResourceLedger
     ) -> None:
         """Two agents with equal LLM calls; more human_attention ranks higher."""
-        ledger.record_cost(_cost(llm_calls=5, human_attention_minutes=1.0), agent_id="low-attn")
-        ledger.record_cost(_cost(llm_calls=5, human_attention_minutes=9.0), agent_id="high-attn")
+        ledger.record_cost(
+            _cost(llm_calls=5, human_attention_minutes=1.0), agent_id="low-attn"
+        )
+        ledger.record_cost(
+            _cost(llm_calls=5, human_attention_minutes=9.0), agent_id="high-attn"
+        )
 
         ranked = ledger.most_expensive_agents(k=2)
 
@@ -383,7 +403,9 @@ class TestMostExpensiveAgents:
         assert ranked[0][0] == "bot"
         assert ranked[0][1].llm_calls == 7
 
-    def test_most_expensive_agents_returns_k_results(self, ledger: ResourceLedger) -> None:
+    def test_most_expensive_agents_returns_k_results(
+        self, ledger: ResourceLedger
+    ) -> None:
         for i in range(10):
             ledger.record_cost(_cost(llm_calls=i + 1), agent_id=f"bot-{i}")
 
@@ -486,7 +508,9 @@ class TestConsume:
         assert usage.llm_calls == 4
         assert usage.runtime_seconds == pytest.approx(1.5)
 
-    def test_consume_within_budget_does_not_exceed(self, ledger: ResourceLedger) -> None:
+    def test_consume_within_budget_does_not_exceed(
+        self, ledger: ResourceLedger
+    ) -> None:
         """After consume() the accumulated total stays within default budget."""
         ledger.consume(_cost(llm_calls=2))
 
@@ -509,7 +533,9 @@ class TestConsume:
 
 
 class TestCheckBudget:
-    def test_check_budget_within_limits_returns_ok(self, ledger: ResourceLedger) -> None:
+    def test_check_budget_within_limits_returns_ok(
+        self, ledger: ResourceLedger
+    ) -> None:
         """Small cost on fresh default ledger → approved with reason string."""
         ok, reason = ledger.check_budget(_cost(llm_calls=1))
 
@@ -526,7 +552,9 @@ class TestCheckBudget:
         assert ok is False
         assert "llm_calls" in reason
 
-    def test_check_budget_does_not_mutate_accumulator(self, ledger: ResourceLedger) -> None:
+    def test_check_budget_does_not_mutate_accumulator(
+        self, ledger: ResourceLedger
+    ) -> None:
         """check_budget is read-only: accumulated usage unchanged after the call."""
         before = ledger.current_usage().llm_calls
         ledger.check_budget(_cost(llm_calls=5))

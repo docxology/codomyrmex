@@ -595,7 +595,7 @@ Include:
 
 ---
 
-**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: March 2026* | *Maintained by: Codomyrmex Documentation Team* | *Version: v1.2.3*
+**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: March 2026* | *Maintained by: Codomyrmex Documentation Team* | *Version: v1.3.0*
 
 ## Navigation Links
 

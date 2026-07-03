@@ -8,10 +8,10 @@
 
 ## Overview
 
-`colony_kernel` is the Colony Control Plane for multi-agent orchestration.  It
-wires five subsystems — pheromone stigmergy, resource budgeting, actuation
-gating, consequence memory, and role adaptation — behind a single top-level
-class: `ColonyKernel`.
+`colony_kernel` is the Colony Control Plane for multi-agent orchestration. It
+wires eight subsystems — pheromone stigmergy, resource budgeting, actuation
+gating, consequence memory, role adaptation, pruning, falsification, and MCP
+exposure — behind a single top-level class: `ColonyKernel`.
 
 All callers interact exclusively through the public methods documented below.
 Subsystem internals (`PheromoneStore`, `ResourceLedger`, `ActuationGate`,
