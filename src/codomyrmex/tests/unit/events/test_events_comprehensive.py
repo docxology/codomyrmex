@@ -847,6 +847,15 @@ class TestEventLoggerExtended:
         event = Event(event_type=event_type, source=source)
         bus.publish(event)
 
+    def test_get_event_logger_returns_singleton(self):
+        """get_event_logger() returns the same singleton instance on multiple calls."""
+        from codomyrmex.events.handlers.event_logger import get_event_logger
+
+        logger1 = get_event_logger()
+        logger2 = get_event_logger()
+
+        assert logger1 is logger2
+
     def test_get_error_events_returns_only_errors(self):
         """get_error_events() returns only events whose type contains 'error' — ISC-26."""
         logger, bus = self._make_fresh_logger()
