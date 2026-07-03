@@ -40,7 +40,7 @@ jobs:
       benchmark-enabled: ${{ steps.check-benchmarks.outputs.enabled }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Check if benchmarks exist
         id: check-benchmarks
@@ -62,7 +62,7 @@ jobs:
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -121,7 +121,7 @@ jobs:
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -175,7 +175,7 @@ jobs:
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5

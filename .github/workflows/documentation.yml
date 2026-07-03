@@ -44,7 +44,7 @@ jobs:
       docs-changed: ${{ steps.changes.outputs.docs }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 
@@ -130,7 +130,7 @@ jobs:
     if: needs.validate-documentation.outputs.docs-changed == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -226,7 +226,7 @@ jobs:
     if: needs.validate-documentation.outputs.docs-changed == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Download aggregated documentation
         uses: actions/download-artifact@v4
