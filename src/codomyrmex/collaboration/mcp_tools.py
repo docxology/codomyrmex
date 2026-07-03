@@ -13,7 +13,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 def _get_swarm_manager() -> Any:
     """Lazy-import SwarmManager to avoid circular imports."""
-    from codomyrmex.collaboration.swarm import SwarmManager
+    from codomyrmex.collaboration.protocols.swarm import SwarmManager
 
     return SwarmManager()
 

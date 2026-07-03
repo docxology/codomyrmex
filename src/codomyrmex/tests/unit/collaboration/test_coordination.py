@@ -249,6 +249,27 @@ class TestTaskManager:
 
         assert result is False
 
+    def test_manager_cancel_running_task(self):
+        """Test cancelling a running task."""
+        manager = TaskManager()
+        task = Task(name="Running Task")
+        agent = CollaborativeAgent(name="Worker")
+
+        task_id = manager.submit(task)
+        _ = manager.get_next_task(agent)
+
+        result = manager.cancel(task_id)
+
+        assert result is False
+        assert manager.get_running_count() == 1
+
+    def test_manager_cancel_nonexistent_task(self):
+        """Test cancelling a task that does not exist."""
+        manager = TaskManager()
+        result = manager.cancel("nonexistent_task_id")
+
+        assert result is False
+
     def test_manager_get_next_task(self):
         """Test getting next task for an agent."""
         manager = TaskManager()
