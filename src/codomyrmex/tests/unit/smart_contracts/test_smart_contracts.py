@@ -457,6 +457,11 @@ class TestContractCallFluent:
 class TestTransactionBuilderDeep:
     """Deep tests for TransactionBuilder fluent API."""
 
+    def test_gas_limit_sets_value(self, eth_address):
+        builder = TransactionBuilder(eth_address)
+        builder.gas_limit(42000)
+        assert builder._gas_limit == 42000
+
     def test_fluent_chain_all_methods(self, eth_address):
         to_addr = Address(value=VALID_ETH_ADDRESS, network=Network.POLYGON)
         builder = (
