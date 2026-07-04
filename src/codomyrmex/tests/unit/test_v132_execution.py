@@ -6,7 +6,18 @@ Strict zero-mock policy on macOS host ensuring all bridges are fully concrete.
 import pytest
 
 from codomyrmex.plugin_system.wasm import WasmSandbox, WasmSandboxError
-from codomyrmex.quantization import QuantizationConfig, dequantize_array, quantize_array
+
+try:
+    from codomyrmex.quantization import (
+        QuantizationConfig,
+        dequantize_array,
+        quantize_array,
+    )
+except ImportError:
+    QuantizationConfig = None  # type: ignore
+    dequantize_array = None  # type: ignore
+    quantize_array = None  # type: ignore
+
 from codomyrmex.spatial.coordinates.geodesic import generate_icosahedron
 from codomyrmex.spatial.three_d.engine_3d import Vector3D
 from codomyrmex.spatial.three_d.geodesic_bvh import build_bvh, ray_intersect_bvh
@@ -77,6 +88,7 @@ class TestWasmSandbox:
             sandbox.execute_plugin(wat, "anything")
 
 
+@pytest.mark.skipif(QuantizationConfig is None, reason="mlx not installed")
 class TestMLXQuantizer:
     """Test suite for the MLX array quantization module."""
 

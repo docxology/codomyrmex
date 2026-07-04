@@ -218,9 +218,7 @@ class ColonyKernel:
                     evidence={
                         "proposal_id": proposal.proposal_id,
                         "finding_count": len(risk_findings),
-                        "max_severity": max(
-                            f.severity.value for f in risk_findings
-                        ),
+                        "max_severity": max(f.severity.value for f in risk_findings),
                     },
                 )
                 self.pheromone_store.deposit(
