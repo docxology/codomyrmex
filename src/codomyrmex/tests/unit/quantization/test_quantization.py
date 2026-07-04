@@ -15,6 +15,17 @@ from codomyrmex.quantization import (
 )
 from codomyrmex.quantization.utils import quantization_error
 
+try:
+    from codomyrmex.quantization.mlx_quantizer import (
+        QuantizationConfig,
+        dequantize_array,
+        quantize_array,
+    )
+except ImportError:
+    QuantizationConfig = None  # type: ignore
+    dequantize_array = None  # type: ignore
+    quantize_array = None  # type: ignore
+
 
 class TestInt8Quantization:
     """Tests for Int8 quantization roundtrip correctness."""

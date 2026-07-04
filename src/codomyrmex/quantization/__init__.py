@@ -6,7 +6,14 @@ for edge inference execution constraints.
 
 from .fp4 import FP4Quantizer, FP4Tensor, dequantize_fp4, quantize_fp4
 from .int8 import Int8Quantizer, QuantizedTensor, dequantize_int8, quantize_int8
-from .mlx_quantizer import QuantizationConfig, dequantize_array, quantize_array
+
+try:
+    from .mlx_quantizer import QuantizationConfig, dequantize_array, quantize_array
+except ImportError:
+    QuantizationConfig = None  # type: ignore
+    dequantize_array = None  # type: ignore
+    quantize_array = None  # type: ignore
+
 from .utils import compute_scale_zero_point, per_channel_scale, quantization_error
 
 __all__ = [
