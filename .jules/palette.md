@@ -1,0 +1,3 @@
+## 2025-03-04 - Adding ARIA labels to icon-only buttons
+**Learning:** Icon-only buttons (using `size="icon-sm"` or `size="icon-xs"` and containing SVG or `&times;` text) across various panels (e.g., modals, pipeline, standup, agent-squad) were missing `aria-label`s, reducing screen reader accessibility. The `variant="ghost"` and `size="icon-xs"/"icon-sm"` combinations are frequently used for close buttons (`×`, `&times;`, `x`) and action buttons (Move, Edit, Delete).
+**Action:** Always verify `aria-label` presence when encountering `<Button>` components utilizing icon-only size variants without text content, to ensure consistent keyboard and screen reader accessibility across the application.
