@@ -145,9 +145,7 @@ def orchestrator_run_dag(
                 import ast
                 import operator
 
-                def _safe_eval(
-                    node: ast.AST,
-                ) -> float | int | str | list | dict | tuple | set:
+                def _safe_eval(node: ast.AST) -> float | int | str | list | dict | tuple | set:
                     if isinstance(node, ast.Expression):
                         return _safe_eval(node.body)
                     if isinstance(node, ast.Constant):
