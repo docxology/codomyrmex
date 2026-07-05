@@ -142,15 +142,92 @@ def orchestrator_run_dag(
                         "Double underscores are not allowed in fn_expr for security reasons."
                     )
 
-                safe_locals = {
-                    "len": len,
-                    "sum": sum,
-                    "min": min,
-                    "max": max,
-                    "abs": abs,
-                    "round": round,
-                }
-                return lambda *_a, **_kw: eval(expr, {"__builtins__": {}}, safe_locals)
+                import ast
+                import operator
+
+                def _safe_eval(
+                    node: ast.AST,
+                ) -> float | int | str | list | dict | tuple | set:
+                    if isinstance(node, ast.Expression):
+                        return _safe_eval(node.body)
+                    if isinstance(node, ast.Constant):
+                        return node.value
+                    if isinstance(node, ast.List):
+                        return [_safe_eval(x) for x in node.elts]
+                    if isinstance(node, ast.Tuple):
+                        return tuple(_safe_eval(x) for x in node.elts)
+                    if isinstance(node, ast.Set):
+                        return {_safe_eval(x) for x in node.elts}
+                    if isinstance(node, ast.Dict):
+                        return {
+                            _safe_eval(k): _safe_eval(v)
+                            for k, v in zip(node.keys, node.values, strict=False)
+                        }
+
+                    if isinstance(node, ast.Name):
+                        safe_funcs = {
+                            "len": len,
+                            "sum": sum,
+                            "min": min,
+                            "max": max,
+                            "abs": abs,
+                            "round": round,
+                        }
+                        if node.id in safe_funcs:
+                            return safe_funcs[node.id]
+                        raise ValueError(f"Unknown variable: {node.id}")
+
+                    _math_ops = {
+                        ast.Add: operator.add,
+                        ast.Sub: operator.sub,
+                        ast.Mult: operator.mul,
+                        ast.Div: operator.truediv,
+                        ast.USub: operator.neg,
+                        ast.UAdd: operator.pos,
+                    }
+                    if isinstance(node, ast.BinOp) and type(node.op) in _math_ops:
+                        return _math_ops[type(node.op)](
+                            _safe_eval(node.left), _safe_eval(node.right)
+                        )
+                    if isinstance(node, ast.UnaryOp) and type(node.op) in _math_ops:
+                        return _math_ops[type(node.op)](_safe_eval(node.operand))
+
+                    _compare_ops = {
+                        ast.Eq: operator.eq,
+                        ast.NotEq: operator.ne,
+                        ast.Lt: operator.lt,
+                        ast.LtE: operator.le,
+                        ast.Gt: operator.gt,
+                        ast.GtE: operator.ge,
+                    }
+                    if (
+                        isinstance(node, ast.Compare)
+                        and len(node.ops) == 1
+                        and len(node.comparators) == 1
+                    ):
+                        op = type(node.ops[0])
+                        if op in _compare_ops:
+                            return _compare_ops[op](
+                                _safe_eval(node.left), _safe_eval(node.comparators[0])
+                            )
+
+                    if isinstance(node, ast.Call):
+                        if isinstance(node.func, ast.Name):
+                            safe_funcs = {
+                                "len": len,
+                                "sum": sum,
+                                "min": min,
+                                "max": max,
+                                "abs": abs,
+                                "round": round,
+                            }
+                            if node.func.id in safe_funcs:
+                                args = [_safe_eval(arg) for arg in node.args]
+                                return safe_funcs[node.func.id](*args)
+
+                    raise ValueError(f"Unsupported expression: {ast.dump(node)}")
+
+                return lambda *_a, **_kw: _safe_eval(ast.parse(expr, mode="eval"))
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 
