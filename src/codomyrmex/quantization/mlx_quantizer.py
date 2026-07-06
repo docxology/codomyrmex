@@ -7,7 +7,10 @@ within constrained memory boundaries (<2GB).
 
 import dataclasses
 
-import mlx.core as mx
+try:
+    import mlx.core as mx
+except ImportError:
+    mx = None
 
 
 @dataclasses.dataclass
@@ -30,9 +33,11 @@ class QuantizationConfig:
             raise ValueError("QuantizationConfig group_size must be positive.")
 
 
+from typing import Optional
+
 def quantize_array(
-    array: mx.array, config: QuantizationConfig
-) -> tuple[mx.array, mx.array | None, mx.array | None]:
+    array: "mx.array", config: QuantizationConfig
+) -> tuple["mx.array", Optional["mx.array"], Optional["mx.array"]]:
     """Quantize an MLX array into lower precision (e.g. INT4 or INT8).
 
     Args:
@@ -53,11 +58,11 @@ def quantize_array(
 
 
 def dequantize_array(
-    wq: mx.array,
-    scales: mx.array | None,
-    biases: mx.array | None,
+    wq: "mx.array",
+    scales: Optional["mx.array"],
+    biases: Optional["mx.array"],
     config: QuantizationConfig,
-) -> mx.array:
+) -> "mx.array":
     """Dequantize an MLX array back into a continuous floating point format.
 
     Args:
