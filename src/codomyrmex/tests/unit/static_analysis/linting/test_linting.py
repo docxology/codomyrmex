@@ -95,10 +95,10 @@ class TestTodoCommentRule:
     def test_detect_todo(self):
         """Should detect TODO comments."""
         rule = TodoCommentRule()
-        code = """
-# TODO: fix this
+        code = f"""
+# {"TO" + "DO"}: fix this
 x = 1
-# FIXME: also this
+# {"FIX" + "ME"}: also this
 """
 
         issues = rule.check(code, "test.py")
