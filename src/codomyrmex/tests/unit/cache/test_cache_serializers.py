@@ -218,6 +218,13 @@ class TestTypedSerializer:
         result = s.deserialize(s.serialize(99))
         assert result == 99
 
+    def test_deserialize_unmapped_type(self):
+        s = TypedSerializer()
+        data = s.serialize({1, 2, 3})
+        result = s.deserialize(data)
+        assert isinstance(result, str)
+        assert result == str({1, 2, 3})
+
 
 # ── create_serializer ─────────────────────────────────────────────────
 
@@ -260,3 +267,13 @@ class TestCreateSerializer:
         s = create_serializer("json", indent=2)
         assert isinstance(s, JSONSerializer)
         assert s.indent == 2
+
+    def test_kwargs_passed_to_pickle_serializer(self):
+        s = create_serializer("pickle", protocol=2)
+        assert isinstance(s, PickleSerializer)
+        assert s.protocol == 2
+
+    def test_kwargs_passed_to_string_serializer(self):
+        s = create_serializer("string", encoding="latin-1")
+        assert isinstance(s, StringSerializer)
+        assert s.encoding == "latin-1"
