@@ -58,6 +58,7 @@ class InMemoryCache(Cache):
         ttl = ttl or self.default_ttl
         self._cache[key] = (value, time.time(), ttl)
         self._stats.size = len(self._cache)
+        self._stats.record_write()
         return True
 
     def delete(self, key: str) -> bool:
@@ -65,6 +66,7 @@ class InMemoryCache(Cache):
         if key in self._cache:
             del self._cache[key]
             self._stats.size = len(self._cache)
+            self._stats.record_delete()
             return True
         return False
 
