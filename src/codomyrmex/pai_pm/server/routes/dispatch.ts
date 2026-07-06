@@ -21,6 +21,11 @@ const MISSIONS_DIR = join(PAI_DIR, "MEMORY", "STATE", "missions");
 
 const yaml = await import("js-yaml");
 
+// Secure YAML wrapper for SAST rule compliance while using js-yaml v4
+function safeLoad(content: string) {
+    return yaml.load(content, { schema: yaml.JSON_SCHEMA });
+}
+
 const TIMEOUT_MS = 120_000;
 
 export async function handleDispatchRoutes(
@@ -157,7 +162,7 @@ export async function handleDispatchRoutes(
         });
         const projectFile = join(PROJECTS_DIR, projectId, "project.yaml");
         if (existsSync(projectFile)) {
-            const data = yaml.load(readFileSync(projectFile, "utf8")) as any;
+            const data = safeLoad(readFileSync(projectFile, "utf8")) as any;
             data.dispatch_context = globalThis._dispatchContexts.get(`project:${projectId}`);
             writeFileSync(projectFile, yaml.dump(data));
         }
@@ -180,7 +185,7 @@ export async function handleDispatchRoutes(
         });
         const missionsFile = join(MISSIONS_DIR, "missions.yaml");
         if (existsSync(missionsFile)) {
-            const missions = (yaml.load(readFileSync(missionsFile, "utf8")) as any[]) || [];
+            const missions = (safeLoad(readFileSync(missionsFile, "utf8")) as any[]) || [];
             const m = missions.find((x: any) => x.id === missionId);
             if (m) { m.dispatch_context = globalThis._dispatchContexts.get(`mission:${missionId}`); writeFileSync(missionsFile, yaml.dump(missions)); }
         }
