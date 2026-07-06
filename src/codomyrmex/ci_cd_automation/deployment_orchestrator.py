@@ -8,6 +8,7 @@ and release coordination capabilities.
 import importlib
 import json
 import os
+import shlex
 import shutil
 import socket
 import subprocess
@@ -562,9 +563,11 @@ class DeploymentOrchestrator:
                 env.update(deployment.environment.variables)
                 env["DEPLOYMENT_VERSION"] = deployment.version
 
+                cmd = hook if os.name == "nt" else shlex.split(hook)
+
                 result = subprocess.run(
-                    hook,
-                    shell=True,
+                    cmd,
+                    shell=False,
                     capture_output=True,
                     text=True,
                     cwd=os.getcwd(),
