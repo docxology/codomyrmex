@@ -5,7 +5,6 @@ from collections.abc import Generator
 from pathlib import Path
 from typing import Any
 
-# from conftest import FunctionName, ClassName
 import pytest
 
 """Pytest configuration and fixtures for example testing.
