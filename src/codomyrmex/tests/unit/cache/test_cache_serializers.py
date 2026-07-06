@@ -213,6 +213,14 @@ class TestTypedSerializer:
         data = s.serialize({1, 2, 3})
         assert isinstance(data, bytes)
 
+    def test_deserialize_unmapped_type_returns_value(self):
+        s = TypedSerializer()
+        # A set is not JSON serializable — it falls back to str, and is serialized as string "{1, 2, 3}"
+        # On deserialize, type name is "set", which is not in type_map, so it returns the string value verbatim
+        original = {1, 2, 3}
+        result = s.deserialize(s.serialize(original))
+        assert result == str(original)
+
     def test_custom_base_serializer(self):
         s = TypedSerializer(base_serializer=JSONSerializer())
         result = s.deserialize(s.serialize(99))
@@ -260,3 +268,9 @@ class TestCreateSerializer:
         s = create_serializer("json", indent=2)
         assert isinstance(s, JSONSerializer)
         assert s.indent == 2
+
+    def test_create_serializer_with_compression_and_kwargs(self):
+        s = create_serializer("json", compress=True, indent=4)
+        assert isinstance(s, CompressedSerializer)
+        assert isinstance(s.base, JSONSerializer)
+        assert s.base.indent == 4
