@@ -77,6 +77,31 @@ def test_cache_delete_returns_true_when_exists() -> None:
     assert cache_delete("to_del", cache_name=cache_name) is True
 
 
+def test_cache_delete_actually_removes_key() -> None:
+    """cache_delete actually removes the key from the cache."""
+    from codomyrmex.cache.mcp_tools import cache_delete, cache_get, cache_set
+
+    cache_name = _unique_cache()
+    cache_set("to_del", 42, cache_name=cache_name)
+    assert cache_get("to_del", cache_name=cache_name) == 42
+
+    assert cache_delete("to_del", cache_name=cache_name) is True
+    assert cache_get("to_del", cache_name=cache_name) is None
+
+
+def test_cache_delete_preserves_other_keys() -> None:
+    """cache_delete on one key does not affect another key."""
+    from codomyrmex.cache.mcp_tools import cache_delete, cache_get, cache_set
+
+    cache_name = _unique_cache()
+    cache_set("key1", "val1", cache_name=cache_name)
+    cache_set("key2", "val2", cache_name=cache_name)
+
+    assert cache_delete("key1", cache_name=cache_name) is True
+    assert cache_get("key1", cache_name=cache_name) is None
+    assert cache_get("key2", cache_name=cache_name) == "val2"
+
+
 def test_cache_delete_returns_false_when_missing() -> None:
     """cache_delete returns False for a key that was never set."""
     from codomyrmex.cache.mcp_tools import cache_delete
