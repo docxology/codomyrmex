@@ -6,7 +6,6 @@ import time
 import traceback
 from datetime import datetime
 from pathlib import Path
-import os
 from typing import Any
 
 try:
