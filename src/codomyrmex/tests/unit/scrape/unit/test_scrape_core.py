@@ -532,10 +532,46 @@ class TestScrapeMcpToolsContent:
             "headings",
             "paragraph_count",
             "link_count",
+            "image_count",
             "word_count",
             "content_hash",
+            "meta",
         ):
             assert key in result
+
+    def test_images_and_meta_extracted(self):
+        from codomyrmex.scrape.mcp_tools import scrape_extract_content
+
+        html = """
+        <html>
+            <head>
+                <meta name="description" content="Test description">
+                <meta name="keywords" content="test, mock">
+            </head>
+            <body>
+                <img src="/img1.png" alt="Image 1">
+                <img src="/img2.jpg" alt="Image 2">
+            </body>
+        </html>
+        """
+        result = scrape_extract_content(html=html, base_url="https://example.com")
+        assert result["status"] == "success"
+        assert result["image_count"] == 2
+        assert result["meta"].get("description") == "Test description"
+        assert result["meta"].get("keywords") == "test, mock"
+
+    def test_extract_content_exception(self, monkeypatch):
+        from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
+        from codomyrmex.scrape.mcp_tools import scrape_extract_content
+
+        def mock_extract(*args, **kwargs):
+            raise RuntimeError("Simulated extraction failure")
+
+        monkeypatch.setattr(ContentExtractor, "extract", mock_extract)
+
+        result = scrape_extract_content(html="<html></html>")
+        assert result["status"] == "error"
+        assert "Simulated extraction failure" in result["message"]
 
     def test_headings_structured(self):
         from codomyrmex.scrape.mcp_tools import scrape_extract_content
