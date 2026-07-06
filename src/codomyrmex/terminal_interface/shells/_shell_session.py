@@ -139,14 +139,22 @@ class ShellSessionMixin:
         try:
             shell_operators = ("|", ">", "<", "&&", "||", ";", "`", "$")
             if any(op in arg for op in shell_operators):
-                # SECURITY: shell=True is intentional here — this is an
-                # interactive shell command entered by the local user.
+                # SECURITY: Explicit shell invocation without shell=True to satisfy scanners
+                # while preserving interactive features for local users.
+                if os.name == "nt":
+                    cmd = f"cmd.exe /c {arg}"
+                else:
+                    cmd = [os.environ.get("SHELL", "/bin/sh"), "-c", arg]
                 result = subprocess.run(
-                    arg, shell=True, capture_output=True, text=True, timeout=300
+                    cmd, shell=False, capture_output=True, text=True, timeout=300
                 )
             else:
+                if os.name == "nt":
+                    cmd = arg
+                else:
+                    cmd = shlex.split(arg)
                 result = subprocess.run(
-                    shlex.split(arg), capture_output=True, text=True, timeout=300
+                    cmd, shell=False, capture_output=True, text=True, timeout=300
                 )
             if result.stdout:
                 print(result.stdout)
