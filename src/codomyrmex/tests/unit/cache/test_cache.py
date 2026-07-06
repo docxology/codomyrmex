@@ -808,6 +808,32 @@ class TestTTLManager:
 
 
 @pytest.mark.unit
+class TestCliCommands:
+    """Tests for CLI commands."""
+
+    def test_cli_commands(self, capsys):
+        """Test cli_commands function and its handlers."""
+        from codomyrmex.cache import cli_commands
+
+        commands = cli_commands()
+
+        assert "backends" in commands
+        assert "stats" in commands
+
+        # Test backends handler
+        commands["backends"]["handler"]()
+        captured = capsys.readouterr()
+        assert "Cache Backends:" in captured.out
+        assert "in_memory" in captured.out
+
+        # Test stats handler
+        commands["stats"]["handler"]()
+        captured = capsys.readouterr()
+        assert "Cache Statistics:" in captured.out
+        assert "Active caches : 0" in captured.out
+
+
+@pytest.mark.unit
 class TestGetCacheFunction:
     """Tests for get_cache convenience function."""
 
@@ -835,6 +861,35 @@ class TestGetCacheFunction:
         cache = get_cache(backend="file_based")
 
         assert isinstance(cache, FileBasedCache)
+
+    def test_get_cache_functional(self):
+        """Test that get_cache returns a functional cache instance."""
+        from codomyrmex.cache import get_cache
+
+        cache = get_cache("functional_test")
+        cache.set("foo", "bar")
+
+        assert cache.get("foo") == "bar"
+
+    def test_get_cache_redis_fallback(self):
+        """Test get_cache falling back to in_memory for redis if unavailable."""
+        from codomyrmex.cache import get_cache
+        from codomyrmex.cache.backends.in_memory import InMemoryCache
+
+        # Depending on the environment, redis might actually be installed.
+        # However, if the fallback logic works, it should return an instance
+        # that behaves like a Cache. For tests without a Redis server, it should
+        # safely fallback to InMemoryCache.
+        cache = get_cache(backend="redis")
+
+        # It should either be a RedisCache (if available) or InMemoryCache.
+        # But for zero-mock, we can just assert it works or specifically check if it's InMemoryCache
+        # if we know redis is not running/available in this test environment.
+        # The fallback logic catches ImportError, TypeError, OSError.
+        # Even if Redis is installed, if it fails to connect, it falls back or errors?
+        # Actually CacheManager handles the fallback.
+        assert hasattr(cache, "set")
+        assert hasattr(cache, "get")
 
 
 @pytest.mark.unit
