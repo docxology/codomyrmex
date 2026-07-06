@@ -119,13 +119,30 @@ def orchestrator_run_dag(
         Aggregated result dict with per-task outputs, success/error counts.
     """
     try:
+        import ast
         import importlib
+        import operator
 
         from codomyrmex.orchestrator.swarm_topology import (
             SwarmTopology,
             TaskSpec,
             TopologyMode,
         )
+
+        _MATH_OPS = {
+            ast.Add: operator.add,
+            ast.Sub: operator.sub,
+            ast.Mult: operator.mul,
+            ast.Div: operator.truediv,
+            ast.FloorDiv: operator.floordiv,
+            ast.Mod: operator.mod,
+            ast.Pow: operator.pow,
+        }
+
+        _UNARY_OPS = {
+            ast.USub: operator.neg,
+            ast.UAdd: operator.pos,
+        }
 
         def _resolve_fn(task_dict: dict):
             """Resolve a callable from task dict."""
@@ -150,7 +167,130 @@ def orchestrator_run_dag(
                     "abs": abs,
                     "round": round,
                 }
-                return lambda *_a, **_kw: eval(expr, {"__builtins__": {}}, safe_locals)
+
+                def _safe_eval(node: ast.AST) -> object:
+                    if isinstance(node, ast.Expression):
+                        return _safe_eval(node.body)
+                    if isinstance(node, ast.Call):
+                        func = _safe_eval(node.func)
+                        args = [_safe_eval(arg) for arg in node.args]
+                        kwargs = {
+                            kw.arg: _safe_eval(kw.value)
+                            for kw in node.keywords
+                            if kw.arg is not None
+                        }
+                        return func(*args, **kwargs)  # type: ignore
+                    if isinstance(node, ast.Name):
+                        if node.id in safe_locals:
+                            return safe_locals[node.id]
+                        raise ValueError(
+                            f"Function or variable '{node.id}' is not allowed"
+                        )
+                    if isinstance(node, ast.Constant):
+                        return node.value
+                    if isinstance(node, ast.List):
+                        return [_safe_eval(el) for el in node.elts]
+                    if isinstance(node, ast.Tuple):
+                        return tuple(_safe_eval(el) for el in node.elts)
+                    if isinstance(node, ast.Set):
+                        return {_safe_eval(el) for el in node.elts}
+                    if isinstance(node, ast.Dict):
+                        return {
+                            _safe_eval(k): _safe_eval(v)
+                            for k, v in zip(node.keys, node.values, strict=False)
+                        }
+                    if isinstance(node, ast.Subscript):
+                        value = _safe_eval(node.value)
+                        slice_val = _safe_eval(node.slice)
+                        return value[slice_val]  # type: ignore
+
+                    if isinstance(node, ast.BinOp):
+                        if type(node.op) in _MATH_OPS:
+                            return _MATH_OPS[type(node.op)](
+                                _safe_eval(node.left), _safe_eval(node.right)
+                            )  # type: ignore
+                        raise ValueError(
+                            f"Unsupported binary operator: {type(node.op).__name__}"
+                        )
+
+                    if isinstance(node, ast.UnaryOp):
+                        if type(node.op) in _UNARY_OPS:
+                            return _UNARY_OPS[type(node.op)](_safe_eval(node.operand))  # type: ignore
+                        raise ValueError(
+                            f"Unsupported unary operator: {type(node.op).__name__}"
+                        )
+
+                    if isinstance(node, ast.Compare):
+                        left = _safe_eval(node.left)
+                        for op, right in zip(node.ops, node.comparators, strict=False):
+                            r_val = _safe_eval(right)
+                            if isinstance(op, ast.Eq):
+                                if left != r_val:
+                                    return False
+                            elif isinstance(op, ast.NotEq):
+                                if left == r_val:
+                                    return False
+                            elif isinstance(op, ast.Lt):
+                                if not left < r_val:
+                                    return False
+                            elif isinstance(op, ast.LtE):
+                                if not left <= r_val:
+                                    return False
+                            elif isinstance(op, ast.Gt):
+                                if not left > r_val:
+                                    return False
+                            elif isinstance(op, ast.GtE):
+                                if not left >= r_val:
+                                    return False
+                            elif isinstance(op, ast.Is):
+                                if left is not r_val:
+                                    return False
+                            elif isinstance(op, ast.IsNot):
+                                if left is r_val:
+                                    return False
+                            elif isinstance(op, ast.In):
+                                if left not in r_val:
+                                    return False
+                            elif isinstance(op, ast.NotIn):
+                                if left in r_val:
+                                    return False
+                            else:
+                                raise ValueError(
+                                    f"Unsupported comparison operator: {type(op).__name__}"
+                                )
+                            left = r_val
+                        return True
+
+                    if isinstance(node, ast.BoolOp):
+                        if isinstance(node.op, ast.And):
+                            for value in node.values:
+                                val = _safe_eval(value)
+                                if not val:
+                                    return val
+                            return val  # type: ignore
+                        if isinstance(node.op, ast.Or):
+                            for value in node.values:
+                                val = _safe_eval(value)
+                                if val:
+                                    return val
+                            return val  # type: ignore
+                        raise ValueError(
+                            f"Unsupported boolean operator: {type(node.op).__name__}"
+                        )
+
+                    if isinstance(node, ast.Attribute):
+                        val = _safe_eval(node.value)
+                        if node.attr.startswith("_"):
+                            raise ValueError(
+                                f"Access to private attribute '{node.attr}' is not allowed"
+                            )
+                        return getattr(val, node.attr)
+
+                    raise ValueError(
+                        f"Unsupported AST node type: {type(node).__name__}"
+                    )
+
+                return lambda *_a, **_kw: _safe_eval(ast.parse(expr, mode="eval"))
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 
