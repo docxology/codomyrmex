@@ -119,3 +119,26 @@ def test_mcp_tool_meta_attached() -> None:
 
     for fn in (cache_get, cache_set, cache_delete, cache_stats):
         assert hasattr(fn, "_mcp_tool_meta"), f"{fn.__name__} missing _mcp_tool_meta"
+
+
+def test_cache_get_default_cache_name() -> None:
+    """cache_get uses 'default' cache name when not specified."""
+    from codomyrmex.cache.mcp_tools import cache_get, cache_set
+
+    # Set value explicitly in "default" cache
+    cache_set("default_key", "default_value", cache_name="default")
+
+    # Retrieve without specifying cache_name (should default to "default")
+    assert cache_get("default_key") == "default_value"
+
+
+def test_cache_get_isolation() -> None:
+    """cache_get returns None for a key that exists in a different namespace."""
+    from codomyrmex.cache.mcp_tools import cache_get, cache_set
+
+    cache_set("shared_key", "value_in_a", cache_name="cache_a")
+    cache_set("shared_key", "value_in_b", cache_name="cache_b")
+
+    assert cache_get("shared_key", cache_name="cache_a") == "value_in_a"
+    assert cache_get("shared_key", cache_name="cache_b") == "value_in_b"
+    assert cache_get("shared_key", cache_name="cache_c") is None
