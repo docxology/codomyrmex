@@ -90,8 +90,55 @@ def test_cache_stats_returns_dict() -> None:
 
     stats = cache_stats(cache_name=_unique_cache())
     assert isinstance(stats, dict)
-    assert "hits" in stats
-    assert "misses" in stats
+
+    expected_keys = {
+        "hits",
+        "misses",
+        "total_requests",
+        "hit_rate",
+        "size",
+        "max_size",
+        "usage_percent",
+        "evictions",
+        "writes",
+        "deletes",
+    }
+    for key in expected_keys:
+        assert key in stats
+
+
+def test_cache_stats_writes_and_deletes() -> None:
+    """Writes, deletes, and size metrics are accurately updated in stats."""
+    from codomyrmex.cache.mcp_tools import cache_delete, cache_set, cache_stats
+
+    cache_name = _unique_cache()
+
+    # Initially empty
+    stats = cache_stats(cache_name=cache_name)
+    assert stats["writes"] == 0
+    assert stats["deletes"] == 0
+    assert stats["size"] == 0
+
+    # After a set
+    cache_set("k1", "v1", cache_name=cache_name)
+    stats = cache_stats(cache_name=cache_name)
+    assert stats["writes"] == 1
+    assert stats["deletes"] == 0
+    assert stats["size"] == 1
+
+    # After another set
+    cache_set("k2", "v2", cache_name=cache_name)
+    stats = cache_stats(cache_name=cache_name)
+    assert stats["writes"] == 2
+    assert stats["deletes"] == 0
+    assert stats["size"] == 2
+
+    # After a delete
+    cache_delete("k1", cache_name=cache_name)
+    stats = cache_stats(cache_name=cache_name)
+    assert stats["writes"] == 2
+    assert stats["deletes"] == 1
+    assert stats["size"] == 1
 
 
 def test_cache_stats_hit_rate_after_operations() -> None:
