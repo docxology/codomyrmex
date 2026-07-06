@@ -117,7 +117,19 @@ jobs:
 
       - name: Save health snapshot
         run: |
-          python3 -c "import json, os; snapshot = {'coverage_pct': os.environ.get('COV_PCT','N/A'), 'test_count': os.environ.get('TEST_COUNT','N/A'), 'ruff_violations': os.environ.get('RUFF_TOTAL','N/A'), 'run_number': os.environ.get('GITHUB_RUN_NUMBER','N/A'), 'sha': os.environ.get('GITHUB_SHA','N/A')[:8]}; open('health-results/health-snapshot.json','w').write(json.dumps(snapshot, indent=2)); print('Saved:', snapshot)"
+          python3 -c "
+import json, os
+snapshot = {
+    'coverage_pct': os.environ.get('COV_PCT','N/A'),
+    'test_count': os.environ.get('TEST_COUNT','N/A'),
+    'ruff_violations': os.environ.get('RUFF_TOTAL','N/A'),
+    'run_number': os.environ.get('GITHUB_RUN_NUMBER','N/A'),
+    'sha': os.environ.get('GITHUB_SHA','N/A')[:8]
+}
+with open('health-results/health-snapshot.json','w') as f:
+    f.write(json.dumps(snapshot, indent=2))
+print('Saved:', snapshot)
+          "
         env:
           COV_PCT: ${{ steps.coverage.outputs.pct }}
           TEST_COUNT: ${{ steps.test-count.outputs.count }}
