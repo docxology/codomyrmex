@@ -446,9 +446,7 @@ class ActuationGate:
             if trust_ok < 1.0:
                 required.append("increase_trust_score_via_accepted_proposals")
             if risk_ok < 1.0:
-                required.append(
-                    "wait_for_risk_pheromone_to_decay_or_address_root_cause"
-                )
+                required.append("wait_for_risk_pheromone_to_decay_or_address_root_cause")
             if findings:
                 required.append("resolve_falsification_findings")
             if not required:

@@ -985,30 +985,14 @@ def test_crossref_labels_are_unique_referenced_and_resolved() -> None:
     # sections that are self-explanatory in context — not every equation
     # needs an explicit prose cross-reference.
     ALLOWED_UNREFERENCED = {
-        "eq:ai-likelihood",
-        "eq:ai-observations",
-        "eq:ai-posterior",
-        "eq:ai-prior",
-        "eq:ai-states",
-        "eq:efe-approximation",
-        "eq:expected-fe",
-        "eq:expected-fe-intrinsic",
-        "eq:variational-fe",
-        "tbl:ai-gate-mapping",
-        "eq:theory-gate-score-detail",
-        "eq:gate-entropy",
-        "eq:max-score-by-tier",
-        "eq:min-execute",
-        "eq:corollary5",
-        "eq:all-stress",
-        "eq:cascaded-stress",
-        "eq:failure-cascade",
-        "eq:ensemble-detection",
-        "eq:f1",
-        "eq:f2",
-        "eq:f3",
-        "tbl:override-interactions",
-        "tbl:trust-penalty-cascade",
+        "eq:ai-likelihood", "eq:ai-observations", "eq:ai-posterior",
+        "eq:ai-prior", "eq:ai-states", "eq:efe-approximation",
+        "eq:expected-fe", "eq:expected-fe-intrinsic", "eq:variational-fe",
+        "tbl:ai-gate-mapping", "eq:theory-gate-score-detail",
+        "eq:gate-entropy", "eq:max-score-by-tier", "eq:min-execute",
+        "eq:corollary5", "eq:all-stress", "eq:cascaded-stress",
+        "eq:failure-cascade", "eq:ensemble-detection", "eq:f1", "eq:f2",
+        "eq:f3", "tbl:override-interactions", "tbl:trust-penalty-cascade",
     }
     truly_unreferenced = sorted(
         l for l in unreferenced if l not in ALLOWED_UNREFERENCED
