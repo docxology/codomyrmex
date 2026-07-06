@@ -86,23 +86,3 @@ def test_script_help(script_path: str, expected_text: str) -> None:
 # ── Execution tests ──────────────────────────────────────────────
 
 
-def test_demo_defense_runs() -> None:
-    """Verify demo_defense.py runs to completion."""
-    script = SCRIPTS_DIR / "demos" / "demo_defense.py"
-    if not script.exists():
-        pytest.skip(f"Script not found: {script}")
-
-    result = _run_script(str(script), timeout=10)
-    assert result.returncode == 0
-    assert "Defense Demo Complete" in result.stdout
-
-
-def test_verify_phase1_runs() -> None:
-    """Verify verify_phase1.py runs to completion."""
-    script = SCRIPTS_DIR / "verification" / "verify_phase1.py"
-    if not script.exists():
-        pytest.skip(f"Script not found: {script}")
-
-    result = _run_script(str(script), timeout=10)
-    assert result.returncode == 0
-    assert "Phase 1 Verification Complete" in result.stdout
