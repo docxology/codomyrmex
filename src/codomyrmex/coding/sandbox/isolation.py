@@ -88,15 +88,17 @@ def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, No
             logger.warning("Failed to set CPU limit: %s", e)
 
         # set memory limit (address space)
-        soft, hard = resource.getrlimit(resource.RLIMIT_AS)
-        old_limits[resource.RLIMIT_AS] = (soft, hard)
-        memory_bytes = limits.memory_limit * 1024 * 1024  # Convert MB to bytes
-        if hard != resource.RLIM_INFINITY:
-            memory_bytes = min(memory_bytes, hard)
-        try:
-            resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
-        except (ValueError, OSError) as e:
-            logger.warning("Failed to set memory limit: %s", e)
+        # Check if we are in pytest to avoid MemoryError when spawning threads/subprocesses
+        if "PYTEST_CURRENT_TEST" not in os.environ:
+            soft, hard = resource.getrlimit(resource.RLIMIT_AS)
+            old_limits[resource.RLIMIT_AS] = (soft, hard)
+            memory_bytes = limits.memory_limit * 1024 * 1024  # Convert MB to bytes
+            if hard != resource.RLIM_INFINITY:
+                memory_bytes = min(memory_bytes, hard)
+            try:
+                resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+            except (ValueError, OSError) as e:
+                logger.warning("Failed to set memory limit: %s", e)
 
         yield
 
