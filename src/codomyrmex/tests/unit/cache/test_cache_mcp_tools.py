@@ -119,3 +119,23 @@ def test_mcp_tool_meta_attached() -> None:
 
     for fn in (cache_get, cache_set, cache_delete, cache_stats):
         assert hasattr(fn, "_mcp_tool_meta"), f"{fn.__name__} missing _mcp_tool_meta"
+
+
+def test_cache_set_with_ttl() -> None:
+    """cache_set with TTL expires correctly."""
+    import time
+
+    from codomyrmex.cache.mcp_tools import cache_get, cache_set
+
+    cache_name = _unique_cache()
+    # Set a value with a 1 second TTL
+    cache_set("ttl_key", "ttl_val", ttl=1, cache_name=cache_name)
+
+    # Value should exist immediately
+    assert cache_get("ttl_key", cache_name=cache_name) == "ttl_val"
+
+    # Wait for TTL to expire
+    time.sleep(1.1)
+
+    # Value should be gone
+    assert cache_get("ttl_key", cache_name=cache_name) is None
