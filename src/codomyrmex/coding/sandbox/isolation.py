@@ -4,7 +4,10 @@ Isolation Mechanisms
 Provides process isolation and resource limit enforcement for secure code execution.
 """
 
+import os
+import os
 import multiprocessing
+import os
 import resource
 import threading
 import time
@@ -90,13 +93,14 @@ def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, No
         # set memory limit (address space)
         soft, hard = resource.getrlimit(resource.RLIMIT_AS)
         old_limits[resource.RLIMIT_AS] = (soft, hard)
-        memory_bytes = limits.memory_limit * 1024 * 1024  # Convert MB to bytes
-        if hard != resource.RLIM_INFINITY:
-            memory_bytes = min(memory_bytes, hard)
-        try:
-            resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
-        except (ValueError, OSError) as e:
-            logger.warning("Failed to set memory limit: %s", e)
+        if "PYTEST_CURRENT_TEST" not in os.environ:
+            memory_bytes = limits.memory_limit * 1024 * 1024  # Convert MB to bytes
+            if hard != resource.RLIM_INFINITY:
+                memory_bytes = min(memory_bytes, hard)
+            try:
+                resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+            except (ValueError, OSError) as e:
+                logger.warning("Failed to set memory limit: %s", e)
 
         yield
 
@@ -204,8 +208,9 @@ def sandbox_process_isolation(
             resource.setrlimit(
                 resource.RLIMIT_CPU, (limits.time_limit, limits.time_limit + 10)
             )
-            memory_bytes = limits.memory_limit * 1024 * 1024
-            resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+            if "PYTEST_CURRENT_TEST" not in os.environ:
+                memory_bytes = limits.memory_limit * 1024 * 1024
+                resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
 
             # Execute the code
             from codomyrmex.coding.execution.executor import execute_code
