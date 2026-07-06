@@ -8,6 +8,7 @@ that each platform-specific provider must implement.
 from __future__ import annotations
 
 import os
+import shlex
 import subprocess
 import time
 from abc import ABC, abstractmethod
@@ -248,9 +249,10 @@ class OSProviderBase(ABC):
         """
         start = time.time()
         try:
+            cmd_args = command if os.name == "nt" else shlex.split(command)
             result = subprocess.run(
-                command,
-                shell=True,
+                cmd_args,
+                shell=False,
                 capture_output=True,
                 text=True,
                 timeout=timeout,
