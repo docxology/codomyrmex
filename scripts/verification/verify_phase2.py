@@ -10,6 +10,7 @@ Verifies Defense and Market module functionality:
 """
 
 from codomyrmex.defense import ActiveDefense, RabbitHole
+
 from codomyrmex.market import DemandAggregator, ReverseAuction
 
 

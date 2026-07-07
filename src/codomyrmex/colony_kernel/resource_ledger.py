@@ -378,6 +378,7 @@ class ThreadSafeResourceLedger:
     Example::
 
         from threading import Lock
+
         ledger = ThreadSafeResourceLedger(ResourceLedger(budget=budget))
         ok, reason = ledger.check_and_consume(cost, agent_id="worker-1")
 
@@ -387,6 +388,7 @@ class ThreadSafeResourceLedger:
 
     def __init__(self, ledger: ResourceLedger) -> None:
         import threading
+
         self._ledger = ledger
         self._lock = threading.Lock()
 

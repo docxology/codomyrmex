@@ -1767,8 +1767,13 @@ def fig_gate_score_3d() -> None:
 
     norm = plt.Normalize(0, 1)
     surf = ax1.plot_surface(
-        T, C, score_best, facecolors=plt.cm.YlOrRd(norm(score_best)),
-        alpha=0.92, linewidth=0, antialiased=True
+        T,
+        C,
+        score_best,
+        facecolors=plt.cm.YlOrRd(norm(score_best)),
+        alpha=0.92,
+        linewidth=0,
+        antialiased=True,
     )
 
     ax1.set_xlabel("Trust score", fontsize=9, labelpad=8)
@@ -1781,19 +1786,41 @@ def fig_gate_score_3d() -> None:
     ax2.set_facecolor("#F7F9FC")
     _pub_style(ax2)
 
-    for trust_val, ls, marker, color in [(0.2, "--", "v", "#D55E00"),
-                                          (0.5, "-.", "s", _OI["blue"]),
-                                          (0.9, "-", "o", _OI["green"])]:
+    for trust_val, ls, marker, color in [
+        (0.2, "--", "v", "#D55E00"),
+        (0.5, "-.", "s", _OI["blue"]),
+        (0.9, "-", "o", _OI["green"]),
+    ]:
         scores = w_trust * trust_val + w_complete * C[:, 0]
         total_score = 0.60 + scores  # budget=risk=1.0
-        ax2.plot(C[:, 0], total_score, label=f"trust={trust_val:.1f}",
-                 linestyle=ls, color=color, lw=2.2, marker=marker,
-                 markevery=10, markersize=5)
+        ax2.plot(
+            C[:, 0],
+            total_score,
+            label=f"trust={trust_val:.1f}",
+            linestyle=ls,
+            color=color,
+            lw=2.2,
+            marker=marker,
+            markevery=10,
+            markersize=5,
+        )
 
-    ax2.axhline(y=gate_exec, color="#0072B2", linestyle="--", lw=1.2,
-                alpha=0.7, label=f"EXECUTE (g≥{gate_exec})")
-    ax2.axhline(y=gate_hold, color="#D55E00", linestyle=":", lw=1.2,
-                alpha=0.7, label=f"HOLD (g≥{gate_hold})")
+    ax2.axhline(
+        y=gate_exec,
+        color="#0072B2",
+        linestyle="--",
+        lw=1.2,
+        alpha=0.7,
+        label=f"EXECUTE (g≥{gate_exec})",
+    )
+    ax2.axhline(
+        y=gate_hold,
+        color="#D55E00",
+        linestyle=":",
+        lw=1.2,
+        alpha=0.7,
+        label=f"HOLD (g≥{gate_hold})",
+    )
     ax2.fill_between(C[:, 0], 0.60, gate_hold, alpha=0.06, color="#D55E00")
     ax2.fill_between(C[:, 0], gate_hold, gate_exec, alpha=0.06, color=_OI["yellow"])
     ax2.fill_between(C[:, 0], gate_exec, 1.0, alpha=0.06, color=_OI["green"])
@@ -1819,30 +1846,54 @@ def fig_fep_correspondence() -> None:
     A tiled table with color-coded rows showing the correspondence.
     """
     rows = [
-        ("Generative model\np(o, s)", "PheromoneStore +\nConsequenceMemory",
-         "Field stores accumulated\nconsequence history",
-         _OI["blue"]),
-        ("Observations o", "Pheromone field:\nTraceField.sense()",
-         "Signal strengths at\n(tick, location, type)",
-         _OI["sky"]),
-        ("Hidden states s", "AgentTrustProfile:\ntrust_score, role",
-         "Latent competence\ninferred from outcomes",
-         _OI["orange"]),
-        ("Variational posterior\nq(s)", "RoleAdapter.infer_role()",
-         "Deterministic mapping\nfrom trust→role",
-         _OI["pink"]),
-        ("Expected Free Energy\nG(π)", "ActuationGate.evaluate()\ngate_score",
-         "Cost of acting with\ncurrent belief state",
-         _OI["vermil"]),
-        ("Policy π", "ActionProposal\n(action_type, target)",
-         "Proposed course of\naction for gate",
-         _OI["green"]),
-        ("Active inference\n(action selection)", "GateResult:\nEXECUTE/HOLD/REFUSE",
-         "Score-thresholded\nternary decision",
-         "#555555"),
-        ("Learning\n(parameter update)", "ConsequenceMemory.record()\ntrust_delta",
-         "Trust deltas as\nparameter updates",
-         _OI["pink"]),
+        (
+            "Generative model\np(o, s)",
+            "PheromoneStore +\nConsequenceMemory",
+            "Field stores accumulated\nconsequence history",
+            _OI["blue"],
+        ),
+        (
+            "Observations o",
+            "Pheromone field:\nTraceField.sense()",
+            "Signal strengths at\n(tick, location, type)",
+            _OI["sky"],
+        ),
+        (
+            "Hidden states s",
+            "AgentTrustProfile:\ntrust_score, role",
+            "Latent competence\ninferred from outcomes",
+            _OI["orange"],
+        ),
+        (
+            "Variational posterior\nq(s)",
+            "RoleAdapter.infer_role()",
+            "Deterministic mapping\nfrom trust→role",
+            _OI["pink"],
+        ),
+        (
+            "Expected Free Energy\nG(π)",
+            "ActuationGate.evaluate()\ngate_score",
+            "Cost of acting with\ncurrent belief state",
+            _OI["vermil"],
+        ),
+        (
+            "Policy π",
+            "ActionProposal\n(action_type, target)",
+            "Proposed course of\naction for gate",
+            _OI["green"],
+        ),
+        (
+            "Active inference\n(action selection)",
+            "GateResult:\nEXECUTE/HOLD/REFUSE",
+            "Score-thresholded\nternary decision",
+            "#555555",
+        ),
+        (
+            "Learning\n(parameter update)",
+            "ConsequenceMemory.record()\ntrust_delta",
+            "Trust deltas as\nparameter updates",
+            _OI["pink"],
+        ),
     ]
 
     fig, ax = plt.subplots(figsize=(10, 5.5))
@@ -1857,16 +1908,26 @@ def fig_fep_correspondence() -> None:
     table_h = n_rows * row_h + 0.3
 
     # Headers
-    headers = ["FEP component", "Colony Kernel\nsubsystem", "Formal\ncorrespondence", "Decay\nclass"]
+    headers = [
+        "FEP component",
+        "Colony Kernel\nsubsystem",
+        "Formal\ncorrespondence",
+        "Decay\nclass",
+    ]
     x_positions = [sum(col_widths[:i]) for i in range(len(col_widths))]
     start_x = (1 - table_w) / 2
     start_y = 0.92
 
     for i, (header, x_pos) in enumerate(zip(headers, x_positions, strict=False)):
         ax.text(
-            start_x + x_pos + col_widths[i] / 2, start_y,
-            header, ha="center", va="center", fontsize=8.5,
-            fontweight="bold", color="#1a1a1a",
+            start_x + x_pos + col_widths[i] / 2,
+            start_y,
+            header,
+            ha="center",
+            va="center",
+            fontsize=8.5,
+            fontweight="bold",
+            color="#1a1a1a",
         )
 
     # Rows
@@ -1874,21 +1935,40 @@ def fig_fep_correspondence() -> None:
         y = start_y - 0.08 - (r + 1) * row_h
         # Row background
         bg_color = "#EBF0F5" if r % 2 == 0 else "#F7F9FC"
-        ax.add_patch(plt.Rectangle(
-            (start_x, y), table_w, row_h,
-            facecolor=bg_color, edgecolor="none", alpha=0.6, zorder=0,
-        ))
+        ax.add_patch(
+            plt.Rectangle(
+                (start_x, y),
+                table_w,
+                row_h,
+                facecolor=bg_color,
+                edgecolor="none",
+                alpha=0.6,
+                zorder=0,
+            )
+        )
         # Color stripe
-        ax.add_patch(plt.Rectangle(
-            (start_x, y), 0.04, row_h,
-            facecolor=color, edgecolor="none", alpha=0.9, zorder=1,
-        ))
+        ax.add_patch(
+            plt.Rectangle(
+                (start_x, y),
+                0.04,
+                row_h,
+                facecolor=color,
+                edgecolor="none",
+                alpha=0.9,
+                zorder=1,
+            )
+        )
         # Cells
         texts = [fep, kernel, formal, ""]
-        for j, (txt, x_pos, cw) in enumerate(zip(texts, x_positions, col_widths, strict=False)):
+        for j, (txt, x_pos, cw) in enumerate(
+            zip(texts, x_positions, col_widths, strict=False)
+        ):
             ax.text(
-                start_x + x_pos + cw / 2, y + row_h / 2,
-                txt, ha="center", va="center",
+                start_x + x_pos + cw / 2,
+                y + row_h / 2,
+                txt,
+                ha="center",
+                va="center",
                 fontsize=7.0 if j < 3 else 6.5,
                 color="#1a1a1a",
                 linespacing=1.2,
@@ -1897,7 +1977,9 @@ def fig_fep_correspondence() -> None:
     ax.set_title(
         "Free Energy Principle — Colony Kernel correspondence\n"
         "Each FEP component maps to a deterministic colony subsystem",
-        fontsize=11, pad=6, color="#1a1a1a",
+        fontsize=11,
+        pad=6,
+        color="#1a1a1a",
     )
     _add_provenance_note(fig)
     fig.tight_layout(pad=0.4, rect=(0, 0.035, 1, 1))
@@ -1913,16 +1995,29 @@ def fig_formula_comparison() -> None:
     Used by 90_appendix_design_rationale.md §dr-gate-formula.
     Creates a grouped bar chart for visual comparison.
     """
-    approaches = ["Weighted\nadditive", "Multiplicative", "Learned\nclassifier", "Rule\nsystem"]
-    criteria = ["Auditability", "Zero-shot\nvalidity", "Recovery\nsupport",
-                "Calibration\ncost", "Interpretability", "Safety\nguarantees"]
+    approaches = [
+        "Weighted\nadditive",
+        "Multiplicative",
+        "Learned\nclassifier",
+        "Rule\nsystem",
+    ]
+    criteria = [
+        "Auditability",
+        "Zero-shot\nvalidity",
+        "Recovery\nsupport",
+        "Calibration\ncost",
+        "Interpretability",
+        "Safety\nguarantees",
+    ]
     # Scores: 5 = best, 1 = worst
-    scores = np.array([
-        [5, 5, 4, 5, 5, 4],   # Weighted additive
-        [3, 3, 2, 5, 3, 3],   # Multiplicative
-        [1, 1, 3, 1, 1, 2],   # Learned classifier
-        [4, 4, 1, 5, 4, 3],   # Rule system
-    ])
+    scores = np.array(
+        [
+            [5, 5, 4, 5, 5, 4],  # Weighted additive
+            [3, 3, 2, 5, 3, 3],  # Multiplicative
+            [1, 1, 3, 1, 1, 2],  # Learned classifier
+            [4, 4, 1, 5, 4, 3],  # Rule system
+        ]
+    )
 
     fig, ax = plt.subplots(figsize=(10, 5.5))
     ax.set_facecolor("#F7F9FC")
@@ -1938,16 +2033,28 @@ def fig_formula_comparison() -> None:
     for i, (approach, color) in enumerate(zip(approaches, colors, strict=False)):
         offset = (i - n_approaches / 2 + 0.5) * bar_width
         bars = ax.bar(
-            x + offset, scores[i], bar_width,
+            x + offset,
+            scores[i],
+            bar_width,
             label=approach.replace("\n", " "),
-            color=color, alpha=0.85, edgecolor="white", linewidth=1.2,
+            color=color,
+            alpha=0.85,
+            edgecolor="white",
+            linewidth=1.2,
             zorder=3,
         )
         # Annotate bars
         for bar, score in zip(bars, scores[i], strict=False):
-            ax.text(bar.get_x() + bar.get_width() / 2, score + 0.08,
-                    str(score), ha="center", va="bottom", fontsize=8,
-                    fontweight="bold", color=color)
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                score + 0.08,
+                str(score),
+                ha="center",
+                va="bottom",
+                fontsize=8,
+                fontweight="bold",
+                color=color,
+            )
 
     ax.set_xticks(x)
     ax.set_xticklabels(criteria, fontsize=8)
@@ -1957,16 +2064,26 @@ def fig_formula_comparison() -> None:
     ax.set_title(
         "Gate formula approach comparison across 6 criteria\n"
         "Weighted additive achieves the best combination of auditability, safety, and flexibility",
-        fontsize=11, pad=10, color="#1a1a1a",
+        fontsize=11,
+        pad=10,
+        color="#1a1a1a",
     )
 
     # Highlight additive column
     for i in range(n_criteria):
         max_score = scores[:, i].max()
         if scores[0, i] == max_score:
-            ax.text(x[i], 5.85, "← best", ha="center", va="bottom",
-                    fontsize=7.5, color=_OI["vermil"], fontweight="bold",
-                    style="italic")
+            ax.text(
+                x[i],
+                5.85,
+                "← best",
+                ha="center",
+                va="bottom",
+                fontsize=7.5,
+                color=_OI["vermil"],
+                fontweight="bold",
+                style="italic",
+            )
 
     _add_provenance_note(fig)
     fig.tight_layout(pad=0.4, rect=(0, 0.035, 1, 1))

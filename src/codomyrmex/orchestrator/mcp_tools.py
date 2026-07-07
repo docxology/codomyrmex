@@ -174,7 +174,10 @@ def orchestrator_run_dag(
                     if isinstance(node, ast.Set):
                         return {_safe_eval(elt) for elt in node.elts}
                     if isinstance(node, ast.Dict):
-                        return {_safe_eval(k): _safe_eval(v) for k, v in zip(node.keys, node.values)}
+                        return {
+                            _safe_eval(k): _safe_eval(v)
+                            for k, v in zip(node.keys, node.values, strict=False)
+                        }
                     if isinstance(node, ast.Name):
                         if node.id in safe_locals:
                             return safe_locals[node.id]
@@ -182,7 +185,11 @@ def orchestrator_run_dag(
                     if isinstance(node, ast.Call):
                         func = _safe_eval(node.func)
                         args = [_safe_eval(arg) for arg in node.args]
-                        kwargs = {kw.arg: _safe_eval(kw.value) for kw in node.keywords if kw.arg}
+                        kwargs = {
+                            kw.arg: _safe_eval(kw.value)
+                            for kw in node.keywords
+                            if kw.arg
+                        }
                         return func(*args, **kwargs)
                     if isinstance(node, ast.BinOp) and type(node.op) in _MATH_OPS:
                         return _MATH_OPS[type(node.op)](
