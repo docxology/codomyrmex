@@ -30,8 +30,9 @@ def _set_memory_limit(memory_limit_mb: int):
         return
 
     try:
-        limit_bytes = memory_limit_mb * 1024 * 1024
-        resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
+        if "PYTEST_CURRENT_TEST" not in os.environ:
+            limit_bytes = memory_limit_mb * 1024 * 1024
+            resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
     except (ValueError, OSError) as e:
         logger.warning("Failed to set memory limit: %s", e)
 

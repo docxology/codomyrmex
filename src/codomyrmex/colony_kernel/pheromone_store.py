@@ -179,6 +179,7 @@ class PheromoneStore:
         """
         if signal.strength > _MAX_DEPOSIT_STRENGTH:
             import warnings as _warnings
+
             _warnings.warn(
                 f"PheromoneStore.deposit_signal: strength {signal.strength!r} exceeds "
                 f"maximum allowed value {_MAX_DEPOSIT_STRENGTH}; clamping to "
@@ -186,6 +187,7 @@ class PheromoneStore:
                 stacklevel=2,
             )
             import dataclasses as _dc
+
             signal = _dc.replace(signal, strength=_MAX_DEPOSIT_STRENGTH)
 
         key = _make_key(signal.signal_type, signal.location)
