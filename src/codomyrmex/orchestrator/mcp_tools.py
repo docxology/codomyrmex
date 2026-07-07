@@ -119,7 +119,9 @@ def orchestrator_run_dag(
         Aggregated result dict with per-task outputs, success/error counts.
     """
     try:
+        import ast
         import importlib
+        import operator
 
         from codomyrmex.orchestrator.swarm_topology import (
             SwarmTopology,
@@ -150,7 +152,48 @@ def orchestrator_run_dag(
                     "abs": abs,
                     "round": round,
                 }
-                return lambda *_a, **_kw: eval(expr, {"__builtins__": {}}, safe_locals)
+
+                _MATH_OPS = {
+                    ast.Add: operator.add,
+                    ast.Sub: operator.sub,
+                    ast.Mult: operator.mul,
+                    ast.Div: operator.truediv,
+                    ast.USub: operator.neg,
+                    ast.UAdd: operator.pos,
+                }
+
+                def _safe_eval(node: ast.AST):
+                    if isinstance(node, ast.Expression):
+                        return _safe_eval(node.body)
+                    if isinstance(node, ast.Constant):
+                        return node.value
+                    if isinstance(node, ast.List):
+                        return [_safe_eval(elt) for elt in node.elts]
+                    if isinstance(node, ast.Tuple):
+                        return tuple(_safe_eval(elt) for elt in node.elts)
+                    if isinstance(node, ast.Set):
+                        return {_safe_eval(elt) for elt in node.elts}
+                    if isinstance(node, ast.Dict):
+                        return {_safe_eval(k): _safe_eval(v) for k, v in zip(node.keys, node.values)}
+                    if isinstance(node, ast.Name):
+                        if node.id in safe_locals:
+                            return safe_locals[node.id]
+                        raise ValueError(f"Disallowed name: {node.id}")
+                    if isinstance(node, ast.Call):
+                        func = _safe_eval(node.func)
+                        args = [_safe_eval(arg) for arg in node.args]
+                        kwargs = {kw.arg: _safe_eval(kw.value) for kw in node.keywords if kw.arg}
+                        return func(*args, **kwargs)
+                    if isinstance(node, ast.BinOp) and type(node.op) in _MATH_OPS:
+                        return _MATH_OPS[type(node.op)](
+                            _safe_eval(node.left),
+                            _safe_eval(node.right),
+                        )
+                    if isinstance(node, ast.UnaryOp) and type(node.op) in _MATH_OPS:
+                        return _MATH_OPS[type(node.op)](_safe_eval(node.operand))
+                    raise ValueError(f"Unsupported expression: {ast.dump(node)}")
+
+                return lambda *_a, **_kw: _safe_eval(ast.parse(expr, mode="eval"))
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 
