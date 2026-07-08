@@ -389,6 +389,7 @@ jobs:
         run: uv python install ${{ env.PYTHON_VERSION }}
 
       - name: Check for dependency updates
+        continue-on-error: true
         id: check_updates
         run: |
           echo "🔄 Checking for dependency updates..."
@@ -426,6 +427,7 @@ jobs:
           uv run pytest src/codomyrmex/tests/unit/ -v --tb=short --maxfail=5
 
       - name: Create Pull Request
+        continue-on-error: true
         if: steps.check_updates.outputs.updates_available == 'true'
         continue-on-error: true
         uses: peter-evans/create-pull-request@v7

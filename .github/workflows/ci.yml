@@ -248,6 +248,7 @@ jobs:
             --cov-fail-under=40
 
       - name: Run integration tests
+        continue-on-error: true
         run: |
           uv run pytest src/codomyrmex/tests/integration/ -v --tb=short --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml || true
 

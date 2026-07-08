@@ -1,3 +1,4 @@
+from typing import Any
 """Codomyrmex MLX Quantizer.
 
 This module provides wrappers for creating INT8 and INT4 quantized
@@ -7,7 +8,10 @@ within constrained memory boundaries (<2GB).
 
 import dataclasses
 
-import mlx.core as mx
+try:
+    import mlx.core as mx
+except ImportError:
+    mx = None
 
 
 @dataclasses.dataclass
@@ -31,8 +35,8 @@ class QuantizationConfig:
 
 
 def quantize_array(
-    array: mx.array, config: QuantizationConfig
-) -> tuple[mx.array, mx.array | None, mx.array | None]:
+    array: 'mx.array', config: QuantizationConfig
+) -> tuple['mx.array', Any, Any]:
     """Quantize an MLX array into lower precision (e.g. INT4 or INT8).
 
     Args:
@@ -53,11 +57,11 @@ def quantize_array(
 
 
 def dequantize_array(
-    wq: mx.array,
-    scales: mx.array | None,
-    biases: mx.array | None,
+    wq: 'mx.array',
+    scales: Any,
+    biases: Any,
     config: QuantizationConfig,
-) -> mx.array:
+) -> 'mx.array':
     """Dequantize an MLX array back into a continuous floating point format.
 
     Args:
