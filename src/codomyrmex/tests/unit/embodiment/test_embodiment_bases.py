@@ -3,7 +3,6 @@
 import asyncio
 
 import pytest
-
 from codomyrmex.embodiment.actuators.base import (
     ActuatorCommand,
     ActuatorStatus,
