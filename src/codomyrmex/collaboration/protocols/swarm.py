@@ -56,19 +56,18 @@ class SwarmManager(NewSwarmManager):
 
         self.register_agent(SwarmAgent(agent.name, role))
 
-    def execute(self, mission: str) -> dict[str, str]:
+    def execute(self, mission: str) -> list[dict[str, object]]:
         """Distribute a mission across the swarm (Legacy Compatibility).
 
-        Decomposes the mission into role-based subtasks and returns the
-        distribution plan keyed by task_id.  For full async execution with
-        real result values, call ``execute_mission()`` directly.
+        Decomposes the mission into role-based subtasks and returns the same
+        queued result shape as the canonical swarm manager. For full async
+        execution with real result values, call ``execute_mission()`` directly.
 
         Returns:
-            Mapping of task_id to task description for each decomposed subtask.
+            List of queued result records for each decomposed subtask.
 
         """
-        subtasks = self.decomposer.decompose(mission)
-        return {st.task_id: st.description for st in subtasks}
+        return super().execute(mission)
 
     def consensus_vote(self, proposal: str) -> bool:
         """Perform simple majority vote among agents (Legacy Compatibility)."""

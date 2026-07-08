@@ -17,7 +17,7 @@ help:
 	@echo "  install      - Install dependencies using uv"
 	@echo "  submodules   - Initialize git submodules and install their deps"
 	@echo "  setup        - Set up complete development environment (install + submodules)"
-	@echo "  test         - Run all tests with coverage + 40% gate"
+	@echo "  test         - Run all tests with coverage + 60% gate"
 	@echo "  test-unit    - Run unit tests only"
 	@echo "  test-integration - Run integration tests only"
 	@echo "  test-coverage - Run tests with coverage report"
@@ -37,7 +37,7 @@ help:
 	@echo "  check-deps   - Check and validate dependencies"
 	@echo "  check-dependencies - Check module dependency hierarchy"
 	@echo "  ci           - Run full CI pipeline"
-	@echo "  verify-release - lint + type-check + full tests with 40% coverage gate"
+	@echo "  verify-release - lint + type-check + full tests with 60% coverage gate"
 	@echo ""
 
 # Installation and setup
@@ -59,27 +59,27 @@ setup: install submodules
 # Testing
 test:
 	@echo "Running all tests..."
-	uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=40
+	uv run pytest tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
 
 test-unit:
 	@echo "Running unit tests..."
-	uv run pytest src/codomyrmex/tests/unit/ -v --tb=short -m unit --cov=src/codomyrmex --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=40
+	uv run pytest tests/unit/ -v --tb=short -m unit --cov=src/codomyrmex --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=60
 
 test-integration:
 	@echo "Running integration tests..."
-	uv run pytest src/codomyrmex/tests/integration/ -v --tb=short -m integration
+	uv run pytest tests/integration/ -v --tb=short -m integration
 
 test-obsidian:
 	@echo "Running Obsidian module tests..."
-	uv run pytest src/codomyrmex/tests/unit/agentic_memory/obsidian/ -v --tb=short --override-ini="addopts="
+	uv run pytest tests/unit/agentic_memory/obsidian/ -v --tb=short --override-ini="addopts="
 
 test-fast:
 	@echo "Running tests with minimal addopts while preserving importlib collection..."
-	uv run pytest src/codomyrmex/tests/ -q --no-header --override-ini="addopts=" --import-mode=importlib
+	uv run pytest tests/ -q --no-header --override-ini="addopts=" --import-mode=importlib
 
 test-coverage:
 	@echo "Running tests with coverage report..."
-	uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=40
+	uv run pytest tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
 	@echo "Coverage report generated: coverage.json and htmlcov/"
 
 test-coverage-html:
@@ -120,10 +120,10 @@ security:
 # Performance Benchmarks
 benchmark-mcp:
 	@echo "Running MCP performance benchmarks..."
-	uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_load.py -v --no-cov --no-header
+	uv run python -m pytest tests/performance/test_mcp_load.py -v --no-cov --no-header
 	@echo "Running MCP benchmark suite..."
-	uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_performance.py -v --no-cov --no-header --benchmark-only 2>/dev/null || \
-		uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_performance.py -v --no-cov --no-header
+	uv run python -m pytest tests/performance/test_mcp_performance.py -v --no-cov --no-header --benchmark-only 2>/dev/null || \
+		uv run python -m pytest tests/performance/test_mcp_performance.py -v --no-cov --no-header
 
 benchmark: benchmark-mcp
 	@echo "All benchmarks completed."

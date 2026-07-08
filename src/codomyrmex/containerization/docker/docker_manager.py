@@ -7,7 +7,7 @@ from typing import Any
 try:
     import docker
 except ImportError:
-    docker = None  # type: ignore[assignment]
+    docker = None
 
 from codomyrmex.logging_monitoring import get_logger
 

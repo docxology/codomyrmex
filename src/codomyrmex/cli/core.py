@@ -134,7 +134,10 @@ class Cli:
         workflows=False,
         imports=False,
         colony=False,
+        all=False,
         all_checks=False,
+        fix=False,
+        json=False,
         output_json=False,
     ):
         """Run self-diagnostics on the Codomyrmex ecosystem"""
@@ -147,8 +150,9 @@ class Cli:
             workflows=workflows,
             imports=imports,
             colony=colony,
-            all_checks=all_checks,
-            output_json=output_json,
+            all_checks=all or all_checks,
+            fix=fix,
+            output_json=json or output_json,
         )
 
     def chat(self, todo="TODO.md", rounds=0, context=None, stream=False, resume=None):
@@ -400,7 +404,7 @@ class Cli:
         import subprocess
         from pathlib import Path
 
-        cmd = [sys.executable, "-m", "pytest", "src/codomyrmex/tests/"]
+        cmd = [sys.executable, "-m", "pytest", "tests/"]
         if coverage:
             cmd.extend(["--cov=codomyrmex", "--cov-report=term-missing"])
         print(f"🧪 Running tests{' with coverage' if coverage else ''}...")

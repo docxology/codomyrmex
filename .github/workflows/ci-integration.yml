@@ -48,7 +48,7 @@ jobs:
 
       - name: Run integration tests (strict)
         run: |
-          uv run pytest src/codomyrmex/tests/integration/ \
+          uv run pytest tests/integration/ \
             --timeout=120 \
             --no-header \
             -q \

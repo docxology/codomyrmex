@@ -28,7 +28,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | Production `@mcp_tool` decorators | 610 |
 | Pytest tests collected | 35,137 (`uv run python scripts/doc_inventory.py --pytest`) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
-| Markdown files under `docs/` | 1,180 (`find docs -name '*.md' -type f \| wc -l`) |
+| Markdown files under `docs/` | 1,198 (`find docs -name '*.md' -type f \| wc -l`) |
 
 ## Reproduce
 

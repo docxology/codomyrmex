@@ -1,0 +1,62 @@
+import json
+import subprocess
+import sys
+
+import pytest
+
+pytestmark = pytest.mark.integration
+
+
+def test_check_command():
+    """Tests that the check command runs successfully."""
+    result = subprocess.run(
+        [sys.executable, "-m", "codomyrmex.cli", "check"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0
+    assert (
+        "Codomyrmex Environment Check" in result.stdout
+        or "Checking Codomyrmex environment..." in result.stdout
+    )
+
+
+def test_info_command():
+    """Tests that the info command runs successfully."""
+    result = subprocess.run(
+        [sys.executable, "-m", "codomyrmex.cli", "info"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0
+    assert "Codomyrmex - A Modular, Extensible Coding Workspace" in result.stdout
+
+
+def test_doctor_command():
+    """Tests that the doctor command runs successfully."""
+    result = subprocess.run(
+        [sys.executable, "-m", "codomyrmex.cli", "doctor", "--all_checks"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0
+    assert "Codomyrmex Doctor" in result.stdout
+
+
+def test_doctor_command_documented_aliases():
+    result = subprocess.run(
+        [sys.executable, "-m", "codomyrmex.cli", "doctor", "--all", "--json"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0
+
+    json_start = result.stdout.find("{")
+    assert json_start >= 0
+    data = json.loads(result.stdout[json_start:].removesuffix("\nTrue\n"))
+    assert data["status"] == "ok"
+    assert len(data["checks"]) >= 3

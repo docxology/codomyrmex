@@ -47,7 +47,7 @@ def verify_readiness(*, prompt: str, description: str) -> str:
     from pathlib import Path
 
     project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
-    required_dirs = ["src/codomyrmex", "scripts", "src/codomyrmex/tests"]
+    required_dirs = ["src/codomyrmex", "scripts", "tests"]
 
     missing = []
     for d in required_dirs:

@@ -29,7 +29,7 @@ swarm.add_agent(AgentProxy(name="engineer", role="builder"))
 swarm.add_agent(AgentProxy(name="reviewer", role="verifier"))
 
 results = swarm.execute("Implement and review authentication middleware")
-# Returns: {"engineer": "...", "reviewer": "..."}
+# Returns queued task-result records with task_id, description, and result keys.
 
 subtasks = TaskDecomposer.decompose("Implement and review authentication middleware")
 # Returns: ["Implement middleware", "Write tests", "Review code"]

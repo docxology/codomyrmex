@@ -51,7 +51,7 @@ Two files: `__init__.py` contains the full protocol stack (enums, data types, ab
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `add_agent` | `agent: AgentProxy` | `None` | Add to swarm |
-| `execute` | `mission: str` | `dict[str, str]` | Distribute mission to all agents |
+| `execute` | `mission: str` | `list[dict[str, object]]` | Decompose mission and return queued task result records |
 | `consensus_vote` | `proposal: str` | `bool` | Simple majority vote |
 
 ## Dependencies
