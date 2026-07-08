@@ -90,7 +90,7 @@ class TestMLXQuantizer:
 
     def test_quantize_dequantize_int4(self):
         """Test full INT4 quantization round-trip on native MLX array."""
-        mx = pytest.importorskip("mlx.core")
+        mx = pytest.importorskip("mlx.core", exc_type=ImportError)
 
         # Original continuous floating point weights
         original = mx.random.normal((128, 128))
@@ -112,7 +112,7 @@ class TestMLXQuantizer:
 
     def test_quantize_dequantize_int8(self):
         """Test full INT8 quantization round-trip on native MLX array."""
-        mx = pytest.importorskip("mlx.core")
+        mx = pytest.importorskip("mlx.core", exc_type=ImportError)
 
         original = mx.random.normal((64, 64))
         config = QuantizationConfig(bits=8, group_size=64)
@@ -129,7 +129,7 @@ class TestMLXQuantizer:
 
     def test_quantize_fallback_fp16(self):
         """Test the 16-bit fallback logic bypassed structural quantization."""
-        mx = pytest.importorskip("mlx.core")
+        mx = pytest.importorskip("mlx.core", exc_type=ImportError)
 
         original = mx.random.normal((32, 32))
         config = QuantizationConfig(bits=16)
@@ -147,7 +147,7 @@ class TestMLXQuantizer:
 
     def test_dequantize_missing_scales_biases(self):
         """Test error when dequantizing low-bit arrays without mandatory constants."""
-        mx = pytest.importorskip("mlx.core")
+        mx = pytest.importorskip("mlx.core", exc_type=ImportError)
         wq = mx.zeros((32, 32))
         config = QuantizationConfig(bits=4)
 
