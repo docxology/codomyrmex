@@ -109,6 +109,15 @@ class MCPBridge:
         }
         self._handlers[name] = handler
 
+    _TYPE_MAP = {
+        str: "string",
+        int: "integer",
+        float: "number",
+        bool: "boolean",
+        list: "array",
+        dict: "object",
+    }
+
     def register_tool_from_function(
         self,
         func: Callable,
@@ -129,21 +138,12 @@ class MCPBridge:
         properties = {}
         required = []
 
-        type_map = {
-            str: "string",
-            int: "integer",
-            float: "number",
-            bool: "boolean",
-            list: "array",
-            dict: "object",
-        }
-
         for param_name, param in sig.parameters.items():
             if param_name in ("self", "cls"):
                 continue
 
             python_type = type_hints.get(param_name, str)
-            json_type = type_map.get(python_type, "string")
+            json_type = self._TYPE_MAP.get(python_type, "string")
 
             properties[param_name] = {
                 "type": json_type,

@@ -134,23 +134,23 @@ class TypedSerializer(CacheSerializer):
         }
         return self.base.serialize(wrapped)
 
+    _TYPE_MAP = {
+        "int": int,
+        "float": float,
+        "bool": bool,
+        "str": str,
+        "list": list,
+        "dict": dict,
+    }
+
     def deserialize(self, data: bytes) -> Any:
         """Deserialize from a portable format and return an instance."""
         wrapped = self.base.deserialize(data)
         type_name = wrapped.get("_type")
         value = wrapped.get("_value")
 
-        type_map = {
-            "int": int,
-            "float": float,
-            "bool": bool,
-            "str": str,
-            "list": list,
-            "dict": dict,
-        }
-
-        if type_name in type_map:
-            return type_map[type_name](value)
+        if type_name in self._TYPE_MAP:
+            return self._TYPE_MAP[type_name](value)
 
         return value
 
