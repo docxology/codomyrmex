@@ -127,6 +127,47 @@ def orchestrator_run_dag(
             TopologyMode,
         )
 
+        import ast
+        import operator
+
+        _MATH_OPS = {
+            ast.Add: operator.add,
+            ast.Sub: operator.sub,
+            ast.Mult: operator.mul,
+            ast.Div: operator.truediv,
+            ast.FloorDiv: operator.floordiv,
+            ast.Mod: operator.mod,
+            ast.Pow: operator.pow,
+            ast.USub: operator.neg,
+            ast.UAdd: operator.pos,
+        }
+
+        def _safe_eval(node: ast.AST, safe_locals: dict):
+            """Recursively evaluate an AST node containing only safe operations."""
+            if isinstance(node, ast.Expression):
+                return _safe_eval(node.body, safe_locals)
+            if isinstance(node, ast.Constant):
+                return node.value
+            if isinstance(node, ast.List):
+                return [_safe_eval(elt, safe_locals) for elt in node.elts]
+            if isinstance(node, ast.Tuple):
+                return tuple(_safe_eval(elt, safe_locals) for elt in node.elts)
+            if isinstance(node, ast.BinOp) and type(node.op) in _MATH_OPS:
+                return _MATH_OPS[type(node.op)](
+                    _safe_eval(node.left, safe_locals),
+                    _safe_eval(node.right, safe_locals),
+                )
+            if isinstance(node, ast.UnaryOp) and type(node.op) in _MATH_OPS:
+                return _MATH_OPS[type(node.op)](_safe_eval(node.operand, safe_locals))
+            if isinstance(node, ast.Call):
+                if not isinstance(node.func, ast.Name):
+                    raise ValueError("Only simple function calls are allowed")
+                if node.func.id not in safe_locals:
+                    raise ValueError(f"Function {node.func.id} is not allowed")
+                args = [_safe_eval(arg, safe_locals) for arg in node.args]
+                return safe_locals[node.func.id](*args)
+            raise ValueError(f"Unsupported expression: {ast.dump(node)}")
+
         def _resolve_fn(task_dict: dict):
             """Resolve a callable from task dict."""
             if "fn" in task_dict:
@@ -150,7 +191,12 @@ def orchestrator_run_dag(
                     "abs": abs,
                     "round": round,
                 }
-                return lambda *_a, **_kw: eval(expr, {"__builtins__": {}}, safe_locals)
+
+                def evaluator(*_a, **_kw):
+                    tree = ast.parse(expr, mode="eval")
+                    return _safe_eval(tree, safe_locals)
+
+                return evaluator
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 
