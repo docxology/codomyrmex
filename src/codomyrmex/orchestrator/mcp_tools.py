@@ -119,16 +119,15 @@ def orchestrator_run_dag(
         Aggregated result dict with per-task outputs, success/error counts.
     """
     try:
+        import ast
         import importlib
+        import operator
 
         from codomyrmex.orchestrator.swarm_topology import (
             SwarmTopology,
             TaskSpec,
             TopologyMode,
         )
-
-        import ast
-        import operator
 
         _MATH_OPS = {
             ast.Add: operator.add,
@@ -143,7 +142,6 @@ def orchestrator_run_dag(
         }
 
         def _safe_eval(node: ast.AST, safe_locals: dict):
-            """Recursively evaluate an AST node containing only safe operations."""
             if isinstance(node, ast.Expression):
                 return _safe_eval(node.body, safe_locals)
             if isinstance(node, ast.Constant):
