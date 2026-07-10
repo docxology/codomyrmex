@@ -163,8 +163,8 @@ FORBIDDEN_CLAIMS = {
         r"\bwires five subsystems\b", re.IGNORECASE
     ): "the Colony Control Plane now documents eight subsystems",
     re.compile(
-        r"\b128\s+top-level\s+modules?\b", re.IGNORECASE
-    ): "publication-facing entry points should use the current 129-module inventory",
+        r"\b129\s+top-level\s+modules?\b", re.IGNORECASE
+    ): "publication-facing entry points should use the current 130-module inventory",
     re.compile(
         r"\b128\s+total\b", re.IGNORECASE
     ): "configuration diagrams should not preserve stale 128 totals",
@@ -403,7 +403,7 @@ REQUIRED_CLAIMS = {
     "README.md": [
         "593 runtime MCP tools",
         "610 decorators",
-        "1,198",
+        "1,201",
         "35,137",
     ],
 }
@@ -1066,7 +1066,7 @@ def test_public_inventory_counts_match_live_tree() -> None:
     readme = _read("README.md")
     inventory = _read("docs/reference/inventory.md")
 
-    assert docs_count == 1198
+    assert docs_count == 1201
     assert f"{docs_count:,} Markdown" in readme
     assert f"{docs_count:,} (`find docs" in inventory
     assert "35%2C137" in readme

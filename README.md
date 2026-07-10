@@ -26,7 +26,7 @@
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **129 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **593** runtime MCP tools in the generated manifest and **610** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **35,137** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,198 Markdown** files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
+Codomyrmex is a production-grade library of **130 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **593** runtime MCP tools in the generated manifest and **610** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **35,137** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,201 Markdown** files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
 
 ```bash
 # Install
@@ -64,7 +64,7 @@ uv run codomyrmex doctor --all
 
 | | |
 |---|---|
-| 🧩 **129 Top-Level Modules** | Packages under `src/codomyrmex/` — composable, independently versioned, zero-mock tested |
+| 🧩 **130 Top-Level Modules** | Packages under `src/codomyrmex/` — composable, independently versioned, zero-mock tested |
 | 🤖 **593 Runtime MCP Tools** | 610 source `@mcp_tool` decorator lines; see [inventory](docs/reference/inventory.md) |
 | 🧪 **35,137 Collected Tests** | `uv run python scripts/doc_inventory.py --pytest`; zero-mock policy |
 | 🔒 **Security First** | GitGuardian, SBOM, GGSHIELD pre-commit, detect-secrets integration |
@@ -97,7 +97,7 @@ uv run codomyrmex doctor --all
 | [**docs/getting-started/**](docs/getting-started/) | 9 | Quick start, installation, setup, tutorials |
 | [**docs/development/**](docs/development/) | 10 | Dev environment, testing strategy, contribution guides |
 | [**docs/reference/**](docs/reference/) | 16 | API reference, CLI reference, troubleshooting |
-| [**docs/modules/**](docs/modules/) | 129 pkgs | Per-module documentation (README, SPEC, AGENTS, PAI per module) |
+| [**docs/modules/**](docs/modules/) | 130 pkgs | Per-module documentation (README, SPEC, AGENTS, PAI per module) |
 | [**docs/agents/**](docs/agents/) | 118 | Agent rules, coordination, per-provider docs (mirror `src/codomyrmex/agents/`) |
 | [**docs/integration/**](docs/integration/) | 11 | External service integration (Google, GitHub, etc.) |
 | [**docs/deployment/**](docs/deployment/) | 5 | Production deployment guides and checklists |
@@ -209,7 +209,7 @@ graph TB
 ## 🗂️ Complete Module Inventory
 
 > Every module links directly to its **source**, **docs**, **config**, and **scripts** directories.
-> 129 top-level modules across 10 capability layers — from foundation utilities to ML training primitives.
+> 130 top-level modules across 10 capability layers — from foundation utilities to ML training primitives.
 
 ### 🧠 Core Intelligence Modules
 
@@ -481,7 +481,7 @@ sequenceDiagram
     User->>CLI: codomyrmex run --task "analyze codebase"
     CLI->>Orchestrator: Create workflow
     Orchestrator->>MCP: Register available tools
-    MCP->>Tools: Discover 593 runtime tools (610 source decorators; 129 top-level modules)
+    MCP->>Tools: Discover 593 runtime tools (610 source decorators; 130 top-level modules)
     Orchestrator->>Agents: Dispatch agent
     Agents->>LLM: Generate completion (Gemini 2.5 Pro)
     LLM-->>Agents: Response + tool calls
@@ -502,7 +502,7 @@ sequenceDiagram
 codomyrmex/
 ├── .github/                  # 37 GitHub Actions workflows, templates, docs
 ├── config/                   # 102 top-level config dirs, 96 config.yaml files
-├── docs/                     # 1,196 Markdown files (see inventory); 18+ top-level sections
+├── docs/                     # 1,201 Markdown files (see inventory); 18+ top-level sections
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
@@ -520,7 +520,7 @@ codomyrmex/
 │   ├── maintenance/          # Config generation, health checks
 │   └── ... (90+ module scripts)
 ├── projects/                 # Project workspaces and adapter integrations (daf-consulting v0.4.1, hermes-paperclip-adapter)
-├── src/codomyrmex/           # Main source (129 modules)
+├── src/codomyrmex/           # Main source (130 modules)
 │   ├── agents/               # 168 files
 │   ├── llm/                  # 41 files
 │   ├── security/             # 47 files
@@ -537,10 +537,10 @@ codomyrmex/
 
 | Metric | Value |
 |:---|:---:|
-| **Total Modules** | 129 (top-level under `src/codomyrmex/`) |
+| **Total Modules** | 130 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
 | **Collected tests** | 35,137 (`uv run python scripts/doc_inventory.py --pytest`) |
-| **Documentation Files** | 1,196 Markdown under `docs/` (`find docs -name '*.md'`) |
+| **Documentation Files** | 1,201 Markdown under `docs/` (`find docs -name '*.md'`) |
 | **GitHub Workflows** | 37 (`.github/workflows/*.yml`) |
 | **MCP Runtime Tools** | 593 (generated runtime manifest) |
 | **MCP Tool Decorators** | 610 (`@mcp_tool` lines, production tree) |
@@ -829,7 +829,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>129 modules · 593 runtime MCP tools · 610 decorators · 35,137 tests · 1,196 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>130 modules · 593 runtime MCP tools · 610 decorators · 35,137 tests · 1,201 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

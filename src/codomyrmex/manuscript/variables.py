@@ -468,9 +468,7 @@ def compute_variables(
     # 3. Derive RESULT_* from actual project files
     # ------------------------------------------------------------------
 
-    colony_kernel_tests_dir = (
-        project_root / "src" / "codomyrmex" / "tests" / "unit" / "colony_kernel"
-    )
+    colony_kernel_tests_dir = _colony_kernel_test_dir(project_root)
     pytest_info = _run_colony_kernel_coverage(project_root, colony_kernel_tests_dir)
     test_count: int = pytest_info.get("collected", 0)
     if test_count <= 0:

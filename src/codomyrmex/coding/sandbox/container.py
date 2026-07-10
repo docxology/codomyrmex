@@ -92,6 +92,11 @@ def run_code_in_docker(
     docker_args.append(f"-v={real_temp}:/sandbox")
     docker_args.append("-w=/sandbox")  # set working directory
 
+    # Enable interactive mode when stdin is provided so the container's
+    # process can read from the redirected stdin file descriptor.
+    if stdin_file:
+        docker_args.append("-i")
+
     # Prepare the command to run inside the container
     container_cmd = [
         cmd.format(filename=code_file_path)
@@ -161,7 +166,7 @@ def run_code_in_docker(
             stdout, stderr = process.communicate()
             exit_code = -1
             status = "timeout"
-            error_message = f"Execution timed out after {timeout} seconds."
+            error_message = f"Execution timeout after {timeout} seconds."
 
             # Try to find and kill the running container
             try:

@@ -6,7 +6,7 @@
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows with **129** top-level modules under `src/codomyrmex/`, plus project workspaces under `projects/` for integration builds such as Paperclip adapters. This document serves as the central navigation hub for agents working with any part of the system. Repo metrics: [docs/reference/inventory.md](docs/reference/inventory.md).
+Codomyrmex is a modular coding workspace enabling AI development workflows with **130** top-level modules under `src/codomyrmex/`, plus project workspaces under `projects/` for integration builds such as Paperclip adapters. This document serves as the central navigation hub for agents working with any part of the system. Repo metrics: [docs/reference/inventory.md](docs/reference/inventory.md).
 
 ## Repository Structure
 

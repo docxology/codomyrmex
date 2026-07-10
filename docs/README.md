@@ -4,7 +4,7 @@
 
 ## Overview
 
-Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **129 top-level modules**, **610** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md)), and **39 agent packages** under `src/codomyrmex/agents/` (see [agents/](agents/)).
+Comprehensive documentation for the Codomyrmex modular coding workspace — a production-grade ecosystem with **130 top-level modules**, **610** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md)), and **39 agent packages** under `src/codomyrmex/agents/` (see [agents/](agents/)).
 
 ## Documentation Map
 

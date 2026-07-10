@@ -11,7 +11,7 @@
 |:--------------|:------------|
 | Run the CLI | `codomyrmex --help` → [cli/](src/codomyrmex/cli/) |
 | Understand PAI integration | [PAI.md](PAI.md) — algorithm phase ↔ module mapping |
-| Browse all 129 top-level modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
+| Browse all 130 top-level modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
 | MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — **610** production `@mcp_tool` lines ([inventory](docs/reference/inventory.md)) |
 | Check system health | `codomyrmex status` or `codomyrmex check` |
 | Run tests | `uv run pytest` |
@@ -65,7 +65,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 | Directory | Description |
 | :--- | :--- |
 | [src/](src/INDEX.md) | Source root — namespace package |
-| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **129 top-level modules** across 4 layers |
+| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **130 top-level modules** across 4 layers |
 
 ### Infrastructure
 
