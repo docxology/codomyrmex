@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.3.0 | **Date**: 2026-07-02 | **Modules**: 129 | **Sprint**: 36 colony-kernel publication sweep
+**Version**: v1.3.0 | **Date**: 2026-07-09 | **Modules**: 130 | **Sprint**: 37 publication hardening
 
 > **Current release**: v1.3.0 "Colony Kernel" (2026-06-30).
 > **Next release**: v1.3.1 (publication hardening)
@@ -15,12 +15,12 @@
 
 | Metric | Value | Command |
 | :--- | :--- | :--- |
-| **Tests collected** | **35,137** (0 errors) | `uv run python scripts/doc_inventory.py --pytest` |
+| **Tests collected** | **34,988** (0 errors) | `uv run python scripts/doc_inventory.py --pytest` |
 | **Ruff errors** | **0** | `uv run ruff check .` |
 | **ty diagnostics** | **0** | `uv run ty check --output-format concise src/` |
 | **Mock violations** | **0** | `rg -n "from unittest\\.mock" src --glob '*.py'` |
 | **MCP tool decorators** | **610** | `uv run python scripts/doc_inventory.py` (production tree; lines starting with `@mcp_tool`) |
-| **Top-level modules** | **129** | `uv run python scripts/doc_inventory.py --pytest` |
+| **Top-level modules** | **130** | `uv run python scripts/doc_inventory.py --pytest` |
 | **pyproject.toml version** | **1.3.0** | `grep version pyproject.toml \| head -1` |
 | **AGENTS validation** | **1,342 / 1,342 valid** | `make docs-check` |
 | **Doc triple-check debt** | **0 files with issues; 0 broken links; 0 placeholders; 0 completeness issues** | `make docs-check` |
@@ -90,13 +90,13 @@
 
 | # | Item | Module | Notes |
 | :--- | :--- | :--- | :--- |
-| B1 | **Tool versioning UI** | `model_context_protocol/` | `deprecated_in` metadata exists, not surfaced |
+| B1 | ~~Tool versioning UI~~ | `model_context_protocol/` | ✅ Fixed — `deprecated_in` metadata now surfaced via `get_deprecated_tools()`, `get_deprecation_timeline()`, `get_deprecation_summary()` exported from `model_context_protocol.__init__` |
 | B2 | **Oversized files audit** | `orchestrator/` | 16 files >800 LOC, largest: `orchestration.py` |
 | B3 | **Video module depth** | `video/` | Partial impl (processor, extractor, analyzer, transcription paths); not a thin stub — see `video/README.md` / `SPEC.md` |
-| B4 | **Meme module MCP exposure** | `meme/` | Experimental, needs RASP + `@mcp_tool` |
-| B5 | **Secure Cognitive Layer MCP** | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | Not MCP-exposed via PAI bridge |
+| B4 | ~~Meme module MCP exposure~~ | `meme/` | ✅ Fixed — 5 `@mcp_tool` decorators in `mcp_tools.py` (dissect, fitness, synthesize, propagate, narrative); RASP docs present |
+| B5 | ~~Secure Cognitive Layer MCP~~ | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | ✅ Fixed — PAI bridge module `pai_pm/secure_cognitive_bridge.py` registers all 15 MCP tools (3 per module × 5 modules); `register_secure_cognitive_tools()` + `get_secure_cognitive_tool_catalog()` |
 | B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,137 tests collect with 0 errors via import guards and optional submodule skips |
-| B7 | **README / inventory metric drift watch** | root | Current measured baseline: 35,137 collected tests, 610 MCP `@mcp_tool` lines, 129 modules |
+| B7 | ~~README / inventory metric drift watch~~ | root | ✅ Fixed — updated all surfaces to 130 modules, 1,201 docs; manuscript consistency test updated |
 | B8 | **Coverage gate** | repo-wide | **40%** in `[tool.coverage.report] fail_under`; `meme/*` omitted from `[tool.coverage.run]`. Enforce with `make test` or `--cov-fail-under=40`. Re-verify after substantive changes. |
 | B9 | ~~Type safety burn-down~~ | repo-wide | ✅ Fixed — `uv run ty check --output-format concise src/` now reports 0 diagnostics. Keep this zero baseline in CI/local gates. |
 | B10 | ~~Documentation completeness burn-down~~ | `docs/`, `src/codomyrmex/**` | ✅ Fixed — `make docs-check` reports 4,911 docs checked, 0 placeholders, 0 broken links, 0 completeness issues, and 1,342/1,342 AGENTS valid. |
@@ -110,7 +110,7 @@
 | Requirement | Command | Threshold | Status |
 | :--- | :--- | :--- | :--- |
 | **Zero-Mock Policy** | `rg -n "from unittest\\.mock" src --glob '*.py'` | 0 `unittest.mock` imports | ✅ PASSED (0 violations) |
-| **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 40% gate) | 🟡 PENDING (35,137 collected with 0 errors; needs full run) |
+| **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 40% gate) | 🟡 PENDING (34,988 tests collected with 0 errors; build_synthesis + colony_kernel + integration suites verified green) |
 | **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED (0 errors) |
 | **Type Safety** | `uv run ty check --output-format concise src/` | 0 diagnostics | ✅ PASSED (0 diagnostics) |
 | **Coverage Gate** | `make test` or `uv run pytest src/codomyrmex/tests/ ... --cov-fail-under=40` | ≥40% | 🟡 Confirm on CI / local green run — `meme/*` omitted from coverage (`pyproject.toml`); one dev unit+cov snapshot showed ~73% of ~135k statements (Mar 2026) |
@@ -166,10 +166,10 @@ codomyrmex/
 ├── SECURITY.md          ← Security policies
 ├── PAI.md               ← Personal AI Infrastructure
 ├── pyproject.toml       ← Package config (version: 1.3.0)
-└── src/codomyrmex/      ← 129 modules
+└── src/codomyrmex/      ← 130 modules
 ```
 
 ---
 
-*Last updated: 2026-05-13 — Sprint 35 health sweep active.*
-*Version: 1.2.8-draft*
+*Last updated: 2026-07-09 — Sprint 37 publication hardening active.*
+*Version: 1.3.0-draft*
