@@ -173,13 +173,13 @@ FORBIDDEN_CLAIMS = {
     ): "configuration inventory should distinguish config dirs from config.yaml files",
     re.compile(
         r"\b35,183\b"
-    ): "full-suite collection is currently documented as 35,137 tests",
+    ): "full-suite collection is currently documented as 35,119 tests",
     re.compile(
         r"\b35,118\b"
-    ): "full-suite collection is currently documented as 35,137 tests",
+    ): "full-suite collection is currently documented as 35,119 tests",
     re.compile(
-        r"\b35,119\b"
-    ): "full-suite collection is currently documented as 35,137 tests",
+        r"\b35,137\b"
+    ): "full-suite collection is currently documented as 35,119 tests",
     re.compile(
         r"\b1,191\b"
     ): "docs inventory is currently 1,196 Markdown files under docs/",
@@ -197,25 +197,26 @@ FORBIDDEN_CLAIMS = {
     ): "docs inventory is currently 1,196 Markdown files under docs/",
     re.compile(
         r"\b35,122\b"
-    ): "full-suite collection is currently documented as 35,137 tests",
+    ): "full-suite collection is currently documented as 35,119 tests",
     re.compile(
         r"\b35,124\b"
-    ): "full-suite collection is currently documented as 35,137 tests",
-    re.compile(r"35%2C124"): "full-suite collection badge is currently 35,137 tests",
+    ): "full-suite collection is currently documented as 35,119 tests",
+    re.compile(r"35%2C124"): "full-suite collection badge is currently 35,119 tests",
     re.compile(
         r"\b35,114\b"
-    ): "full-suite collection is currently documented as 35,137 tests",
+    ): "full-suite collection is currently documented as 35,119 tests",
     re.compile(
         r"\b34,451\b"
-    ): "full-suite collection is currently documented as 35,137 tests",
+    ): "full-suite collection is currently documented as 35,119 tests",
     re.compile(
         r"\b35,130\b"
-    ): "full-suite collection is currently documented as 35,137 tests",
-    re.compile(r"35%2C130"): "full-suite collection badge is currently 35,137 tests",
+    ): "full-suite collection is currently documented as 35,119 tests",
+    re.compile(r"35%2C130"): "full-suite collection badge is currently 35,119 tests",
     re.compile(
         r"\b35,131\b"
-    ): "full-suite collection is currently documented as 35,137 tests",
-    re.compile(r"35%2C131"): "full-suite collection badge is currently 35,137 tests",
+    ): "full-suite collection is currently documented as 35,119 tests",
+    re.compile(r"35%2C131"): "full-suite collection badge is currently 35,119 tests",
+    re.compile(r"35%2C137"): "full-suite collection badge is currently 35,119 tests",
     re.compile(
         r"\b9\s+test\s+files\b", re.IGNORECASE
     ): "colony-kernel test suite currently spans 12 test files",
@@ -323,7 +324,10 @@ FORBIDDEN_CLAIMS = {
     ): "the manuscript should not claim a queue budget path absent a checked-in trace",
     re.compile(
         r"\b610 MCP tools\b", re.IGNORECASE
-    ): "root docs must distinguish 593 runtime tools from 610 decorator lines",
+    ): "root docs must distinguish 593 runtime tools from 623 decorator lines",
+    re.compile(
+        r"\b610 decorators\b", re.IGNORECASE
+    ): "production @mcp_tool decorator count is now 623, not 610",
     re.compile(
         r"\b92\.3%\s+branch\s+coverage\b", re.IGNORECASE
     ): "branch coverage must come from pytest --cov-branch, not statement coverage",
@@ -402,9 +406,9 @@ REQUIRED_CLAIMS = {
     ],
     "README.md": [
         "593 runtime MCP tools",
-        "610 decorators",
+        "623 decorators",
         "1,201",
-        "35,137",
+        "35,119",
     ],
 }
 
@@ -1069,12 +1073,12 @@ def test_public_inventory_counts_match_live_tree() -> None:
     assert docs_count == 1201
     assert f"{docs_count:,} Markdown" in readme
     assert f"{docs_count:,} (`find docs" in inventory
-    assert "35%2C137" in readme
-    assert "35,137" in readme
+    assert "35%2C119" in readme
+    assert "35,119" in readme
     assert "| Runtime MCP tools | 593 |" in inventory
-    assert "| Production `@mcp_tool` decorators | 610 |" in inventory
+    assert "| Production `@mcp_tool` decorators | 623 |" in inventory
     assert "593 runtime MCP tools" in readme
-    assert "610 decorators" in readme
+    assert "623 decorators" in readme
 
 
 def test_todo_docs_reference_current_root_backlog_name() -> None:

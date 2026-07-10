@@ -124,7 +124,7 @@ Hermes + colony_kernel: **1203+ passed** after P0 fixes.
 | --- | --- |
 | Top-level modules | 129 (+1 `manuscript` package) |
 | Production `@mcp_tool` decorators | 610 |
-| Pytest collected | 35,137 |
+| Pytest collected | 35,119 |
 | Coverage gate | 40% |
 | Hermes+kernel targeted coverage | 55.6% |
 | Mock-policy grep hits | 237 across 216 files |

@@ -27,7 +27,7 @@
 | `mcp_tools.py` files (non-test) | 150 | [docs/reference/inventory.md](docs/reference/inventory.md) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Tests collected | 35,137 | `uv run python scripts/doc_inventory.py --pytest` ([inventory](docs/reference/inventory.md)) |
+| Tests collected | 35,119 | `uv run python scripts/doc_inventory.py --pytest` ([inventory](docs/reference/inventory.md)) |
 | GitHub Actions workflows | 37 | `.github/workflows/*.yml` (see `uv run python scripts/doc_inventory.py`) |
 | RASP gap report | `uv run python scripts/rasp_gap_report.py` | [AGENTS.md](AGENTS.md) |
 | Version | v1.3.0 | [pyproject.toml](pyproject.toml) |

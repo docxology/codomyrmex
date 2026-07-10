@@ -1,0 +1,366 @@
+{
+  "schema_version": "1.0",
+  "title": "Codomyrmex — The Colony",
+  "width": 3840,
+  "height": 2160,
+  "fps": 30,
+  "voice": "bf_emma",
+  "metadata": {
+    "author": "Daniel Ari Friedman",
+    "version": "1.3.0",
+    "self_referential": false
+  },
+  "scenes": [
+    {
+      "id": "title",
+      "title": "Codomyrmex",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "title-c",
+          "text": "What if an agent colony could not be fooled the same way twice? After a failed action, the next proposal should be measurably harder to pass. This is Codomyrmex.",
+          "actions": []
+        }
+      ],
+      "context": {
+        "section": "Codomyrmex",
+        "subtitle": "The colony that gets harder to fool"
+      }
+    },
+    {
+      "id": "abstract",
+      "title": "The whole idea",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "abstract-c",
+          "text": "A modular agentic ecosystem of one hundred thirty Python modules, governed by a Colony Control Plane that learns from every action. Agents earn authority. Failures tighten the gate. The colony remembers.",
+          "actions": [
+            {
+              "type": "open_file",
+              "params": {
+                "path": "The whole idea"
+              },
+              "trigger_word": "glance"
+            }
+          ]
+        }
+      ],
+      "context": {
+        "section": "At a glance",
+        "background_image": "/Users/hum/Documents/GitHub/HumOS/projects/platform/hum-docxology/repos/public/codomyrmex/output/figures/colony_pressure_loop.png"
+      }
+    },
+    {
+      "id": "thesis",
+      "title": "A demo is a value, not a recording",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "thesis-c",
+          "text": "Conventional agent frameworks treat the module ecosystem as a warehouse: any agent can reach for any tool at any time, with no memory of past failures. Codomyrmex models the collective as a colony, where agents earn trust, roles adapt, and the gate tightens on repeated failure.",
+          "actions": []
+        }
+      ],
+      "context": {
+        "section": "The Thesis",
+        "bullets": [
+          "Agents are not fungible workers — they are actors with earned trust profiles.",
+          "Failures deposit pheromone signals that make the next proposal at that location harder.",
+          "Five roles, six signal types, eight subsystems — all governed by a closed feedback loop."
+        ]
+      }
+    },
+    {
+      "id": "kernel-code",
+      "title": "src/codomyrmex/colony_kernel/kernel.py",
+      "kind": "codebase",
+      "chunks": [
+        {
+          "id": "kernel-code-c",
+          "text": "The ColonyKernel is the hub class. It owns the lifecycle of all eight subsystems and exposes a four-method public API: propose, record, status, tick.",
+          "actions": [
+            {
+              "type": "create_file",
+              "params": {
+                "path": "src/codomyrmex/colony_kernel/kernel.py",
+                "code": "class ColonyKernel:\n    \"\"\"The control plane for the artificial ecology.\"\"\"\n\n    def propose_action(self, proposal: ActionProposal) -> GateResult:\n        \"\"\"Pressure -> proposal -> gate -> action.\"\"\"\n        findings = self._falsify(proposal)\n        budget_ok = self._ledger.check_budget(proposal)\n        return self._gate.evaluate(\n            proposal, self._profile(proposal),\n            findings, budget_ok,\n        )\n\n    def record_outcome(self, result: ConsequenceRecord) -> None:\n        \"\"\"Consequence -> memory -> role -> pressure.\"\"\"\n        self._memory.record(result)\n        self._roles.reassign(result.agent_id)\n        self._pheromones.deposit(result)"
+              },
+              "trigger_word": "hub"
+            },
+            {
+              "type": "highlight_lines",
+              "params": {
+                "lines": [4, 5, 6, 7, 8, 9, 10, 11]
+              },
+              "trigger_word": "propose"
+            }
+          ]
+        }
+      ],
+      "context": {
+        "section": "The Colony Kernel"
+      }
+    },
+    {
+      "id": "gate-code",
+      "title": "src/codomyrmex/colony_kernel/actuation_gate.py",
+      "kind": "codebase",
+      "chunks": [
+        {
+          "id": "gate-code-c",
+          "text": "The actuation gate renders its verdict through a weighted linear combination of four scores: budget headroom, risk pressure, trust tier, and proposal completeness. Hard overrides refuse SANDBOX roles, low trust, and CRITICAL falsification findings before scoring even begins.",
+          "actions": [
+            {
+              "type": "create_file",
+              "params": {
+                "path": "src/codomyrmex/colony_kernel/actuation_gate.py",
+                "code": "class ActuationGate:\n    \"\"\"The +1/0/-1 permission layer for the Colony Kernel.\"\"\"\n\n    _GATE_SCORE_EXECUTE = 0.75\n    _GATE_SCORE_HOLD = 0.50\n    _TRUST_HARD_FLOOR = 0.30\n\n    def evaluate(self, proposal, profile, findings, budget_ok):\n        # Hard overrides: SANDBOX always refuses.\n        if profile.role == AgentRole.SANDBOX:\n            return GateResult(GateDecision.REFUSE, ...)\n        # Trust floor: below 0.30, refuse before scoring.\n        if profile.trust_score < self._TRUST_HARD_FLOOR:\n            return GateResult(GateDecision.REFUSE, ...)\n        # CRITICAL falsification -> refuse before scoring.\n        if any(f.severity == FalsificationSeverity.CRITICAL\n               for f in findings):\n            return GateResult(GateDecision.REFUSE, ...)\n        # Weighted additive score.\n        score = (self._w_budget * budget_ok\n                 + self._w_risk * risk_ok\n                 + self._w_trust * trust_ok\n                 + self._w_complete * completeness)"
+              },
+              "trigger_word": "gate"
+            },
+            {
+              "type": "highlight_lines",
+              "params": {
+                "lines": [8, 9, 10, 11, 12, 13, 14, 15]
+              },
+              "trigger_word": "overrides"
+            }
+          ]
+        }
+      ],
+      "context": {
+        "section": "The Actuation Gate"
+      }
+    },
+    {
+      "id": "pheromone-code",
+      "title": "src/codomyrmex/colony_kernel/pheromone_store.py",
+      "kind": "codebase",
+      "chunks": [
+        {
+          "id": "pheromone-code-c",
+          "text": "Stigmergy: agents do not negotiate with each other. They deposit signals into a shared pheromone field. The gate reads the field when evaluating the next proposal at that location. Coordination scales as O of n, not O of n squared.",
+          "actions": [
+            {
+              "type": "create_file",
+              "params": {
+                "path": "src/codomyrmex/colony_kernel/pheromone_store.py",
+                "code": "class PheromoneStore:\n    \"\"\"Typed colony signal layer over TraceField.\"\"\"\n\n    def deposit(self, signal: ColonySignal) -> None:\n        key = f\"{signal.type.value}:{signal.location}\"\n        self._field.deposit(key, signal.strength,\n                           source=signal.source,\n                           metadata={'decay': signal.decay})\n\n    def pressure_at(self, location: str,\n                    signal_type: SignalType) -> float:\n        key = f\"{signal_type.value}:{location}\"\n        return self._field.read(key)\n\n    def tick(self) -> None:\n        \"\"\"Evaporate all signals per their configured decay rate.\"\"\"\n        self._field.evaporate()"
+              },
+              "trigger_word": "deposit"
+            },
+            {
+              "type": "highlight_lines",
+              "params": {
+                "lines": [4, 5, 6, 7, 8]
+              },
+              "trigger_word": "stigmergy"
+            }
+          ]
+        }
+      ],
+      "context": {
+        "section": "Stigmergy"
+      }
+    },
+    {
+      "id": "craft",
+      "title": "What you are seeing, right now",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "craft-c",
+          "text": "This video was compiled by DemoCreate from a single declarative file describing Codomyrmex. The code typed itself in. The narration is a real neural voice running fully local. Every frame is rendered, not recorded.",
+          "actions": []
+        }
+      ],
+      "context": {
+        "section": "The Craft",
+        "bullets": [
+          "One hundred thirty top-level modules, each self-contained with its own tests and RASP documentation.",
+          "Five hundred ninety three runtime MCP tools exposed for Claude, Gemini, GPT, and any Model Context Protocol client.",
+          "Zero-mock policy: all thirty five thousand tests use real data and real computations — no unittest.mock, ever."
+        ]
+      }
+    },
+    {
+      "id": "loop",
+      "title": "The closed feedback loop",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "loop-c",
+          "text": "The colony kernel runs a continuous loop: pressure generates proposals, proposals pass or are blocked by the gate, surviving actions produce consequences, consequences are written to memory, memory drives role reassignment, and roles reshape the pressure distribution. The loop repeats. The colony learns.",
+          "actions": [
+            {
+              "type": "open_file",
+              "params": {
+                "path": "The closed feedback loop"
+              },
+              "trigger_word": "loop"
+            }
+          ]
+        }
+      ],
+      "context": {
+        "section": "The Loop",
+        "background_image": "/Users/hum/Documents/GitHub/HumOS/projects/platform/hum-docxology/repos/public/codomyrmex/output/figures/colony_pressure_loop.png"
+      }
+    },
+    {
+      "id": "roles",
+      "title": "Five roles, earned not assigned",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "roles-c",
+          "text": "Agents do not start with permissions. They start as SANDBOX. Clean outcomes deposit SUCCESS signals, trust rises, and the role adapter deterministically promotes them through REPAIR ANT, MEMORY ANT, DISPATCHER, and finally GUARD ANT. Failures reverse the trajectory.",
+          "actions": []
+        }
+      ],
+      "context": {
+        "section": "Role Ladder",
+        "bullets": [
+          "SANDBOX — all proposals refused, no matter the score.",
+          "REPAIR_ANT — narrow scope, fix-only access.",
+          "MEMORY_ANT — read and annotate, no destructive actions.",
+          "DISPATCHER — coordinate other agents, propose plans.",
+          "GUARD_ANT — full authority, review pruning candidates, enforce colony policy."
+        ]
+      }
+    },
+    {
+      "id": "signals",
+      "title": "Six typed signal channels",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "signals-c",
+          "text": "The pheromone field carries six typed signal types. Each has its own decay rate. FAILURE signals persist longer than SUCCESS, making the colony cautious where things have gone wrong. HUMAN PRIORITY overrides everything. NEED signals attract agents. DEPENDENCY traces the module graph. RISK marks unverified paths.",
+          "actions": []
+        }
+      ],
+      "context": {
+        "section": "Signals",
+        "stats": [
+          ["130", "top-level modules"],
+          ["593", "MCP tools"],
+          ["35,137", "collected tests"],
+          ["37", "CI workflows"],
+          ["0", "mocks allowed"]
+        ]
+      }
+    },
+    {
+      "id": "falsification",
+      "title": "Adversarial falsification before the gate",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "falsification-c",
+          "text": "Before the gate evaluates any proposal, the falsification worker runs deterministic adversarial checks. It attempts to invalidate the proposal — missing tests, no rollback plan, unverified assumptions, scope creep. Only proposals that survive adversarial scrutiny reach the gate.",
+          "actions": [
+            {
+              "type": "open_file",
+              "params": {
+                "path": "Adversarial falsification before the gate"
+              },
+              "trigger_word": "falsify"
+            }
+          ]
+        }
+      ],
+      "context": {
+        "section": "Falsification",
+        "background_image": "/Users/hum/Documents/GitHub/HumOS/projects/platform/hum-docxology/repos/public/codomyrmex/output/figures/falsification_vectors.png"
+      }
+    },
+    {
+      "id": "trust",
+      "title": "Trust trajectory",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "trust-c",
+          "text": "Under deterministic clean outcomes, trust converges. Each success deposits a signal, the trust score drifts upward, and the role adapter promotes the agent. Under repeated failures, the score drops, the role narrows, and the gate refuses more proposals. The colony adapts its pressure profile to the problem surface.",
+          "actions": [
+            {
+              "type": "open_file",
+              "params": {
+                "path": "Trust trajectory"
+              },
+              "trigger_word": "trust"
+            }
+          ]
+        }
+      ],
+      "context": {
+        "section": "Trust",
+        "background_image": "/Users/hum/Documents/GitHub/HumOS/projects/platform/hum-docxology/repos/public/codomyrmex/output/figures/trust_trajectory.png"
+      }
+    },
+    {
+      "id": "numbers",
+      "title": "Codomyrmex by the numbers",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "numbers-c",
+          "text": "And it is real. One hundred thirty modules, five hundred ninety three MCP tools, thirty five thousand tests, thirty seven CI workflows, and one thousand two hundred markdown docs — all zero-mock, all real, all tested.",
+          "actions": []
+        }
+      ],
+      "context": {
+        "section": "By the numbers",
+        "stats": [
+          ["130", "top-level modules"],
+          ["593", "runtime MCP tools"],
+          ["35,137", "collected tests"],
+          ["37", "CI workflows"],
+          ["0", "mocks"]
+        ]
+      }
+    },
+    {
+      "id": "terminal",
+      "title": "terminal",
+      "kind": "terminal",
+      "chunks": [
+        {
+          "id": "terminal-c",
+          "text": "One command verifies the entire colony: doctor checks every module, every MCP tool, every test. Zero-mock means zero shortcuts. Real verification, every time.",
+          "actions": [
+            {
+              "type": "run_command",
+              "params": {
+                "command": "uv run codomyrmex doctor --all",
+                "output": "\u2713 colony_kernel: 8/8 subsystems healthy\n\u2713 pheromone_store: decay rates nominal\n\u2713 actuation_gate: thresholds configured\n\u2713 consequence_memory: persistence layer OK\n\u2713 593 MCP tools registered\n\u2713 35,137 tests collected\n\u2713 zero-mock policy: enforced"
+              },
+              "trigger_word": "doctor"
+            }
+          ]
+        }
+      ],
+      "context": {
+        "section": "Verify"
+      }
+    },
+    {
+      "id": "outro",
+      "title": "Codomyrmex",
+      "kind": "slide",
+      "chunks": [
+        {
+          "id": "outro-c",
+          "text": "The colony that gets harder to fool. One hundred thirty modules. Five roles. Six signals. Eight subsystems. One loop: pressure, proposal, gate, action, consequence, memory, role, pressure. This video was compiled by DemoCreate from one declarative file. Edit it, re-render, and never record a take again.",
+          "actions": []
+        }
+      ],
+      "context": {
+        "section": "The Colony",
+        "subtitle": "github.com/docxology/codomyrmex"
+      }
+    }
+  ]
+}
