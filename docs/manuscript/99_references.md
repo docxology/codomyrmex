@@ -104,4 +104,30 @@ entries should be added to the project's .bib file (refs.bib or equivalent).
   Tversky, A., & Kahneman, D. (1991). Loss aversion in riskless choice: A reference-
   dependent model. Quarterly Journal of Economics, 106(4), 1039–1061.
 
--->
+
+
+
+=== Zero-Knowledge Proofs (sec:zk-proofs) ===
+
+@fiat1986prove
+  Fiat, A., & Shamir, A. (1986). How to Prove Yourself: Practical Solutions to
+  Identification and Signature Problems. Advances in Cryptology, CRYPTO 1986, 186-194.
+
+@ben2014succinct
+  Ben-Sasson, E., Chiesa, A., Tromer, E., & Virza, M. (2014). Succinct Non-Interactive
+  Zero Knowledge for a von Neumann Architecture. IACR Cryptology ePrint Archive, 2014, 705.
+
+=== Biocognitive Verification (sec:biocognitive) ===
+
+@taskForce1996heart
+  Task Force of the European Society of Cardiology and the North American Society
+  of Pacing and Electrophysiology. (1996). Heart Rate Variability: Standards of
+  Measurement, Physiological Interpretation, and Clinical Use. Circulation, 93, 1043-1065.
+
+@shaffer2017overview
+  Shaffer, F., & Ginsberg, J. P. (2017). An Overview of Heart Rate Variability
+  Metrics and Norms. Frontiers in Public Health, 5, 258.
+
+@klimesch1999eeg
+  Klimesch, W. (1999). EEG Alpha and Theta Oscillations Reflect Cognitive and
+  Memory Performance: A Review and Analysis. Brain Research Reviews, 29(2-3), 169-195.

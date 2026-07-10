@@ -413,3 +413,63 @@ or upgraded without cascading effects on others — a property that supports the
 trivially compromise the gate logic in another.
 
 
+
+---
+
+## Zero-Knowledge Proofs and Secure Agent Authentication {#sec:zk-proofs}
+
+The secure cognitive layer integrates zero-knowledge proof (ZKP) authentication
+into the colony's wallet operations, enabling agents to prove ownership of
+resources without exposing private keys. The `ZKProofVerifier` implements a
+challenge-response protocol: the prover generates a proof bound to a message
+(a challenge derived from the wallet address and a nonce), and the verifier
+checks the proof without ever accessing the private key material. This approach
+follows the Fiat-Shamir heuristic [@fiat1986prove] in spirit, though the
+current implementation uses HMAC-based challenge-response rather than full
+non-interactive ZK-SNARKs.
+
+The `SignedCapabilityProofBuilder` integrates ZK-proofs with the identity module,
+producing signed capability proofs that bind wallet ownership to identity
+verification. This enables the colony to verify that an agent both controls a
+wallet and holds a verified identity persona before granting elevated trust —
+a two-factor authentication mechanism for agent actuation.
+
+**Scope limitation.** The current ZK-proof implementation uses symmetric-key
+cryptography (HMAC-SHA256) rather than public-key ZK-SNARKs. This is sufficient
+for proving wallet ownership within the colony's trust boundary but does not
+provide the non-interactivity or succinctness properties of full ZK-SNARK
+systems [@ben2014succinct]. Upgrading to a ZK-SNARK backend is an identified
+future direction contingent on performance requirements.
+
+---
+
+## Biocognitive Verification and Physiological Trust Signals {#sec:biocognitive}
+
+The identity module implements biocognitive verification hooks that enable the
+colony to incorporate physiological signals into its trust scoring. The
+`HeartbeatValidator` enrolled-mode verifier computes heart rate variability
+(HRV) metrics — RMSSD (root mean square of successive differences), SDNN
+(standard deviation of NN intervals), and mean heart rate — and compares them
+against a stored baseline using a configurable tolerance. A heartbeat that
+deviates beyond the tolerance threshold (e.g., a doubled heart rate suggesting
+stress or coercion) is rejected, preventing actuation by an agent whose
+physiological state suggests compromised judgment.
+
+The `EEGFrequencyAnalyzer` computes power spectral density across standard
+frequency bands (delta, theta, alpha, beta, gamma) using fast Fourier
+transform, enabling frequency-band-specific trust adjustments. The
+`PersonaRotation` system allows agents to maintain multiple verified identity
+personas and switch between them, enabling role separation without
+re-enrollment.
+
+**Relationship to active inference.** The biocognitive verification layer
+connects to the active inference framework ([@sec:active-inference]) by
+providing sensory evidence about the agent's internal state. Heart rate
+variability and EEG band power are physiological correlates of cognitive load
+and attention — quantities that the free-energy principle predicts should
+correlate with precision-weighting of prediction errors. An agent under high
+cognitive load (low HRV, elevated beta power) may be less reliable in its
+proposals, suggesting the gate should weight its completeness score more
+heavily. This connection is speculative and not yet implemented in the gate
+scoring; it represents a direction for integrating physiological evidence into
+the colony's trust dynamics.
