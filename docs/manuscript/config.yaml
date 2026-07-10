@@ -17,11 +17,11 @@ paper:
 
 # Consumed by: `infrastructure.publishing.extract_publication_metadata` (in `infrastructure/publishing/metadata.py`)
 authors:
-  - name: "The Codomyrmex Contributors"
+  - name: "Daniel Ari Friedman"
     alias: "docxology"
-    email: "contributors@docxology.github.io"
-    affiliation: "Docxology Open Source"
-    orcid: "forthcoming"
+    email: "daniel@activeinference.institute"
+    affiliation: "Active Inference Institute"
+    orcid: "0000-0001-6232-9096"
     corresponding: true
 
 # Consumed by: `infrastructure.publishing.publish_to_zenodo` (in `infrastructure/publishing/platforms.py`)

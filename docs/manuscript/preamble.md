@@ -45,7 +45,7 @@ This file contains LaTeX packages and commands that are automatically injected i
     colorlinks=true,
     allcolors=red,
     pdftitle={Codomyrmex},
-    pdfauthor={Codomyrmex Authors},
+    pdfauthor={Daniel Ari Friedman},
     pdfsubject={Codomyrmex -- integrity-verified manuscript},
     pdfkeywords={codomyrmex, integrity, verification, manuscript}
 }

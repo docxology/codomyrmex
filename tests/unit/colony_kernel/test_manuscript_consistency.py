@@ -468,7 +468,7 @@ def test_manuscript_config_matches_kernel_contract() -> None:
 
     assert config["paper"]["version"] == "1.3.0"
     assert config["paper"]["date"] == "auto"
-    assert config["authors"][0]["orcid"] == "forthcoming"
+    assert config["authors"][0]["orcid"] == "0000-0001-6232-9096"
     assert publication["doi"] == ""
     assert publication["doi_status"] == "forthcoming"
     assert publication["version_doi"] == ""
@@ -517,7 +517,7 @@ def test_source_publication_metadata_has_no_placeholders() -> None:
     source = yaml.safe_load(_read("docs/manuscript/config.yaml"))
 
     assert source["paper"]["date"] == "auto"
-    assert source["authors"][0]["orcid"] == "forthcoming"
+    assert source["authors"][0]["orcid"] == "0000-0001-6232-9096"
     assert source["publication"]["doi_status"] == "forthcoming"
     assert "placeholder" not in str(source["publication"]).lower()
 
