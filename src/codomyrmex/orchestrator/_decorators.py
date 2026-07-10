@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-
 from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger

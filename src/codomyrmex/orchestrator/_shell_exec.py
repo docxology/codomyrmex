@@ -60,9 +60,9 @@ def shell(
     start_time = time.time()
 
     try:
-        result = subprocess.run(  # noqa: S603
+        result = subprocess.run(
             command,
-            shell=True,  # SECURITY: Intentional — shell() is a named shell executor utility  # noqa: S602
+            shell=True,  # SECURITY: Intentional — shell() is a named shell executor utility
             capture_output=True,
             text=True,
             timeout=timeout,
