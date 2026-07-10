@@ -1,12 +1,20 @@
 """Identity Module.
 
-Provides Persona management and Bio-Cognitive Verification.
+Provides Persona management, Bio-Cognitive Verification (heartbeat, EEG),
+and Persona rotation.
 """
 
 import contextlib
 
-from .biocognitive import BioCognitiveVerifier
-from .manager import IdentityManager
+from .biocognitive import (
+    BioCognitiveVerifier,
+    EEGFrequencyAnalyzer,
+    HeartbeatValidator,
+    analyze_eeg_bands,
+    verify_biocognitive,
+    verify_heartbeat_intervals,
+)
+from .manager import IdentityManager, PersonaRotator, RotationRecord
 from .persona import Persona, VerificationLevel
 
 # Shared schemas for cross-module interop
@@ -23,6 +31,9 @@ def cli_commands():
                 "Identity Providers:\n"
                 f"  - Identity Manager: {IdentityManager.__name__}\n"
                 f"  - Bio-Cognitive Verifier: {BioCognitiveVerifier.__name__}\n"
+                f"  - Heartbeat Validator: {HeartbeatValidator.__name__}\n"
+                f"  - EEG Frequency Analyzer: {EEGFrequencyAnalyzer.__name__}\n"
+                f"  - Persona Rotator: {PersonaRotator.__name__}\n"
                 f"  - Persona: {Persona.__name__}\n"
                 f"  Verification levels: {[v.name for v in VerificationLevel] if hasattr(VerificationLevel, '__iter__') else 'available'}"
             ),
@@ -33,7 +44,9 @@ def cli_commands():
                 "Current Identity:\n"
                 "  Manager: IdentityManager (available)\n"
                 "  Bio-Cognitive Verifier: available\n"
-                "  Persona system: available"
+                "  Heartbeat Validator: available\n"
+                "  EEG Frequency Analyzer: available\n"
+                "  Persona Rotator: available"
             ),
         },
     }
@@ -41,8 +54,15 @@ def cli_commands():
 
 __all__ = [
     "BioCognitiveVerifier",
+    "EEGFrequencyAnalyzer",
+    "HeartbeatValidator",
     "IdentityManager",
     "Persona",
+    "PersonaRotator",
+    "RotationRecord",
     "VerificationLevel",
+    "analyze_eeg_bands",
     "cli_commands",
+    "verify_biocognitive",
+    "verify_heartbeat_intervals",
 ]

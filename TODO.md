@@ -81,8 +81,8 @@
 | # | Direction | Builds On | Concrete Next Step |
 | :--- | :--- | :--- | :--- |
 | R1 | **Spatial World Models** ✅ | `spatial/` | ✅ Done — `Trajectory4D`/`TrajectoryPoint4D` 4D time-series in `world_models/`, `render_agent_trial` + `summarize_trial` with quadray integration, `spatial_render_agent_trial` `@mcp_tool`; 41 new tests (zero-mock) |
-| R2 | **Self-Custody Wallet** | `wallet/` | Expose `WalletManager` ZK-proof interfaces, integrate with `identity/` for signed capability proofs |
-| R3 | **Identity & Persona** | `identity/` | Implement `BioCognitiveVerifier` real-bio hooks + `Persona` rotation |
+| R2 | ~~Self-Custody Wallet~~ | `wallet/` | ✅ Fixed — `zk_proof.py` with `ZKProofVerifier`, `SignedCapabilityProofBuilder`; 2 new `@mcp_tool` decorators (`wallet_generate_zk_proof`, `wallet_verify_zk_proof`); 44 tests pass |
+| R3 | ~~Identity & Persona~~ | `identity/` | ✅ Fixed — `HeartbeatValidator` with RMSSD/SDNN/mean_hr metrics + enrollment, `EEGFrequencyAnalyzer` with band power analysis, `PersonaRotation` system; 2 new `@mcp_tool` decorators; 22 tests pass |
 
 ---
 
@@ -92,7 +92,7 @@
 | :--- | :--- | :--- | :--- |
 | B1 | ~~Tool versioning UI~~ | `model_context_protocol/` | ✅ Fixed — `deprecated_in` metadata now surfaced via `get_deprecated_tools()`, `get_deprecation_timeline()`, `get_deprecation_summary()` exported from `model_context_protocol.__init__` |
 | B2 | **Oversized files audit** | `orchestrator/` | 16 files >800 LOC, largest: `orchestration.py` |
-| B3 | **Video module depth** | `video/` | Partial impl (processor, extractor, analyzer, transcription paths); not a thin stub — see `video/README.md` / `SPEC.md` |
+| B3 | ~~Video module depth~~ | `video/` | ✅ Audited — video processor, extractor, analyzer, and transcription paths all implemented; 207 tests pass, 1 skip (optional dep) |
 | B4 | ~~Meme module MCP exposure~~ | `meme/` | ✅ Fixed — 5 `@mcp_tool` decorators in `mcp_tools.py` (dissect, fitness, synthesize, propagate, narrative); RASP docs present |
 | B5 | ~~Secure Cognitive Layer MCP~~ | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | ✅ Fixed — PAI bridge module `pai_pm/secure_cognitive_bridge.py` registers all 15 MCP tools (3 per module × 5 modules); `register_secure_cognitive_tools()` + `get_secure_cognitive_tool_catalog()` |
 | B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,137 tests collect with 0 errors via import guards and optional submodule skips |

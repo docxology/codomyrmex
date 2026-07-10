@@ -49,6 +49,74 @@ SUPPORTED_INPUT_FORMATS = {
 SUPPORTED_OUTPUT_FORMATS = {".mp4", ".avi", ".mov", ".webm", ".mkv"}
 
 
+def _pil_filter_frame(
+    get_frame: Any,
+    t: float,
+    filter_name: str,
+    intensity: float = 1.0,
+) -> Any:
+    """Apply a PIL-based filter to a single video frame.
+
+    Used as a ``clip.fl`` callback for filters that moviepy's ``vfx`` module
+    does not provide natively (blur, sharpen, saturation, sepia).
+
+    Args:
+        get_frame: moviepy frame-getter function (called with ``t``).
+        t: Timestamp of the frame being processed.
+        filter_name: One of ``"blur"``, ``"sharpen"``, ``"saturation"``, ``"sepia"``.
+        intensity: Filter intensity (0.0–2.0 scale; semantics vary per filter).
+
+    Returns:
+        NumPy array suitable for moviepy (same shape/dtype as input frame).
+    """
+    import numpy as np
+
+    frame = get_frame(t)
+    # Skip processing for non-video frames (e.g., mask)
+    if frame.dtype != np.uint8 or frame.ndim != 3 or frame.shape[2] < 3:
+        return frame
+
+    # Use PIL for per-frame pixel manipulation
+    from PIL import Image, ImageFilter
+
+    img = Image.fromarray(frame.astype(np.uint8))
+
+    if filter_name == "blur":
+        radius = max(0.1, intensity * 2.0)
+        img = img.filter(ImageFilter.GaussianBlur(radius=radius))
+    elif filter_name == "sharpen":
+        # Unsharp mask: blend sharpened with original based on intensity
+        sharpened = img.filter(ImageFilter.UnsharpMask(radius=2, percent=150))
+        if intensity <= 1.0:
+            img = Image.blend(img, sharpened, intensity)
+        else:
+            img = sharpened
+    elif filter_name == "saturation":
+        # Saturation via HSV: scale the S channel using numpy for precision
+        hsv_img = img.convert("HSV")
+        hsv_arr = np.array(hsv_img, dtype=np.float32)
+        # Scale saturation channel (index 1) and clip
+        hsv_arr[:, :, 1] = np.clip(hsv_arr[:, :, 1] * intensity, 0, 255)
+        result_img = Image.fromarray(hsv_arr.astype(np.uint8), "HSV")
+        img = result_img.convert("RGB")
+    elif filter_name == "sepia":
+        # Sepia tone: matrix transform per pixel using numpy
+        arr = np.array(img, dtype=np.float32)
+        # Standard sepia weights
+        r, g, b = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
+        new_r = np.clip(0.393 * r + 0.769 * g + 0.189 * b, 0, 255)
+        new_g = np.clip(0.349 * r + 0.686 * g + 0.168 * b, 0, 255)
+        new_b = np.clip(0.272 * r + 0.534 * g + 0.131 * b, 0, 255)
+        sepia_arr = np.stack([new_r, new_g, new_b], axis=2).astype(np.uint8)
+        sepia_img = Image.fromarray(sepia_arr, "RGB")
+        if intensity < 1.0:
+            img = Image.blend(img, sepia_img, intensity)
+        else:
+            img = sepia_img
+
+    return np.array(img)
+
+
 class VideoProcessor:
     """Video processing class for manipulating video files.
 
@@ -491,8 +559,38 @@ class VideoProcessor:
                 elif filter_type == FilterType.CONTRAST:
                     filtered = clip.fx(vfx.lum_contrast, contrast=intensity)
                 elif filter_type == FilterType.BLUR:
-                    # Use gamma correction for blur-like effect
-                    filtered = clip.fx(vfx.gamma_corr, gamma=intensity)
+                    # Real Gaussian blur via per-frame PIL processing
+                    blurred = clip.fl(
+                        lambda gf, t: _pil_filter_frame(
+                            gf, t, "blur", intensity
+                        ),
+                        apply_to=["mask", "video"],
+                    )
+                    filtered = blurred
+                elif filter_type == FilterType.SHARPEN:
+                    # Sharpen via PIL ImageFilter
+                    filtered = clip.fl(
+                        lambda gf, t: _pil_filter_frame(
+                            gf, t, "sharpen", intensity
+                        ),
+                        apply_to=["mask", "video"],
+                    )
+                elif filter_type == FilterType.SATURATION:
+                    # Saturation boost/reduce via HSV manipulation
+                    filtered = clip.fl(
+                        lambda gf, t: _pil_filter_frame(
+                            gf, t, "saturation", intensity
+                        ),
+                        apply_to=["mask", "video"],
+                    )
+                elif filter_type == FilterType.SEPIA:
+                    # Sepia tone via per-frame matrix transform
+                    filtered = clip.fl(
+                        lambda gf, t: _pil_filter_frame(
+                            gf, t, "sepia", intensity
+                        ),
+                        apply_to=["mask", "video"],
+                    )
                 else:
                     # Default: no filter
                     filtered = clip

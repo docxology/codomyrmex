@@ -225,3 +225,30 @@ class WalletManager:
             Dictionary mapping user_id to wallet_address.
         """
         return dict(self._wallets)
+
+    def register_wallet(self, user_id: str, wallet_address: str) -> bool:
+        """Register an existing wallet without creating a new key.
+
+        This is used when a wallet was created by a different
+        :class:`WalletManager` instance (e.g. via an MCP tool call)
+        and the key is already stored on disk. It populates the
+        in-memory registry so subsequent operations (sign, verify,
+        ZK proof) can find the wallet.
+
+        Args:
+            user_id: The user identifier.
+            wallet_address: The wallet address to register.
+
+        Returns:
+            True if the key exists on disk and registration succeeded.
+        """
+        key_id = f"wallet_{user_id}_private"
+        if not self.key_manager.key_exists(key_id):
+            logger.warning(
+                "Cannot register wallet for %s: key not found on disk", user_id
+            )
+            return False
+        self._wallets[user_id] = wallet_address
+        self._created_at[user_id] = datetime.now(UTC).isoformat()
+        logger.info("Registered existing wallet %s for user %s", wallet_address, user_id)
+        return True
