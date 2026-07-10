@@ -32,12 +32,12 @@ This file contains LaTeX packages and commands that are automatically injected i
 \setmainfont{STIX Two Text}
 \setsansfont{STIX Two Text}
 \setmonofont{Menlo}[Scale=MatchLowercase]
-\usepackage{newunicodechar}
-\newunicodechar{≥}{\ensuremath{\geq}}
-\newunicodechar{≤}{\ensuremath{\leq}}
-\newunicodechar{≈}{\ensuremath{\approx}}
-\newunicodechar{∈}{\ensuremath{\in}}
-\newunicodechar{→}{\ensuremath{\rightarrow}}
+% Unicode character mappings (replaces newunicodechar package)
+\catcode`≥=\active \def ≥{\ensuremath{\geq}}
+\catcode`≤=\active \def ≤{\ensuremath{\leq}}
+\catcode`≈=\active \def ≈{\ensuremath{\approx}}
+\catcode`∈=\active \def ∈{\ensuremath{\in}}
+\catcode`→=\active \def →{\ensuremath{\rightarrow}}
 
 % Cross-references and citations
 \usepackage{hyperref}

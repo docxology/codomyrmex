@@ -80,7 +80,7 @@
 
 | # | Direction | Builds On | Concrete Next Step |
 | :--- | :--- | :--- | :--- |
-| R1 | **Spatial World Models** | `spatial/` | Integrate 4D time-series into `spatial/world_models/`, expose `spatial_render_agent_trial` |
+| R1 | **Spatial World Models** ✅ | `spatial/` | ✅ Done — `Trajectory4D`/`TrajectoryPoint4D` 4D time-series in `world_models/`, `render_agent_trial` + `summarize_trial` with quadray integration, `spatial_render_agent_trial` `@mcp_tool`; 41 new tests (zero-mock) |
 | R2 | **Self-Custody Wallet** | `wallet/` | Expose `WalletManager` ZK-proof interfaces, integrate with `identity/` for signed capability proofs |
 | R3 | **Identity & Persona** | `identity/` | Implement `BioCognitiveVerifier` real-bio hooks + `Persona` rotation |
 
