@@ -5,7 +5,6 @@ Provides process isolation and resource limit enforcement for secure code execut
 """
 
 import multiprocessing
-import os
 import resource
 import threading
 import time
@@ -94,12 +93,10 @@ def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, No
         memory_bytes = limits.memory_limit * 1024 * 1024  # Convert MB to bytes
         if hard != resource.RLIM_INFINITY:
             memory_bytes = min(memory_bytes, hard)
-
-        if "PYTEST_CURRENT_TEST" not in os.environ:
-            try:
-                resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
-            except (ValueError, OSError) as e:
-                logger.warning("Failed to set memory limit: %s", e)
+        try:
+            resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+        except (ValueError, OSError) as e:
+            logger.warning("Failed to set memory limit: %s", e)
 
         yield
 
