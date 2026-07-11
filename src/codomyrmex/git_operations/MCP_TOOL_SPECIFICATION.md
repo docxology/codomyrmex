@@ -56,7 +56,7 @@ Check if a directory is a git repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `is_git_repository` | `boolean` | Whether path is a git repo | `true` |
 | `path` | `string` | Checked path | `"/projects/myapp"` |
@@ -208,7 +208,7 @@ Initialize a new git repository at the given path.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `initialized` | `boolean` | Whether initialization succeeded | `true` |
 | `path` | `string` | Repository path | `"/projects/new-app"` |
@@ -233,7 +233,7 @@ Clone a git repository from a URL to a local path.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `url` | `string` | Yes | Repository URL to clone | `"https://github.com/org/repo.git"` |
 | `path` | `string` | Yes | Local destination path | `"/projects/repo"` |
 | `branch` | `string` | No | Branch to clone (default: default branch) | `"develop"` |
@@ -241,7 +241,7 @@ Clone a git repository from a URL to a local path.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `cloned` | `boolean` | Whether clone succeeded | `true` |
 | `result` | `any` | Result from `clone_repository()` | `...` |
@@ -265,7 +265,7 @@ Stage files and create a commit with a message.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
 | `message` | `string` | Yes | Commit message | `"Fix login bug"` |
 | `files` | `array[string]` | No | Specific files to stage before commit | `["src/auth.py"]` |
@@ -273,7 +273,7 @@ Stage files and create a commit with a message.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `committed` | `boolean` | Whether commit succeeded | `true` |
 | `result` | `any` | Result from `commit_changes()` | `...` |
@@ -304,7 +304,7 @@ Create a new branch in a git repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `branch` | `string` | Branch name | `"feature/new-login"` |
 | `result` | `any` | Result from `create_branch()` | `...` |
@@ -335,7 +335,7 @@ Switch to a different branch in a git repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `branch` | `string` | Current branch after switch | `"feature/new-login"` |
 | `result` | `any` | Result from `switch_branch()` | `...` |
@@ -366,7 +366,7 @@ Pull latest changes from a remote git repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `pulled` | `boolean` | Whether pull succeeded | `true` |
 | `result` | `any` | Result from `pull_changes()` | `...` |
@@ -397,7 +397,7 @@ Push local commits to a remote git repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `pushed` | `boolean` | Whether push succeeded | `true` |
 | `result` | `any` | Result from `push_changes()` | `...` |
@@ -425,7 +425,7 @@ Delete a local branch. Use `force=True` to delete unmerged branches.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
 | `branch_name` | `string` | Yes | Branch to delete | `"feature/old-work"` |
 | `force` | `boolean` | No | Force-delete unmerged branch (default: `false`) | `true` |
@@ -433,7 +433,7 @@ Delete a local branch. Use `force=True` to delete unmerged branches.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `branch` | `string` | Deleted branch name | `"feature/old-work"` |
 | `deleted` | `any` | Result from `delete_branch()` | `...` |
@@ -457,7 +457,7 @@ Merge a source branch into a target branch (or the current branch if target is o
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
 | `source_branch` | `string` | Yes | Branch to merge from | `"feature/login"` |
 | `target_branch` | `string` | No | Branch to merge into (default: current branch) | `"main"` |
@@ -465,7 +465,7 @@ Merge a source branch into a target branch (or the current branch if target is o
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `merged` | `any` | Result from `merge_branch()` | `...` |
 | `source` | `string` | Source branch name | `"feature/login"` |
@@ -497,7 +497,7 @@ Rebase the current branch onto a target branch.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `rebased` | `any` | Result from `rebase_branch()` | `...` |
 | `target` | `string` | Target branch | `"main"` |
@@ -528,7 +528,7 @@ Cherry-pick a specific commit onto the current branch.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `cherry_picked` | `any` | Result from `cherry_pick()` | `...` |
 | `commit` | `string` | Commit SHA | `"a1b2c3d"` |
@@ -559,7 +559,7 @@ Revert a specific commit by creating a new inverse commit.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `reverted` | `any` | Result from `revert_commit()` | `...` |
 | `commit` | `string` | Reverted commit SHA | `"a1b2c3d"` |
@@ -583,7 +583,7 @@ Reset the repository to a commit using soft, mixed, or hard mode.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
 | `mode` | `string` | No | Reset mode: `"soft"`, `"mixed"`, or `"hard"` (default: `"mixed"`) | `"hard"` |
 | `target` | `string` | No | Commit to reset to (default: `"HEAD"`) | `"HEAD~3"` |
@@ -591,7 +591,7 @@ Reset the repository to a commit using soft, mixed, or hard mode.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `reset` | `any` | Result from `reset_changes()` | `...` |
 | `mode` | `string` | Reset mode used | `"hard"` |
@@ -712,7 +712,7 @@ List all stash entries in the repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `stashes` | `array` | List of stash entries | `[...]` |
 | `count` | `integer` | Number of stash entries | `3` |
@@ -736,7 +736,7 @@ Create a lightweight or annotated tag at the current commit.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
 | `tag_name` | `string` | Yes | Tag name | `"v1.2.0"` |
 | `message` | `string` | No | Annotation message (creates annotated tag if provided) | `"Release 1.2.0"` |
@@ -744,7 +744,7 @@ Create a lightweight or annotated tag at the current commit.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `tag` | `string` | Tag name | `"v1.2.0"` |
 | `created` | `any` | Result from `create_tag()` | `...` |
@@ -774,7 +774,7 @@ List all tags in the repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `tags` | `array` | List of tag names | `["v1.0.0", "v1.1.0"]` |
 | `count` | `integer` | Number of tags | `2` |
@@ -805,7 +805,7 @@ Fetch changes from a remote repository without merging.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `fetched` | `any` | Result from `fetch_changes()` | `...` |
 | `remote` | `string` | Remote name | `"origin"` |
@@ -829,7 +829,7 @@ Add a named remote URL to the repository.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
 | `name` | `string` | Yes | Remote name | `"upstream"` |
 | `url` | `string` | Yes | Remote URL | `"https://github.com/org/repo.git"` |
@@ -837,7 +837,7 @@ Add a named remote URL to the repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `added` | `any` | Result from `add_remote()` | `...` |
 | `name` | `string` | Remote name | `"upstream"` |
@@ -869,7 +869,7 @@ Remove a named remote from the repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `removed` | `any` | Result from `remove_remote()` | `...` |
 | `name` | `string` | Removed remote name | `"upstream"` |
@@ -899,7 +899,7 @@ List all configured remotes for the repository.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `remotes` | `array` | List of remote objects | `[...]` |
 | `count` | `integer` | Number of remotes | `2` |
@@ -983,7 +983,7 @@ Read a git configuration value by key.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
 | `key` | `string` | Yes | Config key to read | `"user.email"` |
 | `global_config` | `boolean` | No | Read from global config (default: `false`) | `true` |
@@ -991,7 +991,7 @@ Read a git configuration value by key.
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `key` | `string` | Config key | `"user.email"` |
 | `value` | `string` | Config value | `"dev@example.com"` |
@@ -1015,7 +1015,7 @@ Set a git configuration value (local or global scope).
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
 | `key` | `string` | Yes | Config key to set | `"user.email"` |
 | `value` | `string` | Yes | Config value | `"dev@example.com"` |
@@ -1024,7 +1024,7 @@ Set a git configuration value (local or global scope).
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :----------- | :----- | :------------ | :-------------- |
 | `status` | `string` | `"ok"` or `"error"` | `"ok"` |
 | `key` | `string` | Config key | `"user.email"` |
 | `value` | `string` | Config value | `"dev@example.com"` |
@@ -1049,7 +1049,7 @@ WARNING: Irreversible. Deletes untracked files from the working tree.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--------------- | :----- | :--------- | :------------ | :-------------- |
 | `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
 | `force` | `boolean` | No | Force clean (default: `false`) | `true` |
 | `directories` | `boolean` | No | Also remove untracked directories (default: `false`) | `true` |
