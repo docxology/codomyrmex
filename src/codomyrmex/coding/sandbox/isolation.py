@@ -5,12 +5,12 @@ Provides process isolation and resource limit enforcement for secure code execut
 """
 
 import multiprocessing
+import os
 import resource
 import threading
 import time
 from collections.abc import Generator
 from contextlib import contextmanager
-import os
 from dataclasses import dataclass
 from typing import Any
 
