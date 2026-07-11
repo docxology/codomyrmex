@@ -18,7 +18,7 @@ def scan_vulnerabilities(path: str = ".") -> dict:
     try:
         results = _scan(path)
         # Convert response objects to dicts if necessary
-        if hasattr(results, "to_dict"):
+        if callable(getattr(results, "to_dict", None)):
             results = results.to_dict()
         return {"status": "success", "results": results}
     except Exception as e:
@@ -39,7 +39,7 @@ def scan_secrets(file_path: str) -> dict:
 
     try:
         results = _scan_secrets(file_path)
-        if hasattr(results, "to_dict"):
+        if callable(getattr(results, "to_dict", None)):
             results = results.to_dict()
         return {"status": "success", "findings": results}
     except Exception as e:
@@ -60,7 +60,7 @@ def audit_code_security(path: str) -> dict:
 
     try:
         results = _audit(path)
-        if hasattr(results, "to_dict"):
+        if callable(getattr(results, "to_dict", None)):
             results = results.to_dict()
         return {"status": "success", "audit": results}
     except Exception as e:

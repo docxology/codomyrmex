@@ -7,6 +7,7 @@ for turn-based dialogue and factual knowledge respectively.
 """
 
 from __future__ import annotations
+from typing import Any
 
 import time
 import uuid
@@ -27,7 +28,7 @@ if TYPE_CHECKING:
 try:
     from sentence_transformers import SentenceTransformer
 except ImportError:
-    SentenceTransformer = None
+    SentenceTransformer: Any = None
 
 # ── helpers ──────────────────────────────────────────────────────────
 

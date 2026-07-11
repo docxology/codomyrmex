@@ -17,5 +17,5 @@ class BatchSpanProcessor(OTBatchSpanProcessor):
 def add_span_processor(processor: SpanProcessor) -> None:
     """Add a span processor to the global tracer provider."""
     provider = trace.get_tracer_provider()
-    if hasattr(provider, "add_span_processor"):
+    if callable(getattr(provider, "add_span_processor", None)):
         provider.add_span_processor(processor)
