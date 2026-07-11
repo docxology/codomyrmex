@@ -15,7 +15,6 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from codomyrmex.defense import ActiveDefense, RabbitHole
-
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,

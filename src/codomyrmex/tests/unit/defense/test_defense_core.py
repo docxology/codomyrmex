@@ -3,6 +3,7 @@
 import time
 
 import pytest
+
 from codomyrmex.defense.defense import (
     Defense,
     DetectionRule,
