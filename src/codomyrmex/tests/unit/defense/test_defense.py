@@ -1,6 +1,7 @@
 """Comprehensive zero-mock tests for the defense module."""
 
 import pytest
+
 from codomyrmex.defense import (
     ActiveDefense,
     Defense,

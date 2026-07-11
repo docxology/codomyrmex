@@ -3,6 +3,7 @@
 import math
 
 import pytest
+
 from codomyrmex.embodiment.transformation.transformation import Transform3D, Vec3
 
 
