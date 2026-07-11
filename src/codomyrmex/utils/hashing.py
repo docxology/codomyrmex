@@ -62,9 +62,7 @@ class ConsistentHash:
 
     def _hash(self, key: str) -> int:
         """Return the hash value."""
-        return int.from_bytes(
-            hashlib.md5(key.encode(), usedforsecurity=False).digest(), "big"
-        )
+        return int(hashlib.md5(key.encode(), usedforsecurity=False).hexdigest(), 16)
 
     def add_node(self, node: str) -> None:
         """Add a node to the ring."""
