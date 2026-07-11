@@ -7,6 +7,7 @@ Protocol so that AI agents can evaluate expressions and verify gradients.
 
 from __future__ import annotations
 
+import ast
 import operator
 from typing import Any
 
@@ -20,11 +21,51 @@ from .ops import relu, sigmoid, tanh
 # ---------------------------------------------------------------------------
 
 _ALLOWED_OPS = {
-    "+": operator.add,
-    "-": operator.sub,
-    "*": operator.mul,
-    "**": operator.pow,
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Pow: operator.pow,
+    ast.USub: operator.neg,
+    ast.UAdd: operator.pos,
 }
+
+
+def _safe_eval(node: ast.AST, namespace: dict[str, Any]) -> Any:
+    """Recursively evaluate an AST node safely."""
+    if isinstance(node, ast.Expression):
+        return _safe_eval(node.body, namespace)
+    if isinstance(node, ast.Constant):
+        if not isinstance(node.value, (int, float)):
+            raise ValueError(f"Unsupported constant type: {type(node.value)}")
+        return node.value
+    if isinstance(node, ast.Name):
+        if node.id in namespace:
+            return namespace[node.id]
+        raise ValueError(f"Unknown variable or function: {node.id}")
+    if isinstance(node, ast.BinOp):
+        left = _safe_eval(node.left, namespace)
+        right = _safe_eval(node.right, namespace)
+        op_type = type(node.op)
+        if op_type in _ALLOWED_OPS:
+            return _ALLOWED_OPS[op_type](left, right)
+        raise ValueError(f"Unsupported operation: {op_type.__name__}")
+    if isinstance(node, ast.UnaryOp):
+        operand = _safe_eval(node.operand, namespace)
+        op_type = type(node.op)
+        if op_type in _ALLOWED_OPS:
+            return _ALLOWED_OPS[op_type](operand)
+        raise ValueError(f"Unsupported unary operation: {op_type.__name__}")
+    if isinstance(node, ast.Call):
+        if node.keywords:
+            raise ValueError("Keyword arguments are not supported in function calls")
+        if isinstance(node.func, ast.Name):
+            if node.func.id not in namespace:
+                raise ValueError(f"Unknown function: {node.func.id}")
+            func = namespace[node.func.id]
+            args = [_safe_eval(arg, namespace) for arg in node.args]
+            return func(*args)
+        raise ValueError("Unsupported function call syntax")
+    raise ValueError(f"Unsupported syntax: {type(node).__name__}")
 
 
 # ---------------------------------------------------------------------------
@@ -60,13 +101,14 @@ def autograd_compute(expression: str, variables: dict) -> dict:
         var_values[name] = v
         namespace[name] = v
 
-    # Compile and evaluate
+    # Parse and safely evaluate
     try:
-        code = compile(expression, "<autograd_compute>", "eval")
+        tree = ast.parse(expression, mode="eval")
+        result = _safe_eval(tree, namespace)
     except SyntaxError as exc:
         raise ValueError(f"Invalid expression syntax: {exc}") from exc
-
-    result = eval(code, namespace)
+    except ValueError as exc:
+        raise ValueError(f"Expression evaluation error: {exc}") from exc
 
     if not isinstance(result, Value):
         result = Value(float(result))
