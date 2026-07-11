@@ -129,21 +129,12 @@ class MCPBridge:
         properties = {}
         required = []
 
-        type_map = {
-            str: "string",
-            int: "integer",
-            float: "number",
-            bool: "boolean",
-            list: "array",
-            dict: "object",
-        }
-
         for param_name, param in sig.parameters.items():
             if param_name in ("self", "cls"):
                 continue
 
             python_type = type_hints.get(param_name, str)
-            json_type = type_map.get(python_type, "string")
+            json_type = _TYPE_MAP.get(python_type, "string")
 
             properties[param_name] = {
                 "type": json_type,
@@ -454,6 +445,15 @@ class MCPBridge:
 # =========================================================================
 # Integration with LLM Tools
 # =========================================================================
+
+_TYPE_MAP = {
+    str: "string",
+    int: "integer",
+    float: "number",
+    bool: "boolean",
+    list: "array",
+    dict: "object",
+}
 
 
 def convert_tool_to_mcp(tool) -> dict[str, Any]:
