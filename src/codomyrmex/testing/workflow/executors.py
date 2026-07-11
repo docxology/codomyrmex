@@ -4,6 +4,7 @@ Workflow Testing Executors
 Step executors for workflow assertions, waits, and scripts.
 """
 
+import ast
 import time
 from abc import ABC, abstractmethod
 from typing import Any
@@ -97,9 +98,19 @@ class ScriptExecutor(StepExecutor):
             if callable(script_fn):
                 result = script_fn(context)
             else:
-                # SECURITY: Restricted eval — only 'ctx' is accessible, builtins disabled
+                expr_str = step.config.get("expression", "True")
+
+                # SECURITY: Restricted eval — only 'ctx' is accessible, builtins disabled.
+                # Adding defense-in-depth AST validation to prevent access to dunders and private attributes.
+                tree = ast.parse(expr_str, mode='eval')
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.Attribute) and node.attr.startswith('_'):
+                        raise ValueError(f"Access to private attribute '{node.attr}' is not allowed.")
+                    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in ('eval', 'exec'):
+                        raise ValueError(f"Call to '{node.func.id}' is not allowed.")
+
                 result = eval(
-                    step.config.get("expression", "True"),
+                    expr_str,
                     {"__builtins__": {}},
                     {"ctx": context},
                 )
