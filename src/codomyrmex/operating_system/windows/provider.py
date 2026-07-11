@@ -27,11 +27,11 @@ from codomyrmex.operating_system.base import (
 def _run(cmd: str, timeout: float = 15.0) -> str:
     """Run a shell command and return stripped stdout."""
     try:
-        # On Windows, no need for shell=True with explicit executables,
-        # but we keep shell=True for compound commands.
+        # On Windows, string commands can be passed to subprocess.run
+        # with shell=False safely.
         result = subprocess.run(
             cmd,
-            shell=True,
+            shell=False,
             capture_output=True,
             text=True,
             timeout=timeout,
