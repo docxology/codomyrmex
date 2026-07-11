@@ -20,6 +20,15 @@ from .exceptions import RitualError, WalletError, WalletKeyError, WalletNotFound
 from .security.backup import BackupManager
 from .security.key_rotation import KeyRotation, RotationPolicy, RotationRecord
 from .security.recovery import NaturalRitualRecovery, RitualStep, hash_response
+from .zk_proof import (
+    CapabilityAttestation,
+    SignedCapabilityProof,
+    SignedCapabilityProofBuilder,
+    ZKProof,
+    ZKProofVerifier,
+    generate_zk_proof,
+    verify_zk_proof,
+)
 
 # Shared schemas for cross-module interop
 with contextlib.suppress(ImportError):
@@ -51,26 +60,33 @@ def cli_commands():
 
 __all__ = [
     "BackupManager",
+    "CapabilityAttestation",
     "KeyRotation",
     "NaturalRitualRecovery",
     "RitualError",
     "RitualStep",
     "RotationPolicy",
     "RotationRecord",
+    "SignedCapabilityProof",
+    "SignedCapabilityProofBuilder",
     # Exceptions
     "WalletError",
     "WalletKeyError",
     # Classes
     "WalletManager",
     "WalletNotFoundError",
+    "ZKProof",
+    "ZKProofVerifier",
     # CLI integration
     "cli_commands",
     "contracts",
     "create_wallet",
+    "generate_zk_proof",
     "get_wallet_manager",
     # Functions
     "hash_response",
     "security",
+    "verify_zk_proof",
 ]
 
 __version__ = "0.1.0"

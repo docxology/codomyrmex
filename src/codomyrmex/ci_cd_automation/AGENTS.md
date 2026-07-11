@@ -13,6 +13,7 @@ Continuous integration and deployment with pipeline management, flaky test quara
 - `SECURITY.md` – Security considerations and vulnerability reporting
 - `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
 - `__init__.py` – Python package entry point — exports and initialization
+- `build/` – Build orchestration and artifact synthesis (18 public functions)
 - `dependency_scan.py` – Internal implementation module
 - `deployment_orchestrator.py` – Internal implementation module
 - `exceptions.py` – Custom exceptions and error types

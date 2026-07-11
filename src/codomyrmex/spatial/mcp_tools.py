@@ -256,3 +256,55 @@ def spatial_geodesic_distance(
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="spatial",
+    description="Render an agent's 4D space-time trajectory and return structured visualization data.",
+)
+def spatial_render_agent_trial(
+    agent_id: str = "default",
+    waypoints: list | None = None,
+    include_summary: bool = True,
+    include_segments: bool = True,
+) -> dict[str, Any]:
+    """Render an agent's trajectory through 4D space-time.
+
+    Accepts a list of waypoints (each a dict with keys x, y, z, t, and
+    optional label) and returns structured trajectory data suitable for
+    rendering pipelines or direct inspection.
+
+    Args:
+        agent_id: Identifier for the agent.
+        waypoints: List of waypoint dicts with keys x, y, z, t (floats)
+            and optional label (str). Defaults to an empty list.
+        include_summary: Include aggregated metrics in the output.
+        include_segments: Include per-segment details in the output.
+
+    Returns:
+        dict with keys: status, agent_id, waypoint_count, waypoints,
+        segments (if include_segments), summary (if include_summary)
+    """
+    try:
+        from codomyrmex.spatial.world_models import (
+            Trajectory4D,
+            render_agent_trial,
+        )
+
+        trajectory = Trajectory4D(agent_id=agent_id)
+        for wp in waypoints or []:
+            trajectory.add_waypoint(
+                x=float(wp.get("x", 0.0)),
+                y=float(wp.get("y", 0.0)),
+                z=float(wp.get("z", 0.0)),
+                t=float(wp.get("t", 0.0)),
+                label=str(wp.get("label", "")),
+            )
+
+        return render_agent_trial(
+            trajectory,
+            include_summary=include_summary,
+            include_segments=include_segments,
+        )
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

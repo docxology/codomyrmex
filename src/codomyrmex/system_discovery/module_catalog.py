@@ -162,7 +162,7 @@ def _default_repo_root() -> Path:
 
 
 def _has_tests_for_module(repo_root: Path, name: str) -> bool:
-    test_root = repo_root / "src" / "codomyrmex" / "tests"
+    test_root = repo_root / "tests"
     if not test_root.is_dir():
         return False
     patterns = (
@@ -217,6 +217,31 @@ def build_module_catalog(
                 docs_module_exists=(docs_root / path.name).is_dir(),
             )
         )
+
+    # ``tests`` moved from ``src/codomyrmex/tests`` to the top-level ``tests/``
+    # directory; it remains a recognized support surface even though it is no
+    # longer nested under ``package_root``.
+    top_level_tests = root / "tests"
+    if "tests" in support_surface_names and top_level_tests.is_dir():
+        entries.append(
+            ModuleCatalogEntry(
+                name="tests",
+                relative_path=top_level_tests.relative_to(root).as_posix(),
+                kind="support_surface",
+                has_init=(top_level_tests / "__init__.py").is_file(),
+                has_readme=(top_level_tests / "README.md").is_file(),
+                has_agents=(top_level_tests / "AGENTS.md").is_file(),
+                has_spec=(top_level_tests / "SPEC.md").is_file(),
+                has_pai=(top_level_tests / "PAI.md").is_file(),
+                has_api_spec=(top_level_tests / "API_SPECIFICATION.md").is_file(),
+                has_mcp_tools=(top_level_tests / "mcp_tools.py").is_file(),
+                has_mcp_spec=(top_level_tests / "MCP_TOOL_SPECIFICATION.md").is_file(),
+                has_py_typed=(top_level_tests / "py.typed").is_file(),
+                has_tests=True,
+                docs_module_exists=(docs_root / "tests").is_dir(),
+            )
+        )
+        entries.sort(key=lambda entry: entry.name)
 
     return ModuleCatalog(entries=tuple(entries), docs_module_names=docs_module_names)
 

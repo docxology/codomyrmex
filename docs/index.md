@@ -2,7 +2,7 @@
 
 **A Modular, Extensible Coding Workspace** — v1.3.0
 
-Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides for a production-grade ecosystem with **129 top-level modules** (see [reference/inventory.md](reference/inventory.md)) and **39 agent packages** under `src/codomyrmex/agents/` (documented under [agents/](agents/)).
+Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides for a production-grade ecosystem with **130 top-level modules** (see [reference/inventory.md](reference/inventory.md)) and **39 agent packages** under `src/codomyrmex/agents/` (documented under [agents/](agents/)).
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
@@ -30,10 +30,10 @@ just build
 
 ## Key Features
 
-- **129 top-level modules** under `src/codomyrmex/` — AI agents, code analysis, security, cloud, and more ([inventory](reference/inventory.md))
+- **130 top-level modules** under `src/codomyrmex/` — AI agents, code analysis, security, cloud, and more ([inventory](reference/inventory.md))
 - **610** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md); refresh via `uv run python scripts/doc_inventory.py`)
 - **39 agent packages** — Claude, Gemini, Jules, Hermes, Codex, and 34 more (see [agents/](agents/))
-- **Zero-Mock testing** — all tests use real functional verification (**35,137** tests collected with `uv run python scripts/doc_inventory.py --pytest`; see [inventory](reference/inventory.md))
+- **Zero-Mock testing** — all tests use real functional verification (**35,119** tests collected with `uv run python scripts/doc_inventory.py --pytest`; see [inventory](reference/inventory.md))
 - **PAI integration** — Personal AI bridge with 14-tab SPA dashboard + WebSocket push (see [PAI_DASHBOARD.md](PAI_DASHBOARD.md))
 - **Lint / types** — run `uv run ruff check src/` and `uv run ty check src/` for current output; thresholds live in `pyproject.toml`
 - **Coverage gate** — configured in `pyproject.toml`; run `uv run pytest --cov=src/codomyrmex` for measured coverage

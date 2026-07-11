@@ -15,7 +15,7 @@ from typing import Any
 
 z3 = None
 with contextlib.suppress(ImportError):
-    import z3  # type: ignore[assignment]
+    import z3
 
 from codomyrmex.formal_verification.exceptions import (
     BackendNotAvailableError,

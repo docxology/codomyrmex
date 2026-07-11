@@ -73,7 +73,7 @@ def _agents_path_skipped(rel_posix: str) -> bool:
         return True
     if "src/codomyrmex/skills/skills/custom/" in rel_posix:
         return True
-    if rel_posix.startswith("src/codomyrmex/tests/"):
+    if rel_posix.startswith("tests/"):
         return True
     if "src/codomyrmex/agents/mission_control/app/" in rel_posix:
         return True

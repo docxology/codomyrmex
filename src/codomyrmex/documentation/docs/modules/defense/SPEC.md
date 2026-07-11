@@ -4,21 +4,22 @@
 
 ## Functional Requirements
 
-### FR-1: Core Functionality
-- The module shall provide defense capabilities as described in the module docstring.
-- The module shall export 9 public symbols via `__all__`.
+- Detect configured prompt-exploit substrings and classify them as `ThreatLevel` values.
+- Maintain exploit and honeytoken metrics through `ActiveDefense`.
+- Create, list, and detect honeytokens with `HT-` identifiers.
+- Process requests through containment, blocklist, rate-limit, custom-rule, and cognitive-exploit checks.
+- Engage rabbit-hole containment for high-risk cognitive exploit attempts.
+- Expose MCP wrappers for exploit detection, request processing, and threat reporting.
 
 ## Non-Functional Requirements
 
-### NFR-1: Zero-Mock Testing
-- All tests follow the Zero-Mock policy -- no unittest.mock, MagicMock, or monkeypatch.
-
-### NFR-2: Explicit Failure
-- All failures shall raise exceptions; no silent fallbacks or placeholder returns.
+- Tests use real local instances and follow the zero-mock policy.
+- Runtime behavior is in-process and deterministic except for honeytoken IDs and poison phrase sampling.
+- Compatibility imports through `codomyrmex.defense` and `codomyrmex.security.ai_safety` remain supported.
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/defense/](../../../../defense/)
+- **Source**: [../../../../defense/README.md](../../../../defense/README.md)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

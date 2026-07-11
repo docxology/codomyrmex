@@ -191,11 +191,11 @@ jobs:
 
       - name: Full test suite with coverage floor
         run: |
-          uv run pytest src/codomyrmex/tests/ -q --tb=short \
+          uv run pytest tests/ -q --tb=short \
             --cov=src/codomyrmex \
             --cov-report=term-missing \
             --cov-report=json:coverage-gate.json \
-            --cov-fail-under=40
+            --cov-fail-under=60
 
   test-matrix:
     name: Test Suite
@@ -238,18 +238,18 @@ jobs:
       - name: Run unit tests
         continue-on-error: true
         run: |
-          uv run pytest src/codomyrmex/tests/unit/ -v --tb=short \
+          uv run pytest tests/unit/ -v --tb=short \
             --cov=src/codomyrmex \
             --cov-report=xml \
             --cov-report=html \
             --cov-report=term-missing \
             --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml \
             --cov-report=json \
-            --cov-fail-under=40
+            --cov-fail-under=60
 
       - name: Run integration tests
         run: |
-          uv run pytest src/codomyrmex/tests/integration/ -v --tb=short --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml || true
+          uv run pytest tests/integration/ -v --tb=short --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml || true
 
       - name: Save coverage.json to root
         shell: bash
@@ -322,7 +322,7 @@ jobs:
 
       - name: Run comprehensive tests for ${{ matrix.test-suite }}
         run: |
-          uv run pytest src/codomyrmex/tests/unit/${{ matrix.test-suite }}/ -v --tb=short --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml || true
+          uv run pytest tests/unit/${{ matrix.test-suite }}/ -v --tb=short --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml || true
 
       - name: Upload comprehensive test results
         uses: actions/upload-artifact@v4

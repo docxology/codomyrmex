@@ -57,6 +57,7 @@ from .core.logger_config import (
     log_with_context,
     setup_logging,
 )
+from .handlers import PerformanceLogger
 
 
 def cli_commands() -> dict[str, object]:
@@ -100,6 +101,7 @@ __all__ = [
     "JSONFormatter",
     # context management
     "LogContext",
+    "PerformanceLogger",
     "clear_correlation_id",
     "cli_commands",
     "configure_all_structured",

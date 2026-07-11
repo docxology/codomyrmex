@@ -1,6 +1,6 @@
 ---
 name: Codomyrmex
-description: Full-spectrum coding workspace skill providing ~610 production MCP `@mcp_tool` lines across 129 top-level modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
+description: Full-spectrum coding workspace skill providing ~610 production MCP `@mcp_tool` lines across 130 top-level modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
 ---
 # Codomyrmex Skill for PAI
 
@@ -8,7 +8,7 @@ description: Full-spectrum coding workspace skill providing ~610 production MCP 
 
 ## Description
 
-Full-spectrum coding workspace skill providing ~610 production `@mcp_tool` lines across 129 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
+Full-spectrum coding workspace skill providing ~610 production `@mcp_tool` lines across 130 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
 
 ## Installation
 
@@ -75,7 +75,7 @@ Most tools are read-only; a small set is destructive (require `/codomyrmexTrust`
 
 - **Destructive**: `write_file`, `run_command`, `run_tests`, `call_module_function`
 
-Auto-discovered from **150** `mcp_tools.py` files across the package tree (129 top-level modules), including agents, cerebrum, coding, containerization, crypto, data_visualization, documentation, events, formal_verification, git_analysis, git_operations, llm, logging_monitoring, maintenance, orchestrator, performance, plugin_system, relations, scrape, search, security, and more.
+Auto-discovered from **150** `mcp_tools.py` files across the package tree (130 top-level modules), including agents, cerebrum, coding, containerization, crypto, data_visualization, documentation, events, formal_verification, git_analysis, git_operations, llm, logging_monitoring, maintenance, orchestrator, performance, plugin_system, relations, scrape, search, security, and more.
 
 ## Resources
 

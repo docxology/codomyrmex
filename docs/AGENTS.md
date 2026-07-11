@@ -34,7 +34,7 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 
 ## Documentation Architecture
 
-The `docs/` directory is organized into **19 thematic sections** containing **1,180 markdown files** ([reference/inventory.md](reference/inventory.md)):
+The `docs/` directory is organized into **19 thematic sections** containing **1,201 markdown files** ([reference/inventory.md](reference/inventory.md)):
 
 ### Core references (top level)
 
@@ -63,7 +63,7 @@ Volatile counts (modules, MCP tools, tests) live in [reference/inventory.md](ref
 | `examples/` | Tutorials | Executable demos and integration examples |
 | `getting-started/` | Onboarding | Quickstart, installation, learning path |
 | `integration/` | Cross-module | Integration patterns, MCP bridges |
-| `modules/` | Module docs | **129** top-level packages; ownership hub [modules/AGENTS.md](modules/AGENTS.md) (see [reference/inventory.md](reference/inventory.md)) |
+| `modules/` | Module docs | **130** top-level packages; ownership hub [modules/AGENTS.md](modules/AGENTS.md) (see [reference/inventory.md](reference/inventory.md)) |
 | `pai/` | PAI system | Dashboard, skills, memory, dispatch |
 | `plans/` | Roadmap | Release plans, version targets |
 | `project/` | Standards | Contributing, architecture, coding style |

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Manuscript variable injection orchestrator for Codomyrmex.
 
-Thin orchestrator: all computation logic lives in src/manuscript_variables.py.
+Thin orchestrator: all computation logic lives in ``codomyrmex.manuscript.variables``.
 This script drives the pipeline:
   1. Resolve project root and config paths.
-  2. Delegate variable computation to manuscript_variables.py.
+  2. Delegate variable computation to ``codomyrmex.manuscript.variables``.
   3. Write output/data/manuscript_variables.json.
   4. Inject tokens into manuscript section Markdown → output/manuscript/.
 """
@@ -69,24 +69,18 @@ def _inject_tokens(
     return written
 
 
+from codomyrmex.manuscript.variables import compute_variables, inject_via_infrastructure
+
+
 def main() -> int:
     project_root = _find_project_root()
-    _ensure_src_on_path(project_root)
-
-    # Delegate all computation to the library module.
-    try:
-        import manuscript_variables as mv  # type: ignore[import]
-    except ImportError as exc:
-        print(f"ERROR: cannot import manuscript_variables: {exc}", file=sys.stderr)
-        print("  Expected at: src/manuscript_variables.py", file=sys.stderr)
-        return 1
 
     config_path = project_root / "docs" / "manuscript" / "config.yaml"
     if not config_path.exists():
         print(f"ERROR: manuscript config not found: {config_path}", file=sys.stderr)
         return 1
 
-    variables: dict[str, str] = mv.compute_variables(
+    variables: dict[str, str] = compute_variables(
         config_path=config_path,
         project_root=project_root,
     )
@@ -104,16 +98,13 @@ def main() -> int:
     # Try infrastructure rendering injection first.
     injected_via_infra = False
     try:
-        import manuscript_variables as mv2  # already imported
-
-        if hasattr(mv2, "inject_via_infrastructure"):
-            mv2.inject_via_infrastructure(
-                manuscript_dir=manuscript_dir,
-                output_dir=output_manuscript,
-                variables=variables,
-            )
-            injected_via_infra = True
-            print("[z_generate] injection delegated to infrastructure renderer")
+        inject_via_infrastructure(
+            manuscript_dir=manuscript_dir,
+            output_dir=output_manuscript,
+            variables=variables,
+        )
+        injected_via_infra = True
+        print("[z_generate] injection delegated to infrastructure renderer")
     except Exception:
         pass
 

@@ -33,7 +33,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ### Internal Coherence
 
-- Consistent directory structure and naming conventions across all 129 top-level modules.
+- Consistent directory structure and naming conventions across all 130 top-level modules.
 - Unified documentation patterns: every module carries the same set of specification files.
 - Shared configuration idioms via standardized `Config` objects and `pyproject.toml` extras.
 

@@ -19,7 +19,7 @@ PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt,
 
 ## How Codomyrmex Serves PAI
 
-Codomyrmex is a **129 top-level module** Python development platform. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
+Codomyrmex is a **130 top-level module** Python development platform. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)

@@ -1,0 +1,75 @@
+"""Unit tests for serialization module expansion."""
+
+import pytest
+
+try:
+    from codomyrmex.serialization import (
+        AvroSerializer,
+        MsgpackSerializer,
+        ParquetSerializer,
+    )
+
+    SERIALIZATION_AVAILABLE = True
+except ImportError:
+    SERIALIZATION_AVAILABLE = False
+
+MSGPACK_AVAILABLE = SERIALIZATION_AVAILABLE and MsgpackSerializer is not None
+AVRO_AVAILABLE = SERIALIZATION_AVAILABLE and AvroSerializer is not None
+
+try:
+    import pandas as pd
+    import pyarrow as pa
+
+    pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")
+    PARQUET_AVAILABLE = True
+except (ImportError, Exception):
+    PARQUET_AVAILABLE = False
+
+pytestmark = pytest.mark.skipif(
+    not SERIALIZATION_AVAILABLE,
+    reason="serialization dependencies (msgpack, etc.) not installed",
+)
+
+
+@pytest.mark.unit
+@pytest.mark.skipif(not MSGPACK_AVAILABLE, reason="msgpack not installed")
+def test_msgpack_serialization():
+    """Test Msgpack serialization/deserialization."""
+    data = {"key": "value", "list": [1, 2, 3], "bool": True}
+    serialized = MsgpackSerializer.serialize(data)
+    deserialized = MsgpackSerializer.deserialize(serialized)
+    assert deserialized == data
+
+
+@pytest.mark.unit
+@pytest.mark.skipif(not AVRO_AVAILABLE, reason="fastavro not installed")
+def test_avro_serialization():
+    """Test Avro serialization/deserialization."""
+    schema = {
+        "doc": "Test schema",
+        "name": "Test",
+        "namespace": "test",
+        "type": "record",
+        "fields": [
+            {"name": "name", "type": "string"},
+            {"name": "age", "type": "int"},
+        ],
+    }
+    data = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
+    serialized = AvroSerializer.serialize(data, schema)
+    deserialized = AvroSerializer.deserialize(serialized)
+    assert deserialized == data
+
+
+@pytest.mark.unit
+@pytest.mark.skipif(
+    not PARQUET_AVAILABLE, reason="pyarrow/pandas parquet support not available"
+)
+def test_parquet_serialization():
+    """Test Parquet serialization/deserialization."""
+    data = [{"col1": 1, "col2": "A"}, {"col1": 2, "col2": "B"}]
+    serialized = ParquetSerializer.serialize(data)
+    deserialized = ParquetSerializer.deserialize(serialized)
+    # Pandas might return records in different order or with slightly different types,
+    # but for simple dicts it should match.
+    assert deserialized == data

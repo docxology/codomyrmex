@@ -375,7 +375,7 @@ omit = [
 ]
 
 [tool.coverage.report]
-fail_under = 40
+fail_under = 60
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
@@ -390,14 +390,14 @@ exclude_lines = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["src/codomyrmex"]
+testpaths = ["tests"]
 pythonpath = ["src"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
-# Coverage is opt-in: use `make test`, CI, or `pytest --cov=src/codomyrmex --cov-fail-under=40`.
+# Coverage is opt-in: use `make test`, CI, or `pytest --cov=src/codomyrmex --cov-fail-under=60`.
 # [tool.coverage.report] fail_under still applies whenever pytest runs with --cov.
 addopts = [
     "--import-mode=importlib",
@@ -685,7 +685,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403", "E402"]
 # Optional / skip-guard imports in unit+integration tests (availability probes, lazy imports).
-"src/codomyrmex/tests/**/*.py" = ["F401"]
+"tests/**/*.py" = ["F401"]
 "tests/**/*" = ["S101", "PLR2004", "ANN", "B011", "SLF001", "ARG", "PT011", "S106", "S108", "S310"]
 "scripts/**/*.py" = ["T20", "INP001", "ANN", "S101", "BLE001", "EXE001", "E402", "PLW1510", "F401"]
 "**/mcp_tools.py" = ["ANN", "ARG001"]
@@ -742,9 +742,9 @@ paths_to_mutate = [
     "src/codomyrmex/events/",
 ]
 tests_dir = [
-    "src/codomyrmex/tests/unit/cache/",
-    "src/codomyrmex/tests/unit/concurrency/",
-    "src/codomyrmex/tests/unit/events/",
+    "tests/unit/cache/",
+    "tests/unit/concurrency/",
+    "tests/unit/events/",
 ]
 do_not_mutate = [
     "*/vendor/*",
@@ -752,7 +752,7 @@ do_not_mutate = [
     "*/__pycache__/*",
     "*/tests/*",
 ]
-also_copy = ["src/codomyrmex/tests/unit/mcp/", "src/codomyrmex/tests/unit/agents/", "src/codomyrmex/tests/unit/validation/", "src/codomyrmex/tests/unit/security/", "src/codomyrmex/tests/unit/orchestrator/", "src/codomyrmex/tests/unit/events/", "src/codomyrmex/tests/unit/cache/", "src/codomyrmex/tests/unit/concurrency/", "conftest.py"]
+also_copy = ["tests/unit/mcp/", "tests/unit/agents/", "tests/unit/validation/", "tests/unit/security/", "tests/unit/orchestrator/", "tests/unit/events/", "tests/unit/cache/", "tests/unit/concurrency/", "conftest.py"]
 pytest_add_cli_args = ["--no-cov", "-p", "no:timeout", "-p", "no:benchmark", "--override-ini=addopts=", "--rootdir=.."]
 debug = false
 

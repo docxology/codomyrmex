@@ -15,7 +15,7 @@
 
 ## Purpose
 
-Installable package root: **129** top-level subpackages (each with `__init__.py`), plus `tests/`, `examples/`, and per-package RASP docs. Programmatic names: `codomyrmex.list_modules()` in [__init__.py](__init__.py). Full directory listing: [README.md](README.md) (Directory Contents).
+Installable package root: **130** top-level subpackages (each with `__init__.py`), plus `tests/`, `examples/`, and per-package RASP docs. Programmatic names: `codomyrmex.list_modules()` in [__init__.py](__init__.py). Full directory listing: [README.md](README.md) (Directory Contents).
 
 ## Active Components (summary)
 

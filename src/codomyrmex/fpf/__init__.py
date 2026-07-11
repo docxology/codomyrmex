@@ -36,22 +36,22 @@ GraphGenerator = None
 FPFVisualizer = None
 FPFVisualizerPNG = None
 with contextlib.suppress(ImportError):
-    from .analysis.analyzer import FPFAnalyzer  # type: ignore[assignment]
+    from .analysis.analyzer import FPFAnalyzer
 with contextlib.suppress(ImportError):
-    from .analysis.indexer import FPFIndexer  # type: ignore[assignment]
+    from .analysis.indexer import FPFIndexer
 with contextlib.suppress(ImportError):
-    from .analysis.report_generator import ReportGenerator  # type: ignore[assignment]
+    from .analysis.report_generator import ReportGenerator
 with contextlib.suppress(ImportError):
-    from .analysis.term_analyzer import TermAnalyzer  # type: ignore[assignment]
+    from .analysis.term_analyzer import TermAnalyzer
 with contextlib.suppress(ImportError):
     from .visualization.graph_generator import (
-        GraphGenerator,  # type: ignore[assignment]
+        GraphGenerator,
     )
 with contextlib.suppress(ImportError):
-    from .visualization.visualizer import FPFVisualizer  # type: ignore[assignment]
+    from .visualization.visualizer import FPFVisualizer
 with contextlib.suppress(ImportError):
     from .visualization.visualizer_png import (
-        FPFVisualizerPNG,  # type: ignore[assignment]
+        FPFVisualizerPNG,
     )
 
 # Shared schemas for cross-module interop

@@ -621,7 +621,11 @@ class ConversationOrchestrator:
         )
 
         # Real LLM call with retry.
-        req = AgentRequest(prompt=prompt, timeout=request_timeout)
+        req = AgentRequest(
+            prompt=prompt,
+            timeout=request_timeout,
+            metadata={"max_tokens": max_tokens},
+        )
         content = ""
         start = time.monotonic()
         last_error: Exception | None = None

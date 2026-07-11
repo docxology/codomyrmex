@@ -10,6 +10,7 @@ Usage:
     python basic_usage.py --verbose                # Verbose output
 """
 
+import asyncio
 import sys
 import time
 from pathlib import Path
@@ -21,7 +22,11 @@ sys.path.insert(0, str(project_root / "src"))
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
 
-script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
+script_base_path = (
+    project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
+)
+if not script_base_path.exists():
+    script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(script_base)
@@ -78,7 +83,13 @@ class CollaborationScript(ScriptBase):
             return results
 
         # Import collaboration module (after dry_run check)
-        from codomyrmex.collaboration import AgentProxy, SwarmManager, TaskDecomposer
+        from codomyrmex.collaboration import (
+            AgentProxy,
+            Decision,
+            SwarmManager,
+            SwarmVote,
+            TaskDecomposer,
+        )
 
         # Test 1: SwarmManager creation
         self.log_info(f"\n1. Creating SwarmManager with {args.agents} agents")
@@ -92,9 +103,9 @@ class CollaborationScript(ScriptBase):
                 agents.append({"name": agent.name, "role": agent.role})
 
             results["swarm_stats"]["agents"] = agents
-            results["swarm_stats"]["total"] = len(swarm.agents)
+            results["swarm_stats"]["total"] = swarm.pool.size
             results["tests_passed"] += 1
-            self.log_success(f"Swarm created with {len(swarm.agents)} agents")
+            self.log_success(f"Swarm created with {swarm.pool.size} agents")
         except Exception as e:
             self.log_error(f"Swarm creation failed: {e}")
         results["tests_run"] += 1
@@ -107,13 +118,14 @@ class CollaborationScript(ScriptBase):
                 "review documentation and update examples",
                 "fix bugs and optimize performance",
             ]
+            decomposer = TaskDecomposer()
             decomposition_results = []
             for mission in missions:
-                subtasks = TaskDecomposer.decompose(mission)
+                subtasks = decomposer.decompose(mission)
                 decomposition_results.append(
                     {
                         "mission": mission,
-                        "subtasks": subtasks,
+                        "subtasks": [task.description for task in subtasks],
                         "count": len(subtasks),
                     }
                 )
@@ -144,7 +156,7 @@ class CollaborationScript(ScriptBase):
                     {
                         "mission": mission,
                         "results_count": len(mission_results),
-                        "agents_responded": list(mission_results.keys()),
+                        "task_ids": [result["task_id"] for result in mission_results],
                     }
                 )
 
@@ -169,11 +181,15 @@ class CollaborationScript(ScriptBase):
             ]
             voting_results = []
             for proposal in proposals:
-                approved = swarm.consensus_vote(proposal)
+                votes = [
+                    SwarmVote(agent_id, True)
+                    for agent_id in swarm.pool._agents
+                ]
+                consensus = asyncio.run(swarm.request_consensus(proposal, votes))
                 voting_results.append(
                     {
                         "proposal": proposal,
-                        "approved": approved,
+                        "approved": consensus.decision == Decision.APPROVED,
                     }
                 )
 
@@ -190,7 +206,7 @@ class CollaborationScript(ScriptBase):
         # Metrics
         self.add_metric("tests_run", results["tests_run"])
         self.add_metric("tests_passed", results["tests_passed"])
-        self.add_metric("agents", len(swarm.agents))
+        self.add_metric("agents", swarm.pool.size)
         self.add_metric("missions_completed", args.missions)
 
         return results

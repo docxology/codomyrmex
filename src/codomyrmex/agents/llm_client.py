@@ -94,7 +94,13 @@ class OllamaClient:
         if request.metadata and request.metadata.get("system"):
             messages.append({"role": "system", "content": request.metadata["system"]})
         messages.append({"role": "user", "content": request.prompt})
-        payload = {"model": self.model, "messages": messages, "stream": False}
+        payload: dict[str, Any] = {
+            "model": self.model,
+            "messages": messages,
+            "stream": False,
+        }
+        if request.metadata and request.metadata.get("max_tokens") is not None:
+            payload["options"] = {"num_predict": int(request.metadata["max_tokens"])}
         request_timeout = (
             float(request.timeout) if request.timeout is not None else 120.0
         )

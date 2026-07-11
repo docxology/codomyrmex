@@ -171,6 +171,7 @@ class ProxyHandler:
             "model": model,
             "messages": [{"role": "user", "content": prompt}],
             "stream": False,
+            "options": {"num_predict": 256},
         }
 
         try:

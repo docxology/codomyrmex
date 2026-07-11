@@ -122,6 +122,18 @@ class StringSerializer(CacheSerializer):
 class TypedSerializer(CacheSerializer):
     """Serializer that preserves type information."""
 
+    # Pre-allocate the type map mapping as a class variable to avoid
+    # the overhead of recreating this dictionary on every deserialize call.
+    # This provides a small but measurable performance improvement.
+    _TYPE_MAP = {
+        "int": int,
+        "float": float,
+        "bool": bool,
+        "str": str,
+        "list": list,
+        "dict": dict,
+    }
+
     def __init__(self, base_serializer: CacheSerializer | None = None):
         self.base = base_serializer or JSONSerializer()
 
@@ -140,17 +152,8 @@ class TypedSerializer(CacheSerializer):
         type_name = wrapped.get("_type")
         value = wrapped.get("_value")
 
-        type_map = {
-            "int": int,
-            "float": float,
-            "bool": bool,
-            "str": str,
-            "list": list,
-            "dict": dict,
-        }
-
-        if type_name in type_map:
-            return type_map[type_name](value)
+        if type_name in self._TYPE_MAP:
+            return self._TYPE_MAP[type_name](value)
 
         return value
 

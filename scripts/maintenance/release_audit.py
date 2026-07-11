@@ -161,7 +161,7 @@ class ReleaseAuditor:
     def check_test_file_exists(self) -> AuditCheck:
         """Verify release test files exist."""
         start = time.monotonic()
-        test_dir = self._root / "src" / "codomyrmex" / "tests" / "unit"
+        test_dir = self._root / "tests" / "unit"
         test_files = list(test_dir.glob("test_v1_*.py")) if test_dir.exists() else []
         elapsed = (time.monotonic() - start) * 1000
 

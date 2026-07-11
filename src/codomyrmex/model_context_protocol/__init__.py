@@ -142,6 +142,9 @@ __all__ = [
     "generate_taxonomy_report",
     "get_all_circuit_metrics",
     "get_circuit_breaker",
+    "get_deprecated_tools",
+    "get_deprecation_summary",
+    "get_deprecation_timeline",
     "main",
     "mcp_tool",
     "quality",
@@ -155,3 +158,8 @@ __all__ = [
 ]
 
 from . import versioning as versioning_module
+from .mcp_deprecation import (
+    get_deprecated_tools,
+    get_deprecation_summary,
+    get_deprecation_timeline,
+)

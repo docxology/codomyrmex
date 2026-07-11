@@ -21,14 +21,14 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 
 | Metric | Value (as of last update) |
 |--------|---------------------------|
-| Top-level modules | 129 |
+| Top-level modules | 130 |
 | Agent packages (`src/codomyrmex/agents/`) | 39 |
 | `mcp_tools.py` files (non-test) | 150 |
 | Runtime MCP tools | 593 |
-| Production `@mcp_tool` decorators | 610 |
-| Pytest tests collected | 35,137 (`uv run python scripts/doc_inventory.py --pytest`) |
+| Production `@mcp_tool` decorators | 623 |
+| Pytest tests collected | 35,119 (`uv run python scripts/doc_inventory.py --pytest`) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
-| Markdown files under `docs/` | 1,180 (`find docs -name '*.md' -type f \| wc -l`) |
+| Markdown files under `docs/` | 1,201 (`find docs -name '*.md' -type f \| wc -l`) |
 
 ## Reproduce
 

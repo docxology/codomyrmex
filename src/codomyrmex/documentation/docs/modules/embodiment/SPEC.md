@@ -4,21 +4,22 @@
 
 ## Functional Requirements
 
-### FR-1: Core Functionality
-- The module shall provide embodiment capabilities as described in the module docstring.
-- The module shall export 7 public symbols via `__all__`.
+- Parse JSON sensor payloads and reject invalid payloads with `ValueError`.
+- Track latest telemetry per node.
+- Accept local WebSocket telemetry and send command JSON to connected nodes.
+- Provide simulated sensor and actuator lifecycles.
+- Provide an in-process ROS-style topic bridge with bounded history, latching, and simulated message delivery.
+- Provide `Vec3` and `Transform3D` vector and Euler-transform helpers.
 
 ## Non-Functional Requirements
 
-### NFR-1: Zero-Mock Testing
-- All tests follow the Zero-Mock policy -- no unittest.mock, MagicMock, or monkeypatch.
-
-### NFR-2: Explicit Failure
-- All failures shall raise exceptions; no silent fallbacks or placeholder returns.
+- Tests use real local objects and WebSocket transport where available.
+- The module is a local compatibility surface and does not claim production ROS2 middleware integration.
+- Runtime behavior should stay deterministic and dependency-light.
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/embodiment/](../../../../embodiment/)
+- **Source**: [../../../../embodiment/README.md](../../../../embodiment/README.md)
 - **Extended README**: [README.md](readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

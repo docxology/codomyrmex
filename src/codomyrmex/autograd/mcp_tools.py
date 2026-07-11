@@ -7,6 +7,7 @@ Protocol so that AI agents can evaluate expressions and verify gradients.
 
 from __future__ import annotations
 
+import ast
 import operator
 from typing import Any
 
@@ -23,8 +24,62 @@ _ALLOWED_OPS = {
     "+": operator.add,
     "-": operator.sub,
     "*": operator.mul,
+    "/": operator.truediv,
     "**": operator.pow,
 }
+
+
+def _safe_eval(expr: str, namespace: dict[str, Any]) -> Any:
+    try:
+        tree = ast.parse(expr, mode="eval")
+    except SyntaxError as exc:
+        raise ValueError(f"Invalid expression syntax: {exc}") from exc
+
+    def _eval(node: ast.AST) -> Any:
+        if isinstance(node, ast.Expression):
+            return _eval(node.body)
+        if isinstance(node, ast.Constant):
+            return node.value
+        if isinstance(node, ast.Name):
+            if node.id in namespace:
+                return namespace[node.id]
+            raise NameError(f"name {node.id!r} is not defined")
+        if isinstance(node, ast.BinOp):
+            left = _eval(node.left)
+            right = _eval(node.right)
+            if isinstance(node.op, ast.Add):
+                return _ALLOWED_OPS["+"](left, right)
+            if isinstance(node.op, ast.Sub):
+                return _ALLOWED_OPS["-"](left, right)
+            if isinstance(node.op, ast.Mult):
+                return _ALLOWED_OPS["*"](left, right)
+            if isinstance(node.op, ast.Div):
+                return _ALLOWED_OPS["/"](left, right)
+            if isinstance(node.op, ast.Pow):
+                return _ALLOWED_OPS["**"](left, right)
+            raise ValueError(
+                f"Unsupported binary operator: {type(node.op).__name__}"
+            )
+        if isinstance(node, ast.UnaryOp):
+            operand = _eval(node.operand)
+            if isinstance(node.op, ast.UAdd):
+                return operator.pos(operand)
+            if isinstance(node.op, ast.USub):
+                return operator.neg(operand)
+            raise ValueError(
+                f"Unsupported unary operator: {type(node.op).__name__}"
+            )
+        if isinstance(node, ast.Call):
+            func = _eval(node.func)
+            if not callable(func):
+                raise TypeError(f"'{type(func).__name__}' object is not callable")
+            args = [_eval(arg) for arg in node.args]
+            if node.keywords:
+                raise ValueError("Keyword arguments are not supported")
+            return func(*args)
+        raise ValueError(f"Unsupported expression node: {type(node).__name__}")
+
+    return _eval(tree.body)
 
 
 # ---------------------------------------------------------------------------
@@ -60,13 +115,8 @@ def autograd_compute(expression: str, variables: dict) -> dict:
         var_values[name] = v
         namespace[name] = v
 
-    # Compile and evaluate
-    try:
-        code = compile(expression, "<autograd_compute>", "eval")
-    except SyntaxError as exc:
-        raise ValueError(f"Invalid expression syntax: {exc}") from exc
-
-    result = eval(code, namespace)
+    # Safely evaluate using AST parsing
+    result = _safe_eval(expression, namespace)
 
     if not isinstance(result, Value):
         result = Value(float(result))
