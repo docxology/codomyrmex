@@ -1,5 +1,9 @@
 """Unit tests for Int8 and FP4 quantization."""
 
+import pytest
+
+pytest.importorskip("mlx")
+
 import numpy as np
 import pytest
 

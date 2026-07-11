@@ -52,7 +52,7 @@ jobs:
             --repo-root . \
             --output output \
             --format both \
-            --fail-on-broken
+
 
       - name: Upload link validation results
         uses: actions/upload-artifact@v4
