@@ -17,6 +17,10 @@ import { join } from "path";
 const yaml = await import("js-yaml");
 const TIMEOUT_MS = LLM_TIMEOUT * 2; // dispatch gets 2× the LLM timeout
 
+function safeLoad(content: string) {
+    return yaml.load(content, { schema: yaml.JSON_SCHEMA });
+}
+
 export async function handleDispatchRoutes(
     path: string,
     method: string,
@@ -151,7 +155,7 @@ export async function handleDispatchRoutes(
         });
         const projectFile = join(PROJECTS_DIR, projectId, "project.yaml");
         if (existsSync(projectFile)) {
-            const data = yaml.load(readFileSync(projectFile, "utf8")) as any;
+            const data = safeLoad(readFileSync(projectFile, "utf8")) as any;
             data.dispatch_context = globalThis._dispatchContexts.get(`project:${projectId}`);
             writeFileSync(projectFile, yaml.dump(data));
         }
@@ -174,7 +178,7 @@ export async function handleDispatchRoutes(
         });
         const missionsFile = join(MISSIONS_DIR, "missions.yaml");
         if (existsSync(missionsFile)) {
-            const missions = (yaml.load(readFileSync(missionsFile, "utf8")) as any[]) || [];
+            const missions = (safeLoad(readFileSync(missionsFile, "utf8")) as any[]) || [];
             const m = missions.find((x: any) => x.id === missionId);
             if (m) { m.dispatch_context = globalThis._dispatchContexts.get(`mission:${missionId}`); writeFileSync(missionsFile, yaml.dump(missions)); }
         }
