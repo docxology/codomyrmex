@@ -5,7 +5,10 @@ from pathlib import Path
 import pytest
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
-from codomyrmex.system_discovery.module_catalog import build_module_catalog
+from codomyrmex.system_discovery.module_catalog import (
+    ModuleCatalogEntry,
+    build_module_catalog,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -64,6 +67,35 @@ def test_catalog_to_dict_is_json_ready() -> None:
     assert data["py_typed_missing"] == []
     assert isinstance(data["entries"], list)
     assert all(isinstance(entry["name"], str) for entry in data["entries"])
+
+
+def test_entry_has_required_docs() -> None:
+    def make_entry(
+        has_readme: bool, has_agents: bool, has_spec: bool, has_pai: bool
+    ) -> ModuleCatalogEntry:
+        return ModuleCatalogEntry(
+            name="test",
+            relative_path="test",
+            kind="runtime_module",
+            has_init=True,
+            has_readme=has_readme,
+            has_agents=has_agents,
+            has_spec=has_spec,
+            has_pai=has_pai,
+            has_api_spec=True,
+            has_mcp_tools=True,
+            has_mcp_spec=True,
+            has_py_typed=True,
+            has_tests=True,
+            docs_module_exists=True,
+        )
+
+    assert make_entry(True, True, True, True).has_required_docs is True
+    assert make_entry(False, True, True, True).has_required_docs is False
+    assert make_entry(True, False, True, True).has_required_docs is False
+    assert make_entry(True, True, False, True).has_required_docs is False
+    assert make_entry(True, True, True, False).has_required_docs is False
+    assert make_entry(False, False, False, False).has_required_docs is False
 
 
 def test_system_discovery_exports_catalog_and_structure_commands() -> None:
