@@ -8,3 +8,7 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+
+## 2026-07-13 - Inline Set Optimization
+**Learning:** In Python, inline set literals (e.g., `if name in {'a', 'b'}:`) are compiled into `frozenset` constants for O(1) membership checks without repeated instantiation overhead. However, when generating source code strings where elements are injected or repeated, extracting them to module-level `frozenset` constants ensures optimal memory and allocation behavior during the generated module's runtime execution.
+**Action:** Replaced an O(N) list check generated inside a loop with a module-level `frozenset` constant `_README_VARIANTS`.
