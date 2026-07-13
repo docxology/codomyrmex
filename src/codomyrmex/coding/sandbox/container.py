@@ -23,6 +23,7 @@ _DOCKER_SETUP_ERROR_MARKERS = (
     "is the docker daemon running",
     "docker.sock",
     "error during connect",
+    "error response from daemon",
     "docker daemon",
     "github.com/docker/cli",
     "github.com/docker/docker",
