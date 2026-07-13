@@ -1,8 +1,9 @@
 """Tests for templating __init__.py."""
 
-import pytest
 import sys
 from importlib import reload
+
+import pytest
 
 from codomyrmex.templating import get_default_engine
 from codomyrmex.templating.engines.template_engine import TemplateEngine
@@ -16,6 +17,7 @@ class TestGetDefaultEngine:
     def reset_default_engine(self):
         """Reset the global _default_engine before and after each test."""
         import codomyrmex.templating as t
+
         original = t._default_engine
         t._default_engine = None
         yield
