@@ -28,6 +28,7 @@ from typing import Any
 from codomyrmex.colony_kernel.kernel import ColonyKernel
 from codomyrmex.colony_kernel.models import (
     ActionProposal,
+    AgentTrustProfile,
     ColonySignal,
     DecayRate,
     FalsificationFinding,
