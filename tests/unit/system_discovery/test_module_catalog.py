@@ -28,6 +28,11 @@ def test_catalog_counts_runtime_modules_without_tests_surface() -> None:
     assert "tests" in {entry.name for entry in catalog.support_surfaces}
 
 
+def test_support_surface_count() -> None:
+    catalog = build_module_catalog(_repo_root())
+    assert catalog.support_surface_count == len(catalog.support_surfaces)
+
+
 def test_catalog_has_no_retired_architecture_entry() -> None:
     catalog = build_module_catalog(_repo_root())
     names = {entry.name for entry in catalog.entries}
