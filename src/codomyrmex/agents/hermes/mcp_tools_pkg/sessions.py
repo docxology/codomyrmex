@@ -1,4 +1,5 @@
 """Hermes MCP tools — sessions category."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -27,6 +28,7 @@ def hermes_session_list() -> dict[str, Any]:
             return {"status": "success", "sessions": sessions, "count": len(sessions)}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -58,6 +60,7 @@ def hermes_session_clear(session_id: str) -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -79,6 +82,7 @@ def hermes_session_stats() -> dict[str, Any]:
         return {"status": "success", **stats}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -115,6 +119,7 @@ def hermes_session_fork(
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -140,6 +145,7 @@ def hermes_session_export_md(session_id: str) -> dict[str, Any]:
         return {"status": "success", "session_id": session_id, "markdown": md}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -167,6 +173,7 @@ def hermes_session_detail(session_id: str) -> dict[str, Any]:
         return {"status": "success", **detail}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -203,6 +210,7 @@ def hermes_session_merge(
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -233,6 +241,7 @@ def hermes_prune_sessions(days_old: int = 30) -> dict[str, Any]:
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -325,6 +334,7 @@ def hermes_archive_sessions(
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -354,6 +364,7 @@ def hermes_worktree_create(session_id: str) -> dict[str, Any]:
         return {"status": "error", "message": "Failed to create worktree"}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",

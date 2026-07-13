@@ -181,10 +181,7 @@ class CollaborationScript(ScriptBase):
             ]
             voting_results = []
             for proposal in proposals:
-                votes = [
-                    SwarmVote(agent_id, True)
-                    for agent_id in swarm.pool._agents
-                ]
+                votes = [SwarmVote(agent_id, True) for agent_id in swarm.pool._agents]
                 consensus = asyncio.run(swarm.request_consensus(proposal, votes))
                 voting_results.append(
                     {

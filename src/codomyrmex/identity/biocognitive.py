@@ -224,7 +224,9 @@ class HeartbeatValidator:
             logger.warning("No heartbeat baseline for %s", user_id)
             return False
         if len(intervals_ms) < self.min_samples:
-            logger.info("Insufficient heartbeat samples (%d); allowing", len(intervals_ms))
+            logger.info(
+                "Insufficient heartbeat samples (%d); allowing", len(intervals_ms)
+            )
             return True
 
         current = self._compute_metrics(intervals_ms)
@@ -236,12 +238,23 @@ class HeartbeatValidator:
             if base_val <= 0:
                 # Near-zero baseline; fall back to absolute comparison
                 if abs(curr_val - base_val) > self.tolerance * 100:
-                    logger.warning("Heartbeat %s mismatch: base=%.2f cur=%.2f", metric, base_val, curr_val)
+                    logger.warning(
+                        "Heartbeat %s mismatch: base=%.2f cur=%.2f",
+                        metric,
+                        base_val,
+                        curr_val,
+                    )
                     return False
             else:
                 ratio = abs(curr_val - base_val) / base_val
                 if ratio > self.tolerance:
-                    logger.warning("Heartbeat %s mismatch: base=%.2f cur=%.2f (%.0f%%)", metric, base_val, curr_val, ratio * 100)
+                    logger.warning(
+                        "Heartbeat %s mismatch: base=%.2f cur=%.2f (%.0f%%)",
+                        metric,
+                        base_val,
+                        curr_val,
+                        ratio * 100,
+                    )
                     return False
 
         # Also check mean heart rate — a doubled HR should be rejected even
@@ -253,7 +266,9 @@ class HeartbeatValidator:
             if hr_ratio > self.tolerance:
                 logger.warning(
                     "Heartbeat mean_hr mismatch: base=%.1f cur=%.1f (%.0f%%)",
-                    base_hr, curr_hr, hr_ratio * 100,
+                    base_hr,
+                    curr_hr,
+                    hr_ratio * 100,
                 )
                 return False
         return True
@@ -455,7 +470,10 @@ def verify_biocognitive(
             modalities["keystroke"] = {"verified": ok, "current": current_keystroke}
             all_verified = all_verified and ok
         else:
-            modalities["keystroke"] = {"verified": True, "note": "enrolled, no current value"}
+            modalities["keystroke"] = {
+                "verified": True,
+                "note": "enrolled, no current value",
+            }
     elif current_keystroke is not None:
         # No baseline → cannot verify
         modalities["keystroke"] = {"verified": False, "reason": "no baseline"}
