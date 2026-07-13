@@ -5,7 +5,10 @@ from pathlib import Path
 import pytest
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
-from codomyrmex.system_discovery.module_catalog import build_module_catalog
+from codomyrmex.system_discovery.module_catalog import (
+    ModuleCatalogEntry,
+    build_module_catalog,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -76,3 +79,45 @@ def test_system_discovery_exports_catalog_and_structure_commands() -> None:
     assert {"catalog", "structure"} <= set(commands)
     assert callable(commands["catalog"]["handler"])
     assert callable(commands["structure"]["handler"])
+
+
+def test_module_catalog_entry_properties() -> None:
+    entry1 = ModuleCatalogEntry(
+        name="test1",
+        relative_path="path",
+        kind="runtime_module",
+        has_init=True,
+        has_readme=True,
+        has_agents=True,
+        has_spec=True,
+        has_pai=True,
+        has_api_spec=False,
+        has_mcp_tools=True,
+        has_mcp_spec=False,
+        has_py_typed=True,
+        has_tests=True,
+        docs_module_exists=True,
+    )
+    assert entry1.is_runtime_module is True
+    assert entry1.has_required_docs is True
+    assert entry1.has_mcp_contract_gap is True
+
+    entry2 = ModuleCatalogEntry(
+        name="test2",
+        relative_path="path",
+        kind="support_surface",
+        has_init=True,
+        has_readme=True,
+        has_agents=False,
+        has_spec=True,
+        has_pai=True,
+        has_api_spec=False,
+        has_mcp_tools=True,
+        has_mcp_spec=True,
+        has_py_typed=True,
+        has_tests=True,
+        docs_module_exists=True,
+    )
+    assert entry2.is_runtime_module is False
+    assert entry2.has_required_docs is False
+    assert entry2.has_mcp_contract_gap is False
