@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-07-13 - non-blocking JSON loading in async directory processing
+**Learning:** Standard file I/O `open()` and JSON parsing in a tight loop inside an async function blocks the event loop, severely degrading performance of concurrent background tasks.
+**Action:** When aiofiles is unavailable or standard async paradigms don't fit, wrap the blocking file reading and JSON loading in a synchronous helper function and execute it using `asyncio.get_running_loop().run_in_executor(None, ...)`.
