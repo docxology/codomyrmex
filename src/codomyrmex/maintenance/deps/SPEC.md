@@ -21,7 +21,7 @@ the consolidated configuration.
 ### `DependencyAnalyzer` (dependency_analyzer.py)
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| -------- | ----------- | --------- | ------------- |
 | `extract_imports` | `file_path: Path` | `set[str]` | Extract codomyrmex imports via AST parsing |
 | `scan_module` | `module_name: str` | `None` | Scan all .py files in a module for imports |
 | `scan_all_modules` | -- | `None` | Scan every module under `src/codomyrmex/` |
@@ -34,7 +34,7 @@ the consolidated configuration.
 ### Checker Functions (dependency_checker.py)
 
 | Function | Returns | Description |
-|----------|---------|-------------|
+| ---------- | --------- | ------------- |
 | `check_python_version()` | `dict` | Python version >= 3.10 check |
 | `check_dependencies()` | `dict` | Import checks for core/LLM/analysis/data/dev packages |
 | `check_security()` | `dict` | pip-audit and safety vulnerability scan |
@@ -44,7 +44,7 @@ the consolidated configuration.
 ### Consolidator Functions (dependency_consolidator.py)
 
 | Function | Returns | Description |
-|----------|---------|-------------|
+| ---------- | --------- | ------------- |
 | `parse_requirements_file(path)` | `list[tuple]` | Parse a requirements.txt into (name, version, source) tuples |
 | `find_all_requirements_files(root)` | `list[Path]` | Find all requirements.txt under src/codomyrmex/ |
 | `analyze_dependencies(root)` | `dict` | Consolidated dependency info with conflict detection |
@@ -53,7 +53,7 @@ the consolidated configuration.
 ### Validator Functions (validate_dependencies.py)
 
 | Function | Returns | Description |
-|----------|---------|-------------|
+| ---------- | --------- | ------------- |
 | `parse_pyproject_dependencies(content)` | `dict` | Parse deps from pyproject.toml content |
 | `check_version_constraints(deps)` | `list[str]` | Find deps missing version constraints |
 | `check_duplicates(deps)` | `list[str]` | Find duplicate packages across sections |
