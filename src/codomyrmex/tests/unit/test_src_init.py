@@ -1,6 +1,7 @@
 import pytest
 from src import get_main_package_info
 
+
 def test_get_main_package_info():
     info = get_main_package_info()
     assert isinstance(info, dict)
@@ -10,6 +11,7 @@ def test_get_main_package_info():
     assert isinstance(info["modules"], list)
     assert "description" in info
     assert info["description"] == "Core Codomyrmex functionality and modules"
+
 
 def test_get_main_package_info_structure():
     info = get_main_package_info()
