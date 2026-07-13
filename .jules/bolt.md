@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-07-13 - Replace blocking subprocess.run with asyncio in setup
+**Learning:** Found that `subprocess.run` blocks the main thread in asynchronous functions like `setup`. To avoid this overhead, use `asyncio.create_subprocess_exec` coupled with `await asyncio.wait_for`.
+**Action:** Applied this non-blocking execution model in `yc_bench_env.py` to prevent event loop blocking when executing the `yc-bench` CLI tool in long-horizon benchmark environments.
