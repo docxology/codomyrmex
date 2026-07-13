@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-07-13 - Optimize open_gauss run_agent membership checks
+**Learning:** In Python, inline literal sets (e.g., `if name in {'a', 'b', 'c'}:`) are optimized at compile-time into `frozenset` constants, making membership checks O(1) and substantially faster than lists, without the overhead of runtime allocation.
+**Action:** Replaced literal list membership checks with set literals in `src/codomyrmex/agents/open_gauss/run_agent.py`.
