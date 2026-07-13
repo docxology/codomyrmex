@@ -7,7 +7,7 @@ generating thumbnails, and extracting audio from video files.
 import time
 from pathlib import Path
 
-from codomyrmex.video._validation import SUPPORTED_FORMATS, validate_video_path
+from codomyrmex.video._validation import validate_video_path
 from codomyrmex.video.config import get_config
 from codomyrmex.video.exceptions import (
     AudioExtractionError,
