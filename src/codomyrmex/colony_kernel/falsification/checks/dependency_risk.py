@@ -9,9 +9,7 @@ from codomyrmex.colony_kernel.falsification.models import AttackVector
 from codomyrmex.colony_kernel.models import FalsificationFinding, FalsificationSeverity
 
 
-def check_dependency_risk(
-    plan: dict[str, Any]
-) -> FalsificationFinding | None:
+def check_dependency_risk(plan: dict[str, Any]) -> FalsificationFinding | None:
     """Attack: plan introduces unvetted external dependencies."""
     deps = plan.get("dependencies", [])
     if isinstance(deps, str):

@@ -285,7 +285,12 @@ class PersonaRotator:
         self.manager.set_active_persona(persona_id)
         record = RotationRecord(from_id=from_id, to_id=persona_id, reason=reason)
         self._history.append(record)
-        logger.info("Rotated persona: %s -> %s (%s)", from_id, persona_id, reason or "unspecified")
+        logger.info(
+            "Rotated persona: %s -> %s (%s)",
+            from_id,
+            persona_id,
+            reason or "unspecified",
+        )
         return self.manager.active_persona  # type: ignore[return-value]
 
     def rotate_next(self, reason: str = "") -> Persona:

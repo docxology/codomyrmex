@@ -9,9 +9,7 @@ from codomyrmex.colony_kernel.falsification.models import AttackVector
 from codomyrmex.colony_kernel.models import FalsificationFinding, FalsificationSeverity
 
 
-def check_missing_metrics(
-    plan: dict[str, Any]
-) -> FalsificationFinding | None:
+def check_missing_metrics(plan: dict[str, Any]) -> FalsificationFinding | None:
     """Attack: plan defines no verifiable success metric.
 
     Returns a MEDIUM finding when ``metrics`` is absent or contains only
