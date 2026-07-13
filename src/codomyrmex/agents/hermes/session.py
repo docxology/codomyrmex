@@ -303,16 +303,20 @@ class SQLiteSessionStore:
             ),
         ]
 
+        migrated = False
         for col_name, sql in migrations:
             if col_name not in columns:
                 try:
                     self._conn.execute(sql)
-                    self._conn.commit()
+                    migrated = True
                     logger.info(
                         "Migrated hermes_sessions schema: added '%s' column.", col_name
                     )
                 except sqlite3.OperationalError:
                     pass  # Column already exists or DB is read-only
+
+        if migrated:
+            self._conn.commit()
 
     def save(self, session: HermesSession) -> None:
         """Save or update a session.
