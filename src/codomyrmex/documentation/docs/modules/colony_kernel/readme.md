@@ -4,11 +4,11 @@
 
 ## Purpose
 
-The Colony Kernel is the control plane for codomyrmex's artificial ecology thesis: a codebase is not a static artefact but a living colony where agents, modules, and human operators co-evolve under stigmergic pressure. Rather than coordinating agents through centralised command, the kernel lets each subsystem deposit pheromone signals — chemical-analogy traces that carry success, failure, risk, and dependency information — and then gates every proposed change against the accumulated signal landscape plus the proposing agent's earned trust. An action that would touch a location heavy with FAILURE pheromones faces a higher gate barrier than one proposing work on a clean, SUCCESS-reinforced target. Outcomes feed back into the pheromone field, creating a self-reinforcing memory of what works and what breaks. Agents that consistently deliver clean outcomes earn higher trust scores and broader roles; agents that generate repair cycles see their trust decay and their gate scores drop accordingly. The result is an ecology that collectively remembers, prunes stale code, and concentrates activity where the evidence says it matters.
+The Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology thesis: a codebase is treated as a colony in which agents, modules, and human operators interact through a process-local signal field. Subsystems deposit chemical-analogy traces carrying success, failure, risk, and dependency information, and the kernel evaluates proposals against the accumulated field, reported consequence history, budget state, completeness, and agent trust. A proposal touching a location with strong FAILURE or RISK pressure faces a higher gate barrier than an otherwise identical proposal at a clean target. Caller-reported outcomes update the field and trust profile, while pruning scans nominate candidates for review. These mechanics implement environmental feedback; they do not by themselves attest execution, enforce downstream actions, or establish production benefit.
 
 ## Architecture
 
-The kernel wires eight subsystems. Each subsystem is a self-contained class; no subsystem imports from another — all share only the `models.py` contract at the centre.
+The kernel wires eight cooperating responsibilities. `models.py` supplies shared value objects, while `ColonyKernel` explicitly sequences falsification, budget, role, gate, consequence, signal, and pruning operations. Cross-subsystem dependencies are documented rather than hidden.
 
 ```mermaid
 graph TB
@@ -61,10 +61,11 @@ proposal = ActionProposal(
 )
 
 result = kernel.propose_action(proposal)
-print(result.decision)   # GateDecision.EXECUTE (or HOLD / REFUSE with reason)
-print(result.gate_score) # e.g. 0.712
+print(result.decision)   # GateDecision.REFUSE for a brand-new SANDBOX agent
+print(result.gate_score) # 0.0 on the SANDBOX hard-override path
 
-# After executing the action, record what actually happened.
+# Outcome reporting is a separate, caller-driven operation. This demonstrates the
+# current interface; it does not prove that the action was authorized or executed.
 record = kernel.record_outcome(
     proposal=proposal,
     outcome={"summary": "patch applied; git rebase succeeded", "repair_needed": False},
@@ -132,7 +133,7 @@ The colony kernel depends on exactly one external codomyrmex module: `agentic_me
 
 `ConsequenceMemory` uses the Python standard library `sqlite3` directly. No ORM or third-party persistence library is required.
 
-All other imports are from `codomyrmex.colony_kernel.models` or stdlib. The dependency graph is a star: `models.py` at the centre, each subsystem pointing inward only.
+Other colony-kernel imports are explicit: subsystem classes share `models.py`, and the integration layer coordinates them. `ActuationGate` may query both the pheromone store and consequence memory; `PruningDaemon` may query the pheromone store.
 
 ## MCP Tools
 
@@ -171,10 +172,10 @@ The doctor verifies: imports, kernel instantiation, propose→record lifecycle, 
 
 ## Tests
 
-Tests live in `src/codomyrmex/tests/unit/colony_kernel/`. Run with:
+Tests live in `tests/unit/colony_kernel/`. Run with:
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/colony_kernel/ -v
+uv run pytest tests/unit/colony_kernel/ -v
 ```
 
 The test suite follows the zero-mock policy: all tests use real `ColonyKernel` instances with `db_path=":memory:"`. No `unittest.mock`, no `MagicMock`. Coverage target: ≥ 40% (project-wide gate).

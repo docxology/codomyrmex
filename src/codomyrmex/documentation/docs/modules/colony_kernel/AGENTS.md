@@ -35,7 +35,7 @@ After changing this documentation mirror, run:
 
 ```bash
 make docs-check
-uv run pytest src/codomyrmex/tests/unit/colony_kernel/ -q
+uv run pytest tests/unit/colony_kernel/ -q
 uv run codomyrmex doctor --all
 ```
 

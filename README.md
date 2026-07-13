@@ -26,7 +26,7 @@
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **130 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **593** runtime MCP tools in the generated manifest and **623** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **35,119** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,201 Markdown** files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
+Codomyrmex is a production-grade library of **130 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **593** runtime MCP tools in the generated manifest and **623** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **35,119** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,202 Markdown** files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
 
 ```bash
 # Install
@@ -222,6 +222,7 @@ graph TB
 | [`model_context_protocol`](src/codomyrmex/model_context_protocol/) | 27 | 9 | [📖](docs/modules/model_context_protocol/) | [⚙️](config/model_context_protocol/config.yaml) | [📜](scripts/model_context_protocol/) | MCP tool server, bridge, and protocol implementation |
 | [`prompt_engineering`](src/codomyrmex/prompt_engineering/) | 10 | 7 | [📖](docs/modules/prompt_engineering/) | [⚙️](config/prompt_engineering/config.yaml) | [📜](scripts/prompt_engineering/) | Template management, prompt optimization, few-shot patterns |
 | [`skills`](src/codomyrmex/skills/) | 22 | 11 | [📖](docs/modules/skills/) | [⚙️](config/skills/config.yaml) | [📜](scripts/skills/) | Extensible skill registry and execution engine |
+| [`colony_kernel`](src/codomyrmex/colony_kernel/) | 13 | 13 | [📖](docs/modules/colony_kernel/) | [⚙️](config/colony_kernel/) | — | Stigmergic colony control plane: pheromone field, actuation gate, consequence memory, role/trust adaptation |
 
 ### 🤖 AI & Machine Learning Modules
 
@@ -399,6 +400,11 @@ graph TB
 | [`examples`](src/codomyrmex/examples/) | 9 | [📖](docs/modules/examples/) | Reference implementation examples |
 | [`pai_pm`](src/codomyrmex/pai_pm/) | 6 | [📖](docs/modules/pai_pm/) | PAI Project Manager server (Bun/TypeScript) |
 | [`soul`](src/codomyrmex/soul/) | 4 | [📖](docs/modules/soul/) | Biocognitive identity and persona engine |
+| [`defense`](src/codomyrmex/defense/) | 5 | [📖](docs/modules/defense/) | Local active-defense: prompt-exploit detection, honeytokens, rate limiting |
+| [`embodiment`](src/codomyrmex/embodiment/) | 3 | [📖](docs/modules/embodiment/) | Simulated sensors/actuators, WebSocket bridging, ROS-style pub/sub, 3D transforms |
+| [`languages`](src/codomyrmex/languages/) | 3 | [📖](docs/modules/languages/) | Language runtime adapters (Python, JS/TS, Go, Java, Rust, Ruby, Swift, R, PHP, Elixir, C++, C#) |
+| [`manuscript`](src/codomyrmex/manuscript/) | 2 | [📖](docs/modules/manuscript/) | Manuscript token computation and publication figure generation |
+| [`vision`](src/codomyrmex/vision/) | 5 | [📖](docs/modules/vision/) | Visual document processing: annotation extraction, PDF extraction, VLM client |
 
 ---
 
@@ -502,7 +508,7 @@ sequenceDiagram
 codomyrmex/
 ├── .github/                  # 37 GitHub Actions workflows, templates, docs
 ├── config/                   # 102 top-level config dirs, 96 config.yaml files
-├── docs/                     # 1,201 Markdown files (see inventory); 18+ top-level sections
+├── docs/                     # 1,202 Markdown files (see inventory); 18+ top-level sections
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
@@ -540,7 +546,7 @@ codomyrmex/
 | **Total Modules** | 130 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
 | **Collected tests** | 35,119 (`uv run python scripts/doc_inventory.py --pytest`) |
-| **Documentation Files** | 1,201 Markdown under `docs/` (`find docs -name '*.md'`) |
+| **Documentation Files** | 1,202 Markdown under `docs/` (`find docs -name '*.md'`) |
 | **GitHub Workflows** | 37 (`.github/workflows/*.yml`) |
 | **MCP Runtime Tools** | 593 (generated runtime manifest) |
 | **MCP Tool Decorators** | 623 (`@mcp_tool` lines, production tree) |
@@ -829,7 +835,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>130 modules · 593 runtime MCP tools · 623 decorators · 35,119 tests · 1,201 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>130 modules · 593 runtime MCP tools · 623 decorators · 35,119 tests · 1,202 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

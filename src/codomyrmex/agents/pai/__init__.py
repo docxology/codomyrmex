@@ -37,6 +37,9 @@ Example:
 Version: v0.4.0
 """
 
+from importlib import import_module
+from typing import Any
+
 from .mcp_bridge import (
     PROMPT_COUNT,
     RESOURCE_COUNT,
@@ -59,21 +62,37 @@ from .pai_bridge import (
     PAISkillInfo,
     PAIToolInfo,
 )
-from .trust_gateway import (
-    DESTRUCTIVE_TOOL_COUNT,
-    DESTRUCTIVE_TOOLS,
-    SAFE_TOOL_COUNT,
-    SAFE_TOOLS,
-    TrustLevel,
-    TrustRegistry,
-    get_trust_report,
-    is_trusted,
-    reset_trust,
-    trust_all,
-    trust_tool,
-    trusted_call_tool,
-    verify_capabilities,
+
+# Trust-gateway exports are resolved only when requested.  In particular, the
+# dynamic count constants enumerate MCP tools, so importing them eagerly made a
+# lightweight ``mcp_bridge`` import recursively import every tool package.
+_TRUST_GATEWAY_EXPORTS = frozenset(
+    {
+        "DESTRUCTIVE_TOOL_COUNT",
+        "DESTRUCTIVE_TOOLS",
+        "SAFE_TOOL_COUNT",
+        "SAFE_TOOLS",
+        "TrustLevel",
+        "TrustRegistry",
+        "get_trust_report",
+        "is_trusted",
+        "reset_trust",
+        "trust_all",
+        "trust_tool",
+        "trusted_call_tool",
+        "verify_capabilities",
+    }
 )
+
+
+def __getattr__(name: str) -> Any:
+    """Resolve trust-gateway API members without eager tool discovery."""
+    if name in _TRUST_GATEWAY_EXPORTS:
+        trust_gateway = import_module(f"{__name__}.trust_gateway")
+        value = getattr(trust_gateway, name)
+        globals()[name] = value
+        return value
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 __all__ = [
     # Constants

@@ -64,7 +64,7 @@ APIHandler (mixin)
 |----------|--------|----------|
 | `/api/modules` | GET | List all discovered modules |
 | `/api/execute` | POST | Run script with path traversal protection |
-| `/api/tests/run` | POST | Start test execution (background thread) |
+| `/api/tests` | POST | Start test execution, or validate routing with `validate_only: true` |
 | `/api/pai/action` | POST | Dispatch PAI commands (verify/trust/reset/...) |
 
 ## Dependencies
@@ -79,7 +79,8 @@ APIHandler (mixin)
 - Telemetry collector is class-level shared state (`_telemetry_collector`); not thread-safe for concurrent writes.
 - Ollama proxy timeout is 60 seconds; not configurable per-request.
 - Script execution in `handle_execute` validates paths but runs subprocess directly.
-- Test execution runs in a daemon thread; results polled via `/api/tests/status`.
+- Test execution runs in an owned daemon thread; results are polled via
+  `/api/tests/status`. Validation-only requests do not create a worker.
 
 ## Navigation
 

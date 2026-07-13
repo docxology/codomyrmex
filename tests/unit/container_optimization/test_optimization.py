@@ -4,7 +4,7 @@ import time
 import pytest
 
 pytest.importorskip(
-    "docker",
+    "docker.errors",
     reason="container optimization tests require docker SDK (uv sync --extra containerization)",
 )
 import docker

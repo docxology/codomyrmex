@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **`docs/manuscript/layer_contract.yaml`**: dropped dangling `src/codomyrmex/_infra.py` allowlist entry (file never existed). Was documentation-only — referenced by `docs/manuscript/AGENTS.md` as "enforced at CI boundary" but consumed by no code in the repository; added `test_layer_contract_forbids_infrastructure_imports` (`tests/unit/colony_kernel/test_manuscript_consistency.py`) to make the claim real, verified via negative control (planted a real `infrastructure.*` import under `colony_kernel/`, confirmed the test fails, removed it, confirmed green).
+- **Broken test path** (10 files: `CHANGELOG.md`, `docs/todo/COLONY_KERNEL.md`, `docs/modules/colony_kernel/{README,AGENTS,SPEC}.md`, `src/codomyrmex/colony_kernel/{README,AGENTS}.md`, `tests/unit/colony_kernel/AGENTS.md`, `src/codomyrmex/documentation/docs/modules/colony_kernel/{AGENTS,readme}.md`): `src/codomyrmex/tests/unit/colony_kernel/` (never existed) → `tests/unit/colony_kernel/` (real location); every `uv run pytest` snippet using the old path would have failed if copy-pasted.
+- **`docs/modules/colony_kernel/README.md`**: canonical `ActionProposal(...)` usage example raised `TypeError: missing 1 required positional argument: 'expected_outcome'` if copy-pasted; added the missing field and verified the example now runs.
+- **`docs/manuscript/config.yaml`**: `render.formats` claimed `slides`/`docx`/`epub` enabled, but `scripts/_render_pdf_override.py` short-circuits `infrastructure/rendering/pipeline.py` before those formats are ever produced (verified: empty `output/slides/`, no `output/{docx,epub}/` artifacts). Set to `false` to match actual behavior.
+- **`README.md`**: root module inventory table claimed "130 Top-Level Modules" but listed only 124 — missing `colony_kernel` (the subject of the manuscript) plus `defense`, `embodiment`, `languages`, `manuscript`, `vision`. Added all 6 with verified file counts; table now has exactly 130 rows.
+
 ---
 
 ## [1.3.0] - 2026-06-30 — "Colony Kernel"
@@ -15,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Colony Kernel** (8 subsystems, 8 MCP tools): `PheromoneStore`, `ResourceLedger`, `ActuationGate`, `ConsequenceMemory`, `RoleAdapter`, `PruningDaemon`, `FalsificationWorker`, `ColonyKernel` — artificial ecology control plane. Gate formula: `budget×0.30 + risk×0.30 + trust×0.25 + completeness×0.15`; EXECUTE≥0.75, HOLD 0.50–0.74, REFUSE<0.50. Trust deltas: PASS=+0.04, FAIL=−0.08, REPAIR=−0.05, HUMAN_WEIGHT=0.03.
-- **Colony Kernel test suite** (641 tests, 12 files): `test_config_loader.py`, `test_models.py`, `test_resource_ledger.py`, `test_consequence_memory.py`, `test_actuation_gate.py`, `test_pheromone_store.py`, `test_role_adapter.py`, `test_kernel.py`, `test_pruning_daemon.py`, `test_falsification_worker.py`, `test_mcp_tools.py`, and `test_manuscript_consistency.py`.
+- **Colony Kernel test suite** (771 tests, 13 files): `test_config_loader.py`, `test_models.py`, `test_resource_ledger.py`, `test_consequence_memory.py`, `test_actuation_gate.py`, `test_pheromone_store.py`, `test_role_adapter.py`, `test_kernel.py`, `test_pruning_daemon.py`, `test_falsification_worker.py`, `test_mcp_tools.py`, `test_manuscript_consistency.py`, and `test_property_stress_integration.py`.
 - **`open_gauss` submodule RASP docs**: 34 files (AGENTS.md + README.md for 17 subdirectories) committed at submodule commit `032e9a9c`.
 - **Colony Kernel `PAI.md`**: gate formula corrected (was 0.4+0.3+0.3, now 0.30+0.30+0.25+0.15); version bumped to v1.3.0.
 - **Manuscript pandoc-crossref integration**: `scripts/compile_manuscript.py` now auto-detects `pandoc-crossref` and inserts `-F pandoc-crossref` before `--citeproc`; all `[@sec:xxx]`, `[@fig:xxx]`, `[@eq:xxx]` cross-references resolve correctly. Section IDs added to all 9 manuscript chapters.
@@ -30,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`colony_kernel/kernel.py`**: `colony_status()` now reads `self.pruning_daemon._last_scan_count` instead of hardcoded `0`.
 - **`colony_kernel/mcp_tools.py`**: `colony_record_outcome` now captures `record = kernel.record_outcome(...)` and returns `record.consequence_id` (was constructing a local ephemeral `ConsequenceRecord`).
 - **`agents/hermes/gateway/cron.py`**: `asyncio.iscoroutinefunction(job)` → `inspect.iscoroutinefunction(job)` (Python 3.14 deprecation-as-error fix; `import inspect` added).
+- **`manuscript/variables.py`**: `CONFIG_EVAPORATION_FAST`/`_NORMAL`/`_SLOW` now `round(..., 3)` before stringifying; the unrounded `base_evaporation_rate * decay_rate` product leaked IEEE-754 noise (`0.30000000000000004`, `0.020000000000000004`) into rendered manuscript prose (§2.1, §5.4). Matches the rounding already applied to the derived `pheromone_retention_*` values.
 
 ### Changed
 
@@ -39,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Tests
 
 - **Colony Kernel**: 441 → 641 tests (+200 new tests across 12 files).
-- Added `src/codomyrmex/tests/unit/colony_kernel/AGENTS.md` documenting all 12 test files and their subsystem coverage.
+- Added `tests/unit/colony_kernel/AGENTS.md` documenting all 12 test files and their subsystem coverage.
 
 ### Documentation
 

@@ -264,12 +264,11 @@ def hermes_archive_sessions(
     """
     try:
         import os
-        from pathlib import Path
 
+        from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_session_db
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
 
-        WORKSPACE_ROOT = Path(os.path.abspath(".")).resolve()
-        db_path = WORKSPACE_ROOT / ".codomyrmex" / "hermes_sessions.db"
+        db_path = resolve_hermes_session_db()
 
         stats: dict[str, Any] = {
             "status": "ok",

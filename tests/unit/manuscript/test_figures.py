@@ -7,13 +7,14 @@ from pathlib import Path
 import pytest
 
 
-def test_figure_registry_lists_ten_generators() -> None:
+def test_figure_registry_lists_nine_referenced_generators() -> None:
     from codomyrmex.manuscript.figures import FIGURES
 
-    assert len(FIGURES) == 10
+    assert len(FIGURES) == 9
     names = {name for name, _ in FIGURES}
     assert "cover.png" in names
     assert "colony_pressure_loop.png" in names
+    assert "formula_comparison.png" not in names
 
 
 def test_pheromone_decay_writes_png(tmp_path: Path, monkeypatch) -> None:

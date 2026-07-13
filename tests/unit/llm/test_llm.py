@@ -285,6 +285,7 @@ class TestExecutionOptions:
 
 
 @pytest.mark.unit
+@pytest.mark.requires_ollama
 @_skip_no_ollama
 class TestModelRunner:
     """Tests for ModelRunner class with real OllamaManager (skip if unavailable)."""
@@ -370,6 +371,7 @@ class TestModelRunner:
 
 
 @pytest.mark.unit
+@pytest.mark.requires_ollama
 @_skip_no_ollama
 class TestOllamaManager:
     """Tests for OllamaManager class with real Ollama (skip if unavailable)."""
@@ -1043,6 +1045,7 @@ class TestTokenCounting:
 
         assert result.tokens_used == 150
 
+    @pytest.mark.requires_ollama
     def test_run_model_captures_eval_count(self):
         """Test run_model captures eval_count from real API response."""
         if not _OLLAMA_AVAILABLE:

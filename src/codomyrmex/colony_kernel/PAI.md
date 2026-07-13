@@ -4,10 +4,11 @@
 
 ## Overview
 
-The Colony Kernel is Codomyrmex's emergent control plane: it governs what
-agents are allowed to do (actuation gate), how they earn the right to do
-more (trust + role system), what the environment currently needs (pheromone
-pressure), and what outcomes looked like in practice (consequence memory).
+The Colony Kernel is Codomyrmex's emergent proposal-evaluation control plane:
+it returns advisory gate verdicts, tracks caller-reported outcomes and resource
+use, derives trust and role labels, and maintains process-local pheromone
+pressure. Downstream callers remain responsible for enforcing verdicts and for
+the accuracy of submitted outcome reports.
 
 This document maps each PAI Algorithm phase to the Colony Kernel subsystem
 that serves it, explains how colony roles map to PAI agent types, describes
@@ -28,7 +29,7 @@ gone quiet (stale, pruning candidates).
 **Subsystem**: `pheromone_store.PheromoneStore` + `kernel.ColonyKernel.pheromone_query`
 
 A PAI agent at OBSERVE reads the colony's stigmergic field to answer:
-- What is failing? (`SignalType.FAILURE` at high strength)
+- Where have failures been reported? (`SignalType.FAILURE` at high strength)
 - What needs attention? (`SignalType.NEED`)
 - What is actively depended on? (`SignalType.DEPENDENCY`)
 - What is stale and pruning-eligible? (`SignalType.SUCCESS == 0.0` + no recent `DEPENDENCY`)
@@ -49,7 +50,7 @@ colony_pruning_report()  # stale/broken modules from PruningDaemon
 
 | Signal type | Meaning for OBSERVE | Decay rate |
 |-------------|---------------------|------------|
-| `FAILURE` | Something broke here recently | FAST (0.30/tick) |
+| `FAILURE` | A caller or subsystem reported failure here recently | FAST (0.30/tick) |
 | `NEED` | Explicit attention request deposited | NORMAL (0.10/tick) |
 | `RISK` | Caution marker, clear quickly | FAST |
 | `DEPENDENCY` | Actively imported/called | SLOW (0.02/tick) |
@@ -113,8 +114,9 @@ and `recommendation: "execute"` is the plan to carry forward.
 ### EXECUTE → Actuation Gate
 
 The EXECUTE phase submits the approved plan as an `ActionProposal` to the
-actuation gate. The gate is the colony's hard chokepoint: no action reaches
-the environment without passing three sequential checks.
+actuation gate. The gate is the decision point in this recommended workflow,
+but it is not a non-bypassable execution boundary: it returns a verdict and
+does not itself run a tool or prevent another caller from acting.
 
 **Subsystem**: `kernel.ColonyKernel.propose_action` (the actuation gate)
 
@@ -144,11 +146,13 @@ gate_score = clamp(gate_score, 0.0, 1.0)
 | `gate_score < 0.50` | REFUSE |
 
 **Gate outcomes**:
-- `GateDecision.EXECUTE`: proceed; ledger records the cost; DEPENDENCY
-  pheromone deposited at the target
-- `GateDecision.HOLD`: requeue; `required_evidence` list tells agent what to fix
-- `GateDecision.REFUSE`: rejected; FAILURE pheromone deposited at the target;
-  agent's trust decremented on subsequent `record_outcome` call
+- `GateDecision.EXECUTE`: the proposal cleared the current policy; no budget is
+  consumed and no DEPENDENCY signal is deposited until a separate
+  `record_outcome` call
+- `GateDecision.HOLD`: the returned `required_evidence` list tells the caller
+  what to address before optional resubmission
+- `GateDecision.REFUSE`: the kernel deposits a FAILURE signal at the proposal
+  target; it does not automatically change trust or enforce a downstream stop
 
 **MCP tool**:
 ```python
@@ -165,23 +169,25 @@ colony_propose_action(
 A `HOLD` result should be treated as a feedback loop back to THINK: address
 the `required_evidence` items, revise the plan, re-falsify, re-submit.
 
-A `REFUSE` result is a hard stop. The EXECUTE phase must not proceed. Deposit
+A `REFUSE` result is a hard stop for this recommended workflow. The kernel does
+not technically prevent an external caller from bypassing the result. Deposit
 additional context for the next cycle via a new OBSERVE run.
 
 ---
 
 ### VERIFY → Consequence Memory
 
-The VERIFY phase records what actually happened after EXECUTE. This is the
-colony's trust feedback loop: every outcome updates the acting agent's
-`AgentTrustProfile`, deposits a SUCCESS or FAILURE pheromone at the action
-target, and feeds into future gate scoring through the role assignment rules.
+The VERIFY phase submits a caller's report of what happened after an action.
+This is the colony's trust feedback loop: each accepted report updates the
+agent profile, resource ledger, and pheromone field. The current MCP surface
+does not attest the report or link it to a consumed prior EXECUTE authorization.
 
 **Subsystem**: `consequence_memory.ConsequenceMemory` + `role_adapter.RoleAdapter`
 
-VERIFY is not optional. Every EXECUTE that receives `GateDecision.EXECUTE` must
-be followed by a `colony_record_outcome` call. An agent that executes but never
-records outcomes cannot accumulate trust and cannot earn a specialist role.
+The recommended workflow pairs every acted-upon EXECUTE verdict with one
+`colony_record_outcome` call. This pairing is a caller responsibility, not a
+kernel invariant. Without submitted reports, the kernel cannot account for
+costs, update trust, or derive later role labels from those actions.
 
 **Trust delta formula** (applied by `ConsequenceMemory._compute_delta`):
 
@@ -193,9 +199,14 @@ delta +=  human_feedback × 0.03   # human_feedback ∈ [-1.0, +1.0]
 
 Result: `trust_score = clamp(trust_score + delta, 0.0, 1.0)`
 
-**Pheromone deposited at VERIFY**:
-- `tests_passed=True` and `repair_needed=False` → SUCCESS signal (strength 2.0)
-- Otherwise → FAILURE signal (strength 1.5)
+**Pheromone updates from `record_outcome`**:
+- `tests_passed=False` → FAILURE with nominal strength 2.0 and TEST source;
+  the 1.5 source multiplier deposits effective strength 3.0
+- `tests_passed=True` → reinforce an existing SUCCESS trace by 0.15 (a no-op
+  when none exists)
+- `tests_passed=True` and `repair_needed=False` → additionally deposit SUCCESS
+  with nominal strength 1.5 and TEST source, for effective strength 2.25
+- every report → DEPENDENCY with strength 0.5 and RUNTIME source
 
 **MCP tool**:
 ```python
@@ -216,9 +227,10 @@ trust score and confirm the agent's role has advanced (if applicable).
 
 ## Agent Role ↔ PAI Agent Type Mapping
 
-Colony roles are earned through consequence history. PAI agent types are
-capability specialisations. The mapping below describes how each PAI agent type
-naturally earns — and operates within — the corresponding colony role.
+Colony roles are inferred from recorded trust and proposal counts. PAI agent
+types are capability specialisations, while the colony roles are labels. The
+mapping below describes an intended semantic affinity; it does not grant or
+restrict action types.
 
 | Colony role | PAI agent type | Trust threshold | How they earn the role |
 |---|---|---|---|
@@ -235,15 +247,16 @@ successful action types (`test_fix`, `bug_repair`, `doc_write`, `memory_index`,
 `security_scan`, and `vulnerability_fix`); do not use its specialization
 thresholds as the kernel promotion ladder.
 
-**Gate permissions by role** are enforced automatically. A SANDBOX agent cannot
-execute high-risk actions: new agents start at trust 0.10, and the gate
-hard-refuses trust below 0.30 before ordinary scoring.
+**Gate behavior by role** is deliberately narrow. A SANDBOX agent cannot pass the
+gate: new agents start at trust 0.10, and both SANDBOX status and trust below 0.30
+hard-refuse before ordinary scoring. Higher roles are inferred labels; the current gate
+does not implement inheritance or an action-class permission matrix.
 
-**PAI Architect agents** are the natural DISPATCHER role. Because Architects
-coordinate rather than execute directly, their action types are typically
-`"delegate"`, `"coordinate"`, and `"route"`. These actions have low blast
-radius and quickly accumulate a high acceptance rate (low falsification
-severity), which earns the DISPATCHER role.
+**PAI Architect agents** have a natural semantic affinity with the DISPATCHER
+label because their action types are often `"delegate"`, `"coordinate"`, and
+`"route"`. Action type and falsification severity do not enter the kernel role
+ladder; DISPATCHER is inferred only after at least three proposals and trust of
+at least 0.50.
 
 ---
 
@@ -308,7 +321,7 @@ EXECUTE
   # If EXECUTE: carry out the action
 
 VERIFY
-  colony_record_outcome(...)                   # record what actually happened
+  colony_record_outcome(...)                   # submit the caller's outcome report
   colony_agent_profile(agent_id)               # confirm updated trust score + role
   colony_tick()                                # advance evaporation; age signals
 ```
@@ -379,9 +392,9 @@ colony_propose_action(
 # Returns: decision="execute", gate_score=0.82
 ```
 
-The gate deposits a DEPENDENCY signal at `codomyrmex.git_operations.core`
-(marks it as actively being worked on) and records the `ResourceCost`
-against the E3 budget.
+The gate returns only the decision. If the caller acts on EXECUTE, the later
+`colony_record_outcome` call records a cost (using a valid supplied cost or the
+proposal estimate) and deposits a DEPENDENCY signal.
 
 ### Step 4 — VERIFY closes the loop
 
@@ -399,12 +412,14 @@ colony_record_outcome(
 ```
 
 The colony responds:
-- SUCCESS signal (strength 2.0) deposited at `codomyrmex.git_operations.core`
-- FAILURE signal at that location evaporates faster (it was FAST decay; SUCCESS
-  reinforcement counters it)
+- SUCCESS is deposited at effective strength 2.25 at
+  `codomyrmex.git_operations.core` (nominal 1.5 × TEST source multiplier 1.5)
+- FAILURE and SUCCESS remain separate channels; the existing FAILURE trace
+  changes only when that channel is explicitly ticked, reinforced, or receives
+  another deposit
 - `engineer-claude-e3-001` trust delta: `+0.04 (tests) + 0.027 (feedback) = +0.067`
-- If the agent has enough `patch_file`/`bug_repair` successes, role advances to
-  REPAIR_ANT on next update
+- If the profile has at least three counted proposals and the reported outcomes
+  raise trust to at least 0.20, the role label becomes REPAIR_ANT on update
 
 ```python
 colony_tick()
@@ -417,15 +432,14 @@ colony_tick()
 
 | ISA criterion | Colony signal produced by verification |
 |---|---|
-| ISC-001: no unhandled exceptions | SUCCESS at `git_operations.core` (replaces FAILURE signal over ticks) |
-| ISC-002: CI pass rate ≥ 95% | FAILURE strength decreases each successful CI run; DEPENDENCY persists |
+| ISC-001: no unhandled exceptions | Reported clean outcome deposits SUCCESS at `git_operations.core`; FAILURE remains independently inspectable |
+| ISC-002: CI pass rate ≥ 95% | Explicit ticks decrease FAILURE; submitted outcome reports deposit DEPENDENCY |
 | ISC-003: rollback paths documented | MEMORY_ANT `doc_write` action → SUCCESS at `git_operations.core` docs |
 
-The next Algorithm run at OBSERVE will see a changed pressure gradient:
-FAILURE strength near zero, DEPENDENCY still high, SUCCESS recently deposited.
-This correctly signals "this module was repaired and is healthy" — the colony
-encodes verification results as environmental pressure, not as a flag in a
-config file.
+After enough explicit ticks, the next Algorithm run may see lower FAILURE,
+persisting DEPENDENCY, and a recent SUCCESS trace. This represents the submitted
+report history; without independent attestation it does not establish that the
+module was repaired or is healthy.
 
 ---
 
@@ -437,9 +451,10 @@ pre-populate the pheromone field by depositing HUMAN_PRIORITY signals at known
 critical modules before the Algorithm begins its OBSERVE phase.
 
 **Cross-session persistence**: The default `ColonyKernel` is an in-process
-singleton (`mcp_tools._kernel`). Pheromone state and trust profiles are lost
-between processes. For cross-session memory, wire the `ColonyKernel` to a
-`ConsequenceMemory` backend that persists to disk or a database.
+singleton (`mcp_tools._kernel`). Its in-memory pheromone state and default
+`ConsequenceMemory` are lost between processes. A file-backed SQLite path can persist
+reported consequences and trust profiles, but the pheromone field, budget accumulator,
+and complete kernel state still require a separate persistence design.
 
 **Signal injection from PAI hooks**: PAI hooks (e.g. `ToolActivityTracker`,
 `WorkCompletionLearning`) can deposit colony signals as side effects. On tool

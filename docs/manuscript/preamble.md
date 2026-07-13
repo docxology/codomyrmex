@@ -13,7 +13,8 @@ This file contains LaTeX packages and commands that are automatically injected i
 
 % Document layout
 \usepackage{geometry}
-\geometry{margin=0.25in}
+\geometry{margin=0.72in,headheight=14pt}
+\setlength{\emergencystretch}{2em}
 \usepackage{float}
 \usepackage{graphicx}
 
@@ -44,10 +45,10 @@ This file contains LaTeX packages and commands that are automatically injected i
 \hypersetup{
     colorlinks=true,
     allcolors=red,
-    pdftitle={Codomyrmex},
-    pdfauthor={Daniel Ari Friedman},
-    pdfsubject={Codomyrmex -- integrity-verified manuscript},
-    pdfkeywords={codomyrmex, integrity, verification, manuscript}
+    pdftitle={{{CONFIG_TITLE}}},
+    pdfauthor={{{CONFIG_FIRST_AUTHOR}}},
+    pdfsubject={{{CONFIG_TITLE}} -- integrity-verified manuscript},
+    pdfkeywords={{{CONFIG_KEYWORDS}}}
 }
 % natbib omitted — pandoc --citeproc manages all citation formatting.
 % Adding \usepackage{natbib} conflicts with citeproc and causes a fatal error.

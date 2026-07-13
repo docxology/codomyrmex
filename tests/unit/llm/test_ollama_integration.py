@@ -44,6 +44,7 @@ except ImportError:
 
 pytestmark = [
     pytest.mark.integration,
+    pytest.mark.requires_ollama,
     pytest.mark.skipif(not OLLAMA_AVAILABLE, reason="Ollama integration not available"),
 ]
 

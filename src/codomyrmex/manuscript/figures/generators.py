@@ -5,7 +5,6 @@ from codomyrmex.manuscript.figures.falsification_vectors import (
     fig_falsification_vectors,
 )
 from codomyrmex.manuscript.figures.fep_correspondence import fig_fep_correspondence
-from codomyrmex.manuscript.figures.formula_comparison import fig_formula_comparison
 from codomyrmex.manuscript.figures.gate_heatmap import fig_gate_score_heatmap
 from codomyrmex.manuscript.figures.gate_score_3d import fig_gate_score_3d
 from codomyrmex.manuscript.figures.orchestrator import main
@@ -21,7 +20,6 @@ __all__ = [
     "fig_cover_art",
     "fig_falsification_vectors",
     "fig_fep_correspondence",
-    "fig_formula_comparison",
     "fig_gate_score_3d",
     "fig_gate_score_heatmap",
     "fig_pheromone_decay",

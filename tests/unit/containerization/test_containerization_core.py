@@ -23,8 +23,12 @@ from datetime import datetime
 import pytest
 
 pytest.importorskip(
-    "docker",
+    "docker.errors",
     reason="docker_manager imports docker SDK (uv sync --extra containerization)",
+)
+pytest.importorskip(
+    "kubernetes",
+    reason="kubernetes orchestrator imports kubernetes SDK (install the containerization test extras)",
 )
 
 # ---------------------------------------------------------------------------

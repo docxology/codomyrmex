@@ -10,6 +10,8 @@ import subprocess
 
 import pytest
 
+pytestmark = [pytest.mark.unit, pytest.mark.requires_ollama]
+
 try:
     from codomyrmex.agents.ai_code_editing.ai_code_helpers import (
         OLLAMA_AVAILABLE,

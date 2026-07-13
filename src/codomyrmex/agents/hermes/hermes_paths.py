@@ -23,6 +23,7 @@ from pathlib import Path
 
 ENV_HERMES_AGENT_REPO = "HERMES_AGENT_REPO"
 ENV_HERMES_CLI_PATH = "HERMES_CLI_PATH"
+ENV_HERMES_SESSION_DB = "CODOMYRMEX_HERMES_SESSION_DB"
 
 
 def _hermes_module_dir() -> Path:
@@ -32,6 +33,14 @@ def _hermes_module_dir() -> Path:
 def default_home_hermes_agent() -> Path:
     """Standard install location used by ``hermes`` installers (data + checkout)."""
     return Path.home() / ".hermes" / "hermes-agent"
+
+
+def resolve_hermes_session_db(explicit: str | Path | None = None) -> Path:
+    """Resolve session persistence with explicit > environment > home precedence."""
+    configured = explicit or os.environ.get(ENV_HERMES_SESSION_DB)
+    if configured is not None:
+        return Path(configured).expanduser()
+    return Path.home() / ".codomyrmex" / "hermes_sessions.db"
 
 
 def _sibling_hermes_agent_under_src() -> Path | None:

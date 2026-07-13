@@ -38,7 +38,7 @@ module-level attribute reset (e.g. resetting the `_kernel` singleton in
 `test_mcp_tools.py`) — not for replacing methods with stubs.
 
 **Markers.** All tests in this directory are marked `@pytest.mark.unit`.
-Run the suite with `uv run pytest -m unit src/codomyrmex/tests/unit/colony_kernel/`.
+Run the suite with `uv run pytest -m unit tests/unit/colony_kernel/`.
 
 **Coverage target.** The `--cov` target for the manuscript gate is
 `src/codomyrmex/colony_kernel/`. The project-wide floor is 40%; the Colony Kernel

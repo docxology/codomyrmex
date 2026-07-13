@@ -1,8 +1,8 @@
 # Codomyrmex — The Artificial Ecology Manuscript
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
+**Status**: Active. Version and publication date are injected from `config.yaml`.
 
-This manuscript presents **Codomyrmex**, an agentic software-development framework that models the AI agent collective as an artificial ecology: agents accumulate consequence histories, receive deterministic role reassignment, fail under recorded consequence, and may be flagged for pruning under configured pressure signals. The Colony Control Plane comprises eight subsystems (PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel) that implement a closed feedback loop in which the colony is designed to become less vulnerable to repeated and context-reset deception after recorded failed actions. Numeric claims are hydrated from generated artifacts at compose time so reviewer-sensitive figures are tied to the artifact that produced them.
+This manuscript presents **Codomyrmex**, an agentic software-development framework that models an AI-agent collective as an artificial ecology. Its Colony Control Plane records caller-reported consequences, maintains a process-local signal field, computes deterministic trust and role labels, nominates pruning candidates, and returns EXECUTE/HOLD/REFUSE gate decisions. The central checked contract is deliberately narrow: reported FAILURE at one location contributes to `max(RISK, FAILURE)`, lowering an otherwise identical same-target proposal while leaving an unrelated target unchanged. Outcome attestation, complete restart persistence, external effectiveness, and production safety remain open. Numeric claims and generated images are rebuilt from the evaluated snapshot.
 
 ## Navigation
 
@@ -20,18 +20,22 @@ The `manuscript/` directory contains raw Markdown files rendered by `scripts/com
 - `00_abstract.md` — Abstract; build variables and CSV-backed prose injected by `z_generate_manuscript_variables.py`.
 - `01_introduction.md` — Ecology thesis, Colony Control Plane overview, and gate scoring model introduction.
 - `02_methodology.md` — Colony Kernel architecture in full: stigmergic pheromone protocol, trust lifecycle, falsification algorithm, pruning daemon.
-- `03_results.md` — Empirical measurements: gate decision distributions, trust score trajectories, pheromone field evolution.
+- `02_theory.md` — Formal properties of the pheromone field, gate, trust process, privacy boundary, and boundedness results.
+- `03_results.md` — Executed quality gates, deterministic paired fixtures, and formula-derived policy behavior; no external benchmark result.
 - `04_conclusion.md` — Summary of the colony thesis, architectural commitments, and open falsification criteria.
-- `05_experimental_setup.md` — Configuration parameters and colony initialization procedures for reproducing reported experiments.
-- `06_reproducibility.md` — Machine-verifiable reproducibility certificate: cryptographic chain of custody from source commit to rendered PDF.
-- `07_scope_and_related_work.md` — Scope boundaries, related work, trust-based access control, AI risk-management positioning, threat-informed security positioning, agentic-security benchmark scholarship, assurance-case / external-benchmark positioning, runtime-assurance, provenance, privacy-action, cyber-capability, visibility, and harmful-agent evaluation scholarship.
+- `05_experimental_setup.md` — Proposed external evaluation protocol separated from the live release configuration.
+- `06_reproducibility.md` — Reproduction commands, generated evidence, and explicit limits of the configuration/artifact chain.
+- `07_scope_and_related_work.md` — Bounded positioning against agentic software engineering, stigmergy, computational trust, capability security, runtime assurance, and external benchmarks.
+- `08_active_inference.md` — A bounded Active Inference interpretation that distinguishes structural analogy from implemented Bayesian inference.
+- `90_appendix_design_rationale.md` — Design decisions, alternatives, trade-offs, and calibration limits.
+- `98_acknowledgements.md` — Unnumbered, configuration-injected contributor credit.
 - `99_references.md` — Minimal bibliography anchor; rendered entries come from `references.bib` through Pandoc citeproc.
 
 The renderer requires `pandoc-crossref` and Pandoc citeproc. Cross-reference labels (`sec`, `fig`, `tbl`, `eq`) are resolved before citations, and citations/cross-references are linked in both PDF and HTML outputs. Citation syntax guidance lives in [SYNTAX.md](SYNTAX.md), not in the rendered paper.
 
 ## Architecture
 
-The Colony Control Plane is the centerpiece: a set of eight self-contained subsystems sharing only the `models.py` contract, exposed to external orchestrators through MCP tools.
+The Colony Control Plane is the centerpiece: operational components coordinated by `ColonyKernel` and exposed through the generated MCP inventory. The components exchange typed objects from `models.py`; selected modules also call one another through explicit integration paths.
 
 ```mermaid
 graph LR
@@ -44,11 +48,11 @@ graph LR
     CK["ColonyKernel\n(top-level API)"]:::kernel
     PS["PheromoneStore\n(stigmergic signals)"]:::subsystem
     AG["ActuationGate\n(EXECUTE / HOLD / REFUSE)"]:::subsystem
-    CM["ConsequenceMemory\n(SQLite ledger)"]:::subsystem
-    RA["RoleAdapter\n(dynamic role assignment)"]:::subsystem
+    CM["ConsequenceMemory\n(SQLite; in-memory by default)"]:::subsystem
+    RA["RoleAdapter\n(role labels)"]:::subsystem
     FW["FalsificationWorker\n(adversarial pre-check)"]:::worker
     PD["PruningDaemon\n(colony self-contraction)"]:::worker
-    MCP["MCP Tools\n(8 production endpoints)"]:::mcp
+    MCP["MCP Tools\n(generated inventory)"]:::mcp
     CFG["config/colony_kernel/*.yaml\n(gate thresholds · trust floors)"]:::config
 
     CK <--> PS
@@ -69,11 +73,14 @@ graph LR
 # 1. Hydrate manuscript variables from live build artifacts
 uv run python scripts/z_generate_manuscript_variables.py
 
-# 2. Render the cover, generated contents, linked HTML, and final PDF
-uv run python scripts/compile_manuscript.py --pdf
+# 2. Generate the provenance-stamped visual assets
+uv run python scripts/generate_manuscript_figures.py
 
-# 3. Open the result
-open output/paper.pdf
+# 3. Render linked HTML, contents, bookends, and the final PDF
+uv run python scripts/compile_manuscript.py --pdf --bookends --skip-generate
+
+# Or, from the parent template checkout, run the integrated pipeline:
+./run.sh --pipeline --project ongoing/codomyrmex --core-only
 ```
 
 ## AI Agent Directives

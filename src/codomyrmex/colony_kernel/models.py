@@ -1,7 +1,7 @@
 """Colony Kernel shared contract — value objects and enums for all subsystems.
 
 All Colony Kernel modules import from here. No cross-module imports between
-subsystems; the dependency graph is a star with models.py at the centre.
+subsystems; integration and explicit subsystem references are owned by the kernel.
 
 No external dependencies beyond stdlib.
 """
@@ -287,14 +287,9 @@ class ConsequenceRecord:
 class AgentRole(Enum):
     """Emergent role assignment based on consequence history.
 
-    Roles are inferred by RoleAdapter — never hard-assigned at startup.
-    Each role carries implicit permission constraints enforced by the gate.
-
-    SANDBOX:     read-only; no write-path gate passes
-    REPAIR_ANT:  patch, test-fix, doc-update
-    MEMORY_ANT:  archive, index, summarise
-    DISPATCHER:  delegate, coordinate, route
-    GUARD_ANT:   security review, gate audit, archive authority
+    Roles are inferred by RoleAdapter rather than hard-assigned at startup.
+    The gate hard-refuses SANDBOX profiles. Other roles are descriptive labels;
+    the current implementation does not enforce an action-by-role permission matrix.
     """
 
     SANDBOX = "sandbox"

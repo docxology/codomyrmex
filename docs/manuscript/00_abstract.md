@@ -1,33 +1,43 @@
 # Abstract {#sec:abstract .unnumbered}
 
-The central claim of this paper is bounded and testable: after a failed action,
-matching future proposals should become measurably harder to pass under the
-colony gate. Each rejected tool call, failed gate, or contradicted consequence
-is written into a shared consequence memory that reshapes trust weights, role
-assignments, and resource budgets for subsequent proposals. The mechanism that
-produces this pressure is stigmergy: rather than maintaining ephemeral,
-per-session agent state, the framework encodes learned caution directly into a
-persistent pheromone field that survives model swaps, session boundaries, and
-agent population changes. The colony does not converge toward a fixed policy;
-it adapts its recorded pressure profile to the problem surface.
+Agentic software systems can preserve task state while still forgetting the consequences
+of prior actions. Codomyrmex addresses that gap with a testable control-plane claim:
+after a failed action, a materially similar proposal at the affected location should
+become measurably harder to pass through the proposal-evaluation gate. The framework records
+reported outcomes in consequence memory and converts them into changes in local
+pheromone pressure, agent trust, role labels, and resource accounting. This environmental
+feedback is stigmergic within a running kernel process: later agents encounter the
+shared field even when the model or agent identity changes. Consequence records can be
+made restart-persistent with file-backed SQLite; the default MCP kernel and pheromone
+field are process-local.
 
-This paper presents **Codomyrmex** (v{{CONFIG_VERSION}}), an agentic software-development framework that instantiates this insight as a closed feedback loop governed by the Colony Control Plane. Agents accumulate consequence histories, receive deterministic role reassignment, and are constrained by recorded consequence; stale or duplicate module locations may be flagged for human-reviewed pruning under configured pressure signals.
+The Colony Control Plane comprises {{CONFIG_COLONY_KERNEL_SUBSYSTEMS}} cooperating
+subsystems for pheromone storage, resource accounting, actuation gating, consequence
+memory, role adaptation, pruning nomination, adversarial falsification, and lifecycle
+coordination. A weighted gate combines budget headroom, local hazard pressure, earned
+trust, and proposal completeness, subject to hard overrides; EXECUTE begins at
+{{CONFIG_GATE_EXECUTE_THRESHOLD}}, while new agents remain confined to the `SANDBOX`
+role until their recorded history satisfies the configured promotion contract. The
+pruning daemon nominates stale or duplicate module locations for review but does not
+remove them autonomously.
+{{CONFIG_MCP_TOOL_COUNT}} Model Context Protocol tools expose this control plane to
+external orchestrators without collapsing governance into execution.
 
-The architectural centerpiece is the **Colony Control Plane**, comprising {{CONFIG_COLONY_KERNEL_SUBSYSTEMS}} subsystems: (1) *pheromone gradients* — ephemeral stigmergic signals implementing stigmergy (indirect coordination through environment-mediated signals, Grassé 1959) that bias agent attention toward high-yield paths without explicit coordination; (2) *resource budget* — per-agent and per-colony token, tool-call, and wall-time envelopes enforced before dispatch; (3) *actuation gate* — a weighted additive score with hard overrides ($\tau_{\text{gate}} = {{CONFIG_GATE_EXECUTE_THRESHOLD}}$) that blocks proposals lacking sufficient evidence mass; (4) *consequence memory* — a persistent, append-only ledger of action outcomes indexed by agent, role, and context hash; (5) *role adaptation* — deterministic reassignment of the {{CONFIG_ROLE_COUNT}} canonical roles (`SANDBOX`, `REPAIR_ANT`, `MEMORY_ANT`, `DISPATCHER`, `GUARD_ANT`) based on trust and proposal count; (6) *pruning daemon* — read-only nomination of stale, dormant, or duplicate module locations for human or `GUARD_ANT` review; (7) *falsification worker* — deterministic adversarial checks that attempt to invalidate a proposal before any gate decision is finalised; and (8) *ColonyKernel* — the hub class coordinating the other subsystems as a single re-entrant transaction.
-
-These subsystems implement a closed feedback loop: environmental pressure
-generates proposals; proposals pass (or are blocked by) the actuation gate;
-surviving actions produce consequences; consequences are written to memory;
-memory drives role reassignment; roles reshape the pressure distribution. The
-loop repeats with a colony that is less vulnerable to repeated context-reset
-and local-failure deception patterns because memory is retained and gate
-thresholds tighten on repeated failure patterns. {{CONFIG_MCP_TOOL_COUNT}} MCP
-tools expose the Control Plane to external orchestrators, and
-{{CONFIG_SIGNAL_TYPES_COUNT}} typed inter-agent signal channels — `FAILURE`,
-`SUCCESS`, `RISK`, `NEED`, `DEPENDENCY`, and `HUMAN_PRIORITY` — propagate state
-changes without shared mutable state.
-
-The framework ships {{CONFIG_MODULE_COUNT}} top-level submodules covering the colony kernel, MCP surface, agent lifecycle, signal bus, role engine, gate logic, consequence ledger, and CLI harness. Beyond the Colony Control Plane, the framework integrates a secure cognitive layer: self-custody wallet operations authenticated via zero-knowledge proofs that verify ownership without exposing private keys, biocognitive identity verification using heartbeat interval variability (RMSSD/SDNN) and EEG frequency-band analysis, and a PAI bridge that exposes all 15 secure cognitive MCP tools across identity, wallet, defense, market, and privacy modules to external orchestrators. The colony-kernel manuscript surface enforces the no-mock contract throughout: **{{RESULT_TEST_COUNT}} tests**, **{{RESULT_COVERAGE_PCT}}% branch coverage**, **{{RESULT_RUFF_ERRORS}} ruff errors**, and **{{RESULT_TY_ERRORS}} ty type errors** — all figures drawn from a single authoritative `pytest --cov --cov-branch` invocation at compose time. Behaviorally, deterministic contract tests confirm that the actuation gate rejects {{RESULT_GATE_REFUSAL_RATE}}% of low-evidence proposals in the controlled gate fixture, and the trust trajectory reaches its first non-sandbox role after {{RESULT_TRUST_CONVERGENCE_STEPS}} clean feedback cycles under the configured role ladder. Numeric claims in this manuscript are hydrated from generated artifacts at compose time so reviewer-sensitive figures remain tied to the artifact that produced them.
+Evaluation is deliberately bounded to implementation contracts and controlled fixtures.
+At composition time, the colony-kernel surface contains {{RESULT_TEST_COUNT}} passing
+tests with {{RESULT_COVERAGE_PCT}}% branch coverage, {{RESULT_RUFF_ERRORS}} Ruff errors,
+and {{RESULT_TY_ERRORS}} ty diagnostics. A paired deterministic contract test shows
+that a failed outcome lowers the next complete proposal at the same target from
+EXECUTE to HOLD while leaving an unrelated target unchanged; a separate all-success
+fixture reaches its first non-sandbox role after {{RESULT_PROPOSALS_TO_PROMOTION}} recorded outcomes. These results validate internal
+mechanics, not production safety or ecological optimality. The paper therefore pairs
+the implementation evidence with explicit falsification criteria, reproducibility
+artifacts, and deployment limitations. Within that bounded surface, process-local
+failure memory raises friction for repeated same-location proposals; external workloads,
+outcome attestation, and restart-persistent field storage remain necessary to establish
+generality. Numeric claims are injected from generated
+artifacts so the rendered manuscript remains tied to the evaluated code and
+configuration.
 
 **Keywords:** {{CONFIG_KEYWORDS}}
 

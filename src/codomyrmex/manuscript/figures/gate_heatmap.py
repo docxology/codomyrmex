@@ -154,7 +154,7 @@ def fig_gate_score_heatmap() -> None:
             va="top",
         )
 
-    for y_val, label_txt in [(3.0, "medium risk"), (6.0, "high risk")]:
+    for y_val, label_txt in [(3.0, "medium hazard"), (6.0, "high hazard")]:
         ax.axhline(y=y_val, color="white", lw=0.8, alpha=0.32, linestyle=":")
         ax.text(
             0.985,
@@ -190,8 +190,8 @@ def fig_gate_score_heatmap() -> None:
         return "REFUSE"
 
     examples = [
-        (0.90, 1.0, 0.73, 1.70, "GUARD_ANT\nfull spec", "white"),
-        (0.70, 6.5, 0.78, 7.30, "elevated\nrisk", "#FFE066"),
+        (0.90, 1.0, 0.73, 1.70, "high trust\ncomplete", "white"),
+        (0.70, 6.5, 0.78, 7.30, "elevated\nhazard", "#FFE066"),
         (0.20, 1.0, 0.33, 1.90, "low trust\nclear field", "#FF9999"),
     ]
     for tx, tp, label_x, label_y, desc, ecolor in examples:
@@ -222,7 +222,7 @@ def fig_gate_score_heatmap() -> None:
         )
 
     ax.set_xlabel("Agent trust score", fontsize=11.5)
-    ax.set_ylabel("Risk pheromone pressure", fontsize=11.5)
+    ax.set_ylabel("Effective hazard = max(RISK, FAILURE)", fontsize=11.5)
     gate_title = (
         "Gate decision landscape — piecewise score bands and hard trust floor\n"
         f"score = {w_budget:.2f}*budget + {w_risk:.2f}*risk_ok + "

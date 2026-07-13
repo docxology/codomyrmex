@@ -11,7 +11,7 @@ Workflow:
     1. Run z_generate_manuscript_variables.py to inject tokens
     2. Generate output/manuscript/00_01_contents.md after the cover page
     3. Verify no {{TOKEN}} remain in output/manuscript/*.md
-    4. Collect sections 00_00_cover through 99_references in lexicographic order
+    4. Collect sections in the declared scientific narrative order
        (skips 00_00_transmission_begin.md and 99_zz_transmission_end.md by default —
        those are PDF-only bookends with pending DOI/QR placeholders)
     5. Run pandoc with pandoc-crossref and citeproc to produce output/paper.html
@@ -36,7 +36,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from datetime import date
 from pathlib import Path
 
 import yaml
@@ -49,13 +48,28 @@ MANUSCRIPT_SECTIONS_GLOB = "[0-9]*.md"
 BOOKEND_NAMES = {"00_00_transmission_begin.md", "99_zz_transmission_end.md"}
 GENERATED_CONTENTS_NAME = "00_01_contents.md"
 COVER_NAME = "00_00_cover.md"
+MANUSCRIPT_SECTION_ORDER = (
+    "00_00_transmission_begin.md",
+    COVER_NAME,
+    "00_abstract.md",
+    "01_introduction.md",
+    "02_theory.md",
+    "02_methodology.md",
+    "05_experimental_setup.md",
+    "03_results.md",
+    "07_scope_and_related_work.md",
+    "08_active_inference.md",
+    "06_reproducibility.md",
+    "04_conclusion.md",
+    "90_appendix_design_rationale.md",
+    "98_acknowledgements.md",
+    "99_references.md",
+    "99_zz_transmission_end.md",
+)
 TOKEN_PATTERN = re.compile(r"\{\{[A-Z0-9_]+\}\}")
 HEADING_PATTERN = re.compile(
     r"^(?P<level>#{1,3})\s+(?P<title>.+?)(?:\s+\{(?P<attrs>[^}]*)\})?\s*$"
 )
-
-PAPER_TITLE = "Codomyrmex: An Artificial Ecology for Agentic Software Development"
-
 
 def _find_project_root() -> Path:
     """Walk up from this script's location to the project root (contains pyproject.toml)."""
@@ -117,11 +131,13 @@ def _run_generate_variables(project_root: Path) -> bool:
 def _collect_sections(
     manuscript_dir: Path, include_bookends: bool = False
 ) -> list[Path]:
-    """Return section .md files in lexicographic order, excluding bookends unless requested."""
-    files = sorted(manuscript_dir.glob(MANUSCRIPT_SECTIONS_GLOB))
+    """Return sections in declared narrative order, then any unknown numbered files."""
+    files = list(manuscript_dir.glob(MANUSCRIPT_SECTIONS_GLOB))
     files = [f for f in files if f.name != GENERATED_CONTENTS_NAME]
     if not include_bookends:
         files = [f for f in files if f.name not in BOOKEND_NAMES]
+    rank = {name: index for index, name in enumerate(MANUSCRIPT_SECTION_ORDER)}
+    files.sort(key=lambda path: (rank.get(path.name, len(rank)), path.name))
     return files
 
 
@@ -237,28 +253,22 @@ def _strip_trailing_whitespace(path: Path) -> None:
     path.write_text(cleaned, encoding="utf-8")
 
 
-def _publication_date(project_root: Path, variables: dict[str, str]) -> str:
-    config_path = project_root / "docs" / "manuscript" / "config.yaml"
-    if config_path.exists():
-        config = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
-        paper = config.get("paper", {})
-        configured_date = str(paper.get("date") or "").strip()
-        if configured_date and configured_date.lower() not in {"auto", "today"}:
-            return configured_date
-        return date.today().isoformat()
-    timestamp = variables.get("GENERATION_TIMESTAMP", "")
-    return timestamp[:10] if timestamp else ""
-
-
 def _build_pandoc_metadata_args(
     variables: dict[str, str], project_root: Path
 ) -> list[str]:
     """Construct -M key=value args from manuscript_variables.json."""
-    title = variables.get("CONFIG_TITLE", PAPER_TITLE)
-    author = variables.get("CONFIG_FIRST_AUTHOR", "The Codomyrmex Contributors")
+    for required in (
+        "CONFIG_TITLE",
+        "CONFIG_FIRST_AUTHOR",
+        "CONFIG_PUBLICATION_DATE",
+    ):
+        if not variables.get(required):
+            raise RuntimeError(f"Required manuscript variable is missing: {required}")
+    title = variables["CONFIG_TITLE"]
+    author = variables["CONFIG_FIRST_AUTHOR"]
     version = variables.get("CONFIG_VERSION", "")
     keywords = variables.get("CONFIG_KEYWORDS", "")
-    date = _publication_date(project_root, variables)
+    publication_date = variables["CONFIG_PUBLICATION_DATE"]
 
     args: list[str] = [
         "-M",
@@ -268,8 +278,7 @@ def _build_pandoc_metadata_args(
         "-M",
         f"author-meta={author}",
     ]
-    if date:
-        args += ["-M", f"date={date}"]
+    args += ["-M", f"date={publication_date}"]
     if version:
         args += ["-M", f"version={version}"]
     if keywords:

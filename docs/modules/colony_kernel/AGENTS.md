@@ -70,13 +70,13 @@ Documentation tooling, generated references, and publishing assets for the Colon
 
 ```bash
 # Full colony_kernel suite
-uv run pytest src/codomyrmex/tests/unit/colony_kernel/ -v
+uv run pytest tests/unit/colony_kernel/ -v
 
 # MCP tools only
-uv run pytest src/codomyrmex/tests/unit/colony_kernel/test_mcp_tools.py -v
+uv run pytest tests/unit/colony_kernel/test_mcp_tools.py -v
 
 # Coverage
-uv run pytest src/codomyrmex/tests/unit/colony_kernel/ --cov=src/codomyrmex/colony_kernel --cov-report=term-missing
+uv run pytest tests/unit/colony_kernel/ --cov=src/codomyrmex/colony_kernel --cov-report=term-missing
 
 # Doctor health check
 uv run python -m codomyrmex.cli doctor --colony

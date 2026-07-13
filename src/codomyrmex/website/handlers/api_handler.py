@@ -48,6 +48,7 @@ class APIHandler:
         path: str
         _test_lock: Any
         _test_running: bool
+        _test_thread: threading.Thread | None
         _dispatch_lock: Any
         _dispatch_orch: Any
         _dispatch_thread: Any
@@ -351,43 +352,54 @@ class APIHandler:
 
         Runs tests in a background thread so the HTTP server stays
         responsive. Returns 202 Accepted immediately. Poll
-        GET /api/tests/status to retrieve results.
+        GET /api/tests/status to retrieve results. A request with
+        ``validate_only`` (or its ``dry_run`` alias) set to ``true`` validates
+        the route and provider without starting a worker.
         """
         # Import the server class to access class-level state
         from codomyrmex.website.server import WebsiteServer
-
-        with self._test_lock:
-            if self._test_running:
-                self.send_json_response(
-                    {"error": "A test run is already in progress. Please wait."},
-                    status=429,
-                )
-                return
-            WebsiteServer._test_running = True
 
         try:
             content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         module = None
+        validate_only = False
         if content_length > 0:
             try:
                 post_data = self.rfile.read(content_length)
                 data = json.loads(post_data.decode("utf-8"))
+                if not isinstance(data, dict):
+                    raise TypeError("JSON body must be an object")
                 module = data.get("module")
-            except (json.JSONDecodeError, KeyError):
-                with self._test_lock:
-                    WebsiteServer._test_running = False
+                validate_only_value = data.get(
+                    "validate_only", data.get("dry_run", False)
+                )
+                if not isinstance(validate_only_value, bool):
+                    raise TypeError("validate_only must be a boolean")
+                validate_only = validate_only_value
+                if module is not None and not isinstance(module, str):
+                    raise TypeError("module must be a string")
+            except (json.JSONDecodeError, KeyError, TypeError, UnicodeDecodeError):
                 self.send_json_response({"error": "Invalid JSON"}, status=400)
                 return
 
         if not self.data_provider:
-            with self._test_lock:
-                WebsiteServer._test_running = False
             self.send_error(500, "Data provider missing")
             return
 
         dp = self.data_provider
+
+        if validate_only:
+            self.send_json_response(
+                {
+                    "status": "validated",
+                    "message": "Test route and data provider are available.",
+                    "module": module,
+                    "worker_started": False,
+                }
+            )
+            return
 
         def _run_tests_bg(mod: str | None) -> None:
             try:
@@ -397,9 +409,33 @@ class APIHandler:
             finally:
                 with WebsiteServer._test_lock:
                     WebsiteServer._test_running = False
+                    WebsiteServer._test_thread = None
 
-        t = threading.Thread(target=_run_tests_bg, args=(module,), daemon=True)
-        t.start()
+        with self._test_lock:
+            if self._test_running:
+                self.send_json_response(
+                    {"error": "A test run is already in progress. Please wait."},
+                    status=429,
+                )
+                return
+            WebsiteServer._test_results = None
+            WebsiteServer._test_running = True
+            test_thread = threading.Thread(
+                target=_run_tests_bg,
+                args=(module,),
+                daemon=True,
+                name="CodomyrmexWebsiteTests",
+            )
+            WebsiteServer._test_thread = test_thread
+
+        try:
+            test_thread.start()
+        except RuntimeError as exc:
+            with WebsiteServer._test_lock:
+                WebsiteServer._test_running = False
+                WebsiteServer._test_thread = None
+            self.send_json_response({"error": str(exc)}, status=500)
+            return
         self.send_json_response(
             {"status": "running", "message": "Test run started in background."},
             status=202,

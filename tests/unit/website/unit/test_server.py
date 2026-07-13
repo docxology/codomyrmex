@@ -105,6 +105,8 @@ class _LiveServer:
     def shutdown(self):
         self.httpd.shutdown()
         self.httpd.server_close()
+        self._thread.join(timeout=5)
+        assert not self._thread.is_alive(), "HTTP server thread did not stop"
 
     # -- convenience request helpers --
 
@@ -373,11 +375,47 @@ class TestPOSTEndpoints:
         assert "hello from test" in data["stdout"]
 
     def test_tests_run_endpoint(self, live_server):
-        """Test /api/tests endpoint returns 202 Accepted (async background run)."""
-        status, data = live_server.post("/api/tests", {})
-        assert status == 202
+        """Validation mode resolves without starting a recursive pytest run."""
+        WebsiteServer._test_running = False
+        WebsiteServer._test_thread = None
+        status, data = live_server.post("/api/tests", {"validate_only": True})
+        assert status == 200
         assert isinstance(data, dict)
+        assert data.get("status") == "validated"
+        assert data.get("worker_started") is False
+        assert WebsiteServer._test_running is False
+        assert WebsiteServer._test_thread is None
+
+    def test_tests_run_worker_is_bounded_and_joined(self, live_server):
+        """The real async path owns a small, explicitly joined worker."""
+        test_dir = (
+            live_server.root
+            / "src"
+            / "codomyrmex"
+            / "tests"
+            / "unit"
+            / "fake_mod"
+        )
+        test_dir.mkdir(parents=True)
+        (test_dir / "test_smoke.py").write_text(
+            "import time\n\ndef test_smoke():\n    time.sleep(0.5)\n"
+        )
+        WebsiteServer._test_running = False
+        WebsiteServer._test_thread = None
+        WebsiteServer._test_results = None
+
+        status, data = live_server.post("/api/tests", {"module": "fake_mod"})
+        assert status == 202
         assert data.get("status") == "running"
+
+        test_thread = WebsiteServer._test_thread
+        assert test_thread is not None
+        test_thread.join(timeout=10)
+        assert not test_thread.is_alive(), "Test worker did not finish"
+        assert WebsiteServer._test_running is False
+        assert WebsiteServer._test_thread is None
+        assert WebsiteServer._test_results is not None
+        assert WebsiteServer._test_results.get("passed") == 1
 
 
 # ── Security Tests ──────────────────────────────────────────────────
@@ -510,6 +548,7 @@ class TestConfigSave:
 class TestChatEndpoint:
     """Tests for /api/chat — uses real Ollama when available, skips otherwise."""
 
+    @pytest.mark.requires_ollama
     @_skip_no_ollama
     def test_chat_forwards_to_ollama(self, live_server):
         """Test that chat endpoint proxies to Ollama successfully."""
@@ -520,6 +559,7 @@ class TestChatEndpoint:
         assert data["success"] is True
         assert len(data.get("response", "")) > 0
 
+    @pytest.mark.requires_ollama
     @_skip_no_ollama
     def test_chat_uses_default_model(self, live_server):
         """Test that chat endpoint uses an available model."""
@@ -549,6 +589,7 @@ class TestChatEndpoint:
 class TestAwarenessSummary:
     """Tests for /api/awareness/summary — uses real Ollama when available."""
 
+    @pytest.mark.requires_ollama
     @_skip_no_ollama
     def test_ollama_success(self, live_server):
         """Test successful AI summary generation."""
@@ -559,6 +600,7 @@ class TestAwarenessSummary:
         assert data["success"] is True
         assert "summary" in data
 
+    @pytest.mark.requires_ollama
     @_skip_no_ollama
     def test_awareness_summary_uses_default_model(self, live_server):
         """Test that awareness summary uses an available model."""
@@ -617,9 +659,15 @@ class TestRouting:
         assert status == 400  # Missing script name, but routed correctly
 
     def test_post_tests_routes_correctly(self, live_server):
-        """Test that POST /api/tests resolves (202 Accepted for async test runs)."""
-        status, _data = live_server.post("/api/tests", {})
-        assert status in (200, 202)  # 202 Accepted is correct for async test start
+        """Test that dry-run routing never leaves a test worker behind."""
+        WebsiteServer._test_running = False
+        WebsiteServer._test_thread = None
+        status, data = live_server.post("/api/tests", {"dry_run": True})
+        assert status == 200
+        assert data.get("status") == "validated"
+        assert data.get("worker_started") is False
+        assert WebsiteServer._test_running is False
+        assert WebsiteServer._test_thread is None
 
     def test_unknown_api_returns_404(self, live_server):
         """Test that unknown API endpoint returns 404."""
@@ -1007,6 +1055,7 @@ class TestAgentDispatchEndpoint:
         finally:
             conn.close()
 
+    @pytest.mark.requires_ollama
     def test_with_prompt_returns_dict(self, live_server):
         """POST with a prompt returns a dict response (200 or 500 if orch unavailable)."""
         WebsiteServer._dispatch_orch = None

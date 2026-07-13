@@ -1,10 +1,11 @@
 """MCP dynamic tool discovery."""
 
+import ast
 import importlib
 import os
-import pkgutil
 import threading
 import time
+from pathlib import Path
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
@@ -23,7 +24,10 @@ def tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
         if _DISCOVERY_ENGINE is None:
             return {"error": "Discovery engine not initialized"}
 
-        report = _DISCOVERY_ENGINE.scan_module(module)
+        scan_target = (
+            f"{module}.mcp_tools" if module in set(_find_mcp_modules()) else module
+        )
+        report = _DISCOVERY_ENGINE.scan_module(scan_target)
 
         global _CACHE_EXPIRY
         _CACHE_EXPIRY = 0.0  # expired in the past → triggers refresh on next access
@@ -87,28 +91,34 @@ _FALLBACK_SCAN_TARGETS = [
 def _find_mcp_modules() -> list[str]:
     """Auto-discover all codomyrmex sub-packages that contain an ``mcp_tools`` module.
 
-    Uses :func:`pkgutil.walk_packages` to walk the ``codomyrmex`` package tree,
-    filtering for modules whose name ends with ``.mcp_tools``.  Returns the
-    *parent* package name for each match (e.g. ``codomyrmex.security``).
+    Walks the package *filesystem* without importing sub-packages.  This is
+    intentionally different from :func:`pkgutil.walk_packages`: recursive
+    package walking imports parent packages and can therefore initialize
+    unrelated optional runtimes (for example MLX or matplotlib) merely to
+    build an MCP inventory.  Returns the parent package name for each match
+    (e.g. ``codomyrmex.security``).
 
     Falls back to :data:`_FALLBACK_SCAN_TARGETS` if the walk fails entirely.
     """
     try:
         root = importlib.import_module("codomyrmex")
-        root_path = getattr(root, "__path__", None)
-        if not root_path:
+        root_paths = getattr(root, "__path__", None)
+        if not root_paths:
             return list(_FALLBACK_SCAN_TARGETS)
 
         parents: set[str] = set()
-        for _importer, name, _ispkg in pkgutil.walk_packages(
-            root_path, prefix="codomyrmex."
-        ):
-            if name.endswith(".mcp_tools"):
-                parent = name.rsplit(".", 1)[0]
-                parents.add(parent)
+        ignored_parts = {"__pycache__", "test", "tests", "vendor", "vendors"}
+        for root_path in root_paths:
+            package_root = Path(root_path)
+            for tool_file in package_root.rglob("mcp_tools.py"):
+                relative_parent = tool_file.parent.relative_to(package_root)
+                if any(part.startswith(".") or part in ignored_parts for part in relative_parent.parts):
+                    continue
+                suffix = ".".join(relative_parent.parts)
+                parents.add(f"codomyrmex.{suffix}" if suffix else "codomyrmex")
 
         if not parents:
-            logger.warning("pkgutil walk found 0 mcp_tools modules; using fallback")
+            logger.warning("Filesystem scan found 0 mcp_tools modules; using fallback")
             return list(_FALLBACK_SCAN_TARGETS)
 
         logger.info("Auto-discovered %d modules with mcp_tools", len(parents))
@@ -117,6 +127,61 @@ def _find_mcp_modules() -> list[str]:
     except (ImportError, AttributeError, OSError, RuntimeError) as exc:
         logger.exception("_find_mcp_modules failed (%s); using fallback targets", exc)
         return list(_FALLBACK_SCAN_TARGETS)
+
+
+def _decorates_mcp_tool(source_path: Path) -> bool:
+    """Return whether a Python source defines an ``@mcp_tool`` callable."""
+    try:
+        tree = ast.parse(source_path.read_text(encoding="utf-8"))
+    except (OSError, SyntaxError, UnicodeError):
+        return False
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        for decorator in node.decorator_list:
+            target = decorator.func if isinstance(decorator, ast.Call) else decorator
+            if isinstance(target, ast.Name) and target.id == "mcp_tool":
+                return True
+            if isinstance(target, ast.Attribute) and target.attr == "mcp_tool":
+                return True
+    return False
+
+
+def _find_mcp_tool_modules() -> list[str]:
+    """Find exact decorated source modules without importing sibling packages."""
+    try:
+        root = importlib.import_module("codomyrmex")
+        root_paths = getattr(root, "__path__", None)
+        if not root_paths:
+            return [f"{target}.mcp_tools" for target in _FALLBACK_SCAN_TARGETS]
+
+        modules: set[str] = set()
+        ignored_parts = {"__pycache__", "test", "tests", "vendor", "vendors"}
+        for root_path in root_paths:
+            package_root = Path(root_path)
+            for source_path in package_root.rglob("*.py"):
+                relative = source_path.relative_to(package_root)
+                module_parts = list(relative.with_suffix("").parts)
+                if module_parts[-1] == "__init__":
+                    module_parts.pop()
+                if (
+                    not module_parts
+                    or any(
+                        part.startswith(".")
+                        or part in ignored_parts
+                        or not part.isidentifier()
+                        for part in module_parts
+                    )
+                    or not _decorates_mcp_tool(source_path)
+                ):
+                    continue
+                modules.add("codomyrmex." + ".".join(module_parts))
+
+        if modules:
+            return sorted(modules)
+    except (ImportError, AttributeError, OSError, RuntimeError) as exc:
+        logger.exception("Decorated MCP source scan failed: %s", exc)
+    return [f"{target}.mcp_tools" for target in _FALLBACK_SCAN_TARGETS]
 
 
 def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
@@ -144,13 +209,12 @@ def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
 
     t0 = time.monotonic()
 
-    scan_targets = _find_mcp_modules()
+    scan_targets = _find_mcp_tool_modules()
 
     for target in scan_targets:
-        try:
-            _DISCOVERY_ENGINE.scan_package(target)
-        except (ImportError, AttributeError, SyntaxError, TypeError) as e:
-            logger.warning("Failed to scan package %s: %s", target, e)
+        report = _DISCOVERY_ENGINE.scan_module(target)
+        if report.failed_modules:
+            logger.debug("Failed to scan module %s: %s", target, report.failed_modules)
 
     tools: list[tuple[str, str, Any, dict[str, Any]]] = []
 
@@ -159,8 +223,12 @@ def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
             tools.append((tool.name, tool.description, tool.handler, tool.parameters))
 
     elapsed_ms = (time.monotonic() - t0) * 1000
+    metrics = _DISCOVERY_ENGINE.get_metrics()
+    metrics.total_tools = len(_DISCOVERY_ENGINE.list_tools())
+    metrics.modules_scanned = len(scan_targets)
+    metrics.scan_duration_ms = elapsed_ms
     logger.info(
-        "Dynamic tools discovered: %d in %.0fms",
+    "Dynamic tools discovered: %d in %.0fms",
         len(tools),
         elapsed_ms,
     )

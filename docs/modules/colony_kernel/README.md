@@ -2,7 +2,7 @@
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
-> Control plane for Codomyrmex's artificial ecology: gates every agent action through adversarial falsification, multi-dimensional budget tracking, earned trust scores, and a stigmergic pheromone field.
+> Proposal-evaluation control plane for Codomyrmex's artificial ecology: combines adversarial checks, budget state, reported consequences, trust, and a process-local signal field.
 
 ## Navigation
 
@@ -13,7 +13,7 @@
 
 ## Overview
 
-The Colony Kernel is the central governance layer of Codomyrmex. Rather than coordinating agents through centralised command, it models the agent collective as a colony where permission is constrained by accumulated signals. Agents earn trust through clean outcomes, leave pheromone traces that encode collective memory, and must pass an adversarial falsification step before any action executes.
+The Colony Kernel constrains proposal verdicts using reported consequences, a process-local signal field, budget state, trust, completeness, role state, and falsification checks. Its verdict is advisory to downstream callers: the kernel neither executes tools nor attests that submitted outcomes correspond to prior authorized actions.
 
 The kernel exposes 8 MCP tools for the propose→gate→record→tick lifecycle and wires 8 internal subsystems: PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, and the ColonyKernel coordinator. The MCP tool layer is the public surface over those subsystems, not a ninth subsystem.
 
@@ -75,6 +75,7 @@ result = kernel.propose_action(
         rationale="Fix off-by-one in branch name parser",
         rollback_plan="git revert HEAD~1",
         evidence={"test_ids": ["test_slash_in_name"]},
+        expected_outcome="test_slash_in_name passes; no other branch-name tests regress",
     ),
 )
 ```
@@ -103,5 +104,5 @@ colony_tick
 
 - **Source**: [src/codomyrmex/colony_kernel/](../../../src/codomyrmex/colony_kernel/)
 - **MCP Tool Specification**: [src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md)
-- **Tests**: [src/codomyrmex/tests/unit/colony_kernel/](../../../src/codomyrmex/tests/unit/colony_kernel/)
+- **Tests**: [tests/unit/colony_kernel/](../../../tests/unit/colony_kernel/)
 - **Scope / TODO**: [docs/todo/COLONY_KERNEL.md](../../todo/COLONY_KERNEL.md)

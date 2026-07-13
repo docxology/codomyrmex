@@ -12,7 +12,7 @@
 
 ## Overview
 
-Colony Kernel implements a stigmergy-based actuation control plane for codomyrmex. The central thesis is that a multi-agent codebase can self-organise through pheromone signals rather than explicit coordination: agents deposit chemical-analogy traces at locations (module paths or file paths), those traces decay over time, and every proposed change is gated against the accumulated signal landscape plus the proposing agent's earned trust score. The kernel enforces no side-effects on the codebase itself; it only decides whether a proposed change may proceed (EXECUTE), should wait (HOLD), or must be refused (REFUSE).
+Colony Kernel implements a stigmergy-based proposal-evaluation control plane for codomyrmex. Agents deposit chemical-analogy traces at locations (module paths or file paths), those traces decay over time, and submitted proposals are evaluated against the accumulated signal landscape, reported consequences, budget state, completeness, and the proposing agent's earned trust score. The kernel does not execute the proposed action or enforce its verdict downstream; it returns EXECUTE, HOLD, or REFUSE to the caller.
 
 All shared types are defined in `models.py`. Canonical subsystem implementations live in standalone modules and exchange typed value objects; cross-subsystem sequencing flows through the `ColonyKernel` integration class.
 
@@ -34,7 +34,7 @@ All shared types are defined in `models.py`. Canonical subsystem implementations
 |--------|-----------|
 | HUMAN | 2.0 |
 | TEST | 1.5 |
-| SECURITY | 1.3 |
+| SECURITY | 1.5 |
 | AGENT | 1.0 (× caller-supplied trust_factor) |
 | RUNTIME | 1.0 |
 
@@ -98,11 +98,14 @@ gate_score = (
 gate_score = clamp(gate_score, 0.0, 1.0)
 ```
 
-**Risk component**:
+**Local hazard component**:
 ```
-risk_pressure = PheromoneStore.sense(target, RISK)
-risk_ok = 0.0 if risk_pressure >= 6.0
-       or 0.5 if risk_pressure >= 3.0
+effective_hazard = max(
+    PheromoneStore.sense(target, RISK),
+    PheromoneStore.sense(target, FAILURE),
+)
+risk_ok = 0.0 if effective_hazard >= 6.0
+       or 0.5 if effective_hazard >= 3.0
        or 1.0 otherwise
 ```
 
@@ -136,9 +139,9 @@ risk_ok = 0.0 if risk_pressure >= 6.0
 
 ### 4. ConsequenceMemory
 
-**File**: `kernel.py` — class `ConsequenceMemory`
+**File**: `consequence_memory.py` — class `ConsequenceMemory` (`kernel.py` re-exports it)
 
-**Purpose**: SQLite-backed persistence for consequence records and per-agent trust profiles. Authoritative witness for all colony history.
+**Purpose**: SQLite-backed storage for reported consequence records and per-agent trust profiles. Records are caller-supplied and are not attested against prior EXECUTE authorizations. The default `:memory:` database lasts only for one process.
 
 **Schema**:
 - `consequences` — one row per `ConsequenceRecord`
@@ -189,9 +192,11 @@ Resulting delta is applied to `trust_score` via `AgentTrustProfile.apply_delta`,
 
 ### 6. PruningDaemon
 
-**File**: `kernel.py` — class `PruningDaemon`
+**File**: `pruning_daemon.py` — class `PruningDaemon` (`kernel.py` re-exports it)
 
-**Purpose**: Scans the pheromone field for locations that are stale or broken and returns `PruningCandidate` lists. Never writes, deletes, or modifies anything.
+**Purpose**: Nominates registry entries for operator review. The kernel/MCP report path
+is read-only; the separate `archive(candidate, dry_run=False)` method can move an
+explicitly reviewed path into `docs/plans/archived/`.
 
 **Pruning criteria**:
 
@@ -199,18 +204,19 @@ Resulting delta is applied to `trust_score` via `AgentTrustProfile.apply_delta`,
 |-----------|-----------|-----------|
 | Never used | 0.90 | `call_count == 0 and last_used == 0.0` |
 | Duplicate | 0.85 | `duplicate_of` field is set |
-| Broken and abandoned | `min(0.85, failure_strength / 5.0)` | FAILURE signal present, SUCCESS signal absent |
-| Stale by age | `min(0.95, 0.5 + elapsed_beyond_window / 30d)` | No DEPENDENCY signal for > stale_window (default 7 days) |
-| Dormant | `max(0.1, (1 - dep_strength / min_dep_strength) × 0.7)` | DEPENDENCY strength < min_dependency_strength |
+| No calls for >30 days | 0.70 | `call_count == 0`, nonzero `last_used`, and age > 30 days |
+| Low usage for >30 days | 0.50 | `call_count < 5` and age > 30 days |
 
-**Exclusion**: Locations with a HUMAN_PRIORITY signal are never flagged.
+**Exclusions in `scan()`**: locations with positive HUMAN_PRIORITY or DEPENDENCY
+strength ≥ 2.0 are not nominated.
 
 **Minimum reported confidence**: 0.50 (candidates below this threshold are suppressed).
 
 | Method | Inputs | Output | Invariants |
 |--------|--------|--------|------------|
-| `scan(module_registry)` | `dict[str, dict]` (in `kernel.py` version) | `list[PruningCandidate]` | Sorted by confidence descending; read-only |
-| `report()` | — (in `mcp_tools.py` version) | `dict` | Reads from `TraceField`; returns candidates + total_candidates + generated_at |
+| `scan(module_registry)` | `dict[str, dict]` | `list[PruningCandidate]` | Sorted by confidence descending; read-only |
+| `report()` | — | `dict[str, list[PruningCandidate]]` | Standalone filesystem heuristics: unused, duplicate SPEC, stale-doc placeholder, and missing-test categories |
+| `archive(candidate, dry_run=True)` | `PruningCandidate`, `bool` | `str` | Non-mutating plan by default; validates repository containment before an opt-in move |
 
 ---
 
@@ -343,23 +349,27 @@ else:
     return SANDBOX
 ```
 
-**Role permission constraints enforced by ActuationGate**:
+**Role behavior enforced by ActuationGate**:
 
-| Role | Gate permission |
+| Role | Implemented gate behavior |
 |------|----------------|
-| SANDBOX | Unconditional REFUSE on all write-path proposals |
-| REPAIR_ANT | patch_file, run_tests, doc_update permitted |
-| MEMORY_ANT | archive, index, summarise permitted |
-| DISPATCHER | delegate, coordinate, route permitted |
-| GUARD_ANT | security review, gate audit, archive authority permitted |
+| SANDBOX | Unconditional REFUSE for every proposal |
+| REPAIR_ANT | No action-specific role constraint |
+| MEMORY_ANT | No action-specific role constraint |
+| DISPATCHER | No action-specific role constraint |
+| GUARD_ANT | No action-specific role constraint or veto |
 
-Roles are never hard-assigned at agent creation; they emerge from the consequence history.
+Roles are inferred from the recorded profile. Except for SANDBOX, they are labels rather
+than a live authorization matrix.
 
 ---
 
 ## Pruning Criteria
 
-`PruningDaemon` identifies module locations that are candidates for archival or removal. It operates on the pheromone field only — no filesystem scan, no import graph traversal.
+The integrated kernel and MCP path derive a minimal registry from DEPENDENCY traces and
+pass it to `PruningDaemon.scan()`. Direct callers may supply richer registry metadata.
+The standalone `report()` API separately runs filesystem heuristics; neither path
+performs import-graph traversal.
 
 **Confidence thresholds**:
 
@@ -367,13 +377,15 @@ Roles are never hard-assigned at agent creation; they emerge from the consequenc
 |-----------|-------------------|------------------|
 | Never used | 0.90 (fixed) | 0.50 |
 | Duplicate | 0.85 (fixed) | 0.50 |
-| Broken + abandoned | min(0.85, failure_strength / 5.0) | 0.50 |
-| Stale by age | min(0.95, 0.5 + (elapsed − window) / 30d) | 0.50 |
-| Dormant (weak dep) | max(0.1, (1 − dep/min_dep) × 0.7) | 0.50 |
+| No calls for >30 days | 0.70 (fixed) | 0.50 |
+| Low usage (`call_count < 5`) for >30 days | 0.50 (fixed) | 0.50 |
 
-**Protection rule**: Any location with a HUMAN_PRIORITY pheromone signal (strength > 0.0) is excluded from consideration unconditionally.
+**Protection rules in `scan()`**: positive HUMAN_PRIORITY and DEPENDENCY strength ≥ 2.0
+exclude a registry entry from nomination.
 
-**Output invariants**: Candidates are sorted by confidence descending. The daemon never modifies the pheromone field or any file.
+**Output and mutation boundary**: `scan()` sorts candidates by confidence and does not
+mutate the field or filesystem. `archive()` returns a dry-run plan by default; only an
+explicit `dry_run=False` call moves a repository-contained path.
 
 ---
 
@@ -383,7 +395,7 @@ Roles are never hard-assigned at agent creation; they emerge from the consequenc
 
 ```python
 score = mean([SEVERITY_WEIGHTS[f.severity.value] for f in findings])
-# SEVERITY_WEIGHTS: LOW=0.25, MEDIUM=0.5, HIGH=0.75, CRITICAL=1.0
+# SEVERITY_WEIGHTS: LOW=0.05, MEDIUM=0.20, HIGH=0.45, CRITICAL=1.0
 ```
 
 **Recommendation routing**:

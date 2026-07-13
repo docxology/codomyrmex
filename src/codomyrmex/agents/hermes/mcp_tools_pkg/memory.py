@@ -26,14 +26,10 @@ def hermes_recall_memory(query: str, limit: int = 10) -> dict[str, Any]:
 
     """
     try:
-        import os
-        from pathlib import Path
-
+        from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_session_db
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
 
-        # Load the DB path the same way the client does
-        WORKSPACE_ROOT = Path(os.path.abspath(".")).resolve()
-        db_path = WORKSPACE_ROOT / ".codomyrmex" / "hermes_sessions.db"
+        db_path = resolve_hermes_session_db()
 
         with SQLiteSessionStore(db_path) as store:
             results = store.search_fts(query, limit)
@@ -95,15 +91,13 @@ def hermes_build_memory_graph(
         and session_count.
     """
     try:
-        import os
         import re
         from collections import Counter, defaultdict
-        from pathlib import Path
 
+        from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_session_db
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
 
-        WORKSPACE_ROOT = Path(os.path.abspath(".")).resolve()
-        db_path = WORKSPACE_ROOT / ".codomyrmex" / "hermes_sessions.db"
+        db_path = resolve_hermes_session_db()
 
         WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
@@ -175,14 +169,11 @@ def hermes_extract_ki(
         dict with status, memory_id, title, and body_length.
     """
     try:
-        import os
-        from pathlib import Path
-
         from codomyrmex.agentic_memory.memory import KnowledgeMemory
+        from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_session_db
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
 
-        WORKSPACE_ROOT = Path(os.path.abspath(".")).resolve()
-        db_path = WORKSPACE_ROOT / ".codomyrmex" / "hermes_sessions.db"
+        db_path = resolve_hermes_session_db()
 
         with SQLiteSessionStore(db_path) as store:
             session = store.load(session_id)

@@ -1,55 +1,157 @@
 # Introduction {#sec:introduction}
 
-When an AI agent causes a five-hour repair cycle, the default agentic framework starts the next invocation with identical permissions and no memory of the damage. The agent disappears back into the tool pool as if Tuesday never happened. Human engineers face a chain of social accountability — code review, standup, retrospective, trust erosion — but the default architecture provides no analogous mechanism for agents. Software engineering at scale has always been a coordination problem; classical multi-agent systems research already treated autonomy, social ability, reactivity, and proactiveness as engineering properties rather than personality traits [@wooldridge1995intelligent]. The emergence of LLM-based coding agents sharpens that old problem into something operationally new: agents now navigate repositories, edit files, run tests, and call tools through software interfaces whose design materially changes task success [@yang2024swebench; @yang2024sweagent; @garg2025savingswebench]. Recent agent surveys converge on the same decomposition: LLM agents are not just text generators but systems organized around perception, memory, planning, tool use, and action loops [@wang2023surveyautonomousagents; @xi2023riseagents].
+Tool-using language-model agents can browse, retrieve, call APIs, edit repositories, and
+run software [@nakano2021webgpt; @karpas2022mrkl; @yao2022react; @schick2023toolformer;
+@qin2023toolllm; @patil2023gorilla]. Once an agent can alter persistent state, success is
+not only a planning problem. It is also an authorization, accounting, and feedback
+problem: what evidence should be inspected before an action, what should be recorded
+afterward, and how should that record affect the next proposal?
 
-Tool-use scholarship makes the risk concrete. WebGPT, MRKL systems, ReAct, Toolformer, ToolLLM, Gorilla, and API-Bank all show that language models become more capable when they browse, retrieve, call APIs, learn tool-call patterns, or interleave reasoning with action against an external environment [@nakano2021webgpt; @karpas2022mrkl; @yao2022react; @schick2023toolformer; @qin2023toolllm; @patil2023gorilla; @li2023apibank]. Planning and deliberation work sharpens the same point: chain-of-thought, self-consistency, and Tree of Thoughts increase capability by making intermediate reasoning, search, and branch selection explicit rather than leaving every decision to a single greedy continuation [@wei2022chainofthought; @wang2022selfconsistency; @yao2023treeofthoughts]. Reflexion, Generative Agents, and MemGPT add the temporal dimension: language agents can preserve feedback, memories, reflections, and long-horizon context across interactions without changing the base model weights [@shinn2023reflexion; @park2023generative; @packer2023memgpt]. That capability is precisely why actuation needs a control plane. A tool-using model that can retrieve, plan, remember, edit, and execute is no longer merely producing text; it is changing persistent state.
+Long-horizon environments and software-agent benchmarks increasingly evaluate stateful,
+multi-step interaction rather than isolated text generation
+[@yang2024swebench; @yang2024sweagent; @liu2023agentbench; @zhou2023webarena;
+@xie2024osworld; @trivedi2024appworld]. Security evaluations likewise treat tool misuse,
+prompt injection, privacy leakage, and trajectory-level effects as system properties
+[@greshake2023indirectprompt; @debenedetti2024agentdojo; @ruan2023toolemu;
+@zhang2024agentsafetybench]. These results motivate explicit controls between a model's
+proposal and consequential actuation.
 
-Agent-governance and agent-safety work therefore emphasize constrained action spaces, legible activity, monitoring, prompt-injection resistance, and risk evaluation for high-stakes tool calls [@shavit2023governing; @greshake2023indirectprompt; @debenedetti2024agentdojo; @zhan2024injecagent; @ruan2023toolemu]. Recent safety benchmarks broaden that pressure: Agent-SafetyBench, Agent Security Bench, RAS-Eval, SafeToolBench, PrivacyLens, and memory-poisoning studies all treat unsafe tool use, trajectory-level privacy leakage, attack surfaces, and persistent memory as first-class evaluation objects rather than incidental prompting failures [@zhang2024agentsafetybench; @zhang2024asb; @fu2025raseval; @xia2025safetoolbench; @shao2024privacylens; @dash2026memorypoisoning]. Codomyrmex begins from the same premise but narrows it to one falsifiable engineering question: before an agent acts on a repository, has it earned the authority to do so?
+## Problem statement {#sec:intro-problem}
 
-## The Fragility of the Warehouse Model
+Contemporary orchestration frameworks provide routing, checkpoints, memory, roles, and
+multi-agent coordination [@langgraph2024; @wu2023autogen; @crewai2024]. Codomyrmex does
+not claim those systems lack state. It targets a narrower integration question:
 
-Conventional agentic frameworks treat the module ecosystem as a warehouse: tools sit on shelves, any agent can reach for any tool at any time, and the only record of past activity is whatever the tool's return value happened to contain. Contemporary orchestration frameworks and multi-agent software-engineering systems are increasingly good at routing messages, maintaining task state, encoding roles, using standard operating procedures, and coordinating communicative agents [@langgraph2024; @wu2023autogen; @crewai2024; @li2023camel; @qian2023chatdev; @hong2023metagpt]. Those are runtime capabilities, not consequence systems. There is no memory of past failures, no adaptation in response to outcomes, and no consequence for bad actions. An agent that caused a five-hour repair cycle last Tuesday returns on Wednesday with the same gate score, the same trust level, and the same access envelope. The system has no immune response. It cannot distinguish a proven collaborator from a first-time actor, or a safe target location from one heavy with unresolved failure signals. Every actuation event is a fresh start, and fresh starts accumulate technical debt the same way unsupervised processes accumulate entropy.
+> Can a recorded failure at one software location deterministically increase the
+> admission cost of a later proposal at that same location, without changing the later
+> model's context or weights?
 
-This fragility is not a niche concern. As agent populations grow and actuation rates increase, the statistical probability that some agent proposes some harmful action within some window approaches certainty. Long-horizon evaluation environments such as AgentBench, WebArena, OSWorld, GAIA, AppWorld, and TheAgentCompany all move agent evaluation toward persistent state, tools, apps, computer interfaces, and workplace-like tasks [@liu2023agentbench; @zhou2023webarena; @xie2024osworld; @mialon2023gaia; @trivedi2024appworld; @xu2024theagentcompany]. Harmful-agent and cyber-agent benchmarks make the same point from the adversarial side: once agents can operate tools over multiple steps, the evaluation target becomes whether they should act, not only whether they can act [@andriushchenko2024agentharm; @levy2024stwebagentbench; @wan2024cyberseceval3; @fang2024oneday; @zhu2024zerodayagents; @zhu2025cvebench; @motwani2024secretcollusion]. A warehouse that cannot learn from those events will repeat them.
+The question is deliberately local and falsifiable. A convincing positive result
+requires a paired case: hold agent, proposal, and budget factors fixed; add the failed
+outcome at one target; show that the same-target score does not increase and that an
+unrelated target is unchanged.
 
-## The Ecology Thesis
+## Bounded ecology thesis {#sec:intro-thesis}
 
-Codomyrmex takes a different premise. Rather than treating the agent collective as a pool of interchangeable workers drawing from a static toolbox, it models the collective as a colony. The metaphor is not decorative; it imports three research traditions into the software-agent setting. The first is stigmergy and self-organization: Grassé's original account of environment-mediated coordination, Bonabeau et al.'s synthesis of swarm intelligence, Parunak's digital pheromones for distributed software agents, Dorigo and Stützle's ant-colony optimization dynamics, and Kauffman's broader account of self-organizing order [@grasse1959reconstruction; @bonabeau1999swarm; @parunak1997pheromones; @dorigo2004aco; @kauffman1993origins]. The second is computational trust: formal trust as an operative quantity, trust and reputation updates from observed interaction, peer-to-peer reputation algorithms, stereotype/referral bootstrapping, and hybrid models that combine direct experience with role or certified evidence [@marsh1994trust; @sabater2005review; @kamvar2003eigentrust; @burnett2013bootstrapping; @huynh2006fire]. The third is externalized feedback and alignment: reinforcement learning, RLHF, Constitutional AI, and process reward models all distinguish action selection from downstream feedback, even though they usually internalize that feedback into policies or weights rather than keeping it as an auditable gate ledger [@sutton2018reinforcement; @christiano2017deep; @bai2022constitutional; @lightman2023let; @uesato2022solving]. Codomyrmex combines those lines: modules are not passive tools waiting to be invoked; they are organisms with assigned roles, earned trust scores, and finite lifespans determined by whether their continued presence serves the colony's objectives. Agents are not fungible workers; they are actors whose behavioral history is encoded in a persistent trust profile that gates what they are permitted to propose next.
+Codomyrmex uses “colony” and “pheromone” as engineering metaphors for a shared control
+plane. Stigmergy describes coordination mediated through changes to a shared environment
+rather than direct pairwise messages [@grasse1959reconstruction; @parunak1997pheromones;
+@bonabeau1999swarm]. In the implementation, the shared environment is a typed,
+process-local signal field. `FAILURE` records caller-reported adverse outcomes, `RISK` records
+prospective concerns, and the gate scores their maximum at the proposal target.
 
-The colony accumulates memory of what works. A sequence of successful outcomes by an agent deposits SUCCESS signals in the pheromone field at the locations it touched. A failure deposits FAILURE signals, and repeated local risk pressure makes the gate stricter for the next agent that proposes work at the same location. An agent whose recent history contains repeated repair cycles sees its trust score drift downward and its effective role narrow toward lower-privilege tiers. An agent that consistently delivers clean outcomes earns deterministic promotion toward higher-privilege roles. The ecology metaphor is useful because outcomes feed directly into the state that determines future actuation access.
+The project specification's design criterion is that the colony should become “harder to
+fool after every failed action.” This manuscript narrows that phrase to an implemented
+contract:
 
-The design principle is stated once in the project specification and should be restated here verbatim because it is load-bearing: "Codomyrmex should not measure itself by how many ants it has, but by whether the colony gets harder to fool after every failed action." This is the falsification criterion for the entire architecture. An agentic system that does not become measurably harder to fool over time — regardless of how many tools it exposes or how many MCP endpoints it registers — has not solved the coordination problem; it has scaled the warehouse model.
+- a canonical failed report deposits same-target FAILURE pressure;
+- effective local hazard is `max(RISK, FAILURE)`;
+- higher hazard cannot increase the ordinary score;
+- the paired lower-trust case moves from {{RESULT_PAIRED_CLEAR_SCORE}}/EXECUTE to
+  {{RESULT_PAIRED_FAILURE_SCORE}}/HOLD;
+- an unrelated target remains unchanged; and
+- passive decay eventually removes the added friction.
 
-## Architecture Overview
+This does not make the system deception-proof. The current MCP surface accepts
+caller-reported outcomes without attesting them against a prior EXECUTE authorization.
+The default field and consequence database are also in-memory and disappear on process
+restart. The verified claim is therefore process-local, report-dependent, and
+reversible.
 
-The system is organized in three tiers. The base tier is the `src/codomyrmex/` Python package, a library of modules spanning infrastructure, agents, cloud, coding, security, search, memory, and ML primitives. Each module is independently versioned, zero-mock tested, and documented under the RASP pattern — four collocated files per module: README, AGENTS, SPEC, and PAI. The second tier is the Colony Control Plane, a dedicated subsystem within `src/codomyrmex/colony_kernel/` that acts as the control plane governing how agents interact with those modules. The third tier is the MCP surface, a set of eight production `@mcp_tool`-decorated endpoints that expose the Colony Control Plane to any Model Context Protocol client, including Claude, GPT-class models, and the PAI system, using the Model Context Protocol as the tool-facing integration boundary [@anthropic2024mcp].
+## Contribution {#sec:intro-contribution}
 
-## The Colony Control Plane: Eight Subsystems
+The paper contributes five concrete artifacts.
 
-The Colony Control Plane is composed of eight subsystems, each a self-contained class that shares only the `models.py` contract and carries no imports from the others:
+1. **A Colony Control Plane.** {{CONFIG_COLONY_KERNEL_SUBSYSTEMS}} named subsystems separate typed signal storage,
+   resource accounting, actuation gating, consequence records, role inference, pruning
+   nomination, deterministic falsification, and integration.
+2. **A transparent ternary gate.** Budget, effective local hazard, trust credit, and
+   proposal completeness form a bounded weighted score, subject to explicit hard
+   overrides and EXECUTE/HOLD/REFUSE routing.
+3. **Coupled local feedback.** Reported FAILURE and prospective RISK remain separately
+   inspectable but jointly constrain the gate through their maximum; the integrated gate
+   also reads recent failures from the kernel's consequence memory.
+4. **A real contract suite.** Tests use real subsystem instances to establish
+   same-target inhibition, cross-target isolation, linear decay recovery, score bounds,
+   trust updates, and interface behavior.
+5. **A reproducible manuscript route.** Fail-closed test/lint/type evidence, generated
+   variables, formula-derived figures, cross-reference validation, and the project
+   renderer are orchestrated through the repository's `run.sh` pipeline.
 
-**PheromoneStore** wraps the stigmergic `TraceField` with colony-specific `ColonySignal` semantics, applying source trust multipliers on deposit and evaporating traces on each kernel tick. **ResourceLedger** maintains a period-scoped, multi-dimensional budget tracker that checks seven cost dimensions — including LLM call count, runtime seconds, risk level, human attention minutes, merge risk, documentation debt, and security exposure — before any actuation request is approved. **ActuationGate** combines budget headroom, pheromone pressure, trust tier, and proposal completeness into a weighted additive score, with hard overrides for budget exhaustion, SANDBOX role, low trust, and CRITICAL falsification findings. **ConsequenceMemory** maintains a SQLite-backed log of every proposal outcome, computing trust deltas and persisting per-agent `AgentTrustProfile` records across sessions. **RoleAdapter** deterministically infers an agent's `AgentRole` from its trust score and proposal history, mapping the colony's five roles (SANDBOX, REPAIR_ANT, MEMORY_ANT, DISPATCHER, GUARD_ANT) without side effects. **PruningDaemon** scans the pheromone field for locations with stale or absent DEPENDENCY signals and produces `PruningCandidate` reports for human or GUARD_ANT review, implementing the colony's mechanism for self-contraction. **FalsificationWorker** runs {{CONFIG_FALSIFICATION_VECTORS}} deterministic adversarial checks against every proposal before the gate evaluates it, functioning as an internal red-team pass that the gate uses to inform its completeness score and hard-refuse path. **ColonyKernel** is the top-level integration class that owns subsystem lifecycle and exposes the four-method public API (`propose_action`, `record_outcome`, `colony_status`, `tick`).
+The contribution is a reference implementation and evidence boundary, not a completed
+production-security system.
 
-## Gate Scoring
+## Architecture in brief {#sec:intro-architecture}
 
-The ActuationGate renders its verdict through a weighted linear combination of four normalized component scores. Each component maps a colony-observable quantity to the interval $[0, 1]$: `budget_ok` reflects whether the colony's multi-dimensional resource envelope can absorb the proposed cost; `risk_ok` encodes the inverse of pheromone pressure at the target location; `trust_ok` is the proposing agent's gate trust tier; and `completeness` measures the evidential quality of the proposal (tests referenced, rollback plan quality, falsification vector coverage). [@sec:methodology] derives the gate scoring formula; resource and risk signals carry the highest weight ({{CONFIG_GATE_WEIGHT_BUDGET}} each), reflecting the colony's priority ordering: these signals encode objective, real-time constraints — budget headroom and accumulated failure pressure at the target location — whereas trust is an earned prior and completeness is partially gameable. The EXECUTE threshold is ${{CONFIG_GATE_EXECUTE_THRESHOLD}}$; HOLD begins at ${{CONFIG_GATE_HOLD_THRESHOLD}}$; REFUSE applies below that hold threshold. Hard-override rules supersede the numeric score: SANDBOX role always receives REFUSE, trust below ${{CONFIG_TRUST_HARD_FLOOR}}$ refuses before scoring, CRITICAL falsification findings refuse before scoring, and budget failure is mode-dependent — standalone gate checks REFUSE immediately, while kernel-supplied budget exhaustion returns HOLD so the action can be requeued after the budget period resets.
+`ColonyKernel.propose_action` first runs deterministic falsification, checks the resource
+budget, loads the agent profile, refreshes its role label, and asks `ActuationGate` for a
+decision. Ordinary scoring uses
 
-This is not a complete security boundary, but it follows a least-authority and zero-trust posture: authority is earned incrementally, and each destructive proposal is re-evaluated rather than inheriting trust from identity or prior access [@saltzer1975protection; @miller2003capabilities; @nist2020zerotrust]. Human-automation research supplies a parallel warning: the design problem is not "more autonomy" in the abstract, but choosing automation levels, preserving operator awareness, and calibrating trust so reliance tracks demonstrated capability [@parasuraman2000automation; @lee2004trust; @endsley2017autonomy]. AI safety work frames the same failure mode as accident risk: side effects, reward hacking, distribution shift, unsafe exploration, and weak oversight become engineering problems once systems act in open environments [@amodei2016concrete]. The same boundary appears in governance and threat frameworks. AI risk-management guidance, generative-AI profiles, OWASP LLM/agentic guidance, MITRE ATLAS, AI-control work, and runtime-assurance/shielding literature all argue for explicit controls between high-capability systems and consequential action [@tabassi2023airmf; @autio2024genairmf; @owasp2025llm; @owasp2026agentic; @owasp2026agentsecurity; @mitre2026atlas; @greenblatt2023aicontrol; @seto1998simplex; @alshiekh2018shielding]. Codomyrmex contributes one such control point for software actuation, not a proof that the surrounding system is secure.
+- binary budget approval (weight {{CONFIG_GATE_WEIGHT_BUDGET}});
+- tiered credit from effective hazard `max(RISK, FAILURE)` (weight {{CONFIG_GATE_WEIGHT_RISK}});
+- tiered trust credit, optionally reduced after
+  {{CONFIG_RECENT_FAILURE_COUNT_THRESHOLD}} recent failures (weight
+  {{CONFIG_GATE_WEIGHT_TRUST}}); and
+- completeness of rollback, evidence, and expected outcome fields (weight
+  {{CONFIG_GATE_WEIGHT_COMPLETENESS}}).
 
-## Relationship to Template Infrastructure
+Budget failure, SANDBOX, trust below {{CONFIG_TRUST_HARD_FLOOR}}, and CRITICAL
+falsification are early returns.
+The higher role labels are inferred trust tiers and intended specializations; the current
+gate does not enforce a complete action-by-role permission matrix.
 
-Codomyrmex is developed and published within the template research infrastructure described in the repository's top-level CLAUDE.md and AGENTS.md. That infrastructure provides the RASP documentation standard (which governs every module's README, AGENTS, SPEC, and PAI files), a strict zero-mock testing policy (all 35,119 collected tests use real data and computations; `unittest.mock`, `MagicMock`, and `pytest-mock` are prohibited), the three-tree mirror invariant (every `src/codomyrmex/<module>` has sibling trees in `tests/unit/<module>/` and documentation), and a multi-stage pipeline with test gating that enforces a 40% coverage floor before any PDF artifact is rendered. These constraints are not incidental; they are load-bearing for the colony thesis. Reproducible-research, assurance-case, model-reporting, dataset-documentation, AI-service FactSheet, internal audit, and algorithmic-impact-assessment scholarship make the same point from the evidence side: claims about computational systems need explicit artifacts, auditable context, disclosed limits, and a route for revising the claim when evidence changes [@peng2011reproducible; @buhl2024safetycases; @hawkins2021amlas; @mitchell2019modelcards; @gebru2021datasheets; @arnold2019factsheets; @raji2020accountability; @reisman2018algorithmicimpact]. Secure-development and supply-chain work adds the release boundary: SSDF, SLSA, Sigstore, in-toto, TUF, agent-identity work, visibility infrastructure, and legal-governance scholarship all treat identity, provenance, logs, attestations, and accountable action records as part of the system rather than as optional documentation [@nist2022ssdf; @slsa2026; @newman2022sigstore; @torresarias2019intoto; @samuel2010tuf; @nist2026agentidentity; @chan2024visibility; @chan2025infrastructure; @kolt2025governing]. A system that claims to make the codebase harder to fool must itself be built on a foundation that cannot silently degrade.
+`record_outcome` is a separate caller operation. It updates the consequence store,
+resource ledger, trust profile, role label, and signal field. A failed test report
+deposits a FAST FAILURE trace; a clean report reinforces/deposits SUCCESS. Because
+proposal and outcome are not linked by a consumed authorization ledger, the word
+“outcome” in this paper means a submitted report unless explicitly qualified as
+attested.
 
-## Why Stigmergy
+The {{CONFIG_MCP_TOOL_COUNT}} MCP tools expose this stateful kernel through JSON-shaped requests and
+responses. A module-level singleton shares state across calls in one server process.
+File-backed SQLite can persist consequence records when configured, but the field has no
+restart-persistent backend.
 
-The design metaphor deserves explicit defense. Ants do not coordinate by negotiating with each other. They deposit chemical traces — pheromones — into the shared environment, and other ants sense those traces and modulate their behavior accordingly. The colony's collective intelligence emerges not from any central authority or inter-agent communication protocol but from the accumulated pattern of signals in the environment. A trail that leads to food gets reinforced by returning foragers; a trail that leads to danger gets suppressed by the absence of positive reinforcement and the presence of alarm signals.
+## Relation to prior work {#sec:intro-related}
 
-There is a precise information-theoretic reason to prefer this design over direct agent-to-agent communication. If $n$ agents must coordinate pairwise — each informing all others of its state — the number of communication channels required scales as $O(n^2)$. Stigmergy collapses this to $O(n)$: each agent reads the shared field and writes to the shared field, and the field integrates all historical signals into a single queryable surface. For an agentic system operating at machine speed, the difference between $O(n^2)$ and $O(n)$ coordination overhead is not a theoretical nicety — it is the boundary between an architecture that saturates under moderate agent populations and one that scales linearly with them. The pheromone field is the compression: instead of propagating failure events as messages to every peer, the colony encodes the event as a field perturbation that any future agent consulting that location will encounter automatically, without any agent having transmitted it.
+The implementation combines ideas from several established areas without claiming to
+replace them:
 
-The Colony Kernel uses the same principle. Agents do not negotiate permissions with a central authority, and they do not communicate with each other to coordinate actuation decisions. They deposit signals into the pheromone field — SUCCESS when outcomes are clean, FAILURE when repair is required, RISK when the FalsificationWorker flags adversarial vectors — and the ActuationGate reads those signals when evaluating the next proposal at the same location. An agent does not need to know that another agent failed at `codomyrmex.git_operations.core` last week; it only needs the gate to report elevated FAILURE pressure at that location and apply the corresponding score penalty. The ecology's memory is stored in the field, not in any individual agent's context window. This architectural choice has a practical consequence: the colony's learned caution about dangerous locations persists across session boundaries, model swaps, and agent population changes, because it is encoded in the pheromone store rather than in any ephemeral state that disappears when a session ends.
+- multi-agent systems treat autonomy, reactivity, proactivity, and social interaction as
+  engineered properties [@wooldridge1995intelligent];
+- computational trust and reputation update beliefs or scores from interaction history
+  [@marsh1994trust; @sabater2005review; @kamvar2003eigentrust];
+- runtime-assurance and shielding research inserts a safety decision layer between an
+  advanced controller and actuation [@seto1998simplex; @alshiekh2018shielding];
+- least privilege, capability security, and zero-trust architecture motivate explicit,
+  repeatedly evaluated authority boundaries [@saltzer1975protection; @miller2003capabilities;
+  @nist2020zerotrust]; and
+- reproducible research, model reporting, and assurance cases motivate traceable claims
+  and explicit limitations [@peng2011reproducible; @mitchell2019modelcards;
+  @raji2020accountability; @buhl2024safetycases].
 
-The "harder to fool" property that the project specification names as its falsification criterion is precisely what stigmergy makes structurally available: each failure event is inscribed in the field at the location where the failure occurred, raising the gate's caution for the next proposal at that location. The colony is less vulnerable to context-reset deception by fresh agents, because relevant local failure history is stored in the field rather than only in the agent context. Whether this is the right metaphor or merely a productive one remains an empirical question beyond this artifact; the results reported here validate the implementation contracts that make the property measurable.
+Codomyrmex's specific combination is a target-indexed signal field coupled to a
+transparent software-actuation gate and consequence ledger. Comparative superiority over
+other frameworks is not established in this release.
 
-## Reader's Guide to Sections
+## Evidence boundary {#sec:intro-evidence}
 
-The remainder of this manuscript is organized as follows. [@sec:methodology] presents the Colony Kernel design in full: the stigmergic pheromone protocol, the gate scoring model, the trust lifecycle, the falsification worker algorithm, and the pruning daemon. [@sec:theory] develops the mathematical foundations: formal definitions of the pheromone field as a vector space, proofs of decay monotonicity and field boundedness, the gate score's decision-theoretic interpretation, and the trust delta as a stochastic approximation process with provable convergence properties. [@sec:results] reports implementation measurements: gate decision fixtures across agent role tiers, trust score trajectories under deterministic clean outcomes, pheromone field decay under configured rates, and analytical contract derivations with complete edge-case analysis. [@sec:experimental_setup] documents the configuration parameters and colony initialization procedures required to reproduce the checked-in protocol. [@sec:reproducibility] describes the provenance chain from source commit through test gate to rendered PDF, including the steganographic verification layer. [@sec:scope] surveys related work in multi-agent coordination, stigmergy-inspired computing, trust-based access control, information-theoretic security, decision theory, and mechanism design for autonomous systems, situating Codomyrmex within and against those traditions. [@sec:conclusion] synthesizes the implementation findings against the falsification criterion stated in [@sec:introduction], presents formal falsification criteria as mathematical statements, characterizes the precise conditions under which the colony fails to get harder to fool, and specifies an empirical benchmark agenda. [@sec:active-inference] provides a complete active inference treatment of the Colony Kernel, mapping its components to the Free Energy Principle framework and identifying both structural correspondences and divergences from the canonical Bayesian brain. [@sec:design-rationale] in the appendix documents the explicit design decisions behind the architecture, presenting the alternatives considered and the reasoning behind each choice made.
+The executed evidence is the scoped Colony Kernel quality gate and deterministic
+fixtures. The proposed {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition,
+{{CONFIG_TRIAL_COUNT}}-run benchmark has not been
+executed. No population refusal rate, throughput advantage, production harm reduction,
+or long-run convergence claim is reported. The paper treats unlinked outcome reporting,
+SANDBOX bootstrap, persistence, role permissions, and external calibration as open
+engineering work.
+
+## Reader's guide {#sec:intro-guide}
+
+[@sec:theory] states only the invariants supported by the runtime recurrence and gate
+arithmetic. [@sec:methodology] describes subsystem behavior and call sequencing.
+[@sec:experimental_setup] separates the proposed external study from the live
+configuration. [@sec:results] reports executed gates, deterministic fixtures, and
+analytical score cases. [@sec:scope] compares related systems and states limitations.
+[@sec:active-inference] offers a bounded conceptual analogy rather than a formal
+equivalence. [@sec:reproducibility] documents the build and evidence chain.
+[@sec:conclusion] summarizes the supported claim and next tests.
+[@sec:design-rationale] records design alternatives and remaining tradeoffs.

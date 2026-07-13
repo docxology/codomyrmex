@@ -167,6 +167,7 @@ class TestIsSafeUrl:
         us = _import_url_safety()
         assert us.is_safe_url("http://192.168.1.1/admin") is False
 
+    @pytest.mark.network
     def test_public_url_allowed(self) -> None:
         us = _import_url_safety()
         # google.com resolves to a public IP

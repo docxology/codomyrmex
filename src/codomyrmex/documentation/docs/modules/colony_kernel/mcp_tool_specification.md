@@ -153,12 +153,15 @@ graph TD
 
 ```json
 {
-  "decision": "execute",
-  "gate_score": 0.712,
-  "reason": "gate score 0.712 ≥ execute threshold",
-  "required_evidence": [],
+  "decision": "refuse",
+  "gate_score": 0.0,
+  "reason": "SANDBOX role: no write-path gate passes",
+  "required_evidence": [
+    "earn_higher_role_via_trust_growth",
+    "accumulate_accepted_proposals"
+  ],
   "budget_approved": true,
-  "falsification_severity": 0.0
+  "falsification_severity": 0.45
 }
 ```
 
@@ -166,7 +169,7 @@ graph TD
 
 ## colony_record_outcome
 
-**Description**: Record the real consequence of a previously executed action. Updates the agent's trust profile (stored in SQLite), deposits SUCCESS or FAILURE pheromone at the target, and records a DEPENDENCY trace.
+**Description**: Record a caller-reported consequence of an action. Updates the agent's trust profile (stored in SQLite), deposits SUCCESS or FAILURE pheromone at the target, and records a DEPENDENCY trace. The tool does not attest the report against a prior EXECUTE authorization.
 
 ### Input Schema
 
@@ -177,23 +180,23 @@ graph TD
   "properties": {
     "agent_id": {
       "type": "string",
-      "description": "The agent that executed the action."
+      "description": "Agent identifier associated with the submitted report."
     },
     "action_type": {
       "type": "string",
-      "description": "The action type that was executed (should match the original proposal)."
+      "description": "Action type claimed by the report; linkage to an original proposal is not attested."
     },
     "target": {
       "type": "string",
-      "description": "The target of the executed action."
+      "description": "Target claimed by the submitted report."
     },
     "actual_outcome": {
       "type": "string",
-      "description": "Human-readable description of what actually happened."
+      "description": "Human-readable caller description of what happened."
     },
     "tests_passed": {
       "type": "boolean",
-      "description": "Whether automated tests passed after the action completed."
+      "description": "Caller-supplied post-action test status."
     },
     "human_feedback": {
       "type": "number",
@@ -617,7 +620,9 @@ graph TD
 
 ## colony_pruning_report
 
-**Description**: Run the pruning daemon against the current pheromone field and return a list of module locations that are stale, broken, or dormant. The daemon never writes or deletes anything; the report is advisory only.
+**Description**: Derive a minimal module registry from current DEPENDENCY traces and
+return any low-usage entries nominated by `PruningDaemon.scan()`. A fresh field normally
+returns no candidates. This report path is read-only and advisory.
 
 ### Input Schema
 
@@ -641,11 +646,11 @@ graph TD
       "items": {
         "type": "object",
         "properties": {
-          "module_path": {"type": "string", "description": "Location key from the pheromone field."},
-          "last_used": {"type": "number", "description": "Unix timestamp of last DEPENDENCY signal; 0.0 if never."},
-          "call_count": {"type": "integer", "description": "Estimated call count (0 for pheromone-only inference)."},
-          "duplicate_of": {"type": ["string", "null"], "description": "Dotted path of surviving equivalent, if known."},
-          "reason": {"type": "string", "description": "Human-readable staleness explanation."},
+          "module_path": {"type": "string", "description": "Location derived from a DEPENDENCY trace."},
+          "last_used": {"type": "number", "description": "Unix timestamp of the latest DEPENDENCY trace update."},
+          "call_count": {"type": "integer", "description": "Minimal derived registry uses 1 for traced locations."},
+          "duplicate_of": {"type": ["string", "null"], "description": "Always null in the MCP-derived registry."},
+          "reason": {"type": "string", "description": "Metadata-rule nomination reason emitted by PruningDaemon.scan()."},
           "confidence": {"type": "number", "description": "Confidence score in [0.0, 1.0]. Only candidates ≥ 0.50 are reported."}
         }
       }
@@ -671,17 +676,8 @@ graph TD
 
 ```json
 {
-  "candidates": [
-    {
-      "module_path": "codomyrmex.dark",
-      "last_used": 0.0,
-      "call_count": 0,
-      "duplicate_of": null,
-      "reason": "No DEPENDENCY signal for >168h; last seen 0.0h ago.",
-      "confidence": 0.73
-    }
-  ],
-  "total_candidates": 1,
+  "candidates": [],
+  "total_candidates": 0,
   "generated_at": 1751234700.0
 }
 ```

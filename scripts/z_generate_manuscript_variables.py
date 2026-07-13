@@ -12,7 +12,6 @@ This script drives the pipeline:
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -46,30 +45,10 @@ def _clean_output_dir(output_dir: Path) -> None:
                 path.unlink()
 
 
-def _manuscript_sources(manuscript_dir: Path) -> list[Path]:
-    sources = sorted(manuscript_dir.glob("[0-9]*.md"))
-    preamble = manuscript_dir / "preamble.md"
-    if preamble.exists():
-        sources.append(preamble)
-    return sources
-
-
-def _inject_tokens(
-    manuscript_dir: Path, output_dir: Path, variables: dict[str, str]
-) -> list[Path]:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    written: list[Path] = []
-    for src_file in _manuscript_sources(manuscript_dir):
-        content = src_file.read_text(encoding="utf-8")
-        for key, value in variables.items():
-            content = content.replace("{{" + key + "}}", str(value))
-        dest = output_dir / src_file.name
-        dest.write_text(content, encoding="utf-8")
-        written.append(dest)
-    return written
-
-
-from codomyrmex.manuscript.variables import compute_variables, inject_via_infrastructure
+from codomyrmex.manuscript.variables import (
+    compute_variables,
+    inject_manuscript_variables,
+)
 
 
 def main() -> int:
@@ -85,33 +64,21 @@ def main() -> int:
         project_root=project_root,
     )
 
+    manuscript_dir = project_root / "docs" / "manuscript"
     # Write JSON snapshot.
     json_out = project_root / "output" / "data" / "manuscript_variables.json"
     _write_json(json_out, variables)
     print(f"[z_generate] wrote {json_out.relative_to(project_root)}")
 
     # Inject into manuscript markdown files.
-    manuscript_dir = project_root / "docs" / "manuscript"
     output_manuscript = project_root / "output" / "manuscript"
     _clean_output_dir(output_manuscript)
 
-    # Try infrastructure rendering injection first.
-    injected_via_infra = False
-    try:
-        inject_via_infrastructure(
-            manuscript_dir=manuscript_dir,
-            output_dir=output_manuscript,
-            variables=variables,
-        )
-        injected_via_infra = True
-        print("[z_generate] injection delegated to infrastructure renderer")
-    except Exception:
-        pass
-
-    if not injected_via_infra:
-        written = _inject_tokens(manuscript_dir, output_manuscript, variables)
-        for p in written:
-            print(f"[z_generate] injected → {p.relative_to(project_root)}")
+    written = inject_manuscript_variables(
+        manuscript_dir, output_manuscript, variables
+    )
+    for path in written:
+        print(f"[z_generate] injected → {path.relative_to(project_root)}")
 
     # Copy config.yaml and *.bib so the rendering infrastructure can find them.
     # resolve_manuscript_dir() in _manuscript_source.py only copies these when

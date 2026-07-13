@@ -89,7 +89,8 @@ class ActuationGate:
 
     Components:
       budget_ok      — 1.0 if resource_ledger.can_afford passes; hard REFUSE if not
-      risk_ok        — 1.0 / 0.5 / 0.0 based on RISK pheromone pressure thresholds
+      risk_ok        — 1.0 / 0.5 / 0.0 based on the larger of RISK and FAILURE
+                       pheromone pressure at the proposal target
       trust_ok       — 0.5 if trust ∈ [0.3, 0.6); 1.0 if trust ≥ 0.6;
                        reduced by _FAILURE_PENALTY when ≥ 3 recent failures
       completeness   — max(0, 1 − missing_count × _MISSING_FIELD_PENALTY)
@@ -114,7 +115,8 @@ class ActuationGate:
             pheromone_store: A ``TraceField`` instance (standalone / test usage) or a
                 ``PheromoneStore`` instance (kernel usage).  Passing any other type
                 raises ``TypeError``.
-            resource_ledger: Optional object with a ``can_afford(cost) -> bool`` method.
+            resource_ledger: Optional object with a ``can_afford(cost)`` method that
+                returns either a Boolean or the canonical ``(approved, reason)`` pair.
                 When provided, the gate performs an internal budget pre-check inside
                 ``evaluate``.  The kernel passes ``None`` here and supplies
                 ``budget_approved`` explicitly in the four-argument ``evaluate`` call.
@@ -168,6 +170,12 @@ class ActuationGate:
                 self._pheromone, proposal.target, SignalType.HUMAN_PRIORITY
             ),
         }
+        # RISK represents prospective concern; FAILURE represents caller-reported adverse
+        # outcomes. The gate treats either as sufficient local hazard evidence while
+        # retaining both raw channels for diagnosis and independent decay.
+        pheromone_readings["effective_risk"] = max(
+            pheromone_readings["risk"], pheromone_readings["failure"]
+        )
         completeness_flags = {
             "has_rollback_plan": bool(proposal.rollback_plan.strip()),
             "has_evidence": bool(proposal.evidence),
@@ -245,9 +253,15 @@ class ActuationGate:
         # --- internal budget check (standalone style) ---
         if budget_approved is None:
             if self._ledger is not None:
-                budget_approved = bool(
-                    self._ledger.can_afford(proposal.budget_estimate)
-                )
+                affordability = self._ledger.can_afford(proposal.budget_estimate)
+                if isinstance(affordability, tuple):
+                    if not affordability:
+                        raise TypeError(
+                            "resource_ledger.can_afford() returned an empty tuple"
+                        )
+                    budget_approved = bool(affordability[0])
+                else:
+                    budget_approved = bool(affordability)
             else:
                 budget_approved = True
 
@@ -344,7 +358,7 @@ class ActuationGate:
         # budget_ok
         budget_ok = 1.0  # already cleared the hard override above
 
-        risk_pressure = pheromone_readings["risk"]
+        risk_pressure = pheromone_readings["effective_risk"]
         if risk_pressure >= _HIGH_RISK_THRESHOLD:
             risk_ok = 0.0
         elif risk_pressure >= _MED_RISK_THRESHOLD:
@@ -389,7 +403,9 @@ class ActuationGate:
         issues: list[str] = []
         if risk_ok < 1.0:
             issues.append(
-                f"high-risk pheromone pressure at target ({risk_pressure:.2f})"
+                "elevated local pheromone hazard pressure at target "
+                f"({risk_pressure:.2f}; risk={pheromone_readings['risk']:.2f}, "
+                f"failure={pheromone_readings['failure']:.2f})"
             )
         if trust_ok < 0.5 or (trust_ok < 1.0 and recent_fail_count >= 3):
             issues.append(

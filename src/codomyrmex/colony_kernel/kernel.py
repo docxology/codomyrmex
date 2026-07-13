@@ -132,8 +132,11 @@ class ColonyKernel:
 
         self.pheromone_store = PheromoneStore(config=self._config.pheromone_config)
         self.resource_ledger = ResourceLedger(budget=self._config.budget)
-        self.actuation_gate = ActuationGate(pheromone_store=self.pheromone_store)
         self.consequence_memory = ConsequenceMemory(db_path=self._config.db_path)
+        self.actuation_gate = ActuationGate(
+            pheromone_store=self.pheromone_store,
+            consequence_memory_ref=self.consequence_memory,
+        )
         self.role_adapter = RoleAdapter()
         self.pruning_daemon = PruningDaemon(
             pheromone_store=self.pheromone_store,
@@ -158,8 +161,9 @@ class ColonyKernel:
         5. On REFUSE: deposit a FAILURE pheromone at the agent's target so
            the signal decays into future evaluations.
 
-        Does NOT consume budget; ``record_outcome`` calls ``consume`` with
-        the actual cost after execution.
+        Does NOT consume budget. A later, caller-initiated ``record_outcome``
+        call consumes a supplied valid cost mapping or falls back to the
+        proposal estimate. The kernel does not attest that execution occurred.
         """
         # Step 1 — falsification
         findings = self.falsification_worker.analyze(proposal)
@@ -236,14 +240,15 @@ class ColonyKernel:
         tests_passed: bool,
         human_feedback: str | None = None,
     ) -> ConsequenceRecord:
-        """Record the consequence of an executed action and update pheromones.
+        """Record a caller-reported consequence and update pheromones.
 
         Parameters
         ----------
         proposal:
-            The original ActionProposal that was executed.
+            The ActionProposal associated with the report. This method does not
+            verify a prior EXECUTE verdict or that execution occurred.
         outcome:
-            Free-form dict describing what actually happened.
+            Free-form caller report describing what happened.
         tests_passed:
             Whether post-action tests passed.
         human_feedback:

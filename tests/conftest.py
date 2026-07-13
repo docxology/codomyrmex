@@ -2,8 +2,12 @@
 
 import contextlib
 import functools
+import hashlib
 import json
 import os
+import sys
+import tempfile
+from pathlib import Path
 
 # Hypothesis seeds NumPy's RNG when available; on some Python/NumPy combos that
 # import chain fails (e.g. ImportError: cannot import name randbits). Property
@@ -11,6 +15,20 @@ import os
 # a shell value cannot disable it; codomyrmex/conftest.py also sets this in
 # pytest_configure.
 os.environ["HYPOTHESIS_NO_NPY"] = "1"
+
+# Collection can instantiate clients in marker expressions before function
+# fixtures exist. Give every pytest worker a process-local persistence root,
+# then narrow it to ``tmp_path`` inside the autouse fixture below.
+_PROCESS_TEST_STATE_HANDLE = tempfile.TemporaryDirectory(
+    prefix=f"codomyrmex-pytest-{os.getpid()}-"
+)
+_PROCESS_TEST_STATE = Path(_PROCESS_TEST_STATE_HANDLE.name)
+os.environ["CODOMYRMEX_TRUST_LEDGER_PATH"] = str(
+    _PROCESS_TEST_STATE / "trust-ledger.json"
+)
+os.environ["CODOMYRMEX_HERMES_SESSION_DB"] = str(
+    _PROCESS_TEST_STATE / "hermes-sessions.db"
+)
 
 
 def _patch_hypothesis_is_local_module_file() -> None:
@@ -38,7 +56,6 @@ def _patch_hypothesis_is_local_module_file() -> None:
 _patch_hypothesis_is_local_module_file()
 
 import subprocess
-from pathlib import Path
 
 import pytest
 
@@ -59,6 +76,29 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "unit: Unit tests")
     config.addinivalue_line("markers", "integration: Integration tests")
     config.addinivalue_line("markers", "slow: Slow running tests")
+    config.addinivalue_line("markers", "bench: Opt-in benchmark and timing tests")
+    config.addinivalue_line("markers", "benchmark: Opt-in pytest-benchmark tests")
+    config.addinivalue_line("markers", "performance: Performance test suite")
+
+
+_TESTS_ROOT = Path(__file__).parent.resolve()
+
+
+def _is_performance_test_path(path: Path) -> bool:
+    """Return whether *path* belongs to the opt-in performance suite."""
+    try:
+        relative = path.resolve().relative_to(_TESTS_ROOT)
+    except ValueError:
+        return False
+    return bool(relative.parts) and relative.parts[0] == "performance"
+
+
+def pytest_itemcollected(item: pytest.Item) -> None:
+    """Apply all benchmark aliases before pytest evaluates ``-m`` filters."""
+    if _is_performance_test_path(Path(str(item.path))):
+        item.add_marker(pytest.mark.bench)
+        item.add_marker(pytest.mark.benchmark)
+        item.add_marker(pytest.mark.performance)
 
 
 @pytest.fixture
@@ -145,24 +185,49 @@ def login(username, pwd):
 
 
 @pytest.fixture(autouse=True)
-def setup_test_environment():
-    """Auto-use fixture to set up test environment."""
+def setup_test_environment(request: pytest.FixtureRequest):
+    """Set up an isolated environment, including per-test trust persistence."""
     os.environ["HYPOTHESIS_NO_NPY"] = "1"
     # Ensure we're in test mode
+    original_test_mode = os.environ.get("CODOMYRMEX_TEST_MODE")
     os.environ.setdefault("CODOMYRMEX_TEST_MODE", "true")
 
     # Prevent Git from opening an editor or terminal prompt during tests
     # This prevents VS Code or Vim auto-popping up if a command requires a message check
     original_git_editor = os.environ.get("GIT_EDITOR")
     original_git_prompt = os.environ.get("GIT_TERMINAL_PROMPT")
+    original_trust_ledger = os.environ.get("CODOMYRMEX_TRUST_LEDGER_PATH")
+    original_hermes_db = os.environ.get("CODOMYRMEX_HERMES_SESSION_DB")
     os.environ["GIT_EDITOR"] = "true"
     os.environ["GIT_TERMINAL_PROMPT"] = "0"
+    test_token = hashlib.sha256(request.node.nodeid.encode()).hexdigest()[:16]
+    test_state = _PROCESS_TEST_STATE / test_token
+    trust_ledger = test_state / "codomyrmex-trust-ledger.json"
+    hermes_db = test_state / "codomyrmex-hermes-sessions.db"
+    os.environ["CODOMYRMEX_TRUST_LEDGER_PATH"] = str(trust_ledger)
+    os.environ["CODOMYRMEX_HERMES_SESSION_DB"] = str(hermes_db)
+
+    # Most trust tests import the module during collection, before fixtures
+    # run. Redirect that already-created (but lazily unloaded) singleton too.
+    trust_module = sys.modules.get("codomyrmex.agents.pai.trust_gateway")
+    if trust_module is not None:
+        registry = getattr(trust_module, "_registry", None)
+        if registry is not None:
+            registry.configure_ledger_path(trust_ledger, load_existing=False)
+
+    client_factory_module = sys.modules.get(
+        "codomyrmex.agents.hermes.mcp_tools_pkg._client"
+    )
+    if client_factory_module is not None:
+        client_factory_module._factory_override = None
 
     yield
 
     # Cleanup after test
-    if "CODOMYRMEX_TEST_MODE" in os.environ:
-        del os.environ["CODOMYRMEX_TEST_MODE"]
+    if original_test_mode is not None:
+        os.environ["CODOMYRMEX_TEST_MODE"] = original_test_mode
+    else:
+        os.environ.pop("CODOMYRMEX_TEST_MODE", None)
 
     if original_git_editor is not None:
         os.environ["GIT_EDITOR"] = original_git_editor
@@ -173,6 +238,22 @@ def setup_test_environment():
         os.environ["GIT_TERMINAL_PROMPT"] = original_git_prompt
     elif "GIT_TERMINAL_PROMPT" in os.environ:
         del os.environ["GIT_TERMINAL_PROMPT"]
+
+    if original_trust_ledger is not None:
+        os.environ["CODOMYRMEX_TRUST_LEDGER_PATH"] = original_trust_ledger
+    else:
+        os.environ.pop("CODOMYRMEX_TRUST_LEDGER_PATH", None)
+
+    if original_hermes_db is not None:
+        os.environ["CODOMYRMEX_HERMES_SESSION_DB"] = original_hermes_db
+    else:
+        os.environ.pop("CODOMYRMEX_HERMES_SESSION_DB", None)
+
+    client_factory_module = sys.modules.get(
+        "codomyrmex.agents.hermes.mcp_tools_pkg._client"
+    )
+    if client_factory_module is not None:
+        client_factory_module._factory_override = None
 
 
 # ===== REAL DATA FIXTURES =====

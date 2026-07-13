@@ -112,9 +112,9 @@ def fig_falsification_vectors() -> None:
 
     legend_items = [
         mpatches.Patch(color=_OI["black"], label="CRITICAL override class"),
-        mpatches.Patch(color=_OI["vermil"], label="HIGH — strong REFUSE signal"),
-        mpatches.Patch(color=_OI["orange"], label="MEDIUM — HOLD candidate"),
-        mpatches.Patch(color=_OI["sky"], label="LOW — advisory"),
+        mpatches.Patch(color=_OI["vermil"], label="HIGH — FAILURE deposit"),
+        mpatches.Patch(color=_OI["orange"], label="MEDIUM — RISK deposit"),
+        mpatches.Patch(color=_OI["sky"], label="LOW — finding only"),
     ]
     ax.legend(
         handles=legend_items,

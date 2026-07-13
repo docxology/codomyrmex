@@ -19,10 +19,10 @@ def fig_subsystem_architecture() -> None:
     subsystems = [
         ("Pheromone\nStore", _OI["orange"], "Stigmergic\ntraces & decay"),
         ("Resource\nLedger", _OI["blue"], "Budget\nenforcement"),
-        ("Actuation\nGate", _OI["vermil"], "Permission\nscoring gate"),
-        ("Consequence\nMemory", _OI["green"], "SQLite\noutcome log"),
+        ("Actuation\nGate", _OI["vermil"], "Decision\nscoring gate"),
+        ("Consequence\nMemory", _OI["green"], "Reported\noutcome log"),
         ("Role\nAdapter", _OI["pink"], "Trust → role\ninference"),
-        ("Pruning\nDaemon", _OI["grey"], "Stale module\neviction"),
+        ("Pruning\nDaemon", _OI["grey"], "Stale module\nnomination"),
         ("Falsification\nWorker", "#444444", "Adversarial\npre-check"),
     ]
     n = len(subsystems)

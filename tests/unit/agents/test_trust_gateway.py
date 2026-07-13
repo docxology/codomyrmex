@@ -162,6 +162,16 @@ class TestTrustRegistry:
         for name in SAFE_TOOLS | DESTRUCTIVE_TOOLS:
             assert reg.level(name) == TrustLevel.UNTRUSTED
 
+    def test_empty_ledger_reconfiguration_resets_in_memory_trust(self, tmp_path):
+        reg = TrustRegistry(tmp_path / "first.json")
+        reg.trust_tool("codomyrmex.read_file")
+        assert reg.is_trusted("codomyrmex.read_file")
+
+        reg.configure_ledger_path(tmp_path / "second.json", load_existing=False)
+
+        assert reg.level("codomyrmex.read_file") == TrustLevel.UNTRUSTED
+        assert not (tmp_path / "second.json").exists()
+
     def test_report_structure(self):
         reg = TrustRegistry()
         report = reg.get_report()

@@ -5,7 +5,6 @@ from codomyrmex.manuscript.figures.generators import (
     fig_cover_art,
     fig_falsification_vectors,
     fig_fep_correspondence,
-    fig_formula_comparison,
     fig_gate_score_3d,
     fig_gate_score_heatmap,
     fig_pheromone_decay,
@@ -24,7 +23,6 @@ FIGURES: list[tuple[str, object]] = [
     ("subsystem_architecture.png", fig_subsystem_architecture),
     ("gate_score_3d.png", fig_gate_score_3d),
     ("fep_correspondence.png", fig_fep_correspondence),
-    ("formula_comparison.png", fig_formula_comparison),
 ]
 
 __all__ = [
@@ -33,7 +31,6 @@ __all__ = [
     "fig_cover_art",
     "fig_falsification_vectors",
     "fig_fep_correspondence",
-    "fig_formula_comparison",
     "fig_gate_score_3d",
     "fig_gate_score_heatmap",
     "fig_pheromone_decay",

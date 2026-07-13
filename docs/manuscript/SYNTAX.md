@@ -6,13 +6,13 @@ Project-specific overlay for the **codomyrmex** manuscript. This file documents 
 
 ```markdown
 <!-- Single citation -->
-[@dorigo2004ants]
+[@dorigo2004ant]
 
 <!-- Multiple citations -->
-[@dorigo2004ants; @bonabeau1999swarm]
+[@dorigo2004ant; @bonabeau1999swarm]
 
 <!-- Citation with locator -->
-[@dorigo2004ants, pp. 14-17]
+[@dorigo2004ant, pp. 14-17]
 
 <!-- Narrative citation -->
 @grasse1959reconstruction described how ants coordinate...
@@ -42,13 +42,32 @@ Reference equations with `[@eq:label]` (parenthetical) or `@eq:label` (narrative
 | Label | Equation | Source file |
 |---|---|---|
 | `{#eq:effective_strength}` | Signal strength scaled by source multiplier and agent trust factor | `02_methodology.md` |
-| `{#eq:gate_score_detail}` | $g = 0.30 \cdot \text{budget\_ok} + 0.30 \cdot \text{risk\_ok} + 0.25 \cdot \text{trust\_ok} + 0.15 \cdot \text{completeness}$ | `02_methodology.md` |
+| `{#eq:gate_score_detail}` | Generated weighted ordinary gate score | `02_methodology.md` |
 | `{#eq:trust_penalty}` | Local trust-component penalty for recent failure streaks | `02_methodology.md` |
 | `{#eq:proposal_completeness}` | Completeness score as a function of missing evidence fields | `02_methodology.md` |
 | `{#eq:worked_example_execute}` | Worked EXECUTE score under clean budget/risk and medium trust | `02_methodology.md` |
 | `{#eq:worked_example_failure_streak}` | Worked score after recent-failure trust penalty | `02_methodology.md` |
 | `{#eq:worked_example_hold}` | Worked HOLD score after failure streak and medium risk pressure | `02_methodology.md` |
 | `{#eq:trust_delta}` | $\Delta_\text{trust} = \Delta_\text{pass/fail} + \Delta_\text{repair} + h \cdot \Delta_\text{human}$ | `02_methodology.md` |
+| `{#eq:field-state}` | Capped location-by-signal field state | `02_theory.md` |
+| `{#eq:field-recurrence}` | Implemented capped subtractive recurrence | `02_theory.md` |
+| `{#eq:passive-linear-decay}` | Closed form for passive linear decay | `02_theory.md` |
+| `{#eq:finite-extinction}` | Finite extinction tick for passive traces | `02_theory.md` |
+| `{#eq:effective-hazard}` | Maximum of local RISK and FAILURE pressure | `02_theory.md` |
+| `{#eq:risk-clearance}` | Piecewise hazard-credit map | `02_theory.md` |
+| `{#eq:paired-clear-score}` | Clear-target paired gate score | `02_theory.md` |
+| `{#eq:paired-failure-score}` | Failed-target paired gate score | `02_theory.md` |
+| `{#eq:theory-gate-score}` | General weighted ordinary gate score | `02_theory.md` |
+| `{#eq:hold-value-condition}` | Conditional value criterion for HOLD | `02_theory.md` |
+| `{#eq:trust-update}` | Clipped trust-state recurrence | `02_theory.md` |
+| `{#eq:trust-delta}` | Outcome-dependent trust increment | `02_theory.md` |
+| `{#eq:trust-drift}` | Expected drift under a stated outcome model | `02_theory.md` |
+| `{#eq:trust-replacement-sensitivity}` | Replacement sensitivity of the deterministic trust summary | `02_theory.md` |
+| `{#eq:paired-score-change}` | Exact paired same-target score change | `03_results.md` |
+| `{#eq:lower-tier-score}` | Attainable lower-tier score family | `03_results.md` |
+| `{#eq:variational-free-energy}` | Canonical identity used for comparison | `08_active_inference.md` |
+| `{#eq:appendix-gate-score}` | Appendix ordinary gate score | `90_appendix_design_rationale.md` |
+| `{#eq:appendix-linear-decay}` | Appendix linear-decay recurrence | `90_appendix_design_rationale.md` |
 
 ## Section Labels
 
@@ -58,12 +77,15 @@ Every H1 in this manuscript carries a `{#sec:<name>}` label so cross-section ref
 |---|---|---|
 | `00_abstract.md` | Abstract | `{#sec:abstract .unnumbered}` |
 | `01_introduction.md` | Introduction | `{#sec:introduction}` |
+| `02_theory.md` | Verified Formal Model | `{#sec:theory}` |
 | `02_methodology.md` | Methodology | `{#sec:methodology}` |
-| `03_results.md` | Colony Kernel Implementation Results | `{#sec:results}` |
+| `03_results.md` | Verified Implementation Results | `{#sec:results}` |
 | `04_conclusion.md` | Conclusion | `{#sec:conclusion}` |
-| `05_experimental_setup.md` | Experimental Setup | `{#sec:experimental_setup}` |
-| `06_reproducibility.md` | Reproducibility Certification | `{#sec:reproducibility}` |
+| `05_experimental_setup.md` | Proposed Evaluation Protocol and Release Configuration | `{#sec:experimental_setup}` |
+| `06_reproducibility.md` | Reproducibility Evidence and Limits | `{#sec:reproducibility}` |
 | `07_scope_and_related_work.md` | Scope, Related Work, and Positioning | `{#sec:scope}` |
+| `08_active_inference.md` | Active Inference as a Design Analogy | `{#sec:active-inference}` |
+| `90_appendix_design_rationale.md` | Appendix: Design Rationale and Visual Evidence | `{#sec:design-rationale}` |
 | `99_references.md` | References | `{#sec:references .unnumbered}` |
 
 ## Table References
@@ -85,30 +107,41 @@ Every H1 in this manuscript carries a `{#sec:<name>}` label so cross-section ref
 |---|---|---|
 | `{#tbl:subsystem_overview}` | Colony Control Plane subsystem overview | `02_methodology.md` |
 | `{#tbl:signal_types}` | Pheromone signal types and gate effects | `02_methodology.md` |
-| `{#tbl:methodology_decay_rates}` | Pheromone decay classes and retention constants | `02_methodology.md` |
+| `{#tbl:methodology_decay_rates}` | Subtractive unit-trace decay classes | `02_methodology.md` |
 | `{#tbl:resource_dimensions}` | Resource budget dimensions enforced by `ResourceLedger` | `02_methodology.md` |
-| `{#tbl:risk_pressure_mapping}` | RISK pheromone pressure mapping used by the gate | `02_methodology.md` |
+| `{#tbl:risk_pressure_mapping}` | Effective local-hazard mapping used by the gate | `02_methodology.md` |
 | `{#tbl:trust_mapping}` | Trust-score mapping used by the gate | `02_methodology.md` |
 | `{#tbl:gate_decision_thresholds}` | Actuation-gate decision thresholds | `02_methodology.md` |
-| `{#tbl:role_ladder_methodology}` | Kernel role ladder and action permissions | `02_methodology.md` |
+| `{#tbl:role_ladder_methodology}` | Role labels and intended specializations | `02_methodology.md` |
 | `{#tbl:pruning_confidence}` | Pruning-daemon candidate confidence tiers | `02_methodology.md` |
 | `{#tbl:falsification_taxonomy}` | Falsification-worker attack vector taxonomy | `02_methodology.md` |
-| `{#tbl:quality_gates}` | ruff / ty / pytest / coverage gate outcomes for the Colony Kernel | `03_results.md` |
-| `{#tbl:trust_trajectory}` | Trust score and role at representative outcome checkpoints for a new agent | `03_results.md` |
-| `{#tbl:gate_outcomes}` | Gate-score outcomes under varied agent and proposal conditions | `03_results.md` |
-| `{#tbl:mcp_tools}` | Colony Kernel MCP tool inventory — 8 tools with name and purpose | `03_results.md` |
-| `{#tbl:dependent_variables}` | Dependent variables for the configured benchmark protocol | `05_experimental_setup.md` |
+| `{#tbl:formal-claim-status}` | Verified properties and open hypotheses | `02_theory.md` |
+| `{#tbl:quality_gates}` | Executed pytest/coverage/Ruff/ty snapshot | `03_results.md` |
+| `{#tbl:paired-locality}` | Same-target inhibition, target isolation, and decay recovery | `03_results.md` |
+| `{#tbl:representative-gates}` | Formula-checked gate cases | `03_results.md` |
+| `{#tbl:trust_trajectory}` | Deterministic all-success trust fixture | `03_results.md` |
+| `{#tbl:linear-decay-values}` | Exact passive unit-trace decay | `03_results.md` |
+| `{#tbl:mcp-tools}` | Eight-tool MCP state-effect inventory | `03_results.md` |
+| `{#tbl:evidence-status}` | Executed and proposed evidence status | `05_experimental_setup.md` |
+| `{#tbl:dependent_variables}` | Required proposed-benchmark outcomes | `05_experimental_setup.md` |
 | `{#tbl:experimental_gate_thresholds}` | Gate decision thresholds for experimental configuration | `05_experimental_setup.md` |
 | `{#tbl:experimental_gate_weights}` | Gate score dimension weights for experimental configuration | `05_experimental_setup.md` |
-| `{#tbl:experimental_decay_rates}` | Pheromone decay rate classes for experimental configuration | `05_experimental_setup.md` |
+| `{#tbl:experimental_decay_rates}` | Linear field dynamics for unit traces | `05_experimental_setup.md` |
 | `{#tbl:resource_budget_caps}` | Resource budget caps from `kernel.yaml` | `05_experimental_setup.md` |
-| `{#tbl:role_ladder}` | `AgentRole` variants, promotion thresholds, and permitted actions | `05_experimental_setup.md` |
+| `{#tbl:role_ladder}` | Inferred labels and current enforcement boundary | `05_experimental_setup.md` |
 | `{#tbl:software_environment}` | Software environment for the manuscript snapshot | `05_experimental_setup.md` |
+| `{#tbl:repro-scope}` | Scope of reproducibility evidence | `06_reproducibility.md` |
 | `{#tbl:configuration_provenance}` | Configuration provenance for the rendered manuscript | `06_reproducibility.md` |
 | `{#tbl:artifact_registry}` | Generated artifact registry for the manuscript pipeline | `06_reproducibility.md` |
 | `{#tbl:quality_gate_summary}` | Quality gate summary used by the reproducibility certificate | `06_reproducibility.md` |
 | `{#tbl:software_versions}` | Software versions used by the reproducibility certificate | `06_reproducibility.md` |
 | `{#tbl:evaluation_snapshot}` | Evaluation snapshot inputs and generated artifacts | `06_reproducibility.md` |
+| `{#tbl:external-evidence}` | Evidence required for an external comparison | `06_reproducibility.md` |
+| `{#tbl:falsification-benchmarks}` | Conclusion claim boundary and falsification agenda | `04_conclusion.md` |
+| `{#tbl:external-validation-agenda}` | Future external validation agenda | `07_scope_and_related_work.md` |
+| `{#tbl:ai-correspondence-status}` | Active Inference analogies and non-equivalence | `08_active_inference.md` |
+| `{#tbl:gate-formula-tradeoffs}` | Candidate score-policy tradeoffs | `90_appendix_design_rationale.md` |
+| `{#tbl:appendix-figures}` | Generated figure evidence registry | `90_appendix_design_rationale.md` |
 
 ## Figure References
 
@@ -128,15 +161,21 @@ Figure source PNG files live in `output/figures/` and are generated by `scripts/
 | Label | PNG filename | Generator function | Source file |
 |---|---|---|---|
 | `{#fig:architecture}` | `subsystem_architecture.png` | `fig_subsystem_architecture()` | `02_methodology.md` |
-| `{#fig:pheromone_decay}` | `pheromone_decay.png` | `fig_pheromone_decay()` | `02_methodology.md` |
+| `{#fig:pheromone_decay}` | `pheromone_decay.png` | `fig_pheromone_decay()` | `02_theory.md` |
 | `{#fig:falsification_vectors}` | `falsification_vectors.png` | `fig_falsification_vectors()` | `02_methodology.md` |
 | `{#fig:pressure_loop}` | `colony_pressure_loop.png` | `fig_colony_pressure_loop()` | `02_methodology.md` |
 | `{#fig:trust_trajectory}` | `trust_trajectory.png` | `fig_trust_trajectory()` | `03_results.md` |
 | `{#fig:gate_heatmap}` | `gate_score_heatmap.png` | `fig_gate_score_heatmap()` | `03_results.md` |
+| `{#fig:gate_score_3d}` | `gate_score_3d.png` | `fig_gate_score_3d()` | `02_theory.md` |
+| `{#fig:fep_correspondence}` | `fep_correspondence.png` | `fig_fep_correspondence()` | `08_active_inference.md` |
+
+The additional generated image is `cover.png`, referenced by the unnumbered cover page.
+`output/figures/figure_registry.json` records the generated filenames, evidence classes,
+byte sizes, and SHA-256 hashes.
 
 ## `{{VARIABLE}}` Token Table
 
-All `{{TOKEN}}` placeholders are resolved at render time by `scripts/z_generate_manuscript_variables.py`, which writes `output/data/manuscript_variables.json` and substituted Markdown under `output/manuscript/`. An unresolved token causes a non-zero exit before the PDF renderer runs. The table below is the complete v1.3.0 generated variable inventory; tokens marked "generated map only" are emitted for reproducibility or downstream templates but are not currently referenced by the numbered manuscript sections.
+All `{{TOKEN}}` placeholders are resolved at render time by `scripts/z_generate_manuscript_variables.py`, which writes `output/data/manuscript_variables.json` and substituted Markdown under `output/manuscript/`. An undefined or unresolved token causes a non-zero exit before the PDF renderer runs. The JSON snapshot and the key map in `variables.py` are authoritative; the compact table below is an authoring aid, not a second complete inventory.
 
 | Token | Category | Section(s) |
 |---|---|---|
@@ -157,11 +196,11 @@ All `{{TOKEN}}` placeholders are resolved at render time by `scripts/z_generate_
 | `{{CONFIG_DECAY_RATE_NORMAL}}` | CONFIG | `05_experimental_setup.md` |
 | `{{CONFIG_DECAY_RATE_SLOW}}` | CONFIG | generated map only |
 | `{{CONFIG_DOI}}` | CONFIG | `00_00_cover.md` |
-| `{{CONFIG_FALSIFICATION_VECTORS}}` | CONFIG | `01_introduction.md`, `05_experimental_setup.md` |
+| `{{CONFIG_FALSIFICATION_VECTORS}}` | CONFIG | generated map only |
 | `{{CONFIG_FIRST_AUTHOR}}` | CONFIG | `00_00_cover.md`, `00_abstract.md`, `06_reproducibility.md` |
-| `{{CONFIG_GATE_EXECUTE_THRESHOLD}}` | CONFIG | `00_abstract.md`, `01_introduction.md`, `05_experimental_setup.md` |
-| `{{CONFIG_GATE_HOLD_THRESHOLD}}` | CONFIG | `01_introduction.md`, `05_experimental_setup.md` |
-| `{{CONFIG_GATE_WEIGHT_BUDGET}}` | CONFIG | `01_introduction.md` |
+| `{{CONFIG_GATE_EXECUTE_THRESHOLD}}` | CONFIG | `00_abstract.md`, `05_experimental_setup.md` |
+| `{{CONFIG_GATE_HOLD_THRESHOLD}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_GATE_WEIGHT_BUDGET}}` | CONFIG | generated map only |
 | `{{CONFIG_GATE_WEIGHT_COMPLETENESS}}` | CONFIG | generated map only |
 | `{{CONFIG_GATE_WEIGHT_RISK}}` | CONFIG | generated map only |
 | `{{CONFIG_GATE_WEIGHT_TRUST}}` | CONFIG | generated map only |
@@ -169,7 +208,7 @@ All `{{TOKEN}}` placeholders are resolved at render time by `scripts/z_generate_
 | `{{CONFIG_HASH}}` | CONFIG | `06_reproducibility.md` |
 | `{{CONFIG_KEYWORDS}}` | CONFIG | `00_abstract.md`, `06_reproducibility.md` |
 | `{{CONFIG_MCP_TOOL_COUNT}}` | CONFIG | `00_abstract.md` |
-| `{{CONFIG_MODULE_COUNT}}` | CONFIG | `00_abstract.md` |
+| `{{CONFIG_MODULE_COUNT}}` | CONFIG | generated map only |
 | `{{CONFIG_PHEROMONE_RETENTION_FAST}}` | CONFIG | generated map only |
 | `{{CONFIG_PHEROMONE_RETENTION_FAST_PCT}}` | CONFIG | `02_methodology.md` |
 | `{{CONFIG_PHEROMONE_RETENTION_NORMAL}}` | CONFIG | generated map only |
@@ -178,46 +217,43 @@ All `{{TOKEN}}` placeholders are resolved at render time by `scripts/z_generate_
 | `{{CONFIG_PHEROMONE_RETENTION_SLOW_PCT}}` | CONFIG | `02_methodology.md` |
 | `{{CONFIG_PUBLICATION_DATE}}` | CONFIG | generated map only |
 | `{{CONFIG_PUBLICATION_DATE_DISPLAY}}` | CONFIG | `00_00_cover.md` |
-| `{{CONFIG_ROLE_COUNT}}` | CONFIG | `00_abstract.md`, `05_experimental_setup.md` |
-| `{{CONFIG_SIGNAL_TYPES_COUNT}}` | CONFIG | `00_abstract.md`, `05_experimental_setup.md` |
+| `{{CONFIG_ROLE_COUNT}}` | CONFIG | generated map only |
+| `{{CONFIG_SIGNAL_TYPES_COUNT}}` | CONFIG | generated map only |
 | `{{CONFIG_SUBTITLE}}` | CONFIG | `00_00_cover.md` |
-| `{{CONFIG_TEST_COUNT}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_TEST_COUNT}}` | CONFIG | generated map only |
 | `{{CONFIG_TITLE}}` | CONFIG | `00_00_cover.md` |
-| `{{CONFIG_TRIAL_COUNT}}` | CONFIG | `05_experimental_setup.md` |
-| `{{CONFIG_TRIAL_COUNT_MINUS_1}}` | CONFIG | `05_experimental_setup.md` |
-| `{{CONFIG_TRUST_DELTA_FAIL}}` | CONFIG | `07_scope_and_related_work.md` |
-| `{{CONFIG_TRUST_DELTA_PASS}}` | CONFIG | `03_results.md`, `07_scope_and_related_work.md` |
-| `{{CONFIG_TRUST_HARD_FLOOR}}` | CONFIG | `01_introduction.md` |
+| `{{CONFIG_TRIAL_COUNT}}` | CONFIG | `01_introduction.md`, `05_experimental_setup.md` |
+| `{{CONFIG_TRIAL_COUNT_MINUS_1}}` | CONFIG | generated map only |
+| `{{CONFIG_TRUST_DELTA_FAIL}}` | CONFIG | generated map only |
+| `{{CONFIG_TRUST_DELTA_PASS}}` | CONFIG | generated map only |
+| `{{CONFIG_TRUST_HARD_FLOOR}}` | CONFIG | generated map only |
 | `{{CONFIG_TRUST_PROMOTE_THRESHOLD}}` | CONFIG | generated map only |
-| `{{CONFIG_TRUST_SANDBOX_SCORE}}` | CONFIG | `00_abstract.md` |
-| `{{CONFIG_VERSION}}` | CONFIG | `00_abstract.md`, `05_experimental_setup.md`, `06_reproducibility.md` |
+| `{{CONFIG_TRUST_SANDBOX_SCORE}}` | CONFIG | generated map only |
+| `{{CONFIG_VERSION}}` | CONFIG | `00_00_cover.md`, `05_experimental_setup.md`, `06_reproducibility.md` |
 | `{{CONFIG_WARMUP_TICKS}}` | CONFIG | `05_experimental_setup.md` |
 | `{{CONFIG_WORKLOAD_TASK_COUNT}}` | CONFIG | `05_experimental_setup.md` |
-| `{{CONFIG_YAML_CONFIG_FILES}}` | CONFIG | `05_experimental_setup.md` |
+| `{{CONFIG_YAML_CONFIG_FILES}}` | CONFIG | generated map only |
 | `{{GENERATION_TIMESTAMP}}` | ENVIRONMENT | `05_experimental_setup.md`, `06_reproducibility.md` |
 | `{{PLATFORM}}` | ENVIRONMENT | generated map only |
 | `{{PYTHON_VERSION}}` | ENVIRONMENT | `05_experimental_setup.md`, `06_reproducibility.md` |
 | `{{RESULT_COLONY_KERNEL_FILES}}` | RESULT | `03_results.md`, `06_reproducibility.md` |
 | `{{RESULT_COLONY_KERNEL_LOC}}` | RESULT | `03_results.md` |
 | `{{RESULT_COVERAGE_PCT}}` | RESULT | `00_abstract.md`, `03_results.md`, `06_reproducibility.md` |
-| `{{RESULT_GATE_REFUSAL_RATE}}` | RESULT | `00_abstract.md` |
-| `{{RESULT_GATE_SCORE_PROMOTED}}` | RESULT | generated map only |
 | `{{RESULT_GATE_SCORE_SANDBOX}}` | RESULT | generated map only |
 | `{{RESULT_MODULE_DOCS_COUNT}}` | RESULT | `06_reproducibility.md` |
-| `{{RESULT_PHEROMONE_FAST_LOSS_8_TICK_PCT}}` | RESULT | `03_results.md` |
-| `{{RESULT_PHEROMONE_SLOW_RETENTION_8_TICK_PCT}}` | RESULT | `03_results.md` |
+| `{{RESULT_PHEROMONE_FAST_LOSS_REPORT_TICK_PCT}}` | RESULT | `03_results.md`, `05_experimental_setup.md` |
+| `{{RESULT_PHEROMONE_SLOW_RETENTION_REPORT_TICK_PCT}}` | RESULT | `03_results.md`, `05_experimental_setup.md` |
 | `{{RESULT_PROPOSALS_TO_PROMOTION}}` | RESULT | generated map only |
-| `{{RESULT_RUFF_ERRORS}}` | RESULT | `00_abstract.md`, `06_reproducibility.md` |
+| `{{RESULT_RUFF_ERRORS}}` | RESULT | `00_abstract.md`, `03_results.md`, `06_reproducibility.md` |
 | `{{RESULT_TEST_COUNT}}` | RESULT | `00_abstract.md`, `03_results.md`, `06_reproducibility.md` |
 | `{{RESULT_TRUST_AFTER_PROMOTION}}` | RESULT | generated map only |
-| `{{RESULT_TRUST_AT_0}}` | RESULT | `03_results.md` |
-| `{{RESULT_TRUST_AT_12}}` | RESULT | `03_results.md` |
-| `{{RESULT_TRUST_AT_3}}` | RESULT | `03_results.md` |
-| `{{RESULT_TRUST_AT_6}}` | RESULT | `03_results.md` |
-| `{{RESULT_TRUST_AT_9}}` | RESULT | `03_results.md` |
-| `{{RESULT_TRUST_CONVERGENCE_STEPS}}` | RESULT | `00_abstract.md` |
+| `{{RESULT_TRUST_TRAJECTORY_ROWS}}` | RESULT | `03_results.md` |
+| `{{RESULT_PAIRED_LOCALITY_ROWS}}` | RESULT | `03_results.md` |
+| `{{RESULT_DECAY_ROWS}}` | RESULT | `03_results.md` |
+| `{{RESULT_REPRESENTATIVE_GATE_ROWS}}` | RESULT | `03_results.md` |
+| `{{RESULT_TRUST_CONVERGENCE_STEPS}}` | RESULT | generated map only |
 | `{{RESULT_TRUST_INITIAL}}` | RESULT | generated map only |
-| `{{RESULT_TY_ERRORS}}` | RESULT | `00_abstract.md`, `06_reproducibility.md` |
+| `{{RESULT_TY_ERRORS}}` | RESULT | `00_abstract.md`, `03_results.md`, `06_reproducibility.md` |
 
 ## Preamble Injection
 
@@ -240,10 +276,10 @@ Do **not** duplicate package imports already loaded by this preamble.
 ## BibTeX Entry Format
 
 ```bibtex
-@article{dorigo2004ants,
+@book{dorigo2004ant,
   author  = {Marco Dorigo and Thomas St\"{u}tzle},
   title   = {Ant Colony Optimization},
-  journal = {MIT Press},
+  publisher = {MIT Press},
   year    = {2004}
 }
 
@@ -267,16 +303,22 @@ Do **not** duplicate package imports already loaded by this preamble.
 00_01_contents.md          → Contents (generated under output/manuscript/)
 00_abstract.md              → Abstract (unnumbered in PDF)
 01_introduction.md          → Section 1
-02_methodology.md           → Section 2
-03_results.md               → Section 3
-04_conclusion.md            → Section 4
-05_experimental_setup.md    → Section 5
-06_reproducibility.md       → Section 6
-07_scope_and_related_work.md → Section 7
+02_theory.md                → Section 2
+02_methodology.md           → Section 3
+05_experimental_setup.md    → Section 4
+03_results.md               → Section 5
+07_scope_and_related_work.md → Section 6
+08_active_inference.md      → Section 7
+06_reproducibility.md       → Section 8
+04_conclusion.md            → Section 9
+90_appendix_design_rationale.md → Appendix
 99_references.md            → References (Pandoc citeproc bibliography)
 ```
 
-Files are assembled by `scripts/compile_manuscript.py` using lexicographic manuscript section order with generated contents inserted after `00_00_cover.md` and before `00_abstract.md`. The explicit cover file renders first, and `99_` ensures the references anchor comes last.
+Files are assembled by `scripts/compile_manuscript.py` using
+`MANUSCRIPT_SECTION_ORDER`; filenames remain stable identifiers rather than the
+narrative-order authority. Generated contents are inserted after `00_00_cover.md`, and
+the references anchor remains last.
 
 ## Prose Conventions
 

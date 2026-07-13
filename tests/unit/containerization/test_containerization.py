@@ -25,6 +25,7 @@ def check_docker_available():
 
 # Test ImageOptimizer
 @pytest.mark.unit
+@pytest.mark.requires_docker
 class TestImageOptimizer:
     """Test cases for ImageOptimizer functionality."""
 

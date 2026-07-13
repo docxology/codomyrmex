@@ -20,6 +20,7 @@ from codomyrmex.colony_kernel.models import (
     ResourceCost,
     SignalType,
 )
+from codomyrmex.colony_kernel.resource_ledger import ResourceBudget, ResourceLedger
 
 # ---------------------------------------------------------------------------
 # Minimal real helpers (no mocks)
@@ -334,6 +335,22 @@ def test_budget_exceeded_hard_refuses() -> None:
     assert result.gate_score == 0.0
 
 
+def test_budget_exceeded_hard_refuses_with_real_resource_ledger() -> None:
+    """The canonical ledger's ``(False, reason)`` pair must not become truthy."""
+    ledger = ResourceLedger(ResourceBudget(max_llm_calls=1, period_seconds=0))
+    gate = ActuationGate(
+        pheromone_store=TraceField(),
+        resource_ledger=ledger,
+    )
+
+    result = gate.evaluate(_good_proposal(), _high_trust_profile())
+
+    assert ledger.can_afford(_good_proposal().budget_estimate)[0] is False
+    assert result.decision is GateDecision.REFUSE
+    assert result.budget_approved is False
+    assert result.gate_score == 0.0
+
+
 def test_budget_refuse_reason_mentions_cost() -> None:
     """Budget REFUSE reason string contains cost fields for diagnostics."""
     gate = ActuationGate(
@@ -613,10 +630,10 @@ def test_witness_state_returns_dict_with_expected_keys(gate: ActuationGate) -> N
 
 
 def test_witness_state_has_all_pheromone_reading_keys(gate: ActuationGate) -> None:
-    """pheromone_readings sub-dict must contain risk, failure, success, human_priority."""
+    """The witness exposes raw signals plus the derived local-hazard pressure."""
     snapshot = gate.witness_state(_good_proposal())
     readings = snapshot["pheromone_readings"]
-    for key in ("risk", "failure", "success", "human_priority"):
+    for key in ("risk", "failure", "effective_risk", "success", "human_priority"):
         assert key in readings, f"pheromone_readings missing '{key}'"
 
 

@@ -7,7 +7,7 @@ shared across calls within a process.
 
 Eight tools are registered:
 - colony_propose_action  — submit an action proposal to the gate
-- colony_record_outcome  — record the real consequence of a past proposal
+- colony_record_outcome  — record a caller-reported consequence of an action
 - colony_agent_profile   — read an agent's trust profile
 - colony_status          — current pheromone and resource snapshot
 - colony_pheromone_query — sense pheromone pressure at a location
@@ -154,9 +154,9 @@ def colony_propose_action(
 @mcp_tool(
     category="colony_kernel",
     description=(
-        "Record the real outcome of a previously executed action. "
-        "Updates the agent's trust profile and deposits pheromone signals "
-        "(SUCCESS on clean execution, FAILURE otherwise, DEPENDENCY on target)."
+        "Record a caller-reported action outcome. The report is not linked to "
+        "a consumed EXECUTE authorization. Updates trust and deposits SUCCESS "
+        "or FAILURE plus a DEPENDENCY signal."
     ),
 )
 def colony_record_outcome(
@@ -167,14 +167,14 @@ def colony_record_outcome(
     tests_passed: bool,
     human_feedback: float = 0.0,
 ) -> dict[str, Any]:
-    """Record a consequence for a completed action proposal.
+    """Record a caller-reported consequence without execution attestation.
 
     Args:
-        agent_id: The agent that executed the action.
-        action_type: The action type that was executed.
-        target: The target of the action.
-        actual_outcome: Human-readable description of what actually happened.
-        tests_passed: Whether automated tests passed after the action.
+        agent_id: Identifier associated with the submitted report.
+        action_type: Action type claimed by the report.
+        target: Target claimed by the report.
+        actual_outcome: Human-readable caller description of what happened.
+        tests_passed: Caller-supplied post-action test status.
         human_feedback: Float in [-1.0, 1.0]; 0.0 means no feedback (default).
 
     Returns:

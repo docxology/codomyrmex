@@ -390,6 +390,7 @@ django==3.2.0
             except Exception as e:
                 assert isinstance(e, Exception)
 
+    @pytest.mark.bench
     def test_workflow_performance(self):
         """Test that the integrated workflow performs adequately."""
         import time

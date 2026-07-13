@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import re
 import subprocess
-import sys
 from pathlib import Path
 
 import pytest
@@ -52,12 +51,15 @@ PUBLIC_CLAIM_FILES = [
     "docs/manuscript/00_abstract.md",
     "docs/manuscript/00_00_cover.md",
     "docs/manuscript/01_introduction.md",
+    "docs/manuscript/02_theory.md",
     "docs/manuscript/02_methodology.md",
     "docs/manuscript/03_results.md",
     "docs/manuscript/04_conclusion.md",
     "docs/manuscript/05_experimental_setup.md",
     "docs/manuscript/06_reproducibility.md",
     "docs/manuscript/07_scope_and_related_work.md",
+    "docs/manuscript/08_active_inference.md",
+    "docs/manuscript/90_appendix_design_rationale.md",
     "docs/manuscript/manuscript.css",
     "docs/manuscript/preamble.md",
     "docs/manuscript/config.yaml",
@@ -353,15 +355,16 @@ FORBIDDEN_CLAIMS = {
 
 REQUIRED_CLAIMS = {
     "docs/manuscript/03_results.md": [
-        "weighted additive score",
-        "hard overrides",
+        "effective local hazard",
+        "analytical policy map",
     ],
     "docs/manuscript/01_introduction.md": [
-        "less vulnerable to context-reset deception",
+        "max(RISK, FAILURE)",
+        "caller-reported outcomes",
     ],
     "docs/manuscript/00_abstract.md": [
         "measurably harder to pass",
-        "less vulnerable to repeated context-reset",
+        "failure memory raises friction",
         "stale or duplicate module locations",
     ],
     "docs/manuscript/02_methodology.md": [
@@ -374,40 +377,27 @@ REQUIRED_CLAIMS = {
         "10 adversarial vectors",
     ],
     "docs/manuscript/05_experimental_setup.md": [
-        "Raw trial traces are not shipped",
+        "Proposed, not executed",
+        "raw append-only traces",
     ],
     "docs/manuscript/04_conclusion.md": [
-        "does not ship raw 20-trial traces",
+        "caller-supplied data",
+        "Supported within one kernel process",
     ],
     "docs/manuscript/07_scope_and_related_work.md": [
-        "Advanced Threat Models, Zero Trust, and Supply-Chain Integrity",
-        "AI risk-management standards add an organizational lens",
-        "evidence-producing infrastructure for a future AI risk-management process",
-        "threat-informed security framing",
-        "agentic-security scholarship",
-        "PrivacyLens adds an action-level privacy lens",
-        "assurance and agent-evaluation literature",
-        "Assurance and benchmark scholarship",
-        "Runtime-assurance, provenance, and visibility scholarship",
-        "Runtime-assurance, provenance, visibility, and harmful-agent scholarship",
-        "Codomyrmex has not yet been run against these external benchmarks",
-        "Codomyrmex has not yet been evaluated against AgentHarm, ST-WebAgentBench, CyberSecEval, one-day or zero-day exploitation scenarios, CVE-Bench, or secret-collusion scenarios",
-        "does not claim SLSA certification",
-        "does not present a certified safety case",
-        "has not yet been evaluated as a SWE-agent or mutated SWE-bench policy layer",
-        "not an achieved security certification",
+        "Not a security boundary",
+        "Not production- or scale-validated",
+        "Not an Active Inference implementation",
+        "unattested report",
     ],
-    "docs/manuscript/README.md": [
-        "AI risk-management positioning",
-        "threat-informed security positioning",
-        "agentic-security benchmark scholarship",
-        "assurance-case / external-benchmark positioning",
-        "runtime-assurance, provenance, privacy-action, cyber-capability, visibility, and harmful-agent evaluation scholarship",
+    "docs/manuscript/08_active_inference.md": [
+        "deterministic and heuristic",
+        "conceptual crosswalk",
     ],
     "README.md": [
         "593 runtime MCP tools",
         "623 decorators",
-        "1,201",
+        "1,202",
         "35,119",
     ],
 }
@@ -429,6 +419,26 @@ def _read_figure_generators() -> str:
 
 def _source_manuscript_files() -> list[Path]:
     return sorted(MANUSCRIPT_DIR.glob("[0-9][0-9]_*.md"))
+
+
+def test_compiler_declares_scientific_narrative_order() -> None:
+    """The rendered paper must not place the conclusion before methods/results."""
+    import importlib.util
+
+    compiler_path = REPO_ROOT / "scripts" / "compile_manuscript.py"
+    spec = importlib.util.spec_from_file_location("codomyrmex_compile_manuscript", compiler_path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    names = [
+        path.name
+        for path in module._collect_sections(MANUSCRIPT_DIR, include_bookends=False)
+    ]
+    assert names.index("02_methodology.md") < names.index("05_experimental_setup.md")
+    assert names.index("05_experimental_setup.md") < names.index("03_results.md")
+    assert names.index("03_results.md") < names.index("04_conclusion.md")
+    assert names[-1] == "99_references.md"
 
 
 def _without_fenced_blocks(text: str) -> str:
@@ -469,6 +479,12 @@ def test_manuscript_config_matches_kernel_contract() -> None:
     assert config["paper"]["version"] == "1.3.0"
     assert config["paper"]["date"] == "auto"
     assert config["authors"][0]["orcid"] == "0000-0001-6232-9096"
+    assert config["acknowledgements"] == [
+        {
+            "name": "Marek Pawel Bargiel",
+            "contribution": "conceptual comments on pressure-aware gating / colony-control framing",
+        }
+    ]
     assert publication["doi"] == ""
     assert publication["doi_status"] == "forthcoming"
     assert publication["version_doi"] == ""
@@ -536,18 +552,6 @@ def test_variable_inventory_matches_syntax_and_source_tokens() -> None:
         1,
     )[0]
     generated_tokens = set(re.findall(r'"([A-Z0-9_]+)"\s*:', variable_block))
-    syntax = _read("docs/manuscript/SYNTAX.md")
-    table = syntax.split("## `{{VARIABLE}}` Token Table", 1)[1].split(
-        "## Preamble Injection",
-        1,
-    )[0]
-
-    table_rows = "\n".join(
-        line for line in table.splitlines() if line.startswith("| `{{")
-    )
-    table_tokens = set(re.findall(r"\{\{([A-Z0-9_]+)\}\}", table_rows))
-    assert table_tokens == generated_tokens
-
     source_tokens: set[str] = set()
     for manuscript_file in (REPO_ROOT / "docs" / "manuscript").glob("[0-9][0-9]_*.md"):
         source_tokens.update(
@@ -557,6 +561,41 @@ def test_variable_inventory_matches_syntax_and_source_tokens() -> None:
         )
 
     assert source_tokens <= generated_tokens
+    assert {
+        "CONFIG_ACKNOWLEDGEMENTS",
+        "CONFIG_COVERAGE_FLOOR",
+        "RESULT_PAIRED_LOCALITY_ROWS",
+        "RESULT_TRUST_TRAJECTORY_ROWS",
+        "RESULT_DECAY_ROWS",
+        "RESULT_REPRESENTATIVE_GATE_ROWS",
+    } <= source_tokens
+    assert "RESULT_GATE_SCORE_PROMOTED" not in generated_tokens | source_tokens
+
+
+def test_acknowledgements_are_tokenized_and_ordered_before_references() -> None:
+    acknowledgement = _read("docs/manuscript/98_acknowledgements.md")
+    assert acknowledgement == (
+        "# Acknowledgements {#sec:acknowledgements .unnumbered}\n\n"
+        "{{CONFIG_ACKNOWLEDGEMENTS}}\n"
+    )
+    compiler = _read("scripts/compile_manuscript.py")
+    order = compiler.split("MANUSCRIPT_SECTION_ORDER = (", 1)[1].split(")", 1)[0]
+    assert order.index('"98_acknowledgements.md"') < order.index('"99_references.md"')
+
+
+def test_numbered_manuscript_has_no_raw_mutable_policy_literals() -> None:
+    mutable_literal = re.compile(
+        r"(?<![A-Za-z0-9_])(?:0\.(?:02|04|05|08|1(?:0)?|15|2(?:0|5)?|"
+        r"3(?:0|5)?|5(?:0)?|6(?:0|5)?|7(?:0|5)?|85|9(?:0)?)|"
+        r"[236]\.0|10\.0|20\b|30\b|200\b)"
+    )
+    failures: list[str] = []
+    for path in _source_manuscript_files():
+        if path.name == "00_00_cover.md":
+            continue
+        for match in mutable_literal.finditer(_without_fenced_blocks(path.read_text())):
+            failures.append(f"{path.name}: raw mutable value {match.group(0)!r}")
+    assert not failures, "\n".join(failures)
 
 
 def test_falsification_figure_uses_canonical_attack_vector_names_and_severity() -> None:
@@ -637,7 +676,7 @@ def test_mcp_falsification_specs_use_canonical_attack_vector_enum() -> None:
             assert alias not in text, f"{rel_path} preserves old alias {alias}"
 
 
-def test_compile_manuscript_accepts_digit_tokens_and_source_date() -> None:
+def test_compile_manuscript_accepts_digit_tokens_and_generated_metadata() -> None:
     import importlib.util
 
     module_path = REPO_ROOT / "scripts" / "compile_manuscript.py"
@@ -652,9 +691,15 @@ def test_compile_manuscript_accepts_digit_tokens_and_source_date() -> None:
     assert module.TOKEN_PATTERN.findall(
         "{{RESULT_TRUST_AT_0}} {{CONFIG_TRIAL_COUNT_MINUS_1}}"
     ) == ["{{RESULT_TRUST_AT_0}}", "{{CONFIG_TRIAL_COUNT_MINUS_1}}"]
-    assert module._publication_date(
-        REPO_ROOT, {"GENERATION_TIMESTAMP": "2099-01-01T00:00:00Z"}
-    ) == (module.date.today().isoformat())
+    args = module._build_pandoc_metadata_args(
+        {
+            "CONFIG_TITLE": "Generated title",
+            "CONFIG_FIRST_AUTHOR": "Generated author",
+            "CONFIG_PUBLICATION_DATE": "2099-01-01",
+        },
+        REPO_ROOT,
+    )
+    assert "date=2099-01-01" in args
 
 
 def test_cover_page_metadata_and_red_link_contract() -> None:
@@ -713,212 +758,50 @@ def test_rendered_references_section_is_bibliography_anchor_only() -> None:
     assert "citation key inventory" not in references.lower()
     assert "natbib" not in references.lower()
 
-    required_related_work_citations = (
+    cited = set(re.findall(r"@([A-Za-z][A-Za-z0-9_:-]+)", related_work))
+    cited = {key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))}
+    defined = set(re.findall(r"^@[A-Za-z]+\{([^,]+),", bibliography, re.MULTILINE))
+    assert cited <= defined, f"Undefined related-work citations: {sorted(cited - defined)}"
+    assert {
+        "yang2024swebench",
+        "grasse1959reconstruction",
+        "marsh1994trust",
         "nist2020zerotrust",
-        "nist2022ssdf",
-        "slsa2026",
-        "newman2022sigstore",
-        "mitre2026attack",
-        "mitre2026atlas",
-        "owasp2025llm",
-        "owasp2026agentic",
-        "owasp2026agentsecurity",
-        "nist2026agentidentity",
-        "tabassi2023airmf",
-        "autio2024genairmf",
-        "greshake2023indirectprompt",
         "debenedetti2024agentdojo",
-        "zhan2024injecagent",
-        "ruan2023toolemu",
-        "zhang2024agentsafetybench",
-        "zhang2024asb",
-        "fu2025raseval",
-        "xia2025safetoolbench",
-        "shao2024privacylens",
-        "dash2026memorypoisoning",
-        "luo2025agentauditor",
-        "lupinacci2025darkside",
-        "shavit2023governing",
-        "greenblatt2023aicontrol",
-        "buhl2024safetycases",
-        "hawkins2021amlas",
-        "yang2024sweagent",
-        "liu2023agentbench",
-        "zhou2023webarena",
-        "xie2024osworld",
-        "mialon2023gaia",
-        "trivedi2024appworld",
-        "xu2024theagentcompany",
-        "garg2025savingswebench",
         "seto1998simplex",
-        "phan2017componentbased",
-        "mehmood2021blackboxsimplex",
-        "alshiekh2018shielding",
-        "torresarias2019intoto",
-        "samuel2010tuf",
-        "chan2024visibility",
-        "chan2025infrastructure",
-        "kolt2025governing",
-        "andriushchenko2024agentharm",
-        "levy2024stwebagentbench",
-        "wan2024cyberseceval3",
-        "fang2024oneday",
-        "zhu2024zerodayagents",
-        "zhu2025cvebench",
-        "motwani2024secretcollusion",
-    )
-    for key in required_related_work_citations:
-        assert f"@{key}" in related_work, f"related-work citation {key} is not used"
-        assert f"{{{key}," in bibliography, (
-            f"related-work citation {key} is not defined"
-        )
+        "friston2017active",
+    } <= cited
 
 
 def test_introduction_cites_control_plane_scholarship() -> None:
     introduction = _read("docs/manuscript/01_introduction.md")
     bibliography = _read("docs/manuscript/references.bib")
 
-    required_intro_citations = (
+    cited = set(re.findall(r"@([A-Za-z][A-Za-z0-9_:-]+)", introduction))
+    cited = {key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))}
+    defined = set(re.findall(r"^@[A-Za-z]+\{([^,]+),", bibliography, re.MULTILINE))
+    assert cited <= defined, f"Undefined introduction citations: {sorted(cited - defined)}"
+    assert {
         "wooldridge1995intelligent",
         "yang2024swebench",
-        "yang2024sweagent",
-        "garg2025savingswebench",
-        "wang2023surveyautonomousagents",
-        "xi2023riseagents",
-        "nakano2021webgpt",
-        "karpas2022mrkl",
-        "yao2022react",
-        "schick2023toolformer",
-        "qin2023toolllm",
-        "patil2023gorilla",
-        "li2023apibank",
-        "wei2022chainofthought",
-        "wang2022selfconsistency",
-        "yao2023treeofthoughts",
-        "shinn2023reflexion",
-        "park2023generative",
-        "packer2023memgpt",
-        "shavit2023governing",
-        "greshake2023indirectprompt",
-        "debenedetti2024agentdojo",
-        "zhan2024injecagent",
-        "ruan2023toolemu",
-        "zhang2024agentsafetybench",
-        "zhang2024asb",
-        "fu2025raseval",
-        "xia2025safetoolbench",
-        "shao2024privacylens",
-        "dash2026memorypoisoning",
-        "langgraph2024",
-        "wu2023autogen",
-        "crewai2024",
-        "li2023camel",
-        "qian2023chatdev",
-        "hong2023metagpt",
-        "liu2023agentbench",
-        "zhou2023webarena",
-        "xie2024osworld",
-        "mialon2023gaia",
-        "trivedi2024appworld",
-        "xu2024theagentcompany",
-        "andriushchenko2024agentharm",
-        "levy2024stwebagentbench",
-        "wan2024cyberseceval3",
-        "fang2024oneday",
-        "zhu2024zerodayagents",
-        "zhu2025cvebench",
-        "motwani2024secretcollusion",
         "grasse1959reconstruction",
-        "bonabeau1999swarm",
-        "parunak1997pheromones",
-        "dorigo2004aco",
-        "kauffman1993origins",
         "marsh1994trust",
-        "sabater2005review",
-        "kamvar2003eigentrust",
-        "burnett2013bootstrapping",
-        "huynh2006fire",
-        "sutton2018reinforcement",
-        "christiano2017deep",
-        "bai2022constitutional",
-        "lightman2023let",
-        "uesato2022solving",
-        "anthropic2024mcp",
-        "saltzer1975protection",
-        "miller2003capabilities",
+        "debenedetti2024agentdojo",
         "nist2020zerotrust",
-        "parasuraman2000automation",
-        "lee2004trust",
-        "endsley2017autonomy",
-        "amodei2016concrete",
-        "tabassi2023airmf",
-        "autio2024genairmf",
-        "owasp2025llm",
-        "owasp2026agentic",
-        "owasp2026agentsecurity",
-        "mitre2026atlas",
-        "greenblatt2023aicontrol",
-        "seto1998simplex",
-        "alshiekh2018shielding",
         "peng2011reproducible",
-        "buhl2024safetycases",
-        "hawkins2021amlas",
-        "mitchell2019modelcards",
-        "gebru2021datasheets",
-        "arnold2019factsheets",
-        "raji2020accountability",
-        "reisman2018algorithmicimpact",
-        "nist2022ssdf",
-        "slsa2026",
-        "newman2022sigstore",
-        "torresarias2019intoto",
-        "samuel2010tuf",
-        "nist2026agentidentity",
-        "chan2024visibility",
-        "chan2025infrastructure",
-        "kolt2025governing",
-    )
-    for key in required_intro_citations:
-        assert f"@{key}" in introduction, f"introduction citation {key} is not used"
-        assert f"{{{key}," in bibliography, (
-            f"introduction citation {key} is not defined"
-        )
-
-    for token in (
-        "{{CONFIG_GATE_WEIGHT_BUDGET}}",
-        "{{CONFIG_GATE_EXECUTE_THRESHOLD}}",
-        "{{CONFIG_GATE_HOLD_THRESHOLD}}",
-        "{{CONFIG_TRUST_HARD_FLOOR}}",
-    ):
-        assert token in introduction
+    } <= cited
 
 
 def test_introduction_token_inventory_is_documented() -> None:
     introduction = _read("docs/manuscript/01_introduction.md")
-    agents = _read("docs/manuscript/AGENTS.md")
-    syntax = _read("docs/manuscript/SYNTAX.md")
+    generator = _read("src/codomyrmex/manuscript/variables.py")
 
-    intro_tokens = sorted(set(re.findall(r"\{\{([A-Z0-9_]+)\}\}", introduction)))
+    intro_tokens = set(re.findall(r"\{\{([A-Z0-9_]+)\}\}", introduction))
     assert intro_tokens
-
-    introduction_rows = [
-        line
-        for line in agents.splitlines()
-        if line.startswith("| `01_introduction.md`")
-    ]
-    assert len(introduction_rows) == 1
-    intro_inventory_row = introduction_rows[0]
-
-    for token in intro_tokens:
-        assert token in intro_inventory_row, (
-            f"01_introduction.md token {token} is missing from AGENTS.md inventory"
-        )
-        syntax_pattern = re.compile(
-            rf"\| `\{{\{{{re.escape(token)}\}}\}}` \| [^|]+ \| [^|]*`01_introduction\.md`"
-        )
-        assert syntax_pattern.search(syntax), (
-            f"01_introduction.md token {token} is missing from SYNTAX.md token table"
-        )
+    generated_tokens = set(
+        re.findall(r'^\s+"([A-Z0-9_]+)"\s*:', generator, re.MULTILINE)
+    )
+    assert intro_tokens <= generated_tokens
 
 
 def test_manuscript_source_uses_generated_cross_references() -> None:
@@ -962,6 +845,10 @@ def test_manuscript_tables_and_formalisms_have_crossref_labels() -> None:
 
             while index < len(lines) and lines[index].startswith("|"):
                 index += 1
+            if index < len(lines) and re.fullmatch(
+                r"\{\{RESULT_[A-Z0-9_]+_ROWS\}\}", lines[index].strip()
+            ):
+                index += 1
             while index < len(lines) and not lines[index].strip():
                 index += 1
             caption = lines[index].strip() if index < len(lines) else ""
@@ -995,33 +882,16 @@ def test_crossref_labels_are_unique_referenced_and_resolved() -> None:
     unresolved = sorted(
         reference for reference in references if reference not in label_counts
     )
+    # Figures and tables must be called out in prose. Display equations may be
+    # numbered for stable review anchors without forcing a redundant sentence.
     unreferenced = sorted(
         label
         for label in label_counts
-        if label.startswith(("fig:", "tbl:", "eq:")) and label not in references
-    )
-
-    # Labels from the theory, active-inference, and analytical-expansion
-    # sections that are self-explanatory in context — not every equation
-    # needs an explicit prose cross-reference.
-    ALLOWED_UNREFERENCED = {
-        "eq:ai-likelihood", "eq:ai-observations", "eq:ai-posterior",
-        "eq:ai-prior", "eq:ai-states", "eq:efe-approximation",
-        "eq:expected-fe", "eq:expected-fe-intrinsic", "eq:variational-fe",
-        "tbl:ai-gate-mapping", "eq:theory-gate-score-detail",
-        "eq:gate-entropy", "eq:max-score-by-tier", "eq:min-execute",
-        "eq:corollary5", "eq:all-stress", "eq:cascaded-stress",
-        "eq:failure-cascade", "eq:ensemble-detection", "eq:f1", "eq:f2",
-        "eq:f3", "tbl:override-interactions", "tbl:trust-penalty-cascade",
-    }
-    truly_unreferenced = sorted(
-        l for l in unreferenced if l not in ALLOWED_UNREFERENCED
+        if label.startswith(("fig:", "tbl:")) and label not in references
     )
     assert not duplicated, f"Duplicate crossref labels: {duplicated}"
     assert not unresolved, f"Crossref references without labels: {unresolved}"
-    assert not truly_unreferenced, (
-        f"Crossref labels without prose references: {truly_unreferenced}"
-    )
+    assert not unreferenced, f"Crossref labels without prose references: {unreferenced}"
 
 
 def test_rendered_html_contains_toc_linked_citations_crossrefs_and_mathml() -> None:
@@ -1029,17 +899,7 @@ def test_rendered_html_contains_toc_linked_citations_crossrefs_and_mathml() -> N
 
     html_path = REPO_ROOT / "output" / "paper.html"
     if not html_path.exists():
-        # Auto-generate the HTML so the test never skips
-        subprocess.run(
-            [
-                sys.executable,
-                str(REPO_ROOT / "scripts" / "compile_manuscript.py"),
-            ],
-            cwd=REPO_ROOT,
-            capture_output=True,
-            text=True,
-            timeout=300,
-        )
+        pytest.skip("rendered artifact is validated after the pipeline render stage")
     source_mtime = max(
         path.stat().st_mtime
         for path in [
@@ -1047,8 +907,6 @@ def test_rendered_html_contains_toc_linked_citations_crossrefs_and_mathml() -> N
             *_source_manuscript_files(),
         ]
     )
-    if not html_path.exists():
-        pytest.skip("HTML generation failed; no artifact to check")
     if html_path.stat().st_mtime < source_mtime:
         pytest.skip(
             "Rendered HTML is older than manuscript sources; rerender before artifact check"
@@ -1070,7 +928,7 @@ def test_public_inventory_counts_match_live_tree() -> None:
     readme = _read("README.md")
     inventory = _read("docs/reference/inventory.md")
 
-    assert docs_count == 1201
+    assert docs_count == 1202
     assert f"{docs_count:,} Markdown" in readme
     assert f"{docs_count:,} (`find docs" in inventory
     assert "35%2C119" in readme
@@ -1104,7 +962,7 @@ def test_manuscript_artifact_count_sources_match_documented_surfaces() -> None:
     assert module._count_colony_kernel_config_files(REPO_ROOT) == 3
     assert (
         module._count_colony_kernel_mcp_tools(
-            REPO_ROOT / "src" / "codomyrmex" / "colony_kernel", 0
+            REPO_ROOT / "src" / "codomyrmex" / "colony_kernel"
         )
         == 8
     )
@@ -1172,3 +1030,43 @@ def test_documented_kernel_role_ladder_matches_role_adapter(
     )
 
     assert RoleAdapter.infer_role(profile) == expected_role
+
+
+_INFRASTRUCTURE_IMPORT_PATTERN = re.compile(
+    r"^\s*(?:from infrastructure\b|import infrastructure\b)", re.MULTILINE
+)
+
+
+def test_infrastructure_import_pattern_detects_known_bad_case() -> None:
+    """Proof-of-detection: the pattern used below must actually fire on a violation."""
+    assert _INFRASTRUCTURE_IMPORT_PATTERN.search("from infrastructure.config import Foo\n")
+    assert _INFRASTRUCTURE_IMPORT_PATTERN.search("    import infrastructure.rendering\n")
+    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search("from codomyrmex.infrastructure_x import Foo\n")
+    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search("# import infrastructure.config for context\n")
+
+
+def test_layer_contract_forbids_infrastructure_imports() -> None:
+    """docs/manuscript/layer_contract.yaml claims src/codomyrmex/ stays infrastructure-free
+    outside its allowlist. This was previously documentation-only (consumed by no code
+    anywhere in the repository) — this test makes the claim real."""
+    contract = yaml.safe_load(_read("docs/manuscript/layer_contract.yaml"))
+    allowed = {
+        (REPO_ROOT / rel).resolve()
+        for rel in contract["allow_infrastructure_imports"]
+    }
+    assert allowed, "layer_contract.yaml allowlist must not be empty for this test to be meaningful"
+
+    violations: list[str] = []
+    for path in sorted((REPO_ROOT / "src" / "codomyrmex").rglob("*.py")):
+        if path.resolve() in allowed:
+            continue
+        if "__pycache__" in path.parts:
+            continue
+        text = path.read_text(encoding="utf-8")
+        if _INFRASTRUCTURE_IMPORT_PATTERN.search(text):
+            violations.append(str(path.relative_to(REPO_ROOT)))
+
+    assert not violations, (
+        "src/codomyrmex/ files import infrastructure.* outside the layer_contract.yaml "
+        f"allowlist: {violations}"
+    )

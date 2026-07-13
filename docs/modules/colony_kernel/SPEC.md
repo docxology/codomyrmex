@@ -8,15 +8,15 @@
 - **Agent Guide**: [AGENTS.md](AGENTS.md)
 - **Source Module**: [../../../src/codomyrmex/colony_kernel/](../../../src/codomyrmex/colony_kernel/)
 - **Source MCP Spec**: [../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md)
-- **Tests**: [../../../src/codomyrmex/tests/unit/colony_kernel/](../../../src/codomyrmex/tests/unit/colony_kernel/)
+- **Tests**: [../../../tests/unit/colony_kernel/](../../../tests/unit/colony_kernel/)
 
 ## Purpose
 
 The Colony Kernel is the control plane for Codomyrmex's artificial ecology thesis. Rather than coordinating agents through centralised command, it models the collective as a colony where:
 
 - **Modules** are organisms with assigned roles, earned trust scores, and finite lifespans
-- **Agents** are actors whose behavioral history is encoded in persistent trust profiles
-- **The pheromone field** is the colony's shared memory of what works and what breaks
+- **Agents** are caller identifiers whose reported history updates trust profiles
+- **The pheromone field** is process-local shared state unless a future persistent backend is supplied
 
 The kernel exposes 8 MCP tools for agent interaction.
 
@@ -101,11 +101,11 @@ stateDiagram-v2
     }
 
     state REPAIR_ANT {
-        [*] --> CanWrite : patch, test, doc
+        [*] --> LabelOnly : no action-specific permission matrix
     }
 
     state GUARD_ANT {
-        [*] --> CanVeto : security review<br/>gate audit
+        [*] --> LabelOnly2 : no independent veto authority
     }
 ```
 
@@ -133,13 +133,13 @@ graph LR
     subgraph sources["Source Trust Multipliers"]
         HUM["HUMAN → ×2.0"]
         TST["TEST → ×1.5"]
-        SEC["SECURITY → ×1.3"]
+        SEC["SECURITY → ×1.5"]
         AGT["AGENT → ×1.0"]
         RNT["RUNTIME → ×1.0"]
     end
 
     subgraph evaporation["Evaporation Model"]
-        FAST["FAST (3.0)<br/>Urgent/transient<br/>Clears in ~3 ticks"]
+        FAST["FAST (3.0)<br/>Urgent/transient<br/>Unit trace clears on tick 4"]
         NORMAL["NORMAL (1.0)<br/>Standard signals<br/>Clears in ~10 ticks"]
         SLOW["SLOW (0.2)<br/>Persistent memory<br/>Clears in ~50 ticks"]
     end
@@ -186,14 +186,13 @@ All 8 tools route through a module-level `ColonyKernel` singleton. State persist
 4. **Trust clamping**: Trust scores are always in [0.0, 1.0].
 5. **Budget enforcement**: Any single dimension exceeded → HOLD.
 6. **SANDBOX block**: SANDBOX agents always receive REFUSE.
-7. **Pruning is read-only**: PruningDaemon never writes or deletes.
+7. **Report is read-only**: the MCP pruning report only nominates candidates; the separate archive API is dry-run by default and mutates only when explicitly invoked.
 8. **DEPENDENCY on record**: `record_outcome` always deposits DEPENDENCY signal.
 
 ## Test Coverage
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/colony_kernel/ -v
-# 641 tests, 0 failures
+uv run pytest tests/unit/colony_kernel/ -v
 ```
 
 ## Navigation
@@ -202,4 +201,4 @@ uv run pytest src/codomyrmex/tests/unit/colony_kernel/ -v
 - **Agent Guide**: [AGENTS.md](AGENTS.md)
 - **Source**: [src/codomyrmex/colony_kernel/](../../../src/codomyrmex/colony_kernel/)
 - **MCP Spec**: [src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md)
-- **Tests**: [src/codomyrmex/tests/unit/colony_kernel/](../../../src/codomyrmex/tests/unit/colony_kernel/)
+- **Tests**: [tests/unit/colony_kernel/](../../../tests/unit/colony_kernel/)

@@ -295,9 +295,9 @@ def fig_trust_trajectory() -> None:
     ax.set_ylabel("Agent trust score", fontsize=11.5)
     trust_at_12 = min(trust_init + 12 * delta, 1.0)
     ax.set_title(
-        f"Trust trajectory — conservative model (Δ = {delta:.2f} per pass)\n"
+        f"Deterministic all-success trust fixture (Δ = {delta:.2f} per report)\n"
         f"trust {trust_init:.2f} → {trust_at_12:.2f} after 12 outcomes; "
-        "dashed projection shows GUARD_ANT crossing",
+        "dashed line is an arithmetic projection, not observed convergence",
         fontsize=10.5,
         pad=12,
     )

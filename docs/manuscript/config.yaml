@@ -24,6 +24,11 @@ authors:
     orcid: "0000-0001-6232-9096"
     corresponding: true
 
+# Rendered through CONFIG_ACKNOWLEDGEMENTS in the final, unnumbered section.
+acknowledgements:
+  - name: "Marek Pawel Bargiel"
+    contribution: "conceptual comments on pressure-aware gating / colony-control framing"
+
 # Consumed by: `infrastructure.publishing.publish_to_zenodo` (in `infrastructure/publishing/platforms.py`)
 # Also consumed by: `infrastructure/publishing/transmission_bookends.py` (transmission bookend pages),
 #   `infrastructure/publishing/transmission_figure.py` (QR strip DOI label),
@@ -97,10 +102,17 @@ steganography:
   overlay_mode: "text"
   overlay_text: "CODOMYRMEX"
 
-# Render format toggles — gate per-renderer in infrastructure/rendering/pipeline.py.
-# Defaults: pdf/html/slides on, docx/epub off. Setting `false` makes the pipeline
-# log `[skip] <format> rendering disabled in config` and emit no artifacts.
-# Consumed by: `infrastructure/rendering/config.py::RenderingConfig.from_project_config`.
+# Render format toggles — gate per-renderer in infrastructure/rendering/pipeline.py,
+# via `RenderManager` (see `RenderingConfig.from_project_config`). NOT consulted for
+# this project: `scripts/_render_pdf_override.py` exists, so
+# `infrastructure/rendering/pipeline.py::_render_pipeline_impl` returns immediately
+# after running the override (before `RenderManager` is ever constructed). The
+# override only produces `output/paper.pdf` and `output/paper.html` via
+# `scripts/compile_manuscript.py --pdf`. slides/docx/epub are therefore never
+# generated regardless of these values — verified empty `output/slides/` and no
+# `output/{docx,epub}/` artifacts in this checkout. Set to `false` to reflect
+# actual behavior; flip to `true` (and extend `_render_pdf_override.py` to call
+# the shared `RenderManager`) only if those formats are actually implemented.
 # Documented in `docs/operational/logging/output-design.md`.
 # PDF rendering pipeline: manuscript/ markdown -> scripts/compile_manuscript.py -> Pandoc/LaTeX -> PDF.
 # The integrity manifest (SHA-256/SHA-512 sidecar JSON) is written alongside the PDF.
@@ -108,9 +120,9 @@ render:
   formats:
     pdf: true
     html: true
-    slides: true
-    docx: true
-    epub: true
+    slides: false
+    docx: false
+    epub: false
 
 # Consumed by manuscript review tooling.
 # See docs/ for details
@@ -134,7 +146,16 @@ testing:
   max_infra_test_failures: 0
   max_project_test_failures: 0
 
-# Experimental parameters — read by colony_kernel.py and z_generate_manuscript_variables.py
+# Stage 02 runs only manuscript build producers, in this declared order.
+# Compilation belongs to the Stage 03 render override, not analysis discovery.
+analysis:
+  scripts:
+    - z_generate_manuscript_variables.py
+    - generate_manuscript_figures.py
+
+# Manuscript projections of runtime policy plus proposed-study parameters.
+# Runtime policy remains authoritative in src/codomyrmex/colony_kernel; variable
+# generation fails if any compatibility mirror below differs from live code.
 experiment:
   # Colony Kernel gate thresholds:
   #   Execute (proceed with actuation):   gate_score >= 0.75
@@ -172,8 +193,8 @@ experiment:
   base_evaporation_rate: 0.1
 
   # Pheromone decay rate classes (maps to numeric decay constants):
-  #   FAST:   3.0  — transient alerts (e.g. FAILURE, RISK); clear within seconds
-  #   NORMAL: 1.0  — standard coordination signals (e.g. NEED, DEPENDENCY)
+  #   FAST:   3.0  — transient alerts (e.g. FAILURE, RISK); subtract 0.30 per tick
+  #   NORMAL: 1.0  — standard/default coordination signals (e.g. NEED)
   #   SLOW:   0.2  — persistent memory signals (e.g. SUCCESS, HUMAN_PRIORITY)
   decay_rates:
     - FAST    # 3.0
@@ -181,11 +202,11 @@ experiment:
     - SLOW    # 0.2
 
   # Agent role taxonomy in the Codomyrmex colony:
-  #   SANDBOX:      untrusted new agents; actuation blocked; trust building only
-  #   REPAIR_ANT:   diagnose + patch failures; high read/write filesystem access
-  #   MEMORY_ANT:   maintain colony knowledge graph; read-heavy, low actuation risk
-  #   DISPATCHER:   route tasks and signals; orchestration privileges; no direct edit
-  #   GUARD_ANT:    falsification workers; veto authority over actuation gate
+  #   SANDBOX:      untrusted new agents; all proposals hard-refused by the gate
+  #   REPAIR_ANT:   inferred label; no action-specific permissions are enforced
+  #   MEMORY_ANT:   inferred label; no action-specific permissions are enforced
+  #   DISPATCHER:   inferred label; no action-specific permissions are enforced
+  #   GUARD_ANT:    inferred label; no independent veto authority is implemented
   agent_roles:
     - SANDBOX
     - REPAIR_ANT
@@ -256,13 +277,25 @@ experiment:
   # Referenced in 05_experimental_setup.md §5.0.4 and §5.0.5 as CONFIG_WARMUP_TICKS.
   warmup_ticks: 10
 
-  # Number of independent trial runs used in the evaluation benchmark suite.
-  # Seeds 0 .. (trial_count - 1) are drawn from a pre-registered seed table.
+  # Planned run count for the proposed evaluation protocol. No repeated-trial
+  # benchmark or seed table is shipped in this release.
   trial_count: 20
 
-  # Percentage of low-evidence proposals (completeness < 0.35, trust < 0.30) refused
-  # by the actuation gate in the benchmark suite.
-  # Derived analytically: at completeness=0.25, trust=0.20, budget=0.55, risk=0.50:
-  #   score = 0.30*0.55 + 0.30*0.50 + 0.25*0.20 + 0.15*0.25 = 0.408 < 0.50 → REFUSE.
-  # Across the low-evidence distribution, 67% of proposals fall below the HOLD threshold.
-  result_gate_refusal_rate: 67
+  # Proposed benchmark condition registry; its length is injected wherever the
+  # manuscript states the condition count.
+  benchmark_conditions:
+    - composite_gate
+    - static_trust
+    - budget_only
+    - always_execute
+
+  # Presentation checkpoints for tables whose values are generated by applying
+  # the live runtime recurrence and role adapter.
+  trust_trajectory_checkpoints: [0, 3, 5, 6, 9, 12, 15]
+  decay_table_ticks: [0, 1, 2, 4, 8, 10]
+
+  # Exact deterministic fixture inputs. Scores, pressure, decisions, and table
+  # rows are produced by executing real Colony Kernel subsystem instances.
+  paired_fixture:
+    agent_trust: 0.50
+    recovery_ticks: 20

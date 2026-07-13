@@ -119,6 +119,9 @@ logs/
 
 # Local agent workflow state and evidence
 .omo/
+.codegraph/
+.leann/
+.gitnexus/
 
 # Build directories
 build/
@@ -161,6 +164,7 @@ lib-cov
 /code/documentation/.docusaurus
 /docs/build/
 /docs/.docusaurus/
+**/.docusaurus/
 /site
 
 # Temporary and backup files
@@ -252,6 +256,7 @@ pytest_failures.log
 test_fails.log
 coverage.txt
 .benchmarks/
+.pyscn/reports/
 fix_*.py
 !scripts/documentation/fix_docusaurus_module_links.py
 /.claude

@@ -66,6 +66,7 @@ class WebsiteServer(
     data_provider: DataProvider | None = None
     _test_lock = threading.Lock()
     _test_running = False
+    _test_thread: threading.Thread | None = None
     _dispatch_lock = threading.Lock()
     _dispatch_orch: Any = None
     _dispatch_thread: threading.Thread | None = None

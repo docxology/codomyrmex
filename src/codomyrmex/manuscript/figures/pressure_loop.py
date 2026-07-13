@@ -15,13 +15,13 @@ from codomyrmex.manuscript.figures._common import (
 
 def fig_colony_pressure_loop() -> None:
     steps = [
-        ("Environmental\nPressure", _OI["orange"], "1"),
-        ("Proposal\nSubmission", _OI["sky"], "2"),
-        ("Actuation\nGate", _OI["vermil"], "3"),
-        ("Action\nExecution", _OI["blue"], "4"),
-        ("Consequence\nRecord", _OI["green"], "5"),
-        ("Trust &\nRole Update", _OI["pink"], "6"),
-        ("Falsification\nReview", "#555555", "7"),
+        ("Proposal\nSubmission", _OI["sky"], "1"),
+        ("Falsification\nReview", "#555555", "2"),
+        ("State\nWitness", _OI["orange"], "3"),
+        ("Actuation\nGate", _OI["vermil"], "4"),
+        ("Caller\nActuation", _OI["blue"], "5"),
+        ("Outcome\nReport", _OI["green"], "6"),
+        ("Trust, Budget\n& Role Update", _OI["pink"], "7"),
         ("Pheromone\nDeposit", _OI["orange"], "8"),
     ]
     n = len(steps)
@@ -188,8 +188,8 @@ def fig_colony_pressure_loop() -> None:
     )
 
     ax.set_title(
-        "Colony feedback loop — 8-step circular actuation cycle\n"
-        "Each proposal traverses the full ring before state is committed",
+        "Colony feedback dependencies — proposal, decision, report, and later state\n"
+        "Caller actuation and outcome reporting are separate from the kernel gate call",
         fontsize=11,
         pad=16,
         color="#1a1a1a",

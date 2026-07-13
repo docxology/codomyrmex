@@ -25,6 +25,7 @@ import enum
 import hashlib
 import json
 import logging
+import os
 import threading
 import time
 from datetime import UTC, datetime
@@ -326,23 +327,70 @@ class TrustRegistry:
     Thread-safe by design (single-process, GIL-protected dict ops).
     """
 
-    def __init__(self) -> None:
-        self._ledger_path = Path.home() / ".codomyrmex" / "trust_ledger.json"
-        self._disk_loaded: bool = False
+    def __init__(self, ledger_path: str | Path | None = None) -> None:
+        """Create a registry whose durable ledger can be explicitly isolated.
 
-        # Initialize default state with ALL known tools (static + dynamic)
+        Tool enumeration and disk reads are lazy so importing the bridge is a
+        side-effect-free operation.  ``CODOMYRMEX_TRUST_LEDGER_PATH`` provides
+        process-level injection for test workers and isolated deployments.
+        """
+        configured_path = ledger_path or os.environ.get("CODOMYRMEX_TRUST_LEDGER_PATH")
+        self._ledger_path = (
+            Path(configured_path).expanduser()
+            if configured_path is not None
+            else Path.home() / ".codomyrmex" / "trust_ledger.json"
+        )
+        self._disk_loaded: bool = False
+        self._levels_initialized: bool = False
+        self._levels: dict[str, TrustLevel] = {}
+
+    @property
+    def ledger_path(self) -> Path:
+        """Path used for persisted trust state."""
+        return self._ledger_path
+
+    def configure_ledger_path(
+        self,
+        ledger_path: str | Path,
+        *,
+        load_existing: bool = True,
+    ) -> None:
+        """Redirect persistence to *ledger_path* without rebuilding tool state.
+
+        ``load_existing=False`` is useful for isolated test workers: it marks
+        the new, empty ledger as loaded and guarantees no read from the user's
+        real home-directory ledger.
+        """
+        self._ledger_path = Path(ledger_path).expanduser()
+        self._disk_loaded = not load_existing
+        if not load_existing:
+            # A new empty ledger is a new trust context, not merely a new
+            # destination for levels accumulated under the previous path.
+            self._levels = {}
+            self._levels_initialized = False
+        if load_existing:
+            self._load()
+
+    def _ensure_levels(self) -> None:
+        """Populate the in-memory level map on first semantic access."""
+        if getattr(self, "_levels_initialized", False):
+            return
+        # Registries constructed with ``__new__`` in compatibility tests may
+        # already provide an explicit state map.
+        if not hasattr(self, "_levels_initialized") and hasattr(self, "_levels"):
+            self._levels_initialized = True
+            return
+        if not hasattr(self, "_levels"):
+            self._levels = {}
         registry = get_tool_registry()
         all_tool_names = registry.list_tools()
-
-        self._levels: dict[str, TrustLevel] = {}
         for name in all_tool_names:
-            self._levels[name] = TrustLevel.UNTRUSTED
-
-        # Load persisted state if available
-        self._load()
+            self._levels.setdefault(name, TrustLevel.UNTRUSTED)
+        self._levels_initialized = True
 
     def _load(self) -> None:
         """Load trust state from disk (skipped if already loaded this process)."""
+        self._ensure_levels()
         if getattr(self, "_disk_loaded", False):
             return
         if not self._ledger_path.exists():
@@ -375,6 +423,7 @@ class TrustRegistry:
 
     def _save(self) -> None:
         """Save trust state to disk (atomic write + restricted permissions)."""
+        self._ensure_levels()
         try:
             self._ledger_path.parent.mkdir(parents=True, exist_ok=True)
             data = {name: lvl.value for name, lvl in self._levels.items()}
@@ -402,6 +451,7 @@ class TrustRegistry:
 
     def verify_all_safe(self) -> list[str]:
         """Promote all safe (read-only) tools to VERIFIED. Return promoted names."""
+        self._load()
         promoted = []
         for name in _get_safe_tools():
             if name in self._levels and self._levels[name] == TrustLevel.UNTRUSTED:
@@ -415,6 +465,7 @@ class TrustRegistry:
 
     def trust_tool(self, tool_name: str) -> TrustLevel:
         """Promote *tool_name* to TRUSTED."""
+        self._load()
         if tool_name not in self._levels:
             raise KeyError(
                 f"Unknown tool: {tool_name!r}. Available: {sorted(self._levels.keys())}"
@@ -428,6 +479,7 @@ class TrustRegistry:
 
     def trust_all(self) -> list[str]:
         """Promote **all** tools to TRUSTED. Return promoted names."""
+        self._load()
         promoted = []
         for name in self._levels:
             if self._levels[name] != TrustLevel.TRUSTED:
@@ -450,6 +502,7 @@ class TrustRegistry:
 
     def get_report(self) -> dict[str, Any]:
         """Return current trust state as a JSON-serializable dict."""
+        self._load()
         by_level: dict[str, list[str]] = {
             "untrusted": [],
             "verified": [],
@@ -465,6 +518,7 @@ class TrustRegistry:
 
     def get_aggregate_level(self) -> str:
         """Highest trust level present across all tools; 'untrusted' if nothing promoted."""
+        self._load()
         levels = set(self._levels.values())
         if TrustLevel.TRUSTED in levels:
             return "trusted"
@@ -503,6 +557,7 @@ class TrustRegistry:
 
     def reset(self) -> None:
         """Reset all tools to UNTRUSTED."""
+        self._load()
         for name in self._levels:
             self._levels[name] = TrustLevel.UNTRUSTED
         self._save()

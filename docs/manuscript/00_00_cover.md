@@ -25,7 +25,7 @@
 
 ```{=html}
 <section id="cover" class="manuscript-cover">
-  <img src="figures/cover.png" alt="Codomyrmex cover art: a colony control plane with a bright kernel hub, seven subsystem nodes, and consequence trails." />
+  <img src="figures/cover.png" alt="{{CONFIG_PROJECT_SHORT_NAME}} cover art: a colony control plane with a bright kernel hub, {{CONFIG_OPERATIONAL_SUBSYSTEM_COUNT}} subsystem nodes, and consequence trails." />
   <div class="cover-copy">
     <h1>{{CONFIG_TITLE}}</h1>
     <p class="cover-subtitle">{{CONFIG_SUBTITLE}}</p>

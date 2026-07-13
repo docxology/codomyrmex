@@ -98,6 +98,12 @@ class TestColonyKernelInit:
     def test_kernel_has_consequence_memory(self, kernel: ColonyKernel):
         assert isinstance(kernel.consequence_memory, ConsequenceMemory)
 
+    def test_integrated_gate_uses_kernel_consequence_memory(
+        self, kernel: ColonyKernel
+    ) -> None:
+        """Recent-outcome penalties must be live in the integrated/MCP path."""
+        assert kernel.actuation_gate._memory is kernel.consequence_memory
+
     def test_kernel_has_role_adapter(self, kernel: ColonyKernel):
         assert isinstance(kernel.role_adapter, RoleAdapter)
 
@@ -296,6 +302,91 @@ class TestRecordOutcome:
         )
         strength = kernel.pheromone_store.sense(proposal.target, SignalType.FAILURE)
         assert strength > 0.0
+
+    def test_failed_outcome_tightens_same_target_gate_only(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ) -> None:
+        """Observed failure must lower a later gate score at the same location."""
+        profile = AgentTrustProfile(
+            agent_id="independent-reviewer",
+            trust_score=0.50,
+            role=AgentRole.DISPATCHER,
+            total_proposals=3,
+        )
+        same_target = ActionProposal(
+            agent_id=profile.agent_id,
+            agent_type="dispatcher",
+            action_type="patch_file",
+            target=proposal.target,
+            rationale="Apply a bounded correction with a verified rollback path.",
+            expected_outcome="targeted tests pass",
+            rollback_plan="revert the bounded correction",
+            evidence={"test": "tests/unit/test_target.py"},
+        )
+        other_target = ActionProposal(
+            agent_id=profile.agent_id,
+            agent_type="dispatcher",
+            action_type="patch_file",
+            target="mypackage.unrelated",
+            rationale="Apply an independent bounded correction.",
+            expected_outcome="independent tests pass",
+            rollback_plan="revert the independent correction",
+            evidence={"test": "tests/unit/test_unrelated.py"},
+        )
+
+        before = kernel.actuation_gate.evaluate(same_target, profile, [], True)
+        assert before.decision is GateDecision.EXECUTE
+        assert before.gate_score == pytest.approx(0.875)
+
+        kernel.record_outcome(
+            proposal,
+            outcome={"summary": "targeted tests failed"},
+            tests_passed=False,
+        )
+
+        after = kernel.actuation_gate.evaluate(same_target, profile, [], True)
+        unaffected = kernel.actuation_gate.evaluate(other_target, profile, [], True)
+        assert after.decision is GateDecision.HOLD
+        assert after.gate_score == pytest.approx(0.725)
+        assert unaffected.decision is GateDecision.EXECUTE
+        assert unaffected.gate_score == pytest.approx(before.gate_score)
+
+    def test_failed_outcome_pressure_recovers_after_decay(
+        self, kernel: ColonyKernel, proposal: ActionProposal
+    ) -> None:
+        """Local inhibition is reversible once the observed-failure trace evaporates."""
+        profile = AgentTrustProfile(
+            agent_id="decay-reviewer",
+            trust_score=0.50,
+            role=AgentRole.DISPATCHER,
+            total_proposals=3,
+        )
+        candidate = ActionProposal(
+            agent_id=profile.agent_id,
+            agent_type="dispatcher",
+            action_type="patch_file",
+            target=proposal.target,
+            rationale="Retry after the local failure evidence has expired.",
+            expected_outcome="targeted tests pass",
+            rollback_plan="revert the retry",
+            evidence={"test": "tests/unit/test_target.py"},
+        )
+        kernel.record_outcome(
+            proposal,
+            outcome={"summary": "targeted tests failed"},
+            tests_passed=False,
+        )
+        assert (
+            kernel.actuation_gate.evaluate(candidate, profile, [], True).decision
+            is GateDecision.HOLD
+        )
+
+        for _ in range(20):
+            kernel.tick()
+
+        recovered = kernel.actuation_gate.evaluate(candidate, profile, [], True)
+        assert recovered.decision is GateDecision.EXECUTE
+        assert recovered.gate_score == pytest.approx(0.875)
 
     def test_outcome_consumes_budget(
         self, kernel: ColonyKernel, proposal: ActionProposal

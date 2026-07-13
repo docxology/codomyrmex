@@ -7,9 +7,13 @@ RESOURCE_DEFINITIONS, PROMPT_DEFINITIONS, and proxy tool helpers.
 Zero-mock compliant: no unittest.mock, MagicMock, or monkeypatch.
 """
 
+import os
+import subprocess
+import sys
 import threading
 
 import pytest
+from tests.support.repo_paths import REPO_ROOT
 
 from codomyrmex.agents.pai.mcp.definitions import (
     PROMPT_DEFINITIONS,
@@ -21,6 +25,7 @@ from codomyrmex.agents.pai.mcp.discovery import (
     _DYNAMIC_TOOLS_CACHE_LOCK,
     _FALLBACK_SCAN_TARGETS,
     _find_mcp_modules,
+    _find_mcp_tool_modules,
     discover_dynamic_tools,
     get_discovery_metrics,
     invalidate_tool_cache,
@@ -74,6 +79,105 @@ class TestFindMcpModules:
         assert len(result) >= 10, (
             f"Expected at least 10 mcp_tools modules, found {len(result)}"
         )
+
+    def test_bridge_import_and_filesystem_scan_keep_mlx_optional(self):
+        """Lightweight inventory construction must not initialize optional MLX."""
+        env = os.environ.copy()
+        src_path = str(REPO_ROOT / "src")
+        env["PYTHONPATH"] = os.pathsep.join(
+            part for part in (src_path, env.get("PYTHONPATH", "")) if part
+        )
+        script = """
+import sys
+from codomyrmex.agents.pai import mcp_bridge
+from codomyrmex.agents.pai.mcp.discovery import _find_mcp_modules
+
+modules = _find_mcp_modules()
+assert mcp_bridge.TOOL_COUNT > 0
+assert "codomyrmex.quantization" in modules
+assert "codomyrmex.data_visualization" in modules
+for prefix in ("mlx", "codomyrmex.quantization"):
+    assert not any(name == prefix or name.startswith(prefix + ".") for name in sys.modules), prefix
+assert "codomyrmex.agents.pai.trust_gateway" not in sys.modules
+"""
+        result = subprocess.run(
+            [sys.executable, "-c", script],
+            cwd=REPO_ROOT,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+        assert result.returncode == 0, result.stderr or result.stdout
+
+    def test_quantization_package_keeps_optional_mlx_backend_lazy(self):
+        """MCP discovery may import quantization without initializing MLX."""
+        env = os.environ.copy()
+        src_path = str(REPO_ROOT / "src")
+        env["PYTHONPATH"] = os.pathsep.join(
+            part for part in (src_path, env.get("PYTHONPATH", "")) if part
+        )
+        script = """
+import sys
+import codomyrmex.quantization as quantization
+
+assert quantization.quantize_int8 is not None
+assert "codomyrmex.quantization.mlx_quantizer" not in sys.modules
+assert not any(name == "mlx" or name.startswith("mlx.") for name in sys.modules)
+"""
+        result = subprocess.run(
+            [sys.executable, "-c", script],
+            cwd=REPO_ROOT,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+        assert result.returncode == 0, result.stderr or result.stdout
+
+    def test_exact_discovery_preserves_legacy_tools_without_loading_mlx(self):
+        """Decorated legacy modules remain visible while optional MLX stays lazy."""
+        modules = set(_find_mcp_tool_modules())
+        assert "codomyrmex.quantization.mcp_tools" in modules
+        assert "codomyrmex.coding.execution.executor" in modules
+        assert "codomyrmex.git_operations.core.commands.status" in modules
+        assert "codomyrmex.networks.graph" in modules
+        assert "codomyrmex.data_visualization.mermaid.mermaid_generator" in modules
+
+        env = os.environ.copy()
+        src_path = str(REPO_ROOT / "src")
+        env["PYTHONPATH"] = os.pathsep.join(
+            part for part in (src_path, env.get("PYTHONPATH", "")) if part
+        )
+        script = """
+import sys
+from codomyrmex.agents.pai.mcp.discovery import discover_dynamic_tools, invalidate_tool_cache
+
+invalidate_tool_cache()
+names = {entry[0] for entry in discover_dynamic_tools()}
+for expected in (
+    "codomyrmex.quantize_tensor",
+    "codomyrmex.execute_code",
+    "codomyrmex.git_add",
+    "codomyrmex.NetworkGraph.shortest_path",
+    "codomyrmex.create_git_branch_diagram",
+):
+    assert expected in names, expected
+assert "codomyrmex.quantization.mlx_quantizer" not in sys.modules
+assert not any(name == "mlx" or name.startswith("mlx.") for name in sys.modules)
+"""
+        result = subprocess.run(
+            [sys.executable, "-c", script],
+            cwd=REPO_ROOT,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=120,
+            check=False,
+        )
+        assert result.returncode == 0, result.stderr or result.stdout
 
 
 @pytest.mark.unit

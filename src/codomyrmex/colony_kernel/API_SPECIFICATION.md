@@ -70,8 +70,9 @@ def propose_action(self, proposal: ActionProposal) -> GateResult
 Full pipeline: falsification → budget pre-check → trust/role refresh → gate
 evaluation.
 
-**Does not consume budget.**  Budget is consumed by `record_outcome` after
-actual execution.
+**Does not consume budget.** Budget is consumed only if a caller later invokes
+`record_outcome`; the kernel does not attest that execution occurred between
+the two calls.
 
 **Parameters**
 
@@ -114,16 +115,18 @@ def record_outcome(
 ) -> ConsequenceRecord
 ```
 
-Record the consequence of an executed action.  Updates the agent's trust
-score, consumes budget, and adjusts pheromone traces.
+Record a caller-supplied consequence report. Updates the agent's trust score,
+consumes a supplied cost or the proposal estimate, and adjusts pheromone
+traces. The method does not require a matching prior EXECUTE decision and does
+not attest the reported action or outcome.
 
 **Parameters**
 
 | Name | Type | Description |
 |------|------|-------------|
-| `proposal` | `ActionProposal` | The original proposal that was executed. |
-| `outcome` | `dict[str, Any]` | Free-form result dict. Recognised keys: `summary` (str), `repair_needed` (bool), `action_taken` (str), `cost` (dict matching `ResourceCost` fields). |
-| `tests_passed` | `bool` | Whether post-execution tests passed. |
+| `proposal` | `ActionProposal` | Caller-supplied proposal context; not checked against a prior gate authorization. |
+| `outcome` | `dict[str, Any]` | Caller-supplied result dict. Recognised keys: `summary` (str), `repair_needed` (bool), `action_taken` (str), `cost` (dict matching `ResourceCost` fields). |
+| `tests_passed` | `bool` | Caller's report of whether tests passed. |
 | `human_feedback` | `str \| None` | Optional operator feedback. Parsed tokens: `"good"/"approve"/"yes"/"+" → +1.0`, `"bad"/"reject"/"no"/"-" → -1.0`, numeric string → clamped to `[-1.0, 1.0]`, `None`/unrecognised → `0.0`. |
 
 **Returns** `ConsequenceRecord`
@@ -142,12 +145,15 @@ score, consumes budget, and adjusts pheromone traces.
 
 **Side effects**
 
-- Calls `ResourceLedger.consume` with the actual cost.
+- Calls `ResourceLedger.consume` with a valid `outcome["cost"]` mapping when
+  present; otherwise falls back to `proposal.budget_estimate`.
 - `tests_passed=True` → reinforces a `SUCCESS` pheromone at `proposal.target`.
-- `tests_passed=False` → deposits a `FAILURE` pheromone (strength 2.0, `FAST`
-  decay) at `proposal.target`.
+- `tests_passed=False` → constructs a `FAILURE` pheromone with nominal strength
+  2.0 and `FAST` decay at `proposal.target`; the TEST source multiplier makes
+  the default effective deposit 3.0.
 - Clean success (`tests_passed=True` and `repair_needed=False`) also deposits
-  a `SUCCESS` trace (strength 1.5, `SLOW` decay).
+  a `SUCCESS` trace with nominal strength 1.5 and `SLOW` decay; the TEST source
+  multiplier makes the default effective deposit 2.25.
 - Always deposits a `DEPENDENCY` pheromone (strength 0.5, `SLOW` decay) at
   `proposal.target` tagging `agent_id`.
 - Updates the agent's role if trust crossed a role boundary; persists the
@@ -178,7 +184,7 @@ Return the current `AgentTrustProfile` for `agent_id`.  Creates a default
 | `role` | `AgentRole` | Emergent role: `SANDBOX`, `REPAIR_ANT`, `MEMORY_ANT`, `DISPATCHER`, or `GUARD_ANT` |
 | `trust_score` | `float` | `[0.0, 1.0]`; new agents start at `0.1` |
 | `total_proposals` | `int` | Lifetime proposal count |
-| `accepted_proposals` | `int` | Proposals with `EXECUTE` decision |
+| `accepted_proposals` | `int` | Recorded outcomes with `tests_passed=True` and `repair_needed=False` |
 | `consequence_history` | `list[str]` | Most-recent `consequence_id` values (chronological, most recent last) |
 | `last_updated` | `float` | Unix timestamp of last update |
 
@@ -265,27 +271,30 @@ class ResourceCost:
     security_exposure: float = 0.0   # [0.0, 1.0]
 ```
 
-Fraction fields (`risk_level`, `merge_risk`, `security_exposure`) are clamped
-to `[0.0, 1.0]` by `__post_init__`.  Supports `+` operator (fractions
-accumulate with `min(1.0, ...)`).
+Fraction fields (`risk_level`, `merge_risk`, `security_exposure`) must already
+be in `[0.0, 1.0]`; `__post_init__` raises `ValueError` otherwise. The `+`
+operator caps accumulated fraction fields with `min(1.0, ...)`.
 
 ### `GateDecision` (enum)
 
 | Value | Meaning |
 |-------|---------|
-| `EXECUTE` | Proceed immediately |
-| `HOLD` | Requeue; agent must supply `required_evidence` |
-| `REFUSE` | Rejected; `FAILURE` pheromone deposited |
+| `EXECUTE` | Proposal cleared the current policy; downstream actuation remains caller-controlled |
+| `HOLD` | Return revision requirements; any requeue is caller-controlled |
+| `REFUSE` | Proposal rejected by the policy; the integrated kernel deposits FAILURE |
 
 ### `AgentRole` (enum)
 
-| Value | Implicit permissions |
-|-------|---------------------|
-| `SANDBOX` | Read-only; no write-path gate passes |
-| `REPAIR_ANT` | Patch, test-fix, doc-update |
-| `MEMORY_ANT` | Archive, index, summarise |
-| `DISPATCHER` | Delegate, coordinate, route |
-| `GUARD_ANT` | Security review, gate audit, archive authority |
+| Value | Current enforcement and intended specialization |
+|-------|-------------------------------------------------|
+| `SANDBOX` | ActuationGate unconditionally returns REFUSE for every proposal |
+| `REPAIR_ANT` | Label associated with repair work; no action-specific permission is enforced |
+| `MEMORY_ANT` | Label associated with memory/documentation work; no action-specific permission is enforced |
+| `DISPATCHER` | Label associated with coordination; no action-specific permission is enforced |
+| `GUARD_ANT` | Label associated with review; no action-specific permission or veto is enforced |
+
+Apart from the SANDBOX hard override, roles are inferred labels rather than an
+action-by-role authorization matrix.
 
 ---
 

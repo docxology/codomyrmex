@@ -16,6 +16,7 @@ from codomyrmex.agents.hermes.client_pkg.execution import HermesExecutionMixin
 from codomyrmex.agents.hermes.client_pkg.gateway import HermesGatewayMixin
 from codomyrmex.agents.hermes.client_pkg.maintenance import HermesMaintenanceMixin
 from codomyrmex.agents.hermes.client_pkg.session_ops import HermesSessionOpsMixin
+from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_session_db
 
 
 class HermesClient(
@@ -106,9 +107,10 @@ class HermesClient(
             self.get_config_value("pass_session_id", config=cfg)
         )
 
-        db_default = Path.home() / ".codomyrmex" / "hermes_sessions.db"
         self._session_db_path = str(
-            self.get_config_value("hermes_session_db", config=cfg) or db_default
+            resolve_hermes_session_db(
+                self.get_config_value("hermes_session_db", config=cfg)
+            )
         )
         Path(self._session_db_path).parent.mkdir(parents=True, exist_ok=True)
 

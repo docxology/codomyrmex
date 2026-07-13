@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Colony Kernel is the control plane for codomyrmex's artificial ecology. It gates every agent action through a multi-factor pipeline (adversarial falsification → budget check → trust evaluation → actuation gate), persists outcomes in SQLite, and maintains a stigmergic pheromone field that encodes the codebase's collective memory of success, failure, risk, and active dependencies. The pheromone landscape and per-agent trust profiles provide the shared state from which deterministic role assignment and configured pruning nominations arise.
+Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology. It runs adversarial checks, budget evaluation, trust lookup, and a ternary actuation gate; stores caller-reported outcomes in SQLite; and maintains a process-local stigmergic field. The MCP adapter exposes this path, but the kernel does not itself enforce downstream tool execution or attest submitted outcomes.
 
 ## Active Components
 
@@ -68,7 +68,7 @@ All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` i
 | Tool | Category | Description |
 |------|----------|-------------|
 | `colony_propose_action` | `colony_kernel` | Submit an action proposal; runs falsification → budget → trust → gate; returns `GateResult` |
-| `colony_record_outcome` | `colony_kernel` | Record the real consequence of an executed action; updates trust, deposits SUCCESS/FAILURE + DEPENDENCY pheromones |
+| `colony_record_outcome` | `colony_kernel` | Record a caller-reported consequence; updates trust, deposits SUCCESS/FAILURE + DEPENDENCY pheromones |
 | `colony_agent_profile` | `colony_kernel` | Read an agent's current `AgentTrustProfile` (role, trust_score, history length) |
 | `colony_status` | `colony_kernel` | Dashboard snapshot: pheromone_summary, budget_usage, role_distribution, recent_consequences, pruning_candidates_count |
 | `colony_pheromone_query` | `colony_kernel` | Sense pheromone strength at a given location and signal type |
@@ -80,7 +80,7 @@ All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` i
 
 ### Witness state
 
-`ConsequenceMemory` is the authoritative witness for everything that happened in the colony. SQLite WAL mode ensures concurrent readers do not block writers. The `db_path=":memory:"` default is safe for tests and single-process exploration; supply a file path (e.g. `ColonyKernelConfig(db_path="/var/codomyrmex/colony.db")`) for persistence across restarts.
+`ConsequenceMemory` stores what callers report; it is not an authoritative witness of execution. SQLite WAL mode supports concurrent readers for file-backed databases. The `db_path=":memory:"` default is process-local; a file path persists consequence rows and profiles across restarts, but not the pheromone field, budget accumulator, or complete kernel state.
 
 ### Consequence loop
 
@@ -88,7 +88,7 @@ All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` i
 
 ### Role ladder
 
-A brand-new agent starts as SANDBOX regardless of trust score until it accumulates at least three total proposals (`_ROLE_MIN_PROPOSALS_FOR_PROMOTION = 3`). This prevents newly registered agents from immediately receiving write-path permissions. The promotion ladder is:
+A brand-new agent starts as SANDBOX until it accumulates at least three proposals (`_ROLE_MIN_PROPOSALS_FOR_PROMOTION = 3`). SANDBOX is hard-refused. Promotion changes a label; non-sandbox labels do not currently grant or restrict action types. The ladder is:
 
 ```
 SANDBOX (< 3 proposals or trust < 0.20)
@@ -106,11 +106,11 @@ The pheromone field uses compound keys of the form `"{location}:{signal_type.val
 
 ### Falsification severity threshold
 
-`ActuationGate` issues an unconditional REFUSE for any CRITICAL falsification finding (severity weight 1.0). HIGH findings lower the gate score significantly but do not automatically block execution if the composite score remains above the EXECUTE threshold (0.75). CRITICAL pheromone pressure (failure_strength ≥ 6.0) is also treated as a CRITICAL falsification finding.
+`ActuationGate` issues an unconditional REFUSE for any CRITICAL falsification finding (severity weight 1.0). Non-critical findings are reported in the result and can cause the kernel to deposit RISK pressure after evaluation, but they do not directly enter the current additive score. Elevated effective hazard, computed as `max(RISK, FAILURE)` at the target, lowers the risk component of later proposals.
 
-### Pruning is read-only
+### Pruning report versus archive
 
-`PruningDaemon` never writes, deletes, or archives anything. It only produces `PruningCandidate` lists for human or GUARD_ANT review. Candidates with confidence < 0.50 are suppressed. Modules protected by a HUMAN_PRIORITY signal are never flagged.
+The MCP pruning-report path only produces `PruningCandidate` lists for human or GUARD_ANT review. Candidates with confidence < 0.50 are suppressed, and modules protected by a HUMAN_PRIORITY signal are not flagged by the registry scan. The separate `archive(candidate, dry_run=False)` API can move a reviewed path into `docs/plans/archived/`; its default is a non-mutating dry run.
 
 ## Operating Contracts
 
@@ -123,17 +123,17 @@ The pheromone field uses compound keys of the form `"{location}:{signal_type.val
 
 ```bash
 # Full colony_kernel suite
-uv run pytest src/codomyrmex/tests/unit/colony_kernel/ -v
+uv run pytest tests/unit/colony_kernel/ -v
 
 # Coverage report
-HYPOTHESIS_NO_NPY=1 uv run pytest src/codomyrmex/tests/unit/colony_kernel/ \
+HYPOTHESIS_NO_NPY=1 uv run pytest tests/unit/colony_kernel/ \
   --cov=src/codomyrmex/colony_kernel --cov-report=term-missing
 
 # Single test file
-uv run pytest src/codomyrmex/tests/unit/colony_kernel/test_kernel.py -v
+uv run pytest tests/unit/colony_kernel/test_kernel.py -v
 
 # MCP tools smoke-test
-uv run pytest src/codomyrmex/tests/unit/colony_kernel/test_mcp_tools.py -v
+uv run pytest tests/unit/colony_kernel/test_mcp_tools.py -v
 ```
 
 ## Navigation Links

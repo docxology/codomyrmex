@@ -9,7 +9,6 @@ from codomyrmex.manuscript.figures._common import (
     _pub_style,
     _save,
     _var_float,
-    math,
     np,
     plt,
 )
@@ -25,21 +24,21 @@ def fig_pheromone_decay() -> None:
     slow_mult = _var_float("CONFIG_DECAY_RATE_SLOW", 0.2)
     configs = [
         (
-            f"FAST  (λ={base_rate * fast_mult:.2f}) — FAILURE, RISK",
+            f"FAST  (ε={base_rate * fast_mult:.2f}) — FAILURE, RISK",
             base_rate * fast_mult,
             _OI["vermil"],
             "solid",
             "FAST",
         ),
         (
-            f"NORMAL (λ={base_rate * normal_mult:.2f}) — NEED, DEPENDENCY",
+            f"NORMAL (ε={base_rate * normal_mult:.2f}) — NEED, DEFAULT",
             base_rate * normal_mult,
             _OI["blue"],
             "dashed",
             "NORMAL",
         ),
         (
-            f"SLOW  (λ={base_rate * slow_mult:.2f}) — SUCCESS, PRIORITY",
+            f"SLOW  (ε={base_rate * slow_mult:.2f}) — SUCCESS, DEPENDENCY, PRIORITY",
             base_rate * slow_mult,
             _OI["green"],
             "dotted",
@@ -53,31 +52,21 @@ def fig_pheromone_decay() -> None:
     _pub_style(ax)
 
     for label, rate, color, ls, cls_name in configs:
-        strength = np.exp(-rate * t)
+        strength = np.maximum(0.0, 1.0 - rate * t)
         ax.plot(t, strength, label=label, color=color, linestyle=ls, lw=2.8, zorder=4)
         ax.fill_between(t, 0, strength, color=color, alpha=0.07, zorder=2)
         ax.fill_between(
             t, 0, np.minimum(strength, 0.50), color=color, alpha=0.05, zorder=2
         )
 
-        # Time-constant marker (τ = 1/λ), value = 1/e ≈ 0.368
+        # Extinction marker for unit initial strength: ceil(1 / epsilon) ticks.
         tau = 1.0 / rate
         if tau <= 10.0:
-            s_tau = math.exp(-1.0)  # always 1/e
+            s_tau = 0.0
             ax.vlines(
                 tau,
                 0,
-                s_tau,
-                colors=color,
-                linestyles=":",
-                lw=1.0,
-                alpha=0.50,
-                zorder=3,
-            )
-            ax.hlines(
-                s_tau,
-                0,
-                tau,
+                1,
                 colors=color,
                 linestyles=":",
                 lw=1.0,
@@ -127,11 +116,11 @@ def fig_pheromone_decay() -> None:
     )
     ax.text(0.12, 0.515, "50%", fontsize=8, color=_OI["grey"], va="bottom")
 
-    # FAST half-life annotation
+    # FAST half-strength annotation for the linear recurrence.
     fast_rate = base_rate * fast_mult
-    t_half = math.log(2) / fast_rate
+    t_half = 0.5 / fast_rate
     ax.annotate(
-        f"FAST t½ = {t_half:.2f} ticks",
+        f"FAST reaches 0.5 at {t_half:.2f} ticks",
         xy=(t_half, 0.5),
         xytext=(t_half + 0.65, 0.63),
         arrowprops={"arrowstyle": "->", "color": _OI["vermil"], "lw": 1.1},
@@ -146,13 +135,13 @@ def fig_pheromone_decay() -> None:
     )
 
     slow_rate = base_rate * slow_mult
-    slow_per_tick = math.exp(-slow_rate)
+    slow_per_tick = 1.0 - slow_rate
     slow_example_tick = 8.0
-    slow_example_strength = math.exp(-slow_rate * slow_example_tick)
-    slow_half_life = math.log(2) / slow_rate
+    slow_example_strength = max(0.0, 1.0 - slow_rate * slow_example_tick)
+    slow_extinction = 1.0 / slow_rate
     ax.annotate(
-        f"SLOW: {slow_per_tick:.0%} retained per tick\n"
-        f"(e^(-{slow_rate:.2f}) ≈ {slow_per_tick:.3f}; t½ ≈ {slow_half_life:.2f} ticks)",
+        f"SLOW unit trace: {slow_per_tick:.0%} after one tick\n"
+        f"(subtract {slow_rate:.2f}/tick; extinction at {slow_extinction:.0f} ticks)",
         xy=(slow_example_tick, slow_example_strength),
         xytext=(6.1, 0.68),
         arrowprops={"arrowstyle": "->", "color": _OI["green"], "lw": 1.1},
@@ -173,7 +162,7 @@ def fig_pheromone_decay() -> None:
     )
     ax.set_title(
         "Pheromone signal decay by rate class\n"
-        "s(t) = s0 exp(-lambda t) — three config-backed rate classes map to signal volatility",
+        "s(t) = max(0, s0 - epsilon t) for a unit deposit",
         fontsize=11,
         pad=12,
     )

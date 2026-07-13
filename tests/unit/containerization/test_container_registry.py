@@ -20,7 +20,7 @@ from datetime import datetime
 import pytest
 
 pytest.importorskip(
-    "docker",
+    "docker.errors",
     reason="container_registry imports docker SDK (uv sync --extra containerization)",
 )
 
