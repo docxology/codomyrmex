@@ -19,7 +19,6 @@ def fig_gate_score_3d() -> None:
     The trust hard floor and tiered trust credit mirror ActuationGate. Completeness
     is continuous only as a visual envelope; runtime values are discrete.
     """
-    from mpl_toolkits.mplot3d import Axes3D
 
     w_trust = _var_float("CONFIG_GATE_WEIGHT_TRUST", 0.25)
     w_complete = _var_float("CONFIG_GATE_WEIGHT_COMPLETENESS", 0.15)
