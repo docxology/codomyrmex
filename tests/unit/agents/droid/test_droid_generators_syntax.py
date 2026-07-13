@@ -16,7 +16,13 @@ from tests.support.repo_paths import PACKAGE_ROOT
 
 # Import the generators module directly to avoid the droid __init__.py chain,
 # which pulls in controller.py → codomyrmex.performance → psutil (optional dep).
-_GENERATORS_PATH = PACKAGE_ROOT / "agents" / "droid" / "generators" / "documentation.py"
+_GENERATORS_PATH = (
+    PACKAGE_ROOT
+    / "agents"
+    / "droid"
+    / "generators"
+    / "documentation.py"
+)
 _spec = _importlib_util.spec_from_file_location(
     "codomyrmex.agents.droid.generators.documentation", _GENERATORS_PATH
 )

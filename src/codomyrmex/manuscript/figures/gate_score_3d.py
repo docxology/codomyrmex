@@ -50,13 +50,8 @@ def fig_gate_score_3d() -> None:
 
     norm = plt.Normalize(0, 1)
     surf = ax1.plot_surface(
-        T,
-        C,
-        score_best,
-        facecolors=plt.cm.YlOrRd(norm(score_best)),
-        alpha=0.92,
-        linewidth=0,
-        antialiased=True,
+        T, C, score_best, facecolors=plt.cm.YlOrRd(norm(score_best)),
+        alpha=0.92, linewidth=0, antialiased=True
     )
 
     ax1.set_xlabel("Trust score", fontsize=9, labelpad=8)
@@ -83,34 +78,14 @@ def fig_gate_score_3d() -> None:
         else:
             trust_component = 1.0 if trust_val >= 0.60 else 0.5
             total_score = 0.60 + w_trust * trust_component + w_complete * C[:, 0]
-        ax2.plot(
-            C[:, 0],
-            total_score,
-            label=f"trust={trust_val:.1f}",
-            linestyle=ls,
-            color=color,
-            lw=2.2,
-            marker=marker,
-            markevery=10,
-            markersize=5,
-        )
+        ax2.plot(C[:, 0], total_score, label=f"trust={trust_val:.1f}",
+                 linestyle=ls, color=color, lw=2.2, marker=marker,
+                 markevery=10, markersize=5)
 
-    ax2.axhline(
-        y=gate_exec,
-        color="#0072B2",
-        linestyle="--",
-        lw=1.2,
-        alpha=0.7,
-        label=f"EXECUTE (g≥{gate_exec})",
-    )
-    ax2.axhline(
-        y=gate_hold,
-        color="#D55E00",
-        linestyle=":",
-        lw=1.2,
-        alpha=0.7,
-        label=f"HOLD (g≥{gate_hold})",
-    )
+    ax2.axhline(y=gate_exec, color="#0072B2", linestyle="--", lw=1.2,
+                alpha=0.7, label=f"EXECUTE (g≥{gate_exec})")
+    ax2.axhline(y=gate_hold, color="#D55E00", linestyle=":", lw=1.2,
+                alpha=0.7, label=f"HOLD (g≥{gate_hold})")
     ax2.fill_between(C[:, 0], 0.0, gate_hold, alpha=0.06, color="#D55E00")
     ax2.fill_between(C[:, 0], gate_hold, gate_exec, alpha=0.06, color=_OI["yellow"])
     ax2.fill_between(C[:, 0], gate_exec, 1.0, alpha=0.06, color=_OI["green"])

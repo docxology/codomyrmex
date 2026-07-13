@@ -27,7 +27,6 @@ logger = get_logger(__name__)
 def _set_memory_limit(memory_limit_mb: int):
     """set memory limit for current process."""
     import os
-
     if not RESOURCE_LIMIT_AVAILABLE or "PYTEST_CURRENT_TEST" in os.environ:
         return
 

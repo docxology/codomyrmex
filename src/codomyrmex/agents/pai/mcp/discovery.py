@@ -112,10 +112,7 @@ def _find_mcp_modules() -> list[str]:
             package_root = Path(root_path)
             for tool_file in package_root.rglob("mcp_tools.py"):
                 relative_parent = tool_file.parent.relative_to(package_root)
-                if any(
-                    part.startswith(".") or part in ignored_parts
-                    for part in relative_parent.parts
-                ):
+                if any(part.startswith(".") or part in ignored_parts for part in relative_parent.parts):
                     continue
                 suffix = ".".join(relative_parent.parts)
                 parents.add(f"codomyrmex.{suffix}" if suffix else "codomyrmex")
@@ -231,7 +228,7 @@ def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     metrics.modules_scanned = len(scan_targets)
     metrics.scan_duration_ms = elapsed_ms
     logger.info(
-        "Dynamic tools discovered: %d in %.0fms",
+    "Dynamic tools discovered: %d in %.0fms",
         len(tools),
         elapsed_ms,
     )

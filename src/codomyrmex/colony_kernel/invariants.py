@@ -58,9 +58,9 @@ def check_gate_weights_sum_to_one(
 
     Example::
 
-        assert check_gate_weights_sum_to_one()  # canonical
+        assert check_gate_weights_sum_to_one()                     # canonical
         assert check_gate_weights_sum_to_one([0.25, 0.25, 0.25, 0.25])  # custom
-        assert not check_gate_weights_sum_to_one([0.30, 0.30, 0.30])  # sum != 1
+        assert not check_gate_weights_sum_to_one([0.30, 0.30, 0.30])    # sum != 1
     """
     if weights is None:
         weights = _GATE_WEIGHTS
@@ -93,7 +93,6 @@ def check_trust_score_in_range(
     Example::
 
         from codomyrmex.colony_kernel.models import AgentTrustProfile, AgentRole
-
         p = AgentTrustProfile(agent_id="a", trust_score=0.5)
         assert check_trust_score_in_range([p])
 
@@ -140,7 +139,7 @@ def check_pheromone_strength_bounds(
     Example::
 
         assert check_pheromone_strength_bounds([0.0, 1.5, 999.9])
-        assert not check_pheromone_strength_bounds([-0.1])  # below floor
+        assert not check_pheromone_strength_bounds([-0.1])         # below floor
         assert not check_pheromone_strength_bounds([1_000_001.0])  # above ceiling
     """
     if strengths is None:
@@ -188,10 +187,10 @@ def check_role_ladder_monotonic(
 
     Example::
 
-        assert check_role_ladder_monotonic()  # canonical thresholds
+        assert check_role_ladder_monotonic()              # canonical thresholds
         assert check_role_ladder_monotonic([0.1, 0.3, 0.6, 0.9])
-        assert not check_role_ladder_monotonic([0.3, 0.3, 0.5])  # tie
-        assert not check_role_ladder_monotonic([0.5, 0.3, 0.8])  # decrease
+        assert not check_role_ladder_monotonic([0.3, 0.3, 0.5])   # tie
+        assert not check_role_ladder_monotonic([0.5, 0.3, 0.8])   # decrease
     """
     if thresholds is None:
         thresholds = _ROLE_LADDER_THRESHOLDS

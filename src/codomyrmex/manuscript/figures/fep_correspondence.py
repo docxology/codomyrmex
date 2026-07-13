@@ -57,11 +57,7 @@ def fig_fep_correspondence() -> None:
     fig.patch.set_facecolor("#F7F9FC")
     ax.axis("off")
 
-    headers = [
-        "Active Inference concept",
-        "Loose software analogue",
-        "Why equivalence fails",
-    ]
+    headers = ["Active Inference concept", "Loose software analogue", "Why equivalence fails"]
     widths = [0.23, 0.31, 0.46]
     x0 = 0.02
     y_top = 0.88

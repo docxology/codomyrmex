@@ -95,7 +95,6 @@ def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, No
             memory_bytes = min(memory_bytes, hard)
         try:
             import os
-
             if "PYTEST_CURRENT_TEST" not in os.environ:
                 resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
         except (ValueError, OSError) as e:
@@ -209,7 +208,6 @@ def sandbox_process_isolation(
             )
             memory_bytes = limits.memory_limit * 1024 * 1024
             import os
-
             if "PYTEST_CURRENT_TEST" not in os.environ:
                 resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
 
