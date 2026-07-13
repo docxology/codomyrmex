@@ -34,7 +34,6 @@ from codomyrmex.colony_kernel.models import (
     FalsificationFinding,
     FalsificationSeverity,
     GateResult,
-    PruningCandidate,
     ResourceCost,
     SignalSource,
     SignalType,
