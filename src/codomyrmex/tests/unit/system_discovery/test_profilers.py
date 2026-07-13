@@ -7,9 +7,7 @@ import pytest
 from codomyrmex.system_discovery.reporting.profilers import HardwareProfiler
 
 
-def create_fake_executable(
-    base_path: Path, name: str, output: str = "", fail: bool = False
-) -> None:
+def create_fake_executable(base_path: Path, name: str, output: str = "", fail: bool = False) -> None:
     """Create a cross-platform fake executable for testing."""
     # Unix script
     sh_path = base_path / name
@@ -82,9 +80,7 @@ def test_gpu_info_rocm_smi(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> N
     assert found_amd
 
 
-def test_gpu_info_nvidia_smi_failure(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_gpu_info_nvidia_smi_failure(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """Test get_gpu_info handles nvidia-smi execution failure gracefully."""
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
@@ -97,9 +93,7 @@ def test_gpu_info_nvidia_smi_failure(
     assert len(nvidia_details) == 0
 
 
-def test_gpu_info_nvidia_smi_malformed(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_gpu_info_nvidia_smi_malformed(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """Test get_gpu_info handles malformed nvidia-smi output gracefully."""
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
@@ -112,9 +106,7 @@ def test_gpu_info_nvidia_smi_malformed(
     assert len(nvidia_details) == 0
 
 
-def test_gpu_info_system_profiler(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_gpu_info_system_profiler(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """Test get_gpu_info parses system_profiler output correctly on macOS."""
     monkeypatch.setattr(platform, "system", lambda: "Darwin")
 
@@ -124,12 +116,11 @@ def test_gpu_info_system_profiler(
     output = "Chipset Model: Apple M2 Max\nChipset Model: Apple M1"
     create_fake_executable(fake_bin, "system_profiler", output)
 
-    old_path = os.environ.get("PATH", "")
-    monkeypatch.setenv("PATH", f"{fake_bin}{os.pathsep}{old_path}")
+    monkeypatch.setenv("PATH", str(fake_bin))
 
     gpu_info = HardwareProfiler.get_gpu_info()
 
-    assert gpu_info["available"] is True, f"gpu_info is {gpu_info}"
+    assert gpu_info["available"] is True
 
     found_m2 = False
     found_m1 = False
