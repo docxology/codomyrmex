@@ -8,3 +8,9 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-07-13 - Optimize Graph Traversal
+**Learning:** List membership checks () incur repeated allocation overhead on every call. In performance-critical loops like graph traversals, this compounds significantly.
+**Action:** Replaced list literals  with set literals  in  and , allowing Python to compile them into  constants for fast O(1) lookups and zero runtime allocation overhead.
+## 2023-11-20 - Optimize Graph Traversal
+**Learning:** List membership checks (`in [...]`) incur repeated allocation overhead on every call. In performance-critical loops like graph traversals, this compounds significantly.
+**Action:** Replaced list literals `["out", "both"]` with set literals `{"out", "both"}` in `get_neighbors` and `get_relationships`, allowing Python to compile them into `frozenset` constants for fast O(1) lookups and zero runtime allocation overhead.
