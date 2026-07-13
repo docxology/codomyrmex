@@ -62,6 +62,7 @@ class HermesMaintenanceMixin:
         if self._pass_session_id:
             args.append("--pass-session-id")
         return args
+
     def _heal_environment(self, package_name: str) -> dict[str, Any]:
         """Attempt to automatically install a missing package using uv.
 
@@ -115,6 +116,7 @@ class HermesMaintenanceMixin:
         except Exception as e:
             self.logger.error(f"Auto-heal exception for {package_name}: {e}")
             return {"success": False, "output": f"Exception during uv add: {e!s}"}
+
     def _run_coverage_loop(
         self, target_path: str, max_turns: int = 5
     ) -> dict[str, Any]:
@@ -195,6 +197,7 @@ class HermesMaintenanceMixin:
             "message": f"Did not achieve green tests after {max_turns} turns.",
             "trace": trace,
         }
+
     def get_version(self) -> str | None:
         """Get the installed Hermes CLI version string.
 
@@ -222,6 +225,7 @@ class HermesMaintenanceMixin:
         except Exception as e:
             self.logger.debug("Could not get Hermes version: %s", e)
             return None
+
     def run_doctor(self) -> dict[str, Any]:
         """Run ``hermes doctor`` for comprehensive health diagnostics.
 
@@ -252,6 +256,7 @@ class HermesMaintenanceMixin:
         except Exception as e:
             self.logger.warning("hermes doctor failed: %s", e)
             return {"success": False, "error": str(e)}
+
     def list_skills(self) -> dict[str, Any]:
         """list active skills available to Hermes.
 
@@ -270,6 +275,7 @@ class HermesMaintenanceMixin:
         except Exception as e:
             self.logger.warning("Failed to list Hermes skills: %s", e)
             return {"success": False, "error": str(e)}
+
     def get_hermes_status(self) -> dict[str, Any]:
         """Get the current Hermes configuration status.
 

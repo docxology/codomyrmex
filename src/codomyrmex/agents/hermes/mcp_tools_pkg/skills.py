@@ -1,4 +1,5 @@
 """Hermes MCP tools — skills category."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -31,6 +32,7 @@ def hermes_skills_list() -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     tags=["hermes", "skills", "registry", "interop"],
@@ -55,6 +57,7 @@ def hermes_skills_resolve(skill_ids: list[str] | str) -> dict[str, Any]:
             "hermes_preload": [],
             "resolved_entries": [],
         }
+
 
 @mcp_tool(
     category="hermes",
@@ -93,6 +96,7 @@ def hermes_skills_validate_registry() -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc), "registry_skill_count": 0}
 
+
 @mcp_tool(
     category="hermes",
     description="list all available Hermes prompt template names.",
@@ -112,6 +116,7 @@ def hermes_template_list() -> dict[str, Any]:
         return {"status": "success", "templates": names, "count": len(names)}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -153,6 +158,7 @@ def hermes_template_render(
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -182,6 +188,7 @@ def hermes_skill_install(repo_url: str) -> dict[str, Any]:
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -223,6 +230,7 @@ def hermes_fastmcp_scaffold(
         return response
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
