@@ -8,10 +8,10 @@ and release coordination capabilities.
 import importlib
 import json
 import os
+import shlex
 import shutil
 import socket
 import subprocess
-import shlex
 import tempfile
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
