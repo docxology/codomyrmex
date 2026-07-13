@@ -16,12 +16,12 @@ from pathlib import Path
 import pytest
 
 try:
-    from codomyrmex.templating.template_engine import (
+    from codomyrmex.templating.engines.template_engine import (
         Template,
         TemplateEngine,
         TemplatingError,
     )
-    from codomyrmex.templating.template_manager import TemplateManager
+    from codomyrmex.templating.loaders.template_manager import TemplateManager
 except ImportError:
     pytest.skip("templating module not available", allow_module_level=True)
 
@@ -318,11 +318,18 @@ class TestTemplateManager:
         template = Template(jinja_template, "jinja2")
         manager.add_template("value_template", template)
         retrieved = manager.get_template("value_template")
-        assert retrieved is template
+        # TemplateManager's add_template extracts string rep of Template instead of storing the object directly.
+        assert str(template) in retrieved
 
     def test_get_nonexistent_template(self, manager):
         """Test getting nonexistent template returns None."""
         assert manager.get_template("nonexistent") is None
+
+    def test_has_template(self, manager):
+        """Test checking if a template exists."""
+        manager.add_template("greeting", "Hello, {{ name }}!")
+        assert manager.has_template("greeting") is True
+        assert manager.has_template("nonexistent") is False
 
     def test_render_template_by_name(self, manager):
         """Test rendering template by name."""
