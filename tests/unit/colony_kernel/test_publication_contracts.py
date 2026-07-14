@@ -299,3 +299,16 @@ def test_release_manifest_rejects_stale_generated_artifact(tmp_path: Path) -> No
     assert _artifact_freshness([artifact], [source], tmp_path) == {
         "paper.pdf": False
     }
+
+
+def test_release_manifest_rejects_equal_mtime_as_fresh(tmp_path: Path) -> None:
+    source = tmp_path / "source.md"
+    artifact = tmp_path / "paper.pdf"
+    source.write_text("source", encoding="utf-8")
+    artifact.write_text("artifact", encoding="utf-8")
+    source_mtime = source.stat().st_mtime_ns
+    utime(artifact, ns=(source_mtime, source_mtime))
+
+    assert _artifact_freshness([artifact], [source], tmp_path) == {
+        "paper.pdf": False
+    }

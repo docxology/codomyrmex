@@ -77,6 +77,45 @@ def test_provider_configuration_requires_every_release_pin() -> None:
         ProviderConfiguration.from_mapping({})
 
 
+def test_provider_configuration_rejects_non_object_and_non_integer_seed() -> None:
+    with pytest.raises(BenchmarkConfigurationError, match="must be an object"):
+        ProviderConfiguration.from_mapping([])  # type: ignore[arg-type]
+    with pytest.raises(BenchmarkConfigurationError, match="seed must be an integer"):
+        ProviderConfiguration.from_mapping(
+            {
+                "provider": "test",
+                "model": "model",
+                "model_version": "1",
+                "parameters": {},
+                "endpoint": "https://example.invalid",
+                "seed": "1",
+            }
+        )
+
+
+def test_release_manifest_rejects_duplicate_controlled_task_types(tmp_path: Path) -> None:
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    manifest["controlled_suite"]["task_types"] = [
+        "patch_file",
+        "run_tests",
+        "documentation",
+        "documentation",
+    ]
+    path = tmp_path / "duplicate-types.json"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(BenchmarkConfigurationError, match="four required action types"):
+        load_manifest(path)
+
+
+def test_release_manifest_requires_exactly_thirty_swe_bench_tasks(tmp_path: Path) -> None:
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    manifest["swe_bench_lite"]["required_count"] = 29
+    path = tmp_path / "wrong-count.json"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(BenchmarkConfigurationError, match="exactly 30"):
+        load_manifest(path)
+
+
 def test_paired_effect_is_reproducible() -> None:
     rows = [
         {"task_id": "a", "condition": "always_execute", "task_success": True},
@@ -113,6 +152,7 @@ def test_controlled_runner_only_runs_after_manifest_is_fully_pinned(tmp_path: Pa
     ]
     manifest_path = tmp_path / "manifest.json"
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    adapter = DeterministicFixtureAdapter()
     provider = ProviderConfiguration(
         provider="fixture",
         model="deterministic",
@@ -120,12 +160,13 @@ def test_controlled_runner_only_runs_after_manifest_is_fully_pinned(tmp_path: Pa
         parameters={"temperature": 0},
         endpoint="local://fixture",
         seed=7,
+        executor_public_keys=adapter.public_executor_keys(),
     )
     result = run_benchmark(
         ROOT,
         manifest_path,
         provider,
-        adapter=DeterministicFixtureAdapter(),
+        adapter=adapter,
         expected_environment_digest=environment_digest(ROOT),
         corpus_path=tmp_path / "accepted.parquet",
         corpus_source_path=corpus_source,
@@ -213,6 +254,38 @@ def test_benchmark_stages_require_explicit_ed25519_receipt_verification() -> Non
         parse_result(task, "enforced_authorization", result)
 
 
+def test_benchmark_stages_verify_receipt_against_pinned_public_key() -> None:
+    manifest = load_manifest(MANIFEST)
+    task = prepare_tasks(manifest)[0]
+    adapter = DeterministicFixtureAdapter()
+    result = adapter.run(task, "enforced_authorization", 1)
+    result["receipt"]["status"] = "tampered"
+    with pytest.raises(StageError, match="cryptographically verified"):
+        parse_result(
+            task,
+            "enforced_authorization",
+            result,
+            trusted_executor_keys=ProviderConfiguration(
+                provider="fixture",
+                model="deterministic",
+                model_version="1",
+                parameters={},
+                endpoint="local://fixture",
+                seed=1,
+                executor_public_keys=adapter.public_executor_keys(),
+            ).trusted_executor_keys(),
+        )
+
+
+def test_benchmark_stages_reject_cross_partition_identity() -> None:
+    manifest = load_manifest(MANIFEST)
+    task = prepare_tasks(manifest)[0]
+    result = DeterministicFixtureAdapter().run(task, "always_execute", 1)
+    result["partition"] = "held_out"
+    with pytest.raises(StageError, match="partition"):
+        parse_result(task, "always_execute", result)
+
+
 def test_render_report_rejects_incomplete_task_condition_rows() -> None:
     manifest = load_manifest(MANIFEST)
     with pytest.raises(StageError, match="every task/condition pair"):
@@ -229,6 +302,19 @@ def test_render_report_rejects_unknown_task_identity() -> None:
     ]
     rows[0]["task_id"] = "unlisted-task"
     with pytest.raises(StageError, match="every task/condition pair"):
+        render_report(manifest, {"provider": "test"}, rows)
+
+
+def test_render_report_rejects_reused_enforced_authorization_identity() -> None:
+    manifest = load_manifest(MANIFEST)
+    tasks = prepare_tasks(manifest)
+    rows = [
+        parse_result(task, condition, DeterministicFixtureAdapter().run(task, condition, 1))
+        for task in tasks
+        for condition in manifest["conditions"]
+    ]
+    rows[2]["receipt"]["authorization_id"] = rows[5]["receipt"]["authorization_id"]
+    with pytest.raises(StageError, match="reuse authorization_id"):
         render_report(manifest, {"provider": "test"}, rows)
 
 

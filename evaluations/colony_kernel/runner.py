@@ -8,6 +8,7 @@ release evidence; deterministic fixtures are reserved for contract tests.
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import math
@@ -16,9 +17,16 @@ import statistics
 import subprocess
 import sys
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
+
+from codomyrmex.colony_kernel.authorization import (
+    Ed25519Authority,
+    _receipt_payload,
+    canonical_json,
+)
+from codomyrmex.colony_kernel.models import ExecutionReceipt
 
 
 class BenchmarkConfigurationError(RuntimeError):
@@ -45,17 +53,31 @@ class ProviderConfiguration:
     seed: int
     auth_env: str | None = None
     timeout_seconds: float = 300.0
+    executor_public_keys: dict[str, str] = field(default_factory=dict)
 
     @classmethod
     def from_mapping(cls, raw: dict[str, Any]) -> ProviderConfiguration:
+        if not isinstance(raw, dict):
+            raise BenchmarkConfigurationError("provider configuration must be an object")
         required = ("provider", "model", "model_version", "parameters", "endpoint", "seed")
-        missing = [key for key in required if raw.get(key) in (None, "")]
+        missing = [
+            key
+            for key in required
+            if key not in {"parameters", "seed"}
+            and (not isinstance(raw.get(key), str) or not raw[key].strip())
+        ]
+        if raw.get("parameters") is None:
+            missing.append("parameters")
+        if raw.get("seed") is None:
+            missing.append("seed")
         if missing:
             raise BenchmarkConfigurationError(
                 f"provider configuration is incomplete: {', '.join(missing)}"
             )
         if not isinstance(raw["parameters"], dict):
             raise BenchmarkConfigurationError("provider parameters must be an object")
+        if isinstance(raw["seed"], bool) or not isinstance(raw["seed"], int):
+            raise BenchmarkConfigurationError("provider seed must be an integer")
         timeout_seconds = raw.get("timeout_seconds", 300.0)
         if (
             isinstance(timeout_seconds, bool)
@@ -64,15 +86,45 @@ class ProviderConfiguration:
             or timeout_seconds <= 0
         ):
             raise BenchmarkConfigurationError("timeout_seconds must be a positive finite number")
+        auth_env = raw.get("auth_env")
+        if auth_env is not None and (
+            not isinstance(auth_env, str) or not auth_env.strip()
+        ):
+            raise BenchmarkConfigurationError("auth_env must be a non-empty string when provided")
+        public_keys = raw.get("executor_public_keys", {})
+        if public_keys is None:
+            public_keys = {}
+        if not isinstance(public_keys, dict) or any(
+            not isinstance(key_id, str)
+            or not key_id.strip()
+            or not isinstance(encoded_key, str)
+            or not encoded_key.strip()
+            for key_id, encoded_key in public_keys.items()
+        ):
+            raise BenchmarkConfigurationError(
+                "executor_public_keys must map non-empty key IDs to base64 strings"
+            )
+        for key_id, encoded_key in public_keys.items():
+            try:
+                public_key = base64.urlsafe_b64decode(encoded_key.encode("ascii"))
+            except (ValueError, UnicodeEncodeError) as exc:
+                raise BenchmarkConfigurationError(
+                    f"executor public key is not valid base64: {key_id}"
+                ) from exc
+            if len(public_key) != 32 or hashlib.sha256(public_key).hexdigest()[:32] != key_id:
+                raise BenchmarkConfigurationError(
+                    f"executor public key does not match key ID: {key_id}"
+                )
         return cls(
-            provider=str(raw["provider"]),
-            model=str(raw["model"]),
-            model_version=str(raw["model_version"]),
+            provider=raw["provider"].strip(),
+            model=raw["model"].strip(),
+            model_version=raw["model_version"].strip(),
             parameters=dict(raw["parameters"]),
-            endpoint=str(raw["endpoint"]),
-            seed=int(raw["seed"]),
-            auth_env=str(raw["auth_env"]) if raw.get("auth_env") else None,
+            endpoint=raw["endpoint"].strip(),
+            seed=raw["seed"],
+            auth_env=auth_env.strip() if auth_env else None,
             timeout_seconds=float(timeout_seconds),
+            executor_public_keys={str(key): str(value) for key, value in public_keys.items()},
         )
 
     def public_mapping(self) -> dict[str, Any]:
@@ -87,6 +139,15 @@ class ProviderConfiguration:
             "seed": self.seed,
             "auth_env": self.auth_env,
             "timeout_seconds": self.timeout_seconds,
+            "executor_public_keys": dict(sorted(self.executor_public_keys.items())),
+        }
+
+    def trusted_executor_keys(self) -> dict[str, bytes]:
+        """Decode the pinned executor key registry for receipt verification."""
+
+        return {
+            key_id: base64.urlsafe_b64decode(encoded.encode("ascii"))
+            for key_id, encoded in self.executor_public_keys.items()
         }
 
 
@@ -190,8 +251,37 @@ def swe_bench_tasks(manifest: dict[str, Any]) -> list[dict[str, Any]]:
 
 def load_manifest(path: Path) -> dict[str, Any]:
     data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise BenchmarkConfigurationError("benchmark manifest must be a JSON object")
+
+    def integer(value: Any, label: str, *, minimum: int | None = None) -> int:
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise BenchmarkConfigurationError(f"{label} must be an integer")
+        if minimum is not None and value < minimum:
+            raise BenchmarkConfigurationError(f"{label} must be at least {minimum}")
+        return value
+
+    def string_list(value: Any, label: str) -> list[str]:
+        if not isinstance(value, list) or any(
+            not isinstance(item, str) or not item.strip() for item in value
+        ):
+            raise BenchmarkConfigurationError(f"{label} must be a list of non-empty strings")
+        return value
+
+    def sha256_hex(value: Any, label: str) -> str:
+        if not isinstance(value, str) or len(value) != 64:
+            raise BenchmarkConfigurationError(f"{label} must be a SHA-256 hex digest")
+        try:
+            int(value, 16)
+        except ValueError as exc:
+            raise BenchmarkConfigurationError(f"{label} must be a SHA-256 hex digest") from exc
+        return value
+
     suite = data.get("controlled_suite", {})
-    if int(suite.get("task_count", 0)) != 50:
+    if not isinstance(suite, dict):
+        raise BenchmarkConfigurationError("controlled_suite must be an object")
+    task_count = integer(suite.get("task_count"), "controlled task_count")
+    if task_count != 50:
         raise BenchmarkConfigurationError("controlled suite must contain exactly 50 tasks")
     task_id_prefix = suite.get("task_id_prefix")
     task_types = suite.get("task_types")
@@ -199,20 +289,34 @@ def load_manifest(path: Path) -> dict[str, Any]:
         not isinstance(task_id_prefix, str)
         or not task_id_prefix
         or not isinstance(task_types, list)
+        or len(task_types) != len(REQUIRED_CONTROLLED_TASK_TYPES)
+        or any(not isinstance(task_type, str) for task_type in task_types)
         or set(task_types) != REQUIRED_CONTROLLED_TASK_TYPES
     ):
         raise BenchmarkConfigurationError(
             "controlled suite must declare the four required action types and a task prefix"
         )
     controlled_ids = {
-        f"{task_id_prefix}{index:03d}" for index in range(int(suite["task_count"]))
+        f"{task_id_prefix}{index:03d}" for index in range(task_count)
     }
     partitions = data.get("partitions", {})
-    development_controlled = set(partitions.get("development_controlled_ids", []))
-    held_out_controlled = set(partitions.get("held_out_controlled_ids", []))
+    if not isinstance(partitions, dict):
+        raise BenchmarkConfigurationError("partitions must be an object")
+    development_controlled_values = string_list(
+        partitions.get("development_controlled_ids"),
+        "development_controlled_ids",
+    )
+    held_out_controlled_values = string_list(
+        partitions.get("held_out_controlled_ids"),
+        "held_out_controlled_ids",
+    )
+    development_controlled = set(development_controlled_values)
+    held_out_controlled = set(held_out_controlled_values)
     if (
-        len(development_controlled) != 30
-        or len(held_out_controlled) != 20
+        len(development_controlled_values) != 30
+        or len(held_out_controlled_values) != 20
+        or len(development_controlled) != len(development_controlled_values)
+        or len(held_out_controlled) != len(held_out_controlled_values)
         or development_controlled & held_out_controlled
         or development_controlled | held_out_controlled != controlled_ids
     ):
@@ -220,7 +324,10 @@ def load_manifest(path: Path) -> dict[str, Any]:
             "controlled development and held-out IDs must partition all 50 tasks"
         )
     swe = data.get("swe_bench_lite", {})
-    issue_ids = swe.get("issue_ids", [])
+    if not isinstance(swe, dict):
+        raise BenchmarkConfigurationError("swe_bench_lite must be an object")
+    issue_ids = string_list(swe.get("issue_ids"), "SWE-bench issue_ids")
+    required_count = integer(swe.get("required_count"), "SWE-bench required_count")
     required_swe_fields = (
         "dataset_name",
         "dataset_revision",
@@ -231,18 +338,35 @@ def load_manifest(path: Path) -> dict[str, Any]:
     )
     if (
         swe.get("status") != "pinned"
-        or any(swe.get(field) in (None, "") for field in required_swe_fields)
-        or len(issue_ids) != int(swe.get("required_count", 30))
+        or any(
+            not isinstance(swe.get(field), str) or not swe[field].strip()
+            for field in required_swe_fields
+            if field != "seed"
+        )
+        or not isinstance(swe.get("seed"), int)
+        or isinstance(swe.get("seed"), bool)
+        or not sha256_hex(swe.get("source_file_sha256"), "SWE-bench source_file_sha256")
+        or required_count != 30
+        or len(issue_ids) != required_count
         or len(set(issue_ids)) != len(issue_ids)
     ):
         raise BenchmarkConfigurationError(
             "SWE-bench Lite revision and exactly 30 predeclared issue IDs are required"
         )
-    development_swe = set(data.get("partitions", {}).get("development_swe_bench_ids", []))
-    held_out_swe = data.get("partitions", {}).get("held_out_swe_bench_ids", [])
+    development_swe_values = string_list(
+        partitions.get("development_swe_bench_ids"),
+        "development_swe_bench_ids",
+    )
+    held_out_swe = string_list(
+        partitions.get("held_out_swe_bench_ids"),
+        "held_out_swe_bench_ids",
+    )
+    development_swe = set(development_swe_values)
     if (
-        not held_out_swe
-        or not development_swe
+        len(development_swe_values) != 20
+        or len(held_out_swe) != 10
+        or len(development_swe) != len(development_swe_values)
+        or len(set(held_out_swe)) != len(held_out_swe)
         or not set(held_out_swe).issubset(set(issue_ids))
         or not development_swe.issubset(set(issue_ids))
         or development_swe & set(held_out_swe)
@@ -251,9 +375,11 @@ def load_manifest(path: Path) -> dict[str, Any]:
         raise BenchmarkConfigurationError(
             "development and held-out SWE-bench Lite IDs must partition the manifest"
         )
-    if tuple(data.get("conditions", [])) != REQUIRED_CONDITIONS:
+    if data.get("conditions") != list(REQUIRED_CONDITIONS):
         raise BenchmarkConfigurationError("all three required benchmark conditions must be present")
     requirements = data.get("requirements", {})
+    if not isinstance(requirements, dict):
+        raise BenchmarkConfigurationError("requirements must be an object")
     if any(requirements.get(key) is not True for key in (
         "environment_digest", "signed_receipts", "verified_results", "zero_required_protocol_errors"
     )):
@@ -326,10 +452,46 @@ def paired_effects(rows: list[dict[str, Any]]) -> dict[str, Any]:
 class DeterministicFixtureAdapter:
     """A non-provider baseline adapter for contract tests only."""
 
+    def __init__(self) -> None:
+        self._authority = Ed25519Authority.generate()
+
+    def public_executor_keys(self) -> dict[str, str]:
+        return {
+            self._authority.key_id: base64.urlsafe_b64encode(
+                self._authority.public_key
+            ).decode("ascii")
+        }
+
     def run(self, task: dict[str, Any], condition: str, seed: int) -> dict[str, Any]:
         del seed
         success = condition != "always_execute" or task["action_type"] != "archive_module"
         enforced = condition == "enforced_authorization"
+        receipt = None
+        receipt_verification = None
+        if enforced:
+            receipt = {
+                "authorization_id": f"fixture-auth:{task['task_id']}",
+                "proposal_id": f"fixture-proposal:{task['task_id']}",
+                "executor_id": "fixture-executor",
+                "action_digest": "fixture-action-digest",
+                "result_digest": "fixture-result-digest",
+                "started_at": 0.0,
+                "completed_at": 0.0,
+                "exit_code": 0 if success else 1,
+                "status": "completed" if success else "failed",
+                "executor_key_id": self._authority.key_id,
+                "signature": "",
+                "request_digest": f"fixture-request-digest:{task['task_id']}",
+            }
+            unsigned = ExecutionReceipt(**receipt)
+            receipt["signature"] = self._authority.sign(
+                canonical_json(_receipt_payload(unsigned))
+            )
+            receipt_verification = {
+                "algorithm": "Ed25519",
+                "public_key_id": self._authority.key_id,
+                "signature_valid": True,
+            }
         return {
             "task_id": task["task_id"],
             "condition": condition,
@@ -346,33 +508,8 @@ class DeterministicFixtureAdapter:
             "token_usage": 0,
             "trust_calibration_error": 0.0,
             "rework_count": 0,
-            "receipt": (
-                {
-                    "authorization_id": f"fixture-auth:{task['task_id']}",
-                    "proposal_id": f"fixture-proposal:{task['task_id']}",
-                    "executor_id": "fixture-executor",
-                    "action_digest": "fixture-action-digest",
-                    "result_digest": "fixture-result-digest",
-                    "started_at": 0.0,
-                    "completed_at": 0.0,
-                    "exit_code": 0 if success else 1,
-                    "status": "completed" if success else "failed",
-                    "executor_key_id": "fixture-key",
-                    "signature": "fixture-signature",
-                    "request_digest": "fixture-request-digest",
-                }
-                if enforced
-                else None
-            ),
-            "receipt_verification": (
-                {
-                    "algorithm": "Ed25519",
-                    "public_key_id": "fixture-key",
-                    "signature_valid": True,
-                }
-                if enforced
-                else None
-            ),
+            "receipt": receipt,
+            "receipt_verification": receipt_verification,
             "resource_cost": {"runtime_seconds": 0.0, "tokens": 0.0},
         }
 
@@ -394,6 +531,11 @@ def run_benchmark(
     if adapter is None:
         raise BenchmarkConfigurationError(
             "a concrete provider adapter is required; fixture results are test-only"
+        )
+    trusted_executor_keys = provider_config.trusted_executor_keys()
+    if not trusted_executor_keys:
+        raise BenchmarkConfigurationError(
+            "trusted executor public keys are required for signed benchmark receipts"
         )
     from evaluations.colony_kernel.stages import (
         StageError,
@@ -426,6 +568,7 @@ def run_benchmark(
                     task,
                     condition,
                     adapter.run(task, condition, int(task["seed"])),
+                    trusted_executor_keys=trusted_executor_keys,
                 )
             except StageError as exc:
                 raise BenchmarkConfigurationError(str(exc)) from exc

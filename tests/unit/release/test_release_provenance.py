@@ -202,3 +202,16 @@ def test_verifier_rejects_incomplete_passed_benchmark_result(tmp_path: Path) -> 
         "failures"
     ]
     assert "benchmark result is missing required release metrics" in report["failures"]
+
+
+def test_verifier_rejects_tampered_release_package_hash(tmp_path: Path) -> None:
+    root, manifest_path = _candidate(tmp_path)
+    package_path = root / "output/release_package.tar.gz"
+    package_path.write_bytes(b"candidate-package")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["release_package_hash"] = "0" * 64
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    report = verify(root, manifest_path)
+
+    assert "release package hash does not match the checkout" in report["failures"]

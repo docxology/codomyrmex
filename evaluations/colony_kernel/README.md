@@ -3,9 +3,13 @@
 This harness is deliberately fail-closed. The checked-in manifest defines the 50-task
 controlled suite, a pinned 30-instance SWE-bench Lite subset, and the three comparison
 conditions. A provider configuration must still pin provider, model, model version,
-parameters, endpoint, and seed. No benchmark result may be reported until a concrete
-provider adapter has run all tasks with an environment digest and verified receipt
-evidence.
+parameters, endpoint, seed, and a trusted executor public-key registry. No benchmark
+result may be reported until a concrete provider adapter has run all tasks with an
+environment digest and cryptographically verified receipt evidence.
+
+The pre-registered design, hypotheses, controls, stopping rules, and claim boundary
+are recorded in [`RESEARCH_PROTOCOL.md`](RESEARCH_PROTOCOL.md). A provider-backed
+result is required before any comparative effectiveness claim is released.
 
 Run the release evaluation only after filling the manifest and provider configuration:
 
@@ -16,13 +20,16 @@ uv run python evaluations/colony_kernel/runner.py \
 ```
 
 The provider configuration must contain `provider`, `model`, `model_version`,
-`parameters`, `endpoint`, and `seed`; it may also name an `auth_env` variable and a
-positive `timeout_seconds`. The endpoint receives a JSON POST containing the pinned
+`parameters`, `endpoint`, `seed`, and `executor_public_keys`; it may also name an
+`auth_env` variable and a positive `timeout_seconds`. The endpoint receives a JSON POST containing the pinned
 model configuration, task specification, condition, and seed. It must return one
 structured result per task/condition with the required outcome, rejection, resource,
 latency, calibration, and authorization fields. Enforced rows must include a verified
 executor receipt with the complete signed `ExecutionReceipt` field set plus
 `receipt_verification: {"algorithm": "Ed25519", "public_key_id": "...", "signature_valid": true}`.
+The runner additionally verifies the receipt signature against the pinned raw
+public key whose ID is the SHA-256-derived executor key ID; metadata alone is not
+accepted for a release run.
 
 The runner acquires and SHA-256 verifies the pinned SWE-bench corpus before invoking
 the adapter. It emits 240 rows (80 tasks × 3 conditions), rejects duplicate or missing

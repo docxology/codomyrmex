@@ -17,7 +17,8 @@ each task under each of the three conditions: 240 rows in total. A row records s
 verified failure, harmful or unauthorized attempts, replay and cross-scope rejection,
 false HOLD/REFUSE, rework, resource cost, latency, token use, trust calibration, and
 authorization precision. Enforced rows additionally require the complete signed
-`ExecutionReceipt` field set and explicit Ed25519 verification metadata. Missing,
+`ExecutionReceipt` field set, a trusted executor public-key registry, and an Ed25519
+signature verification. Metadata alone is insufficient. Missing,
 duplicated, out-of-manifest, malformed, or unverifiable evidence fails the run before a
 result file is written.
 

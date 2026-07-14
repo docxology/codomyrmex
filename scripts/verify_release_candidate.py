@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import subprocess
+import tarfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
@@ -132,6 +133,57 @@ def _read_status_artifact(root: Path, failures: list[str]) -> dict[str, Any] | N
     return data
 
 
+def _validate_release_package(
+    root: Path, manifest: dict[str, Any], failures: list[str]
+) -> None:
+    """Check the transport archive and its non-self-referential manifest copy."""
+
+    package_path = root / "output/release_package.tar.gz"
+    expected_hash = manifest.get("release_package_hash")
+    if expected_hash is None:
+        if manifest.get("publication_ready") is True:
+            failures.append("publication-ready manifest is missing release_package_hash")
+        return
+    if not package_path.is_file():
+        failures.append("declared release package is missing")
+        return
+    if not isinstance(expected_hash, str) or expected_hash != sha256(package_path):
+        failures.append("release package hash does not match the checkout")
+        return
+
+    required_members = set(manifest.get("artifact_hashes", {})) | {
+        "output/release_manifest.json"
+    }
+    try:
+        with tarfile.open(package_path, mode="r:gz") as archive:
+            members = {member.name for member in archive.getmembers()}
+            missing = sorted(required_members - members)
+            if missing:
+                failures.append(
+                    "release package is missing declared artifacts: " + ", ".join(missing)
+                )
+            member = archive.extractfile("output/release_manifest.json")
+            if member is None:
+                failures.append("release package does not contain its manifest")
+                return
+            packaged_manifest = json.loads(member.read().decode("utf-8"))
+        if not isinstance(packaged_manifest, dict):
+            failures.append("packaged release manifest is not a JSON object")
+            return
+        outer = dict(manifest)
+        inner = dict(packaged_manifest)
+        for candidate in (outer, inner):
+            candidate.pop("release_package_hash", None)
+            candidate.pop("generated_at", None)
+        if inner != outer:
+            failures.append(
+                "packaged release manifest disagrees with the sidecar manifest "
+                "outside the self-referential package hash"
+            )
+    except (OSError, tarfile.TarError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+        failures.append(f"release package cannot be audited: {exc}")
+
+
 def _validate_benchmark_result(
     root: Path,
     benchmark_manifest_path: Path,
@@ -199,6 +251,7 @@ def _validate_benchmark_result(
         try:
             from evaluations.colony_kernel.runner import (
                 BenchmarkConfigurationError,
+                ProviderConfiguration,
                 controlled_tasks,
                 load_manifest,
                 swe_bench_tasks,
@@ -210,17 +263,35 @@ def _validate_benchmark_result(
             )
 
             validated_manifest = load_manifest(benchmark_manifest_path)
+            validated_provider = ProviderConfiguration.from_mapping(provider)
+            trusted_executor_keys = validated_provider.trusted_executor_keys()
+            if not trusted_executor_keys:
+                raise StageError("benchmark provider has no trusted executor public keys")
             task_by_id = {
                 str(task["task_id"]): task
                 for task in [*controlled_tasks(validated_manifest), *swe_bench_tasks(validated_manifest)]
             }
+            normalized_rows = []
             for row in rows:
                 task = task_by_id.get(str(row.get("task_id")))
                 if task is None:
                     raise StageError("benchmark row references an unknown task")
-                parse_result(task, str(row.get("condition")), row)
+                normalized = parse_result(
+                    task,
+                    str(row.get("condition")),
+                    row,
+                    trusted_executor_keys=trusted_executor_keys,
+                )
+                for field in ("instance_id", "partition"):
+                    if field not in row or row[field] != normalized[field]:
+                        raise StageError(
+                            f"benchmark row {field} is not bound to the task manifest"
+                        )
+                normalized_rows.append(normalized)
             if isinstance(metrics, dict):
-                calculated = render_report(provider=provider, manifest=validated_manifest, rows=rows)[
+                calculated = render_report(
+                    provider=provider, manifest=validated_manifest, rows=normalized_rows
+                )[
                     "metrics"
                 ]
                 if calculated != metrics:
@@ -330,6 +401,7 @@ def verify(root: Path, manifest_path: Path) -> dict[str, Any]:
             )
         elif not isinstance(expected, str) or expected != sha256(path):
             failures.append(f"artifact hash mismatch: {relative}")
+    _validate_release_package(root, manifest, failures)
 
     source_files = source_files_for_manifest(root)
     input_files = input_files_for_manifest(root)

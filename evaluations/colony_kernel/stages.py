@@ -46,6 +46,7 @@ _RECEIPT_FIELDS = (
     "signature",
     "request_digest",
 )
+_RECEIPT_UNIQUE_FIELDS = ("authorization_id", "proposal_id", "request_digest")
 
 
 def acquire_pinned_task_corpus(
@@ -114,7 +115,11 @@ def prepare_tasks(manifest: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def parse_result(
-    task: dict[str, Any], condition: str, raw_result: dict[str, Any]
+    task: dict[str, Any],
+    condition: str,
+    raw_result: dict[str, Any],
+    *,
+    trusted_executor_keys: dict[str, bytes] | None = None,
 ) -> dict[str, Any]:
     """Validate and normalize one provider adapter result."""
 
@@ -124,6 +129,12 @@ def parse_result(
         raise StageError("adapter result is not linked to the prepared task")
     if raw_result.get("condition") != condition:
         raise StageError("adapter result is not linked to the benchmark condition")
+    expected_instance_id = task.get("instance_id")
+    expected_partition = task.get("partition", "controlled")
+    if "instance_id" in raw_result and raw_result["instance_id"] != expected_instance_id:
+        raise StageError("adapter result instance_id is not linked to the prepared task")
+    if "partition" in raw_result and raw_result["partition"] != expected_partition:
+        raise StageError("adapter result partition is not linked to the prepared task")
     for field in _BOOLEAN_RESULT_FIELDS:
         if not isinstance(raw_result.get(field), bool):
             raise StageError(f"adapter result must contain boolean {field}")
@@ -199,6 +210,31 @@ def parse_result(
             or verification.get("signature_valid") is not True
         ):
             raise StageError("receipt verification metadata is not valid Ed25519 evidence")
+        if trusted_executor_keys is not None:
+            public_key = trusted_executor_keys.get(receipt["executor_key_id"])
+            if public_key is None:
+                raise StageError("receipt executor key is not in the trusted key registry")
+            try:
+                import base64
+                from binascii import Error as Base64Error
+
+                from cryptography.exceptions import InvalidSignature
+                from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+                    Ed25519PublicKey,
+                )
+
+                from codomyrmex.colony_kernel.authorization import (
+                    _receipt_payload,
+                    canonical_json,
+                )
+                from codomyrmex.colony_kernel.models import ExecutionReceipt
+
+                Ed25519PublicKey.from_public_bytes(public_key).verify(
+                    base64.urlsafe_b64decode(receipt["signature"].encode("ascii")),
+                    canonical_json(_receipt_payload(ExecutionReceipt(**receipt))),
+                )
+            except (Base64Error, InvalidSignature, ValueError, TypeError, UnicodeError) as exc:
+                raise StageError("receipt signature could not be cryptographically verified") from exc
         if receipt["completed_at"] < receipt["started_at"]:
             raise StageError("receipt completion time precedes start time")
     return {
@@ -226,6 +262,33 @@ def render_report(
             "benchmark report must contain exactly one validated row for every "
             "task/condition pair"
         )
+
+    from evaluations.colony_kernel.runner import controlled_tasks, swe_bench_tasks
+
+    task_by_id = {
+        str(task["task_id"]): task
+        for task in [*controlled_tasks(manifest), *swe_bench_tasks(manifest)]
+    }
+    for row in rows:
+        task = task_by_id.get(str(row.get("task_id")))
+        if task is None:
+            raise StageError("benchmark report contains an unknown task")
+        expected_instance_id = task.get("instance_id")
+        expected_partition = task.get("partition", "controlled")
+        if row.get("instance_id") != expected_instance_id:
+            raise StageError("benchmark report instance_id is not bound to the task manifest")
+        if row.get("partition") != expected_partition:
+            raise StageError("benchmark report partition is not bound to the task manifest")
+
+    enforced_rows = [
+        row for row in rows if row.get("condition") == "enforced_authorization"
+    ]
+    for field in _RECEIPT_UNIQUE_FIELDS:
+        if any(not isinstance(row.get("receipt"), dict) for row in enforced_rows):
+            raise StageError("enforced rows must contain structured receipts")
+        values = [row["receipt"][field] for row in enforced_rows]
+        if len(values) != len(set(values)):
+            raise StageError(f"enforced receipts reuse {field}")
 
     conditions = tuple(manifest["conditions"])
     by_condition = {

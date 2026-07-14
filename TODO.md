@@ -1,13 +1,13 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.4.0-rc12 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
+**Version**: v1.4.0-rc13 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
 
-> **Current release**: v1.4.0-rc12 "Colony Kernel enforcement" (candidate, 2026-07-14).
+> **Current release**: v1.4.0-rc13 "Colony Kernel enforcement" (candidate, 2026-07-14).
 > **Next release**: v1.4.0 (held for provider evaluation and immutable release verification)
 > **Archived**: v1.2.4–v1.2.8 → [CHANGELOG.md](CHANGELOG.md)
 
-## 🔬 v1.4.0-rc12 — First-principles publication checkpoint
+## 🔬 v1.4.0-rc13 — First-principles publication checkpoint
 
 This candidate is an auditable release candidate, not a completed production-safety claim. The strict
 profile governs only its explicit action-scope map; unregistered mutating paths remain bypasses. The
@@ -16,7 +16,7 @@ follow-up audit is recorded in
 
 | Gate | Current evidence | Status |
 | :--- | :--- | :--- |
-| Scoped Colony Kernel suite | 833 selected and passed; 0 skipped, failed, or errored (834 collected, 1 deselected) | ✅ Measured |
+| Scoped Colony Kernel suite | 841 selected and passed; 0 skipped, failed, or errored (842 collected, 1 deselected) | ✅ Measured |
 | Branch coverage | 74.37185929648241% (592/796 branches; 82.59604190919674% line coverage) | ✅ Above 60% floor |
 | Clean-clone PDF replay | `output/paper.pdf` hash `9a463ff0f52a254115920206a677104423658f3fcb359f6b00e620c70aae9a75` at the tagged candidate | ✅ Byte-for-byte match |
 | Clean-clone evidence replay | HTML, variables, coverage JSON, JUnit XML, and status JSON also match the candidate | ✅ Byte-for-byte match |
@@ -25,7 +25,8 @@ follow-up audit is recorded in
 | Immutable final publication | A-001 and A-016 remain open | ⛔ Open |
 
 The benchmark gap is intentionally fail-closed. Fixture adapter output is contract evidence only and is
-not a substitute for the predeclared controlled and SWE-bench Lite experiment.
+not a substitute for the predeclared controlled and SWE-bench Lite experiment. Release rows must carry
+cryptographically verified Ed25519 receipts bound to the trusted executor key registry.
 
 ---
 

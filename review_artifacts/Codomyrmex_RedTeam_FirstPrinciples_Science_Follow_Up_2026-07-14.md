@@ -1,9 +1,9 @@
 # Codomyrmex Red-Team / First-Principles / Science Follow-Up
 
 **Date:** 2026-07-14
-**Candidate:** `v1.4.0-rc12`
+**Candidate:** `v1.4.0-rc13`
 **Historical audit anchor:** `v1.4.0-rc1` at `471f998719bcbbdd756cedb66a2d8e95762dd542`
-**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc12`
+**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc13`
 **Execution mode:** internal specialist panel; no independent subagents were available in the host
 
 ## Scope and goal
@@ -43,6 +43,10 @@ measured facts it actually binds.
 | Outcome could be relinked to same-ID, different-target proposal context | `ColonyKernel.record_attested_outcome` | Reuse a consumed receipt with altered action/target | Fixed: action, target, agent, proposal, receipt, and request digest must match |
 | Ledger could record a receipt-free attested report directly | `AuthorizationLedger.record_outcome_report` | Call ledger report insertion after consumption but before receipt | Fixed: consumed authorization and linked receipt are required |
 | Valid authorization payload could be altered at execution | `ExecutionAuthorization`, `RegisteredActionExecutor` | Sign an `action_payload`, execute a different payload | Fixed: optional explicit payload digest is signed and receipt-linked |
+| Benchmark row could report a different task partition than the manifest | `evaluations/colony_kernel/stages.py`, `parse_result()` and `render_report()` | Change a development row to `held_out` while retaining the task ID | Fixed: instance ID and partition are normalized and checked |
+| Enforced receipt identities could be reused across rows | `evaluations/colony_kernel/stages.py`, `render_report()` | Reuse an authorization, proposal, or request digest in a second enforced row | Fixed: each enforced identity is single-use in the report |
+| Receipt verification metadata could be self-asserted | `evaluations/colony_kernel/stages.py`, `parse_result()` | Tamper a signed receipt while leaving `signature_valid=true` | Fixed: release runs verify Ed25519 against the pinned public-key registry |
+| Release package hash could be recorded without being checked | `scripts/verify_release_candidate.py` | Alter the transport archive after writing its manifest | Fixed: package hash, declared members, and sidecar manifest consistency are checked |
 
 ## Scientific cycle
 
@@ -57,7 +61,7 @@ measured facts it actually binds.
 ### Experiments and observed results
 
 The verifier and enforcement negative controls passed with real components. The final scoped release
-suite completed after artifact regeneration with 833 JUnit-collected and passed tests, zero skipped,
+suite completed after artifact regeneration with 841 JUnit-collected and passed tests, zero skipped,
 failed, or errored tests, 74.37185929648241% branch coverage (592/796), and 82.59604190919674% line
 coverage (2,246/2,640). Its machine-readable status, JUnit, and coverage artifacts remain the release
 authority.
@@ -69,6 +73,8 @@ H1–H4 are supported for the tested contracts and clean-clone replay. H5 is
 
 - **A-001 / A-016:** immutable release publication and final manuscript/evidence attachment remain open.
 - **R-20:** provider-backed controlled and pinned SWE-bench Lite execution remains open.
+- The provider configuration must supply a trusted executor public-key registry; receipt metadata alone
+  is not benchmark evidence.
 - The strict boundary still governs only the declared action-scope map; unregistered mutating paths are
   explicit bypasses and must not be described as repository-wide enforcement.
 - Signed receipts attest the executor’s recorded request/result linkage; they do not independently validate
@@ -77,6 +83,6 @@ H1–H4 are supported for the tested contracts and clean-clone replay. H5 is
 ## Re-review gate
 
 The clean-clone PDF/evidence replay and required test gate are complete. Re-review remains contingent on
-the provider benchmark supplying its pinned configuration, raw rows, receipts, environment digest, and
-reports, followed by public immutable evidence attachment. Until then, this candidate is an auditable
-RC12 with a publication hold, not a completed production-safety release.
+the provider benchmark supplying its pinned configuration, raw rows, cryptographically verified receipts,
+environment digest, and reports, followed by public immutable evidence attachment. Until then, this
+candidate is an auditable RC13 with a publication hold, not a completed production-safety release.

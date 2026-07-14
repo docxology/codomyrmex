@@ -36,6 +36,14 @@ RELEASE_INPUT_PATHS = (
     "evaluations/colony_kernel/benchmark_manifest.json",
 )
 
+RELEASE_EVIDENCE_PATHS = (
+    "evaluations/colony_kernel/README.md",
+    "evaluations/colony_kernel/RESEARCH_PROTOCOL.md",
+    "review_artifacts/Codomyrmex_Reproduction_Evidence_Follow_Up_2026-07-13.md",
+    "review_artifacts/Codomyrmex_Action_Register_2026-07-13_Follow_Up.xlsx",
+    "review_artifacts/Codomyrmex_RedTeam_FirstPrinciples_Science_Follow_Up_2026-07-14.md",
+)
+
 
 def _run(root: Path, argv: list[str]) -> tuple[int, str]:
     result = subprocess.run(
@@ -104,11 +112,9 @@ def source_files_for_manifest(root: Path) -> list[Path]:
         root / "scripts" / "generate_release_manifest.py",
         root / "scripts" / "package_release_evidence.py",
         root / "scripts" / "verify_release_candidate.py",
-        root
-        / "review_artifacts"
-        / "Codomyrmex_RedTeam_FirstPrinciples_Science_Follow_Up_2026-07-14.md",
         *sorted((root / "evaluations" / "colony_kernel").glob("*.py")),
         *sorted((root / "evaluations" / "colony_kernel").glob("*.json")),
+        *_existing_files(root, list(RELEASE_EVIDENCE_PATHS)),
     ]
     return [path for path in paths if path.is_file()]
 
@@ -140,7 +146,7 @@ def _artifact_freshness(
         return {str(path.relative_to(root)): False for path in artifacts}
     newest_source = max(path.stat().st_mtime_ns for path in source_files)
     return {
-        str(path.relative_to(root)): path.stat().st_mtime_ns >= newest_source
+        str(path.relative_to(root)): path.stat().st_mtime_ns > newest_source
         for path in artifacts
     }
 

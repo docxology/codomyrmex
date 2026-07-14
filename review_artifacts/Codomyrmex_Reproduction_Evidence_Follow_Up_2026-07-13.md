@@ -4,7 +4,7 @@ This follow-up preserves the historical second-pass audit of
 `e85aee6758726ca1fbba202d0ef1a09d524029e3` and records the implementation and
 release checks performed against the reviewed baseline
 `4bd6c1804f2caa905d36bcb39d67bdf8c1d86837` and the final candidate revision
-identified by the clean-clone manifest for tag `v1.4.0-rc12`.
+identified by the clean-clone manifest for tag `v1.4.0-rc13`.
 
 The result is a dual-profile candidate. The advisory profile preserves
 `caller_reported_unattested` input; the strict profile enforces only the governed
@@ -13,7 +13,7 @@ action scope through signed, single-use Ed25519 capabilities and executor receip
 `POLICY_REJECTION`; prospective falsification findings use `RISK`. The PDF-producing
 source and generated outputs are synchronized in this worktree. A clean clone of the
 candidate regenerated the exact PDF, HTML, evidence, and figure hashes; the candidate
-is tagged as `v1.4.0-rc12` and remains on hold until the provider-backed
+is tagged as `v1.4.0-rc13` and remains on hold until the provider-backed
 benchmark is completed and the final release is published.
 
 ## Reproduction snapshot
@@ -23,15 +23,15 @@ The fail-closed generator wrote `output/data/colony_kernel_test_status.json` and
 
 | Measure | Result |
 | --- | ---: |
-| Required tests collected | 833 (834 pytest items collected; 1 deselected) |
-| Required tests passed | 833 |
+| Required tests collected | 841 (842 pytest items collected; 1 deselected) |
+| Required tests passed | 841 |
 | Required skips | 0 |
 | Required failures | 0 |
 | Required errors | 0 |
 | Branch coverage | 74.37185929648241% (592/796) |
 | Line coverage | 82.59604190919674% (2,246/2,640) |
 | Executable coverage floor | 60.0% |
-| Full local colony-kernel suite | 833 selected and passed; 0 skipped, failed, or errored |
+| Full local colony-kernel suite | 841 selected and passed; 0 skipped, failed, or errored |
 
 Commands and exit codes are captured in `output/release_manifest.json`. The final
 render command was:
@@ -83,7 +83,7 @@ candidate worktree.
 | `output/data/colony_kernel_test_report.xml` | `6c442af40d8005c6bad25b690107a9548252bf96dca621c75b5075a362c9a778` |
 | `output/data/colony_kernel_test_status.json` | `859a674b509ae72973ac10b78b5a9c7ef6a6118e4128c16695495781f9910b25` |
 
-The clean-clone manifest for `v1.4.0-rc12` reports `publication_ready=false` because provider-backed
+The clean-clone manifest for `v1.4.0-rc13` reports `publication_ready=false` because provider-backed
 benchmark results are missing; its checkout, artifact freshness, and required test
 gates are true. The shared development worktree retains unrelated changes outside the
 candidate. The
@@ -96,5 +96,7 @@ The workbook follow-up reclassifies the implemented enforcement, persistence,
 semantic, and documentation actions as `Addressed - verify` against this candidate;
 A-001 and A-016 remain release blockers until the release candidate is externally
 published with its evidence bundle. Provider-backed benchmark execution and external
-key/endpoint configuration remain explicitly pending. No production-safety or
+key/endpoint configuration remain explicitly pending; the release runner now also
+requires a trusted executor public-key registry and verifies receipt signatures
+cryptographically. No production-safety or
 repository-wide governance claim is made.

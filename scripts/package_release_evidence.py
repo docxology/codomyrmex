@@ -25,6 +25,7 @@ def _files(root: Path) -> list[Path]:
         "output/data/colony_kernel_test_status.json",
         "docs/manuscript/RELEASE_PROVENANCE.md",
         "evaluations/colony_kernel/benchmark_manifest.json",
+        "evaluations/colony_kernel/RESEARCH_PROTOCOL.md",
         "evaluations/colony_kernel/truth_tables.json",
         "evaluations/colony_kernel/truth_tables.md",
         "review_artifacts/Codomyrmex_Reproduction_Evidence_Follow_Up_2026-07-13.md",
