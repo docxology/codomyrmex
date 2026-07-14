@@ -66,7 +66,7 @@ uv run pytest --version
 There is **no** in-repository batch shell runner. Use **`make`** targets or explicit **`uv run pytest`** (markers, directories, or `-k`).
 
 ```bash
-# Full suite + 40% coverage floor + term/html/json reports
+# Full suite + 60% coverage floor + term/html/json reports
 make test
 
 # Lint, type-check, then full test target (release-style gate)
@@ -83,7 +83,7 @@ uv run pytest src/codomyrmex/tests/ -q --tb=short \
   --cov=src/codomyrmex \
   --cov-report=term-missing \
   --cov-report=json:coverage-gate.json \
-  --cov-fail-under=40
+  --cov-fail-under=60
 ```
 
 ### Scoped runs (by tree or marker)
@@ -118,7 +118,7 @@ uv run pytest src/codomyrmex/tests/unit/ --collect-only
 
 ### Coverage Reports
 
-Default `uv run pytest` does **not** enable coverage (see `pyproject.toml` `[tool.pytest.ini_options]`). Use `make test`, `make test-coverage`, or explicit `--cov` flags. The documented floor is **40%** (`[tool.coverage.report] fail_under`); enforce it with `--cov-fail-under=40` when running pytest with `--cov`. The experimental `meme` package is omitted from coverage measurement (`[tool.coverage.run] omit`); all other `src/codomyrmex/` code counts toward the gate.
+Default `uv run pytest` does **not** enable coverage (see `pyproject.toml` `[tool.pytest.ini_options]`). Use `make test`, `make test-coverage`, or explicit `--cov` flags. The release floor is **60%** (`[tool.coverage.report] fail_under`); enforce it with `--cov-fail-under=60` when running pytest with `--cov`. The experimental `meme` package is omitted from coverage measurement (`[tool.coverage.run] omit`); all other `src/codomyrmex/` code counts toward the gate.
 
 **Hypothesis / NumPy / `secrets`:** If you see `ImportError: cannot import name randbits` from `numpy.random`, check for a **test directory named `secrets`** under a path that appears on `sys.path` before the stdlib (the suite uses `secrets_tests/` under `tests/unit/security/` to avoid shadowing). `security/secrets/vault.py` must not repoint `sys.modules["secrets"]`. The `Makefile` and CI also set `HYPOTHESIS_NO_NPY=1` for the process.
 
@@ -126,7 +126,7 @@ Generate coverage reports:
 
 ```bash
 # Run with coverage + gate
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html --cov-report=term-missing
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60 --cov-report=html --cov-report=term-missing
 
 # View HTML report
 open htmlcov/index.html
@@ -386,14 +386,14 @@ When contributing tests:
 # Quick validation (unit marker + coverage gate)
 make test-unit
 
-# Full test suite + 40% gate
+# Full test suite + 60% gate
 make test
 
 # Debug failing test
 uv run pytest -vv --pdb src/codomyrmex/tests/unit/test_specific.py::TestClass::test_method
 
-# Check coverage (40% gate when using --cov-fail-under)
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html
+# Check coverage (60% gate when using --cov-fail-under)
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60 --cov-report=html
 
 # Find slow tests
 uv run pytest --durations=10 src/codomyrmex/tests/

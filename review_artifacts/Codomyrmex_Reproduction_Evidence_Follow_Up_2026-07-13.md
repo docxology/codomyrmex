@@ -4,7 +4,7 @@ This follow-up preserves the historical second-pass audit of
 `e85aee6758726ca1fbba202d0ef1a09d524029e3` and records the implementation and
 release checks performed against the reviewed baseline
 `4bd6c1804f2caa905d36bcb39d67bdf8c1d86837` and the final candidate revision
-recorded in the tagged clean-clone manifest.
+identified by the clean-clone manifest for tag `v1.4.0-rc8`.
 
 The result is a dual-profile candidate. The advisory profile preserves
 `caller_reported_unattested` input; the strict profile enforces only the governed
@@ -13,7 +13,7 @@ action scope through signed, single-use Ed25519 capabilities and executor receip
 `POLICY_REJECTION`; prospective falsification findings use `RISK`. The PDF-producing
 source and generated outputs are synchronized in this worktree. A clean clone of the
 candidate regenerated the exact PDF, HTML, evidence, and figure hashes; the candidate
-is tagged as `v1.4.0-rc6` and remains on hold until the provider-backed
+is tagged as `v1.4.0-rc8` and remains on hold until the provider-backed
 benchmark is completed and the final release is published.
 
 ## Reproduction snapshot
@@ -78,7 +78,7 @@ candidate worktree.
 | --- | --- |
 | `output/paper.pdf` | `69fdbb018d81b7b5dd0ae170187842ef30647b8f6864af91f615fa23ea6ac706` |
 | `output/paper.html` | `cb0f7bd1546dc8acca60dccc355e4093ad1a2bd7e9f878dad7a9413e2b0641f5` |
-| `output/data/manuscript_variables.json` | `865ba48c143b1b5fbfb98a79cf94638b673d0ec208acc68a95857d64410` |
+| `output/data/manuscript_variables.json` | `865ba48c143b1b5fbfb98a79cf94638b9c38b673d0ec208acc68a95857d64410` |
 | `output/data/colony_kernel_coverage.json` | `7dc284a8b6d29c163eb2185e1372795dfb3da8eb22977c66a289286249239ccf` |
 | `output/data/colony_kernel_test_report.xml` | `677e30d935cc5e09849d92e9d6ea3c014d8d8ee076aaa5dd8573d9cc7002a1ce` |
 | `output/data/colony_kernel_test_status.json` | `53be36e539e2e45ea55b78758280cb9e5a1e81f30968619a326618123b070dbf` |

@@ -22,8 +22,8 @@ uv run pytest src/codomyrmex/tests/unit/ -q
 # Single module
 uv run pytest src/codomyrmex/tests/unit/cloud/ -q
 
-# Coverage gate (40% minimum in `pyproject.toml` / CI)
-uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=40 -q
+# Coverage gate (60% minimum in `pyproject.toml` / CI)
+uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=60 -q
 ```
 
 Full local runs can fail when optional backends (Ollama, Docker, vector DBs, live API tokens) are missing or misconfigured. **CI with declared extras is the usual release gate.** Use narrow `pytest …/path/` loops while developing.
