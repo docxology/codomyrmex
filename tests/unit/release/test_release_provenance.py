@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 from pathlib import Path
@@ -14,6 +15,7 @@ from scripts.generate_release_manifest import (
     input_files_for_manifest,
     source_files_for_manifest,
 )
+from scripts.package_release_evidence import package
 from scripts.verify_release_candidate import verify
 
 
@@ -215,3 +217,38 @@ def test_verifier_rejects_tampered_release_package_hash(tmp_path: Path) -> None:
     report = verify(root, manifest_path)
 
     assert "release package hash does not match the checkout" in report["failures"]
+
+
+def test_release_package_hash_is_stable_across_repeated_builds(tmp_path: Path) -> None:
+    """The evidence transport hash must not depend on wall-clock time."""
+
+    required = (
+        "output/paper.pdf",
+        "output/paper.html",
+        "output/release_manifest.json",
+        "output/data/manuscript_variables.json",
+        "output/data/colony_kernel_coverage.json",
+        "output/data/colony_kernel_test_report.xml",
+        "output/data/colony_kernel_test_status.json",
+        "docs/manuscript/RELEASE_PROVENANCE.md",
+        "evaluations/colony_kernel/benchmark_manifest.json",
+        "evaluations/colony_kernel/RESEARCH_PROTOCOL.md",
+        "evaluations/colony_kernel/truth_tables.json",
+        "evaluations/colony_kernel/truth_tables.md",
+        "review_artifacts/Codomyrmex_Reproduction_Evidence_Follow_Up_2026-07-13.md",
+        "review_artifacts/Codomyrmex_Action_Register_2026-07-13_Follow_Up.xlsx",
+        "review_artifacts/Codomyrmex_RedTeam_FirstPrinciples_Science_Follow_Up_2026-07-14.md",
+        "output/figures/example.txt",
+        "output/manuscript/example.md",
+    )
+    for relative in required:
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(path.as_posix().encode("utf-8"))
+
+    first = package(tmp_path, tmp_path / "output" / "first.tar.gz")
+    second = package(tmp_path, tmp_path / "output" / "second.tar.gz")
+
+    assert hashlib.sha256(first.read_bytes()).digest() == hashlib.sha256(
+        second.read_bytes()
+    ).digest()

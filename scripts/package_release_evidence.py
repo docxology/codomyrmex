@@ -9,6 +9,7 @@ tarball cannot contain a hash of itself without becoming self-referential.
 from __future__ import annotations
 
 import argparse
+import gzip
 import os
 import tarfile
 from pathlib import Path
@@ -48,17 +49,25 @@ def package(root: Path, output: Path) -> Path:
     output.parent.mkdir(parents=True, exist_ok=True)
     temporary = output.with_name(f".{output.name}.{os.getpid()}.tmp")
     try:
-        with tarfile.open(temporary, mode="w:gz", compresslevel=9) as archive:
-            for path in paths:
-                relative = path.relative_to(root).as_posix()
-                info = archive.gettarinfo(str(path), arcname=relative)
-                info.uid = 0
-                info.gid = 0
-                info.uname = ""
-                info.gname = ""
-                info.mtime = 0
-                with path.open("rb") as handle:
-                    archive.addfile(info, handle)
+        # ``tarfile.open(..., mode="w:gz")`` delegates to ``gzip.GzipFile``
+        # without a pinned header timestamp.  The tar members were already
+        # normalized, but the outer gzip stream could still change on every
+        # invocation.  Keep both layers deterministic for transport hashes.
+        with temporary.open("wb") as raw:
+            with gzip.GzipFile(
+                filename="", fileobj=raw, mode="wb", compresslevel=9, mtime=0
+            ) as compressed:
+                with tarfile.open(fileobj=compressed, mode="w") as archive:
+                    for path in paths:
+                        relative = path.relative_to(root).as_posix()
+                        info = archive.gettarinfo(str(path), arcname=relative)
+                        info.uid = 0
+                        info.gid = 0
+                        info.uname = ""
+                        info.gname = ""
+                        info.mtime = 0
+                        with path.open("rb") as handle:
+                            archive.addfile(info, handle)
         temporary.replace(output)
     finally:
         if temporary.exists():
