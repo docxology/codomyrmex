@@ -152,6 +152,8 @@ def build_manifest(root: Path, *, extra_commands: list[dict[str, Any]] | None = 
     source_files = [
         *sorted((root / "src" / "codomyrmex" / "colony_kernel").rglob("*.py")),
         *sorted((root / "tests" / "unit" / "colony_kernel").rglob("*.py")),
+        root / "src" / "codomyrmex" / "manuscript" / "variables.py",
+        *sorted((root / "src" / "codomyrmex" / "manuscript" / "figures").rglob("*.py")),
         *sorted(
             path
             for path in (root / "docs" / "manuscript").glob("*.md")
@@ -159,6 +161,7 @@ def build_manifest(root: Path, *, extra_commands: list[dict[str, Any]] | None = 
         ),
         *sorted((root / "config" / "colony_kernel").glob("*")),
         root / "scripts" / "z_generate_manuscript_variables.py",
+        root / "scripts" / "generate_manuscript_figures.py",
         root / "scripts" / "compile_manuscript.py",
         root / "scripts" / "generate_release_manifest.py",
         root / "scripts" / "package_release_evidence.py",
@@ -173,6 +176,7 @@ def build_manifest(root: Path, *, extra_commands: list[dict[str, Any]] | None = 
             "pyproject.toml",
             "uv.lock",
             "docs/manuscript/config.yaml",
+            "docs/manuscript/manuscript.css",
             "config/colony_kernel/kernel.yaml",
             "evaluations/colony_kernel/benchmark_manifest.json",
         ],

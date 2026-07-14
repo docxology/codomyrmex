@@ -355,6 +355,45 @@ def _atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
     temporary.replace(path)
 
 
+def _normalise_coverage_evidence(data: dict[str, Any]) -> dict[str, Any]:
+    """Pin coverage metadata so the identity artifact is clone-reproducible.
+
+    Coverage.py records the wall-clock collection time in ``meta.timestamp``.
+    The release evidence needs the measured line/branch totals, not the time at
+    which the command happened to run, so release builds replace that field with
+    the pinned source-date timestamp before publishing the artifact.
+    """
+    meta = data.get("meta")
+    if isinstance(meta, dict):
+        meta["timestamp"] = _generation_timestamp()
+    return data
+
+
+def _normalise_junit_evidence(path: Path) -> None:
+    """Remove host- and runtime-specific fields from the status evidence.
+
+    The JUnit artifact is used as a structured test-status receipt.  Test
+    duration and Hypothesis timing diagnostics are intentionally not part of its
+    identity; benchmark latency is recorded separately by the evaluation
+    harness.  Removing those volatile fields makes the status receipt stable
+    across clean clones while retaining every testcase and outcome element.
+    """
+    tree = ET.parse(path)
+    root = tree.getroot()
+    for suite in root.iter("testsuite"):
+        suite.attrib["time"] = "0.000"
+        suite.attrib["timestamp"] = _generation_timestamp()
+        suite.attrib.pop("hostname", None)
+        for child in list(suite):
+            if child.tag == "properties":
+                suite.remove(child)
+    for testcase in root.iter("testcase"):
+        testcase.attrib["time"] = "0.000"
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.normalised.tmp")
+    tree.write(temporary, encoding="utf-8", xml_declaration=True)
+    temporary.replace(path)
+
+
 def _paired_locality_snapshot(
     *, agent_trust: float, recovery_ticks: int
 ) -> dict[str, Any]:
@@ -663,7 +702,12 @@ def _run_colony_kernel_coverage(
             )
         if not coverage_tmp.exists():
             raise RuntimeError(f"pytest coverage gate did not create {coverage_tmp}")
-        data = json.loads(coverage_tmp.read_text(encoding="utf-8"))
+        data = _normalise_coverage_evidence(
+            json.loads(coverage_tmp.read_text(encoding="utf-8"))
+        )
+        coverage_tmp.write_text(
+            json.dumps(data, indent=2, sort_keys=True), encoding="utf-8"
+        )
         totals = data.get("totals", {})
         pct = totals.get("percent_branches_covered")
         if pct is None:
@@ -676,6 +720,7 @@ def _run_colony_kernel_coverage(
                 f"scoped branch coverage {branch_pct:.1f}% is below the configured "
                 f"floor {coverage_floor:.1f}%"
             )
+        _normalise_junit_evidence(junit_tmp)
         status = _parse_junit_status(junit_tmp)
         if status["skipped"] or status["failed"] or status["errors"]:
             raise RuntimeError(
@@ -685,7 +730,22 @@ def _run_colony_kernel_coverage(
         return {
             **status,
             "coverage_pct": branch_pct,
-            "command": cmd,
+            "command": [
+                "python",
+                "-m",
+                "pytest",
+                "tests/unit/colony_kernel",
+                "--cov=src/codomyrmex/colony_kernel",
+                "--cov-branch",
+                "--cov-report=json:output/data/colony_kernel_coverage.json",
+                "--cov-report=term",
+                f"--cov-fail-under={coverage_floor}",
+                "--junitxml=output/data/colony_kernel_test_report.xml",
+                "-m",
+                "not optional_artifact",
+                "--tb=short",
+                "-q",
+            ],
             "exit_code": result.returncode,
             "coverage_tmp": str(coverage_tmp),
             "junit_tmp": str(junit_tmp),
@@ -1207,12 +1267,18 @@ def compute_variables(
                         "ruff",
                         "check",
                         "--output-format=json",
-                        colony_kernel_src_str,
+                        "src/codomyrmex/colony_kernel",
                     ],
                     "exit_code": ruff_result.returncode,
                 },
                 {
-                    "argv": ["ty", "check", "--output-format", "concise", colony_kernel_src_str],
+                    "argv": [
+                        "ty",
+                        "check",
+                        "--output-format",
+                        "concise",
+                        "src/codomyrmex/colony_kernel",
+                    ],
                     "exit_code": ty_result.returncode,
                 },
             ],
