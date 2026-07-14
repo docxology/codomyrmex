@@ -3,8 +3,8 @@
 This follow-up preserves the historical second-pass audit of
 `e85aee6758726ca1fbba202d0ef1a09d524029e3` and records the implementation and
 release checks performed against the reviewed baseline
-`4bd6c1804f2caa905d36bcb39d67bdf8c1d86837` and implementation candidate
-`fc318a55be5cb46ff7850cec3bc547401b407701`.
+`4bd6c1804f2caa905d36bcb39d67bdf8c1d86837` and the final candidate revision
+recorded in the tagged clean-clone manifest.
 
 The result is a dual-profile candidate. The advisory profile preserves
 `caller_reported_unattested` input; the strict profile enforces only the governed
@@ -12,8 +12,8 @@ action scope through signed, single-use Ed25519 capabilities and executor receip
 `FAILURE` means a caller-reported or attested adverse outcome; policy rejection is
 `POLICY_REJECTION`; prospective falsification findings use `RISK`. The PDF-producing
 source and generated outputs are synchronized in this worktree. A clean clone of the
-implementation candidate regenerated the exact PDF, HTML, evidence, and figure hashes;
-the candidate is tagged as `v1.4.0-rc1` and remains on hold until the provider-backed
+candidate regenerated the exact PDF, HTML, evidence, and figure hashes; the candidate
+is tagged as `v1.4.0-rc6` and remains on hold until the provider-backed
 benchmark is completed and the final release is published.
 
 ## Reproduction snapshot
@@ -23,15 +23,15 @@ The fail-closed generator wrote `output/data/colony_kernel_test_status.json` and
 
 | Measure | Result |
 | --- | ---: |
-| Required tests collected | 822 |
-| Required tests passed | 822 |
+| Required tests collected | 826 (827 pytest items collected; 1 deselected) |
+| Required tests passed | 826 |
 | Required skips | 0 |
 | Required failures | 0 |
 | Required errors | 0 |
-| Branch coverage | 74.29667519181585% (581/782) |
-| Line coverage | 82.57419923596827% (2,229/2,621) |
+| Branch coverage | 74.37185929648241% (592/796) |
+| Line coverage | 82.59604190919674% (2,246/2,640) |
 | Executable coverage floor | 60.0% |
-| Full local colony-kernel suite | 816 passed |
+| Full local colony-kernel suite | 826 selected and passed; 0 skipped, failed, or errored |
 
 Commands and exit codes are captured in `output/release_manifest.json`. The final
 render command was:
@@ -76,12 +76,12 @@ candidate worktree.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `output/paper.pdf` | `37bc6ba55b8208a8a455c8e82371b848a5378c82b5a6d0f72ce43a1ee58894bd` |
-| `output/paper.html` | `f930564711c845f6e6abc494ed81a463202efce466929ea23a83d85110151df3` |
-| `output/data/manuscript_variables.json` | `2445b34cdaa162b0ee27ae050316b42e7ba09e2a5ecf4b09623f443f3a28e52d` |
-| `output/data/colony_kernel_coverage.json` | `e5f1b3ac69ebeda28cded7cd28ed5a9c2e03c7a772222857a08143a7dc37b2b6` |
-| `output/data/colony_kernel_test_report.xml` | `59498b92044f4082c05d1a60fdb482ea9efe4fb761e79db0d4a7077f5fb7694f` |
-| `output/data/colony_kernel_test_status.json` | `ad5ee65f8e1933d05928cf59a555c56f48cb0a47510972b8d0006ecd09bc9d19` |
+| `output/paper.pdf` | `69fdbb018d81b7b5dd0ae170187842ef30647b8f6864af91f615fa23ea6ac706` |
+| `output/paper.html` | `cb0f7bd1546dc8acca60dccc355e4093ad1a2bd7e9f878dad7a9413e2b0641f5` |
+| `output/data/manuscript_variables.json` | `865ba48c143b1b5fbfb98a79cf94638b673d0ec208acc68a95857d64410` |
+| `output/data/colony_kernel_coverage.json` | `7dc284a8b6d29c163eb2185e1372795dfb3da8eb22977c66a289286249239ccf` |
+| `output/data/colony_kernel_test_report.xml` | `677e30d935cc5e09849d92e9d6ea3c014d8d8ee076aaa5dd8573d9cc7002a1ce` |
+| `output/data/colony_kernel_test_status.json` | `53be36e539e2e45ea55b78758280cb9e5a1e81f30968619a326618123b070dbf` |
 
 The clean-clone manifest reports `publication_ready=false` because provider-backed
 benchmark results are missing; its checkout, artifact freshness, and required test

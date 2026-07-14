@@ -1,8 +1,9 @@
 # Codomyrmex Red-Team / First-Principles / Science Follow-Up
 
 **Date:** 2026-07-14
-**Candidate:** `v1.4.0-rc1`
-**Base revision:** `471f998719bcbbdd756cedb66a2d8e95762dd542`
+**Candidate:** `v1.4.0-rc6`
+**Historical audit anchor:** `v1.4.0-rc1` at `471f998719bcbbdd756cedb66a2d8e95762dd542`
+**Current revision:** recorded in the tagged clean-clone manifest
 **Execution mode:** internal specialist panel; no independent subagents were available in the host
 
 ## Scope and goal
@@ -25,7 +26,7 @@ The release claim consists of five irreducible evidence links:
 4. measurement identity — JUnit, status JSON, and coverage agree;
 5. scope identity — a declared action request is authorized, consumed once, and linked to a signed receipt.
 
-The following are policy choices rather than physical constraints: the 60% coverage floor, the RC1/1.4.0
+The following are policy choices rather than physical constraints: the 60% coverage floor, the RC/final
 release sequence, the 0.20-inch manuscript side margins, and the use of SQLite. They are retained because
 they serve reproducibility and auditability, not because they are immutable. The hard evidence boundary
 is that a manifest or receipt cannot prove truth merely by existing; it can only prove the signed and
@@ -55,13 +56,14 @@ measured facts it actually binds.
 
 ### Experiments and observed results
 
-The verifier and enforcement negative controls passed with real components. The focused regression run
-covered the release-provenance, strict-enforcement, and publication-contract suites. The full scoped
-release suite must be rerun after the final artifact regeneration; its machine-readable counts remain the
-release authority.
+The verifier and enforcement negative controls passed with real components. The final scoped release
+suite completed after artifact regeneration with 826 JUnit-collected and passed tests, zero skipped,
+failed, or errored tests, 74.37185929648241% branch coverage (592/796), and 82.59604190919674% line
+coverage (2,246/2,640). Its machine-readable status, JUnit, and coverage artifacts remain the release
+authority.
 
-H1–H3 are supported for the tested contracts. H4 is a release-replay criterion, not assumed from the
-working tree. H5 is **inconclusive/unrun**, not a failed or successful benchmark result.
+H1–H4 are supported for the tested contracts and clean-clone replay. H5 is
+**inconclusive/unrun**, not a failed or successful benchmark result.
 
 ## Remaining blockers and TODOs
 
@@ -74,7 +76,7 @@ working tree. H5 is **inconclusive/unrun**, not a failed or successful benchmark
 
 ## Re-review gate
 
-Re-review is warranted only after a clean clone at the immutable final tag regenerates the exact canonical
-PDF and manifest, required tests report zero failures/errors/skips, and the provider benchmark supplies
-its pinned configuration, raw rows, receipts, environment digest, and reports. Until then, this candidate
-is an auditable RC1 with a publication hold, not a completed production-safety release.
+The clean-clone PDF/evidence replay and required test gate are complete. Re-review remains contingent on
+the provider benchmark supplying its pinned configuration, raw rows, receipts, environment digest, and
+reports, followed by public immutable evidence attachment. Until then, this candidate is an auditable
+RC6 with a publication hold, not a completed production-safety release.

@@ -1,13 +1,13 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.4.0-rc5 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
+**Version**: v1.4.0-rc6 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
 
-> **Current release**: v1.4.0-rc5 "Colony Kernel enforcement" (candidate, 2026-07-14).
+> **Current release**: v1.4.0-rc6 "Colony Kernel enforcement" (candidate, 2026-07-14).
 > **Next release**: v1.4.0 (held for provider evaluation and immutable release verification)
 > **Archived**: v1.2.4–v1.2.8 → [CHANGELOG.md](CHANGELOG.md)
 
-## 🔬 v1.4.0-rc5 — First-principles publication checkpoint
+## 🔬 v1.4.0-rc6 — First-principles publication checkpoint
 
 This candidate is an auditable release candidate, not a completed production-safety claim. The strict
 profile governs only its explicit action-scope map; unregistered mutating paths remain bypasses. The
