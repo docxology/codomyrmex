@@ -1,9 +1,9 @@
 # Codomyrmex Red-Team / First-Principles / Science Follow-Up
 
 **Date:** 2026-07-14
-**Candidate:** `v1.4.0-rc11`
+**Candidate:** `v1.4.0-rc12`
 **Historical audit anchor:** `v1.4.0-rc1` at `471f998719bcbbdd756cedb66a2d8e95762dd542`
-**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc11`
+**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc12`
 **Execution mode:** internal specialist panel; no independent subagents were available in the host
 
 ## Scope and goal
@@ -57,7 +57,7 @@ measured facts it actually binds.
 ### Experiments and observed results
 
 The verifier and enforcement negative controls passed with real components. The final scoped release
-suite completed after artifact regeneration with 826 JUnit-collected and passed tests, zero skipped,
+suite completed after artifact regeneration with 833 JUnit-collected and passed tests, zero skipped,
 failed, or errored tests, 74.37185929648241% branch coverage (592/796), and 82.59604190919674% line
 coverage (2,246/2,640). Its machine-readable status, JUnit, and coverage artifacts remain the release
 authority.
@@ -79,4 +79,4 @@ H1–H4 are supported for the tested contracts and clean-clone replay. H5 is
 The clean-clone PDF/evidence replay and required test gate are complete. Re-review remains contingent on
 the provider benchmark supplying its pinned configuration, raw rows, receipts, environment digest, and
 reports, followed by public immutable evidence attachment. Until then, this candidate is an auditable
-RC11 with a publication hold, not a completed production-safety release.
+RC12 with a publication hold, not a completed production-safety release.

@@ -281,10 +281,12 @@ hand-calculated worked example in prose.
 
 The `ConsequenceMemory` subsystem stores each reported `ConsequenceRecord` and the
 derived agent profile. It uses SQLite WAL mode when configured with a file path. The
-kernel and MCP defaults use `:memory:`, so records survive only for the process
-lifetime unless an operator supplies a persistent database path. Because the MCP outcome
-endpoint does not yet attest reports against a prior EXECUTE record, this is an audit log
-of submitted outcomes rather than independent ground truth.
+advisory kernel/MCP default is `:memory:` and is intentionally process-local; a strict
+file-backed profile uses the durable authorization, signal, resource, consequence, and
+receipt stores together. Advisory reports remain an audit log of submitted outcomes
+rather than independent ground truth. Strict accepted outcomes additionally require a
+consumed authorization and verified executor receipt, while the receipt remains process
+evidence rather than an independent world-truth oracle.
 
 The schema comprises three tables: `consequences` (one row per submitted consequence
 report), `agent_profiles` (one row per agent, containing current trust state and role),
@@ -346,8 +348,9 @@ minimum is met, the four thresholds are generated directly from the live adapter
 Role inference runs on proposal and outcome cycles. The live gate enforces the SANDBOX
 override but does not implement a per-action permission matrix for the four higher role
 labels; those labels currently express trust tiers and intended specializations. Outcome
-recording persists a changed role. The transition out of SANDBOX depends on externally
-recorded outcomes, which are not yet linked to prior authorized execution.
+recording persists a changed role. In advisory mode, promotion can still depend on
+caller-reported outcomes; in strict mode, declared-action promotion inputs are restricted
+to receipt-linked outcomes.
 
 ---
 
@@ -447,8 +450,10 @@ HIGH severity; the CRITICAL class remains part of the actuation-gate override co
 ## The Pressure Loop
 
 The feedback path is composed from separate public operations. `propose_action` returns a
-decision but does not actuate; `record_outcome` accepts a later caller report but does not
-currently require a matching authorization. The pseudocode makes that boundary explicit.
+decision but does not itself actuate. Advisory `record_outcome` accepts a later
+caller-reported audit record; strict declared actions instead require authorization
+consumption, executor receipt verification, and `record_attested_outcome`. The pseudocode
+makes this profile boundary explicit.
 
 **Algorithm 1: Colony Kernel Pressure Loop**
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -9,6 +10,7 @@ import pytest
 from evaluations.colony_kernel.runner import (
     BenchmarkConfigurationError,
     DeterministicFixtureAdapter,
+    HttpJsonAgentAdapter,
     ProviderConfiguration,
     controlled_tasks,
     environment_digest,
@@ -22,6 +24,7 @@ from evaluations.colony_kernel.stages import (
     acquire_pinned_task_corpus,
     parse_result,
     prepare_tasks,
+    render_report,
 )
 from scripts.generate_colony_kernel_truth_tables import build_tables
 
@@ -34,6 +37,19 @@ def test_release_manifest_has_a_fixed_swe_bench_partition() -> None:
     tasks = swe_bench_tasks(manifest)
     assert len(tasks) == 30
     assert sum(task["partition"] == "held_out" for task in tasks) == 10
+
+
+def test_release_manifest_has_disjoint_controlled_partitions() -> None:
+    manifest = load_manifest(MANIFEST)
+    partitions = manifest["partitions"]
+    development = set(partitions["development_controlled_ids"])
+    held_out = set(partitions["held_out_controlled_ids"])
+    assert len(development) == 30
+    assert len(held_out) == 20
+    assert not development & held_out
+    assert development | held_out == {
+        f"controlled-{index:03d}" for index in range(50)
+    }
 
 
 def test_incomplete_swe_bench_manifest_fails_closed(tmp_path: Path) -> None:
@@ -76,9 +92,16 @@ def test_paired_effect_is_reproducible() -> None:
 
 def test_controlled_runner_only_runs_after_manifest_is_fully_pinned(tmp_path: Path) -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    corpus_source = tmp_path / "source.parquet"
+    corpus_source.write_bytes(b"deterministic-test-corpus")
     manifest["swe_bench_lite"] = {
         "status": "pinned",
+        "dataset_name": "test/dataset",
         "dataset_revision": "test-revision",
+        "split": "test",
+        "source_file": "data/test.parquet",
+        "source_file_sha256": hashlib.sha256(corpus_source.read_bytes()).hexdigest(),
+        "seed": 2800,
         "issue_ids": [f"issue-{index:02d}" for index in range(30)],
         "required_count": 30,
     }
@@ -104,10 +127,21 @@ def test_controlled_runner_only_runs_after_manifest_is_fully_pinned(tmp_path: Pa
         provider,
         adapter=DeterministicFixtureAdapter(),
         expected_environment_digest=environment_digest(ROOT),
+        corpus_path=tmp_path / "accepted.parquet",
+        corpus_source_path=corpus_source,
     )
     assert result["status"] == "passed"
     assert len(result["rows"]) == 240
     assert result["metrics"]["paired_effects"]["n"] == 80
+    assert result["metrics"]["row_count"] == 240
+    assert set(result["metrics"]["task_success_rate"]) == {
+        "always_execute",
+        "advisory_gate",
+        "enforced_authorization",
+    }
+    assert result["corpus"]["sha256"] == hashlib.sha256(
+        corpus_source.read_bytes()
+    ).hexdigest()
 
 
 def test_provider_run_without_concrete_adapter_fails_closed(tmp_path: Path) -> None:
@@ -144,11 +178,86 @@ def test_benchmark_stages_prepare_and_reject_unverified_receipts() -> None:
                 "task_id": tasks[0]["task_id"],
                 "condition": "enforced_authorization",
                 "task_success": True,
+                "verified_failure": False,
+                "harmful_attempt": False,
                 "unauthorized_attempt": False,
-                "resource_cost": {},
+                "replay_rejected": False,
+                "cross_scope_rejected": False,
+                "false_hold_refuse": False,
+                "resource_cost": {"runtime_seconds": 0.0, "tokens": 0.0},
                 "receipt_verified": False,
+                "authorization_correct": False,
+                "latency_seconds": 0.0,
+                "token_usage": 0,
+                "trust_calibration_error": 0.0,
+                "rework_count": 0,
             },
         )
+
+
+def test_benchmark_stages_reject_malformed_receipt_timestamps() -> None:
+    manifest = load_manifest(MANIFEST)
+    task = prepare_tasks(manifest)[0]
+    result = DeterministicFixtureAdapter().run(task, "enforced_authorization", 1)
+    result["receipt"]["started_at"] = "not-a-timestamp"
+    with pytest.raises(StageError, match="receipt started_at"):
+        parse_result(task, "enforced_authorization", result)
+
+
+def test_benchmark_stages_require_explicit_ed25519_receipt_verification() -> None:
+    manifest = load_manifest(MANIFEST)
+    task = prepare_tasks(manifest)[0]
+    result = DeterministicFixtureAdapter().run(task, "enforced_authorization", 1)
+    result["receipt_verification"]["signature_valid"] = False
+    with pytest.raises(StageError, match="verification metadata"):
+        parse_result(task, "enforced_authorization", result)
+
+
+def test_render_report_rejects_incomplete_task_condition_rows() -> None:
+    manifest = load_manifest(MANIFEST)
+    with pytest.raises(StageError, match="every task/condition pair"):
+        render_report(manifest, {"provider": "test"}, [])
+
+
+def test_render_report_rejects_unknown_task_identity() -> None:
+    manifest = load_manifest(MANIFEST)
+    tasks = prepare_tasks(manifest)
+    rows = [
+        parse_result(task, condition, DeterministicFixtureAdapter().run(task, condition, 1))
+        for task in tasks
+        for condition in manifest["conditions"]
+    ]
+    rows[0]["task_id"] = "unlisted-task"
+    with pytest.raises(StageError, match="every task/condition pair"):
+        render_report(manifest, {"provider": "test"}, rows)
+
+
+def test_provider_configuration_rejects_non_positive_timeout() -> None:
+    with pytest.raises(BenchmarkConfigurationError, match="timeout_seconds"):
+        ProviderConfiguration.from_mapping(
+            {
+                "provider": "test",
+                "model": "model",
+                "model_version": "1",
+                "parameters": {},
+                "endpoint": "https://example.invalid",
+                "seed": 1,
+                "timeout_seconds": 0,
+            }
+        )
+
+
+def test_http_provider_adapter_rejects_non_http_endpoint() -> None:
+    provider = ProviderConfiguration(
+        provider="test",
+        model="model",
+        model_version="1",
+        parameters={},
+        endpoint="local://fixture",
+        seed=1,
+    )
+    with pytest.raises(BenchmarkConfigurationError, match="http"):
+        HttpJsonAgentAdapter(provider)
 
 
 def test_acquisition_stage_accepts_only_the_pinned_corpus(tmp_path: Path) -> None:

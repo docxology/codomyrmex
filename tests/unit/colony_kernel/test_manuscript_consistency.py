@@ -377,15 +377,15 @@ REQUIRED_CLAIMS = {
         "10 adversarial vectors",
     ],
     "docs/manuscript/05_experimental_setup.md": [
-        "Harness and task manifest implemented; provider results pending",
+        "Manifest, corpus acquisition, complete-matrix validation, and report schema implemented; provider results pending",
         "raw append-only traces",
     ],
     "docs/manuscript/04_conclusion.md": [
-        "caller-supplied data",
+        "caller report",
         "Supported within one kernel process",
     ],
     "docs/manuscript/07_scope_and_related_work.md": [
-        "Not a security boundary",
+        "scoped, not universal, security boundary",
         "Not production- or scale-validated",
         "Not an Active Inference implementation",
         "unattested report",

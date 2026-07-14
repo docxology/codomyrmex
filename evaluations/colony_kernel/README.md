@@ -15,8 +15,25 @@ uv run python evaluations/colony_kernel/runner.py \
   --environment-digest "$(uv run python -c 'from pathlib import Path; from evaluations.colony_kernel.runner import environment_digest; print(environment_digest(Path(".")))')"
 ```
 
+The provider configuration must contain `provider`, `model`, `model_version`,
+`parameters`, `endpoint`, and `seed`; it may also name an `auth_env` variable and a
+positive `timeout_seconds`. The endpoint receives a JSON POST containing the pinned
+model configuration, task specification, condition, and seed. It must return one
+structured result per task/condition with the required outcome, rejection, resource,
+latency, calibration, and authorization fields. Enforced rows must include a verified
+executor receipt with the complete signed `ExecutionReceipt` field set plus
+`receipt_verification: {"algorithm": "Ed25519", "public_key_id": "...", "signature_valid": true}`.
+
+The runner acquires and SHA-256 verifies the pinned SWE-bench corpus before invoking
+the adapter. It emits 240 rows (80 tasks × 3 conditions), rejects duplicate or missing
+task/condition pairs, and reports task success, verified failure, harmful/unauthorized
+attempts, replay and cross-scope rejection, false HOLD/REFUSE, rework, resource cost,
+latency, token usage, trust calibration, authorization precision, and paired effects
+with intervals. Any missing or malformed field fails the run before output publication.
+
 The deterministic fixture adapter is used only by unit tests; it is not evidence for a
-model or provider comparison.
+model or provider comparison. Authentication material is read from the named
+environment variable and is never serialized into the result report.
 
 The acquisition stage can be run independently by calling
 `acquire_pinned_task_corpus` from `evaluations.colony_kernel.stages`; it verifies the

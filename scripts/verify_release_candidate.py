@@ -31,6 +31,24 @@ except ModuleNotFoundError:  # Package/test execution resolves from the repo roo
     )
 
 REQUIRED_TEST_KEYS = ("collected", "passed", "skipped", "failed", "errors")
+REQUIRED_BENCHMARK_METRICS = {
+    "metrics_version",
+    "task_count",
+    "row_count",
+    "task_success_rate",
+    "verified_failure_rate",
+    "harmful_or_unauthorized_attempts",
+    "replay_rejection_rate",
+    "cross_scope_rejection_rate",
+    "false_hold_refuse_rate",
+    "rework_count",
+    "resource_cost",
+    "latency_seconds",
+    "token_usage",
+    "trust_calibration",
+    "authorization_precision",
+    "paired_effects",
+}
 
 
 def sha256(path: Path) -> str:
@@ -38,6 +56,18 @@ def sha256(path: Path) -> str:
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _environment_digest(root: Path) -> str:
+    digest = hashlib.sha256()
+    for relative in (
+        "pyproject.toml",
+        "uv.lock",
+        "evaluations/colony_kernel/benchmark_manifest.json",
+    ):
+        path = root / relative
+        digest.update(relative.encode("utf-8") + b"\0" + path.read_bytes())
     return digest.hexdigest()
 
 
@@ -100,6 +130,133 @@ def _read_status_artifact(root: Path, failures: list[str]) -> dict[str, Any] | N
         failures.append("test status artifact is not a JSON object")
         return None
     return data
+
+
+def _validate_benchmark_result(
+    root: Path,
+    benchmark_manifest_path: Path,
+    benchmark_result_path: Path,
+    failures: list[str],
+) -> None:
+    """Validate the result structure before a passed benchmark can unlock release."""
+
+    try:
+        result = json.loads(benchmark_result_path.read_text(encoding="utf-8"))
+        benchmark_manifest = json.loads(benchmark_manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        failures.append(f"benchmark result cannot be parsed: {exc}")
+        return
+    if not isinstance(result, dict) or result.get("status") != "passed":
+        failures.append("benchmark result is not a passed JSON object")
+        return
+    if result.get("manifest") != benchmark_manifest:
+        failures.append("benchmark result is not bound to the checked-in benchmark manifest")
+    provider = result.get("provider")
+    if not isinstance(provider, dict) or any(
+        provider.get(key) in (None, "")
+        for key in ("provider", "model", "model_version", "parameters", "endpoint", "seed")
+    ):
+        failures.append("benchmark result is missing pinned provider/model metadata")
+    elif not isinstance(provider.get("parameters"), dict):
+        failures.append("benchmark provider parameters are not an object")
+    elif result.get("provider_config_digest") != hashlib.sha256(
+        json.dumps(provider, sort_keys=True).encode("utf-8")
+    ).hexdigest():
+        failures.append("benchmark provider metadata does not match provider_config_digest")
+    rows = result.get("rows")
+    conditions = benchmark_manifest.get("conditions", [])
+    controlled_suite = benchmark_manifest.get("controlled_suite", {})
+    controlled_count = int(controlled_suite.get("task_count", 0))
+    task_prefix = str(controlled_suite.get("task_id_prefix", ""))
+    swe_count = int(benchmark_manifest.get("swe_bench_lite", {}).get("required_count", 0))
+    expected_task_ids = {
+        f"{task_prefix}{index:03d}" for index in range(controlled_count)
+    } | {f"swe-{index:03d}" for index in range(swe_count)}
+    expected_keys = {
+        (task_id, condition) for task_id in expected_task_ids for condition in conditions
+    }
+    expected_count = len(expected_keys)
+    if not isinstance(rows, list) or len(rows) != expected_count:
+        failures.append("benchmark result does not contain the complete task/condition matrix")
+    elif not all(isinstance(row, dict) for row in rows):
+        failures.append("benchmark result contains a non-object row")
+    else:
+        actual_keys = {
+            (str(row.get("task_id")), str(row.get("condition"))) for row in rows
+        }
+        if actual_keys != expected_keys:
+            failures.append("benchmark result task/condition keys do not match the manifest")
+        if len(actual_keys) != len(rows):
+            failures.append("benchmark result contains duplicate task/condition rows")
+    metrics = result.get("metrics")
+    if not isinstance(metrics, dict) or set(metrics) < REQUIRED_BENCHMARK_METRICS:
+        failures.append("benchmark result is missing required release metrics")
+    elif metrics.get("row_count") != expected_count or metrics.get("task_count") != len(
+        expected_task_ids
+    ):
+        failures.append("benchmark result metrics are not bound to the complete matrix")
+    if isinstance(rows, list) and all(isinstance(row, dict) for row in rows):
+        try:
+            from evaluations.colony_kernel.runner import (
+                BenchmarkConfigurationError,
+                controlled_tasks,
+                load_manifest,
+                swe_bench_tasks,
+            )
+            from evaluations.colony_kernel.stages import (
+                StageError,
+                parse_result,
+                render_report,
+            )
+
+            validated_manifest = load_manifest(benchmark_manifest_path)
+            task_by_id = {
+                str(task["task_id"]): task
+                for task in [*controlled_tasks(validated_manifest), *swe_bench_tasks(validated_manifest)]
+            }
+            for row in rows:
+                task = task_by_id.get(str(row.get("task_id")))
+                if task is None:
+                    raise StageError("benchmark row references an unknown task")
+                parse_result(task, str(row.get("condition")), row)
+            if isinstance(metrics, dict):
+                calculated = render_report(provider=provider, manifest=validated_manifest, rows=rows)[
+                    "metrics"
+                ]
+                if calculated != metrics:
+                    failures.append("benchmark metrics do not match the validated raw rows")
+        except (
+            ImportError,
+            KeyError,
+            TypeError,
+            ValueError,
+            BenchmarkConfigurationError,
+            StageError,
+        ) as exc:
+            failures.append(f"benchmark rows or metrics failed contract validation: {exc}")
+    corpus = result.get("corpus")
+    if (
+        not isinstance(corpus, dict)
+        or not isinstance(corpus.get("sha256"), str)
+        or not isinstance(corpus.get("path"), str)
+        or not corpus["path"]
+        or Path(corpus["path"]).is_absolute()
+    ):
+        failures.append("benchmark result is missing pinned corpus evidence")
+    else:
+        corpus_path = (root / corpus["path"]).resolve()
+        if root.resolve() not in corpus_path.parents:
+            failures.append("benchmark corpus path escapes the release checkout")
+        elif not corpus_path.is_file() or sha256(corpus_path) != corpus["sha256"]:
+            failures.append("benchmark corpus evidence is missing or hash-mismatched")
+    environment = result.get("environment_digest")
+    try:
+        expected_environment = _environment_digest(root)
+    except OSError:
+        expected_environment = None
+        failures.append("benchmark environment inputs are missing")
+    if expected_environment is not None and environment != expected_environment:
+        failures.append("benchmark result environment_digest does not match the checkout")
 
 
 def verify(root: Path, manifest_path: Path) -> dict[str, Any]:
@@ -198,10 +355,15 @@ def verify(root: Path, manifest_path: Path) -> dict[str, Any]:
         failures.append("benchmark manifest hash does not match the checkout")
     benchmark_result_path = root / "output/evaluations/colony_kernel/benchmark.json"
     result_hash = benchmark.get("result_hash")
-    if result_hash is not None and (
-        not benchmark_result_path.is_file() or result_hash != sha256(benchmark_result_path)
-    ):
-        failures.append("benchmark result hash does not match the checkout")
+    if benchmark_result_path.is_file():
+        if result_hash is None or result_hash != sha256(benchmark_result_path):
+            failures.append("benchmark result hash does not match the checkout")
+        else:
+            _validate_benchmark_result(
+                root, benchmark_manifest_path, benchmark_result_path, failures
+            )
+    elif result_hash is not None:
+        failures.append("benchmark result hash is declared but the result is missing")
     if not benchmark.get("ready") or benchmark.get("status") != "passed":
         failures.append("benchmark manifest/results are not passed and pinned")
     if manifest.get("publication_ready") is not True:

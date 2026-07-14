@@ -48,20 +48,21 @@ models, execute arbitrary tools, or guarantee that a downstream runtime obeys it
 Other Codomyrmex packages may provide adjacent capabilities, but they are not evidence for
 the kernel claims in this paper.
 
-**Process-lifetime by default.** The MCP module owns a single kernel instance within one
-process. Consequence memory defaults to SQLite in-memory mode, and the pheromone field is
-in memory. A caller can choose a file-backed database for consequence records; the default
-does not provide cross-session persistence, and file-backed consequence records do not
-by themselves persist the whole kernel or pheromone field.
+**Process-lifetime by default, durable by explicit profile.** The advisory MCP module owns
+a single process-local kernel by default. A strict file-backed profile persists the
+declared signal, resource, trust, consequence, authorization, and receipt state through
+SQLite WAL, with restart and concurrent-claim contracts. This does not imply distributed
+replication or that every deployment selects the strict profile.
 
 **Not a per-role authorization system.** RoleAdapter infers labels from trust and proposal
 count, and SANDBOX is a hard gate condition. The other role labels do not currently
 define or enforce an action-by-role permission matrix.
 
-**Not a security boundary.** Trust scores are mutable state associated with caller-supplied
-agent identifiers, not unforgeable capability tokens. Outcome submission is not, in the
-present interface, a cryptographic attestation that an approved proposal executed and
-produced the reported consequence.
+**A scoped, not universal, security boundary.** In advisory mode, trust scores and
+caller-reported outcomes are not unforgeable authority. In strict mode, declared actions
+receive Ed25519-signed, single-use capabilities and accepted outcomes require consumed
+authorizations plus signed executor receipts. Unregistered mutating paths remain outside
+that boundary and must be treated as bypasses.
 
 **Not production- or scale-validated.** The checked-in tests exercise internal contracts.
 The manuscript does not release the repeated-trial traces, production replays, concurrent
@@ -85,7 +86,7 @@ boundaries rather than as additional evidence [@tbl:claim-status].
 | Outcome reports establish execution truth | Advisory caller report is unattested; strict path verifies one consumed authorization and signed executor receipt | Not claimed as truth validation; attestation contract checked | Independent outcome oracle and deployment evidence |
 | Declared Colony actions require authorization | Strict profile's explicit action-scope map, atomic single-use ledger, executor adapter, and quarantine tests | Checked for declared scope only | Complete governed scope inventory and clean deployment routing |
 | The kernel mediates all repository or agent actions | Opt-in proposal/MCP surface plus explicit strict scope | Not claimed | Non-bypassable routing outside the declared scope |
-| The field, trust, budget, and authorization state survive restart | Strict file-backed SQLite signal/resource/consequence/authorization stores plus restart/concurrency tests | Checked under configured persistence cases | Pinned deployment configuration and operational recovery evidence |
+| The field, trust, budget, and authorization state survive restart | Strict file-backed SQLite signal/resource/consequence/authorization stores plus restart/concurrency tests | Checked under the declared profile | Pinned deployment configuration, migration, backup, and operational recovery evidence |
 | The approach improves production safety or task success | No released external benchmark or production replay | Not evaluated | Predeclared baselines, traces, and held-out analysis |
 
 : Canonical claim-status table for this advisory release. {#tbl:claim-status}
@@ -230,7 +231,8 @@ zero-knowledge, wallet-ownership, coercion-detection, physiological-authenticati
 trajectory-aware gating claim on their behalf.
 
 The resulting position is deliberately modest. The Colony Kernel is an inspectable
-software experiment in consequence-aware gating. Its deterministic contracts are
-testable now. Persistence across sessions, enforceable role authority, resistance to
-adversarial clients, and improved safety on realistic workloads remain implementation
-and evaluation targets.
+software experiment in consequence-aware gating with a separately configured strict
+boundary for declared actions. Its deterministic contracts and persistence behavior are
+testable now. Complete scope routing, enforceable role authority, resistance to
+adversarial clients, independent outcome truth, and improved safety on realistic
+workloads remain implementation and evaluation targets.

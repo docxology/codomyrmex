@@ -17,7 +17,7 @@ require additional evidence.
 | Static checks | Ruff and ty status for `src/codomyrmex/colony_kernel` | Repository-wide lint or type cleanliness |
 | Manuscript variables | Token map computed from current files, configuration, and gate outputs | A signed or independently attested release until immutable tag verification |
 | Figures | {{ARTIFACT_FIGURE_COUNT}} regenerated visual assets sourced from the variable snapshot and documented constants | Measurements from an external agent population |
-| Render | Hydrated Markdown plus HTML/PDF outputs | Byte-identical output across machines and dates |
+| Render | Hydrated Markdown plus HTML/PDF outputs | Byte identity outside the pinned clean-clone toolchain |
 : Scope of the reproducibility evidence. {#tbl:repro-scope}
 
 The variable generator fails when the scoped pytest process, branch-coverage threshold,
@@ -168,11 +168,12 @@ manuscript without inventing cross-platform certification.
 : Software inputs relevant to reproduction. {#tbl:software_versions}
 
 `uv sync --frozen` prevents dependency re-resolution, and `SOURCE_DATE_EPOCH` pins the
-manuscript provenance timestamp to the immutable revision. Exact PDF identity still
-depends on the pinned Pandoc/XeLaTeX/font environment; the release manifest records
-those tool and environment facts. Without that host-tool pin, the supported claim is
-semantic regeneration with passing gates and resolved references, not universal
-byte-for-byte identity.
+manuscript provenance timestamp to the immutable revision. The clean-clone release
+replay establishes byte-identical PDF/HTML/evidence output under the recorded host-tool
+chain. Exact PDF identity outside that chain still depends on Pandoc/XeLaTeX/font
+versions; the release manifest records those facts. Without the same host-tool pin, the
+supported claim is semantic regeneration with passing gates and resolved references, not
+universal byte-for-byte identity.
 
 ## Evaluation snapshot {#sec:sim-spec}
 
@@ -184,7 +185,7 @@ byte-for-byte identity.
 | Branch details | Executed during variable generation | `output/data/colony_kernel_coverage.json` |
 | Policy and taxonomy figures | Regenerated | `output/figures/*.png` |
 | Deterministic contract cases | Executed by the Colony Kernel suite | `tests/unit/colony_kernel/` |
-| Four-condition benchmark | Proposed only | No raw trial artifact in this release |
+| Three-condition benchmark | Harness and pinned task manifest | No provider-backed raw trial artifact in this release |
 | Production deployment | Not evaluated | No production trace artifact |
 : Contents and omissions of the release evaluation snapshot. {#tbl:evaluation_snapshot}
 

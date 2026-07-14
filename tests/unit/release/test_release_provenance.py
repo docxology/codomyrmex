@@ -174,3 +174,31 @@ def test_verifier_rejects_changed_source_inputs(tmp_path: Path) -> None:
     report = verify(root, manifest_path)
 
     assert "manifest source hash does not match the checkout" in report["failures"]
+
+
+def test_verifier_rejects_incomplete_passed_benchmark_result(tmp_path: Path) -> None:
+    root, manifest_path = _candidate(tmp_path)
+    result_path = root / "output/evaluations/colony_kernel/benchmark.json"
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    result_path.write_text(
+        json.dumps({"status": "passed", "manifest": {}, "rows": [], "metrics": {}}),
+        encoding="utf-8",
+    )
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    import hashlib
+
+    manifest["benchmark"].update(
+        {
+            "status": "passed",
+            "ready": True,
+            "result_hash": hashlib.sha256(result_path.read_bytes()).hexdigest(),
+        }
+    )
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    report = verify(root, manifest_path)
+
+    assert "benchmark result is missing pinned provider/model metadata" in report[
+        "failures"
+    ]
+    assert "benchmark result is missing required release metrics" in report["failures"]

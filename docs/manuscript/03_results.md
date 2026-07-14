@@ -123,9 +123,10 @@ clipped update has no restoring term.
 
 ![Deterministic trust trajectory under consecutive caller-reported clean outcomes. Shaded bands show inferred role labels; the independent generated gate floor means the first role promotion does not yet make ordinary gate scoring reachable. Points are analytical applications of the fixed update, not population measurements or evidence of stochastic convergence.](figures/trust_trajectory.png){#fig:trust_trajectory width=90%}
 
-The fixture is also not an attested credential protocol. The current MCP outcome tool
-does not require a matching prior EXECUTE record, so an operator or client can submit
-the reports that drive this path. This is a deployment blocker for adversarial trust.
+This trajectory is advisory evidence: the caller-reported outcome tool can supply the
+reports that drive it. The strict profile separately prevents an unlinked report from
+changing enforced trust or failure evidence, but the receipt still attests the registered
+executor's process event rather than the truth of the external result.
 
 ## Subtractive signal dynamics {#sec:results-decay}
 

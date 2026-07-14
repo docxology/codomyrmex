@@ -28,6 +28,19 @@ implication here is modest: preserve inspectable context at the proposal boundar
 make uncertainty and evidence provenance visible, without claiming that a gate creates
 situation awareness by itself.
 
+Three related literatures sharpen that boundary. Distributed-cognition work treats
+external representations as resources in coordinated activity, but not as substitutes
+for the people and practices that interpret them [@hutchins1995cognition]. Dependable-
+computing research separates a recorded fault, an internal error, and an externally
+observed failure; collapsing those categories makes an audit trail look more certain
+than its evidence warrants [@avizienis2004basic]. Reproducible-computing scholarship
+similarly treats the data, code, environment, and transformation record as part of a
+claim rather than as optional packaging [@peng2011reproducible]. The present work adopts
+these as design constraints: expose a provenance-bearing context packet, preserve
+evidence grades, and bind publication claims to the exact tested artifact. The packet
+can support inspection and later challenge; it cannot demonstrate perception,
+comprehension, projection, calibrated reliance, or truth.
+
 ## Problem statement {#sec:intro-problem}
 
 Contemporary orchestration frameworks provide routing, checkpoints, memory, roles, and
@@ -78,8 +91,8 @@ The strict profile adds a narrower boundary: only declared action-scope entries 
 signed, single-use authorizations, and only consumed authorizations with executor
 receipts can update enforced outcome state. Unregistered mutating paths fail closed in
 that profile; actions outside the map remain bypassable and are not silently covered.
-File-backed strict profiles persist the authorization, receipt, signal, resource, and
-consequence ledgers; `:memory:` remains isolated-test mode. These are evidence-chain
+File-backed strict profiles persist the authorization, receipt, signal, resource, trust,
+and consequence ledgers; `:memory:` remains isolated-test mode. These are evidence-chain
 properties, not guarantees that a human or model perceived, understood, or correctly
 projected the situation [@endsley1995toward; @hutchins1995cognition].
 
@@ -144,8 +157,11 @@ independent truth oracle.
 
 The {{CONFIG_MCP_TOOL_COUNT}} MCP tools expose this stateful kernel through JSON-shaped requests and
 responses. A module-level singleton shares state across calls in one server process.
-File-backed SQLite can persist consequence records when configured, but the field has no
-restart-persistent backend.
+The advisory default remains process-local. A strict file-backed profile persists the
+declared enforcement state, including signal pressure, resource usage, trust profiles,
+authorizations, receipts, and consequence records, with SQLite WAL and restart/
+concurrency contracts. This persistence is still a deployment property, not evidence
+of distributed consistency, replication, or situation awareness.
 
 ## Relation to prior work {#sec:intro-related}
 
@@ -178,13 +194,13 @@ other frameworks is not established in this release.
 
 ## Evidence boundary {#sec:intro-evidence}
 
-The executed evidence is the scoped Colony Kernel quality gate and deterministic
-fixtures. The proposed {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition,
+The executed evidence is the scoped Colony Kernel quality gate, deterministic fixtures,
+and strict lifecycle/persistence contracts. The proposed {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition,
 {{CONFIG_TRIAL_COUNT}}-run benchmark has not been
 executed. No population refusal rate, throughput advantage, production harm reduction,
-or long-run convergence claim is reported. The paper treats unlinked outcome reporting,
-SANDBOX bootstrap, persistence, role permissions, and external calibration as open
-engineering work.
+or long-run convergence claim is reported. The paper treats advisory unlinked outcome
+reporting, SANDBOX bootstrap, role permissions, external calibration, and deployment
+routing outside the declared scope as bounded limitations rather than solved problems.
 
 ## Reader's guide {#sec:intro-guide}
 

@@ -8,6 +8,19 @@ manifest pins the SWE-bench revision and issue IDs, but execution remains pendin
 model/provider pins, environment digest, raw receipts, and held-out results are
 attached; no comparative benchmark claim is made here.
 
+The executable protocol has a stricter evidence boundary than a task-list description.
+Before any adapter call, the runner acquires the pinned corpus into a temporary file,
+checks its SHA-256 digest, and atomically accepts it only on an exact match. It then
+prepares 80 stable task identifiers (50 controlled actions and {{CONFIG_SWE_BENCH_TASK_COUNT}} SWE-bench instances)
+under the declared development/held-out partitions and requires one validated row for
+each task under each of the three conditions: 240 rows in total. A row records success,
+verified failure, harmful or unauthorized attempts, replay and cross-scope rejection,
+false HOLD/REFUSE, rework, resource cost, latency, token use, trust calibration, and
+authorization precision. Enforced rows additionally require the complete signed
+`ExecutionReceipt` field set and explicit Ed25519 verification metadata. Missing,
+duplicated, out-of-manifest, malformed, or unverifiable evidence fails the run before a
+result file is written.
+
 ## Evidence-status map {#sec:experimental-design}
 
 [@tbl:evidence-status] is the release's claim-status ledger.
@@ -17,7 +30,7 @@ attached; no comparative benchmark claim is made here.
 | Colony Kernel unit/integration suite | Executed during variable generation | Checked deterministic behavior under test inputs |
 | Ruff and ty checks | Executed; fail closed | No scoped lint/type diagnostics in this snapshot |
 | Formula-derived figures and tables | Regenerated from configuration and constants | Arithmetic consequences of the policy |
-| {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition benchmark | Harness and task manifest implemented; provider results pending | No comparative conclusion |
+| {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition benchmark | Manifest, corpus acquisition, complete-matrix validation, and report schema implemented; provider results pending | No comparative conclusion |
 | Production deployment study | Absent | No production safety or performance conclusion |
 : Evidence status for the release and proposed study. {#tbl:evidence-status}
 
