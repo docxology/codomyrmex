@@ -133,7 +133,7 @@ not a substitute for the predeclared controlled and SWE-bench Lite experiment.
 | **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 60% gate) | 🟡 PENDING (35,119 tests collected with 0 errors; build_synthesis + colony_kernel + integration suites verified green) |
 | **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED (0 errors) |
 | **Type Safety** | `uv run ty check --output-format concise src/` | 0 diagnostics | ✅ PASSED (0 diagnostics) |
-| **Coverage Gate** | `make test` or `uv run pytest src/codomyrmex/tests/ ... --cov-fail-under=60` | ≥60% | ✅ PASSED — `fail_under = 60` in `pyproject.toml`; `meme/*` omitted from coverage; colony_kernel scoped coverage at 78.4% branch |
+| **Coverage Gate** | `make test` or the scoped release command with `--cov-fail-under=60` | ≥60% | ✅ PASSED — `fail_under = 60` in `pyproject.toml`; `meme/*` omitted from coverage; current Colony Kernel release coverage is 74.37185929648241% branch (592/796) |
 | **Documentation Parity** | `make docs-check` | AGENTS.md, README.md, SPEC.md, CHANGELOG.md aligned with pytest/coverage source of truth | ✅ PASSED (0 placeholders, 0 broken links, 0 completeness issues, AGENTS validation passes) |
 
 ---
