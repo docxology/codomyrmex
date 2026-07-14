@@ -1,0 +1,18 @@
+# Merge this block into ~/.hermes/config.yaml.
+# Hermes treats external skill directories as read-only discovery sources.
+skills:
+  external_dirs:
+    - /absolute/path/to/codomyrmex/.agents/skills
+mcp_servers:
+  codomyrmex:
+    command: uv
+    args:
+      - run
+      - python
+      - /absolute/path/to/codomyrmex/scripts/model_context_protocol/run_mcp_server.py
+      - --transport
+      - stdio
+      - --profile
+      - readonly
+    timeout: 60
+    connect_timeout: 30

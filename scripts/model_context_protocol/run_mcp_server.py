@@ -28,40 +28,30 @@ except ImportError:
 
 import argparse
 import asyncio
+import contextlib
 import json
-import logging
-from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.model_context_protocol import MCPServer, MCPServerConfig
 from codomyrmex.model_context_protocol import tools as mcp_tools
-from codomyrmex.model_context_protocol.discovery import (
-    DiscoveredTool,
-    discover_tools,
-)
+from codomyrmex.model_context_protocol.discovery import MCPDiscovery
 
 logger = get_logger(__name__)
 
-
-# ============================================================================
-# Known tool-name -> tools.py function mapping for spec-discovered tools
-# ============================================================================
-
-_SPEC_TOOL_IMPLEMENTATIONS: dict[str, Any] = {
-    "git_status": mcp_tools.git_status,
-    "git_diff": mcp_tools.git_diff,
-    "read_file": mcp_tools.read_file,
-    "write_file": mcp_tools.write_file,
-    "list_directory": mcp_tools.list_directory,
-    "search_code": mcp_tools.search_codebase,
-    "search_codebase": mcp_tools.search_codebase,
-    "run_command": mcp_tools.run_shell_command,
-    "run_shell_command": mcp_tools.run_shell_command,
-    "analyze_python_file": mcp_tools.analyze_python_file,
-    "json_query": mcp_tools.json_query,
-    "checksum_file": mcp_tools.checksum_file,
-}
+READONLY_TOOL_NAMES = frozenset(
+    {
+        "git_diff",
+        "git_status",
+        "read_file",
+        "list_directory",
+        "search_code",
+        "analyze_python_file",
+        "json_query",
+        "checksum_file",
+        "list_modules",
+        "get_module_info",
+    }
+)
 
 
 # ============================================================================
@@ -70,108 +60,50 @@ _SPEC_TOOL_IMPLEMENTATIONS: dict[str, Any] = {
 
 
 def discover_and_register_tools(server: MCPServer) -> int:
-    """
-    Discover tools from MCP_TOOL_SPECIFICATION.md files across all modules
-    and register them with the MCP server.
-
-    Returns the number of tools discovered and registered.
-    """
-    project_root = Path(__file__).resolve().parent.parent.parent
-    modules_dir = project_root / "src" / "codomyrmex"
-
-    # Find all MCP_TOOL_SPECIFICATION.md files
-    spec_files = list(modules_dir.rglob("MCP_TOOL_SPECIFICATION.md"))
-    logger.info(f"Found {len(spec_files)} MCP specification files")
-
-    # Use the discovery system to scan specifications
-    catalog = discover_tools(spec_files=spec_files)
-    discovered = catalog.list_all()
+    """Discover decorated executable tools and register them with the server."""
+    discovery = MCPDiscovery()
+    # MCP stdio reserves stdout for JSON-RPC frames. Some optional modules emit
+    # import-time diagnostics, so keep discovery noise on stderr.
+    with contextlib.redirect_stdout(sys.stderr):
+        report = discovery.scan_package("codomyrmex")
     registered_count = 0
+    existing = set(server._tool_registry.list_tools())
 
-    for tool in discovered:
-        # Skip tools with empty names or duplicates of built-in tools
-        if not tool.name or not tool.name.strip():
+    for tool in report.tools:
+        if not tool.available or tool.handler is None:
             continue
 
-        # Sanitize tool name: lowercase, replace spaces/special chars
-        safe_name = tool.name.lower().replace(" ", "_").replace("-", "_")
-        safe_name = "".join(c for c in safe_name if c.isalnum() or c == "_")
-
-        if not safe_name:
+        tool_name = tool.name.strip()
+        if not tool_name or tool_name in existing:
             continue
-
-        # Prefix with module source to avoid collisions
-        source_module = _extract_module_name(tool.source_path, str(modules_dir))
-        prefixed_name = f"{source_module}__{safe_name}" if source_module else safe_name
-
-        # Check for duplicate tool names
-        existing = server._tool_registry.list_tools()
-        if prefixed_name in existing:
-            continue
-
-        # Build schema for registration (MCP 2025-06-18: includes title)
-        # Check if this tool has a real implementation
-        impl_func = _SPEC_TOOL_IMPLEMENTATIONS.get(safe_name)
-        has_impl = impl_func is not None
 
         schema = {
-            "name": prefixed_name,
-            "title": tool.name,  # MCP 2025-06-18: human-friendly display name
-            "description": tool.description or f"Discovered tool: {tool.name}",
-            "inputSchema": tool.input_schema
+            "name": tool_name,
+            "description": tool.description or f"Discovered tool: {tool_name}",
+            "inputSchema": tool.parameters
             or {
                 "type": "object",
                 "properties": {},
                 "required": [],
             },
-            "_implementation_status": "fully_implemented" if has_impl else "spec_only",
+            "x-codomyrmex": {
+                "module": tool.module_path,
+                "callable": tool.callable_name,
+                "version": tool.version,
+                "tags": tool.tags,
+            },
         }
 
-        if has_impl:
-            # Wire to the actual tools.py implementation
-            server.register_tool(prefixed_name, schema, impl_func)
-        else:
-            # Spec-only: return structured metadata about the tool
-            def make_handler(t: DiscoveredTool):
-                def handler(**kwargs):
-                    return {
-                        "status": "spec_only",
-                        "tool_name": t.name,
-                        "source": t.source_path,
-                        "message": (
-                            f"Tool '{t.name}' is defined in the MCP specification "
-                            f"but does not have a direct implementation wired into "
-                            f"the MCP server. To use this tool, invoke the underlying "
-                            f"module code directly."
-                        ),
-                        "module": _extract_module_name(t.source_path, str(modules_dir)),
-                        "provided_arguments": kwargs,
-                    }
-
-                return handler
-
-            server.register_tool(prefixed_name, schema, make_handler(tool))
+        server.register_tool(tool_name, schema, tool.handler)
+        existing.add(tool_name)
 
         registered_count += 1
-        logger.debug(
-            f"Registered discovered tool: {prefixed_name} ({'implemented' if has_impl else 'spec_only'})"
-        )
+        logger.debug("Registered discovered tool: %s", tool_name)
 
-    logger.info(f"Registered {registered_count} discovered tools from specifications")
+    if report.failed_modules:
+        logger.warning("Tool discovery skipped %d modules", len(report.failed_modules))
+    logger.info("Registered %d discovered executable tools", registered_count)
     return registered_count
-
-
-def _extract_module_name(source_path: str, base_dir: str) -> str:
-    """Extract the module name from a specification file path."""
-    try:
-        rel = Path(source_path).relative_to(base_dir)
-        parts = rel.parts
-        # The first directory component is the module name
-        if parts:
-            return parts[0]
-    except (ValueError, IndexError) as e:
-        logger.debug("Could not extract module name from %s: %s", source_path, e)
-    return ""
 
 
 # ============================================================================
@@ -450,6 +382,22 @@ def create_server(name: str = "codomyrmex-mcp") -> MCPServer:
     return server
 
 
+def apply_tool_profile(server: MCPServer, profile: str) -> None:
+    """Restrict the server registry to a named tool profile."""
+    if profile == "full":
+        return
+    if profile != "readonly":
+        raise ValueError(f"Unknown tool profile: {profile}")
+
+    for tool_name in list(server._tool_registry.list_tools()):
+        if tool_name not in READONLY_TOOL_NAMES:
+            server._tool_registry.unregister(tool_name)
+    logger.info(
+        "Applied readonly MCP tool profile with %d tools",
+        len(server._tool_registry.list_tools()),
+    )
+
+
 def list_available_tools(server: MCPServer) -> None:
     """Print all available tools."""
     tools = server._tool_registry.list_tools()
@@ -490,7 +438,10 @@ def main():
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
-            print("Loaded config from config/model_context_protocol/config.yaml")
+            print(
+                "Loaded config from config/model_context_protocol/config.yaml",
+                file=sys.stderr,
+            )
 
     parser = argparse.ArgumentParser(
         description="Run Codomyrmex MCP Server",
@@ -521,11 +472,18 @@ Examples:
     parser.add_argument(
         "--name", default="codomyrmex-mcp", help="Server name (default: codomyrmex-mcp)"
     )
+    parser.add_argument(
+        "--profile",
+        choices=["full", "readonly"],
+        default="full",
+        help="Tool exposure profile (default: full; readonly keeps only inspection tools)",
+    )
 
     args = parser.parse_args()
 
     # Create server
     server = create_server(name=args.name)
+    apply_tool_profile(server, args.profile)
 
     if args.list_tools:
         list_available_tools(server)

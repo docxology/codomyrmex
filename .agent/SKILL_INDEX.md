@@ -2,6 +2,16 @@
 
 All 32 Claude Code plugins and their SKILL.md paths. **Antigravity can read any skill on demand with `view_file`.**
 
+## Repository-Scoped Portable Skills
+
+These Codex/Claude Code/Hermes-compatible skills are maintained in `.agents/skills/`:
+
+- `first-principles` — reduce problems to verified facts and constraints
+- `red-team` — test realistic abuse and failure paths
+- `systems-thinking` — map feedback, dependencies, and leverage points
+- `mcp-tool-use` — constrain and verify MCP calls
+- `agent-interop` — transfer work across agent runtimes
+
 ## Workflow Bridges (Auto-Loaded)
 
 These workflows in `.agent/workflows/` are auto-detected by Antigravity:

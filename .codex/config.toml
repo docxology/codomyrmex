@@ -1,0 +1,23 @@
+# Project-scoped Codex MCP configuration.
+# Keep the default surface read-only; add mutating tools only for a named task.
+
+[mcp_servers.codomyrmex]
+command = "uv"
+args = ["run", "python", "scripts/model_context_protocol/run_mcp_server.py", "--transport", "stdio", "--profile", "readonly"]
+cwd = "."
+enabled = true
+startup_timeout_sec = 20
+tool_timeout_sec = 60
+default_tools_approval_mode = "prompt"
+enabled_tools = [
+  "git_status",
+  "git_diff",
+  "read_file",
+  "list_directory",
+  "search_code",
+  "analyze_python_file",
+  "json_query",
+  "checksum_file",
+  "list_modules",
+  "get_module_info",
+]

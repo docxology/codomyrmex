@@ -76,6 +76,7 @@ Documentation for all AI agent integrations in the Codomyrmex ecosystem. This di
 ## Other Files
 
 - `AGENTS.md` — Agent coordination
+- `agent-interoperability.md` — Portable skills and Codex/Claude Code/Hermes MCP setup
 - `PAI.md` — PAI bridge documentation
 - `SPEC.md` — Functional specification
 - `rules/` — Agent rules and guidelines

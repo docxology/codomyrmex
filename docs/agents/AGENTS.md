@@ -90,4 +90,5 @@ Agent coordination document for the `docs/agents/` directory. This directory con
 ## Related Documents
 
 - **Readme**: [README.md](README.md)
+- **Interoperability**: [agent-interoperability.md](agent-interoperability.md) — portable skills and MCP setup
 - **Spec**: [SPEC.md](SPEC.md)

@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "codomyrmex": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "python",
+        "scripts/model_context_protocol/run_mcp_server.py",
+        "--transport",
+        "stdio",
+        "--profile",
+        "readonly"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}
