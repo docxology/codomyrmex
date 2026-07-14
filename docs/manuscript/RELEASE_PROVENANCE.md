@@ -8,7 +8,7 @@ identity self-referential. The machine-readable source of truth is
 ## Candidate identity
 
 - Historical audit anchor: `e85aee6758726ca1fbba202d0ef1a09d524029e3`
-- Evaluated implementation revision: `f22384acf925cebdd819915d17d530592d9ffba3`
+- Evaluated implementation revision: `fc318a55be5cb46ff7850cec3bc547401b407701`
 - Release tag: `v1.4.0-rc1` (candidate; `v1.4.0` remains held pending external evaluation)
 - Scope: dual-profile Colony Kernel candidate; strict enforcement applies only to the declared action scope, while advisory compatibility remains available
 
@@ -21,12 +21,12 @@ remains false pending external evaluation evidence and final release publication
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `output/paper.pdf` | `4de816030843c5d43255dfb6a8d0a8056091689ad6d667d08d6569a5529f92c2` |
-| `output/paper.html` | `7b1f10d08475204af555e798de31c13158c9a7112586717c7aba906230cd1200` |
-| `output/data/manuscript_variables.json` | `3fc5e6ef13443a1a214722f24332b8db0fcd3fbce3c3bcda69af7dbb43e080de` |
+| `output/paper.pdf` | `37bc6ba55b8208a8a455c8e82371b848a5378c82b5a6d0f72ce43a1ee58894bd` |
+| `output/paper.html` | `f930564711c845f6e6abc494ed81a463202efce466929ea23a83d85110151df3` |
+| `output/data/manuscript_variables.json` | `2445b34cdaa162b0ee27ae050316b42e7ba09e2a5ecf4b09623f443f3a28e52d` |
 | `output/data/colony_kernel_coverage.json` | `e5f1b3ac69ebeda28cded7cd28ed5a9c2e03c7a772222857a08143a7dc37b2b6` |
-| `output/data/colony_kernel_test_report.xml` | `832bc840a1c36264c34e7169e9b7e3bff58b41b6c58ff6e09aff4dcce31dceba` |
-| `output/data/colony_kernel_test_status.json` | `88e9076c9961a314a2394dff21917b9ccbd490c9bcbabca7ea4c41b4d4efdf35` |
+| `output/data/colony_kernel_test_report.xml` | `59498b92044f4082c05d1a60fdb482ea9efe4fb761e79db0d4a7077f5fb7694f` |
+| `output/data/colony_kernel_test_status.json` | `ad5ee65f8e1933d05928cf59a555c56f48cb0a47510972b8d0006ecd09bc9d19` |
 
 The corresponding benchmark-manifest hash is
 `03b791c91c89e4de4d4844c7376142a8ad1ca2ab22ec5a8811f4f963d3b931d6`.

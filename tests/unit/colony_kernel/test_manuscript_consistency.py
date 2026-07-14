@@ -960,7 +960,7 @@ def test_manuscript_artifact_count_sources_match_documented_surfaces() -> None:
     spec.loader.exec_module(module)
 
     assert module._count_colony_kernel_docs(REPO_ROOT) == 3
-    assert module._count_colony_kernel_test_suites(REPO_ROOT) == 16
+    assert module._count_colony_kernel_test_suites(REPO_ROOT) == 17
     assert module._count_colony_kernel_config_files(REPO_ROOT) == 3
     assert (
         module._count_colony_kernel_mcp_tools(
