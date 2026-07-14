@@ -22,12 +22,12 @@ remains false pending external evaluation evidence and final release publication
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `output/paper.pdf` | `9a463ff0f52a254115920206a677104423658f3fcb359f6b00e620c70aae9a75` |
-| `output/paper.html` | `ec6dcff2a8b4035c63530479b0af279dcd5e5bb79acc22a65df68d50dd4386e2` |
-| `output/data/manuscript_variables.json` | `ab097f586bc3039830962988eb9df8ecf64c40d1dcdca0112958e53c9d7e13db` |
-| `output/data/colony_kernel_coverage.json` | `abd7dae63df1a6be3e0e4bd3d5c1423d598ac39ea71853bfa6abad69abf23f6b` |
-| `output/data/colony_kernel_test_report.xml` | `6c442af40d8005c6bad25b690107a9548252bf96dca621c75b5075a362c9a778` |
-| `output/data/colony_kernel_test_status.json` | `859a674b509ae72973ac10b78b5a9c7ef6a6118e4128c16695495781f9910b25` |
+| `output/paper.pdf` | `3e15c79ee15f174bac784a05fa1ebceaed25a8741305f974d51bb3960744503d` |
+| `output/paper.html` | `7f42c41a1f42127cf9b06ebc5a53384ecaa5a57fd51a7e2feb84cc0b29999355` |
+| `output/data/manuscript_variables.json` | `49ba171b55cd8946d1024dbcbbca12fbe1986e90d3ed152d695c1501f1b44e85` |
+| `output/data/colony_kernel_coverage.json` | `e7134083deb0d91cb91bfed463ae7809d3d461d22a067c85ac84fe740d004e57` |
+| `output/data/colony_kernel_test_report.xml` | `cbcfc215fee2cf2200ee0c1ae18e2adf5a2ec9d58c360ef8e691b0b5be963e5eb` |
+| `output/data/colony_kernel_test_status.json` | `fc2f174b03c69d8d3bf038e6e49c11b1c86d39aa74920aa7c226211e6e4a1ecf` |
 
 The corresponding benchmark-manifest hash is
 `03b791c91c89e4de4d4844c7376142a8ad1ca2ab22ec5a8811f4f963d3b931d6`.

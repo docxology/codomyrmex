@@ -16,7 +16,7 @@ follow-up audit is recorded in
 
 | Gate | Current evidence | Status |
 | :--- | :--- | :--- |
-| Scoped Colony Kernel suite | 841 selected and passed; 0 skipped, failed, or errored (842 collected, 1 deselected) | ✅ Measured |
+| Scoped Colony Kernel suite | 840 selected and passed; 0 skipped, failed, or errored (841 collected, 1 deselected) | ✅ Measured |
 | Branch coverage | 74.37185929648241% (592/796 branches; 82.59604190919674% line coverage) | ✅ Above 60% floor |
 | Clean-clone PDF replay | `output/paper.pdf` hash `9a463ff0f52a254115920206a677104423658f3fcb359f6b00e620c70aae9a75` at the tagged candidate | ✅ Byte-for-byte match |
 | Clean-clone evidence replay | HTML, variables, coverage JSON, JUnit XML, and status JSON also match the candidate | ✅ Byte-for-byte match |

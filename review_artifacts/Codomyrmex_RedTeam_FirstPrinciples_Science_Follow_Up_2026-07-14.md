@@ -61,7 +61,7 @@ measured facts it actually binds.
 ### Experiments and observed results
 
 The verifier and enforcement negative controls passed with real components. The final scoped release
-suite completed after artifact regeneration with 841 JUnit-collected and passed tests, zero skipped,
+suite completed after artifact regeneration with 840 JUnit-collected and passed tests, zero skipped,
 failed, or errored tests, 74.37185929648241% branch coverage (592/796), and 82.59604190919674% line
 coverage (2,246/2,640). Its machine-readable status, JUnit, and coverage artifacts remain the release
 authority.
