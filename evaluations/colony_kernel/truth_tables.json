@@ -1,0 +1,87 @@
+{
+  "budget_dimensions": {
+    "count": 7,
+    "integrated_budget_failure": "HOLD",
+    "resource_budget_cap_fields": [
+      "max_llm_calls",
+      "max_runtime_seconds",
+      "max_risk_level",
+      "max_human_attention_minutes",
+      "max_merge_risk",
+      "max_doc_debt",
+      "max_security_exposure",
+      "max_llm_calls_per_hour"
+    ],
+    "resource_cost_fields": [
+      "llm_calls",
+      "runtime_seconds",
+      "risk_level",
+      "human_attention_minutes",
+      "merge_risk",
+      "doc_debt",
+      "security_exposure"
+    ],
+    "standalone_budget_failure": "REFUSE"
+  },
+  "claim_boundaries": {
+    "attested_execution": "signed receipt linked to one consumed authorization",
+    "caller_reported_unattested": "not execution verification or ground truth",
+    "failure": "caller-reported adverse outcome or attested failed execution",
+    "policy_rejection": "proposal rejected before execution",
+    "risk": "prospective falsification finding"
+  },
+  "falsification_input_fields": [
+    "agent_id",
+    "action_type",
+    "target",
+    "rationale",
+    "expected_outcome",
+    "rollback_plan",
+    "tests",
+    "metrics",
+    "scope",
+    "dependencies",
+    "evidence"
+  ],
+  "gate_boundaries": {
+    "execute_minimum": 0.75,
+    "hard_overrides": [
+      "budget",
+      "sandbox_role",
+      "trust_floor",
+      "critical_finding"
+    ],
+    "hold_minimum": 0.5,
+    "trust_hard_floor": 0.3
+  },
+  "generator": "scripts/generate_colony_kernel_truth_tables.py",
+  "severity_policy": [
+    {
+      "rank": 1,
+      "recommendation": "execute",
+      "severity": "low"
+    },
+    {
+      "rank": 2,
+      "recommendation": "execute",
+      "severity": "medium"
+    },
+    {
+      "rank": 3,
+      "recommendation": "hold",
+      "severity": "high"
+    },
+    {
+      "rank": 4,
+      "recommendation": "refuse",
+      "severity": "critical"
+    }
+  ],
+  "source_multipliers": {
+    "agent": 1.0,
+    "human": 2.0,
+    "runtime": 1.0,
+    "security": 1.5,
+    "test": 1.5
+  }
+}

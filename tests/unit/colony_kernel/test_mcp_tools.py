@@ -1,15 +1,14 @@
 """Unit tests for codomyrmex.colony_kernel.mcp_tools.
 
-Zero-mock policy: no unittest.mock, MagicMock, or pytest-mock.
-Kernel singleton is reset between tests via monkeypatch on the module-level
-``_kernel`` attribute (narrow monkeypatch — environment isolation only,
-not method stubbing).  All assertions are against real return values.
+Zero-mock policy: no unittest.mock, MagicMock, or pytest-mock.  Each test uses
+the production MCP functions inside the module's real-kernel isolation
+context, so no singleton or method is replaced.
 """
 
 from __future__ import annotations
 
 import json
-import types
+from collections.abc import Iterator
 
 import pytest
 
@@ -32,15 +31,10 @@ from codomyrmex.colony_kernel.mcp_tools import (
 
 
 @pytest.fixture(autouse=True)
-def fresh_kernel(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Replace the module-level ``_kernel`` singleton with a fresh instance
-    for every test, then restore the original reference on teardown.
-
-    This is the canonical pattern for resetting singleton state without
-    mocking: monkeypatch.setattr replaces the module attribute; pytest
-    restores it after the test.
-    """
-    monkeypatch.setattr(_mcp_mod, "_kernel", ColonyKernel())
+def fresh_kernel() -> Iterator[ColonyKernel]:
+    """Use a bounded real-kernel context for every test."""
+    with _mcp_mod.isolated_kernel() as kernel:
+        yield kernel
 
 
 # ---------------------------------------------------------------------------
@@ -353,6 +347,7 @@ class TestColonyPheromoneQuery:
             "need",
             "dependency",
             "human_priority",
+            "policy_rejection",
         ]
         for sig in valid_types:
             result = colony_pheromone_query("codomyrmex.core", sig)
@@ -380,8 +375,8 @@ class TestColonyPheromoneQuery:
         result = colony_pheromone_query("codomyrmex.pheromone.target", "dependency")
         assert isinstance(result, list)
 
-    def test_failure_pheromone_deposited_on_refuse(self) -> None:
-        """A REFUSE gate decision deposits a FAILURE pheromone on the target."""
+    def test_policy_rejection_signal_is_distinct_from_failure(self) -> None:
+        """A policy REFUSE is audited without fabricating an observed failure."""
         target = "codomyrmex.refuse.target"
         # Trigger a REFUSE by providing a high-risk plan with no rollback
         colony_propose_action(
@@ -391,10 +386,10 @@ class TestColonyPheromoneQuery:
             rationale="short",
             rollback_plan="",
         )
-        result = colony_pheromone_query(target, "failure")
-        # Either a signal was deposited (list with items) or it wasn't (empty).
-        # We only assert the return type to avoid brittleness on scoring details.
-        assert isinstance(result, list)
+        failure = colony_pheromone_query(target, "failure")
+        rejection = colony_pheromone_query(target, "policy_rejection")
+        assert failure == []
+        assert len(rejection) == 1
 
 
 # ---------------------------------------------------------------------------
@@ -637,6 +632,7 @@ class TestMcpToolSchemas:
             "recent_consequences",
             "pruning_candidates_count",
             "tick_count",
+            "enforcement",
         }
 
     def test_colony_tick_exact_keys(self) -> None:
@@ -648,6 +644,7 @@ class TestMcpToolSchemas:
             "recent_consequences",
             "pruning_candidates_count",
             "tick_count",
+            "enforcement",
         }
 
     def test_colony_pruning_report_exact_keys(self) -> None:
@@ -673,6 +670,7 @@ class TestMcpToolSchemas:
             "required_evidence",
             "budget_approved",
             "falsification_severity",
+            "authorization",
         }
 
     def test_colony_record_outcome_exact_keys(self) -> None:
@@ -688,6 +686,7 @@ class TestMcpToolSchemas:
             "consequence_id",
             "trust_score",
             "role",
+            "evidence_grade",
         }
 
 

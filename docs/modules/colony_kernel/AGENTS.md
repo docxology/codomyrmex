@@ -9,7 +9,7 @@ Documentation tooling, generated references, and publishing assets for the Colon
 - `AGENTS.md` — Agent coordination and navigation
 - `README.md` — Module overview, quick-start, architecture diagram
 - `SPEC.md` — Formal specification with API contracts and invariants
-- `../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md` — Full JSON schema for each of the 8 MCP tools
+- `../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md` — Full JSON schema for the advisory and strict MCP tools
 - `../../../src/codomyrmex/colony_kernel/API_SPECIFICATION.md` — Public API reference
 - `../../../src/codomyrmex/colony_kernel/PAI.md` — Public API Interface for integration patterns
 
@@ -30,12 +30,15 @@ Documentation tooling, generated references, and publishing assets for the Colon
 | Actuation Gate | `actuation_gate.py` | Protocol-based ActuationGate with pheromone queries |
 | Pheromone Store | `pheromone_store.py` | Standalone PheromoneStore with per-key evaporation |
 
-## MCP Tools (8)
+## MCP Tools (11)
 
 | Tool | Category | Description |
 |------|----------|-------------|
 | `colony_propose_action` | colony_kernel | Submit action proposal; returns GateResult |
-| `colony_record_outcome` | colony_kernel | Record consequence; updates trust + pheromones |
+| `colony_record_outcome` | colony_kernel | Advisory consequence report; strict mode quarantines it |
+| `colony_execute_authorized` | colony_kernel | Consume a signed capability and return a receipt |
+| `colony_record_attested_outcome` | colony_kernel | Record one receipt-linked outcome |
+| `colony_action_scope` | colony_kernel | Inspect strict declared scope |
 | `colony_agent_profile` | colony_kernel | Read agent trust profile and role |
 | `colony_status` | colony_kernel | Dashboard: pheromone_summary, budget_usage, role_distribution |
 | `colony_pheromone_query` | colony_kernel | Sense pheromone at location/signal_type |

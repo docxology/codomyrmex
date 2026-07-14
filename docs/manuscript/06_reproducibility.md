@@ -15,7 +15,7 @@ require additional evidence.
 | Colony Kernel tests | Pass/fail count for `tests/unit/colony_kernel/` | Correctness outside exercised cases |
 | Branch coverage | Coverage of `src/codomyrmex/colony_kernel` against the configured {{CONFIG_COVERAGE_FLOOR}}% floor | Coverage of the full Codomyrmex package |
 | Static checks | Ruff and ty status for `src/codomyrmex/colony_kernel` | Repository-wide lint or type cleanliness |
-| Manuscript variables | Token map computed from current files, configuration, and gate outputs | A signed or independently attested release |
+| Manuscript variables | Token map computed from current files, configuration, and gate outputs | A signed or independently attested release until immutable tag verification |
 | Figures | {{ARTIFACT_FIGURE_COUNT}} regenerated visual assets sourced from the variable snapshot and documented constants | Measurements from an external agent population |
 | Render | Hydrated Markdown plus HTML/PDF outputs | Byte-identical output across machines and dates |
 : Scope of the reproducibility evidence. {#tbl:repro-scope}
@@ -84,6 +84,12 @@ These paths are generated workspace outputs. Their presence alone does not show 
 they are current; the successful command log and artifact hashes are needed to bind
 them to a particular run.
 
+The exact candidate identity is recorded in the companion
+`docs/manuscript/RELEASE_PROVENANCE.md` and in `output/release_manifest.json`. The
+companion is kept outside the rendered PDF because embedding a PDF's own hash would
+be self-referential; the package-level provenance records the commit/tag and hashes
+for the PDF, HTML, variables, coverage, JUnit, and test-status artifacts.
+
 ## Scoped quality gates
 
 [@tbl:quality_gate_summary] repeats the same generated values reported in
@@ -91,43 +97,43 @@ them to a particular run.
 
 | Gate | Rendered result | Exact scope |
 |---|---:|---|
-| pytest | {{RESULT_TEST_COUNT}} passed | `tests/unit/colony_kernel/` |
+| pytest | {{RESULT_TEST_PASSED}} passed of {{RESULT_TEST_COLLECTED}} collected; skipped={{RESULT_TEST_SKIPPED}}, failed={{RESULT_TEST_FAILED}}, errors={{RESULT_TEST_ERRORS}} | `tests/unit/colony_kernel/` |
 | branch coverage | {{RESULT_COVERAGE_PCT}}% | `src/codomyrmex/colony_kernel`; {{CONFIG_COVERAGE_FLOOR}}% project floor |
 | Ruff | {{RESULT_RUFF_ERRORS}} findings | `src/codomyrmex/colony_kernel` |
 | ty | {{RESULT_TY_ERRORS}} diagnostics | `src/codomyrmex/colony_kernel` |
 : Scoped quality-gate snapshot regenerated for the manuscript. {#tbl:quality_gate_summary}
 
-The generator deletes the prior coverage JSON before invoking pytest, requires a newly
-written report with a branch-coverage percentage, and raises on a non-zero subprocess
-result. Ruff and ty are also rerun rather than read from a cached scorecard. The test
-count is parsed from the same scoped pytest process, with a collection-only fallback if
-the summary cannot be parsed.
+The generator deletes the prior coverage and JUnit reports before invoking pytest,
+requires a newly written report with a branch-coverage percentage, separates collected,
+passed, skipped, failed, and errored tests, and raises on any required skip or non-zero
+subprocess. Ruff and ty are also rerun rather than read from a cached scorecard. The
+counts are parsed from the same scoped pytest JUnit report rather than labeling
+collection as passage.
 
 The suite introduces no prohibited mock framework and includes real value objects,
 filesystem cases, and both in-memory and SQLite-backed cases. That testing style checks
 more integration behavior than isolated substitutes would, but it neither reproduces a
 production deployment nor validates the truth of caller-reported outcomes.
 
+The strict enforcement contracts add separate evidence surfaces: the action-scope map,
+authorization ledger, public-key IDs, receipt signatures, quarantine counts, durable
+signal/resource stores, and restart/concurrency tests. These establish the tested
+proposal-to-receipt lifecycle for declared actions only. They do not establish that the
+receipt's result is ground truth, that an action outside the scope map was governed, or
+that a human or agent understood the situation.
+
 ## Exact reproduction commands {#sec:repro-commands}
 
-The supported repository-level route, from the public template checkout with the
-ongoing project linked, is:
+The supported route runs from the root of a clean Codomyrmex checkout:
 
 ```bash
-uv sync --frozen
-./run.sh --pipeline --project ongoing/codomyrmex --core-only
-```
-
-The project-local evidence and publication route can be run independently:
-
-```bash
-cd projects/ongoing/codomyrmex
 uv sync --frozen
 
 uv run python scripts/z_generate_manuscript_variables.py
 uv run python scripts/generate_manuscript_figures.py
-uv run python scripts/compile_manuscript.py --check --skip-generate
-uv run python scripts/compile_manuscript.py --pdf --skip-generate
+uv run python scripts/compile_manuscript.py --pdf
+uv run python scripts/generate_release_manifest.py \
+  --extra-command 'uv run python scripts/compile_manuscript.py --pdf'
 ```
 
 The scoped gates can also be inspected directly:

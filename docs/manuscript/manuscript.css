@@ -1,3 +1,12 @@
+@page {
+  margin: 0.55in 0.20in;
+}
+
+html,
+body {
+  margin: 0;
+}
+
 a,
 a:visited {
   color: #c1121f;

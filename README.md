@@ -26,7 +26,7 @@
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **130 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **593** runtime MCP tools in the generated manifest and **623** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **35,119** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,202 Markdown** files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
+Codomyrmex is a production-grade library of **130 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem exposes **593** runtime MCP tools in the generated manifest and **623** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **35,119** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,203 Markdown** files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`).
 
 ```bash
 # Install
@@ -508,7 +508,7 @@ sequenceDiagram
 codomyrmex/
 ├── .github/                  # 37 GitHub Actions workflows, templates, docs
 ├── config/                   # 102 top-level config dirs, 96 config.yaml files
-├── docs/                     # 1,202 Markdown files (see inventory); 18+ top-level sections
+├── docs/                     # 1,203 Markdown files (see inventory); 18+ top-level sections
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
@@ -546,7 +546,7 @@ codomyrmex/
 | **Total Modules** | 130 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
 | **Collected tests** | 35,119 (`uv run python scripts/doc_inventory.py --pytest`) |
-| **Documentation Files** | 1,202 Markdown under `docs/` (`find docs -name '*.md'`) |
+| **Documentation Files** | 1,203 Markdown under `docs/` (`find docs -name '*.md'`) |
 | **GitHub Workflows** | 37 (`.github/workflows/*.yml`) |
 | **MCP Runtime Tools** | 593 (generated runtime manifest) |
 | **MCP Tool Decorators** | 623 (`@mcp_tool` lines, production tree) |
@@ -555,7 +555,7 @@ codomyrmex/
 | **RASP Gap Report** | `uv run python scripts/rasp_gap_report.py` |
 | **Ruff / ty** | Run locally; targets in `pyproject.toml` |
 | **Testing Policy** | Zero-Mock (100% real methods) |
-| **Coverage Gate** | **40%** (`fail_under` in `pyproject.toml`; CI + `make test` use `--cov-fail-under=40`; plain `uv run pytest` skips `--cov`; `meme/` omitted from coverage run; stretch toward 45%+) |
+| **Coverage Gate** | **60%** (`fail_under` in `pyproject.toml`; CI + `make test` use `--cov-fail-under=60`; plain `uv run pytest` skips `--cov`; `meme/` omitted from coverage run) |
 | **Default LLM** | Gemini 2.5 Pro |
 | **Package Manager** | uv |
 | **Python Version** | 3.11 – 3.14 |
@@ -819,7 +819,7 @@ We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for sta
 **Key requirements:**
 
 - All tests must use real implementations (Zero-Mock policy — no `unittest.mock` or `MagicMock`)
-- Coverage must not drop below the **40%** gate in `pyproject.toml` (`[tool.coverage.report]` and pytest `addopts`)
+- Coverage must not drop below the **60%** gate in `pyproject.toml` (`[tool.coverage.report]` and explicit coverage test commands)
 - All new modules need `README.md`, `AGENTS.md`, `SPEC.md`, and `PAI.md` (RASP pattern)
 - Run `uv run ruff check .` and `uv run ty check src/` before submitting
 
@@ -835,7 +835,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>130 modules · 593 runtime MCP tools · 623 decorators · 35,119 tests · 1,202 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>130 modules · 593 runtime MCP tools · 623 decorators · 35,119 tests · 1,203 docs · 37 workflows · Zero-Mock · Production-Grade</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

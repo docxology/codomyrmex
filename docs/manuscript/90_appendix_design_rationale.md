@@ -91,7 +91,7 @@ EXECUTE, HOLD, and REFUSE distinguish three operational states:
 
 - EXECUTE returns an advisory approval verdict to the caller;
 - HOLD requests revision, evidence, budget recovery, or later reevaluation; and
-- REFUSE rejects the proposal and, in the integrated path, deposits FAILURE pressure.
+- REFUSE rejects the proposal and, in the integrated path, deposits POLICY_REJECTION audit pressure; FAILURE remains reserved for caller-reported adverse outcomes.
 
 HOLD is useful only when revision can change a relevant input at acceptable cost. The
 release therefore does not claim that a three-way gate universally dominates a binary

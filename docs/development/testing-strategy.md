@@ -296,8 +296,8 @@ uv run pytest src/codomyrmex/tests/e2e/              # End-to-end tests only
 # Run tests for specific module
 uv run pytest src/codomyrmex/tests/unit/test_data_visualization.py
 
-# Run with coverage + 40% gate
-uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=40
+# Run with coverage + 60% gate
+uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=60
 
 # Run with detailed output
 uv run pytest -v --tb=short
@@ -328,7 +328,7 @@ jobs:
         uv sync --dev
 
     - name: Run unit tests
-      run: uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=40
+      run: uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=60
 
     - name: Run integration tests
       run: uv run pytest src/codomyrmex/tests/integration/

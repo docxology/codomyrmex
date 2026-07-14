@@ -23,7 +23,10 @@ class SignalType(Enum):
     """Pheromone signal classification.
 
     Maps to ecological function:
-    - FAILURE: trail avoidance (this path broke something)
+    - FAILURE: trail avoidance (this path produced a caller-reported adverse
+      outcome)
+    - POLICY_REJECTION: audit trail for a proposal rejected by policy; this is
+      deliberately not an observed execution failure
     - SUCCESS: trail amplification (this path worked)
     - RISK: caution marker (tread carefully near this location)
     - NEED: resource request (this location requires attention)
@@ -32,6 +35,7 @@ class SignalType(Enum):
     """
 
     FAILURE = "failure"
+    POLICY_REJECTION = "policy_rejection"
     SUCCESS = "success"
     RISK = "risk"
     NEED = "need"
@@ -214,12 +218,22 @@ class GateDecision(Enum):
 
     EXECUTE: proceed immediately.
     HOLD: requeue for re-evaluation (budget recovery, trust growth, human review).
-    REFUSE: rejected; deposits a FAILURE signal at agent location.
+    REFUSE: rejected by policy; deposits a POLICY_REJECTION audit signal.
     """
 
     EXECUTE = "execute"
     HOLD = "hold"
     REFUSE = "refuse"
+
+
+class AuthorizationStatus(Enum):
+    """Lifecycle state of an execution authorization."""
+
+    ISSUED = "issued"
+    CONSUMED = "consumed"
+    EXPIRED = "expired"
+    REVOKED = "revoked"
+    REJECTED = "rejected"
 
 
 @dataclass
@@ -232,6 +246,7 @@ class GateResult:
     required_evidence: list[str] = field(default_factory=list)  # for HOLD
     budget_approved: bool = True
     falsification_severity: float = 0.0  # 0.0 = clean, 1.0 = do not execute
+    authorization: ExecutionAuthorization | None = None
 
     def __str__(self) -> str:
         return (
@@ -271,12 +286,90 @@ class ConsequenceRecord:
     human_feedback: float = 0.0  # -1.0 .. +1.0
     repair_needed: bool = False
     trust_delta: float = 0.0
+    evidence_grade: str = "caller_reported_unattested"
     recorded_at: float = field(default_factory=time.time)
     consequence_id: str = field(default_factory=lambda: str(uuid.uuid4()))
 
     def __post_init__(self) -> None:
         if not -1.0 <= self.human_feedback <= 1.0:
             raise ValueError("ConsequenceRecord.human_feedback must be in [-1.0, 1.0]")
+        if self.evidence_grade not in {
+            "caller_reported_unattested",
+            "attested_execution",
+            "supervised_evaluator",
+        }:
+            raise ValueError(
+                "ConsequenceRecord.evidence_grade must be one of "
+                "'caller_reported_unattested', 'attested_execution', "
+                "or 'supervised_evaluator'"
+            )
+
+
+@dataclass(frozen=True)
+class ExecutionAuthorization:
+    """Signed, scope-bound capability issued only for an EXECUTE decision."""
+
+    authorization_id: str
+    proposal_id: str
+    agent_id: str
+    action_type: str
+    target: str
+    scope_digest: str
+    issued_at: float
+    expires_at: float
+    nonce: str
+    issuer_key_id: str
+    signature: str
+    status: AuthorizationStatus = AuthorizationStatus.ISSUED
+
+
+@dataclass(frozen=True)
+class ExecutionReceipt:
+    """Executor-signed evidence that a capability was consumed and run."""
+
+    authorization_id: str
+    proposal_id: str
+    executor_id: str
+    action_digest: str
+    result_digest: str
+    started_at: float
+    completed_at: float
+    exit_code: int
+    status: str
+    executor_key_id: str
+    signature: str
+
+
+@dataclass(frozen=True)
+class OutcomeEvidence:
+    """Evidence supplied when converting an execution receipt into an outcome."""
+
+    authorization_id: str
+    receipt: ExecutionReceipt
+    evidence_grade: str = "attested_execution"
+
+    def __post_init__(self) -> None:
+        if self.evidence_grade != "attested_execution":
+            raise ValueError(
+                "OutcomeEvidence.evidence_grade must be 'attested_execution'"
+            )
+
+
+@dataclass(frozen=True)
+class SupervisedEvaluatorEvidence:
+    """Signed read-only evaluator input used for supervised bootstrap checks."""
+
+    agent_id: str
+    proposal_id: str
+    evaluator_id: str
+    evaluator_key_id: str
+    assessment_digest: str
+    signature: str
+    read_only: bool = True
+
+    def __post_init__(self) -> None:
+        if not self.read_only:
+            raise ValueError("supervised evaluator evidence must be read-only")
 
 
 # ---------------------------------------------------------------------------
@@ -369,6 +462,59 @@ class FalsificationSeverity(Enum):
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
+
+
+# One numeric severity policy is shared by falsification, gate diagnostics,
+# MCP recommendations, and manuscript provenance.  Keeping the ordering here
+# prevents enum-label ordering (for example, alphabetical ``max``) from
+# changing a safety decision.
+_SEVERITY_RANK: dict[FalsificationSeverity, int] = {
+    FalsificationSeverity.LOW: 1,
+    FalsificationSeverity.MEDIUM: 2,
+    FalsificationSeverity.HIGH: 3,
+    FalsificationSeverity.CRITICAL: 4,
+}
+
+_SEVERITY_WEIGHT: dict[FalsificationSeverity, float] = {
+    FalsificationSeverity.LOW: 0.05,
+    FalsificationSeverity.MEDIUM: 0.20,
+    FalsificationSeverity.HIGH: 0.45,
+    FalsificationSeverity.CRITICAL: 1.0,
+}
+
+
+def severity_rank(severity: FalsificationSeverity) -> int:
+    """Return the canonical numeric rank for a falsification severity."""
+    return _SEVERITY_RANK[severity]
+
+
+def maximum_severity(
+    findings: list[FalsificationFinding],
+) -> FalsificationSeverity | None:
+    """Return the strongest finding by numeric rank, or ``None`` if empty."""
+    if not findings:
+        return None
+    return max(findings, key=lambda finding: severity_rank(finding.severity)).severity
+
+
+def severity_weight(severity: FalsificationSeverity) -> float:
+    """Return the canonical advisory weight for *severity*."""
+    return _SEVERITY_WEIGHT[severity]
+
+
+def recommendation_for_severity(
+    severity: FalsificationSeverity | None,
+) -> str:
+    """Map the strongest severity to the bounded advisory recommendation.
+
+    CRITICAL findings refuse, HIGH findings hold, and lower-severity findings
+    remain ordinary advisory scoring rather than being promoted by averaging.
+    """
+    if severity is FalsificationSeverity.CRITICAL:
+        return "refuse"
+    if severity is FalsificationSeverity.HIGH:
+        return "hold"
+    return "execute"
 
 
 @dataclass
@@ -486,20 +632,31 @@ def compute_trust_delta(record: ConsequenceRecord) -> float:
 # ---------------------------------------------------------------------------
 
 __all__ = [
+    "_SEVERITY_RANK",
+    "_SEVERITY_WEIGHT",
     "ActionProposal",
     "AgentRole",
     "AgentTrustProfile",
+    "AuthorizationStatus",
     "ColonySignal",
     "ConsequenceRecord",
     "DecayRate",
+    "ExecutionAuthorization",
+    "ExecutionReceipt",
     "FalsificationFinding",
     "FalsificationSeverity",
     "GateDecision",
     "GateResult",
+    "OutcomeEvidence",
     "PruningCandidate",
     "ResourceCost",
     "SignalSource",
     "SignalType",
+    "SupervisedEvaluatorEvidence",
     "compute_trust_delta",
     "make_trace_key",
+    "maximum_severity",
+    "recommendation_for_severity",
+    "severity_rank",
+    "severity_weight",
 ]

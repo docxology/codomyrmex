@@ -21,7 +21,7 @@ therefore a snapshot of executed release gates, not a manually entered scorecard
 
 | Gate | Snapshot result | Interpretation |
 |---|---:|---|
-| pytest | {{RESULT_TEST_COUNT}} passing tests | Real tests under `tests/unit/colony_kernel/` |
+| pytest | {{RESULT_TEST_PASSED}} passing of {{RESULT_TEST_COLLECTED}} collected tests | Real tests under `tests/unit/colony_kernel/`; skipped={{RESULT_TEST_SKIPPED}}, failed={{RESULT_TEST_FAILED}}, errors={{RESULT_TEST_ERRORS}} |
 | branch coverage | {{RESULT_COVERAGE_PCT}}% | Scoped to `src/codomyrmex/colony_kernel` |
 | Ruff | {{RESULT_RUFF_ERRORS}} findings | Zero required for variable generation |
 | ty | {{RESULT_TY_ERRORS}} diagnostics | Zero required for variable generation |
@@ -154,6 +154,9 @@ The package exposes the {{CONFIG_MCP_TOOL_COUNT}} MCP tools summarized in [@tbl:
 |---|---|
 | `colony_propose_action` | Runs falsification and gate evaluation; may deposit traces |
 | `colony_record_outcome` | Accepts a reported outcome; updates memory, budget, trust, role, and traces |
+| `colony_execute_authorized` | Strict-only capability consumption and signed executor receipt |
+| `colony_record_attested_outcome` | Strict-only receipt-linked consequence update |
+| `colony_action_scope` | Reads declared scope and bypass behavior |
 | `colony_agent_profile` | Reads one profile |
 | `colony_status` | Reads the kernel snapshot |
 | `colony_pheromone_query` | Reads typed pressure |
@@ -164,16 +167,16 @@ The package exposes the {{CONFIG_MCP_TOOL_COUNT}} MCP tools summarized in [@tbl:
 
 Requests and responses are self-contained JSON-shaped documents, but calls are not
 stateless. A module-level `ColonyKernel` singleton shares state across calls within one
-server process. By default its consequence database is `:memory:` and its field is
-in-memory; restarting the process loses both. Supplying a file-backed SQLite path can
-persist consequence records, but the pheromone field still has no restart-persistent
-backend.
+server process. Advisory mode retains the process-local default. A strict file-backed
+profile persists consequence, authorization, receipt, pheromone, and resource state with
+SQLite WAL; `:memory:` remains isolated-test mode.
 
-The principal integrity gap is proposal–outcome linkage. `colony_propose_action` does
-not return a durable authorization record consumed by `colony_record_outcome`, and the
-outcome tool synthesizes a proposal from caller input. Unknown, refused, mismatched, or
-duplicate outcome reports are not rejected by an attestation ledger because no such
-ledger exists yet.
+The strict path closes the proposal–outcome linkage gap for declared actions:
+`colony_propose_action` can return a durable signed capability, the executor consumes it
+once, and `colony_record_attested_outcome` requires the resulting receipt. The advisory
+outcome tool remains intentionally report-dependent; in strict mode it quarantines
+unknown, refused, mismatched, duplicate, and unlinked reports without changing trust or
+failure evidence. Actions outside the declared scope remain a documented bypass.
 
 ## What has not been measured {#sec:results-not-measured}
 

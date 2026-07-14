@@ -3,8 +3,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, TypedDict
 
-from codomyrmex.colony_kernel.models import FalsificationFinding, FalsificationSeverity
+from codomyrmex.colony_kernel.models import (
+    _SEVERITY_RANK,
+    FalsificationFinding,
+    FalsificationSeverity,
+)
 
 
 class AttackVector(Enum):
@@ -50,20 +55,36 @@ class FalsificationReport:
     required_changes: list[str] = field(default_factory=list)
 
 
+class FalsificationPlan(TypedDict):
+    """Normalized input contract consumed by every falsification check."""
+
+    agent_id: str
+    action_type: str
+    target: str
+    rationale: str
+    expected_outcome: str
+    rollback_plan: str
+    tests: Any
+    metrics: Any
+    scope: Any
+    dependencies: Any
+    evidence: dict[str, Any]
+    budget_estimate: dict[str, Any]
+    repo_root: str
+
+
 # ---------------------------------------------------------------------------
 # Severity helpers
 # ---------------------------------------------------------------------------
-
-_SEVERITY_RANK: dict[FalsificationSeverity, int] = {
-    FalsificationSeverity.LOW: 1,
-    FalsificationSeverity.MEDIUM: 2,
-    FalsificationSeverity.HIGH: 3,
-    FalsificationSeverity.CRITICAL: 4,
-}
-
 
 def _rank(sev: FalsificationSeverity) -> int:
     """Return numeric rank for a severity (1=LOW … 4=CRITICAL)."""
     return _SEVERITY_RANK[sev]
 
-__all__ = ["_SEVERITY_RANK", "AttackVector", "FalsificationReport", "_rank"]
+__all__ = [
+    "_SEVERITY_RANK",
+    "AttackVector",
+    "FalsificationPlan",
+    "FalsificationReport",
+    "_rank",
+]

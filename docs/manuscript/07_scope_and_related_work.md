@@ -71,6 +71,33 @@ load results, or external benchmark runs needed for effectiveness or scaling cla
 generative model, variational posterior, or expected-free-energy policy optimizer. The
 comparison in [@sec:active-inference] is a design analogy.
 
+## Claim Status and Deployment Boundary {#sec:claim-status}
+
+The release has a bounded advisory profile and a separately configured strict
+enforcement profile. The table below is the canonical status summary for the manuscript;
+repeated limitation language elsewhere should be read as explanation of these same
+boundaries rather than as additional evidence [@tbl:claim-status].
+
+| Claim | Evidence in this release | Status | Required for a stronger claim |
+|:---|:---|:---|:---|
+| Same-target reported failure changes a later gate decision | Paired real-component locality, unrelated-target control, and decay-recovery contracts | Checked internal contract | Independent replicated workloads |
+| Prospective falsification is non-dilutable | Typed plan conversion, numeric maximum severity, RISK findings, CRITICAL/HIGH routing | Checked internal contract | Calibrated held-out harm data |
+| Outcome reports establish execution truth | Advisory caller report is unattested; strict path verifies one consumed authorization and signed executor receipt | Not claimed as truth validation; attestation contract checked | Independent outcome oracle and deployment evidence |
+| Declared Colony actions require authorization | Strict profile's explicit action-scope map, atomic single-use ledger, executor adapter, and quarantine tests | Checked for declared scope only | Complete governed scope inventory and clean deployment routing |
+| The kernel mediates all repository or agent actions | Opt-in proposal/MCP surface plus explicit strict scope | Not claimed | Non-bypassable routing outside the declared scope |
+| The field, trust, budget, and authorization state survive restart | Strict file-backed SQLite signal/resource/consequence/authorization stores plus restart/concurrency tests | Checked under configured persistence cases | Pinned deployment configuration and operational recovery evidence |
+| The approach improves production safety or task success | No released external benchmark or production replay | Not evaluated | Predeclared baselines, traces, and held-out analysis |
+
+: Canonical claim-status table for this advisory release. {#tbl:claim-status}
+
+The advisory profile may be deployed alongside an external authorization and execution
+layer. The strict profile supplies a capability boundary only for its declared actions;
+operators must register every mutating path intended to be governed, retain the release
+manifest and public-key IDs, and treat unregistered paths as bypasses. EXECUTE remains a
+policy decision, not a proof of safe or truthful execution. The receipt proves the
+registered executor's recorded attempt and result digest, not independent world truth or
+human/agent situation awareness.
+
 ## Stigmergy and Environmental Traces
 
 Grassé introduced stigmergy to describe coordination mediated by changes to a shared
@@ -87,11 +114,13 @@ continuous diffusion field. Its coordination scope is also bounded by process li
 the default MCP configuration.
 
 Signal types must not be conflated. A failed outcome deposits FAILURE and changes the
-responsible agent's consequence history; prospective checks may deposit RISK. The gate
-retains these raw readings for diagnosis and uses their maximum as effective local
-hazard. Thus a reported failure can tighten a later same-target decision without being
-silently relabeled as RISK. This coupling is process-local and only as trustworthy as the
-unattested report that created the FAILURE signal.
+responsible agent's consequence history; prospective checks deposit RISK, while a policy
+rejection deposits POLICY_REJECTION. The gate retains these raw readings for diagnosis
+and uses the numeric maximum of RISK and FAILURE as effective local hazard. Thus a
+reported failure can tighten a later same-target decision without being silently
+relabeled as RISK, and a refusal cannot fabricate an observed failure. This coupling is
+process-local and only as trustworthy as the unattested report that created the FAILURE
+signal.
 
 ## Computational Trust and Role Labels
 

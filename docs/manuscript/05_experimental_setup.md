@@ -1,10 +1,12 @@
 # Proposed Evaluation Protocol and Release Configuration {#sec:experimental_setup}
 
-This section separates a **proposed external benchmark** from the configuration and
-contract checks that were actually executed for this release. The comparative benchmark
-has not been run, its baselines are not implemented as released adapters, and no raw
-trial traces are included. Its purpose here is to make the next empirical test explicit
-without presenting planned work as evidence.
+This section separates the **release evaluation harness** from the benchmark evidence
+actually executed for this manuscript. The harness now defines 50 deterministic
+controlled tasks, a predeclared {{CONFIG_SWE_BENCH_TASK_COUNT}}-instance SWE-bench Lite subset, three baselines, a
+provider-neutral adapter, signed-receipt parsing, and paired metrics. The checked
+manifest pins the SWE-bench revision and issue IDs, but execution remains pending until
+model/provider pins, environment digest, raw receipts, and held-out results are
+attached; no comparative benchmark claim is made here.
 
 ## Evidence-status map {#sec:experimental-design}
 
@@ -15,7 +17,7 @@ without presenting planned work as evidence.
 | Colony Kernel unit/integration suite | Executed during variable generation | Checked deterministic behavior under test inputs |
 | Ruff and ty checks | Executed; fail closed | No scoped lint/type diagnostics in this snapshot |
 | Formula-derived figures and tables | Regenerated from configuration and constants | Arithmetic consequences of the policy |
-| {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition benchmark | Proposed, not executed | No comparative conclusion |
+| {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition benchmark | Harness and task manifest implemented; provider results pending | No comparative conclusion |
 | Production deployment study | Absent | No production safety or performance conclusion |
 : Evidence status for the release and proposed study. {#tbl:evidence-status}
 
@@ -114,7 +116,7 @@ the configured routing bands.
 |---|---|---|
 | EXECUTE | score ≥ {{CONFIG_GATE_EXECUTE_THRESHOLD}} | Caller may actuate |
 | HOLD | {{CONFIG_GATE_HOLD_THRESHOLD}} ≤ score < {{CONFIG_GATE_EXECUTE_THRESHOLD}} | Return revision/recovery requirements |
-| REFUSE | score < {{CONFIG_GATE_HOLD_THRESHOLD}} | Reject and deposit FAILURE |
+| REFUSE | score < {{CONFIG_GATE_HOLD_THRESHOLD}} | Reject and deposit POLICY_REJECTION audit signal |
 : Ordinary gate routing thresholds. {#tbl:experimental_gate_thresholds}
 
 Budget failure, SANDBOX, trust below {{CONFIG_TRUST_HARD_FLOOR}}, and CRITICAL falsification are evaluated as
@@ -205,8 +207,8 @@ The worker runs {{CONFIG_FALSIFICATION_CHECK_COUNT}} checks grouped into these
 9. `OVER_BROAD_MODULE`
 10. `PREMATURE_ABSTRACTION`
 
-HIGH or CRITICAL findings deposit FAILURE; MEDIUM findings deposit RISK. Only CRITICAL
-findings are gate hard overrides. The worker's PASS/CONDITIONAL/FAIL report is not itself
+MEDIUM, HIGH, and CRITICAL findings deposit RISK; prospective findings never become
+observed FAILURE. Only CRITICAL findings are gate hard overrides. The worker's PASS/CONDITIONAL/FAIL report is not itself
 the gate decision.
 
 ## Configuration provenance {#sec:yaml-configuration-files}
@@ -254,11 +256,11 @@ The project renderer runs three ordered project steps:
 3. `compile_manuscript.py --pdf` hydrates Markdown, checks unresolved tokens, then runs
    Pandoc with pandoc-crossref and citeproc to produce HTML and PDF.
 
-The template `run.sh` integration invokes the first two scripts as Stage 02 analysis
-and delegates Stage 03 rendering to the project override. The override normalizes outputs
-to `{{ARTIFACT_COMBINED_PDF_PATH}}` and `output/web/index.html`. Static manuscript
-validation runs against the actual `docs/manuscript` source through the shared source
-resolver.
+The publication route runs these scripts directly from the Codomyrmex repository root;
+it does not require an outer template checkout or an untracked `run.sh`. Static
+manuscript validation runs against the actual `docs/manuscript` source through the
+shared source resolver, and the direct renderer writes the canonical `output/paper.html`
+and `output/paper.pdf` artifacts.
 
 This pipeline binds internal evidence to the rendered artifact. It does not prove that
 the proposed external benchmark has been executed.

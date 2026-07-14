@@ -34,6 +34,7 @@ from codomyrmex.colony_kernel.models import (
     SignalType,
     make_trace_key,
 )
+from codomyrmex.colony_kernel.sqlite_signal_store import SQLiteSignalStore
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -129,7 +130,9 @@ class PheromoneStore:
         signals = store.query_pressure("codomyrmex.git_operations", SignalType.FAILURE)
     """
 
-    def __init__(self, config: StigmergyConfig | None = None) -> None:
+    def __init__(
+        self, config: StigmergyConfig | None = None, db_path: str | None = None
+    ) -> None:
         """Initialise with a TraceField and an empty key-rate map.
 
         Args:
@@ -154,6 +157,9 @@ class PheromoneStore:
         # location -> set[key] index for O(|results|) prefix queries instead of O(N).
         # Updated by deposit_signal and evaporate.
         self._location_index: dict[str, set[str]] = {}
+        self._persistent = (
+            SQLiteSignalStore(db_path, config=field_config) if db_path else None
+        )
 
     # ------------------------------------------------------------------
     # Deposit & reinforce
@@ -188,6 +194,10 @@ class PheromoneStore:
             import dataclasses as _dc
             signal = _dc.replace(signal, strength=_MAX_DEPOSIT_STRENGTH)
 
+        if self._persistent is not None:
+            self._persistent.deposit(signal)
+            return
+
         key = _make_key(signal.signal_type, signal.location)
         evaporation = _DECAY_TO_EVAPORATION[signal.decay_rate]
         self._key_evaporation[key] = evaporation
@@ -219,6 +229,9 @@ class PheromoneStore:
             location: The dotted module path or file path to reinforce.
             signal_type: Which signal type to strengthen at that location.
         """
+        if self._persistent is not None:
+            self._persistent.reinforce(location, signal_type)
+            return
         key = _make_key(signal_type, location)
         marker = self._field.reinforce(key)
         if marker is not None:
@@ -250,6 +263,20 @@ class PheromoneStore:
         Returns:
             List of matching ColonySignal objects sorted by descending strength.
         """
+        if self._persistent is not None:
+            signals = self._persistent.all_signals()
+            results = [
+                signal
+                for signal in signals
+                if (
+                    signal.location == location
+                    or signal.location.startswith((location + ".", location + "/"))
+                )
+                and (signal_type is None or signal.signal_type is signal_type)
+            ]
+            results.sort(key=lambda s: s.strength, reverse=True)
+            return results
+
         results: list[ColonySignal] = []
 
         # Collect candidate keys from the location index using prefix matching.
@@ -299,6 +326,12 @@ class PheromoneStore:
         Returns:
             List of ColonySignal objects from that source.
         """
+        if self._persistent is not None:
+            return [
+                signal
+                for signal in self._persistent.all_signals()
+                if signal.source is source
+            ]
         results: list[ColonySignal] = []
         all_markers = self._field.top_k(k=len(self._field) or 1)
         for marker in all_markers:
@@ -316,6 +349,12 @@ class PheromoneStore:
         Returns:
             List of ColonySignal objects of that type.
         """
+        if self._persistent is not None:
+            return [
+                signal
+                for signal in self._persistent.all_signals()
+                if signal.signal_type is signal_type
+            ]
         results: list[ColonySignal] = []
         all_markers = self._field.top_k(k=len(self._field) or 1)
         for marker in all_markers:
@@ -333,6 +372,8 @@ class PheromoneStore:
         Returns:
             List of up to *k* ColonySignal objects in descending strength order.
         """
+        if self._persistent is not None:
+            return self._persistent.all_signals()[:k]
         markers = self._field.top_k(k=k)
         return [_marker_to_signal(m) for m in markers]
 
@@ -351,6 +392,9 @@ class PheromoneStore:
         This replaces calling ``TraceField.tick()`` directly — that would use
         the shared config rate of 0.0 set at construction time.
         """
+        if self._persistent is not None:
+            self._persistent.evaporate()
+            return
         min_strength = self._field.config.min_strength
         keys_to_remove: list[str] = []
 
@@ -397,6 +441,37 @@ class PheromoneStore:
         Returns:
             Dictionary of summary statistics.
         """
+        if self._persistent is not None:
+            signals = self._persistent.all_signals()
+            by_type: dict[str, int] = {}
+            by_source: dict[str, int] = {}
+            by_decay: dict[str, int] = {}
+            strengths = [signal.strength for signal in signals]
+            for signal in signals:
+                by_type[signal.signal_type.value] = by_type.get(signal.signal_type.value, 0) + 1
+                by_source[signal.source.value] = by_source.get(signal.source.value, 0) + 1
+                decay_key = str(signal.decay_rate.value)
+                by_decay[decay_key] = by_decay.get(decay_key, 0) + 1
+            return {
+                "total_signals": len(signals),
+                "by_signal_type": by_type,
+                "by_source": by_source,
+                "by_decay_rate": by_decay,
+                "top_5": [
+                    {
+                        "location": signal.location,
+                        "signal_type": signal.signal_type.value,
+                        "strength": signal.strength,
+                        "source": signal.source.value,
+                        "decay_rate": signal.decay_rate.value,
+                    }
+                    for signal in signals[:5]
+                ],
+                "max_strength": max(strengths, default=0.0),
+                "min_strength": min(strengths, default=0.0),
+                "mean_strength": sum(strengths) / len(signals) if signals else 0.0,
+            }
+
         all_markers = self._field.top_k(k=len(self._field) or 1)
         total = len(all_markers)
 
@@ -468,6 +543,9 @@ class PheromoneStore:
 
         Kernel-compatible API wrapping query_pressure.
         """
+        if self._persistent is not None:
+            signal = self._persistent.sense(location, signal_type)
+            return signal.strength if signal is not None else 0.0
         key = _make_key(signal_type, location)
         marker = self._field.sense(key)
         return marker.strength if marker is not None else 0.0
@@ -477,7 +555,7 @@ class PheromoneStore:
 
         Kernel-compatible API wrapping evaporate().
         """
-        count_before = len(self._field)
+        count_before = len(self._persistent) if self._persistent else len(self._field)
         self.evaporate()
         count_after = len(self._field)
         return max(0, count_before - count_after)
@@ -504,7 +582,24 @@ class PheromoneStore:
         return results
 
     def __len__(self) -> int:
-        return len(self._field)
+        return len(self._persistent) if self._persistent else len(self._field)
+
+    def clear(self) -> int:
+        """Clear all signals and return the number removed."""
+
+        if self._persistent is not None:
+            return self._persistent.clear()
+        count = len(self._field)
+        self._field._markers.clear()
+        self._key_evaporation.clear()
+        self._location_index.clear()
+        return count
+
+    def close(self) -> None:
+        """Close a durable backend, if configured."""
+
+        if self._persistent is not None:
+            self._persistent.close()
 
 
 __all__ = ["PheromoneStore"]

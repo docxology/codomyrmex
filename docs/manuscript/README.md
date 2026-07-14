@@ -2,7 +2,7 @@
 
 **Status**: Active. Version and publication date are injected from `config.yaml`.
 
-This manuscript presents **Codomyrmex**, an agentic software-development framework that models an AI-agent collective as an artificial ecology. Its Colony Control Plane records caller-reported consequences, maintains a process-local signal field, computes deterministic trust and role labels, nominates pruning candidates, and returns EXECUTE/HOLD/REFUSE gate decisions. The central checked contract is deliberately narrow: reported FAILURE at one location contributes to `max(RISK, FAILURE)`, lowering an otherwise identical same-target proposal while leaving an unrelated target unchanged. Outcome attestation, complete restart persistence, external effectiveness, and production safety remain open. Numeric claims and generated images are rebuilt from the evaluated snapshot.
+This manuscript presents **Codomyrmex**, an agentic software-development framework that models an AI-agent collective as an artificial ecology. Its Colony Control Plane records caller-reported consequences, maintains a process-local signal field, computes deterministic trust and role labels, nominates pruning candidates, and returns EXECUTE/HOLD/REFUSE advisory gate decisions. The central checked contract is deliberately narrow: reported FAILURE at one location contributes to `max(RISK, FAILURE)`, lowering an otherwise identical same-target proposal while leaving an unrelated target unchanged; policy rejection and prospective falsification remain separate audit/RISK channels. Outcome attestation, complete restart persistence, external effectiveness, and production safety remain open. Numeric claims and generated images are rebuilt from the evaluated snapshot.
 
 ## Navigation
 
@@ -76,11 +76,12 @@ uv run python scripts/z_generate_manuscript_variables.py
 # 2. Generate the provenance-stamped visual assets
 uv run python scripts/generate_manuscript_figures.py
 
-# 3. Render linked HTML, contents, bookends, and the final PDF
-uv run python scripts/compile_manuscript.py --pdf --bookends --skip-generate
+# 3. Render linked HTML and the canonical PDF
+uv run python scripts/compile_manuscript.py --pdf
 
-# Or, from the parent template checkout, run the integrated pipeline:
-./run.sh --pipeline --project ongoing/codomyrmex --core-only
+# 4. Record commit, gate status, tool versions, and output hashes
+uv run python scripts/generate_release_manifest.py \
+  --extra-command 'uv run python scripts/compile_manuscript.py --pdf'
 ```
 
 ## AI Agent Directives

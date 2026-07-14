@@ -12,6 +12,7 @@ This script drives the pipeline:
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -34,7 +35,9 @@ def _ensure_src_on_path(project_root: Path) -> None:
 
 def _write_json(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    temporary.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
+    temporary.replace(path)
 
 
 def _clean_output_dir(output_dir: Path) -> None:

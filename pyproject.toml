@@ -435,6 +435,7 @@ markers = [
     "openfang: openfang Agent OS integration tests",
     "pai_pm: PAI Project Manager module tests (requires bun for server tests)",
     "google_workspace: Google Workspace API and gws CLI tests",
+    "optional_artifact: post-render artifact checks run after publication rendering",
 ]
 filterwarnings = [
     # Any warning not matched by a later rule becomes a test failure.

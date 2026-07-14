@@ -4,7 +4,7 @@
 
 Unit tests for the Colony Kernel subsystems (`src/codomyrmex/colony_kernel/`).
 Each file targets one subsystem; together they constitute the gate harness that
-enforces the 40% coverage floor on the colony_kernel package.
+enforces the executable 60% coverage floor on the colony_kernel package.
 
 ## Navigation
 
@@ -22,7 +22,7 @@ enforces the 40% coverage floor on the colony_kernel package.
 | `test_falsification_worker.py` | `FalsificationWorker` — adversarial plan checking; all 10 attack vectors, `FalsificationReport` structure, severity scoring |
 | `test_kernel.py` | `ColonyKernel` — integration paths through `kernel.py`; subsystem wiring, `record_outcome` → trust update cycle, tick advancement |
 | `test_manuscript_consistency.py` | Publication contract — docs/manuscript claim drift, generated variables, role ladder, and package surface checks |
-| `test_mcp_tools.py` | `mcp_tools.py` — all 8 MCP tool entry-points (`colony_propose_action`, `colony_record_outcome`, `colony_agent_profile`, `colony_status`, `colony_pheromone_query`, `colony_falsify_plan`, `colony_pruning_report`, `colony_tick`) |
+| `test_mcp_tools.py` | `mcp_tools.py` — all 11 MCP tool entry-points, including strict authorization, attested outcome, and action-scope surfaces |
 | `test_models.py` | `models.py` — dataclass invariants, enum values, defaults, and serialization contracts |
 | `test_pheromone_store.py` | `PheromoneStore` — signal deposit, evaporation, decay-rate tiers (FAST/NORMAL/SLOW), `ColonySignal` state mutations |
 | `test_pruning_daemon.py` | `PruningDaemon` — report structure, dry-run archive, unused-tool scanning, `PruningCandidate` field contract |
@@ -41,5 +41,6 @@ module-level attribute reset (e.g. resetting the `_kernel` singleton in
 Run the suite with `uv run pytest -m unit tests/unit/colony_kernel/`.
 
 **Coverage target.** The `--cov` target for the manuscript gate is
-`src/codomyrmex/colony_kernel/`. The project-wide floor is 40%; the Colony Kernel
-suite is expected to substantially exceed this floor across all subsystem modules.
+`src/codomyrmex/colony_kernel/`. The executable project-wide floor is 60%; the
+Colony Kernel suite is expected to substantially exceed this floor across all
+subsystem modules.

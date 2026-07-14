@@ -28,8 +28,8 @@ from __future__ import annotations
 
 import logging
 import time
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass, field, replace
+from typing import Any, Self
 
 from codomyrmex.agentic_memory.stigmergy.models import StigmergyConfig
 from codomyrmex.colony_kernel.actuation_gate import (
@@ -37,7 +37,17 @@ from codomyrmex.colony_kernel.actuation_gate import (
     _GATE_SCORE_HOLD,
     ActuationGate,
 )
+from codomyrmex.colony_kernel.authorization import (
+    DEFAULT_ACTION_SCOPE,
+    AuthorizationError,
+    AuthorizationLedger,
+    Ed25519Authority,
+    canonical_json,
+    digest,
+    target_in_scope,
+)
 from codomyrmex.colony_kernel.consequence_memory import ConsequenceMemory
+from codomyrmex.colony_kernel.executor import ExecutionRun, RegisteredActionExecutor
 from codomyrmex.colony_kernel.falsification_worker import FalsificationWorker
 from codomyrmex.colony_kernel.models import (
     ActionProposal,
@@ -46,14 +56,18 @@ from codomyrmex.colony_kernel.models import (
     ColonySignal,
     ConsequenceRecord,
     DecayRate,
+    ExecutionAuthorization,
+    ExecutionReceipt,
     FalsificationFinding,
     FalsificationSeverity,
     GateDecision,
     GateResult,
+    OutcomeEvidence,
     PruningCandidate,
     ResourceCost,
     SignalSource,
     SignalType,
+    SupervisedEvaluatorEvidence,
     compute_trust_delta,
     make_trace_key,
 )
@@ -91,6 +105,18 @@ class ColonyKernelConfig:
     repo_root: str = "."
     budget: ResourceBudget | None = field(default=None)
     pheromone_config: StigmergyConfig = field(default_factory=StigmergyConfig)
+    enforcement_mode: str = "advisory"
+    authorization_db_path: str | None = None
+    signal_db_path: str | None = None
+    resource_db_path: str | None = None
+    authorization_signer: Ed25519Authority | None = None
+    executor_signer: Ed25519Authority | None = None
+    executor_id: str = "colony-executor"
+    evaluator_signer: Ed25519Authority | None = None
+    authorization_ttl_seconds: float = 60.0
+    action_scope: dict[str, tuple[str, ...]] = field(
+        default_factory=lambda: dict(DEFAULT_ACTION_SCOPE)
+    )
 
     def __post_init__(self) -> None:
         """Resolve *budget* from YAML when the caller left it as ``None``."""
@@ -104,6 +130,12 @@ class ColonyKernelConfig:
             except Exception:
                 # Never let config loading crash the kernel.
                 self.budget = ResourceBudget()
+        if self.enforcement_mode not in {"advisory", "strict"}:
+            raise ValueError("enforcement_mode must be 'advisory' or 'strict'")
+        if self.enforcement_mode == "strict" and self.authorization_signer is None:
+            raise ValueError(
+                "strict enforcement requires an externally provisioned authorization_signer"
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -130,8 +162,37 @@ class ColonyKernel:
         self._config = config or ColonyKernelConfig()
         self._tick_count: int = 0
 
-        self.pheromone_store = PheromoneStore(config=self._config.pheromone_config)
-        self.resource_ledger = ResourceLedger(budget=self._config.budget)
+        self.authorization_ledger: AuthorizationLedger | None = None
+        self.executor: RegisteredActionExecutor | None = None
+        if self._config.enforcement_mode == "strict":
+            assert self._config.authorization_signer is not None
+            authorization_db_path = (
+                self._config.authorization_db_path or self._config.db_path
+            )
+            self.authorization_ledger = AuthorizationLedger(
+                authorization_db_path,
+                issuer=self._config.authorization_signer,
+                action_scope=self._config.action_scope,
+                ttl_seconds=self._config.authorization_ttl_seconds,
+            )
+            self.executor = RegisteredActionExecutor(
+                self.authorization_ledger,
+                signer=self._config.executor_signer or self._config.authorization_signer,
+                executor_id=self._config.executor_id,
+                action_scope=self._config.action_scope,
+            )
+
+        durable_db_path = (
+            self._config.db_path if self._config.enforcement_mode == "strict" else None
+        )
+        self.pheromone_store = PheromoneStore(
+            config=self._config.pheromone_config,
+            db_path=self._config.signal_db_path or durable_db_path,
+        )
+        self.resource_ledger = ResourceLedger(
+            budget=self._config.budget,
+            db_path=self._config.resource_db_path or durable_db_path,
+        )
         self.consequence_memory = ConsequenceMemory(db_path=self._config.db_path)
         self.actuation_gate = ActuationGate(
             pheromone_store=self.pheromone_store,
@@ -158,8 +219,8 @@ class ColonyKernel:
         2. Check ResourceLedger budget against the proposal's estimate.
         3. Load (or lazily create) the agent's trust profile; refresh role.
         4. Evaluate ActuationGate with findings, budget status, and profile.
-        5. On REFUSE: deposit a FAILURE pheromone at the agent's target so
-           the signal decays into future evaluations.
+        5. On REFUSE: deposit a POLICY_REJECTION audit signal at the target.
+           This is deliberately distinct from a caller-reported FAILURE.
 
         Does NOT consume budget. A later, caller-initiated ``record_outcome``
         call consumes a supplied valid cost mapping or falls back to the
@@ -168,15 +229,49 @@ class ColonyKernel:
         # Step 1 — falsification
         findings = self.falsification_worker.analyze(proposal)
 
+        # Strict profiles fail closed for every action outside the governed map.
+        # The map is intentionally explicit: an unregistered mutating path is
+        # outside the enforcement boundary and cannot receive a capability.
+        if self._config.enforcement_mode == "strict" and not target_in_scope(
+            proposal.action_type, proposal.target, self._config.action_scope
+        ):
+            profile = self.consequence_memory.get_profile(proposal.agent_id)
+            self.consequence_memory.register_proposal(proposal)
+            self.pheromone_store.deposit(
+                ColonySignal(
+                    location=proposal.target,
+                    signal_type=SignalType.POLICY_REJECTION,
+                    strength=1.0,
+                    decay_rate=DecayRate.NORMAL,
+                    source=SignalSource.AGENT,
+                    evidence={
+                        "proposal_id": proposal.proposal_id,
+                        "reason": "outside governed action scope",
+                    },
+                ),
+                trust_factor=profile.trust_score,
+            )
+            return GateResult(
+                decision=GateDecision.REFUSE,
+                gate_score=0.0,
+                reason=(
+                    "action is outside the governed Colony scope map; "
+                    "no authorization issued"
+                ),
+                budget_approved=False,
+                falsification_severity=0.0,
+            )
+
         # Step 2 — budget pre-check (non-consuming)
         budget_approved, _reason = self.resource_ledger.check_budget(
             proposal.budget_estimate
         )
 
-        # Step 3 — profile + role refresh (increment proposal counter)
+        # Step 3 — profile + role refresh. The lifecycle registry makes this
+        # idempotent when a caller retries the same proposal ID.
         profile = self.consequence_memory.get_profile(proposal.agent_id)
-        profile.total_proposals += 1
-        self.consequence_memory.save_profile(profile)
+        self.consequence_memory.register_proposal(proposal)
+        profile = self.consequence_memory.get_profile(proposal.agent_id)
         self.role_adapter.update(profile)
 
         # Step 4 — gate evaluation
@@ -187,11 +282,19 @@ class ColonyKernel:
             budget_approved=budget_approved,
         )
 
+        if (
+            self._config.enforcement_mode == "strict"
+            and result.decision is GateDecision.EXECUTE
+        ):
+            assert self.authorization_ledger is not None
+            authorization = self.authorization_ledger.issue(proposal, result)
+            result = replace(result, authorization=authorization)
+
         # Step 5 — deposit signals based on outcome
         if result.decision == GateDecision.REFUSE:
             signal = ColonySignal(
                 location=proposal.target,
-                signal_type=SignalType.FAILURE,
+                signal_type=SignalType.POLICY_REJECTION,
                 strength=1.0 + result.falsification_severity * 3.0,
                 decay_rate=DecayRate.NORMAL,
                 source=SignalSource.AGENT,
@@ -202,36 +305,125 @@ class ColonyKernel:
             )
             self.pheromone_store.deposit(signal, trust_factor=profile.trust_score)
 
-        # Deposit RISK signal when falsification findings exist at MEDIUM+, so
-        # the gate's risk_pressure reading reflects live adversarial concern
-        # at the target location — even if the proposal passed the gate.
-        elif findings:
-            risk_findings = [
-                f
-                for f in findings
-                if f.severity.value in ("medium", "high", "critical")
-            ]
-            if risk_findings:
-                risk_strength = min(3.0, len(risk_findings) * 0.8)
-                risk_signal = ColonySignal(
-                    location=proposal.target,
-                    signal_type=SignalType.RISK,
-                    strength=risk_strength,
-                    decay_rate=DecayRate.FAST,
-                    source=SignalSource.AGENT,
-                    evidence={
-                        "proposal_id": proposal.proposal_id,
-                        "finding_count": len(risk_findings),
-                        "max_severity": max(
-                            f.severity.value for f in risk_findings
-                        ),
-                    },
-                )
-                self.pheromone_store.deposit(
-                    risk_signal, trust_factor=profile.trust_score
-                )
-
         return result
+
+    def register_executor_handler(self, action_type: str, handler: Any) -> None:
+        """Bind a real action implementation to the strict executor."""
+
+        if self.executor is None:
+            raise AuthorizationError("executor handlers require strict enforcement")
+        self.executor.register(action_type, handler)
+
+    def supervised_read_only_evaluate(
+        self,
+        proposal: ActionProposal,
+        evidence: SupervisedEvaluatorEvidence,
+    ) -> GateResult:
+        """Evaluate signed supervised input without writing authorization state."""
+
+        authority = self._config.evaluator_signer or self._config.authorization_signer
+        if authority is None:
+            raise AuthorizationError("a trusted evaluator key is required")
+        payload = {
+            "agent_id": evidence.agent_id,
+            "proposal_id": evidence.proposal_id,
+            "evaluator_id": evidence.evaluator_id,
+            "evaluator_key_id": evidence.evaluator_key_id,
+            "assessment_digest": evidence.assessment_digest,
+            "read_only": evidence.read_only,
+        }
+        if evidence.agent_id != proposal.agent_id or evidence.proposal_id != proposal.proposal_id:
+            raise AuthorizationError("supervised evidence does not match the proposal")
+        if evidence.evaluator_key_id != authority.key_id or not authority.verify(
+            canonical_json(payload), evidence.signature
+        ):
+            raise AuthorizationError("supervised evaluator signature is invalid")
+        if evidence.assessment_digest != digest(proposal):
+            raise AuthorizationError("supervised evaluator digest does not match proposal")
+        findings = self.falsification_worker.analyze(proposal)
+        budget_approved, _ = self.resource_ledger.check_budget(proposal.budget_estimate)
+        profile = self.consequence_memory.get_profile(proposal.agent_id)
+        return self.actuation_gate.evaluate(
+            proposal=proposal,
+            profile=profile,
+            findings=findings,
+            budget_approved=budget_approved,
+        )
+
+    def execute_authorized(
+        self,
+        authorization: ExecutionAuthorization | str | dict[str, Any],
+        *,
+        agent_id: str,
+        action_type: str,
+        target: str,
+        payload: dict[str, Any] | None = None,
+    ) -> ExecutionRun:
+        """Execute one declared action through the consumed-capability adapter."""
+
+        if self.executor is None:
+            raise AuthorizationError("authorized execution requires strict enforcement")
+        return self.executor.execute(
+            authorization,
+            agent_id=agent_id,
+            action_type=action_type,
+            target=target,
+            payload=payload,
+        )
+
+    def record_attested_outcome(
+        self,
+        proposal: ActionProposal,
+        evidence: OutcomeEvidence,
+        outcome: dict[str, Any],
+        tests_passed: bool,
+        human_feedback: str | None = None,
+    ) -> ConsequenceRecord:
+        """Accept an outcome only when a consumed authorization has a valid receipt."""
+
+        if self.authorization_ledger is None or self.executor is None:
+            raise AuthorizationError("attested outcomes require strict enforcement")
+        existing = self.consequence_memory.find_by_proposal_id(proposal.proposal_id)
+        if existing is not None:
+            return existing
+        receipt = evidence.receipt
+        authorization = self.authorization_ledger.get_authorization(
+            evidence.authorization_id
+        )
+        if authorization is None or authorization.status.value != "consumed":
+            raise AuthorizationError("outcome evidence does not reference a consumed authorization")
+        if (
+            authorization.proposal_id != proposal.proposal_id
+            or authorization.agent_id != proposal.agent_id
+            or receipt.authorization_id != authorization.authorization_id
+            or receipt.proposal_id != proposal.proposal_id
+        ):
+            raise AuthorizationError("outcome evidence is not linked to the proposal lifecycle")
+        if not self.executor.verify_receipt(receipt):
+            raise AuthorizationError("executor receipt signature is invalid")
+        if not self.authorization_ledger.has_receipt(receipt.authorization_id):
+            raise AuthorizationError("executor receipt is not present in the authorization ledger")
+        if receipt.exit_code != 0 and tests_passed:
+            raise AuthorizationError("a failed executor receipt cannot report passed tests")
+        record = self._record_outcome(
+            proposal,
+            outcome,
+            tests_passed,
+            human_feedback,
+            evidence_grade="attested_execution",
+        )
+        self.authorization_ledger.record_outcome_report(
+            proposal_id=proposal.proposal_id,
+            authorization_id=receipt.authorization_id,
+            evidence_grade="attested_execution",
+            report={
+                "consequence_id": record.consequence_id,
+                "tests_passed": tests_passed,
+                "outcome": outcome,
+                "receipt": receipt,
+            },
+        )
+        return record
 
     def record_outcome(
         self,
@@ -239,6 +431,41 @@ class ColonyKernel:
         outcome: dict[str, Any],
         tests_passed: bool,
         human_feedback: str | None = None,
+    ) -> ConsequenceRecord:
+        """Record advisory evidence, or quarantine it in strict mode."""
+
+        if self._config.enforcement_mode == "strict":
+            assert self.authorization_ledger is not None
+            report_id = self.authorization_ledger.quarantine_report(
+                {
+                    "agent_id": proposal.agent_id,
+                    "action_type": proposal.action_type,
+                    "target": proposal.target,
+                    "proposal_id": proposal.proposal_id,
+                    "outcome": outcome,
+                    "tests_passed": tests_passed,
+                    "human_feedback": human_feedback,
+                }
+            )
+            raise AuthorizationError(
+                f"unattested outcome quarantined as {report_id}; signed receipt required"
+            )
+        return self._record_outcome(
+            proposal,
+            outcome,
+            tests_passed,
+            human_feedback,
+            evidence_grade="caller_reported_unattested",
+        )
+
+    def _record_outcome(
+        self,
+        proposal: ActionProposal,
+        outcome: dict[str, Any],
+        tests_passed: bool,
+        human_feedback: str | None = None,
+        *,
+        evidence_grade: str = "caller_reported_unattested",
     ) -> ConsequenceRecord:
         """Record a caller-reported consequence and update pheromones.
 
@@ -262,6 +489,10 @@ class ColonyKernel:
           - tests_passed=True  → reinforce SUCCESS at target
           - tests_passed=False → deposit FAILURE at target (FAST decay)
         """
+        existing_report = self.consequence_memory.find_by_proposal_id(proposal.proposal_id)
+        if existing_report is not None:
+            return existing_report
+
         # Parse human_feedback string to float
         hf_float = _parse_human_feedback(human_feedback)
 
@@ -277,6 +508,7 @@ class ColonyKernel:
             tests_passed=tests_passed,
             human_feedback=hf_float,
             repair_needed=repair_needed,
+            evidence_grade=evidence_grade,
         )
         # trust_delta left at 0.0 → ConsequenceMemory.record computes it
         record = self.consequence_memory.record(record)
@@ -366,6 +598,18 @@ class ColonyKernel:
         """
         return {
             "tick_count": self._tick_count,
+            "enforcement": {
+                "mode": self._config.enforcement_mode,
+                "action_scope": self._config.action_scope,
+                "registered_executor_actions": (
+                    self.executor.registered_actions() if self.executor is not None else ()
+                ),
+                "lifecycle": (
+                    self.authorization_ledger.lifecycle_snapshot()
+                    if self.authorization_ledger is not None
+                    else {}
+                ),
+            },
             "pheromone_summary": {
                 "total_signals": len(self.pheromone_store.top_signals(k=200)),
                 "top_signals": self.pheromone_store.top_signals(k=10),
@@ -405,11 +649,11 @@ class ColonyKernel:
             # DEPENDENCY signal is considered "used" at the signal's
             # last_reinforced timestamp.
             module_registry = {}
-            for marker in self.pheromone_store._field.top_k(k=10_000):
-                if ":dependency" in marker.key:
-                    location = marker.key.rsplit(":", 1)[0]
+            for signal in self.pheromone_store.query_by_signal_type(SignalType.DEPENDENCY):
+                if signal.signal_type is SignalType.DEPENDENCY:
+                    location = signal.location
                     module_registry[location] = {
-                        "last_used": marker.updated_at,
+                        "last_used": signal.last_reinforced,
                         "call_count": 1,
                         "duplicate_of": None,
                     }
@@ -437,6 +681,21 @@ class ColonyKernel:
         self.resource_ledger._maybe_reset()
         self._tick_count += 1
 
+    def close(self) -> None:
+        """Close durable kernel resources."""
+
+        self.consequence_memory.close()
+        self.pheromone_store.close()
+        self.resource_ledger.close()
+        if self.authorization_ledger is not None:
+            self.authorization_ledger.close()
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, *_: Any) -> None:
+        self.close()
+
     def calm_down(self, reason: str = "emergency_brake") -> dict[str, Any]:
         """Emergency brake — reset the colony to a quiescent state.
 
@@ -463,15 +722,7 @@ class ColonyKernel:
         _logger = logging.getLogger(__name__)
 
         tick_before = self._tick_count
-        # Count signals before clearing
-        signals_cleared = len(self.pheromone_store)
-
-        # Clear the pheromone field by evaporating everything to zero
-        # We drain by setting all strengths to floor — tick enough times
-        # (up to 1000) or directly zero out markers.
-        for key in list(self.pheromone_store._field._markers.keys()):
-            del self.pheromone_store._field._markers[key]
-        self.pheromone_store._key_evaporation.clear()
+        signals_cleared = self.pheromone_store.clear()
 
         # Reset the ledger period
         self.resource_ledger.reset_period()

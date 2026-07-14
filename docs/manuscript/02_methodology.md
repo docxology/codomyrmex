@@ -1,5 +1,51 @@
 # Methodology {#sec:methodology}
 
+## System Boundary and Operational Context {#sec:methodology-boundary}
+
+The evaluated boundary is the proposal and outcome path inside one `ColonyKernel`
+process. It includes target-indexed signal state, resource accounting, consequence
+memory, falsification findings, trust/profile updates, and the ternary gate. It does not
+include the model's private context, a caller's authorization service, downstream tool
+execution, or a measurement of human or agent cognition.
+
+### Operational context and situation awareness
+
+We use situation awareness in its narrow engineering sense: the availability and
+interpretability of relevant state for a decision, not a claim about an agent's internal
+cognition. The proposal boundary exposes target, evidence, budget, trust, local
+`RISK`/`FAILURE` pressure, falsification findings, and the gate reason. These fields form
+an inspectable context packet. They do not guarantee perception, comprehension,
+projection, or correct human reliance [@endsley1995toward; @endsley2017autonomy;
+@parasuraman2000automation].
+
+This distinction matters because the kernel can preserve an external trace without
+establishing common ground. A caller may ignore the verdict, submit an unattested
+outcome, or observe stale/process-local state. Accordingly, this release evaluates
+context availability and decision reproducibility, not human/agent situation-awareness
+accuracy. Future evaluation should measure detection, comprehension, projection,
+override quality, workload, and calibration separately.
+
+### Enforced action lifecycle
+
+The release implementation separates policy evaluation from authorization and
+execution. In the strict profile, the governed action-scope map is mandatory:
+an `EXECUTE` proposal outside that map cannot receive a capability. The issuer
+signs the proposal identity, agent, action, target, canonical scope digest,
+timestamps, nonce, and key ID with Ed25519. SQLite `BEGIN IMMEDIATE` and a
+conditional status update make consumption single-use across workers. A
+registered real-component executor then returns one signed receipt containing
+action and result digests, timestamps, exit status, and executor key ID.
+
+Only a consumed authorization with a verified receipt can be converted into an
+`attested_execution` consequence. A caller report in strict mode is retained as
+a quarantined audit record and cannot change trust, budget, or `FAILURE`
+pressure. Advisory reports remain explicitly `caller_reported_unattested`.
+`POLICY_REJECTION` is a policy/audit signal and prospective falsification stays
+in `RISK`; neither is an observed execution failure. The authorization and
+receipt boundary improves inspectability of declared actions but does not prove
+that a human or model perceived, understood, or correctly projected the
+situation [@endsley1995toward; @hutchins1995cognition].
+
 ## Colony Kernel Architecture
 
 ### Overview of the {{CONFIG_COLONY_KERNEL_SUBSYSTEMS}} Subsystems
@@ -205,7 +251,7 @@ The gate maps the numeric score to a ternary verdict:
 |---|---|---|
 | $g \geq {{CONFIG_GATE_EXECUTE_THRESHOLD}}$ | **EXECUTE** | Advisory approval returned; the kernel does not perform or enforce the action. |
 | ${{CONFIG_GATE_HOLD_THRESHOLD}} \leq g < {{CONFIG_GATE_EXECUTE_THRESHOLD}}$ | **HOLD** | Revision or recovery evidence returned; the kernel does not maintain a requeue. |
-| $g < {{CONFIG_GATE_HOLD_THRESHOLD}}$ | **REFUSE** | Refusal returned and, in the integrated path, FAILURE pressure deposited at the target. |
+| $g < {{CONFIG_GATE_HOLD_THRESHOLD}}$ | **REFUSE** | Refusal returned and, in the integrated path, POLICY_REJECTION audit pressure deposited at the target. |
 : Actuation-gate decision thresholds. {#tbl:gate_decision_thresholds}
 
 ### Hard Overrides
@@ -337,6 +383,10 @@ and stale-document detection remains incomplete.
 
 ## Falsification Worker
 
+The worker distinguishes ten attack-vector categories from eleven concrete check
+functions. The category count is the `AttackVector` taxonomy; the check count is the
+number of executable predicates. They must not be reported as interchangeable totals.
+
 The `FalsificationWorker` is the colony's deterministic adversarial-review component.
 It runs {{CONFIG_FALSIFICATION_CHECK_COUNT}} heuristic checks grouped into the
 {{CONFIG_FALSIFICATION_VECTORS}} `AttackVector` categories, without an LLM call. The
@@ -369,9 +419,9 @@ The `CIRCULAR_ARCHITECTURE` check has repository-aware and plan-only modes. With
 stack to find cycles. Without a repository root, it inspects declared dependencies for
 self-reference and parent–child patterns.
 
-Pheromone deposits are best-effort. HIGH and CRITICAL findings deposit FAILURE;
-MEDIUM findings deposit RISK; LOW findings deposit neither. The kernel may add a further
-RISK trace for non-refused proposals with MEDIUM-or-higher findings.
+Pheromone deposits are best-effort. MEDIUM, HIGH, and CRITICAL prospective findings
+deposit RISK; LOW findings deposit neither. FAILURE remains reserved for caller-reported
+adverse outcomes, and the worker emits one RISK trace per qualifying finding.
 
 Each check returns a `FalsificationFinding` with fields for the attacked claim, vector,
 severity, evidence, and remediation. The `evaluate_plan()` method runs all
@@ -409,11 +459,11 @@ Output: GateResult verdict; side effects on PheromoneStore,
 
 PROPOSE(p):
          findings ← FalsificationWorker.analyze(p)
-             [{{CONFIG_FALSIFICATION_CHECK_COUNT}} checks; HIGH+ deposits FAILURE, MEDIUM deposits RISK]
+             [{{CONFIG_FALSIFICATION_CHECK_COUNT}} checks; MEDIUM+ deposits RISK]
          budget_approved ← ResourceLedger.check_budget(p.budget_estimate)
          profile ← ConsequenceMemory.get_profile(p.agent_id)
-         profile.total_proposals ← profile.total_proposals + 1
-         ConsequenceMemory.save_profile(profile)
+         ConsequenceMemory.register_proposal(p)  # one count per proposal_id
+         profile ← ConsequenceMemory.get_profile(p.agent_id)
          RoleAdapter.update(profile)
          witness ← ActuationGate.witness_state(p)
          hazard ← max(witness.RISK, witness.FAILURE)
@@ -438,7 +488,7 @@ PROPOSE(p):
                    | HOLD   if gate_score >= {{CONFIG_GATE_HOLD_THRESHOLD}}
                    | REFUSE otherwise
 POST_GATE:
-         if decision is REFUSE: deposit FAILURE at p.target
+         if decision is REFUSE: deposit POLICY_REJECTION at p.target
          return GateResult(decision, gate_score, reason, required_evidence)
 
 CALLER MAY ACTUATE AFTER EXECUTE; THE KERNEL DOES NOT ENFORCE THIS STEP.

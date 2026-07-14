@@ -35,7 +35,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `SECURITY.md` - Security policies and vulnerability reporting
 - `pyproject.toml` - Python package configuration
 - `pyproject.toml` (`[tool.pytest.ini_options]`, `[tool.coverage.*]`) — pytest and coverage configuration
-- `Makefile` - Primary build and automation tasks (`make test` applies the 40% coverage gate)
+- `Makefile` - Primary build and automation tasks (`make test` applies the 60% coverage gate)
 - `justfile` - Optional [just](https://github.com/casey/just) recipes mirroring common Makefile targets
 - `index.html` - Root redirect to `/output/website/index.html` for static hosting entry
 - `uv.lock` - Python dependency lock file
@@ -51,7 +51,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 ## Development Guidelines
 
 - **Zero-Mock Policy:** All tests must use real components. No mocks. Narrow `monkeypatch.setenv`/`delenv`/`chdir` and `tmp_path` fixtures are permitted for test-input isolation — see [docs/development/testing-strategy.md § Zero-Mock Policy (clarified)](docs/development/testing-strategy.md#zero-mock-policy-clarified) and [issue #175](https://github.com/docxology/codomyrmex/issues/175).
-- **Coverage Gate:** **40%** line coverage (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI and `make test` pass `--cov-fail-under=40`; plain `uv run pytest` skips coverage for speed. Experimental `meme/` is omitted from `[tool.coverage.run]` (see `pyproject.toml`). New work must not drop below the floor when measured with `--cov`.
+- **Coverage Gate:** **60%** line coverage (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI and `make test` pass `--cov-fail-under=60`; plain `uv run pytest` skips coverage for speed. Experimental `meme/` is omitted from `[tool.coverage.run]` (see `pyproject.toml`). New work must not drop below the floor when measured with `--cov`.
 - **Documentation:** Maintain `AGENTS.md`, `README.md`, and `SPEC.md` parity on structural changes.
 - **Generated leaf docs:** Thousands of per-folder `AGENTS.md` / `README.md` files are produced by tooling, not by hand.
   - **Bootstrap (inventory + signposts):** from repo root, `uv run python -m codomyrmex.documentation.scripts.bootstrap_agents_readmes` (or `uv run python scripts/documentation/bootstrap_agents_readmes.py`, same implementation). Use `--dry-run` first; use `--agents-only` to touch only `AGENTS.md`. The script skips vendor prefixes (see `codomyrmex.documentation.doc_generation_common.EXCLUDED_DOC_PREFIXES`) and **does not** rewrite trees under `docs/modules/<pkg>/` when `src/codomyrmex/<pkg>/` exists — those stay owned by module enrichment. **Hand-maintained hubs:** put `<!-- agents: curated -->` in the first lines of an `AGENTS.md`, or add prefixes to `PRESERVE_AGENTS_REL_PREFIXES` in `bootstrap_agents_readmes.py` (see [docs/development/documentation.md](docs/development/documentation.md)). `AGENTS.md` with `<!-- agents: curated -->` and `README.md` with `<!-- readme: curated -->` in the file head are not overwritten.
@@ -85,7 +85,7 @@ All agents operating within this repository must:
 #### src/ - Source Code
 
 - Follow Python best practices (PEP 8)
-- Maintain test coverage at or above the **40%** project gate in `pyproject.toml`
+- Maintain test coverage at or above the **60%** project gate in `pyproject.toml`
 - Update `API_SPECIFICATION.md` when changing interfaces
 - Document MCP tools in `MCP_TOOL_SPECIFICATION.md`
 - Version changes in `CHANGELOG.md`

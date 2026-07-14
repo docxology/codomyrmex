@@ -2,7 +2,7 @@
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
-All eight tools route through a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`). The singleton is an instance of the full `ColonyKernel` class from `kernel.py` (not a simplified duplicate). State is shared and persistent for the lifetime of the MCP server process. The singleton is lazily initialised on first call.
+The advisory and strict tools route through a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`). Strict execution requires a configured declared scope, signed single-use capability, and receipt-linked outcome; advisory reports remain explicitly unattested. The singleton is lazily initialised on first call.
 
 ```mermaid
 graph TD
@@ -169,7 +169,7 @@ graph TD
 
 ## colony_record_outcome
 
-**Description**: Record a caller-reported consequence of an action. Updates the agent's trust profile (stored in SQLite), deposits SUCCESS or FAILURE pheromone at the target, and records a DEPENDENCY trace. The tool does not attest the report against a prior EXECUTE authorization.
+**Description**: Record a caller-reported consequence of an action. Advisory mode stores it as `caller_reported_unattested`; strict mode quarantines it and does not update trust, budget, or FAILURE evidence. Use the receipt-linked strict tool for enforced actions.
 
 ### Input Schema
 

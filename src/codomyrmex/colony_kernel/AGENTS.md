@@ -4,13 +4,23 @@
 
 ## Purpose
 
-Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology. It runs adversarial checks, budget evaluation, trust lookup, and a ternary actuation gate; stores caller-reported outcomes in SQLite; and maintains a process-local stigmergic field. The MCP adapter exposes this path, but the kernel does not itself enforce downstream tool execution or attest submitted outcomes.
+Colony Kernel has two explicit profiles. Advisory mode runs adversarial checks,
+budget evaluation, trust lookup, and a ternary gate while retaining
+`caller_reported_unattested` audit evidence. Strict mode governs only the
+declared action-scope map: an `EXECUTE` proposal receives an Ed25519-signed,
+single-use authorization; a registered executor consumes it atomically and
+returns a signed receipt; only that receipt-linked path updates enforced trust,
+budget, and outcome state. Unregistered mutating paths fail closed in strict
+mode. Neither profile is a truth oracle or a repository-wide enforcement claim.
 
 ## Active Components
 
 - `models.py` — Shared value-object and enum contract for subsystem exchange
 - `kernel.py` — `ColonyKernel` integration class plus compatibility re-exports for subsystem classes
-- `mcp_tools.py` — Eight `@mcp_tool`-decorated functions; thin wrappers over the kernel singleton; includes a standalone `FalsificationWorker` for pre-flight plan evaluation
+- `authorization.py` — Ed25519 capability envelopes, key registry, and SQLite lifecycle ledger
+- `executor.py` — registered real-component executor and signed receipt adapter
+- `sqlite_signal_store.py` — durable WAL-backed signal field for strict deployments
+- `mcp_tools.py` — advisory, authorization, receipt, and scope `@mcp_tool` wrappers over the kernel singleton
 - `config_loader.py` — YAML config loading from `config/colony_kernel/` (kernel.yaml, roles.yaml, decay_rates.yaml)
 - `resource_ledger.py` — Standalone `ResourceLedger` / `ResourceBudget` (used by kernel.py and independently)
 - `falsification_worker.py` — Full 10-vector `FalsificationWorker` with AST-based circular-dependency analysis
@@ -63,12 +73,15 @@ The listed external dependencies are the expected cross-package imports for colo
 
 ## MCP Tools
 
-All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`), which is an instance of the integration class re-exported from `kernel.py`. State is therefore persistent for the lifetime of the MCP server process and benefits from the canonical subsystem implementations (ActuationGate, PheromoneStore, ConsequenceMemory, RoleAdapter, PruningDaemon).
+The advisory MCP tools delegate to a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`). Strict deployments additionally expose authorization, attested-outcome, and action-scope tools through an explicitly configured kernel. The advisory singleton is process-local; strict durable state uses the configured SQLite profile.
 
 | Tool | Category | Description |
 |------|----------|-------------|
 | `colony_propose_action` | `colony_kernel` | Submit an action proposal; runs falsification → budget → trust → gate; returns `GateResult` |
-| `colony_record_outcome` | `colony_kernel` | Record a caller-reported consequence; updates trust, deposits SUCCESS/FAILURE + DEPENDENCY pheromones |
+| `colony_record_outcome` | `colony_kernel` | Advisory caller-reported evidence; strict mode quarantines it |
+| `colony_execute_authorized` | `colony_kernel` | Consume a signed capability and return a signed executor receipt |
+| `colony_record_attested_outcome` | `colony_kernel` | Accept one receipt-linked attested outcome |
+| `colony_action_scope` | `colony_kernel` | Inspect declared scope and bypass semantics |
 | `colony_agent_profile` | `colony_kernel` | Read an agent's current `AgentTrustProfile` (role, trust_score, history length) |
 | `colony_status` | `colony_kernel` | Dashboard snapshot: pheromone_summary, budget_usage, role_distribution, recent_consequences, pruning_candidates_count |
 | `colony_pheromone_query` | `colony_kernel` | Sense pheromone strength at a given location and signal type |
@@ -80,7 +93,11 @@ All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` i
 
 ### Witness state
 
-`ConsequenceMemory` stores what callers report; it is not an authoritative witness of execution. SQLite WAL mode supports concurrent readers for file-backed databases. The `db_path=":memory:"` default is process-local; a file path persists consequence rows and profiles across restarts, but not the pheromone field, budget accumulator, or complete kernel state.
+`ConsequenceMemory` stores typed consequence records; advisory reports remain
+caller supplied and are not an authoritative witness of execution. Strict
+file-backed profiles persist consequence, authorization, receipt, signal, and
+resource state through SQLite WAL tables. The `db_path=":memory:"` default is
+explicit isolated-test mode and is not durable.
 
 ### Consequence loop
 
@@ -106,7 +123,7 @@ The pheromone field uses compound keys of the form `"{location}:{signal_type.val
 
 ### Falsification severity threshold
 
-`ActuationGate` issues an unconditional REFUSE for any CRITICAL falsification finding (severity weight 1.0). Non-critical findings are reported in the result and can cause the kernel to deposit RISK pressure after evaluation, but they do not directly enter the current additive score. Elevated effective hazard, computed as `max(RISK, FAILURE)` at the target, lowers the risk component of later proposals.
+`ActuationGate` issues an unconditional REFUSE for any CRITICAL falsification finding (severity weight 1.0). Prospective MEDIUM+ findings use the RISK channel; REFUSE uses a distinct POLICY_REJECTION audit signal. Non-critical findings do not become observed FAILURE. Elevated effective hazard, computed as `max(RISK, FAILURE)` at the target, lowers the risk component of later proposals.
 
 ### Pruning report versus archive
 

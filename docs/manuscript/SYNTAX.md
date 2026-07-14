@@ -245,7 +245,7 @@ All `{{TOKEN}}` placeholders are resolved at render time by `scripts/z_generate_
 | `{{RESULT_PHEROMONE_SLOW_RETENTION_REPORT_TICK_PCT}}` | RESULT | `03_results.md`, `05_experimental_setup.md` |
 | `{{RESULT_PROPOSALS_TO_PROMOTION}}` | RESULT | generated map only |
 | `{{RESULT_RUFF_ERRORS}}` | RESULT | `00_abstract.md`, `03_results.md`, `06_reproducibility.md` |
-| `{{RESULT_TEST_COUNT}}` | RESULT | `00_abstract.md`, `03_results.md`, `06_reproducibility.md` |
+| `{{RESULT_TEST_PASSED}}`, `{{RESULT_TEST_COLLECTED}}`, `{{RESULT_TEST_SKIPPED}}`, `{{RESULT_TEST_FAILED}}`, `{{RESULT_TEST_ERRORS}}` | RESULT | `00_abstract.md`, `03_results.md`, `06_reproducibility.md` |
 | `{{RESULT_TRUST_AFTER_PROMOTION}}` | RESULT | generated map only |
 | `{{RESULT_TRUST_TRAJECTORY_ROWS}}` | RESULT | `03_results.md` |
 | `{{RESULT_PAIRED_LOCALITY_ROWS}}` | RESULT | `03_results.md` |

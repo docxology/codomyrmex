@@ -377,7 +377,7 @@ REQUIRED_CLAIMS = {
         "10 adversarial vectors",
     ],
     "docs/manuscript/05_experimental_setup.md": [
-        "Proposed, not executed",
+        "Harness and task manifest implemented; provider results pending",
         "raw append-only traces",
     ],
     "docs/manuscript/04_conclusion.md": [
@@ -397,7 +397,7 @@ REQUIRED_CLAIMS = {
     "README.md": [
         "593 runtime MCP tools",
         "623 decorators",
-        "1,202",
+        "1,203",
         "35,119",
     ],
 }
@@ -574,10 +574,11 @@ def test_variable_inventory_matches_syntax_and_source_tokens() -> None:
 
 def test_acknowledgements_are_tokenized_and_ordered_before_references() -> None:
     acknowledgement = _read("docs/manuscript/98_acknowledgements.md")
-    assert acknowledgement == (
+    assert acknowledgement.startswith(
         "# Acknowledgements {#sec:acknowledgements .unnumbered}\n\n"
         "{{CONFIG_ACKNOWLEDGEMENTS}}\n"
     )
+    assert "Marek" in acknowledgement
     compiler = _read("scripts/compile_manuscript.py")
     order = compiler.split("MANUSCRIPT_SECTION_ORDER = (", 1)[1].split(")", 1)[0]
     assert order.index('"98_acknowledgements.md"') < order.index('"99_references.md"')
@@ -894,6 +895,7 @@ def test_crossref_labels_are_unique_referenced_and_resolved() -> None:
     assert not unreferenced, f"Crossref labels without prose references: {unreferenced}"
 
 
+@pytest.mark.optional_artifact
 def test_rendered_html_contains_toc_linked_citations_crossrefs_and_mathml() -> None:
     from bs4 import BeautifulSoup
 
@@ -928,7 +930,7 @@ def test_public_inventory_counts_match_live_tree() -> None:
     readme = _read("README.md")
     inventory = _read("docs/reference/inventory.md")
 
-    assert docs_count == 1202
+    assert docs_count == 1203
     assert f"{docs_count:,} Markdown" in readme
     assert f"{docs_count:,} (`find docs" in inventory
     assert "35%2C119" in readme
@@ -958,13 +960,13 @@ def test_manuscript_artifact_count_sources_match_documented_surfaces() -> None:
     spec.loader.exec_module(module)
 
     assert module._count_colony_kernel_docs(REPO_ROOT) == 3
-    assert module._count_colony_kernel_test_suites(REPO_ROOT) == 13
+    assert module._count_colony_kernel_test_suites(REPO_ROOT) == 16
     assert module._count_colony_kernel_config_files(REPO_ROOT) == 3
     assert (
         module._count_colony_kernel_mcp_tools(
             REPO_ROOT / "src" / "codomyrmex" / "colony_kernel"
         )
-        == 8
+        == 11
     )
 
 
