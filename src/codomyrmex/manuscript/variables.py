@@ -1426,7 +1426,7 @@ def compute_variables(
         "ARTIFACT_MCP_TOOLS": str(mcp_tools_artifact),
         "ARTIFACT_FIGURE_COUNT": str(figure_count),
         "ARTIFACT_COMBINED_PDF_PATH": (
-            f"output/pdf/{project_root.name}_combined.pdf"
+            "output/pdf/codomyrmex_combined.pdf"
         ),
         # Platform tokens
         "PYTHON_VERSION": python_version,
