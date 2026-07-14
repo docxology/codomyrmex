@@ -23,7 +23,7 @@ mode. Neither profile is a truth oracle or a repository-wide enforcement claim.
 - `mcp_tools.py` — advisory, authorization, receipt, and scope `@mcp_tool` wrappers over the kernel singleton
 - `config_loader.py` — YAML config loading from `config/colony_kernel/` (kernel.yaml, roles.yaml, decay_rates.yaml)
 - `resource_ledger.py` — Standalone `ResourceLedger` / `ResourceBudget` (used by kernel.py and independently)
-- `falsification_worker.py` — Full 10-vector `FalsificationWorker` with AST-based circular-dependency analysis
+- `falsification_worker.py` — Ten attack-vector categories implemented by eleven concrete checks, including AST-based circular-dependency analysis
 - `actuation_gate.py` — Protocol-based `ActuationGate` with pheromone pressure queries
 - `pheromone_store.py` — Standalone `PheromoneStore` with per-key evaporation rates
 - `README.md` — Module overview, quick-start, and architecture diagram (Mermaid)
@@ -64,7 +64,8 @@ mode. Neither profile is a truth oracle or a repository-wide enforcement claim.
 
 ### Standard library only
 
-- `sqlite3` — ConsequenceMemory persistence (WAL mode)
+- `sqlite3` — consequence, authorization, signal, and resource persistence (WAL mode)
+- `cryptography` — Ed25519 authorization and executor signatures
 - `dataclasses`, `uuid`, `time`, `json`, `pathlib` — models and utility
 
 ### Expected external codomyrmex imports
@@ -101,7 +102,7 @@ explicit isolated-test mode and is not durable.
 
 ### Consequence loop
 
-`propose_action` does not consume budget — it only checks whether the estimate would exceed the ceiling. Budget consumption happens inside `record_outcome` via `ResourceLedger.consume`. If `record_outcome` is never called for an executed action, the ledger's accumulated cost for that period will be understated. Callers are responsible for always pairing a successful EXECUTE verdict with a downstream `record_outcome` call.
+`propose_action` does not consume budget — it only checks whether the estimate would exceed the ceiling. Budget consumption happens inside the outcome path via `ResourceLedger.consume`. Advisory callers pair a successful EXECUTE verdict with caller-reported `record_outcome`; strict declared actions pair a consumed authorization and signed receipt with `record_attested_outcome`. A missing outcome still leaves the ledger's accumulated cost understated, so service integrations must monitor uncompleted lifecycles.
 
 ### Role ladder
 

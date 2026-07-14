@@ -19,6 +19,23 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+REQUIRED_ARTIFACTS = (
+    "output/paper.pdf",
+    "output/data/manuscript_variables.json",
+    "output/data/colony_kernel_coverage.json",
+    "output/data/colony_kernel_test_report.xml",
+    "output/data/colony_kernel_test_status.json",
+)
+
+RELEASE_INPUT_PATHS = (
+    "pyproject.toml",
+    "uv.lock",
+    "docs/manuscript/config.yaml",
+    "docs/manuscript/manuscript.css",
+    "config/colony_kernel/kernel.yaml",
+    "evaluations/colony_kernel/benchmark_manifest.json",
+)
+
 
 def _run(root: Path, argv: list[str]) -> tuple[int, str]:
     result = subprocess.run(
@@ -67,6 +84,54 @@ def _existing_files(root: Path, paths: list[str]) -> list[Path]:
     return [root / path for path in paths if (root / path).is_file()]
 
 
+def source_files_for_manifest(root: Path) -> list[Path]:
+    """Return the source surfaces that determine the release artifacts."""
+
+    paths = [
+        *sorted((root / "src" / "codomyrmex" / "colony_kernel").rglob("*.py")),
+        *sorted((root / "tests" / "unit" / "colony_kernel").rglob("*.py")),
+        root / "src" / "codomyrmex" / "manuscript" / "variables.py",
+        *sorted((root / "src" / "codomyrmex" / "manuscript" / "figures").rglob("*.py")),
+        *sorted(
+            path
+            for path in (root / "docs" / "manuscript").glob("*.md")
+            if path.name != "RELEASE_PROVENANCE.md"
+        ),
+        *sorted((root / "config" / "colony_kernel").glob("*")),
+        root / "scripts" / "z_generate_manuscript_variables.py",
+        root / "scripts" / "generate_manuscript_figures.py",
+        root / "scripts" / "compile_manuscript.py",
+        root / "scripts" / "generate_release_manifest.py",
+        root / "scripts" / "package_release_evidence.py",
+        root / "scripts" / "verify_release_candidate.py",
+        root
+        / "review_artifacts"
+        / "Codomyrmex_RedTeam_FirstPrinciples_Science_Follow_Up_2026-07-14.md",
+        *sorted((root / "evaluations" / "colony_kernel").glob("*.py")),
+        *sorted((root / "evaluations" / "colony_kernel").glob("*.json")),
+    ]
+    return [path for path in paths if path.is_file()]
+
+
+def input_files_for_manifest(root: Path) -> list[Path]:
+    """Return lockfile and configuration inputs used by the release build."""
+
+    return _existing_files(root, list(RELEASE_INPUT_PATHS))
+
+
+def artifact_files_for_manifest(root: Path) -> list[Path]:
+    """Return generated artifacts present in the evaluated checkout."""
+
+    return _existing_files(
+        root,
+        [
+            *REQUIRED_ARTIFACTS,
+            "output/paper.html",
+            "output/evaluations/colony_kernel/benchmark.json",
+        ],
+    )
+
+
 def _artifact_freshness(
     artifacts: list[Path], source_files: list[Path], root: Path
 ) -> dict[str, bool]:
@@ -84,7 +149,7 @@ def _tool_versions(root: Path) -> dict[str, str]:
     commands = {
         "python": [sys.executable, "--version"],
         "uv": ["uv", "--version"],
-        "pytest": ["pytest", "--version"],
+        "pytest": [sys.executable, "-m", "pytest", "--version"],
         "ruff": ["ruff", "--version"],
         "ty": ["ty", "--version"],
         "pandoc": ["pandoc", "--version"],
@@ -149,60 +214,13 @@ def build_manifest(root: Path, *, extra_commands: list[dict[str, Any]] | None = 
         raise RuntimeError(f"cannot identify git status: {dirty_lines}")
     tag_code, tag = _run(root, ["git", "describe", "--tags", "--exact-match", "HEAD"])
 
-    source_files = [
-        *sorted((root / "src" / "codomyrmex" / "colony_kernel").rglob("*.py")),
-        *sorted((root / "tests" / "unit" / "colony_kernel").rglob("*.py")),
-        root / "src" / "codomyrmex" / "manuscript" / "variables.py",
-        *sorted((root / "src" / "codomyrmex" / "manuscript" / "figures").rglob("*.py")),
-        *sorted(
-            path
-            for path in (root / "docs" / "manuscript").glob("*.md")
-            if path.name != "RELEASE_PROVENANCE.md"
-        ),
-        *sorted((root / "config" / "colony_kernel").glob("*")),
-        root / "scripts" / "z_generate_manuscript_variables.py",
-        root / "scripts" / "generate_manuscript_figures.py",
-        root / "scripts" / "compile_manuscript.py",
-        root / "scripts" / "generate_release_manifest.py",
-        root / "scripts" / "package_release_evidence.py",
-        root / "scripts" / "verify_release_candidate.py",
-        *sorted((root / "evaluations" / "colony_kernel").glob("*.py")),
-        *sorted((root / "evaluations" / "colony_kernel").glob("*.json")),
-    ]
-    source_files = [path for path in source_files if path.is_file()]
-    input_paths = _existing_files(
-        root,
-        [
-            "pyproject.toml",
-            "uv.lock",
-            "docs/manuscript/config.yaml",
-            "docs/manuscript/manuscript.css",
-            "config/colony_kernel/kernel.yaml",
-            "evaluations/colony_kernel/benchmark_manifest.json",
-        ],
-    )
-
-    artifacts = _existing_files(
-        root,
-        [
-            "output/paper.pdf",
-            "output/paper.html",
-            "output/data/manuscript_variables.json",
-            "output/data/colony_kernel_coverage.json",
-            "output/data/colony_kernel_test_report.xml",
-            "output/data/colony_kernel_test_status.json",
-            "output/evaluations/colony_kernel/benchmark.json",
-        ],
-    )
-    required_artifacts = {
-        "output/paper.pdf",
-        "output/data/manuscript_variables.json",
-        "output/data/colony_kernel_coverage.json",
-        "output/data/colony_kernel_test_report.xml",
-        "output/data/colony_kernel_test_status.json",
-    }
+    source_files = source_files_for_manifest(root)
+    input_paths = input_files_for_manifest(root)
+    artifacts = artifact_files_for_manifest(root)
+    required_artifacts = set(REQUIRED_ARTIFACTS)
     artifact_paths = {str(path.relative_to(root)) for path in artifacts}
-    artifact_freshness = _artifact_freshness(artifacts, source_files, root)
+    freshness_inputs = [*source_files, *input_paths]
+    artifact_freshness = _artifact_freshness(artifacts, freshness_inputs, root)
 
     benchmark_manifest_path = root / "evaluations" / "colony_kernel" / "benchmark_manifest.json"
     benchmark_manifest = _load_json(benchmark_manifest_path, "benchmark manifest")

@@ -296,7 +296,7 @@ cross-agent, cross-target, cross-action, HOLD, REFUSE, and unknown tokens.
     "agent_id": {"type": "string"},
     "action_type": {"type": "string", "description": "Must match the capability and registered scope."},
     "target": {"type": "string"},
-    "payload": {"type": "string", "default": "{}", "description": "JSON object passed to the registered handler."}
+    "payload": {"type": "string", "default": "{}", "description": "JSON object passed to the registered handler; when the proposal contains evidence.action_payload, it must be identical to that signed payload."}
   }
 }
 ```

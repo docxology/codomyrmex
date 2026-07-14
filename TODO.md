@@ -1,11 +1,30 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.3.0 | **Date**: 2026-07-09 | **Modules**: 130 | **Sprint**: 37 publication hardening
+**Version**: v1.4.0-rc1 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
 
-> **Current release**: v1.3.0 "Colony Kernel" (2026-06-30).
-> **Next release**: v1.3.1 (publication hardening)
+> **Current release**: v1.4.0-rc1 "Colony Kernel enforcement" (candidate, 2026-07-14).
+> **Next release**: v1.4.0 (held for provider evaluation and immutable release verification)
 > **Archived**: v1.2.4–v1.2.8 → [CHANGELOG.md](CHANGELOG.md)
+
+## 🔬 v1.4.0-rc1 — First-principles publication checkpoint
+
+This candidate is an auditable release candidate, not a completed production-safety claim. The strict
+profile governs only its explicit action-scope map; unregistered mutating paths remain bypasses. The
+follow-up audit is recorded in
+[`review_artifacts/Codomyrmex_RedTeam_FirstPrinciples_Science_Follow_Up_2026-07-14.md`](review_artifacts/Codomyrmex_RedTeam_FirstPrinciples_Science_Follow_Up_2026-07-14.md).
+
+| Gate | Current evidence | Status |
+| :--- | :--- | :--- |
+| Scoped Colony Kernel suite | 822 passed in the pinned RC1 evidence; rerun required after this follow-up | 🔄 Verify |
+| Branch coverage | 74.29667519181585% (581/782) in the pinned RC1 evidence | ✅ Above 60% floor |
+| Clean-clone PDF replay | `output/paper.pdf` hash `37bc6ba55b8208a8a455c8e82371b848a5378c82b5a6d0f72ce43a1ee58894bd` at `v1.4.0-rc1` | ✅ Reproduced before follow-up |
+| Verifier integrity | Commit/tag, source/config, freshness, JUnit/status, and artifact hashes independently checked | 🔄 Verify |
+| Provider benchmark | Concrete provider/model, raw receipts, and result artifact absent | ⛔ Open (R-20) |
+| Immutable final publication | A-001 and A-016 remain open | ⛔ Open |
+
+The benchmark gap is intentionally fail-closed. Fixture adapter output is contract evidence only and is
+not a substitute for the predeclared controlled and SWE-bench Lite experiment.
 
 ---
 

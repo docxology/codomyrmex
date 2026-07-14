@@ -321,6 +321,7 @@ class ExecutionAuthorization:
     issuer_key_id: str
     signature: str
     status: AuthorizationStatus = AuthorizationStatus.ISSUED
+    request_digest: str = ""
 
 
 @dataclass(frozen=True)
@@ -338,6 +339,7 @@ class ExecutionReceipt:
     status: str
     executor_key_id: str
     signature: str
+    request_digest: str = ""
 
 
 @dataclass(frozen=True)

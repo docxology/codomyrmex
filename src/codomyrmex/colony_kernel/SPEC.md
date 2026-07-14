@@ -442,10 +442,10 @@ The strict lifecycle is:
 
 1. `ActionProposal` is evaluated by falsification, budget, trust, role, and gate policy.
 2. Only `GateDecision.EXECUTE` for a target in the configured action-scope map receives an `ExecutionAuthorization`.
-3. The authorization signs proposal ID, agent identity, action type, target, canonical scope digest, timestamps, nonce, and issuer key ID.
+3. The authorization signs proposal ID, agent identity, action type, target, canonical scope digest, timestamps, nonce, issuer key ID, and the digest of an optional explicit `evidence["action_payload"]` object. If supplied, execution must present the same payload.
 4. `RegisteredActionExecutor` consumes the authorization under SQLite `BEGIN IMMEDIATE` and invokes only a registered real handler.
 5. The executor signs exactly one `ExecutionReceipt`; replay and duplicate receipt writes are rejected.
-6. `record_attested_outcome` verifies the receipt and writes one `attested_execution` record. Unlinked reports are quarantined in strict mode and cannot update trust, budgets, or `FAILURE` pressure.
+6. `record_attested_outcome` verifies the receipt, exact proposal action/target, and request digest before writing one `attested_execution` record. Unlinked reports are quarantined in strict mode and cannot update trust, budgets, or `FAILURE` pressure.
 
 The ledger persists proposal, authorization, receipt, quarantined-report, and
 outcome-report records. The signal and resource backends use WAL mode with busy

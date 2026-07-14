@@ -29,6 +29,7 @@ def _files(root: Path) -> list[Path]:
         "evaluations/colony_kernel/truth_tables.md",
         "review_artifacts/Codomyrmex_Reproduction_Evidence_Follow_Up_2026-07-13.md",
         "review_artifacts/Codomyrmex_Action_Register_2026-07-13_Follow_Up.xlsx",
+        "review_artifacts/Codomyrmex_RedTeam_FirstPrinciples_Science_Follow_Up_2026-07-14.md",
     ]
     paths = [root / relative for relative in exact]
     paths.extend(sorted((root / "output" / "figures").glob("*")))

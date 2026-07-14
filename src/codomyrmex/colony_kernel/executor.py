@@ -56,7 +56,10 @@ class RegisteredActionExecutor:
         self.ledger = ledger
         self.signer = signer
         self.executor_id = executor_id
-        self.action_scope = action_scope or ledger.action_scope
+        # An explicitly empty map must remain empty rather than widening to the
+        # ledger defaults. This keeps a deployment's fail-closed scope choice
+        # intact across both authorization and execution layers.
+        self.action_scope = ledger.action_scope if action_scope is None else dict(action_scope)
         self._trusted_executor_keys: dict[str, bytes] = {
             signer.key_id: signer.public_key
         }
@@ -112,13 +115,15 @@ class RegisteredActionExecutor:
             raise AuthorizationError(f"no executor handler is registered: {action_type}")
         if not target_in_scope(action_type, target, self.action_scope):
             raise AuthorizationError(f"target is outside the declared action scope: {target}")
+        arguments = dict(payload or {})
+        if digest(arguments) != token.request_digest:
+            raise AuthorizationError("execution payload does not match authorization")
         consumed = self.ledger.consume(
             token,
             agent_id=agent_id,
             action_type=action_type,
             target=target,
         )
-        arguments = dict(payload or {})
         started_at = time.time()
         action_digest = digest(
             {
@@ -149,6 +154,7 @@ class RegisteredActionExecutor:
             status=status,
             executor_key_id=self.signer.key_id,
             signature="",
+            request_digest=consumed.request_digest,
         )
         receipt = ExecutionReceipt(
             **{

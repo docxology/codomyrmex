@@ -116,7 +116,8 @@ proposal → falsification/gate → signed authorization → atomic consume
 
 `ExecutionAuthorization` contains the proposal ID, agent identity, action type,
 target, canonical scope digest, issue/expiry timestamps, nonce, issuer key ID,
-and Ed25519 signature. `AuthorizationLedger.consume` uses SQLite
+the digest of an optional explicit `evidence["action_payload"]` object, and an
+Ed25519 signature. `AuthorizationLedger.consume` uses SQLite
 `BEGIN IMMEDIATE` plus a conditional status update, so a capability is
 single-use across workers. Expired, altered, replayed, cross-agent,
 cross-target, cross-action, HOLD, REFUSE, and unknown tokens are rejected.
@@ -125,7 +126,8 @@ cross-target, cross-action, HOLD, REFUSE, and unknown tokens are rejected.
 service registers real handlers for the governed action types and supplies a
 trusted executor key. It returns an `ExecutionReceipt` even for a handler
 failure, allowing the failure to remain an attested execution result without
-turning a policy rejection or prospective finding into `FAILURE`.
+turning a policy rejection or prospective finding into `FAILURE`. When a request
+digest is present, the executor and receipt must carry the same action payload.
 
 `record_attested_outcome` requires the consumed authorization and the executor's
 receipt. `record_outcome` remains a caller-reported audit input in advisory mode;

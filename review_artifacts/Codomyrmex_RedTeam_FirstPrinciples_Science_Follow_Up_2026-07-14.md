@@ -1,0 +1,80 @@
+# Codomyrmex Red-Team / First-Principles / Science Follow-Up
+
+**Date:** 2026-07-14
+**Candidate:** `v1.4.0-rc1`
+**Base revision:** `471f998719bcbbdd756cedb66a2d8e95762dd542`
+**Execution mode:** internal specialist panel; no independent subagents were available in the host
+
+## Scope and goal
+
+This follow-up audits the publication verifier, strict authorization lifecycle, generated evidence, and
+the remaining TODO/release claims. The success condition is narrower than “the system is safe”: a clean
+immutable checkout must be able to show that the manifest, source inputs, generated artifacts, test
+evidence, and declared enforcement semantics are the same release.
+
+The provider-backed controlled/SWE-bench evaluation remains a required external experiment. It is not
+fabricated or replaced by the deterministic fixture adapter.
+
+## First-principles decomposition
+
+The release claim consists of five irreducible evidence links:
+
+1. checkout identity — current `HEAD`, exact tag, and clean status;
+2. input identity — source, lockfile, configuration, and benchmark hashes;
+3. output identity — independently recomputed artifact hashes and freshness;
+4. measurement identity — JUnit, status JSON, and coverage agree;
+5. scope identity — a declared action request is authorized, consumed once, and linked to a signed receipt.
+
+The following are policy choices rather than physical constraints: the 60% coverage floor, the RC1/1.4.0
+release sequence, the 0.20-inch manuscript side margins, and the use of SQLite. They are retained because
+they serve reproducibility and auditability, not because they are immutable. The hard evidence boundary
+is that a manifest or receipt cannot prove truth merely by existing; it can only prove the signed and
+measured facts it actually binds.
+
+## Verifier-first findings and repairs
+
+| Finding | Evidence location | Negative control | Result |
+|---|---|---|---|
+| Manifest could be evaluated against a different checkout | `scripts/verify_release_candidate.py`, `verify()` | Substitute another commit while retaining artifact hashes | Fixed: current `HEAD`, dirty state, and exact tag are compared |
+| Source/config claims were trusted | `scripts/generate_release_manifest.py` and verifier | Change a source or lock/config input without regenerating artifacts | Fixed: aggregate hashes and freshness are recomputed |
+| Status artifact could disagree with claimed status | release verifier | Hand-edit status JSON and refresh only its hash | Fixed: manifest, status JSON, and independently parsed JUnit must agree |
+| Empty strict scope could silently widen to defaults | `authorization.py` and `executor.py` constructors | Provision `action_scope={}` and attempt a default action | Fixed: explicit empty maps remain empty and fail closed |
+| Outcome could be relinked to same-ID, different-target proposal context | `ColonyKernel.record_attested_outcome` | Reuse a consumed receipt with altered action/target | Fixed: action, target, agent, proposal, receipt, and request digest must match |
+| Ledger could record a receipt-free attested report directly | `AuthorizationLedger.record_outcome_report` | Call ledger report insertion after consumption but before receipt | Fixed: consumed authorization and linked receipt are required |
+| Valid authorization payload could be altered at execution | `ExecutionAuthorization`, `RegisteredActionExecutor` | Sign an `action_payload`, execute a different payload | Fixed: optional explicit payload digest is signed and receipt-linked |
+
+## Scientific cycle
+
+### Pre-registered hypotheses
+
+- **H1 — verifier binding:** a candidate bound to another commit or changed source must fail verification.
+- **H2 — lifecycle integrity:** altered scope, payload, receipt, or proposal context must not update enforced state.
+- **H3 — evidence separation:** policy rejection, prospective risk, caller reports, and attested execution remain distinct.
+- **H4 — reproducible build:** after regenerating from the pinned revision, the canonical PDF and evidence data hashes remain stable.
+- **H5 — external effectiveness:** the gate improves measured outcomes against baselines. This remains untested until a concrete provider/model configuration and signed benchmark receipts are supplied.
+
+### Experiments and observed results
+
+The verifier and enforcement negative controls passed with real components. The focused regression run
+covered the release-provenance, strict-enforcement, and publication-contract suites. The full scoped
+release suite must be rerun after the final artifact regeneration; its machine-readable counts remain the
+release authority.
+
+H1–H3 are supported for the tested contracts. H4 is a release-replay criterion, not assumed from the
+working tree. H5 is **inconclusive/unrun**, not a failed or successful benchmark result.
+
+## Remaining blockers and TODOs
+
+- **A-001 / A-016:** immutable release publication and final manuscript/evidence attachment remain open.
+- **R-20:** provider-backed controlled and pinned SWE-bench Lite execution remains open.
+- The strict boundary still governs only the declared action-scope map; unregistered mutating paths are
+  explicit bypasses and must not be described as repository-wide enforcement.
+- Signed receipts attest the executor’s recorded request/result linkage; they do not independently validate
+  semantic truth, human understanding, or production safety.
+
+## Re-review gate
+
+Re-review is warranted only after a clean clone at the immutable final tag regenerates the exact canonical
+PDF and manifest, required tests report zero failures/errors/skips, and the provider benchmark supplies
+its pinned configuration, raw rows, receipts, environment digest, and reports. Until then, this candidate
+is an auditable RC1 with a publication hold, not a completed production-safety release.

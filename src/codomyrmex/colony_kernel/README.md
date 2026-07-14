@@ -92,8 +92,11 @@ Services that require an execution boundary must explicitly provision an
 `Ed25519Authority` from an external secret store and construct
 `ColonyKernelConfig(enforcement_mode="strict", authorization_signer=...)`. A
 successful `propose_action` then returns a signed `ExecutionAuthorization` only
-for the configured action-scope map. A registered `RegisteredActionExecutor`
-consumes that capability atomically and returns one signed `ExecutionReceipt`.
+for the configured action-scope map. If a proposal supplies an explicit
+`evidence["action_payload"]` object, its canonical digest is signed as part of
+the capability and the executor must receive the same object. A registered
+`RegisteredActionExecutor` consumes that capability atomically and returns one
+signed `ExecutionReceipt` carrying the same request digest.
 `record_attested_outcome` verifies the receipt before updating trust, budgets, or
 signals. `record_outcome` remains available for audit input, but strict mode
 quarantines it and applies no learning or failure pressure.

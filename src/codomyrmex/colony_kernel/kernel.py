@@ -338,6 +338,8 @@ class ColonyKernel:
             canonical_json(payload), evidence.signature
         ):
             raise AuthorizationError("supervised evaluator signature is invalid")
+        if not evidence.read_only:
+            raise AuthorizationError("supervised evaluator evidence must be read-only")
         if evidence.assessment_digest != digest(proposal):
             raise AuthorizationError("supervised evaluator digest does not match proposal")
         findings = self.falsification_worker.analyze(proposal)
@@ -395,8 +397,11 @@ class ColonyKernel:
         if (
             authorization.proposal_id != proposal.proposal_id
             or authorization.agent_id != proposal.agent_id
+            or authorization.action_type != proposal.action_type
+            or authorization.target != proposal.target
             or receipt.authorization_id != authorization.authorization_id
             or receipt.proposal_id != proposal.proposal_id
+            or receipt.request_digest != authorization.request_digest
         ):
             raise AuthorizationError("outcome evidence is not linked to the proposal lifecycle")
         if not self.executor.verify_receipt(receipt):

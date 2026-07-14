@@ -168,6 +168,7 @@ def _receipt_payload(receipt: ExecutionReceipt) -> dict[str, Any]:
         "exit_code": receipt.exit_code,
         "status": receipt.status,
         "executor_key_id": receipt.executor_key_id,
+        "request_digest": receipt.request_digest,
     }
 
 
@@ -200,6 +201,7 @@ def _authorization_payload(token: ExecutionAuthorization) -> dict[str, Any]:
         "expires_at": token.expires_at,
         "nonce": token.nonce,
         "issuer_key_id": token.issuer_key_id,
+        "request_digest": token.request_digest,
     }
 
 
@@ -230,7 +232,11 @@ class AuthorizationLedger:
     ) -> None:
         self.db_path = db_path
         self.issuer = issuer
-        self.action_scope = action_scope or DEFAULT_ACTION_SCOPE
+        # An explicitly empty map is a deliberate fail-closed configuration;
+        # only ``None`` means "use the documented defaults".
+        self.action_scope = (
+            DEFAULT_ACTION_SCOPE if action_scope is None else dict(action_scope)
+        )
         self.ttl_seconds = ttl_seconds
         self._trusted_issuer_keys: dict[str, bytes] = {
             issuer.key_id: issuer.public_key
@@ -294,6 +300,9 @@ class AuthorizationLedger:
             raise AuthorizationError(
                 f"action scope is not registered: {proposal.action_type}:{proposal.target}"
             )
+        action_payload = proposal.evidence.get("action_payload", {})
+        if not isinstance(action_payload, dict):
+            raise AuthorizationError("proposal action_payload must be a JSON object")
         issued_at = time.time()
         token = ExecutionAuthorization(
             authorization_id=str(uuid.uuid4()),
@@ -307,6 +316,7 @@ class AuthorizationLedger:
             nonce=uuid.uuid4().hex,
             issuer_key_id=self.issuer.key_id,
             signature="",
+            request_digest=digest(action_payload),
         )
         signature = self.issuer.sign(canonical_json(_authorization_payload(token)))
         token = ExecutionAuthorization(**{**_authorization_payload(token), "signature": signature})
@@ -537,6 +547,23 @@ class AuthorizationLedger:
 
         if evidence_grade != "attested_execution":
             raise AuthorizationError("authorization ledger accepts only attested outcomes")
+        authorization_row = self._conn.execute(
+            "SELECT proposal_id, status FROM execution_authorizations "
+            "WHERE authorization_id = ?",
+            (authorization_id,),
+        ).fetchone()
+        if authorization_row is None:
+            raise AuthorizationError("outcome report references an unknown authorization")
+        if authorization_row[0] != proposal_id:
+            raise AuthorizationError("outcome report proposal does not match authorization")
+        if authorization_row[1] != AuthorizationStatus.CONSUMED.value:
+            raise AuthorizationError("outcome report requires a consumed authorization")
+        receipt_row = self._conn.execute(
+            "SELECT proposal_id FROM execution_receipts WHERE authorization_id = ?",
+            (authorization_id,),
+        ).fetchone()
+        if receipt_row is None or receipt_row[0] != proposal_id:
+            raise AuthorizationError("outcome report requires a linked execution receipt")
         report_id = str(uuid.uuid4())
         try:
             with self._conn:

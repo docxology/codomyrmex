@@ -137,6 +137,41 @@ def test_signed_authorization_is_single_use_and_receipt_linked(tmp_path: Path) -
     kernel.close()
 
 
+def test_authorization_binds_explicit_action_payload(tmp_path: Path) -> None:
+    kernel = _strict_kernel(tmp_path)
+    kernel.register_executor_handler(
+        "patch_file", lambda target, payload: {"target": target, "payload": payload}
+    )
+    proposal = replace(
+        _proposal(proposal_id="payload-bound"),
+        evidence={"test": "release-contract", "action_payload": {"patch": "approved"}},
+    )
+    decision = kernel.propose_action(proposal)
+    assert decision.authorization is not None
+
+    with pytest.raises(AuthorizationError, match="payload does not match"):
+        kernel.execute_authorized(
+            decision.authorization,
+            agent_id=proposal.agent_id,
+            action_type=proposal.action_type,
+            target=proposal.target,
+            payload={"patch": "altered"},
+        )
+    assert kernel.authorization_ledger is not None
+    assert kernel.authorization_ledger.get_authorization(
+        decision.authorization.authorization_id
+    ).status.value == "issued"
+    run = kernel.execute_authorized(
+        decision.authorization,
+        agent_id=proposal.agent_id,
+        action_type=proposal.action_type,
+        target=proposal.target,
+        payload={"patch": "approved"},
+    )
+    assert run.receipt.request_digest == decision.authorization.request_digest
+    kernel.close()
+
+
 def test_unattested_report_is_quarantined_without_trust_or_failure_pressure(
     tmp_path: Path,
 ) -> None:
@@ -163,6 +198,22 @@ def test_strict_scope_fails_closed_for_unregistered_target(tmp_path: Path) -> No
     assert kernel.pheromone_store.sense("README.md", SignalType.FAILURE) == 0.0
     assert kernel.pheromone_store.sense("README.md", SignalType.POLICY_REJECTION) > 0.0
     kernel.close()
+
+
+def test_explicitly_empty_scope_map_remains_fail_closed(tmp_path: Path) -> None:
+    key = Ed25519Authority.generate()
+    ledger = AuthorizationLedger(
+        str(tmp_path / "empty-scope.sqlite"), issuer=key, action_scope={}
+    )
+    from codomyrmex.colony_kernel.models import GateResult
+
+    with pytest.raises(AuthorizationError, match="action scope is not registered"):
+        ledger.issue(
+            _proposal(proposal_id="empty-scope"),
+            GateResult(GateDecision.EXECUTE, 1.0, "test", budget_approved=True),
+        )
+    assert ledger.trusted_key_ids() == (key.key_id,)
+    ledger.close()
 
 
 def test_scope_rejects_absolute_and_traversal_targets() -> None:
@@ -213,6 +264,34 @@ def test_tampered_cross_agent_and_expired_authorizations_are_rejected(
     ledger.close()
 
 
+def test_ledger_cannot_record_an_attested_outcome_without_a_receipt(tmp_path: Path) -> None:
+    key = Ed25519Authority.generate()
+    ledger = AuthorizationLedger(str(tmp_path / "outcome-link.sqlite"), issuer=key)
+    from codomyrmex.colony_kernel.models import GateResult
+
+    proposal = _proposal(proposal_id="missing-receipt")
+    token = ledger.issue(
+        proposal,
+        GateResult(GateDecision.EXECUTE, 1.0, "test", budget_approved=True),
+    )
+    ledger.consume(
+        token,
+        agent_id=proposal.agent_id,
+        action_type=proposal.action_type,
+        target=proposal.target,
+    )
+
+    with pytest.raises(AuthorizationError, match="linked execution receipt"):
+        ledger.record_outcome_report(
+            proposal_id=proposal.proposal_id,
+            authorization_id=token.authorization_id,
+            evidence_grade="attested_execution",
+            report={"summary": "unlinked"},
+        )
+    assert ledger.lifecycle_snapshot().get("outcome_reports", 0) == 0
+    ledger.close()
+
+
 def test_supervised_evaluator_path_is_signed_and_read_only(tmp_path: Path) -> None:
     kernel = _strict_kernel(tmp_path)
     proposal = _proposal(proposal_id="supervised")
@@ -238,6 +317,32 @@ def test_supervised_evaluator_path_is_signed_and_read_only(tmp_path: Path) -> No
     assert result.authorization is None
     assert kernel.authorization_ledger is not None
     assert kernel.authorization_ledger.lifecycle_snapshot().get("proposals", 0) == 0
+    kernel.close()
+
+
+def test_attested_outcome_rejects_cross_target_proposal_context(tmp_path: Path) -> None:
+    kernel = _strict_kernel(tmp_path)
+    kernel.register_executor_handler(
+        "patch_file", lambda target, payload: {"target": target, "changed": True}
+    )
+    proposal = _proposal(proposal_id="cross-target")
+    decision = kernel.propose_action(proposal)
+    assert decision.authorization is not None
+    run = kernel.execute_authorized(
+        decision.authorization,
+        agent_id=proposal.agent_id,
+        action_type=proposal.action_type,
+        target=proposal.target,
+    )
+
+    with pytest.raises(AuthorizationError, match="lifecycle"):
+        kernel.record_attested_outcome(
+            replace(proposal, target="src/other-target.py"),
+            OutcomeEvidence(decision.authorization.authorization_id, run.receipt),
+            {"summary": "incorrectly relinked"},
+            True,
+        )
+    assert kernel.consequence_memory.find_by_proposal_id(proposal.proposal_id) is None
     kernel.close()
 
 

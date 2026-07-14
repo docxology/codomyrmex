@@ -1,6 +1,6 @@
 # Colony Kernel — Scope Document
 
-> **Status:** Fully implemented and tested. All 4 phases complete.
+> **Status:** Core implementation and RC1 enforcement contracts are implemented; external evaluation and immutable final publication remain open.
 > **Phase target:** 4 phases across 8 subsystems.
 > **Location:** `src/codomyrmex/colony_kernel/`
 
@@ -18,7 +18,15 @@
 | FalsificationWorker | `falsification_worker.py` | Implemented | 77 | 89% |
 | ColonyKernel + MCP | `kernel.py` + `mcp_tools.py` | Implemented | 71 + 59 = 130 | 87% / 80% |
 
-The current scoped test status and branch coverage are generated from the release tree in `output/data/colony_kernel_test_status.json`, `output/data/manuscript_variables.json`, and `output/data/colony_kernel_coverage.json`; the executable project floor is `CONFIG_COVERAGE_FLOOR` from `pyproject.toml`. Run: `uv run python scripts/z_generate_manuscript_variables.py`.
+The current scoped test status and branch coverage are generated from the release tree in `output/data/colony_kernel_test_status.json`, `output/data/manuscript_variables.json`, and `output/data/colony_kernel_coverage.json`; the executable project floor is `CONFIG_COVERAGE_FLOOR` from `pyproject.toml` (60%). The release verifier independently compares the status JSON with JUnit and recomputes source/config/artifact hashes. Run: `uv run python scripts/z_generate_manuscript_variables.py`.
+
+### Current contract authority
+
+The phase sketches below preserve the original design history. For current API and release claims,
+the authoritative surfaces are `src/codomyrmex/colony_kernel/SPEC.md`, `API_SPECIFICATION.md`,
+`MCP_TOOL_SPECIFICATION.md`, `authorization.py`, `executor.py`, and the executable tests. Role
+labels are descriptive; strict write authorization comes from a consumed signed capability within the
+declared action-scope map, and `:memory:` persistence is isolated-test mode.
 
 The per-subsystem row counts above predate `test_config_loader.py`, `test_manuscript_consistency.py`, and `test_property_stress_integration.py` plus organic growth in the other files, and are not re-derived here to avoid stapling on unverified precision — see the live token or `uv run pytest tests/unit/colony_kernel/ --collect-only -q` for current per-file counts.
 
@@ -34,9 +42,9 @@ The Colony Kernel applies this model to callers that opt into its advisory propo
 or to declared action types explicitly configured for the strict enforcement profile:
 
 - **Pheromone signals** replace trust-by-default. An agent that consistently ships broken code generates failure signals that weaken its gate score. An agent that repairs tests leaves success traces that open future gates.
-- **Resource budgets** replace unlimited execution. Every action has a cost (LLM calls, runtime, merge risk, human attention). The ledger enforces scarcity.
+- **Resource budgets** constrain proposals submitted through the kernel. Each estimate has a cost (LLM calls, runtime, merge risk, human attention), and the ledger enforces scarcity for that participating path.
 - **Roles** emerge from consequence history, not assignment. A repair-capable agent that demonstrates that capability repeatedly becomes the repair ant. A guard agent that catches real vulnerabilities earns higher gate authority.
-- **Pruning** keeps the colony lean. Modules that draw no signal die. Exports that nothing calls get flagged for archival.
+- **Pruning** keeps the colony lean. Modules that draw no signal are flagged for operator review; this component reports candidates and does not silently delete modules.
 - **Falsification** is a first-class workflow. Before a plan submitted through this path is evaluated, an adversarial worker attacks it. The caller decides whether and how to act on the returned advisory verdict.
 
 ### Strict declared-action boundary
@@ -56,7 +64,7 @@ The loop that makes this real:
 pressure → proposal → gate → action → consequence → memory → role change → future pressure
 ```
 
-This is an implementation path for participating callers, not a mandatory execution route for all system actions.
+This is an implementation path for participating callers and explicitly registered action types, not a mandatory execution route for all system actions. An optional `evidence["action_payload"]` object is included in the signed request digest; executors must present the same payload. Receipts attest linkage and execution reporting, not semantic truth.
 
 ---
 
@@ -162,7 +170,7 @@ colony_kernel/
 
 ### 3. `resource_ledger.py` — Colony Budget
 
-**Purpose:** Track and enforce resource budgets across all agent actions. Scarcity is the mechanism that prevents runaway agents.
+**Purpose:** Track and enforce resource budgets across proposals submitted through the kernel. Scarcity is a control for that participating path, not a repository-wide execution guarantee.
 
 **Key class:** `ResourceLedger`
 
@@ -233,7 +241,7 @@ Default thresholds: `EXECUTE_THRESHOLD=0.75`, `HOLD_THRESHOLD=0.50`.
 
 ### 5. `consequence_memory.py` — Outcome Recorder
 
-**Purpose:** Close the feedback loop. Every action that passes the gate produces a `ConsequenceRecord`. That record updates the agent's trust score and deposits new pheromone signals.
+**Purpose:** Close the feedback loop. Advisory callers may submit caller-reported consequences, while strict declared actions require a consumed authorization and signed executor receipt before an `attested_execution` record updates trust. These records update the agent's trust score and deposits new pheromone signals; they do not constitute a general truth oracle.
 
 **Key class:** `ConsequenceMemory`
 
@@ -301,7 +309,7 @@ trust_delta = delta
 **Operations:**
 - `scan(module_root: str, usage_window_days: int = 30) -> list[PruningCandidate]` — walk `module_root`, extract `__all__` from each `__init__.py`, cross-reference against pheromone traces (call-frequency signals), AST import graph, and git blame recency
 - `report(candidates: list[PruningCandidate]) -> str` — Markdown table of candidates ranked by confidence
-- `archive_candidate(candidate: PruningCandidate, archive_dir: str) -> None` — move module to archive with a provenance file; only callable by `GUARD_ANT` or `DISPATCHER` role after operator approval
+- `archive(candidate: PruningCandidate, dry_run: bool = True) -> str` — report or perform the configured archive operation; this implementation does not infer permission from a role label
 
 **Signal integration:** `pruning_daemon` reads pheromone traces where `signal_type=DEPENDENCY` — modules that are frequently imported leave strong dependency traces. A module with zero dependency traces for N days is a pruning candidate.
 
@@ -317,7 +325,7 @@ trust_delta = delta
 
 ### 8. `falsification_worker.py` — Adversarial Plan Attacker
 
-**Purpose:** Every plan that reaches the gate has already been falsified. `falsification_worker` takes an `ActionProposal`, attacks it with adversarial probes, and returns a `FalsificationReport`. The gate uses the report's severity to adjust its score.
+**Purpose:** Every plan submitted through this path is inspected by a falsification worker. `falsification_worker` takes an `ActionProposal`, attacks it with adversarial probes, and returns a `FalsificationReport`. The gate uses the report's numeric maximum severity to route the proposal; findings are prospective `RISK`, not observed `FAILURE` outcomes.
 
 **Key class:** `FalsificationWorker`
 
@@ -338,7 +346,7 @@ trust_delta = delta
 
 **Operations:**
 - `evaluate_plan(plan: dict[str, Any]) -> FalsificationReport` — run all built-in attack vectors; return findings and recommendation
-- `severity_score(report: FalsificationReport) -> float` — aggregate severity for reporting and routing
+- The strongest finding is available through numeric severity ranking; prospective findings use `RISK`, not observed `FAILURE`
 
 **FalsificationReport:**
 ```python
@@ -376,18 +384,18 @@ class FalsificationReport:
    - Returns GateResult(EXECUTE | HOLD | REFUSE)
 
 4. ACTION
-   - EXECUTE is an advisory clearance; the kernel does not route or attest downstream execution
+   - In advisory mode, EXECUTE is an advisory clearance; in strict mode, only declared targets receive a signed capability and downstream execution must consume it through a registered executor
    - HOLD queues for re-evaluation after budget recovery or trust growth
    - REFUSE deposits a POLICY_REJECTION audit signal, not an observed FAILURE
 
 5. CONSEQUENCE
-   - Actual outcome recorded in ConsequenceRecord
+   - Advisory mode accepts a `caller_reported_unattested` record; strict declared actions require a consumed authorization and signed executor receipt for `attested_execution`
    - Tests pass / fail measured
    - Human feedback collected (async, -1..+1)
 
 6. MEMORY
    - consequence_memory.record_outcome() updates AgentTrustProfile
-   - Feedback pheromone deposited (SUCCESS or FAILURE)
+   - Feedback pheromone deposited (SUCCESS or caller-reported `FAILURE`; policy rejection and prospective risk use separate channels)
    - ResourceLedger updated with actual cost
 
 7. ROLE CHANGE
@@ -447,19 +455,19 @@ class FalsificationReport:
 - `ActuationGate.evaluate` refuses all write-path proposals from `SANDBOX`
 - Role transitions are deterministic and persisted by the caller
 - `PruningDaemon.scan` identifies a stub module with zero call-count as a candidate with confidence ≥ 0.9
-- `PruningDaemon.archive_candidate` is blocked unless caller holds `GUARD_ANT` or `DISPATCHER` role
-- `FalsificationWorker.evaluate_plan` covers all 10 `AttackVector` enum values and reports severity-weighted findings
-- `FalsificationReport.severity_score` returns 0.0 for a clean proposal with no findings
+- `PruningDaemon.archive` remains an explicit operator-facing operation and does not treat role labels as authorization
+- `FalsificationWorker.evaluate_plan` runs eleven concrete check functions across ten attack-vector categories and reports numeric-severity findings
+- The strongest finding is available through numeric severity ranking; prospective findings use `RISK`, not observed `FAILURE`
 
 **Tests:** `test_role_adapter.py`, `test_pruning_daemon.py`, `test_falsification_worker.py`
 
 ---
 
-### Phase 4 — Integration
+### Phase 4 — Integration and enforcement
 
 **Deliverables:** `kernel.py`, `mcp_tools.py`, docs, full integration tests
 
-**Goal:** `ColonyKernel` wires everything into a single entry point. MCP tools expose the kernel to external clients.
+**Goal:** `ColonyKernel` wires everything into a single entry point. MCP tools expose advisory and strict declared-action paths; the strict boundary is explicit and bypassable outside its governed scope.
 
 **Acceptance criteria:**
 - `ColonyKernel.propose_action` executes the full loop (falsify → budget → profile → role_update → gate) for a happy-path proposal
@@ -576,11 +584,11 @@ class PruningDaemon:
         usage_window_days: int = 30,
     ) -> list[PruningCandidate]: ...
     def report(self, candidates: list[PruningCandidate]) -> str: ...
-    def archive_candidate(
+    def archive(
         self,
         candidate: PruningCandidate,
-        archive_dir: str,
-    ) -> None: ...
+        dry_run: bool = True,
+    ) -> str: ...
 ```
 
 ### `falsification_worker.py`
@@ -588,26 +596,18 @@ class PruningDaemon:
 ```python
 @dataclass
 class FalsificationReport:
-    proposal_id: str
+    plan_summary: str
     findings: list[FalsificationFinding]
-    severity_score: float
-    attacked_at: float
-    attack_vectors_run: list[str]
+    verdict: str
+    required_changes: list[str]
 
 class FalsificationWorker:
     def __init__(self) -> None: ...
 
-    def falsify(
+    def evaluate_plan(
         self,
-        proposal: ActionProposal,
-        context: dict | None = None,
+        plan: dict[str, Any],
     ) -> FalsificationReport: ...
-    def register_attack(
-        self,
-        name: str,
-        fn: Callable[[ActionProposal], list[FalsificationFinding]],
-    ) -> None: ...
-    def severity_score(self, report: FalsificationReport) -> float: ...
 ```
 
 ### `kernel.py`
