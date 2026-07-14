@@ -10,23 +10,23 @@ identity self-referential. The machine-readable source of truth is
 - Historical audit anchor: `e85aee6758726ca1fbba202d0ef1a09d524029e3`
 - Code/enforcement baseline revision: `b533af71c387b306b2c84b07099c49ba402518c5` (`docs: finalize rc2 provenance`)
 - Candidate commit: recorded in `output/release_manifest.json` for the immutable tag below
-- Release tag: `v1.4.0-rc10` (`v1.4.0` remains held pending external evaluation)
+- Release tag: `v1.4.0-rc11` (`v1.4.0` remains held pending external evaluation)
 - Scope: dual-profile Colony Kernel candidate; strict enforcement applies only to the declared action scope, while advisory compatibility remains available
 
 ## Artifact hashes
 
 These values were captured from the deterministic post-render candidate build. The
-candidate is tagged as `v1.4.0-rc10` and the clean-clone release manifest is
+candidate is tagged as `v1.4.0-rc11` and the clean-clone release manifest is
 reproducible. The provider-backed benchmark is not attached, so `publication_ready`
 remains false pending external evaluation evidence and final release publication.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `output/paper.pdf` | `69fdbb018d81b7b5dd0ae170187842ef30647b8f6864af91f615fa23ea6ac706` |
-| `output/paper.html` | `cb0f7bd1546dc8acca60dccc355e4093ad1a2bd7e9f878dad7a9413e2b0641f5` |
-| `output/data/manuscript_variables.json` | `865ba48c143b1b5fbfb98a79cf94638b9c38b673d0ec208acc68a95857d64410` |
-| `output/data/colony_kernel_coverage.json` | `7dc284a8b6d29c163eb2185e1372795dfb3da8eb22977c66a289286249239ccf` |
-| `output/data/colony_kernel_test_report.xml` | `677e30d935cc5e09849d92e9d6ea3c014d8d8ee076aaa5dd8573d9cc7002a1ce` |
+| `output/paper.pdf` | `e98b781bc0e816514435ed87daa27350febbf5e3040073421a3ebfb126ce20e0` |
+| `output/paper.html` | `d88b892ed58e0b7d53d776e68b1c722014987cb72cc28695819c266b11555d13` |
+| `output/data/manuscript_variables.json` | `eb3117407a1d4bd18350d0f2e4d4adae65334816ece8028b8d75d341dd5cbb80` |
+| `output/data/colony_kernel_coverage.json` | `9628a231d58035ae1b19dd8bc9545ec262a043e925969024f0bedd4052b2ce1e` |
+| `output/data/colony_kernel_test_report.xml` | `fad2d4b11b0c191edda20e109a0e19fd16eeb638f3ce30922d46f3c79a4b9b09` |
 | `output/data/colony_kernel_test_status.json` | `53be36e539e2e45ea55b78758280cb9e5a1e81f30968619a326618123b070dbf` |
 
 The corresponding benchmark-manifest hash is

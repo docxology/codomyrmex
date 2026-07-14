@@ -1,13 +1,13 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.4.0-rc10 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
+**Version**: v1.4.0-rc11 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
 
-> **Current release**: v1.4.0-rc10 "Colony Kernel enforcement" (candidate, 2026-07-14).
+> **Current release**: v1.4.0-rc11 "Colony Kernel enforcement" (candidate, 2026-07-14).
 > **Next release**: v1.4.0 (held for provider evaluation and immutable release verification)
 > **Archived**: v1.2.4–v1.2.8 → [CHANGELOG.md](CHANGELOG.md)
 
-## 🔬 v1.4.0-rc10 — First-principles publication checkpoint
+## 🔬 v1.4.0-rc11 — First-principles publication checkpoint
 
 This candidate is an auditable release candidate, not a completed production-safety claim. The strict
 profile governs only its explicit action-scope map; unregistered mutating paths remain bypasses. The
@@ -18,7 +18,7 @@ follow-up audit is recorded in
 | :--- | :--- | :--- |
 | Scoped Colony Kernel suite | 826 selected and passed; 0 skipped, failed, or errored (827 collected, 1 deselected) | ✅ Measured |
 | Branch coverage | 74.37185929648241% (592/796 branches; 82.59604190919674% line coverage) | ✅ Above 60% floor |
-| Clean-clone PDF replay | `output/paper.pdf` hash `69fdbb018d81b7b5dd0ae170187842ef30647b8f6864af91f615fa23ea6ac706` at the tagged candidate | ✅ Byte-for-byte match |
+| Clean-clone PDF replay | `output/paper.pdf` hash `e98b781bc0e816514435ed87daa27350febbf5e3040073421a3ebfb126ce20e0` at the tagged candidate | ✅ Byte-for-byte match |
 | Clean-clone evidence replay | HTML, variables, coverage JSON, JUnit XML, and status JSON also match the candidate | ✅ Byte-for-byte match |
 | Verifier integrity | Commit/tag, source/config, freshness, JUnit/status, and artifact hashes independently checked; clean clone has no status output | ✅ Measured |
 | Provider benchmark | Concrete provider/model, raw receipts, and result artifact absent | ⛔ Open (R-20) |
