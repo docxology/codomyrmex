@@ -1,9 +1,9 @@
 # Codomyrmex Red-Team / First-Principles / Science Follow-Up
 
 **Date:** 2026-07-14
-**Candidate:** `v1.4.0-rc15`
+**Candidate:** `v1.4.0-rc16`
 **Historical audit anchor:** `v1.4.0-rc1` at `471f998719bcbbdd756cedb66a2d8e95762dd542`
-**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc15`
+**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc16`
 **Execution mode:** internal specialist panel; no independent subagents were available in the host
 
 ## Scope and goal
