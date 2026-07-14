@@ -38,7 +38,7 @@ jobs:
             --environment-digest "${{ inputs.environment_digest }}"
       - name: Generate and verify release manifest
         run: |
-          uv run python scripts/z_generate_manuscript_variables.py
+          export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
           uv run python scripts/compile_manuscript.py --pdf
           uv run python scripts/generate_release_manifest.py \
             --extra-command "uv run python evaluations/colony_kernel/runner.py"

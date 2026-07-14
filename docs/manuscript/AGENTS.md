@@ -42,7 +42,9 @@ This directory contains the Codomyrmex manuscript source files, configuration, a
 
 - Never hardcode numeric results; use `{{TOKEN}}` syntax for all computed values.
 - Never hardcode rendered section, figure, table, or equation numbers in manuscript source; use `[@sec:*]`, `[@fig:*]`, `[@tbl:*]`, and `[@eq:*]`.
-- Run `scripts/z_generate_manuscript_variables.py` after any parameter or result change.
+- Run `scripts/compile_manuscript.py --pdf` after any parameter or result change; it
+  regenerates variables and figures in the correct order. Set `SOURCE_DATE_EPOCH` to
+  the immutable revision timestamp for a reproducible release build.
 - Keep `tests/unit/colony_kernel/test_manuscript_consistency.py` assertions in sync with reviewer-sensitive tokens and public claims.
 - Follow the Section Modification Protocol below for all prose edits.
 
@@ -62,7 +64,7 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 | MCP tools exposed | **generated count** | live decorators in `src/codomyrmex/colony_kernel/mcp_tools.py` |
 | Falsification attack vector (import-cycle) | **`CIRCULAR_ARCHITECTURE`** | `AttackVector` enum in `falsification_worker.py` — not `CIRCULAR_DEPS` |
 | Transmission bookends | **enabled** | `config.yaml` → `publication.transmission_bookends.enabled: true` |
-| Token injection pipeline | 3-step: compute → persist → render | `scripts/z_generate_manuscript_variables.py` → `output/data/manuscript_variables.json` → `output/manuscript/*.md` |
+| Token/figure pipeline | 4-step: compute → persist → inject → render | `scripts/compile_manuscript.py` runs variable generation, figure generation, token injection, and Pandoc rendering |
 | Contents page | **generated after cover** | `scripts/compile_manuscript.py` writes `output/manuscript/00_01_contents.md` before render |
 | Citation and reference pipeline | **pandoc-crossref then citeproc** | `scripts/compile_manuscript.py`; HTML math uses MathML |
 

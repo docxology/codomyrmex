@@ -127,6 +127,24 @@ def _count_files_matching(directory: Path, pattern: str) -> int:
     return sum(1 for path in directory.glob(pattern) if path.is_file())
 
 
+def _generation_timestamp() -> str:
+    """Return the build timestamp, honoring reproducible-build pinning.
+
+    Release builds set ``SOURCE_DATE_EPOCH`` to the immutable revision's commit
+    time.  Developer builds retain the useful current-time provenance when the
+    variable is not set.  An invalid explicit value fails closed rather than
+    silently producing an apparently reproducible artifact.
+    """
+    raw_epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if raw_epoch is None:
+        return datetime.now(tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    try:
+        epoch = int(raw_epoch)
+    except ValueError as exc:
+        raise RuntimeError("SOURCE_DATE_EPOCH must be an integer Unix timestamp") from exc
+    return datetime.fromtimestamp(epoch, tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def _count_colony_kernel_docs(project_root: Path) -> int:
     return _count_files_matching(
         project_root / "docs" / "modules" / "colony_kernel", "*.md"
@@ -1238,7 +1256,7 @@ def compute_variables(
         f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
     )
     platform_name: str = platform.system()
-    generation_timestamp: str = datetime.now(tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    generation_timestamp: str = _generation_timestamp()
 
     # ------------------------------------------------------------------
     # 6. Assemble flat string dict (all values coerced to str)

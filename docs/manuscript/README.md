@@ -70,18 +70,14 @@ graph LR
 ```bash
 # From repository root
 
-# 1. Hydrate manuscript variables from live build artifacts
-uv run python scripts/z_generate_manuscript_variables.py
-
-# 2. Generate the provenance-stamped visual assets
-uv run python scripts/generate_manuscript_figures.py
-
-# 3. Render linked HTML and the canonical PDF
+# 1. Hydrate variables, generate figures, and render linked HTML/PDF.
+#    SOURCE_DATE_EPOCH makes the provenance field byte-reproducible.
+export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
 uv run python scripts/compile_manuscript.py --pdf
 
 # 4. Record commit, gate status, tool versions, and output hashes
 uv run python scripts/generate_release_manifest.py \
-  --extra-command 'uv run python scripts/compile_manuscript.py --pdf'
+  --extra-command 'SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH uv run python scripts/compile_manuscript.py --pdf'
 ```
 
 ## AI Agent Directives

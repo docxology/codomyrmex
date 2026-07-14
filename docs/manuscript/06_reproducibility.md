@@ -129,11 +129,10 @@ The supported route runs from the root of a clean Codomyrmex checkout:
 ```bash
 uv sync --frozen
 
-uv run python scripts/z_generate_manuscript_variables.py
-uv run python scripts/generate_manuscript_figures.py
+export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
 uv run python scripts/compile_manuscript.py --pdf
 uv run python scripts/generate_release_manifest.py \
-  --extra-command 'uv run python scripts/compile_manuscript.py --pdf'
+  --extra-command 'SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH uv run python scripts/compile_manuscript.py --pdf'
 ```
 
 The scoped gates can also be inspected directly:
@@ -168,10 +167,11 @@ manuscript without inventing cross-platform certification.
 | SQLite | Python standard-library binding | Exercises consequence storage where configured |
 : Software inputs relevant to reproduction. {#tbl:software_versions}
 
-`uv sync --frozen` prevents dependency re-resolution, but it does not pin host fonts,
-Pandoc, TeX packages, operating-system libraries, or the current date. The generation
-timestamp and auto publication date also change across runs. Consequently, the expected
-claim is semantic regeneration with passing gates and resolved references—not universal
+`uv sync --frozen` prevents dependency re-resolution, and `SOURCE_DATE_EPOCH` pins the
+manuscript provenance timestamp to the immutable revision. Exact PDF identity still
+depends on the pinned Pandoc/XeLaTeX/font environment; the release manifest records
+those tool and environment facts. Without that host-tool pin, the supported claim is
+semantic regeneration with passing gates and resolved references, not universal
 byte-for-byte identity.
 
 ## Evaluation snapshot {#sec:sim-spec}
@@ -189,10 +189,10 @@ byte-for-byte identity.
 : Contents and omissions of the release evaluation snapshot. {#tbl:evaluation_snapshot}
 
 Core score calculations and tick updates are deterministic for fixed explicit inputs and
-state. The full build is not purely deterministic: proposal identifiers and timestamps
-may be created at runtime, the manuscript records a generation time, the publication
-date may be automatic, and renderer versions can alter layout. Replaying an identical
-policy case is therefore different from reproducing identical publication bytes.
+state. Runtime proposal identifiers remain runtime data; they are not used in the
+manuscript build. A publication build pins the manuscript timestamp with
+`SOURCE_DATE_EPOCH`; renderer versions, fonts, and TeX packages must still be held
+constant for byte-identical PDF output.
 
 ## Evidence required for the proposed external study
 

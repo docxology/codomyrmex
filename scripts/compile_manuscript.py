@@ -9,12 +9,13 @@ Usage:
 
 Workflow:
     1. Run z_generate_manuscript_variables.py to inject tokens
-    2. Generate output/manuscript/00_01_contents.md after the cover page
-    3. Verify no {{TOKEN}} remain in output/manuscript/*.md
-    4. Collect sections in the declared scientific narrative order
+    2. Generate output/figures/*.png from the resolved variable snapshot
+    3. Generate output/manuscript/00_01_contents.md after the cover page
+    4. Verify no {{TOKEN}} remain in output/manuscript/*.md
+    5. Collect sections in the declared scientific narrative order
        (skips 00_00_transmission_begin.md and 99_zz_transmission_end.md by default —
        those are PDF-only bookends with pending DOI/QR placeholders)
-    5. Run pandoc with pandoc-crossref and citeproc to produce output/paper.html
+    6. Run pandoc with pandoc-crossref and citeproc to produce output/paper.html
        (always) and output/paper.pdf (--pdf flag)
 
 Bookend files (00_00 / 99_zz) contain:
@@ -123,6 +124,27 @@ def _run_generate_variables(project_root: Path) -> bool:
     if result.returncode != 0:
         print(
             f"  WARNING: z_generate_manuscript_variables.py exited with code {result.returncode}"
+        )
+        return False
+    return True
+
+
+def _run_generate_figures(project_root: Path) -> bool:
+    """Generate figures after variables so provenance and assets share one snapshot."""
+    script = project_root / "scripts" / "generate_manuscript_figures.py"
+    if not script.exists():
+        print(f"ERROR: {script.relative_to(project_root)} not found", file=sys.stderr)
+        return False
+    print("Generating manuscript figures...")
+    result = subprocess.run(
+        [sys.executable, str(script)],
+        cwd=str(project_root),
+        capture_output=False,
+    )
+    if result.returncode != 0:
+        print(
+            f"ERROR: generate_manuscript_figures.py exited with code {result.returncode}",
+            file=sys.stderr,
         )
         return False
     return True
@@ -475,6 +497,12 @@ def main() -> int:
             return 1
     else:
         print("Skipping variable generation (--skip-generate).")
+
+    # Figures must be generated from the same resolved variable snapshot as the
+    # manuscript.  Keeping this in the renderer prevents the common clean-clone
+    # failure mode where figures are generated before output/data exists.
+    if not args.check and not _run_generate_figures(project_root):
+        return 1
 
     # Step 2: Locate manuscript files
     manuscript_dir = project_root / "output" / "manuscript"
