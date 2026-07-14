@@ -4,7 +4,7 @@ This follow-up preserves the historical second-pass audit of
 `e85aee6758726ca1fbba202d0ef1a09d524029e3` and records the implementation and
 release checks performed against the reviewed baseline
 `4bd6c1804f2caa905d36bcb39d67bdf8c1d86837` and the final candidate revision
-identified by the clean-clone manifest for tag `v1.4.0-rc9`.
+identified by the clean-clone manifest for tag `v1.4.0-rc10`.
 
 The result is a dual-profile candidate. The advisory profile preserves
 `caller_reported_unattested` input; the strict profile enforces only the governed
@@ -13,7 +13,7 @@ action scope through signed, single-use Ed25519 capabilities and executor receip
 `POLICY_REJECTION`; prospective falsification findings use `RISK`. The PDF-producing
 source and generated outputs are synchronized in this worktree. A clean clone of the
 candidate regenerated the exact PDF, HTML, evidence, and figure hashes; the candidate
-is tagged as `v1.4.0-rc9` and remains on hold until the provider-backed
+is tagged as `v1.4.0-rc10` and remains on hold until the provider-backed
 benchmark is completed and the final release is published.
 
 ## Reproduction snapshot
