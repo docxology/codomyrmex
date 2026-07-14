@@ -8,14 +8,14 @@ identity self-referential. The machine-readable source of truth is
 ## Candidate identity
 
 - Historical audit anchor: `e85aee6758726ca1fbba202d0ef1a09d524029e3`
-- Evaluated implementation revision: `b533af71c387b306b2c84b07099c49ba402518c5` (`docs: finalize rc2 provenance`)
-- Release tag: `v1.4.0-rc2` (candidate; `v1.4.0` remains held pending external evaluation)
+- Code/enforcement baseline revision: `b533af71c387b306b2c84b07099c49ba402518c5` (`docs: finalize rc2 provenance`)
+- Release tag: `v1.4.0-rc4` (candidate revision is recorded by the tagged clean-clone manifest; `v1.4.0` remains held pending external evaluation)
 - Scope: dual-profile Colony Kernel candidate; strict enforcement applies only to the declared action scope, while advisory compatibility remains available
 
 ## Artifact hashes
 
 These values were captured from the deterministic post-render candidate build. The
-candidate is tagged as `v1.4.0-rc2` and the clean-clone release manifest is
+candidate is tagged as `v1.4.0-rc4` and the clean-clone release manifest is
 reproducible. The provider-backed benchmark is not attached, so `publication_ready`
 remains false pending external evaluation evidence and final release publication.
 
