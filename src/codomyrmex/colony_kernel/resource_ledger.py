@@ -8,11 +8,14 @@ No external dependencies beyond stdlib.
 from __future__ import annotations
 
 import sqlite3
+import threading
 import time
 from dataclasses import dataclass, field
 from typing import Any
 
 from codomyrmex.colony_kernel.models import ResourceCost
+
+_SQLITE_INIT_LOCK = threading.Lock()
 
 # ---------------------------------------------------------------------------
 # Budget definition
@@ -95,43 +98,44 @@ class ResourceLedger:
             self.db_path, check_same_thread=False, timeout=10.0
         )
         self._conn.execute("PRAGMA busy_timeout=10000")
-        try:
+        # SQLite connection setup is serialized within a process so concurrent
+        # workers do not race while enabling WAL or creating the schema.  The
+        # transaction used by check_and_consume still provides cross-process
+        # atomicity.
+        with _SQLITE_INIT_LOCK:
             self._conn.execute("PRAGMA journal_mode=WAL")
-        except sqlite3.OperationalError as exc:
-            if "locked" not in str(exc).lower():
-                raise
-        self._conn.executescript(
-            """
-            CREATE TABLE IF NOT EXISTS resource_usage (
-                singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
-                llm_calls INTEGER NOT NULL,
-                runtime_seconds REAL NOT NULL,
-                risk_level REAL NOT NULL,
-                human_attention_minutes REAL NOT NULL,
-                merge_risk REAL NOT NULL,
-                doc_debt REAL NOT NULL,
-                security_exposure REAL NOT NULL,
-                period_start REAL NOT NULL
-            );
-            CREATE TABLE IF NOT EXISTS resource_history (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                agent_id TEXT NOT NULL,
-                llm_calls INTEGER NOT NULL,
-                runtime_seconds REAL NOT NULL,
-                risk_level REAL NOT NULL,
-                human_attention_minutes REAL NOT NULL,
-                merge_risk REAL NOT NULL,
-                doc_debt REAL NOT NULL,
-                security_exposure REAL NOT NULL,
-                recorded_at REAL NOT NULL
-            );
-            """
-        )
-        self._conn.execute(
-            "INSERT OR IGNORE INTO resource_usage VALUES (1, 0, 0, 0, 0, 0, 0, 0, ?)",
-            (self._period_start,),
-        )
-        self._conn.commit()
+            self._conn.executescript(
+                """
+                CREATE TABLE IF NOT EXISTS resource_usage (
+                    singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
+                    llm_calls INTEGER NOT NULL,
+                    runtime_seconds REAL NOT NULL,
+                    risk_level REAL NOT NULL,
+                    human_attention_minutes REAL NOT NULL,
+                    merge_risk REAL NOT NULL,
+                    doc_debt REAL NOT NULL,
+                    security_exposure REAL NOT NULL,
+                    period_start REAL NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS resource_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    agent_id TEXT NOT NULL,
+                    llm_calls INTEGER NOT NULL,
+                    runtime_seconds REAL NOT NULL,
+                    risk_level REAL NOT NULL,
+                    human_attention_minutes REAL NOT NULL,
+                    merge_risk REAL NOT NULL,
+                    doc_debt REAL NOT NULL,
+                    security_exposure REAL NOT NULL,
+                    recorded_at REAL NOT NULL
+                );
+                """
+            )
+            self._conn.execute(
+                "INSERT OR IGNORE INTO resource_usage VALUES (1, 0, 0, 0, 0, 0, 0, 0, ?)",
+                (self._period_start,),
+            )
+            self._conn.commit()
         self._load_persistent_state()
 
     def _load_persistent_state(self) -> None:
