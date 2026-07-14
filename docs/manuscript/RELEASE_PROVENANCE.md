@@ -8,7 +8,7 @@ identity self-referential. The machine-readable source of truth is
 ## Candidate identity
 
 - Historical audit anchor: `e85aee6758726ca1fbba202d0ef1a09d524029e3`
-- Evaluated implementation revision: `e5a9fbeec` (`release: harden verifier and authorization lifecycle`)
+- Evaluated implementation revision: `b533af71c387b306b2c84b07099c49ba402518c5` (`docs: finalize rc2 provenance`)
 - Release tag: `v1.4.0-rc2` (candidate; `v1.4.0` remains held pending external evaluation)
 - Scope: dual-profile Colony Kernel candidate; strict enforcement applies only to the declared action scope, while advisory compatibility remains available
 
@@ -35,7 +35,9 @@ The deterministic clean-clone replay at the implementation revision regenerated 
 same PDF, HTML, evidence, and figure hashes. The release manifest remains
 `publication_ready: false` because provider-backed benchmark results are missing.
 The shared development checkout retains unrelated changes outside the candidate; the
-tagged clean-clone evaluation is clean.
+tagged clean-clone evaluation is clean. The local manifest sidecar records the
+candidate's dirty state explicitly; the clean-clone manifest records the same
+revision and tag with no status output.
 
 The rendered candidate uses 0.20-inch left/right and 0.55-inch top/bottom margins in
 both the PDF layout and the HTML print stylesheet.

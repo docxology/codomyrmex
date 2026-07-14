@@ -16,10 +16,11 @@ follow-up audit is recorded in
 
 | Gate | Current evidence | Status |
 | :--- | :--- | :--- |
-| Scoped Colony Kernel suite | 822 passed in the pinned RC1 evidence; rerun required after this follow-up | 🔄 Verify |
-| Branch coverage | 74.29667519181585% (581/782) in the pinned RC1 evidence | ✅ Above 60% floor |
-| Clean-clone PDF replay | `output/paper.pdf` hash `37bc6ba55b8208a8a455c8e82371b848a5378c82b5a6d0f72ce43a1ee58894bd` at `v1.4.0-rc1` | ✅ Reproduced before follow-up |
-| Verifier integrity | Commit/tag, source/config, freshness, JUnit/status, and artifact hashes independently checked | 🔄 Verify |
+| Scoped Colony Kernel suite | 826 selected and passed; 0 skipped, failed, or errored (827 collected, 1 deselected) | ✅ Measured |
+| Branch coverage | 74.37185929648241% (592/796 branches; 82.59604190919674% line coverage) | ✅ Above 60% floor |
+| Clean-clone PDF replay | `output/paper.pdf` hash `69fdbb018d81b7b5dd0ae170187842ef30647b8f6864af91f615fa23ea6ac706` at the tagged candidate | ✅ Byte-for-byte match |
+| Clean-clone evidence replay | HTML, variables, coverage JSON, JUnit XML, and status JSON also match the candidate | ✅ Byte-for-byte match |
+| Verifier integrity | Commit/tag, source/config, freshness, JUnit/status, and artifact hashes independently checked; clean clone has no status output | ✅ Measured |
 | Provider benchmark | Concrete provider/model, raw receipts, and result artifact absent | ⛔ Open (R-20) |
 | Immutable final publication | A-001 and A-016 remain open | ⛔ Open |
 
