@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import argparse
 import gzip
+import io
+import json
 import os
 import tarfile
 from pathlib import Path
@@ -66,8 +68,23 @@ def package(root: Path, output: Path) -> Path:
                         info.uname = ""
                         info.gname = ""
                         info.mtime = 0
-                        with path.open("rb") as handle:
-                            archive.addfile(info, handle)
+                        if relative == "output/release_manifest.json":
+                            packaged_manifest = json.loads(
+                                path.read_text(encoding="utf-8")
+                            )
+                            if not isinstance(packaged_manifest, dict):
+                                raise ValueError(
+                                    "release manifest must be a JSON object"
+                                )
+                            packaged_manifest["release_package_hash"] = None
+                            payload = json.dumps(
+                                packaged_manifest, indent=2, sort_keys=True
+                            ).encode("utf-8")
+                            info.size = len(payload)
+                            archive.addfile(info, fileobj=io.BytesIO(payload))
+                        else:
+                            with path.open("rb") as handle:
+                                archive.addfile(info, handle)
         temporary.replace(output)
     finally:
         if temporary.exists():

@@ -244,9 +244,17 @@ def test_release_package_hash_is_stable_across_repeated_builds(tmp_path: Path) -
     for relative in required:
         path = tmp_path / relative
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(path.as_posix().encode("utf-8"))
+        if relative == "output/release_manifest.json":
+            path.write_text("{}", encoding="utf-8")
+        else:
+            path.write_bytes(path.as_posix().encode("utf-8"))
 
     first = package(tmp_path, tmp_path / "output" / "first.tar.gz")
+    manifest_path = tmp_path / "output/release_manifest.json"
+    manifest_path.write_text(
+        json.dumps({"release_package_hash": hashlib.sha256(first.read_bytes()).hexdigest()}),
+        encoding="utf-8",
+    )
     second = package(tmp_path, tmp_path / "output" / "second.tar.gz")
 
     assert hashlib.sha256(first.read_bytes()).digest() == hashlib.sha256(
