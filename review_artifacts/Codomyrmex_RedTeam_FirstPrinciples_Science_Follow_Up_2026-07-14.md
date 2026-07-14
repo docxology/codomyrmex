@@ -1,9 +1,9 @@
 # Codomyrmex Red-Team / First-Principles / Science Follow-Up
 
 **Date:** 2026-07-14
-**Candidate:** `v1.4.0-rc14`
+**Candidate:** `v1.4.0-rc15`
 **Historical audit anchor:** `v1.4.0-rc1` at `471f998719bcbbdd756cedb66a2d8e95762dd542`
-**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc14`
+**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc15`
 **Execution mode:** internal specialist panel; no independent subagents were available in the host
 
 ## Scope and goal
@@ -85,4 +85,4 @@ H1–H4 are supported for the tested contracts and clean-clone replay. H5 is
 The clean-clone PDF/evidence replay and required test gate are complete. Re-review remains contingent on
 the provider benchmark supplying its pinned configuration, raw rows, cryptographically verified receipts,
 environment digest, and reports, followed by public immutable evidence attachment. Until then, this
-candidate is an auditable RC14 with a publication hold, not a completed production-safety release.
+candidate is an auditable RC15 with a publication hold, not a completed production-safety release.

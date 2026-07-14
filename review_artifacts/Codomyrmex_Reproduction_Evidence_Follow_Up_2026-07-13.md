@@ -4,7 +4,7 @@ This follow-up preserves the historical second-pass audit of
 `e85aee6758726ca1fbba202d0ef1a09d524029e3` and records the implementation and
 release checks performed against the reviewed baseline
 `4bd6c1804f2caa905d36bcb39d67bdf8c1d86837` and the final candidate revision
-identified by the clean-clone manifest for tag `v1.4.0-rc14`.
+identified by the clean-clone manifest for tag `v1.4.0-rc15`.
 
 The result is a dual-profile candidate. The advisory profile preserves
 `caller_reported_unattested` input; the strict profile enforces only the governed
@@ -13,7 +13,7 @@ action scope through signed, single-use Ed25519 capabilities and executor receip
 `POLICY_REJECTION`; prospective falsification findings use `RISK`. The PDF-producing
 source and generated outputs are synchronized in this worktree. A clean clone of the
 candidate regenerated the exact PDF, HTML, evidence, and figure hashes; the candidate
-is tagged as `v1.4.0-rc14` and remains on hold until the provider-backed
+is tagged as `v1.4.0-rc15` and remains on hold until the provider-backed
 benchmark is completed and the final release is published.
 
 ## Reproduction snapshot
@@ -83,7 +83,7 @@ candidate worktree.
 | `output/data/colony_kernel_test_report.xml` | `cbcfc215fee2cf2200ee0c1ae18e2adf5a2ec9d58c360ef8e691b0b5be963e5eb` |
 | `output/data/colony_kernel_test_status.json` | `fc2f174b03c69d8d3bf038e6e49c11b1c86d39aa74920aa7c226211e6e4a1ecf` |
 
-The clean-clone manifest for `v1.4.0-rc14` reports `publication_ready=false` because provider-backed
+The clean-clone manifest for `v1.4.0-rc15` reports `publication_ready=false` because provider-backed
 benchmark results are missing; its checkout, artifact freshness, and required test
 gates are true. The shared development worktree retains unrelated changes outside the
 candidate. The

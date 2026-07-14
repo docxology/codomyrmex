@@ -229,7 +229,7 @@ def test_tampered_cross_agent_and_expired_authorizations_are_rejected(
 ) -> None:
     key = Ed25519Authority.generate()
     ledger = AuthorizationLedger(
-        str(tmp_path / "authorization-edge.sqlite"), issuer=key, ttl_seconds=0.01
+        str(tmp_path / "authorization-edge.sqlite"), issuer=key, ttl_seconds=1.0
     )
     proposal = _proposal(proposal_id="edge")
     from codomyrmex.colony_kernel.models import GateResult
@@ -253,7 +253,7 @@ def test_tampered_cross_agent_and_expired_authorizations_are_rejected(
             action_type=proposal.action_type,
             target=proposal.target,
         )
-    time.sleep(0.02)
+    time.sleep(1.05)
     with pytest.raises(AuthorizationError, match="expired"):
         ledger.consume(
             token,
