@@ -644,7 +644,7 @@ graph LR
 # Run all tests (no coverage by default)
 uv run pytest src/codomyrmex/tests/ -v --tb=short
 
-# Same suite with 40% coverage gate
+# Same suite with 60% coverage gate
 make test
 
 # Run a specific module
@@ -748,7 +748,7 @@ uv run codomyrmex --help
 uv run codomyrmex modules        # List all top-level modules
 uv run codomyrmex status         # Live system status
 
-# 6. Run tests (`make test` for coverage + 40% gate; optional `just test` if you use just)
+# 6. Run tests (`make test` for coverage + 60% gate; optional `just test` if you use just)
 uv run pytest src/codomyrmex/tests/ -v --tb=short
 
 # 7. Lint & type-check
