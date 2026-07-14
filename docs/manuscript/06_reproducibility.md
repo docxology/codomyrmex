@@ -163,7 +163,7 @@ manuscript without inventing cross-platform certification.
 | `uv.lock` | Repository lockfile | Pins Python package resolution |
 | pytest / pytest-cov | Development dependencies | Executes tests and branch coverage |
 | Ruff / ty | Development dependencies | Executes scoped static gates |
-| Pandoc / XeLaTeX | Host tools | Produce HTML/PDF; versions can affect layout |
+| Pandoc / XeLaTeX / qpdf | Host tools | Produce and deterministically normalize HTML/PDF; versions can affect layout |
 | SQLite | Python standard-library binding | Exercises consequence storage where configured |
 : Software inputs relevant to reproduction. {#tbl:software_versions}
 

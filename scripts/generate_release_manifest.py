@@ -88,6 +88,7 @@ def _tool_versions(root: Path) -> dict[str, str]:
         "ruff": ["ruff", "--version"],
         "ty": ["ty", "--version"],
         "pandoc": ["pandoc", "--version"],
+        "qpdf": ["qpdf", "--version"],
     }
     versions: dict[str, str] = {}
     for name, argv in commands.items():
@@ -99,6 +100,18 @@ def _tool_versions(root: Path) -> dict[str, str]:
         versions[name] = output if code == 0 else f"unavailable: {output}"
     versions["platform"] = platform.platform()
     return versions
+
+
+def _build_timestamp() -> str:
+    """Return a pinned manifest timestamp when SOURCE_DATE_EPOCH is supplied."""
+    raw_epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if raw_epoch is None:
+        return datetime.now(tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    try:
+        epoch = int(raw_epoch)
+    except ValueError as exc:
+        raise RuntimeError("SOURCE_DATE_EPOCH must be an integer Unix timestamp") from exc
+    return datetime.fromtimestamp(epoch, tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _load_json(path: Path, label: str) -> dict[str, Any]:
@@ -231,7 +244,11 @@ def build_manifest(root: Path, *, extra_commands: list[dict[str, Any]] | None = 
 
     return {
         "manifest_version": "1.1",
-        "generated_at": datetime.now(tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at": _build_timestamp(),
+        "reproducible_build": {
+            "source_date_epoch": os.environ.get("SOURCE_DATE_EPOCH"),
+            "font_and_pdf_id_normalization": "qpdf-qdf-stable-subset-prefixes-and-fixed-id",
+        },
         "publication_ready": publication_ready,
         "git": {
             "commit_sha": commit,

@@ -32,6 +32,7 @@ from __future__ import annotations
 import argparse
 import html as html_lib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -454,6 +455,73 @@ def _run_pandoc_pdf(
     return True
 
 
+def _stable_font_prefix(index: int) -> bytes:
+    """Return a six-letter PDF font-subset prefix for a stable index."""
+    letters: list[str] = []
+    value = index
+    for _ in range(6):
+        letters.append(chr(ord("A") + value % 26))
+        value //= 26
+    return "".join(reversed(letters)).encode("ascii")
+
+
+def _normalize_pdf_for_reproducibility(pdf_path: Path, project_root: Path) -> bool:
+    """Normalize renderer-generated font prefixes and PDF IDs in-place.
+
+    XeLaTeX/xdvipdfmx assigns run-specific six-letter font subset prefixes and
+    a content-derived trailer ID.  Both are semantically inert but otherwise
+    make a clean-clone PDF hash differ.  qpdf's QDF representation lets us
+    replace those same-length fields without changing page content or offsets.
+    """
+    qpdf = shutil.which("qpdf")
+    if not qpdf:
+        print("ERROR: qpdf not found; deterministic PDF normalization is required", file=sys.stderr)
+        return False
+
+    qdf_path = pdf_path.with_name(f".{pdf_path.name}.{os.getpid()}.qdf")
+    normalized_path = pdf_path.with_name(f".{pdf_path.name}.{os.getpid()}.normalized")
+    try:
+        result = subprocess.run(
+            [qpdf, "--qdf", "--object-streams=disable", str(pdf_path), str(qdf_path)],
+            cwd=str(project_root),
+            capture_output=False,
+        )
+        if result.returncode != 0:
+            print("ERROR: qpdf QDF conversion failed", file=sys.stderr)
+            return False
+
+        payload = qdf_path.read_bytes()
+        font_matches = sorted(set(re.findall(rb"([A-Z]{6})\+([A-Za-z0-9-]+)", payload)))
+        suffixes = sorted({suffix for _prefix, suffix in font_matches})
+        for index, suffix in enumerate(suffixes):
+            replacement = _stable_font_prefix(index)
+            for old_prefix, old_suffix in font_matches:
+                if old_suffix == suffix:
+                    payload = payload.replace(old_prefix + b"+", replacement + b"+")
+
+        fixed_id = b"/ID [<00000000000000000000000000000000><00000000000000000000000000000000>]"
+        payload = re.sub(rb"/ID \[<[0-9A-Fa-f]+><[0-9A-Fa-f]+>\]", fixed_id, payload)
+        qdf_path.write_bytes(payload)
+
+        result = subprocess.run(
+            [qpdf, "--object-streams=generate", "--compress-streams=y", str(qdf_path), str(normalized_path)],
+            cwd=str(project_root),
+            capture_output=False,
+        )
+        if result.returncode != 0:
+            print("ERROR: qpdf normalized PDF generation failed", file=sys.stderr)
+            return False
+
+        normalized = normalized_path.read_bytes()
+        normalized = re.sub(rb"/ID \[<[0-9A-Fa-f]+><[0-9A-Fa-f]+>\]", fixed_id, normalized)
+        normalized_path.write_bytes(normalized)
+        normalized_path.replace(pdf_path)
+        return True
+    finally:
+        qdf_path.unlink(missing_ok=True)
+        normalized_path.unlink(missing_ok=True)
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -583,6 +651,8 @@ def main() -> int:
             project_root=project_root,
         )
         if not pdf_ok:
+            return 1
+        if not _normalize_pdf_for_reproducibility(pdf_out, project_root):
             return 1
 
     print("Done.")
