@@ -2,17 +2,18 @@
 
 This follow-up preserves the historical second-pass audit of
 `e85aee6758726ca1fbba202d0ef1a09d524029e3` and records the implementation and
-release checks performed against the current revision named by the review:
-`4bd6c1804f2caa905d36bcb39d67bdf8c1d86837`.
+release checks performed against the reviewed baseline
+`4bd6c1804f2caa905d36bcb39d67bdf8c1d86837` and implementation candidate
+`1db2b7a326b468a6c33ce9af7adb8e2ddd5d8025`.
 
 The result is a dual-profile candidate. The advisory profile preserves
 `caller_reported_unattested` input; the strict profile enforces only the governed
 action scope through signed, single-use Ed25519 capabilities and executor receipts.
 `FAILURE` means a caller-reported or attested adverse outcome; policy rejection is
 `POLICY_REJECTION`; prospective falsification findings use `RISK`. The PDF-producing
-source and generated outputs are synchronized in this worktree, but publication
-remains on hold until the changes are committed, tagged, benchmarked, and replayed
-from a clean clone.
+source and generated outputs are synchronized in this worktree. A clean clone of the
+implementation candidate regenerated the exact PDF, HTML, and figure hashes; publication
+remains on hold until the candidate is published under an immutable tag and benchmarked.
 
 ## Reproduction snapshot
 
@@ -26,8 +27,8 @@ The fail-closed generator wrote `output/data/colony_kernel_test_status.json` and
 | Required skips | 0 |
 | Required failures | 0 |
 | Required errors | 0 |
-| Branch coverage | 74.10714285714286% (581/784) |
-| Line coverage | 82.44274809160305% (2,227/2,622) |
+| Branch coverage | 74.29667519181585% (581/782) |
+| Line coverage | 82.57419923596827% (2,229/2,621) |
 | Executable coverage floor | 60.0% |
 | Full local colony-kernel suite | 816 passed |
 
@@ -74,18 +75,16 @@ candidate worktree.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `output/paper.pdf` | `b560d7bfbe8ce5785536fef8f7c6d31d89658b887752883e6798531e292067be` |
-| `output/paper.html` | `2dd8c4768682ef9339d63309e8ed3de0c70c6961c6f433743af895dc64d66a5e` |
-| `output/data/manuscript_variables.json` | `c81fc49cb865e698e3bbef2f0816b8d6b4946a8d06ebd84511b69fb660ee3689` |
-| `output/data/colony_kernel_coverage.json` | `eddb1a9090c16ac2e5a8e5830c73994482d24713d049753187e6b480f74d4489` |
-| `output/data/colony_kernel_test_report.xml` | `ad6f6a0ab82dc5df20fae378d420f8b210b24e086543e8f8721c6687effdc08f` |
-| `output/data/colony_kernel_test_status.json` | `a6ce71a6cd0cc7fda17191ab6c06ab1159e5bd2ca0b046c38849335b6a42cec3` |
-| `output/release_manifest.json` | `aa336607eb304523b279a367eedf671218fe15fe017a444ca27e6357ff50b7e2` |
-| `output/release_package.tar.gz` | `a418096f6868cc33a4d0b3a26c322c1b9e8e82461987cd74d901e25224a505ab` |
+| `output/paper.pdf` | `36ebc8982f92d5bd007b92f9415d029dfc26ee4c5aa185c0345fc8b48b1f0f76` |
+| `output/paper.html` | `6d999977449e85e979992f07c16472bdea07e5ab8e8018ce34a421e0938120df` |
+| `output/data/manuscript_variables.json` | `6b424188e10d340dce60cb520809ab30ab3014fb9681b7935befa63271b86c98` |
+| `output/data/colony_kernel_coverage.json` | `117dcb7145d1455a2f0125e954c92ff016012622e7e1f6a951b26996541cceb2` |
+| `output/data/colony_kernel_test_report.xml` | `0dad5f0f470c4bf770bf7bb3f15169099113e4e28a8f6af203caf232c7102355` |
+| `output/data/colony_kernel_test_status.json` | `abe20b74d40742d444770bc68e96979f916c8766971eaca62759d01ee12657af` |
 
-The manifest reports `publication_ready=false` because the worktree is dirty and
-provider-backed benchmark results are missing; its required artifact freshness and
-required test gates are true. The
+The manifest reports `publication_ready=false` because the worktree contains unrelated
+changes and provider-backed benchmark results are missing; its required artifact
+freshness and required test gates are true. The
 historical reviewed PDF remains preserved in the Downloads package and is not
 overwritten by this follow-up.
 
