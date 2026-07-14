@@ -12,8 +12,9 @@ action scope through signed, single-use Ed25519 capabilities and executor receip
 `FAILURE` means a caller-reported or attested adverse outcome; policy rejection is
 `POLICY_REJECTION`; prospective falsification findings use `RISK`. The PDF-producing
 source and generated outputs are synchronized in this worktree. A clean clone of the
-implementation candidate regenerated the exact PDF, HTML, evidence, and figure hashes; publication
-remains on hold until the candidate is published under an immutable tag and benchmarked.
+implementation candidate regenerated the exact PDF, HTML, evidence, and figure hashes;
+the candidate is tagged as `v1.4.0-rc1` and remains on hold until the provider-backed
+benchmark is completed and the final release is published.
 
 ## Reproduction snapshot
 
@@ -82,9 +83,10 @@ candidate worktree.
 | `output/data/colony_kernel_test_report.xml` | `832bc840a1c36264c34e7169e9b7e3bff58b41b6c58ff6e09aff4dcce31dceba` |
 | `output/data/colony_kernel_test_status.json` | `88e9076c9961a314a2394dff21917b9ccbd490c9bcbabca7ea4c41b4d4efdf35` |
 
-The manifest reports `publication_ready=false` because the worktree contains unrelated
-changes and provider-backed benchmark results are missing; its required artifact
-freshness and required test gates are true. The
+The clean-clone manifest reports `publication_ready=false` because provider-backed
+benchmark results are missing; its checkout, artifact freshness, and required test
+gates are true. The shared development worktree retains unrelated changes outside the
+candidate. The
 historical reviewed PDF remains preserved in the Downloads package and is not
 overwritten by this follow-up.
 
@@ -92,7 +94,7 @@ overwritten by this follow-up.
 
 The workbook follow-up reclassifies the implemented enforcement, persistence,
 semantic, and documentation actions as `Addressed - verify` against this candidate;
-A-001 and A-016 remain release blockers until an immutable release is published.
-Provider-backed benchmark execution, clean-clone replay, and external key/endpoint
-configuration remain explicitly pending. No production-safety or repository-wide
-governance claim is made.
+A-001 and A-016 remain release blockers until the release candidate is externally
+published with its evidence bundle. Provider-backed benchmark execution and external
+key/endpoint configuration remain explicitly pending. No production-safety or
+repository-wide governance claim is made.
