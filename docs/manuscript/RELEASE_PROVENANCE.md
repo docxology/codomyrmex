@@ -8,7 +8,7 @@ identity self-referential. The machine-readable source of truth is
 ## Candidate identity
 
 - Historical audit anchor: `e85aee6758726ca1fbba202d0ef1a09d524029e3`
-- Evaluated implementation revision: `1db2b7a326b468a6c33ce9af7adb8e2ddd5d8025`
+- Evaluated implementation revision: `f22384acf925cebdd819915d17d530592d9ffba3`
 - Release tag: pending a clean immutable release
 - Scope: dual-profile Colony Kernel candidate; strict enforcement applies only to the declared action scope, while advisory compatibility remains available
 
@@ -21,18 +21,18 @@ tag and external evaluation evidence exist.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `output/paper.pdf` | `36ebc8982f92d5bd007b92f9415d029dfc26ee4c5aa185c0345fc8b48b1f0f76` |
-| `output/paper.html` | `6d999977449e85e979992f07c16472bdea07e5ab8e8018ce34a421e0938120df` |
-| `output/data/manuscript_variables.json` | `6b424188e10d340dce60cb520809ab30ab3014fb9681b7935befa63271b86c98` |
-| `output/data/colony_kernel_coverage.json` | `117dcb7145d1455a2f0125e954c92ff016012622e7e1f6a951b26996541cceb2` |
-| `output/data/colony_kernel_test_report.xml` | `0dad5f0f470c4bf770bf7bb3f15169099113e4e28a8f6af203caf232c7102355` |
-| `output/data/colony_kernel_test_status.json` | `abe20b74d40742d444770bc68e96979f916c8766971eaca62759d01ee12657af` |
+| `output/paper.pdf` | `4de816030843c5d43255dfb6a8d0a8056091689ad6d667d08d6569a5529f92c2` |
+| `output/paper.html` | `7b1f10d08475204af555e798de31c13158c9a7112586717c7aba906230cd1200` |
+| `output/data/manuscript_variables.json` | `3fc5e6ef13443a1a214722f24332b8db0fcd3fbce3c3bcda69af7dbb43e080de` |
+| `output/data/colony_kernel_coverage.json` | `e5f1b3ac69ebeda28cded7cd28ed5a9c2e03c7a772222857a08143a7dc37b2b6` |
+| `output/data/colony_kernel_test_report.xml` | `832bc840a1c36264c34e7169e9b7e3bff58b41b6c58ff6e09aff4dcce31dceba` |
+| `output/data/colony_kernel_test_status.json` | `88e9076c9961a314a2394dff21917b9ccbd490c9bcbabca7ea4c41b4d4efdf35` |
 
 The corresponding benchmark-manifest hash is
 `03b791c91c89e4de4d4844c7376142a8ad1ca2ab22ec5a8811f4f963d3b931d6`.
 
 The deterministic clean-clone replay at the implementation revision regenerated the
-same PDF, HTML, and figure hashes. The release manifest remains
+same PDF, HTML, evidence, and figure hashes. The release manifest remains
 `publication_ready: false` because the local checkout is not an immutable tag and
 provider-backed benchmark results are missing.
 
