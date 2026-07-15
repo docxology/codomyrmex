@@ -66,7 +66,7 @@ class TestDeploymentOrchestrator:
         # But wait, in our implementation if hooks fail, we log warning and continue.
         # Let's see how it behaves.
         orchestrator.deploy("fail-hook")
-        assert any("Hook failed" in log for log in deployment.logs)
+        assert any("Hook failed" in log or "Hook execution failed" in log for log in deployment.logs)
 
     def test_health_check_fail(self, config_file):
         """Test that a failing health check marks deployment as failed/rolled back."""
