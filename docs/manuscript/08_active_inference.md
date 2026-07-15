@@ -130,10 +130,11 @@ proposal and a verdict, but this alone does not establish the conditional indepe
 of a Markov blanket. Calling the gate a blanket is acceptable only as a clearly marked
 metaphor for mediation.
 
-The process boundary matters here as well. The default MCP singleton lets multiple calls
-within one process encounter the same in-memory field. Restarting the process removes that
-field, and a file-backed consequence database does not restore it. Cross-session
-collective belief propagation is therefore not an implemented property.
+The process boundary matters here as well. The default advisory MCP singleton lets
+multiple calls within one process encounter the same in-memory field. A strict,
+file-backed profile can restore the declared signal, resource, trust, consequence,
+authorization, and receipt state across restarts, but this is durable recordkeeping—not
+cross-session collective belief propagation, distributed consistency, or active inference.
 
 ## From Analogy to an Active Inference Model {#sec:ai-upgrade}
 

@@ -1,7 +1,7 @@
 """MCP tool definitions for the Colony Kernel module.
 
 Exposes the Colony Kernel control plane to AI agents via Model Context
-Protocol.  All eight tools route through a single module-level
+Protocol.  Advisory, strict execution, evidence, and scope tools route through a single module-level
 ``ColonyKernel`` singleton (imported from ``kernel.py``) so state is
 shared across calls within a process.
 
@@ -14,6 +14,9 @@ Eight tools are registered:
 - colony_falsify_plan    — adversarial evaluation of a plan dict
 - colony_pruning_report  — stale-module candidates identified by the daemon
 - colony_tick            — advance the colony one time-step
+- colony_execute_authorized — consume a signed capability and execute a registered action
+- colony_record_attested_outcome — link one receipt to one strict outcome
+- colony_action_scope    — inspect the declared strict action scope
 
 No external dependencies beyond stdlib and the colony_kernel / stigmergy
 packages that are already part of codomyrmex.
@@ -23,22 +26,35 @@ from __future__ import annotations
 
 import json
 import threading
+import uuid
+from collections.abc import Iterator
+from contextlib import contextmanager
 from typing import Any
 
+from codomyrmex.colony_kernel.authorization import (
+    deserialize_authorization,
+    deserialize_receipt,
+    serialize_receipt,
+)
 from codomyrmex.colony_kernel.kernel import ColonyKernel
 from codomyrmex.colony_kernel.models import (
     ActionProposal,
     AgentTrustProfile,
     ColonySignal,
     DecayRate,
+    ExecutionAuthorization,
     FalsificationFinding,
     FalsificationSeverity,
     GateResult,
+    OutcomeEvidence,
     PruningCandidate,
     ResourceCost,
     SignalSource,
     SignalType,
     make_trace_key,
+    recommendation_for_severity,
+    severity_rank,
+    severity_weight,
 )
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -47,7 +63,9 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 # ---------------------------------------------------------------------------
 
 _kernel: ColonyKernel | None = None
-# Lock protecting non-atomic lazy initialisation of _kernel.
+# Lock protecting non-atomic lazy initialisation and scoped replacement of
+# _kernel.  ``isolated_kernel`` is the real-component boundary used by tests
+# and by callers that need a short-lived colony context.
 _KERNEL_LOCK: threading.Lock = threading.Lock()
 
 
@@ -65,6 +83,27 @@ def _get_kernel() -> ColonyKernel:
             if _kernel is None:
                 _kernel = ColonyKernel()
     return _kernel
+
+
+@contextmanager
+def isolated_kernel(config: Any | None = None) -> Iterator[ColonyKernel]:
+    """Run MCP calls against a fresh real kernel for a bounded scope.
+
+    This is an isolation/factory boundary, not a method stub or singleton
+    replacement fixture.  The previous process singleton is restored after
+    the context and the temporary consequence store is closed.
+    """
+    global _kernel
+    with _KERNEL_LOCK:
+        previous = _kernel
+        replacement = ColonyKernel(config=config)
+        _kernel = replacement
+    try:
+        yield replacement
+    finally:
+        replacement.consequence_memory.close()
+        with _KERNEL_LOCK:
+            _kernel = previous
 
 
 # ---------------------------------------------------------------------------
@@ -154,9 +193,9 @@ def colony_propose_action(
 @mcp_tool(
     category="colony_kernel",
     description=(
-        "Record a caller-reported action outcome. The report is not linked to "
-        "a consumed EXECUTE authorization. Updates trust and deposits SUCCESS "
-        "or FAILURE plus a DEPENDENCY signal."
+        "Record a caller-reported action outcome. Advisory mode stores it with "
+        "caller_reported_unattested evidence; strict mode quarantines it until "
+        "a consumed authorization and signed executor receipt are supplied."
     ),
 )
 def colony_record_outcome(
@@ -192,6 +231,22 @@ def colony_record_outcome(
             target=target,
             rationale="Outcome recorded via colony_record_outcome MCP tool.",
             expected_outcome=actual_outcome,
+            proposal_id=str(
+                uuid.uuid5(
+                    uuid.NAMESPACE_URL,
+                    "colony-outcome:" + json.dumps(
+                        {
+                            "agent_id": agent_id,
+                            "action_type": action_type,
+                            "target": target,
+                            "actual_outcome": actual_outcome,
+                            "tests_passed": tests_passed,
+                            "human_feedback": human_feedback,
+                        },
+                        sort_keys=True,
+                    ),
+                )
+            ),
         )
         record = kernel.record_outcome(
             proposal=proposal,
@@ -209,9 +264,117 @@ def colony_record_outcome(
             "consequence_id": record.consequence_id,
             "trust_score": round(profile.trust_score, 4),
             "role": profile.role.value,
+            "evidence_grade": record.evidence_grade,
         }
     except Exception as exc:
         return {"error": str(exc)}
+
+
+@mcp_tool(
+    category="colony_kernel",
+    description=(
+        "Execute a declared action with a signed, single-use authorization and "
+        "return the executor receipt. Direct execution without a capability is rejected."
+    ),
+)
+def colony_execute_authorized(
+    authorization_json: str,
+    agent_id: str,
+    action_type: str,
+    target: str,
+    payload: str = "{}",
+) -> dict[str, Any]:
+    """Consume a capability and invoke a service-registered real handler."""
+
+    try:
+        token = deserialize_authorization(authorization_json)
+        arguments = json.loads(payload) if payload.strip() else {}
+        if not isinstance(arguments, dict):
+            raise ValueError("payload must be a JSON object")
+        run = _get_kernel().execute_authorized(
+            token,
+            agent_id=agent_id,
+            action_type=action_type,
+            target=target,
+            payload=arguments,
+        )
+        return {
+            "result": _dataclass_to_dict(run.result),
+            "receipt": serialize_receipt(run.receipt),
+        }
+    except Exception as exc:
+        return {"error": str(exc)}
+
+
+@mcp_tool(
+    category="colony_kernel",
+    description=(
+        "Convert a consumed authorization and signed executor receipt into an "
+        "attested outcome; only this path can update strict-profile trust and signals."
+    ),
+)
+def colony_record_attested_outcome(
+    authorization_json: str,
+    receipt_json: str,
+    agent_id: str,
+    action_type: str,
+    target: str,
+    actual_outcome: str,
+    tests_passed: bool,
+    human_feedback: float = 0.0,
+) -> dict[str, Any]:
+    """Record a receipt-linked outcome in the strict kernel profile."""
+
+    try:
+        token = deserialize_authorization(authorization_json)
+        receipt = deserialize_receipt(receipt_json)
+        proposal = ActionProposal(
+            agent_id=agent_id,
+            agent_type="mcp_agent",
+            action_type=action_type,
+            target=target,
+            rationale="Receipt-linked outcome submitted through the Colony boundary.",
+            expected_outcome=actual_outcome,
+            proposal_id=token.proposal_id,
+        )
+        record = _get_kernel().record_attested_outcome(
+            proposal=proposal,
+            evidence=OutcomeEvidence(token.authorization_id, receipt),
+            outcome={
+                "summary": actual_outcome,
+                "repair_needed": not tests_passed,
+                "action_taken": f"{action_type} on {target}",
+            },
+            tests_passed=tests_passed,
+            human_feedback=str(human_feedback) if human_feedback != 0.0 else None,
+        )
+        profile = _get_kernel().agent_profile(agent_id)
+        return {
+            "status": "recorded",
+            "consequence_id": record.consequence_id,
+            "evidence_grade": record.evidence_grade,
+            "trust_score": round(profile.trust_score, 4),
+        }
+    except Exception as exc:
+        return {"error": str(exc)}
+
+
+@mcp_tool(
+    category="colony_kernel",
+    description="Return the governed action scope and current enforcement mode.",
+)
+def colony_action_scope() -> dict[str, Any]:
+    """Expose the explicit declared/bypassable action-scope map."""
+
+    kernel = _get_kernel()
+    return {
+        "enforcement_mode": kernel._config.enforcement_mode,
+        "action_scope": kernel._config.action_scope,
+        "bypass_behavior": (
+            "unregistered mutating paths are refused in strict mode; "
+            "advisory mode does not claim enforcement"
+        ),
+    }
 
 
 @mcp_tool(
@@ -267,8 +430,8 @@ def colony_pheromone_query(location: str, signal_type: str) -> list[dict[str, An
 
     Args:
         location: Dotted module path or file path (e.g. ``codomyrmex.git_operations.core``).
-        signal_type: One of ``failure``, ``success``, ``risk``, ``need``,
-                     ``dependency``, ``human_priority``.
+        signal_type: One of ``failure``, ``policy_rejection``, ``success``,
+                     ``risk``, ``need``, ``dependency``, ``human_priority``.
 
     Returns:
         List of serialised :class:`~codomyrmex.colony_kernel.models.ColonySignal` dicts;
@@ -278,16 +441,15 @@ def colony_pheromone_query(location: str, signal_type: str) -> list[dict[str, An
         sig_enum = SignalType(signal_type.lower())
         kernel = _get_kernel()
         # Use the kernel's pheromone_store directly for sensing
-        marker = kernel.pheromone_store._field.sense(make_trace_key(location, sig_enum))
-        if marker is not None:
-            signal = ColonySignal(
+        strength = kernel.pheromone_store.sense(location, sig_enum)
+        if strength:
+            signals = kernel.pheromone_store.query_pressure(location, sig_enum)
+            signal = signals[0] if signals else ColonySignal(
                 location=location,
                 signal_type=sig_enum,
-                strength=marker.strength,
+                strength=strength,
                 decay_rate=DecayRate.NORMAL,
                 source=SignalSource.AGENT,
-                evidence=dict(marker.metadata),
-                last_reinforced=marker.updated_at,
             )
             return [_dataclass_to_dict(signal)]
         return []
@@ -326,24 +488,18 @@ def colony_falsify_plan(plan_json: str) -> dict[str, Any]:
         worker = FalsificationWorker()
         report = worker.evaluate_plan(plan)
         result = _dataclass_to_dict(report)
-        # Compute severity_score and recommendation (not stored on FalsificationReport).
-        # severity_score is the mean weight across all findings (0.0 if no findings).
-        _weight = {"low": 0.05, "medium": 0.20, "high": 0.45, "critical": 1.0}
+        # Compute severity_score and recommendation (not stored on
+        # FalsificationReport). Severity is non-dilutable: mixed findings use
+        # the strongest numeric rank, never an alphabetical label or mean.
         findings_list = result.get("findings", [])
-        severity_score: float = 0.0
-        if findings_list:
-            weights = [
-                _weight.get(str(f.get("severity", "low")).lower(), 0.05)
-                for f in findings_list
-            ]
-            severity_score = sum(weights) / len(weights)
-        result["severity_score"] = severity_score
-        if severity_score < 0.4:
-            result["recommendation"] = "execute"
-        elif severity_score < 0.75:
-            result["recommendation"] = "hold"
-        else:
-            result["recommendation"] = "refuse"
+        severity_values = {
+            str(f.get("severity", "low")).lower() for f in findings_list
+        }
+        severity_map = {severity.value: severity for severity in FalsificationSeverity}
+        severities = [severity_map[value] for value in severity_values if value in severity_map]
+        strongest = max(severities, key=severity_rank, default=None)
+        result["severity_score"] = severity_weight(strongest) if strongest else 0.0
+        result["recommendation"] = recommendation_for_severity(strongest)
         return result
     except json.JSONDecodeError as exc:
         return {"error": f"plan_json is not valid JSON: {exc}"}
@@ -401,16 +557,15 @@ def colony_tick() -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 __all__ = [
-    # Core classes (importable for testing / extension)
     "ColonyKernel",
     "FalsificationWorker",
     "colony_agent_profile",
     "colony_falsify_plan",
     "colony_pheromone_query",
-    # MCP tools
     "colony_propose_action",
     "colony_pruning_report",
     "colony_record_outcome",
     "colony_status",
     "colony_tick",
+    "isolated_kernel",
 ]

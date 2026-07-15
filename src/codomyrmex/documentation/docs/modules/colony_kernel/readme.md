@@ -4,11 +4,11 @@
 
 ## Purpose
 
-The Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology thesis: a codebase is treated as a colony in which agents, modules, and human operators interact through a process-local signal field. Subsystems deposit chemical-analogy traces carrying success, failure, risk, and dependency information, and the kernel evaluates proposals against the accumulated field, reported consequence history, budget state, completeness, and agent trust. A proposal touching a location with strong FAILURE or RISK pressure faces a higher gate barrier than an otherwise identical proposal at a clean target. Caller-reported outcomes update the field and trust profile, while pruning scans nominate candidates for review. These mechanics implement environmental feedback; they do not by themselves attest execution, enforce downstream actions, or establish production benefit.
+The Colony Kernel is a proposal-evaluation control plane with advisory and strict declared-action profiles. Strict mode issues signed single-use capabilities only for registered scope entries, consumes them atomically through a real executor, and requires a signed receipt before enforced state changes. Advisory caller reports retain an explicit unattested evidence grade.
 
 ## Architecture
 
-The kernel wires eight cooperating responsibilities. `models.py` supplies shared value objects, while `ColonyKernel` explicitly sequences falsification, budget, role, gate, consequence, signal, and pruning operations. Cross-subsystem dependencies are documented rather than hidden.
+The kernel wires typed policy, persistence, authorization, and execution responsibilities. `models.py` supplies shared value objects, while `ColonyKernel` explicitly sequences falsification, budget, role, gate, consequence, signal, authorization, receipt, and pruning operations.
 
 ```mermaid
 graph TB
@@ -188,7 +188,7 @@ Key test modules:
 - `test_consequence_memory.py` — SQLite persistence and trust delta computation
 - `test_falsification_worker.py` — each attack vector in isolation
 - `test_pruning_daemon.py` — staleness detection via pheromone field state
-- `test_mcp_tools.py` — all eight MCP tool round-trips against the singleton
+- `test_mcp_tools.py` and enforcement contracts — MCP round-trips plus signed capability, receipt, persistence, and quarantine cases
 
 ## Navigation Links
 

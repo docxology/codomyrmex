@@ -8,6 +8,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Colony Kernel strict declared-scope profile**: Ed25519-signed, expiring,
+  single-use authorization capabilities; atomic SQLite consumption; registered
+  action execution for `patch_file`, `run_tests`, and `archive_module`; signed
+  executor receipts; receipt-linked outcome evidence; and quarantine for
+  unattested strict-mode reports.
+- **Durable enforcement evidence**: SQLite WAL signal storage, restart-safe
+  resource budgets, lifecycle counters, supervised read-only evaluator input,
+  generated truth tables, and a fail-closed benchmark harness with a pinned
+  30-instance SWE-bench Lite selection.
+- **Publication evidence package**: machine-readable release manifest, atomic
+  candidate evidence archive, current action-register follow-up workbook, and
+  compact-margin PDF/HTML regeneration workflow.
+
+### Changed
+
+- Colony Kernel documentation and manuscript claims now distinguish advisory
+  compatibility from strict declared-scope enforcement, caller-reported,
+  attested, policy-rejected, prospective-RISK, and verified-execution evidence.
+- Publication gates now report collected, passed, skipped, failed, and errored
+  tests separately and fail closed on stale artifacts, missing benchmark
+  evidence, or dirty release state.
+
+### Release status
+
+- Candidate implementation branch is not yet `v1.4.0`: required tests pass, but
+  immutable clean-clone PDF replay and provider-backed benchmark results remain
+  open release gates.
+
 ### Fixed
 
 - **`docs/manuscript/layer_contract.yaml`**: dropped dangling `src/codomyrmex/_infra.py` allowlist entry (file never existed). Was documentation-only — referenced by `docs/manuscript/AGENTS.md` as "enforced at CI boundary" but consumed by no code in the repository; added `test_layer_contract_forbids_infrastructure_imports` (`tests/unit/colony_kernel/test_manuscript_consistency.py`) to make the claim real, verified via negative control (planted a real `infrastructure.*` import under `colony_kernel/`, confirmed the test fails, removed it, confirmed green).

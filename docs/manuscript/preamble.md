@@ -13,7 +13,8 @@ This file contains LaTeX packages and commands that are automatically injected i
 
 % Document layout
 \usepackage{geometry}
-\geometry{margin=0.72in,headheight=14pt}
+% Compact print layout with a small trim-safe margin for tables and equations.
+\geometry{left=0.20in,right=0.20in,top=0.55in,bottom=0.55in,headheight=14pt,headsep=0.12in,footskip=0.25in}
 \setlength{\emergencystretch}{2em}
 \usepackage{float}
 \usepackage{graphicx}

@@ -12,7 +12,14 @@
 
 ## Overview
 
-Colony Kernel implements a stigmergy-based proposal-evaluation control plane for codomyrmex. Agents deposit chemical-analogy traces at locations (module paths or file paths), those traces decay over time, and submitted proposals are evaluated against the accumulated signal landscape, reported consequences, budget state, completeness, and the proposing agent's earned trust score. The kernel does not execute the proposed action or enforce its verdict downstream; it returns EXECUTE, HOLD, or REFUSE to the caller.
+Colony Kernel implements a stigmergy-based proposal-evaluation control plane
+with advisory and strict profiles. Advisory mode returns EXECUTE, HOLD, or
+REFUSE and records caller-reported evidence. Strict mode governs only an
+explicit action-scope map: `EXECUTE` is necessary for a signed, single-use
+authorization, and a consumed authorization plus executor receipt is necessary
+for state-changing execution evidence. Unregistered mutating paths fail closed;
+actions outside the map remain an explicit bypass boundary rather than an
+implicit repository-wide guarantee.
 
 All shared types are defined in `models.py`. Canonical subsystem implementations live in standalone modules and exchange typed value objects; cross-subsystem sequencing flows through the `ColonyKernel` integration class.
 
@@ -258,7 +265,7 @@ strength ≥ 2.0 are not nominated.
 
 | Method | Pipeline | Output |
 |--------|----------|--------|
-| `propose_action(proposal)` | FalsificationWorker → ResourceLedger → ConsequenceMemory (profile) → RoleAdapter → ActuationGate → deposit FAILURE if REFUSE | `GateResult` |
+| `propose_action(proposal)` | FalsificationWorker → ResourceLedger → ConsequenceMemory (profile) → RoleAdapter → ActuationGate → deposit POLICY_REJECTION if REFUSE | `GateResult` |
 | `record_outcome(proposal, outcome, tests_passed, human_feedback)` | Parse human_feedback → build ConsequenceRecord → ConsequenceMemory.record → ResourceLedger.consume → pheromone update | `ConsequenceRecord` |
 | `agent_profile(agent_id)` | ConsequenceMemory.get_profile | `AgentTrustProfile` |
 | `colony_status()` | PheromoneStore.top_signals + ResourceLedger.usage_summary + ConsequenceMemory.role_distribution + ConsequenceMemory.recent_consequences | `dict` |
@@ -394,7 +401,7 @@ explicit `dry_run=False` call moves a repository-contained path.
 **Composite severity score** (`mcp_tools.py` `FalsificationWorker.evaluate_plan`):
 
 ```python
-score = mean([SEVERITY_WEIGHTS[f.severity.value] for f in findings])
+score = max([SEVERITY_WEIGHTS[f.severity] for f in findings], default=0.0)
 # SEVERITY_WEIGHTS: LOW=0.05, MEDIUM=0.20, HIGH=0.45, CRITICAL=1.0
 ```
 
@@ -402,9 +409,9 @@ score = mean([SEVERITY_WEIGHTS[f.severity.value] for f in findings])
 
 | score | recommendation |
 |-------|----------------|
-| ≥ 0.75 | `"refuse"` |
-| 0.40 – 0.75 | `"hold"` |
-| < 0.40 | `"execute"` |
+| CRITICAL (1.0) | `"refuse"` |
+| HIGH (0.45) | `"hold"` |
+| LOW or MEDIUM (≤ 0.20) | `"execute"` advisory |
 
 **Gate-level falsification override** (`actuation_gate.py` `ActuationGate.evaluate`):
 
@@ -428,3 +435,21 @@ A CRITICAL finding (`falsification_penalty == 1.0`) triggers an unconditional RE
 | `ValueError` on `ConsequenceRecord` | `human_feedback` outside [-1.0, 1.0] | Use `_parse_human_feedback` helper |
 | SQLite `OperationalError` | Disk full or corrupted db file | Supply `db_path=":memory:"` for tests; check disk space for production |
 | `json.JSONDecodeError` in MCP tools | `evidence` or `plan_json` argument not valid JSON | Validate JSON before calling |
+
+## Strict authorization and evidence contract
+
+The strict lifecycle is:
+
+1. `ActionProposal` is evaluated by falsification, budget, trust, role, and gate policy.
+2. Only `GateDecision.EXECUTE` for a target in the configured action-scope map receives an `ExecutionAuthorization`.
+3. The authorization signs proposal ID, agent identity, action type, target, canonical scope digest, timestamps, nonce, issuer key ID, and the digest of an optional explicit `evidence["action_payload"]` object. If supplied, execution must present the same payload.
+4. `RegisteredActionExecutor` consumes the authorization under SQLite `BEGIN IMMEDIATE` and invokes only a registered real handler.
+5. The executor signs exactly one `ExecutionReceipt`; replay and duplicate receipt writes are rejected.
+6. `record_attested_outcome` verifies the receipt, exact proposal action/target, and request digest before writing one `attested_execution` record. Unlinked reports are quarantined in strict mode and cannot update trust, budgets, or `FAILURE` pressure.
+
+The ledger persists proposal, authorization, receipt, quarantined-report, and
+outcome-report records. The signal and resource backends use WAL mode with busy
+timeouts in strict file-backed profiles. `:memory:` is for isolated tests only.
+Public keys are pinned by key ID and rotation is explicit; private keys remain
+outside repository state. `RISK` is prospective and `POLICY_REJECTION` is an
+audit signal; neither is an observed `FAILURE`.

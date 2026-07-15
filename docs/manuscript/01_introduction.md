@@ -16,6 +16,31 @@ prompt injection, privacy leakage, and trajectory-level effects as system proper
 @zhang2024agentsafetybench]. These results motivate explicit controls between a model's
 proposal and consequential actuation.
 
+This is also a situation-awareness problem. In Endsley's classic formulation, situation
+awareness concerns the perception of relevant elements, comprehension of their meaning,
+and projection of their likely near-term status [@endsley1995toward]. For tool-using
+agents, a control layer can expose target-local state, budget pressure, prior reports,
+and decision reasons, but an exposed state is not the same as an agent or operator
+understanding it. Human--automation research likewise distinguishes the level of
+automation from the quality of calibrated reliance and retained awareness
+[@parasuraman2000automation; @lee2004trust; @endsley2017autonomy]. The design
+implication here is modest: preserve inspectable context at the proposal boundary and
+make uncertainty and evidence provenance visible, without claiming that a gate creates
+situation awareness by itself.
+
+Three related literatures sharpen that boundary. Distributed-cognition work treats
+external representations as resources in coordinated activity, but not as substitutes
+for the people and practices that interpret them [@hutchins1995cognition]. Dependable-
+computing research separates a recorded fault, an internal error, and an externally
+observed failure; collapsing those categories makes an audit trail look more certain
+than its evidence warrants [@avizienis2004basic]. Reproducible-computing scholarship
+similarly treats the data, code, environment, and transformation record as part of a
+claim rather than as optional packaging [@peng2011reproducible]. The present work adopts
+these as design constraints: expose a provenance-bearing context packet, preserve
+evidence grades, and bind publication claims to the exact tested artifact. The packet
+can support inspection and later challenge; it cannot demonstrate perception,
+comprehension, projection, calibrated reliance, or truth.
+
 ## Problem statement {#sec:intro-problem}
 
 Contemporary orchestration frameworks provide routing, checkpoints, memory, roles, and
@@ -31,6 +56,13 @@ requires a paired case: hold agent, proposal, and budget factors fixed; add the 
 outcome at one target; show that the same-target score does not increase and that an
 unrelated target is unchanged.
 
+A second distinction is between shared state and shared understanding. Distributed-
+cognition research shows that representations and artifacts can participate in
+coordinated work [@hutchins1995cognition], but a process-local trace field is only an
+external-memory substrate. It does not establish common ground, correct interpretation,
+or reliable execution. The current study therefore treats situation awareness as a
+design requirement for inspectability, not as an outcome measured by the present tests.
+
 ## Bounded ecology thesis {#sec:intro-thesis}
 
 Codomyrmex uses “colony” and “pheromone” as engineering metaphors for a shared control
@@ -38,7 +70,8 @@ plane. Stigmergy describes coordination mediated through changes to a shared env
 rather than direct pairwise messages [@grasse1959reconstruction; @parunak1997pheromones;
 @bonabeau1999swarm]. In the implementation, the shared environment is a typed,
 process-local signal field. `FAILURE` records caller-reported adverse outcomes, `RISK` records
-prospective concerns, and the gate scores their maximum at the proposal target.
+prospective concerns; `POLICY_REJECTION` records advisory policy refusals, and the gate
+scores the numeric maximum of RISK and FAILURE at the proposal target.
 
 The project specification's design criterion is that the colony should become “harder to
 fool after every failed action.” This manuscript narrows that phrase to an implemented
@@ -52,11 +85,20 @@ contract:
 - an unrelated target remains unchanged; and
 - passive decay eventually removes the added friction.
 
-This does not make the system deception-proof. The current MCP surface accepts
-caller-reported outcomes without attesting them against a prior EXECUTE authorization.
-The default field and consequence database are also in-memory and disappear on process
-restart. The verified claim is therefore process-local, report-dependent, and
-reversible.
+This does not make the system deception-proof or establish situation awareness. The
+advisory MCP surface accepts caller-reported outcomes with an explicit unattested grade.
+The strict profile adds a narrower boundary: only declared action-scope entries receive
+signed, single-use authorizations, and only consumed authorizations with executor
+receipts can update enforced outcome state. Unregistered mutating paths fail closed in
+that profile; actions outside the map remain bypassable and are not silently covered.
+File-backed strict profiles persist the authorization, receipt, signal, resource, trust,
+and consequence ledgers; `:memory:` remains isolated-test mode. These are evidence-chain
+properties, not guarantees that a human or model perceived, understood, or correctly
+projected the situation [@endsley1995toward; @hutchins1995cognition].
+
+In this sense, the field is a context carrier rather than a mind: it makes selected
+consequences available to later evaluations, but it neither infers an operator's
+situation model nor guarantees that an agent will consult it.
 
 ## Contribution {#sec:intro-contribution}
 
@@ -76,7 +118,7 @@ The paper contributes five concrete artifacts.
    trust updates, and interface behavior.
 5. **A reproducible manuscript route.** Fail-closed test/lint/type evidence, generated
    variables, formula-derived figures, cross-reference validation, and the project
-   renderer are orchestrated through the repository's `run.sh` pipeline.
+   renderer are orchestrated by the repository's versioned Python scripts.
 
 The contribution is a reference implementation and evidence boundary, not a completed
 production-security system.
@@ -100,17 +142,26 @@ falsification are early returns.
 The higher role labels are inferred trust tiers and intended specializations; the current
 gate does not enforce a complete action-by-role permission matrix.
 
-`record_outcome` is a separate caller operation. It updates the consequence store,
-resource ledger, trust profile, role label, and signal field. A failed test report
-deposits a FAST FAILURE trace; a clean report reinforces/deposits SUCCESS. Because
-proposal and outcome are not linked by a consumed authorization ledger, the word
-“outcome” in this paper means a submitted report unless explicitly qualified as
-attested.
+The implementation now exposes two operational profiles. In advisory mode,
+`record_outcome` remains a caller-reported operation with the explicit
+`caller_reported_unattested` grade; it may update consequence memory, resource
+accounting, trust, role labels, and signals, but it does not establish execution
+truth. In strict mode, only actions in the declared scope map can receive an
+Ed25519-signed, single-use `ExecutionAuthorization`. A registered executor
+consumes that capability atomically and returns one signed `ExecutionReceipt`;
+only `record_attested_outcome` can then update enforced trust and outcome state.
+Unlinked reports are quarantined without creating `FAILURE` pressure. Thus
+“outcome” means a caller report unless qualified as `attested_execution`, and
+even an attested receipt establishes executor/process evidence rather than an
+independent truth oracle.
 
 The {{CONFIG_MCP_TOOL_COUNT}} MCP tools expose this stateful kernel through JSON-shaped requests and
 responses. A module-level singleton shares state across calls in one server process.
-File-backed SQLite can persist consequence records when configured, but the field has no
-restart-persistent backend.
+The advisory default remains process-local. A strict file-backed profile persists the
+declared enforcement state, including signal pressure, resource usage, trust profiles,
+authorizations, receipts, and consequence records, with SQLite WAL and restart/
+concurrency contracts. This persistence is still a deployment property, not evidence
+of distributed consistency, replication, or situation awareness.
 
 ## Relation to prior work {#sec:intro-related}
 
@@ -123,9 +174,16 @@ replace them:
   [@marsh1994trust; @sabater2005review; @kamvar2003eigentrust];
 - runtime-assurance and shielding research inserts a safety decision layer between an
   advanced controller and actuation [@seto1998simplex; @alshiekh2018shielding];
+- situation-awareness and human--autonomy research distinguishes available state from
+  perceived, understood, and projected state, and warns that automation level does not
+  by itself establish calibrated reliance [@endsley1995toward; @parasuraman2000automation;
+  @endsley2017autonomy];
 - least privilege, capability security, and zero-trust architecture motivate explicit,
   repeatedly evaluated authority boundaries [@saltzer1975protection; @miller2003capabilities;
   @nist2020zerotrust]; and
+- dependable-computing scholarship separates faults, errors, failures, and the means of
+  achieving dependability [@avizienis2004basic]. The present `FAILURE` signal is a
+  caller-reported adverse-outcome record, not a general diagnosis of system failure;
 - reproducible research, model reporting, and assurance cases motivate traceable claims
   and explicit limitations [@peng2011reproducible; @mitchell2019modelcards;
   @raji2020accountability; @buhl2024safetycases].
@@ -136,13 +194,13 @@ other frameworks is not established in this release.
 
 ## Evidence boundary {#sec:intro-evidence}
 
-The executed evidence is the scoped Colony Kernel quality gate and deterministic
-fixtures. The proposed {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition,
+The executed evidence is the scoped Colony Kernel quality gate, deterministic fixtures,
+and strict lifecycle/persistence contracts. The proposed {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition,
 {{CONFIG_TRIAL_COUNT}}-run benchmark has not been
 executed. No population refusal rate, throughput advantage, production harm reduction,
-or long-run convergence claim is reported. The paper treats unlinked outcome reporting,
-SANDBOX bootstrap, persistence, role permissions, and external calibration as open
-engineering work.
+or long-run convergence claim is reported. The paper treats advisory unlinked outcome
+reporting, SANDBOX bootstrap, role permissions, external calibration, and deployment
+routing outside the declared scope as bounded limitations rather than solved problems.
 
 ## Reader's guide {#sec:intro-guide}
 

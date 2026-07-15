@@ -18,7 +18,11 @@ from codomyrmex.colony_kernel.falsification.checks import (
     check_scope_creep,
     check_security_risk,
 )
-from codomyrmex.colony_kernel.falsification.models import FalsificationReport, _rank
+from codomyrmex.colony_kernel.falsification.models import (
+    FalsificationPlan,
+    FalsificationReport,
+    _rank,
+)
 from codomyrmex.colony_kernel.models import (
     ActionProposal,
     ColonySignal,
@@ -120,28 +124,15 @@ class FalsificationWorker:
         verdict = self._compute_verdict(findings)
         required_changes = [f.remediation for f in findings if f.remediation]
 
-        # Deposit pheromone traces for findings
-        #   FAILURE for severity >= HIGH — strong avoidance signal
-        #   RISK   for severity >= MEDIUM — caution marker (gate reads RISK pressure)
+        # Prospective falsification findings are not observed execution
+        # outcomes.  They therefore use the RISK/finding channel at MEDIUM+
+        # severity; FAILURE remains reserved for caller-reported adverse
+        # consequences.  One finding produces at most one signal here.
         if self._pheromone_store is not None:
             target = plan.get("target", "unknown")
             for finding in findings:
                 try:
-                    if _rank(finding.severity) >= 3:
-                        self._pheromone_store.deposit(
-                            ColonySignal(
-                                location=str(target),
-                                signal_type=SignalType.FAILURE,
-                                strength=float(_rank(finding.severity)),
-                                decay_rate=DecayRate.FAST,
-                                source=SignalSource.AGENT,
-                                evidence={
-                                    "attack_vector": finding.attack_vector,
-                                    "claim": finding.claim,
-                                },
-                            )
-                        )
-                    elif _rank(finding.severity) >= 2:
+                    if _rank(finding.severity) >= 2:
                         self._pheromone_store.deposit(
                             ColonySignal(
                                 location=str(target),
@@ -177,22 +168,7 @@ class FalsificationWorker:
         Converts the ActionProposal to a plan dict, calls evaluate_plan,
         and returns only the findings list for ColonyKernel compatibility.
         """
-        plan = {
-            "target": proposal.target,
-            "rationale": proposal.rationale,
-            "rollback_plan": proposal.rollback_plan,
-            "evidence": proposal.evidence,
-            "action_type": proposal.action_type,
-            "budget_estimate": {
-                "llm_calls": proposal.budget_estimate.llm_calls,
-                "runtime_seconds": proposal.budget_estimate.runtime_seconds,
-                "risk_level": proposal.budget_estimate.risk_level,
-                "human_attention_minutes": proposal.budget_estimate.human_attention_minutes,
-                "merge_risk": proposal.budget_estimate.merge_risk,
-                "doc_debt": proposal.budget_estimate.doc_debt,
-                "security_exposure": proposal.budget_estimate.security_exposure,
-            },
-        }
+        plan = proposal_to_falsification_plan(proposal)
         report = self.evaluate_plan(plan)
         return report.findings
 
@@ -229,4 +205,43 @@ class FalsificationWorker:
         return f"{agent}: {action} on {target}"
 
 
-__all__ = ["FalsificationWorker"]
+__all__ = ["FalsificationWorker", "proposal_to_falsification_plan"]
+
+
+def proposal_to_falsification_plan(proposal: ActionProposal) -> FalsificationPlan:
+    """Convert an :class:`ActionProposal` to the complete check input shape.
+
+    Proposal fields remain authoritative.  Optional falsification fields are
+    read from ``proposal.evidence`` so the conversion is deterministic and no
+    check silently receives a missing field merely because the caller used the
+    typed proposal API.
+    """
+    evidence = dict(proposal.evidence)
+
+    def evidence_value(key: str, default: Any) -> Any:
+        return evidence.get(key, default)
+
+    tests = evidence_value("tests", evidence_value("test_ids", evidence.get("test", [])))
+    return {
+        "agent_id": proposal.agent_id,
+        "action_type": proposal.action_type,
+        "target": proposal.target,
+        "rationale": proposal.rationale,
+        "expected_outcome": proposal.expected_outcome,
+        "rollback_plan": proposal.rollback_plan,
+        "tests": tests,
+        "metrics": evidence_value("metrics", ""),
+        "scope": evidence_value("scope", ""),
+        "dependencies": evidence_value("dependencies", []),
+        "evidence": evidence,
+        "budget_estimate": {
+            "llm_calls": proposal.budget_estimate.llm_calls,
+            "runtime_seconds": proposal.budget_estimate.runtime_seconds,
+            "risk_level": proposal.budget_estimate.risk_level,
+            "human_attention_minutes": proposal.budget_estimate.human_attention_minutes,
+            "merge_risk": proposal.budget_estimate.merge_risk,
+            "doc_debt": proposal.budget_estimate.doc_debt,
+            "security_exposure": proposal.budget_estimate.security_exposure,
+        },
+        "repo_root": str(evidence_value("repo_root", "")),
+    }

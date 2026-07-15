@@ -2,7 +2,7 @@
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
-> Proposal-evaluation control plane for Codomyrmex's artificial ecology: combines adversarial checks, budget state, reported consequences, trust, and a process-local signal field.
+> Proposal-evaluation control plane for Codomyrmex's artificial ecology, with advisory and strict declared-action profiles, signed capabilities, receipts, and explicit evidence grades.
 
 ## Navigation
 
@@ -13,15 +13,15 @@
 
 ## Overview
 
-The Colony Kernel constrains proposal verdicts using reported consequences, a process-local signal field, budget state, trust, completeness, role state, and falsification checks. Its verdict is advisory to downstream callers: the kernel neither executes tools nor attests that submitted outcomes correspond to prior authorized actions.
+The Colony Kernel constrains proposal verdicts using reported consequences, signal state, budget, trust, completeness, role state, and falsification checks. Advisory verdicts remain caller-facing recommendations. In strict mode, only declared action-scope entries receive a signed single-use capability, a registered executor returns a receipt, and receipt-linked outcomes update enforced state; unregistered mutating paths fail closed.
 
-The kernel exposes 8 MCP tools for the propose→gate→record→tick lifecycle and wires 8 internal subsystems: PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, and the ColonyKernel coordinator. The MCP tool layer is the public surface over those subsystems, not a ninth subsystem.
+The kernel exposes 11 MCP tools for advisory observation plus strict authorization and receipt handling. Its core subsystems include PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, AuthorizationLedger, RegisteredActionExecutor, and the ColonyKernel coordinator.
 
 ## Architecture
 
 ```mermaid
 flowchart TD
-    subgraph mcp["MCP Surface (8 tools)"]
+    subgraph mcp["MCP Surface (11 tools)"]
         PA["colony_propose_action"]
         RO["colony_record_outcome"]
         AP["colony_agent_profile"]

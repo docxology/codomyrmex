@@ -1,11 +1,32 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.3.0 | **Date**: 2026-07-09 | **Modules**: 130 | **Sprint**: 37 publication hardening
+**Version**: v1.4.0-rc20 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
 
-> **Current release**: v1.3.0 "Colony Kernel" (2026-06-30).
-> **Next release**: v1.3.1 (publication hardening)
+> **Current release**: v1.4.0-rc20 "Colony Kernel enforcement" (candidate, 2026-07-14).
+> **Next release**: v1.4.0 (held for provider evaluation and immutable release verification)
 > **Archived**: v1.2.4–v1.2.8 → [CHANGELOG.md](CHANGELOG.md)
+
+## 🔬 v1.4.0-rc20 — First-principles publication checkpoint
+
+This candidate is an auditable release candidate, not a completed production-safety claim. The strict
+profile governs only its explicit action-scope map; unregistered mutating paths remain bypasses. The
+follow-up audit is recorded in
+[`review_artifacts/Codomyrmex_RedTeam_FirstPrinciples_Science_Follow_Up_2026-07-14.md`](review_artifacts/Codomyrmex_RedTeam_FirstPrinciples_Science_Follow_Up_2026-07-14.md).
+
+| Gate | Current evidence | Status |
+| :--- | :--- | :--- |
+| Scoped Colony Kernel suite | 841 selected and passed; 0 skipped, failed, or errored | ✅ Measured |
+| Branch coverage | 74.37185929648241% (592/796 branches; 82.59604190919674% line coverage) | ✅ Above 60% floor |
+| Clean-clone PDF replay | `output/paper.pdf` hash `8dc89701bcfb5b4ece4475b4015071470bfc74034f8d85aecd5aa716ea8e4857` at the tagged candidate | ✅ Byte-for-byte match |
+| Clean-clone evidence replay | HTML, variables, coverage JSON, JUnit XML, and status JSON also match the candidate | ✅ Byte-for-byte match |
+| Verifier integrity | Commit/tag, source/config, freshness, JUnit/status, and artifact hashes independently checked; clean clone has no status output | ✅ Measured |
+| Provider benchmark | Concrete provider/model, raw receipts, and result artifact absent | ⛔ Open (R-20) |
+| Immutable final publication | A-001 and A-016 remain open | ⛔ Open |
+
+The benchmark gap is intentionally fail-closed. Fixture adapter output is contract evidence only and is
+not a substitute for the predeclared controlled and SWE-bench Lite experiment. Release rows must carry
+cryptographically verified Ed25519 receipts bound to the trusted executor key registry.
 
 ---
 
@@ -113,7 +134,7 @@
 | **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 60% gate) | 🟡 PENDING (35,119 tests collected with 0 errors; build_synthesis + colony_kernel + integration suites verified green) |
 | **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED (0 errors) |
 | **Type Safety** | `uv run ty check --output-format concise src/` | 0 diagnostics | ✅ PASSED (0 diagnostics) |
-| **Coverage Gate** | `make test` or `uv run pytest src/codomyrmex/tests/ ... --cov-fail-under=60` | ≥60% | ✅ PASSED — `fail_under = 60` in `pyproject.toml`; `meme/*` omitted from coverage; colony_kernel scoped coverage at 78.4% branch |
+| **Coverage Gate** | `make test` or the scoped release command with `--cov-fail-under=60` | ≥60% | ✅ PASSED — `fail_under = 60` in `pyproject.toml`; `meme/*` omitted from coverage; current Colony Kernel release coverage is 74.37185929648241% branch (592/796) |
 | **Documentation Parity** | `make docs-check` | AGENTS.md, README.md, SPEC.md, CHANGELOG.md aligned with pytest/coverage source of truth | ✅ PASSED (0 placeholders, 0 broken links, 0 completeness issues, AGENTS validation passes) |
 
 ---
@@ -138,7 +159,7 @@
 | **Lint** | `uv run ruff check .` |
 | **Format** | `uv run ruff format .` |
 | **Type Check** | `uv run ty check --output-format concise src/` |
-| **Coverage** | `uv run pytest --cov=src/codomyrmex --cov-fail-under=40` |
+| **Coverage** | `uv run pytest --cov=src/codomyrmex --cov-fail-under=60` |
 | **Build** | `uv build` |
 
 ### Key Modules

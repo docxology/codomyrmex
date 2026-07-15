@@ -15,13 +15,13 @@ for the cases they cover. They do not establish production safety, robustness at
 resistance to a strategic adversary, or improved task performance relative to another
 agent runtime.
 
-Several boundaries are especially important. The default MCP server owns one kernel
-instance for the lifetime of its process. Its consequence database defaults to SQLite
-in-memory mode, and its pheromone field is also in memory. A caller may configure a
-file-backed SQLite path for consequence records, but that does not persist the complete
-kernel state or the pheromone field. The present artifact therefore does not support a
-claim that local pressure, trust, or gate state automatically survives process restarts,
-model swaps, or deployment across machines.
+Several boundaries are especially important. The advisory MCP server owns one
+process-local kernel by default. A separately configured strict profile uses a file-backed
+SQLite WAL profile for signal pressure, resource usage, trust, consequence, authorization,
+and receipt state, and the repository includes restart and concurrent-claim contracts.
+Those tests support persistence for the configured profile; they do not establish
+cross-machine replication, operational recovery, model-independent identity, or a
+non-bypassable route for actions outside the declared scope.
 
 The role ladder is similarly narrower than an authorization hierarchy. RoleAdapter
 deterministically maps trust and proposal-count state to labels, and SANDBOX receives a
@@ -34,9 +34,9 @@ the gate: local hazard is the maximum of the two sensed pressures. The paired co
 test records a failed outcome, observes the resulting FAILURE pressure, and changes a
 complete same-target proposal from EXECUTE to HOLD while leaving an unrelated target
 unchanged. Passive tick decay later restores the original decision. This verifies a
-process-local locality invariant. It does not verify the truth of the outcome report:
-the MCP outcome endpoint still accepts caller-supplied data without binding it to a
-prior EXECUTE authorization or independently observed actuation.
+process-local locality invariant. The advisory path does not verify the truth of the
+caller report; the strict declared-action path adds a consumed capability and signed
+executor receipt, but that receipt is not an independent outcome oracle.
 
 ## Falsification Criteria and Evaluation Agenda {#sec:falsification-criteria}
 
@@ -49,9 +49,9 @@ claims that still require implementation or empirical evaluation.
 The checked-in paired test submits identical proposals under identical agent, budget,
 completeness, and falsification state, varying only whether the target location has a
 reported failed outcome. The failed-location proposal receives a strictly lower score
-and a stricter decision; an unrelated location does not. The remaining falsification
-criterion is end-to-end attestation: the same result must hold when FAILURE can only be
-created from a prior authorized action and an independently observed adverse outcome.
+and a stricter decision; an unrelated location does not. Strict lifecycle tests add the
+separate criterion that an accepted outcome must trace to one consumed authorization and
+receipt. Independent observation of the external result remains future work.
 
 ### F2: Deterministic gate evaluation
 
@@ -89,7 +89,7 @@ unit tests cannot settle.
 | Is gate arithmetic deterministic for covered fixtures? | Checked-in unit and contract tests | Supported within the tested state space |
 | Does reported FAILURE tighten same-target local gating? | Paired contract test over `max(RISK, FAILURE)` | Supported within one kernel process |
 | Do role labels enforce per-action permissions? | SANDBOX override; no general role/action matrix | Not implemented |
-| Does colony state survive a default MCP process restart? | In-memory default database and field | No |
+| Does the configured strict profile survive restart and concurrent claims? | File-backed SQLite WAL and restart/concurrency contracts | Checked for the declared profile; not a distributed-consistency claim |
 | Does the kernel reduce unsafe actuation on external workloads? | Proposed protocol; no released trial traces | Not yet evaluated |
 | Does the kernel remain correct under production concurrency or scale? | Single-process implementation and local tests | Unverified |
 
@@ -112,13 +112,13 @@ or production repair cost. The falsification worker is also a deterministic prop
 checker, not a proof of semantic safety: only CRITICAL findings independently force a
 gate refusal, and syntactically complete but misleading evidence may evade its checks.
 
-Four implementation priorities follow directly from these limits. First, bind outcome
-records to prior EXECUTE authorizations, observed effects, and authenticated agent
-identities. Second, persist and reconcile the entire field and budget state when
-cross-session behavior is required. Third, define and enforce
-an action-by-role authorization policy if role names are to carry security meaning.
-Fourth, run the proposed paired and external benchmarks with released traces, explicit
-baselines, and predeclared outcome measures before making effectiveness or scale claims.
+Four remaining priorities follow directly from these limits. First, complete the governed
+scope inventory and non-bypassable routing for every deployment that makes an enforcement
+claim. Second, add an independent outcome oracle when external truth rather than executor
+process evidence is required. Third, define and enforce an action-by-role authorization
+policy if role names are to carry security meaning. Fourth, run the proposed paired and
+external benchmarks with released traces, explicit baselines, and predeclared outcome
+measures before making effectiveness or scale claims.
 
 The Colony Kernel's present contribution is thus a testable control-plane scaffold. It
 makes selected state transitions and decision rules visible enough to inspect, replay

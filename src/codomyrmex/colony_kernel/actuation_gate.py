@@ -23,6 +23,7 @@ from typing import Any
 
 from codomyrmex.agentic_memory.stigmergy.field import TraceField
 from codomyrmex.colony_kernel.models import (
+    _SEVERITY_WEIGHT,
     ActionProposal,
     AgentRole,
     AgentTrustProfile,
@@ -31,6 +32,8 @@ from codomyrmex.colony_kernel.models import (
     GateDecision,
     GateResult,
     SignalType,
+    maximum_severity,
+    severity_weight,
 )
 
 # ---------------------------------------------------------------------------
@@ -52,13 +55,8 @@ _MISSING_FIELD_PENALTY = 0.35
 # Consecutive-failure trust penalty applied when recent_failures >= 3
 _FAILURE_PENALTY = 0.25
 
-# Falsification severity numeric weights
-_FALSIFICATION_WEIGHT: dict[FalsificationSeverity, float] = {
-    FalsificationSeverity.LOW: 0.05,
-    FalsificationSeverity.MEDIUM: 0.20,
-    FalsificationSeverity.HIGH: 0.45,
-    FalsificationSeverity.CRITICAL: 1.0,
-}
+# Backward-compatible export for callers that imported the old gate-local map.
+_FALSIFICATION_WEIGHT = _SEVERITY_WEIGHT
 
 
 def _sense_pheromone(store: Any, target: str, signal_type: SignalType) -> float:
@@ -334,7 +332,7 @@ class ActuationGate:
         # ----------------------------------------------------------------
         if (
             falsification_penalty
-            >= _FALSIFICATION_WEIGHT[FalsificationSeverity.CRITICAL]
+            >= severity_weight(FalsificationSeverity.CRITICAL)
         ):
             critical = [
                 f for f in findings if f.severity == FalsificationSeverity.CRITICAL
@@ -424,9 +422,10 @@ class ActuationGate:
         if not completeness_flags["has_expected_outcome"]:
             issues.append("missing: expected_outcome")
         if findings:
+            strongest = maximum_severity(findings)
             issues.append(
                 f"falsification findings: {len(findings)} "
-                f"(max severity {max(f.severity.value for f in findings)})"
+                f"(max severity {strongest.value if strongest else 'none'})"
             )
 
         # ----------------------------------------------------------------

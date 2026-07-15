@@ -14,7 +14,7 @@ gating, consequence memory, pheromone deposits, and pruning reports.
 - Keep this mirror synchronized with the source module's `AGENTS.md`,
   `README.md`, `SPEC.md`, `API_SPECIFICATION.md`, and
   `MCP_TOOL_SPECIFICATION.md`.
-- Preserve the documented eight-tool MCP surface:
+- Preserve the documented advisory and strict MCP surface; its current tool count is generated from the decorators.
   `colony_propose_action`, `colony_record_outcome`, `colony_agent_profile`,
   `colony_status`, `colony_pheromone_query`, `colony_falsify_plan`,
   `colony_pruning_report`, and `colony_tick`.

@@ -4,6 +4,25 @@ This document outlines Codomyrmex's comprehensive testing approach, ensuring hig
 
 ## 🎯 Testing Philosophy
 
+### Evidence-oriented test modularity
+
+Benchmark provenance, paired statistics, release verification, documentation metrics,
+and manuscript rendering are separate test surfaces. Run the narrow contract suites while
+developing, then run the full collection and coverage gate before release:
+
+```bash
+uv run python -m pytest tests/unit/colony_kernel/test_benchmark_analysis.py \
+  tests/unit/colony_kernel/test_benchmark_contracts.py \
+  tests/unit/release/test_release_provenance.py \
+  tests/unit/scripts/test_doc_inventory_metrics.py
+uv run python scripts/doc_inventory.py --manifest --pytest --json --check-reference
+make test
+```
+
+The fixture adapter is a real contract component, but its `fixture_contract` execution
+class is never publication evidence. Only a verified `provider_backed` report can unlock
+an effectiveness claim.
+
 ### **Test-Driven Development (TDD)**
 - **Write tests first**, then implement functionality
 - **No mock methods** - always test with real implementations
@@ -296,8 +315,8 @@ uv run pytest src/codomyrmex/tests/e2e/              # End-to-end tests only
 # Run tests for specific module
 uv run pytest src/codomyrmex/tests/unit/test_data_visualization.py
 
-# Run with coverage + 40% gate
-uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=40
+# Run with coverage + 60% gate
+uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=60
 
 # Run with detailed output
 uv run pytest -v --tb=short
@@ -328,7 +347,7 @@ jobs:
         uv sync --dev
 
     - name: Run unit tests
-      run: uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=40
+      run: uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=60
 
     - name: Run integration tests
       run: uv run pytest src/codomyrmex/tests/integration/

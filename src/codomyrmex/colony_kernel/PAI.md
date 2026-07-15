@@ -4,11 +4,28 @@
 
 ## Overview
 
-The Colony Kernel is Codomyrmex's emergent proposal-evaluation control plane:
-it returns advisory gate verdicts, tracks caller-reported outcomes and resource
-use, derives trust and role labels, and maintains process-local pheromone
-pressure. Downstream callers remain responsible for enforcing verdicts and for
-the accuracy of submitted outcome reports.
+The Colony Kernel supports an advisory profile and an explicit strict profile.
+Advisory calls retain caller-reported outcomes with the
+`caller_reported_unattested` grade. Strict calls govern only the configured
+Colony action scope: an `EXECUTE` proposal receives an Ed25519-signed,
+single-use capability, a registered executor consumes it atomically, and a
+signed receipt is required before trust, budgets, or outcome signals change.
+Unregistered mutating paths fail closed in strict mode. These mechanisms expose
+inspectable context and authorization evidence; they do not guarantee human or
+agent situation awareness, verify truth, or govern repository actions outside
+the declared scope.
+
+### Strict PAI execution sequence
+
+```text
+OBSERVE → THINK/falsify → PROPOSE → EXECUTE with capability
+        → verify receipt → RECORD attested outcome → UPDATE memory
+```
+
+`colony_record_outcome` is suitable for advisory audit input only. In strict
+mode it is quarantined instead of updating learning state. Role labels remain
+descriptive; write eligibility is determined by trust/gate conditions plus a
+valid consumed authorization, not by a role name alone.
 
 This document maps each PAI Algorithm phase to the Colony Kernel subsystem
 that serves it, explains how colony roles map to PAI agent types, describes
@@ -51,6 +68,7 @@ colony_pruning_report()  # stale/broken modules from PruningDaemon
 | Signal type | Meaning for OBSERVE | Decay rate |
 |-------------|---------------------|------------|
 | `FAILURE` | A caller or subsystem reported failure here recently | FAST (0.30/tick) |
+| `POLICY_REJECTION` | The advisory gate rejected a proposal; not an observed failure | NORMAL |
 | `NEED` | Explicit attention request deposited | NORMAL (0.10/tick) |
 | `RISK` | Caution marker, clear quickly | FAST |
 | `DEPENDENCY` | Actively imported/called | SLOW (0.02/tick) |
@@ -90,10 +108,10 @@ receives `recommendation: "execute"` — it passes the THINK-phase gate.
 | `HIDDEN_MAINTENANCE_COST` | Long-term upkeep burden is ignored | MEDIUM |
 | `PREMATURE_ABSTRACTION` | Generic abstraction without demonstrated need | LOW |
 
-**Composite scoring**:
-- `severity_score < 0.4` → `"execute"` (THINK phase: proceed to EXECUTE)
-- `0.4 ≤ severity_score < 0.75` → `"hold"` (THINK phase: revise the plan)
-- `severity_score ≥ 0.75` → `"refuse"` (THINK phase: abort, re-approach)
+**Composite scoring**: the strongest numeric severity is used without averaging.
+CRITICAL → `"refuse"`; HIGH → `"hold"`; LOW or MEDIUM → ordinary advisory
+scoring (`"execute"`). These are recommendations to the caller, not execution
+enforcement.
 
 **MCP tool**:
 ```python
@@ -151,8 +169,9 @@ gate_score = clamp(gate_score, 0.0, 1.0)
   `record_outcome` call
 - `GateDecision.HOLD`: the returned `required_evidence` list tells the caller
   what to address before optional resubmission
-- `GateDecision.REFUSE`: the kernel deposits a FAILURE signal at the proposal
-  target; it does not automatically change trust or enforce a downstream stop
+- `GateDecision.REFUSE`: the kernel deposits a POLICY_REJECTION audit signal at
+  the proposal target; it does not fabricate an observed FAILURE, automatically
+  change trust, or enforce a downstream stop
 
 **MCP tool**:
 ```python

@@ -1,0 +1,58 @@
+name: Colony Kernel publication gates
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider_config:
+        description: "Repository-relative provider configuration JSON"
+        required: true
+        type: string
+      environment_digest:
+        description: "Digest produced from the pinned checkout environment"
+        required: true
+        type: string
+
+jobs:
+  publication:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install deterministic PDF normalizer
+        run: sudo apt-get update && sudo apt-get install -y qpdf
+      - name: Install locked environment
+        run: uv sync --frozen
+      - name: Run strict scoped gates
+        run: |
+          uv run ruff check src/codomyrmex/colony_kernel evaluations/colony_kernel
+          uv run ty check src/codomyrmex/colony_kernel
+          uv run python -m pytest tests/unit/colony_kernel/ -q \
+            --junitxml=output/data/colony_kernel_test_report.xml
+      - name: Run the fail-closed external evaluation
+        run: |
+          test -f "${{ inputs.provider_config }}"
+          uv run python evaluations/colony_kernel/runner.py \
+            --provider-config "${{ inputs.provider_config }}" \
+            --environment-digest "${{ inputs.environment_digest }}"
+      - name: Generate and verify release manifest
+        run: |
+          export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
+          uv run python scripts/compile_manuscript.py --pdf
+          uv run python scripts/generate_release_manifest.py \
+            --extra-command "uv run python evaluations/colony_kernel/runner.py"
+          uv run python scripts/verify_release_candidate.py
+      - name: Upload publication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: colony-kernel-publication-evidence
+          path: |
+            output/paper.pdf
+            output/paper.html
+            output/release_manifest.json
+            output/data/
+            output/evaluations/colony_kernel/

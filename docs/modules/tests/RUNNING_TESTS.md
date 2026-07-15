@@ -8,7 +8,7 @@
 
 This document describes how to run and filter the Codomyrmex test suite. Canonical counts and inventory live in [docs/reference/inventory.md](../../reference/inventory.md).
 
-**Collected tests (repo-wide):** **35,119** — `uv run python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths.
+**Collected tests (repo-wide):** **35,225** — `uv run python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths.
 
 ### Zero-Mock Policy
 
@@ -24,7 +24,7 @@ This document describes how to run and filter the Codomyrmex test suite. Canonic
 
 | Category | Location | Count (indicative) | Notes |
 |----------|----------|--------------------|--------|
-| **All collected** | under `src/codomyrmex/` (`tests/` + `tests/**`) | **35,119** | Single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
+| **All collected** | under `src/codomyrmex/` (`tests/` + `tests/**`) | **35,225** | Single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
 | **`unit` marker** | mostly `tests/unit/**` | **21,024** | `pytest -m unit --collect-only` |
 | **`integration` marker** | mixed | **253** | `pytest -m integration --collect-only` |
 | **Integration tree** | `tests/integration/` | **339** | `pytest tests/integration/ --collect-only` |
@@ -68,7 +68,7 @@ uv run pytest --version
 There is **no** in-repository batch shell runner. Use **`make`** targets or explicit **`uv run pytest`** (markers, directories, or `-k`).
 
 ```bash
-# Full suite + 40% coverage floor + term/html/json reports
+# Full suite + 60% coverage floor + term/html/json reports
 make test
 
 # Lint, type-check, then full test target (release-style gate)
@@ -85,7 +85,7 @@ uv run pytest src/codomyrmex/tests/ -q --tb=short \
   --cov=src/codomyrmex \
   --cov-report=term-missing \
   --cov-report=json:coverage-gate.json \
-  --cov-fail-under=40
+  --cov-fail-under=60
 ```
 
 ### Scoped runs (by tree or marker)
@@ -120,7 +120,7 @@ uv run pytest src/codomyrmex/tests/unit/ --collect-only
 
 ### Coverage Reports
 
-Default `uv run pytest` does **not** enable coverage (see `pyproject.toml` `[tool.pytest.ini_options]`). Use `make test`, `make test-coverage`, or explicit `--cov` flags. The documented floor is **40%** (`[tool.coverage.report] fail_under`); enforce it with `--cov-fail-under=40` when running pytest with `--cov`. The experimental `meme` package is omitted from coverage measurement (`[tool.coverage.run] omit`).
+Default `uv run pytest` does **not** enable coverage (see `pyproject.toml` `[tool.pytest.ini_options]`). Use `make test`, `make test-coverage`, or explicit `--cov` flags. The enforced floor is **60%** (`[tool.coverage.report] fail_under`); enforce it with `--cov-fail-under=60` when running pytest with `--cov`. The experimental `meme` package is omitted from coverage measurement (`[tool.coverage.run] omit`).
 
 **Hypothesis / NumPy / `secrets`:** If you see `ImportError: cannot import name randbits` from `numpy.random`, check for a **test directory named `secrets`** under a path that appears on `sys.path` before the stdlib (the suite uses `secrets_tests/` under `tests/unit/security/` to avoid shadowing). `security/secrets/vault.py` must not repoint `sys.modules["secrets"]`. The `Makefile` and CI also set `HYPOTHESIS_NO_NPY=1` for the process.
 
@@ -128,7 +128,7 @@ Generate coverage reports:
 
 ```bash
 # Run with coverage + gate
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html --cov-report=term-missing
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60 --cov-report=html --cov-report=term-missing
 
 # View HTML report
 open htmlcov/index.html
@@ -421,14 +421,14 @@ When contributing tests:
 # Quick validation (unit marker + coverage gate)
 make test-unit
 
-# Full test suite + 40% gate
+# Full test suite + 60% gate
 make test
 
 # Debug failing test
 uv run pytest -vv --pdb src/codomyrmex/tests/unit/test_specific.py::TestClass::test_method
 
-# Check coverage (40% gate when using --cov-fail-under)
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html
+# Check coverage (60% gate when using --cov-fail-under)
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60 --cov-report=html
 
 # Find slow tests
 uv run pytest --durations=10 src/codomyrmex/tests/

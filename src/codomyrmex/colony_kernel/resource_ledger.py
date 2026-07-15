@@ -7,11 +7,15 @@ No external dependencies beyond stdlib.
 
 from __future__ import annotations
 
+import sqlite3
+import threading
 import time
 from dataclasses import dataclass, field
 from typing import Any
 
 from codomyrmex.colony_kernel.models import ResourceCost
+
+_SQLITE_INIT_LOCK = threading.Lock()
 
 # ---------------------------------------------------------------------------
 # Budget definition
@@ -74,6 +78,7 @@ class ResourceLedger:
     """
 
     budget: ResourceBudget = field(default_factory=ResourceBudget)
+    db_path: str | None = None
 
     # Internal state — not part of the public interface.
     _accumulated: ResourceCost = field(
@@ -83,6 +88,95 @@ class ResourceLedger:
         default_factory=list, init=False, repr=False
     )
     _period_start: float = field(default_factory=time.time, init=False, repr=False)
+    _conn: sqlite3.Connection | None = field(default=None, init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        """Open the optional durable backend and restore its current period."""
+        if self.db_path is None:
+            return
+        self._conn = sqlite3.connect(
+            self.db_path, check_same_thread=False, timeout=10.0
+        )
+        self._conn.execute("PRAGMA busy_timeout=10000")
+        # SQLite connection setup is serialized within a process so concurrent
+        # workers do not race while enabling WAL or creating the schema.  The
+        # transaction used by check_and_consume still provides cross-process
+        # atomicity.
+        with _SQLITE_INIT_LOCK:
+            self._conn.execute("PRAGMA journal_mode=WAL")
+            self._conn.executescript(
+                """
+                CREATE TABLE IF NOT EXISTS resource_usage (
+                    singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
+                    llm_calls INTEGER NOT NULL,
+                    runtime_seconds REAL NOT NULL,
+                    risk_level REAL NOT NULL,
+                    human_attention_minutes REAL NOT NULL,
+                    merge_risk REAL NOT NULL,
+                    doc_debt REAL NOT NULL,
+                    security_exposure REAL NOT NULL,
+                    period_start REAL NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS resource_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    agent_id TEXT NOT NULL,
+                    llm_calls INTEGER NOT NULL,
+                    runtime_seconds REAL NOT NULL,
+                    risk_level REAL NOT NULL,
+                    human_attention_minutes REAL NOT NULL,
+                    merge_risk REAL NOT NULL,
+                    doc_debt REAL NOT NULL,
+                    security_exposure REAL NOT NULL,
+                    recorded_at REAL NOT NULL
+                );
+                """
+            )
+            self._conn.execute(
+                "INSERT OR IGNORE INTO resource_usage VALUES (1, 0, 0, 0, 0, 0, 0, 0, ?)",
+                (self._period_start,),
+            )
+            self._conn.commit()
+        self._load_persistent_state()
+
+    def _load_persistent_state(self) -> None:
+        if self._conn is None:
+            return
+        row = self._conn.execute(
+            "SELECT llm_calls, runtime_seconds, risk_level, human_attention_minutes, "
+            "merge_risk, doc_debt, security_exposure, period_start FROM resource_usage "
+            "WHERE singleton = 1"
+        ).fetchone()
+        if row is not None:
+            self._accumulated = ResourceCost(*row[:7])
+            self._period_start = float(row[7])
+        rows = self._conn.execute(
+            "SELECT agent_id, llm_calls, runtime_seconds, risk_level, "
+            "human_attention_minutes, merge_risk, doc_debt, security_exposure, "
+            "recorded_at FROM resource_history ORDER BY id"
+        ).fetchall()
+        self._history = [
+            (str(row[0]), ResourceCost(*row[1:8]), float(row[8])) for row in rows
+        ]
+
+    def _persist_state(self) -> None:
+        if self._conn is None:
+            return
+        acc = self._accumulated
+        self._conn.execute(
+            "UPDATE resource_usage SET llm_calls=?, runtime_seconds=?, risk_level=?, "
+            "human_attention_minutes=?, merge_risk=?, doc_debt=?, "
+            "security_exposure=?, period_start=? WHERE singleton=1",
+            (
+                acc.llm_calls,
+                acc.runtime_seconds,
+                acc.risk_level,
+                acc.human_attention_minutes,
+                acc.merge_risk,
+                acc.doc_debt,
+                acc.security_exposure,
+                self._period_start,
+            ),
+        )
 
     # ---------------------------------------------------------------------------
     # Period reset
@@ -93,13 +187,21 @@ class ResourceLedger:
         if self.budget.period_seconds <= 0:
             return
         if time.time() - self._period_start >= self.budget.period_seconds:
+            self._load_persistent_state()
             self._accumulated = ResourceCost()
             self._period_start = time.time()
+            if self._conn is not None:
+                with self._conn:
+                    self._persist_state()
 
     def reset_period(self) -> None:
         """Manually reset the period accumulator."""
+        self._load_persistent_state()
         self._accumulated = ResourceCost()
         self._period_start = time.time()
+        if self._conn is not None:
+            with self._conn:
+                self._persist_state()
 
     # ---------------------------------------------------------------------------
     # Mutation
@@ -118,9 +220,23 @@ class ResourceLedger:
         """
         if not agent_id:
             raise ValueError("agent_id must be non-empty")
+        self._load_persistent_state()
         self._maybe_reset()
         self._accumulated = self._accumulated + cost
-        self._history.append((agent_id, cost, time.time()))
+        recorded_at = time.time()
+        self._history.append((agent_id, cost, recorded_at))
+        if self._conn is not None:
+            with self._conn:
+                self._persist_state()
+                self._conn.execute(
+                    "INSERT INTO resource_history "
+                    "(agent_id, llm_calls, runtime_seconds, risk_level, "
+                    "human_attention_minutes, merge_risk, doc_debt, security_exposure, recorded_at) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (agent_id, cost.llm_calls, cost.runtime_seconds, cost.risk_level,
+                     cost.human_attention_minutes, cost.merge_risk, cost.doc_debt,
+                     cost.security_exposure, recorded_at),
+                )
 
     def consume(self, cost: ResourceCost) -> None:
         """Record actual consumption after an action executes.
@@ -128,8 +244,12 @@ class ResourceLedger:
         This is the canonical method called by ColonyKernel.record_outcome.
         Does not require an agent_id — use record_cost for per-agent tracking.
         """
+        self._load_persistent_state()
         self._maybe_reset()
         self._accumulated = self._accumulated + cost
+        if self._conn is not None:
+            with self._conn:
+                self._persist_state()
 
     def reset(self, period: str = "hourly") -> None:
         """Reset the accumulated usage counter.
@@ -141,8 +261,7 @@ class ResourceLedger:
                 ``"hourly"``, ``"daily"``).  Not used computationally — stored
                 for observability.  Defaults to ``"hourly"``.
         """
-        self._accumulated = ResourceCost()
-        self._period_start = time.time()
+        self.reset_period()
 
     # ---------------------------------------------------------------------------
     # Queries
@@ -155,6 +274,7 @@ class ResourceLedger:
         not breach any budget dimension. The accumulator is NOT modified here;
         call ``consume`` after the action executes.
         """
+        self._load_persistent_state()
         self._maybe_reset()
         ok, reason = self.can_afford(estimate)
         if ok:
@@ -171,6 +291,7 @@ class ResourceLedger:
         Args:
             cost: The prospective cost to check.
         """
+        self._load_persistent_state()
         self._maybe_reset()
         projected: ResourceCost = self._accumulated + cost
 
@@ -255,6 +376,35 @@ class ResourceLedger:
             ``(True, "consumed")`` if within budget (cost is consumed),
             ``(False, reason)`` if budget would be exceeded (not consumed).
         """
+        if self._conn is not None:
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                self._load_persistent_state()
+                self._maybe_reset()
+                ok, reason = self.can_afford(cost)
+                if not ok:
+                    self._conn.rollback()
+                    return (False, reason or "budget exceeded")
+                self._accumulated = self._accumulated + cost
+                if agent_id:
+                    recorded_at = time.time()
+                    self._history.append((agent_id, cost, recorded_at))
+                    self._conn.execute(
+                        "INSERT INTO resource_history "
+                        "(agent_id, llm_calls, runtime_seconds, risk_level, "
+                        "human_attention_minutes, merge_risk, doc_debt, security_exposure, recorded_at) "
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        (agent_id, cost.llm_calls, cost.runtime_seconds, cost.risk_level,
+                         cost.human_attention_minutes, cost.merge_risk, cost.doc_debt,
+                         cost.security_exposure, recorded_at),
+                    )
+                self._persist_state()
+                self._conn.commit()
+                return (True, "consumed")
+            except Exception:
+                self._conn.rollback()
+                raise
+
         self._maybe_reset()
         ok, reason = self.can_afford(cost)
         if not ok:
@@ -271,6 +421,7 @@ class ResourceLedger:
 
         Returns a copy; mutating the returned object does not affect the ledger.
         """
+        self._load_persistent_state()
         self._maybe_reset()
         return ResourceCost(
             llm_calls=self._accumulated.llm_calls,
@@ -284,6 +435,7 @@ class ResourceLedger:
 
     def usage_summary(self) -> dict[str, Any]:
         """Return current period consumption vs budget as a plain dict."""
+        self._load_persistent_state()
         self._maybe_reset()
         acc = self._accumulated
         b = self.budget
@@ -319,6 +471,7 @@ class ResourceLedger:
         Returns:
             A shallow copy of the internal history list.
         """
+        self._load_persistent_state()
         return list(self._history)
 
     def agent_spend(self, agent_id: str) -> ResourceCost:
@@ -330,6 +483,7 @@ class ResourceLedger:
         Returns:
             Summed ``ResourceCost`` for that agent; zero-cost if unknown.
         """
+        self._load_persistent_state()
         total = ResourceCost()
         for aid, cost, _ in self._history:
             if aid == agent_id:
@@ -346,6 +500,7 @@ class ResourceLedger:
         Returns:
             A list of ``(agent_id, total_cost)`` pairs, most expensive first.
         """
+        self._load_persistent_state()
         per_agent: dict[str, ResourceCost] = {}
         for aid, cost, _ in self._history:
             if aid in per_agent:
@@ -361,6 +516,12 @@ class ResourceLedger:
             ),
         )
         return ranked[:k]
+
+    def close(self) -> None:
+        """Close the durable backend, if configured."""
+
+        if self._conn is not None:
+            self._conn.close()
 
 
 # ---------------------------------------------------------------------------

@@ -1,10 +1,33 @@
 # Proposed Evaluation Protocol and Release Configuration {#sec:experimental_setup}
 
-This section separates a **proposed external benchmark** from the configuration and
-contract checks that were actually executed for this release. The comparative benchmark
-has not been run, its baselines are not implemented as released adapters, and no raw
-trial traces are included. Its purpose here is to make the next empirical test explicit
-without presenting planned work as evidence.
+This section separates the **release evaluation harness** from the benchmark evidence
+actually executed for this manuscript. The harness now defines 50 deterministic
+controlled tasks, a predeclared {{CONFIG_SWE_BENCH_TASK_COUNT}}-instance SWE-bench Lite subset, three baselines, a
+provider-neutral adapter, signed-receipt parsing, and paired metrics. The checked
+manifest pins the SWE-bench revision and issue IDs, but execution remains pending until
+model/provider pins, environment digest, raw receipts, and held-out results are
+attached; no comparative benchmark claim is made here.
+
+Every report declares `execution_class`: `fixture_contract` is a contractual test
+surface, while `provider_backed` requires the HTTP adapter and later release verification.
+The analysis layer records denominators by partition and exact paired-binary uncertainty,
+but it cannot turn a fixture or a missing provider result into an empirical figure.
+
+The executable protocol has a stricter evidence boundary than a task-list description.
+Before any adapter call, the runner acquires the pinned corpus into a temporary file,
+checks its SHA-256 digest, and atomically accepts it only on an exact match. It then
+prepares 80 stable task identifiers (50 controlled actions and {{CONFIG_SWE_BENCH_TASK_COUNT}} SWE-bench instances)
+under the declared development/held-out partitions and requires one validated row for
+each task under each of the three conditions: 240 rows in total. A row records success,
+verified failure, harmful or unauthorized attempts, replay and cross-scope rejection,
+false HOLD/REFUSE, rework, resource cost, latency, token use, trust calibration, and
+authorization precision. Enforced rows additionally require the complete signed
+`ExecutionReceipt` field set, a trusted executor public-key registry, and an Ed25519
+signature verification. Metadata alone is insufficient. Missing,
+duplicated, out-of-manifest, malformed, or unverifiable evidence fails the run before a
+result file is written. The registry is an independent checked-in input rather than
+provider-supplied proof; in this candidate it is intentionally empty while an
+approved external executor key is pending, so no provider-backed result is reported.
 
 ## Evidence-status map {#sec:experimental-design}
 
@@ -15,7 +38,7 @@ without presenting planned work as evidence.
 | Colony Kernel unit/integration suite | Executed during variable generation | Checked deterministic behavior under test inputs |
 | Ruff and ty checks | Executed; fail closed | No scoped lint/type diagnostics in this snapshot |
 | Formula-derived figures and tables | Regenerated from configuration and constants | Arithmetic consequences of the policy |
-| {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition benchmark | Proposed, not executed | No comparative conclusion |
+| {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition benchmark | Manifest, corpus acquisition, complete-matrix validation, and report schema implemented; provider results pending | No comparative conclusion |
 | Production deployment study | Absent | No production safety or performance conclusion |
 : Evidence status for the release and proposed study. {#tbl:evidence-status}
 
@@ -114,7 +137,7 @@ the configured routing bands.
 |---|---|---|
 | EXECUTE | score ≥ {{CONFIG_GATE_EXECUTE_THRESHOLD}} | Caller may actuate |
 | HOLD | {{CONFIG_GATE_HOLD_THRESHOLD}} ≤ score < {{CONFIG_GATE_EXECUTE_THRESHOLD}} | Return revision/recovery requirements |
-| REFUSE | score < {{CONFIG_GATE_HOLD_THRESHOLD}} | Reject and deposit FAILURE |
+| REFUSE | score < {{CONFIG_GATE_HOLD_THRESHOLD}} | Reject and deposit POLICY_REJECTION audit signal |
 : Ordinary gate routing thresholds. {#tbl:experimental_gate_thresholds}
 
 Budget failure, SANDBOX, trust below {{CONFIG_TRUST_HARD_FLOOR}}, and CRITICAL falsification are evaluated as
@@ -205,8 +228,8 @@ The worker runs {{CONFIG_FALSIFICATION_CHECK_COUNT}} checks grouped into these
 9. `OVER_BROAD_MODULE`
 10. `PREMATURE_ABSTRACTION`
 
-HIGH or CRITICAL findings deposit FAILURE; MEDIUM findings deposit RISK. Only CRITICAL
-findings are gate hard overrides. The worker's PASS/CONDITIONAL/FAIL report is not itself
+MEDIUM, HIGH, and CRITICAL findings deposit RISK; prospective findings never become
+observed FAILURE. Only CRITICAL findings are gate hard overrides. The worker's PASS/CONDITIONAL/FAIL report is not itself
 the gate decision.
 
 ## Configuration provenance {#sec:yaml-configuration-files}
@@ -254,11 +277,11 @@ The project renderer runs three ordered project steps:
 3. `compile_manuscript.py --pdf` hydrates Markdown, checks unresolved tokens, then runs
    Pandoc with pandoc-crossref and citeproc to produce HTML and PDF.
 
-The template `run.sh` integration invokes the first two scripts as Stage 02 analysis
-and delegates Stage 03 rendering to the project override. The override normalizes outputs
-to `{{ARTIFACT_COMBINED_PDF_PATH}}` and `output/web/index.html`. Static manuscript
-validation runs against the actual `docs/manuscript` source through the shared source
-resolver.
+The publication route runs these scripts directly from the Codomyrmex repository root;
+it does not require an outer template checkout or an untracked `run.sh`. Static
+manuscript validation runs against the actual `docs/manuscript` source through the
+shared source resolver, and the direct renderer writes the canonical `output/paper.html`
+and `output/paper.pdf` artifacts.
 
 This pipeline binds internal evidence to the rendered artifact. It does not prove that
 the proposed external benchmark has been executed.

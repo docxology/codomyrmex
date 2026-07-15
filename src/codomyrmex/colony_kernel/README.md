@@ -4,11 +4,15 @@
 
 ## Purpose
 
-The Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology thesis: a codebase is treated as a colony in which agents, modules, and human operators interact through a process-local signal field. Subsystems deposit chemical-analogy traces carrying success, failure, risk, and dependency information, and the kernel evaluates proposals against the accumulated field, reported consequence history, budget state, completeness, and agent trust. A proposal touching a location with strong FAILURE or RISK pressure faces a higher gate barrier than an otherwise identical proposal at a clean target. Caller-reported outcomes update the field and trust profile, while pruning scans nominate candidates for review. These mechanics implement environmental feedback; they do not by themselves attest execution, enforce downstream actions, or establish production benefit.
+The Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology thesis: a codebase is treated as a colony in which agents, modules, and human operators interact through a signal field. The default profile remains advisory and process-local, while the strict profile adds a governed action-scope boundary: only explicitly registered targets can receive an Ed25519-signed, single-use execution authorization, and only a consumed authorization plus executor receipt can update enforced trust and outcome state. Unregistered mutating paths remain outside scope and fail closed in strict mode. Caller-reported, policy-rejected, prospective-RISK, and attested-execution evidence remain separate grades; none is a general truth oracle or production-safety claim.
 
 ## Architecture
 
-The kernel wires eight cooperating responsibilities. `models.py` supplies shared value objects, while `ColonyKernel` explicitly sequences falsification, budget, role, gate, consequence, signal, and pruning operations. Cross-subsystem dependencies are documented rather than hidden.
+The kernel wires eight cooperating responsibilities plus the strict authorization and executor surfaces. `models.py` supplies shared value objects, while `ColonyKernel` explicitly sequences falsification, budget, role, gate, consequence, signal, pruning, authorization, and receipt operations. Cross-subsystem dependencies are documented rather than hidden.
+
+The falsification surface has **ten attack-vector categories** represented by
+`AttackVector` and **eleven check functions** in the worker. These counts are
+different by design: one category can contain more than one concrete check.
 
 ```mermaid
 graph TB
@@ -65,7 +69,7 @@ print(result.decision)   # GateDecision.REFUSE for a brand-new SANDBOX agent
 print(result.gate_score) # 0.0 on the SANDBOX hard-override path
 
 # Outcome reporting is a separate, caller-driven operation. This demonstrates the
-# current interface; it does not prove that the action was authorized or executed.
+# advisory interface; it does not prove that the action was authorized or executed.
 record = kernel.record_outcome(
     proposal=proposal,
     outcome={"summary": "patch applied; git rebase succeeded", "repair_needed": False},
@@ -81,6 +85,28 @@ print(status["budget_usage"]["llm_calls"])  # {"used": 3, "max": 500}
 # Advance one tick — evaporates pheromone traces.
 kernel.tick()
 ```
+
+### Strict enforcement profile
+
+Services that require an execution boundary must explicitly provision an
+`Ed25519Authority` from an external secret store and construct
+`ColonyKernelConfig(enforcement_mode="strict", authorization_signer=...)`. A
+successful `propose_action` then returns a signed `ExecutionAuthorization` only
+for the configured action-scope map. If a proposal supplies an explicit
+`evidence["action_payload"]` object, its canonical digest is signed as part of
+the capability and the executor must receive the same object. A registered
+`RegisteredActionExecutor` consumes that capability atomically and returns one
+signed `ExecutionReceipt` carrying the same request digest.
+`record_attested_outcome` verifies the receipt before updating trust, budgets, or
+signals. `record_outcome` remains available for audit input, but strict mode
+quarantines it and applies no learning or failure pressure.
+
+The strict profile persists authorization, signal, resource, consequence, and
+receipt state when a file-backed SQLite path is configured. `:memory:` is an
+explicit isolated-test mode and is not durable. Key IDs and public-key metadata
+may be recorded in a release manifest; private keys must remain outside
+repository state. Key rotation is explicit through the authorization ledger's
+trusted public-key registry.
 
 ## The Core Loop
 
@@ -137,12 +163,18 @@ Other colony-kernel imports are explicit: subsystem classes share `models.py`, a
 
 ## MCP Tools
 
-Eight MCP tools expose the colony kernel to AI agents via Model Context Protocol. All tools route through a module-level `ColonyKernel` singleton.
+The MCP surface exposes the advisory read/evaluation tools plus strict execution
+and evidence tools. All calls route through a module-level `ColonyKernel`
+singleton; a service must configure that singleton with a strict profile before
+the enforcement tools can execute anything.
 
 | Tool | Purpose |
 |------|---------|
 | `colony_propose_action` | Submit an action proposal; returns the full `GateResult` |
-| `colony_record_outcome` | Record the actual consequence of an executed action |
+| `colony_record_outcome` | Record a caller-reported, unattested consequence report |
+| `colony_execute_authorized` | Consume a signed authorization and return a signed executor receipt |
+| `colony_record_attested_outcome` | Link one consumed receipt to one accepted outcome |
+| `colony_action_scope` | Inspect the governed action scope and bypass behavior |
 | `colony_agent_profile` | Read an agent's current trust profile and role |
 | `colony_status` | Dashboard snapshot: signals, budget usage, role distribution, recent consequences |
 | `colony_pheromone_query` | Sense pheromone strength at a specific location and signal type |
@@ -178,7 +210,7 @@ Tests live in `tests/unit/colony_kernel/`. Run with:
 uv run pytest tests/unit/colony_kernel/ -v
 ```
 
-The test suite follows the zero-mock policy: all tests use real `ColonyKernel` instances with `db_path=":memory:"`. No `unittest.mock`, no `MagicMock`. Coverage target: ≥ 40% (project-wide gate).
+The test suite follows the zero-mock policy: all tests use real `ColonyKernel` instances with `db_path=":memory:"`. No `unittest.mock`, no `MagicMock`. Coverage target: ≥ 60% (the executable `pyproject.toml` release floor).
 
 Key test modules:
 
@@ -188,7 +220,7 @@ Key test modules:
 - `test_consequence_memory.py` — SQLite persistence and trust delta computation
 - `test_falsification_worker.py` — each attack vector in isolation
 - `test_pruning_daemon.py` — staleness detection via pheromone field state
-- `test_mcp_tools.py` — all eight MCP tool round-trips against the singleton
+- `test_mcp_tools.py` — all eleven MCP tool round-trips, including strict lifecycle tools
 
 ## Navigation Links
 

@@ -57,18 +57,19 @@ trust multipliers affect initial strength, while the field cap bounds accumulate
 strength. Deployments that need real-time semantics must define the scheduler-to-tick
 mapping rather than reinterpret a tick as an undocumented number of seconds.
 
-## DR-3: Process-local state with optional file-backed consequences {#sec:dr-sqlite}
+## DR-3: Advisory process-local state and strict durable profile {#sec:dr-sqlite}
 
-`ColonyKernelConfig` defaults `db_path` to `:memory:`. In that mode consequence rows and
-profiles disappear when the process exits. `ConsequenceMemory` also supports a caller
-supplied SQLite file path, while `db_path=None` selects its pure in-memory list mode.
-The pheromone field remains in memory in all three cases.
+`ColonyKernelConfig` defaults `db_path` to `:memory:` for the advisory profile. In that
+mode consequence rows and profiles disappear when the process exits. A strict profile
+uses a caller-supplied SQLite path and durable signal, resource, authorization, receipt,
+consequence, and trust stores; `db_path=None` still selects pure in-memory list mode for
+isolated tests.
 
-This design minimizes setup and keeps real SQLite behavior available to tests. It does
-not provide shared multi-process state, restart recovery for signal pressure, remote
-replication, migration management, or conflict resolution. A deployment requiring
-those properties needs an explicit state architecture; changing only the consequence
-database path is not sufficient.
+This design keeps the low-friction advisory default while making the strict persistence
+profile explicit and testable. SQLite WAL plus atomic transactions provide the checked
+single-database concurrency contract; they do not provide remote replication, migration
+management, backup policy, or conflict resolution. A deployment requiring those
+properties needs an operational state architecture beyond this package.
 
 ## DR-4: Clipped additive trust updates {#sec:dr-trust-deltas}
 
@@ -80,10 +81,9 @@ can change the net update. The rule is transparent and supports exact fixtures s
 
 The cost of that simplicity is that trust is neither a calibrated posterior nor an
 uncertainty interval. Equal scores can arise from different histories, and constant-step
-updates do not imply convergence to a unique equilibrium. More importantly, current
-outcomes are caller supplied: the MCP surface does not consume a durable prior EXECUTE
-record. Before trust is used in an adversarial setting, proposal, execution, outcome,
-and attestation must be linked.
+updates do not imply convergence to a unique equilibrium. Advisory outcomes are caller
+supplied; strict declared actions instead require proposal, execution authorization,
+receipt, and attested-outcome linkage. Neither path is an independent world-truth oracle.
 
 ## DR-5: Three routing outcomes {#sec:dr-three-state}
 
@@ -91,7 +91,7 @@ EXECUTE, HOLD, and REFUSE distinguish three operational states:
 
 - EXECUTE returns an advisory approval verdict to the caller;
 - HOLD requests revision, evidence, budget recovery, or later reevaluation; and
-- REFUSE rejects the proposal and, in the integrated path, deposits FAILURE pressure.
+- REFUSE rejects the proposal and, in the integrated path, deposits POLICY_REJECTION audit pressure; FAILURE remains reserved for caller-reported adverse outcomes.
 
 HOLD is useful only when revision can change a relevant input at acceptable cost. The
 release therefore does not claim that a three-way gate universally dominates a binary

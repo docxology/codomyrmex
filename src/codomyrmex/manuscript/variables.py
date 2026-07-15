@@ -21,19 +21,19 @@ import hashlib
 import inspect
 import json
 import math
+import os
 import platform
 import re
 import subprocess
 import sys
 import tomllib
+import xml.etree.ElementTree as ET
 from dataclasses import fields
 from datetime import UTC, date, datetime
-from typing import TYPE_CHECKING, Any
+from pathlib import Path
+from typing import Any
 
 import yaml  # stdlib-compatible: PyYAML
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Internal helpers
@@ -80,7 +80,9 @@ def inject_manuscript_variables(
     written: list[Path] = []
     for source, content in hydrated.items():
         destination = output_dir / source.name
-        destination.write_text(content, encoding="utf-8")
+        temporary = destination.with_name(f".{destination.name}.{os.getpid()}.tmp")
+        temporary.write_text(content, encoding="utf-8")
+        temporary.replace(destination)
         written.append(destination)
     return written
 
@@ -123,6 +125,24 @@ def _count_files_matching(directory: Path, pattern: str) -> int:
     if not directory.is_dir():
         return 0
     return sum(1 for path in directory.glob(pattern) if path.is_file())
+
+
+def _generation_timestamp() -> str:
+    """Return the build timestamp, honoring reproducible-build pinning.
+
+    Release builds set ``SOURCE_DATE_EPOCH`` to the immutable revision's commit
+    time.  Developer builds retain the useful current-time provenance when the
+    variable is not set.  An invalid explicit value fails closed rather than
+    silently producing an apparently reproducible artifact.
+    """
+    raw_epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if raw_epoch is None:
+        return datetime.now(tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    try:
+        epoch = int(raw_epoch)
+    except ValueError as exc:
+        raise RuntimeError("SOURCE_DATE_EPOCH must be an integer Unix timestamp") from exc
+    return datetime.fromtimestamp(epoch, tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _count_colony_kernel_docs(project_root: Path) -> int:
@@ -305,6 +325,73 @@ def _extract_pytest_count(output: str) -> int:
         if match:
             return int(match.group(1))
     return 0
+
+
+def _parse_junit_status(path: Path) -> dict[str, int]:
+    """Return collected/passed/skipped/failed/errored counts from JUnit XML."""
+    if not path.exists():
+        raise RuntimeError(f"JUnit test report is missing: {path}")
+    root = ET.parse(path).getroot()
+    testcases = list(root.iter("testcase"))
+    collected = len(testcases)
+    skipped = sum(1 for case in testcases if case.find("skipped") is not None)
+    failed = sum(1 for case in testcases if case.find("failure") is not None)
+    errored = sum(1 for case in testcases if case.find("error") is not None)
+    passed = max(0, collected - skipped - failed - errored)
+    return {
+        "collected": collected,
+        "passed": passed,
+        "skipped": skipped,
+        "failed": failed,
+        "errors": errored,
+    }
+
+
+def _atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
+    """Write a JSON artifact by replacement, never by partial final writes."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    temporary.replace(path)
+
+
+def _normalise_coverage_evidence(data: dict[str, Any]) -> dict[str, Any]:
+    """Pin coverage metadata so the identity artifact is clone-reproducible.
+
+    Coverage.py records the wall-clock collection time in ``meta.timestamp``.
+    The release evidence needs the measured line/branch totals, not the time at
+    which the command happened to run, so release builds replace that field with
+    the pinned source-date timestamp before publishing the artifact.
+    """
+    meta = data.get("meta")
+    if isinstance(meta, dict):
+        meta["timestamp"] = _generation_timestamp()
+    return data
+
+
+def _normalise_junit_evidence(path: Path) -> None:
+    """Remove host- and runtime-specific fields from the status evidence.
+
+    The JUnit artifact is used as a structured test-status receipt.  Test
+    duration and Hypothesis timing diagnostics are intentionally not part of its
+    identity; benchmark latency is recorded separately by the evaluation
+    harness.  Removing those volatile fields makes the status receipt stable
+    across clean clones while retaining every testcase and outcome element.
+    """
+    tree = ET.parse(path)
+    root = tree.getroot()
+    for suite in root.iter("testsuite"):
+        suite.attrib["time"] = "0.000"
+        suite.attrib["timestamp"] = _generation_timestamp()
+        suite.attrib.pop("hostname", None)
+        for child in list(suite):
+            if child.tag == "properties":
+                suite.remove(child)
+    for testcase in root.iter("testcase"):
+        testcase.attrib["time"] = "0.000"
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.normalised.tmp")
+    tree.write(temporary, encoding="utf-8", xml_declaration=True)
+    temporary.replace(path)
 
 
 def _paired_locality_snapshot(
@@ -573,10 +660,16 @@ def _run_colony_kernel_coverage(
     project_root: Path, test_path: Path, coverage_floor: float
 ) -> dict[str, Any]:
     coverage_path = project_root / "output" / "data" / "colony_kernel_coverage.json"
+    junit_path = project_root / "output" / "data" / "colony_kernel_test_report.xml"
     coverage_path.parent.mkdir(parents=True, exist_ok=True)
-    # Release evidence is regenerated for the current tree. Removing the prior
-    # report prevents a failed pytest process from being mistaken for fresh proof.
+    # Release evidence is regenerated for the current tree. Final artifacts are
+    # removed before the gate and only replaced after every quality gate passes.
     coverage_path.unlink(missing_ok=True)
+    junit_path.unlink(missing_ok=True)
+    coverage_tmp = coverage_path.with_name(f".{coverage_path.name}.{os.getpid()}.tmp")
+    junit_tmp = junit_path.with_name(f".{junit_path.name}.{os.getpid()}.tmp")
+    coverage_tmp.unlink(missing_ok=True)
+    junit_tmp.unlink(missing_ok=True)
     cmd = [
         sys.executable,
         "-m",
@@ -584,9 +677,12 @@ def _run_colony_kernel_coverage(
         str(test_path),
         "--cov=src/codomyrmex/colony_kernel",
         "--cov-branch",
-        f"--cov-report=json:{coverage_path}",
+        f"--cov-report=json:{coverage_tmp}",
         "--cov-report=term",
         f"--cov-fail-under={coverage_floor}",
+        f"--junitxml={junit_tmp}",
+        "-m",
+        "not optional_artifact",
         "--tb=short",
         "-q",
     ]
@@ -598,30 +694,66 @@ def _run_colony_kernel_coverage(
         timeout=600,
     )
     output = f"{result.stdout}\n{result.stderr}".strip()
-    if result.returncode != 0:
-        raise RuntimeError(
-            "scoped pytest coverage gate failed while computing manuscript metrics "
-            f"(exit {result.returncode}):\n{output}"
+    try:
+        if result.returncode != 0:
+            raise RuntimeError(
+                "scoped pytest coverage gate failed while computing manuscript metrics "
+                f"(exit {result.returncode}):\n{output}"
+            )
+        if not coverage_tmp.exists():
+            raise RuntimeError(f"pytest coverage gate did not create {coverage_tmp}")
+        data = _normalise_coverage_evidence(
+            json.loads(coverage_tmp.read_text(encoding="utf-8"))
         )
-    if not coverage_path.exists():
-        raise RuntimeError(f"pytest coverage gate did not create {coverage_path}")
-    data = json.loads(coverage_path.read_text(encoding="utf-8"))
-    totals = data.get("totals", {})
-    pct = totals.get("percent_branches_covered")
-    if pct is None:
-        raise RuntimeError(
-            f"coverage JSON lacks a branch coverage percent: {coverage_path}"
+        coverage_tmp.write_text(
+            json.dumps(data, indent=2, sort_keys=True), encoding="utf-8"
         )
-    branch_pct = round(float(pct), 1)
-    if branch_pct < coverage_floor:
-        raise RuntimeError(
-            f"scoped branch coverage {branch_pct:.1f}% is below the configured "
-            f"floor {coverage_floor:.1f}%"
-        )
-    count = _extract_pytest_count(output)
-    if count <= 0:
-        count = _run_pytest_json(project_root, test_path=test_path)["collected"]
-    return {"collected": count, "coverage_pct": branch_pct}
+        totals = data.get("totals", {})
+        pct = totals.get("percent_branches_covered")
+        if pct is None:
+            raise RuntimeError(
+                f"coverage JSON lacks a branch coverage percent: {coverage_tmp}"
+            )
+        branch_pct = round(float(pct), 1)
+        if branch_pct < coverage_floor:
+            raise RuntimeError(
+                f"scoped branch coverage {branch_pct:.1f}% is below the configured "
+                f"floor {coverage_floor:.1f}%"
+            )
+        _normalise_junit_evidence(junit_tmp)
+        status = _parse_junit_status(junit_tmp)
+        if status["skipped"] or status["failed"] or status["errors"]:
+            raise RuntimeError(
+                "publication test gate requires zero skipped, failed, and errored "
+                f"tests; status={status}"
+            )
+        return {
+            **status,
+            "coverage_pct": branch_pct,
+            "command": [
+                "python",
+                "-m",
+                "pytest",
+                "tests/unit/colony_kernel",
+                "--cov=src/codomyrmex/colony_kernel",
+                "--cov-branch",
+                "--cov-report=json:output/data/colony_kernel_coverage.json",
+                "--cov-report=term",
+                f"--cov-fail-under={coverage_floor}",
+                "--junitxml=output/data/colony_kernel_test_report.xml",
+                "-m",
+                "not optional_artifact",
+                "--tb=short",
+                "-q",
+            ],
+            "exit_code": result.returncode,
+            "coverage_tmp": str(coverage_tmp),
+            "junit_tmp": str(junit_tmp),
+        }
+    except Exception:
+        coverage_tmp.unlink(missing_ok=True)
+        junit_tmp.unlink(missing_ok=True)
+        raise
 
 
 # ---------------------------------------------------------------------------
@@ -909,6 +1041,9 @@ def compute_variables(
     workload_task_count = int(
         _required_value(experiment, "workload_task_count", config_path)
     )
+    swe_bench_task_count = int(
+        _required_value(experiment, "swe_bench_task_count", config_path)
+    )
     warmup_ticks = int(_required_value(experiment, "warmup_ticks", config_path))
     trial_count = int(_required_value(experiment, "trial_count", config_path))
     benchmark_conditions = _required_list(
@@ -1060,8 +1195,13 @@ def compute_variables(
     pytest_info = _run_colony_kernel_coverage(
         project_root, colony_kernel_tests_dir, coverage_floor
     )
-    test_count: int = pytest_info.get("collected", 0)
-    if test_count <= 0:
+    test_collected: int = int(pytest_info["collected"])
+    test_passed: int = int(pytest_info["passed"])
+    test_skipped: int = int(pytest_info["skipped"])
+    test_failed: int = int(pytest_info["failed"])
+    test_errors: int = int(pytest_info["errors"])
+    test_count: int = test_passed
+    if test_collected <= 0 or test_passed <= 0:
         raise RuntimeError("pytest collection returned zero colony-kernel tests")
 
     coverage_pct: float = float(pytest_info["coverage_pct"])
@@ -1103,6 +1243,48 @@ def compute_variables(
         if "error[" in line or ": error:" in line
     )
 
+    # Publish the fresh test and quality-gate evidence only after pytest,
+    # coverage, Ruff, and ty have all passed.  The temporary coverage/JUnit
+    # paths are intentionally not part of the final release surface.
+    coverage_final = project_root / "output" / "data" / "colony_kernel_coverage.json"
+    junit_final = project_root / "output" / "data" / "colony_kernel_test_report.xml"
+    Path(str(pytest_info["coverage_tmp"])).replace(coverage_final)
+    Path(str(pytest_info["junit_tmp"])).replace(junit_final)
+    _atomic_write_json(
+        project_root / "output" / "data" / "colony_kernel_test_status.json",
+        {
+            "collected": test_collected,
+            "passed": test_passed,
+            "skipped": test_skipped,
+            "failed": test_failed,
+            "errors": test_errors,
+            "coverage_pct": coverage_pct,
+            "coverage_floor": coverage_floor,
+            "commands": [
+                {"argv": pytest_info["command"], "exit_code": pytest_info["exit_code"]},
+                {
+                    "argv": [
+                        "ruff",
+                        "check",
+                        "--output-format=json",
+                        "src/codomyrmex/colony_kernel",
+                    ],
+                    "exit_code": ruff_result.returncode,
+                },
+                {
+                    "argv": [
+                        "ty",
+                        "check",
+                        "--output-format",
+                        "concise",
+                        "src/codomyrmex/colony_kernel",
+                    ],
+                    "exit_code": ty_result.returncode,
+                },
+            ],
+        },
+    )
+
     # Trust score traces derived from live runtime constants.
     trust_initial: float = trust_sandbox_score
     trust_after_promotion: float = trust_promote_threshold
@@ -1140,7 +1322,7 @@ def compute_variables(
         f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
     )
     platform_name: str = platform.system()
-    generation_timestamp: str = datetime.now(tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    generation_timestamp: str = _generation_timestamp()
 
     # ------------------------------------------------------------------
     # 6. Assemble flat string dict (all values coerced to str)
@@ -1233,6 +1415,7 @@ def compute_variables(
         "CONFIG_PRUNING_MIN_CONFIDENCE": str(pruning_min_confidence),
         "CONFIG_AGENT_COUNT": str(agent_count),
         "CONFIG_WORKLOAD_TASK_COUNT": str(workload_task_count),
+        "CONFIG_SWE_BENCH_TASK_COUNT": str(swe_bench_task_count),
         "CONFIG_WARMUP_TICKS": str(warmup_ticks),
         "CONFIG_BENCHMARK_CONDITION_COUNT": str(benchmark_condition_count),
         "CONFIG_ROLE_COUNT": str(role_count),
@@ -1285,9 +1468,13 @@ def compute_variables(
         "CONFIG_HASH": config_hash,
         # RESULT tokens
         "RESULT_TEST_COUNT": str(test_count),
-        # CONFIG_TEST_COUNT: alias for RESULT_TEST_COUNT — 05_experimental_setup.md line 11
-        # uses the CONFIG_ prefix to reference the same live pytest-collected count.
+        # Compatibility aliases retain the historical passing-test token.
         "CONFIG_TEST_COUNT": str(test_count),
+        "RESULT_TEST_COLLECTED": str(test_collected),
+        "RESULT_TEST_PASSED": str(test_passed),
+        "RESULT_TEST_SKIPPED": str(test_skipped),
+        "RESULT_TEST_FAILED": str(test_failed),
+        "RESULT_TEST_ERRORS": str(test_errors),
         "RESULT_COVERAGE_PCT": str(coverage_pct),
         "RESULT_RUFF_ERRORS": str(ruff_errors),
         "RESULT_TY_ERRORS": str(ty_errors),
@@ -1305,7 +1492,7 @@ def compute_variables(
         "ARTIFACT_MCP_TOOLS": str(mcp_tools_artifact),
         "ARTIFACT_FIGURE_COUNT": str(figure_count),
         "ARTIFACT_COMBINED_PDF_PATH": (
-            f"output/pdf/{project_root.name}_combined.pdf"
+            "output/pdf/codomyrmex_combined.pdf"
         ),
         # Platform tokens
         "PYTHON_VERSION": python_version,

@@ -2,6 +2,16 @@
 
 **Current package version:** [pyproject.toml](pyproject.toml) (v1.3.0). For the full changelog see [CHANGELOG.md](CHANGELOG.md). The section below summarizes the historical **v1.2.3** “Coherence Release”.
 
+## v1.4.0 candidate — publication and enforcement status
+
+The candidate adds strict enforcement for the explicitly governed Colony action
+scope: signed Ed25519 capabilities, atomic single-use consumption, registered
+executors, signed receipts, durable SQLite state, and receipt-linked outcomes.
+The advisory profile remains available for compatibility. The candidate is not
+released as v1.4.0 until a clean immutable checkout reproduces the PDF and a
+provider-backed controlled/SWE-bench evaluation supplies signed results; the
+release manifest intentionally reports `publication_ready: false` until then.
+
 ## Codomyrmex v1.2.3 — "Coherence Release"
 
 ### Overview

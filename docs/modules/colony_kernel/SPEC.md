@@ -18,7 +18,9 @@ The Colony Kernel is the control plane for Codomyrmex's artificial ecology thesi
 - **Agents** are caller identifiers whose reported history updates trust profiles
 - **The pheromone field** is process-local shared state unless a future persistent backend is supplied
 
-The kernel exposes 8 MCP tools for agent interaction.
+The kernel exposes 11 MCP tools for agent interaction. Advisory mode retains
+caller-reported unattested evidence; strict mode governs only the declared action
+scope and requires a consumed signed authorization plus executor receipt.
 
 ## Architecture
 
@@ -165,7 +167,9 @@ Compound key format: `"{location}:{signal_type.value}"` (e.g. `"codomyrmex.git_o
 
 ## MCP Tool Surface
 
-All 8 tools route through a module-level `ColonyKernel` singleton. State persists for the lifetime of the MCP server process.
+The advisory tools route through a module-level `ColonyKernel` singleton. Strict
+authorization, attested-outcome, and action-scope tools require an explicitly
+configured strict kernel; durable state uses its configured SQLite profile.
 
 | Tool | Input | Output |
 |------|-------|--------|

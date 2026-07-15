@@ -15,9 +15,9 @@ require additional evidence.
 | Colony Kernel tests | Pass/fail count for `tests/unit/colony_kernel/` | Correctness outside exercised cases |
 | Branch coverage | Coverage of `src/codomyrmex/colony_kernel` against the configured {{CONFIG_COVERAGE_FLOOR}}% floor | Coverage of the full Codomyrmex package |
 | Static checks | Ruff and ty status for `src/codomyrmex/colony_kernel` | Repository-wide lint or type cleanliness |
-| Manuscript variables | Token map computed from current files, configuration, and gate outputs | A signed or independently attested release |
+| Manuscript variables | Token map computed from current files, configuration, and gate outputs | A signed or independently attested release until immutable tag verification |
 | Figures | {{ARTIFACT_FIGURE_COUNT}} regenerated visual assets sourced from the variable snapshot and documented constants | Measurements from an external agent population |
-| Render | Hydrated Markdown plus HTML/PDF outputs | Byte-identical output across machines and dates |
+| Render | Hydrated Markdown plus HTML/PDF outputs | Byte identity outside the pinned clean-clone toolchain |
 : Scope of the reproducibility evidence. {#tbl:repro-scope}
 
 The variable generator fails when the scoped pytest process, branch-coverage threshold,
@@ -69,12 +69,14 @@ newly created artifacts.
 The project uses the following output conventions:
 
 - `output/data/manuscript_variables.json` stores the complete rendered token map;
+- `output/data/colony_kernel_analysis.json` stores the versioned paired-binary analysis and
+  its evidence status;
 - `output/data/colony_kernel_coverage.json` stores the fresh scoped coverage report;
 - `output/manuscript/` stores token-resolved section copies plus `config.yaml` and the
   bibliography used by the renderer;
-- `output/figures/` stores the {{ARTIFACT_FIGURE_COUNT}} generated PNG figures and
-  `figure_registry.json`, whose entries record evidence class, byte size, and full
-  SHA-256 for each PNG;
+- `output/figures/` stores the {{ARTIFACT_FIGURE_COUNT}} generated PNG figures, the
+  evidence-status SVG, and `figure_registry.json`, whose entries record evidence class,
+  byte size, and full SHA-256 for each PNG;
 - direct project compilation writes `output/paper.html` and, with `--pdf`,
   `output/paper.pdf`; and
 - the shared template renderer writes its canonical combined outputs to
@@ -84,6 +86,12 @@ These paths are generated workspace outputs. Their presence alone does not show 
 they are current; the successful command log and artifact hashes are needed to bind
 them to a particular run.
 
+The exact candidate identity is recorded in the companion
+`docs/manuscript/RELEASE_PROVENANCE.md` and in `output/release_manifest.json`. The
+companion is kept outside the rendered PDF because embedding a PDF's own hash would
+be self-referential; the package-level provenance records the commit/tag and hashes
+for the PDF, HTML, variables, coverage, JUnit, and test-status artifacts.
+
 ## Scoped quality gates
 
 [@tbl:quality_gate_summary] repeats the same generated values reported in
@@ -91,43 +99,44 @@ them to a particular run.
 
 | Gate | Rendered result | Exact scope |
 |---|---:|---|
-| pytest | {{RESULT_TEST_COUNT}} passed | `tests/unit/colony_kernel/` |
+| pytest | {{RESULT_TEST_PASSED}} passed of {{RESULT_TEST_COLLECTED}} collected; skipped={{RESULT_TEST_SKIPPED}}, failed={{RESULT_TEST_FAILED}}, errors={{RESULT_TEST_ERRORS}} | `tests/unit/colony_kernel/` |
 | branch coverage | {{RESULT_COVERAGE_PCT}}% | `src/codomyrmex/colony_kernel`; {{CONFIG_COVERAGE_FLOOR}}% project floor |
 | Ruff | {{RESULT_RUFF_ERRORS}} findings | `src/codomyrmex/colony_kernel` |
 | ty | {{RESULT_TY_ERRORS}} diagnostics | `src/codomyrmex/colony_kernel` |
 : Scoped quality-gate snapshot regenerated for the manuscript. {#tbl:quality_gate_summary}
 
-The generator deletes the prior coverage JSON before invoking pytest, requires a newly
-written report with a branch-coverage percentage, and raises on a non-zero subprocess
-result. Ruff and ty are also rerun rather than read from a cached scorecard. The test
-count is parsed from the same scoped pytest process, with a collection-only fallback if
-the summary cannot be parsed.
+The generator deletes the prior coverage and JUnit reports before invoking pytest,
+requires a newly written report with a branch-coverage percentage, separates collected,
+passed, skipped, failed, and errored tests, and raises on any required skip or non-zero
+subprocess. Ruff and ty are also rerun rather than read from a cached scorecard. The
+counts are parsed from the same scoped pytest JUnit report rather than labeling
+collection as passage.
 
 The suite introduces no prohibited mock framework and includes real value objects,
 filesystem cases, and both in-memory and SQLite-backed cases. That testing style checks
 more integration behavior than isolated substitutes would, but it neither reproduces a
 production deployment nor validates the truth of caller-reported outcomes.
 
+The strict enforcement contracts add separate evidence surfaces: the action-scope map,
+authorization ledger, public-key IDs, receipt signatures, quarantine counts, durable
+signal/resource stores, and restart/concurrency tests. The executor-key registry is a
+separate checked-in input and is compared to the provider metadata; self-asserted key
+material cannot unlock the benchmark. These establish the tested proposal-to-receipt
+lifecycle for declared actions only. They do not establish that the receipt's result is
+ground truth, that an action outside the scope map was governed, or that a human or
+agent understood the situation.
+
 ## Exact reproduction commands {#sec:repro-commands}
 
-The supported repository-level route, from the public template checkout with the
-ongoing project linked, is:
+The supported route runs from the root of a clean Codomyrmex checkout:
 
 ```bash
 uv sync --frozen
-./run.sh --pipeline --project ongoing/codomyrmex --core-only
-```
 
-The project-local evidence and publication route can be run independently:
-
-```bash
-cd projects/ongoing/codomyrmex
-uv sync --frozen
-
-uv run python scripts/z_generate_manuscript_variables.py
-uv run python scripts/generate_manuscript_figures.py
-uv run python scripts/compile_manuscript.py --check --skip-generate
-uv run python scripts/compile_manuscript.py --pdf --skip-generate
+export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
+uv run python scripts/compile_manuscript.py --pdf
+uv run python scripts/generate_release_manifest.py \
+  --extra-command 'SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH uv run python scripts/compile_manuscript.py --pdf'
 ```
 
 The scoped gates can also be inspected directly:
@@ -158,15 +167,17 @@ manuscript without inventing cross-platform certification.
 | `uv.lock` | Repository lockfile | Pins Python package resolution |
 | pytest / pytest-cov | Development dependencies | Executes tests and branch coverage |
 | Ruff / ty | Development dependencies | Executes scoped static gates |
-| Pandoc / XeLaTeX | Host tools | Produce HTML/PDF; versions can affect layout |
+| Pandoc / XeLaTeX / qpdf | Host tools | Produce and deterministically normalize HTML/PDF; versions can affect layout |
 | SQLite | Python standard-library binding | Exercises consequence storage where configured |
 : Software inputs relevant to reproduction. {#tbl:software_versions}
 
-`uv sync --frozen` prevents dependency re-resolution, but it does not pin host fonts,
-Pandoc, TeX packages, operating-system libraries, or the current date. The generation
-timestamp and auto publication date also change across runs. Consequently, the expected
-claim is semantic regeneration with passing gates and resolved references—not universal
-byte-for-byte identity.
+`uv sync --frozen` prevents dependency re-resolution, and `SOURCE_DATE_EPOCH` pins the
+manuscript provenance timestamp to the immutable revision. The clean-clone release
+replay establishes byte-identical PDF/HTML/evidence output under the recorded host-tool
+chain. Exact PDF identity outside that chain still depends on Pandoc/XeLaTeX/font
+versions; the release manifest records those facts. Without the same host-tool pin, the
+supported claim is semantic regeneration with passing gates and resolved references, not
+universal byte-for-byte identity.
 
 ## Evaluation snapshot {#sec:sim-spec}
 
@@ -178,15 +189,15 @@ byte-for-byte identity.
 | Branch details | Executed during variable generation | `output/data/colony_kernel_coverage.json` |
 | Policy and taxonomy figures | Regenerated | `output/figures/*.png` |
 | Deterministic contract cases | Executed by the Colony Kernel suite | `tests/unit/colony_kernel/` |
-| Four-condition benchmark | Proposed only | No raw trial artifact in this release |
+| Three-condition benchmark | Harness and pinned task manifest | No provider-backed raw trial artifact in this release |
 | Production deployment | Not evaluated | No production trace artifact |
 : Contents and omissions of the release evaluation snapshot. {#tbl:evaluation_snapshot}
 
 Core score calculations and tick updates are deterministic for fixed explicit inputs and
-state. The full build is not purely deterministic: proposal identifiers and timestamps
-may be created at runtime, the manuscript records a generation time, the publication
-date may be automatic, and renderer versions can alter layout. Replaying an identical
-policy case is therefore different from reproducing identical publication bytes.
+state. Runtime proposal identifiers remain runtime data; they are not used in the
+manuscript build. A publication build pins the manuscript timestamp with
+`SOURCE_DATE_EPOCH`; renderer versions, fonts, and TeX packages must still be held
+constant for byte-identical PDF output.
 
 ## Evidence required for the proposed external study
 

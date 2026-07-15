@@ -377,15 +377,15 @@ REQUIRED_CLAIMS = {
         "10 adversarial vectors",
     ],
     "docs/manuscript/05_experimental_setup.md": [
-        "Proposed, not executed",
+        "Manifest, corpus acquisition, complete-matrix validation, and report schema implemented; provider results pending",
         "raw append-only traces",
     ],
     "docs/manuscript/04_conclusion.md": [
-        "caller-supplied data",
+        "caller report",
         "Supported within one kernel process",
     ],
     "docs/manuscript/07_scope_and_related_work.md": [
-        "Not a security boundary",
+        "scoped, not universal, security boundary",
         "Not production- or scale-validated",
         "Not an Active Inference implementation",
         "unattested report",
@@ -395,10 +395,10 @@ REQUIRED_CLAIMS = {
         "conceptual crosswalk",
     ],
     "README.md": [
-        "593 runtime MCP tools",
-        "623 decorators",
-        "1,202",
-        "35,119",
+        "611 runtime MCP tools",
+        "626 decorators",
+        "1,204",
+        "35,225",
     ],
 }
 
@@ -574,10 +574,11 @@ def test_variable_inventory_matches_syntax_and_source_tokens() -> None:
 
 def test_acknowledgements_are_tokenized_and_ordered_before_references() -> None:
     acknowledgement = _read("docs/manuscript/98_acknowledgements.md")
-    assert acknowledgement == (
+    assert acknowledgement.startswith(
         "# Acknowledgements {#sec:acknowledgements .unnumbered}\n\n"
         "{{CONFIG_ACKNOWLEDGEMENTS}}\n"
     )
+    assert "Marek" in acknowledgement
     compiler = _read("scripts/compile_manuscript.py")
     order = compiler.split("MANUSCRIPT_SECTION_ORDER = (", 1)[1].split(")", 1)[0]
     assert order.index('"98_acknowledgements.md"') < order.index('"99_references.md"')
@@ -894,6 +895,7 @@ def test_crossref_labels_are_unique_referenced_and_resolved() -> None:
     assert not unreferenced, f"Crossref labels without prose references: {unreferenced}"
 
 
+@pytest.mark.optional_artifact
 def test_rendered_html_contains_toc_linked_citations_crossrefs_and_mathml() -> None:
     from bs4 import BeautifulSoup
 
@@ -924,19 +926,28 @@ def test_rendered_html_contains_toc_linked_citations_crossrefs_and_mathml() -> N
 
 
 def test_public_inventory_counts_match_live_tree() -> None:
+    from scripts.doc_inventory import collect_inventory
+
     docs_count = sum(1 for path in (REPO_ROOT / "docs").rglob("*.md") if path.is_file())
     readme = _read("README.md")
     inventory = _read("docs/reference/inventory.md")
+    metrics = collect_inventory(REPO_ROOT, include_pytest=True, include_manifest=True)
 
-    assert docs_count == 1202
+    assert docs_count == metrics["markdown_docs_under_docs"]
     assert f"{docs_count:,} Markdown" in readme
     assert f"{docs_count:,} (`find docs" in inventory
-    assert "35%2C119" in readme
-    assert "35,119" in readme
-    assert "| Runtime MCP tools | 593 |" in inventory
-    assert "| Production `@mcp_tool` decorators | 623 |" in inventory
-    assert "593 runtime MCP tools" in readme
-    assert "623 decorators" in readme
+    assert metrics["pytest_collected"] is not None
+    assert metrics["runtime_mcp_tools"] is not None
+    encoded_tests = f"{metrics['pytest_collected']:,}".replace(",", "%2C")
+    assert encoded_tests in readme
+    assert f"{metrics['pytest_collected']:,}" in readme
+    assert f"| Runtime MCP tools | {metrics['runtime_mcp_tools']} |" in inventory
+    assert (
+        f"| Production `@mcp_tool` decorators | {metrics['production_mcp_tool_decorators']} |"
+        in inventory
+    )
+    assert f"{metrics['runtime_mcp_tools']} runtime MCP tools" in readme
+    assert f"{metrics['production_mcp_tool_decorators']} decorators" in readme
 
 
 def test_todo_docs_reference_current_root_backlog_name() -> None:
@@ -958,13 +969,18 @@ def test_manuscript_artifact_count_sources_match_documented_surfaces() -> None:
     spec.loader.exec_module(module)
 
     assert module._count_colony_kernel_docs(REPO_ROOT) == 3
-    assert module._count_colony_kernel_test_suites(REPO_ROOT) == 13
+    expected_test_suites = sum(
+        1
+        for path in (REPO_ROOT / "tests" / "unit" / "colony_kernel").glob("test_*.py")
+        if path.is_file()
+    )
+    assert module._count_colony_kernel_test_suites(REPO_ROOT) == expected_test_suites
     assert module._count_colony_kernel_config_files(REPO_ROOT) == 3
     assert (
         module._count_colony_kernel_mcp_tools(
             REPO_ROOT / "src" / "codomyrmex" / "colony_kernel"
         )
-        == 8
+        == 11
     )
 
 

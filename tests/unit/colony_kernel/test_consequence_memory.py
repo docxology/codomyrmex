@@ -628,8 +628,8 @@ class TestSaveProfile:
             retrieved = mem.get_profile("ow-agent")
             assert abs(retrieved.trust_score - 0.9) < 1e-9
 
-    def test_save_profile_noop_in_memory_mode(self) -> None:
-        """In pure in-memory mode, save_profile is a no-op (does not raise)."""
+    def test_save_profile_persists_in_memory_mode(self) -> None:
+        """Pure in-memory mode follows the same profile contract as SQLite."""
         from codomyrmex.colony_kernel.models import AgentRole, AgentTrustProfile
 
         mem = ConsequenceMemory(db_path=None)
@@ -638,12 +638,11 @@ class TestSaveProfile:
             role=AgentRole.SANDBOX,
             trust_score=0.8,
         )
-        # Must not raise; get_profile returns computed value (0.5 base, no records)
+        # Must not raise; profile state is retained just as it is for SQLite.
         mem.save_profile(profile)
         retrieved = mem.get_profile("noop-agent")
         assert retrieved.agent_id == "noop-agent"
-        # In-memory: no records -> trust_score == _TRUST_BASE (0.5)
-        assert abs(retrieved.trust_score - _TRUST_BASE) < 1e-9
+        assert abs(retrieved.trust_score - 0.8) < 1e-9
         mem.close()
 
 

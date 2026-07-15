@@ -42,7 +42,9 @@ This directory contains the Codomyrmex manuscript source files, configuration, a
 
 - Never hardcode numeric results; use `{{TOKEN}}` syntax for all computed values.
 - Never hardcode rendered section, figure, table, or equation numbers in manuscript source; use `[@sec:*]`, `[@fig:*]`, `[@tbl:*]`, and `[@eq:*]`.
-- Run `scripts/z_generate_manuscript_variables.py` after any parameter or result change.
+- Run `scripts/compile_manuscript.py --pdf` after any parameter or result change; it
+  regenerates variables and figures in the correct order. Set `SOURCE_DATE_EPOCH` to
+  the immutable revision timestamp for a reproducible release build.
 - Keep `tests/unit/colony_kernel/test_manuscript_consistency.py` assertions in sync with reviewer-sensitive tokens and public claims.
 - Follow the Section Modification Protocol below for all prose edits.
 
@@ -52,16 +54,17 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 
 | Fact | Value | Authoritative source |
 |:-----|:-----|:---------------------|
-| Colony kernel test count | **{{RESULT_TEST_COUNT}}** | `RESULT_TEST_COUNT` token; `uv run pytest tests/unit/colony_kernel/` |
+| Colony kernel test status | **{{RESULT_TEST_PASSED}}/{{RESULT_TEST_COLLECTED}} passed** | `RESULT_TEST_*` tokens; `output/data/colony_kernel_test_status.json` |
 | Local hazard input | **`max(RISK, FAILURE)`** | `ActuationGate.witness_state()`; paired kernel tests |
-| Outcome integrity | **caller-reported, not attested** | `colony_record_outcome`; no consumed authorization ledger |
-| Default state lifetime | **one process** | in-memory field and `db_path=":memory:"` |
+| Outcome integrity | **profile-dependent** | Advisory `caller_reported_unattested`; strict `attested_execution` requires one consumed capability and signed receipt |
+| Default state lifetime | **one process; strict file-backed option** | `:memory:` is isolated-test mode; strict file paths persist authorization, receipt, signal, resource, and consequence state |
+| Enforcement boundary | **declared action scope only** | Strict `action_scope` map; unregistered mutating paths fail closed and remain explicit bypasses |
 | Gate weights | **generated tokens** | live expressions in `ActuationGate.evaluate` |
 | Colony kernel subsystems | **generated count** | live `ColonyKernel` ownership graph |
 | MCP tools exposed | **generated count** | live decorators in `src/codomyrmex/colony_kernel/mcp_tools.py` |
 | Falsification attack vector (import-cycle) | **`CIRCULAR_ARCHITECTURE`** | `AttackVector` enum in `falsification_worker.py` — not `CIRCULAR_DEPS` |
 | Transmission bookends | **enabled** | `config.yaml` → `publication.transmission_bookends.enabled: true` |
-| Token injection pipeline | 3-step: compute → persist → render | `scripts/z_generate_manuscript_variables.py` → `output/data/manuscript_variables.json` → `output/manuscript/*.md` |
+| Token/figure pipeline | 4-step: compute → persist → inject → render | `scripts/compile_manuscript.py` runs variable generation, figure generation, token injection, and Pandoc rendering |
 | Contents page | **generated after cover** | `scripts/compile_manuscript.py` writes `output/manuscript/00_01_contents.md` before render |
 | Citation and reference pipeline | **pandoc-crossref then citeproc** | `scripts/compile_manuscript.py`; HTML math uses MathML |
 
@@ -71,15 +74,16 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 |---|---|---|---|
 | `00_00_cover.md` | Cover page; renders cover art, automatic publication date, ORCID, DOI status, repository, and version metadata | `CONFIG_TITLE`, `CONFIG_SUBTITLE`, `CONFIG_FIRST_AUTHOR`, `CONFIG_PUBLICATION_DATE_DISPLAY`, `CONFIG_AUTHOR_ORCID`, `CONFIG_DOI`, `CONFIG_GITHUB_REPOSITORY`, `CONFIG_VERSION` | `cover.png` |
 | `00_01_contents.md` | Generated output-only contents page inserted after the cover; do not edit by hand | None | None |
-| `00_abstract.md` | Bounded thesis, paired contract, release gates, and limitations | `CONFIG_COLONY_KERNEL_SUBSYSTEMS`, `CONFIG_FIRST_AUTHOR`, `CONFIG_GATE_EXECUTE_THRESHOLD`, `CONFIG_KEYWORDS`, `CONFIG_MCP_TOOL_COUNT`, `RESULT_COVERAGE_PCT`, `RESULT_RUFF_ERRORS`, `RESULT_TEST_COUNT`, `RESULT_TY_ERRORS` | None |
+| `00_abstract.md` | Bounded thesis, paired contract, release gates, and limitations | `CONFIG_COLONY_KERNEL_SUBSYSTEMS`, `CONFIG_FIRST_AUTHOR`, `CONFIG_GATE_EXECUTE_THRESHOLD`, `CONFIG_KEYWORDS`, `CONFIG_MCP_TOOL_COUNT`, `RESULT_COVERAGE_PCT`, `RESULT_RUFF_ERRORS`, `RESULT_TEST_PASSED`, `RESULT_TY_ERRORS` | None |
 | `01_introduction.md` | Problem framing, bounded thesis, architecture, evidence boundary | `CONFIG_TRIAL_COUNT` | None |
 | `02_methodology.md` | Control-plane design, linear field, gate, trust, labels, pruning, falsification, and feedback sequence | `CONFIG_BASE_EVAPORATION_RATE`, `CONFIG_PHEROMONE_RETENTION_FAST_PCT`, `CONFIG_PHEROMONE_RETENTION_NORMAL_PCT`, `CONFIG_PHEROMONE_RETENTION_SLOW_PCT` | `fig:architecture`, `fig:falsification_vectors`, `fig:pressure_loop` |
 | `02_theory.md` | Verified recurrence, local-pressure, gate, trust, and privacy bounds | None | `fig:pheromone_decay`, `fig:gate_score_3d` |
 | `03_results.md` | Executed gates, paired locality, analytical score cases, trust fixture, decay, and MCP boundary | Generated row blocks plus scoped gate/result tokens | `fig:trust_trajectory`, `fig:gate_heatmap` |
 | `04_conclusion.md` | Summary of contributions, ecological metaphor, future directions | None | None |
 | `05_experimental_setup.md` | Proposed benchmark, live gate/field/budget configuration, software snapshot, and pipeline | `CONFIG_AGENT_COUNT`, `CONFIG_BUDGET_MAX_LLM_CALLS`, `CONFIG_BUDGET_MAX_RISK`, `CONFIG_BUDGET_MAX_RUNTIME`, `CONFIG_BUDGET_MAX_SECURITY`, `CONFIG_GATE_EXECUTE_THRESHOLD`, `CONFIG_GATE_HOLD_THRESHOLD`, `CONFIG_TRIAL_COUNT`, `CONFIG_VERSION`, `CONFIG_WARMUP_TICKS`, `CONFIG_WORKLOAD_TASK_COUNT`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION` | None |
-| `06_reproducibility.md` | Configuration provenance, artifact registry, quality-gate summary | `ARTIFACT_CONFIG_FILES`, `ARTIFACT_MCP_TOOLS`, `ARTIFACT_TEST_SUITES`, `CONFIG_FIRST_AUTHOR`, `CONFIG_HASH`, `CONFIG_KEYWORDS`, `CONFIG_VERSION`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION`, `RESULT_COLONY_KERNEL_FILES`, `RESULT_COVERAGE_PCT`, `RESULT_MODULE_DOCS_COUNT`, `RESULT_RUFF_ERRORS`, `RESULT_TEST_COUNT`, `RESULT_TY_ERRORS` | None |
+| `06_reproducibility.md` | Configuration provenance, artifact registry, quality-gate summary | `ARTIFACT_CONFIG_FILES`, `ARTIFACT_MCP_TOOLS`, `ARTIFACT_TEST_SUITES`, `CONFIG_FIRST_AUTHOR`, `CONFIG_HASH`, `CONFIG_KEYWORDS`, `CONFIG_VERSION`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION`, `RESULT_COLONY_KERNEL_FILES`, `RESULT_COVERAGE_PCT`, `RESULT_MODULE_DOCS_COUNT`, `RESULT_RUFF_ERRORS`, `RESULT_TEST_PASSED`, `RESULT_TEST_COLLECTED`, `RESULT_TEST_SKIPPED`, `RESULT_TEST_FAILED`, `RESULT_TEST_ERRORS`, `RESULT_TY_ERRORS` | None |
 | `07_scope_and_related_work.md` | Bounded comparison with agentic engineering, stigmergy, trust, security, assurance, and external evaluation | None | None |
+| `RELATED_WORK_EVIDENCE.md` | Primary-source register and evidence boundaries for related work and analysis choices | None | None |
 | `08_active_inference.md` | Explicitly non-equivalent Active Inference crosswalk and implementation agenda | None | `fig:fep_correspondence` |
 | `90_appendix_design_rationale.md` | Auditable design choices, rejected alternatives, and calibration boundaries | None | None |
 | `98_acknowledgements.md` | Contributor credit | `CONFIG_ACKNOWLEDGEMENTS` | None |

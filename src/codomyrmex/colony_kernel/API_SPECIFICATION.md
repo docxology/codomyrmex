@@ -2,7 +2,7 @@
 
 **Module**: `codomyrmex.colony_kernel`
 **Version**: matches package version (see `pyproject.toml`)
-**Stability**: internal — subject to change until v2.0
+**Stability**: internal — strict enforcement contracts are release-gated in v1.4
 
 ---
 
@@ -70,9 +70,10 @@ def propose_action(self, proposal: ActionProposal) -> GateResult
 Full pipeline: falsification → budget pre-check → trust/role refresh → gate
 evaluation.
 
-**Does not consume budget.** Budget is consumed only if a caller later invokes
-`record_outcome`; the kernel does not attest that execution occurred between
-the two calls.
+In the advisory profile this remains a non-consuming pre-check. In the strict
+profile, an `EXECUTE` result is additionally issued a signed, scope-bound
+`ExecutionAuthorization`; issuing a capability still does not execute the
+action.
 
 **Parameters**
 
@@ -90,10 +91,11 @@ the two calls.
 | `required_evidence` | `list[str]` | Non-empty on `HOLD`; lists what the agent must provide |
 | `budget_approved` | `bool` | Whether the budget pre-check passed |
 | `falsification_severity` | `float` | `0.0` = clean; `1.0` = strong adversarial signal against execution |
+| `authorization` | `ExecutionAuthorization \| None` | Present only for strict-profile `EXECUTE` results. |
 
 **Side effects**
 
-- On `REFUSE`: deposits a `FAILURE` pheromone at `proposal.target` with
+- On `REFUSE`: deposits a `POLICY_REJECTION` audit signal at `proposal.target` with
   strength `1.0 + falsification_severity * 3.0`.
 
 **Raises**
@@ -102,6 +104,36 @@ the two calls.
   validation.
 
 ---
+
+### Strict execution lifecycle
+
+The strict profile adds an explicit typed lifecycle:
+
+```text
+proposal → falsification/gate → signed authorization → atomic consume
+         → registered handler → signed receipt → attested outcome
+```
+
+`ExecutionAuthorization` contains the proposal ID, agent identity, action type,
+target, canonical scope digest, issue/expiry timestamps, nonce, issuer key ID,
+the digest of an optional explicit `evidence["action_payload"]` object, and an
+Ed25519 signature. `AuthorizationLedger.consume` uses SQLite
+`BEGIN IMMEDIATE` plus a conditional status update, so a capability is
+single-use across workers. Expired, altered, replayed, cross-agent,
+cross-target, cross-action, HOLD, REFUSE, and unknown tokens are rejected.
+
+`RegisteredActionExecutor` is the only supported strict execution adapter. A
+service registers real handlers for the governed action types and supplies a
+trusted executor key. It returns an `ExecutionReceipt` even for a handler
+failure, allowing the failure to remain an attested execution result without
+turning a policy rejection or prospective finding into `FAILURE`. When a request
+digest is present, the executor and receipt must carry the same action payload.
+
+`record_attested_outcome` requires the consumed authorization and the executor's
+receipt. `record_outcome` remains a caller-reported audit input in advisory mode;
+strict mode quarantines it and leaves trust, budgets, and pheromone pressure
+unchanged. The explicit `caller_reported_unattested` grade is never promoted to
+verified execution or truth validation.
 
 ### `record_outcome`
 
@@ -115,10 +147,11 @@ def record_outcome(
 ) -> ConsequenceRecord
 ```
 
-Record a caller-supplied consequence report. Updates the agent's trust score,
-consumes a supplied cost or the proposal estimate, and adjusts pheromone
-traces. The method does not require a matching prior EXECUTE decision and does
-not attest the reported action or outcome.
+Record a caller-supplied consequence report. In advisory mode it updates the
+agent's trust score, consumes a supplied cost or the proposal estimate, and
+adjusts pheromone traces without attestation. In strict mode it writes only a
+quarantined audit record and raises `AuthorizationError`; it cannot update
+trust, budget, or failure evidence without `record_attested_outcome`.
 
 **Parameters**
 
@@ -281,7 +314,7 @@ operator caps accumulated fraction fields with `min(1.0, ...)`.
 |-------|---------|
 | `EXECUTE` | Proposal cleared the current policy; downstream actuation remains caller-controlled |
 | `HOLD` | Return revision requirements; any requeue is caller-controlled |
-| `REFUSE` | Proposal rejected by the policy; the integrated kernel deposits FAILURE |
+| `REFUSE` | Proposal rejected by the policy; the integrated kernel deposits POLICY_REJECTION, not observed FAILURE |
 
 ### `AgentRole` (enum)
 

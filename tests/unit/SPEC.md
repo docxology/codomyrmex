@@ -14,7 +14,7 @@
 
 | Metric | Baseline | Target | Gate |
 |--------|----------|--------|------|
-| Line coverage | varies per run | 45%+ stretch | CI fails below **40%** floor (`pyproject.toml`) |
+| Line coverage | varies per run | 60%+ stretch | CI fails below **60%** floor (`pyproject.toml`) |
 | Tests collected | 34,520 (April 2026; `pytest --collect-only`) | growing | `uv run pytest src/codomyrmex/tests/unit --collect-only -q` |
 | Skipped | varies | minimize | — |
 | Failures | 0 | 0 | Blocks merge |
@@ -111,15 +111,15 @@ pytest.importorskip("heavy_sdk")
 
 The `ci.yml` workflow runs unit tests with:
 ```bash
-uv run pytest src/codomyrmex/tests/unit/ ... --cov=src/codomyrmex --cov-fail-under=40
+uv run pytest src/codomyrmex/tests/unit/ ... --cov=src/codomyrmex --cov-fail-under=60
 ```
 
-Coverage floor is **40%** in `[tool.coverage.report] fail_under` and mirrored on the CI command line.
+Coverage floor is **60%** in `[tool.coverage.report] fail_under` and mirrored on the CI command line.
 All tests must pass and coverage must meet the floor when that job is configured to fail the workflow (see workflow `continue-on-error` flags).
 
 ### Baseline note (April 2026 layout refresh)
 
-A full local `uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=40` completed coverage aggregation with **~76%** line coverage on measured `src/codomyrmex` before exit, while the same run reported **multiple failures** tied to optional services,plot backends, and provider SDK drift—**not** to file moves under `tests/unit/`. Treat **CI green** as the release gate; use module-scoped pytest locally when debugging.
+A full local `uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=60` completed coverage aggregation with **~76%** line coverage on measured `src/codomyrmex` before exit, while the same run reported **multiple failures** tied to optional services, plot backends, and provider SDK drift—**not** to file moves under `tests/unit/`. Treat **CI green** as the release gate; use module-scoped pytest locally when debugging.
 
 ## Navigation
 

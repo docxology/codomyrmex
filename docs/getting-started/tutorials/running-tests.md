@@ -18,8 +18,8 @@ uv run pytest
 # Quick check — collect only (no execution)
 uv run pytest --collect-only -q
 
-# Run with coverage + 40% gate (matches CI / `make test`)
-uv run pytest --cov=src/codomyrmex --cov-report=term-missing --cov-fail-under=40
+# Run with coverage + 60% gate (matches CI / `make test`)
+uv run pytest --cov=src/codomyrmex --cov-report=term-missing --cov-fail-under=60
 ```
 
 ## Test Organization
@@ -55,17 +55,17 @@ uv run pytest src/codomyrmex/tests/unit/ide/test_agent_bridge.py -v
 
 ## Coverage
 
-The project documents a **40%** line-coverage floor in `[tool.coverage.report] fail_under` in `pyproject.toml`. **Plain `uv run pytest` does not collect coverage** (faster local runs). Enforce the gate explicitly:
+The project enforces a **60%** line-coverage floor in `[tool.coverage.report] fail_under` in `pyproject.toml`. **Plain `uv run pytest` does not collect coverage** (faster local runs). Enforce the gate explicitly:
 
 ```bash
-# Full suite with coverage (fails below 40%)
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40
+# Full suite with coverage (fails below 60%)
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60
 
 # Or use Makefile (adds reports)
 make test
 
 # HTML report
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60 --cov-report=html
 open htmlcov/index.html
 
 # Per-file coverage for a specific module
@@ -106,8 +106,8 @@ The policy is enforced via `ruff` — any import of mock libraries will fail lin
 | Metric | Value |
 |--------|-------|
 | Test files | 886 |
-| Tests collected | 35,119 (`uv run python scripts/doc_inventory.py --pytest`; see [reference/inventory.md](../../reference/inventory.md)) |
-| Coverage gate | **40%** (`fail_under` in `pyproject.toml`; pass `--cov-fail-under=40` or `make test`) |
+| Tests collected | 35,225 (`uv run python scripts/doc_inventory.py --pytest`; see [reference/inventory.md](../../reference/inventory.md)) |
+| Coverage gate | **60%** (`fail_under` in `pyproject.toml`; pass `--cov-fail-under=60` or `make test`) |
 | Actual coverage | After a run with `--cov` (e.g. `make test-coverage`) — see pytest summary or `coverage.json` (`meme/` omitted; see `pyproject.toml`) |
 
 ## Next Steps

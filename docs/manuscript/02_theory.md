@@ -12,6 +12,13 @@ The gate score is a design score, not a probability of safety. The trust process
 bounded accounting rule, not a Bayesian posterior. No claim below establishes production
 safety, optimality, differential privacy, or long-run ecological convergence.
 
+The formal object here is an externalized context field. It can support situation-aware
+review by exposing what the gate knows at a target, but it is not a model of an agent's
+internal situation awareness. This separation follows the distinction between state
+representation and the perception--comprehension--projection process
+[@endsley1995toward]. The proofs below therefore establish state and decision invariants,
+not awareness, understanding, or reliable reliance.
+
 ## Capped local signal field {#sec:theory-field}
 
 Let $J_t \subseteq \mathcal L \times \mathcal K$ be the finite set of compound

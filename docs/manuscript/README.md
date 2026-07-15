@@ -2,7 +2,7 @@
 
 **Status**: Active. Version and publication date are injected from `config.yaml`.
 
-This manuscript presents **Codomyrmex**, an agentic software-development framework that models an AI-agent collective as an artificial ecology. Its Colony Control Plane records caller-reported consequences, maintains a process-local signal field, computes deterministic trust and role labels, nominates pruning candidates, and returns EXECUTE/HOLD/REFUSE gate decisions. The central checked contract is deliberately narrow: reported FAILURE at one location contributes to `max(RISK, FAILURE)`, lowering an otherwise identical same-target proposal while leaving an unrelated target unchanged. Outcome attestation, complete restart persistence, external effectiveness, and production safety remain open. Numeric claims and generated images are rebuilt from the evaluated snapshot.
+This manuscript presents **Codomyrmex**, an agentic software-development framework that models an AI-agent collective as an artificial ecology. Its Colony Control Plane records caller-reported consequences, maintains a process-local signal field, computes deterministic trust and role labels, nominates pruning candidates, and returns EXECUTE/HOLD/REFUSE advisory gate decisions. The central checked contract is deliberately narrow: reported FAILURE at one location contributes to `max(RISK, FAILURE)`, lowering an otherwise identical same-target proposal while leaving an unrelated target unchanged; policy rejection and prospective falsification remain separate audit/RISK channels. Outcome attestation, complete restart persistence, external effectiveness, and production safety remain open. Numeric claims and generated images are rebuilt from the evaluated snapshot.
 
 ## Navigation
 
@@ -26,6 +26,7 @@ The `manuscript/` directory contains raw Markdown files rendered by `scripts/com
 - `05_experimental_setup.md` — Proposed external evaluation protocol separated from the live release configuration.
 - `06_reproducibility.md` — Reproduction commands, generated evidence, and explicit limits of the configuration/artifact chain.
 - `07_scope_and_related_work.md` — Bounded positioning against agentic software engineering, stigmergy, computational trust, capability security, runtime assurance, and external benchmarks.
+- `RELATED_WORK_EVIDENCE.md` — Primary-source register for related work, statistical choices, reproducibility, and assurance-case provenance.
 - `08_active_inference.md` — A bounded Active Inference interpretation that distinguishes structural analogy from implemented Bayesian inference.
 - `90_appendix_design_rationale.md` — Design decisions, alternatives, trade-offs, and calibration limits.
 - `98_acknowledgements.md` — Unnumbered, configuration-injected contributor credit.
@@ -70,17 +71,14 @@ graph LR
 ```bash
 # From repository root
 
-# 1. Hydrate manuscript variables from live build artifacts
-uv run python scripts/z_generate_manuscript_variables.py
+# 1. Hydrate variables, generate figures, and render linked HTML/PDF.
+#    SOURCE_DATE_EPOCH makes the provenance field byte-reproducible.
+export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
+uv run python scripts/compile_manuscript.py --pdf
 
-# 2. Generate the provenance-stamped visual assets
-uv run python scripts/generate_manuscript_figures.py
-
-# 3. Render linked HTML, contents, bookends, and the final PDF
-uv run python scripts/compile_manuscript.py --pdf --bookends --skip-generate
-
-# Or, from the parent template checkout, run the integrated pipeline:
-./run.sh --pipeline --project ongoing/codomyrmex --core-only
+# 4. Record commit, gate status, tool versions, and output hashes
+uv run python scripts/generate_release_manifest.py \
+  --extra-command 'SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH uv run python scripts/compile_manuscript.py --pdf'
 ```
 
 ## AI Agent Directives

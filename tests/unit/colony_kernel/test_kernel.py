@@ -171,15 +171,19 @@ class TestProposeAction:
         result = kernel.propose_action(sandbox_proposal)
         assert result.decision == GateDecision.REFUSE
 
-    def test_refuse_deposits_failure_pheromone(
+    def test_refuse_deposits_policy_rejection_signal(
         self, kernel: ColonyKernel, sandbox_proposal: ActionProposal
     ):
-        # After a REFUSE the failure signal at the target should be > 0
+        # A policy refusal is not an observed execution failure.
         kernel.propose_action(sandbox_proposal)
-        strength = kernel.pheromone_store.sense(
+        rejection_strength = kernel.pheromone_store.sense(
+            sandbox_proposal.target, SignalType.POLICY_REJECTION
+        )
+        failure_strength = kernel.pheromone_store.sense(
             sandbox_proposal.target, SignalType.FAILURE
         )
-        assert strength > 0.0
+        assert rejection_strength > 0.0
+        assert failure_strength == 0.0
 
     def test_budget_overrun_causes_hold(
         self, kernel: ColonyKernel, proposal: ActionProposal
@@ -606,7 +610,8 @@ class TestAgentProfile:
         kernel.record_outcome(proposal, outcome={"summary": "done"}, tests_passed=True)
         profile = kernel.agent_profile(proposal.agent_id)
         assert profile.agent_id == proposal.agent_id
-        assert profile.total_proposals == 1
+        assert profile.total_proposals == 0
+        assert profile.accepted_proposals == 1
 
 
 # ---------------------------------------------------------------------------
@@ -1059,6 +1064,7 @@ class TestRoleChangeTriggeredSaveProfile:
                 rollback_plan="git revert HEAD",
                 evidence={"i": i},
             )
+            kernel.propose_action(p)
             kernel.record_outcome(p, outcome={"summary": "ok"}, tests_passed=True)
 
         profile = kernel.agent_profile(agent_id)
@@ -1107,7 +1113,7 @@ class TestProposeActionExecuteBranch:
 
     @staticmethod
     def _seed_successful_outcomes(kernel: ColonyKernel, agent_id: str, n: int) -> None:
-        """Call kernel.record_outcome n times with tests_passed=True for agent_id."""
+        """Run n proposal lifecycles and report their caller outcomes."""
         for i in range(n):
             p = ActionProposal(
                 agent_id=agent_id,
@@ -1119,6 +1125,7 @@ class TestProposeActionExecuteBranch:
                 rollback_plan="git revert HEAD --no-edit",
                 evidence={"seed_index": i},
             )
+            kernel.propose_action(p)
             kernel.record_outcome(p, outcome={"summary": "ok"}, tests_passed=True)
 
     @staticmethod

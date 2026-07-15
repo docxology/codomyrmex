@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 15, 2026
 
 ## Purpose
 
@@ -31,11 +31,12 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `AGENTS.md` - This file: agent coordination and navigation
 - `scripts/rasp_gap_report.py` — regenerates [docs/plans/agents-readme-gap-report.md](docs/plans/agents-readme-gap-report.md) (scoped `AGENTS.md` / `README.md` presence under `src/codomyrmex/`, `docs/`, `projects/`, `scripts/`, `config/`, `.github/`; see script docstring for excludes)
 - `scripts/doc_inventory.py` — prints repo doc metrics (module counts, workflows, optional pytest collect); output summarized in [docs/reference/inventory.md](docs/reference/inventory.md)
+- Live inventory snapshot (July 15, 2026): 130 top-level modules, 611 runtime MCP tools, 626 production decorators, 38 workflows, 35,225 collected tests, and 1,204 Markdown files under `docs/`. Regenerate with `uv run python scripts/doc_inventory.py --manifest --pytest` and validate with `--check-reference`.
 - `LICENSE` - MIT License
 - `SECURITY.md` - Security policies and vulnerability reporting
 - `pyproject.toml` - Python package configuration
 - `pyproject.toml` (`[tool.pytest.ini_options]`, `[tool.coverage.*]`) — pytest and coverage configuration
-- `Makefile` - Primary build and automation tasks (`make test` applies the 40% coverage gate)
+- `Makefile` - Primary build and automation tasks (`make test` applies the 60% coverage gate)
 - `justfile` - Optional [just](https://github.com/casey/just) recipes mirroring common Makefile targets
 - `index.html` - Root redirect to `/output/website/index.html` for static hosting entry
 - `uv.lock` - Python dependency lock file
@@ -51,7 +52,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 ## Development Guidelines
 
 - **Zero-Mock Policy:** All tests must use real components. No mocks. Narrow `monkeypatch.setenv`/`delenv`/`chdir` and `tmp_path` fixtures are permitted for test-input isolation — see [docs/development/testing-strategy.md § Zero-Mock Policy (clarified)](docs/development/testing-strategy.md#zero-mock-policy-clarified) and [issue #175](https://github.com/docxology/codomyrmex/issues/175).
-- **Coverage Gate:** **40%** line coverage (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI and `make test` pass `--cov-fail-under=40`; plain `uv run pytest` skips coverage for speed. Experimental `meme/` is omitted from `[tool.coverage.run]` (see `pyproject.toml`). New work must not drop below the floor when measured with `--cov`.
+- **Coverage Gate:** **60%** line coverage (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI and `make test` pass `--cov-fail-under=60`; plain `uv run pytest` skips coverage for speed. Experimental `meme/` is omitted from `[tool.coverage.run]` (see `pyproject.toml`). New work must not drop below the floor when measured with `--cov`.
 - **Documentation:** Maintain `AGENTS.md`, `README.md`, and `SPEC.md` parity on structural changes.
 - **Generated leaf docs:** Thousands of per-folder `AGENTS.md` / `README.md` files are produced by tooling, not by hand.
   - **Bootstrap (inventory + signposts):** from repo root, `uv run python -m codomyrmex.documentation.scripts.bootstrap_agents_readmes` (or `uv run python scripts/documentation/bootstrap_agents_readmes.py`, same implementation). Use `--dry-run` first; use `--agents-only` to touch only `AGENTS.md`. The script skips vendor prefixes (see `codomyrmex.documentation.doc_generation_common.EXCLUDED_DOC_PREFIXES`) and **does not** rewrite trees under `docs/modules/<pkg>/` when `src/codomyrmex/<pkg>/` exists — those stay owned by module enrichment. **Hand-maintained hubs:** put `<!-- agents: curated -->` in the first lines of an `AGENTS.md`, or add prefixes to `PRESERVE_AGENTS_REL_PREFIXES` in `bootstrap_agents_readmes.py` (see [docs/development/documentation.md](docs/development/documentation.md)). `AGENTS.md` with `<!-- agents: curated -->` and `README.md` with `<!-- readme: curated -->` in the file head are not overwritten.
@@ -85,7 +86,7 @@ All agents operating within this repository must:
 #### src/ - Source Code
 
 - Follow Python best practices (PEP 8)
-- Maintain test coverage at or above the **40%** project gate in `pyproject.toml`
+- Maintain test coverage at or above the **60%** project gate in `pyproject.toml`
 - Update `API_SPECIFICATION.md` when changing interfaces
 - Document MCP tools in `MCP_TOOL_SPECIFICATION.md`
 - Version changes in `CHANGELOG.md`
@@ -449,7 +450,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (173753 symbols, 250088 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (174629 symbols, 251945 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > Index stale? Run `node .gitnexus/run.cjs analyze` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? `npx gitnexus analyze` (npm 11 crash → `npm i -g gitnexus`; #1939).
 

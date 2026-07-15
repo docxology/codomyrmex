@@ -18,6 +18,7 @@ import json
 import sqlite3
 import time
 from collections import defaultdict
+from copy import deepcopy
 from dataclasses import asdict
 from typing import Any, Self
 
@@ -38,7 +39,8 @@ from codomyrmex.colony_kernel.models import (
 # Internal helpers / constants
 # ---------------------------------------------------------------------------
 
-_TRUST_BASE: float = 0.5
+# Keep both storage backends aligned with AgentTrustProfile's explicit default.
+_TRUST_BASE: float = 0.1
 
 # Trust delta constants — imported from models.py (single source of truth).
 _DELTA_TESTS_PASSED: float = _TRUST_DELTA_PASS
@@ -107,6 +109,7 @@ def _record_to_row(record: ConsequenceRecord) -> tuple[Any, ...]:
         record.human_feedback,
         int(record.repair_needed),
         record.trust_delta,
+        record.evidence_grade,
         record.recorded_at,
     )
 
@@ -123,6 +126,7 @@ def _row_to_record(row: tuple[Any, ...]) -> ConsequenceRecord:
         human_feedback,
         repair_needed,
         trust_delta,
+        evidence_grade,
         recorded_at,
     ) = row
     proposal = _proposal_from_json(proposal_json)
@@ -135,6 +139,7 @@ def _row_to_record(row: tuple[Any, ...]) -> ConsequenceRecord:
         human_feedback=float(human_feedback),
         repair_needed=bool(repair_needed),
         trust_delta=float(trust_delta),
+        evidence_grade=str(evidence_grade),
         recorded_at=float(recorded_at),
     )
 
@@ -155,6 +160,7 @@ CREATE TABLE IF NOT EXISTS consequences (
     human_feedback  REAL NOT NULL,
     repair_needed   INTEGER NOT NULL,
     trust_delta     REAL NOT NULL,
+    evidence_grade  TEXT NOT NULL DEFAULT 'caller_reported_unattested',
     recorded_at     REAL NOT NULL
 );
 
@@ -172,6 +178,12 @@ CREATE TABLE IF NOT EXISTS consequence_history (
     consequence_id TEXT NOT NULL,
     seq            INTEGER NOT NULL,
     PRIMARY KEY (agent_id, consequence_id)
+);
+
+CREATE TABLE IF NOT EXISTS proposal_lifecycles (
+    proposal_id TEXT PRIMARY KEY,
+    agent_id    TEXT NOT NULL,
+    created_at  REAL NOT NULL
 );
 """
 
@@ -204,6 +216,8 @@ class ConsequenceMemory:
         """
         self._db_path = db_path
         self._in_memory: list[ConsequenceRecord] | None = None
+        self._profiles: dict[str, AgentTrustProfile] = {}
+        self._proposal_ids: set[str] = set()
 
         if db_path is None:
             # Pure in-memory fallback — no SQLite.
@@ -213,6 +227,15 @@ class ConsequenceMemory:
             self._conn.row_factory = None
             self._conn.execute("PRAGMA journal_mode=WAL")
             self._conn.executescript(_CREATE_SCHEMA)
+            columns = {
+                row[1]
+                for row in self._conn.execute("PRAGMA table_info(consequences)")
+            }
+            if "evidence_grade" not in columns:
+                self._conn.execute(
+                    "ALTER TABLE consequences ADD COLUMN evidence_grade TEXT "
+                    "NOT NULL DEFAULT 'caller_reported_unattested'"
+                )
             self._conn.commit()
 
     # ------------------------------------------------------------------
@@ -221,21 +244,10 @@ class ConsequenceMemory:
 
     def _load_profile(self, agent_id: str) -> AgentTrustProfile:
         if self._in_memory is not None:
-            # Compute trust from in-memory records
-            records = [r for r in self._in_memory if r.proposal.agent_id == agent_id]
-            score = _TRUST_BASE
-            for rec in records[-_TRUST_WINDOW:]:
-                score += _delta_for_record(rec)
-            trust = max(0.0, min(1.0, score))
-            total = len(records)
-            accepted = sum(1 for r in records if r.tests_passed and not r.repair_needed)
-            return AgentTrustProfile(
-                agent_id=agent_id,
-                trust_score=trust,
-                total_proposals=total,
-                accepted_proposals=accepted,
-                consequence_history=[r.consequence_id for r in records[-200:]],
-            )
+            profile = self._profiles.get(agent_id)
+            if profile is None:
+                return AgentTrustProfile(agent_id=agent_id, trust_score=_TRUST_BASE)
+            return deepcopy(profile)
 
         row = self._conn.execute(
             "SELECT role, trust_score, total_proposals, accepted_proposals, last_updated "
@@ -263,7 +275,8 @@ class ConsequenceMemory:
 
     def _save_profile_internal(self, profile: AgentTrustProfile) -> None:
         if self._in_memory is not None:
-            return  # in-memory mode doesn't persist profiles
+            self._profiles[profile.agent_id] = deepcopy(profile)
+            return
         self._conn.execute(
             """
             INSERT INTO agent_profiles
@@ -316,13 +329,55 @@ class ConsequenceMemory:
     def save_profile(self, profile: AgentTrustProfile) -> None:
         """Persist an updated AgentTrustProfile (e.g. after role promotion)."""
         if self._in_memory is not None:
-            return  # in-memory mode: no-op (profiles computed from records)
+            self._save_profile_internal(profile)
+            return
         with self._conn:
             self._save_profile_internal(profile)
 
     def get_profile(self, agent_id: str) -> AgentTrustProfile:
         """Return the current trust profile; creates a SANDBOX default if absent."""
         return self._load_profile(agent_id)
+
+    def register_proposal(self, proposal: ActionProposal) -> bool:
+        """Count a proposal lifecycle exactly once by its stable proposal ID."""
+        if self._in_memory is not None:
+            if proposal.proposal_id in self._proposal_ids:
+                return False
+            self._proposal_ids.add(proposal.proposal_id)
+            profile = self._load_profile(proposal.agent_id)
+            profile.total_proposals += 1
+            self._save_profile_internal(profile)
+            return True
+
+        inserted = self._conn.execute(
+            "INSERT OR IGNORE INTO proposal_lifecycles "
+            "(proposal_id, agent_id, created_at) VALUES (?, ?, ?)",
+            (proposal.proposal_id, proposal.agent_id, proposal.created_at),
+        ).rowcount
+        if not inserted:
+            return False
+        profile = self._load_profile(proposal.agent_id)
+        profile.total_proposals += 1
+        with self._conn:
+            self._save_profile_internal(profile)
+        return True
+
+    def find_by_proposal_id(self, proposal_id: str) -> ConsequenceRecord | None:
+        """Return the first outcome report for a proposal lifecycle, if any."""
+        if self._in_memory is not None:
+            return next(
+                (record for record in self._in_memory if record.proposal.proposal_id == proposal_id),
+                None,
+            )
+        row = self._conn.execute(
+            "SELECT consequence_id, agent_id, action_type, proposal_json, action_taken, "
+            "actual_outcome, tests_passed, human_feedback, repair_needed, trust_delta, "
+            "evidence_grade, recorded_at FROM consequences "
+            "WHERE json_extract(proposal_json, '$.proposal_id') = ? "
+            "ORDER BY recorded_at ASC LIMIT 1",
+            (proposal_id,),
+        ).fetchone()
+        return _row_to_record(row) if row is not None else None
 
     def record(self, rec: ConsequenceRecord) -> ConsequenceRecord:
         """Persist *rec*, compute trust_delta if zero, update profile.
@@ -338,13 +393,34 @@ class ConsequenceMemory:
         if rec.trust_delta == 0.0:
             object.__setattr__(rec, "trust_delta", compute_trust_delta(rec))
 
+        agent_id = rec.proposal.agent_id
+        existing_report = self.find_by_proposal_id(rec.proposal.proposal_id)
+        if existing_report is not None:
+            return existing_report
         if self._in_memory is not None:
+            if any(r.consequence_id == rec.consequence_id for r in self._in_memory):
+                return next(
+                    r for r in self._in_memory if r.consequence_id == rec.consequence_id
+                )
             self._in_memory.append(rec)
+            profile = self._load_profile(agent_id)
+            if rec.tests_passed and not rec.repair_needed:
+                profile.accepted_proposals += 1
+            profile.apply_delta(rec.trust_delta)
+            profile.consequence_history.append(rec.consequence_id)
+            profile.consequence_history = profile.consequence_history[-_CONSEQUENCE_HISTORY_MAX:]
+            self._save_profile_internal(profile)
             return rec
 
-        agent_id = rec.proposal.agent_id
+        existing = self._conn.execute(
+            "SELECT consequence_id, agent_id, action_type, proposal_json, action_taken, "
+            "actual_outcome, tests_passed, human_feedback, repair_needed, trust_delta, "
+            "evidence_grade, recorded_at FROM consequences WHERE consequence_id = ?",
+            (rec.consequence_id,),
+        ).fetchone()
+        if existing is not None:
+            return _row_to_record(existing)
         profile = self._load_profile(agent_id)
-        profile.total_proposals += 1
         if rec.tests_passed and not rec.repair_needed:
             profile.accepted_proposals += 1
         profile.apply_delta(rec.trust_delta)
@@ -355,8 +431,8 @@ class ConsequenceMemory:
                 INSERT OR REPLACE INTO consequences
                     (consequence_id, agent_id, action_type, proposal_json,
                      action_taken, actual_outcome, tests_passed, human_feedback,
-                     repair_needed, trust_delta, recorded_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     repair_needed, trust_delta, evidence_grade, recorded_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 _record_to_row(rec),
             )
@@ -437,7 +513,10 @@ class ConsequenceMemory:
     def role_distribution(self) -> dict[str, int]:
         """Return a count of agents per role."""
         if self._in_memory is not None:
-            return {}  # no role tracking in pure in-memory mode
+            counts: dict[str, int] = defaultdict(int)
+            for profile in self._profiles.values():
+                counts[profile.role.value] += 1
+            return dict(counts)
         rows = self._conn.execute(
             "SELECT role, COUNT(*) FROM agent_profiles GROUP BY role"
         ).fetchall()
@@ -448,12 +527,8 @@ class ConsequenceMemory:
     # ------------------------------------------------------------------
 
     def trust_score(self, agent_id: str) -> float:
-        """Compute the trust score for an agent from their last 50 records."""
-        records = self._fetch_agent_records(agent_id, limit=_TRUST_WINDOW)
-        score = _TRUST_BASE
-        for rec in records:
-            score += _delta_for_record(rec)
-        return max(0.0, min(1.0, score))
+        """Return the same profile-backed trust score for either backend."""
+        return self.get_profile(agent_id).trust_score
 
     def history(self, agent_id: str, limit: int = 20) -> list[ConsequenceRecord]:
         """Return the most recent consequence records for an agent."""
@@ -507,7 +582,7 @@ class ConsequenceMemory:
             """
             SELECT consequence_id, agent_id, action_type, proposal_json,
                    action_taken, actual_outcome, tests_passed, human_feedback,
-                   repair_needed, trust_delta, recorded_at
+                   repair_needed, trust_delta, evidence_grade, recorded_at
             FROM consequences
             WHERE agent_id = ?
             ORDER BY recorded_at DESC
@@ -524,7 +599,7 @@ class ConsequenceMemory:
             """
             SELECT consequence_id, agent_id, action_type, proposal_json,
                    action_taken, actual_outcome, tests_passed, human_feedback,
-                   repair_needed, trust_delta, recorded_at
+                   repair_needed, trust_delta, evidence_grade, recorded_at
             FROM consequences WHERE agent_id = ? ORDER BY recorded_at ASC
             """,
             (agent_id,),
@@ -538,7 +613,7 @@ class ConsequenceMemory:
             """
             SELECT consequence_id, agent_id, action_type, proposal_json,
                    action_taken, actual_outcome, tests_passed, human_feedback,
-                   repair_needed, trust_delta, recorded_at
+                   repair_needed, trust_delta, evidence_grade, recorded_at
             FROM consequences WHERE action_type = ? ORDER BY recorded_at ASC
             """,
             (action_type,),
@@ -550,7 +625,8 @@ class ConsequenceMemory:
             seen: dict[str, None] = {}
             for r in self._in_memory:
                 seen[r.proposal.agent_id] = None
-            return list(seen.keys())
+            seen.update(dict.fromkeys(self._profiles))
+            return sorted(seen)
         cursor = self._conn.execute(
             "SELECT DISTINCT agent_id FROM consequences ORDER BY agent_id"
         )

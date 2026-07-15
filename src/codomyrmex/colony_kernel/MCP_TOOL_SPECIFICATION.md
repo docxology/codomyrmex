@@ -1,8 +1,12 @@
 # Colony Kernel — MCP Tool Specification
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
+**Version**: v1.4.0 | **Status**: Active | **Last Updated**: July 2026
 
-All eight tools route through a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`). The singleton is an instance of the full `ColonyKernel` class from `kernel.py` (not a simplified duplicate). State is shared and persistent for the lifetime of the MCP server process. The singleton is lazily initialised on first call.
+All tools route through a module-level `ColonyKernel` singleton (`_kernel` in
+`mcp_tools.py`). Advisory mode preserves caller-reported audit behavior. A
+strictly configured singleton additionally exposes a governed action scope,
+single-use signed authorizations, receipt-linked execution, and quarantine for
+unattested outcome reports. The singleton is lazily initialised on first call.
 
 ```mermaid
 graph TD
@@ -22,6 +26,9 @@ graph TD
         T6["colony_falsify_plan"]
         T7["colony_pruning_report"]
         T8["colony_tick"]
+        T9["colony_execute_authorized"]
+        T10["colony_record_attested_outcome"]
+        T11["colony_action_scope"]
     end
 
     subgraph kernel["ColonyKernel Singleton"]
@@ -38,8 +45,8 @@ graph TD
         FW["FalsificationWorker"]
     end
 
-    C1 & C2 & C3 & C4 --> T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8
-    T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8 --> CK
+    C1 & C2 & C3 & C4 --> T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8 & T9 & T10 & T11
+    T1 & T2 & T3 & T4 & T5 & T6 & T7 & T8 & T9 & T10 & T11 --> CK
     CK --> PS & RL & AG & CM & RA & PD & FW
 
     style CK fill:#1e3a8a,color:#fff,stroke:#3b82f6
@@ -60,7 +67,7 @@ graph TD
 
 ## colony_propose_action
 
-**Description**: Submit an action proposal to the Colony actuation gate. Runs adversarial falsification, budget check, and trust evaluation before returning a gate verdict. On REFUSE, deposits a FAILURE pheromone at the target location.
+**Description**: Submit an action proposal to the Colony advisory gate. Runs adversarial falsification, budget check, and trust evaluation before returning a gate verdict. On REFUSE, deposits a POLICY_REJECTION audit signal at the target location; it does not claim an observed execution failure.
 
 ### Input Schema
 
@@ -169,7 +176,12 @@ graph TD
 
 ## colony_record_outcome
 
-**Description**: Record a caller-reported consequence of an action. Updates the agent's trust profile (stored in SQLite), deposits SUCCESS or FAILURE pheromone at the target, and records a DEPENDENCY trace. The tool does not attest the report against a prior EXECUTE authorization.
+**Description**: Record a caller-reported, unattested consequence of an action.
+Advisory mode updates the trust profile and signal field with the explicit
+`caller_reported_unattested` grade. Strict mode quarantines the report and
+returns an error; it cannot update trust, budget, or FAILURE evidence. Use
+`colony_record_attested_outcome` after `colony_execute_authorized` for enforced
+actions.
 
 ### Input Schema
 
@@ -264,6 +276,47 @@ graph TD
 ```
 
 ---
+
+## colony_execute_authorized
+
+**Description**: Strict-profile execution adapter. It consumes a signed,
+scope-bound `ExecutionAuthorization` atomically, invokes a service-registered
+real handler, and returns the handler result plus one signed
+`ExecutionReceipt`. It rejects missing, expired, altered, replayed,
+cross-agent, cross-target, cross-action, HOLD, REFUSE, and unknown tokens.
+
+### Input Schema
+
+```json
+{
+  "type": "object",
+  "required": ["authorization_json", "agent_id", "action_type", "target"],
+  "properties": {
+    "authorization_json": {"type": "string", "description": "Serialized signed capability."},
+    "agent_id": {"type": "string"},
+    "action_type": {"type": "string", "description": "Must match the capability and registered scope."},
+    "target": {"type": "string"},
+    "payload": {"type": "string", "default": "{}", "description": "JSON object passed to the registered handler; when the proposal contains evidence.action_payload, it must be identical to that signed payload."}
+  }
+}
+```
+
+The receipt is not an outcome oracle. It attests that a trusted executor
+consumed the capability and records the handler's exit status and result digest.
+
+## colony_record_attested_outcome
+
+**Description**: Convert one consumed authorization and one executor-signed
+receipt into an `attested_execution` consequence. The proposal ID, agent, action,
+and target are reconstructed from the capability and must match the submitted
+fields. Duplicate reports are idempotent and cannot create a second lifecycle.
+
+## colony_action_scope
+
+**Description**: Return the configured enforcement mode, explicit action-scope
+map, and bypass behavior. In strict mode unregistered mutating paths are
+refused and cannot receive a capability. In advisory mode the map is descriptive
+only and callers must not infer an enforcement boundary.
 
 ## colony_agent_profile
 
@@ -566,12 +619,12 @@ graph TD
     },
     "severity_score": {
       "type": "number",
-      "description": "Mean severity weight in [0.0, 1.0]. Weights are low=0.05, medium=0.20, high=0.45, critical=1.0; 0.0 = no findings."
+      "description": "Maximum numeric severity weight in [0.0, 1.0]. Weights are low=0.05, medium=0.20, high=0.45, critical=1.0; 0.0 = no findings."
     },
     "recommendation": {
       "type": "string",
       "enum": ["execute", "hold", "refuse"],
-      "description": "execute if score < 0.4; hold if 0.4–0.75; refuse if ≥ 0.75."
+      "description": "refuse for CRITICAL, hold for HIGH, and execute for LOW or MEDIUM findings; no averaging dilution."
     },
     "error": {"type": "string"}
   }

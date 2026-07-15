@@ -8,6 +8,12 @@ from their respective modules to keep import overhead low.
 """
 
 from codomyrmex.colony_kernel.actuation_gate import ActuationGate
+from codomyrmex.colony_kernel.authorization import (
+    DEFAULT_ACTION_SCOPE,
+    AuthorizationError,
+    AuthorizationLedger,
+    Ed25519Authority,
+)
 from codomyrmex.colony_kernel.config_loader import (
     COLONY_KERNEL_CONFIG_DIR,
     default_budget_from_yaml,
@@ -17,6 +23,7 @@ from codomyrmex.colony_kernel.config_loader import (
     load_roles_yaml,
 )
 from codomyrmex.colony_kernel.consequence_memory import ConsequenceMemory
+from codomyrmex.colony_kernel.executor import ExecutionRun, RegisteredActionExecutor
 from codomyrmex.colony_kernel.falsification_worker import FalsificationWorker
 from codomyrmex.colony_kernel.invariants import (
     all_invariants_hold,
@@ -31,17 +38,22 @@ from codomyrmex.colony_kernel.models import (
     ActionProposal,
     AgentRole,
     AgentTrustProfile,
+    AuthorizationStatus,
     ColonySignal,
     ConsequenceRecord,
     DecayRate,
+    ExecutionAuthorization,
+    ExecutionReceipt,
     FalsificationFinding,
     FalsificationSeverity,
     GateDecision,
     GateResult,
+    OutcomeEvidence,
     PruningCandidate,
     ResourceCost,
     SignalSource,
     SignalType,
+    SupervisedEvaluatorEvidence,
     compute_trust_delta,
     make_trace_key,
 )
@@ -53,33 +65,46 @@ from codomyrmex.colony_kernel.resource_ledger import (
     ThreadSafeResourceLedger,
 )
 from codomyrmex.colony_kernel.role_adapter import RoleAdapter
+from codomyrmex.colony_kernel.sqlite_signal_store import SQLiteSignalStore
 
 __all__ = [
     "COLONY_KERNEL_CONFIG_DIR",
+    "DEFAULT_ACTION_SCOPE",
     "ActionProposal",
     "ActuationGate",
     "AgentRole",
     "AgentTrustProfile",
+    "AuthorizationError",
+    "AuthorizationLedger",
+    "AuthorizationStatus",
     "ColonyKernel",
     "ColonyKernelConfig",
     "ColonySignal",
     "ConsequenceMemory",
     "ConsequenceRecord",
     "DecayRate",
+    "Ed25519Authority",
+    "ExecutionAuthorization",
+    "ExecutionReceipt",
+    "ExecutionRun",
     "FalsificationFinding",
     "FalsificationSeverity",
     "FalsificationWorker",
     "GateDecision",
     "GateResult",
+    "OutcomeEvidence",
     "PheromoneStore",
     "PruningCandidate",
     "PruningDaemon",
+    "RegisteredActionExecutor",
     "ResourceBudget",
     "ResourceCost",
     "ResourceLedger",
     "RoleAdapter",
+    "SQLiteSignalStore",
     "SignalSource",
     "SignalType",
+    "SupervisedEvaluatorEvidence",
     "ThreadSafeResourceLedger",
     "all_invariants_hold",
     "check_enum_values_no_conflict",
@@ -95,4 +120,3 @@ __all__ = [
     "load_roles_yaml",
     "make_trace_key",
 ]
-
