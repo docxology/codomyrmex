@@ -41,6 +41,9 @@ REQUIRED_CONDITIONS = (
 REQUIRED_CONTROLLED_TASK_TYPES = frozenset(
     {"patch_file", "run_tests", "documentation", "archive_module"}
 )
+EXECUTOR_KEY_REGISTRY_RELATIVE = (
+    "evaluations/colony_kernel/executor_key_registry.json"
+)
 
 
 @dataclass(frozen=True)
@@ -402,7 +405,12 @@ def environment_digest(root: Path) -> str:
     """Digest locked environment metadata used by the benchmark."""
 
     parts = []
-    for relative in ("pyproject.toml", "uv.lock", "evaluations/colony_kernel/benchmark_manifest.json"):
+    for relative in (
+        "pyproject.toml",
+        "uv.lock",
+        "evaluations/colony_kernel/benchmark_manifest.json",
+        EXECUTOR_KEY_REGISTRY_RELATIVE,
+    ):
         path = root / relative
         if not path.is_file():
             raise BenchmarkConfigurationError(f"environment input is missing: {relative}")
@@ -481,7 +489,7 @@ class DeterministicFixtureAdapter:
                 "status": "completed" if success else "failed",
                 "executor_key_id": self._authority.key_id,
                 "signature": "",
-                "request_digest": f"fixture-request-digest:{task['task_id']}",
+                "request_digest": self._request_digest(task, condition),
             }
             unsigned = ExecutionReceipt(**receipt)
             receipt["signature"] = self._authority.sign(
@@ -512,6 +520,12 @@ class DeterministicFixtureAdapter:
             "receipt_verification": receipt_verification,
             "resource_cost": {"runtime_seconds": 0.0, "tokens": 0.0},
         }
+
+    @staticmethod
+    def _request_digest(task: dict[str, Any], condition: str) -> str:
+        from evaluations.colony_kernel.stages import benchmark_request_digest
+
+        return benchmark_request_digest(task, condition)
 
 
 def run_benchmark(

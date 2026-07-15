@@ -277,6 +277,29 @@ def test_benchmark_stages_verify_receipt_against_pinned_public_key() -> None:
         )
 
 
+def test_benchmark_receipt_must_bind_signed_request_to_task_and_condition() -> None:
+    manifest = load_manifest(MANIFEST)
+    tasks = prepare_tasks(manifest)
+    adapter = DeterministicFixtureAdapter()
+    result = adapter.run(tasks[0], "enforced_authorization", 1)
+    result["task_id"] = tasks[1]["task_id"]
+    with pytest.raises(StageError, match="request digest"):
+        parse_result(
+            tasks[1],
+            "enforced_authorization",
+            result,
+            trusted_executor_keys=ProviderConfiguration(
+                provider="fixture",
+                model="deterministic",
+                model_version="1",
+                parameters={},
+                endpoint="local://fixture",
+                seed=1,
+                executor_public_keys=adapter.public_executor_keys(),
+            ).trusted_executor_keys(),
+        )
+
+
 def test_benchmark_stages_reject_cross_partition_identity() -> None:
     manifest = load_manifest(MANIFEST)
     task = prepare_tasks(manifest)[0]

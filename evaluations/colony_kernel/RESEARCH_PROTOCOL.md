@@ -5,6 +5,11 @@
 **Date locked:** 2026-07-14
 **Scope:** declared Colony action types only
 
+The checked-in executor-key registry is currently empty and has status
+`awaiting-approved-key`. This is an explicit release precondition, not a benchmark
+result: a provider run cannot pass verification until its executor public keys match
+that independently reviewed registry.
+
 ## Research question
 
 For a fixed set of repository-action tasks, does a declared-scope authorization
@@ -29,7 +34,9 @@ normal-approximation interval.
 The run is valid only when all 80 pinned tasks produce exactly one row under each
 condition: 240 rows total, zero required protocol errors, a matching environment
 digest, and an executor receipt whose Ed25519 signature verifies against the
-trusted public-key registry supplied with the provider configuration.
+trusted public-key registry supplied with the provider configuration. The signed
+`request_digest` must also bind the receipt to the canonical task and condition
+payload.
 
 No minimum effect size or success threshold is claimed post hoc. A positive,
 negative, or null result is reportable; interpretation must retain the interval,
@@ -70,15 +77,17 @@ failure, skip, or refusal.
 ## Analysis and audit trail
 
 The runner emits raw rows and derived metrics. The verifier independently checks
-the manifest binding, row matrix, partition identity, receipt field set, single-use
-authorization/proposal/request identities, Ed25519 signatures, corpus hash,
+the manifest binding, row matrix, partition identity, receipt field set, canonical
+task/condition request digest, single-use authorization/proposal/request identities,
+Ed25519 signatures, corpus hash,
 environment digest, and metric recomputation. The release package is a transport
 bundle; its sidecar manifest remains the non-self-referential source of truth.
 
 Required artifacts are the provider configuration with secrets excluded, raw
 benchmark result, corpus evidence and hash, receipt/key metadata, environment
 metadata, machine-readable metrics, human-readable report, JUnit/coverage evidence,
-and the release manifest. Raw output is preserved before rendering derived reports.
+the checked-in executor key registry, and the release manifest. Raw output is
+preserved before rendering derived reports.
 
 ## Stopping and interpretation rules
 

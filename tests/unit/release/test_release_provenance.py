@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import subprocess
 from pathlib import Path
 
+from evaluations.colony_kernel.runner import ProviderConfiguration
 from scripts.generate_release_manifest import (
     REQUIRED_ARTIFACTS,
     _aggregate_hash,
@@ -16,7 +18,9 @@ from scripts.generate_release_manifest import (
     source_files_for_manifest,
 )
 from scripts.package_release_evidence import package
-from scripts.verify_release_candidate import verify
+from scripts.verify_release_candidate import _provider_config_digest, verify
+
+from codomyrmex.colony_kernel.authorization import Ed25519Authority
 
 
 def _candidate(tmp_path: Path) -> tuple[Path, Path]:
@@ -116,6 +120,16 @@ def test_verifier_rejects_manifest_bound_to_another_commit(tmp_path: Path) -> No
     assert "manifest commit does not match the current checkout" in report["failures"]
 
 
+def test_verifier_fails_closed_for_a_non_object_manifest(tmp_path: Path) -> None:
+    root, manifest_path = _candidate(tmp_path)
+    manifest_path.write_text("[]", encoding="utf-8")
+
+    report = verify(root, manifest_path)
+
+    assert report["status"] == "failed"
+    assert "release manifest must be a JSON object" in report["failures"]
+
+
 def test_verifier_rejects_hand_edited_test_status(tmp_path: Path) -> None:
     root, manifest_path = _candidate(tmp_path)
     status_path = root / "output/data/colony_kernel_test_status.json"
@@ -180,6 +194,9 @@ def test_verifier_rejects_changed_source_inputs(tmp_path: Path) -> None:
 
 def test_verifier_rejects_incomplete_passed_benchmark_result(tmp_path: Path) -> None:
     root, manifest_path = _candidate(tmp_path)
+    registry = root / "evaluations/colony_kernel/executor_key_registry.json"
+    registry.parent.mkdir(parents=True, exist_ok=True)
+    registry.write_text(json.dumps({"keys": {}}), encoding="utf-8")
     result_path = root / "output/evaluations/colony_kernel/benchmark.json"
     result_path.parent.mkdir(parents=True, exist_ok=True)
     result_path.write_text(
@@ -204,6 +221,80 @@ def test_verifier_rejects_incomplete_passed_benchmark_result(tmp_path: Path) -> 
         "failures"
     ]
     assert "benchmark result is missing required release metrics" in report["failures"]
+
+
+def test_provider_digest_uses_runner_normalization() -> None:
+    """Equivalent provider inputs must hash to the runner's canonical mapping."""
+
+    raw = {
+        "provider": "test",
+        "model": "model",
+        "model_version": "1",
+        "parameters": {"temperature": 0},
+        "endpoint": " https://example.invalid ",
+        "seed": 7,
+        "timeout_seconds": 300,
+    }
+    normalized = ProviderConfiguration.from_mapping(raw).public_mapping()
+
+    assert _provider_config_digest(raw) == hashlib.sha256(
+        json.dumps(normalized, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    assert _provider_config_digest(raw) != hashlib.sha256(
+        json.dumps(raw, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+
+
+def test_verifier_fails_closed_for_a_non_object_benchmark_result(tmp_path: Path) -> None:
+    root, manifest_path = _candidate(tmp_path)
+    result_path = root / "output/evaluations/colony_kernel/benchmark.json"
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    result_path.write_text("[]", encoding="utf-8")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["benchmark"]["result_hash"] = hashlib.sha256(
+        result_path.read_bytes()
+    ).hexdigest()
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    report = verify(root, manifest_path)
+
+    assert report["status"] == "failed"
+    assert "benchmark result is not a passed JSON object" in report["failures"]
+
+
+def test_verifier_rejects_a_self_asserted_executor_key_registry(tmp_path: Path) -> None:
+    root, manifest_path = _candidate(tmp_path)
+    authority = Ed25519Authority.generate()
+    encoded_key = base64.urlsafe_b64encode(authority.public_key).decode("ascii")
+    registry = root / "evaluations/colony_kernel/executor_key_registry.json"
+    registry.parent.mkdir(parents=True, exist_ok=True)
+    registry.write_text(
+        json.dumps({"keys": {authority.key_id: "not-a-key"}}), encoding="utf-8"
+    )
+    result_path = root / "output/evaluations/colony_kernel/benchmark.json"
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    provider = {
+        "provider": "test",
+        "model": "test",
+        "model_version": "1",
+        "parameters": {},
+        "endpoint": "https://example.invalid",
+        "seed": 1,
+        "executor_public_keys": {authority.key_id: encoded_key},
+    }
+    result_path.write_text(
+        json.dumps({"status": "passed", "provider": provider}), encoding="utf-8"
+    )
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["benchmark"]["result_hash"] = hashlib.sha256(
+        result_path.read_bytes()
+    ).hexdigest()
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    report = verify(root, manifest_path)
+
+    assert report["status"] == "failed"
+    assert any("trusted executor key registry is invalid" in failure for failure in report["failures"])
 
 
 def test_verifier_rejects_tampered_release_package_hash(tmp_path: Path) -> None:
@@ -232,6 +323,7 @@ def test_release_package_hash_is_stable_across_repeated_builds(tmp_path: Path) -
         "output/data/colony_kernel_test_status.json",
         "docs/manuscript/RELEASE_PROVENANCE.md",
         "evaluations/colony_kernel/benchmark_manifest.json",
+        "evaluations/colony_kernel/executor_key_registry.json",
         "evaluations/colony_kernel/RESEARCH_PROTOCOL.md",
         "evaluations/colony_kernel/truth_tables.json",
         "evaluations/colony_kernel/truth_tables.md",

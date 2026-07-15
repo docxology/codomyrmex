@@ -66,6 +66,7 @@ def _environment_digest(root: Path) -> str:
         "pyproject.toml",
         "uv.lock",
         "evaluations/colony_kernel/benchmark_manifest.json",
+        "evaluations/colony_kernel/executor_key_registry.json",
     ):
         path = root / relative
         digest.update(relative.encode("utf-8") + b"\0" + path.read_bytes())
@@ -81,6 +82,33 @@ def _git_value(root: Path, argv: list[str]) -> tuple[int, str]:
         check=False,
     )
     return result.returncode, result.stdout.strip()
+
+
+def _mapping(value: Any, label: str, failures: list[str]) -> dict[str, Any]:
+    """Normalize malformed manifest sections without crashing the verifier."""
+
+    if not isinstance(value, dict):
+        failures.append(f"{label} is not a JSON object")
+        return {}
+    return value
+
+
+def _provider_config_digest(provider: dict[str, Any]) -> str:
+    """Hash the same normalized provider projection emitted by the runner.
+
+    Release evidence may be authored by tools that omit fields with defaults or
+    represent numerically equivalent values differently (for example ``300``
+    versus ``300.0``).  The verifier must validate the typed configuration and
+    hash its canonical public mapping, rather than hashing an unnormalized
+    caller-supplied JSON object.
+    """
+
+    from evaluations.colony_kernel.runner import ProviderConfiguration
+
+    normalized = ProviderConfiguration.from_mapping(provider).public_mapping()
+    return hashlib.sha256(
+        json.dumps(normalized, sort_keys=True).encode("utf-8")
+    ).hexdigest()
 
 
 def _parse_junit_status(path: Path) -> dict[str, int]:
@@ -151,8 +179,13 @@ def _validate_release_package(
         failures.append("release package hash does not match the checkout")
         return
 
-    required_members = set(manifest.get("artifact_hashes", {})) | {
-        "output/release_manifest.json"
+    artifact_hashes = manifest.get("artifact_hashes", {})
+    if not isinstance(artifact_hashes, dict):
+        failures.append("manifest artifact_hashes is not an object")
+        artifact_hashes = {}
+    required_members = set(artifact_hashes) | {
+        "output/release_manifest.json",
+        "evaluations/colony_kernel/executor_key_registry.json",
     }
     try:
         with tarfile.open(package_path, mode="r:gz") as archive:
@@ -201,9 +234,13 @@ def _validate_benchmark_result(
     if not isinstance(result, dict) or result.get("status") != "passed":
         failures.append("benchmark result is not a passed JSON object")
         return
+    if not isinstance(benchmark_manifest, dict):
+        failures.append("benchmark manifest is not a JSON object")
+        return
     if result.get("manifest") != benchmark_manifest:
         failures.append("benchmark result is not bound to the checked-in benchmark manifest")
     provider = result.get("provider")
+    validated_provider = None
     if not isinstance(provider, dict) or any(
         provider.get(key) in (None, "")
         for key in ("provider", "model", "model_version", "parameters", "endpoint", "seed")
@@ -211,16 +248,67 @@ def _validate_benchmark_result(
         failures.append("benchmark result is missing pinned provider/model metadata")
     elif not isinstance(provider.get("parameters"), dict):
         failures.append("benchmark provider parameters are not an object")
-    elif result.get("provider_config_digest") != hashlib.sha256(
-        json.dumps(provider, sort_keys=True).encode("utf-8")
-    ).hexdigest():
-        failures.append("benchmark provider metadata does not match provider_config_digest")
+    else:
+        try:
+            from evaluations.colony_kernel.runner import ProviderConfiguration
+
+            validated_provider = ProviderConfiguration.from_mapping(provider)
+            if result.get("provider_config_digest") != _provider_config_digest(provider):
+                failures.append("benchmark provider metadata does not match provider_config_digest")
+        except (ImportError, TypeError, ValueError, RuntimeError) as exc:
+            failures.append(f"benchmark provider metadata is invalid: {exc}")
+    registry_path = root / "evaluations/colony_kernel/executor_key_registry.json"
+    try:
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        failures.append(f"trusted executor key registry cannot be parsed: {exc}")
+        return
+    if not isinstance(registry, dict) or not isinstance(registry.get("keys"), dict):
+        failures.append("trusted executor key registry is malformed")
+        return
+    registry_keys = registry["keys"]
+    if not registry_keys:
+        failures.append("trusted executor key registry is empty")
+    try:
+        from evaluations.colony_kernel.runner import ProviderConfiguration
+
+        ProviderConfiguration.from_mapping(
+            {
+                "provider": "registry",
+                "model": "registry",
+                "model_version": "1",
+                "parameters": {},
+                "endpoint": "https://registry.invalid",
+                "seed": 0,
+                "executor_public_keys": registry_keys,
+            }
+        )
+    except (ImportError, TypeError, ValueError, RuntimeError) as exc:
+        failures.append(f"trusted executor key registry is invalid: {exc}")
+        return
+    if not isinstance(provider, dict) or provider.get("executor_public_keys") != registry_keys:
+        failures.append(
+            "benchmark provider executor keys do not match the checked-in trusted registry"
+        )
     rows = result.get("rows")
     conditions = benchmark_manifest.get("conditions", [])
     controlled_suite = benchmark_manifest.get("controlled_suite", {})
-    controlled_count = int(controlled_suite.get("task_count", 0))
-    task_prefix = str(controlled_suite.get("task_id_prefix", ""))
-    swe_count = int(benchmark_manifest.get("swe_bench_lite", {}).get("required_count", 0))
+    swe_suite = benchmark_manifest.get("swe_bench_lite", {})
+    if (
+        not isinstance(conditions, list)
+        or any(not isinstance(condition, str) for condition in conditions)
+        or not isinstance(controlled_suite, dict)
+        or not isinstance(swe_suite, dict)
+    ):
+        failures.append("benchmark manifest task matrix is malformed")
+        return
+    try:
+        controlled_count = int(controlled_suite.get("task_count", 0))
+        task_prefix = str(controlled_suite.get("task_id_prefix", ""))
+        swe_count = int(swe_suite.get("required_count", 0))
+    except (TypeError, ValueError) as exc:
+        failures.append(f"benchmark manifest task counts are malformed: {exc}")
+        return
     expected_task_ids = {
         f"{task_prefix}{index:03d}" for index in range(controlled_count)
     } | {f"swe-{index:03d}" for index in range(swe_count)}
@@ -251,7 +339,6 @@ def _validate_benchmark_result(
         try:
             from evaluations.colony_kernel.runner import (
                 BenchmarkConfigurationError,
-                ProviderConfiguration,
                 controlled_tasks,
                 load_manifest,
                 swe_bench_tasks,
@@ -263,7 +350,8 @@ def _validate_benchmark_result(
             )
 
             validated_manifest = load_manifest(benchmark_manifest_path)
-            validated_provider = ProviderConfiguration.from_mapping(provider)
+            if validated_provider is None:
+                raise StageError("benchmark provider metadata was not validated")
             trusted_executor_keys = validated_provider.trusted_executor_keys()
             if not trusted_executor_keys:
                 raise StageError("benchmark provider has no trusted executor public keys")
@@ -331,8 +419,16 @@ def _validate_benchmark_result(
 
 
 def verify(root: Path, manifest_path: Path) -> dict[str, Any]:
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     failures: list[str] = []
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return {"status": "failed", "failures": [f"release manifest cannot be parsed: {exc}"]}
+    if not isinstance(manifest, dict):
+        return {
+            "status": "failed",
+            "failures": ["release manifest must be a JSON object"],
+        }
     git_status = subprocess.run(
         ["git", "status", "--porcelain", "--untracked-files=all"],
         cwd=root,
@@ -340,7 +436,7 @@ def verify(root: Path, manifest_path: Path) -> dict[str, Any]:
         text=True,
         check=False,
     ).stdout.strip()
-    manifest_git = manifest.get("git", {})
+    manifest_git = _mapping(manifest.get("git", {}), "manifest git", failures)
     commit_code, current_commit = _git_value(root, ["rev-parse", "HEAD"])
     if commit_code != 0:
         failures.append("cannot identify current checkout commit")
@@ -361,7 +457,7 @@ def verify(root: Path, manifest_path: Path) -> dict[str, Any]:
         failures.append("manifest dirty flag does not match the checkout")
     if manifest_git.get("dirty") or git_status:
         failures.append("checkout is dirty")
-    status = manifest.get("test_status", {})
+    status = _mapping(manifest.get("test_status", {}), "manifest test_status", failures)
     for key in REQUIRED_TEST_KEYS:
         if key not in status:
             failures.append(f"test status is missing {key}")
@@ -406,7 +502,7 @@ def verify(root: Path, manifest_path: Path) -> dict[str, Any]:
     source_files = source_files_for_manifest(root)
     input_files = input_files_for_manifest(root)
     freshness_inputs = [*source_files, *input_files]
-    inputs = manifest.get("inputs", {})
+    inputs = _mapping(manifest.get("inputs", {}), "manifest inputs", failures)
     if inputs.get("source_hash") != _aggregate_hash(source_files, root):
         failures.append("manifest source hash does not match the checkout")
     if inputs.get("lockfile_config_source_hash") != _aggregate_hash(input_files, root):
@@ -414,13 +510,15 @@ def verify(root: Path, manifest_path: Path) -> dict[str, Any]:
     expected_freshness = _artifact_freshness(
         artifact_files_for_manifest(root), freshness_inputs, root
     )
-    declared_freshness = manifest.get("artifact_freshness", {})
+    declared_freshness = _mapping(
+        manifest.get("artifact_freshness", {}), "manifest artifact_freshness", failures
+    )
     for relative, fresh in expected_freshness.items():
         if declared_freshness.get(relative) is not fresh:
             failures.append(f"artifact freshness claim is incorrect: {relative}")
 
     benchmark_manifest_path = root / "evaluations/colony_kernel/benchmark_manifest.json"
-    benchmark = manifest.get("benchmark", {})
+    benchmark = _mapping(manifest.get("benchmark", {}), "manifest benchmark", failures)
     if not benchmark_manifest_path.is_file() or benchmark.get("manifest_hash") != sha256(
         benchmark_manifest_path
     ):
@@ -443,8 +541,8 @@ def verify(root: Path, manifest_path: Path) -> dict[str, Any]:
     return {
         "status": "passed" if not failures else "failed",
         "failures": failures,
-        "commit_sha": manifest.get("git", {}).get("commit_sha"),
-        "tag": manifest.get("git", {}).get("tag"),
+        "commit_sha": manifest_git.get("commit_sha"),
+        "tag": manifest_git.get("tag"),
     }
 
 

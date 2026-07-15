@@ -11,6 +11,8 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.colony_kernel.authorization import canonical_json
+
 
 class StageError(RuntimeError):
     """Raised when a benchmark stage cannot produce auditable output."""
@@ -47,6 +49,29 @@ _RECEIPT_FIELDS = (
     "request_digest",
 )
 _RECEIPT_UNIQUE_FIELDS = ("authorization_id", "proposal_id", "request_digest")
+
+
+def benchmark_request_payload(task: dict[str, Any], condition: str) -> dict[str, Any]:
+    """Return the canonical action context bound by an evaluated receipt."""
+
+    return {
+        "task_id": task["task_id"],
+        "condition": condition,
+        "action_type": task["action_type"],
+        "target": task["target"],
+        "instance_id": task.get("instance_id"),
+        "partition": task.get("partition", "controlled"),
+        "expected_outcome": task["expected"],
+        "seed": task["seed"],
+    }
+
+
+def benchmark_request_digest(task: dict[str, Any], condition: str) -> str:
+    """Hash the canonical task context expected in an executor receipt."""
+
+    return hashlib.sha256(
+        canonical_json(benchmark_request_payload(task, condition))
+    ).hexdigest()
 
 
 def acquire_pinned_task_corpus(
@@ -237,6 +262,10 @@ def parse_result(
                 raise StageError("receipt signature could not be cryptographically verified") from exc
         if receipt["completed_at"] < receipt["started_at"]:
             raise StageError("receipt completion time precedes start time")
+        if receipt["request_digest"] != benchmark_request_digest(task, condition):
+            raise StageError(
+                "receipt request digest is not bound to the benchmark task and condition"
+            )
     return {
         **raw_result,
         "task_id": task["task_id"],
@@ -380,6 +409,8 @@ def _sha256(path: Path) -> str:
 __all__ = [
     "StageError",
     "acquire_pinned_task_corpus",
+    "benchmark_request_digest",
+    "benchmark_request_payload",
     "parse_result",
     "prepare_tasks",
     "render_report",

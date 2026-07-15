@@ -9,6 +9,7 @@ turning a worktree snapshot into a release claim.
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import os
@@ -34,6 +35,7 @@ RELEASE_INPUT_PATHS = (
     "docs/manuscript/manuscript.css",
     "config/colony_kernel/kernel.yaml",
     "evaluations/colony_kernel/benchmark_manifest.json",
+    "evaluations/colony_kernel/executor_key_registry.json",
 )
 
 RELEASE_EVIDENCE_PATHS = (
@@ -194,6 +196,28 @@ def _load_json(path: Path, label: str) -> dict[str, Any]:
     return data
 
 
+def _executor_key_ids(root: Path) -> list[str]:
+    """Read the independently committed executor-key registry metadata."""
+
+    path = root / "evaluations/colony_kernel/executor_key_registry.json"
+    data = _load_json(path, "executor key registry")
+    keys = data.get("keys")
+    if not isinstance(keys, dict) or any(
+        not isinstance(key_id, str) or not key_id.strip()
+        or not isinstance(encoded_key, str) or not encoded_key.strip()
+        for key_id, encoded_key in keys.items()
+    ):
+        raise RuntimeError("executor key registry keys must map non-empty IDs to strings")
+    for key_id, encoded_key in keys.items():
+        try:
+            public_key = base64.urlsafe_b64decode(encoded_key.encode("ascii"))
+        except (ValueError, UnicodeEncodeError) as exc:
+            raise RuntimeError(f"executor key registry contains invalid base64: {key_id}") from exc
+        if len(public_key) != 32 or hashlib.sha256(public_key).hexdigest()[:32] != key_id:
+            raise RuntimeError(f"executor key registry ID does not match key: {key_id}")
+    return sorted(keys)
+
+
 def build_manifest(root: Path, *, extra_commands: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     status_path = root / "output" / "data" / "colony_kernel_test_status.json"
     variables_path = root / "output" / "data" / "manuscript_variables.json"
@@ -230,6 +254,7 @@ def build_manifest(root: Path, *, extra_commands: list[dict[str, Any]] | None = 
 
     benchmark_manifest_path = root / "evaluations" / "colony_kernel" / "benchmark_manifest.json"
     benchmark_manifest = _load_json(benchmark_manifest_path, "benchmark manifest")
+    executor_key_ids = _executor_key_ids(root)
     benchmark_result_path = root / "output" / "evaluations" / "colony_kernel" / "benchmark.json"
     benchmark_result = (
         _load_json(benchmark_result_path, "benchmark result")
@@ -300,6 +325,8 @@ def build_manifest(root: Path, *, extra_commands: list[dict[str, Any]] | None = 
         },
         "signature_metadata": {
             "key_ids": key_metadata,
+            "executor_key_registry": "evaluations/colony_kernel/executor_key_registry.json",
+            "executor_key_ids": executor_key_ids,
             "private_keys_recorded": False,
             "public_key_material": "external-key-registry",
         },

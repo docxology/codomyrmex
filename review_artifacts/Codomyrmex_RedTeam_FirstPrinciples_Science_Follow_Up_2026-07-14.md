@@ -46,6 +46,9 @@ measured facts it actually binds.
 | Benchmark row could report a different task partition than the manifest | `evaluations/colony_kernel/stages.py`, `parse_result()` and `render_report()` | Change a development row to `held_out` while retaining the task ID | Fixed: instance ID and partition are normalized and checked |
 | Enforced receipt identities could be reused across rows | `evaluations/colony_kernel/stages.py`, `render_report()` | Reuse an authorization, proposal, or request digest in a second enforced row | Fixed: each enforced identity is single-use in the report |
 | Receipt verification metadata could be self-asserted | `evaluations/colony_kernel/stages.py`, `parse_result()` | Tamper a signed receipt while leaving `signature_valid=true` | Fixed: release runs verify Ed25519 against the pinned public-key registry |
+| A provider could self-assert the trusted executor key | `executor_key_registry.json`, `verify_release_candidate.py` | Generate a new signing key, place it in provider metadata, and sign otherwise valid rows | Fixed: release verification requires a non-empty independently checked-in registry and exact provider-key equality |
+| A signed receipt could be for a different benchmark request | `evaluations/colony_kernel/stages.py`, `benchmark_request_digest()` | Reuse a valid signature while changing task or condition | Fixed: the signed request digest is recomputed from the canonical task/condition payload |
+| Equivalent provider defaults could be rejected or hashed inconsistently | `runner.py`, `verify_release_candidate.py` | Omit default fields or use `300` versus `300.0` in provider JSON | Fixed: the verifier hashes the runner's normalized typed public mapping |
 | Release package hash could be recorded without being checked | `scripts/verify_release_candidate.py` | Alter the transport archive after writing its manifest | Fixed: package hash, declared members, and sidecar manifest consistency are checked |
 
 ## Scientific cycle
@@ -60,11 +63,10 @@ measured facts it actually binds.
 
 ### Experiments and observed results
 
-The verifier and enforcement negative controls passed with real components. The final scoped release
-suite completed after artifact regeneration with 840 JUnit-collected and passed tests, zero skipped,
-failed, or errored tests, 74.37185929648241% branch coverage (592/796), and 82.59604190919674% line
-coverage (2,246/2,640). Its machine-readable status, JUnit, and coverage artifacts remain the release
-authority.
+The verifier and enforcement negative controls passed with real components. The current scoped release
+suite completed with 853 JUnit-collected and passed tests, zero skipped, failed, or errored tests. The
+clean-clone candidate rebuild remains the release authority for final coverage and artifact hashes; the
+provider benchmark remains unrun.
 
 H1–H4 are supported for the tested contracts and clean-clone replay. H5 is
 **inconclusive/unrun**, not a failed or successful benchmark result.
@@ -73,8 +75,9 @@ H1–H4 are supported for the tested contracts and clean-clone replay. H5 is
 
 - **A-001 / A-016:** immutable release publication and final manuscript/evidence attachment remain open.
 - **R-20:** provider-backed controlled and pinned SWE-bench Lite execution remains open.
-- The provider configuration must supply a trusted executor public-key registry; receipt metadata alone
-  is not benchmark evidence.
+- The provider configuration must match the independently checked-in trusted executor public-key
+  registry; receipt metadata alone is not benchmark evidence. The current registry is empty and
+  explicitly awaits an approved key.
 - The strict boundary still governs only the declared action-scope map; unregistered mutating paths are
   explicit bypasses and must not be described as repository-wide enforcement.
 - Signed receipts attest the executor’s recorded request/result linkage; they do not independently validate
@@ -85,4 +88,4 @@ H1–H4 are supported for the tested contracts and clean-clone replay. H5 is
 The clean-clone PDF/evidence replay and required test gate are complete. Re-review remains contingent on
 the provider benchmark supplying its pinned configuration, raw rows, cryptographically verified receipts,
 environment digest, and reports, followed by public immutable evidence attachment. Until then, this
-candidate is an auditable RC19 with a publication hold, not a completed production-safety release.
+candidate is an auditable release candidate with a publication hold, not a completed production-safety release.

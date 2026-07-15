@@ -117,10 +117,12 @@ production deployment nor validates the truth of caller-reported outcomes.
 
 The strict enforcement contracts add separate evidence surfaces: the action-scope map,
 authorization ledger, public-key IDs, receipt signatures, quarantine counts, durable
-signal/resource stores, and restart/concurrency tests. These establish the tested
-proposal-to-receipt lifecycle for declared actions only. They do not establish that the
-receipt's result is ground truth, that an action outside the scope map was governed, or
-that a human or agent understood the situation.
+signal/resource stores, and restart/concurrency tests. The executor-key registry is a
+separate checked-in input and is compared to the provider metadata; self-asserted key
+material cannot unlock the benchmark. These establish the tested proposal-to-receipt
+lifecycle for declared actions only. They do not establish that the receipt's result is
+ground truth, that an action outside the scope map was governed, or that a human or
+agent understood the situation.
 
 ## Exact reproduction commands {#sec:repro-commands}
 

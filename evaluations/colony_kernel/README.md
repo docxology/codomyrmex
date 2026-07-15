@@ -6,6 +6,9 @@ conditions. A provider configuration must still pin provider, model, model versi
 parameters, endpoint, seed, and a trusted executor public-key registry. No benchmark
 result may be reported until a concrete provider adapter has run all tasks with an
 environment digest and cryptographically verified receipt evidence.
+The registry is an independent checked-in release input rather than self-asserted
+result metadata; the current empty registry intentionally keeps provider execution
+blocked until an approved executor key is provisioned.
 
 The pre-registered design, hypotheses, controls, stopping rules, and claim boundary
 are recorded in [`RESEARCH_PROTOCOL.md`](RESEARCH_PROTOCOL.md). A provider-backed
@@ -29,7 +32,10 @@ executor receipt with the complete signed `ExecutionReceipt` field set plus
 `receipt_verification: {"algorithm": "Ed25519", "public_key_id": "...", "signature_valid": true}`.
 The runner additionally verifies the receipt signature against the pinned raw
 public key whose ID is the SHA-256-derived executor key ID; metadata alone is not
-accepted for a release run.
+accepted for a release run. The signed receipt `request_digest` must also equal
+the canonical digest of the task ID, condition, action type, target, partition,
+expected outcome, and seed; a valid signature on a receipt for another task is
+not accepted.
 
 The runner acquires and SHA-256 verifies the pinned SWE-bench corpus before invoking
 the adapter. It emits 240 rows (80 tasks × 3 conditions), rejects duplicate or missing

@@ -20,7 +20,9 @@ authorization precision. Enforced rows additionally require the complete signed
 `ExecutionReceipt` field set, a trusted executor public-key registry, and an Ed25519
 signature verification. Metadata alone is insufficient. Missing,
 duplicated, out-of-manifest, malformed, or unverifiable evidence fails the run before a
-result file is written.
+result file is written. The registry is an independent checked-in input rather than
+provider-supplied proof; in this candidate it is intentionally empty while an
+approved external executor key is pending, so no provider-backed result is reported.
 
 ## Evidence-status map {#sec:experimental-design}
 
