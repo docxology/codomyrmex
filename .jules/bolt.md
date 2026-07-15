@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-07-15 - Pre-compiling regex outside recursive functions
+**Learning:** Compiling a regular expression (using `re.compile`) inside a recursive function introduces unnecessary, repetitive overhead, especially when parsing large, deeply nested configuration structures (like dictionaries and lists). While Python's `re` module internally caches recently compiled patterns, avoiding the function call and cache lookup entirely by moving the compilation to a module-level constant is faster and cleaner.
+**Action:** Always move static, unchanging regular expressions (and other constant objects like static mapping dictionaries) outside of functions or loops—particularly recursive ones—and assign them to module-level or class-level constants.
