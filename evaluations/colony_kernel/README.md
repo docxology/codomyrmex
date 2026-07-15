@@ -7,7 +7,8 @@ parameters, endpoint, seed, and a trusted executor public-key registry. No bench
 result may be reported until a concrete provider adapter has run all tasks with an
 environment digest and cryptographically verified receipt evidence.
 The registry is an independent checked-in release input rather than self-asserted
-result metadata; the current empty registry intentionally keeps provider execution
+result metadata. Schema version 2 classifies every registered key as
+`fixture_contract` or `provider_backed`; the current empty registry intentionally keeps provider execution
 blocked until an approved executor key is provisioned.
 
 The pre-registered design, hypotheses, controls, stopping rules, and claim boundary
@@ -41,7 +42,8 @@ The runner acquires and SHA-256 verifies the pinned SWE-bench corpus before invo
 the adapter. It emits 240 rows (80 tasks × 3 conditions), rejects duplicate or missing
 task/condition pairs, and reports task success, verified failure, harmful/unauthorized
 attempts, replay and cross-scope rejection, false HOLD/REFUSE, rework, resource cost,
-latency, token usage, trust calibration, authorization precision, and paired effects
+latency, token usage, trust calibration, authorization precision, partition-aware
+denominators, exact paired intervals, exact McNemar p-values, and paired effects
 with intervals. Any missing or malformed field fails the run before output publication.
 
 The deterministic fixture adapter is used only by unit tests; it is not evidence for a

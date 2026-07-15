@@ -195,3 +195,8 @@ Consequently:
 
 This boundary is a result in its own right: it identifies exactly what the internal
 contract suite establishes and what the next empirical study must supply.
+
+The companion analysis artifact records this state machine explicitly: the current
+snapshot is `evidence_status=not_available`, and its evidence-labeled SVG is a status
+visualization rather than an effectiveness figure. The artifact is therefore useful for
+replay and release review without turning an absent provider run into a null result.

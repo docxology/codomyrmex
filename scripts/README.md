@@ -131,7 +131,7 @@ Maintenance and automation utilities for project management.
 | :--- | :--- |
 | `strip_mermaid_style_lines.py` | Remove `style … fill:…` lines from fenced `mermaid` blocks under `docs/` |
 | `normalize_mermaid_subgraphs.py` | Rewrite `subgraph "Label"` → `subgraph sg_<hash> [Label]` in `docs/` |
-| `doc_inventory.py` | Print module / `mcp_tools.py` / `@mcp_tool` counts; optional `--pytest`, `--manifest` (`get_skill_manifest` tool count). Canonical definitions: [docs/reference/inventory.md](../docs/reference/inventory.md) |
+| `doc_inventory.py` | Print or emit JSON module / `mcp_tools.py` / `@mcp_tool` counts; optional `--pytest`, `--manifest`, and `--check-reference` (`get_skill_manifest` tool count). Canonical definitions: [docs/reference/inventory.md](../docs/reference/inventory.md) |
 | `mcp_spec_gap.py` | List `mcp_tools.py` paths missing sibling `MCP_TOOL_SPECIFICATION.md`; see [docs/reference/mcp-tool-spec-coverage.md](../docs/reference/mcp-tool-spec-coverage.md) |
 | `src_structure_audit.py` | Run the read-only source module structure gate (`--json` available); checks runtime module docs/API/MCP/test parity, PEP 561 `py.typed` markers, docs/modules counterparts, stale docs/modules directories, support-surface docs, and retired module names |
 

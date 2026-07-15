@@ -13,7 +13,10 @@ Optional: pass --manifest for runtime merged MCP tool count via get_skill_manife
 from __future__ import annotations
 
 import argparse
+import contextlib
 import importlib.util
+import io
+import json
 import re
 import subprocess
 import sys
@@ -127,13 +130,57 @@ def manifest_tool_count() -> int | None:
     except ImportError:
         return None
     try:
-        m = get_skill_manifest()
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            m = get_skill_manifest()
         tools = m.get("tools")
         if isinstance(tools, list):
             return len(tools)
     except Exception:
         return None
     return None
+
+
+def collect_inventory(root: Path, *, include_pytest: bool = False, include_manifest: bool = False) -> dict[str, int | None]:
+    """Return the measured inventory as a JSON-serializable mapping."""
+
+    metrics: dict[str, int | None] = {
+        "top_level_modules": count_top_level_modules(root),
+        "mcp_tools_py": count_mcp_tools_py(root),
+        "production_mcp_tool_decorators": count_mcp_tool_decorators(root),
+        "github_workflows": count_github_workflow_yml(root),
+        "markdown_docs_under_docs": sum(
+            1 for path in (root / "docs").rglob("*.md") if path.is_file()
+        ),
+    }
+    metrics["runtime_mcp_tools"] = manifest_tool_count() if include_manifest else None
+    metrics["pytest_collected"] = pytest_collect_count(root) if include_pytest else None
+    return metrics
+
+
+def reference_consistency(root: Path, metrics: dict[str, int | None]) -> list[str]:
+    """Check canonical inventory values against freshly measured values."""
+
+    path = root / "docs" / "reference" / "inventory.md"
+    if not path.is_file():
+        return [f"missing canonical inventory: {path}"]
+    text = path.read_text(encoding="utf-8")
+    expected = {
+        "Top-level modules": metrics["top_level_modules"],
+        "`mcp_tools.py` files (non-test)": metrics["mcp_tools_py"],
+        "Runtime MCP tools": metrics["runtime_mcp_tools"],
+        "Production `@mcp_tool` decorators": metrics["production_mcp_tool_decorators"],
+        "Pytest tests collected": metrics["pytest_collected"],
+        "GitHub Actions workflow files (`.github/workflows/*.yml`)": metrics["github_workflows"],
+        "Markdown files under `docs/`": metrics["markdown_docs_under_docs"],
+    }
+    errors: list[str] = []
+    for label, value in expected.items():
+        if value is None:
+            continue
+        pattern = re.compile(rf"\|\s*{re.escape(label)}\s*\|\s*{value:,}(?:\s|\|)")
+        if not pattern.search(text):
+            errors.append(f"{label}: expected {value:,}")
+    return errors
 
 
 def main() -> int:
@@ -148,12 +195,42 @@ def main() -> int:
         action="store_true",
         help="Print get_skill_manifest() tool count (imports codomyrmex)",
     )
+    ap.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit the measured inventory as JSON",
+    )
+    ap.add_argument(
+        "--check-reference",
+        action="store_true",
+        help="Fail if docs/reference/inventory.md disagrees with measured values",
+    )
     args = ap.parse_args()
     root = repo_root()
 
-    mods = count_top_level_modules(root)
-    mcp_files = count_mcp_tools_py(root)
-    decorators = count_mcp_tool_decorators(root)
+    metrics = collect_inventory(
+        root,
+        include_pytest=args.pytest,
+        include_manifest=args.manifest,
+    )
+    reference_errors = reference_consistency(root, metrics) if args.check_reference else []
+
+    if args.json:
+        payload = {
+            "schema_version": "doc-inventory-v1",
+            "metrics": metrics,
+            "reference_check": {
+                "enabled": args.check_reference,
+                "passed": not reference_errors,
+                "errors": reference_errors,
+            },
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1 if reference_errors else 0
+
+    mods = metrics["top_level_modules"]
+    mcp_files = metrics["mcp_tools_py"]
+    decorators = metrics["production_mcp_tool_decorators"]
 
     print("Codomyrmex inventory (see docs/reference/inventory.md)")
     print(f"  top_level_modules:        {mods}")
@@ -161,19 +238,26 @@ def main() -> int:
     print(f"  @mcp_tool (production):   {decorators}")
     print(f"  .github/workflows *.yml:  {count_github_workflow_yml(root)}")
     if args.manifest:
-        n = manifest_tool_count()
+        n = metrics["runtime_mcp_tools"]
         if n is not None:
             print(f"  manifest tools (runtime): {n}")
         else:
             print("  manifest tools (runtime): (import or get_skill_manifest failed)")
     if args.pytest:
-        n = pytest_collect_count(root)
+        n = metrics["pytest_collected"]
         if n is not None:
             print(f"  pytest collected:         {n}")
         else:
             print("  pytest collected:         (failed to run or parse)")
     else:
         print("  pytest collected:         (omit --pytest for speed; see inventory.md)")
+    if args.check_reference:
+        if reference_errors:
+            print("  reference check:          FAILED")
+            for error in reference_errors:
+                print(f"    - {error}")
+            return 1
+        print("  reference check:          passed")
     return 0
 
 

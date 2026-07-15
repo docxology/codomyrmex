@@ -26,6 +26,7 @@ The `manuscript/` directory contains raw Markdown files rendered by `scripts/com
 - `05_experimental_setup.md` — Proposed external evaluation protocol separated from the live release configuration.
 - `06_reproducibility.md` — Reproduction commands, generated evidence, and explicit limits of the configuration/artifact chain.
 - `07_scope_and_related_work.md` — Bounded positioning against agentic software engineering, stigmergy, computational trust, capability security, runtime assurance, and external benchmarks.
+- `RELATED_WORK_EVIDENCE.md` — Primary-source register for related work, statistical choices, reproducibility, and assurance-case provenance.
 - `08_active_inference.md` — A bounded Active Inference interpretation that distinguishes structural analogy from implemented Bayesian inference.
 - `90_appendix_design_rationale.md` — Design decisions, alternatives, trade-offs, and calibration limits.
 - `98_acknowledgements.md` — Unnumbered, configuration-injected contributor credit.

@@ -17,10 +17,18 @@ is enforced by an operating-system or cloud authorization layer.
 
 SWE-bench evaluates model-generated patches against real repository issues, while
 SWE-agent shows that the agent-computer interface materially shapes software-engineering
-performance [@yang2024swebench; @yang2024sweagent]. These projects motivate evaluating a
-control plane in the same environments where agents inspect files, run tools, and modify
-persistent state. They do not provide evidence for the Colony Kernel until the kernel is
-actually evaluated as part of such a workflow.
+performance [@yang2024swebench; @yang2024sweagent]. HELM provides a complementary
+framework for multidimensional, scenario-aware language-model evaluation
+[@liang2022helm]. These projects motivate evaluating a control plane in the same
+environments where agents inspect files, run tools, and modify persistent state. They do
+not provide evidence for the Colony Kernel until the kernel is actually evaluated as
+part of such a workflow.
+
+The source-grounded register in
+[`RELATED_WORK_EVIDENCE.md`](RELATED_WORK_EVIDENCE.md) records the primary sources and
+the boundary attached to each comparison. It is intentionally a provenance register,
+not a literature-count claim or an argument that an adjacent benchmark validates this
+artifact.
 
 LangGraph, AutoGen, and CrewAI provide stateful graphs, conversational multi-agent
 composition, and role-oriented orchestration, respectively [@langgraph2024;
@@ -211,7 +219,10 @@ The benchmark protocol in [@sec:experimental_setup] remains unexecuted as a repe
 comparative study. Configured agent counts, scenarios, and expected rates are protocol
 parameters or analytical fixtures, not observations. A publication-quality experiment
 requires released traces, explicit baselines, linked proposal-to-outcome records,
-predeclared outcomes, and an analysis appropriate to ternary gate decisions.
+predeclared outcomes, and an analysis appropriate to ternary gate decisions. The paired
+binary analysis now reports denominators by partition, an exact conditional interval, and
+an exact McNemar-style paired test [@mcnemar1947correlated]; these are analysis
+capabilities, not a result until provider-backed rows exist.
 
 The current system is synchronous and single-process by default. It has no demonstrated
 throughput envelope, distributed consistency model, or merge protocol for independent

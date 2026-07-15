@@ -239,6 +239,10 @@ def _validate_benchmark_result(
         return
     if result.get("manifest") != benchmark_manifest:
         failures.append("benchmark result is not bound to the checked-in benchmark manifest")
+    if result.get("execution_class") != "provider_backed":
+        failures.append(
+            "benchmark result is not provider-backed; fixture_contract evidence cannot unlock release"
+        )
     provider = result.get("provider")
     validated_provider = None
     if not isinstance(provider, dict) or any(
@@ -263,12 +267,22 @@ def _validate_benchmark_result(
     except (OSError, json.JSONDecodeError) as exc:
         failures.append(f"trusted executor key registry cannot be parsed: {exc}")
         return
-    if not isinstance(registry, dict) or not isinstance(registry.get("keys"), dict):
+    if (
+        not isinstance(registry, dict)
+        or registry.get("registry_version") != "2"
+        or not isinstance(registry.get("keys"), dict)
+        or not isinstance(registry.get("key_classes"), dict)
+    ):
         failures.append("trusted executor key registry is malformed")
         return
     registry_keys = registry["keys"]
+    registry_key_classes = registry["key_classes"]
     if not registry_keys:
         failures.append("trusted executor key registry is empty")
+    if set(registry_key_classes) != set(registry_keys):
+        failures.append("trusted executor key registry classifications do not match its keys")
+    if any(key_class != "provider_backed" for key_class in registry_key_classes.values()):
+        failures.append("provider benchmark executor keys must be classified as provider_backed")
     try:
         from evaluations.colony_kernel.runner import ProviderConfiguration
 
@@ -290,6 +304,10 @@ def _validate_benchmark_result(
         failures.append(
             "benchmark provider executor keys do not match the checked-in trusted registry"
         )
+    if validated_provider is not None and not validated_provider.endpoint.startswith(
+        ("http://", "https://")
+    ):
+        failures.append("provider-backed benchmark endpoint must use http:// or https://")
     rows = result.get("rows")
     conditions = benchmark_manifest.get("conditions", [])
     controlled_suite = benchmark_manifest.get("controlled_suite", {})

@@ -172,6 +172,7 @@ def test_controlled_runner_only_runs_after_manifest_is_fully_pinned(tmp_path: Pa
         corpus_source_path=corpus_source,
     )
     assert result["status"] == "passed"
+    assert result["execution_class"] == "fixture_contract"
     assert len(result["rows"]) == 240
     assert result["metrics"]["paired_effects"]["n"] == 80
     assert result["metrics"]["row_count"] == 240

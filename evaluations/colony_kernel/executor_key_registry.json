@@ -1,5 +1,6 @@
 {
-  "registry_version": "1.0",
+  "registry_version": "2",
   "status": "awaiting-approved-key",
-  "keys": {}
+  "keys": {},
+  "key_classes": {}
 }

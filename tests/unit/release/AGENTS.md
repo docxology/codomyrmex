@@ -12,6 +12,7 @@ Validation coverage, fixtures, and regression checks for Release.
 - `test_mcp_tools_release.py` – Project file
 - `test_release_cert.py` – Project file
 - `test_release_comprehensive.py` – Project file
+- `test_release_provenance.py` – Provider provenance, registry classification, and fail-closed release negative controls
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -27,6 +28,7 @@ Validation coverage, fixtures, and regression checks for Release.
 - `test_mcp_tools_release.py`
 - `test_release_cert.py`
 - `test_release_comprehensive.py`
+- `test_release_provenance.py`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

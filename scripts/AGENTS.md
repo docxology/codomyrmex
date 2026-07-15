@@ -6,7 +6,7 @@
 Maintenance and automation utilities for project management.
 
 ## Metrics and doc audits
-- `doc_inventory.py` — counts aligned with [docs/reference/inventory.md](../docs/reference/inventory.md) (top-level modules, `@mcp_tool`, `mcp_tools.py`, `.github/workflows/*.yml`; optional `--pytest`, `--manifest`).
+- `doc_inventory.py` — counts aligned with [docs/reference/inventory.md](../docs/reference/inventory.md) (top-level modules, `@mcp_tool`, `mcp_tools.py`, `.github/workflows/*.yml`; optional `--pytest`, `--manifest`, JSON output, and `--check-reference`).
 - `rasp_gap_report.py` — writes [docs/plans/agents-readme-gap-report.md](../docs/plans/agents-readme-gap-report.md) for scoped `AGENTS.md` / `README.md` gaps.
 - `src_structure_audit.py` — read-only `src/codomyrmex` structure gate for module docs/API/MCP/test parity, PEP 561 `py.typed` markers, docs/modules counterparts, stale docs/modules directories, support-surface docs, and retired module names.
 

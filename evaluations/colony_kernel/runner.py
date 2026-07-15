@@ -13,7 +13,6 @@ import hashlib
 import json
 import math
 import os
-import statistics
 import subprocess
 import sys
 import urllib.request
@@ -41,6 +40,9 @@ REQUIRED_CONDITIONS = (
 REQUIRED_CONTROLLED_TASK_TYPES = frozenset(
     {"patch_file", "run_tests", "documentation", "archive_module"}
 )
+EXECUTION_CLASS_FIXTURE = "fixture_contract"
+EXECUTION_CLASS_PROVIDER = "provider_backed"
+EXECUTION_CLASSES = frozenset({EXECUTION_CLASS_FIXTURE, EXECUTION_CLASS_PROVIDER})
 EXECUTOR_KEY_REGISTRY_RELATIVE = (
     "evaluations/colony_kernel/executor_key_registry.json"
 )
@@ -157,6 +159,8 @@ class ProviderConfiguration:
 class AgentAdapter(Protocol):
     """Provider-neutral interface for an evaluated agent."""
 
+    execution_class: str
+
     def run(self, task: dict[str, Any], condition: str, seed: int) -> dict[str, Any]:
         """Return a structured proposal/result record."""
 
@@ -168,6 +172,8 @@ class HttpJsonAgentAdapter:
     ``evaluations.colony_kernel.stages.parse_result``. Authentication is read
     from the named environment variable and is never written to reports.
     """
+
+    execution_class = EXECUTION_CLASS_PROVIDER
 
     def __init__(self, configuration: ProviderConfiguration) -> None:
         if not configuration.endpoint.startswith(("http://", "https://")):
@@ -419,46 +425,17 @@ def environment_digest(root: Path) -> str:
 
 
 def paired_effects(rows: list[dict[str, Any]]) -> dict[str, Any]:
-    """Compute paired differences and a deterministic normal-approximation interval."""
+    """Compatibility wrapper for the versioned paired-binary analysis."""
 
-    grouped: dict[str, dict[str, float]] = {}
-    for row in rows:
-        grouped.setdefault(str(row["task_id"]), {})[str(row["condition"])] = float(
-            row.get("task_success", 0)
-        )
-    pairs = [
-        values["enforced_authorization"] - values["always_execute"]
-        for values in grouped.values()
-        if {"enforced_authorization", "always_execute"} <= values.keys()
-    ]
-    if not pairs:
-        return {
-            "n": 0,
-            "mean_difference": None,
-            "standard_error": None,
-            "ci95": [None, None],
-            "ci95_method": "normal_approximation",
-        }
-    mean = statistics.fmean(pairs)
-    if len(pairs) == 1:
-        lower = upper = mean
-        standard_error = 0.0
-    else:
-        standard_error = statistics.stdev(pairs) / math.sqrt(len(pairs))
-        margin = statistics.NormalDist().inv_cdf(0.975) * standard_error
-        lower = max(-1.0, mean - margin)
-        upper = min(1.0, mean + margin)
-    return {
-        "n": len(pairs),
-        "mean_difference": mean,
-        "standard_error": standard_error,
-        "ci95": [lower, upper],
-        "ci95_method": "normal_approximation",
-    }
+    from evaluations.colony_kernel.analysis import paired_binary_effects
+
+    return paired_binary_effects(rows)
 
 
 class DeterministicFixtureAdapter:
     """A non-provider baseline adapter for contract tests only."""
+
+    execution_class = EXECUTION_CLASS_FIXTURE
 
     def __init__(self) -> None:
         self._authority = Ed25519Authority.generate()
@@ -546,6 +523,11 @@ def run_benchmark(
         raise BenchmarkConfigurationError(
             "a concrete provider adapter is required; fixture results are test-only"
         )
+    execution_class = getattr(adapter, "execution_class", None)
+    if execution_class not in EXECUTION_CLASSES:
+        raise BenchmarkConfigurationError(
+            "adapter execution_class must be fixture_contract or provider_backed"
+        )
     trusted_executor_keys = provider_config.trusted_executor_keys()
     if not trusted_executor_keys:
         raise BenchmarkConfigurationError(
@@ -588,6 +570,7 @@ def run_benchmark(
                 raise BenchmarkConfigurationError(str(exc)) from exc
             rows.append(row)
     report = render_report(manifest, provider_config.public_mapping(), rows)
+    report["execution_class"] = execution_class
     report["environment_digest"] = actual_environment_digest
     try:
         corpus_report_path = str(acquired_corpus.relative_to(root))

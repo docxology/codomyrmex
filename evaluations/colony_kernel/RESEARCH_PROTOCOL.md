@@ -5,10 +5,10 @@
 **Date locked:** 2026-07-14
 **Scope:** declared Colony action types only
 
-The checked-in executor-key registry is currently empty and has status
+The checked-in executor-key registry is schema version 2, currently empty, and has status
 `awaiting-approved-key`. This is an explicit release precondition, not a benchmark
 result: a provider run cannot pass verification until its executor public keys match
-that independently reviewed registry.
+that independently reviewed registry and each key is classified `provider_backed`.
 
 ## Research question
 
@@ -28,8 +28,10 @@ conditions, including task success rate, verified failure rate, harmful or
 unauthorized attempts, replay rejection, cross-scope rejection, false HOLD/REFUSE,
 rework, resource cost, latency, token usage, trust calibration, and authorization
 precision. The paired comparison is the per-task difference between
-`enforced_authorization` and `always_execute`, with the harness-reported 95%
-normal-approximation interval.
+`enforced_authorization` and `always_execute`. The versioned analysis layer retains the
+historical normal-approximation fields for compatibility and adds partition-aware
+denominators, a 95% exact conditional interval, and an exact two-sided McNemar p-value.
+The statistics schema is `paired-binary-v1`.
 
 The run is valid only when all 80 pinned tasks produce exactly one row under each
 condition: 240 rows total, zero required protocol errors, a matching environment
@@ -76,12 +78,18 @@ failure, skip, or refusal.
 
 ## Analysis and audit trail
 
-The runner emits raw rows and derived metrics. The verifier independently checks
+The runner emits raw rows, an explicit `execution_class` (`fixture_contract` or
+`provider_backed`), and derived metrics. The verifier independently checks
 the manifest binding, row matrix, partition identity, receipt field set, canonical
 task/condition request digest, single-use authorization/proposal/request identities,
 Ed25519 signatures, corpus hash,
 environment digest, and metric recomputation. The release package is a transport
 bundle; its sidecar manifest remains the non-self-referential source of truth.
+
+The analysis command writes `output/data/colony_kernel_analysis.json` and an evidence
+status SVG. Missing results and fixture results remain non-empirical; a provider-backed
+input is labeled `provider_backed_unverified` until the independent release verifier
+accepts its endpoint, registry classes, receipts, partitions, and recomputed metrics.
 
 Required artifacts are the provider configuration with secrets excluded, raw
 benchmark result, corpus evidence and hash, receipt/key metadata, environment

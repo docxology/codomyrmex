@@ -17,6 +17,8 @@ enforces the executable 60% coverage floor on the colony_kernel package.
 | File | Subsystem covered |
 |------|-------------------|
 | `test_actuation_gate.py` | `ActuationGate` — permission layer; gate score computation, SANDBOX hard-override, REFUSE/HOLD/EXECUTE decision paths |
+| `test_benchmark_analysis.py` | Versioned paired-binary analysis — exact conditional intervals, McNemar counts, partition denominators, and evidence labels |
+| `test_benchmark_contracts.py` | Release benchmark contracts — pinned partitions, receipt validation, complete matrices, and fixture execution class |
 | `test_config_loader.py` | `config_loader.py` — YAML-backed config schema and default loading |
 | `test_consequence_memory.py` | `ConsequenceMemory` — outcome accountability store; in-memory and SQLite modes, trust-delta constants, record serialisation |
 | `test_falsification_worker.py` | `FalsificationWorker` — adversarial plan checking; all 10 attack vectors, `FalsificationReport` structure, severity scoring |

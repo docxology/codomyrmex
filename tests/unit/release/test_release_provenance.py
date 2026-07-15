@@ -8,7 +8,12 @@ import json
 import subprocess
 from pathlib import Path
 
-from evaluations.colony_kernel.runner import ProviderConfiguration
+from evaluations.colony_kernel.runner import (
+    DeterministicFixtureAdapter,
+    ProviderConfiguration,
+    load_manifest,
+)
+from evaluations.colony_kernel.stages import parse_result, prepare_tasks, render_report
 from scripts.generate_release_manifest import (
     REQUIRED_ARTIFACTS,
     _aggregate_hash,
@@ -18,7 +23,11 @@ from scripts.generate_release_manifest import (
     source_files_for_manifest,
 )
 from scripts.package_release_evidence import package
-from scripts.verify_release_candidate import _provider_config_digest, verify
+from scripts.verify_release_candidate import (
+    _environment_digest,
+    _provider_config_digest,
+    verify,
+)
 
 from codomyrmex.colony_kernel.authorization import Ed25519Authority
 
@@ -196,7 +205,10 @@ def test_verifier_rejects_incomplete_passed_benchmark_result(tmp_path: Path) -> 
     root, manifest_path = _candidate(tmp_path)
     registry = root / "evaluations/colony_kernel/executor_key_registry.json"
     registry.parent.mkdir(parents=True, exist_ok=True)
-    registry.write_text(json.dumps({"keys": {}}), encoding="utf-8")
+    registry.write_text(
+        json.dumps({"registry_version": "2", "keys": {}, "key_classes": {}}),
+        encoding="utf-8",
+    )
     result_path = root / "output/evaluations/colony_kernel/benchmark.json"
     result_path.parent.mkdir(parents=True, exist_ok=True)
     result_path.write_text(
@@ -221,6 +233,161 @@ def test_verifier_rejects_incomplete_passed_benchmark_result(tmp_path: Path) -> 
         "failures"
     ]
     assert "benchmark result is missing required release metrics" in report["failures"]
+
+
+def test_verifier_rejects_structurally_valid_fixture_evidence(tmp_path: Path) -> None:
+    """A signed fixture result must never satisfy the provider release gate."""
+
+    root, manifest_path = _candidate(tmp_path)
+    authority = Ed25519Authority.generate()
+    encoded_key = base64.urlsafe_b64encode(authority.public_key).decode("ascii")
+    registry = root / "evaluations/colony_kernel/executor_key_registry.json"
+    registry.parent.mkdir(parents=True, exist_ok=True)
+    registry.write_text(
+        json.dumps(
+            {
+                "registry_version": "2",
+                "status": "test-fixture",
+                "keys": {authority.key_id: encoded_key},
+                "key_classes": {authority.key_id: "fixture_contract"},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result_path = root / "output/evaluations/colony_kernel/benchmark.json"
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    provider = {
+        "provider": "fixture",
+        "model": "deterministic",
+        "model_version": "1",
+        "parameters": {},
+        "endpoint": "https://fixture.invalid",
+        "seed": 1,
+        "executor_public_keys": {authority.key_id: encoded_key},
+    }
+    result_path.write_text(
+        json.dumps(
+            {
+                "status": "passed",
+                "execution_class": "fixture_contract",
+                "manifest": {},
+                "provider": provider,
+                "rows": [],
+                "metrics": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["benchmark"].update(
+        {
+            "status": "passed",
+            "ready": True,
+            "result_hash": hashlib.sha256(result_path.read_bytes()).hexdigest(),
+        }
+    )
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    report = verify(root, manifest_path)
+
+    assert (
+        "benchmark result is not provider-backed; fixture_contract evidence cannot unlock release"
+        in report["failures"]
+    )
+    assert "provider benchmark executor keys must be classified as provider_backed" in report[
+        "failures"
+    ]
+
+
+def test_verifier_rejects_forged_metrics_even_with_complete_rows(tmp_path: Path) -> None:
+    """A complete signed matrix cannot override recomputed release metrics."""
+
+    root, manifest_path = _candidate(tmp_path)
+    repository_root = Path(__file__).resolve().parents[3]
+    benchmark_manifest = load_manifest(
+        repository_root / "evaluations/colony_kernel/benchmark_manifest.json"
+    )
+    benchmark_manifest_path = root / "evaluations/colony_kernel/benchmark_manifest.json"
+    benchmark_manifest_path.write_text(json.dumps(benchmark_manifest), encoding="utf-8")
+    for relative in ("pyproject.toml", "uv.lock"):
+        destination = root / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes((repository_root / relative).read_bytes())
+
+    adapter = DeterministicFixtureAdapter()
+    registry_keys = adapter.public_executor_keys()
+    registry = root / "evaluations/colony_kernel/executor_key_registry.json"
+    registry.write_text(
+        json.dumps(
+            {
+                "registry_version": "2",
+                "keys": registry_keys,
+                "key_classes": dict.fromkeys(registry_keys, "provider_backed"),
+            }
+        ),
+        encoding="utf-8",
+    )
+    provider = {
+        "provider": "fixture-replay",
+        "model": "deterministic",
+        "model_version": "1",
+        "parameters": {},
+        "endpoint": "https://provider.example.invalid/run",
+        "seed": 1,
+        "executor_public_keys": registry_keys,
+    }
+    trusted_keys = ProviderConfiguration.from_mapping(provider).trusted_executor_keys()
+    rows = [
+        parse_result(task, condition, adapter.run(task, condition, 1), trusted_executor_keys=trusted_keys)
+        for task in prepare_tasks(benchmark_manifest)
+        for condition in benchmark_manifest["conditions"]
+    ]
+    calculated = render_report(
+        provider=provider, manifest=benchmark_manifest, rows=rows
+    )["metrics"]
+    forged_metrics = dict(calculated)
+    forged_metrics["row_count"] = int(calculated["row_count"]) + 1
+
+    corpus = root / "corpus.bin"
+    corpus.write_bytes(b"pinned-test-corpus")
+    result_path = root / "output/evaluations/colony_kernel/benchmark.json"
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    result_path.write_text(
+        json.dumps(
+            {
+                "status": "passed",
+                "execution_class": "provider_backed",
+                "manifest": benchmark_manifest,
+                "provider": provider,
+                "provider_config_digest": _provider_config_digest(provider),
+                "rows": rows,
+                "metrics": forged_metrics,
+                "corpus": {
+                    "sha256": hashlib.sha256(corpus.read_bytes()).hexdigest(),
+                    "path": "corpus.bin",
+                },
+                "environment_digest": _environment_digest(root),
+            }
+        ),
+        encoding="utf-8",
+    )
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["inputs"]["lockfile_config_source_hash"] = _aggregate_hash(
+        input_files_for_manifest(root), root
+    )
+    manifest["benchmark"].update(
+        {
+            "manifest_hash": hashlib.sha256(benchmark_manifest_path.read_bytes()).hexdigest(),
+            "status": "passed",
+            "ready": True,
+            "result_hash": hashlib.sha256(result_path.read_bytes()).hexdigest(),
+        }
+    )
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    report = verify(root, manifest_path)
+
+    assert "benchmark metrics do not match the validated raw rows" in report["failures"]
 
 
 def test_provider_digest_uses_runner_normalization() -> None:
@@ -269,7 +436,14 @@ def test_verifier_rejects_a_self_asserted_executor_key_registry(tmp_path: Path) 
     registry = root / "evaluations/colony_kernel/executor_key_registry.json"
     registry.parent.mkdir(parents=True, exist_ok=True)
     registry.write_text(
-        json.dumps({"keys": {authority.key_id: "not-a-key"}}), encoding="utf-8"
+        json.dumps(
+            {
+                "registry_version": "2",
+                "keys": {authority.key_id: "not-a-key"},
+                "key_classes": {authority.key_id: "provider_backed"},
+            }
+        ),
+        encoding="utf-8",
     )
     result_path = root / "output/evaluations/colony_kernel/benchmark.json"
     result_path.parent.mkdir(parents=True, exist_ok=True)

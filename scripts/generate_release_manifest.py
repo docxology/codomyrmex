@@ -110,6 +110,7 @@ def source_files_for_manifest(root: Path) -> list[Path]:
         *sorted((root / "config" / "colony_kernel").glob("*")),
         root / "scripts" / "z_generate_manuscript_variables.py",
         root / "scripts" / "generate_manuscript_figures.py",
+        root / "scripts" / "analyze_colony_kernel_benchmark.py",
         root / "scripts" / "compile_manuscript.py",
         root / "scripts" / "generate_release_manifest.py",
         root / "scripts" / "package_release_evidence.py",
@@ -134,6 +135,8 @@ def artifact_files_for_manifest(root: Path) -> list[Path]:
         root,
         [
             *REQUIRED_ARTIFACTS,
+            "output/data/colony_kernel_analysis.json",
+            "output/figures/colony_kernel_evidence_status.svg",
             "output/paper.html",
             "output/evaluations/colony_kernel/benchmark.json",
         ],
@@ -202,10 +205,18 @@ def _executor_key_ids(root: Path) -> list[str]:
     path = root / "evaluations/colony_kernel/executor_key_registry.json"
     data = _load_json(path, "executor key registry")
     keys = data.get("keys")
-    if not isinstance(keys, dict) or any(
+    key_classes = data.get("key_classes")
+    if (
+        data.get("registry_version") != "2"
+        or not isinstance(keys, dict)
+        or not isinstance(key_classes, dict)
+        or set(key_classes) != set(keys)
+        or any(key_class not in {"fixture_contract", "provider_backed"} for key_class in key_classes.values())
+        or any(
         not isinstance(key_id, str) or not key_id.strip()
         or not isinstance(encoded_key, str) or not encoded_key.strip()
         for key_id, encoded_key in keys.items()
+        )
     ):
         raise RuntimeError("executor key registry keys must map non-empty IDs to strings")
     for key_id, encoded_key in keys.items():
@@ -263,6 +274,11 @@ def build_manifest(root: Path, *, extra_commands: list[dict[str, Any]] | None = 
     )
     benchmark_ready = (
         benchmark_result.get("status") == "passed"
+        and benchmark_result.get("execution_class") == "provider_backed"
+        and isinstance(benchmark_result.get("provider"), dict)
+        and str(benchmark_result["provider"].get("endpoint", "")).startswith(
+            ("http://", "https://")
+        )
         and benchmark_manifest.get("swe_bench_lite", {}).get("status") == "pinned"
     )
     key_metadata = {

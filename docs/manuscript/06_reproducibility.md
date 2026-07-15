@@ -69,12 +69,14 @@ newly created artifacts.
 The project uses the following output conventions:
 
 - `output/data/manuscript_variables.json` stores the complete rendered token map;
+- `output/data/colony_kernel_analysis.json` stores the versioned paired-binary analysis and
+  its evidence status;
 - `output/data/colony_kernel_coverage.json` stores the fresh scoped coverage report;
 - `output/manuscript/` stores token-resolved section copies plus `config.yaml` and the
   bibliography used by the renderer;
-- `output/figures/` stores the {{ARTIFACT_FIGURE_COUNT}} generated PNG figures and
-  `figure_registry.json`, whose entries record evidence class, byte size, and full
-  SHA-256 for each PNG;
+- `output/figures/` stores the {{ARTIFACT_FIGURE_COUNT}} generated PNG figures, the
+  evidence-status SVG, and `figure_registry.json`, whose entries record evidence class,
+  byte size, and full SHA-256 for each PNG;
 - direct project compilation writes `output/paper.html` and, with `--pdf`,
   `output/paper.pdf`; and
 - the shared template renderer writes its canonical combined outputs to

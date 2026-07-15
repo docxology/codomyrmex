@@ -8,6 +8,11 @@ manifest pins the SWE-bench revision and issue IDs, but execution remains pendin
 model/provider pins, environment digest, raw receipts, and held-out results are
 attached; no comparative benchmark claim is made here.
 
+Every report declares `execution_class`: `fixture_contract` is a contractual test
+surface, while `provider_backed` requires the HTTP adapter and later release verification.
+The analysis layer records denominators by partition and exact paired-binary uncertainty,
+but it cannot turn a fixture or a missing provider result into an empirical figure.
+
 The executable protocol has a stricter evidence boundary than a task-list description.
 Before any adapter call, the runner acquires the pinned corpus into a temporary file,
 checks its SHA-256 digest, and atomically accepts it only on an exact match. It then

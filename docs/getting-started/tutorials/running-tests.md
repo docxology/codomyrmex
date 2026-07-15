@@ -106,7 +106,7 @@ The policy is enforced via `ruff` — any import of mock libraries will fail lin
 | Metric | Value |
 |--------|-------|
 | Test files | 886 |
-| Tests collected | 35,119 (`uv run python scripts/doc_inventory.py --pytest`; see [reference/inventory.md](../../reference/inventory.md)) |
+| Tests collected | 35,225 (`uv run python scripts/doc_inventory.py --pytest`; see [reference/inventory.md](../../reference/inventory.md)) |
 | Coverage gate | **60%** (`fail_under` in `pyproject.toml`; pass `--cov-fail-under=60` or `make test`) |
 | Actual coverage | After a run with `--cov` (e.g. `make test-coverage`) — see pytest summary or `coverage.json` (`meme/` omitted; see `pyproject.toml`) |
 

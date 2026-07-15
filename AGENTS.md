@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 15, 2026
 
 ## Purpose
 
@@ -31,6 +31,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `AGENTS.md` - This file: agent coordination and navigation
 - `scripts/rasp_gap_report.py` — regenerates [docs/plans/agents-readme-gap-report.md](docs/plans/agents-readme-gap-report.md) (scoped `AGENTS.md` / `README.md` presence under `src/codomyrmex/`, `docs/`, `projects/`, `scripts/`, `config/`, `.github/`; see script docstring for excludes)
 - `scripts/doc_inventory.py` — prints repo doc metrics (module counts, workflows, optional pytest collect); output summarized in [docs/reference/inventory.md](docs/reference/inventory.md)
+- Live inventory snapshot (July 15, 2026): 130 top-level modules, 611 runtime MCP tools, 626 production decorators, 38 workflows, 35,225 collected tests, and 1,204 Markdown files under `docs/`. Regenerate with `uv run python scripts/doc_inventory.py --manifest --pytest` and validate with `--check-reference`.
 - `LICENSE` - MIT License
 - `SECURITY.md` - Security policies and vulnerability reporting
 - `pyproject.toml` - Python package configuration
@@ -449,7 +450,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (173753 symbols, 250088 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (174629 symbols, 251945 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > Index stale? Run `node .gitnexus/run.cjs analyze` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? `npx gitnexus analyze` (npm 11 crash → `npm i -g gitnexus`; #1939).
 

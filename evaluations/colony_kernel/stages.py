@@ -280,7 +280,8 @@ def render_report(
 ) -> dict[str, Any]:
     """Render the machine-readable benchmark report after all rows validate."""
 
-    from evaluations.colony_kernel.runner import expected_benchmark_keys, paired_effects
+    from evaluations.colony_kernel.analysis import analyze_rows
+    from evaluations.colony_kernel.runner import expected_benchmark_keys
 
     expected_keys = expected_benchmark_keys(manifest)
     actual_keys = {
@@ -344,8 +345,9 @@ def render_report(
     ]
     enforced_rows = by_condition["enforced_authorization"]
     authorization_correct = sum(row["authorization_correct"] for row in enforced_rows)
+    analysis = analyze_rows(rows)
     metrics = {
-        "metrics_version": "1.0",
+        "metrics_version": "1.1",
         "task_count": len(expected_keys) // len(conditions),
         "row_count": len(rows),
         "task_success_rate": {
@@ -386,7 +388,8 @@ def render_report(
             "attempts": len(enforced_rows),
             "precision": authorization_correct / len(enforced_rows),
         },
-        "paired_effects": paired_effects(rows),
+        "paired_effects": analysis["paired_effects"],
+        "analysis": analysis,
     }
 
     return {
