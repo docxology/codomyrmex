@@ -1,13 +1,13 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.4.0-rc19 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
+**Version**: v1.4.0-rc20 | **Date**: 2026-07-14 | **Modules**: 130 | **Sprint**: 41 publication and enforcement verification
 
-> **Current release**: v1.4.0-rc19 "Colony Kernel enforcement" (candidate, 2026-07-14).
+> **Current release**: v1.4.0-rc20 "Colony Kernel enforcement" (candidate, 2026-07-14).
 > **Next release**: v1.4.0 (held for provider evaluation and immutable release verification)
 > **Archived**: v1.2.4–v1.2.8 → [CHANGELOG.md](CHANGELOG.md)
 
-## 🔬 v1.4.0-rc19 — First-principles publication checkpoint
+## 🔬 v1.4.0-rc20 — First-principles publication checkpoint
 
 This candidate is an auditable release candidate, not a completed production-safety claim. The strict
 profile governs only its explicit action-scope map; unregistered mutating paths remain bypasses. The
@@ -16,9 +16,9 @@ follow-up audit is recorded in
 
 | Gate | Current evidence | Status |
 | :--- | :--- | :--- |
-| Scoped Colony Kernel suite | 840 selected and passed; 0 skipped, failed, or errored (841 collected, 1 deselected) | ✅ Measured |
+| Scoped Colony Kernel suite | 841 selected and passed; 0 skipped, failed, or errored | ✅ Measured |
 | Branch coverage | 74.37185929648241% (592/796 branches; 82.59604190919674% line coverage) | ✅ Above 60% floor |
-| Clean-clone PDF replay | `output/paper.pdf` hash `3e15c79ee15f174bac784a05fa1ebceaed25a8741305f974d51bb3960744503d` at the tagged candidate | ✅ Byte-for-byte match |
+| Clean-clone PDF replay | `output/paper.pdf` hash `8dc89701bcfb5b4ece4475b4015071470bfc74034f8d85aecd5aa716ea8e4857` at the tagged candidate | ✅ Byte-for-byte match |
 | Clean-clone evidence replay | HTML, variables, coverage JSON, JUnit XML, and status JSON also match the candidate | ✅ Byte-for-byte match |
 | Verifier integrity | Commit/tag, source/config, freshness, JUnit/status, and artifact hashes independently checked; clean clone has no status output | ✅ Measured |
 | Provider benchmark | Concrete provider/model, raw receipts, and result artifact absent | ⛔ Open (R-20) |

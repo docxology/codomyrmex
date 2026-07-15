@@ -1,9 +1,9 @@
 # Codomyrmex Red-Team / First-Principles / Science Follow-Up
 
 **Date:** 2026-07-14
-**Candidate:** `v1.4.0-rc19`
+**Candidate:** `v1.4.0-rc20`
 **Historical audit anchor:** `v1.4.0-rc1` at `471f998719bcbbdd756cedb66a2d8e95762dd542`
-**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc19`
+**Current revision:** recorded in the clean-clone manifest for tag `v1.4.0-rc20`
 **Execution mode:** internal specialist panel; no independent subagents were available in the host
 
 ## Scope and goal
@@ -64,9 +64,10 @@ measured facts it actually binds.
 ### Experiments and observed results
 
 The verifier and enforcement negative controls passed with real components. The current scoped release
-suite completed with 853 JUnit-collected and passed tests, zero skipped, failed, or errored tests. The
-clean-clone candidate rebuild remains the release authority for final coverage and artifact hashes; the
-provider benchmark remains unrun.
+suite completed with 841 JUnit-collected and passed tests, zero skipped, failed, or errored tests; the
+additional focused verifier/benchmark regression suite also passed 35 tests. The clean-clone candidate
+rebuild remains the release authority for final coverage and artifact hashes; the provider benchmark
+remains unrun.
 
 H1–H4 are supported for the tested contracts and clean-clone replay. H5 is
 **inconclusive/unrun**, not a failed or successful benchmark result.

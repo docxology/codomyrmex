@@ -4,7 +4,7 @@ This follow-up preserves the historical second-pass audit of
 `e85aee6758726ca1fbba202d0ef1a09d524029e3` and records the implementation and
 release checks performed against the reviewed baseline
 `4bd6c1804f2caa905d36bcb39d67bdf8c1d86837` and the final candidate revision
-identified by the clean-clone manifest for tag `v1.4.0-rc19`.
+identified by the clean-clone manifest for tag `v1.4.0-rc20`.
 
 The result is a dual-profile candidate. The advisory profile preserves
 `caller_reported_unattested` input; the strict profile enforces only the governed
@@ -13,7 +13,7 @@ action scope through signed, single-use Ed25519 capabilities and executor receip
 `POLICY_REJECTION`; prospective falsification findings use `RISK`. The PDF-producing
 source and generated outputs are synchronized in this worktree. A clean clone of the
 candidate regenerated the exact PDF, HTML, evidence, and figure hashes; the candidate
-is tagged as `v1.4.0-rc19` and remains on hold until the provider-backed
+is tagged as `v1.4.0-rc20` and remains on hold until the provider-backed
 benchmark is completed and the final release is published.
 
 ## Reproduction snapshot
@@ -23,15 +23,15 @@ The fail-closed generator wrote `output/data/colony_kernel_test_status.json` and
 
 | Measure | Result |
 | --- | ---: |
-| Required tests collected | 840 (841 pytest items collected; 1 deselected) |
-| Required tests passed | 840 |
+| Required tests collected | 841 |
+| Required tests passed | 841 |
 | Required skips | 0 |
 | Required failures | 0 |
 | Required errors | 0 |
 | Branch coverage | 74.37185929648241% (592/796) |
 | Line coverage | 82.59604190919674% (2,246/2,640) |
 | Executable coverage floor | 60.0% |
-| Full local colony-kernel suite | 840 selected and passed; 0 skipped, failed, or errored |
+| Full local colony-kernel suite | 841 selected and passed; 0 skipped, failed, or errored |
 
 Commands and exit codes are captured in `output/release_manifest.json`. The final
 render command was:
@@ -76,14 +76,14 @@ candidate worktree.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `output/paper.pdf` | `3e15c79ee15f174bac784a05fa1ebceaed25a8741305f974d51bb3960744503d` |
-| `output/paper.html` | `7f42c41a1f42127cf9b06ebc5a53384ecaa5a57fd51a7e2feb84cc0b29999355` |
-| `output/data/manuscript_variables.json` | `49ba171b55cd8946d1024dbcbbca12fbe1986e90d3ed152d695c1501f1b44e85` |
+| `output/paper.pdf` | `8dc89701bcfb5b4ece4475b4015071470bfc74034f8d85aecd5aa716ea8e4857` |
+| `output/paper.html` | `99846d4132f1a42e59b422f46bc80960cf123ef6f2a527d27a841c7937f55092` |
+| `output/data/manuscript_variables.json` | `b70e43d0785976eeea88c51f2f71a22d13d4e78ac019e19c4c93ce912ba22d63` |
 | `output/data/colony_kernel_coverage.json` | `e7134083deb0d91cb91bfed463ae7809d3d461d22a067c85ac84fe740d004e57` |
-| `output/data/colony_kernel_test_report.xml` | `cbcfc215fee2cf2200ee0c1ae18e2adf5a2ec9d58c360ef8e691b0b5be963e5eb` |
-| `output/data/colony_kernel_test_status.json` | `fc2f174b03c69d8d3bf038e6e49c11b1c86d39aa74920aa7c226211e6e4a1ecf` |
+| `output/data/colony_kernel_test_report.xml` | `50f2c14555ec754fdf085fcc7377ad3fa230a8dc93c78ff080b59836801a1d1d` |
+| `output/data/colony_kernel_test_status.json` | `ce9a8aa6c490a73dc58e53184b6ef19a47cd5be722afc8dd69bd62a5573ed376` |
 
-The clean-clone manifest for `v1.4.0-rc19` reports `publication_ready=false` because provider-backed
+The clean-clone manifest for `v1.4.0-rc20` reports `publication_ready=false` because provider-backed
 benchmark results are missing; its checkout, artifact freshness, and required test
 gates are true. The shared development worktree retains unrelated changes outside the
 candidate. The
