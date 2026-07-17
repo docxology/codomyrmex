@@ -28,14 +28,16 @@ class JavaScriptParser(Parser):
         root.children.extend(self._parse_imports(source, lines))
         return root
 
+    # Bolt optimization: Hoisted regex compilation to class level to prevent recompiling on every parse call
+    _FUNC_PATTERNS = [
+        re.compile(r"function\s+(\w+)\s*\((.*?)\)\s*\{"),
+        re.compile(r"(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?\((.*?)\)\s*=>"),
+        re.compile(r"(\w+)\s*:\s*function\s*\((.*?)\)\s*\{"),
+    ]
+
     def _parse_functions(self, source: str, lines: list[str]) -> list[ASTNode]:
         functions = []
-        patterns = [
-            re.compile(r"function\s+(\w+)\s*\((.*?)\)\s*\{"),
-            re.compile(r"(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?\((.*?)\)\s*=>"),
-            re.compile(r"(\w+)\s*:\s*function\s*\((.*?)\)\s*\{"),
-        ]
-        for pattern in patterns:
+        for pattern in self._FUNC_PATTERNS:
             for match in pattern.finditer(source):
                 name = match.group(1)
                 params = match.group(2)
@@ -55,10 +57,11 @@ class JavaScriptParser(Parser):
                 )
         return functions
 
+    _CLASS_PATTERN = re.compile(r"class\s+(\w+)(?:\s+extends\s+(\w+))?\s*\{")
+
     def _parse_classes(self, source: str, lines: list[str]) -> list[ASTNode]:
         classes = []
-        pattern = re.compile(r"class\s+(\w+)(?:\s+extends\s+(\w+))?\s*\{")
-        for match in pattern.finditer(source):
+        for match in self._CLASS_PATTERN.finditer(source):
             name = match.group(1)
             extends = match.group(2)
             line_num = source[: match.start()].count("\n")
@@ -72,12 +75,13 @@ class JavaScriptParser(Parser):
             )
         return classes
 
+    _IMPORT_PATTERN = re.compile(
+        r'import\s+(?:\{([^}]+)\}|(\w+))?\s*(?:,\s*(?:\{([^}]+)\}|(\w+)))?\s*from\s+[\'"]([^\'"]+)[\'"]'
+    )
+
     def _parse_imports(self, source: str, lines: list[str]) -> list[ASTNode]:
         imports = []
-        pattern = re.compile(
-            r'import\s+(?:\{([^}]+)\}|(\w+))?\s*(?:,\s*(?:\{([^}]+)\}|(\w+)))?\s*from\s+[\'"]([^\'"]+)[\'"]'
-        )
-        for match in pattern.finditer(source):
+        for match in self._IMPORT_PATTERN.finditer(source):
             line_num = source[: match.start()].count("\n")
             imports.append(
                 ASTNode(
