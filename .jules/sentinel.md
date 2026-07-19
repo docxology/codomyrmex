@@ -11,3 +11,8 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
+## 2026-03-01 - Avoid shell=True in subprocess.run
+**Vulnerability:** Use of shell=True in subprocess.run with formatted command templates.
+**Learning:** Even when using shlex.quote for arguments, using shell=True poses a command injection risk and violates secure coding practices.
+**Prevention:** Use shell=False and tokenize the command string into an argument list using shlex.split() before passing it to subprocess.run.
