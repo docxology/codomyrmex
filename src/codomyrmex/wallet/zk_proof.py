@@ -262,7 +262,9 @@ class ZKProofVerifier:
             proof.user_id, proof.wallet_address, proof.nonce, message
         )
         if not hmac.compare_digest(expected_challenge, proof.challenge):
-            logger.warning("ZK proof failed: challenge mismatch for user %s", proof.user_id)
+            logger.warning(
+                "ZK proof failed: challenge mismatch for user %s", proof.user_id
+            )
             return False
 
         # Verify the HMAC response matches what the key would produce.
@@ -278,7 +280,9 @@ class ZKProofVerifier:
         if is_valid:
             logger.info("ZK proof verified for user %s", proof.user_id)
         else:
-            logger.warning("ZK proof failed: response mismatch for user %s", proof.user_id)
+            logger.warning(
+                "ZK proof failed: response mismatch for user %s", proof.user_id
+            )
         return is_valid
 
     # ── Decoupled verification (no WalletManager key access) ─────────
@@ -490,9 +494,7 @@ class SignedCapabilityProofBuilder:
 
         # Sign the attestation with the wallet key (HMAC).
         mgr = self._verifier._get_manager()
-        attestation_sig = mgr.sign_message(
-            user_id, attestation.to_json().encode()
-        )
+        attestation_sig = mgr.sign_message(user_id, attestation.to_json().encode())
 
         proof = SignedCapabilityProof(
             zk_proof=zk_proof,

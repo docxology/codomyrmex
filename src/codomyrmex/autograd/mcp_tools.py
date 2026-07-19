@@ -57,18 +57,14 @@ def _safe_eval(expr: str, namespace: dict[str, Any]) -> Any:
                 return _ALLOWED_OPS["/"](left, right)
             if isinstance(node.op, ast.Pow):
                 return _ALLOWED_OPS["**"](left, right)
-            raise ValueError(
-                f"Unsupported binary operator: {type(node.op).__name__}"
-            )
+            raise ValueError(f"Unsupported binary operator: {type(node.op).__name__}")
         if isinstance(node, ast.UnaryOp):
             operand = _eval(node.operand)
             if isinstance(node.op, ast.UAdd):
                 return operator.pos(operand)
             if isinstance(node.op, ast.USub):
                 return operator.neg(operand)
-            raise ValueError(
-                f"Unsupported unary operator: {type(node.op).__name__}"
-            )
+            raise ValueError(f"Unsupported unary operator: {type(node.op).__name__}")
         if isinstance(node, ast.Call):
             func = _eval(node.func)
             if not callable(func):

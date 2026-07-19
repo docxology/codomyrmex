@@ -74,9 +74,7 @@ def main() -> int:
     output_manuscript = project_root / "output" / "manuscript"
     _clean_output_dir(output_manuscript)
 
-    written = inject_manuscript_variables(
-        manuscript_dir, output_manuscript, variables
-    )
+    written = inject_manuscript_variables(manuscript_dir, output_manuscript, variables)
     for path in written:
         print(f"[z_generate] injected → {path.relative_to(project_root)}")
 

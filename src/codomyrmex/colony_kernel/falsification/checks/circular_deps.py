@@ -35,9 +35,7 @@ def check_circular_deps(
     if isinstance(raw_deps, (list, tuple)):
         dependencies = [str(d) for d in raw_deps]
     elif isinstance(raw_deps, str) and raw_deps:
-        dependencies = [
-            s.strip() for s in re.split(r"[,\n;]", raw_deps) if s.strip()
-        ]
+        dependencies = [s.strip() for s in re.split(r"[,\n;]", raw_deps) if s.strip()]
 
     # Self-modification check — agent targeting itself is always circular
     agent_id = str(plan.get("agent_id", "")).strip()

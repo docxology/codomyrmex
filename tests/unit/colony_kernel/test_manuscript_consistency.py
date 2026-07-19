@@ -426,7 +426,9 @@ def test_compiler_declares_scientific_narrative_order() -> None:
     import importlib.util
 
     compiler_path = REPO_ROOT / "scripts" / "compile_manuscript.py"
-    spec = importlib.util.spec_from_file_location("codomyrmex_compile_manuscript", compiler_path)
+    spec = importlib.util.spec_from_file_location(
+        "codomyrmex_compile_manuscript", compiler_path
+    )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -759,9 +761,13 @@ def test_rendered_references_section_is_bibliography_anchor_only() -> None:
     assert "natbib" not in references.lower()
 
     cited = set(re.findall(r"@([A-Za-z][A-Za-z0-9_:-]+)", related_work))
-    cited = {key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))}
+    cited = {
+        key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))
+    }
     defined = set(re.findall(r"^@[A-Za-z]+\{([^,]+),", bibliography, re.MULTILINE))
-    assert cited <= defined, f"Undefined related-work citations: {sorted(cited - defined)}"
+    assert cited <= defined, (
+        f"Undefined related-work citations: {sorted(cited - defined)}"
+    )
     assert {
         "yang2024swebench",
         "grasse1959reconstruction",
@@ -778,9 +784,13 @@ def test_introduction_cites_control_plane_scholarship() -> None:
     bibliography = _read("docs/manuscript/references.bib")
 
     cited = set(re.findall(r"@([A-Za-z][A-Za-z0-9_:-]+)", introduction))
-    cited = {key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))}
+    cited = {
+        key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))
+    }
     defined = set(re.findall(r"^@[A-Za-z]+\{([^,]+),", bibliography, re.MULTILINE))
-    assert cited <= defined, f"Undefined introduction citations: {sorted(cited - defined)}"
+    assert cited <= defined, (
+        f"Undefined introduction citations: {sorted(cited - defined)}"
+    )
     assert {
         "wooldridge1995intelligent",
         "yang2024swebench",
@@ -1039,10 +1049,18 @@ _INFRASTRUCTURE_IMPORT_PATTERN = re.compile(
 
 def test_infrastructure_import_pattern_detects_known_bad_case() -> None:
     """Proof-of-detection: the pattern used below must actually fire on a violation."""
-    assert _INFRASTRUCTURE_IMPORT_PATTERN.search("from infrastructure.config import Foo\n")
-    assert _INFRASTRUCTURE_IMPORT_PATTERN.search("    import infrastructure.rendering\n")
-    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search("from codomyrmex.infrastructure_x import Foo\n")
-    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search("# import infrastructure.config for context\n")
+    assert _INFRASTRUCTURE_IMPORT_PATTERN.search(
+        "from infrastructure.config import Foo\n"
+    )
+    assert _INFRASTRUCTURE_IMPORT_PATTERN.search(
+        "    import infrastructure.rendering\n"
+    )
+    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search(
+        "from codomyrmex.infrastructure_x import Foo\n"
+    )
+    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search(
+        "# import infrastructure.config for context\n"
+    )
 
 
 def test_layer_contract_forbids_infrastructure_imports() -> None:
@@ -1051,10 +1069,11 @@ def test_layer_contract_forbids_infrastructure_imports() -> None:
     anywhere in the repository) — this test makes the claim real."""
     contract = yaml.safe_load(_read("docs/manuscript/layer_contract.yaml"))
     allowed = {
-        (REPO_ROOT / rel).resolve()
-        for rel in contract["allow_infrastructure_imports"]
+        (REPO_ROOT / rel).resolve() for rel in contract["allow_infrastructure_imports"]
     }
-    assert allowed, "layer_contract.yaml allowlist must not be empty for this test to be meaningful"
+    assert allowed, (
+        "layer_contract.yaml allowlist must not be empty for this test to be meaningful"
+    )
 
     violations: list[str] = []
     for path in sorted((REPO_ROOT / "src" / "codomyrmex").rglob("*.py")):
