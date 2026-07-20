@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2025-06-25 - Extracted constant dictionaries from inner loops
+**Learning:** Instantiating static mapping dictionaries inside frequently called functions or inner loops creates repeated allocation overhead, significantly decreasing performance.
+**Action:** Extract these dictionaries as module-level constants to avoid repeated allocation in loop/function invocations.

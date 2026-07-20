@@ -18,6 +18,39 @@ from .models import AnalysisResult, SeverityLevel
 logger = get_logger(__name__)
 
 
+_PYLINT_SEVERITY_MAP = {
+    "convention": SeverityLevel.INFO,
+    "refactor": SeverityLevel.WARNING,
+    "warning": SeverityLevel.WARNING,
+    "error": SeverityLevel.ERROR,
+    "fatal": SeverityLevel.CRITICAL,
+}
+
+_BANDIT_SEVERITY_MAP = {
+    "LOW": SeverityLevel.INFO,
+    "MEDIUM": SeverityLevel.WARNING,
+    "HIGH": SeverityLevel.ERROR,
+    "CRITICAL": SeverityLevel.CRITICAL,
+}
+
+_PYREFLY_SEVERITY_MAP = {
+    "error": SeverityLevel.ERROR,
+    "warning": SeverityLevel.WARNING,
+    "info": SeverityLevel.INFO,
+}
+
+_ESLINT_SEVERITY_MAP = {
+    1: SeverityLevel.WARNING,
+    2: SeverityLevel.ERROR,
+}
+
+_SPOTBUGS_SEVERITY_MAP = {
+    "LOW": SeverityLevel.INFO,
+    "MEDIUM": SeverityLevel.WARNING,
+    "HIGH": SeverityLevel.ERROR,
+}
+
+
 class ToolRunner:
     """Runs external analysis tools and converts their output to AnalysisResult."""
 
@@ -38,20 +71,12 @@ class ToolRunner:
                 pylint_results = json.loads(result.stdout)
 
                 for issue in pylint_results:
-                    severity_map = {
-                        "convention": SeverityLevel.INFO,
-                        "refactor": SeverityLevel.WARNING,
-                        "warning": SeverityLevel.WARNING,
-                        "error": SeverityLevel.ERROR,
-                        "fatal": SeverityLevel.CRITICAL,
-                    }
-
                     results.append(
                         AnalysisResult(
                             file_path=issue["path"],
                             line_number=issue["line"],
                             column_number=issue["column"],
-                            severity=severity_map.get(
+                            severity=_PYLINT_SEVERITY_MAP.get(
                                 issue["type"], SeverityLevel.WARNING
                             ),
                             message=issue["message"],
@@ -166,19 +191,12 @@ class ToolRunner:
                 bandit_results = json.loads(result.stdout)
 
                 for issue in bandit_results.get("results", []):
-                    severity_map = {
-                        "LOW": SeverityLevel.INFO,
-                        "MEDIUM": SeverityLevel.WARNING,
-                        "HIGH": SeverityLevel.ERROR,
-                        "CRITICAL": SeverityLevel.CRITICAL,
-                    }
-
                     results.append(
                         AnalysisResult(
                             file_path=issue["filename"],
                             line_number=issue["line_number"],
                             column_number=0,
-                            severity=severity_map.get(
+                            severity=_BANDIT_SEVERITY_MAP.get(
                                 issue["issue_severity"], SeverityLevel.WARNING
                             ),
                             message=issue["issue_text"],
@@ -308,19 +326,13 @@ class ToolRunner:
             pyrefly_result = run_pyrefly(file_path)
 
             if pyrefly_result.success and pyrefly_result.issues:
-                severity_map = {
-                    "error": SeverityLevel.ERROR,
-                    "warning": SeverityLevel.WARNING,
-                    "info": SeverityLevel.INFO,
-                }
-
                 for issue in pyrefly_result.issues:
                     results.append(
                         AnalysisResult(
                             file_path=issue.file_path or file_path,
                             line_number=issue.line,
                             column_number=issue.column,
-                            severity=severity_map.get(
+                            severity=_PYREFLY_SEVERITY_MAP.get(
                                 issue.severity, SeverityLevel.ERROR
                             ),
                             message=issue.message,
@@ -373,17 +385,12 @@ class ToolRunner:
 
                 for file_data in eslint_results:
                     for message in file_data.get("messages", []):
-                        severity_map = {
-                            1: SeverityLevel.WARNING,
-                            2: SeverityLevel.ERROR,
-                        }
-
                         results.append(
                             AnalysisResult(
                                 file_path=file_data["filePath"],
                                 line_number=message["line"],
                                 column_number=message["column"],
-                                severity=severity_map.get(
+                                severity=_ESLINT_SEVERITY_MAP.get(
                                     message["severity"], SeverityLevel.WARNING
                                 ),
                                 message=message["message"],
@@ -444,18 +451,12 @@ class ToolRunner:
                 spotbugs_results = json.loads(result.stdout)
 
                 for bug in spotbugs_results.get("bugs", []):
-                    severity_map = {
-                        "LOW": SeverityLevel.INFO,
-                        "MEDIUM": SeverityLevel.WARNING,
-                        "HIGH": SeverityLevel.ERROR,
-                    }
-
                     results.append(
                         AnalysisResult(
                             file_path=bug["file"],
                             line_number=bug["line"],
                             column_number=0,
-                            severity=severity_map.get(
+                            severity=_SPOTBUGS_SEVERITY_MAP.get(
                                 bug["priority"], SeverityLevel.WARNING
                             ),
                             message=bug["message"],
