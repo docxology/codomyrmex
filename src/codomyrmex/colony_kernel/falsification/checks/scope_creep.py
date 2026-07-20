@@ -55,9 +55,7 @@ def check_scope_creep(plan: dict[str, Any]) -> FalsificationFinding | None:
         r"\bwherever\s+applicable\b",
         r"\bgeneral\s+(improvements?|refactor(ing)?)\b",
     ]
-    vague_hits = [
-        p for p in vague_patterns if re.search(p, scope_str, re.IGNORECASE)
-    ]
+    vague_hits = [p for p in vague_patterns if re.search(p, scope_str, re.IGNORECASE)]
     if len(vague_hits) >= 2:
         return FalsificationFinding(
             claim="The plan scope is precisely bounded to its stated target.",

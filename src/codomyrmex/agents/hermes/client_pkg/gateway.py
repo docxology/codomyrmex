@@ -73,6 +73,7 @@ class HermesGatewayMixin:
         except Exception as exc:
             self.logger.error("get_gateway_status failed: %s", exc)
             return {"success": False, "instances": [], "error": str(exc)}
+
     def get_model_info(self, model_id: str) -> dict:
         """Look up model context length and tool-use support.
 
@@ -148,6 +149,7 @@ class HermesGatewayMixin:
         except Exception as exc:
             self.logger.error("get_model_info(%s) failed: %s", model_id, exc)
             return {"model_id": model_id, "context_length": 0, "error": str(exc)}
+
     def send_gateway_command(
         self,
         command: str,
@@ -190,6 +192,7 @@ class HermesGatewayMixin:
         except Exception as exc:
             self.logger.error("send_gateway_command(%s) failed: %s", command, exc)
             return {"success": False, "output": "", "error": str(exc)}
+
     def install_skill(self, repo_url: str) -> dict:
         """Install a Hermes skill from a git repository URL.
 
@@ -222,6 +225,7 @@ class HermesGatewayMixin:
         except Exception as exc:
             self.logger.error("install_skill(%s) failed: %s", repo_url, exc)
             return {"success": False, "output": "", "error": str(exc)}
+
     def scaffold_fastmcp(
         self,
         output_dir: str,

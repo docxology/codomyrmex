@@ -73,7 +73,9 @@ class Transform3D:
     def from_yaw(cls, yaw: float) -> Transform3D:
         return cls(rotation=(0.0, 0.0, yaw))
 
-    def transform_vector(self, vector: Vec3 | Iterable[float]) -> tuple[float, float, float]:
+    def transform_vector(
+        self, vector: Vec3 | Iterable[float]
+    ) -> tuple[float, float, float]:
         vec = vector if isinstance(vector, Vec3) else Vec3(*vector)
         return _mat_vec(_rotation_matrix(self.rotation), vec).to_tuple()
 
@@ -138,9 +140,7 @@ def _matrix_to_euler(matrix: list[list[float]]) -> tuple[float, float, float]:
     return (roll, pitch, yaw)
 
 
-def _mat_mul(
-    left: list[list[float]], right: list[list[float]]
-) -> list[list[float]]:
+def _mat_mul(left: list[list[float]], right: list[list[float]]) -> list[list[float]]:
     return [
         [
             sum(left[row][inner] * right[inner][col] for inner in range(3))
