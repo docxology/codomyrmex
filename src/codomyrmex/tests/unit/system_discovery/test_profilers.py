@@ -1,10 +1,14 @@
 import os
 import platform
+import sys
 from pathlib import Path
 
 import pytest
 
-from codomyrmex.system_discovery.reporting.profilers import HardwareProfiler
+from codomyrmex.system_discovery.reporting.profilers import (
+    EnvironmentProfiler,
+    HardwareProfiler,
+)
 
 
 def create_fake_executable(
@@ -156,3 +160,36 @@ def test_gpu_info_no_gpu(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Non
 
     assert gpu_info["available"] is False
     assert len(gpu_info["details"]) == 0
+
+
+def test_is_virtual_env_real_prefix(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test is_virtual_env when sys.real_prefix is set."""
+    monkeypatch.setattr(sys, "real_prefix", "/usr", raising=False)
+    assert EnvironmentProfiler.is_virtual_env() is True
+
+
+def test_is_virtual_env_base_prefix_differs(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test is_virtual_env when sys.base_prefix differs from sys.prefix."""
+    monkeypatch.delattr(sys, "real_prefix", raising=False)
+    monkeypatch.setattr(sys, "base_prefix", "/usr")
+    monkeypatch.setattr(sys, "prefix", "/usr/local")
+    monkeypatch.delenv("VIRTUAL_ENV", raising=False)
+    assert EnvironmentProfiler.is_virtual_env() is True
+
+
+def test_is_virtual_env_env_var(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test is_virtual_env when VIRTUAL_ENV is set."""
+    monkeypatch.delattr(sys, "real_prefix", raising=False)
+    monkeypatch.setattr(sys, "base_prefix", "/usr")
+    monkeypatch.setattr(sys, "prefix", "/usr")
+    monkeypatch.setenv("VIRTUAL_ENV", "/venv")
+    assert EnvironmentProfiler.is_virtual_env() is True
+
+
+def test_is_virtual_env_false(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test is_virtual_env when not in a virtual environment."""
+    monkeypatch.delattr(sys, "real_prefix", raising=False)
+    monkeypatch.setattr(sys, "base_prefix", "/usr")
+    monkeypatch.setattr(sys, "prefix", "/usr")
+    monkeypatch.delenv("VIRTUAL_ENV", raising=False)
+    assert EnvironmentProfiler.is_virtual_env() is False
