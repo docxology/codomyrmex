@@ -29,9 +29,7 @@ def project_root():
     """Project root directory."""
     from pathlib import Path
 
-    return (
-        REPO_ROOT
-    )  # tests/integration/workflows → repo root
+    return REPO_ROOT  # tests/integration/workflows → repo root
 
 
 @pytest.fixture
@@ -39,6 +37,4 @@ def src_codomyrmex():
     """Path to src/codomyrmex."""
     from pathlib import Path
 
-    return (
-        PACKAGE_ROOT
-    )  # tests/integration/workflows → src/codomyrmex
+    return PACKAGE_ROOT  # tests/integration/workflows → src/codomyrmex

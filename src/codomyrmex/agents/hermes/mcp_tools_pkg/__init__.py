@@ -1,4 +1,5 @@
 """Hermes MCP tool surface — split by category for maintainability."""
+
 from __future__ import annotations
 
 from codomyrmex.agents.hermes.mcp_tools_pkg.execution import (

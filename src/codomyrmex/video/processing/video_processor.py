@@ -561,34 +561,26 @@ class VideoProcessor:
                 elif filter_type == FilterType.BLUR:
                     # Real Gaussian blur via per-frame PIL processing
                     blurred = clip.fl(
-                        lambda gf, t: _pil_filter_frame(
-                            gf, t, "blur", intensity
-                        ),
+                        lambda gf, t: _pil_filter_frame(gf, t, "blur", intensity),
                         apply_to=["mask", "video"],
                     )
                     filtered = blurred
                 elif filter_type == FilterType.SHARPEN:
                     # Sharpen via PIL ImageFilter
                     filtered = clip.fl(
-                        lambda gf, t: _pil_filter_frame(
-                            gf, t, "sharpen", intensity
-                        ),
+                        lambda gf, t: _pil_filter_frame(gf, t, "sharpen", intensity),
                         apply_to=["mask", "video"],
                     )
                 elif filter_type == FilterType.SATURATION:
                     # Saturation boost/reduce via HSV manipulation
                     filtered = clip.fl(
-                        lambda gf, t: _pil_filter_frame(
-                            gf, t, "saturation", intensity
-                        ),
+                        lambda gf, t: _pil_filter_frame(gf, t, "saturation", intensity),
                         apply_to=["mask", "video"],
                     )
                 elif filter_type == FilterType.SEPIA:
                     # Sepia tone via per-frame matrix transform
                     filtered = clip.fl(
-                        lambda gf, t: _pil_filter_frame(
-                            gf, t, "sepia", intensity
-                        ),
+                        lambda gf, t: _pil_filter_frame(gf, t, "sepia", intensity),
                         apply_to=["mask", "video"],
                     )
                 else:
