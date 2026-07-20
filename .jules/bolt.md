@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2024-07-17 - Tree-Sitter Parser Regex Overhead
+**Learning:** Frequent instantiations of standard parsing classes (e.g., `PythonParser`, `JavaScriptParser`) in this codebase were repeatedly compiling the same `re.compile()` regular expressions inside their method bodies on every parse invocation, causing unnecessary overhead when parsing large amounts of source code.
+**Action:** Always hoist `re.compile()` definitions out of frequently called methods or loops and define them as class-level constants to avoid redundant compilation and internal `re` cache lookups.
