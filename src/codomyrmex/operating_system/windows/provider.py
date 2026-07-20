@@ -24,14 +24,12 @@ from codomyrmex.operating_system.base import (
 )
 
 
-def _run(cmd: str, timeout: float = 15.0) -> str:
-    """Run a shell command and return stripped stdout."""
+def _run(cmd: list[str], timeout: float = 15.0) -> str:
+    """Run a command and return stripped stdout."""
     try:
-        # On Windows, no need for shell=True with explicit executables,
-        # but we keep shell=True for compound commands.
         result = subprocess.run(
             cmd,
-            shell=True,
+            shell=False,
             capture_output=True,
             text=True,
             timeout=timeout,
@@ -43,7 +41,7 @@ def _run(cmd: str, timeout: float = 15.0) -> str:
 
 def _powershell(script: str, timeout: float = 15.0) -> str:
     """Run a PowerShell one-liner."""
-    return _run(f'powershell -NoProfile -Command "{script}"', timeout=timeout)
+    return _run(["powershell", "-NoProfile", "-Command", script], timeout=timeout)
 
 
 class WindowsProvider(OSProviderBase):
@@ -60,7 +58,9 @@ class WindowsProvider(OSProviderBase):
         kernel_version = platform.release()
 
         # Total physical memory via wmic
-        mem_raw = _run("wmic ComputerSystem get TotalPhysicalMemory /Format:Value")
+        mem_raw = _run(
+            ["wmic", "ComputerSystem", "get", "TotalPhysicalMemory", "/Format:Value"]
+        )
         try:
             m = re.search(r"TotalPhysicalMemory=(\d+)", mem_raw)
             memory_total = int(m.group(1)) if m else 0
