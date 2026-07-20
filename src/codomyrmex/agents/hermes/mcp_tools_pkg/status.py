@@ -1,4 +1,5 @@
 """Hermes MCP tools — status category."""
+
 from __future__ import annotations
 
 import sys
@@ -29,6 +30,7 @@ def hermes_status() -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "available": False, "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -53,6 +55,7 @@ def hermes_system_health() -> dict[str, Any]:
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -85,6 +88,7 @@ def hermes_check_dependencies(package_name: str) -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -107,6 +111,7 @@ def hermes_mcp_reload() -> dict[str, Any]:
         return {"status": "success", **result}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -159,6 +164,7 @@ def hermes_user_context(
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description="Run hermes doctor for comprehensive health diagnostics (CLI v0.2.0+).",
@@ -176,6 +182,7 @@ def hermes_doctor() -> dict[str, Any]:
         return {"status": "success" if result.get("success") else "error", **result}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -198,6 +205,7 @@ def hermes_version() -> dict[str, Any]:
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -239,6 +247,7 @@ def hermes_honcho_status() -> dict[str, Any]:
         return {"status": "error", "message": "honcho status timed out"}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -284,6 +293,7 @@ def hermes_insights(days: int = 30) -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -305,6 +315,7 @@ def hermes_provider_status() -> dict[str, Any]:
         return {"status": "success", "providers": router.get_provider_status()}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -339,6 +350,7 @@ def hermes_rotation_status() -> dict[str, Any]:
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -383,6 +395,7 @@ def hermes_health_check() -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -408,6 +421,7 @@ def hermes_gateway_status() -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc), "instances": []}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -431,6 +445,7 @@ def hermes_model_info(model_id: str) -> dict[str, Any]:
         return {"status": "success" if "error" not in info else "error", **info}
     except Exception as exc:
         return {"status": "error", "model_id": model_id, "message": str(exc)}
+
 
 @mcp_tool(
     category="hermes",
@@ -470,6 +485,7 @@ def hermes_approve_command(
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
+
 @mcp_tool(
     category="hermes",
     description=(
@@ -507,6 +523,7 @@ def hermes_pairing_list() -> dict[str, Any]:
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc), "approved": {}}
+
 
 @mcp_tool(
     category="hermes",

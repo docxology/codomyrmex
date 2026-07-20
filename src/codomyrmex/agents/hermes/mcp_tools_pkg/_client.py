@@ -1,4 +1,5 @@
 """Shared HermesClient factory for MCP tool modules."""
+
 from __future__ import annotations
 
 from collections.abc import Callable

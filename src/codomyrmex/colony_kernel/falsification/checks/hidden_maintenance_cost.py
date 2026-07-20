@@ -9,9 +9,7 @@ from codomyrmex.colony_kernel.falsification.models import AttackVector
 from codomyrmex.colony_kernel.models import FalsificationFinding, FalsificationSeverity
 
 
-def check_hidden_maintenance_cost(
-    plan: dict[str, Any]
-) -> FalsificationFinding | None:
+def check_hidden_maintenance_cost(plan: dict[str, Any]) -> FalsificationFinding | None:
     action_type = str(plan.get("action_type", "")).strip().lower()
     target = str(plan.get("target", "")).strip().lower()
     rationale = str(plan.get("rationale", "")).strip()
@@ -38,9 +36,7 @@ def check_hidden_maintenance_cost(
         "deprecation_plan",
         "runbook",
     )
-    acknowledged = any(
-        str(plan.get(field, "")).strip() for field in maintenance_fields
-    )
+    acknowledged = any(str(plan.get(field, "")).strip() for field in maintenance_fields)
     if acknowledged:
         return None
 

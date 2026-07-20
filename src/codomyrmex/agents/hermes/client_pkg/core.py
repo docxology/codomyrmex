@@ -174,4 +174,5 @@ class HermesClient(
         """Return the configured Ollama model name."""
         return self._ollama_model
 
+
 __all__ = ["HermesClient"]

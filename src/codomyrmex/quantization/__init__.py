@@ -13,9 +13,7 @@ from .fp4 import FP4Quantizer, FP4Tensor, dequantize_fp4, quantize_fp4
 from .int8 import Int8Quantizer, QuantizedTensor, dequantize_int8, quantize_int8
 from .utils import compute_scale_zero_point, per_channel_scale, quantization_error
 
-_MLX_EXPORTS = frozenset(
-    {"QuantizationConfig", "dequantize_array", "quantize_array"}
-)
+_MLX_EXPORTS = frozenset({"QuantizationConfig", "dequantize_array", "quantize_array"})
 
 
 def __getattr__(name: str) -> Any:
@@ -26,6 +24,7 @@ def __getattr__(name: str) -> Any:
         globals()[name] = value
         return value
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 
 __all__ = [
     "FP4Quantizer",

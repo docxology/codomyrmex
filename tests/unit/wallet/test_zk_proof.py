@@ -216,23 +216,29 @@ class TestZKProofDecoupledVerification:
         # In decoupled mode, the verifier has the expected response
         # (e.g. pre-shared or from an attestation service).
         expected = bytes.fromhex(proof.response)
-        assert ZKProofVerifier.verify_proof_with_response(
-            proof, expected, message=b"hello"
-        ) is True
+        assert (
+            ZKProofVerifier.verify_proof_with_response(
+                proof, expected, message=b"hello"
+            )
+            is True
+        )
 
     def test_decoupled_verify_wrong_response_fails(self):
         proof = self.verifier.generate_proof("bob")
         wrong_response = b"\x00" * 32
-        assert ZKProofVerifier.verify_proof_with_response(
-            proof, wrong_response
-        ) is False
+        assert (
+            ZKProofVerifier.verify_proof_with_response(proof, wrong_response) is False
+        )
 
     def test_decoupled_verify_wrong_message_fails(self):
         proof = self.verifier.generate_proof("bob", message=b"original")
         expected = bytes.fromhex(proof.response)
-        assert ZKProofVerifier.verify_proof_with_response(
-            proof, expected, message=b"wrong"
-        ) is False
+        assert (
+            ZKProofVerifier.verify_proof_with_response(
+                proof, expected, message=b"wrong"
+            )
+            is False
+        )
 
     def test_decoupled_verify_tampered_challenge_fails(self):
         proof = self.verifier.generate_proof("bob")
@@ -246,9 +252,7 @@ class TestZKProofDecoupledVerification:
             timestamp=proof.timestamp,
             nonce=proof.nonce,
         )
-        assert ZKProofVerifier.verify_proof_with_response(
-            tampered, expected
-        ) is False
+        assert ZKProofVerifier.verify_proof_with_response(tampered, expected) is False
 
 
 @pytest.mark.unit
@@ -407,17 +411,13 @@ class TestConvenienceFunctions:
         mgr = WalletManager()
         mgr.create_wallet("conv_user")
 
-        gen_result = generate_zk_proof(
-            "conv_user", message="hello", wallet_manager=mgr
-        )
+        gen_result = generate_zk_proof("conv_user", message="hello", wallet_manager=mgr)
         assert "status" not in gen_result  # success has no status key
         assert "user_id" in gen_result
         assert "challenge" in gen_result
         assert "response" in gen_result
 
-        verify_result = verify_zk_proof(
-            gen_result, message="hello", wallet_manager=mgr
-        )
+        verify_result = verify_zk_proof(gen_result, message="hello", wallet_manager=mgr)
         assert verify_result["status"] == "success"
         assert verify_result["verified"] is True
 

@@ -90,6 +90,7 @@ class HermesExecutionMixin:
             return True
 
         return False
+
     def _execute_impl(
         self, request: AgentRequest, max_tokens: int | None = None
     ) -> AgentResponse:
@@ -107,6 +108,7 @@ class HermesExecutionMixin:
                     request, model_override=self._fallback_model
                 )
             raise
+
     def _execute_primary(
         self, request: AgentRequest, max_tokens: int | None = None
     ) -> AgentResponse:
@@ -120,6 +122,7 @@ class HermesExecutionMixin:
             )
             return self._execute_via_ollama(request, max_tokens=max_tokens)
         return self._execute_via_cli(request, max_tokens=max_tokens)
+
     def _should_fallback(self, exc: HermesError) -> bool:
         """Determine if the error warrants a fallback retry.
 
@@ -140,6 +143,7 @@ class HermesExecutionMixin:
                 "capacity",
             )
         )
+
     def _execute_via_cli(
         self, request: AgentRequest, max_tokens: int | None = None
     ) -> AgentResponse:
@@ -214,6 +218,7 @@ class HermesExecutionMixin:
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error("Hermes CLI execution failed: %s", e, exc_info=True)
             raise HermesError(f"Hermes CLI failed: {e}", command=self.command) from e
+
     def _execute_via_ollama(
         self,
         request: AgentRequest,
@@ -288,6 +293,7 @@ class HermesExecutionMixin:
             raise HermesError(
                 f"Ollama execution failed: {e}", command=" ".join(cmd)
             ) from e
+
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream output from the active backend."""
         if self._active_backend == "ollama":
@@ -311,6 +317,7 @@ class HermesExecutionMixin:
                 ctx.pop("hermes_skills", None)
             hermes_args = self._build_hermes_args(prompt, ctx)
             yield from self._stream_command(args=hermes_args)
+
     def _stream_via_ollama(self, request: AgentRequest) -> Iterator[str]:
         """Stream output from ``ollama run <model>``."""
         ollama_bin = shutil.which("ollama") or "ollama"
