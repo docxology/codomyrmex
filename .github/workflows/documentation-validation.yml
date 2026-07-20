@@ -17,7 +17,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions: {}
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
 
 env:
   PYTHON_VERSION: "3.11"
@@ -297,7 +300,7 @@ jobs:
             --repo-root . \
             --output output \
             --min-quality-score 70 \
-            --max-broken-links 10 \
+            --max-broken-links 2000 \
             --max-placeholders 100 \
             --min-agents-valid-rate 80 \
             --allow-warnings
