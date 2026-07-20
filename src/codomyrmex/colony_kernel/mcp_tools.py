@@ -33,7 +33,6 @@ from codomyrmex.colony_kernel.models import (
     DecayRate,
     FalsificationFinding,
     FalsificationSeverity,
-    GateResult,
     PruningCandidate,
     ResourceCost,
     SignalSource,

@@ -1,6 +1,6 @@
 import re
 
-with open('src/codomyrmex/tests/unit/system_discovery/test_profilers.py', 'r') as f:
+with open("src/codomyrmex/tests/unit/system_discovery/test_profilers.py") as f:
     content = f.read()
 
 # I will just write a new test_profilers.py content.
@@ -154,5 +154,5 @@ def test_gpu_info_no_gpu(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Non
     assert gpu_info["available"] is False
     assert len(gpu_info["details"]) == 0
 """
-with open('src/codomyrmex/tests/unit/system_discovery/test_profilers.py', 'w') as f:
+with open("src/codomyrmex/tests/unit/system_discovery/test_profilers.py", "w") as f:
     f.write(new_content)
