@@ -11,7 +11,7 @@ in `mcp_tools.py` and surfaced as part of the ~303 dynamic tools available to Cl
 ## Auto-Discovery
 
 | Property | Value |
-|----------|-------|
+| ---------- | ------- |
 | Discovery method | `@mcp_tool` decorator scan |
 | Namespace | `logit_processor` |
 | Trust default | Safe |
@@ -28,7 +28,7 @@ in `mcp_tools.py` and surfaced as part of the ~303 dynamic tools available to Cl
 **Parameters**:
 
 | Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
+| ----------- | ------ | ---------- | --------- | ------------- |
 | `logits` | `list[float]` | Yes | -- | Raw logit values from language model |
 | `temperature` | `float` | No | `1.0` | Scaling factor (>1=diverse, <1=focused, 1=unchanged) |
 | `top_k` | `int` | No | `0` | Keep only top-k tokens (0=disabled) |
@@ -40,6 +40,7 @@ in `mcp_tools.py` and surfaced as part of the ~303 dynamic tools available to Cl
 **Returns**: `dict` -- Dictionary with sampled_token, greedy_token, top5_tokens (list of {id, prob}), and entropy.
 
 **Example**:
+
 ```python
 from codomyrmex.logit_processor.mcp_tools import process_logits
 

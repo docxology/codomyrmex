@@ -15,7 +15,7 @@ Evidence-aggregation verification pattern. `EpistemicEngine` maintains an `Epist
 ### `EpistemicEngine`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| -------- | ----------- | --------- | ------------- |
 | `add_fact` | `fact: Fact` | `None` | Register a verified fact in the state |
 | `assess_claim` | `statement: str, evidence: list[Evidence]` | `Fact` | Verify claim against evidence; auto-accept if confidence >0.8 |
 | `detect_contradictions` | none | `list[str]` | Find beliefs that negate known facts (string-negation heuristic) |
@@ -23,7 +23,7 @@ Evidence-aggregation verification pattern. `EpistemicEngine` maintains an `Epist
 ### Data Models
 
 | Class | Fields | Purpose |
-|-------|--------|---------|
+| ------- | -------- | --------- |
 | `Evidence` | `content, source, evidence_type, weight, validity` | A piece of evidence with type and strength |
 | `EvidenceType` | `EMPIRICAL, LOGICAL, TESTIMONIAL, ANECDOTAL, FABRICATED` | Evidence strength classification |
 | `Fact` | `statement, verification_method, confidence` | A verified claim with confidence score (0-1) |
@@ -33,7 +33,7 @@ Evidence-aggregation verification pattern. `EpistemicEngine` maintains an `Epist
 ### Module Functions
 
 | Function | Parameters | Returns | Description |
-|----------|-----------|---------|-------------|
+| ---------- | ----------- | --------- | ------------- |
 | `verify_claim` | `statement: str, evidence: list[Evidence]` | `Fact` | Aggregate evidence weights, penalize FABRICATED type, normalize to 0-1 confidence |
 | `calculate_certainty` | `beliefs: list[Belief]` | `float` | Simple average of individual belief certainty values |
 

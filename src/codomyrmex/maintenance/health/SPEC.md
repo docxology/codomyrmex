@@ -1,6 +1,5 @@
 # Health - Technical Specification
 
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
 
 ## Overview
@@ -12,7 +11,7 @@ Two-part framework: `HealthChecker` for on-demand system health probes with aggr
 ### `HealthChecker` (health_check.py)
 
 | Method | Parameters | Returns |
-|--------|-----------|---------|
+| -------- | ----------- | --------- |
 | `register` | `check: HealthCheck` | `None` |
 | `unregister` | `name: str` | `bool` |
 | `run` | `name: str` | `HealthCheckResult` |
@@ -30,7 +29,7 @@ Overall status logic: UNHEALTHY if any unhealthy, else DEGRADED if any degraded,
 ### `MaintenanceScheduler` (scheduler.py)
 
 | Method | Parameters | Returns |
-|--------|-----------|---------|
+| -------- | ----------- | --------- |
 | `register` | `task: MaintenanceTask` | `None` |
 | `unregister` | `name: str` | `bool` |
 | `get_task` | `name: str` | `MaintenanceTask \ None` |
