@@ -4,7 +4,10 @@ from pathlib import Path
 
 import pytest
 
-from codomyrmex.system_discovery.reporting.profilers import HardwareProfiler
+from codomyrmex.system_discovery.reporting.profilers import (
+    EnvironmentProfiler,
+    HardwareProfiler,
+)
 
 
 def create_fake_executable(
@@ -156,3 +159,43 @@ def test_gpu_info_no_gpu(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Non
 
     assert gpu_info["available"] is False
     assert len(gpu_info["details"]) == 0
+
+
+@pytest.mark.parametrize(
+    "env_vars, path_exists_return, release_return, expected_type",
+    [
+        ({"GITHUB_ACTIONS": "true"}, False, "generic", "ci_github"),
+        ({"TRAVIS": "true"}, False, "generic", "ci_travis"),
+        ({"CIRCLECI": "true"}, False, "generic", "ci_circleci"),
+        ({}, True, "generic", "docker"),  # docker path exists
+        ({"KUBERNETES_SERVICE_HOST": "10.0.0.1"}, False, "generic", "kubernetes"),
+        ({"WSL_DISTRO_NAME": "Ubuntu"}, False, "generic", "wsl"),
+        ({}, False, "5.15.90.1-microsoft-standard-WSL2", "wsl"),
+        ({}, False, "generic", "local"),
+    ],
+)
+def test_get_environment_type(
+    monkeypatch: pytest.MonkeyPatch,
+    env_vars: dict[str, str],
+    path_exists_return: bool,
+    release_return: str,
+    expected_type: str,
+) -> None:
+    """Test get_environment_type detects environment correctly."""
+    # Mock environment variables
+    monkeypatch.setattr(os, "environ", env_vars)
+
+    # Mock os.path.exists
+    original_exists = os.path.exists
+
+    def mock_exists(path: str) -> bool:
+        if path == "/.dockerenv":
+            return path_exists_return
+        return original_exists(path)
+
+    monkeypatch.setattr(os.path, "exists", mock_exists)
+
+    # Mock platform.release
+    monkeypatch.setattr(platform, "release", lambda: release_return)
+
+    assert EnvironmentProfiler.get_environment_type() == expected_type
