@@ -12,6 +12,7 @@ import shutil
 import socket
 import subprocess
 import tempfile
+import shlex
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
@@ -563,8 +564,8 @@ class DeploymentOrchestrator:
                 env["DEPLOYMENT_VERSION"] = deployment.version
 
                 result = subprocess.run(
-                    hook,
-                    shell=True,
+                    shlex.split(hook),
+                    shell=False,
                     capture_output=True,
                     text=True,
                     cwd=os.getcwd(),
