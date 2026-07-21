@@ -236,7 +236,9 @@ def _count_falsification_checks(project_root: Path) -> int:
     source = worker_path.read_text(encoding="utf-8")
     match = re.search(r"\bchecks\s*=\s*\[(.*?)\n\s*\]", source, flags=re.DOTALL)
     if match is None:
-        raise RuntimeError(f"Could not locate falsification check registry in {worker_path}")
+        raise RuntimeError(
+            f"Could not locate falsification check registry in {worker_path}"
+        )
     count = len(re.findall(r"\bcheck_[a-z_]+\(", match.group(1)))
     if count <= 0:
         raise RuntimeError(f"Falsification check registry is empty in {worker_path}")
@@ -434,9 +436,7 @@ def _trust_trajectory_rows(
     return "\n".join(rows)
 
 
-def _decay_rows(
-    *, checkpoints: list[int], evaporation: dict[str, float]
-) -> str:
+def _decay_rows(*, checkpoints: list[int], evaporation: dict[str, float]) -> str:
     rows: list[str] = []
     for tick in checkpoints:
         values = [max(0.0, 1.0 - tick * evaporation[name]) for name in evaporation]
@@ -533,9 +533,7 @@ def _representative_gate_rows(
         cells = [budget, hazard, trust, completeness]
         rendered = ["—" if cell is None else f"{cell:.2f}" for cell in cells]
         verdict = forced or decision(value)
-        rows.append(
-            f"| {label} | {' | '.join(rendered)} | {value:.3f} | {verdict} |"
-        )
+        rows.append(f"| {label} | {' | '.join(rendered)} | {value:.3f} | {verdict} |")
     return "\n".join(rows)
 
 
@@ -681,7 +679,9 @@ def compute_variables(
     codomyrmex_pkg = project_root / "src" / "codomyrmex"
     module_count: int = _count_top_level_modules(codomyrmex_pkg)
     if module_count == 0:
-        raise RuntimeError(f"No top-level Codomyrmex modules found under {codomyrmex_pkg}")
+        raise RuntimeError(
+            f"No top-level Codomyrmex modules found under {codomyrmex_pkg}"
+        )
 
     colony_kernel_dir = codomyrmex_pkg / "colony_kernel"
     if not colony_kernel_dir.is_dir():
@@ -1119,10 +1119,14 @@ def compute_variables(
     # Colony kernel metrics
     ck_loc = _count_loc(colony_kernel_dir)
     if ck_loc == 0:
-        raise RuntimeError(f"No Colony Kernel source lines found under {colony_kernel_dir}")
+        raise RuntimeError(
+            f"No Colony Kernel source lines found under {colony_kernel_dir}"
+        )
     ck_files = _count_python_files(colony_kernel_dir)
     if ck_files == 0:
-        raise RuntimeError(f"No top-level Colony Kernel files found under {colony_kernel_dir}")
+        raise RuntimeError(
+            f"No top-level Colony Kernel files found under {colony_kernel_dir}"
+        )
 
     module_docs_count: int = _count_colony_kernel_docs(project_root)
 
@@ -1220,16 +1224,10 @@ def compute_variables(
         "CONFIG_PRUNING_STALENESS_DAYS": str(pruning_staleness_days),
         "CONFIG_PRUNING_LOW_CALL_COUNT": str(pruning_low_call_count),
         "CONFIG_PRUNING_DEPENDENCY_VETO": str(pruning_dependency_veto),
-        "CONFIG_PRUNING_DUPLICATE_CONFIDENCE": str(
-            pruning_duplicate_confidence
-        ),
-        "CONFIG_PRUNING_NEVER_USED_CONFIDENCE": str(
-            pruning_never_used_confidence
-        ),
+        "CONFIG_PRUNING_DUPLICATE_CONFIDENCE": str(pruning_duplicate_confidence),
+        "CONFIG_PRUNING_NEVER_USED_CONFIDENCE": str(pruning_never_used_confidence),
         "CONFIG_PRUNING_STALE_CONFIDENCE": str(pruning_stale_confidence),
-        "CONFIG_PRUNING_LOW_USAGE_CONFIDENCE": str(
-            pruning_low_usage_confidence
-        ),
+        "CONFIG_PRUNING_LOW_USAGE_CONFIDENCE": str(pruning_low_usage_confidence),
         "CONFIG_PRUNING_MIN_CONFIDENCE": str(pruning_min_confidence),
         "CONFIG_AGENT_COUNT": str(agent_count),
         "CONFIG_WORKLOAD_TASK_COUNT": str(workload_task_count),
@@ -1304,9 +1302,7 @@ def compute_variables(
         "ARTIFACT_CONFIG_FILES": str(config_files_found),
         "ARTIFACT_MCP_TOOLS": str(mcp_tools_artifact),
         "ARTIFACT_FIGURE_COUNT": str(figure_count),
-        "ARTIFACT_COMBINED_PDF_PATH": (
-            f"output/pdf/{project_root.name}_combined.pdf"
-        ),
+        "ARTIFACT_COMBINED_PDF_PATH": (f"output/pdf/{project_root.name}_combined.pdf"),
         # Platform tokens
         "PYTHON_VERSION": python_version,
         "PLATFORM": platform_name,

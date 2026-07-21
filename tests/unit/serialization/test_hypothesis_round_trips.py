@@ -17,13 +17,7 @@ from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
 # Import serializer directly, bypassing serialization/__init__.py
 # which pulls in binary_formats (requiring fastavro)
-_serializer_path = (
-    REPO_ROOT
-    / "src"
-    / "codomyrmex"
-    / "serialization"
-    / "serializer.py"
-)
+_serializer_path = REPO_ROOT / "src" / "codomyrmex" / "serialization" / "serializer.py"
 _spec = importlib.util.spec_from_file_location("serializer_direct", _serializer_path)
 _mod = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_mod)

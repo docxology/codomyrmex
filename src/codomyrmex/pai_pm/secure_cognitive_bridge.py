@@ -5,11 +5,15 @@ modules so they are discoverable by the PAI system and external MCP clients.
 
 Usage::
 
-    from codomyrmex.pai_pm.secure_cognitive_bridge import register_secure_cognitive_tools
+    from codomyrmex.pai_pm.secure_cognitive_bridge import (
+        register_secure_cognitive_tools,
+    )
+
     register_secure_cognitive_tools()
 
     # Or query the registry:
     from codomyrmex.pai_pm.secure_cognitive_bridge import SECURE_COGNITIVE_MODULES
+
     print(f"{len(SECURE_COGNITIVE_MODULES)} secure cognitive modules registered")
 """
 
@@ -59,9 +63,7 @@ def register_secure_cognitive_tools() -> dict[str, Any]:
             results["tool_counts"][module_name] = tool_count
             results["modules_registered"] += 1
         except Exception as exc:
-            results["errors"].append(
-                f"Failed to register {module_name}: {exc}"
-            )
+            results["errors"].append(f"Failed to register {module_name}: {exc}")
 
     if results["errors"] and results["modules_registered"] == 0:
         results["status"] = "error"
@@ -88,12 +90,14 @@ def get_secure_cognitive_tool_catalog() -> list[dict[str, str]]:
                 attr = getattr(mod, attr_name)
                 meta = getattr(attr, "_mcp_tool_meta", None)
                 if meta:
-                    catalog.append({
-                        "module": module_name,
-                        "name": getattr(attr, "__name__", attr_name),
-                        "description": meta.get("description", ""),
-                        "category": meta.get("category", module_name),
-                    })
+                    catalog.append(
+                        {
+                            "module": module_name,
+                            "name": getattr(attr, "__name__", attr_name),
+                            "description": meta.get("description", ""),
+                            "category": meta.get("category", module_name),
+                        }
+                    )
         except Exception:
             pass
     return catalog

@@ -257,7 +257,9 @@ def default_gate_config_from_yaml() -> dict[str, Any]:
 
     # Validate gate score weights sum constraints
     if gate_section:
-        execute = gate_section.get("execute_threshold", gate_section.get("score_execute"))
+        execute = gate_section.get(
+            "execute_threshold", gate_section.get("score_execute")
+        )
         hold = gate_section.get("hold_threshold", gate_section.get("score_hold"))
         if execute is not None and hold is not None:
             try:

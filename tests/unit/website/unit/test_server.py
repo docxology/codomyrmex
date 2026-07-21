@@ -389,12 +389,7 @@ class TestPOSTEndpoints:
     def test_tests_run_worker_is_bounded_and_joined(self, live_server):
         """The real async path owns a small, explicitly joined worker."""
         test_dir = (
-            live_server.root
-            / "src"
-            / "codomyrmex"
-            / "tests"
-            / "unit"
-            / "fake_mod"
+            live_server.root / "src" / "codomyrmex" / "tests" / "unit" / "fake_mod"
         )
         test_dir.mkdir(parents=True)
         (test_dir / "test_smoke.py").write_text(
