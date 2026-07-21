@@ -6,11 +6,19 @@ ensuring code generation, refactoring, and analysis work with local LLMs.
 Uses the smallest available Ollama model to keep tests fast.
 """
 
+import os
 import subprocess
 
 import pytest
 
-pytestmark = [pytest.mark.unit, pytest.mark.requires_ollama]
+pytestmark = [
+    pytest.mark.unit,
+    pytest.mark.requires_ollama,
+    pytest.mark.skipif(
+        os.environ.get("RUN_LIVE_OLLAMA") != "1",
+        reason="Live Ollama tests require RUN_LIVE_OLLAMA=1",
+    ),
+]
 
 try:
     from codomyrmex.agents.ai_code_editing.ai_code_helpers import (

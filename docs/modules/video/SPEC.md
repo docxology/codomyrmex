@@ -225,7 +225,7 @@ For concurrent processing, create separate instances per thread.
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k video -v
+uv run python -m pytest tests/ -k video -v
 ```
 
 ## Navigation

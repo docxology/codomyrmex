@@ -57,7 +57,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/orchestrator/triggers/
+uv run pytest tests/unit/orchestrator/triggers/
 ```
 
 ## 6. Future Considerations

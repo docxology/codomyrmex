@@ -31,7 +31,7 @@ bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
 
 # 3. Verify setup
 codomyrmex check
-pytest src/codomyrmex/tests/unit/ -x  # Run tests (stop at first failure)
+pytest tests/unit/ -x  # Run tests (stop at first failure)
 ```
 
 ### **Manual Development Setup**
@@ -69,8 +69,8 @@ mypy               # Type checking
 bandit             # Security scanning
 
 # Usage
-black src/ src/codomyrmex/tests/              # Format code
-ruff src/ src/codomyrmex/tests/               # Quick linting  
+black src/ tests/              # Format code
+ruff src/ tests/               # Quick linting
 pylint src/codomyrmex/          # Detailed analysis
 mypy src/codomyrmex/            # Type checking
 bandit -r src/codomyrmex/       # Security scan
@@ -83,8 +83,8 @@ pytest             # Testing framework
 pytest-cov         # Coverage reporting
 
 # Usage
-pytest src/codomyrmex/tests/                           # Run all tests
-pytest src/codomyrmex/tests/unit/test_specific.py -v  # Run specific tests
+pytest tests/                           # Run all tests
+pytest tests/unit/test_specific.py -v  # Run specific tests
 pytest --cov=src/codomyrmex --cov-report=html  # Coverage report
 ```
 
@@ -193,7 +193,7 @@ pytest -m integration   # Integration tests only
 pytest -k "test_ai"     # Tests matching pattern
 
 # Run tests for specific module
-pytest src/codomyrmex/tests/unit/test_data_visualization.py -v
+pytest tests/unit/test_data_visualization.py -v
 
 # Run tests in parallel (faster)
 pytest -n auto  # Requires pytest-xdist
@@ -202,12 +202,12 @@ pytest -n auto  # Requires pytest-xdist
 ### **Test Coverage Requirements**
 - **Minimum coverage**: 80% (enforced by CI)
 - **Target coverage**: 90%+ for new modules
-- **Coverage reporting**: HTML reports generated in `src/codomyrmex/tests/htmlcov/`
+- **Coverage reporting**: HTML reports generated in `tests/htmlcov/`
 
 ### **Writing Tests**
 Follow the existing patterns (zero-mock policy -- use skip-when-unavailable guards for external dependencies):
 ```python
-# src/codomyrmex/tests/unit/test_my_module.py
+# tests/unit/test_my_module.py
 import pytest
 import shutil
 
@@ -320,8 +320,8 @@ git checkout -b feature/my-new-feature
 
 # 3. Make changes and test frequently
 # Edit code...
-pytest src/codomyrmex/tests/unit/test_my_module.py -v  # Test your changes
-black src/ src/codomyrmex/tests/                       # Format code
+pytest tests/unit/test_my_module.py -v  # Test your changes
+black src/ tests/                       # Format code
 
 # 4. Run quality checks
 pre-commit run --all-files  # Check all quality standards

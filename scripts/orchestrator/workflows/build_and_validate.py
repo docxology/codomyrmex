@@ -102,7 +102,7 @@ async def run_type_checking(_task_results: dict | None = None) -> dict:
 async def run_tests(_task_results: dict | None = None) -> dict:
     """Run test suite."""
     result = subprocess.run(
-        ["uv", "run", "pytest", "src/codomyrmex/tests/unit", "-q", "--tb=no", "-x"],
+        ["uv", "run", "pytest", "tests/unit", "-q", "--tb=no", "-x"],
         capture_output=True,
         text=True,
         timeout=300,

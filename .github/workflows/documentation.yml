@@ -107,9 +107,10 @@ jobs:
           cd src/codomyrmex/documentation
           if [ -f "documentation_website.py" ]; then
             echo "🔍 Running documentation validation..."
-            uv run python documentation_website.py validate_docs || echo "Validation script not fully implemented yet"
+            uv run python documentation_website.py validate_docs
           else
-            echo "⚠️  Documentation validation script not found, skipping"
+            echo "❌ Documentation validation script not found"
+            exit 1
           fi
 
       - name: Check documentation quality
@@ -428,3 +429,19 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Docs Changed**: ${{ needs.validate-documentation.outputs.docs-changed }}" >> $GITHUB_STEP_SUMMARY
 
+          validation_result="${{ needs.validate-documentation.result }}"
+          aggregate_result="${{ needs.aggregate-documentation.result }}"
+          build_result="${{ needs.build-documentation.result }}"
+          if [[ "$validation_result" != "success" ]]; then
+            echo "❌ Documentation validation failed: $validation_result"
+            exit 1
+          fi
+          if [[ "$aggregate_result" != "success" && "$aggregate_result" != "skipped" ]]; then
+            echo "❌ Documentation aggregation failed: $aggregate_result"
+            exit 1
+          fi
+          if [[ "$build_result" != "success" && "$build_result" != "skipped" ]]; then
+            echo "❌ Documentation build failed: $build_result"
+            exit 1
+          fi
+          echo "✅ Documentation status gate passed."

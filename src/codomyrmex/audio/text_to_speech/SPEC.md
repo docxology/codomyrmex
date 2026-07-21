@@ -34,7 +34,7 @@ See `src/codomyrmex/audio/text_to_speech/__init__.py` for import dependencies.
 ## 5. Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k text_to_speech -v
+uv run python -m pytest tests/ -k text_to_speech -v
 ```
 
 ## References

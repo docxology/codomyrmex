@@ -24,7 +24,7 @@ After changing this mirror or the source module, run:
 ```bash
 make docs-check
 uv run ruff check src/codomyrmex/data_curation
-uv run pytest src/codomyrmex/tests/unit/data_curation/ -q
+uv run pytest tests/unit/data_curation/ -q
 ```
 
 ## Navigation

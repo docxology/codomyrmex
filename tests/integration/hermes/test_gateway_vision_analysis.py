@@ -1,8 +1,12 @@
 """Integration tests for Gateway Vision Descriptions (D2)."""
 
+import os
+
 import pytest
 
 from codomyrmex.agents.hermes.gateway.platforms.media import VisionAnalyzer
+
+RUN_LIVE_OLLAMA = os.environ.get("RUN_LIVE_OLLAMA") == "1"
 
 
 def _generate_synthetic_png() -> bytes:
@@ -16,6 +20,10 @@ def _generate_synthetic_png() -> bytes:
 
 
 @pytest.mark.asyncio
+@pytest.mark.skipif(
+    not RUN_LIVE_OLLAMA,
+    reason="Live Ollama integration tests require RUN_LIVE_OLLAMA=1",
+)
 async def test_vision_analyzer_integration() -> None:
     """Verify that a raw image seamlessly routes through the VisionAnalyzer pipeline."""
     # We might test this without actual model backend loaded if it throws connection errors

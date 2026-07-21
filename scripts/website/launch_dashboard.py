@@ -37,7 +37,11 @@ def parse_args():
     parser.add_argument(
         "--open", action="store_true", help="Open browser automatically"
     )
-    parser.add_argument("--host", default="0.0.0.0", help="Host to bind to")
+    parser.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="Host to bind to (default: 127.0.0.1; use an explicit host for trusted networks)",
+    )
     return parser.parse_args()
 
 

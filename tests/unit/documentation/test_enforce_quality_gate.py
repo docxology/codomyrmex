@@ -167,3 +167,41 @@ def test_enforce_quality_gate_fails_on_agents_valid_rate(
         allow_warnings=True,
     )
     assert rc == 1
+
+
+@pytest.mark.unit
+def test_enforce_quality_gate_fails_when_required_report_is_missing(
+    enforce_module, tmp_path: Path
+) -> None:
+    _write_gate_fixtures(tmp_path)
+    (tmp_path / "agents_validation.json").unlink()
+
+    rc = enforce_module.enforce_quality_gate(REPO_ROOT, tmp_path)
+
+    assert rc == 1
+
+
+@pytest.mark.unit
+def test_enforce_quality_gate_fails_when_required_report_is_empty(
+    enforce_module, tmp_path: Path
+) -> None:
+    _write_gate_fixtures(tmp_path)
+    (tmp_path / "content_quality.json").write_text("[]", encoding="utf-8")
+
+    rc = enforce_module.enforce_quality_gate(REPO_ROOT, tmp_path)
+
+    assert rc == 1
+
+
+@pytest.mark.unit
+def test_enforce_quality_gate_fails_when_report_is_malformed(
+    enforce_module, tmp_path: Path
+) -> None:
+    _write_gate_fixtures(tmp_path)
+    (tmp_path / "link_validation.json").write_text(
+        json.dumps([{"status": "ok"}, "not-an-entry"]), encoding="utf-8"
+    )
+
+    rc = enforce_module.enforce_quality_gate(REPO_ROOT, tmp_path)
+
+    assert rc == 1

@@ -11,14 +11,19 @@ Validates all seven new MCP tools by calling them directly:
 
 Zero-mock policy: all tests interact with real in-memory or temp-path session stores.
 The Hermes backend availability is checked and tests are skipped gracefully when
-neither CLI nor Ollama is available.
+neither CLI nor Ollama is available. Live batch execution additionally requires
+``RUN_LIVE_HERMES=1``.
 """
 
 from __future__ import annotations
 
+import os
+
 import pytest
 
 from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+
+RUN_LIVE_HERMES = os.environ.get("RUN_LIVE_HERMES") == "1"
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -48,7 +53,12 @@ def client_with_db(populated_db):
     db_path, sid1, sid2 = populated_db
     from codomyrmex.agents.hermes.hermes_client import HermesClient
 
-    client = HermesClient(config={"hermes_session_db": db_path})
+    client = HermesClient(
+        config={
+            "hermes_backend": "auto" if RUN_LIVE_HERMES else "none",
+            "hermes_session_db": db_path,
+        }
+    )
     return client, sid1, sid2
 
 

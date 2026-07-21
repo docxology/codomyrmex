@@ -56,7 +56,7 @@ graph TD
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k deployment -v
+uv run python -m pytest tests/ -k deployment -v
 ```
 
 ## Navigation

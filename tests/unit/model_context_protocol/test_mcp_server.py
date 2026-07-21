@@ -390,9 +390,7 @@ class TestToolExecution:
 
     def test_analyze_python_file(self, server):
         # Analyze tools.py itself
-        tools_py = (
-            PACKAGE_ROOT / "model_context_protocol" / "tools.py"
-        )
+        tools_py = PACKAGE_ROOT / "model_context_protocol" / "tools.py"
         if not tools_py.exists():
             pytest.skip("tools.py not found")
 
@@ -587,6 +585,14 @@ class TestHTTPTransport:
             pytest.skip("starlette not installed")
         return TestClient(http_app)
 
+    @pytest.fixture
+    def secured_client(self, server):
+        try:
+            from starlette.testclient import TestClient
+        except ImportError:
+            pytest.skip("starlette not installed")
+        return TestClient(server._create_http_app(auth_token="test-token"))
+
     def test_health_endpoint(self, client):
         resp = client.get("/health")
         assert resp.status_code == 200
@@ -645,6 +651,73 @@ class TestHTTPTransport:
         assert data["jsonrpc"] == "2.0"
         assert "result" in data
         assert "tools" in data["result"]
+
+    def test_secured_http_app_requires_bearer_token(self, secured_client, server):
+        from starlette.testclient import TestClient
+
+        unauthorized = secured_client.get("/tools")
+        assert unauthorized.status_code == 401
+        assert unauthorized.headers["www-authenticate"] == "Bearer"
+
+        authorized = secured_client.get(
+            "/tools", headers={"Authorization": "Bearer test-token"}
+        )
+        assert authorized.status_code == 200
+
+        preflight = secured_client.options(
+            "/tools",
+            headers={
+                "Origin": "https://trusted.example",
+                "Access-Control-Request-Method": "GET",
+            },
+        )
+        assert preflight.status_code == 400
+
+        cors_secured_client = TestClient(
+            server._create_http_app(
+                allowed_origins=["https://trusted.example"],
+                auth_token="test-token",
+            )
+        )
+        preflight = cors_secured_client.options(
+            "/tools",
+            headers={
+                "Origin": "https://trusted.example",
+                "Access-Control-Request-Method": "GET",
+            },
+        )
+        assert preflight.status_code == 200
+        assert preflight.headers["access-control-allow-origin"] == (
+            "https://trusted.example"
+        )
+
+    def test_http_cors_requires_explicit_origin(self, server):
+        from starlette.testclient import TestClient
+
+        default_client = TestClient(server._create_http_app())
+        default_response = default_client.get(
+            "/health", headers={"Origin": "https://untrusted.example"}
+        )
+        assert "access-control-allow-origin" not in default_response.headers
+
+        configured_client = TestClient(
+            server._create_http_app(allowed_origins=["https://trusted.example"])
+        )
+        preflight = configured_client.options(
+            "/tools",
+            headers={
+                "Origin": "https://trusted.example",
+                "Access-Control-Request-Method": "GET",
+            },
+        )
+        assert preflight.status_code == 200
+        assert preflight.headers["access-control-allow-origin"] == (
+            "https://trusted.example"
+        )
+
+    def test_non_loopback_http_requires_authentication(self, server):
+        with pytest.raises(ValueError, match="auth_token is required"):
+            _run(server.run_http(host="0.0.0.0", port=0))
 
     def test_mcp_notification_returns_202(self, client):
         resp = client.post(

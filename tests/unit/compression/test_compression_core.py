@@ -573,6 +573,227 @@ class TestArchiveManager:
             result = mgr.extract_archive(archive_path, output_dir)
             assert result is True
 
+    def test_extract_tar_rejects_path_traversal(self):
+        import tarfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            archive_path = tmp_path / "malicious.tar"
+            with tarfile.open(archive_path, "w") as tf:
+                member = tarfile.TarInfo("../out_evil/escaped.txt")
+                member.size = len(b"escaped")
+                tf.addfile(member, BytesIO(b"escaped"))
+
+            output_dir = tmp_path / "out"
+            with pytest.raises(CompressionError, match="Blocked"):
+                ArchiveManager().extract_archive(archive_path, output_dir)
+
+            assert not (tmp_path / "out_evil" / "escaped.txt").exists()
+
+    def test_extract_tar_rejects_absolute_path(self):
+        import tarfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            archive_path = tmp_path / "absolute.tar"
+            absolute_target = tmp_path / "absolute-escape.txt"
+            with tarfile.open(archive_path, "w") as tf:
+                member = tarfile.TarInfo(str(absolute_target))
+                member.size = len(b"escaped")
+                tf.addfile(member, BytesIO(b"escaped"))
+
+            with pytest.raises(CompressionError, match="Blocked"):
+                ArchiveManager().extract_archive(archive_path, tmp_path / "out")
+
+            assert not absolute_target.exists()
+
+    def test_extract_tar_rejects_links(self):
+        import tarfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            archive_path = tmp_path / "symlink.tar"
+            with tarfile.open(archive_path, "w") as tf:
+                member = tarfile.TarInfo("linked.txt")
+                member.type = tarfile.SYMTYPE
+                member.linkname = "../../outside.txt"
+                tf.addfile(member)
+
+            with pytest.raises(CompressionError, match="unsafe archive link"):
+                ArchiveManager().extract_archive(archive_path, tmp_path / "out")
+
+    def test_extract_tar_rejects_hard_links(self):
+        """Hard links are blocked before extraction, just like symlinks."""
+        import tarfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            archive_path = tmp_path / "hardlink.tar"
+            with tarfile.open(archive_path, "w") as tf:
+                member = tarfile.TarInfo("linked.txt")
+                member.type = tarfile.LNKTYPE
+                member.linkname = "target.txt"
+                tf.addfile(member)
+
+            with pytest.raises(CompressionError, match="unsafe archive link"):
+                ArchiveManager().extract_archive(archive_path, tmp_path / "out")
+
+    def test_extract_tar_rejects_preexisting_symlink_directory(self):
+        """A safe-looking member cannot follow a pre-existing output symlink."""
+        import tarfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            outside = tmp_path / "outside"
+            outside.mkdir()
+            output_dir = tmp_path / "out"
+            output_dir.mkdir()
+            try:
+                (output_dir / "redirect").symlink_to(outside, target_is_directory=True)
+            except OSError as exc:
+                pytest.skip(f"symlinks unavailable: {exc}")
+
+            archive_path = tmp_path / "symlink-directory.tar"
+            with tarfile.open(archive_path, "w") as tf:
+                member = tarfile.TarInfo("redirect/escaped.txt")
+                member.size = len(b"escaped")
+                tf.addfile(member, BytesIO(b"escaped"))
+
+            with pytest.raises(CompressionError, match="Blocked"):
+                ArchiveManager().extract_archive(archive_path, output_dir)
+            assert not (outside / "escaped.txt").exists()
+
+    def test_extract_zip_rejects_path_traversal(self):
+        import zipfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            archive_path = tmp_path / "malicious.zip"
+            with zipfile.ZipFile(archive_path, "w") as zf:
+                zf.writestr("../escaped.txt", "escaped")
+
+            with pytest.raises(CompressionError, match="Blocked"):
+                ArchiveManager().extract_archive(archive_path, tmp_path / "out")
+
+            assert not (tmp_path / "escaped.txt").exists()
+
+    def test_extract_zip_rejects_absolute_path(self):
+        import zipfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            archive_path = tmp_path / "absolute.zip"
+            absolute_target = tmp_path / "absolute-escape.txt"
+            with zipfile.ZipFile(archive_path, "w") as zf:
+                zf.writestr(str(absolute_target), "escaped")
+
+            with pytest.raises(CompressionError, match="Blocked"):
+                ArchiveManager().extract_archive(archive_path, tmp_path / "out")
+            assert not absolute_target.exists()
+
+    def test_extract_zip_rejects_prefix_bypass_path(self):
+        """A sibling path sharing the output directory's string prefix is unsafe."""
+        import zipfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            archive_path = tmp_path / "prefix-bypass.zip"
+            with zipfile.ZipFile(archive_path, "w") as zf:
+                zf.writestr("../out_evil/escaped.txt", "escaped")
+
+            with pytest.raises(CompressionError, match="Blocked"):
+                ArchiveManager().extract_archive(archive_path, tmp_path / "out")
+            assert not (tmp_path / "out_evil" / "escaped.txt").exists()
+
+    def test_extract_zip_rejects_preexisting_symlink_directory(self):
+        """ZIP extraction must not follow a symlink already under output."""
+        import zipfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            outside = tmp_path / "outside"
+            outside.mkdir()
+            output_dir = tmp_path / "out"
+            output_dir.mkdir()
+            try:
+                (output_dir / "redirect").symlink_to(outside, target_is_directory=True)
+            except OSError as exc:
+                pytest.skip(f"symlinks unavailable: {exc}")
+
+            archive_path = tmp_path / "symlink-directory.zip"
+            with zipfile.ZipFile(archive_path, "w") as zf:
+                zf.writestr("redirect/escaped.txt", "escaped")
+
+            with pytest.raises(CompressionError, match="Blocked"):
+                ArchiveManager().extract_archive(archive_path, output_dir)
+            assert not (outside / "escaped.txt").exists()
+
+    def test_extract_zip_rejects_symlink(self):
+        import stat
+        import zipfile
+
+        from codomyrmex.compression.archives.archive_manager import (
+            ArchiveManager,
+            CompressionError,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            archive_path = tmp_path / "symlink.zip"
+            with zipfile.ZipFile(archive_path, "w") as zf:
+                member = zipfile.ZipInfo("linked.txt")
+                member.create_system = 3
+                member.external_attr = (stat.S_IFLNK | 0o777) << 16
+                zf.writestr(member, "../../outside.txt")
+
+            with pytest.raises(CompressionError, match="unsafe symbolic link"):
+                ArchiveManager().extract_archive(archive_path, tmp_path / "out")
+
     def test_create_archive_skips_nonexistent_files(self):
         """Files that don't exist are silently skipped during archive creation."""
         import zipfile

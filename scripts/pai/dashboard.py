@@ -306,7 +306,9 @@ def parse_args() -> argparse.Namespace:
         help=f"PAI PM port (default: {_PAI_PM_PORT})",
     )
     parser.add_argument(
-        "--host", default="0.0.0.0", help="Codomyrmex bind host (default: 0.0.0.0)"
+        "--host",
+        default="127.0.0.1",
+        help="Codomyrmex bind host (default: 127.0.0.1; use an explicit host for trusted networks)",
     )
     parser.add_argument(
         "--restart",

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/fpf
+# Codomyrmex Agents — tests/unit/fpf
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

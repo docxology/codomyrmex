@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 from pathlib import Path
 from typing import Any
 
@@ -97,6 +98,27 @@ def _var_float(name: str, default: float) -> float:
         return default
 
 
+def _var_list(name: str, default: list[float]) -> list[float]:
+    """Decode a generated JSON list token without accepting malformed values."""
+    raw = _VARIABLES.get(name)
+    if raw:
+        try:
+            value = json.loads(raw)
+            if isinstance(value, list):
+                return [float(item) for item in value]
+        except (TypeError, ValueError, json.JSONDecodeError):
+            pass
+    return default
+
+
+def _experiment_list(key: str, variable_name: str) -> list[float]:
+    """Read a list from generated values or the manuscript experiment config."""
+    if variable_name in _VARIABLES:
+        return _var_list(variable_name, [])
+    value = _EXPERIMENT.get(key, [])
+    return [float(item) for item in value] if isinstance(value, list) else []
+
+
 def _experiment_float(key: str, var_name: str, default: float) -> float:
     if var_name in _VARIABLES:
         return _var_float(var_name, default)
@@ -143,6 +165,97 @@ def _role_min_proposals(role_key: str, default: int = 3) -> int:
         return int(role_config.get("min_total_proposals", default))
     except (TypeError, ValueError):
         return default
+
+
+def _figure_parameter(
+    key: str,
+    variable_name: str,
+    default: Any,
+    converter: type[Any] = float,
+) -> Any:
+    """Read a presentation parameter from the generated snapshot/configuration."""
+    if variable_name in _VARIABLES:
+        try:
+            return converter(_VARIABLES[variable_name])
+        except (TypeError, ValueError):
+            pass
+    parameters = _EXPERIMENT.get("figure_parameters", {})
+    if isinstance(parameters, dict) and key in parameters:
+        try:
+            return converter(parameters[key])
+        except (TypeError, ValueError):
+            pass
+    return default
+
+
+def _figure_parameter_list(key: str, variable_name: str) -> list[float]:
+    """Read a configured numeric list, preferring the generated snapshot."""
+    raw = _VARIABLES.get(variable_name)
+    if raw:
+        try:
+            value = json.loads(raw)
+            if isinstance(value, list):
+                return [float(item) for item in value]
+        except (TypeError, ValueError, json.JSONDecodeError):
+            pass
+    parameters = _EXPERIMENT.get("figure_parameters", {})
+    value = parameters.get(key, []) if isinstance(parameters, dict) else []
+    return [float(item) for item in value] if isinstance(value, list) else []
+
+
+def _figure_metadata(filename: str) -> dict[str, str]:
+    """Return one configured figure record with its caption tokens resolved."""
+    figures = _CONFIG.get("figures", {})
+    if not isinstance(figures, dict):
+        return {}
+    for spec in figures.values():
+        if not isinstance(spec, dict) or spec.get("filename") != filename:
+            continue
+        metadata = {str(key): str(value) for key, value in spec.items()}
+        token_pattern = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
+        metadata["caption"] = token_pattern.sub(
+            lambda match: _VARIABLES.get(match.group(1), match.group(0)),
+            metadata.get("caption", ""),
+        )
+        return metadata
+    return {}
+
+
+def _falsification_severity_map() -> dict[str, str]:
+    """Return generated vector severities, with a live-source fallback."""
+    encoded = _var_str("CONFIG_FALSIFICATION_VECTOR_SEVERITIES")
+    if encoded:
+        return {
+            name: severity
+            for item in encoded.split(";")
+            if "=" in item
+            for name, severity in [item.split("=", 1)]
+        }
+
+    from codomyrmex.colony_kernel.falsification.models import (
+        _SEVERITY_RANK,
+        AttackVector,
+    )
+    from codomyrmex.colony_kernel.models import FalsificationSeverity
+
+    checks_dir = PROJECT_ROOT / "src/codomyrmex/colony_kernel/falsification/checks"
+    rank_to_name = {rank: severity.name for severity, rank in _SEVERITY_RANK.items()}
+    values: dict[str, int] = {}
+    for path in checks_dir.glob("*.py"):
+        source = path.read_text(encoding="utf-8", errors="replace")
+        for vector in AttackVector:
+            matches = re.findall(
+                rf"AttackVector\.{vector.name}\.value.{{0,220}}?"
+                r"FalsificationSeverity\.([A-Z]+)",
+                source,
+                flags=re.DOTALL,
+            )
+            for severity_name in matches:
+                severity = FalsificationSeverity[severity_name]
+                values[vector.name] = max(
+                    values.get(vector.name, 0), _SEVERITY_RANK[severity]
+                )
+    return {name: rank_to_name[rank] for name, rank in values.items()}
 
 
 def _figure_provenance() -> str:
@@ -237,6 +350,11 @@ __all__ = [
     "_add_provenance_note",
     "_bezier",
     "_experiment_float",
+    "_experiment_list",
+    "_falsification_severity_map",
+    "_figure_metadata",
+    "_figure_parameter",
+    "_figure_parameter_list",
     "_figure_provenance",
     "_gate_weight",
     "_glow",
@@ -245,6 +363,7 @@ __all__ = [
     "_role_threshold",
     "_save",
     "_var_float",
+    "_var_list",
     "_var_str",
     "math",
     "mpatches",

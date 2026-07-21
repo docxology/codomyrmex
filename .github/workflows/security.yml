@@ -62,14 +62,13 @@ jobs:
           echo '```' >> security-report.md
 
       - name: Run pip-audit for vulnerability scanning
-        continue-on-error: true
         run: |
           echo "🔍 Running pip-audit for vulnerability scanning..."
           uv pip install pip-audit
           
           # Generate vulnerability report
-          pip-audit --format=json --output=vulnerability-report.json || true
-          pip-audit --format=markdown --output=vulnerability-report.md || true
+          pip-audit --format=json --output=vulnerability-report.json
+          pip-audit --format=markdown --output=vulnerability-report.md
           
           # Add to security report
           echo "" >> security-report.md
@@ -81,14 +80,13 @@ jobs:
           fi
 
       - name: Run Safety vulnerability scanner
-        continue-on-error: true
         run: |
           echo "🛡️  Running Safety vulnerability scanner..."
           uv pip install safety
           
           # Generate safety report (safety scan replaces deprecated safety check)
-          safety scan --output json --save-json safety-report.json || true
-          safety scan --output text --save-as text safety-report.txt || true
+          safety scan --output json --save-json safety-report.json
+          safety scan --output text --save-as text safety-report.txt
           
           # Add to security report
           echo "" >> security-report.md
@@ -140,10 +138,17 @@ jobs:
         run: |
           echo "🔒 Running Bandit security analysis..."
           
-          # Run Bandit with different output formats
-          uv run bandit -r src/codomyrmex/ -f json -o bandit-report.json || true
-          uv run bandit -r src/codomyrmex/ -f txt -o bandit-report.txt || true
-          uv run bandit -r src/codomyrmex/ -f xml -o bandit-report.xml || true
+          # Scan first-party production code only. Tests, vendored code, and
+          # generated documentation are validated by their own gates.
+          BANDIT_ARGS=(
+            -r src/codomyrmex/
+            -x '*/tests/*,*/vendor/*,*/generated/*,src/codomyrmex/agents/open_gauss,src/codomyrmex/documentation/docs'
+            -lll -iii
+          )
+          bandit_status=0
+          uv run bandit "${BANDIT_ARGS[@]}" -f json -o bandit-report.json || bandit_status=$?
+          uv run bandit "${BANDIT_ARGS[@]}" -f txt -o bandit-report.txt || true
+          uv run bandit "${BANDIT_ARGS[@]}" -f xml -o bandit-report.xml || true
           
           # Create human-readable summary
           echo "# Bandit Security Analysis Report" > bandit-summary.md
@@ -163,14 +168,14 @@ jobs:
             grep -i "total lines of code" bandit-report.txt >> bandit-summary.md || true
             grep -i "total issues" bandit-report.txt >> bandit-summary.md || true
           fi
+          exit "$bandit_status"
 
       - name: Build Bandit SARIF for GitHub Security
         if: always()
-        continue-on-error: true
         run: |
           echo "📎 Converting Bandit JSON to SARIF (Bandit has no -f sarif; see scripts/review/bandit_json_to_sarif.py)..."
           if [ -f "bandit-report.json" ]; then
-            uv run python scripts/review/bandit_json_to_sarif.py bandit-report.json bandit-results.sarif || true
+            uv run python scripts/review/bandit_json_to_sarif.py bandit-report.json bandit-results.sarif
           fi
           if [ ! -f bandit-results.sarif ]; then
             echo '{"version": "2.1.0", "$schema": "https://json.schemastore.org/sarif-2.1.0.json", "runs": []}' > bandit-results.sarif
@@ -179,7 +184,6 @@ jobs:
       - name: Upload Bandit results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         if: always()
-        continue-on-error: true
         with:
           sarif_file: bandit-results.sarif
           category: bandit
@@ -201,7 +205,6 @@ jobs:
     runs-on: ubuntu-latest
     # Skip gracefully when no Semgrep token is configured
     if: vars['SEMGREP_ENABLED'] != 'false'
-    continue-on-error: true
     permissions:
       security-events: write
       contents: read
@@ -420,14 +423,12 @@ jobs:
 
       - name: Run tests with updated dependencies
         if: steps.check_updates.outputs.updates_available == 'true'
-        continue-on-error: true
         run: |
           echo "🧪 Running tests with updated dependencies..."
           uv run pytest tests/unit/ -v --tb=short --maxfail=5
 
       - name: Create Pull Request
         if: steps.check_updates.outputs.updates_available == 'true'
-        continue-on-error: true
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -593,3 +594,19 @@ jobs:
           else
             echo "❌ **Secret Detection**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
+
+          required_results=(
+            "${{ needs.dependency-scan.result }}"
+            "${{ needs.bandit-scan.result }}"
+            "${{ needs.semgrep-scan.result }}"
+            "${{ needs.codeql-analysis.result }}"
+            "${{ needs.license-scan.result }}"
+            "${{ needs.secret-scan.result }}"
+          )
+          for result in "${required_results[@]}"; do
+            if [[ "$result" != "success" && "$result" != "skipped" ]]; then
+              echo "❌ Security gate failed with result: $result"
+              exit 1
+            fi
+          done
+          echo "✅ All required security checks passed."

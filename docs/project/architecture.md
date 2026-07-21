@@ -226,8 +226,8 @@ Source Code → Static Analysis → Testing → Build Validation → Deployment
 
 ### Testing Strategy
 
-- **Unit tests**: In `src/codomyrmex/tests/unit/` for individual module testing
-- **Integration tests**: In `src/codomyrmex/tests/integration/` for cross-module workflows
+- **Unit tests**: In `tests/unit/` for individual module testing
+- **Integration tests**: In `tests/integration/` for cross-module workflows
 - **Comprehensive coverage**: Target >80% coverage across all modules
 
 ## Extension Points

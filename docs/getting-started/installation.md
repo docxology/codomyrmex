@@ -139,7 +139,7 @@ uv sync --dev
 pre-commit install
 
 # 5. Run tests to verify everything works
-uv run pytest src/codomyrmex/tests/ -v
+uv run pytest tests/ -v
 ```
 
 ## ⚙️ Configuration
@@ -262,16 +262,16 @@ print(f"✅ Sandbox test: {sandbox_result['success']}")
 
 ```bash
 # Run all tests with coverage reporting
-uv run pytest src/codomyrmex/tests/ --cov=src/codomyrmex --cov-report=html
+uv run pytest tests/ --cov=src/codomyrmex --cov-report=html
 
 # Run specific module tests
-uv run pytest src/codomyrmex/tests/unit/test_data_visualization.py -v
+uv run pytest tests/unit/test_data_visualization.py -v
 
 # Run integration tests
-uv run pytest src/codomyrmex/tests/integration/ -v
+uv run pytest tests/integration/ -v
 
 # Check test coverage
-open src/codomyrmex/tests/htmlcov/index.html  # View coverage report
+open tests/htmlcov/index.html  # View coverage report
 ```
 
 ### **Step 5: Code Quality Check**

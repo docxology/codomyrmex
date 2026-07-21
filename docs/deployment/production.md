@@ -591,7 +591,7 @@ jobs:
 
     - name: Run comprehensive tests
       run: |
-        uv run pytest src/codomyrmex/tests/ --cov=src/codomyrmex --cov-report=xml -n auto
+        uv run pytest tests/ --cov=src/codomyrmex --cov-report=xml -n auto
 
     - name: Security scan
       run: |

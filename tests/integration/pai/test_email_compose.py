@@ -24,10 +24,14 @@ Prerequisites:
     - For ollama: ollama serve must be running
     - For gemini: gemini CLI installed
     - For claude: claude CLI installed
+
+Pytest execution is opt-in because this module contacts the local PAI PM
+service; set ``RUN_LIVE_PAI=1`` when invoking its live test suite.
 """
 
 import argparse
 import json
+import os
 import sys
 import time
 import urllib.error
@@ -37,6 +41,11 @@ import urllib.request
 import pytest
 
 BASE_URL = "http://localhost:8888"
+_RUN_LIVE_PAI = os.getenv("RUN_LIVE_PAI", "0").lower() in {"1", "true", "yes"}
+pytestmark = pytest.mark.skipif(
+    not _RUN_LIVE_PAI,
+    reason="set RUN_LIVE_PAI=1 to contact the local PAI PM service",
+)
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/integration/workflows
+# Codomyrmex Agents — tests/integration/workflows
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
@@ -57,6 +57,7 @@ Validation coverage, fixtures, and regression checks for Workflows.
 - Follow the universal agent protocols defined in the root `AGENTS.md`.
 - Adhere to the Python PEP 8 style guide and project-specific linting rules.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+- The real-Ollama conversation suite is opt-in: run it with `RUN_LIVE_OLLAMA=1`.
 
 ## Navigation Links
 - **📁 Parent Directory**: [integration](../README.md) - Parent directory documentation

@@ -17,12 +17,15 @@ import urllib.request
 import pytest
 
 _OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+_RUN_LIVE_OLLAMA: bool = os.environ.get("RUN_LIVE_OLLAMA") == "1"
 
 # ── Skip entire module if Ollama is unreachable ─────────────────────
 
 
 def _ollama_available() -> bool:
     """Check if Ollama is running and has at least one model."""
+    if not _RUN_LIVE_OLLAMA:
+        return False
     try:
         with urllib.request.urlopen(f"{_OLLAMA_BASE_URL}/api/tags", timeout=3) as resp:
             data = json.loads(resp.read().decode("utf-8"))

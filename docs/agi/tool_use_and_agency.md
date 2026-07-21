@@ -8,7 +8,7 @@ The capacity for autonomous tool use — selecting, composing, and invoking tool
 
 But tool use is not merely an engineering convenience. It is an instance of **extended cognition** (Clark & Chalmers, 1998): the tools become part of the cognitive system's functional organization. The boundary between "the agent" and "the tool" dissolves when tool invocation is seamless and automatic — precisely as it does in skilled human tool use, where the hammer becomes a transparent extension of the carpenter's motor system (Heidegger's *Zuhandenheit*, readiness-to-hand).
 
-Codomyrmex's **610** production `@mcp_tool`-decorated functions across 129 top-level modules constitute one of the largest compositional tool surfaces in any open-source AI development platform. This essay examines how this tool ecosystem relates to the AGI requirement for autonomous agency. (See [reference/inventory.md](../reference/inventory.md).)
+Codomyrmex's **623** production `@mcp_tool`-decorated functions across 130 top-level modules constitute one of the largest compositional tool surfaces in any open-source AI development platform. This essay examines how this tool ecosystem relates to the AGI requirement for autonomous agency. (See [reference/inventory.md](../reference/inventory.md).)
 
 ## Tool Anatomy: The Four-Phase Lifecycle
 

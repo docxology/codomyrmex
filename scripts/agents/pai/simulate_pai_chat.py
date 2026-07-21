@@ -9,10 +9,11 @@ import argparse
 import sys
 from pathlib import Path
 
-# Ensure src is in path
-sys.path.insert(0, str(Path(__file__).parent / "src"))
+# Ensure the repository root is importable; test support lives under tests/.
+_PROJECT_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(_PROJECT_ROOT))
 
-from codomyrmex.tests.simulation.pai_simulator import PAISimulator
+from tests.unit.simulation.pai_simulator import PAISimulator
 
 from codomyrmex.utils.cli_helpers import (
     print_error,

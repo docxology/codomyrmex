@@ -218,7 +218,7 @@ def build_module_catalog(
             )
         )
 
-    # ``tests`` moved from ``src/codomyrmex/tests`` to the top-level ``tests/``
+    # ``tests`` moved from ``tests`` to the top-level ``tests/``
     # directory; it remains a recognized support surface even though it is no
     # longer nested under ``package_root``.
     top_level_tests = root / "tests"

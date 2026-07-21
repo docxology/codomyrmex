@@ -246,12 +246,12 @@ print(data["id"], len(data["messages"]))
 
 ```bash
 # Run both test suites
-uv run pytest src/codomyrmex/tests/agents/test_open_gauss.py \
-              src/codomyrmex/tests/agents/test_open_gauss_client.py \
+uv run pytest tests/agents/test_open_gauss.py \
+              tests/agents/test_open_gauss_client.py \
               -v --no-cov
 
 # Run with coverage
-uv run pytest src/codomyrmex/tests/agents/test_open_gauss*.py --cov=. --cov-report=term-missing
+uv run pytest tests/agents/test_open_gauss*.py --cov=. --cov-report=term-missing
 ```
 
 | Test File | Tests | Coverage Area |
@@ -305,8 +305,8 @@ git submodule update --init src/codomyrmex/agents/open_gauss
 
 - **Client wrapper**: `src/codomyrmex/agents/open_gauss/open_gauss_client.py` inside the initialized submodule
 - **Config template**: `src/codomyrmex/agents/open_gauss/config.example.yaml` inside the initialized submodule
-- **Test suite (upstream)**: [test_open_gauss.py](../../../src/codomyrmex/tests/agents/test_open_gauss.py)
-- **Test suite (client)**: [test_open_gauss_client.py](../../../src/codomyrmex/tests/agents/test_open_gauss_client.py)
+- **Test suite (upstream)**: [test_open_gauss.py](../../../tests/agents/test_open_gauss.py)
+- **Test suite (client)**: [test_open_gauss_client.py](../../../tests/agents/test_open_gauss_client.py)
 - **Spec**: `src/codomyrmex/agents/open_gauss/CODOMYRMEX_SPEC.md` inside the initialized submodule
 - **PAI**: `src/codomyrmex/agents/open_gauss/CODOMYRMEX_PAI.md` inside the initialized submodule
 - **Skill**: `src/codomyrmex/agents/open_gauss/CODOMYRMEX_SKILL.md` inside the initialized submodule

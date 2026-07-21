@@ -38,9 +38,15 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
 # Skip guard for live API tests
-_has_openrouter_key = bool(os.getenv("OPENROUTER_API_KEY"))
-_has_anthropic_key = bool(os.getenv("ANTHROPIC_API_KEY"))
-_has_openai_key = bool(os.getenv("OPENAI_API_KEY"))
+_has_openrouter_key = os.getenv("RUN_LIVE_OPENROUTER") == "1" and bool(
+    os.getenv("OPENROUTER_API_KEY")
+)
+_has_anthropic_key = os.getenv("RUN_LIVE_ANTHROPIC") == "1" and bool(
+    os.getenv("ANTHROPIC_API_KEY")
+)
+_has_openai_key = os.getenv("RUN_LIVE_OPENAI") == "1" and bool(
+    os.getenv("OPENAI_API_KEY")
+)
 
 
 # ===========================================================================

@@ -5,7 +5,7 @@
 ## Overview
 
 Infrastructure for the [SAIR Mathematics Distillation Challenge (Stage 1)](https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage1/overview).
-**Deadline**: April 20, 2026.
+**Historical deadline**: April 20, 2026 (retained as provenance; not an active promise).
 
 Distill universal algebra knowledge from the Equational Theories Project into a ≤10KB "cheat sheet" injected into each LLM prompt at evaluation time.
 Official competition playground for testing: [playground.sair.foundation](https://playground.sair.foundation/playground/mathematics-distillation-challenge-equational-theories-stage1)
@@ -39,9 +39,9 @@ Official competition playground for testing: [playground.sair.foundation](https:
 ## Quick Start
 
 ```bash
-# 1. Download competition data
-python scripts/sair/run_sair.py evaluate --type list   # see what's cached
-python scripts/sair/download_data.py --type public
+# 1. Inspect cached data, then explicitly opt into a download if needed
+python scripts/sair/download_data.py --type list
+RUN_LIVE_SAIR=1 python scripts/sair/download_data.py --type public --live
 
 # 2. Generate baseline cheatsheet
 python scripts/sair/run_sair.py generate --bundle baseline structural \
@@ -50,7 +50,7 @@ python scripts/sair/run_sair.py generate --bundle baseline structural \
 # 3. Evaluate (auto-saves run + telemetry)
 python scripts/sair/run_sair.py evaluate \
   --dataset scripts/sair/data/public/data/normal.jsonl \
-  --cheatsheet scripts/sair/output/cheatsheets/v1.txt --limit 20
+  --cheatsheet scripts/sair/output/cheatsheets/v1.txt --limit 20 --live
 
 # 4. Analyze results
 python scripts/sair/run_sair.py analyze --run-dir scripts/sair/output/runs/
@@ -61,7 +61,7 @@ python scripts/sair/run_sair.py generate \
   --output scripts/sair/output/cheatsheets/v2.txt
 
 # 6. Full pipeline in one command
-python scripts/sair/run_sair.py full --limit 20 --model gemini-2.5-flash
+RUN_LIVE_SAIR=1 python scripts/sair/run_sair.py full --limit 20 --model gemini-2.5-flash --live
 
 # 7. Compare two runs
 python scripts/sair/run_sair.py compare scripts/sair/output/runs/run_A.json scripts/sair/output/runs/run_B.json
@@ -69,8 +69,11 @@ python scripts/sair/run_sair.py compare scripts/sair/output/runs/run_A.json scri
 # 8. Stage 2 (Log-loss Confidence Scoring)
 python scripts/sair/run_sair.py evaluate \
   --dataset scripts/sair/data/public/data/hard.jsonl \
-  --model gemini-2.5-flash --stage2
+  --model gemini-2.5-flash --stage2 --live
 ```
+
+Provider calls and automatic downloads are disabled unless `--live` or
+`RUN_LIVE_SAIR=1` is supplied. Credentials alone never enable external traffic.
 
 ## Navigation
 
@@ -78,4 +81,4 @@ python scripts/sair/run_sair.py evaluate \
 - **Specification**: [SPEC.md](SPEC.md)
 - **Agent Coordination**: [AGENTS.md](AGENTS.md)
 - **PAI Bridge**: [PAI.md](PAI.md)
-- **Tests**: [tests/scripts/sair/](../../src/codomyrmex/tests/scripts/sair/)
+- **Tests**: [tests/scripts/sair/](../../tests/scripts/sair/)

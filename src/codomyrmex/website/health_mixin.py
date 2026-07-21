@@ -387,7 +387,8 @@ class HealthProviderMixin:
     def run_tests(self, module: str | None = None) -> dict[str, Any]:
         """Run pytest and return structured results via JUnit XML."""
         import tempfile
-        import xml.etree.ElementTree as ET
+
+        from defusedxml import ElementTree as ET
 
         # Create a temporary file for JUnit XML output
         with tempfile.NamedTemporaryFile(suffix=".xml", delete=False) as tf:
@@ -404,9 +405,7 @@ class HealthProviderMixin:
             ]
 
             if module and module != "all":
-                test_path = (
-                    self.root_dir / "src" / "codomyrmex" / "tests" / "unit" / module
-                )
+                test_path = self.root_dir / "tests" / "unit" / module
                 if test_path.exists():
                     cmd.append(str(test_path))
                 else:

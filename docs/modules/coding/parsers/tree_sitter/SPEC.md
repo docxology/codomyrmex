@@ -28,7 +28,7 @@ See source module for available exports.
 ## 5. Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k tree_sitter -v
+uv run python -m pytest tests/ -k tree_sitter -v
 ```
 
 ## References

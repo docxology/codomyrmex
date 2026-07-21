@@ -11,6 +11,7 @@ Tests all aspects of the Ollama integration including:
 """
 
 import json
+import os
 import time
 from pathlib import Path
 
@@ -45,6 +46,10 @@ except ImportError:
 pytestmark = [
     pytest.mark.integration,
     pytest.mark.requires_ollama,
+    pytest.mark.skipif(
+        os.environ.get("RUN_LIVE_OLLAMA") != "1",
+        reason="Live Ollama tests require RUN_LIVE_OLLAMA=1",
+    ),
     pytest.mark.skipif(not OLLAMA_AVAILABLE, reason="Ollama integration not available"),
 ]
 

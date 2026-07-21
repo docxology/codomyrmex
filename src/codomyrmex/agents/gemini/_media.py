@@ -128,10 +128,14 @@ class GeminiMediaMixin:
                     outputs.append({"video_bytes": v_bytes})
                 elif v_uri:
                     import urllib.request
+                    from urllib.parse import urlparse
 
                     try:
-                        req = urllib.request.urlopen(v_uri)
-                        outputs.append({"video_bytes": req.read()})
+                        parsed_uri = urlparse(v_uri)
+                        if parsed_uri.scheme != "https" or not parsed_uri.netloc:
+                            raise ValueError("Gemini media URI must use HTTPS")
+                        with urllib.request.urlopen(v_uri, timeout=30) as req:
+                            outputs.append({"video_bytes": req.read()})
                     except Exception as e:
                         logger.warning("Failed to download video URI %s: %s", v_uri, e)
                         outputs.append({"uri": v_uri})

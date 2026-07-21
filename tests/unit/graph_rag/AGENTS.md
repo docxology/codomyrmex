@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/graph_rag
+# Codomyrmex Agents — tests/unit/graph_rag
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

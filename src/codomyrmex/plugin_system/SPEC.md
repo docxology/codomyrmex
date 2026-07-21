@@ -48,5 +48,5 @@ The codebase utilizes Python 3.10+ dataclasses and type hinting. Interaction pat
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k plugin_system -v
+uv run python -m pytest tests/ -k plugin_system -v
 ```

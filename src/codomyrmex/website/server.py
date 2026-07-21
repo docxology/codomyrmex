@@ -187,14 +187,20 @@ class WebsiteServer(
 
     def send_json_response(self, data: dict | list, status: int = 200) -> None:
         """Send a JSON response with the given data and HTTP status code."""
+        body = json.dumps(data).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-type", "application/json")
+        # Declare the exact body size so real HTTP clients do not have to
+        # infer response completion from a server-side socket close.  This is
+        # especially important for larger refresh responses under load.
+        self.send_header("Content-Length", str(len(body)))
         self.send_header("Access-Control-Allow-Origin", self._cors_origin())
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Origin")
         self.send_header("Vary", "Origin")
         self.end_headers()
-        self.wfile.write(json.dumps(data).encode("utf-8"))
+        self.wfile.write(body)
+        self.wfile.flush()
 
     def log_message(self, format: str, *args) -> None:
         """Override to suppress high-frequency access logs like /api/health."""

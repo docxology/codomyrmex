@@ -14,7 +14,7 @@ Tests live beside this file; primary module is `codomyrmex.demos`. Policy: [SPEC
 ## Running
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/demos/ -q
+uv run pytest tests/unit/demos/ -q
 ```
 
 ## Navigation

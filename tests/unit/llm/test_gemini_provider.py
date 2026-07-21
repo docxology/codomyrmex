@@ -1,6 +1,6 @@
 """Tests for GeminiProvider.
 
-Zero-Mock compliant — uses real Gemini API calls gated by GEMINI_API_KEY.
+Zero-Mock compliant — uses real Gemini API calls gated by RUN_LIVE_GEMINI=1.
 """
 
 import os
@@ -16,7 +16,11 @@ from codomyrmex.llm.providers import (
 from codomyrmex.llm.providers.gemini import GEMINI_MODELS, GeminiProvider
 
 _GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
-_skip_no_key = pytest.mark.skipif(not _GEMINI_KEY, reason="GEMINI_API_KEY not set")
+_RUN_LIVE_GEMINI = os.environ.get("RUN_LIVE_GEMINI") == "1"
+_skip_live = pytest.mark.skipif(
+    not _RUN_LIVE_GEMINI or not _GEMINI_KEY,
+    reason="Live Gemini tests require RUN_LIVE_GEMINI=1 and GEMINI_API_KEY",
+)
 
 
 # ---------------------------------------------------------------------------
@@ -34,7 +38,7 @@ class TestGeminiProviderInit:
 
         assert provider.provider_type == ProviderType.GOOGLE
 
-    @_skip_no_key
+    @_skip_live
     def test_init_with_real_key_creates_client(self):
         """Test that provider creates a client with a real API key."""
         config = ProviderConfig(api_key=_GEMINI_KEY)
@@ -155,11 +159,11 @@ class TestGeminiProviderContextManager:
 
 
 # ---------------------------------------------------------------------------
-# Live API tests (require GEMINI_API_KEY)
+# Live API tests (require RUN_LIVE_GEMINI=1 and GEMINI_API_KEY)
 # ---------------------------------------------------------------------------
 
 
-@_skip_no_key
+@_skip_live
 class TestGeminiProviderComplete:
     """Test GeminiProvider completion with real Gemini API."""
 

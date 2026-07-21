@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/integration/data_visualization
+# Codomyrmex Agents — tests/integration/data_visualization
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

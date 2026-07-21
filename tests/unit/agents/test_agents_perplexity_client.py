@@ -34,8 +34,9 @@ class TestPerplexityClientExecution:
                 os.environ["PERPLEXITY_API_KEY"] = old_env
 
     @pytest.mark.skipif(
-        not os.environ.get("PERPLEXITY_API_KEY"),
-        reason="Real API key required for live test",
+        os.environ.get("RUN_LIVE_PERPLEXITY") != "1"
+        or not os.environ.get("PERPLEXITY_API_KEY"),
+        reason="Live Perplexity tests require RUN_LIVE_PERPLEXITY=1 and PERPLEXITY_API_KEY",
     )
     def test_perplexity_live_execute(self):
         """Execute a simple real query against the live Perplexity API."""
@@ -50,8 +51,9 @@ class TestPerplexityClientExecution:
         assert resp.metadata["agent"] == "perplexity"
 
     @pytest.mark.skipif(
-        not os.environ.get("PERPLEXITY_API_KEY"),
-        reason="Real API key required for live test",
+        os.environ.get("RUN_LIVE_PERPLEXITY") != "1"
+        or not os.environ.get("PERPLEXITY_API_KEY"),
+        reason="Live Perplexity tests require RUN_LIVE_PERPLEXITY=1 and PERPLEXITY_API_KEY",
     )
     def test_perplexity_mcp_tool_live(self):
         """Test the MCP tool wrapper directly."""
@@ -62,8 +64,9 @@ class TestPerplexityClientExecution:
         assert result["content"]
 
     @pytest.mark.skipif(
-        not os.environ.get("PERPLEXITY_API_KEY"),
-        reason="Real API key required for live test",
+        os.environ.get("RUN_LIVE_PERPLEXITY") != "1"
+        or not os.environ.get("PERPLEXITY_API_KEY"),
+        reason="Live Perplexity tests require RUN_LIVE_PERPLEXITY=1 and PERPLEXITY_API_KEY",
     )
     def test_perplexity_ask_live(self):
         """Test the perplexity_ask MCP tool wrapper directly with a messages array."""

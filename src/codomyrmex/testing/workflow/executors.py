@@ -98,7 +98,7 @@ class ScriptExecutor(StepExecutor):
                 result = script_fn(context)
             else:
                 # SECURITY: Restricted eval — only 'ctx' is accessible, builtins disabled
-                result = eval(
+                result = eval(  # nosec B307 - restricted workflow expression DSL
                     step.config.get("expression", "True"),
                     {"__builtins__": {}},
                     {"ctx": context},

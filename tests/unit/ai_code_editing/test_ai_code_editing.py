@@ -30,6 +30,8 @@ pytestmark = pytest.mark.skipif(
     reason="ai_code_helpers import hangs (google.genai network init in sandbox)",
 )
 
+_RUN_LIVE_OPENAI = os.environ.get("RUN_LIVE_OPENAI") == "1"
+
 
 @pytest.mark.unit
 class TestAICodeEditing:
@@ -121,9 +123,10 @@ class TestAICodeEditing:
         get_llm_client = ai_code_helpers.get_llm_client
 
         # Test with real API key if available, otherwise skip
-        api_key = os.environ.get("OPENAI_API_KEY")
-        if not api_key:
-            pytest.skip("OPENAI_API_KEY not set")
+        if not _RUN_LIVE_OPENAI or not os.environ.get("OPENAI_API_KEY"):
+            pytest.skip(
+                "Live OpenAI tests require RUN_LIVE_OPENAI=1 and OPENAI_API_KEY"
+            )
 
         try:
             client, model = get_llm_client("openai")
@@ -177,9 +180,10 @@ class TestAICodeEditing:
         generate_code_snippet = ai_code_helpers.generate_code_snippet
 
         # Test with real API key if available
-        api_key = os.environ.get("OPENAI_API_KEY")
-        if not api_key:
-            pytest.skip("OPENAI_API_KEY not set")
+        if not _RUN_LIVE_OPENAI or not os.environ.get("OPENAI_API_KEY"):
+            pytest.skip(
+                "Live OpenAI tests require RUN_LIVE_OPENAI=1 and OPENAI_API_KEY"
+            )
 
         try:
             result = generate_code_snippet(
@@ -200,9 +204,10 @@ class TestAICodeEditing:
         generate_code_snippet = ai_code_helpers.generate_code_snippet
 
         # Test with real API key if available
-        api_key = os.environ.get("OPENAI_API_KEY")
-        if not api_key:
-            pytest.skip("OPENAI_API_KEY not set")
+        if not _RUN_LIVE_OPENAI or not os.environ.get("OPENAI_API_KEY"):
+            pytest.skip(
+                "Live OpenAI tests require RUN_LIVE_OPENAI=1 and OPENAI_API_KEY"
+            )
 
         try:
             result = generate_code_snippet(
@@ -249,9 +254,10 @@ class TestAICodeEditing:
         refactor_code_snippet = ai_code_helpers.refactor_code_snippet
 
         # Test with real API key if available
-        api_key = os.environ.get("OPENAI_API_KEY")
-        if not api_key:
-            pytest.skip("OPENAI_API_KEY not set")
+        if not _RUN_LIVE_OPENAI or not os.environ.get("OPENAI_API_KEY"):
+            pytest.skip(
+                "Live OpenAI tests require RUN_LIVE_OPENAI=1 and OPENAI_API_KEY"
+            )
 
         try:
             original_code = "def calculate_sum(numbers):\n    return sum(numbers)"
@@ -274,9 +280,10 @@ class TestAICodeEditing:
         refactor_code_snippet = ai_code_helpers.refactor_code_snippet
 
         # Test with real API key if available
-        api_key = os.environ.get("OPENAI_API_KEY")
-        if not api_key:
-            pytest.skip("OPENAI_API_KEY not set")
+        if not _RUN_LIVE_OPENAI or not os.environ.get("OPENAI_API_KEY"):
+            pytest.skip(
+                "Live OpenAI tests require RUN_LIVE_OPENAI=1 and OPENAI_API_KEY"
+            )
 
         try:
             original_code = "def hello():\n    print('Hello')"

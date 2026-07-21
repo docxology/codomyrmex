@@ -95,7 +95,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/graph_rag/
+uv run pytest tests/unit/graph_rag/
 ```
 
 ## 6. Future Considerations

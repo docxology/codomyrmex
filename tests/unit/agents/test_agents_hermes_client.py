@@ -6,6 +6,7 @@ If the 'hermes' CLI is missing, execution tests gracefully skip or assert
 on the resulting HermesError.
 """
 
+import os
 import shutil
 
 import pytest
@@ -18,8 +19,10 @@ from codomyrmex.agents.hermes.mcp_tools import (
     hermes_status,
 )
 
-# Check if hermes is actually installed locally for integration tests
-HAS_HERMES = shutil.which("hermes") is not None
+# The CLI is an external provider surface; installation alone must not execute it.
+HAS_HERMES = (
+    os.environ.get("RUN_LIVE_HERMES") == "1" and shutil.which("hermes") is not None
+)
 
 
 class TestHermesClientArgBuilder:
@@ -221,16 +224,20 @@ class TestHermesSessionMCPTools:
                 }
             )
 
-        monkeypatch.setattr(
-            "codomyrmex.agents.hermes.mcp_tools_pkg._client._factory_override",
-            mock_get_client,
-        )
-
         from codomyrmex.agents.hermes.mcp_tools import (
             hermes_chat_session,
             hermes_session_clear,
             hermes_session_list,
         )
+
+        # Patch each function's actual globals. This remains stable even after
+        # the import-isolation benchmark has temporarily removed and restored
+        # package modules, which can otherwise leave duplicate module objects.
+        for tool in (hermes_chat_session, hermes_session_clear, hermes_session_list):
+            implementation = getattr(tool, "__wrapped__", tool)
+            monkeypatch.setitem(
+                implementation.__globals__, "_get_client", mock_get_client
+            )
 
         # 1. Start a session
         res1 = hermes_chat_session(prompt="MCP test 1", backend="cli")

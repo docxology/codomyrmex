@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/model_context_protocol/integration
+# Codomyrmex Agents — tests/unit/model_context_protocol/integration
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -25,7 +25,7 @@ Advisory tooling for local pull-request review and SARIF handling: diff heuristi
 
 ## Tests
 
-- [src/codomyrmex/tests/unit/scripts/test_review_pipeline.py](../../src/codomyrmex/tests/unit/scripts/test_review_pipeline.py)
+- [tests/unit/scripts/test_review_pipeline.py](../../tests/unit/scripts/test_review_pipeline.py)
 
 ## Navigation
 

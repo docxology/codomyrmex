@@ -127,9 +127,9 @@ def validate_pai_integration(src_dir: Path) -> int:
     test_base = (
         src_dir.parent.parent / "src" / "tests" / "unit"
     )  # Verify path assumption
-    # Actually wait, src/codomyrmex/tests/unit or src/tests/unit?
+    # Actually wait, tests/unit or src/tests/unit?
     # Original script used: SRC / "tests" / "unit" where SRC was root/src/codomyrmex
-    # So it was looking in src/codomyrmex/tests/unit
+    # So it was looking in tests/unit
     test_base = src_dir / "tests" / "unit"
 
     for mod in critical_modules:

@@ -2,7 +2,7 @@
 
 Zero-mock tests for ClaudeClient instantiation, configuration,
 tool registration, session management, and pricing constants.
-Live API tests are gated behind ANTHROPIC_API_KEY availability.
+Live API tests require explicit ``RUN_LIVE_ANTHROPIC=1`` opt-in and a key.
 """
 
 import os
@@ -28,7 +28,9 @@ except ImportError:
 if not _HAS_CLAUDE:
     pytest.skip("claude agent deps not available", allow_module_level=True)
 
-_HAS_API_KEY = bool(os.environ.get("ANTHROPIC_API_KEY"))
+_HAS_API_KEY = os.environ.get("RUN_LIVE_ANTHROPIC") == "1" and bool(
+    os.environ.get("ANTHROPIC_API_KEY")
+)
 
 
 # =========================================================================
@@ -273,11 +275,14 @@ class TestClaudeIntegrationAdapter:
 
 
 # =========================================================================
-# Live API Tests (gated behind API key)
+# Live API Tests (gated behind explicit opt-in and API key)
 # =========================================================================
 
 
-@pytest.mark.skipif(not _HAS_API_KEY, reason="ANTHROPIC_API_KEY not set")
+@pytest.mark.skipif(
+    not _HAS_API_KEY,
+    reason="Live Claude tests require RUN_LIVE_ANTHROPIC=1 and ANTHROPIC_API_KEY",
+)
 class TestClaudeLiveAPI:
     """Integration tests that call the real Claude API."""
 

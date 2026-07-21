@@ -14,6 +14,8 @@ import time
 
 import pytest
 
+pytestmark = pytest.mark.performance
+
 from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolRegistry
 from codomyrmex.model_context_protocol.transport.server import (
     MCPServer,

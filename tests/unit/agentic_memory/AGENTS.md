@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agentic_memory
+# Codomyrmex Agents — tests/unit/agentic_memory
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

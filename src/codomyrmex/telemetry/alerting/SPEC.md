@@ -58,7 +58,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/telemetry/alerting/
+uv run pytest tests/unit/telemetry/alerting/
 ```
 
 ## 6. Future Considerations

@@ -150,7 +150,9 @@ def orchestrator_run_dag(
                     "abs": abs,
                     "round": round,
                 }
-                return lambda *_a, **_kw: eval(expr, {"__builtins__": {}}, safe_locals)
+                return lambda *_a, **_kw: eval(  # nosec B307 - restricted expression DSL
+                    expr, {"__builtins__": {}}, safe_locals
+                )
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/finance
+# Codomyrmex Agents — tests/unit/finance
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

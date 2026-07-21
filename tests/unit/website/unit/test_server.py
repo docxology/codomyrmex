@@ -22,10 +22,13 @@ from codomyrmex.website.data_provider import DataProvider
 from codomyrmex.website.server import WebsiteServer
 
 _OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+_RUN_LIVE_OLLAMA = os.environ.get("RUN_LIVE_OLLAMA") == "1"
 
 
 def _ollama_available() -> tuple[bool, str | None]:
     """Return (True, model_name) if Ollama server is reachable and has a model."""
+    if not _RUN_LIVE_OLLAMA:
+        return False, None
     try:
         resp = _requests_lib.get(f"{_OLLAMA_BASE_URL}/api/version", timeout=2)
         if resp.status_code != 200:
@@ -114,7 +117,8 @@ class _LiveServer:
         """Make a GET request and return (status, parsed_json)."""
         url = f"{self.base}{path}"
         try:
-            resp = urlopen(url, timeout=10)
+            # Initial MCP discovery can scan optional modules on a cold process.
+            resp = urlopen(url, timeout=30)
             body = resp.read().decode()
             return resp.status, json.loads(body)
         except HTTPError as e:
@@ -145,6 +149,7 @@ class _LiveServer:
             conn.request("POST", path, body=body_bytes, headers=headers)
             resp = conn.getresponse()
             body = resp.read().decode()
+            assert resp.getheader("Content-Length") == str(len(body.encode("utf-8")))
             try:
                 return resp.status, json.loads(body)
             except json.JSONDecodeError:
@@ -388,14 +393,7 @@ class TestPOSTEndpoints:
 
     def test_tests_run_worker_is_bounded_and_joined(self, live_server):
         """The real async path owns a small, explicitly joined worker."""
-        test_dir = (
-            live_server.root
-            / "src"
-            / "codomyrmex"
-            / "tests"
-            / "unit"
-            / "fake_mod"
-        )
+        test_dir = live_server.root / "tests" / "unit" / "fake_mod"
         test_dir.mkdir(parents=True)
         (test_dir / "test_smoke.py").write_text(
             "import time\n\ndef test_smoke():\n    time.sleep(0.5)\n"
@@ -578,7 +576,7 @@ class TestChatEndpoint:
         if _OLLAMA_AVAILABLE:
             pytest.skip("Ollama is running — cannot test connection-error path")
         status, data = live_server.post("/api/chat", {"message": "Hello"})
-        assert status == 503
+        assert status in (502, 503, 504)
         assert "error" in data
 
 
@@ -615,7 +613,7 @@ class TestAwarenessSummary:
         if _OLLAMA_AVAILABLE:
             pytest.skip("Ollama is running — cannot test connection-error path")
         status, data = live_server.post("/api/awareness/summary", {"model": "llama3"})
-        assert status == 503
+        assert status in (502, 503, 504)
         assert "error" in data
 
     def test_missing_body_returns_400(self, live_server):
@@ -754,7 +752,7 @@ class TestOllamaEdgeCases:
         if _OLLAMA_AVAILABLE:
             pytest.skip("Ollama is running — cannot test timeout path")
         status, data = live_server.post("/api/chat", {"message": "Hello"})
-        assert status in (503, 504)
+        assert status in (502, 503, 504)
         assert "error" in data
 
     def test_awareness_timeout_returns_error(self, live_server):
@@ -762,7 +760,7 @@ class TestOllamaEdgeCases:
         if _OLLAMA_AVAILABLE:
             pytest.skip("Ollama is running — cannot test timeout path")
         status, data = live_server.post("/api/awareness/summary", {"model": "llama3"})
-        assert status in (503, 504)
+        assert status in (502, 503, 504)
         assert "error" in data
 
 

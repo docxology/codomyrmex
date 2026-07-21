@@ -13,8 +13,14 @@ Figure generator modules and `_common.py` shared styling. See [../AGENTS.md](../
 
 ## Dependencies
 
-Depends on `codomyrmex.manuscript.variables` for computed token values consumed by figure captions.
+Depends on `codomyrmex.manuscript.variables` for computed token values consumed by
+figure captions and analytical annotations. All figure metadata is sourced from the
+`figures:` registry in `docs/manuscript/config.yaml`; do not duplicate filenames,
+labels, widths, captions, thresholds, or experimental horizons in Markdown.
 
 ## Development Guidelines
 
 - New figures get their own `fig_*.py` module and a `FIGURES` registry entry; do not grow `_common.py` into a second monolith.
+- Scientific thresholds, horizons, score domains, and sampling parameters must come
+  from the generated snapshot or the manuscript configuration. Geometry-only styling
+  constants may remain local to a generator.

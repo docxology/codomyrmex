@@ -62,7 +62,7 @@ def shell(
     try:
         result = subprocess.run(
             command,
-            shell=True,  # SECURITY: Intentional — shell() is a named shell executor utility
+            shell=True,  # nosec B602 - named trusted shell executor utility
             capture_output=True,
             text=True,
             timeout=timeout,

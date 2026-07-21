@@ -98,7 +98,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/api/circuit_breaker/
+uv run pytest tests/unit/api/circuit_breaker/
 ```
 
 ## 6. Future Considerations

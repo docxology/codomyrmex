@@ -11,6 +11,9 @@ Validates:
 - Anchor links
 - Image references
 
+Git submodules and generated documentation trees are excluded from the scan;
+their source ownership and link roots are outside this repository's docs gate.
+
 Fenced code blocks (``` ... ```) are skipped for ``[text](url)`` and raw ``http(s)`` URL
 extraction so inline examples are not counted as navigational links.
 """
@@ -95,6 +98,67 @@ def validate_link(link: str, file_path: Path, repo_root: Path, line: int) -> Lin
     return LinkResult(file_str, link, line, "broken", f"Target not found: {link_path}")
 
 
+def _read_submodule_paths(repo_root: Path) -> set[tuple[str, ...]]:
+    """Read tracked Git submodule paths from ``.gitmodules``."""
+    gitmodules = repo_root / ".gitmodules"
+    if not gitmodules.exists():
+        return set()
+
+    paths: set[tuple[str, ...]] = set()
+    for line in gitmodules.read_text(encoding="utf-8").splitlines():
+        key, separator, value = line.partition("=")
+        if separator and key.strip() == "path":
+            paths.add(Path(value.strip()).parts)
+    return paths
+
+
+def discover_markdown_files(repo_root: Path) -> list[Path]:
+    """Return first-party Markdown files covered by the link gate."""
+    skip_roots = {
+        ".git",
+        "node_modules",
+        ".venv",
+        ".direnv",
+        "dist",
+        "build",
+        "output",
+        ".agent",
+    }
+    generated_prefixes = {
+        ("docs", "manuscript"),
+        ("docs", "agents", "open_gauss"),
+        ("src", "codomyrmex", "documentation", "docs"),
+    }
+    submodule_prefixes = _read_submodule_paths(repo_root)
+
+    md_files = []
+    for file_path in repo_root.rglob("*.md"):
+        try:
+            rel_parts = file_path.resolve().relative_to(repo_root.resolve()).parts
+        except ValueError:
+            continue
+
+        if not rel_parts or any(part in skip_roots for part in rel_parts):
+            continue
+        if any(
+            rel_parts[: len(prefix)] == prefix
+            for prefix in submodule_prefixes | generated_prefixes
+        ):
+            continue
+
+        # Leaf test signposts are generated from the test tree. Keep the
+        # hand-maintained top-level test guides in the gate.
+        if (
+            rel_parts[0] == "tests"
+            and len(rel_parts) > 2
+            and rel_parts[-1] in {"AGENTS.md", "README.md", "SPEC.md", "PAI.md"}
+        ):
+            continue
+        md_files.append(file_path)
+
+    return md_files
+
+
 def validate_links(
     repo_root: Path,
     output_dir: Path | None = None,
@@ -111,27 +175,7 @@ def validate_links(
 
     results: list[LinkResult] = []
 
-    skip_roots = {
-        ".git",
-        "node_modules",
-        ".venv",
-        ".direnv",
-        "dist",
-        "build",
-        "output",
-        ".agent",
-    }
-    md_files = []
-    for f in repo_root.rglob("*.md"):
-        try:
-            rel_parts = f.resolve().relative_to(repo_root.resolve()).parts
-        except ValueError:
-            continue
-        if rel_parts and rel_parts[0] in skip_roots:
-            continue
-        if any(p in skip_roots for p in rel_parts):
-            continue
-        md_files.append(f)
+    md_files = discover_markdown_files(repo_root)
 
     print(f"📄 Found {len(md_files)} markdown files")
 

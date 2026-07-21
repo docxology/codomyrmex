@@ -26,11 +26,15 @@ from codomyrmex.agents.orchestrator import (
     extract_todo_items,
 )
 
+_RUN_LIVE_OLLAMA = os.environ.get("RUN_LIVE_OLLAMA") == "1"
+
 # ── Helpers ──────────────────────────────────────────────────────────
 
 
 def _ollama_reachable() -> bool:
     """Check whether a local Ollama instance is responding."""
+    if not _RUN_LIVE_OLLAMA:
+        return False
     base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
     try:
         with urllib.request.urlopen(f"{base}/api/tags", timeout=2.0) as resp:

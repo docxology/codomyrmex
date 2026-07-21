@@ -142,7 +142,11 @@ class ShellSessionMixin:
                 # SECURITY: shell=True is intentional here — this is an
                 # interactive shell command entered by the local user.
                 result = subprocess.run(
-                    arg, shell=True, capture_output=True, text=True, timeout=300
+                    arg,
+                    shell=True,
+                    capture_output=True,
+                    text=True,
+                    timeout=300,  # nosec B602 - interactive shell session
                 )
             else:
                 result = subprocess.run(

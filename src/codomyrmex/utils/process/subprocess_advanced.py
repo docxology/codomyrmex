@@ -132,7 +132,7 @@ def stream_command(
             prepared_command,
             cwd=cwd,
             env=prepared_env,
-            shell=shell,
+            shell=shell,  # nosec B602 - caller explicitly selects trusted shell mode
             stdout=subprocess.PIPE,
             stderr=stderr_pipe,
             text=True,

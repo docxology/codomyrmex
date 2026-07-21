@@ -6,6 +6,15 @@
 
 Validation coverage, fixtures, and regression checks for Performance.
 
+These tests are intentionally marked `performance` (and the pytest-benchmark
+cases are also marked `benchmark`). They are informational and are excluded
+from the default unit/integration coverage gate because timing-sensitive tests
+can mutate process-wide registries. Run them explicitly with:
+
+```bash
+uv run pytest tests/performance -m performance
+```
+
 ## Directory Contents
 - `PAI.md` – File
 - `README.md` – File

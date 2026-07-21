@@ -20,7 +20,7 @@ The implementation file is named `retry_sync.py` so a `retry` **submodule** cann
 - [API_SPECIFICATION.md](API_SPECIFICATION.md) — function-level API
 - [SPEC.md](SPEC.md) — design contracts
 - [PAI.md](PAI.md) — PAI integration notes
-- Tests: `uv run pytest src/codomyrmex/tests/unit/utils/ -q`
+- Tests: `uv run pytest tests/unit/utils/ -q`
 
 ## Directory contents
 

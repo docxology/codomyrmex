@@ -1,12 +1,12 @@
 <!-- agents: curated -->
 
-# Codomyrmex Agents — src/codomyrmex/tests/unit/scripts
+# Codomyrmex Agents — tests/unit/scripts
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Signposting
 
-- **Path**: `src/codomyrmex/tests/unit/scripts`
+- **Path**: `tests/unit/scripts`
 - **Human overview**: [README.md](README.md)
 - **Functional spec**: [SPEC.md](SPEC.md)
 - **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)
@@ -16,7 +16,9 @@ Validation coverage, fixtures, and regression checks for Scripts.
 ## Active Components
 - Markdown `README.md`
 - Markdown `SPEC.md`
+- Python source `test_dependency_analyzer.py`
 - Python source `test_review_pipeline.py`
+- Python source `test_workflow_runner.py`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

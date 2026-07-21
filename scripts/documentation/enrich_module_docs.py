@@ -504,7 +504,7 @@ def generate_spec(info: dict) -> str:
     lines.append("## 5. Testing")
     lines.append("")
     lines.append("```bash")
-    lines.append(f"uv run python -m pytest src/codomyrmex/tests/ -k {info['name']} -v")
+    lines.append(f"uv run python -m pytest tests/ -k {info['name']} -v")
     lines.append("```")
     lines.append("")
 

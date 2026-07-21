@@ -125,7 +125,7 @@ sequenceDiagram
 | `{PRINCIPAL.NAME}` | `settings.json → principal.name` | "Daniel" |
 | `{PRINCIPAL.TIMEZONE}` | `settings.json → principal.timezone` | "America/Los_Angeles" |
 
-**Codomyrmex Access**: `PAIBridge.get_settings()` ([L599-605](../../../../src/codomyrmex/agents/pai/pai_bridge.py)) loads these values.
+**Codomyrmex Access**: `PAIBridge.get_settings()` ([L599-608](../../../../src/codomyrmex/agents/pai/pai_bridge.py)) loads these values.
 
 ---
 

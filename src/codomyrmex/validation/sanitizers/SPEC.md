@@ -56,7 +56,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/validation/sanitizers/
+uv run pytest tests/unit/validation/sanitizers/
 ```
 
 ## 6. Future Considerations

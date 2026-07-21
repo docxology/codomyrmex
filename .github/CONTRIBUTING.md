@@ -101,14 +101,14 @@ uv run ty check src/
 ### Running Tests
 
 ```bash
-# Run all tests (coverage gate: 40%; enforced via pyproject.toml addopts)
+# Run all tests (coverage gate: 60%; enforced via pyproject.toml addopts)
 uv run pytest
 
 # Run with coverage report
 uv run pytest --cov=src/codomyrmex --cov-report=html
 
 # Run specific module tests
-uv run pytest src/codomyrmex/tests/unit/<module>/
+uv run pytest tests/unit/<module>/
 
 # Run by marker
 uv run pytest -m unit
@@ -135,7 +135,7 @@ client = MagicMock()
 
 ### Coverage Gate
 
-The current coverage gate is **40.0%** (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI (`ci.yml`) and `make test` / `make test-unit` / `make test-coverage` run pytest with `--cov=src/codomyrmex` and `--cov-fail-under=40`. Plain `uv run pytest` does not collect coverage. Tag releases (`release.yml`) use `--cov-fail-under=40` on the unit test tree. The experimental `meme` package is omitted from aggregate coverage via `[tool.coverage.run] omit` in `pyproject.toml`. New modules must not drop coverage below the documented threshold when measured with `--cov`. Target: increase toward 45%+ over time.
+The current coverage gate is **60.0%** (`[tool.coverage.report] fail_under` in `pyproject.toml`). CI (`ci.yml`) and `make test` / `make test-unit` / `make test-coverage` run pytest with `--cov=src/codomyrmex` and `--cov-fail-under=60`. Plain `uv run pytest` does not collect coverage. Tag releases (`release.yml`) use `--cov-fail-under=60` on the unit test tree. The experimental `meme` package is omitted from aggregate coverage via `[tool.coverage.run] omit` in `pyproject.toml`. New modules must not drop coverage below the documented threshold when measured with `--cov`. Target: increase toward 45%+ over time.
 
 ### Test Skip Policy
 

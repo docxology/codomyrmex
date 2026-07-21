@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 from typing import TYPE_CHECKING
 
@@ -21,6 +22,11 @@ from codomyrmex.agents.hermes.mcp_tools import (
 if TYPE_CHECKING:
     from pathlib import Path
 
+
+_HERMES_AVAILABLE = (
+    os.environ.get("RUN_LIVE_HERMES") == "1" and shutil.which("hermes") is not None
+)
+
 # ---------------------------------------------------------------------------
 # hermes_gateway_status
 # ---------------------------------------------------------------------------
@@ -35,7 +41,8 @@ class TestHermesGatewayStatus:
         assert isinstance(result["instances"], list)
 
     @pytest.mark.skipif(
-        shutil.which("hermes") is None, reason="Hermes CLI not installed"
+        not _HERMES_AVAILABLE,
+        reason="Live Hermes tests require RUN_LIVE_HERMES=1 and the CLI",
     )
     def test_real_gateway_status(self) -> None:
         result = hermes_gateway_status()

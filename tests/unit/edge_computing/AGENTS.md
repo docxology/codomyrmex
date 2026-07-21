@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/edge_computing
+# Codomyrmex Agents — tests/unit/edge_computing
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

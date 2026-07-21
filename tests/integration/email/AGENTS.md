@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/integration/email
+# Codomyrmex Agents — tests/integration/email
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

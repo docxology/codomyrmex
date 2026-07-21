@@ -70,17 +70,18 @@ for all 36 GitHub Actions workflows.
 | --- | --- |
 | `ruff check` | Blocks pipeline |
 | `ruff format --check` | Blocks pipeline |
-| `black --check` | Soft-fail (`continue-on-error`) |
-| `mypy src/` | Soft-fail (`continue-on-error`) |
-| `pylint`, `flake8` | Soft fail (`&#124;&#124; true`) |
+| `ty check` | Blocks pipeline |
+| `lint-imports` | Blocks pipeline |
+| `uv build` | Blocks pipeline |
+| `black`, `mypy`, `pylint`, `flake8` | Not part of the authoritative CI contract |
 
 ### Coverage Gates
 
 | Context | Threshold |
 | --- | --- |
-| Documented floor | 40% (`[tool.coverage.report] fail_under` in `pyproject.toml`) |
-| CI unit job (pytest with `--cov`) | `--cov-fail-under=40` |
-| `release.yml` quality gate | `--cov-fail-under=40` |
+| Documented floor | 60% (`[tool.coverage.report] fail_under` in `pyproject.toml`) |
+| CI unit job (pytest with `--cov`) | `--cov-fail-under=60` |
+| `release.yml` quality gate | `--cov-fail-under=60` |
 | Default local `uv run pytest` | No coverage (add `--cov` / use `make test` to measure) |
 
 ## Agent PR Pipeline
@@ -90,7 +91,7 @@ PR Opened
   ├─→ pr-labeler.yml      (adds labels: jules, source, module:X, size/M, etc.)
   ├─→ agent-welcome.yml   (posts welcome comment with checklist)
   ├─→ ci.yml               (runs lint + tests on ubuntu/3.11)
-  ├─→ pre-commit.yml       (commit checks, soft-fail for agents)
+  ├─→ pre-commit.yml       (pre-commit and repository consistency checks)
   ├─→ gemini-review.yml    (AI code review)
   │
   ├─→ pr-conflict-check.yml (every 6h: adds/removes 'conflict' label)

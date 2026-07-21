@@ -39,7 +39,7 @@ Supports JSON file storage by default. Custom backends can implement the `FlagSt
 ## Testing
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/feature_flags/ -v
+uv run pytest tests/unit/feature_flags/ -v
 ```
 
 ## Navigation

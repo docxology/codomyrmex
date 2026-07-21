@@ -95,7 +95,7 @@ class DocumentationFixer(ScriptBase):
             
             ## Operating Rules
             1.  **Modularity**: Do not import from sibling modules unless necessary.
-            2.  **Testing**: Create unit tests in `src/codomyrmex/tests/unit/{module_name}/`.
+            2.  **Testing**: Create unit tests in `tests/unit/{module_name}/`.
             3.  **Documentation**: Keep `README.md` updated with new features.
             
             ## Task Queue

@@ -1,16 +1,16 @@
 ---
 name: Codomyrmex
-description: Full-spectrum coding workspace skill providing 610 production MCP `@mcp_tool` lines across 129 top-level modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
+description: Full-spectrum coding workspace skill providing 623 production MCP `@mcp_tool` lines across 130 top-level modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
 ---
 # Codomyrmex Skill for PAI
 
-**Version**: v1.3.0 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 610 (`@mcp_tool`; see `docs/reference/inventory.md`)
+**Version**: v1.3.0 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 623 (`@mcp_tool`; see `docs/reference/inventory.md`)
 
 Canonical copy for install-from-repo: [SKILL.md](../../../../SKILL.md) at repository root. This file stays aligned with that manifest for PAI pack resolution.
 
 ## Description
 
-Full-spectrum coding workspace skill providing 610 production `@mcp_tool` lines across 129 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
+Full-spectrum coding workspace skill providing 623 production `@mcp_tool` lines across 130 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
 
 ## Installation
 
@@ -85,13 +85,13 @@ MCP equivalents:
 | `CodomyrmexDeploy` | Infrastructure | "docker build", "list instances" |
 | `CodomyrmexTest` | Testing | "run tests", "benchmark" |
 
-## Tools Summary (610 decorators)
+## Tools Summary (623 decorators)
 
 Most tools are read-only; a small set is destructive (require `/codomyrmexTrust`). Run `/codomyrmexVerify` for the live safe/destructive split.
 
 - **Destructive**: `write_file`, `run_command`, `run_tests`, `call_module_function`
 
-Auto-discovered from **150** `mcp_tools.py` files across the package tree (129 top-level modules). Volatile numbers: [docs/reference/inventory.md](../../../../docs/reference/inventory.md).
+Auto-discovered from **150** `mcp_tools.py` files across the package tree (130 top-level modules). Volatile numbers: [docs/reference/inventory.md](../../../../docs/reference/inventory.md).
 
 ## Resources
 
@@ -126,7 +126,7 @@ Auto-discovered from **150** `mcp_tools.py` files across the package tree (129 t
 | ------- | -------- | ------------ |
 | `UNTRUSTED` | None | Default state |
 | `VERIFIED` | Read-only tools | `/codomyrmexVerify` |
-| `TRUSTED` | All dynamic tools (610 production `@mcp_tool` lines in Python tree; see inventory) plus PAI static proxy tools | `/codomyrmexTrust` |
+| `TRUSTED` | All dynamic tools (623 production `@mcp_tool` lines in Python tree; see inventory) plus PAI static proxy tools | `/codomyrmexTrust` |
 
 ## Workflow Routing
 
@@ -148,7 +148,7 @@ Running the **WorkflowName** workflow in the **Codomyrmex** skill to ACTION...
 
 ## Knowledge scope
 
-Authoritative package list: `codomyrmex.list_modules`, resource `codomyrmex://modules`, and [docs/reference/inventory.md](../../../../docs/reference/inventory.md) (129 top-level modules as of last inventory refresh).
+Authoritative package list: `codomyrmex.list_modules`, resource `codomyrmex://modules`, and [docs/reference/inventory.md](../../../../docs/reference/inventory.md) (130 top-level modules as of last inventory refresh).
 
 ## Repository
 

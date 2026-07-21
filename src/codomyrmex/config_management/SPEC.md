@@ -177,5 +177,5 @@ validate_config(
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k config_management -v
+uv run python -m pytest tests/ -k config_management -v
 ```

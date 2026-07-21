@@ -49,14 +49,14 @@ DEFAULT_CS_DIR = os.path.join(MODULE_DIR, "output", "cheatsheets")
 DEFAULT_MODEL = "gemini-2.5-flash"
 
 
-def _ensure_dataset(dataset_path: str, pub_dir: str) -> None:
+def _ensure_dataset(dataset_path: str, pub_dir: str, *, live: bool = False) -> None:
     """Auto-download datasets if they don't exist yet."""
     if os.path.exists(dataset_path):
         return
     logger.warning("Dataset '%s' not found — attempting auto-download.", dataset_path)
     from scripts.sair.download_data import download_sair_datasets
 
-    download_sair_datasets(pub_dir)
+    download_sair_datasets(pub_dir, live=live)
     if not os.path.exists(dataset_path):
         logger.error(
             "Auto-download failed. Run: python scripts/sair/download_data.py --type public"
@@ -66,7 +66,12 @@ def _ensure_dataset(dataset_path: str, pub_dir: str) -> None:
 
 def cmd_evaluate(args: argparse.Namespace) -> str:
     """Run LLM evaluation on a SAIR dataset."""
-    _ensure_dataset(args.dataset, DEFAULT_PUBLIC_DIR)
+    live = getattr(args, "live", False) or os.getenv("RUN_LIVE_SAIR") == "1"
+    if not live:
+        raise RuntimeError(
+            "SAIR evaluation is disabled by default; pass --live or set RUN_LIVE_SAIR=1."
+        )
+    _ensure_dataset(args.dataset, DEFAULT_PUBLIC_DIR, live=live)
     from scripts.sair.evaluate import run_evaluation
 
     run_data = run_evaluation(
@@ -78,6 +83,7 @@ def cmd_evaluate(args: argparse.Namespace) -> str:
         runs_dir=args.runs_dir,
         logs_dir=args.logs_dir,
         stage2=getattr(args, "stage2", False),
+        live=live,
     )
     s = run_data["summary"]
     msg = (
@@ -159,10 +165,15 @@ def cmd_analyze(args: argparse.Namespace) -> None:
 
 def cmd_full(args: argparse.Namespace) -> None:
     """Full pipeline: ensure data → generate baseline cheatsheet → evaluate → analyze."""
+    live = getattr(args, "live", False) or os.getenv("RUN_LIVE_SAIR") == "1"
+    if not live:
+        raise RuntimeError(
+            "SAIR full evaluation is disabled by default; pass --live or set RUN_LIVE_SAIR=1."
+        )
     logger.info("Starting SAIR full pipeline.")
 
     # 1. Ensure data
-    _ensure_dataset(args.dataset, DEFAULT_PUBLIC_DIR)
+    _ensure_dataset(args.dataset, DEFAULT_PUBLIC_DIR, live=live)
 
     # 2. Generate baseline cheatsheet
     cs_path = os.path.join(DEFAULT_CS_DIR, "baseline.txt")
@@ -183,6 +194,7 @@ def cmd_full(args: argparse.Namespace) -> None:
         runs_dir=args.runs_dir,
         logs_dir=args.logs_dir,
         stage2=getattr(args, "stage2", False),
+        live=live,
     )
 
     # 4. Analyze
@@ -235,6 +247,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Enable Stage 2 log-loss confidence scoring.",
     )
+    ev.add_argument(
+        "--live",
+        action="store_true",
+        help="Explicitly opt into external-provider calls (or set RUN_LIVE_SAIR=1).",
+    )
 
     # ---- generate ----
     gen = sub.add_parser("generate", help="Generate or refine a cheatsheet.")
@@ -267,6 +284,11 @@ def build_parser() -> argparse.ArgumentParser:
     fl.add_argument("--logs-dir", default=DEFAULT_LOGS_DIR)
     fl.add_argument(
         "--stage2", action="store_true", help="Enable Stage 2 log-loss scoring."
+    )
+    fl.add_argument(
+        "--live",
+        action="store_true",
+        help="Explicitly opt into external-provider calls (or set RUN_LIVE_SAIR=1).",
     )
     fl.add_argument("--verbose", "-v", action="store_true")
 

@@ -21,7 +21,7 @@
 ## Validation
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/defense/ -q
+uv run pytest tests/unit/defense/ -q
 uv run ruff check src/codomyrmex/defense
 uv run ty check --output-format concise src/codomyrmex/defense
 ```

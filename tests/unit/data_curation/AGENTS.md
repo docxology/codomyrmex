@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/data_curation
+# Codomyrmex Agents — tests/unit/data_curation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

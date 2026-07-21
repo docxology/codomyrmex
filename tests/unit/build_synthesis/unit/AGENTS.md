@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/build_synthesis/unit
+# Codomyrmex Agents — tests/unit/build_synthesis/unit
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

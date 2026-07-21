@@ -35,7 +35,7 @@ Data structures:
 
 import contextlib
 
-from . import pipeline
+from . import build, pipeline
 
 # Shared schemas for cross-module interop
 with contextlib.suppress(ImportError):
@@ -142,6 +142,8 @@ __all__ = [
     "StageError",
     "Workflow",
     "WorkflowGenerator",
+    # Submodules
+    "build",
     # CLI integration
     "cli_commands",
     "create_pipeline",
@@ -150,7 +152,6 @@ __all__ = [
     "manage_deployments",
     "monitor_pipeline_health",
     "optimize_pipeline_performance",
-    # Submodules
     "pipeline",
     "run_pipeline",
 ]

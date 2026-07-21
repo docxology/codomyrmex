@@ -175,7 +175,7 @@ async def run_smoke_tests(
             "uv",
             "run",
             "pytest",
-            "src/codomyrmex/tests/unit",
+            "tests/unit",
             "-q",
             "--tb=no",
             "-x",

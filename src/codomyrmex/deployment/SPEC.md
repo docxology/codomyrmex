@@ -64,7 +64,7 @@ graph TD
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/unit/deployment/ -v
+uv run python -m pytest tests/unit/deployment/ -v
 ```
 
 ## Navigation

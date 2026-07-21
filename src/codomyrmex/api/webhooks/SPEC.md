@@ -97,7 +97,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/api/webhooks/
+uv run pytest tests/unit/api/webhooks/
 ```
 
 ## 6. Future Considerations

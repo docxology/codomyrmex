@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/ai_gateway
+# Codomyrmex Agents — tests/unit/ai_gateway
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

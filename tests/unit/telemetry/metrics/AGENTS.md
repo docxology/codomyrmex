@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/telemetry/metrics
+# Codomyrmex Agents — tests/unit/telemetry/metrics
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

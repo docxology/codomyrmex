@@ -30,6 +30,7 @@ import argparse
 import asyncio
 import contextlib
 import json
+import os
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.model_context_protocol import MCPServer, MCPServerConfig
@@ -423,26 +424,8 @@ def list_available_tools(server: MCPServer) -> None:
             print()
 
 
-def main():
-    # Auto-injected: Load configuration
-    from pathlib import Path
-
-    import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "model_context_protocol"
-        / "config.yaml"
-    )
-    if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print(
-                "Loaded config from config/model_context_protocol/config.yaml",
-                file=sys.stderr,
-            )
-
+def build_parser() -> argparse.ArgumentParser:
+    """Build the command-line parser without starting discovery or a server."""
     parser = argparse.ArgumentParser(
         description="Run Codomyrmex MCP Server",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -464,7 +447,9 @@ Examples:
         "--port", type=int, default=8080, help="Port for HTTP transport (default: 8080)"
     )
     parser.add_argument(
-        "--host", default="0.0.0.0", help="Host for HTTP transport (default: 0.0.0.0)"
+        "--host",
+        default="127.0.0.1",
+        help="Host for HTTP transport (default: 127.0.0.1)",
     )
     parser.add_argument(
         "--list-tools", action="store_true", help="List available tools and exit"
@@ -475,15 +460,56 @@ Examples:
     parser.add_argument(
         "--profile",
         choices=["full", "readonly"],
-        default="full",
-        help="Tool exposure profile (default: full; readonly keeps only inspection tools)",
+        default=None,
+        help="Tool exposure profile (HTTP defaults to readonly; stdio defaults to full)",
     )
+    parser.add_argument(
+        "--auth-token",
+        default=None,
+        help="Bearer token for HTTP; may also be set via CODOMYRMEX_MCP_AUTH_TOKEN",
+    )
+    parser.add_argument(
+        "--cors-origin",
+        action="append",
+        default=[],
+        help="Explicit browser origin allowed by HTTP CORS (repeatable)",
+    )
+    return parser
 
+
+def resolve_profile(transport: str, profile: str | None) -> str:
+    """Resolve the safe default tool profile for a selected transport."""
+    return profile or ("readonly" if transport == "http" else "full")
+
+
+def main():
+    # Auto-injected: Load configuration
+    from pathlib import Path
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "model_context_protocol"
+        / "config.yaml"
+    )
+    if config_path.exists():
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print(
+                "Loaded config from config/model_context_protocol/config.yaml",
+                file=sys.stderr,
+            )
+
+    parser = build_parser()
     args = parser.parse_args()
+
+    profile = resolve_profile(args.transport, args.profile)
 
     # Create server
     server = create_server(name=args.name)
-    apply_tool_profile(server, args.profile)
+    apply_tool_profile(server, profile)
 
     if args.list_tools:
         list_available_tools(server)
@@ -503,7 +529,15 @@ Examples:
         print(f"   Web UI: http://localhost:{args.port}/", file=sys.stderr)
         print(f"   Health: http://localhost:{args.port}/health", file=sys.stderr)
         print("   Press Ctrl+C to stop\n", file=sys.stderr)
-        asyncio.run(server.run_http(host=args.host, port=args.port))
+        asyncio.run(
+            server.run_http(
+                host=args.host,
+                port=args.port,
+                allowed_origins=args.cors_origin,
+                auth_token=args.auth_token
+                or os.environ.get("CODOMYRMEX_MCP_AUTH_TOKEN"),
+            )
+        )
 
     return 0
 

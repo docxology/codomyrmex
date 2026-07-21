@@ -44,7 +44,7 @@ No internal Codomyrmex dependencies.
 ## 5. Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k tool_use -v
+uv run python -m pytest tests/ -k tool_use -v
 ```
 
 All tests follow the Zero-Mock policy.

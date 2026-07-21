@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/telemetry/tracing
+# Codomyrmex Agents — tests/unit/telemetry/tracing
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

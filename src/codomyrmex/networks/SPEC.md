@@ -93,5 +93,5 @@ graph TD
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k networks -v
+uv run python -m pytest tests/ -k networks -v
 ```

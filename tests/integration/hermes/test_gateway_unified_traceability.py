@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -7,6 +8,8 @@ from codomyrmex.agents.hermes.hermes_client import HermesClient
 from codomyrmex.agents.hermes.mcp_tools import hermes_create_task
 from codomyrmex.agents.hermes.session import SQLiteSessionStore
 from codomyrmex.logging_monitoring.core.correlation import get_correlation_id
+
+RUN_LIVE_OLLAMA = os.environ.get("RUN_LIVE_OLLAMA") == "1"
 
 
 @pytest.fixture
@@ -30,6 +33,10 @@ def hermes_client(temp_db):
     return client
 
 
+@pytest.mark.skipif(
+    not RUN_LIVE_OLLAMA,
+    reason="Live Ollama integration tests require RUN_LIVE_OLLAMA=1",
+)
 def test_unified_traceability_execute(hermes_client):
     """Test that a basic execute request correctly assigns and propagates trace_id."""
     request = AgentRequest(prompt="Hello, are you there?")

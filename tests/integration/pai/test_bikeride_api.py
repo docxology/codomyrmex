@@ -6,17 +6,18 @@ Requires the PAI PM server running on localhost:8888 with Ollama available.
 
 Run::
 
-    uv run python -m pytest src/codomyrmex/tests/integration/pai/test_bikeride_api.py -v
+    uv run python -m pytest tests/integration/pai/test_bikeride_api.py -v
 
 Or skip if the server is not running::
 
-    uv run python -m pytest src/codomyrmex/tests/integration/pai/test_bikeride_api.py -v -k "not slow"
+    uv run python -m pytest tests/integration/pai/test_bikeride_api.py -v -k "not slow"
 """
 
 from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import urllib.error
 import urllib.request
@@ -24,6 +25,12 @@ import urllib.request
 import pytest
 
 logger = logging.getLogger(__name__)
+
+_RUN_LIVE_PAI = os.getenv("RUN_LIVE_PAI", "0").lower() in {"1", "true", "yes"}
+pytestmark = pytest.mark.skipif(
+    not _RUN_LIVE_PAI,
+    reason="set RUN_LIVE_PAI=1 to contact the local PAI PM service",
+)
 
 PAI_PM_BASE = "http://localhost:8888"
 THINKING_PATTERNS = [

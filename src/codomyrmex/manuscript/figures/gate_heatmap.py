@@ -7,17 +7,27 @@ from codomyrmex.manuscript.figures._common import (
     ListedColormap,
     _add_provenance_note,
     _experiment_float,
+    _figure_parameter,
     _gate_weight,
     _save,
+    _var_float,
+    _var_str,
     np,
     plt,
 )
 
 
 def fig_gate_score_heatmap() -> None:
-    N = 160
-    trust_vals = np.linspace(0.0, 1.0, N)
-    pressure_vals = np.linspace(0.0, 10.0, N)
+    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN", 0.0))
+    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX", 1.0))
+    grid_points = int(
+        _figure_parameter("heatmap_grid_points", "CONFIG_HEATMAP_GRID_POINTS", 160, int)
+    )
+    pressure_max = float(
+        _figure_parameter("heatmap_pressure_max", "CONFIG_HEATMAP_PRESSURE_MAX", 10.0)
+    )
+    trust_vals = np.linspace(score_min, score_max, grid_points)
+    pressure_vals = np.linspace(score_min, pressure_max, grid_points)
     T, P = np.meshgrid(trust_vals, pressure_vals)
 
     w_budget = _gate_weight("budget", 0.30)
@@ -35,20 +45,34 @@ def fig_gate_score_heatmap() -> None:
     trust_hard_floor = _experiment_float(
         "trust_hard_floor", "CONFIG_TRUST_HARD_FLOOR", 0.30
     )
-    trust_full_credit = 0.60
+    trust_full_credit = _experiment_float(
+        "trust_full_credit_threshold", "CONFIG_TRUST_FULL_CREDIT_THRESHOLD", 0.60
+    )
+    medium_hazard = _var_float("CONFIG_HAZARD_MEDIUM_THRESHOLD", 3.0)
+    high_hazard = _var_float("CONFIG_HAZARD_HIGH_THRESHOLD", 6.0)
+    risk_credit_medium = _var_float("CONFIG_RISK_CREDIT_MEDIUM", 0.5)
 
-    risk_ok = np.where(P < 3.0, 1.0, np.where(P < 6.0, 0.5, 0.0))
-    trust_ok = np.where(trust_full_credit <= T, 1.0, 0.5)
+    risk_ok = np.where(
+        medium_hazard > P,
+        score_max,
+        np.where(high_hazard > P, risk_credit_medium, score_min),
+    )
+    trust_credit_lower = _var_float(
+        "CONFIG_TRUST_CREDIT_LOWER", (score_min + score_max) / 2
+    )
+    trust_ok = np.where(trust_full_credit <= T, score_max, trust_credit_lower)
     score = (
-        w_budget * np.ones_like(T)
+        w_budget * score_max * np.ones_like(T)
         + w_risk * risk_ok
         + w_trust * trust_ok
-        + w_completeness
+        + w_completeness * score_max
     )
-    score = np.where(trust_hard_floor > T, 0.0, score)
+    score = np.where(trust_hard_floor > T, score_min, score)
 
     cmap = ListedColormap(["#7F1D1D", "#F4B44A", "#0A7A43"], name="gate_decision")
-    norm = BoundaryNorm([0.0, hold_threshold, execute_threshold, 1.001], cmap.N)
+    norm = BoundaryNorm(
+        [score_min, hold_threshold, execute_threshold, score_max + 0.001], cmap.N
+    )
 
     fig, ax = plt.subplots(figsize=(9.5, 5.8))
     ax.set_facecolor("#080808")
@@ -59,9 +83,9 @@ def fig_gate_score_heatmap() -> None:
     )
 
     cbar_ticks = [
-        hold_threshold / 2,
+        (score_min + hold_threshold) / 2,
         (hold_threshold + execute_threshold) / 2,
-        (execute_threshold + 1.0) / 2,
+        (execute_threshold + score_max) / 2,
     ]
     cbar = fig.colorbar(im, ax=ax, pad=0.02, shrink=0.96, ticks=cbar_ticks)
     cbar.ax.tick_params(labelsize=9)
@@ -85,10 +109,10 @@ def fig_gate_score_heatmap() -> None:
         linewidths=[2.0, 2.5],
     )
 
-    ax.axvspan(0.0, trust_hard_floor, alpha=0.62, color="#000000", zorder=2)
+    ax.axvspan(score_min, trust_hard_floor, alpha=0.62, color="#000000", zorder=2)
     ax.text(
         trust_hard_floor / 2,
-        9.2,
+        pressure_max * 0.92,
         "TRUST\nHARD FLOOR",
         fontsize=7.5,
         color="white",
@@ -100,8 +124,8 @@ def fig_gate_score_heatmap() -> None:
 
     # Decision region labels
     ax.text(
-        0.88,
-        1.2,
+        score_max * 0.88,
+        pressure_max * 0.12,
         "EXECUTE",
         fontsize=12,
         color="white",
@@ -112,8 +136,8 @@ def fig_gate_score_heatmap() -> None:
         alpha=0.90,
     )
     ax.text(
-        0.48,
-        5.8,
+        score_max * 0.48,
+        pressure_max * 0.58,
         "HOLD",
         fontsize=12,
         color="white",
@@ -124,8 +148,8 @@ def fig_gate_score_heatmap() -> None:
         alpha=0.90,
     )
     ax.text(
-        0.18,
-        8.3,
+        score_max * 0.18,
+        pressure_max * 0.83,
         "REFUSE",
         fontsize=12,
         color="white",
@@ -144,7 +168,7 @@ def fig_gate_score_heatmap() -> None:
         ax.axvline(x=x_val, color="white", lw=0.8, alpha=0.35, linestyle=":")
         ax.text(
             x_val + 0.006,
-            9.72,
+            pressure_max * 0.972,
             f"{x_val} {label_txt.replace(chr(10), ' ')}",
             fontsize=7.2,
             color="white",
@@ -154,11 +178,14 @@ def fig_gate_score_heatmap() -> None:
             va="top",
         )
 
-    for y_val, label_txt in [(3.0, "medium hazard"), (6.0, "high hazard")]:
+    for y_val, label_txt in [
+        (medium_hazard, "medium hazard"),
+        (high_hazard, "high hazard"),
+    ]:
         ax.axhline(y=y_val, color="white", lw=0.8, alpha=0.32, linestyle=":")
         ax.text(
-            0.985,
-            y_val + 0.08,
+            score_max * 0.985,
+            y_val + pressure_max * 0.008,
             label_txt,
             fontsize=7.2,
             color="white",
@@ -170,16 +197,22 @@ def fig_gate_score_heatmap() -> None:
 
     def _score_at(trust_score: float, risk_pressure: float) -> float:
         if trust_score < trust_hard_floor:
-            return 0.0
+            return score_min
         risk_component = (
-            1.0 if risk_pressure < 3.0 else 0.5 if risk_pressure < 6.0 else 0.0
+            score_max
+            if risk_pressure < medium_hazard
+            else risk_credit_medium
+            if risk_pressure < high_hazard
+            else score_min
         )
-        trust_component = 1.0 if trust_score >= trust_full_credit else 0.5
+        trust_component = (
+            score_max if trust_score >= trust_full_credit else trust_credit_lower
+        )
         return (
-            w_budget
+            w_budget * score_max
             + w_risk * risk_component
             + w_trust * trust_component
-            + w_completeness
+            + w_completeness * score_max
         )
 
     def _decision(score_value: float) -> str:
@@ -190,9 +223,30 @@ def fig_gate_score_heatmap() -> None:
         return "REFUSE"
 
     examples = [
-        (0.90, 1.0, 0.73, 1.70, "high trust\ncomplete", "white"),
-        (0.70, 6.5, 0.78, 7.30, "elevated\nhazard", "#FFE066"),
-        (0.20, 1.0, 0.33, 1.90, "low trust\nclear field", "#FF9999"),
+        (
+            min(score_max, max(trust_full_credit, score_max * 0.9)),
+            medium_hazard / 2,
+            score_max * 0.73,
+            pressure_max * 0.17,
+            "high trust\nclear field",
+            "white",
+        ),
+        (
+            min(score_max, max(trust_full_credit, score_max * 0.7)),
+            high_hazard + (pressure_max - high_hazard) / 2,
+            score_max * 0.78,
+            pressure_max * 0.73,
+            "elevated\nhazard",
+            "#FFE066",
+        ),
+        (
+            trust_hard_floor / 2,
+            medium_hazard / 2,
+            score_max * 0.33,
+            pressure_max * 0.19,
+            "low trust\nclear field",
+            "#FF9999",
+        ),
     ]
     for tx, tp, label_x, label_y, desc, ecolor in examples:
         sc = _score_at(tx, tp)
@@ -227,8 +281,10 @@ def fig_gate_score_heatmap() -> None:
         "Gate decision landscape — piecewise score bands and hard trust floor\n"
         f"score = {w_budget:.2f}*budget + {w_risk:.2f}*risk_ok + "
         f"{w_trust:.2f}*trust_ok + {w_completeness:.2f}*completeness\n"
-        f"(budget=1.0, completeness=1.0; trust_ok tiers at {trust_full_credit:.2f}; "
-        f"trust < {trust_hard_floor:.2f} forces score=0)"
+        f"(budget={score_max:.1f}, completeness={score_max:.1f}; "
+        f"trust_ok tiers at {trust_full_credit:.2f}; "
+        f"trust < {trust_hard_floor:.2f} forces score={score_min:.1f})\n"
+        f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT', 'Current default/illustrative policy slice')}"
     )
     ax.set_title(gate_title, fontsize=9.5, pad=10)
     ax.tick_params(labelsize=9.5)

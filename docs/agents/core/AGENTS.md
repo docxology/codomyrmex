@@ -31,7 +31,7 @@ Documentation for **core agent infrastructure** shared across providers: transpo
 
 ## Development Guidelines
 
-- Follow the root [AGENTS.md](../../../AGENTS.md). Add tests under `src/codomyrmex/tests/unit/agents/core/` (or current layout) for new shared behavior.
+- Follow the root [AGENTS.md](../../../AGENTS.md). Add tests under `tests/unit/agents/core/` (or current layout) for new shared behavior.
 
 ## Navigation Links
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/bio_simulation
+# Codomyrmex Agents — tests/unit/bio_simulation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

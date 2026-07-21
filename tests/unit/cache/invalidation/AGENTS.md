@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/cache/invalidation
+# Codomyrmex Agents — tests/unit/cache/invalidation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

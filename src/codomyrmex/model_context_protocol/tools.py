@@ -446,7 +446,7 @@ def run_shell_command(
 
         result = subprocess.run(
             command,
-            shell=True,  # SECURITY: Intentional — this MCP tool's purpose is shell execution
+            shell=True,  # nosec B602 - explicit full-profile shell tool
             cwd=Path(cwd).expanduser().resolve(),
             capture_output=True,
             text=True,

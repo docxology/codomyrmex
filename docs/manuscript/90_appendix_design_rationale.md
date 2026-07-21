@@ -6,6 +6,9 @@ selected policy is optimal. Where an alternative would require outcome data, the
 release treats calibration as future evaluation rather than retroactively presenting a
 hand-set constant as an empirical result.
 
+{{CONFIG_PARAMETER_STATUS_NOTE}} The appendix consequently distinguishes runtime
+defaults, presentation settings, and future-study inputs wherever their roles differ.
+
 ## DR-1: Weighted additive gate with hard overrides {#sec:dr-gate-formula}
 
 After its early-return checks, `ActuationGate` computes the score in
@@ -42,7 +45,7 @@ formula alone is insufficient to predict every gate result.
 Each trace stores an evaporation amount $\epsilon$ when deposited. A passive tick uses
 
 $$
-s_{n+1}=\max(0,s_n-\epsilon),
+s_{n+1}=\max({{CONFIG_SCORE_MIN}},s_n-\epsilon),
 $$ {#eq:appendix-linear-decay}
 
 and removes a trace at zero. At the defaults, FAST, NORMAL, and SLOW subtract
@@ -72,7 +75,8 @@ database path is not sufficient.
 
 ## DR-4: Clipped additive trust updates {#sec:dr-trust-deltas}
 
-The integrated outcome path applies fixed deltas and clips trust to $[0,1]$. A clean
+The integrated outcome path applies fixed deltas and clips trust to
+$[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$. A clean
 reported outcome adds {{CONFIG_TRUST_DELTA_PASS}}; a failed one changes trust by
 {{CONFIG_TRUST_DELTA_FAIL}}; repair and human-feedback terms
 can change the net update. The rule is transparent and supports exact fixtures such as
@@ -164,7 +168,7 @@ between conceptual, formula-derived, and deterministic-fixture graphics explicit
 | Asset and evidence class | Intended reading and explicit limit |
 |---|---|
 | `cover.png` — conceptual cover | Visual identity and subsystem motif; no quantitative evidence. |
-| `subsystem_architecture.png` — architecture | Kernel ownership of seven operational components; no latency or distributed-topology claim. |
+| `subsystem_architecture.png` — architecture | Kernel ownership of {{CONFIG_OPERATIONAL_SUBSYSTEM_COUNT}} operational components; no latency or distributed-topology claim. |
 | `colony_pressure_loop.png` — dependency diagram | Proposal, decision, report, and later-state dependencies; not a literal call trace or autonomous execution. |
 | `pheromone_decay.png` — formula-derived | Passive unit-trace paths; not empirical frequency or wall-clock half-life. |
 | `gate_score_heatmap.png` — formula-derived | Policy bands over trust and effective hazard; not an observed distribution or calibrated risk. |

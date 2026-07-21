@@ -81,7 +81,7 @@ def check_lock_file(path: Path) -> bool:
     return True
 
 
-def validate_dependencies(repo_root: Path) -> int:
+def validate_dependencies(repo_root: Path, strict: bool = False) -> int:
     """Run all dependency validations."""
     print("🔍 Validating dependency management...\n")
 
@@ -96,9 +96,24 @@ def validate_dependencies(repo_root: Path) -> int:
         pyproject_deps = parse_pyproject(pyproject_path)
         print(f"   Found {len(pyproject_deps)} dependencies")
 
-    # Check uv.lock
+    # Check uv.lock and include missing/empty lock files in the gate result.
     uv_lock = repo_root / "uv.lock"
-    check_lock_file(uv_lock)
+    if not check_lock_file(uv_lock):
+        issues.append("uv.lock is missing or empty")
+
+    if strict and uv_lock.exists():
+        import subprocess
+
+        lock_check = subprocess.run(
+            ["uv", "lock", "--check"],
+            cwd=repo_root,
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        if lock_check.returncode:
+            issues.append("uv.lock is out of date with pyproject.toml")
+            print(lock_check.stdout or lock_check.stderr)
 
     # Check for requirements.txt (optional)
     requirements = repo_root / "requirements.txt"
@@ -143,7 +158,7 @@ def main():
 
     args = parser.parse_args()
 
-    return validate_dependencies(args.repo_root)
+    return validate_dependencies(args.repo_root, strict=args.strict)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/container_optimization
+# Codomyrmex Agents — tests/unit/container_optimization
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

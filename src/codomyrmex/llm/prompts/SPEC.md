@@ -93,7 +93,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/llm/prompts/
+uv run pytest tests/unit/llm/prompts/
 ```
 
 ## 6. Future Considerations

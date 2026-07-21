@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/spatial/coordinates
+# Codomyrmex Agents — tests/unit/spatial/coordinates
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

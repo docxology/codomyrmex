@@ -1,4 +1,4 @@
-# Codomyrmex — `src/codomyrmex/tests/unit/demos`
+# Codomyrmex — `tests/unit/demos`
 
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026

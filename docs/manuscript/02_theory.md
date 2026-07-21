@@ -12,6 +12,10 @@ The gate score is a design score, not a probability of safety. The trust process
 bounded accounting rule, not a Bayesian posterior. No claim below establishes production
 safety, optimality, differential privacy, or long-run ecological convergence.
 
+{{CONFIG_PARAMETER_STATUS_NOTE}} The equations in this section state consequences of
+the current implementation; they are not a claim that the selected constants are
+universal or empirically calibrated.
+
 ## Capped local signal field {#sec:theory-field}
 
 Let $J_t \subseteq \mathcal L \times \mathcal K$ be the finite set of compound
@@ -20,7 +24,7 @@ location–signal keys present at tick $t$, where $\mathcal K$ contains `FAILURE
 set $J$, the field state is
 
 $$
-x_t \in [0,M]^J,\qquad M={{CONFIG_FIELD_MAX_STRENGTH}} .
+x_t \in [{{CONFIG_SCORE_MIN}},M]^J,\qquad M={{CONFIG_FIELD_MAX_STRENGTH}} .
 $$ {#eq:field-state}
 
 This capped non-negative cube is a complete metric lattice under the supremum metric.
@@ -36,7 +40,7 @@ $$
 x_{j,t+1}
 =
 \min\!\left(M,\,
-\max(0,x_{j,t}-\epsilon_j)+d_{j,t}
+\max({{CONFIG_SCORE_MIN}},x_{j,t}-\epsilon_j)+d_{j,t}
 \right).
 $$ {#eq:field-recurrence}
 
@@ -47,8 +51,8 @@ $\epsilon_{\mathrm{SLOW}}={{CONFIG_EVAPORATION_SLOW}}$ strength units per
 tick. A caller may deposit at another point in the scheduler cycle, so exact within-tick
 values depend on operation order; the range and monotonicity results below do not.
 
-**Lemma 1 (range invariance).** If $x_{j,0}\in[0,M]$, then
-$x_{j,t}\in[0,M]$ for every finite sequence of non-negative deposits.
+**Lemma 1 (range invariance).** If $x_{j,0}\in[{{CONFIG_SCORE_MIN}},M]$, then
+$x_{j,t}\in[{{CONFIG_SCORE_MIN}},M]$ for every finite sequence of non-negative deposits.
 
 *Proof.* The inner maximum is non-negative and the outer minimum is at most $M$.
 Induction over $t$ completes the argument. $\square$
@@ -56,7 +60,7 @@ Induction over $t$ completes the argument. $\square$
 **Lemma 2 (passive linear decay).** With no deposits for $n$ ticks,
 
 $$
-x_{j,t+n}=\max(0,x_{j,t}-n\epsilon_j).
+x_{j,t+n}=\max({{CONFIG_SCORE_MIN}},x_{j,t}-n\epsilon_j).
 $$ {#eq:passive-linear-decay}
 
 *Proof.* Apply the subtract-and-floor operation repeatedly. Before the first floor
@@ -76,7 +80,7 @@ For a unit trace, FAST, NORMAL, and SLOW disappear after
 {{RESULT_UNIT_EXTINCTION_SLOW_TICKS}} discrete ticks,
 respectively (the ceiling matters when $s/\epsilon_j$ is not integral).
 
-![Analytical trajectories of a unit-strength trace under the implemented subtractive decay rule. Each curve is $s(t)=\max(0,1-\epsilon t)$, with no deposits, reads, or reinforcement. Vertical markers show continuous-time extinction points; the runtime updates at integer ticks and removes values at or below zero. Parameters are generated from the manuscript snapshot.](figures/pheromone_decay.png){#fig:pheromone_decay width=88%}
+![{{FIGURE_CAPTION_PHEROMONE_DECAY}}](figures/{{FIGURE_FILENAME_PHEROMONE_DECAY}}){#{{FIGURE_LABEL_PHEROMONE_DECAY}} width={{FIGURE_WIDTH_PHEROMONE_DECAY}}}
 
 ## From reported failure to local gate pressure {#sec:theory-local-pressure}
 
@@ -96,9 +100,9 @@ The risk-clearance component is the piecewise function
 $$
 r(h)=
 \begin{cases}
-1, & 0\leq h<{{CONFIG_HAZARD_MEDIUM_THRESHOLD}},\\
+{{CONFIG_UNIT_SCORE}}, & {{CONFIG_SCORE_MIN}}\leq h<{{CONFIG_HAZARD_MEDIUM_THRESHOLD}},\\
 {{CONFIG_RISK_CREDIT_MEDIUM}}, & {{CONFIG_HAZARD_MEDIUM_THRESHOLD}}\leq h<{{CONFIG_HAZARD_HIGH_THRESHOLD}},\\
-0, & h\geq {{CONFIG_HAZARD_HIGH_THRESHOLD}}.
+{{CONFIG_SCORE_MIN}}, & h\geq {{CONFIG_HAZARD_HIGH_THRESHOLD}}.
 \end{cases}
 $$ {#eq:risk-clearance}
 
@@ -140,7 +144,8 @@ $$
 g={{CONFIG_GATE_WEIGHT_BUDGET}}b+{{CONFIG_GATE_WEIGHT_RISK}}r+{{CONFIG_GATE_WEIGHT_TRUST}}u+{{CONFIG_GATE_WEIGHT_COMPLETENESS}}c,
 $$ {#eq:theory-gate-score}
 
-where $b\in\{0,1\}$, $r\in\{0,{{CONFIG_RISK_CREDIT_MEDIUM}},1\}$,
+where $b\in\{{{CONFIG_SCORE_MIN}},{{CONFIG_UNIT_SCORE}}\}$,
+$r\in\{{{CONFIG_SCORE_MIN}},{{CONFIG_RISK_CREDIT_MEDIUM}},{{CONFIG_UNIT_SCORE}}\}$,
 $u$ uses the generated trust-credit tiers and optional
 {{CONFIG_FAILURE_PENALTY}} recent-failure penalty, and $c$ is generated from zero
 through {{CONFIG_COMPLETENESS_FIELD_COUNT}} missing fields with a
@@ -158,10 +163,12 @@ Otherwise $g\geq{{CONFIG_GATE_EXECUTE_THRESHOLD}}$ yields EXECUTE,
 ${{CONFIG_GATE_HOLD_THRESHOLD}}\leq g<{{CONFIG_GATE_EXECUTE_THRESHOLD}}$ yields HOLD,
 and $g<{{CONFIG_GATE_HOLD_THRESHOLD}}$ yields REFUSE.
 
-**Theorem 1 (score boundedness).** Every ordinary score is in $[0,1]$.
+**Theorem 1 (score boundedness).** Every ordinary score is in
+$[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$.
 
-*Proof.* Every component is in $[0,1]$, every coefficient is non-negative, and the
-coefficients sum to one. The implementation additionally clips the sum to $[0,1]$.
+*Proof.* Every component is in $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$, every coefficient is non-negative, and the
+coefficients sum to {{CONFIG_GATE_WEIGHT_SUM}}. The implementation additionally clips the sum to
+$[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$.
 $\square$
 
 **Proposition 2 (component monotonicity).** On the ordinary path, improving budget
@@ -176,7 +183,7 @@ attested outcomes, representative workloads, and held-out evaluation.
 [@fig:gate_score_3d] visualizes the exact score tiers and the continuous completeness
 envelope used only to make the discontinuities legible.
 
-![Analytical gate-score surface with budget and local hazard clearance fixed at 1.0. The implementation's trust hard floor and trust-credit tiers are shown; completeness is plotted continuously as a visual envelope even though runtime completeness is discrete. Threshold planes identify the configured HOLD and EXECUTE boundaries. This is formula-derived, not an empirical risk surface.](figures/gate_score_3d.png){#fig:gate_score_3d width=92%}
+![{{FIGURE_CAPTION_GATE_SCORE_3D}}](figures/{{FIGURE_FILENAME_GATE_SCORE_3D}}){#{{FIGURE_LABEL_GATE_SCORE_3D}} width={{FIGURE_WIDTH_GATE_SCORE_3D}}}
 
 ### What HOLD can and cannot establish {#sec:theory-hold}
 
@@ -200,7 +207,7 @@ choice and a future empirical hypothesis, not a proved optimum.
 For recorded outcome $n$, trust follows
 
 $$
-\tau_{n+1}=\operatorname{clip}_{[0,1]}(\tau_n+\Delta_n),
+\tau_{n+1}=\operatorname{clip}_{[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]}(\tau_n+\Delta_n),
 $$ {#eq:trust-update}
 
 with
@@ -212,7 +219,7 @@ $$
 {{CONFIG_TRUST_DELTA_FAIL}}, & \text{tests fail}
 \end{cases}
 {{CONFIG_TRUST_DELTA_REPAIR}}\,\mathbf 1_{\mathrm{repair}}
-+{{CONFIG_TRUST_DELTA_HUMAN_WEIGHT}}h_n,\qquad h_n\in[-1,1].
++{{CONFIG_TRUST_DELTA_HUMAN_WEIGHT}}h_n,\qquad h_n\in[{{CONFIG_HUMAN_FEEDBACK_MIN}},{{CONFIG_HUMAN_FEEDBACK_MAX}}].
 $$ {#eq:trust-delta}
 
 This proves boundedness by construction. It does not prove convergence. With continuing
@@ -276,8 +283,8 @@ contract cases, open empirical hypotheses, and claims that are false for this re
 | A passive trace decays linearly and disappears in finite ticks | Proved implementation invariant | Exact tick tests |
 | More same-target RISK or FAILURE pressure cannot increase the ordinary score | Proved arithmetic invariant | Monotonicity and paired integration tests |
 | One canonical failed outcome moves the paired lower-tier case from {{RESULT_PAIRED_CLEAR_SCORE}}/EXECUTE to {{RESULT_PAIRED_FAILURE_SCORE}}/HOLD | Verified deterministic case | Real subsystem integration test |
-| Gate score lies in $[0,1]$ | Proved arithmetic invariant | Component ranges and clip |
-| Trust lies in $[0,1]$ | Proved implementation invariant | Clipped update |
+| Gate score lies in $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$ | Proved arithmetic invariant | Component ranges and clip |
+| Trust lies in $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$ | Proved implementation invariant | Clipped update |
 | The gate lowers production harm | Open empirical hypothesis | Linked, attested, representative trials |
 | HOLD improves decisions | Open value-of-information hypothesis | Revision-cost and outcome study |
 | The ecology converges or is optimal | Not established | A specified stochastic model and external validation |

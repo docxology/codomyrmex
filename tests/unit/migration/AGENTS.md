@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/migration
+# Codomyrmex Agents — tests/unit/migration
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -82,3 +82,30 @@ def test_validate_link_existing_relative_ok(links_mod, tmp_path: Path) -> None:
     f.write_text("[x](other.md)", encoding="utf-8")
     r = links_mod.validate_link("other.md", f, tmp_path, 1)
     assert r.status == "ok"
+
+
+@pytest.mark.unit
+def test_discover_markdown_files_excludes_submodules_and_generated_docs(
+    links_mod, tmp_path: Path
+) -> None:
+    (tmp_path / ".gitmodules").write_text(
+        '[submodule "vendor"]\n\tpath = vendor/project\n', encoding="utf-8"
+    )
+    for relative in (
+        "README.md",
+        "tests/RUNNING_TESTS.md",
+        "tests/unit/agents/README.md",
+        "vendor/project/README.md",
+        "docs/manuscript/generated.md",
+        "src/codomyrmex/documentation/docs/generated.md",
+    ):
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("# doc\n", encoding="utf-8")
+
+    discovered = {
+        path.relative_to(tmp_path).as_posix()
+        for path in links_mod.discover_markdown_files(tmp_path)
+    }
+
+    assert discovered == {"README.md", "tests/RUNNING_TESTS.md"}

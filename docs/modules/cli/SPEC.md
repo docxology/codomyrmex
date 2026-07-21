@@ -78,5 +78,5 @@ See `src/codomyrmex/cli/__init__.py` for import dependencies.
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k cli -v
+uv run python -m pytest tests/ -k cli -v
 ```

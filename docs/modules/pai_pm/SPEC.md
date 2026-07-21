@@ -34,7 +34,7 @@ See source module for available exports.
 ## 5. Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k pai_pm -v
+uv run python -m pytest tests/ -k pai_pm -v
 ```
 
 ## Navigation

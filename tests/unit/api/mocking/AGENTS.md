@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/api/mocking
+# Codomyrmex Agents — tests/unit/api/mocking
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

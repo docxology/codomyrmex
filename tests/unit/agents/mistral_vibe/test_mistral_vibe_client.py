@@ -9,7 +9,7 @@ import os
 import pytest
 
 try:
-    from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
+    from tests.unit.agents.helpers import VIBE_AVAILABLE
 
     from codomyrmex.agents.core import AgentCapabilities, AgentRequest
     from codomyrmex.agents.mistral_vibe import MistralVibeClient
@@ -23,8 +23,8 @@ if not _HAS_AGENTS:
 
 # Skip entire module if vibe CLI is not properly configured
 pytestmark = pytest.mark.skipif(
-    not os.getenv("MISTRAL_API_KEY"),
-    reason="MISTRAL_API_KEY not set - skipping mistral_vibe tests",
+    os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1" or not os.getenv("MISTRAL_API_KEY"),
+    reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1 and MISTRAL_API_KEY",
 )
 
 
@@ -56,8 +56,10 @@ class TestMistralVibeClient:
         assert AgentCapabilities.MULTI_TURN in capabilities
 
     @pytest.mark.skipif(
-        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
-        reason="vibe CLI not installed or not configured",
+        os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1"
+        or not VIBE_AVAILABLE
+        or not os.getenv("MISTRAL_API_KEY"),
+        reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1, CLI, and key",
     )
     def test_mistral_vibe_client_execute_success(self):
         """Test successful execution of Mistral Vibe command with real CLI."""
@@ -71,8 +73,10 @@ class TestMistralVibeClient:
         # We test that the response structure is correct
 
     @pytest.mark.skipif(
-        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
-        reason="vibe CLI not configured",
+        os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1"
+        or not VIBE_AVAILABLE
+        or not os.getenv("MISTRAL_API_KEY"),
+        reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1, CLI, and key",
     )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_execute_failure_invalid_command(self):
@@ -89,8 +93,10 @@ class TestMistralVibeClient:
         assert response.error is not None
 
     @pytest.mark.skipif(
-        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
-        reason="vibe CLI not installed or not configured",
+        os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1"
+        or not VIBE_AVAILABLE
+        or not os.getenv("MISTRAL_API_KEY"),
+        reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1, CLI, and key",
     )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_stream(self):
@@ -106,8 +112,10 @@ class TestMistralVibeClient:
         assert isinstance(chunks, list)
 
     @pytest.mark.skipif(
-        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
-        reason="vibe CLI not installed or not configured",
+        os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1"
+        or not VIBE_AVAILABLE
+        or not os.getenv("MISTRAL_API_KEY"),
+        reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1, CLI, and key",
     )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_execute_command(self):
@@ -120,8 +128,10 @@ class TestMistralVibeClient:
         assert "exit_code" in result or "output" in result
 
     @pytest.mark.skipif(
-        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
-        reason="vibe CLI not installed or not configured",
+        os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1"
+        or not VIBE_AVAILABLE
+        or not os.getenv("MISTRAL_API_KEY"),
+        reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1, CLI, and key",
     )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_get_help(self):
@@ -135,8 +145,10 @@ class TestMistralVibeClient:
         assert "help_text" in help_info
 
     @pytest.mark.skipif(
-        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
-        reason="vibe CLI not configured",
+        os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1"
+        or not VIBE_AVAILABLE
+        or not os.getenv("MISTRAL_API_KEY"),
+        reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1, CLI, and key",
     )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_get_help_structure(self):

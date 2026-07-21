@@ -13,6 +13,10 @@ No raw multi-condition benchmark trace ships with this snapshot. Accordingly, th
 section reports no production effect size, confidence interval, ecological optimum, or
 population-level safety rate.
 
+{{CONFIG_PARAMETER_STATUS_NOTE}} The analytical figures and deterministic fixtures
+below should be read as reproducible policy probes, not as measurements of a deployed
+agent population.
+
 ## Executed quality gates {#sec:results-quality}
 
 The fail-closed manuscript generator reruns the Colony Kernel tests and refuses to emit
@@ -73,7 +77,8 @@ persists across restarts, or that the gate reduces real-world harm.
 ## Gate landscape and attainable scores {#sec:results-gate}
 
 The ordinary gate score has {{CONFIG_GATE_COMPONENT_COUNT}} non-negative weighted components. Because trust credit,
-hazard credit, and completeness are discrete, not every real number in $[0,1]$ is
+hazard credit, and completeness are discrete, not every real number in
+$[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$ is
 attainable.
 
 For a lower-tier authorized agent with clear budget and hazard, the score is
@@ -95,12 +100,12 @@ the generated cases below expose those gaps without a second arithmetic source i
 : Representative hard-override and ordinary gate cases. {#tbl:representative-gates}
 
 [@fig:gate_heatmap] visualizes the controlled slice with budget and completeness fixed at
-1.0 and no recent-failure penalty. The vertical discontinuities come from the trust hard
+{{CONFIG_UNIT_SCORE}} and no recent-failure penalty. The vertical discontinuities come from the trust hard
 floor and trust-credit tier; the horizontal discontinuities come from effective hazard
 thresholds at {{CONFIG_HAZARD_MEDIUM_THRESHOLD}} and {{CONFIG_HAZARD_HIGH_THRESHOLD}}. The pressure axis should be read as
 $\max(\mathrm{RISK},\mathrm{FAILURE})$, not RISK alone.
 
-![Formula-derived gate decision landscape over trust and effective local hazard pressure, where hazard is the maximum of RISK and FAILURE. Budget approval and completeness are fixed at 1.0; no recent-failure trust penalty or falsification override is applied. Colours encode configured decision bands, while the black strip is the trust hard override. This is an analytical policy map, not an observed proposal distribution.](figures/gate_score_heatmap.png){#fig:gate_heatmap width=90%}
+![{{FIGURE_CAPTION_GATE_SCORE_HEATMAP}}](figures/{{FIGURE_FILENAME_GATE_SCORE_HEATMAP}}){#{{FIGURE_LABEL_GATE_SCORE_HEATMAP}} width={{FIGURE_WIDTH_GATE_SCORE_HEATMAP}}}
 
 ## Trust accounting path {#sec:results-trust}
 
@@ -121,7 +126,7 @@ does not itself authorize a proposal.
 alternating or stochastic outcomes need not converge, and the current constant-step
 clipped update has no restoring term.
 
-![Deterministic trust trajectory under consecutive caller-reported clean outcomes. Shaded bands show inferred role labels; the independent generated gate floor means the first role promotion does not yet make ordinary gate scoring reachable. Points are analytical applications of the fixed update, not population measurements or evidence of stochastic convergence.](figures/trust_trajectory.png){#fig:trust_trajectory width=90%}
+![{{FIGURE_CAPTION_TRUST_TRAJECTORY}}](figures/{{FIGURE_FILENAME_TRUST_TRAJECTORY}}){#{{FIGURE_LABEL_TRUST_TRAJECTORY}} width={{FIGURE_WIDTH_TRUST_TRAJECTORY}}}
 
 The fixture is also not an attested credential protocol. The current MCP outcome tool
 does not require a matching prior EXECUTE record, so an operator or client can submit

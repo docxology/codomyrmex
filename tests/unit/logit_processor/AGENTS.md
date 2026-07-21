@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/logit_processor
+# Codomyrmex Agents — tests/unit/logit_processor
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

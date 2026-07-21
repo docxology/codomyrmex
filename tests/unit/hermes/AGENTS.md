@@ -1,12 +1,12 @@
 <!-- agents: curated -->
 
-# Codomyrmex Agents — src/codomyrmex/tests/unit/hermes
+# Codomyrmex Agents — tests/unit/hermes
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Signposting
 
-- **Path**: `src/codomyrmex/tests/unit/hermes`
+- **Path**: `tests/unit/hermes`
 - **Human overview**: [README.md](README.md)
 - **Functional spec**: [SPEC.md](SPEC.md)
 - **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)

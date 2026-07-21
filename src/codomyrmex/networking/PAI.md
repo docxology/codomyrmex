@@ -51,7 +51,9 @@ async def monitor_stream():
 
 ### SSH & remote Execution
 
-Secure shell access for remote server management.
+Secure shell access for remote server management. Unknown host keys are
+rejected by default; provide a trusted `known_hosts_file` or install the host
+key in the system known-hosts database before connecting.
 
 ```python
 from codomyrmex.networking import SSHClient

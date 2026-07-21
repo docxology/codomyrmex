@@ -58,7 +58,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/cache/async_ops/
+uv run pytest tests/unit/cache/async_ops/
 ```
 
 ## 6. Future Considerations

@@ -18,20 +18,33 @@ class SSHClient:
         key_filename: str | None = None,
         port: int = 22,
         known_hosts_file: str | None = None,
+        allow_unknown_host_keys: bool = False,
     ):
         self.hostname = hostname
         self.username = username
         self.password = password
         self.key_filename = key_filename
         self.port = port
+        self.allow_unknown_host_keys = allow_unknown_host_keys
         self.client = paramiko.SSHClient()
-        # Load system known_hosts if available; use WarningPolicy instead of
-        # AutoAddPolicy to avoid silently trusting unknown host keys (MITM risk).
+        # Load known hosts and reject anything that is not explicitly trusted.
         if known_hosts_file:
             self.client.load_host_keys(known_hosts_file)
         else:
             self.client.load_system_host_keys()
-        self.client.set_missing_host_key_policy(paramiko.WarningPolicy())
+        if allow_unknown_host_keys:
+            # This compatibility escape hatch is deliberately explicit. It
+            # accepts unknown keys and must never be the secure default.
+            logger.warning(
+                "SSH unknown host keys are accepted for %s; this is unsafe "
+                "and vulnerable to man-in-the-middle attacks",
+                hostname,
+            )
+            self.client.set_missing_host_key_policy(  # nosec B507 - explicit unsafe opt-in
+                paramiko.WarningPolicy()
+            )
+        else:
+            self.client.set_missing_host_key_policy(paramiko.RejectPolicy())
 
     def connect(self) -> None:
         """Establish SSH connection."""

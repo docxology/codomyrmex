@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/tool_use
+# Codomyrmex Agents — tests/unit/tool_use
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

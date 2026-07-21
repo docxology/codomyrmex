@@ -58,10 +58,10 @@ except ImportError:
 
 
 _CX_GATEWAY_TESTS = [
-    "src/codomyrmex/tests/unit/hermes/test_hermes_gateway_config.py",
-    "src/codomyrmex/tests/integration/hermes/test_gateway_identity_resolution.py",
-    "src/codomyrmex/tests/integration/hermes/test_gateway_directory_sync.py",
-    "src/codomyrmex/tests/integration/hermes/test_gateway_adapter_latency.py",
+    "tests/unit/hermes/test_hermes_gateway_config.py",
+    "tests/integration/hermes/test_gateway_identity_resolution.py",
+    "tests/integration/hermes/test_gateway_directory_sync.py",
+    "tests/integration/hermes/test_gateway_adapter_latency.py",
 ]
 
 

@@ -45,7 +45,9 @@ logger = get_logger(__name__)
 COMPETITION_URL = "https://competition.sair.foundation/competitions/mathematics-distillation-challenge-equational-theories-stage1/overview"
 PLAYGROUND_URL = "https://playground.sair.foundation/playground/mathematics-distillation-challenge-equational-theories-stage1"
 BENCHMARK_URL = "https://benchmark.sair.foundation/benchmarks/mathematics-distillation-challenge-equational-theories-stage1"
-SUBMISSION_DEADLINE = "2026-04-20"
+# Historical competition metadata only; this date is not an active promise.
+HISTORICAL_SUBMISSION_DEADLINE = "2026-04-20"
+SUBMISSION_DEADLINE = HISTORICAL_SUBMISSION_DEADLINE  # compatibility alias
 CHEATSHEET_MAX_BYTES = 10_240  # Official: ≤10KB UTF-8
 DATASET_REPO_ID = "SAIRfoundation/equational-theories-selected-problems"
 
@@ -293,6 +295,7 @@ def run_evaluation(
     runs_dir: str = DEFAULT_RUNS_DIR,
     logs_dir: str = DEFAULT_LOGS_DIR,
     stage2: bool = False,
+    live: bool = False,
 ) -> dict[str, Any]:
     """Run a full batch evaluation and persist all structured telemetry.
 
@@ -310,6 +313,12 @@ def run_evaluation(
     Returns:
         The full run result dict (summary + results list).
     """
+    if not (live or os.getenv("RUN_LIVE_SAIR") == "1"):
+        raise RuntimeError(
+            "SAIR evaluation contacts external providers. Re-run with "
+            "live=True or RUN_LIVE_SAIR=1 after verifying credentials and service availability."
+        )
+
     run_id = run_id or str(uuid.uuid4())[:8]
     correlation_id = new_correlation_id()
     set_correlation_id(correlation_id)
@@ -465,6 +474,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--logs-dir", default=DEFAULT_LOGS_DIR, help="Directory for telemetry log."
     )
+    parser.add_argument(
+        "--live",
+        action="store_true",
+        help="Explicitly opt into external-provider calls (or set RUN_LIVE_SAIR=1).",
+    )
 
     args = parser.parse_args()
 
@@ -476,4 +490,5 @@ if __name__ == "__main__":
         output_file=args.output,
         runs_dir=args.runs_dir,
         logs_dir=args.logs_dir,
+        live=args.live,
     )

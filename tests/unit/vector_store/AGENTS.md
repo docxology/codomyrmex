@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/vector_store
+# Codomyrmex Agents — tests/unit/vector_store
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

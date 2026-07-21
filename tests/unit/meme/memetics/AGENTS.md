@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/meme/memetics
+# Codomyrmex Agents — tests/unit/meme/memetics
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/terminal_interface
+# Codomyrmex Agents — tests/unit/terminal_interface
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

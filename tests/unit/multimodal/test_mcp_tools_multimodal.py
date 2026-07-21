@@ -15,7 +15,9 @@ from codomyrmex.multimodal.mcp_tools import (
     multimodal_generate_image,
 )
 
-_HAS_GOOGLE_KEY = bool(os.environ.get("GOOGLE_API_KEY"))
+_HAS_GOOGLE_KEY = os.environ.get("RUN_LIVE_GEMINI") == "1" and bool(
+    os.environ.get("GOOGLE_API_KEY")
+)
 
 
 class TestMultimodalCheck:
@@ -52,7 +54,10 @@ class TestMultimodalGenerateImage:
         result = multimodal_generate_image(prompt="   ")
         assert result["status"] == "error"
 
-    @pytest.mark.skipif(not _HAS_GOOGLE_KEY, reason="GOOGLE_API_KEY not set")
+    @pytest.mark.skipif(
+        not _HAS_GOOGLE_KEY,
+        reason="Live Gemini tests require RUN_LIVE_GEMINI=1 and GOOGLE_API_KEY",
+    )
     def test_generate_with_key(self):
         """Actual generation when key is available."""
         result = multimodal_generate_image(

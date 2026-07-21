@@ -105,8 +105,8 @@ client.set_system_prompt("session-id", "You are an expert Python reviewer.")
 **Deep Links**:
 
 - 🔗 **Session Store**: [`src/codomyrmex/agents/hermes/session.py`](../../../src/codomyrmex/agents/hermes/session.py)
-- 🔗 **Session Extended Tests**: [`src/codomyrmex/tests/integration/hermes/test_gateway_session_extended.py`](../../../src/codomyrmex/tests/integration/hermes/test_gateway_session_extended.py)
-- 🔗 **Vault Integration Tests**: [`src/codomyrmex/tests/integration/hermes/test_gateway_obsidian_sync.py`](../../../src/codomyrmex/tests/integration/hermes/test_gateway_obsidian_sync.py)
+- 🔗 **Session Extended Tests**: [`tests/integration/hermes/test_gateway_session_extended.py`](../../../tests/integration/hermes/test_gateway_session_extended.py)
+- 🔗 **Vault Integration Tests**: [`tests/integration/hermes/test_gateway_obsidian_sync.py`](../../../tests/integration/hermes/test_gateway_obsidian_sync.py)
 
 ---
 
@@ -158,7 +158,7 @@ For Codomyrmex developers creating new skills or adapting internal modules, this
 
 - 🔗 **MCP Protocol Bridge**: [`src/codomyrmex/agents/hermes/mcp_tools.py`](../../../src/codomyrmex/agents/hermes/mcp_tools.py)
 - 🔗 **FastMCP Scaffold MCP Tool**: `hermes_fastmcp_scaffold(output_dir, server_name, force=False)`
-- 🔗 **New MCP Tool Tests**: [`src/codomyrmex/tests/integration/hermes/test_gateway_mcp_new_tools.py`](../../../src/codomyrmex/tests/integration/hermes/test_gateway_mcp_new_tools.py)
+- 🔗 **New MCP Tool Tests**: [`tests/integration/hermes/test_gateway_mcp_new_tools.py`](../../../tests/integration/hermes/test_gateway_mcp_new_tools.py)
 
 ---
 
@@ -272,7 +272,7 @@ A major interface addition is the native ability for Hermes to act autonomously 
 **Deep Links**:
 
 - 🔗 **Autonomous Loop Logic**: [`hermes_client.py` — `chat_session` autonomous loop](../../../src/codomyrmex/agents/hermes/hermes_client.py#L751-L911)
-- 🔗 **Task Integration Tests**: [`src/codomyrmex/tests/integration/hermes/test_gateway_workflow_loop.py`](../../../src/codomyrmex/tests/integration/hermes/test_gateway_workflow_loop.py)
+- 🔗 **Task Integration Tests**: [`tests/integration/hermes/test_gateway_workflow_loop.py`](../../../tests/integration/hermes/test_gateway_workflow_loop.py)
 
 ---
 
@@ -332,7 +332,7 @@ graph TD
 **Deep Links**:
 
 - 🔗 **Identity Resolution**: [`src/codomyrmex/agents/hermes/gateway/identity.py`](../../../src/codomyrmex/agents/hermes/gateway/identity.py)
-- 🔗 **Sandboxing Tests**: [`src/codomyrmex/tests/integration/hermes/test_gateway_sandbox_blocks_shell.py`](../../../src/codomyrmex/tests/integration/hermes/test_gateway_sandbox_blocks_shell.py)
+- 🔗 **Sandboxing Tests**: [`tests/integration/hermes/test_gateway_sandbox_blocks_shell.py`](../../../tests/integration/hermes/test_gateway_sandbox_blocks_shell.py)
 
 ---
 
@@ -362,7 +362,7 @@ The v1.5.x sprint added **50 new integration tests** (across `test_gateway_sessi
 
 **Deep Links**:
 
-- 🔗 **Hermes Integration Tests**: [`src/codomyrmex/tests/integration/hermes/`](../../../src/codomyrmex/tests/integration/hermes/)
+- 🔗 **Hermes Integration Tests**: [`tests/integration/hermes/`](../../../tests/integration/hermes/)
 
 ---
 

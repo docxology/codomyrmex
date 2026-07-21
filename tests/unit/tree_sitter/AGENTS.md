@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/tree_sitter
+# Codomyrmex Agents — tests/unit/tree_sitter
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/formal_verification
+# Codomyrmex Agents — tests/unit/formal_verification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

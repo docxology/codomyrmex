@@ -69,7 +69,7 @@ graph TD
 The module is verified using strictly zero-mock tests to ensure actual evolutionary convergence and operator correctness.
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/evolutionary_ai/
+uv run pytest tests/unit/evolutionary_ai/
 ```
 
 ## Navigation

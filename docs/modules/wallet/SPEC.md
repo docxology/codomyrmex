@@ -153,5 +153,5 @@ CodomyrmexError
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k wallet -v
+uv run python -m pytest tests/ -k wallet -v
 ```

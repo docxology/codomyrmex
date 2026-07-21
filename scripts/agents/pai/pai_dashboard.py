@@ -63,8 +63,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--host",
-        default="0.0.0.0",
-        help="Host to bind to (default: 0.0.0.0)",
+        default="127.0.0.1",
+        help="Host to bind to (default: 127.0.0.1; use an explicit host for trusted networks)",
     )
     parser.add_argument(
         "--no-open",

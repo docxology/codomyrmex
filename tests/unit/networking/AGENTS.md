@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/networking
+# Codomyrmex Agents — tests/unit/networking
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

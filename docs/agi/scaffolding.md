@@ -14,13 +14,13 @@ This essay argues that codomyrmex satisfies five scaffolding preconditions for A
 
 Goertzel's analysis of OpenCog identifies *combinatorial composability* as the first requirement. We can formalize this using category theory. Define a category **Mod** where:
 
-- **Objects** are codomyrmex modules (|Ob(**Mod**)| = 129)
+- **Objects** are codomyrmex modules (|Ob(**Mod**)| = 130)
 - **Morphisms** are valid module invocations via MCP tool calls
 - **Composition** is sequential tool chaining: if `f: A → B` and `g: B → C`, then `g ∘ f: A → C`
 
 The MCP protocol guarantees *associativity* (tool chains are order-preserving) and every module has an *identity morphism* (the no-op self-invocation). Codomyrmex's module system forms a legitimate category.
 
-The **610** production `@mcp_tool` lines are the morphisms of this category. The *composability surface* is not the module count but the **hom-set cardinality**: |Hom(**Mod**)| = 610. The combinatorial explosion of multi-step compositions — paths of length *k* through the dependency graph — gives rise to novel capabilities that no individual morphism encodes.
+The **623** production `@mcp_tool` lines are the morphisms of this category. The *composability surface* is not the module count but the **hom-set cardinality**: |Hom(**Mod**)| = 623. The combinatorial explosion of multi-step compositions — paths of length *k* through the dependency graph — gives rise to novel capabilities that no individual morphism encodes.
 
 ```mermaid
 graph LR
@@ -39,7 +39,7 @@ graph LR
     CATEGORY -.-> RAG
 ```
 
-**Measurement**: With 129 top-level modules and 440+ directed edges in the dependency graph, the number of distinct paths of length ≤5 exceeds 10⁶ — a combinatorial surface far larger than any individual module's design scope.
+**Measurement**: With 130 top-level modules and 440+ directed edges in the dependency graph, the number of distinct paths of length ≤5 exceeds 10⁶ — a combinatorial surface far larger than any individual module's design scope.
 
 ### Precondition 2: Self-Description — Autopoietic Closure
 

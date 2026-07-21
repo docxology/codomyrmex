@@ -7,6 +7,7 @@ in environments without Node.js. No mocking — zero-mock policy.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import pytest
@@ -17,6 +18,7 @@ from codomyrmex.git_analysis.core.gitnexus_bridge import (
 )
 
 PROJECT_ROOT = str(REPO_ROOT)
+RUN_LIVE_GITNEXUS = os.environ.get("RUN_LIVE_GITNEXUS") == "1"
 
 
 def _gitnexus_available() -> bool:
@@ -29,6 +31,8 @@ def _gitnexus_available() -> bool:
     Instead, run ``gitnexus status`` which exercises the database layer and will
     fail with a non-zero exit or error output if LadybugDB is missing.
     """
+    if not RUN_LIVE_GITNEXUS:
+        return False
     import subprocess
 
     bridge = GitNexusBridge(PROJECT_ROOT)

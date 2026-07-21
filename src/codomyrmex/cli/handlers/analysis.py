@@ -78,7 +78,7 @@ def handle_module_test(module_name: str) -> bool:
         # Try a few common test locations
         test_locations = [
             Path("src/codomyrmex") / module_name / "tests",
-            Path("src/codomyrmex/tests/unit") / module_name,
+            Path("tests/unit") / module_name,
             Path("tests/unit") / module_name,
         ]
 

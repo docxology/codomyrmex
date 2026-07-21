@@ -236,9 +236,7 @@ async def main() -> int:
     parser.add_argument("--coverage", action="store_true", help="Collect coverage data")
     parser.add_argument("--markers", "-m", help="Pytest markers to filter tests")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
-    parser.add_argument(
-        "--test-dir", default="src/codomyrmex/tests/unit", help="Test directory"
-    )
+    parser.add_argument("--test-dir", default="tests/unit", help="Test directory")
     args = parser.parse_args()
 
     test_dir = project_root / args.test_dir

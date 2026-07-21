@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/synthetic_data
+# Codomyrmex Agents — tests/unit/synthetic_data
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -69,7 +69,7 @@ def fix_readme(mod_name):
 
     # Add Testing
     if "test" not in content.lower():
-        testing = f"\n## Testing\n\n```bash\nuv run python -m pytest src/codomyrmex/tests/ -k {mod_name} -v\n```\n"
+        testing = f"\n## Testing\n\n```bash\nuv run python -m pytest tests/ -k {mod_name} -v\n```\n"
         for anchor in ["## Related", "## Navigation", "## References"]:
             if anchor in content:
                 content = content.replace(anchor, testing + "\n" + anchor)

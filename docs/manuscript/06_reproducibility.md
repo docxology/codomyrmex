@@ -5,6 +5,10 @@ regenerates. It is a scoped build record, not a claim that every Codomyrmex modu
 tested, that the Git worktree had no uncommitted edits, or that the proposed external
 benchmark in [@sec:experimental-design] was executed.
 
+{{CONFIG_PARAMETER_STATUS_NOTE}} The generated snapshot binds the rendered numbers to
+one configuration and source state; it does not turn those values into fitted or
+externally validated parameters.
+
 ## Evidence boundary
 
 [@tbl:repro-scope] separates the claims supported by the release route from claims that
@@ -34,22 +38,24 @@ into this render.
 | Property | Rendered value | Source |
 |---|---|---|
 | Configuration digest | `{{CONFIG_HASH}}` | Full SHA-256 over the raw bytes of `docs/manuscript/config.yaml` |
+| Experiment replay seed | `{{CONFIG_EXPERIMENT_SEED}}` | Explicit seed reserved for deterministic paired replay |
 | Manuscript version | {{CONFIG_VERSION}} | `paper.version` in the same YAML file |
 | First author | {{CONFIG_FIRST_AUTHOR}} | First entry under `authors` |
 | Keywords | {{CONFIG_KEYWORDS}} | `keywords` list |
 | Generation time | {{GENERATION_TIMESTAMP}} | UTC time when the variable map was computed |
 : Configuration identity embedded in the rendered manuscript. {#tbl:configuration_provenance}
 
-The digest is a compact change detector for one file. It does **not** cover Python
-source, tests, `uv.lock`, bibliography entries, generated figures, rendered documents,
-the Git commit, submodule revisions, environment variables, or worktree status. It is
-also unsigned. A repeated digest therefore means only that the manuscript-configuration
-bytes match; it is not a repository identity or an authenticity proof.
+The configuration digest is a compact change detector for one file. The generated
+snapshot also records the source commit, worktree state, environment fingerprint,
+lockfile/project hashes, and the authoritative inventory digest below. These values
+are integrity metadata, not signatures or authenticity proofs.
 
 The generator reads the current filesystem. It can include uncommitted edits, and it
 does not reject such a state. A release that needs later reconstruction should record
 the commit and submodule revisions, `git status --porcelain=v1`, any retained diff,
 the full SHA-256 of `uv.lock`, and hashes of the emitted evidence and publication files.
+[@tbl:reproducibility_identity] records the identity fields retained for that
+reconstruction.
 
 ## Generated evidence and artifact conventions
 
@@ -65,6 +71,17 @@ newly created artifacts.
 | Colony Kernel documentation files | {{RESULT_MODULE_DOCS_COUNT}} | `*.md` directly under `docs/modules/colony_kernel/` |
 | Top-level Colony Kernel Python files | {{RESULT_COLONY_KERNEL_FILES}} | `*.py` directly under `src/codomyrmex/colony_kernel/` |
 : Live release inventory exposed to manuscript tokens. {#tbl:artifact_registry}
+
+| Reproducibility fact | Rendered value |
+|---|---|
+| Source commit | `{{REPRO_GIT_COMMIT}}` |
+| Worktree dirty | `{{REPRO_WORKTREE_DIRTY}}` |
+| Environment fingerprint | `{{REPRO_ENVIRONMENT_HASH}}` |
+| `pyproject.toml` SHA-256 | `{{REPRO_PYPROJECT_HASH}}` |
+| `uv.lock` SHA-256 | `{{REPRO_LOCK_HASH}}` |
+| Authoritative inventory SHA-256 | `{{REPRO_INVENTORY_HASH}}` |
+| Inventory module / MCP file / decorator / workflow counts | `{{REPRO_INVENTORY_MODULE_COUNT}}` / `{{REPRO_INVENTORY_MCP_FILE_COUNT}}` / `{{REPRO_INVENTORY_MCP_DECORATOR_COUNT}}` / `{{REPRO_INVENTORY_WORKFLOW_COUNT}}` |
+: Reproducibility identity recorded for the generated evidence snapshot. {#tbl:reproducibility_identity}
 
 The project uses the following output conventions:
 

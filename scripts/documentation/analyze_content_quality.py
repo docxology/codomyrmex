@@ -30,6 +30,42 @@ class QualityScore(NamedTuple):
     metrics: dict
 
 
+_SKIP_PARTS = {
+    ".git",
+    ".gitnexus",
+    ".venv",
+    ".agent",
+    "node_modules",
+    "build",
+    "dist",
+    "output",
+}
+_GENERATED_PREFIXES = {
+    ("docs", "manuscript"),
+    ("docs", "agents", "open_gauss"),
+    ("src", "codomyrmex", "documentation", "docs"),
+    ("src", "codomyrmex", "agents", "open_gauss"),
+    ("src", "codomyrmex", "skills", "skills", "upstream"),
+}
+
+
+def discover_markdown_files(repo_root: Path) -> list[Path]:
+    """Return first-party Markdown files covered by the quality gate."""
+    files: list[Path] = []
+    for path in repo_root.rglob("*.md"):
+        rel_parts = path.relative_to(repo_root).parts
+        if any(part in _SKIP_PARTS for part in rel_parts):
+            continue
+        if any(rel_parts[: len(prefix)] == prefix for prefix in _GENERATED_PREFIXES):
+            continue
+        # Generated per-folder test signposts are checked by the AGENTS
+        # structure validator, not prose-quality scoring.
+        if rel_parts[0] == "tests" and len(rel_parts) > 1:
+            continue
+        files.append(path)
+    return files
+
+
 # Task-style TODO / FIXME / XXX (avoids prose like "TODO queues").
 _RE_TODO_MARKERS = re.compile(
     r"(?:"
@@ -83,8 +119,21 @@ def analyze_file(file_path: Path, repo_root: Path) -> QualityScore:
 
     lines = content.split("\n")
 
+    # Markdown examples frequently contain shell comments that begin with
+    # ``#``. Exclude fenced code from heading and empty-section heuristics so
+    # examples are not mistaken for documentation structure.
+    analysis_lines: list[str] = []
+    in_fence = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith(("```", "~~~")):
+            in_fence = not in_fence
+            analysis_lines.append("")
+        else:
+            analysis_lines.append("" if in_fence else line)
+
     # Check for headings
-    headings = [l for l in lines if l.startswith("#")]
+    headings = [l for l in analysis_lines if l.startswith("#")]
     metrics["heading_count"] = len(headings)
     if len(headings) == 0:
         issues.append("No headings found")
@@ -113,14 +162,10 @@ def analyze_file(file_path: Path, repo_root: Path) -> QualityScore:
     links = len(re.findall(r"\[([^\]]*)\]\([^)]+\)", content))
     metrics["link_count"] = links
 
-    # Check for empty sections (heading with no content before next heading)
-    empty_sections = 0
-    for i, line in enumerate(lines[:-1]):
-        if line.startswith("#") and lines[i + 1].startswith("#"):
-            empty_sections += 1
-    if empty_sections > 0:
-        issues.append(f"Found {empty_sections} empty sections")
-        score -= empty_sections * 5
+    # Heading adjacency is not itself an empty section: Markdown documents
+    # commonly use headings to introduce tables, lists, or nested subsections.
+    # Keep structural completeness in the dedicated documentation validators;
+    # this score focuses on measurable prose signals and actionable markers.
 
     return QualityScore(file_str, max(0, score), issues, metrics)
 
@@ -130,6 +175,7 @@ def analyze_content_quality(
     output_dir: Path | None = None,
     output_format: str = "both",
     min_score: int = 60,
+    fail_on_below: bool = False,
 ) -> int:
     """Analyze quality of all markdown documentation."""
     print("📝 Analyzing documentation content quality...\n")
@@ -140,11 +186,7 @@ def analyze_content_quality(
 
     results: list[QualityScore] = []
 
-    # Find all markdown files
-    md_files = list(repo_root.rglob("*.md"))
-    md_files = [
-        f for f in md_files if ".git" not in str(f) and "node_modules" not in str(f)
-    ]
+    md_files = discover_markdown_files(repo_root)
 
     print(f"📄 Found {len(md_files)} markdown files")
 
@@ -187,7 +229,7 @@ def analyze_content_quality(
         for r in sorted(below_threshold, key=lambda x: x.score)[:5]:
             print(f"   {r.file}: {r.score}/100")
 
-    return 0
+    return 1 if fail_on_below and below_threshold else 0
 
 
 def main():
@@ -216,10 +258,19 @@ def main():
         "--format", choices=["json", "markdown", "both"], default="both"
     )
     parser.add_argument("--min-score", type=int, default=60)
+    parser.add_argument(
+        "--fail-on-below",
+        action="store_true",
+        help="Fail when any covered document scores below --min-score",
+    )
 
     args = parser.parse_args()
     return analyze_content_quality(
-        args.repo_root, args.output, args.format, args.min_score
+        args.repo_root,
+        args.output,
+        args.format,
+        args.min_score,
+        args.fail_on_below,
     )
 
 

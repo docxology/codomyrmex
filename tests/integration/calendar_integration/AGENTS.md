@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/integration/calendar_integration
+# Codomyrmex Agents — tests/integration/calendar_integration
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/i18n
+# Codomyrmex Agents — tests/unit/i18n
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/peft
+# Codomyrmex Agents — tests/unit/peft
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -119,11 +119,11 @@ uv pip sync uv.lock
 # Run all tests (no coverage by default)
 uv run pytest
 
-# Run with coverage and the 40% gate
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40
+# Run with coverage and the 60% gate
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60
 
 # Run specific test file
-uv run pytest src/codomyrmex/tests/unit/test_data_visualization.py
+uv run pytest tests/unit/test_data_visualization.py
 
 # Run with verbose output
 uv run pytest -v
@@ -133,10 +133,10 @@ uv run pytest -v
 
 ```bash
 # Format code
-uv run black src/ src/codomyrmex/tests/
+uv run black src/ tests/
 
 # Lint code
-uv run ruff check src/ src/codomyrmex/tests/
+uv run ruff check src/ tests/
 
 # Type checking
 uv run ty check src/codomyrmex/
@@ -378,7 +378,7 @@ uv lock  # Update lock file
 ```bash
 # When developing new modules
 uv pip install -e .  # Install in development mode
-uv run pytest src/codomyrmex/tests/unit/test_new_module.py
+uv run pytest tests/unit/test_new_module.py
 ```
 
 ### AI Integration

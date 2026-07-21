@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/matmul_kernel
+# Codomyrmex Agents — tests/unit/matmul_kernel
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

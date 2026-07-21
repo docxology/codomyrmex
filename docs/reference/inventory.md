@@ -2,7 +2,7 @@
 
 Single source of truth for counts used in documentation and marketing copy. **Refresh** after large changes to modules, tools, or tests.
 
-**Last updated:** 2026-07-02
+**Last updated:** 2026-07-19
 
 ## Definitions
 
@@ -12,7 +12,7 @@ Single source of truth for counts used in documentation and marketing copy. **Re
 | **Agent packages** | Direct child directories of `src/codomyrmex/agents/` with `__init__.py` (excluding `__pycache__`). Documented under `docs/agents/`; **`docs/agents/rules/`** is docs-only. **39** packages. |
 | **`@mcp_tool` count** | Physical lines starting with `@mcp_tool` in `.py` files under `src/codomyrmex/`, excluding paths containing `tests/`. Matches `uv run python scripts/doc_inventory.py`. |
 | **`mcp_tools.py` files** | Files named `mcp_tools.py` under `src/codomyrmex/`, excluding `*/tests/*`. |
-| **Runtime MCP tools** | Tool entries in the generated runtime manifest. This can differ from the raw decorator-line count when decorators share wrappers or aliases. |
+| **Runtime MCP tools** | Tool entries in the generated PAI runtime manifest. This can differ from the raw decorator-line count or standalone launcher profile when decorators share wrappers, aliases, or built-in registrations. |
 | **Collected tests** | Items reported by `uv run python scripts/doc_inventory.py --pytest` when collection completes without errors. |
 
 Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/agents/hermes/codomyrmex_integration.md](../agents/hermes/codomyrmex_integration.md) for Hermes-specific counts.
@@ -24,11 +24,11 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | Top-level modules | 130 |
 | Agent packages (`src/codomyrmex/agents/`) | 39 |
 | `mcp_tools.py` files (non-test) | 150 |
-| Runtime MCP tools | 593 |
+| Runtime MCP tools | 608 (PAI merged manifest; standalone launcher full profile enumerates 605; HTTP defaults to 10 readonly tools) |
 | Production `@mcp_tool` decorators | 623 |
-| Pytest tests collected | 35,119 (`uv run python scripts/doc_inventory.py --pytest`) |
+| Pytest tests collected | 35,375 (`uv run python scripts/doc_inventory.py --pytest`) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
-| Markdown files under `docs/` | 1,202 (`find docs -name '*.md' -type f \| wc -l`) |
+| Markdown files under `docs/` | 1,203 (`find docs -name '*.md' -type f \| wc -l`) |
 
 ## Reproduce
 
@@ -37,6 +37,9 @@ From the repository root:
 ```bash
 # All metrics in one place (includes `.github/workflows` *.yml count)
 uv run python scripts/doc_inventory.py
+
+# Include the imported PAI runtime manifest count
+uv run python scripts/doc_inventory.py --manifest
 
 # Or manually:
 # rg '^@mcp_tool' src/codomyrmex --glob '*.py' --no-ignore | grep -v '/tests/' | wc -l

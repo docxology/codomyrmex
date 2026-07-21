@@ -40,14 +40,14 @@
 - [`src/codomyrmex/security/governance/__init__.py`](../../../src/codomyrmex/security/governance/__init__.py) - Governance exports
 
 ### Tests
-- [`src/codomyrmex/tests/unit/security/scanning/test_scanning.py`](../../../src/codomyrmex/tests/unit/security/scanning/test_scanning.py)
-- [`src/codomyrmex/tests/unit/security/secrets_tests/test_secrets.py`](../../../src/codomyrmex/tests/unit/security/secrets_tests/test_secrets.py)
-- [`src/codomyrmex/tests/unit/security/audit/test_audit.py`](../../../src/codomyrmex/tests/unit/security/audit/test_audit.py)
-- [`src/codomyrmex/tests/unit/security/compliance/test_compliance.py`](../../../src/codomyrmex/tests/unit/security/compliance/test_compliance.py)
-- [`src/codomyrmex/tests/unit/security/test_security_digital.py`](../../../src/codomyrmex/tests/unit/security/test_security_digital.py)
-- [`src/codomyrmex/tests/unit/security/test_security_physical.py`](../../../src/codomyrmex/tests/unit/security/test_security_physical.py)
-- [`src/codomyrmex/tests/unit/security/test_security_cognitive.py`](../../../src/codomyrmex/tests/unit/security/test_security_cognitive.py)
-- [`src/codomyrmex/tests/unit/security/test_security_theory.py`](../../../src/codomyrmex/tests/unit/security/test_security_theory.py)
+- [`tests/unit/security/scanning/test_scanning.py`](../../../tests/unit/security/scanning/test_scanning.py)
+- [`tests/unit/security/secrets_tests/test_secrets.py`](../../../tests/unit/security/secrets_tests/test_secrets.py)
+- [`tests/unit/security/audit/test_audit.py`](../../../tests/unit/security/audit/test_audit.py)
+- [`tests/unit/security/compliance/test_compliance.py`](../../../tests/unit/security/compliance/test_compliance.py)
+- [`tests/unit/security/test_security_digital.py`](../../../tests/unit/security/test_security_digital.py)
+- [`tests/unit/security/test_security_physical.py`](../../../tests/unit/security/test_security_physical.py)
+- [`tests/unit/security/test_security_cognitive.py`](../../../tests/unit/security/test_security_cognitive.py)
+- [`tests/unit/security/test_security_theory.py`](../../../tests/unit/security/test_security_theory.py)
 
 ## Navigation
 

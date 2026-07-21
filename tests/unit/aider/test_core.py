@@ -349,8 +349,10 @@ class TestGetAiderVersion:
 @pytest.mark.unit
 @pytest.mark.aider
 @pytest.mark.skipif(
-    shutil.which("aider") is None or not os.getenv("ANTHROPIC_API_KEY"),
-    reason="aider not installed or ANTHROPIC_API_KEY not set",
+    shutil.which("aider") is None
+    or os.getenv("RUN_LIVE_AIDER") != "1"
+    or not os.getenv("ANTHROPIC_API_KEY"),
+    reason="Live aider tests require RUN_LIVE_AIDER=1 and ANTHROPIC_API_KEY",
 )
 @pytest.mark.slow
 class TestAiderRunnerLive:

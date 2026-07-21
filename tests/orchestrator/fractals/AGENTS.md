@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/orchestrator/fractals
+# Codomyrmex Agents — tests/orchestrator/fractals
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

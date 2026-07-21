@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/jules
+# Codomyrmex Agents — tests/unit/agents/jules
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/collaboration/knowledge
+# Codomyrmex Agents — tests/unit/collaboration/knowledge
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

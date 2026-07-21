@@ -81,6 +81,9 @@ The paper contributes five concrete artifacts.
 The contribution is a reference implementation and evidence boundary, not a completed
 production-security system.
 
+{{CONFIG_PARAMETER_STATUS_NOTE}} This distinction lets the implementation be
+reproducible without turning a reproducible fixture into a scientific calibration claim.
+
 ## Architecture in brief {#sec:intro-architecture}
 
 `ColonyKernel.propose_action` first runs deterministic falsification, checks the resource

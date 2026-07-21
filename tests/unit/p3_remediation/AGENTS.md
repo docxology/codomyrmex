@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/p3_remediation
+# Codomyrmex Agents — tests/unit/p3_remediation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

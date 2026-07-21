@@ -94,7 +94,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/llm/embeddings/
+uv run pytest tests/unit/llm/embeddings/
 ```
 
 ## 6. Future Considerations

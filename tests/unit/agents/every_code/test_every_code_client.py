@@ -8,7 +8,7 @@ conversion logic is tested with real data structures.
 import pytest
 
 try:
-    from codomyrmex.tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
+    from tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
 
     from codomyrmex.agents.core import AgentCapabilities, AgentRequest
     from codomyrmex.agents.every_code import EveryCodeClient

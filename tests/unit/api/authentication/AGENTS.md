@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/api/authentication
+# Codomyrmex Agents — tests/unit/api/authentication
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

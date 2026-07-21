@@ -69,7 +69,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/skills/marketplace/
+uv run pytest tests/unit/skills/marketplace/
 ```
 
 ## 6. Future Considerations

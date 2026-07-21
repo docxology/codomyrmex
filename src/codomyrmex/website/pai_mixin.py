@@ -45,11 +45,42 @@ class PAIProviderMixin:
         _PAI_ROOT: Path
         _ws_clients: set[Any]
 
-    def start_websocket_push(self, host: str = "0.0.0.0", port: int = 8890) -> None:
+    @staticmethod
+    def _validate_websocket_bind(
+        host: str,
+        auth_token: str | None,
+        allowed_origins: list[str] | None,
+    ) -> tuple[str, list[str]]:
+        """Validate WebSocket exposure options before starting a listener."""
+        normalized_host = host.strip("[]").lower()
+        loopback_hosts = {"localhost", "127.0.0.1", "::1"}
+        origins = [origin.rstrip("/") for origin in (allowed_origins or [])]
+        if normalized_host not in loopback_hosts and (not auth_token or not origins):
+            raise ValueError(
+                "auth_token and allowed_origins are required when binding PAI "
+                f"WebSocket push to non-loopback host {host!r}"
+            )
+        if any(not origin or origin == "*" for origin in origins):
+            raise ValueError("allowed_origins must contain explicit origins")
+        return normalized_host, origins
+
+    def start_websocket_push(
+        self,
+        host: str = "127.0.0.1",
+        port: int = 8890,
+        *,
+        auth_token: str | None = None,
+        allowed_origins: list[str] | None = None,
+    ) -> None:
         """Start a background thread that pushes PAI awareness and health data over WebSockets every 15s.
 
-        This replaces frontend HTTP polling with a push model.
+        This replaces frontend HTTP polling with a push model. The listener is
+        loopback-only by default. Non-loopback exposure requires both a bearer
+        token and an explicit origin allowlist.
         """
+        _normalized_host, origins = self._validate_websocket_bind(
+            host, auth_token, allowed_origins
+        )
         import importlib.util
 
         if importlib.util.find_spec("websockets") is None:
@@ -91,6 +122,14 @@ class PAIProviderMixin:
         async def handler(websocket):
             import websockets
 
+            request = getattr(websocket, "request", None)
+            headers = getattr(request, "headers", None) or getattr(
+                websocket, "request_headers", {}
+            )
+            if auth_token and headers.get("Authorization") != f"Bearer {auth_token}":
+                await websocket.close(code=1008, reason="Authentication required")
+                return
+
             self._ws_clients.add(websocket)
             try:
                 # Send immediate initial state
@@ -114,14 +153,19 @@ class PAIProviderMixin:
             except Exception as e:
                 logger.debug("WebSocket client error: %s", e)
             finally:
-                self._ws_clients.remove(websocket)
+                self._ws_clients.discard(websocket)
 
         async def serve():
 
             import websockets
 
             try:
-                async with websockets.serve(handler, host, port):
+                async with websockets.serve(
+                    handler,
+                    host,
+                    port,
+                    origins=origins or None,
+                ):
                     logger.info(
                         "WebSocket push server running on ws://%s:%s", host, port
                     )

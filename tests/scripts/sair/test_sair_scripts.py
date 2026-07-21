@@ -15,7 +15,7 @@ import pytest
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
 # Add repo root to sys.path so 'scripts' package is importable.
-# Path: src/codomyrmex/tests/scripts/sair/this_file.py -> parents[5] = repo root.
+# Path: tests/scripts/sair/this_file.py -> parents[5] = repo root.
 repo_root = REPO_ROOT
 if str(repo_root) not in sys.path:
     sys.path.insert(0, str(repo_root))
@@ -24,8 +24,12 @@ if str(repo_root) not in sys.path:
 from jinja2 import Template
 
 # ---------- download_data ---------------------------------------------------
-from scripts.sair.download_data import list_local_datasets, verify_dataset_integrity
-from scripts.sair.evaluate import OFFICIAL_TEMPLATE, parse_llm_response
+from scripts.sair.download_data import (
+    download_sair_datasets,
+    list_local_datasets,
+    verify_dataset_integrity,
+)
+from scripts.sair.evaluate import OFFICIAL_TEMPLATE, parse_llm_response, run_evaluation
 
 # ---------- generate_cheatsheet ---------------------------------------------
 from scripts.sair.generate_cheatsheet import (
@@ -82,6 +86,23 @@ class TestParseLLMResponse:
         parsed = parse_llm_response(resp)
         assert "Line 1" in parsed["REASONING"]
         assert "Line 2" in parsed["REASONING"]
+
+
+class TestExternalServiceGates:
+    def test_evaluation_requires_explicit_live_opt_in(self, monkeypatch, tmp_path):
+        monkeypatch.delenv("RUN_LIVE_SAIR", raising=False)
+        with pytest.raises(RuntimeError, match="RUN_LIVE_SAIR"):
+            run_evaluation(
+                dataset_path=str(tmp_path / "not-used.jsonl"),
+                model="offline-test-model",
+            )
+
+    def test_dataset_download_requires_explicit_live_opt_in(
+        self, monkeypatch, tmp_path
+    ):
+        monkeypatch.delenv("RUN_LIVE_SAIR", raising=False)
+        with pytest.raises(RuntimeError, match="RUN_LIVE_SAIR"):
+            download_sair_datasets(str(tmp_path))
 
 
 class TestTemplateRendering:

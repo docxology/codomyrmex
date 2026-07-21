@@ -340,7 +340,7 @@ result = analyze_repository_path(
 ## 🏗️ Build Synthesis API
 
 ### **Build Operations**
-**Source**: `src/codomyrmex/deployment/build_orchestrator.py`
+**Source**: `src/codomyrmex/ci_cd_automation/build/build_orchestrator.py`
 
 ```python
 def check_build_environment() -> dict
@@ -362,9 +362,10 @@ from codomyrmex.ci_cd_automation.build.build_orchestrator import (
 env_status = check_build_environment()
 print(f"Python available: {env_status['python_available']}")
 
-# Create executable artifact
+# Create a single-file executable artifact.  Directory sources use
+# ``artifact_type="package"`` or ``"archive"`` instead.
 success = synthesize_build_artifact(
-    source_path="./src",
+    source_path="./src/main.py",
     output_path="./dist/my_app",
     artifact_type="executable"
 )
@@ -379,6 +380,13 @@ build_config = {
 
 result = orchestrate_build_pipeline(build_config)
 ```
+
+Build commands must be argument vectors and are executed without shell
+interpretation.  The artifact types are explicit: `copy` copies a file or
+directory, `package` preserves a source tree, `archive` creates a ZIP archive,
+and `executable` creates a file artifact.  Language labels are metadata only;
+compiler support is supplied through an explicit `build_commands` entry.  Set
+`output_root` to constrain artifacts and rollback to that directory.
 
 ## 📚 Documentation API
 
@@ -502,7 +510,7 @@ All APIs documented above are tested using **real implementations**, never mocks
 
 ### **Data Visualization Testing**
 ```python
-# From src/codomyrmex/tests/unit/test_data_visualization.py
+# From tests/unit/test_data_visualization.py
 def test_create_line_plot_real():
     """Test actual line plot creation with real matplotlib."""
     from codomyrmex.data_visualization.line_plot import create_line_plot
@@ -524,7 +532,7 @@ def test_create_line_plot_real():
 
 ### **Static Analysis Testing**
 ```python
-# From src/codomyrmex/tests/unit/test_static_analysis_comprehensive.py
+# From tests/unit/test_static_analysis_comprehensive.py
 def test_parse_pyrefly_real():
     """Test real Pyrefly output parsing."""
     from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
@@ -541,7 +549,7 @@ def test_parse_pyrefly_real():
 
 ### **Code Execution Testing**
 ```python
-# From src/codomyrmex/tests/unit/test_code_comprehensive.py
+# From tests/unit/test_code_comprehensive.py
 def test_execute_code_real():
     """Test real code execution."""
     from codomyrmex.coding.code_executor import execute_code
@@ -565,7 +573,7 @@ def test_execute_code_real():
 - Real usage examples from module `__main__` sections
 
 ### **Test Files**
-- All APIs covered by tests in `src/codomyrmex/tests/unit/`
+- All APIs covered by tests in `tests/unit/`
 - Real implementation testing (no mocks for core functionality)
 - Comprehensive test coverage following TDD principles
 

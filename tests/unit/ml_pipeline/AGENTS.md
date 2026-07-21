@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/ml_pipeline
+# Codomyrmex Agents — tests/unit/ml_pipeline
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

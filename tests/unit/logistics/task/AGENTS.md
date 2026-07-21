@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/logistics/task
+# Codomyrmex Agents — tests/unit/logistics/task
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

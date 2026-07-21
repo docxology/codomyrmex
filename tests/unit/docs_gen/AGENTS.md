@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/docs_gen
+# Codomyrmex Agents — tests/unit/docs_gen
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

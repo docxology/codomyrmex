@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/dependency_injection
+# Codomyrmex Agents — tests/unit/dependency_injection
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

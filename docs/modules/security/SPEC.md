@@ -108,5 +108,5 @@ class PhishingAnalyzer:
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k security -v
+uv run python -m pytest tests/ -k security -v
 ```

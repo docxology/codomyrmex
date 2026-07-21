@@ -15,6 +15,114 @@ paper:
   cover:
     image: "figures/cover.png"
 
+# Figure metadata is the single source for manuscript captions, evidence class,
+# labels, and layout widths. Captions may contain {{TOKEN}} references; the
+# variable generator resolves them from live runtime/configuration evidence.
+figures:
+  cover:
+    filename: "cover.png"
+    label: "fig:cover"
+    width: "95%"
+    evidence_class: "schematic"
+    caption: >-
+      Conceptual cover for the Colony Control Plane. The visual identity combines
+      the implemented subsystems and signal motifs; it is not quantitative evidence.
+  colony_pressure_loop:
+    filename: "colony_pressure_loop.png"
+    label: "fig:pressure_loop"
+    width: "80%"
+    evidence_class: "schematic"
+    caption: >-
+      Conceptual Colony Kernel feedback dependencies. Proposal review reads budget,
+      local RISK/FAILURE pressure, role, trust, and completeness; a separate caller
+      may execute an approved action and report its outcome; recording then changes
+      trust, resource usage, and signal traces used on a later proposal. Arrows show
+      feedback dependencies rather than exact runtime call order.
+  pheromone_decay:
+    filename: "pheromone_decay.png"
+    label: "fig:pheromone_decay"
+    width: "88%"
+    evidence_class: "analytic"
+    caption: >-
+      Analytical trajectories of a {{CONFIG_SCORE_MAX}}-strength trace under the
+      implemented subtractive decay rule. Each curve is
+      s(t)=max({{CONFIG_SCORE_MIN}},s0-epsilon t),
+      with no deposits, reads, or reinforcement. Vertical markers show continuous
+      extinction points; the runtime updates at integer ticks and removes values at
+      or below zero. {{CONFIG_PARAMETER_STATUS_SHORT}} Parameters are generated from
+      the manuscript snapshot.
+  gate_score_heatmap:
+    filename: "gate_score_heatmap.png"
+    label: "fig:gate_heatmap"
+    width: "90%"
+    evidence_class: "analytic"
+    caption: >-
+      Formula-derived gate decision landscape over trust and effective local hazard
+      pressure, where hazard is the maximum of RISK and FAILURE. Budget and
+      completeness are fixed at {{CONFIG_UNIT_SCORE}}; configured hazard boundaries
+      are {{CONFIG_HAZARD_MEDIUM_THRESHOLD}} and {{CONFIG_HAZARD_HIGH_THRESHOLD}},
+      and trust below {{CONFIG_TRUST_HARD_FLOOR}} forces refusal. Colours encode
+      configured decision bands. This is an analytical policy map, not an observed
+      proposal distribution. {{CONFIG_PARAMETER_STATUS_SHORT}}
+  trust_trajectory:
+    filename: "trust_trajectory.png"
+    label: "fig:trust_trajectory"
+    width: "90%"
+    evidence_class: "deterministic-fixture"
+    caption: >-
+      Deterministic trust trajectory under consecutive caller-reported clean
+      outcomes through the configured {{CONFIG_TRUST_TRAJECTORY_HORIZON}}-outcome
+      horizon. Shaded bands show inferred role labels; the independent generated gate
+      floor means the first role promotion does not yet make ordinary gate scoring
+      reachable. Points are analytical applications of the fixed update, not
+      population measurements or evidence of stochastic convergence.
+      {{CONFIG_PARAMETER_STATUS_SHORT}}
+  falsification_vectors:
+    filename: "falsification_vectors.png"
+    label: "fig:falsification_vectors"
+    width: "90%"
+    evidence_class: "code-taxonomy"
+    caption: >-
+      Falsification categories ordered by the highest severity emitted by their live
+      heuristic checks. Colour encodes severity class; one category may be served by
+      more than one check. The empty CRITICAL band denotes the only finding class that
+      hard-refuses before ordinary scoring. The chart is a code-taxonomy
+      visualization, not a measured detection-rate comparison.
+  subsystem_architecture:
+    filename: "subsystem_architecture.png"
+    label: "fig:architecture"
+    width: "80%"
+    evidence_class: "schematic"
+    caption: >-
+      Colony Control Plane topology. ColonyKernel owns subsystem lifecycle and
+      sequencing; the live integration object supplies the operational leaf-node
+      count, and the nodes exchange typed value objects from the shared models.py
+      contract. Coloured by functional role; the diagram shows ownership and
+      information flow, not deployment topology or performance.
+  gate_score_3d:
+    filename: "gate_score_3d.png"
+    label: "fig:gate_score_3d"
+    width: "92%"
+    evidence_class: "analytic"
+    caption: >-
+      Analytical gate-score surface with budget and local hazard clearance fixed at
+      {{CONFIG_UNIT_SCORE}}. The implementation's trust hard floor and trust-credit
+      tiers are shown; completeness is plotted continuously as a visual envelope even
+      though runtime completeness is discrete. Threshold planes identify the
+      configured HOLD and EXECUTE boundaries. This is formula-derived, not an
+      empirical risk surface. {{CONFIG_PARAMETER_STATUS_SHORT}}
+  fep_correspondence:
+    filename: "fep_correspondence.png"
+    label: "fig:fep_correspondence"
+    width: "95%"
+    evidence_class: "conceptual-analogy"
+    caption: >-
+      Schematic vocabulary crosswalk between Free Energy Principle terms and Colony
+      Kernel artifacts. Each row names an FEP concept, the kernel artifact proposed as
+      an analogue, and the intended engineering intuition. The correspondence is
+      conceptual: the current kernel does not implement Bayesian inference or formal
+      equivalence with expected free energy.
+
 # Consumed by: `infrastructure.publishing.extract_publication_metadata` (in `infrastructure/publishing/metadata.py`)
 authors:
   - name: "Daniel Ari Friedman"
@@ -157,6 +265,18 @@ analysis:
 # Runtime policy remains authoritative in src/codomyrmex/colony_kernel; variable
 # generation fails if any compatibility mirror below differs from live code.
 experiment:
+  # Evidence qualifier reused across prose and figure captions. These values are
+  # defaults/illustrative settings, not fitted empirical parameters; changing a
+  # runtime or presentation input requires regenerating the evidence chain.
+  parameter_status_note: >-
+    The numeric values shown here are current implementation defaults or illustrative
+    initial settings, not universal constants, fitted parameters, or empirical
+    estimates. They are configurable and can be tuned or replaced through the corresponding runtime policy,
+    configuration, or presentation inputs; after a change, regenerate the tests,
+    tables, figures, and manuscript before interpreting the result.
+  parameter_status_short: >-
+    Current default/illustrative policy values; configurable, not empirically calibrated.
+
   # Colony Kernel gate thresholds:
   #   Execute (proceed with actuation):   gate_score >= 0.75
   #   Hold (pause, request review):       gate_score >= 0.50 and < 0.75
@@ -278,8 +398,10 @@ experiment:
   warmup_ticks: 10
 
   # Planned run count for the proposed evaluation protocol. No repeated-trial
-  # benchmark or seed table is shipped in this release.
+  # benchmark artifact is shipped in this release; seed 0 is the deterministic
+  # replay seed reserved for the future paired harness.
   trial_count: 20
+  seed: 0
 
   # Proposed benchmark condition registry; its length is injected wherever the
   # manuscript states the condition count.
@@ -293,6 +415,20 @@ experiment:
   # the live runtime recurrence and role adapter.
   trust_trajectory_checkpoints: [0, 3, 5, 6, 9, 12, 15]
   decay_table_ticks: [0, 1, 2, 4, 8, 10]
+
+  # Presentation parameters are configuration, not hidden figure constants. They
+  # control sampling density and illustrative horizons while scientific values remain
+  # derived from the live kernel below.
+  figure_parameters:
+    score_min: 0.0
+    score_max: 1.0
+    heatmap_grid_points: 160
+    heatmap_pressure_max: 10.0
+    decay_plot_horizon_ticks: 10
+    decay_plot_points: 600
+    gate_surface_grid_points: 60
+    gate_surface_trust_slices: [0.2, 0.5, 0.9]
+    trust_plot_projection_margin: 6
 
   # Exact deterministic fixture inputs. Scores, pressure, decisions, and table
   # rows are produced by executing real Colony Kernel subsystem instances.

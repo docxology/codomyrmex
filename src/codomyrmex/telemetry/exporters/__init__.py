@@ -11,7 +11,7 @@ import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
-from queue import Queue
+from queue import Empty, Queue
 from typing import Any, Optional
 
 from codomyrmex.config_management.defaults import DEFAULT_OTEL_ENDPOINT
@@ -297,10 +297,13 @@ class BatchExporter(SpanExporter):
                 try:
                     span = self._queue.get(timeout=remaining)
                     batch.append(span)
+                except Empty:
+                    # A scheduled flush timeout is normal. Avoid logging from
+                    # the daemon worker after application handlers begin
+                    # shutting down at interpreter exit.
+                    break
                 except Exception as e:
-                    logger.debug(
-                        "BatchExporter queue get timed out or interrupted: %s", e
-                    )
+                    logger.warning("BatchExporter queue read failed: %s", e)
                     break
 
             if batch:

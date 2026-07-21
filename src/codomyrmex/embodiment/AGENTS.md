@@ -20,7 +20,7 @@ bridging, simulated sensors and actuators, ROS-style pub/sub, and 3D transforms.
 
 ## Operating Contracts
 
-- Preserve the import paths exercised by `src/codomyrmex/tests/unit/embodiment/`.
+- Preserve the import paths exercised by `tests/unit/embodiment/`.
 - Keep WebSocket tests real and local; do not replace them with mocks.
 - Keep transform math deterministic and dependency-light.
 - Do not claim production ROS2 integration; this package is an in-process compatibility surface.

@@ -178,7 +178,7 @@ Tests live in `tests/unit/colony_kernel/`. Run with:
 uv run pytest tests/unit/colony_kernel/ -v
 ```
 
-The test suite follows the zero-mock policy: all tests use real `ColonyKernel` instances with `db_path=":memory:"`. No `unittest.mock`, no `MagicMock`. Coverage target: ≥ 40% (project-wide gate).
+The test suite follows the zero-mock policy: all tests use real `ColonyKernel` instances with `db_path=":memory:"`. No `unittest.mock`, no `MagicMock`. Coverage target: ≥ 60% (project-wide gate).
 
 Key test modules:
 

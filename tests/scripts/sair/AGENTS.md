@@ -1,12 +1,12 @@
 <!-- agents: curated -->
 
-# Codomyrmex Agents — src/codomyrmex/tests/scripts/sair
+# Codomyrmex Agents — tests/scripts/sair
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Signposting
 
-- **Path**: `src/codomyrmex/tests/scripts/sair`
+- **Path**: `tests/scripts/sair`
 - **Human overview**: [README.md](README.md)
 - **Functional spec**: [SPEC.md](SPEC.md)
 - **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)

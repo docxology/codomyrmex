@@ -135,7 +135,7 @@ def enrich_docs_agents(mod_name):
         testing = (
             f"\n## Testing Guidelines\n\n"
             f"```bash\n"
-            f"uv run python -m pytest src/codomyrmex/tests/ -k {mod_name} -v\n"
+            f"uv run python -m pytest tests/ -k {mod_name} -v\n"
             f"```\n\n"
             f"- Run tests before and after making changes.\n"
             f"- Ensure all existing tests pass before submitting.\n"
@@ -241,7 +241,7 @@ def enrich_docs_readme(mod_name):
     if "test" not in content.lower():
         testing = (
             f"\n## Testing\n\n```bash\n"
-            f"uv run python -m pytest src/codomyrmex/tests/ -k {mod_name} -v\n"
+            f"uv run python -m pytest tests/ -k {mod_name} -v\n"
             f"```\n"
         )
         content = content.rstrip() + "\n" + testing
@@ -302,7 +302,7 @@ def enrich_docs_spec(mod_name):
     if "test" not in content.lower():
         testing = (
             f"\n## Testing\n\n```bash\n"
-            f"uv run python -m pytest src/codomyrmex/tests/ -k {mod_name} -v\n"
+            f"uv run python -m pytest tests/ -k {mod_name} -v\n"
             f"```\n"
         )
         content = content.rstrip() + "\n" + testing

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/claude
+# Codomyrmex Agents — tests/unit/agents/claude
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

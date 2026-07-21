@@ -1,3 +1,4 @@
+import stat
 import tarfile
 import zipfile
 from pathlib import Path
@@ -17,6 +18,25 @@ class CompressionError(CodomyrmexError):
 
 class ArchiveManager:
     """Manager for archive operations."""
+
+    @staticmethod
+    def _validate_member_path(output: Path, member_name: str) -> Path:
+        """Return a safe extraction path for an archive member.
+
+        Archive member names are untrusted input.  Resolving the candidate and
+        checking its relationship to the resolved output directory avoids the
+        string-prefix bypass where ``/tmp/out_evil`` incorrectly matched
+        ``/tmp/out``.
+        """
+        output_root = output.resolve()
+        member_path = (output_root / member_name).resolve()
+        try:
+            member_path.relative_to(output_root)
+        except ValueError as exc:
+            raise CompressionError(
+                f"Blocked path traversal attempt: {member_name}"
+            ) from exc
+        return member_path
 
     def create_archive(
         self, files: list[Path], output: Path, format: str = "zip"
@@ -71,7 +91,14 @@ class ArchiveManager:
 
             if archive.suffix == ".zip":
                 with zipfile.ZipFile(archive, "r") as zf:
-                    zf.extractall(output)
+                    for member in zf.infolist():
+                        ArchiveManager._validate_member_path(output, member.filename)
+                        mode = (member.external_attr >> 16) & 0o170000
+                        if stat.S_ISLNK(mode):
+                            raise CompressionError(
+                                f"Blocked unsafe symbolic link: {member.filename}"
+                            )
+                    zf.extractall(output)  # nosec B202 - members were preflight-validated
                 return True
             if archive.suffix in [".tar", ".gz"] or archive.name.endswith(".tar.gz"):
                 mode = (
@@ -81,18 +108,20 @@ class ArchiveManager:
                 )
                 with tarfile.open(archive, mode) as tf:
                     # CWE-22: Prevent path traversal during tarfile extraction.
-                    # Use data_filter (Python 3.12+) when available for safe extraction.
+                    # Validate paths and reject links before any extraction.
+                    for member in tf.getmembers():
+                        ArchiveManager._validate_member_path(output, member.name)
+                        if member.issym() or member.islnk():
+                            raise CompressionError(
+                                f"Blocked unsafe archive link: {member.name}"
+                            )
+
+                    # Use data_filter (Python 3.12+) as defense in depth;
+                    # retain the explicit validation for Python 3.11.
                     if hasattr(tarfile, "data_filter"):
-                        tf.extractall(output, filter="data")
+                        tf.extractall(output, filter="data")  # nosec B202 - preflight validation plus data filter
                     else:
-                        # Fallback: validate each member path manually
-                        for member in tf.getmembers():
-                            member_path = Path(output / member.name).resolve()
-                            if not str(member_path).startswith(str(output.resolve())):
-                                raise CompressionError(
-                                    f"Blocked path traversal attempt: {member.name}"
-                                )
-                        tf.extractall(output)
+                        tf.extractall(output)  # nosec B202 - explicit Python 3.11 preflight validation
                 return True
             raise ValueError(f"Unknown archive format: {archive.suffix}")
         except Exception as e:

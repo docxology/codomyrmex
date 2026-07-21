@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import shutil
 from pathlib import Path
 
@@ -155,8 +156,8 @@ class TestHermesSkillBridge:
         assert mapping == {}
 
     @pytest.mark.skipif(
-        shutil.which("hermes") is None,
-        reason="Hermes CLI not installed",
+        os.environ.get("RUN_LIVE_HERMES") != "1" or shutil.which("hermes") is None,
+        reason="Live Hermes tests require RUN_LIVE_HERMES=1 and the CLI",
     )
     def test_list_via_cli_real(self) -> None:
         """Integration: lists real installed skills via CLI."""

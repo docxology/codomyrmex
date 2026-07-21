@@ -64,7 +64,7 @@ class GeminiProvider(LLMProvider):
 
             self._client = genai.Client(api_key=self.config.api_key)
             self._genai_types = __import__("google.genai.types", fromlist=["types"])
-        except ImportError:
+        except (ImportError, ValueError):
             self._client = None
             self._genai_types = None
 

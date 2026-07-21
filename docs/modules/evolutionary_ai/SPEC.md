@@ -55,7 +55,7 @@ graph TD
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
+uv run python -m pytest tests/ -k evolutionary_ai -v
 ```
 
 ## Navigation

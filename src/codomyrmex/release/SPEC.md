@@ -191,7 +191,7 @@ Tests for this module must follow the project zero-mock policy:
   GitHub API).
 - Core certification, build, and preflight logic requires no external services and
   must always be testable.
-- Test files belong in `src/codomyrmex/tests/unit/release/`.
+- Test files belong in `tests/unit/release/`.
 
 Example test structure:
 

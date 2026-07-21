@@ -163,7 +163,7 @@ Advanced capabilities for specific domains:
 
 ## Explore Modules
 
-Codomyrmex includes **129 top-level modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **130 top-level modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 
@@ -267,7 +267,7 @@ Media processing and content management:
 - **[website](../../src/codomyrmex/website/)** - Website generation and management
 - **[skills](../../src/codomyrmex/skills/)** - Skill management and registration
 - **[examples](../../src/codomyrmex/examples/)** - Example code and demonstrations
-- **[tests](../../src/codomyrmex/tests/)** - Centralized test suites
+- **[tests](../../tests/)** - Centralized test suites
 
 ### Observability & Operations Layer
 
@@ -290,7 +290,7 @@ Monitoring, telemetry, and operational tooling:
 | **Specialized** | [spatial](../../src/codomyrmex/spatial/) • [physical_management](../../src/codomyrmex/physical_management/) • [system_discovery](../../src/codomyrmex/system_discovery/) • [module_template](../../src/codomyrmex/module_template/) • [events](../../src/codomyrmex/events/) • [plugin_system](../../src/codomyrmex/plugin_system/) • [tool_use](../../src/codomyrmex/tool_use/) • [cerebrum](../../src/codomyrmex/cerebrum/) • [fpf](../../src/codomyrmex/fpf/) • [ide](../../src/codomyrmex/ide/) • [cloud](../../src/codomyrmex/cloud/) • [networking](../../src/codomyrmex/networking/) • [networks](../../src/codomyrmex/networks/) • [simulation](../../src/codomyrmex/simulation/) • [scrape](../../src/codomyrmex/scrape/) • [encryption](../../src/codomyrmex/encryption/) • [compression](../../src/codomyrmex/compression/) |
 | **AI & Intelligence** | [agentic_memory](../../src/codomyrmex/agentic_memory/) • [graph_rag](../../src/codomyrmex/graph_rag/) • [model_ops](../../src/codomyrmex/model_ops/) • [evolutionary_ai](../../src/codomyrmex/evolutionary_ai/) • [prompt_engineering](../../src/codomyrmex/prompt_engineering/) |
 | **Security & Cognitive** | [identity](../../src/codomyrmex/identity/) *(exp)* • [wallet](../../src/codomyrmex/wallet/) *(exp)* • [defense](../../src/codomyrmex/defense/) *(exp)* • [market](../../src/codomyrmex/market/) *(exp)* • [privacy](../../src/codomyrmex/privacy/) *(exp)* • [finance](../../src/codomyrmex/finance/) |
-| **Media & Content** | [audio](../../src/codomyrmex/audio/) • [vision](../../src/codomyrmex/vision/) • [video](../../src/codomyrmex/video/) • [documents](../../src/codomyrmex/documents/) • [dark](../../src/codomyrmex/dark/) • [website](../../src/codomyrmex/website/) • [skills](../../src/codomyrmex/skills/) • [examples](../../src/codomyrmex/examples/) • [tests](../../src/codomyrmex/tests/) |
+| **Media & Content** | [audio](../../src/codomyrmex/audio/) • [vision](../../src/codomyrmex/vision/) • [video](../../src/codomyrmex/video/) • [documents](../../src/codomyrmex/documents/) • [dark](../../src/codomyrmex/dark/) • [website](../../src/codomyrmex/website/) • [skills](../../src/codomyrmex/skills/) • [examples](../../src/codomyrmex/examples/) • [tests](../../tests/) |
 | **Observability & Operations** | [telemetry](../../src/codomyrmex/telemetry/) • [feature_flags](../../src/codomyrmex/feature_flags/) • [cli](../../src/codomyrmex/cli/) • [embodiment](../../src/codomyrmex/embodiment/) |
 
 ## Common Use Cases
@@ -309,7 +309,7 @@ Monitoring, telemetry, and operational tooling:
 ### Production Operations
 
 - **Infrastructure Management**: [Database operations](../../src/codomyrmex/database_management/) → [Configuration management](../../src/codomyrmex/config_management/) → [Physical monitoring](../../src/codomyrmex/physical_management/)
-- **Quality Assurance**: [Security scanning](../../src/codomyrmex/security/) → [Performance benchmarking](../../src/codomyrmex/performance/) → [Automated testing](../../src/codomyrmex/tests/)
+- **Quality Assurance**: [Security scanning](../../src/codomyrmex/security/) → [Performance benchmarking](../../src/codomyrmex/performance/) → [Automated testing](../../tests/)
 
 See **[executable examples](../../src/codomyrmex/examples/)** for working demonstrations of these workflows.
 

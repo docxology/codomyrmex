@@ -44,10 +44,18 @@ This security policy applies only to the `Networking` module within the Codomyrm
 - **Timeout Configuration**: Prevent resource exhaustion with proper timeouts.
 - **Connection Pooling**: Secure connection reuse with proper lifecycle management.
 - **Proxy Support**: Secure proxy configuration for controlled network access.
+- **SSH host keys**: `SSHClient` rejects unknown host keys by default. Never
+  replace this with an accepting policy in production; provision trusted host
+  keys through `known_hosts_file` or the system known-hosts database. The
+  `allow_unknown_host_keys=True` compatibility option is intentionally unsafe
+  and should be limited to isolated development environments.
 
 ### WebSocket Security
 
-- **Origin Validation**: Verify WebSocket connection origins.
+- **Origin Validation**: Verify WebSocket connection origins with an explicit
+  allowlist; wildcard origins are not accepted for exposed listeners.
+- **Bind Address**: PAI WebSocket push binds to loopback by default. A
+  non-loopback bind requires both a bearer token and explicit origins.
 - **Message Validation**: Validate all incoming WebSocket messages.
 - **Connection Limits**: Prevent resource exhaustion from excessive connections.
 

@@ -59,7 +59,7 @@ Never commit local secrets or generated artifacts, even if they appear in your w
 4. **Run tests**:
 
    ```bash
-   uv run pytest src/codomyrmex/tests/unit/ -v
+   uv run pytest tests/unit/ -v
    ```
 
 5. **Commit your changes** with clear, descriptive messages:
@@ -86,9 +86,9 @@ uv run pre-commit install
 ## Testing
 
 - Write tests for all new features
-- Maintain test coverage above the project gate (≥40%, ratcheting upward)
-- Place unit tests in `src/codomyrmex/tests/unit/`
-- Place integration tests in `src/codomyrmex/tests/integration/`
+- Maintain test coverage above the project gate (≥60%, ratcheting upward)
+- Place unit tests in `tests/unit/`
+- Place integration tests in `tests/integration/`
 
 ## Documentation
 

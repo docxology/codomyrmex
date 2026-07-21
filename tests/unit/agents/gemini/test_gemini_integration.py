@@ -8,7 +8,7 @@ conversion logic is tested with real data structures.
 import pytest
 
 try:
-    from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
+    from tests.unit.agents.helpers import GEMINI_AVAILABLE
 
     from codomyrmex.agents.core import AgentRequest
     from codomyrmex.agents.gemini import GeminiClient, GeminiIntegrationAdapter

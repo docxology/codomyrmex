@@ -1,14 +1,15 @@
 """Tests for GeminiClient.
 
-Zero-Mock compliant — tests use the real Gemini API when GEMINI_API_KEY is
-set, otherwise they are skipped.
+Zero-Mock compliant — live tests use the real Gemini API only when explicitly
+enabled with ``RUN_LIVE_GEMINI=1`` and a ``GEMINI_API_KEY`` is available.
 """
 
 import os
 
 import pytest
 
-_HAS_GEMINI_KEY = bool(os.environ.get("GEMINI_API_KEY"))
+_RUN_LIVE_GEMINI = os.environ.get("RUN_LIVE_GEMINI") == "1"
+_HAS_GEMINI_KEY = _RUN_LIVE_GEMINI and bool(os.environ.get("GEMINI_API_KEY"))
 
 try:
     from codomyrmex.agents.core import AgentCapabilities, AgentRequest
@@ -31,7 +32,10 @@ if not _HAS_AGENTS:
 class TestGeminiClientInit:
     """Tests for GeminiClient initialisation paths."""
 
-    @pytest.mark.skipif(not _HAS_GEMINI_KEY, reason="GEMINI_API_KEY not set")
+    @pytest.mark.skipif(
+        not _HAS_GEMINI_KEY,
+        reason="Live Gemini tests require RUN_LIVE_GEMINI=1 and GEMINI_API_KEY",
+    )
     def test_init_with_real_key(self):
         """GeminiClient initializes successfully with a real API key."""
         client = GeminiClient()
@@ -49,7 +53,10 @@ class TestGeminiClientInit:
             if original_value is not None:
                 os.environ["GEMINI_API_KEY"] = original_value
 
-    @pytest.mark.skipif(not _HAS_GEMINI_KEY, reason="GEMINI_API_KEY not set")
+    @pytest.mark.skipif(
+        not _HAS_GEMINI_KEY,
+        reason="Live Gemini tests require RUN_LIVE_GEMINI=1 and GEMINI_API_KEY",
+    )
     def test_default_model(self):
         """GeminiClient uses the default model from config or env."""
         client = GeminiClient()
@@ -62,7 +69,10 @@ class TestGeminiClientInit:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not _HAS_GEMINI_KEY, reason="GEMINI_API_KEY not set")
+@pytest.mark.skipif(
+    not _HAS_GEMINI_KEY,
+    reason="Live Gemini tests require RUN_LIVE_GEMINI=1 and GEMINI_API_KEY",
+)
 @pytest.mark.unit
 class TestGeminiClientAPI:
     """Live-API tests for GeminiClient — skipped without GEMINI_API_KEY."""

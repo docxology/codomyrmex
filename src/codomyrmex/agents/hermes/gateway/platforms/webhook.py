@@ -43,7 +43,7 @@ class WebhookConfig:
 
     port: int = 8644
     routes: dict[str, WebhookRoute] = field(default_factory=dict)
-    host: str = "0.0.0.0"
+    host: str = "127.0.0.1"
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -408,7 +408,7 @@ class WebhookAdapter:
 def create_webhook_adapter(
     port: int = 8644,
     routes: dict[str, dict[str, str]] | None = None,
-    host: str = "0.0.0.0",
+    host: str = "127.0.0.1",
 ) -> WebhookAdapter:
     """Create a webhook adapter from simple config.
 

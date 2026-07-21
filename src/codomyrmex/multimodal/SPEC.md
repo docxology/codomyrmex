@@ -116,7 +116,7 @@ No file-based configuration. All settings are passed at construction or call tim
 ## Testing
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/multimodal/
+uv run pytest tests/unit/multimodal/
 ```
 
 Tests requiring a live `GEMINI_API_KEY` are guarded with `@pytest.mark.skipif`.

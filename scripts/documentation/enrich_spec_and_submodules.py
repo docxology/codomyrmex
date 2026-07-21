@@ -146,7 +146,7 @@ def enrich_spec(mod_name, info):
 
     # Add testing section if missing
     if "test" not in content_lower:
-        testing = f"\n## Testing\n\n```bash\nuv run python -m pytest src/codomyrmex/tests/ -k {mod_name} -v\n```\n"
+        testing = f"\n## Testing\n\n```bash\nuv run python -m pytest tests/ -k {mod_name} -v\n```\n"
         content = content.rstrip() + "\n" + testing
         modified = True
 

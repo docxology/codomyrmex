@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/llm
+# Codomyrmex Agents — tests/unit/llm
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
@@ -38,6 +38,9 @@ Validation coverage, fixtures, and regression checks for Llm.
 - `test_safety_fabric_multimodal.py` – Project file
 
 ## Operating Contracts
+
+- Live Ollama integration tests require explicit `RUN_LIVE_OLLAMA=1`; pure
+  provider and serialization tests remain runnable without a local service.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

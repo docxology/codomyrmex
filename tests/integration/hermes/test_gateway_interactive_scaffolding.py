@@ -36,7 +36,7 @@ def multiply(a: int, b: int) -> int:
     # Ensure it's in the python path accurately regardless of cwd
     src_base = str(tmp_path / "src")
 
-    # Write a local pytest.ini to block inheritance of the root pyproject.toml 40% coverage rules
+    # Write a local pytest.ini to block inheritance of the root pyproject.toml 60% coverage rules
     ini_file = test_dir / "pytest.ini"
     ini_file.write_text("[pytest]\naddopts = -p no:cov\n")
 

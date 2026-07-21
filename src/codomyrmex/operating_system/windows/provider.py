@@ -31,7 +31,7 @@ def _run(cmd: str, timeout: float = 15.0) -> str:
         # but we keep shell=True for compound commands.
         result = subprocess.run(
             cmd,
-            shell=True,
+            shell=True,  # nosec B602 - trusted Windows command API
             capture_output=True,
             text=True,
             timeout=timeout,

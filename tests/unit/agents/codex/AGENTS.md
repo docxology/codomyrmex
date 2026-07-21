@@ -1,6 +1,6 @@
 <!-- agents: curated -->
 
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/codex
+# Codomyrmex Agents — tests/unit/agents/codex
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: June 2026
 

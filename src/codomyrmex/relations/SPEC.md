@@ -130,8 +130,8 @@ from codomyrmex.relations import (
 
 - All tests use real `SocialGraph`, `PrismEngine`, and `ContactManager` instances.
 - **Zero-Mock Policy**: No mocking of graph operations, hash computations, or storage.
-- Test location: `src/codomyrmex/tests/unit/relations/`
-- Run: `uv run pytest src/codomyrmex/tests/unit/relations/ -v`
+- Test location: `tests/unit/relations/`
+- Run: `uv run pytest tests/unit/relations/ -v`
 
 ## Navigation
 

@@ -1,7 +1,7 @@
 """Comprehensive unit tests for codomyrmex.agents.qwen module.
 
 Tests follow the Zero-Mock policy — all assertions use real objects.
-API-dependent tests are skipped when DASHSCOPE_API_KEY is not set.
+API-dependent tests require RUN_LIVE_QWEN=1 and a DashScope/Qwen API key.
 qwen-agent framework tests are skipped when qwen-agent is not installed.
 
 Coverage:
@@ -20,7 +20,9 @@ import pytest
 from codomyrmex.agents.qwen import DEFAULT_MODEL, QWEN_MODELS, QwenClient
 from codomyrmex.agents.qwen.qwen_client import DEFAULT_BASE_URL
 
-HAS_API_KEY = bool(os.getenv("DASHSCOPE_API_KEY") or os.getenv("QWEN_API_KEY"))
+HAS_API_KEY = os.getenv("RUN_LIVE_QWEN") == "1" and bool(
+    os.getenv("DASHSCOPE_API_KEY") or os.getenv("QWEN_API_KEY")
+)
 DUMMY_CONFIG = {"qwen_api_key": "test-dummy-key-for-construction"}
 
 try:
@@ -446,11 +448,14 @@ class TestQwenConstants:
 
 
 # ============================================================================
-# API Integration (requires DASHSCOPE_API_KEY)
+# API Integration (requires explicit live opt-in and DASHSCOPE_API_KEY)
 # ============================================================================
 
 
-@pytest.mark.skipif(not HAS_API_KEY, reason="DASHSCOPE_API_KEY not set")
+@pytest.mark.skipif(
+    not HAS_API_KEY,
+    reason="Live Qwen tests require RUN_LIVE_QWEN=1 and a DashScope/Qwen API key",
+)
 class TestQwenAPIIntegration:
     """Integration tests requiring real DashScope API access."""
 

@@ -101,7 +101,7 @@ codomyrmex/
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
 │   ├── /src/codomyrmex/coding/static_analysis/ # Code quality analysis
 │   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
-│   └── ...                  # 129 top-level modules
+│   └── ...                  # 130 top-level modules
 ├── /scripts/                 # Maintenance and automation utilities
 │   ├── /scripts/documentation/       # Documentation maintenance scripts
 │   ├── /scripts/development/         # Development utilities
@@ -112,9 +112,9 @@ codomyrmex/
 │   ├── /docs/modules/             # Module system documentation
 │   ├── /docs/project/             # Architecture and contributing guides
 │   └── /docs/reference/           # API reference and troubleshooting
-├── /src/codomyrmex/tests/    # Test suites
-│   ├── /src/codomyrmex/tests/unit/                # Unit tests
-│   └── /src/codomyrmex/tests/integration/         # Integration tests
+├── /tests/    # Test suites
+│   ├── /tests/unit/                # Unit tests
+│   └── /tests/integration/         # Integration tests
 ├── /config/                  # Configuration templates and examples
 │   ├── /config/examples/            # Configuration examples
 │   └── /config/templates/           # Configuration templates
@@ -134,7 +134,7 @@ graph TD
     subgraph corePlatform ["Core Platform"]
         CoreSrc["src/codomyrmex/ 88 Modules"]
         CoreScripts["scripts/ Automation & Orchestration"]
-        CoreTests["src/codomyrmex/tests/ Unit & Integration Tests"]
+        CoreTests["tests/ Unit & Integration Tests"]
     end
 
     subgraph docsConfig ["Documentation & Config"]
@@ -252,8 +252,8 @@ uv run pytest
 uv run pytest --cov=src/codomyrmex --cov-report=html
 
 # Run specific test suite
-uv run pytest src/codomyrmex/tests/unit/
-uv run pytest src/codomyrmex/tests/integration/
+uv run pytest tests/unit/
+uv run pytest tests/integration/
 ```
 
 ### Code Quality
@@ -299,9 +299,9 @@ Copyright (c) 2025 The Codomyrmex Contributors (@docxology)
 
 ## Key Metrics
 
-- **Lines of Code**: ~100K+ across **129** top-level modules
+- **Lines of Code**: ~100K+ across **130** top-level modules
 - **Test Coverage**: Run `uv run pytest --cov=src/codomyrmex` (gate in `pyproject.toml`)
-- **Module Count**: **129** top-level packages — see [reference/inventory.md](../reference/inventory.md) and `codomyrmex modules` for health
+- **Module Count**: **130** top-level packages — see [reference/inventory.md](../reference/inventory.md) and `codomyrmex modules` for health
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

@@ -218,7 +218,7 @@ Both STT and TTS provide async methods:
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k audio -v
+uv run python -m pytest tests/ -k audio -v
 ```
 
 ## Navigation

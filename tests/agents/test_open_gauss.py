@@ -21,7 +21,7 @@ import pytest
 import yaml
 
 # Note: sys.path injection for open_gauss is handled in conftest.py.
-# Do not `import utils` — full-suite collection puts codomyrmex.tests.unit.utils on sys.path first.
+# Do not `import utils` — full-suite collection can put tests.unit.utils on sys.path first.
 _OPEN_GAUSS_DIR = (
     Path(__file__).resolve().parent.parent.parent / "agents" / "open_gauss"
 )

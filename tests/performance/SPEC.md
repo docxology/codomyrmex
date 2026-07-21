@@ -8,6 +8,11 @@
 
 This directory contains performance testing suites for measuring and validating the performance characteristics of Codomyrmex modules. It provides benchmarking, load testing, and performan
 
+Performance tests are opt-in for repository coverage gates. Every module is
+marked `performance`; pytest-benchmark modules additionally use `benchmark`.
+The dedicated performance lane runs these tests without coverage and records
+timing results separately from correctness gates.
+
 ## Design Principles
 
 ### Modularity

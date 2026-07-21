@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/cloud/google_workspace
+# Codomyrmex Agents — tests/unit/cloud/google_workspace
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

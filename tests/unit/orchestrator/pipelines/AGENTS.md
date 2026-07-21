@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/orchestrator/pipelines
+# Codomyrmex Agents — tests/unit/orchestrator/pipelines
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

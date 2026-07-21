@@ -5,6 +5,10 @@ learning under uncertainty [@friston2010free; @friston2017active]. That vocabula
 help ask sharper questions about the Colony Kernel. It does not, by itself, make the
 kernel an active-inference system.
 
+{{CONFIG_PARAMETER_STATUS_NOTE}} The active-inference correspondence below is therefore
+a research scaffold: it identifies missing model components and testable upgrade steps,
+not a retrospective theoretical certification of the current heuristic gate.
+
 The current implementation is deterministic and heuristic. It does not encode a
 probabilistic generative model, maintain a variational posterior, estimate precision from
 data, evaluate policies over a planning horizon, or minimize expected free energy. This
@@ -41,7 +45,7 @@ The checked-in kernel has deterministic state variables and thresholds instead. 
 those variables names borrowed from active inference does not supply the missing model or
 inference procedure.
 
-![Schematic vocabulary crosswalk between Free Energy Principle terms and Colony Kernel artifacts. Each row names an FEP concept, the kernel artifact proposed as an analogue, and the intended engineering intuition. The coloured stripes distinguish rows; they do not encode measurements, probabilities, precision, or decay. The figure's correspondence column is conceptual: the current kernel does not represent $p(o,s)$ or $q(s)$, and its gate score is not canonical expected free energy.](figures/fep_correspondence.png){#fig:fep_correspondence width=95%}
+![{{FIGURE_CAPTION_FEP_CORRESPONDENCE}}](figures/{{FIGURE_FILENAME_FEP_CORRESPONDENCE}}){#{{FIGURE_LABEL_FEP_CORRESPONDENCE}} width={{FIGURE_WIDTH_FEP_CORRESPONDENCE}}}
 
 Figure [@fig:fep_correspondence] is therefore a reading aid, not a model diagram. The
 crosswalk identifies where a future probabilistic implementation might attach to the

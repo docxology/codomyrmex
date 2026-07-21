@@ -25,6 +25,19 @@ from codomyrmex.crypto.random import (
     secure_random_string,
 )
 
+
+def _statistical_test_data(size: int = 1024) -> bytes:
+    """Return a deterministic, balanced sample for statistical-test tests.
+
+    The NIST tests intentionally use a 1% significance threshold.  Feeding
+    them ``os.urandom`` makes the test suite itself fail legitimately about
+    once in every hundred runs, which is unsuitable for a correctness gate.
+    This fixed high-entropy sample exercises the same implementation paths
+    while keeping the assertion reproducible.
+    """
+    return bytes((index * 73 + 19) % 256 for index in range(size))
+
+
 # -------------------------------------------------------------------------
 # Generator tests
 # -------------------------------------------------------------------------
@@ -161,7 +174,7 @@ class TestMonobitTest:
     """Tests for the NIST monobit (frequency) test."""
 
     def test_passes_for_random_data(self) -> None:
-        data = os.urandom(1024)
+        data = _statistical_test_data()
         result = monobit_test(data)
         assert isinstance(result, NistTestResult)
         assert result.test_name == "Monobit (Frequency) Test"
@@ -191,7 +204,7 @@ class TestRunsTest:
     """Tests for the NIST runs test."""
 
     def test_passes_for_random_data(self) -> None:
-        data = os.urandom(1024)
+        data = _statistical_test_data()
         result = runs_test(data)
         assert isinstance(result, NistTestResult)
         assert result.test_name == "Runs Test"
@@ -215,7 +228,7 @@ class TestBlockFrequencyTest:
     """Tests for the NIST block frequency test."""
 
     def test_passes_for_random_data(self) -> None:
-        data = os.urandom(1024)
+        data = _statistical_test_data()
         result = block_frequency_test(data)
         assert isinstance(result, NistTestResult)
         assert result.test_name == "Block Frequency Test"
@@ -232,7 +245,7 @@ class TestBlockFrequencyTest:
             block_frequency_test(b"")
 
     def test_custom_block_size(self) -> None:
-        data = os.urandom(256)
+        data = _statistical_test_data(256)
         result = block_frequency_test(data, block_size=64)
         assert result.passed is True
 
@@ -243,13 +256,13 @@ class TestRunNistSuite:
     """Tests for the full NIST suite runner."""
 
     def test_returns_three_results(self) -> None:
-        data = os.urandom(1024)
+        data = _statistical_test_data()
         results = run_nist_suite(data)
         assert len(results) == 3
         assert all(isinstance(r, NistTestResult) for r in results)
 
     def test_all_pass_for_random_data(self) -> None:
-        data = os.urandom(1024)
+        data = _statistical_test_data()
         results = run_nist_suite(data)
         for r in results:
             assert r.passed is True, f"{r.test_name} failed with p_value={r.p_value}"

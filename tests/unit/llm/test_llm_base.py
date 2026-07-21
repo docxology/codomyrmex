@@ -11,6 +11,7 @@ Tests that DO require Ollama are gated behind ``ollama_available``.
 """
 
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -23,15 +24,17 @@ import pytest
 # Ollama availability guard
 # ---------------------------------------------------------------------------
 ollama_available = False
-try:
-    subprocess.run(
-        ["ollama", "list"],
-        capture_output=True,
-        timeout=2,
-    )
-    ollama_available = True
-except Exception:
-    pass
+if os.environ.get("RUN_LIVE_OLLAMA") == "1":
+    try:
+        probe = subprocess.run(
+            ["ollama", "list"],
+            capture_output=True,
+            timeout=2,
+            check=False,
+        )
+        ollama_available = probe.returncode == 0
+    except Exception:
+        pass
 
 _skip_no_ollama = pytest.mark.skipif(not ollama_available, reason="Ollama not running")
 

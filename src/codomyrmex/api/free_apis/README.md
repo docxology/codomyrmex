@@ -137,10 +137,10 @@ result = free_api_call(
 
 ```bash
 # Unit tests only (no network)
-uv run pytest src/codomyrmex/tests/unit/api/free_apis/ -v
+uv run pytest tests/unit/api/free_apis/ -v
 
 # Include network tests
-CODOMYRMEX_NETWORK_TESTS=1 uv run pytest src/codomyrmex/tests/unit/api/free_apis/ -v
+CODOMYRMEX_NETWORK_TESTS=1 uv run pytest tests/unit/api/free_apis/ -v
 ```
 
 ## Navigation

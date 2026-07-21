@@ -13,6 +13,7 @@ Agent-oriented inventory and contracts: [../../../../../AGENTS.md](../../../../.
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
+- `test_dependency_analyzer.py` – File
 - `test_review_pipeline.py` – File
 
 ## Navigation

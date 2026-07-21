@@ -1,6 +1,6 @@
 # Codomyrmex Module Index
 
-**Version**: v1.3.0 | **Top-level modules**: 129 | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Top-level modules**: 130 | **Last Updated**: March 2026
 
 > [!TIP]
 > This INDEX confirms and catalogs every module directory in `src/codomyrmex/`.
@@ -129,7 +129,7 @@ Advanced features with flexible dependencies.
 | [system_discovery/](system_discovery/) | System introspection & capability mapping | 68 |
 | [templating/](templating/) | Template rendering engine | 57 |
 | [testing/](testing/) | Test utilities & runners | 65 |
-| [tests/](tests/) | Package test suites | 3003 |
+| [tests/](../../tests/) | Repository test suites | 3003 |
 | [tool_use/](tool_use/) | Tool use abstraction layer | 19 |
 | [utils/](utils/) | Common utilities | 51 |
 | [validation/](validation/) | Data validation & schema checking | 75 |

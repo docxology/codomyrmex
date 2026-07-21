@@ -82,8 +82,14 @@ def list_local_datasets(data_dir: str = "data/sair") -> dict[str, Any]:
     return summary
 
 
-def download_sair_datasets(output_dir: str = DEFAULT_PUBLIC_DIR) -> None:
+def download_sair_datasets(
+    output_dir: str = DEFAULT_PUBLIC_DIR, *, live: bool = False
+) -> None:
     """Download the competition datasets from Hugging Face and verify integrity."""
+    if not (live or os.getenv("RUN_LIVE_SAIR") == "1"):
+        raise RuntimeError(
+            "SAIR dataset download is disabled by default; pass live=True or set RUN_LIVE_SAIR=1."
+        )
     os.makedirs(output_dir, exist_ok=True)
     logger.info("Downloading SAIR datasets from %s → %s", REPO_ID, output_dir)
 
@@ -105,11 +111,15 @@ def download_sair_datasets(output_dir: str = DEFAULT_PUBLIC_DIR) -> None:
             logger.error("Failed to download %s: %s", filename, e)
 
 
-def download_etp_full(output_dir: str = DEFAULT_ETP_DIR) -> None:
+def download_etp_full(output_dir: str = DEFAULT_ETP_DIR, *, live: bool = False) -> None:
     """Download the full Equational Theories Project implication graph.
 
     NOTE: This is a very large dataset. Adjust the URL as needed.
     """
+    if not (live or os.getenv("RUN_LIVE_SAIR") == "1"):
+        raise RuntimeError(
+            "SAIR dataset download is disabled by default; pass live=True or set RUN_LIVE_SAIR=1."
+        )
     # Use stable release from GitHub. The raw CSV/Parquet is at:
     url = "https://github.com/teorth/equational_theories/releases/latest/download/implications.csv"
     os.makedirs(output_dir, exist_ok=True)
@@ -139,12 +149,17 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output-dir", default=DEFAULT_PUBLIC_DIR, help="Local directory for data."
     )
+    parser.add_argument(
+        "--live",
+        action="store_true",
+        help="Explicitly opt into external downloads (or set RUN_LIVE_SAIR=1).",
+    )
     args = parser.parse_args()
 
     if args.type == "public":
-        download_sair_datasets(args.output_dir)
+        download_sair_datasets(args.output_dir, live=args.live)
     elif args.type == "full":
-        download_etp_full(DEFAULT_ETP_DIR)
+        download_etp_full(DEFAULT_ETP_DIR, live=args.live)
     elif args.type == "list":
         datasets = list_local_datasets()
         if not datasets:

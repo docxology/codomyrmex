@@ -11,7 +11,16 @@ This module provides production-grade infrastructure for the SAIR Mathematics Di
 - Complete run telemetry and structured logging
 - Stage 2 Log-Loss scoring configuration Support (`--stage2`)
 
-**Submission Deadline**: April 20, 2026.
+**Historical submission deadline**: April 20, 2026. This date is retained for
+provenance and is not an active delivery promise.
+
+## External-service boundary
+
+The SAIR harness is offline-first. Local parsing, integrity checks, analysis,
+cheatsheet generation, and run comparison do not contact providers. Dataset
+downloads and model evaluation require an explicit `--live` flag or
+`RUN_LIVE_SAIR=1`; the presence of credentials alone never enables network
+traffic. CI and ordinary test runs leave this lane disabled.
 
 ## Evaluation Template (Official Jinja2)
 
@@ -110,7 +119,7 @@ One NDJSON line per run containing summary-level metrics for trend analysis.
 ### `evaluate.py`
 - `parse_llm_response(text) -> dict` — Parse VERDICT/REASONING/PROOF/COUNTEREXAMPLE
 - `evaluate_problem(provider, model, problem, cheatsheet, cheatsheet_hash) -> dict`
-- `run_evaluation(dataset_path, model, ...) -> dict` — Full batch with auto-save & telemetry
+- `run_evaluation(dataset_path, model, ..., live=False) -> dict` — Full batch with auto-save & telemetry; provider calls require the explicit live opt-in
 
 ### `generate_cheatsheet.py`
 
@@ -132,7 +141,7 @@ One NDJSON line per run containing summary-level metrics for trend analysis.
 
 ### `download_data.py`
 
-- `download_sair_datasets(output_dir)` — HuggingFace download + integrity check
+- `download_sair_datasets(output_dir, ..., live=False)` — HuggingFace download + integrity check; network access requires the explicit live opt-in
 - `verify_dataset_integrity(path) -> bool` — JSONL validation
 - `list_local_datasets(data_dir) -> dict` — Local dataset registry
 

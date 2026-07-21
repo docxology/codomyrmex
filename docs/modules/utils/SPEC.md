@@ -65,7 +65,7 @@ def run_command(
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k utils -v
+uv run python -m pytest tests/ -k utils -v
 ```
 
 ## Navigation

@@ -30,5 +30,5 @@
 ## Validation
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/defense/test_mcp_tools_defense.py -q
+uv run pytest tests/unit/defense/test_mcp_tools_defense.py -q
 ```

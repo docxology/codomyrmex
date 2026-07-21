@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import os
 import shutil
 
 import pytest
 
 from codomyrmex.agents.hermes.hermes_client import HermesClient
+
+_HERMES_AVAILABLE = (
+    os.environ.get("RUN_LIVE_HERMES") == "1" and shutil.which("hermes") is not None
+)
 
 
 @pytest.fixture
@@ -31,7 +36,8 @@ class TestGetGatewayStatus:
         assert result["instances"] == []
 
     @pytest.mark.skipif(
-        shutil.which("hermes") is None, reason="Hermes CLI not installed"
+        not _HERMES_AVAILABLE,
+        reason="Live Hermes tests require RUN_LIVE_HERMES=1 and the CLI",
     )
     def test_cli_returns_dict(self, client: HermesClient) -> None:
         result = client.get_gateway_status()
@@ -62,7 +68,8 @@ class TestGetModelInfo:
         assert "model_id" in result
 
     @pytest.mark.skipif(
-        shutil.which("hermes") is None, reason="Hermes CLI not installed"
+        not _HERMES_AVAILABLE,
+        reason="Live Hermes tests require RUN_LIVE_HERMES=1 and the CLI",
     )
     def test_nemotron_info_real(self, client: HermesClient) -> None:
         """Integration: real model lookup for the current default model."""
@@ -87,7 +94,8 @@ class TestSendGatewayCommand:
         assert "Hermes CLI not available" in result.get("error", "")
 
     @pytest.mark.skipif(
-        shutil.which("hermes") is None, reason="Hermes CLI not installed"
+        not _HERMES_AVAILABLE,
+        reason="Live Hermes tests require RUN_LIVE_HERMES=1 and the CLI",
     )
     def test_deny_command_real(self, client: HermesClient) -> None:
         """Integration: sends /deny (safe no-op when no pending approval)."""
@@ -111,7 +119,8 @@ class TestInstallSkill:
         assert "Hermes CLI not available" in result.get("error", "")
 
     @pytest.mark.skipif(
-        shutil.which("hermes") is None, reason="Hermes CLI not installed"
+        not _HERMES_AVAILABLE,
+        reason="Live Hermes tests require RUN_LIVE_HERMES=1 and the CLI",
     )
     def test_bad_url_returns_error(self, client: HermesClient) -> None:
         """Integration: invalid URL should fail gracefully."""

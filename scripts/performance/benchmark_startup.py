@@ -10,6 +10,7 @@ import importlib
 import subprocess
 import sys
 import time
+import warnings
 from typing import Any
 
 
@@ -77,7 +78,13 @@ def measure_import_time(module_name: str) -> dict[str, Any]:
 
     try:
         t0 = time.perf_counter()
-        importlib.import_module(module_name)
+        # Deprecated compatibility modules may emit warnings while their
+        # import cost is measured.  Keep those warnings from turning this
+        # diagnostic utility into an order-dependent test failure, while
+        # preserving all non-deprecation warnings.
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            importlib.import_module(module_name)
         t1 = time.perf_counter()
         import_time = t1 - t0
     except ImportError:

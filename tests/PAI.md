@@ -10,28 +10,24 @@ The Tests module provides PAI integration for test automation and coverage.
 
 ### Test Execution
 
-Run tests programmatically:
+Run tests through the repository contract:
 
 ```python
-from codomyrmex.tests import TestRunner
+import subprocess
 
-runner = TestRunner()
-result = runner.run("tests/")
-
-print(f"Passed: {result.passed}")
-print(f"Failed: {result.failed}")
+result = subprocess.run(["uv", "run", "pytest", "tests/"], check=False)
+print(f"Exit status: {result.returncode}")
 ```
 
 ### Coverage Tracking
 
-Track test coverage:
+Track coverage with the same 60% release floor:
 
 ```python
-from codomyrmex.tests import CoverageReporter
+import subprocess
 
-reporter = CoverageReporter()
-coverage = reporter.run("tests/")
-print(f"Coverage: {coverage.percent}%")
+result = subprocess.run(["make", "test"], check=False)
+print(f"Exit status: {result.returncode}")
 ```
 
 ## PAI Integration Points
@@ -45,8 +41,8 @@ print(f"Coverage: {coverage.percent}%")
 ## MCP Tools
 
 This module does not expose MCP tools directly. Access its capabilities via:
-- Direct Python import: `from codomyrmex.tests import ...`
-- CLI: `codomyrmex tests <command>`
+- Repository command: `uv run pytest tests/`
+- Release gate: `make test`
 
 ## Navigation
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/api/pagination
+# Codomyrmex Agents — tests/unit/api/pagination
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

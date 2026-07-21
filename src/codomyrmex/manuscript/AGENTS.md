@@ -15,6 +15,11 @@ Manuscript token computation and publication figure generation.
 | `figures/__init__.py` | `FIGURES` registry + re-exports |
 | `figures/generators.py` | Backward-compat re-export shim |
 
+Figure metadata and captions are configured under `docs/manuscript/config.yaml` in the
+`figures:` mapping. The generator resolves those captions into `FIGURE_*` variables and
+the figure registry records the resolved caption, label, width, evidence class, and
+artifact hash together.
+
 ## Dependencies
 
 Orchestrators (thin):

@@ -26,7 +26,7 @@ Defense module.
 ## Key Files
 
 - **Source module**: [`../../../src/codomyrmex/defense/`](../../../src/codomyrmex/defense/)
-- **Unit tests**: [`../../../src/codomyrmex/tests/unit/defense/`](../../../src/codomyrmex/tests/unit/defense/)
+- **Unit tests**: [`../../../tests/unit/defense/`](../../../tests/unit/defense/)
 
 ## Navigation Links
 

@@ -72,7 +72,7 @@ Module configuration via `DocumentsConfig`:
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/unit/documents/ -v
+uv run python -m pytest tests/unit/documents/ -v
 ```
 
 ## Navigation

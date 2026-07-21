@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/coding/review
+# Codomyrmex Agents — tests/unit/coding/review
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

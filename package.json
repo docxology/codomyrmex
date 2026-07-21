@@ -6,8 +6,8 @@
   "scripts": {
     "serve": "uv run python -m http.server 8000 --directory docs",
     "start": "uv run python -m http.server 8000 --directory docs",
-    "build": "uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root .",
-    "test": "pytest src/codomyrmex/tests/unit"
+    "build": "uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root . --fail-on-issues",
+    "test": "uv run pytest tests/unit"
   },
   "repository": {
     "type": "git",

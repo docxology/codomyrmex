@@ -25,7 +25,7 @@ Server and client implementations for MCP communication over stdio and HTTP tran
 | `register_prompt` | `name, description, arguments, template` | `None` | Register a prompt template with `{key}` substitution |
 | `handle_request` | `message: dict, correlation_id: str | None` | `dict None` Process a JSON-RPC message; returns `None` for notifications |
 | `run_stdio` | — | `None` (async) | Read JSON-RPC from stdin, write responses to stdout |
-| `run_http` | `host, port` | `None` (async) | Start FastAPI server with `/mcp`, `/tools`, `/resources`, `/prompts`, `/health` endpoints |
+| `run_http` | `host="127.0.0.1", port=8080, allowed_origins=None, auth_token=None` | `None` (async) | Start FastAPI server with `/mcp`, `/tools`, `/resources`, `/prompts`, `/health`; non-loopback hosts require `auth_token` |
 | `run` | — | `None` | Synchronous entry point (runs stdio) |
 
 ### `MCPServerConfig`

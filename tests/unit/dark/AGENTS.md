@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/dark
+# Codomyrmex Agents — tests/unit/dark
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

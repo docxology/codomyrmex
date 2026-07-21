@@ -115,7 +115,7 @@ class AgenticSeekRouter:
 ## 5. Testing
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/agents/agentic_seek/ -v
+uv run pytest tests/unit/agents/agentic_seek/ -v
 ```
 
 ## 6. Future Considerations

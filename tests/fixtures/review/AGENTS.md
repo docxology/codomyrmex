@@ -1,12 +1,12 @@
 <!-- agents: curated -->
 
-# Codomyrmex Agents — src/codomyrmex/tests/fixtures/review
+# Codomyrmex Agents — tests/fixtures/review
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Signposting
 
-- **Path**: `src/codomyrmex/tests/fixtures/review`
+- **Path**: `tests/fixtures/review`
 - **Human overview**: [README.md](README.md)
 - **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)
 ## Purpose

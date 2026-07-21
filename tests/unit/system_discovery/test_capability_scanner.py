@@ -138,7 +138,7 @@ CONSTANT = 42
         # Use the real project root derived from this file's location
         # rather than a hardcoded developer-specific path.
         _this_file = Path(__file__).resolve()
-        # tests/unit/system_discovery -> src/codomyrmex/tests/unit/system_discovery
+        # tests/unit/system_discovery -> tests/unit/system_discovery
         # project root is 5 levels up from tests/unit/system_discovery
         _project_root = REPO_ROOT
         scanner = CapabilityScanner(project_root=_project_root)

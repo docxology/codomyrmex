@@ -33,14 +33,14 @@ Ruff-based scan for unused imports confirmed 3 violations, all fixed.
 | ID | File | Line | Category | Finding | Status |
 |----|------|------|----------|---------|--------|
 | MNT-DC-001 | `src/codomyrmex/audio/mcp_tools.py` | 3 | unsorted-imports (I001) | `mcp_tool` import before `typing.Any` | **FIXED** |
-| MNT-DC-002 | `src/codomyrmex/tests/unit/audio/test_mcp_tools.py` | 143 | missing-newline (W292) | No newline at end of file | **FIXED** |
-| MNT-DC-003 | `src/codomyrmex/tests/unit/examples/test_fastapi_endpoint_example.py` | 1 | unsorted-imports (I001) | Mixed import block ordering | **FIXED** |
+| MNT-DC-002 | `tests/unit/audio/test_mcp_tools.py` | 143 | missing-newline (W292) | No newline at end of file | **FIXED** |
+| MNT-DC-003 | `tests/unit/examples/test_fastapi_endpoint_example.py` | 1 | unsorted-imports (I001) | Mixed import block ordering | **FIXED** |
 
 ### Skipped Findings
 
 | ID | File | Lines | Category | Reason for Skip |
 |----|------|-------|----------|-----------------|
-| MNT-DC-004 | `src/codomyrmex/tests/unit/agents/test_react_agent.py` | 76–80 | commented-out-code | 5-line block is explanatory documentation showing impl under test; confidence 75% (<90% threshold) |
+| MNT-DC-004 | `tests/unit/agents/test_react_agent.py` | 76–80 | commented-out-code | 5-line block is explanatory documentation showing impl under test; confidence 75% (<90% threshold) |
 
 ### Evaluated — Not Dead Code
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/ci_cd_automation
+# Codomyrmex Agents — tests/unit/ci_cd_automation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

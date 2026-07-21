@@ -17,9 +17,12 @@ mechanism: fixtures are injected at test-call time and cannot be referenced
 in decorator arguments that must evaluate to a literal bool at definition
 time.
 
+Each external tool constant also requires its matching ``RUN_LIVE_*`` opt-in;
+installation or credentials alone never turns a live lane on.
+
 **Usage pattern in test files:**
 
-    from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
+    from tests.unit.agents.helpers import GEMINI_AVAILABLE
 
     class TestGeminiIntegration:
         @pytest.mark.skipif(not GEMINI_AVAILABLE, reason="gemini CLI or SDK not installed")
@@ -77,16 +80,26 @@ try:
 except ImportError:
     SDK_AVAILABLE = False
 
+
+def _live_enabled(name: str) -> bool:
+    """Return whether an external provider lane was explicitly enabled."""
+    return os.environ.get(f"RUN_LIVE_{name}") == "1"
+
+
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_AVAILABLE = (
-    SDK_AVAILABLE and GEMINI_API_KEY is not None
-) or check_tool_available("gemini")
-JULES_AVAILABLE = check_tool_available("jules")
-OPENCLAW_AVAILABLE = check_tool_available("openclaw")
-OPENCODE_AVAILABLE = check_tool_available("opencode")
-VIBE_AVAILABLE = check_tool_available("vibe")
-EVERY_CODE_AVAILABLE = check_tool_available("code") or check_tool_available("coder")
-PAPERCLIPAI_AVAILABLE = check_tool_available("paperclipai")
+GEMINI_AVAILABLE = _live_enabled("GEMINI") and (
+    (SDK_AVAILABLE and GEMINI_API_KEY is not None) or check_tool_available("gemini")
+)
+JULES_AVAILABLE = _live_enabled("JULES") and check_tool_available("jules")
+OPENCLAW_AVAILABLE = _live_enabled("OPENCLAW") and check_tool_available("openclaw")
+OPENCODE_AVAILABLE = _live_enabled("OPENCODE") and check_tool_available("opencode")
+VIBE_AVAILABLE = _live_enabled("VIBE") and check_tool_available("vibe")
+EVERY_CODE_AVAILABLE = _live_enabled("EVERY_CODE") and (
+    check_tool_available("code") or check_tool_available("coder")
+)
+PAPERCLIPAI_AVAILABLE = _live_enabled("PAPERCLIPAI") and check_tool_available(
+    "paperclipai"
+)
 
 
 def get_tool_version(command: str) -> str | None:

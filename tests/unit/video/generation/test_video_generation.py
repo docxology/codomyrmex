@@ -11,7 +11,10 @@ from codomyrmex.agents.gemini.gemini_client import GeminiClient
 from codomyrmex.video.generation.video_generator import VideoGenerator
 
 _GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
-_skip_no_key = pytest.mark.skipif(not _GEMINI_KEY, reason="GEMINI_API_KEY not set")
+_skip_no_key = pytest.mark.skipif(
+    os.environ.get("RUN_LIVE_GEMINI") != "1" or not _GEMINI_KEY,
+    reason="Live Gemini tests require RUN_LIVE_GEMINI=1 and GEMINI_API_KEY",
+)
 
 
 class FakeGeminiClient(GeminiClient):

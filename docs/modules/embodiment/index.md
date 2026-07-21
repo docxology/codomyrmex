@@ -15,4 +15,4 @@
 ## Source and Tests
 
 - [`src/codomyrmex/embodiment/`](../../../src/codomyrmex/embodiment/)
-- [`src/codomyrmex/tests/unit/embodiment/`](../../../src/codomyrmex/tests/unit/embodiment/)
+- [`tests/unit/embodiment/`](../../../tests/unit/embodiment/)

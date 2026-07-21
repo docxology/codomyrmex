@@ -199,7 +199,7 @@ Tests for `docs_gen` must follow the codomyrmex zero-mock policy:
 Run tests:
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/docs_gen/ -v
+uv run pytest tests/unit/docs_gen/ -v
 ```
 
 ## Navigation

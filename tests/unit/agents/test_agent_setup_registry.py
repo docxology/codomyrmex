@@ -237,8 +237,8 @@ class TestProbeOllamaOffline:
 
 @pytest.mark.unit
 @pytest.mark.skipif(
-    not os.getenv("OLLAMA_BASE_URL"),
-    reason="OLLAMA_BASE_URL not set — skipping live Ollama probe",
+    os.environ.get("RUN_LIVE_OLLAMA") != "1" or not os.getenv("OLLAMA_BASE_URL"),
+    reason="Live Ollama tests require RUN_LIVE_OLLAMA=1 and OLLAMA_BASE_URL",
 )
 class TestProbeOllamaLive:
     def test_live_ollama_probe_returns_probe_result(self):

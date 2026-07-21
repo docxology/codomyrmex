@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/context
+# Codomyrmex Agents — tests/unit/agents/context
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/api/rate_limiting
+# Codomyrmex Agents — tests/unit/api/rate_limiting
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

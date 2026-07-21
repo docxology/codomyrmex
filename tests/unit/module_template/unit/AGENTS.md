@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/module_template/unit
+# Codomyrmex Agents — tests/unit/module_template/unit
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

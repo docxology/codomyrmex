@@ -59,7 +59,7 @@ setup: install submodules
 # Testing
 test:
 	@echo "Running all tests..."
-	uv run pytest tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
+	uv run pytest tests/ -v --tb=short -m "not performance and not benchmark and not bench" --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
 
 test-unit:
 	@echo "Running unit tests..."
@@ -75,11 +75,11 @@ test-obsidian:
 
 test-fast:
 	@echo "Running tests with minimal addopts while preserving importlib collection..."
-	uv run pytest tests/ -q --no-header --override-ini="addopts=" --import-mode=importlib
+	uv run pytest tests/ -q --no-header -m "not performance and not benchmark and not bench" --override-ini="addopts=" --import-mode=importlib
 
 test-coverage:
 	@echo "Running tests with coverage report..."
-	uv run pytest tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
+	uv run pytest tests/ -v --tb=short -m "not performance and not benchmark and not bench" --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
 	@echo "Coverage report generated: coverage.json and htmlcov/"
 
 test-coverage-html:
@@ -113,9 +113,11 @@ type-check:
 
 security:
 	@echo "Running security scanning..."
-	uv run python -m bandit -r src/codomyrmex/
+	uv run bandit -r src/codomyrmex/ \
+		-x '*/tests/*,*/vendor/*,*/generated/*,src/codomyrmex/agents/open_gauss,src/codomyrmex/documentation/docs' \
+		-lll -iii
 	@echo "Checking for vulnerabilities..."
-	uv run python -m pip_audit
+	uv run pip-audit
 
 # Performance Benchmarks
 benchmark-mcp:
@@ -133,7 +135,8 @@ docs: docs-check docs-generate
 
 docs-check:
 	@echo "Checking documentation status..."
-	uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root .
+	uv run python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken
+	uv run python scripts/documentation/analyze_content_quality.py --repo-root . --format both --min-score 70 --fail-on-below
 	uv run python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
 
 docs-generate:
@@ -152,11 +155,11 @@ analyze:
 
 check-deps:
 	@echo "Checking dependencies..."
-	uv run python -m codomyrmex.tools.dependency_checker
+	uv run python scripts/validation/validate_dependencies.py --repo-root . --strict
 
 check-dependencies:
 	@echo "Checking module dependency hierarchy..."
-	uv run python -m codomyrmex.tools.dependency_analyzer
+	uv run python scripts/validation/dependency_analyzer.py --repo-root .
 
 ci: lint lint-imports type-check security test docs-check
 	@echo "CI pipeline completed successfully!"

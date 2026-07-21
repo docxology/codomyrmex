@@ -50,7 +50,9 @@ class BashManager(BaseLanguageManager):
             with open(script_path, "w", encoding="utf-8") as f:
                 f.write(script_content)
 
-            os.chmod(script_path, 0o755)
+            # The script is invoked through ``bash`` and does not need to be
+            # executable by other users of the machine.
+            os.chmod(script_path, 0o600)
 
             result = subprocess.run(
                 ["bash", "script.sh"],
@@ -66,7 +68,7 @@ class BashManager(BaseLanguageManager):
             temp.write(script_content)
             temp_path = temp.name
 
-        os.chmod(temp_path, 0o755)
+        os.chmod(temp_path, 0o600)
 
         try:
             result = subprocess.run(

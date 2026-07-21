@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/model_registry
+# Codomyrmex Agents — tests/unit/model_registry
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

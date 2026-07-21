@@ -28,7 +28,7 @@ remain importable for standalone use and testing.
 each of the {{CONFIG_OPERATIONAL_SUBSYSTEM_COUNT}} operational subsystem classes at the
 leaves, all sharing the `models.py` value-object contract.
 
-![Colony Control Plane topology. `ColonyKernel` owns subsystem lifecycle and sequencing; the live integration object supplies the operational leaf-node count, and the nodes exchange typed value objects from the shared `models.py` contract. Coloured by functional role: orange=stigmergy, blue=resource, red=gate, green=memory, pink=roles, grey=pruning, black=adversarial review.](figures/subsystem_architecture.png){#fig:architecture width=80%}
+![{{FIGURE_CAPTION_SUBSYSTEM_ARCHITECTURE}}](figures/{{FIGURE_FILENAME_SUBSYSTEM_ARCHITECTURE}}){#{{FIGURE_LABEL_SUBSYSTEM_ARCHITECTURE}} width={{FIGURE_WIDTH_SUBSYSTEM_ARCHITECTURE}}}
 
 ---
 
@@ -104,16 +104,16 @@ The `ResourceLedger` enforces a multi-dimensional budget envelope over the colon
 |---|---|---|
 | `llm_calls` | `int` | Number of LLM API invocations. |
 | `runtime_seconds` | `float` | Wall-clock execution time. |
-| `risk_level` | `float ∈ [0,1]` | Aggregate risk fraction of the action. |
+| `risk_level` | `float ∈ [{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]` | Aggregate risk fraction of the action. |
 | `human_attention_minutes` | `float` | Estimated operator review time. |
-| `merge_risk` | `float ∈ [0,1]` | Probability of merge conflicts or integration failures. |
+| `merge_risk` | `float ∈ [{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]` | Probability of merge conflicts or integration failures. |
 | `doc_debt` | `float` | Documentation gap accumulation score. |
-| `security_exposure` | `float ∈ [0,1]` | Estimated security surface increase. |
+| `security_exposure` | `float ∈ [{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]` | Estimated security surface increase. |
 : Resource budget dimensions enforced by `ResourceLedger`. {#tbl:resource_dimensions}
 
 The ledger's `can_afford` method returns an `(approved, reason)` pair after checking
 whether the proposed estimate, added to usage in the current reset period, would breach
-any dimension. A false approval bypasses ordinary scoring (`gate_score = 0.0`) because
+any dimension. A false approval bypasses ordinary scoring (`gate_score = {{CONFIG_SCORE_MIN}}`) because
 budget failure is an early return rather than a score penalty. The final decision depends
 on the calling mode. In standalone mode, `ActuationGate.evaluate(proposal, profile)`
 performs the ledger check and returns `REFUSE`; in integrated mode, `ColonyKernel`
@@ -132,6 +132,11 @@ the resource ledger, pheromone field, agent trust store, and proposal completene
 scalar gate score, then routes that score to one of {{CONFIG_GATE_DECISION_COUNT}}
 decisions.
 
+**Parameter status.** {{CONFIG_PARAMETER_STATUS_NOTE}} In particular, the weights,
+thresholds, trust deltas, decay amounts, and presentation ranges below describe the
+current release snapshot. “Configured” therefore means “declared by the current
+runtime/configuration contract,” not “validated as optimal for every deployment.”
+
 ### Gate Scoring Formula
 
 The gate score $g$ is a weighted linear combination of
@@ -139,9 +144,10 @@ The gate score $g$ is a weighted linear combination of
 
 $$g = {{CONFIG_GATE_WEIGHT_BUDGET}} \cdot \text{budget\_ok} + {{CONFIG_GATE_WEIGHT_RISK}} \cdot \text{risk\_ok} + {{CONFIG_GATE_WEIGHT_TRUST}} \cdot \text{trust\_ok} + {{CONFIG_GATE_WEIGHT_COMPLETENESS}} \cdot \text{completeness}$$ {#eq:gate_score_detail}
 
-clamped to $[0, 1]$ after summation: $g \leftarrow \max(0.0,\; \min(1.0,\; g))$.
+clamped to $[{{CONFIG_SCORE_MIN}}, {{CONFIG_SCORE_MAX}}]$ after summation:
+$g \leftarrow \max({{CONFIG_SCORE_MIN}},\; \min({{CONFIG_SCORE_MAX}},\; g))$.
 
-The weights sum to 1.0. Each component is described below.
+The weights sum to {{CONFIG_GATE_WEIGHT_SUM}}. Each component is described below.
 
 **`budget_ok`** ($w = {{CONFIG_GATE_WEIGHT_BUDGET}}$) is binary resource headroom.
 A false approval bypasses ordinary scoring; each proposal receives a fresh pre-check.
@@ -154,9 +160,9 @@ pressure through two module-level constants:
 
 | `max(RISK, FAILURE)` pressure | `risk_ok` |
 |---|---|
-| $\geq {{CONFIG_HAZARD_HIGH_THRESHOLD}}$ (`_HIGH_RISK_THRESHOLD`) | 0.0 |
+| $\geq {{CONFIG_HAZARD_HIGH_THRESHOLD}}$ (`_HIGH_RISK_THRESHOLD`) | {{CONFIG_SCORE_MIN}} |
 | $\geq {{CONFIG_HAZARD_MEDIUM_THRESHOLD}}$ (`_MEDIUM_RISK_THRESHOLD`) | {{CONFIG_RISK_CREDIT_MEDIUM}} |
-| $< {{CONFIG_HAZARD_MEDIUM_THRESHOLD}}$ | 1.0 |
+| $< {{CONFIG_HAZARD_MEDIUM_THRESHOLD}}$ | {{CONFIG_UNIT_SCORE}} |
 : Local hazard-pressure mapping used by the gate. {#tbl:risk_pressure_mapping}
 
 A location accumulating either prospective RISK findings or reported failed outcomes can
@@ -169,9 +175,9 @@ separate diagnostic channel and does not cancel the maximum.
 
 | `trust_score` | `trust_ok` |
 |---|---|
-| $\geq {{CONFIG_TRUST_FULL_CREDIT_THRESHOLD}}$ | 1.0 |
+| $\geq {{CONFIG_TRUST_FULL_CREDIT_THRESHOLD}}$ | {{CONFIG_UNIT_SCORE}} |
 | ${{CONFIG_TRUST_HARD_FLOOR}} \leq \text{trust\_score} < {{CONFIG_TRUST_FULL_CREDIT_THRESHOLD}}$ | {{CONFIG_TRUST_CREDIT_LOWER}} |
-| $< {{CONFIG_TRUST_HARD_FLOOR}}$ | hard REFUSE (early return, `gate_score = 0.0`) |
+| $< {{CONFIG_TRUST_HARD_FLOOR}}$ | hard REFUSE (early return, `gate_score = {{CONFIG_SCORE_MIN}}`) |
 : Trust-score mapping used by the actuation gate. {#tbl:trust_mapping}
 
 A new agent starts at `trust_score = {{CONFIG_TRUST_SANDBOX_SCORE}}`; profiles between
@@ -181,7 +187,7 @@ credit.
 **Trust penalty.** When `ConsequenceMemory` is available and the agent's recent-failure
 count reaches {{CONFIG_RECENT_FAILURE_COUNT_THRESHOLD}}, the gate applies:
 
-$$\text{trust\_ok} \leftarrow \max(0.0,\; \text{trust\_ok} - {{CONFIG_FAILURE_PENALTY}})$$ {#eq:trust_penalty}
+$$\text{trust\_ok} \leftarrow \max({{CONFIG_SCORE_MIN}},\; \text{trust\_ok} - {{CONFIG_FAILURE_PENALTY}})$$ {#eq:trust_penalty}
 
 This decrement reduces `trust_ok` — the gate's normalised trust contribution for this evaluation only. It does not modify the agent's persistent `trust_score` stored in `ConsequenceMemory`. The agent's durable trust record is updated separately on each `record_outcome` call; the gate penalty is a single-evaluation correction that makes the gate more conservative while an agent is on a losing streak, without permanently penalising the agent's history.
 
@@ -191,7 +197,7 @@ proposal. The gate inspects {{CONFIG_COMPLETENESS_FIELD_COUNT}} fields:
 
 The proposal-completeness expression in [@eq:proposal_completeness] supplies the ordinary score component for incomplete proposals.
 
-$$\text{completeness} = \max(0.0,\; 1.0 - |\text{missing}| \times {{CONFIG_MISSING_FIELD_PENALTY}})$$ {#eq:proposal_completeness}
+$$\text{completeness} = \max({{CONFIG_SCORE_MIN}},\; {{CONFIG_UNIT_SCORE}} - |\text{missing}| \times {{CONFIG_MISSING_FIELD_PENALTY}})$$ {#eq:proposal_completeness}
 
 The rendered result tables compute all discrete completeness values from that expression.
 
@@ -212,14 +218,14 @@ The gate maps the numeric score to a ternary verdict:
 
 Four safety conditions bypass the numeric score entirely, evaluated in order before gate scoring begins:
 
-1. **Budget failure.** A `False` return from `ResourceLedger.can_afford` causes an immediate hard override with `gate_score = 0.0`. Standalone gate evaluation returns `REFUSE`; kernel/caller-supplied budget failure returns `HOLD` for requeue after the budget period resets. No further evaluation occurs.
+1. **Budget failure.** A `False` return from `ResourceLedger.can_afford` causes an immediate hard override with `gate_score = {{CONFIG_SCORE_MIN}}`. Standalone gate evaluation returns `REFUSE`; kernel/caller-supplied budget failure returns `HOLD` for requeue after the budget period resets. No further evaluation occurs.
 
 2. **SANDBOX role.** Agents with role `SANDBOX` always receive REFUSE regardless of
 trust score, pheromone state, or proposal quality. The entry label is held until at least
 {{CONFIG_ROLE_MIN_PROPOSALS}} proposals and the live promotion threshold are satisfied.
 
 3. **Trust floor.** A `trust_score < {{CONFIG_TRUST_HARD_FLOOR}}` triggers an early
-REFUSE with `gate_score = 0.0`.
+REFUSE with `gate_score = {{CONFIG_SCORE_MIN}}`.
 
 4. **Critical falsification.** Any `CRITICAL` finding from the `FalsificationWorker` triggers an immediate REFUSE with the finding's remediation attached to `GateResult.required_evidence`.
 
@@ -245,7 +251,7 @@ report), `agent_profiles` (one row per agent, containing current trust state and
 and `consequence_history` (a chronological sequence of consequence IDs per agent, capped
 at the most recent {{CONFIG_CONSEQUENCE_HISTORY_MAX}} rows).
 
-**Trust delta computation.** When a `ConsequenceRecord` is persisted with `trust_delta == 0.0`, the memory computes it from outcome fields:
+**Trust delta computation.** When a `ConsequenceRecord` is persisted with `trust_delta == {{CONFIG_SCORE_MIN}}`, the memory computes it from outcome fields:
 
 The durable trust update is computed by [@eq:trust_delta].
 
@@ -253,10 +259,10 @@ $$\Delta_\text{trust} = \Delta_\text{pass/fail} + \Delta_\text{repair} + h \cdot
 
 where $\Delta_\text{pass/fail} = {{CONFIG_TRUST_DELTA_PASS}}$ if tests passed else
 ${{CONFIG_TRUST_DELTA_FAIL}}$; $\Delta_\text{repair} =
-{{CONFIG_TRUST_DELTA_REPAIR}}$ if repair was needed; $h \in [-1, +1]$ is the parsed
+{{CONFIG_TRUST_DELTA_REPAIR}}$ if repair was needed; $h \in [{{CONFIG_HUMAN_FEEDBACK_MIN}}, {{CONFIG_HUMAN_FEEDBACK_MAX}}]$ is the parsed
 human feedback score and $\Delta_\text{human} =
 {{CONFIG_TRUST_DELTA_HUMAN_WEIGHT}}$. The delta is clamped to keep `trust_score`
-within $[0,1]$.
+within $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$.
 
 **`recent_failures()` and gate coupling.** The `ConsequenceMemory` exposes a
 `recent_failures(agent_id, window={{CONFIG_RECENT_FAILURE_WINDOW}})` method that the
@@ -315,7 +321,7 @@ The daemon operates by scanning a `module_registry` dict (mapping dotted module 
 
 | Condition | Confidence | Reason Tag |
 |---|---|---|
-| `call_count == 0` and `last_used == 0.0` | {{CONFIG_PRUNING_NEVER_USED_CONFIDENCE}} | `never used since registration` |
+| `call_count == {{CONFIG_ZERO_COUNT}}` and `last_used == {{CONFIG_SCORE_MIN}}` | {{CONFIG_PRUNING_NEVER_USED_CONFIDENCE}} | `never used since registration` |
 | Duplicate of another module | {{CONFIG_PRUNING_DUPLICATE_CONFIDENCE}} | `duplicate of <surviving_module>` |
 | Zero calls, last used > {{CONFIG_PRUNING_STALENESS_DAYS}} days ago | {{CONFIG_PRUNING_STALE_CONFIDENCE}} | `no calls; last used N days ago` |
 | Low call count (< {{CONFIG_PRUNING_LOW_CALL_COUNT}}), last used > {{CONFIG_PRUNING_STALENESS_DAYS}} days | {{CONFIG_PRUNING_LOW_USAGE_CONFIDENCE}} | `low usage (N calls); last used N days ago` |
@@ -390,7 +396,7 @@ themselves force REFUSE; ordinary score components determine the result.
 vectors ranked by maximum severity weight. The current deterministic checks top out at
 HIGH severity; the CRITICAL class remains part of the actuation-gate override contract.
 
-![Falsification categories ordered by generated representative severity weights. Colour encodes severity class; one category may be served by more than one heuristic check. The empty CRITICAL band denotes the only finding class that hard-refuses before ordinary scoring. The chart is a code-taxonomy visualization, not a measured detection-rate comparison.](figures/falsification_vectors.png){#fig:falsification_vectors width=90%}
+![{{FIGURE_CAPTION_FALSIFICATION_VECTORS}}](figures/{{FIGURE_FILENAME_FALSIFICATION_VECTORS}}){#{{FIGURE_LABEL_FALSIFICATION_VECTORS}} width={{FIGURE_WIDTH_FALSIFICATION_VECTORS}}}
 
 ---
 
@@ -418,22 +424,22 @@ PROPOSE(p):
          witness ← ActuationGate.witness_state(p)
          hazard ← max(witness.RISK, witness.FAILURE)
          if budget_approved is false:
-             decision ← HOLD; gate_score ← 0.0; goto POST_GATE
+             decision ← HOLD; gate_score ← {{CONFIG_SCORE_MIN}}; goto POST_GATE
          if profile.role is SANDBOX or profile.trust_score < {{CONFIG_TRUST_HARD_FLOOR}}:
-             decision ← REFUSE; gate_score ← 0.0; goto POST_GATE
+             decision ← REFUSE; gate_score ← {{CONFIG_SCORE_MIN}}; goto POST_GATE
          if any CRITICAL finding:
-             decision ← REFUSE; gate_score ← 0.0; goto POST_GATE
-         trust_ok ← 1.0 if profile.trust_score >= {{CONFIG_TRUST_FULL_CREDIT_THRESHOLD}} else {{CONFIG_TRUST_CREDIT_LOWER}}
+             decision ← REFUSE; gate_score ← {{CONFIG_SCORE_MIN}}; goto POST_GATE
+         trust_ok ← {{CONFIG_UNIT_SCORE}} if profile.trust_score >= {{CONFIG_TRUST_FULL_CREDIT_THRESHOLD}} else {{CONFIG_TRUST_CREDIT_LOWER}}
          if ConsequenceMemory.recent_failures(p.agent_id) >= {{CONFIG_RECENT_FAILURE_COUNT_THRESHOLD}}:
-             trust_ok ← max(0.0, trust_ok - {{CONFIG_FAILURE_PENALTY}})
-         hazard_ok ← 0.0 if hazard >= {{CONFIG_HAZARD_HIGH_THRESHOLD}}
+             trust_ok ← max({{CONFIG_SCORE_MIN}}, trust_ok - {{CONFIG_FAILURE_PENALTY}})
+         hazard_ok ← {{CONFIG_SCORE_MIN}} if hazard >= {{CONFIG_HAZARD_HIGH_THRESHOLD}}
                   | {{CONFIG_RISK_CREDIT_MEDIUM}} if hazard >= {{CONFIG_HAZARD_MEDIUM_THRESHOLD}}
-                  | 1.0 otherwise
+                  | {{CONFIG_UNIT_SCORE}} otherwise
          missing ← [f for f in [rollback_plan, evidence, expected_outcome] if absent]
-         completeness ← max(0.0, 1.0 - len(missing) * {{CONFIG_MISSING_FIELD_PENALTY}}) if missing else 1.0
+         completeness ← max({{CONFIG_SCORE_MIN}}, {{CONFIG_UNIT_SCORE}} - len(missing) * {{CONFIG_MISSING_FIELD_PENALTY}}) if missing else {{CONFIG_UNIT_SCORE}}
          gate_score ← {{CONFIG_GATE_WEIGHT_BUDGET}} + hazard_ok * {{CONFIG_GATE_WEIGHT_RISK}}
                       + trust_ok * {{CONFIG_GATE_WEIGHT_TRUST}} + completeness * {{CONFIG_GATE_WEIGHT_COMPLETENESS}}
-         gate_score ← max(0.0, min(1.0, gate_score))
+         gate_score ← max({{CONFIG_SCORE_MIN}}, min({{CONFIG_SCORE_MAX}}, gate_score))
          decision ← EXECUTE if gate_score >= {{CONFIG_GATE_EXECUTE_THRESHOLD}}
                    | HOLD   if gate_score >= {{CONFIG_GATE_HOLD_THRESHOLD}}
                    | REFUSE otherwise
@@ -472,8 +478,9 @@ arithmetic. The score is therefore a
 transparent policy composition, not a learned collective judgment or calibrated safety
 probability.
 
-[@fig:pressure_loop] maps the conceptual data dependencies as an eight-stage loop. It
+[@fig:pressure_loop] maps the conceptual data dependencies as a
+{{CONFIG_COLONY_KERNEL_SUBSYSTEMS}}-stage loop. It
 shows which state feeds later decisions; it is not a literal call-order trace, because
 outcome recording is a separate caller action and falsification runs before scoring.
 
-![Conceptual Colony Kernel feedback dependencies. Proposal review reads budget, local RISK/FAILURE pressure, role, trust, and completeness; a separate caller may execute an approved action and report its outcome; recording then changes trust, resource usage, and signal traces used on a later proposal. Arrows show feedback dependencies rather than exact runtime call order.](figures/colony_pressure_loop.png){#fig:pressure_loop width=80%}
+![{{FIGURE_CAPTION_COLONY_PRESSURE_LOOP}}](figures/{{FIGURE_FILENAME_COLONY_PRESSURE_LOOP}}){#{{FIGURE_LABEL_COLONY_PRESSURE_LOOP}} width={{FIGURE_WIDTH_COLONY_PRESSURE_LOOP}}}

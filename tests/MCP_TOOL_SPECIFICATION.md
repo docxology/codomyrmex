@@ -17,6 +17,6 @@ For details on the test infrastructure, refer to the module's `README.md` and `A
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Module Index**: [All Agents](../AGENTS.md)
+- **Documentation**: [Reference Guides](../docs/README.md)
+- **Home**: [Root README](../README.md)

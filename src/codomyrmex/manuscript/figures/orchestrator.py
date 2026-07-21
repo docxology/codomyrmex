@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 
-from codomyrmex.manuscript.figures._common import FIGDIR
+from codomyrmex.manuscript.figures._common import FIGDIR, _figure_metadata, _var_str
 from codomyrmex.manuscript.figures.cover import fig_cover_art
 from codomyrmex.manuscript.figures.falsification_vectors import (
     fig_falsification_vectors,
@@ -38,15 +38,24 @@ def _write_registry() -> None:
     for filename, _generator, evidence_class in _FIGURE_GENERATORS:
         path = FIGDIR / filename
         payload = path.read_bytes()
+        metadata = _figure_metadata(filename)
         entries.append(
             {
                 "filename": filename,
-                "evidence_class": evidence_class,
+                "label": metadata.get("label", ""),
+                "width": metadata.get("width", ""),
+                "evidence_class": metadata.get("evidence_class", evidence_class),
+                "caption": metadata.get("caption", ""),
                 "bytes": len(payload),
                 "sha256": hashlib.sha256(payload).hexdigest(),
             }
         )
-    registry = {"schema_version": 1, "count": len(entries), "figures": entries}
+    registry = {
+        "schema_version": 2,
+        "config_hash": _var_str("CONFIG_HASH", "unhashed"),
+        "count": len(entries),
+        "figures": entries,
+    }
     destination = FIGDIR / "figure_registry.json"
     destination.write_text(
         json.dumps(registry, indent=2, sort_keys=True) + "\n",
@@ -60,7 +69,10 @@ def main() -> None:
     for _filename, generator, _evidence_class in _FIGURE_GENERATORS:
         generator()
     _write_registry()
-    print(f"Done — 9 figures in {FIGDIR.relative_to(FIGDIR.parent.parent)}/")
+    print(
+        f"Done — {len(_FIGURE_GENERATORS)} figures in "
+        f"{FIGDIR.relative_to(FIGDIR.parent.parent)}/"
+    )
 
 
 if __name__ == "__main__":

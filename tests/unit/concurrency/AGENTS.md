@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/concurrency
+# Codomyrmex Agents — tests/unit/concurrency
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

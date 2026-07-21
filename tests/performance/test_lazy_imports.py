@@ -13,7 +13,11 @@ import importlib
 import sys
 import time
 
+import pytest
+
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
+
+pytestmark = pytest.mark.performance
 
 # ── Core import time ──────────────────────────────────────────────────
 

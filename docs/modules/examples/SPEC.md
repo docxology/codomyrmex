@@ -66,5 +66,5 @@ The examples module fits into the larger Codomyrmex system as:
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k examples -v
+uv run python -m pytest tests/ -k examples -v
 ```

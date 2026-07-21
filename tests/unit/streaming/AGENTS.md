@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/streaming
+# Codomyrmex Agents — tests/unit/streaming
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

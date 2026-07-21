@@ -1,12 +1,12 @@
 <!-- agents: curated -->
 
-# Codomyrmex Agents — src/codomyrmex/tests/unit/llm/fabric
+# Codomyrmex Agents — tests/unit/llm/fabric
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Signposting
 
-- **Path**: `src/codomyrmex/tests/unit/llm/fabric`
+- **Path**: `tests/unit/llm/fabric`
 - **Human overview**: [README.md](README.md)
 - **Agent coordination** (repo root): [../../../../../../AGENTS.md](../../../../../../AGENTS.md)
 ## Purpose

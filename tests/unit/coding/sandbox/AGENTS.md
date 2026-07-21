@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/coding/sandbox
+# Codomyrmex Agents — tests/unit/coding/sandbox
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

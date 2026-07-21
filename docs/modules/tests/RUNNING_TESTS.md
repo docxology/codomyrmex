@@ -2,13 +2,13 @@
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: May 2026
 
-**Canonical copy:** [src/codomyrmex/tests/RUNNING_TESTS.md](../../../src/codomyrmex/tests/RUNNING_TESTS.md) — keep this module doc in sync when changing commands or counts.
+**Canonical copy:** [tests/RUNNING_TESTS.md](../../../tests/RUNNING_TESTS.md) — keep this module doc in sync when changing commands or counts.
 
 ## Overview
 
 This document describes how to run and filter the Codomyrmex test suite. Canonical counts and inventory live in [docs/reference/inventory.md](../../reference/inventory.md).
 
-**Collected tests (repo-wide):** **35,119** — `uv run python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths.
+**Collected tests (repo-wide):** **35,375** — `uv run python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths.
 
 ### Zero-Mock Policy
 
@@ -24,7 +24,7 @@ This document describes how to run and filter the Codomyrmex test suite. Canonic
 
 | Category | Location | Count (indicative) | Notes |
 |----------|----------|--------------------|--------|
-| **All collected** | under `src/codomyrmex/` (`tests/` + `tests/**`) | **35,119** | Single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
+| **All collected** | under `tests/` (`tests/` + `tests/**`) | **35,375** | Single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
 | **`unit` marker** | mostly `tests/unit/**` | **21,024** | `pytest -m unit --collect-only` |
 | **`integration` marker** | mixed | **253** | `pytest -m integration --collect-only` |
 | **Integration tree** | `tests/integration/` | **339** | `pytest tests/integration/ --collect-only` |
@@ -68,7 +68,7 @@ uv run pytest --version
 There is **no** in-repository batch shell runner. Use **`make`** targets or explicit **`uv run pytest`** (markers, directories, or `-k`).
 
 ```bash
-# Full suite + 40% coverage floor + term/html/json reports
+# Full suite + 60% coverage floor + term/html/json reports
 make test
 
 # Lint, type-check, then full test target (release-style gate)
@@ -81,27 +81,27 @@ make test-unit
 make test-integration
 
 # Quiet run aligned with CI coverage-gate (see .github/workflows/ci.yml)
-uv run pytest src/codomyrmex/tests/ -q --tb=short \
+uv run pytest tests/ -q --tb=short \
   --cov=src/codomyrmex \
   --cov-report=term-missing \
   --cov-report=json:coverage-gate.json \
-  --cov-fail-under=40
+  --cov-fail-under=60
 ```
 
 ### Scoped runs (by tree or marker)
 
 ```bash
 # Unit tests only (fastest)
-uv run pytest src/codomyrmex/tests/unit/ -m "not slow"
+uv run pytest tests/unit/ -m "not slow"
 
 # Integration tests
-uv run pytest src/codomyrmex/tests/integration/
+uv run pytest tests/integration/
 
 # Example validation
-uv run pytest src/codomyrmex/tests/examples/
+uv run pytest tests/examples/
 
 # Performance tests (slow)
-uv run pytest src/codomyrmex/tests/performance/
+uv run pytest tests/performance/
 ```
 
 ## Detailed Test Execution
@@ -115,12 +115,12 @@ Verify all tests can be collected without errors:
 uv run pytest --collect-only
 
 # Check specific directory
-uv run pytest src/codomyrmex/tests/unit/ --collect-only
+uv run pytest tests/unit/ --collect-only
 ```
 
 ### Coverage Reports
 
-Default `uv run pytest` does **not** enable coverage (see `pyproject.toml` `[tool.pytest.ini_options]`). Use `make test`, `make test-coverage`, or explicit `--cov` flags. The documented floor is **40%** (`[tool.coverage.report] fail_under`); enforce it with `--cov-fail-under=40` when running pytest with `--cov`. The experimental `meme` package is omitted from coverage measurement (`[tool.coverage.run] omit`).
+Default `uv run pytest` does **not** enable coverage (see `pyproject.toml` `[tool.pytest.ini_options]`). Use `make test`, `make test-coverage`, or explicit `--cov` flags. The documented floor is **60%** (`[tool.coverage.report] fail_under`); enforce it with `--cov-fail-under=60` when running pytest with `--cov`. The experimental `meme` package is omitted from coverage measurement (`[tool.coverage.run] omit`).
 
 **Hypothesis / NumPy / `secrets`:** If you see `ImportError: cannot import name randbits` from `numpy.random`, check for a **test directory named `secrets`** under a path that appears on `sys.path` before the stdlib (the suite uses `secrets_tests/` under `tests/unit/security/` to avoid shadowing). `security/secrets/vault.py` must not repoint `sys.modules["secrets"]`. The `Makefile` and CI also set `HYPOTHESIS_NO_NPY=1` for the process.
 
@@ -128,7 +128,7 @@ Generate coverage reports:
 
 ```bash
 # Run with coverage + gate
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html --cov-report=term-missing
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60 --cov-report=html --cov-report=term-missing
 
 # View HTML report
 open htmlcov/index.html
@@ -140,10 +140,10 @@ For detailed test output:
 
 ```bash
 # Verbose mode
-uv run pytest -v src/codomyrmex/tests/unit/
+uv run pytest -v tests/unit/
 
 # Very verbose (shows all output)
-uv run pytest -vv src/codomyrmex/tests/unit/test_exceptions.py
+uv run pytest -vv tests/unit/test_exceptions.py
 ```
 
 ### Selective Test Execution
@@ -152,13 +152,13 @@ Run specific tests:
 
 ```bash
 # Run specific test file
-uv run pytest src/codomyrmex/tests/unit/test_exceptions.py
+uv run pytest tests/unit/test_exceptions.py
 
 # Run specific test class
-uv run pytest src/codomyrmex/tests/unit/test_exceptions.py::TestCodomyrmexError
+uv run pytest tests/unit/test_exceptions.py::TestCodomyrmexError
 
 # Run specific test method
-uv run pytest src/codomyrmex/tests/unit/test_exceptions.py::TestCodomyrmexError::test_basic_error_creation
+uv run pytest tests/unit/test_exceptions.py::TestCodomyrmexError::test_basic_error_creation
 
 # Run tests by marker
 uv run pytest -m "unit and not slow"
@@ -173,13 +173,13 @@ Debug failing tests:
 
 ```bash
 # Stop on first failure
-uv run pytest -x src/codomyrmex/tests/unit/
+uv run pytest -x tests/unit/
 
 # Show full traceback
-uv run pytest --tb=long src/codomyrmex/tests/unit/test_exceptions.py
+uv run pytest --tb=long tests/unit/test_exceptions.py
 
 # Debug with PDB
-uv run pytest --pdb src/codomyrmex/tests/unit/test_exceptions.py::TestCodomyrmexError::test_basic_error_creation
+uv run pytest --pdb tests/unit/test_exceptions.py::TestCodomyrmexError::test_basic_error_creation
 ```
 
 ## Split runs and pytest options
@@ -201,7 +201,7 @@ Typical order when running pieces by hand: **unit** → **integration** → **ex
 
 ### GitHub Actions
 
-CI invokes **`uv run pytest`** on `src/codomyrmex/tests/` with coverage in the **`coverage-gate`** job, and splits **unit** vs **integration** paths in the test matrix. There is no batch shell script in this repository — see [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml).
+CI invokes **`uv run pytest`** on `tests/` with coverage in the **`coverage-gate`** job, and splits **unit** vs **integration** paths in the test matrix. There is no batch shell script in this repository — see [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml).
 
 ### Parallel matrix (CI)
 
@@ -221,7 +221,7 @@ make test-unit
 make test-integration
 
 # Or run with limited parallelism (pytest-xdist)
-uv run pytest -n 2 src/codomyrmex/tests/unit/
+uv run pytest -n 2 tests/unit/
 ```
 
 #### Hanging Tests
@@ -230,10 +230,10 @@ Tests that hang can be identified and fixed:
 
 ```bash
 # Run with timeout to identify hanging tests
-uv run pytest --timeout=60 src/codomyrmex/tests/unit/
+uv run pytest --timeout=60 tests/unit/
 
 # Debug specific slow test
-uv run pytest --durations=10 src/codomyrmex/tests/unit/
+uv run pytest --durations=10 tests/unit/
 ```
 
 #### Import Errors
@@ -259,10 +259,13 @@ Tests requiring external services may fail in isolated environments:
 
 ```bash
 # Skip network tests
-uv run pytest -m "not network" src/codomyrmex/tests/unit/
+uv run pytest -m "not network" tests/unit/
 
 # Run only local tests
-uv run pytest -m "not external and not network" src/codomyrmex/tests/
+uv run pytest -m "not external and not network" tests/
+
+# Explicitly opt into live local-Ollama tests (normally skipped)
+RUN_LIVE_OLLAMA=1 uv run pytest -m requires_ollama tests/
 ```
 
 ### Test Performance
@@ -271,21 +274,21 @@ uv run pytest -m "not external and not network" src/codomyrmex/tests/
 
 ```bash
 # Show slowest tests
-uv run pytest --durations=20 src/codomyrmex/tests/
+uv run pytest --durations=20 tests/
 
 # Profile test execution
-uv run pytest --profile src/codomyrmex/tests/unit/
+uv run pytest --profile tests/unit/
 ```
 
 #### Optimizing Test Runs
 
 ```bash
 # Run tests in parallel (if available)
-uv run pytest -n auto src/codomyrmex/tests/unit/
+uv run pytest -n auto tests/unit/
 
 # Use pytest-xdist for distributed execution
 # Note: Ensure pytest-xdist is in your project dependencies (uv sync)
-uv run pytest -n 4 src/codomyrmex/tests/unit/
+uv run pytest -n 4 tests/unit/
 ```
 
 ## Test Development
@@ -302,7 +305,7 @@ When adding tests:
 
 ### Test Fixtures
 
-Common fixtures are available in `src/codomyrmex/tests/conftest.py`:
+Common fixtures are available in `tests/conftest.py`:
 
 ```python
 def project_root():
@@ -347,7 +350,7 @@ Coverage reports are generated automatically:
 
 ```bash
 # HTML report
-open src/codomyrmex/tests/htmlcov/index.html
+open tests/htmlcov/index.html
 
 # Terminal summary
 uv run pytest --cov=src/codomyrmex --cov-report=term-missing
@@ -362,13 +365,13 @@ Use the test summary script for detailed analysis:
 
 ```bash
 # Generate test summary
-uv run python scripts/src/codomyrmex/tests/test_summary.py
+uv run python scripts/tests/test_summary.py
 
 # Analyze test durations
-uv run python scripts/src/codomyrmex/tests/test_summary.py --durations
+uv run python scripts/tests/test_summary.py --durations
 
 # Identify flaky tests
-uv run python scripts/src/codomyrmex/tests/test_summary.py --flaky
+uv run python scripts/tests/test_summary.py --flaky
 ```
 
 ## Best Practices
@@ -421,17 +424,17 @@ When contributing tests:
 # Quick validation (unit marker + coverage gate)
 make test-unit
 
-# Full test suite + 40% gate
+# Full test suite + 60% gate
 make test
 
 # Debug failing test
-uv run pytest -vv --pdb src/codomyrmex/tests/unit/test_specific.py::TestClass::test_method
+uv run pytest -vv --pdb tests/unit/test_specific.py::TestClass::test_method
 
-# Check coverage (40% gate when using --cov-fail-under)
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=html
+# Check coverage (60% gate when using --cov-fail-under)
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60 --cov-report=html
 
 # Find slow tests
-uv run pytest --durations=10 src/codomyrmex/tests/
+uv run pytest --durations=10 tests/
 ```
 
 ## Navigation Links

@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
 ### **Directory Structure**
 ```
-src/codomyrmex/tests/
+tests/
 ├── unit/                    # Unit tests for each module
 │   ├── test_ai_code_editing.py
 │   ├── test_data_visualization.py
@@ -271,7 +271,7 @@ The Zero-Mock Policy distinguishes **two kinds of test interventions**. The haza
 
 **Allowed when narrowly scoped:**
 
-- `monkeypatch.setenv` / `monkeypatch.delenv` — environment variable isolation. Tests that depend on environment state MUST use this rather than mutating `os.environ` directly so cleanup is automatic. See `src/codomyrmex/tests/unit/utils/test_utils_core.py` for the canonical `get_env` pattern.
+- `monkeypatch.setenv` / `monkeypatch.delenv` — environment variable isolation. Tests that depend on environment state MUST use this rather than mutating `os.environ` directly so cleanup is automatic. See `tests/unit/utils/test_utils_core.py` for the canonical `get_env` pattern.
 - `monkeypatch.chdir` — temporary working directory changes
 - `tmp_path`, `tmp_path_factory` — pytest tempdir fixtures
 - `FakeLLMClient`, `FakeSwarm`, or similar named test doubles when the real service is unavailable and the test exercises higher-layer logic. These MUST be explicitly named `Fake*` (not `Mock*`), live in a `tests/_fakes/` or `tests/_doubles/` location, and document what production behavior they preserve.
@@ -289,15 +289,15 @@ The Zero-Mock Policy distinguishes **two kinds of test interventions**. The haza
 uv run pytest
 
 # Run specific test categories
-uv run pytest src/codomyrmex/tests/unit/              # Unit tests only
-uv run pytest src/codomyrmex/tests/integration/       # Integration tests only
-uv run pytest src/codomyrmex/tests/e2e/              # End-to-end tests only
+uv run pytest tests/unit/              # Unit tests only
+uv run pytest tests/integration/       # Integration tests only
+uv run pytest tests/e2e/              # End-to-end tests only
 
 # Run tests for specific module
-uv run pytest src/codomyrmex/tests/unit/test_data_visualization.py
+uv run pytest tests/unit/test_data_visualization.py
 
-# Run with coverage + 40% gate
-uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=40
+# Run with coverage + 60% gate
+uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=60
 
 # Run with detailed output
 uv run pytest -v --tb=short
@@ -328,13 +328,13 @@ jobs:
         uv sync --dev
 
     - name: Run unit tests
-      run: uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex --cov-fail-under=40
+      run: uv run pytest tests/unit/ --cov=src/codomyrmex --cov-fail-under=60
 
     - name: Run integration tests
-      run: uv run pytest src/codomyrmex/tests/integration/
+      run: uv run pytest tests/integration/
 
     - name: Run E2E tests (critical paths only)
-      run: uv run pytest src/codomyrmex/tests/e2e/ -k "critical"
+      run: uv run pytest tests/e2e/ -k "critical"
 ```
 
 ## 🔍 Testing Each Module Type

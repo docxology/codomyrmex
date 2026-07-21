@@ -20,7 +20,7 @@
 ## Validation
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/embodiment/ -q
+uv run pytest tests/unit/embodiment/ -q
 uv run ruff check src/codomyrmex/embodiment
 uv run ty check --output-format concise src/codomyrmex/embodiment
 ```

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/accessibility
+# Codomyrmex Agents — tests/unit/accessibility
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -69,7 +69,8 @@ class ModuleHealthProvider:
 
     Args:
         src_root: Root of module directories. Defaults to ``src/codomyrmex/``.
-        test_root: Root of test directories. Defaults to ``src/codomyrmex/tests/``.
+        test_root: Root of test directories. Defaults to the repository's
+            top-level ``tests/`` tree.
 
     Example::
 

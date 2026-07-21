@@ -21,7 +21,7 @@ def run_shell(cmd: str, timeout: float = 10.0) -> str:
     try:
         result = subprocess.run(
             cmd,
-            shell=True,
+            shell=True,  # nosec B602 - trusted operating-system command API
             capture_output=True,
             text=True,
             timeout=timeout,
@@ -250,7 +250,7 @@ class OSProviderBase(ABC):
         try:
             result = subprocess.run(
                 command,
-                shell=True,
+                shell=True,  # nosec B602 - trusted operating-system command API
                 capture_output=True,
                 text=True,
                 timeout=timeout,

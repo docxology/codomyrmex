@@ -136,7 +136,7 @@ class PipelineExecutionMixin:
 
                 result = subprocess.run(
                     command,
-                    shell=True,  # SECURITY: Intentional — executes pipeline commands from YAML config
+                    shell=True,  # nosec B602 - trusted pipeline command contract
                     capture_output=True,
                     text=True,
                     timeout=timeout,

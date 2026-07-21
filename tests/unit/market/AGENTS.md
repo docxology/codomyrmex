@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/market
+# Codomyrmex Agents — tests/unit/market
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

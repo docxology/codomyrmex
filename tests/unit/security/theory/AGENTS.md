@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/security/theory
+# Codomyrmex Agents — tests/unit/security/theory
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

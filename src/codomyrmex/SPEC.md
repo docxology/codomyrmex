@@ -565,7 +565,7 @@ Each module must provide:
 ### Related Documentation
 
 - **Module Template**: [module_template/SPEC.md](module_template/SPEC.md) - Creating new modules
-- **Testing Guide**: [tests/SPEC.md](tests/SPEC.md) - Test infrastructure
+- **Testing Guide**: [tests/SPEC.md](../../tests/SPEC.md) - Test infrastructure
 - **API Reference**: [api/SPEC.md](api/SPEC.md) - API infrastructure
 - **Orchestration Guide**: [logistics/SPEC.md](logistics/SPEC.md) - Workflow management
 

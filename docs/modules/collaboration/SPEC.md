@@ -70,7 +70,7 @@ class TaskDecomposer:
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
+uv run python -m pytest tests/ -k collaboration -v
 ```
 
 ## Navigation

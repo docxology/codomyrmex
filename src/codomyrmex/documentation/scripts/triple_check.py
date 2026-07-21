@@ -146,47 +146,28 @@ def verify_relative_path(
 
 
 def check_file_completeness(content: str, file_path: Path) -> list[str]:
-    """Check if file has required sections."""
-    issues = []
-    file_name = file_path.name
+    """Check for the small, universal documentation contract.
 
-    # Check for version/status
-    if "**Version**" not in content and "Version" not in content:
-        issues.append("Missing version information")
-
-    if "**Status**" not in content and "Status" not in content:
-        issues.append("Missing status information")
-
-    # Check for navigation
-    if "## Navigation" not in content and "## Navigation Links" not in content:
-        issues.append("Missing Navigation section")
-
-    # Check for cross-references
-    if file_name == "README.md":
-        if "AGENTS.md" not in content and "AGENTS" not in content:
-            issues.append("Missing reference to AGENTS.md")
-        if "SPEC.md" not in content and "SPEC" not in content:
-            issues.append("Missing reference to SPEC.md")
-    elif file_name == "AGENTS.md":
-        if "README.md" not in content and "README" not in content:
-            issues.append("Missing reference to README.md")
-        if "SPEC.md" not in content and "SPEC" not in content:
-            issues.append("Missing reference to SPEC.md")
-    elif file_name == "SPEC.md":
-        if "README.md" not in content and "README" not in content:
-            issues.append("Missing reference to README.md")
-        if "AGENTS.md" not in content and "AGENTS" not in content:
-            issues.append("Missing reference to AGENTS.md")
-
-    # Check for empty or minimal content
-    non_empty_lines = [
+    Structural requirements for ``AGENTS.md`` are owned by
+    ``validate_agents_structure.py`` and link requirements are owned by the
+    comprehensive link validator.  This legacy checker should not reject
+    concise, hand-maintained signposts merely because they omit metadata or a
+    sibling document that does not exist.  Keep this check focused on content
+    that is universally actionable: a heading and meaningful prose.
+    """
+    del file_path  # The current contract is intentionally path-independent.
+    issues: list[str] = []
+    headings = [line for line in content.splitlines() if line.lstrip().startswith("#")]
+    prose = [
         line.strip()
-        for line in content.split("\n")
-        if line.strip() and not line.strip().startswith("#")
+        for line in content.splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
     ]
-    if len(non_empty_lines) < 10:
-        issues.append("File appears to have minimal content")
 
+    if not headings:
+        issues.append("Missing document heading")
+    if len(" ".join(prose).split()) < 10:
+        issues.append("File appears to have minimal content")
     return issues
 
 
@@ -295,9 +276,25 @@ def _collect_doc_files(base_path: Path) -> list[Path]:
     if not base_path.is_dir():
         return doc_files
     submodule_paths = _load_gitmodule_paths(base_path.resolve())
+    generated_prefixes = {
+        ("docs", "manuscript"),
+        ("docs", "agents", "open_gauss"),
+        ("src", "codomyrmex", "documentation", "docs"),
+        ("src", "codomyrmex", "agents", "open_gauss"),
+        ("src", "codomyrmex", "skills", "skills", "upstream"),
+    }
     for root, dirs, _files in os.walk(base_path):
         root_path = Path(root).resolve()
         dirs[:] = [d for d in dirs if not d.startswith(".") and d not in _SKIP_DIRS]
+        rel_root = root_path.relative_to(base_path).parts
+        dirs[:] = [
+            d
+            for d in dirs
+            if (*rel_root, d) not in generated_prefixes
+            and not any(
+                (*rel_root, d)[: len(prefix)] == prefix for prefix in generated_prefixes
+            )
+        ]
         if submodule_paths:
             dirs[:] = [
                 d
@@ -306,6 +303,8 @@ def _collect_doc_files(base_path: Path) -> list[Path]:
                 not in submodule_paths
             ]
         for name in _DOC_FILENAMES:
+            if rel_root and rel_root[0] == "tests" and len(rel_root) > 1:
+                continue
             fp = root_path / name
             if fp.exists():
                 doc_files.append(fp)
@@ -451,6 +450,11 @@ def main(argv: list[str] | None = None) -> int:
         default=Path("output/triple_check_report.md"),
         help="Report path. Relative paths are resolved from --repo-root.",
     )
+    parser.add_argument(
+        "--fail-on-issues",
+        action="store_true",
+        help="Return non-zero when placeholders, broken links, or completeness issues exist",
+    )
     args = parser.parse_args(argv)
 
     base_path = args.repo_root.resolve()
@@ -470,7 +474,16 @@ def main(argv: list[str] | None = None) -> int:
     _print_console_summary(len(doc_files), results, cats)
 
     _write_report(report_path, len(doc_files), results, cats)
-    return 0
+    return (
+        1
+        if args.fail_on_issues
+        and (
+            cats["total_placeholders"]
+            or cats["total_broken_links"]
+            or cats["total_completeness"]
+        )
+        else 0
+    )
 
 
 if __name__ == "__main__":

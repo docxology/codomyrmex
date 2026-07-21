@@ -1,12 +1,19 @@
 """Integration tests for Async Streaming Yields (D3)."""
 
+import os
 import time
 
 import pytest
 
 from codomyrmex.agents.hermes._provider_router import ProviderRouter
 
+RUN_LIVE_OLLAMA = os.environ.get("RUN_LIVE_OLLAMA") == "1"
 
+
+@pytest.mark.skipif(
+    not RUN_LIVE_OLLAMA,
+    reason="Live Ollama integration tests require RUN_LIVE_OLLAMA=1",
+)
 @pytest.mark.asyncio
 async def test_streaming_yield_time_to_first_token() -> None:
     """Ensure the generator yields the first chunk before the final execution completes."""

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agentic_memory/obsidian
+# Codomyrmex Agents — tests/unit/agentic_memory/obsidian
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

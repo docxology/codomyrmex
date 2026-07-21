@@ -38,7 +38,7 @@ the module is represented in generated documentation.
 
 ```bash
 make docs-check
-uv run pytest src/codomyrmex/tests/unit/system_discovery/test_structure_audit.py -q
+uv run pytest tests/unit/system_discovery/test_structure_audit.py -q
 ```
 
 ## Navigation

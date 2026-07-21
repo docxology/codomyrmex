@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/integration/pai
+# Codomyrmex Agents — tests/integration/pai
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

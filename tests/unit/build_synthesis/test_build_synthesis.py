@@ -127,6 +127,24 @@ if __name__ == "__main__":
         assert "artifacts" in results
         assert "errors" in results
 
+    def test_direct_build_command_rejects_shell_strings_and_bad_timeouts(self):
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            run_build_command,
+        )
+
+        unsafe, _, _ = run_build_command("echo unsafe")
+        bad_timeout, _, _ = run_build_command(["echo", "ok"], timeout=0)
+        assert not unsafe
+        assert not bad_timeout
+
+    def test_noop_build_is_distinguishable_from_successful_work(self):
+        result = orchestrate_build_pipeline({})
+
+        assert result["success"] is True
+        assert result["status"] == "noop"
+        assert result["stages"] == []
+        assert result["artifacts"] == []
+
     def test_synthesize_nonexistent_source(self, tmp_path):
         """Test synthesis with nonexistent source file."""
         test_dir = str(tmp_path)
@@ -138,12 +156,45 @@ if __name__ == "__main__":
 
         assert not result
 
+    def test_archive_directory_creates_archive(self, tmp_path):
+        source = tmp_path / "source"
+        source.mkdir()
+        (source / "payload.txt").write_text("payload", encoding="utf-8")
+        output = tmp_path / "artifact.zip"
+
+        assert synthesize_build_artifact(source, output, artifact_type="archive")
+        assert output.is_file()
+
+        import zipfile
+
+        with zipfile.ZipFile(output) as archive:
+            assert archive.read(".artifact-source/payload.txt") == b"payload"
+
     def test_validate_nonexistent_output(self):
         """Test validation of nonexistent output file."""
         validation = validate_build_output("/nonexistent/file.py")
 
         assert not validation["exists"]
         assert "does not exist" in validation["errors"][0]
+
+    def test_validate_archive_output(self, tmp_path):
+        source = tmp_path / "source"
+        source.mkdir()
+        (source / "payload.txt").write_text("payload", encoding="utf-8")
+        output = tmp_path / "artifact.zip"
+
+        assert synthesize_build_artifact(source, output, artifact_type="archive")
+        validation = validate_build_output(output)
+        assert validation["valid"] is True
+
+    def test_validate_non_python_copy_output(self, tmp_path):
+        output = tmp_path / "native-artifact.bin"
+        output.write_bytes(b"opaque build output")
+
+        validation = validate_build_output(output)
+
+        assert validation["valid"] is True
+        assert validation["errors"] == []
 
     @pytest.mark.skipif(
         not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available"
@@ -187,6 +238,19 @@ if __name__ == "__main__":
         assert "timestamp" in manifest
         assert "manifest_version" in manifest
         assert manifest["build_config"]["name"] == "test_build"
+
+    @pytest.mark.skipif(
+        not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available"
+    )
+    def test_create_build_manifest_normalizes_path_values(self, tmp_path):
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            create_build_manifest,
+        )
+
+        manifest = create_build_manifest({"source_path": tmp_path / "src"})
+
+        assert manifest["build_config"]["source_path"] == str(tmp_path / "src")
+        json.dumps(manifest)
 
     @pytest.mark.skipif(
         not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available"
@@ -309,6 +373,56 @@ if __name__ == "__main__":
         for artifact in artifacts:
             assert not os.path.exists(artifact)
 
+    def test_cleanup_rejects_artifacts_outside_allowed_root(self, tmp_path):
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            cleanup_build_artifacts,
+        )
+
+        allowed = tmp_path / "allowed"
+        allowed.mkdir()
+        outside = tmp_path / "outside.txt"
+        outside.write_text("keep", encoding="utf-8")
+
+        assert not cleanup_build_artifacts([outside], allowed_root=allowed)
+        assert outside.exists()
+
+    def test_successful_build_can_rollback_only_its_own_output(self, tmp_path):
+        source = tmp_path / "source.txt"
+        output = tmp_path / "build" / "artifact.txt"
+        source.write_text("build payload", encoding="utf-8")
+
+        result = orchestrate_build_pipeline(
+            {
+                "source_path": source,
+                "output_path": output,
+                "artifact_type": "copy",
+            }
+        )
+
+        assert result["status"] == "success"
+        assert output.exists()
+        assert rollback_build(result["build_id"])
+        assert not output.exists()
+
+    def test_pipeline_rejects_output_outside_configured_root(self, tmp_path):
+        source = tmp_path / "source.txt"
+        output_root = tmp_path / "allowed"
+        output = tmp_path / "outside" / "artifact.txt"
+        source.write_text("build payload", encoding="utf-8")
+
+        result = orchestrate_build_pipeline(
+            {
+                "source_path": source,
+                "output_path": output,
+                "output_root": output_root,
+                "artifact_type": "copy",
+            }
+        )
+
+        assert result["status"] == "failed"
+        assert any("output_root" in error for error in result["errors"])
+        assert not output.exists()
+
     @pytest.mark.skipif(
         not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available"
     )
@@ -428,6 +542,27 @@ if __name__ == "__main__":
         assert isinstance(history, list)
         # History might be empty if no builds have been recorded
         assert len(history) >= 0
+
+    @pytest.mark.skipif(
+        not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available"
+    )
+    def test_build_history_isolated_and_rejects_negative_limits(self):
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            get_build_history,
+        )
+
+        with pytest.raises(ValueError):
+            get_build_history(limit=-1)
+
+        result = orchestrate_build_pipeline(
+            {"build_commands": [[sys.executable, "-c", "print('history')"]]}
+        )
+        assert result["success"] is True
+
+        snapshot = get_build_history(limit=1)[0]
+        snapshot["stages"].clear()
+        fresh = monitor_build_progress(result["build_id"])
+        assert len(fresh["stages"]) == 1
 
     @pytest.mark.skipif(
         not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available"

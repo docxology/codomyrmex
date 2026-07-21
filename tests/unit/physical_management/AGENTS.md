@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/physical_management
+# Codomyrmex Agents — tests/unit/physical_management
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

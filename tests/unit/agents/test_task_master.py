@@ -613,15 +613,18 @@ class TestAPIMethodsSkippedWithoutKey:
     """Methods that require a live API key -- skipped by default.
 
     The skip check is performed at test-execution time (not collection time)
-    so that changes to ANTHROPIC_API_KEY between collection and execution are
-    handled correctly.
+    so that changes to the live opt-in or API key between collection and
+    execution are handled correctly.
     """
 
     @pytest.fixture(autouse=True)
     def require_api_key(self):
-        """Skip all tests in this class when ANTHROPIC_API_KEY is absent."""
-        if not os.getenv("ANTHROPIC_API_KEY"):
-            pytest.skip("ANTHROPIC_API_KEY not set")
+        """Skip unless live Anthropic execution is explicitly enabled."""
+        if os.getenv("RUN_LIVE_ANTHROPIC") != "1" or not os.getenv("ANTHROPIC_API_KEY"):
+            pytest.skip(
+                "Live Claude task-master tests require RUN_LIVE_ANTHROPIC=1 "
+                "and ANTHROPIC_API_KEY"
+            )
 
     def test_execute_task_returns_dict(self):
         m = ClaudeTaskMaster()

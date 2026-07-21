@@ -16,7 +16,7 @@ try:
 
     # Try importing EphemeralServer, might fail if path issues, handled in tests
     with contextlib.suppress(ImportError):
-        from codomyrmex.tests.utils.ephemeral_server import EphemeralServer
+        from tests.utils.ephemeral_server import EphemeralServer
 
     from codomyrmex.networking import (
         HTTPClient,
@@ -395,6 +395,12 @@ class TestSSHClient:
         assert client.username == "user"
         assert client.port == 22
 
+        import paramiko
+
+        assert isinstance(
+            client.client.get_missing_host_key_policy(), paramiko.RejectPolicy
+        )
+
     def test_ssh_client_key_based_auth(self):
         client = SSHClient(
             hostname="example.com", username="user", key_filename="/path/to/key"
@@ -404,6 +410,18 @@ class TestSSHClient:
     def test_ssh_client_custom_port(self):
         client = SSHClient(hostname="example.com", username="user", port=2222)
         assert client.port == 2222
+
+    def test_unknown_host_keys_require_explicit_opt_in(self):
+        import paramiko
+
+        client = SSHClient(
+            hostname="example.com",
+            username="user",
+            allow_unknown_host_keys=True,
+        )
+        assert isinstance(
+            client.client.get_missing_host_key_policy(), paramiko.WarningPolicy
+        )
 
     @requires_ssh
     def test_ssh_client_connect_and_execute(self):

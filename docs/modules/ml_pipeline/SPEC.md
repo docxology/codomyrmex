@@ -30,7 +30,7 @@ See source module for available exports.
 ## 5. Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k ml_pipeline -v
+uv run python -m pytest tests/ -k ml_pipeline -v
 ```
 
 ## Navigation

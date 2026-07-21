@@ -96,7 +96,7 @@ The `operating_system` module provides a unified, cross-platform abstraction lay
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/unit/operating_system/ -v
+uv run python -m pytest tests/unit/operating_system/ -v
 ```
 
 ## Navigation

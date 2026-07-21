@@ -198,41 +198,41 @@ jobs:
           
           # Create basic memory profiling script
           cat > benchmarks/memory_profiler.py << 'EOF'
-import psutil
-import time
-import json
+          import psutil
+          import time
+          import json
 
-def memory_intensive_task():
-    data = []
-    for i in range(10000):
-        data.append(f"Memory test item {i}" * 5)
-    return len(data)
+          def memory_intensive_task():
+              data = []
+              for i in range(10000):
+                  data.append(f"Memory test item {i}" * 5)
+              return len(data)
 
-def profile_memory():
-    process = psutil.Process()
-    initial_memory = process.memory_info().rss / (1024 * 1024)
-    
-    start_time = time.time()
-    result = memory_intensive_task()
-    end_time = time.time()
-    
-    final_memory = process.memory_info().rss / (1024 * 1024)
-    
-    return {
-        'initial_memory_mb': initial_memory,
-        'final_memory_mb': final_memory,
-        'memory_increase_mb': final_memory - initial_memory,
-        'execution_time': end_time - start_time,
-        'result_size': result
-    }
+          def profile_memory():
+              process = psutil.Process()
+              initial_memory = process.memory_info().rss / (1024 * 1024)
 
-if __name__ == "__main__":
-    results = profile_memory()
-    with open('benchmarks/results/memory-profile-results.json', 'w') as f:
-        json.dump(results, f, indent=2)
-    print("Memory profiling completed")
-    print(json.dumps(results, indent=2))
-EOF
+              start_time = time.time()
+              result = memory_intensive_task()
+              end_time = time.time()
+
+              final_memory = process.memory_info().rss / (1024 * 1024)
+
+              return {
+                  'initial_memory_mb': initial_memory,
+                  'final_memory_mb': final_memory,
+                  'memory_increase_mb': final_memory - initial_memory,
+                  'execution_time': end_time - start_time,
+                  'result_size': result
+              }
+
+          if __name__ == "__main__":
+              results = profile_memory()
+              with open('benchmarks/results/memory-profile-results.json', 'w') as f:
+                  json.dump(results, f, indent=2)
+              print("Memory profiling completed")
+              print(json.dumps(results, indent=2))
+          EOF
           
           cd benchmarks && python memory_profiler.py
 

@@ -161,7 +161,7 @@ class SystemOpsMixin:
         try:
             result = subprocess.run(
                 command,
-                shell=True,  # SECURITY: Intentional — run_command is an agent shell executor
+                shell=True,  # nosec B602 - trusted agent shell executor API
                 cwd=cwd,
                 capture_output=capture_output,
                 text=True,

@@ -137,5 +137,5 @@ checked independently.
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/unit/website/ -v
+uv run python -m pytest tests/unit/website/ -v
 ```

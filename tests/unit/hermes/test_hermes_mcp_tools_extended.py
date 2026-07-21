@@ -6,6 +6,7 @@ CLI-dependent tests are skipped gracefully.
 
 from __future__ import annotations
 
+import os
 import shutil
 
 import pytest
@@ -28,7 +29,9 @@ from codomyrmex.agents.hermes.mcp_tools import (
     hermes_worktree_create,
 )
 
-HAS_HERMES = shutil.which("hermes") is not None
+HAS_HERMES = (
+    os.environ.get("RUN_LIVE_HERMES") == "1" and shutil.which("hermes") is not None
+)
 
 
 # ── hermes_doctor ─────────────────────────────────────────────────────

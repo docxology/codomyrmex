@@ -4,7 +4,7 @@
 
 Unit tests for the Colony Kernel subsystems (`src/codomyrmex/colony_kernel/`).
 Each file targets one subsystem; together they constitute the gate harness that
-enforces the 40% coverage floor on the colony_kernel package.
+enforces the 60% coverage floor on the colony_kernel package.
 
 ## Navigation
 
@@ -41,5 +41,5 @@ module-level attribute reset (e.g. resetting the `_kernel` singleton in
 Run the suite with `uv run pytest -m unit tests/unit/colony_kernel/`.
 
 **Coverage target.** The `--cov` target for the manuscript gate is
-`src/codomyrmex/colony_kernel/`. The project-wide floor is 40%; the Colony Kernel
+`src/codomyrmex/colony_kernel/`. The project-wide floor is 60%; the Colony Kernel
 suite is expected to substantially exceed this floor across all subsystem modules.

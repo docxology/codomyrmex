@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/encryption
+# Codomyrmex Agents — tests/unit/encryption
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

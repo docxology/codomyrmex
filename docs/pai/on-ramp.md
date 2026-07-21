@@ -35,7 +35,7 @@ You can browse everything without changing anything.
 
 | Concept | What It Means |
 |---------|--------------|
-| **Codomyrmex** | 129-module Python toolbox — orchestration, testing, discovery |
+| **Codomyrmex** | 130-module Python toolbox — orchestration, testing, discovery |
 | **PAI** | Personal AI Infrastructure — runs The Algorithm on every prompt |
 | **MCP** | Model Context Protocol — how PAI talks to Codomyrmex |
 | **Derived repo** | A smaller repository built using Codomyrmex patterns and tools |
@@ -69,7 +69,7 @@ uv run python scripts/pai/dashboard.py
 
 At this level you can **ask questions** but not **change answers**:
 
-- Browse all **129** top-level modules, read their READMEs and SPECs
+- Browse all **130** top-level modules, read their READMEs and SPECs
 - Search across the codebase for patterns, imports, dependencies
 - Analyze any Python file for classes, functions, metrics
 - Query PAI state — missions, projects, tasks, TELOS identity
@@ -143,7 +143,7 @@ At this level you can **modify the orchestration** — Codomyrmex itself:
 ```text
 Codomyrmex (this repo)                    Derived Repo (e.g., QuadCraft)
 ┌─────────────────────────┐              ┌──────────────────────┐
-│ 129 modules             │              │ Focused codebase     │
+│ 130 modules             │              │ Focused codebase     │
 │ Testing infrastructure  │──creates──→  │ Single responsibility│
 │ MCP tool discovery      │              │ Own CI/CD            │
 │ PAI Dashboard           │──manages──→  │ Linked via GitHub    │

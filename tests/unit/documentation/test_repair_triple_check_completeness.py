@@ -11,6 +11,7 @@ from codomyrmex.documentation.scripts.repair_triple_check_completeness import (
     repair_content,
     repair_tree,
 )
+from codomyrmex.documentation.scripts.triple_check import check_file_completeness
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -79,3 +80,21 @@ def test_repair_tree_dry_run_does_not_write(tmp_path: Path) -> None:
 
     assert stats.changed == 1
     assert readme.read_text(encoding="utf-8") == "# Root\n\nShort.\n"
+
+
+@pytest.mark.unit
+def test_triple_check_accepts_concise_signpost_documents(tmp_path: Path) -> None:
+    content = (
+        "# Checks\n\nRun the deterministic checks and review the generated evidence "
+        "before accepting the change.\n"
+    )
+
+    assert check_file_completeness(content, tmp_path / "README.md") == []
+
+
+@pytest.mark.unit
+def test_triple_check_rejects_empty_or_unheaded_documents(tmp_path: Path) -> None:
+    assert check_file_completeness("\n", tmp_path / "README.md") == [
+        "Missing document heading",
+        "File appears to have minimal content",
+    ]

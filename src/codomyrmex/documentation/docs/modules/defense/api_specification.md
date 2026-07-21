@@ -39,5 +39,5 @@
 
 ## Validation
 
-- Source tests: `uv run pytest src/codomyrmex/tests/unit/defense/ -q`
+- Source tests: `uv run pytest tests/unit/defense/ -q`
 - API import check: `python -c "from codomyrmex.defense import Defense, ActiveDefense"`

@@ -74,9 +74,9 @@ def _cli_agent_ready(binary: str, env_var: str) -> bool:
         return False
 
 
-_OPENCODE_READY = _cli_agent_ready("opencode", "OPENCODE_TEST_ENABLED")
-_JULES_READY = _cli_agent_ready("jules", "JULES_TEST_ENABLED")
-_GEMINI_READY = _cli_agent_ready("gemini", "GEMINI_TEST_ENABLED")
+_OPENCODE_READY = _cli_agent_ready("opencode", "RUN_LIVE_OPENCODE")
+_JULES_READY = _cli_agent_ready("jules", "RUN_LIVE_JULES")
+_GEMINI_READY = _cli_agent_ready("gemini", "RUN_LIVE_GEMINI")
 
 
 def _make_args(**kwargs):
@@ -264,7 +264,7 @@ class TestAgentExecuteNoneGuard:
 @pytest.mark.unit
 @pytest.mark.skipif(
     not _JULES_READY,
-    reason="Jules CLI requires AI API access; set JULES_TEST_ENABLED=1 to run",
+    reason="Jules CLI tests require RUN_LIVE_JULES=1",
 )
 class TestJulesHandlers:
     """Tests for Jules-specific handlers (check, help, command)."""
@@ -420,7 +420,7 @@ class TestOpenCodeHandlers:
 @pytest.mark.unit
 @pytest.mark.skipif(
     not _GEMINI_READY,
-    reason="Gemini CLI requires AI API access; set GEMINI_TEST_ENABLED=1 to run",
+    reason="Gemini CLI tests require RUN_LIVE_GEMINI=1",
 )
 class TestGeminiHandlers:
     """Tests for Gemini-specific handlers."""

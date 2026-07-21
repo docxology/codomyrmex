@@ -56,11 +56,11 @@ uv run python scripts/pai/test_email_compose.py   # full LLM email compose tests
 
 ```bash
 # Run all PAI-ecosystem unit tests (445+ tests)
-uv run python -m pytest src/codomyrmex/tests/unit/website/ \
-  src/codomyrmex/tests/unit/agents/test_pai_bridge.py \
-  src/codomyrmex/tests/unit/agents/pai/ \
-  src/codomyrmex/tests/unit/email/ \
-  src/codomyrmex/tests/unit/calendar_integration/ -v
+uv run python -m pytest tests/unit/website/ \
+  tests/unit/agents/test_pai_bridge.py \
+  tests/unit/agents/pai/ \
+  tests/unit/email/ \
+  tests/unit/calendar_integration/ -v
 ```
 
 ## Error Handling

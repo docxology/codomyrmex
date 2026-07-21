@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/slm
+# Codomyrmex Agents — tests/unit/slm
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

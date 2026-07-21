@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/coding/execution/unit
+# Codomyrmex Agents — tests/unit/coding/execution/unit
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -48,5 +48,5 @@ Edge computing module providing edge node management, function deployment, and s
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k edge_computing -v
+uv run python -m pytest tests/ -k edge_computing -v
 ```

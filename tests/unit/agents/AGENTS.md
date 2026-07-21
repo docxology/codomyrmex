@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agents
+# Codomyrmex Agents — tests/unit/agents
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
@@ -96,6 +96,9 @@ Validation coverage, fixtures, and regression checks for Agents.
 - `transport/` – Directory containing transport components
 
 ## Operating Contracts
+
+- Tests that contact a live Ollama server are disabled by default. Set
+  `RUN_LIVE_OLLAMA=1` explicitly for local service validation.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

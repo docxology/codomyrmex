@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/security/compliance
+# Codomyrmex Agents — tests/unit/security/compliance
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

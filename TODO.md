@@ -95,9 +95,9 @@
 | B3 | ~~Video module depth~~ | `video/` | ✅ Audited — video processor, extractor, analyzer, and transcription paths all implemented; 207 tests pass, 1 skip (optional dep) |
 | B4 | ~~Meme module MCP exposure~~ | `meme/` | ✅ Fixed — 5 `@mcp_tool` decorators in `mcp_tools.py` (dissect, fitness, synthesize, propagate, narrative); RASP docs present |
 | B5 | ~~Secure Cognitive Layer MCP~~ | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | ✅ Fixed — PAI bridge module `pai_pm/secure_cognitive_bridge.py` registers all 15 MCP tools (3 per module × 5 modules); `register_secure_cognitive_tools()` + `get_secure_cognitive_tool_catalog()` |
-| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,119 tests collect with 0 errors via import guards and optional submodule skips |
+| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,144 tests collect with 0 errors via import guards and optional submodule skips |
 | B7 | ~~README / inventory metric drift watch~~ | root | ✅ Fixed — updated all surfaces to 130 modules, 1,201 docs; manuscript consistency test updated |
-| B8 | ~~Coverage gate~~ | repo-wide | ✅ Verified — **60%** in `[tool.coverage.report] fail_under` (raised from 40%); `meme/*` omitted from `[tool.coverage.run]`. Enforce with `make test` or `--cov-fail-under=60`. |
+| B8 | ~~Coverage gate~~ | repo-wide | ✅ Verified — **60%** in `[tool.coverage.report] fail_under` (raised from 60%); `meme/*` omitted from `[tool.coverage.run]`. Enforce with `make test` or `--cov-fail-under=60`. |
 | B9 | ~~Type safety burn-down~~ | repo-wide | ✅ Fixed — `uv run ty check --output-format concise src/` now reports 0 diagnostics. Keep this zero baseline in CI/local gates. |
 | B10 | ~~Documentation completeness burn-down~~ | `docs/`, `src/codomyrmex/**` | ✅ Fixed — `make docs-check` reports 4,911 docs checked, 0 placeholders, 0 broken links, 0 completeness issues, and 1,342/1,342 AGENTS valid. |
 
@@ -110,10 +110,10 @@
 | Requirement | Command | Threshold | Status |
 | :--- | :--- | :--- | :--- |
 | **Zero-Mock Policy** | `rg -n "from unittest\\.mock" src --glob '*.py'` | 0 `unittest.mock` imports | ✅ PASSED (0 violations) |
-| **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 60% gate) | 🟡 PENDING (35,119 tests collected with 0 errors; build_synthesis + colony_kernel + integration suites verified green) |
+| **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 60% gate) | 🟡 PENDING (35,144 tests collected with 0 errors; build_synthesis + colony_kernel + integration suites verified green) |
 | **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED (0 errors) |
 | **Type Safety** | `uv run ty check --output-format concise src/` | 0 diagnostics | ✅ PASSED (0 diagnostics) |
-| **Coverage Gate** | `make test` or `uv run pytest src/codomyrmex/tests/ ... --cov-fail-under=60` | ≥60% | ✅ PASSED — `fail_under = 60` in `pyproject.toml`; `meme/*` omitted from coverage; colony_kernel scoped coverage at 78.4% branch |
+| **Coverage Gate** | `make test` or `uv run pytest tests/ ... --cov-fail-under=60` | ≥60% | ✅ PASSED — `fail_under = 60` in `pyproject.toml`; `meme/*` omitted from coverage; colony_kernel scoped coverage at 78.4% branch |
 | **Documentation Parity** | `make docs-check` | AGENTS.md, README.md, SPEC.md, CHANGELOG.md aligned with pytest/coverage source of truth | ✅ PASSED (0 placeholders, 0 broken links, 0 completeness issues, AGENTS validation passes) |
 
 ---
@@ -138,7 +138,7 @@
 | **Lint** | `uv run ruff check .` |
 | **Format** | `uv run ruff format .` |
 | **Type Check** | `uv run ty check --output-format concise src/` |
-| **Coverage** | `uv run pytest --cov=src/codomyrmex --cov-fail-under=40` |
+| **Coverage** | `uv run pytest --cov=src/codomyrmex --cov-fail-under=60` |
 | **Build** | `uv build` |
 
 ### Key Modules

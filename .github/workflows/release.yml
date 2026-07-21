@@ -106,7 +106,9 @@ jobs:
       - name: Run security checks
         run: |
           echo "🔒 Running security checks..."
-          uv run bandit -r src/codomyrmex/ -ll || true
+          uv run bandit -r src/codomyrmex/ \
+            -x '*/tests/*,*/vendor/*,*/generated/*,src/codomyrmex/agents/open_gauss,src/codomyrmex/documentation/docs' \
+            -lll -iii
 
       - name: Run linting checks
         run: |
@@ -354,11 +356,19 @@ jobs:
           echo "🧪 Testing installation of codomyrmex==$VERSION from ${{ steps.pypi_source.outputs.source }}"
           
           # Retry installation with backoff to wait for package propagation
+          installed=false
           for i in {1..10}; do
-            uv pip install ${{ steps.pypi_source.outputs.index_url }} codomyrmex==$VERSION && break
+            if uv pip install ${{ steps.pypi_source.outputs.index_url }} codomyrmex==$VERSION; then
+              installed=true
+              break
+            fi
             echo "Attempt $i failed, retrying in 30 seconds..."
             sleep 30
           done
+          if [[ "$installed" != "true" ]]; then
+            echo "❌ Package did not become installable after 10 attempts"
+            exit 1
+          fi
           
           # Basic functionality test
           python -c "
@@ -370,7 +380,7 @@ jobs:
       - name: Test CLI functionality
         run: |
           echo "🧪 Testing CLI functionality..."
-          codomyrmex --help || echo "CLI test completed"
+          codomyrmex --help
 
   update-documentation:
     name: Update Release Documentation
@@ -414,7 +424,7 @@ jobs:
   release-status:
     name: Release Status
     runs-on: ubuntu-latest
-    needs: [prepare-release, quality-gate, build-artifacts, create-release, publish-pypi, publish-test-pypi, verify-release]
+    needs: [prepare-release, quality-gate, build-artifacts, create-release, publish-pypi, publish-test-pypi, verify-release, update-documentation]
     if: always()
     steps:
       - name: Generate Release Summary
@@ -465,3 +475,37 @@ jobs:
         run: |
           echo "❌ Release workflow failed. Please check the logs and fix any issues before retrying."
           exit 1
+
+      - name: Enforce release job results
+        run: |
+          required_results=(
+            "${{ needs.prepare-release.result }}"
+            "${{ needs.quality-gate.result }}"
+            "${{ needs.build-artifacts.result }}"
+            "${{ needs.create-release.result }}"
+            "${{ needs.verify-release.result }}"
+          )
+          for result in "${required_results[@]}"; do
+            if [[ "$result" != "success" ]]; then
+              echo "❌ Required release job failed or was skipped: $result"
+              exit 1
+            fi
+          done
+
+          is_prerelease="${{ needs.prepare-release.outputs.is_prerelease }}"
+          if [[ "$is_prerelease" == "true" ]]; then
+            publish_result="${{ needs.publish-test-pypi.result }}"
+          else
+            publish_result="${{ needs.publish-pypi.result }}"
+          fi
+          if [[ "$publish_result" != "success" ]]; then
+            echo "❌ Expected package publication job result was $publish_result"
+            exit 1
+          fi
+
+          docs_result="${{ needs.update-documentation.result }}"
+          if [[ "$is_prerelease" == "false" && "$docs_result" != "success" ]]; then
+            echo "❌ Release documentation update result was $docs_result"
+            exit 1
+          fi
+          echo "✅ All required release jobs passed."

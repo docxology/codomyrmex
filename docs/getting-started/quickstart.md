@@ -288,7 +288,7 @@ codomyrmex check
 codomyrmex info
 
 # Run all tests
-uv run pytest src/codomyrmex/tests/unit/ -v
+uv run pytest tests/unit/ -v
 
 # Launch interactive exploration
 ./start_here.sh

@@ -10,6 +10,8 @@ import time
 
 import pytest
 
+pytestmark = pytest.mark.performance
+
 try:
     from codomyrmex.performance import (
         PerformanceProfiler,

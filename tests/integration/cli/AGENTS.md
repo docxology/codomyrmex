@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/integration/cli
+# Codomyrmex Agents — tests/integration/cli
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

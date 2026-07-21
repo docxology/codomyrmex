@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/languages
+# Codomyrmex Agents — tests/unit/languages
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

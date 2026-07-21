@@ -31,7 +31,7 @@ See `src/codomyrmex/dark/pdf/__init__.py` for import dependencies.
 ## 5. Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k pdf -v
+uv run python -m pytest tests/ -k pdf -v
 ```
 
 ## References

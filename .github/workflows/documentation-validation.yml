@@ -111,8 +111,8 @@ jobs:
             --repo-root . \
             --output output \
             --format both \
-            --min-score 60
-        continue-on-error: true
+            --min-score 70 \
+            --fail-on-below
 
       - name: Upload quality results
         uses: actions/upload-artifact@v4
@@ -171,8 +171,8 @@ jobs:
           uv run python scripts/documentation/validate_agents_structure.py \
             --repo-root . \
             --output output \
-            --format both
-        continue-on-error: true
+            --format both \
+            --fail-on-invalid
 
       - name: Upload structure validation results
         uses: actions/upload-artifact@v4
@@ -262,7 +262,7 @@ jobs:
     name: Enforce Quality Gates
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
-    if: always() && github.event_name == 'pull_request'
+    if: always()
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -299,8 +299,7 @@ jobs:
             --min-quality-score 70 \
             --max-broken-links 10 \
             --max-placeholders 100 \
-            --min-agents-valid-rate 80 \
-            --allow-warnings
+            --min-agents-valid-rate 100
 
       - name: Comment PR with results
         if: always() && github.event_name == 'pull_request'
@@ -354,5 +353,3 @@ jobs:
               repo: context.repo.repo,
               body: comment
             });
-
-

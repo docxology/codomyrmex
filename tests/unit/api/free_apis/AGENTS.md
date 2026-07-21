@@ -1,12 +1,12 @@
 <!-- agents: curated -->
 
-# Codomyrmex Agents — src/codomyrmex/tests/unit/api/free_apis
+# Codomyrmex Agents — tests/unit/api/free_apis
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Signposting
 
-- **Path**: `src/codomyrmex/tests/unit/api/free_apis`
+- **Path**: `tests/unit/api/free_apis`
 - **Human overview**: [README.md](README.md)
 - **Functional spec**: [SPEC.md](SPEC.md)
 - **Agent coordination** (repo root): [../../../../../../AGENTS.md](../../../../../../AGENTS.md)

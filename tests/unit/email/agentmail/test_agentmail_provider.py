@@ -6,7 +6,7 @@ No mocking is used — these tests exercise the live AgentMail API.
 Run with a real API key::
 
     AGENTMAIL_API_KEY=am_us_... uv run pytest \\
-        src/codomyrmex/tests/unit/email/agentmail/ -v
+        tests/unit/email/agentmail/ -v
 
 Zero-mock policy: Tests skip gracefully when the API key is absent.
 No MagicMock, monkeypatch, or unittest.mock usage is permitted.
@@ -20,8 +20,12 @@ import time
 import pytest
 
 AGENTMAIL_API_KEY = os.getenv("AGENTMAIL_API_KEY")
-SKIP_REASON = "AGENTMAIL_API_KEY not set — skipping AgentMail integration tests"
-SKIP = pytest.mark.skipif(not AGENTMAIL_API_KEY, reason=SKIP_REASON)
+_RUN_LIVE_AGENTMAIL = os.getenv("RUN_LIVE_AGENTMAIL") == "1"
+SKIP_REASON = "Live AgentMail tests require RUN_LIVE_AGENTMAIL=1 and AGENTMAIL_API_KEY"
+SKIP = pytest.mark.skipif(
+    not _RUN_LIVE_AGENTMAIL or not AGENTMAIL_API_KEY,
+    reason=SKIP_REASON,
+)
 
 DEFAULT_INBOX = os.getenv("AGENTMAIL_DEFAULT_INBOX", "fristonblanket@agentmail.to")
 
@@ -328,8 +332,8 @@ def test_email_module_exports() -> None:
 
 
 @pytest.mark.skipif(
-    not os.getenv("AGENTMAIL_API_KEY"),
-    reason="AGENTMAIL_API_KEY not set",
+    not _RUN_LIVE_AGENTMAIL or not os.getenv("AGENTMAIL_API_KEY"),
+    reason=SKIP_REASON,
 )
 @pytest.mark.unit
 class TestAgentMailProviderPodOperations:
@@ -408,8 +412,8 @@ class TestAgentMailProviderPodOperations:
 
 
 @pytest.mark.skipif(
-    not os.getenv("AGENTMAIL_API_KEY"),
-    reason="AGENTMAIL_API_KEY not set",
+    not _RUN_LIVE_AGENTMAIL or not os.getenv("AGENTMAIL_API_KEY"),
+    reason=SKIP_REASON,
 )
 @pytest.mark.unit
 class TestAgentMailProviderDomainOperations:
@@ -460,8 +464,8 @@ class TestAgentMailProviderDomainOperations:
 
 
 @pytest.mark.skipif(
-    not os.getenv("AGENTMAIL_API_KEY"),
-    reason="AGENTMAIL_API_KEY not set",
+    not _RUN_LIVE_AGENTMAIL or not os.getenv("AGENTMAIL_API_KEY"),
+    reason=SKIP_REASON,
 )
 @pytest.mark.unit
 class TestAgentMailProviderMetrics:
@@ -502,8 +506,8 @@ class TestAgentMailProviderMetrics:
 
 
 @pytest.mark.skipif(
-    not os.getenv("AGENTMAIL_API_KEY"),
-    reason="AGENTMAIL_API_KEY not set",
+    not _RUN_LIVE_AGENTMAIL or not os.getenv("AGENTMAIL_API_KEY"),
+    reason=SKIP_REASON,
 )
 @pytest.mark.unit
 class TestAgentMailProviderMessageFiltering:
@@ -546,8 +550,8 @@ class TestAgentMailProviderMessageFiltering:
 
 
 @pytest.mark.skipif(
-    not os.getenv("AGENTMAIL_API_KEY"),
-    reason="AGENTMAIL_API_KEY not set",
+    not _RUN_LIVE_AGENTMAIL or not os.getenv("AGENTMAIL_API_KEY"),
+    reason=SKIP_REASON,
 )
 @pytest.mark.unit
 class TestAgentMailProviderReplyForward:
@@ -618,8 +622,8 @@ class TestAgentMailProviderReplyForward:
 
 
 @pytest.mark.skipif(
-    not os.getenv("AGENTMAIL_API_KEY"),
-    reason="AGENTMAIL_API_KEY not set",
+    not _RUN_LIVE_AGENTMAIL or not os.getenv("AGENTMAIL_API_KEY"),
+    reason=SKIP_REASON,
 )
 @pytest.mark.unit
 class TestAgentMailProviderAttachments:

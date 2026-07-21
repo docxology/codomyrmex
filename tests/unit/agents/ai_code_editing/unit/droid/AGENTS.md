@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/ai_code_editing/unit/droid
+# Codomyrmex Agents — tests/unit/agents/ai_code_editing/unit/droid
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

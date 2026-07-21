@@ -13,6 +13,21 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Any
+
+
+def _load_report(path: Path, label: str) -> tuple[Any | None, str | None]:
+    """Load a required JSON report and return an actionable failure message."""
+    if not path.exists():
+        return None, f"{label} results not found: {path}"
+    try:
+        with path.open(encoding="utf-8") as handle:
+            data = json.load(handle)
+    except (OSError, json.JSONDecodeError) as exc:
+        return None, f"{label} results could not be read: {exc}"
+    if not isinstance(data, list) or not data:
+        return None, f"{label} results are empty or have an invalid shape"
+    return data, None
 
 
 def enforce_quality_gate(
@@ -33,76 +48,93 @@ def enforce_quality_gate(
     failures = []
     warnings = []
 
-    # Check link validation
-    links_path = output_dir / "link_validation.json"
-    if links_path.exists():
-        with open(links_path) as f:
-            link_data = json.load(f)
-            broken_count = len([l for l in link_data if l["status"] == "broken"])
+    # Every report is required.  A missing artifact means the corresponding
+    # validator did not complete, and must not be interpreted as a pass.
+    link_data, link_error = _load_report(
+        output_dir / "link_validation.json", "Link validation"
+    )
+    if link_error:
+        failures.append(link_error)
+    else:
+        assert isinstance(link_data, list)
+        broken_count = sum(
+            1
+            for entry in link_data
+            if isinstance(entry, dict) and entry.get("status") == "broken"
+        )
+        malformed = [entry for entry in link_data if not isinstance(entry, dict)]
+        if malformed:
+            failures.append("Link validation results contain malformed entries")
+        elif broken_count > max_broken_links:
+            failures.append(
+                f"Broken links ({broken_count}) exceeds maximum ({max_broken_links})"
+            )
+        else:
+            print(f"✅ Broken links: {broken_count}/{max_broken_links}")
 
-            if broken_count > max_broken_links:
+    quality_data, quality_error = _load_report(
+        output_dir / "content_quality.json", "Content quality"
+    )
+    if quality_error:
+        failures.append(quality_error)
+    else:
+        assert isinstance(quality_data, list)
+        if any(
+            not isinstance(entry, dict)
+            or not isinstance(entry.get("score"), (int, float))
+            or not isinstance(entry.get("metrics"), dict)
+            for entry in quality_data
+        ):
+            failures.append("Content quality results contain malformed entries")
+        else:
+            avg_score = sum(entry["score"] for entry in quality_data) / len(
+                quality_data
+            )
+            if avg_score < min_quality_score:
                 failures.append(
-                    f"Broken links ({broken_count}) exceeds maximum ({max_broken_links})"
+                    f"Average quality score ({avg_score:.1f}) below minimum ({min_quality_score})"
                 )
             else:
-                print(f"✅ Broken links: {broken_count}/{max_broken_links}")
-    else:
-        warnings.append("Link validation results not found")
+                print(f"✅ Average quality score: {avg_score:.1f}/{min_quality_score}")
 
-    # Check content quality
-    quality_path = output_dir / "content_quality.json"
-    if quality_path.exists():
-        with open(quality_path) as f:
-            quality_data = json.load(f)
-
-            if quality_data:
-                avg_score = sum(q["score"] for q in quality_data) / len(quality_data)
-
-                if avg_score < min_quality_score:
-                    failures.append(
-                        f"Average quality score ({avg_score:.1f}) below minimum ({min_quality_score})"
-                    )
-                else:
-                    print(
-                        f"✅ Average quality score: {avg_score:.1f}/{min_quality_score}"
-                    )
-
-                # Check placeholders
-                total_placeholders = sum(
-                    q["metrics"].get("placeholder_count", 0) for q in quality_data
+            total_placeholders = sum(
+                entry["metrics"].get("placeholder_count", 0) for entry in quality_data
+            )
+            if not isinstance(total_placeholders, (int, float)):
+                failures.append("Content quality placeholder counts are malformed")
+            elif total_placeholders > max_placeholders:
+                failures.append(
+                    f"Placeholder count ({total_placeholders}) exceeds maximum ({max_placeholders})"
                 )
-                if total_placeholders > max_placeholders:
-                    failures.append(
-                        f"Placeholder count ({total_placeholders}) exceeds maximum ({max_placeholders})"
-                    )
-                else:
-                    print(f"✅ Placeholders: {total_placeholders}/{max_placeholders}")
+            else:
+                print(f"✅ Placeholders: {total_placeholders}/{max_placeholders}")
+
+    agents_data, agents_error = _load_report(
+        output_dir / "agents_validation.json", "AGENTS.md validation"
+    )
+    if agents_error:
+        failures.append(agents_error)
     else:
-        warnings.append("Content quality results not found")
-
-    # Check AGENTS.md validation
-    agents_path = output_dir / "agents_validation.json"
-    if agents_path.exists():
-        with open(agents_path) as f:
-            agents_data = json.load(f)
-
-            if agents_data:
-                valid_count = len([a for a in agents_data if a["valid"]])
-                valid_rate = (valid_count / len(agents_data)) * 100
-
-                if valid_rate < min_agents_valid_rate:
-                    failures.append(
-                        f"AGENTS.md valid rate ({valid_rate:.1f}%) below minimum ({min_agents_valid_rate}%)"
-                    )
-                else:
-                    print(
-                        f"✅ AGENTS.md valid rate: {valid_rate:.1f}%/{min_agents_valid_rate}%"
-                    )
-    else:
-        warnings.append("AGENTS.md validation results not found")
+        assert isinstance(agents_data, list)
+        if any(
+            not isinstance(entry, dict) or not isinstance(entry.get("valid"), bool)
+            for entry in agents_data
+        ):
+            failures.append("AGENTS.md validation results contain malformed entries")
+        else:
+            valid_count = sum(1 for entry in agents_data if entry["valid"])
+            valid_rate = (valid_count / len(agents_data)) * 100
+            if valid_rate < min_agents_valid_rate:
+                failures.append(
+                    f"AGENTS.md valid rate ({valid_rate:.1f}%) below minimum ({min_agents_valid_rate}%)"
+                )
+            else:
+                print(
+                    f"✅ AGENTS.md valid rate: {valid_rate:.1f}%/{min_agents_valid_rate}%"
+                )
 
     # Report warnings
-    if warnings:
+    if warnings and not allow_warnings:
         print(f"\n⚠️  Warnings ({len(warnings)}):")
         for w in warnings:
             print(f"   - {w}")

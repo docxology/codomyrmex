@@ -27,7 +27,7 @@ This is the main source directory containing the `codomyrmex` Python package wit
 ### Key Patterns
 
 - **Imports**: Always use `from codomyrmex.<module> import <class>`
-- **Testing**: Tests are in `src/codomyrmex/tests/` or per-module `tests/` folders
+- **Testing**: Tests are in `tests/` or per-module `tests/` folders
 - **Documentation**: Every module has README, AGENTS, SPEC, PAI
 
 ### MCP Integration

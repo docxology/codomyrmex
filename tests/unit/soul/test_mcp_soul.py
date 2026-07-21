@@ -189,8 +189,10 @@ class TestImportGuard:
 @pytest.mark.unit
 @pytest.mark.soul
 @pytest.mark.skipif(
-    not HAS_SOUL or not os.getenv("ANTHROPIC_API_KEY"),
-    reason="soul-agent not installed or ANTHROPIC_API_KEY not set",
+    not HAS_SOUL
+    or os.getenv("RUN_LIVE_SOUL") != "1"
+    or not os.getenv("ANTHROPIC_API_KEY"),
+    reason="Live soul tests require RUN_LIVE_SOUL=1 and ANTHROPIC_API_KEY",
 )
 class TestSoulAskLive:
     """Live tests for soul_ask / soul_remember / soul_reset (need API key)."""

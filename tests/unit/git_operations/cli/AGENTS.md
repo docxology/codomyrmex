@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/git_operations/cli
+# Codomyrmex Agents — tests/unit/git_operations/cli
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

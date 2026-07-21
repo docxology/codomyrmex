@@ -125,7 +125,7 @@ from codomyrmex.agents.qwen import (
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/agents/qwen/ -v
+uv run pytest tests/unit/agents/qwen/ -v
 
 # Check imports
 python -c "from codomyrmex.agents.qwen import QwenClient, QWEN_MODELS; print(f'{len(QWEN_MODELS)} models')"

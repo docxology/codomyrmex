@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/database_management/connections
+# Codomyrmex Agents — tests/unit/database_management/connections
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

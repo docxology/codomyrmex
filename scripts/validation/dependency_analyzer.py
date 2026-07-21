@@ -9,14 +9,37 @@ This script scans Python modules to:
 
 import argparse
 import ast
+import json
 import sys
 from collections import defaultdict
 from pathlib import Path
 
 
-def extract_imports(file_path: Path) -> set[str]:
-    """Extract import statements from a Python file."""
+def _module_name(file_path: Path, src_dir: Path) -> str:
+    """Return the package-relative module name for a Python file."""
+    rel_path = file_path.relative_to(src_dir)
+    parts = list(rel_path.parts[:-1])
+    if file_path.name != "__init__.py":
+        parts.append(file_path.stem)
+    return ".".join(parts) if parts else "codomyrmex"
+
+
+def _resolve_relative_import(
+    module_name: str, level: int, imported_module: str | None
+) -> str:
+    """Resolve an AST relative import against its containing module."""
+    package_parts = module_name.split(".")[:-1]
+    if level > 1:
+        package_parts = package_parts[: -(level - 1)]
+    if imported_module:
+        package_parts.extend(imported_module.split("."))
+    return ".".join(part for part in package_parts if part)
+
+
+def extract_imports(file_path: Path, src_dir: Path) -> set[str]:
+    """Extract normalized package-relative imports from a Python file."""
     imports = set()
+    module_name = _module_name(file_path, src_dir)
 
     try:
         with open(file_path, encoding="utf-8") as f:
@@ -27,9 +50,26 @@ def extract_imports(file_path: Path) -> set[str]:
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
-                imports.add(alias.name.split(".")[0])
-        elif isinstance(node, ast.ImportFrom) and node.module:
-            imports.add(node.module.split(".")[0])
+                imported = alias.name
+                if imported == "codomyrmex":
+                    continue
+                if imported.startswith("codomyrmex."):
+                    imports.add(imported.removeprefix("codomyrmex."))
+        elif isinstance(node, ast.ImportFrom):
+            if node.level:
+                relative_base = _resolve_relative_import(
+                    module_name, node.level, node.module
+                )
+                if relative_base:
+                    imports.add(relative_base)
+                if node.module is None and relative_base:
+                    imports.update(
+                        f"{relative_base}.{alias.name}" for alias in node.names
+                    )
+            elif node.module == "codomyrmex":
+                imports.update(alias.name for alias in node.names)
+            elif node.module and node.module.startswith("codomyrmex."):
+                imports.add(node.module.removeprefix("codomyrmex."))
 
     return imports
 
@@ -42,18 +82,33 @@ def build_dependency_graph(src_dir: Path) -> dict[str, set[str]]:
         if "__pycache__" in str(py_file):
             continue
 
-        # Get module name relative to src
         try:
-            rel_path = py_file.relative_to(src_dir)
-            module_parts = list(rel_path.parts[:-1])  # Directory parts
-            if py_file.name != "__init__.py":
-                module_parts.append(py_file.stem)
-            module_name = ".".join(module_parts) if module_parts else py_file.stem
+            module_name = _module_name(py_file, src_dir)
         except ValueError:
             continue
 
-        imports = extract_imports(py_file)
-        graph[module_name] = imports
+        # The package root and this repository-level pytest hook are support
+        # files, not runtime modules. Including them creates a misleading
+        # 132-module top-level inventory (and can make package imports look
+        # circular even when the production graph is not).
+        if py_file == src_dir / "__init__.py" or py_file.name == "conftest.py":
+            continue
+
+        graph[module_name] = extract_imports(py_file, src_dir)
+
+    # Reduce imports to the nearest known internal module and discard self
+    # edges. The old top-level-only parser turned ``cache`` imports into
+    # false ``cache -> cache`` cycles.
+    known_modules = set(graph)
+    for module, imports in graph.items():
+        normalized: set[str] = set()
+        for imported in imports:
+            candidate = imported
+            while candidate and candidate not in known_modules:
+                candidate = candidate.rpartition(".")[0]
+            if candidate and candidate != module:
+                normalized.add(candidate)
+        graph[module] = normalized
 
     return dict(graph)
 
@@ -80,7 +135,7 @@ def find_cycles(
     return cycles
 
 
-def analyze_dependencies(repo_root: Path) -> int:
+def analyze_dependencies(repo_root: Path, output: Path | None = None) -> int:
     """Analyze dependencies and report findings."""
     print("🔍 Analyzing module dependency hierarchy...\n")
 
@@ -102,12 +157,35 @@ def analyze_dependencies(repo_root: Path) -> int:
         cycles = find_cycles(graph, module, set(), [])
         all_cycles.extend(cycles)
 
-    # Deduplicate cycles
+    # Deduplicate cycles by rotation and direction rather than sorting, which
+    # can collapse distinct cycles with the same members.
     unique_cycles = []
+    seen_cycles: set[tuple[str, ...]] = set()
     for cycle in all_cycles:
-        normalized = tuple(sorted(cycle))
-        if normalized not in [tuple(sorted(c)) for c in unique_cycles]:
+        ring = cycle[:-1]
+        rotations = [tuple(ring[i:] + ring[:i]) for i in range(len(ring))]
+        normalized = (*min(rotations), min(rotations))
+        if normalized not in seen_cycles:
+            seen_cycles.add(normalized)
             unique_cycles.append(cycle)
+
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(
+            json.dumps(
+                {
+                    "module_count": len(graph),
+                    "top_level_modules": sorted(
+                        {module.split(".")[0] for module in graph}
+                    ),
+                    "cycles": unique_cycles,
+                    "graph": {key: sorted(value) for key, value in graph.items()},
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
 
     if unique_cycles:
         print(f"\n⚠️  Found {len(unique_cycles)} potential circular dependencies:")
@@ -159,7 +237,7 @@ def main():
 
     args = parser.parse_args()
 
-    return analyze_dependencies(args.repo_root)
+    return analyze_dependencies(args.repo_root, args.output)
 
 
 if __name__ == "__main__":

@@ -32,6 +32,7 @@ classifiers = [
 ]
 
 dependencies = [
+    "defusedxml>=0.7.1",
     # Core toolkit for code analysis and LLM integration
     "cased-kit>=1.9.0",
     # For .env file support

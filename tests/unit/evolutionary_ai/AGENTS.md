@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/evolutionary_ai
+# Codomyrmex Agents — tests/unit/evolutionary_ai
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

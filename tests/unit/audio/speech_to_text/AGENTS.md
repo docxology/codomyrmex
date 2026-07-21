@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/audio/speech_to_text
+# Codomyrmex Agents — tests/unit/audio/speech_to_text
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

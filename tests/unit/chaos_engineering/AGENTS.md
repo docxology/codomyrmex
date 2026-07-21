@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/chaos_engineering
+# Codomyrmex Agents — tests/unit/chaos_engineering
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -15,6 +15,10 @@ from __future__ import annotations
 
 import asyncio
 
+import pytest
+
+pytestmark = [pytest.mark.performance, pytest.mark.benchmark]
+
 from codomyrmex.model_context_protocol.quality.validation import validate_tool_arguments
 from codomyrmex.model_context_protocol.reliability.observability import (
     MCPObservabilityHooks,

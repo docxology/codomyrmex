@@ -13,5 +13,5 @@ control channels.
 ## Validation
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/embodiment/ -q
+uv run pytest tests/unit/embodiment/ -q
 ```

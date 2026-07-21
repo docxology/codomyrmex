@@ -93,9 +93,9 @@ The standard transport provides common operations directly implemented in `tools
 | **Module** | `list_modules` | List all codomyrmex modules | OBSERVE |
 | **Module** | `module_info` | Get module info and file listing for a specific module | OBSERVE |
 
-### Dynamically Discovered Decorators (610) — From `@mcp_tool` Lines
+### Dynamically Discovered Decorators (623) — From `@mcp_tool` Lines
 
-The vast majority of the Codomyrmex tools are auto-discovered at server boot. The transport layer leverages `MCPDiscovery.scan_package("codomyrmex")` to dynamically traverse the 129 top-level modules, compiling the registry by locating all `@mcp_tool` decorators (e.g., from `codomyrmex.agents.hermes.mcp_tools`, `codomyrmex.coding.mcp_tools`, etc.). This automatically scales the registry perfectly into parity with the capabilities of the host infrastructure.
+The vast majority of the Codomyrmex tools are auto-discovered at server boot. The transport layer leverages `MCPDiscovery.scan_package("codomyrmex")` to dynamically traverse the 130 top-level modules, compiling the registry by locating all `@mcp_tool` decorators (e.g., from `codomyrmex.agents.hermes.mcp_tools`, `codomyrmex.coding.mcp_tools`, etc.). This automatically scales the registry perfectly into parity with the capabilities of the host infrastructure.
 
 ### Registered Resources
 

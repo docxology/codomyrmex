@@ -39,7 +39,7 @@ These scripts are lightweight wrappers combining the core `HermesClient` with sy
 
 - **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [../../../README.md](../../../README.md) - Main project documentation
-- **🧪 Tests**: [test_hermes_orchestrators.py](../../../src/codomyrmex/tests/unit/agents/test_hermes_orchestrators.py)
+- **🧪 Tests**: [test_hermes_orchestrators.py](../../../tests/unit/agents/test_hermes_orchestrators.py)
 
 ## Related Documents
 

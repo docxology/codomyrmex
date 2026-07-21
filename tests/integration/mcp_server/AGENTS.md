@@ -1,12 +1,12 @@
 <!-- agents: curated -->
 
-# Codomyrmex Agents — src/codomyrmex/tests/integration/mcp_server
+# Codomyrmex Agents — tests/integration/mcp_server
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Signposting
 
-- **Path**: `src/codomyrmex/tests/integration/mcp_server`
+- **Path**: `tests/integration/mcp_server`
 - **Human overview**: [README.md](README.md)
 - **Functional spec**: [SPEC.md](SPEC.md)
 - **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)

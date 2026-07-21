@@ -26,7 +26,7 @@ Embodiment module.
 ## Key Files
 
 - **Source module**: [`../../../src/codomyrmex/embodiment/`](../../../src/codomyrmex/embodiment/)
-- **Unit tests**: [`../../../src/codomyrmex/tests/unit/embodiment/`](../../../src/codomyrmex/tests/unit/embodiment/)
+- **Unit tests**: [`../../../tests/unit/embodiment/`](../../../tests/unit/embodiment/)
 
 ## Navigation Links
 

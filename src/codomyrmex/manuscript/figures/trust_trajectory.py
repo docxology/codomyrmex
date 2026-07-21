@@ -6,6 +6,8 @@ from codomyrmex.manuscript.figures._common import (
     _OI,
     _add_provenance_note,
     _experiment_float,
+    _experiment_list,
+    _figure_parameter,
     _pub_style,
     _role_min_proposals,
     _role_threshold,
@@ -32,9 +34,25 @@ def fig_trust_trajectory() -> None:
     trust_hard_floor = _experiment_float(
         "trust_hard_floor", "CONFIG_TRUST_HARD_FLOOR", 0.30
     )
-    # Outcomes 0–12 (the manuscript window)
-    outcomes = list(range(13))
-    trust = [min(trust_init + i * delta, 1.0) for i in outcomes]
+    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN", 0.0))
+    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX", 1.0))
+    checkpoints = [
+        int(value)
+        for value in _experiment_list(
+            "trust_trajectory_checkpoints", "CONFIG_TRUST_TRAJECTORY_CHECKPOINTS"
+        )
+    ]
+    horizon = max(checkpoints)
+    projection_margin = int(
+        _figure_parameter(
+            "trust_plot_projection_margin",
+            "CONFIG_TRUST_PLOT_PROJECTION_MARGIN",
+            6,
+            int,
+        )
+    )
+    outcomes = list(range(horizon + 1))
+    trust = [min(trust_init + i * delta, score_max) for i in outcomes]
 
     def _role(outcome: int, tv: float) -> str:
         if outcome < proposal_min or tv < repair_threshold:
@@ -80,7 +98,7 @@ def fig_trust_trajectory() -> None:
     memory_start = _first_outcome_for(memory_threshold)
     dispatcher_start = _first_outcome_for(dispatcher_threshold)
     guard_start = _first_outcome_for(guard_threshold)
-    horizon_end = max(18, guard_start + 2)
+    horizon_end = max(horizon, guard_start) + projection_margin
 
     # Zone shading
     zone_spans = [
@@ -97,7 +115,7 @@ def fig_trust_trajectory() -> None:
     for start, end, color, label in zone_spans[:4]:
         ax.text(
             (start + end) / 2,
-            0.045,
+            score_min + (score_max - score_min) * 0.045,
             label,
             ha="center",
             va="bottom",
@@ -131,7 +149,7 @@ def fig_trust_trajectory() -> None:
         ax.axhline(
             y=yval,
             color=color,
-            linestyle="--" if yval >= 0.50 else ":",
+            linestyle="--" if yval >= score_min + (score_max - score_min) / 2 else ":",
             lw=1.4,
             alpha=0.72,
             label=label,
@@ -173,8 +191,8 @@ def fig_trust_trajectory() -> None:
             zorder=2,
         )
 
-    future_outcomes = list(range(12, horizon_end + 1))
-    future_trust = [min(trust_init + i * delta, 1.0) for i in future_outcomes]
+    future_outcomes = list(range(horizon, horizon_end + 1))
+    future_trust = [min(trust_init + i * delta, score_max) for i in future_outcomes]
     ax.plot(
         future_outcomes,
         future_trust,
@@ -188,7 +206,7 @@ def fig_trust_trajectory() -> None:
         (
             i
             for i in future_outcomes
-            if min(trust_init + i * delta, 1.0) >= guard_threshold
+            if min(trust_init + i * delta, score_max) >= guard_threshold
         ),
         None,
     )
@@ -219,7 +237,7 @@ def fig_trust_trajectory() -> None:
     )
 
     # Checkpoint labels
-    for idx in [0, 3, 6, 9, 12]:
+    for idx in checkpoints:
         if idx < len(trust):
             ax.text(
                 idx,
@@ -293,16 +311,16 @@ def fig_trust_trajectory() -> None:
 
     ax.set_xlabel("Outcome number (consecutive successful passes)", fontsize=11.5)
     ax.set_ylabel("Agent trust score", fontsize=11.5)
-    trust_at_12 = min(trust_init + 12 * delta, 1.0)
+    trust_at_horizon = min(trust_init + horizon * delta, score_max)
     ax.set_title(
         f"Deterministic all-success trust fixture (Δ = {delta:.2f} per report)\n"
-        f"trust {trust_init:.2f} → {trust_at_12:.2f} after 12 outcomes; "
+        f"trust {trust_init:.2f} → {trust_at_horizon:.2f} after {horizon} outcomes; "
         "dashed line is an arithmetic projection, not observed convergence",
         fontsize=10.5,
         pad=12,
     )
     ax.set_xlim(-0.5, horizon_end)
-    ax.set_ylim(0.0, 0.84)
+    ax.set_ylim(score_min, score_max * 1.05)
     ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
     ax.tick_params(labelsize=9.5)
     _add_provenance_note(fig)

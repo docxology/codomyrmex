@@ -1,5 +1,9 @@
 # Scope, Related Work, and Positioning {#sec:scope}
 
+{{CONFIG_PARAMETER_STATUS_NOTE}} This distinction is central to the scholarship: the
+paper contributes an inspectable implementation and a falsifiable evaluation agenda,
+not a claim that a hand-specified policy has already been calibrated or shown superior.
+
 ## Unit of Analysis
 
 The unit of analysis in this paper is the Colony Kernel, not every subsystem distributed
@@ -204,4 +208,6 @@ The resulting position is deliberately modest. The Colony Kernel is an inspectab
 software experiment in consequence-aware gating. Its deterministic contracts are
 testable now. Persistence across sessions, enforceable role authority, resistance to
 adversarial clients, and improved safety on realistic workloads remain implementation
-and evaluation targets.
+and evaluation targets. The relevant comparison with prior work is therefore at the
+level of control-plane decomposition and measurement design; it should not be read as
+an empirical comparison with the cited systems.

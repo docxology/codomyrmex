@@ -47,7 +47,7 @@ PAI agents in the EXECUTE phase can invoke codomyrmex operations as subprocesses
 codomyrmex quick run scripts/verify_integration.py
 
 # Run all scripts in a directory in parallel
-codomyrmex quick run src/codomyrmex/tests/integration/ --parallel
+codomyrmex quick run tests/integration/ --parallel
 
 # Chain scripts sequentially, passing results
 codomyrmex quick chain scripts/build.py scripts/test.py scripts/deploy.py

@@ -33,16 +33,16 @@ uv sync --all-extras             # Install all optional dependencies
 # Run all tests (no coverage — fast default)
 uv run pytest
 
-# Run tests with coverage and the 40% gate (same idea as `make test`).
+# Run tests with coverage and the 60% gate (same idea as `make test`).
 # Makefile exports HYPOTHESIS_NO_NPY=1; for raw pytest, prefix the command so Hypothesis
-# initializes before conftest (see src/codomyrmex/tests/RUNNING_TESTS.md).
-HYPOTHESIS_NO_NPY=1 uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=40
+# initializes before conftest (see tests/RUNNING_TESTS.md).
+HYPOTHESIS_NO_NPY=1 uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=60
 
-# Pre-tag / release checklist: ruff + ty + full test tree with 40% coverage floor
+# Pre-tag / release checklist: ruff + ty + full test tree with 60% coverage floor
 make verify-release
 
 # Run specific test file or module
-uv run pytest src/codomyrmex/tests/unit/<module>/test_<module>.py
+uv run pytest tests/unit/<module>/test_<module>.py
 uv run pytest -k "test_name"     # Run tests matching pattern
 
 # Code formatting and linting
@@ -122,7 +122,7 @@ Each module is self-contained with standard structure:
 - `README.md` - Module documentation
 - `API_SPECIFICATION.md` - Programmatic interfaces
 - `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
-- `tests/` - Module-specific tests (unit tests in `src/codomyrmex/tests/unit/<module>/`)
+- `tests/` - Module-specific tests (unit tests in `tests/unit/<module>/`)
 
 ### Key Patterns
 
@@ -166,7 +166,7 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/Personal_AI_Infrastructure) (`~/.claude/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; production sources contain **600** `@mcp_tool` lines and **149** `mcp_tools.py` files (**128** top-level packages). See `docs/reference/inventory.md`. The Codomyrmex PAI Skill surfaces dynamic tools with 3 resources and 10 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; production sources contain **623** `@mcp_tool` lines and **150** `mcp_tools.py` files (**130** top-level packages). See `docs/reference/inventory.md`. The Codomyrmex PAI Skill surfaces dynamic tools with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
@@ -265,7 +265,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (206499 symbols, 299458 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (206665 symbols, 299707 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > Index stale? Run `node .gitnexus/run.cjs analyze` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? `npx gitnexus analyze` (npm 11 crash → `npm i -g gitnexus`; #1939).
 

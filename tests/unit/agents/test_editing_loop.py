@@ -22,6 +22,8 @@ import pytest
 # constructor behind an Ollama reachability check.
 from codomyrmex.agents.editing_loop import EditingConfig, EditingOrchestrator, EditTask
 
+_RUN_LIVE_OLLAMA = os.environ.get("RUN_LIVE_OLLAMA") == "1"
+
 
 def _ollama_is_reachable() -> bool:
     """Return True if a local Ollama instance responds to /api/tags."""
@@ -59,8 +61,8 @@ def _ollama_has_model() -> bool:
         return False
 
 
-_OLLAMA_REACHABLE = _ollama_is_reachable()
-_OLLAMA_HAS_MODEL = _ollama_has_model()
+_OLLAMA_REACHABLE = _RUN_LIVE_OLLAMA and _ollama_is_reachable()
+_OLLAMA_HAS_MODEL = _RUN_LIVE_OLLAMA and _ollama_has_model()
 
 
 # =====================================================================

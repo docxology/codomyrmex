@@ -84,7 +84,7 @@ async def run_tests(_task_results: dict | None = None) -> dict:
                 "uv",
                 "run",
                 "pytest",
-                "src/codomyrmex/tests/unit",
+                "tests/unit",
                 "--cov=src/codomyrmex",
                 "-q",
                 "--tb=no",

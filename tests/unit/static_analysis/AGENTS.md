@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/static_analysis
+# Codomyrmex Agents — tests/unit/static_analysis
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/file_system
+# Codomyrmex Agents — tests/unit/file_system
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -10,7 +10,8 @@ The Website module is the **human interface layer** for the Codomyrmex ecosystem
 
 ### Live Dashboard (Command Center)
 
-The dashboard receives real-time updates via WebSocket push (ws://0.0.0.0:8890), providing live visibility into:
+The dashboard receives real-time updates via a loopback WebSocket push
+listener (`ws://127.0.0.1:8890` by default), providing live visibility into:
 
 - **System metrics**: module count, agent count, script count, uptime, status
 - **Git status**: branch, commits, dirty files, last commit
@@ -128,6 +129,8 @@ dp.run_tests()                # execute pytest, parse JUnit XML results
 - **Safe file extensions**: config editing restricted to `.toml`, `.yaml`, `.json`, `.txt`, `.cfg`, `.ini`
 - **Script sandboxing**: execution limited to `scripts/` directory with 300s timeout
 - **Test locking**: prevents concurrent test executions (HTTP 429)
+- **WebSocket exposure**: loopback by default; remote binds require a bearer
+  token and explicit origin allowlist.
 
 ## PAI Algorithm Phase Mapping
 

@@ -72,16 +72,16 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 | `00_00_cover.md` | Cover page; renders cover art, automatic publication date, ORCID, DOI status, repository, and version metadata | `CONFIG_TITLE`, `CONFIG_SUBTITLE`, `CONFIG_FIRST_AUTHOR`, `CONFIG_PUBLICATION_DATE_DISPLAY`, `CONFIG_AUTHOR_ORCID`, `CONFIG_DOI`, `CONFIG_GITHUB_REPOSITORY`, `CONFIG_VERSION` | `cover.png` |
 | `00_01_contents.md` | Generated output-only contents page inserted after the cover; do not edit by hand | None | None |
 | `00_abstract.md` | Bounded thesis, paired contract, release gates, and limitations | `CONFIG_COLONY_KERNEL_SUBSYSTEMS`, `CONFIG_FIRST_AUTHOR`, `CONFIG_GATE_EXECUTE_THRESHOLD`, `CONFIG_KEYWORDS`, `CONFIG_MCP_TOOL_COUNT`, `RESULT_COVERAGE_PCT`, `RESULT_RUFF_ERRORS`, `RESULT_TEST_COUNT`, `RESULT_TY_ERRORS` | None |
-| `01_introduction.md` | Problem framing, bounded thesis, architecture, evidence boundary | `CONFIG_TRIAL_COUNT` | None |
-| `02_methodology.md` | Control-plane design, linear field, gate, trust, labels, pruning, falsification, and feedback sequence | `CONFIG_BASE_EVAPORATION_RATE`, `CONFIG_PHEROMONE_RETENTION_FAST_PCT`, `CONFIG_PHEROMONE_RETENTION_NORMAL_PCT`, `CONFIG_PHEROMONE_RETENTION_SLOW_PCT` | `fig:architecture`, `fig:falsification_vectors`, `fig:pressure_loop` |
-| `02_theory.md` | Verified recurrence, local-pressure, gate, trust, and privacy bounds | None | `fig:pheromone_decay`, `fig:gate_score_3d` |
-| `03_results.md` | Executed gates, paired locality, analytical score cases, trust fixture, decay, and MCP boundary | Generated row blocks plus scoped gate/result tokens | `fig:trust_trajectory`, `fig:gate_heatmap` |
-| `04_conclusion.md` | Summary of contributions, ecological metaphor, future directions | None | None |
-| `05_experimental_setup.md` | Proposed benchmark, live gate/field/budget configuration, software snapshot, and pipeline | `CONFIG_AGENT_COUNT`, `CONFIG_BUDGET_MAX_LLM_CALLS`, `CONFIG_BUDGET_MAX_RISK`, `CONFIG_BUDGET_MAX_RUNTIME`, `CONFIG_BUDGET_MAX_SECURITY`, `CONFIG_GATE_EXECUTE_THRESHOLD`, `CONFIG_GATE_HOLD_THRESHOLD`, `CONFIG_TRIAL_COUNT`, `CONFIG_VERSION`, `CONFIG_WARMUP_TICKS`, `CONFIG_WORKLOAD_TASK_COUNT`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION` | None |
-| `06_reproducibility.md` | Configuration provenance, artifact registry, quality-gate summary | `ARTIFACT_CONFIG_FILES`, `ARTIFACT_MCP_TOOLS`, `ARTIFACT_TEST_SUITES`, `CONFIG_FIRST_AUTHOR`, `CONFIG_HASH`, `CONFIG_KEYWORDS`, `CONFIG_VERSION`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION`, `RESULT_COLONY_KERNEL_FILES`, `RESULT_COVERAGE_PCT`, `RESULT_MODULE_DOCS_COUNT`, `RESULT_RUFF_ERRORS`, `RESULT_TEST_COUNT`, `RESULT_TY_ERRORS` | None |
-| `07_scope_and_related_work.md` | Bounded comparison with agentic engineering, stigmergy, trust, security, assurance, and external evaluation | None | None |
-| `08_active_inference.md` | Explicitly non-equivalent Active Inference crosswalk and implementation agenda | None | `fig:fep_correspondence` |
-| `90_appendix_design_rationale.md` | Auditable design choices, rejected alternatives, and calibration boundaries | None | None |
+| `01_introduction.md` | Problem framing, bounded thesis, architecture, evidence boundary | `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_TRIAL_COUNT` | None |
+| `02_methodology.md` | Control-plane design, linear field, gate, trust, labels, pruning, falsification, and feedback sequence | `CONFIG_BASE_EVAPORATION_RATE`, `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_PHEROMONE_RETENTION_FAST_PCT`, `CONFIG_PHEROMONE_RETENTION_NORMAL_PCT`, `CONFIG_PHEROMONE_RETENTION_SLOW_PCT` | `fig:architecture`, `fig:falsification_vectors`, `fig:pressure_loop` |
+| `02_theory.md` | Verified recurrence, local-pressure, gate, trust, and privacy bounds | `CONFIG_PARAMETER_STATUS_NOTE` | `fig:pheromone_decay`, `fig:gate_score_3d` |
+| `03_results.md` | Executed gates, paired locality, analytical score cases, trust fixture, decay, and MCP boundary | `CONFIG_PARAMETER_STATUS_NOTE`, generated row blocks plus scoped gate/result tokens | `fig:trust_trajectory`, `fig:gate_heatmap` |
+| `04_conclusion.md` | Summary of contributions, ecological metaphor, future directions | `CONFIG_PARAMETER_STATUS_NOTE` | None |
+| `05_experimental_setup.md` | Proposed benchmark, parameter classes, live gate/field/budget configuration, software snapshot, and pipeline | `CONFIG_AGENT_COUNT`, `CONFIG_BUDGET_MAX_LLM_CALLS`, `CONFIG_BUDGET_MAX_RISK`, `CONFIG_BUDGET_MAX_RUNTIME`, `CONFIG_BUDGET_MAX_SECURITY`, `CONFIG_GATE_EXECUTE_THRESHOLD`, `CONFIG_GATE_HOLD_THRESHOLD`, `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_TRIAL_COUNT`, `CONFIG_VERSION`, `CONFIG_WARMUP_TICKS`, `CONFIG_WORKLOAD_TASK_COUNT`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION` | None |
+| `06_reproducibility.md` | Configuration provenance, artifact registry, quality-gate summary | `ARTIFACT_CONFIG_FILES`, `ARTIFACT_MCP_TOOLS`, `ARTIFACT_TEST_SUITES`, `CONFIG_EXPERIMENT_SEED`, `CONFIG_FIRST_AUTHOR`, `CONFIG_HASH`, `CONFIG_KEYWORDS`, `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_VERSION`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION`, `REPRO_ENVIRONMENT_HASH`, `REPRO_GIT_COMMIT`, `REPRO_INVENTORY_HASH`, `REPRO_LOCK_HASH`, `REPRO_PYPROJECT_HASH`, `REPRO_WORKTREE_DIRTY`, `RESULT_COLONY_KERNEL_FILES`, `RESULT_COVERAGE_PCT`, `RESULT_MODULE_DOCS_COUNT`, `RESULT_RUFF_ERRORS`, `RESULT_TEST_COUNT`, `RESULT_TY_ERRORS` | None |
+| `07_scope_and_related_work.md` | Bounded comparison with agentic engineering, stigmergy, trust, security, assurance, and external evaluation | `CONFIG_PARAMETER_STATUS_NOTE` | None |
+| `08_active_inference.md` | Explicitly non-equivalent Active Inference crosswalk and implementation agenda | `CONFIG_PARAMETER_STATUS_NOTE` | `fig:fep_correspondence` |
+| `90_appendix_design_rationale.md` | Auditable design choices, rejected alternatives, and calibration boundaries | `CONFIG_PARAMETER_STATUS_NOTE` | None |
 | `98_acknowledgements.md` | Contributor credit | `CONFIG_ACKNOWLEDGEMENTS` | None |
 | `99_references.md` | Citeproc bibliography anchor; bibliography rendered from `references.bib` | None | None |
 | `config.yaml` | Paper metadata, gate parameters, trust thresholds, pheromone decay rates, budget caps, publication settings, steganography profile | — | — |
@@ -104,7 +104,8 @@ The categories are:
 - `CONFIG_*`: values read from `docs/manuscript/config.yaml`, counts derived from source/config files, and deterministic config-derived calculations.
 - `RESULT_*`: live repository measurements and deterministic simulation outputs used by the paper.
 - `ARTIFACT_*`: counts of versioned or generated artifacts that the reproducibility section reports.
-- `PYTHON_VERSION`, `PLATFORM`, `GENERATION_TIMESTAMP`: environment values captured at generation time.
+- `PYTHON_VERSION`, `PLATFORM`, `GENERATION_TIMESTAMP`, and `REPRO_ENVIRONMENT_HASH`: environment values captured at generation time.
+- `REPRO_*`: commit, worktree, project/lockfile, and authoritative inventory provenance for replay.
 
 ## `{{VARIABLE}}` Protocol
 
@@ -116,7 +117,7 @@ Numeric values that come from configuration or analysis outputs **must** use `{{
 
 2. **Persist** — The script writes the complete `{TOKEN: value}` mapping to `output/data/manuscript_variables.json`. This JSON file is the auditable record of every value injected into the rendered manuscript.
 
-3. **Render** — The script writes resolved copies of each `docs/manuscript/*.md` template to `output/manuscript/*.md`, substituting every `{{TOKEN}}` with its resolved string value. `scripts/compile_manuscript.py --pdf` inserts generated contents after the cover and renders the **substituted** copies from `output/manuscript/`, never the source templates.
+3. **Render** — The script writes resolved copies of each `docs/manuscript/*.md` template to `output/manuscript/*.md`, substituting every `{{TOKEN}}` with its resolved string value. Figure filenames, labels, widths, evidence classes, and captions are also generated from the `figures:` registry in `config.yaml`. `scripts/compile_manuscript.py --pdf` inserts generated contents after the cover and renders the **substituted** copies from `output/manuscript/`, never the source templates.
 
 **Adding a new token:**
 
@@ -160,7 +161,7 @@ Follow these steps in order whenever prose, parameters, or measured results chan
 
 1. Every `{{TOKEN}}` in the source manuscript files must have a corresponding key in `compute_variables()`. Reviewer-sensitive tokens and public claims must have corresponding assertions in `tests/unit/colony_kernel/test_manuscript_consistency.py`. A manuscript file that references an undefined token causes a non-zero exit before the PDF renderer runs.
 2. `src/codomyrmex/manuscript/variables.py` is the only manuscript variable generator. Colony kernel modules remain independent of the parent template infrastructure.
-3. Do not hardcode numeric results (test counts, coverage percentages, gate thresholds) directly into manuscript prose. Every claim that can drift must be backed by a token. Use the **Current State** table above when hand-editing prose that cannot use a token.
+3. Do not hardcode numeric results (test counts, coverage percentages, gate thresholds, figure horizons, or figure captions) directly into manuscript prose. Every claim that can drift must be backed by a token. Put figure metadata and captions in `config.yaml`; use the generated `FIGURE_*` tokens in Markdown. Use `CONFIG_PARAMETER_STATUS_NOTE` / `CONFIG_PARAMETER_STATUS_SHORT` for the evidence qualifier that parameters are current defaults or illustrative starting values and remain tunable. Use the **Current State** table above when hand-editing prose that cannot use a token.
 4. The falsification attack vector for import-cycle detection is `CIRCULAR_ARCHITECTURE`, not `CIRCULAR_DEPS`. The canonical enum lives in `src/codomyrmex/colony_kernel/falsification_worker.py`; do not invent aliases.
 5. Avoid boilerplate closers ("In summary", "In conclusion") at the end of sections unless the section genuinely warrants them.
 6. When cross-referencing sections, use Pandoc-crossref `[@sec:label]` syntax — never hardcoded section numbers.

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/softmax_opt
+# Codomyrmex Agents — tests/unit/softmax_opt
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

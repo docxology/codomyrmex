@@ -6,16 +6,30 @@ from codomyrmex.manuscript.figures._common import (
     _OI,
     _add_provenance_note,
     _experiment_float,
+    _figure_parameter,
     _pub_style,
     _save,
     _var_float,
+    _var_str,
     np,
     plt,
 )
 
 
 def fig_pheromone_decay() -> None:
-    t = np.linspace(0, 10, 600)
+    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN", 0.0))
+    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX", 1.0))
+    plot_horizon = float(
+        _figure_parameter(
+            "decay_plot_horizon_ticks",
+            "CONFIG_DECAY_PLOT_HORIZON_TICKS",
+            10,
+        )
+    )
+    plot_points = int(
+        _figure_parameter("decay_plot_points", "CONFIG_DECAY_PLOT_POINTS", 600, int)
+    )
+    t = np.linspace(score_min, plot_horizon, plot_points)
     base_rate = _experiment_float(
         "base_evaporation_rate", "CONFIG_BASE_EVAPORATION_RATE", 0.10
     )
@@ -52,21 +66,26 @@ def fig_pheromone_decay() -> None:
     _pub_style(ax)
 
     for label, rate, color, ls, cls_name in configs:
-        strength = np.maximum(0.0, 1.0 - rate * t)
+        strength = np.maximum(score_min, score_max - rate * t)
         ax.plot(t, strength, label=label, color=color, linestyle=ls, lw=2.8, zorder=4)
-        ax.fill_between(t, 0, strength, color=color, alpha=0.07, zorder=2)
+        ax.fill_between(t, score_min, strength, color=color, alpha=0.07, zorder=2)
         ax.fill_between(
-            t, 0, np.minimum(strength, 0.50), color=color, alpha=0.05, zorder=2
+            t,
+            score_min,
+            np.minimum(strength, score_min + (score_max - score_min) / 2),
+            color=color,
+            alpha=0.05,
+            zorder=2,
         )
 
         # Extinction marker for unit initial strength: ceil(1 / epsilon) ticks.
-        tau = 1.0 / rate
-        if tau <= 10.0:
-            s_tau = 0.0
+        tau = score_max / rate
+        if tau <= plot_horizon:
+            s_tau = score_min
             ax.vlines(
                 tau,
-                0,
-                1,
+                score_min,
+                score_max,
                 colors=color,
                 linestyles=":",
                 lw=1.0,
@@ -84,12 +103,12 @@ def fig_pheromone_decay() -> None:
             )
 
         # Curve label (direct)
-        idx = int(3.6 / 10.0 * len(t))
+        idx = int(min(score_max, 0.36) * len(t))
         y_lbl = strength[idx]
-        if y_lbl > 0.02:
+        if y_lbl > score_min + (score_max - score_min) * 0.02:
             offsets = {"FAST": -0.07, "NORMAL": 0.04, "SLOW": 0.025}
             ax.text(
-                3.7,
+                plot_horizon * 0.37,
                 y_lbl + offsets[cls_name],
                 cls_name,
                 fontsize=9,
@@ -105,24 +124,32 @@ def fig_pheromone_decay() -> None:
                 },
             )
 
-    # 50% line
+    midpoint = score_min + (score_max - score_min) / 2
+    midpoint_pct = (midpoint - score_min) / (score_max - score_min)
     ax.axhline(
-        y=0.5,
+        y=midpoint,
         color=_OI["grey"],
         linestyle="--",
         lw=1.2,
         alpha=0.55,
-        label="50% threshold",
+        label=f"{midpoint_pct:.0%} threshold",
     )
-    ax.text(0.12, 0.515, "50%", fontsize=8, color=_OI["grey"], va="bottom")
+    ax.text(
+        plot_horizon * 0.012,
+        midpoint + (score_max - score_min) * 0.015,
+        f"{midpoint_pct:.0%}",
+        fontsize=8,
+        color=_OI["grey"],
+        va="bottom",
+    )
 
     # FAST half-strength annotation for the linear recurrence.
     fast_rate = base_rate * fast_mult
-    t_half = 0.5 / fast_rate
+    t_half = midpoint / fast_rate
     ax.annotate(
-        f"FAST reaches 0.5 at {t_half:.2f} ticks",
-        xy=(t_half, 0.5),
-        xytext=(t_half + 0.65, 0.63),
+        f"FAST reaches {midpoint:.2f} at {t_half:.2f} ticks",
+        xy=(t_half, midpoint),
+        xytext=(t_half + plot_horizon * 0.065, score_max * 0.63),
         arrowprops={"arrowstyle": "->", "color": _OI["vermil"], "lw": 1.1},
         fontsize=8.5,
         color=_OI["vermil"],
@@ -135,15 +162,16 @@ def fig_pheromone_decay() -> None:
     )
 
     slow_rate = base_rate * slow_mult
-    slow_per_tick = 1.0 - slow_rate
-    slow_example_tick = 8.0
-    slow_example_strength = max(0.0, 1.0 - slow_rate * slow_example_tick)
-    slow_extinction = 1.0 / slow_rate
+    slow_per_tick = max(score_min, score_max - slow_rate)
+    slow_retention = (slow_per_tick - score_min) / (score_max - score_min)
+    slow_example_tick = _var_float("CONFIG_DECAY_REPORT_TICK", plot_horizon)
+    slow_example_strength = max(score_min, score_max - slow_rate * slow_example_tick)
+    slow_extinction = score_max / slow_rate
     ax.annotate(
-        f"SLOW unit trace: {slow_per_tick:.0%} after one tick\n"
+        f"SLOW unit trace: {slow_retention:.0%} after one tick\n"
         f"(subtract {slow_rate:.2f}/tick; extinction at {slow_extinction:.0f} ticks)",
         xy=(slow_example_tick, slow_example_strength),
-        xytext=(6.1, 0.68),
+        xytext=(plot_horizon * 0.61, score_max * 0.68),
         arrowprops={"arrowstyle": "->", "color": _OI["green"], "lw": 1.1},
         fontsize=8.0,
         color=_OI["green"],
@@ -162,13 +190,14 @@ def fig_pheromone_decay() -> None:
     )
     ax.set_title(
         "Pheromone signal decay by rate class\n"
-        "s(t) = max(0, s0 - epsilon t) for a unit deposit",
+        f"s(t) = max({score_min:g}, s0 - epsilon t) for s0={score_max:g}\n"
+        f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT', 'Current default/illustrative decay rates')}",
         fontsize=11,
         pad=12,
     )
     ax.legend(fontsize=9, loc="upper right", framealpha=0.92, edgecolor="#CCCCCC")
-    ax.set_xlim(0, 10)
-    ax.set_ylim(-0.02, 1.10)
+    ax.set_xlim(score_min, plot_horizon)
+    ax.set_ylim(score_min - score_max * 0.02, score_max * 1.10)
     _add_provenance_note(fig)
     fig.tight_layout(rect=(0, 0.04, 1, 1))
     _save(fig, "pheromone_decay.png")

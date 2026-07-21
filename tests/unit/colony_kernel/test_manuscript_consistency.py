@@ -11,7 +11,11 @@ import yaml
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
 from codomyrmex.colony_kernel.falsification_worker import AttackVector
-from codomyrmex.colony_kernel.models import AgentRole, AgentTrustProfile
+from codomyrmex.colony_kernel.models import (
+    AgentRole,
+    AgentTrustProfile,
+    FalsificationSeverity,
+)
 from codomyrmex.colony_kernel.role_adapter import RoleAdapter
 
 pytestmark = pytest.mark.unit
@@ -355,8 +359,8 @@ FORBIDDEN_CLAIMS = {
 
 REQUIRED_CLAIMS = {
     "docs/manuscript/03_results.md": [
-        "effective local hazard",
-        "analytical policy map",
+        "{{FIGURE_CAPTION_GATE_SCORE_HEATMAP}}",
+        "{{FIGURE_LABEL_GATE_SCORE_HEATMAP}}",
     ],
     "docs/manuscript/01_introduction.md": [
         "max(RISK, FAILURE)",
@@ -395,10 +399,10 @@ REQUIRED_CLAIMS = {
         "conceptual crosswalk",
     ],
     "README.md": [
-        "593 runtime MCP tools",
+        "608 runtime MCP tools",
         "623 decorators",
-        "1,202",
-        "35,119",
+        "1,203",
+        "35,375",
     ],
 }
 
@@ -426,7 +430,9 @@ def test_compiler_declares_scientific_narrative_order() -> None:
     import importlib.util
 
     compiler_path = REPO_ROOT / "scripts" / "compile_manuscript.py"
-    spec = importlib.util.spec_from_file_location("codomyrmex_compile_manuscript", compiler_path)
+    spec = importlib.util.spec_from_file_location(
+        "codomyrmex_compile_manuscript", compiler_path
+    )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -499,7 +505,25 @@ def test_manuscript_config_matches_kernel_contract() -> None:
     assert experiment["trust_sandbox_score"] == 0.10
     assert experiment["trust_hard_floor"] == 0.30
     assert experiment["trust_promote_threshold"] == 0.20
+    assert "configurable" in experiment["parameter_status_note"]
+    assert "not empirically calibrated" in experiment["parameter_status_short"]
     assert experiment["falsification_vectors"] == len(AttackVector) == 10
+    assert list(config["figures"]) == [
+        "cover",
+        "colony_pressure_loop",
+        "pheromone_decay",
+        "gate_score_heatmap",
+        "trust_trajectory",
+        "falsification_vectors",
+        "subsystem_architecture",
+        "gate_score_3d",
+        "fep_correspondence",
+    ]
+    assert (
+        experiment["figure_parameters"]["score_min"]
+        < experiment["figure_parameters"]["score_max"]
+    )
+    assert experiment["figure_parameters"]["decay_plot_points"] >= 2
 
 
 def test_roles_yaml_matches_kernel_role_ladder_contract() -> None:
@@ -560,9 +584,23 @@ def test_variable_inventory_matches_syntax_and_source_tokens() -> None:
             )
         )
 
+    figure_config = yaml.safe_load(_read("docs/manuscript/config.yaml"))["figures"]
+    for key in figure_config:
+        slug = re.sub(r"[^A-Z0-9]+", "_", key.upper()).strip("_")
+        generated_tokens.update(
+            {
+                f"FIGURE_FILENAME_{slug}",
+                f"FIGURE_LABEL_{slug}",
+                f"FIGURE_WIDTH_{slug}",
+                f"FIGURE_EVIDENCE_{slug}",
+                f"FIGURE_CAPTION_{slug}",
+            }
+        )
+
     assert source_tokens <= generated_tokens
     assert {
         "CONFIG_ACKNOWLEDGEMENTS",
+        "CONFIG_PARAMETER_STATUS_NOTE",
         "CONFIG_COVERAGE_FLOOR",
         "RESULT_PAIRED_LOCALITY_ROWS",
         "RESULT_TRUST_TRAJECTORY_ROWS",
@@ -570,6 +608,39 @@ def test_variable_inventory_matches_syntax_and_source_tokens() -> None:
         "RESULT_REPRESENTATIVE_GATE_ROWS",
     } <= source_tokens
     assert "RESULT_GATE_SCORE_PROMOTED" not in generated_tokens | source_tokens
+
+
+def test_figure_metadata_is_single_source_for_embedded_captions() -> None:
+    config = yaml.safe_load(_read("docs/manuscript/config.yaml"))
+    figure_config = config["figures"]
+    body = "\n".join(
+        path.read_text(encoding="utf-8") for path in _source_manuscript_files()
+    )
+    for key, spec in figure_config.items():
+        slug = re.sub(r"[^A-Z0-9]+", "_", key.upper()).strip("_")
+        if key == "cover":
+            continue
+        for token in (
+            f"{{{{FIGURE_CAPTION_{slug}}}}}",
+            f"{{{{FIGURE_FILENAME_{slug}}}}}",
+            f"{{{{FIGURE_LABEL_{slug}}}}}",
+            f"{{{{FIGURE_WIDTH_{slug}}}}}",
+        ):
+            assert token in body, f"Missing configured figure token {token}"
+        assert spec["caption"] not in body
+
+
+def test_analytic_figure_captions_qualify_parameter_status() -> None:
+    """Analytical and fixture figures must disclose their provisional inputs."""
+    config = yaml.safe_load(_read("docs/manuscript/config.yaml"))
+    for key in (
+        "pheromone_decay",
+        "gate_score_heatmap",
+        "trust_trajectory",
+        "gate_score_3d",
+    ):
+        caption = config["figures"][key]["caption"]
+        assert "{{CONFIG_PARAMETER_STATUS_SHORT}}" in caption, key
 
 
 def test_acknowledgements_are_tokenized_and_ordered_before_references() -> None:
@@ -600,25 +671,15 @@ def test_numbered_manuscript_has_no_raw_mutable_policy_literals() -> None:
 
 def test_falsification_figure_uses_canonical_attack_vector_names_and_severity() -> None:
     figures = _read_figure_generators()
+    from codomyrmex.manuscript.figures._common import _falsification_severity_map
 
-    expected = {
-        "SECURITY_RISK": "HIGH",
-        "NO_ROLLBACK": "HIGH",
-        "NO_TEST_VALUE": "HIGH",
-        "SCOPE_CREEP": "HIGH",
-        "CIRCULAR_ARCHITECTURE": "HIGH",
-        "FALSE_METRIC": "MEDIUM",
-        "HIDDEN_MAINTENANCE_COST": "MEDIUM",
-        "DEPENDENCY_RISK": "MEDIUM",
-        "OVER_BROAD_MODULE": "MEDIUM",
-        "PREMATURE_ABSTRACTION": "LOW",
-    }
-    actual = dict(re.findall(r'\("([A-Z_]+)",\s+"([A-Z]+)",', figures))
-
-    assert actual == expected
-    assert {name.lower() for name in actual} == {
-        vector.name.lower() for vector in AttackVector
-    }
+    actual = _falsification_severity_map()
+    assert set(actual) == {vector.name for vector in AttackVector}
+    assert set(actual.values()) <= {severity.name for severity in FalsificationSeverity}
+    assert "SECURITY_RISK" in actual
+    assert actual["SECURITY_RISK"] == "HIGH"
+    assert "AttackVector" in figures
+    assert "_falsification_severity_map" in figures
     assert "CIRCULAR_DEPS" not in figures
 
 
@@ -631,6 +692,8 @@ def test_manuscript_figure_generator_uses_live_snapshot_and_provenance() -> None
         "ROLES_CONFIG_PATH",
         "json.loads",
         "yaml.safe_load",
+        "_figure_metadata",
+        '"caption"',
         "CONFIG_BASE_EVAPORATION_RATE",
         "CONFIG_GATE_WEIGHT_",
         '_gate_weight("budget"',
@@ -759,9 +822,13 @@ def test_rendered_references_section_is_bibliography_anchor_only() -> None:
     assert "natbib" not in references.lower()
 
     cited = set(re.findall(r"@([A-Za-z][A-Za-z0-9_:-]+)", related_work))
-    cited = {key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))}
+    cited = {
+        key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))
+    }
     defined = set(re.findall(r"^@[A-Za-z]+\{([^,]+),", bibliography, re.MULTILINE))
-    assert cited <= defined, f"Undefined related-work citations: {sorted(cited - defined)}"
+    assert cited <= defined, (
+        f"Undefined related-work citations: {sorted(cited - defined)}"
+    )
     assert {
         "yang2024swebench",
         "grasse1959reconstruction",
@@ -778,9 +845,13 @@ def test_introduction_cites_control_plane_scholarship() -> None:
     bibliography = _read("docs/manuscript/references.bib")
 
     cited = set(re.findall(r"@([A-Za-z][A-Za-z0-9_:-]+)", introduction))
-    cited = {key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))}
+    cited = {
+        key for key in cited if not key.startswith(("sec:", "fig:", "tbl:", "eq:"))
+    }
     defined = set(re.findall(r"^@[A-Za-z]+\{([^,]+),", bibliography, re.MULTILINE))
-    assert cited <= defined, f"Undefined introduction citations: {sorted(cited - defined)}"
+    assert cited <= defined, (
+        f"Undefined introduction citations: {sorted(cited - defined)}"
+    )
     assert {
         "wooldridge1995intelligent",
         "yang2024swebench",
@@ -878,6 +949,18 @@ def test_crossref_labels_are_unique_referenced_and_resolved() -> None:
             label_counts[label] = label_counts.get(label, 0) + 1
         references.update(re.findall(r"@((?:fig|tbl|eq|sec):[A-Za-z0-9_.:-]+)", text))
 
+    config = yaml.safe_load(_read("docs/manuscript/config.yaml"))
+    for key, spec in config["figures"].items():
+        if key == "cover":
+            continue
+        slug = re.sub(r"[^A-Z0-9]+", "_", key.upper()).strip("_")
+        token = f"{{{{FIGURE_LABEL_{slug}}}}}"
+        if token in "\n".join(
+            path.read_text(encoding="utf-8") for path in _source_manuscript_files()
+        ):
+            label = str(spec["label"])
+            label_counts[label] = label_counts.get(label, 0) + 1
+
     duplicated = sorted(label for label, count in label_counts.items() if count > 1)
     unresolved = sorted(
         reference for reference in references if reference not in label_counts
@@ -928,14 +1011,16 @@ def test_public_inventory_counts_match_live_tree() -> None:
     readme = _read("README.md")
     inventory = _read("docs/reference/inventory.md")
 
-    assert docs_count == 1202
+    assert docs_count == 1203
     assert f"{docs_count:,} Markdown" in readme
     assert f"{docs_count:,} (`find docs" in inventory
-    assert "35%2C119" in readme
-    assert "35,119" in readme
-    assert "| Runtime MCP tools | 593 |" in inventory
+    assert "35,375" in readme
+    assert (
+        "| Runtime MCP tools | 608 (PAI merged manifest; standalone launcher full profile enumerates 605; HTTP defaults to 10 readonly tools) |"
+        in inventory
+    )
     assert "| Production `@mcp_tool` decorators | 623 |" in inventory
-    assert "593 runtime MCP tools" in readme
+    assert "608 runtime MCP tools" in readme
     assert "623 decorators" in readme
 
 
@@ -977,7 +1062,7 @@ def test_root_package_scripts_point_to_live_documentation_surface() -> None:
     assert scripts["serve"] == "uv run python -m http.server 8000 --directory docs"
     assert scripts["start"] == "uv run python -m http.server 8000 --directory docs"
     assert scripts["build"] == (
-        "uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root ."
+        "uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root . --fail-on-issues"
     )
     assert "mkdocs" not in " ".join(scripts.values())
     assert "documentation &&" not in " ".join(scripts.values())
@@ -1039,10 +1124,18 @@ _INFRASTRUCTURE_IMPORT_PATTERN = re.compile(
 
 def test_infrastructure_import_pattern_detects_known_bad_case() -> None:
     """Proof-of-detection: the pattern used below must actually fire on a violation."""
-    assert _INFRASTRUCTURE_IMPORT_PATTERN.search("from infrastructure.config import Foo\n")
-    assert _INFRASTRUCTURE_IMPORT_PATTERN.search("    import infrastructure.rendering\n")
-    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search("from codomyrmex.infrastructure_x import Foo\n")
-    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search("# import infrastructure.config for context\n")
+    assert _INFRASTRUCTURE_IMPORT_PATTERN.search(
+        "from infrastructure.config import Foo\n"
+    )
+    assert _INFRASTRUCTURE_IMPORT_PATTERN.search(
+        "    import infrastructure.rendering\n"
+    )
+    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search(
+        "from codomyrmex.infrastructure_x import Foo\n"
+    )
+    assert not _INFRASTRUCTURE_IMPORT_PATTERN.search(
+        "# import infrastructure.config for context\n"
+    )
 
 
 def test_layer_contract_forbids_infrastructure_imports() -> None:
@@ -1051,10 +1144,11 @@ def test_layer_contract_forbids_infrastructure_imports() -> None:
     anywhere in the repository) — this test makes the claim real."""
     contract = yaml.safe_load(_read("docs/manuscript/layer_contract.yaml"))
     allowed = {
-        (REPO_ROOT / rel).resolve()
-        for rel in contract["allow_infrastructure_imports"]
+        (REPO_ROOT / rel).resolve() for rel in contract["allow_infrastructure_imports"]
     }
-    assert allowed, "layer_contract.yaml allowlist must not be empty for this test to be meaningful"
+    assert allowed, (
+        "layer_contract.yaml allowlist must not be empty for this test to be meaningful"
+    )
 
     violations: list[str] = []
     for path in sorted((REPO_ROOT / "src" / "codomyrmex").rglob("*.py")):

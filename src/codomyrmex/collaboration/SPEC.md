@@ -91,7 +91,7 @@ New in v1.3.0, `coordination/attestation.py` provides HMAC-SHA256 signed attesta
 ## Testing
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/collaboration/
+uv run pytest tests/unit/collaboration/
 ```
 
 ## Navigation

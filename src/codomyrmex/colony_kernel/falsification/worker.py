@@ -52,7 +52,9 @@ class FalsificationWorker:
     def check_scope_creep(self, plan: dict[str, Any]) -> FalsificationFinding | None:
         return check_scope_creep(plan)
 
-    def check_missing_metrics(self, plan: dict[str, Any]) -> FalsificationFinding | None:
+    def check_missing_metrics(
+        self, plan: dict[str, Any]
+    ) -> FalsificationFinding | None:
         return check_missing_metrics(plan)
 
     def check_circular_deps(
@@ -60,7 +62,9 @@ class FalsificationWorker:
     ) -> FalsificationFinding | None:
         return check_circular_deps(plan, repo_root)
 
-    def _check_dependency_risk(self, plan: dict[str, Any]) -> FalsificationFinding | None:
+    def _check_dependency_risk(
+        self, plan: dict[str, Any]
+    ) -> FalsificationFinding | None:
         return check_dependency_risk(plan)
 
     def _check_security_risk(self, plan: dict[str, Any]) -> FalsificationFinding | None:
@@ -69,7 +73,9 @@ class FalsificationWorker:
     def _check_false_metric(self, plan: dict[str, Any]) -> FalsificationFinding | None:
         return check_false_metric(plan)
 
-    def _check_over_broad_module(self, plan: dict[str, Any]) -> FalsificationFinding | None:
+    def _check_over_broad_module(
+        self, plan: dict[str, Any]
+    ) -> FalsificationFinding | None:
         return check_over_broad_module(plan)
 
     def _check_hidden_maintenance_cost(

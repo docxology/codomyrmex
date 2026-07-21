@@ -13,7 +13,7 @@ import pytest
 # Auto-detect OLLAMA_MODEL if not set — avoids skipping tests on machines
 # that have Ollama running with models other than the default codellama:latest.
 # ---------------------------------------------------------------------------
-if not os.environ.get("OLLAMA_MODEL"):
+if os.environ.get("RUN_LIVE_OLLAMA") == "1" and not os.environ.get("OLLAMA_MODEL"):
     _base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
     try:
         with urllib.request.urlopen(f"{_base}/api/tags", timeout=2) as _resp:

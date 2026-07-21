@@ -76,5 +76,5 @@ graph TD
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k data_visualization -v
+uv run python -m pytest tests/ -k data_visualization -v
 ```

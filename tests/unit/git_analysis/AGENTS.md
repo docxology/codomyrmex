@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/git_analysis
+# Codomyrmex Agents — tests/unit/git_analysis
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

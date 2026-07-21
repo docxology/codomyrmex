@@ -52,5 +52,5 @@ Search module providing full-text search, fuzzy matching, and semantic search ca
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k search -v
+uv run python -m pytest tests/ -k search -v
 ```

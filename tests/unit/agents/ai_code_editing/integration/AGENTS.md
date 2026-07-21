@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/ai_code_editing/integration
+# Codomyrmex Agents — tests/unit/agents/ai_code_editing/integration
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

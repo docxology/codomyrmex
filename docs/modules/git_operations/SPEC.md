@@ -81,5 +81,5 @@ See [API_SPECIFICATION.md](API_SPECIFICATION.md) and the [source API spec](../..
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k git_operations -v
+uv run python -m pytest tests/ -k git_operations -v
 ```

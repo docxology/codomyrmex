@@ -38,7 +38,7 @@ As an AI agent working with this module:
 1. **Never add logic here** — import from `src/codomyrmex/` instead
 2. **Thin wrappers**: Each script should be ≤50 lines (parse args → import → call → exit)
 3. **Error handling**: Wrap external calls in try/except and log using `logging_monitoring`
-4. **Testing**: Tests live in `src/codomyrmex/tests/`, not alongside scripts
+4. **Testing**: Tests live in `tests/`, not alongside scripts
 
 ## Key Files
 

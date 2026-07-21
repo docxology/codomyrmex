@@ -46,5 +46,5 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k performance -v
+uv run python -m pytest tests/ -k performance -v
 ```

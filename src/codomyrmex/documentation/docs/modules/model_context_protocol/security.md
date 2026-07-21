@@ -81,6 +81,16 @@ The Model Context Protocol facilitates communication; therefore, security relies
 -   This module primarily provides specifications, templates (../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md), and potentially schema validation utilities.
 -   If this module provides Python-based validation utilities (e.g., using `jsonschema` as listed in `pyproject.toml`), vulnerabilities in those libraries could affect systems using these utilities. Keep these dependencies updated.
 
+### HTTP transport requirements
+
+The HTTP runner is a network boundary around tools and must be treated accordingly:
+
+- It binds to loopback (`127.0.0.1`) by default and uses the `readonly` profile when started through `scripts/model_context_protocol/run_mcp_server.py`.
+- Non-loopback binding requires a configured bearer token. The token must be supplied with `Authorization: Bearer <token>`; this protects health, discovery, Web UI, JSON-RPC, and tool-call endpoints.
+- The `full` profile is an explicit opt-in and includes file-write and shell-execution capabilities. Use it only for a trusted workflow on a controlled host.
+- CORS has no allowed origins by default. Configure exact origins with `--cors-origin`; wildcard CORS is not supported by the runner.
+- HTTP does not provide TLS. Put remotely exposed deployments behind TLS and an additional authenticated reverse proxy, and do not place secrets in command history or source control.
+
 Thank you for helping keep Codomyrmex and the Model Context Protocol secure. 
 ## Navigation Links
 

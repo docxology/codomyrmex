@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/text_to_sql
+# Codomyrmex Agents — tests/unit/text_to_sql
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

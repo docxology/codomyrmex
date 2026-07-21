@@ -99,7 +99,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/cache/warmers/
+uv run pytest tests/unit/cache/warmers/
 ```
 
 ## 6. Future Considerations

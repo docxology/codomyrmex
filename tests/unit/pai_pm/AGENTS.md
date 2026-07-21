@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/pai_pm
+# Codomyrmex Agents — tests/unit/pai_pm
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

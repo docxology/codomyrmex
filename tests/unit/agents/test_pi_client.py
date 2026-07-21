@@ -447,8 +447,10 @@ class TestPiModuleImports(unittest.TestCase):
 # ---------------------------------------------------------------------------
 
 _skip_no_api = unittest.skipUnless(
-    _pi_available() and os.environ.get("GEMINI_API_KEY"),
-    "pi CLI or GEMINI_API_KEY not available",
+    os.environ.get("RUN_LIVE_GEMINI") == "1"
+    and _pi_available()
+    and os.environ.get("GEMINI_API_KEY"),
+    "Live Gemini tests require RUN_LIVE_GEMINI=1, pi CLI, and GEMINI_API_KEY",
 )
 
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/smart_contracts
+# Codomyrmex Agents — tests/unit/smart_contracts
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

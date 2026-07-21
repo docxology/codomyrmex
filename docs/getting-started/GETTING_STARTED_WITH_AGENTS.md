@@ -2,7 +2,7 @@
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
-A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **129** top-level Python modules, **610** production `@mcp_tool` decorators, **81 PAI skills**, and **15 Antigravity workflows**. Live counts: [reference/inventory.md](../reference/inventory.md).
+A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **130** top-level Python modules, **623** production `@mcp_tool` decorators, **81 PAI skills**, and **15 Antigravity workflows**. Live counts: [reference/inventory.md](../reference/inventory.md).
 
 ---
 
@@ -55,7 +55,7 @@ graph TB
         EVENTS["EventBus<br/>phase transitions"]
     end
 
-    subgraph MODULES["🐜 Codomyrmex (129 modules)"]
+    subgraph MODULES["🐜 Codomyrmex (130 modules)"]
         direction LR
         SKILLS_MOD["Skills<br/>81 installed"]
         MEMORY_MOD["Agentic Memory<br/>rules + obsidian"]
@@ -399,11 +399,11 @@ sequenceDiagram
 
 ## 5. MCP Tool Integration
 
-Every module exposes functionality through `mcp_tools.py` files. **150** `mcp_tools.py` entry points back **610** production `@mcp_tool` lines in the Python tree (`uv run python scripts/doc_inventory.py`), plus **9** static proxy tools on the PAI bridge (counted separately; see [inventory](../reference/inventory.md)).
+Every module exposes functionality through `mcp_tools.py` files. **150** `mcp_tools.py` entry points back **623** production `@mcp_tool` lines in the Python tree (`uv run python scripts/doc_inventory.py`), plus **9** static proxy tools on the PAI bridge (counted separately; see [inventory](../reference/inventory.md)).
 
 ```mermaid
 pie title MCP-related surface (two layers)
-    "Python @mcp_tool lines" : 610
+    "Python @mcp_tool lines" : 623
     "PAI static proxy tools" : 9
 ```
 

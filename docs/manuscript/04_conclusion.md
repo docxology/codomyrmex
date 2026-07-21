@@ -15,6 +15,10 @@ for the cases they cover. They do not establish production safety, robustness at
 resistance to a strategic adversary, or improved task performance relative to another
 agent runtime.
 
+{{CONFIG_PARAMETER_STATUS_NOTE}} The current figures and fixtures should therefore be
+changed only through a declared tuning or calibration protocol with regenerated tests,
+tables, figures, and provenance—not silently treated as universal constants.
+
 Several boundaries are especially important. The default MCP server owns one kernel
 instance for the lifetime of its process. Its consequence database defaults to SQLite
 in-memory mode, and its pheromone field is also in memory. A caller may configure a

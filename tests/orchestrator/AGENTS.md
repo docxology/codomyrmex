@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/orchestrator
+# Codomyrmex Agents — tests/orchestrator
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -84,7 +84,7 @@ except Exception as e:
 
 ```bash
 # Run OpenRouter tests
-uv run pytest src/codomyrmex/tests/unit/llm/test_openrouter_provider.py -v
+uv run pytest tests/unit/llm/test_openrouter_provider.py -v
 ```
 
 ## Future Considerations

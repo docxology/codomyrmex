@@ -97,7 +97,7 @@ class Cli:
 
         return print_status_report()
 
-    def dashboard(self, port=8787, host="0.0.0.0", open=True):
+    def dashboard(self, port=8787, host="127.0.0.1", open=True):
         """Launch the Codomyrmex web dashboard"""
         import subprocess
         from pathlib import Path

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/security/secrets_tests
+# Codomyrmex Agents — tests/unit/security/secrets_tests
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

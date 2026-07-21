@@ -564,7 +564,7 @@ class DeploymentOrchestrator:
 
                 result = subprocess.run(
                     hook,
-                    shell=True,
+                    shell=True,  # nosec B602 - deployment hooks are trusted workflow configuration
                     capture_output=True,
                     text=True,
                     cwd=os.getcwd(),

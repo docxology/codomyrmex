@@ -103,5 +103,5 @@ Module configuration via `DocumentsConfig`:
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k documents -v
+uv run python -m pytest tests/ -k documents -v
 ```

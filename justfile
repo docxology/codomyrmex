@@ -18,19 +18,19 @@ dev:
 # ─── Testing ─────────────────────────────────────────────────────
 # Run all tests with coverage
 test:
-    uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=40
+    uv run pytest tests/ -v --tb=short -m "not performance and not benchmark and not bench" --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
 
 # Run unit tests only
 test-unit:
-    uv run pytest src/codomyrmex/tests/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-fail-under=40
+    uv run pytest tests/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-fail-under=60
 
 # Run integration tests
 test-integration:
-    uv run pytest src/codomyrmex/tests/integration/ -v --tb=short
+    uv run pytest tests/integration/ -v --tb=short
 
 # Fast test run (no coverage overhead)
 test-fast:
-    uv run pytest src/codomyrmex/tests/ -q --no-header --override-ini="addopts=" --import-mode=importlib
+    uv run pytest tests/ -q --no-header -m "not performance and not benchmark and not bench" --override-ini="addopts=" --import-mode=importlib
 
 # Run tests with HTML coverage report
 test-coverage-html: test
@@ -106,21 +106,24 @@ release-patch:
 # Run security scanning (bandit + pip-audit)
 security:
     @echo "Running security scanning..."
-    uv run python -m bandit -r src/codomyrmex/
+    uv run bandit -r src/codomyrmex/ \
+        -x '*/tests/*,*/vendor/*,*/generated/*,src/codomyrmex/agents/open_gauss,src/codomyrmex/documentation/docs' \
+        -lll -iii
     @echo "Checking for vulnerabilities..."
-    uv run python -m pip_audit
+    uv run pip-audit
 
 # Dependency audit via pip-audit
 audit:
     @echo "Running dependency audit..."
-    uv run python -m pip_audit
+    uv run pip-audit
     @echo "Audit complete."
 
 # ─── Documentation ───────────────────────────────────────────────
 # Check documentation status
 docs-check:
     @echo "Checking documentation status..."
-    uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root .
+    uv run python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken
+    uv run python scripts/documentation/analyze_content_quality.py --repo-root . --format both --min-score 70 --fail-on-below
     uv run python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
 
 # Generate missing documentation
@@ -135,8 +138,8 @@ docs: docs-check docs-generate docs-build
 # Run MCP performance benchmarks
 benchmark-mcp:
     @echo "Running MCP performance benchmarks..."
-    uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_load.py -v --no-cov --no-header
-    uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_performance.py -v --no-cov --no-header
+    uv run python -m pytest tests/performance/test_mcp_load.py -v --no-cov --no-header
+    uv run python -m pytest tests/performance/test_mcp_performance.py -v --no-cov --no-header
 
 # Run all benchmarks
 benchmark: benchmark-mcp
@@ -146,7 +149,7 @@ benchmark: benchmark-mcp
 # Show project info
 info:
     @echo "Modules: $(ls -d src/codomyrmex/*/ 2>/dev/null | wc -l | tr -d ' ')"
-    @echo "Tests:   $(find src/codomyrmex/tests -name 'test_*.py' 2>/dev/null | wc -l | tr -d ' ') files"
+    @echo "Tests:   $(find tests -name 'test_*.py' 2>/dev/null | wc -l | tr -d ' ') files"
     @echo "LOC:     $(find src/ -name '*.py' | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
     @uv run ruff check . 2>&1 | tail -1
     @uv run ty check src/ 2>&1 | tail -1

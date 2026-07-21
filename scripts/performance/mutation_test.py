@@ -34,24 +34,24 @@ TARGETS = [
     MutationTarget(
         source_file=SRC / "model_context_protocol" / "validation.py",
         test_files=[
-            "src/codomyrmex/tests/unit/mcp/test_mcp_validation.py",
-            "src/codomyrmex/tests/unit/validation/test_validation.py",
-            "src/codomyrmex/tests/unit/mcp/test_mutation_kill.py",
+            "tests/unit/mcp/test_mcp_validation.py",
+            "tests/unit/validation/test_validation.py",
+            "tests/unit/mcp/test_mutation_kill.py",
         ],
         label="validation.py",
     ),
     MutationTarget(
         source_file=SRC / "model_context_protocol" / "schemas" / "mcp_schemas.py",
         test_files=[
-            "src/codomyrmex/tests/unit/mcp/",
+            "tests/unit/mcp/",
         ],
         label="mcp_schemas.py",
     ),
     MutationTarget(
         source_file=SRC / "agents" / "pai" / "trust_gateway.py",
         test_files=[
-            "src/codomyrmex/tests/unit/agents/test_trust_gateway.py",
-            "src/codomyrmex/tests/unit/agents/pai/test_trust_gateway_hardening.py",
+            "tests/unit/agents/test_trust_gateway.py",
+            "tests/unit/agents/pai/test_trust_gateway_hardening.py",
         ],
         label="trust_gateway.py",
     ),

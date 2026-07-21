@@ -9,7 +9,7 @@ import os
 import pytest
 
 try:
-    from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
+    from tests.unit.agents.helpers import VIBE_AVAILABLE
 
     from codomyrmex.agents.mistral_vibe import (
         MistralVibeClient,
@@ -25,8 +25,8 @@ if not _HAS_AGENTS:
 
 # Skip entire module if vibe CLI is not properly configured
 pytestmark = pytest.mark.skipif(
-    not os.getenv("MISTRAL_API_KEY"),
-    reason="MISTRAL_API_KEY not set - skipping mistral_vibe tests",
+    os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1" or not os.getenv("MISTRAL_API_KEY"),
+    reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1 and MISTRAL_API_KEY",
 )
 
 

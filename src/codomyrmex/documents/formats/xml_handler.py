@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-import xml.etree.ElementTree as ET
 from pathlib import Path
+
+from defusedxml import ElementTree as ET
 
 from codomyrmex.documents.config import get_config
 from codomyrmex.documents.exceptions import DocumentReadError, DocumentWriteError

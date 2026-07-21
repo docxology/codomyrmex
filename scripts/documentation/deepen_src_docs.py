@@ -133,7 +133,7 @@ def deepen_readme(mod_name):
         testing = (
             f"\n## Testing\n\n"
             f"```bash\n"
-            f"uv run python -m pytest src/codomyrmex/tests/ -k {mod_name} -v\n"
+            f"uv run python -m pytest tests/ -k {mod_name} -v\n"
             f"```\n"
         )
         # Insert before Navigation section if it exists
@@ -292,7 +292,7 @@ def create_submodule_spec(parent, sub):
     )
 
     content += "## 5. Testing\n\n```bash\n"
-    content += f"uv run python -m pytest src/codomyrmex/tests/ -k {sub} -v\n"
+    content += f"uv run python -m pytest tests/ -k {sub} -v\n"
     content += "```\n\n"
 
     content += "## References\n\n"

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/api/circuit_breaker
+# Codomyrmex Agents — tests/unit/api/circuit_breaker
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/llm/chains
+# Codomyrmex Agents — tests/unit/llm/chains
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -19,7 +19,7 @@ Run:
     GOOGLE_CLIENT_ID=... \\
     GOOGLE_CLIENT_SECRET=... \\
     GOOGLE_REFRESH_TOKEN=... \\
-    uv run pytest src/codomyrmex/tests/integration/email/test_gmail_integration.py -v -s
+    uv run pytest tests/integration/email/test_gmail_integration.py -v -s
 """
 
 from __future__ import annotations

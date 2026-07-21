@@ -60,7 +60,7 @@ Codomyrmex modular development platform.
 ## 5. Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k prompt_engineering -v
+uv run python -m pytest tests/ -k prompt_engineering -v
 ```
 
 All tests follow the Zero-Mock policy.

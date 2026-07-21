@@ -26,6 +26,8 @@ components, and integration points with the broader Codomyrmex ecosystem.
 3. **Size Enforcement**: Cheatsheets must be ≤10,240 bytes; `save_cheatsheet` auto-trims to budget.
 4. **Structured Logging**: All log calls use `codomyrmex.logging_monitoring.get_logger()` with correlation IDs.
 5. **Modular Orchestration**: Use `run_sair.py` as the primary entry point; avoid calling sub-scripts directly.
+6. **External-service gate**: Provider calls and dataset downloads require `--live` or `RUN_LIVE_SAIR=1`; credentials alone never enable them.
+7. **Historical status**: The competition deadline is provenance metadata, not an active delivery promise.
 
 ## Key Files
 
@@ -50,7 +52,7 @@ components, and integration points with the broader Codomyrmex ecosystem.
 - **Parent**: [scripts/AGENTS.md](../AGENTS.md)
 - **Specification**: [SPEC.md](SPEC.md)
 - **PAI Bridge**: [PAI.md](PAI.md)
-- **Tests**: [tests/scripts/sair/](../../src/codomyrmex/tests/scripts/sair/)
+- **Tests**: [tests/scripts/sair/](../../tests/scripts/sair/)
 
 ## Navigation
 

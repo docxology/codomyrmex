@@ -2,7 +2,7 @@
 Tests for OpenRouterProvider.
 
 Unit tests for the OpenRouter LLM provider implementation.
-Zero-Mock compliant — uses real API calls gated by OPENROUTER_API_KEY.
+Zero-Mock compliant — uses real API calls gated by RUN_LIVE_OPENROUTER=1.
 """
 
 import os
@@ -18,8 +18,10 @@ from codomyrmex.llm.providers import (
 )
 
 _OPENROUTER_KEY = os.environ.get("OPENROUTER_API_KEY", "")
-_skip_no_key = pytest.mark.skipif(
-    not _OPENROUTER_KEY, reason="OPENROUTER_API_KEY not set"
+_RUN_LIVE_OPENROUTER = os.environ.get("RUN_LIVE_OPENROUTER") == "1"
+_skip_live = pytest.mark.skipif(
+    not _RUN_LIVE_OPENROUTER or not _OPENROUTER_KEY,
+    reason="Live OpenRouter tests require RUN_LIVE_OPENROUTER=1 and OPENROUTER_API_KEY",
 )
 
 
@@ -152,7 +154,7 @@ class TestOpenRouterProviderContextManager:
 class TestOpenRouterProviderComplete:
     """Test OpenRouterProvider completion methods."""
 
-    @_skip_no_key
+    @_skip_live
     def test_complete_returns_response(self):
         """Test that complete() returns a valid response using real API."""
         config = ProviderConfig(api_key=_OPENROUTER_KEY)

@@ -7,7 +7,7 @@ that implements BaseAgent interface for testing, not a mock.
 import pytest
 
 try:
-    from codomyrmex.tests.unit.agents.helpers import OPENCODE_AVAILABLE
+    from tests.unit.agents.helpers import OPENCODE_AVAILABLE
 
     from codomyrmex.agents.core import (
         AgentCapabilities,

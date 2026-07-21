@@ -14,8 +14,9 @@ from codomyrmex.scrape.exceptions import ScrapeError
 
 
 @pytest.mark.skipif(
-    not os.getenv("FIRECRAWL_API_KEY") and not os.getenv("FC_API_KEY"),
-    reason="Firecrawl API key not set",
+    os.getenv("RUN_LIVE_FIRECRAWL") != "1"
+    or (not os.getenv("FIRECRAWL_API_KEY") and not os.getenv("FC_API_KEY")),
+    reason="Live Firecrawl tests require RUN_LIVE_FIRECRAWL=1 and an API key",
 )
 class TestScrapeIntegration:
     """Integration tests for scraping operations.

@@ -136,7 +136,7 @@ class TemplateEngine:
             for name, func in self._filters.items():
                 env.filters[name] = func
 
-            template_obj = env.from_string(template)
+            template_obj = env.from_string(template)  # nosec B701 - opt-out is explicit
             return template_obj.render(**context)
         except ImportError:
             raise TemplatingError(
@@ -156,7 +156,7 @@ class TemplateEngine:
             for name, func in self._filters.items():
                 env.filters[name] = func
 
-            return env.get_template(path_obj.name)
+            return env.get_template(path_obj.name)  # nosec B701 - opt-out is explicit
         except ImportError:
             raise TemplatingError(
                 "jinja2 package not available. Install with: pip install jinja2"
@@ -165,7 +165,14 @@ class TemplateEngine:
     def _render_mako(self, template: str, context: dict) -> str:
         """Render using Mako."""
         try:
-            template_obj = MakoTemplate(template)
+            # Mako has no environment-level autoescape switch.  Applying its
+            # HTML filter by default keeps the public ``autoescape`` contract
+            # consistent with the Jinja2 path; callers rendering trusted HTML
+            # can explicitly opt out with ``autoescape=False``.
+            default_filters = ["h"] if self.autoescape else []
+            template_obj = MakoTemplate(  # nosec B702 - default_filters applies HTML escaping
+                template, default_filters=default_filters
+            )
             return template_obj.render(**context)
         except ImportError:
             raise TemplatingError(
@@ -175,7 +182,10 @@ class TemplateEngine:
     def _load_mako(self, path: str) -> Any:
         """Load template using Mako."""
         try:
-            return MakoTemplate(filename=path)
+            default_filters = ["h"] if self.autoescape else []
+            return MakoTemplate(  # nosec B702 - default_filters applies HTML escaping
+                filename=path, default_filters=default_filters
+            )
         except ImportError:
             raise TemplatingError(
                 "mako package not available. Install with: pip install mako"

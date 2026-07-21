@@ -6,6 +6,22 @@ has not been run, its baselines are not implemented as released adapters, and no
 trial traces are included. Its purpose here is to make the next empirical test explicit
 without presenting planned work as evidence.
 
+**Parameter status.** {{CONFIG_PARAMETER_STATUS_NOTE}} The protocol values reserved in
+this section are therefore starting points for a preregistered study, not observations
+or claims about the correct operating point. A study should report every changed value,
+its authority (runtime policy, configuration, or presentation), and the regenerated
+artifact hashes.
+
+[@tbl:parameter-classes] makes the distinction explicit before the proposed trial
+design and the live runtime configuration are described.
+
+| Parameter class | Examples in this release | Interpretation and authority |
+|---|---|---|
+| Runtime policy | Gate weights, thresholds, trust deltas, decay constants | Current code-defined behavior; tune by changing the runtime policy and rerun the contract suite. |
+| Presentation | Plot horizon, grid density, trust slices, checkpoint selection | Reproducible display choices; tune without changing kernel semantics, but regenerate figures and captions. |
+| Proposed protocol | Agent count, workload size, warm-up, trial count, seed, baseline conditions | Initial study-design values; they are not completed experiments or observed sample sizes. |
+: Parameter classes, authorities, and evidence interpretation for the current snapshot. {#tbl:parameter-classes}
+
 ## Evidence-status map {#sec:experimental-design}
 
 [@tbl:evidence-status] is the release's claim-status ledger.
@@ -222,7 +238,7 @@ metadata, and decay metadata. Runtime authority is mixed:
 - per-trace evaporation is derived from `DecayRate` and the base store constant.
 
 The manuscript therefore identifies each value's runtime authority instead of claiming
-that every parameter is dynamically configurable.
+that every parameter is dynamically configurable. {{CONFIG_PARAMETER_STATUS_NOTE}}
 
 ## Software snapshot {#sec:software-environment-setup}
 

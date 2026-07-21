@@ -1,4 +1,5 @@
 """Falsification types and severity helpers."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -65,5 +66,6 @@ _SEVERITY_RANK: dict[FalsificationSeverity, int] = {
 def _rank(sev: FalsificationSeverity) -> int:
     """Return numeric rank for a severity (1=LOW … 4=CRITICAL)."""
     return _SEVERITY_RANK[sev]
+
 
 __all__ = ["_SEVERITY_RANK", "AttackVector", "FalsificationReport", "_rank"]

@@ -58,7 +58,7 @@ def execute_step(step: dict, dry_run: bool = False) -> dict:
             start = time.time()
             proc = subprocess.run(
                 cmd,
-                shell=True,
+                shell=True,  # nosec B602 - shell syntax is intentional for trusted workflows
                 capture_output=True,
                 text=True,
                 timeout=step.get("timeout", 60),
@@ -75,6 +75,8 @@ def execute_step(step: dict, dry_run: bool = False) -> dict:
 
     elif "script" in step:
         result["status"] = "script_not_implemented"
+    else:
+        result["status"] = "unimplemented"
 
     return result
 
@@ -91,8 +93,17 @@ def run_workflow(workflow: dict, dry_run: bool = False) -> list:
         result = execute_step(step, dry_run)
         results.append(result)
 
-        # Stop on failure unless continue_on_error
-        if result["status"] == "failed" and not step.get("continue_on_error"):
+        # Stop on any execution failure unless explicitly configured otherwise.
+        terminal_failure_states = {
+            "failed",
+            "timeout",
+            "error",
+            "script_not_implemented",
+            "unimplemented",
+        }
+        if result["status"] in terminal_failure_states and not step.get(
+            "continue_on_error", False
+        ):
             break
 
     return results

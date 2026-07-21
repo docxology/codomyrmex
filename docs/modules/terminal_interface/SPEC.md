@@ -53,5 +53,5 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k terminal_interface -v
+uv run python -m pytest tests/ -k terminal_interface -v
 ```

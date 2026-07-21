@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/semantic_router
+# Codomyrmex Agents — tests/unit/semantic_router
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

@@ -97,7 +97,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/orchestrator/pipelines/
+uv run pytest tests/unit/orchestrator/pipelines/
 ```
 
 ## 6. Future Considerations

@@ -125,6 +125,10 @@ logs/
 
 # Build directories
 build/
+# The CI/CD build synthesis package is source code, not a generated artifact.
+!/src/codomyrmex/ci_cd_automation/build/
+!/src/codomyrmex/ci_cd_automation/build/**
+/src/codomyrmex/ci_cd_automation/build/**/__pycache__/
 dist/
 bin/
 out/

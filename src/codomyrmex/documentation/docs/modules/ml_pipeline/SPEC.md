@@ -28,7 +28,7 @@ After changing this mirror or the source module, run:
 ```bash
 make docs-check
 uv run ruff check src/codomyrmex/ml_pipeline
-uv run pytest src/codomyrmex/tests/unit/ml_pipeline/ -q
+uv run pytest tests/unit/ml_pipeline/ -q
 ```
 
 ## Navigation

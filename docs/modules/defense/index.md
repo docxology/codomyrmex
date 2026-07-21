@@ -15,4 +15,4 @@
 ## Source and Tests
 
 - [`src/codomyrmex/defense/`](../../../src/codomyrmex/defense/)
-- [`src/codomyrmex/tests/unit/defense/`](../../../src/codomyrmex/tests/unit/defense/)
+- [`tests/unit/defense/`](../../../tests/unit/defense/)

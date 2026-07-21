@@ -35,7 +35,7 @@ When working within this module, pay close attention to:
 -   New features (e.g., new model support, output processing) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
 -   Tests should cover Ollama API interactions, model execution, configuration management, and error scenarios.
 -   Use real Ollama API with environment-gated tests for deterministic behavior (Zero-Mock policy).
--   Run existing tests to ensure no regressions. Refer to `src/codomyrmex/tests/unit/test_ollama_integration.py`.
+-   Run existing tests to ensure no regressions. Refer to `tests/unit/test_ollama_integration.py`.
 
 ## 5. Documentation for `llm/ollama`
 -   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/maintenance
+# Codomyrmex Agents — tests/unit/maintenance
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

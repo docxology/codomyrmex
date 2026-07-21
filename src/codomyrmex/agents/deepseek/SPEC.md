@@ -67,7 +67,7 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-uv run pytest src/codomyrmex/tests/unit/agents/deepseek/
+uv run pytest tests/unit/agents/deepseek/
 ```
 
 ## 6. Future Considerations

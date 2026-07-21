@@ -21,6 +21,7 @@ import hashlib
 import inspect
 import json
 import math
+import os
 import platform
 import re
 import subprocess
@@ -59,22 +60,11 @@ def inject_manuscript_variables(
     hydrated: dict[Path, str] = {}
     for source in sources:
         content = source.read_text(encoding="utf-8")
-        required = set(re.findall(r"\{\{([A-Z0-9_]+)\}\}", content))
-        missing = required - variables.keys()
-        if missing:
-            raise RuntimeError(
-                f"Undefined manuscript variables in {source.name}: "
-                + ", ".join(sorted(missing))
-            )
-        for key in required:
-            content = content.replace("{{" + key + "}}", variables[key])
-        unresolved = re.findall(r"\{\{[A-Z0-9_]+\}\}", content)
-        if unresolved:
-            raise RuntimeError(
-                f"Unresolved manuscript variables in {source.name}: "
-                + ", ".join(sorted(set(unresolved)))
-            )
-        hydrated[source] = content
+        hydrated[source] = _render_template(
+            content,
+            variables,
+            source_label=str(source),
+        )
 
     output_dir.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
@@ -83,6 +73,36 @@ def inject_manuscript_variables(
         destination.write_text(content, encoding="utf-8")
         written.append(destination)
     return written
+
+
+def _render_template(
+    content: str,
+    variables: dict[str, str],
+    *,
+    source_label: str,
+) -> str:
+    """Resolve a complete token template or fail before writing an artifact.
+
+    This shared renderer is used both for manuscript sections and configured figure
+    captions. Keeping the missing/unresolved checks in one place prevents a caption
+    from silently becoming a stale hardcoded claim when a new variable is introduced.
+    """
+    token_pattern = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
+    required = set(token_pattern.findall(content))
+    missing = required - variables.keys()
+    if missing:
+        raise RuntimeError(
+            f"Undefined manuscript variables in {source_label}: "
+            + ", ".join(sorted(missing))
+        )
+    rendered = token_pattern.sub(lambda match: variables[match.group(1)], content)
+    unresolved = token_pattern.findall(rendered)
+    if unresolved:
+        raise RuntimeError(
+            f"Unresolved manuscript variables in {source_label}: "
+            + ", ".join(sorted(set(unresolved)))
+        )
+    return rendered
 
 
 def inject_via_infrastructure(
@@ -236,7 +256,9 @@ def _count_falsification_checks(project_root: Path) -> int:
     source = worker_path.read_text(encoding="utf-8")
     match = re.search(r"\bchecks\s*=\s*\[(.*?)\n\s*\]", source, flags=re.DOTALL)
     if match is None:
-        raise RuntimeError(f"Could not locate falsification check registry in {worker_path}")
+        raise RuntimeError(
+            f"Could not locate falsification check registry in {worker_path}"
+        )
     count = len(re.findall(r"\bcheck_[a-z_]+\(", match.group(1)))
     if count <= 0:
         raise RuntimeError(f"Falsification check registry is empty in {worker_path}")
@@ -259,6 +281,75 @@ def _count_figure_generators(project_root: Path) -> int:
     return count
 
 
+def _figure_generator_filenames(project_root: Path) -> list[str]:
+    """Return figure filenames declared by the executable generator registry."""
+    orchestrator = (
+        project_root
+        / "src"
+        / "codomyrmex"
+        / "manuscript"
+        / "figures"
+        / "orchestrator.py"
+    )
+    source = orchestrator.read_text(encoding="utf-8")
+    filenames = re.findall(
+        r'^\s*\("([^\"]+\.png)",\s*fig_[a-z0-9_]+,\s*"[^\"]+"\),',
+        source,
+        flags=re.MULTILINE,
+    )
+    if not filenames:
+        raise RuntimeError(f"Figure generator registry is empty in {orchestrator}")
+    return filenames
+
+
+def _falsification_vector_severities(
+    project_root: Path,
+    attack_vectors: Any,
+    severity_rank: dict[Any, int],
+) -> dict[str, str]:
+    """Derive each vector's highest live check severity from first-party checks."""
+    checks_dir = (
+        project_root
+        / "src"
+        / "codomyrmex"
+        / "colony_kernel"
+        / "falsification"
+        / "checks"
+    )
+    severities: dict[str, int] = {}
+    for check_path in sorted(checks_dir.glob("*.py")):
+        source = check_path.read_text(encoding="utf-8", errors="replace")
+        for vector in attack_vectors:
+            matches = re.findall(
+                rf"AttackVector\.{vector.name}\.value.{{0,220}}?"
+                r"FalsificationSeverity\.([A-Z]+)",
+                source,
+                flags=re.DOTALL,
+            )
+            for severity_name in matches:
+                severity = next(
+                    (
+                        member
+                        for member in severity_rank
+                        if getattr(member, "name", "") == severity_name
+                    ),
+                    None,
+                )
+                if severity is not None:
+                    severities[vector.name] = max(
+                        severities.get(vector.name, 0), severity_rank[severity]
+                    )
+
+    if set(severities) != {vector.name for vector in attack_vectors}:
+        missing = {vector.name for vector in attack_vectors} - set(severities)
+        raise RuntimeError(
+            "Could not derive live severity for falsification vectors: "
+            + ", ".join(sorted(missing))
+        )
+    rank_to_name = {rank: member.name for member, rank in severity_rank.items()}
+    return {name: rank_to_name[rank] for name, rank in sorted(severities.items())}
+
+
 def _coverage_floor(project_root: Path) -> float:
     pyproject = project_root / "pyproject.toml"
     data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
@@ -266,6 +357,87 @@ def _coverage_floor(project_root: Path) -> float:
         return float(data["tool"]["coverage"]["report"]["fail_under"])
     except (KeyError, TypeError, ValueError) as exc:
         raise RuntimeError(f"Coverage floor is missing from {pyproject}") from exc
+
+
+def _sha256_file(path: Path) -> str:
+    """Return the SHA-256 digest for a reproducibility input artifact."""
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _git_snapshot(project_root: Path) -> tuple[str, bool]:
+    """Capture commit identity and tracked/untracked worktree state."""
+    commit_result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=30,
+    )
+    status_result = subprocess.run(
+        ["git", "status", "--porcelain=v1"],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=30,
+    )
+    commit = (
+        commit_result.stdout.strip() if commit_result.returncode == 0 else "unknown"
+    )
+    return commit or "unknown", bool(status_result.stdout.strip())
+
+
+def _authoritative_inventory(project_root: Path) -> dict[str, int]:
+    """Read measured counts from the repository's inventory script."""
+    inventory_script = project_root / "scripts" / "doc_inventory.py"
+    result = subprocess.run(
+        [sys.executable, str(inventory_script)],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=60,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(
+            "Authoritative inventory generation failed:\n"
+            f"{result.stdout}\n{result.stderr}"
+        )
+    # The inventory labels contain punctuation, so map them from stable output
+    # prefixes rather than making the parser depend on label spelling.
+    prefixes = {
+        "top_level_modules": "top_level_modules",
+        "mcp_tools_py": "mcp_tools.py (non-test)",
+        "mcp_decorators": "@mcp_tool (production)",
+        "workflow_count": ".github/workflows *.yml",
+    }
+    parsed: dict[str, int] = {}
+    for key, label in prefixes.items():
+        match = re.search(
+            rf"^\s*{re.escape(label)}:\s+(\d+)$", result.stdout, re.MULTILINE
+        )
+        if match is None:
+            raise RuntimeError(f"Inventory output lacks {label!r}")
+        parsed[key] = int(match.group(1))
+    return parsed
+
+
+def _environment_fingerprint() -> str:
+    """Hash non-secret runtime facts used to compute manuscript values."""
+    facts = {
+        "python": sys.version,
+        "executable": sys.executable,
+        "platform": platform.platform(),
+        "pythonhashseed": os.environ.get("PYTHONHASHSEED", "random"),
+    }
+    return hashlib.sha256(
+        json.dumps(facts, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
 
 
 def _format_acknowledgements(entries: list[Any], source: Path) -> str:
@@ -434,9 +606,7 @@ def _trust_trajectory_rows(
     return "\n".join(rows)
 
 
-def _decay_rows(
-    *, checkpoints: list[int], evaporation: dict[str, float]
-) -> str:
+def _decay_rows(*, checkpoints: list[int], evaporation: dict[str, float]) -> str:
     rows: list[str] = []
     for tick in checkpoints:
         values = [max(0.0, 1.0 - tick * evaporation[name]) for name in evaporation]
@@ -533,9 +703,7 @@ def _representative_gate_rows(
         cells = [budget, hazard, trust, completeness]
         rendered = ["—" if cell is None else f"{cell:.2f}" for cell in cells]
         verdict = forced or decision(value)
-        rows.append(
-            f"| {label} | {' | '.join(rendered)} | {value:.3f} | {verdict} |"
-        )
+        rows.append(f"| {label} | {' | '.join(rendered)} | {value:.3f} | {verdict} |")
     return "\n".join(rows)
 
 
@@ -649,6 +817,8 @@ def compute_variables(
     keywords_list = _required_list(config, "keywords", config_path)
     acknowledgements = _required_list(config, "acknowledgements", config_path)
     experiment = _required_mapping(config, "experiment", config_path)
+    figure_config = _required_mapping(config, "figures", config_path)
+    figure_parameters = _required_mapping(experiment, "figure_parameters", config_path)
 
     # ------------------------------------------------------------------
     # 2. Derive CONFIG_* from config.yaml
@@ -677,11 +847,17 @@ def compute_variables(
     first_author_orcid = str(_required_value(first_author_entry, "orcid", config_path))
     keywords_str = ", ".join(str(keyword) for keyword in keywords_list)
 
-    # Top-level submodule count from src/codomyrmex/
+    inventory = _authoritative_inventory(project_root)
+    # Cross-check the authoritative inventory against the local filesystem so
+    # a broken inventory parser cannot silently publish a plausible count.
     codomyrmex_pkg = project_root / "src" / "codomyrmex"
-    module_count: int = _count_top_level_modules(codomyrmex_pkg)
+    module_count: int = inventory["top_level_modules"]
+    if module_count != _count_top_level_modules(codomyrmex_pkg):
+        raise RuntimeError("Inventory module count disagrees with the source tree")
     if module_count == 0:
-        raise RuntimeError(f"No top-level Codomyrmex modules found under {codomyrmex_pkg}")
+        raise RuntimeError(
+            f"No top-level Codomyrmex modules found under {codomyrmex_pkg}"
+        )
 
     colony_kernel_dir = codomyrmex_pkg / "colony_kernel"
     if not colony_kernel_dir.is_dir():
@@ -735,6 +911,7 @@ def compute_variables(
     actuation_gate_path = colony_kernel_dir / "actuation_gate.py"
     actuation_gate_source = actuation_gate_path.read_text(encoding="utf-8")
     kernel_source = (colony_kernel_dir / "kernel.py").read_text(encoding="utf-8")
+    models_source = (colony_kernel_dir / "models.py").read_text(encoding="utf-8")
     pruning_source = (colony_kernel_dir / "pruning_daemon.py").read_text(
         encoding="utf-8"
     )
@@ -743,12 +920,23 @@ def compute_variables(
     gate_weight_risk = gate_weights["risk_ok"]
     gate_weight_trust = gate_weights["trust_ok"]
     gate_weight_completeness = gate_weights["completeness"]
+    gate_weight_sum = sum(gate_weights.values())
 
     gate_execute_threshold = float(_GATE_SCORE_EXECUTE)
     gate_hold_threshold = float(_GATE_SCORE_HOLD)
     hazard_high_threshold = float(_HIGH_RISK_THRESHOLD)
     hazard_medium_threshold = float(_MED_RISK_THRESHOLD)
     trust_hard_floor = float(_TRUST_HARD_FLOOR)
+    human_feedback_min = _extract_float(
+        models_source,
+        r"if not (-[0-9]+(?:\.[0-9]+)?) <= self\.human_feedback",
+        "human-feedback lower bound",
+    )
+    human_feedback_max = _extract_float(
+        models_source,
+        r"self\.human_feedback <= ([0-9]+(?:\.[0-9]+)?)",
+        "human-feedback upper bound",
+    )
     missing_field_penalty = float(_MISSING_FIELD_PENALTY)
     failure_penalty = float(_FAILURE_PENALTY)
     trust_full_credit_threshold = _extract_float(
@@ -893,6 +1081,11 @@ def compute_variables(
     severity_rank_medium = int(_SEVERITY_RANK[FalsificationSeverity.MEDIUM])
     severity_rank_high = int(_SEVERITY_RANK[FalsificationSeverity.HIGH])
     severity_rank_critical = int(_SEVERITY_RANK[FalsificationSeverity.CRITICAL])
+    falsification_vector_severities = _falsification_vector_severities(
+        project_root,
+        AttackVector,
+        _SEVERITY_RANK,
+    )
 
     kernel_config_path = project_root / "config" / "colony_kernel" / "kernel.yaml"
     kernel_config = yaml.safe_load(kernel_config_path.read_text(encoding="utf-8")) or {}
@@ -905,12 +1098,19 @@ def compute_variables(
     budget_max_security = float(kernel_budget["max_security_exposure"])
 
     # Proposed-study inputs remain configuration authority.
+    parameter_status_note = str(
+        _required_value(experiment, "parameter_status_note", config_path)
+    )
+    parameter_status_short = str(
+        _required_value(experiment, "parameter_status_short", config_path)
+    )
     agent_count = int(_required_value(experiment, "agent_count", config_path))
     workload_task_count = int(
         _required_value(experiment, "workload_task_count", config_path)
     )
     warmup_ticks = int(_required_value(experiment, "warmup_ticks", config_path))
     trial_count = int(_required_value(experiment, "trial_count", config_path))
+    experiment_seed = int(_required_value(experiment, "seed", config_path))
     benchmark_conditions = _required_list(
         experiment, "benchmark_conditions", config_path
     )
@@ -925,6 +1125,11 @@ def compute_variables(
         int(value)
         for value in _required_list(experiment, "decay_table_ticks", config_path)
     ]
+    trust_trajectory_horizon = max(trust_checkpoints)
+    if trust_trajectory_horizon <= 0:
+        raise RuntimeError(
+            "Trust trajectory checkpoints must include a positive horizon"
+        )
     paired_fixture = _required_mapping(experiment, "paired_fixture", config_path)
     paired_agent_trust = float(
         _required_value(paired_fixture, "agent_trust", config_path)
@@ -932,6 +1137,70 @@ def compute_variables(
     paired_recovery_ticks = int(
         _required_value(paired_fixture, "recovery_ticks", config_path)
     )
+
+    # Figure inputs are configuration, while policy values below remain derived from
+    # live runtime constants. This keeps presentation sampling reproducible without
+    # allowing the plot modules to grow independent scientific authorities.
+    figure_score_min = float(
+        _required_value(figure_parameters, "score_min", config_path)
+    )
+    figure_score_max = float(
+        _required_value(figure_parameters, "score_max", config_path)
+    )
+    heatmap_grid_points = int(
+        _required_value(figure_parameters, "heatmap_grid_points", config_path)
+    )
+    heatmap_pressure_max = float(
+        _required_value(figure_parameters, "heatmap_pressure_max", config_path)
+    )
+    decay_plot_horizon_ticks = int(
+        _required_value(figure_parameters, "decay_plot_horizon_ticks", config_path)
+    )
+    decay_plot_points = int(
+        _required_value(figure_parameters, "decay_plot_points", config_path)
+    )
+    gate_surface_grid_points = int(
+        _required_value(figure_parameters, "gate_surface_grid_points", config_path)
+    )
+    gate_surface_trust_slices = [
+        float(value)
+        for value in _required_list(
+            figure_parameters, "gate_surface_trust_slices", config_path
+        )
+    ]
+    trust_plot_projection_margin = int(
+        _required_value(figure_parameters, "trust_plot_projection_margin", config_path)
+    )
+    if not figure_score_min < figure_score_max:
+        raise RuntimeError("Figure score range must be strictly increasing")
+    if heatmap_grid_points < 2 or gate_surface_grid_points < 2:
+        raise RuntimeError("Figure grids require at least two points")
+    if decay_plot_horizon_ticks <= 0 or decay_plot_points < 2:
+        raise RuntimeError("Decay figure horizon and resolution must be positive")
+    if trust_plot_projection_margin < 0:
+        raise RuntimeError("Trust figure projection margin cannot be negative")
+    if not all(
+        figure_score_min <= value <= figure_score_max
+        for value in gate_surface_trust_slices
+    ):
+        raise RuntimeError("Gate surface trust slices must lie within the score range")
+
+    generator_filenames = _figure_generator_filenames(project_root)
+    configured_filenames: list[str] = []
+    for key, spec in figure_config.items():
+        if not isinstance(spec, dict):
+            raise RuntimeError(f"Figure metadata {key!r} is not a mapping")
+        filename = str(_required_value(spec, "filename", config_path))
+        _required_value(spec, "label", config_path)
+        _required_value(spec, "width", config_path)
+        _required_value(spec, "evidence_class", config_path)
+        _required_value(spec, "caption", config_path)
+        configured_filenames.append(filename)
+    if configured_filenames != generator_filenames:
+        raise RuntimeError(
+            "Configured figure registry differs from executable generators: "
+            f"config={configured_filenames!r}, generators={generator_filenames!r}"
+        )
 
     # Manuscript mirrors must equal live code. They are compatibility inputs for
     # figure modules, never independent authorities.
@@ -1050,6 +1319,19 @@ def compute_variables(
     )
 
     config_hash: str = hashlib.sha256(raw_config_bytes).hexdigest()
+    git_commit, worktree_dirty = _git_snapshot(project_root)
+    inventory_payload = {
+        **inventory,
+        "inventory_script_sha256": _sha256_file(
+            project_root / "scripts" / "doc_inventory.py"
+        ),
+    }
+    inventory_hash = hashlib.sha256(
+        json.dumps(inventory_payload, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    pyproject_hash = _sha256_file(project_root / "pyproject.toml")
+    lock_hash = _sha256_file(project_root / "uv.lock")
+    environment_hash = _environment_fingerprint()
 
     # ------------------------------------------------------------------
     # 3. Derive RESULT_* from actual project files
@@ -1119,10 +1401,14 @@ def compute_variables(
     # Colony kernel metrics
     ck_loc = _count_loc(colony_kernel_dir)
     if ck_loc == 0:
-        raise RuntimeError(f"No Colony Kernel source lines found under {colony_kernel_dir}")
+        raise RuntimeError(
+            f"No Colony Kernel source lines found under {colony_kernel_dir}"
+        )
     ck_files = _count_python_files(colony_kernel_dir)
     if ck_files == 0:
-        raise RuntimeError(f"No top-level Colony Kernel files found under {colony_kernel_dir}")
+        raise RuntimeError(
+            f"No top-level Colony Kernel files found under {colony_kernel_dir}"
+        )
 
     module_docs_count: int = _count_colony_kernel_docs(project_root)
 
@@ -1156,6 +1442,8 @@ def compute_variables(
         "CONFIG_DOI": doi_value,
         "CONFIG_GITHUB_REPOSITORY": github_repository,
         "CONFIG_ACKNOWLEDGEMENTS": acknowledgement_text,
+        "CONFIG_PARAMETER_STATUS_NOTE": parameter_status_note,
+        "CONFIG_PARAMETER_STATUS_SHORT": parameter_status_short,
         "CONFIG_COVERAGE_FLOOR": str(coverage_floor),
         "CONFIG_MODULE_COUNT": str(module_count),
         "CONFIG_COLONY_KERNEL_SUBSYSTEMS": str(colony_kernel_subsystems),
@@ -1199,6 +1487,29 @@ def compute_variables(
         "CONFIG_GATE_WEIGHT_RISK": str(gate_weight_risk),
         "CONFIG_GATE_WEIGHT_TRUST": str(gate_weight_trust),
         "CONFIG_GATE_WEIGHT_COMPLETENESS": str(gate_weight_completeness),
+        "CONFIG_GATE_WEIGHT_SUM": str(gate_weight_sum),
+        "CONFIG_SCORE_MIN": str(figure_score_min),
+        "CONFIG_SCORE_MAX": str(figure_score_max),
+        "CONFIG_UNIT_SCORE": str(figure_score_max),
+        "CONFIG_ZERO_COUNT": "0",
+        "CONFIG_SCORE_MID": str(
+            figure_score_min + (figure_score_max - figure_score_min) / 2
+        ),
+        "CONFIG_HUMAN_FEEDBACK_MIN": str(human_feedback_min),
+        "CONFIG_HUMAN_FEEDBACK_MAX": str(human_feedback_max),
+        "CONFIG_HEATMAP_GRID_POINTS": str(heatmap_grid_points),
+        "CONFIG_HEATMAP_PRESSURE_MAX": str(heatmap_pressure_max),
+        "CONFIG_DECAY_PLOT_HORIZON_TICKS": str(decay_plot_horizon_ticks),
+        "CONFIG_DECAY_PLOT_POINTS": str(decay_plot_points),
+        "CONFIG_GATE_SURFACE_GRID_POINTS": str(gate_surface_grid_points),
+        "CONFIG_GATE_SURFACE_TRUST_SLICES": json.dumps(
+            gate_surface_trust_slices, separators=(",", ":")
+        ),
+        "CONFIG_TRUST_PLOT_PROJECTION_MARGIN": str(trust_plot_projection_margin),
+        "CONFIG_TRUST_TRAJECTORY_HORIZON": str(trust_trajectory_horizon),
+        "CONFIG_TRUST_TRAJECTORY_CHECKPOINTS": json.dumps(
+            trust_checkpoints, separators=(",", ":")
+        ),
         "CONFIG_BUDGET_DIMENSIONS_COUNT": str(budget_dimensions_count),
         "CONFIG_BUDGET_MAX_LLM_CALLS": str(budget_max_llm_calls),
         "CONFIG_BUDGET_MAX_RUNTIME": str(budget_max_runtime),
@@ -1217,19 +1528,17 @@ def compute_variables(
         "CONFIG_SEVERITY_RANK_MEDIUM": str(severity_rank_medium),
         "CONFIG_SEVERITY_RANK_HIGH": str(severity_rank_high),
         "CONFIG_SEVERITY_RANK_CRITICAL": str(severity_rank_critical),
+        "CONFIG_FALSIFICATION_VECTOR_SEVERITIES": ";".join(
+            f"{name}={severity}"
+            for name, severity in falsification_vector_severities.items()
+        ),
         "CONFIG_PRUNING_STALENESS_DAYS": str(pruning_staleness_days),
         "CONFIG_PRUNING_LOW_CALL_COUNT": str(pruning_low_call_count),
         "CONFIG_PRUNING_DEPENDENCY_VETO": str(pruning_dependency_veto),
-        "CONFIG_PRUNING_DUPLICATE_CONFIDENCE": str(
-            pruning_duplicate_confidence
-        ),
-        "CONFIG_PRUNING_NEVER_USED_CONFIDENCE": str(
-            pruning_never_used_confidence
-        ),
+        "CONFIG_PRUNING_DUPLICATE_CONFIDENCE": str(pruning_duplicate_confidence),
+        "CONFIG_PRUNING_NEVER_USED_CONFIDENCE": str(pruning_never_used_confidence),
         "CONFIG_PRUNING_STALE_CONFIDENCE": str(pruning_stale_confidence),
-        "CONFIG_PRUNING_LOW_USAGE_CONFIDENCE": str(
-            pruning_low_usage_confidence
-        ),
+        "CONFIG_PRUNING_LOW_USAGE_CONFIDENCE": str(pruning_low_usage_confidence),
         "CONFIG_PRUNING_MIN_CONFIDENCE": str(pruning_min_confidence),
         "CONFIG_AGENT_COUNT": str(agent_count),
         "CONFIG_WORKLOAD_TASK_COUNT": str(workload_task_count),
@@ -1283,6 +1592,17 @@ def compute_variables(
         "CONFIG_FIRST_AUTHOR": first_author,
         "CONFIG_KEYWORDS": keywords_str,
         "CONFIG_HASH": config_hash,
+        "CONFIG_EXPERIMENT_SEED": str(experiment_seed),
+        "REPRO_GIT_COMMIT": git_commit,
+        "REPRO_WORKTREE_DIRTY": str(worktree_dirty).lower(),
+        "REPRO_ENVIRONMENT_HASH": environment_hash,
+        "REPRO_PYPROJECT_HASH": pyproject_hash,
+        "REPRO_LOCK_HASH": lock_hash,
+        "REPRO_INVENTORY_HASH": inventory_hash,
+        "REPRO_INVENTORY_MODULE_COUNT": str(inventory["top_level_modules"]),
+        "REPRO_INVENTORY_MCP_FILE_COUNT": str(inventory["mcp_tools_py"]),
+        "REPRO_INVENTORY_MCP_DECORATOR_COUNT": str(inventory["mcp_decorators"]),
+        "REPRO_INVENTORY_WORKFLOW_COUNT": str(inventory["workflow_count"]),
         # RESULT tokens
         "RESULT_TEST_COUNT": str(test_count),
         # CONFIG_TEST_COUNT: alias for RESULT_TEST_COUNT — 05_experimental_setup.md line 11
@@ -1304,13 +1624,27 @@ def compute_variables(
         "ARTIFACT_CONFIG_FILES": str(config_files_found),
         "ARTIFACT_MCP_TOOLS": str(mcp_tools_artifact),
         "ARTIFACT_FIGURE_COUNT": str(figure_count),
-        "ARTIFACT_COMBINED_PDF_PATH": (
-            f"output/pdf/{project_root.name}_combined.pdf"
-        ),
+        "ARTIFACT_COMBINED_PDF_PATH": (f"output/pdf/{project_root.name}_combined.pdf"),
         # Platform tokens
         "PYTHON_VERSION": python_version,
         "PLATFORM": platform_name,
         "GENERATION_TIMESTAMP": generation_timestamp,
     }
+
+    # Resolve configured figure metadata only after the complete base map exists.
+    # Captions therefore share exactly the same live values as prose, tables, and
+    # figure annotations, while the source Markdown contains no duplicated caption
+    # text or filenames.
+    for key, spec in figure_config.items():
+        slug = re.sub(r"[^A-Z0-9]+", "_", str(key).upper()).strip("_")
+        variables[f"FIGURE_FILENAME_{slug}"] = str(spec["filename"])
+        variables[f"FIGURE_LABEL_{slug}"] = str(spec["label"])
+        variables[f"FIGURE_WIDTH_{slug}"] = str(spec["width"])
+        variables[f"FIGURE_EVIDENCE_{slug}"] = str(spec["evidence_class"])
+        variables[f"FIGURE_CAPTION_{slug}"] = _render_template(
+            str(spec["caption"]),
+            variables,
+            source_label=f"figure metadata {key}",
+        )
 
     return variables

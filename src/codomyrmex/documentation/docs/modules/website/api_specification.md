@@ -172,27 +172,33 @@ Execute a script from the `scripts/` directory.
 
 ### POST `/api/tests`
 
-Run pytest for a specific module or all modules.
+Start pytest for a specific module or all modules in a background worker.
 
 - **Request Body**:
     ```json
     {
-      "module": "website"
+      "module": "website",
+      "validate_only": false
     }
     ```
-    Omit `module` to run all tests.
-- **Response (200)**:
+    Omit `module` to run all tests. Set `validate_only` (or the `dry_run`
+    alias) to `true` to validate the route and data-provider configuration
+    without starting pytest.
+- **Response (202)**:
     ```json
     {
-      "passed": 92,
-      "failed": 0,
-      "skipped": 0,
-      "errors": 0,
-      "total": 92,
-      "success": true,
-      "returncode": 0,
-      "output": "92 passed in 20.69s",
-      "module": "website"
+      "status": "running",
+      "message": "Test run started in background."
+    }
+    ```
+    Poll `GET /api/tests/status` for results.
+- **Validation-only response (200)**:
+    ```json
+    {
+      "status": "validated",
+      "message": "Test route and data provider are available.",
+      "module": "website",
+      "worker_started": false
     }
     ```
 

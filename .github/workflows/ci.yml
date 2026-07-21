@@ -77,14 +77,12 @@ jobs:
 
       - name: Validate dependencies
         run: |
-          echo "🔍 Validating dependency management..."
-          uv run python3 scripts/validation/validate_dependencies.py || true
+          uv run python scripts/validation/validate_dependencies.py --repo-root . --strict
 
       - name: Check module dependencies
         run: |
-          echo "🔍 Checking module dependency hierarchy..."
-          uv run python3 scripts/validation/dependency_analyzer.py || true
-          uv run python3 scripts/maintenance/check_dependencies.py || true
+          uv run python scripts/validation/dependency_analyzer.py --repo-root .
+          uv run python scripts/maintenance/check_dependencies.py --repo-root .
 
   security-scan:
     name: Security Analysis
@@ -108,8 +106,9 @@ jobs:
 
       - name: Run Bandit security scan
         run: |
-          uv run bandit -r src/codomyrmex/ -f json -o bandit-report.json || true
-          uv run bandit -r src/codomyrmex/ || true
+          uv run bandit -r src/codomyrmex/ \
+            -x '*/tests/*,*/vendor/*,*/generated/*,src/codomyrmex/agents/open_gauss,src/codomyrmex/documentation/docs' \
+            -lll -iii -f json -o bandit-report.json
 
       - name: Upload Bandit results
         uses: actions/upload-artifact@v4
@@ -164,8 +163,40 @@ jobs:
           name: complexity-analysis
           path: complexity-report.md
 
+  documentation-gates:
+    name: Documentation contracts
+    runs-on: ubuntu-latest
+    needs: lint-and-format
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Run documentation gates
+        run: make docs-check
+
+      - name: Upload documentation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-reports
+          path: |
+            output/**
+            docs/**/link*.json
+          if-no-files-found: ignore
+
   coverage-gate:
-    name: Coverage gate (40%)
+    name: Coverage gate (60%)
     runs-on: ubuntu-latest
     needs: lint-and-format
     timeout-minutes: 120
@@ -192,6 +223,7 @@ jobs:
       - name: Full test suite with coverage floor
         run: |
           uv run pytest tests/ -q --tb=short \
+            -m "not performance and not benchmark and not bench" \
             --cov=src/codomyrmex \
             --cov-report=term-missing \
             --cov-report=json:coverage-gate.json \
@@ -236,7 +268,6 @@ jobs:
           mkdir -p src/codomyrmex/output
 
       - name: Run unit tests
-        continue-on-error: true
         run: |
           uv run pytest tests/unit/ -v --tb=short \
             --cov=src/codomyrmex \
@@ -249,7 +280,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          uv run pytest tests/integration/ -v --tb=short --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml || true
+          uv run pytest tests/integration/ -v --tb=short --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml
 
       - name: Save coverage.json to root
         shell: bash
@@ -322,7 +353,7 @@ jobs:
 
       - name: Run comprehensive tests for ${{ matrix.test-suite }}
         run: |
-          uv run pytest tests/unit/${{ matrix.test-suite }}/ -v --tb=short --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml || true
+          uv run pytest tests/unit/${{ matrix.test-suite }}/ -v --tb=short --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml
 
       - name: Upload comprehensive test results
         uses: actions/upload-artifact@v4
@@ -362,7 +393,6 @@ jobs:
           path: dist/
 
       - name: Test package installation
-        continue-on-error: true
         run: |
           # Test installation from built wheel
           uv pip install dist/*.whl
@@ -439,16 +469,29 @@ jobs:
           if [ -f "$COV_JSON" ]; then
             pct=$(python3 -c "import json; d=json.load(open('$COV_JSON')); print(f\"{d['totals']['percent_covered']:.1f}\")" 2>/dev/null || echo "N/A")
             echo "## Coverage" >> $GITHUB_STEP_SUMMARY
-            echo "- **Coverage**: ${pct}% (documented gate: 40%)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Coverage**: ${pct}% (documented gate: 60%)" >> $GITHUB_STEP_SUMMARY
           else
             echo "## Coverage" >> $GITHUB_STEP_SUMMARY
             echo "- Coverage report not available (see artifacts)" >> $GITHUB_STEP_SUMMARY
           fi
 
+      - name: Enforce test job results
+        run: |
+          test_matrix_result="${{ needs.test-matrix.result }}"
+          comprehensive_result="${{ needs.comprehensive-tests.result }}"
+          if [[ "$test_matrix_result" != "success" ]]; then
+            echo "Test matrix result was $test_matrix_result; failing the summary job."
+            exit 1
+          fi
+          if [[ "$comprehensive_result" != "success" && "$comprehensive_result" != "skipped" ]]; then
+            echo "Comprehensive test result was $comprehensive_result; failing the summary job."
+            exit 1
+          fi
+
   final-status:
     name: CI Status
     runs-on: ubuntu-latest
-    needs: [lint-and-format, security-scan, complexity-analysis, test-matrix, coverage-gate, build-package, validate-dependencies, test-summary]
+    needs: [lint-and-format, security-scan, complexity-analysis, documentation-gates, test-matrix, coverage-gate, build-package, validate-dependencies, test-summary]
     if: always()
     steps:
       - name: Check CI Status
@@ -474,6 +517,7 @@ jobs:
           check_result "Code Quality"        "${{ needs.lint-and-format.result }}"
           check_result "Security Scan"       "${{ needs.security-scan.result }}"
           check_result "Complexity Analysis" "${{ needs.complexity-analysis.result }}"
+          check_result "Documentation"       "${{ needs.documentation-gates.result }}"
           check_result "Test Matrix"         "${{ needs.test-matrix.result }}"
           check_result "Coverage gate"       "${{ needs.coverage-gate.result }}"
           check_result "Package Build"       "${{ needs.build-package.result }}"
@@ -491,4 +535,3 @@ jobs:
             echo "❌ Some CI checks failed!"
             exit 1
           fi
-

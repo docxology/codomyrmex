@@ -565,14 +565,19 @@ class MCPServer:
             except Exception as e:
                 print(f"Error: {e}", file=sys.stderr)
 
-    async def run_http(self, host: str = "0.0.0.0", port: int = 8080) -> None:
-        """Run server over HTTP transport with Streamable HTTP + REST endpoints.
+    def _create_http_app(
+        self,
+        *,
+        allowed_origins: list[str] | None = None,
+        auth_token: str | None = None,
+    ) -> Any:
+        """Build the HTTP application used by :meth:`run_http`.
 
-        Args:
-            host: Bind address.
-            port: Port number.
+        Authentication is intentionally opt-in for loopback-only use, but a
+        token supplied here protects every HTTP endpoint, including health and
+        tool-discovery routes.  Non-loopback binding is rejected by
+        :meth:`run_http` unless a token is configured.
         """
-        import uvicorn
         from fastapi import FastAPI, Request
         from fastapi.middleware.cors import CORSMiddleware
         from fastapi.responses import HTMLResponse, JSONResponse
@@ -586,13 +591,32 @@ class MCPServer:
             redoc_url=None,
         )
 
+        origins = [origin.rstrip("/") for origin in (allowed_origins or [])]
         app.add_middleware(
             CORSMiddleware,
-            allow_origins=["*"],
-            allow_credentials=True,
-            allow_methods=["*"],
-            allow_headers=["*"],
+            allow_origins=origins,
+            allow_credentials=bool(origins),
+            allow_methods=["GET", "POST", "OPTIONS"],
+            allow_headers=["Authorization", "Content-Type", "X-Correlation-ID"],
         )
+
+        if auth_token:
+
+            @app.middleware("http")
+            async def require_auth(request: Request, call_next):
+                # CORS preflight requests do not carry the bearer token. Let
+                # CORSMiddleware answer them; actual data requests remain
+                # authenticated below.
+                if request.method == "OPTIONS":
+                    return await call_next(request)
+                authorization = request.headers.get("authorization", "")
+                if authorization != f"Bearer {auth_token}":
+                    return JSONResponse(
+                        content={"detail": "Authentication required"},
+                        status_code=401,
+                        headers={"WWW-Authenticate": "Bearer"},
+                    )
+                return await call_next(request)
 
         server = self  # capture for closures
 
@@ -654,17 +678,18 @@ class MCPServer:
         async def call_tool(tool_name: str, request: Request) -> JSONResponse:
             try:
                 body = await request.json()
-            except Exception as _exc:
+            except Exception:
                 body = {}
 
             cid = request.headers.get("x-correlation-id") or request.headers.get(
                 "X-Correlation-ID"
             )
-            result = await server._call_tool(  # type: ignore
+            result = await server._dispatch(
+                "tools/call",
                 {
                     "name": tool_name,
                     "arguments": body,
-                }
+                },
             )
 
             headers = {}
@@ -681,6 +706,39 @@ class MCPServer:
         async def list_prompts():
             result = await server._list_prompts({})
             return JSONResponse(content=result)
+
+        return app
+
+    async def run_http(
+        self,
+        host: str = "127.0.0.1",
+        port: int = 8080,
+        *,
+        allowed_origins: list[str] | None = None,
+        auth_token: str | None = None,
+    ) -> None:
+        """Run HTTP transport with safe network defaults.
+
+        Args:
+            host: Bind address. Non-loopback hosts require ``auth_token``.
+            port: Port number.
+            allowed_origins: Explicit browser origins allowed by CORS.
+            auth_token: Bearer token required on every HTTP request when set.
+        """
+        normalized_host = host.strip("[]").lower()
+        loopback_hosts = {"localhost", "127.0.0.1", "::1"}
+        if normalized_host not in loopback_hosts and not auth_token:
+            raise ValueError(
+                "auth_token is required when binding MCP HTTP transport "
+                f"to non-loopback host {host!r}"
+            )
+
+        import uvicorn
+
+        app = self._create_http_app(
+            allowed_origins=allowed_origins,
+            auth_token=auth_token,
+        )
 
         config = uvicorn.Config(
             app,

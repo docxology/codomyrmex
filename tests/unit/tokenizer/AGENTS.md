@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/tokenizer
+# Codomyrmex Agents — tests/unit/tokenizer
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

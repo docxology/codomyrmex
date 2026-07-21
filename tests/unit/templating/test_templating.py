@@ -138,6 +138,19 @@ class TestTemplateEngineMako:
         result = engine.render(template, {"greeting": "Hi", "name": "Bob"})
         assert result == "Hi, Bob!"
 
+    def test_render_escapes_html_by_default(self, engine):
+        """Mako templates escape context values unless explicitly opted out."""
+        result = engine.render("${value}", {"value": "<script>alert(1)</script>"})
+        assert "<script>" not in result
+        assert "&lt;script&gt;" in result
+
+    def test_render_can_explicitly_disable_html_escaping(self):
+        """Trusted HTML callers can opt out with the documented flag."""
+        engine = TemplateEngine(engine="mako", autoescape=False)
+        assert (
+            engine.render("${value}", {"value": "<b>trusted</b>"}) == "<b>trusted</b>"
+        )
+
     def test_render_with_conditionals(self, engine):
         """Test rendering with Mako conditionals."""
         template = "% if active:\nActive\n% else:\nInactive\n% endif"

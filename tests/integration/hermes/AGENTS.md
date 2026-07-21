@@ -1,12 +1,12 @@
 <!-- agents: curated -->
 
-# Codomyrmex Agents — src/codomyrmex/tests/integration/hermes
+# Codomyrmex Agents — tests/integration/hermes
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Signposting
 
-- **Path**: `src/codomyrmex/tests/integration/hermes`
+- **Path**: `tests/integration/hermes`
 - **Human overview**: [README.md](README.md)
 - **Functional spec**: [SPEC.md](SPEC.md)
 - **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)
@@ -60,6 +60,7 @@ Validation coverage, fixtures, and regression checks for Hermes.
 - Follow the universal agent protocols defined in the root `AGENTS.md`.
 - Adhere to the Python PEP 8 style guide and project-specific linting rules.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+- Tests that invoke a live Ollama model are opt-in: run them with `RUN_LIVE_OLLAMA=1`.
 
 ## Navigation Links
 - **Parent directory**: [integration](../README.md) — parent folder overview

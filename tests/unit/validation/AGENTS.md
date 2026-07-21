@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/validation
+# Codomyrmex Agents — tests/unit/validation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

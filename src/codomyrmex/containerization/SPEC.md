@@ -14,7 +14,7 @@ Manages Docker and Kubernetes resources. It abstracts container operations (buil
 ## Functional Requirements
 
 1. **Build**: Create container images from Dockerfiles.
-2. **Run**: Launch containers for src/codomyrmex/tests/production.
+2. **Run**: Launch containers for tests/production.
 3. **Registry**: Push/pull images.
 
 ## Interface Contracts

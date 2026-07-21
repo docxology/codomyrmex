@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/integration/audio
+# Codomyrmex Agents — tests/integration/audio
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

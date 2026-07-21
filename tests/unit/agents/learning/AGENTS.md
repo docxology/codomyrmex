@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/learning
+# Codomyrmex Agents — tests/unit/agents/learning
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

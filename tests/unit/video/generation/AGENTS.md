@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/video/generation
+# Codomyrmex Agents — tests/unit/video/generation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

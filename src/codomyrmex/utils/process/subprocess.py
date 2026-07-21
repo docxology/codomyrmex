@@ -393,7 +393,7 @@ def run_command(
             cwd=cwd,
             env=prepared_env,
             timeout=timeout,
-            shell=shell,
+            shell=shell,  # nosec B602 - caller explicitly selects trusted shell mode
             capture_output=capture_output,
             text=True,
             input=input_data,

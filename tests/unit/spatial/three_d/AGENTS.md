@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/spatial/three_d
+# Codomyrmex Agents — tests/unit/spatial/three_d
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

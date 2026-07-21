@@ -30,7 +30,7 @@ See `src/codomyrmex/video/processing/__init__.py` for import dependencies.
 ## 5. Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k processing -v
+uv run python -m pytest tests/ -k processing -v
 ```
 
 ## References
