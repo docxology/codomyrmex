@@ -390,7 +390,9 @@ class TestToolExecution:
 
     def test_analyze_python_file(self, server):
         # Analyze tools.py itself
-        tools_py = PACKAGE_ROOT / "model_context_protocol" / "tools.py"
+        tools_py = (
+            PACKAGE_ROOT / "model_context_protocol" / "tools.py"
+        )
         if not tools_py.exists():
             pytest.skip("tools.py not found")
 

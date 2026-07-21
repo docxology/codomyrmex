@@ -131,10 +131,8 @@ class Trajectory4D:
         """Total Euclidean path length through the spatial waypoints."""
         total = 0.0
         for i in range(1, len(self.waypoints)):
-            total += (
-                self.waypoints[i]
-                .to_point3d()
-                .distance_to(self.waypoints[i - 1].to_point3d())
+            total += self.waypoints[i].to_point3d().distance_to(
+                self.waypoints[i - 1].to_point3d()
             )
         return total
 
@@ -143,8 +141,8 @@ class Trajectory4D:
         """Straight-line distance from first to last spatial waypoint."""
         if len(self.waypoints) < 2:
             return 0.0
-        return (
-            self.waypoints[0].to_point3d().distance_to(self.waypoints[-1].to_point3d())
+        return self.waypoints[0].to_point3d().distance_to(
+            self.waypoints[-1].to_point3d()
         )
 
     def to_dict(self) -> dict[str, Any]:

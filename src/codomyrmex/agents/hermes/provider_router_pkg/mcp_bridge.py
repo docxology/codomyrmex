@@ -17,7 +17,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-
 class MCPBridgeManager:
     """Manage the Hermes ↔ Codomyrmex MCP bridge.
 

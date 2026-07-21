@@ -46,7 +46,9 @@ def check_security_risk(plan: dict[str, Any]) -> FalsificationFinding | None:
         r"\bguard_ant\b",
         r"\bthreat\s+model\b",
     ]
-    has_ack = any(re.search(p, combined, re.IGNORECASE) for p in security_ack_patterns)
+    has_ack = any(
+        re.search(p, combined, re.IGNORECASE) for p in security_ack_patterns
+    )
 
     if not has_ack:
         return FalsificationFinding(
