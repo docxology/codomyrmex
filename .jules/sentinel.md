@@ -11,3 +11,7 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+## 2026-07-22 - Command injection in transcription tools
+**Vulnerability:** Command injection vulnerability in _transcribe_local_command by executing a user-configurable command template via subprocess.run with shell=True.
+**Learning:** The vulnerability existed because shell=True was used to invoke a string command, allowing for potential command injection via manipulated environment variables or paths.
+**Prevention:** Avoid shell=True for executing subprocesses. Use shell=False and pass arguments as a list by parsing strings with shlex.split() or constructing lists manually.
