@@ -22,9 +22,7 @@ class FPFExtractor:
     """Extractor for FPF patterns, concepts, and relationships."""
 
     _U_TYPE_PATTERN = re.compile(r"`?U\.(\w+)`?")
-    _CONCEPT_PATTERN = re.compile(
-        r"`?([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`?"
-    )
+    _CONCEPT_PATTERN = re.compile(r"`?([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`?")
 
     def __init__(self):
         """Initialize the extractor."""

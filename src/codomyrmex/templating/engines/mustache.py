@@ -62,6 +62,7 @@ class MustacheEngine(TemplateEngine):
 
     def _process_sections(self, template: str, context: dict[str, Any]) -> str:
         """Process {{#section}} and {{^section}} blocks."""
+
         def replace(match):
             section_type = match.group(1)
             name = match.group(2).strip()
@@ -83,6 +84,7 @@ class MustacheEngine(TemplateEngine):
 
     def _process_variables(self, template: str, context: dict[str, Any]) -> str:
         """Process {{variable}} expressions with optional triple-mustache or & unescaped."""
+
         def replace(match):
             name = match.group(1).strip()
 

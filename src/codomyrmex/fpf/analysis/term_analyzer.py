@@ -16,15 +16,9 @@ class TermAnalyzer:
     """Analyzer for shared terms and variables in FPF specifications."""
 
     _U_TYPE_PATTERN = re.compile(r"`?U\.([A-Z][a-zA-Z0-9]*)`?")
-    _VARIABLE_PATTERN = re.compile(
-        r"`([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`"
-    )
-    _TERM_PATTERN = re.compile(
-        r"\b([A-Z][a-z]+(?:[A-Z][a-z]+)*)\b"
-    )  # CamelCase terms
-    _KEYWORD_PATTERN = re.compile(
-        r"\*\*?([A-Z][a-zA-Z\s-]+?)\*\*?"
-    )  # Bold terms
+    _VARIABLE_PATTERN = re.compile(r"`([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`")
+    _TERM_PATTERN = re.compile(r"\b([A-Z][a-z]+(?:[A-Z][a-z]+)*)\b")  # CamelCase terms
+    _KEYWORD_PATTERN = re.compile(r"\*\*?([A-Z][a-zA-Z\s-]+?)\*\*?")  # Bold terms
 
     def __init__(self):
         """Initialize the term analyzer."""
