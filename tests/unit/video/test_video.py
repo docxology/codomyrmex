@@ -332,7 +332,7 @@ class TestFrameExtractor:
 
     def test_supported_formats(self) -> None:
         """Test supported format constants."""
-        from codomyrmex.video.extraction.frame_extractor import SUPPORTED_FORMATS
+        from codomyrmex.video._validation import SUPPORTED_FORMATS
 
         assert ".mp4" in SUPPORTED_FORMATS
         assert ".avi" in SUPPORTED_FORMATS
