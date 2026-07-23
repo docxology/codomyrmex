@@ -14,14 +14,19 @@ from .models import FPFSpec, Pattern, PatternStatus
 class FPFParser:
     """Parser for FPF specification markdown files."""
 
+    _PATTERN_REGEX = re.compile(
+        r"^##\s+([A-Z]\.\d+(?:\.\d+)?(?:\.[A-Z])?)\s*[-–]\s*(.+)$"
+    )
+    _SECTION_REGEX = re.compile(r"^###\s+(.+)$")
+    _SUBSECTION_REGEX = re.compile(r"^####\s+(.+)$")
+    _SUBSUBSECTION_REGEX = re.compile(r"^#####\s+(.+)$")
+
     def __init__(self):
         """Initialize the parser."""
-        self.pattern_regex = re.compile(
-            r"^##\s+([A-Z]\.\d+(?:\.\d+)?(?:\.[A-Z])?)\s*[-–]\s*(.+)$"
-        )
-        self.section_regex = re.compile(r"^###\s+(.+)$")
-        self.subsection_regex = re.compile(r"^####\s+(.+)$")
-        self.subsubsection_regex = re.compile(r"^#####\s+(.+)$")
+        self.pattern_regex = self._PATTERN_REGEX
+        self.section_regex = self._SECTION_REGEX
+        self.subsection_regex = self._SUBSECTION_REGEX
+        self.subsubsection_regex = self._SUBSUBSECTION_REGEX
 
     def parse_spec(
         self, markdown_content: str, source_path: str | None = None
