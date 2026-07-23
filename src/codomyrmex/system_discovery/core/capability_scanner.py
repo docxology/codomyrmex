@@ -568,19 +568,33 @@ class CapabilityScanner:
             "complexity_analysis": {},  # Complexity statistics
         }
 
-        # Analyze function calls (simplified - would need more sophisticated analysis)
         all_function_names = set()
-        for module_cap in capabilities.values():
-            for func in module_cap.functions:
-                all_function_names.add(func.name)
-
-        # Find shared function names
         function_counts = {}
+        all_complexities = []
+        high_complexity_functions = []
+
+        # Single pass through all capabilities and functions
         for module_name, module_cap in capabilities.items():
             for func in module_cap.functions:
-                if func.name not in function_counts:
-                    function_counts[func.name] = []
-                function_counts[func.name].append(module_name)
+                name = func.name
+                all_function_names.add(name)
+
+                # Count shared functions
+                if name not in function_counts:
+                    function_counts[name] = []
+                function_counts[name].append(module_name)
+
+                # Analyze complexity
+                score = func.complexity_score
+                all_complexities.append(score)
+                if score > 10:
+                    high_complexity_functions.append(
+                        {
+                            "module": module_name,
+                            "function": name,
+                            "complexity": score,
+                        }
+                    )
 
         relationships["shared_functions"] = [
             {"name": name, "modules": modules}
@@ -588,27 +602,12 @@ class CapabilityScanner:
             if len(modules) > 1
         ]
 
-        # Analyze complexity
-        all_complexities = []
-        for module_cap in capabilities.values():
-            for func in module_cap.functions:
-                all_complexities.append(func.complexity_score)
-
         if all_complexities:
             relationships["complexity_analysis"] = {
                 "average": sum(all_complexities) / len(all_complexities),
                 "max": max(all_complexities),
                 "min": min(all_complexities),
-                "high_complexity_functions": [
-                    {
-                        "module": module_name,
-                        "function": func.name,
-                        "complexity": func.complexity_score,
-                    }
-                    for module_name, module_cap in capabilities.items()
-                    for func in module_cap.functions
-                    if func.complexity_score > 10
-                ],
+                "high_complexity_functions": high_complexity_functions,
             }
 
         return relationships
