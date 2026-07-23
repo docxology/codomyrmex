@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-07-22 - Pre-compile Regex in Hot Paths
+**Learning:** Compiling regular expressions via `re.compile()` inside frequently called functions (like template rendering methods) or `__init__` methods creates unnecessary overhead and slows down performance. Python's `re` module caches some patterns, but compiling them at the module level is measurably faster.
+**Action:** Define regular expressions as module-level constants (e.g., `_VAR_PATTERN = re.compile(...)`) instead of recompiling them on every method call or object instantiation.
