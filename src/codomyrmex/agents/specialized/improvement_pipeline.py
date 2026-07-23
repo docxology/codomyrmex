@@ -27,35 +27,35 @@ if TYPE_CHECKING:
 _ANTI_PATTERNS: list[dict[str, Any]] = [
     {
         "name": "bare_except",
-        "pattern": r"except\s*:",
+        "pattern": re.compile(r"except\s*:"),
         "description": "Bare except clause catches all exceptions including SystemExit",
         "severity": 0.7,
         "fix_template": "except (ValueError, RuntimeError, AttributeError, OSError, TypeError):",
     },
     {
         "name": "mutable_default",
-        "pattern": r"def\s+\w+\([^)]*=\s*\[\]",
+        "pattern": re.compile(r"def\s+\w+\([^)]*=\s*\[\]"),
         "description": "Mutable default argument (list) — shared across calls",
         "severity": 0.8,
         "fix_template": "=None",
     },
     {
         "name": "star_import",
-        "pattern": r"from\s+\S+\s+import\s+\*",
+        "pattern": re.compile(r"from\s+\S+\s+import\s+\*"),
         "description": "Star import pollutes namespace and hides dependencies",
         "severity": 0.5,
         "fix_template": None,
     },
     {
         "name": "print_debug",
-        "pattern": r"^\s*print\s*\(",
+        "pattern": re.compile(r"^\s*print\s*\("),
         "description": "Debug print statement left in production code",
         "severity": 0.3,
         "fix_template": None,
     },
     {
         "name": "todo_fixme",
-        "pattern": r"#\s*(TODO|FIXME|HACK|XXX)",
+        "pattern": re.compile(r"#\s*(TODO|FIXME|HACK|XXX)"),
         "description": "Unresolved TODO/FIXME comment",
         "severity": 0.2,
         "fix_template": None,
@@ -94,7 +94,7 @@ class AntiPatternDetector:
             if ap_def["severity"] < self._threshold:
                 continue
 
-            pattern = re.compile(ap_def["pattern"])
+            pattern = ap_def["pattern"]
             for i, line in enumerate(lines, 1):
                 if pattern.search(line):
                     results.append(
@@ -240,7 +240,7 @@ class ImprovementPipeline:
         for ap_def in _ANTI_PATTERNS:
             if ap_def["name"] == ap.name and ap_def.get("fix_template"):
                 old_line = ap.snippet
-                pattern = re.compile(ap_def["pattern"])
+                pattern = ap_def["pattern"]
                 new_line = pattern.sub(ap_def["fix_template"], old_line)
 
                 if new_line != old_line:

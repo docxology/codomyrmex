@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2024-05-18 - Avoid repeated regex compilation in ImprovementPipeline
+**Learning:** Compiling regex patterns on the fly inside hot loops (like in `analyze` and `_default_fix_generator`) incurs significant overhead.
+**Action:** Moved the `re.compile()` calls to the static definition dictionary `_ANTI_PATTERNS` to pre-compile them at module load time, speeding up the regex evaluation.
