@@ -57,6 +57,11 @@ def test_docs_modules_have_source_entries() -> None:
     assert catalog.docs_modules_without_source_entries == ()
 
 
+def test_docs_module_missing() -> None:
+    catalog = build_module_catalog(_repo_root())
+    assert catalog.docs_module_missing == ()
+
+
 def test_catalog_to_dict_is_json_ready() -> None:
     data = build_module_catalog(_repo_root()).to_dict()
     assert data["runtime_module_count"] > 0
