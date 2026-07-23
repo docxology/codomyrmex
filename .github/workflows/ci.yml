@@ -229,6 +229,59 @@ jobs:
             --cov-report=json:coverage-gate.json \
             --cov-fail-under=60
 
+  offline-research:
+    name: Offline research and provenance gate
+    runs-on: ubuntu-latest
+    needs: [lint-and-format]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Run offline research and contract suites
+        run: |
+          uv run pytest -q \
+            tests/unit/colony_kernel/test_attestation.py \
+            tests/unit/colony_kernel/test_formal_bridge.py \
+            tests/unit/colony_kernel/test_kernel_attestation_integration.py \
+            tests/unit/colony_kernel/test_reference_semantics.py \
+            tests/unit/colony_kernel/test_research_harness.py \
+            tests/unit/build_synthesis/test_build_synthesis.py \
+            tests/unit/manuscript/test_integrity.py \
+            tests/unit/manuscript/test_variable_contract.py \
+            tests/scripts/sair/test_sair_scripts.py
+          uv run python scripts/run_colony_research.py \
+            --output output/research/colony_kernel_offline.json --seed 0
+
+      - name: Generate manuscript evidence and validate provenance
+        run: |
+          uv run python scripts/z_generate_manuscript_variables.py
+          uv run python scripts/validate_manuscript_contract.py
+          uv run python scripts/generate_manuscript_figures.py
+          uv run python scripts/validate_manuscript_integrity.py
+          test -s output/data/manuscript_variable_manifest.json
+          test -s output/figures/figure_registry.json
+
+      - name: Upload offline research artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: offline-research-artifacts
+          path: |
+            output/research/**
+            output/data/manuscript_variable_manifest.json
+            output/figures/figure_registry.json
+
   test-matrix:
     name: Test Suite
     runs-on: ${{ matrix.os }}
@@ -491,7 +544,7 @@ jobs:
   final-status:
     name: CI Status
     runs-on: ubuntu-latest
-    needs: [lint-and-format, security-scan, complexity-analysis, documentation-gates, test-matrix, coverage-gate, build-package, validate-dependencies, test-summary]
+    needs: [lint-and-format, security-scan, complexity-analysis, documentation-gates, test-matrix, coverage-gate, offline-research, build-package, validate-dependencies, test-summary]
     if: always()
     steps:
       - name: Check CI Status
@@ -520,6 +573,7 @@ jobs:
           check_result "Documentation"       "${{ needs.documentation-gates.result }}"
           check_result "Test Matrix"         "${{ needs.test-matrix.result }}"
           check_result "Coverage gate"       "${{ needs.coverage-gate.result }}"
+          check_result "Offline research"    "${{ needs.offline-research.result }}"
           check_result "Package Build"       "${{ needs.build-package.result }}"
           check_result "Dependencies"        "${{ needs.validate-dependencies.result }}"
           check_result "Test Summary"        "${{ needs.test-summary.result }}"

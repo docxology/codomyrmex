@@ -16,7 +16,7 @@ Orchestration scripts for the PAI dashboard ecosystem. Agents use these thin wra
 | **Update** | `update_pai_docs.py` — batch update stub PAI.md files across modules |
 | **Sync** | `update_pai_skill.py` — regenerate the Codomyrmex SKILL.md tool table |
 | **Validate** | `validate_pai_integration.py` — verify PAI integration health |
-| **Email Test** | `test_email_compose.py` — validate LLM email compose with real project/calendar data |
+| **Email Test** | `tests/integration/pai/test_email_compose.py` — validate LLM email compose with real project/calendar data |
 
 ## Quick Start
 
@@ -25,8 +25,8 @@ uv run python scripts/pai/dashboard.py           # full launch (both :8888 + :87
 uv run python scripts/pai/dashboard.py --restart  # kill + restart both servers
 uv run python scripts/pai/generate_skills.py      # regenerate all SKILL.md files
 uv run python scripts/pai/validate_pai_integration.py  # check integration health
-uv run python scripts/pai/test_email_compose.py --dry-run  # check email API connectivity
-uv run python scripts/pai/test_email_compose.py   # full LLM email compose tests (requires ollama)
+uv run python -m pytest tests/integration/pai/test_email_compose.py --dry-run  # check email API connectivity
+uv run python -m pytest tests/integration/pai/test_email_compose.py  # full LLM email compose tests (explicit live-service opt-in)
 ```
 
 ## Dependencies

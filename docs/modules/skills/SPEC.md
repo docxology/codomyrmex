@@ -176,7 +176,7 @@ When loading a skill:
 4. Custom skills override upstream skills
 5. MCP tools functional
 6. CLI commands work
-7. Tests pass with ≥80% coverage
+7. Tests pass with the 60% project-wide line-coverage floor
 8. Documentation complete and accurate
 
 ## Navigation

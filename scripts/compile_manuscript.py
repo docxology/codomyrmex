@@ -61,6 +61,8 @@ MANUSCRIPT_SECTION_ORDER = (
     "08_active_inference.md",
     "06_reproducibility.md",
     "04_conclusion.md",
+    "09_research_roadmap.md",
+    "10_formalism_code_crosswalk.md",
     "90_appendix_design_rationale.md",
     "98_acknowledgements.md",
     "99_references.md",

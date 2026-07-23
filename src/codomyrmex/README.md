@@ -1,10 +1,10 @@
 # codomyrmex
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: April 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Overview
 
-Installable package root for Codomyrmex. This directory contains the public package facade, module implementations, MCP tool surfaces, agent integrations, shared foundation modules, and source-level tests. Volatile module and MCP counts are tracked in [../../docs/reference/inventory.md](../../docs/reference/inventory.md).
+Installable package root for Codomyrmex. This directory contains the public package facade, module implementations, MCP tool surfaces, and agent integrations. The authoritative test tree is the repository-level [tests/](../../tests/); volatile module and MCP counts are tracked in [../../docs/reference/inventory.md](../../docs/reference/inventory.md).
 
 ## Directory Contents
 - `INDEX.md` – File

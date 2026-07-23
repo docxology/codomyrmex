@@ -1,8 +1,8 @@
 # Repository inventory (metrics)
 
-Single source of truth for counts used in documentation and marketing copy. **Refresh** after large changes to modules, tools, or tests.
+Single source of truth for counts used in documentation and marketing copy. **Refresh** after large changes to modules, tools, documentation, or tests. Values below are a measured snapshot, not a timeless project invariant.
 
-**Last updated:** 2026-07-19
+**Last updated:** 2026-07-22
 
 ## Definitions
 
@@ -26,9 +26,9 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | `mcp_tools.py` files (non-test) | 150 |
 | Runtime MCP tools | 608 (PAI merged manifest; standalone launcher full profile enumerates 605; HTTP defaults to 10 readonly tools) |
 | Production `@mcp_tool` decorators | 623 |
-| Pytest tests collected | 35,375 (`uv run python scripts/doc_inventory.py --pytest`) |
+| Pytest tests collected | 35,444 (`uv run python scripts/doc_inventory.py --pytest`) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
-| Markdown files under `docs/` | 1,203 (`find docs -name '*.md' -type f \| wc -l`) |
+| Markdown files under `docs/` | 1,207 (`find docs -name '*.md' -type f \| wc -l`) |
 
 ## Reproduce
 
@@ -47,6 +47,13 @@ find src/codomyrmex -name 'mcp_tools.py' -not -path '*/tests/*' | wc -l
 uv run python scripts/doc_inventory.py --pytest
 find docs -name '*.md' -type f | wc -l
 ```
+
+The script's unqualified output is the authoritative fast inventory; `--pytest` and
+`--manifest` add slower runtime-derived measurements. Update this snapshot only after
+running the corresponding command in the same checkout and recording the measurement
+date above. Historical documents may retain older values when they describe a past
+release; active contract documents should link here instead of copying unqualified
+counts.
 
 Top-level module count (Python):
 

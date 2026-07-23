@@ -1,4 +1,4 @@
-# Alignment and Safety: Information-Theoretic Value Loading in Modular AI
+# Alignment and Safety: Control Mechanisms and Evidence Boundaries
 
 **Series**: AGI Perspectives | **Document**: 5 of 10 | **Last Updated**: March 2026
 
@@ -47,47 +47,64 @@ graph TB
 
 ### Primitive 1: Trust Gateway — Cooperative Inverse Reinforcement Learning
 
-The PAI Trust Gateway implements progressive trust:
+The PAI Trust Gateway exposes a progressive-trust design surface. The labels below are
+an explanatory model, not measured posterior probabilities:
 
 | Level | Formal Model | Capability | Information Content |
 |:------|:------------|:-----------|:-------------------|
-| `UNTRUSTED` | Prior: P₀(safe) = 0.5 | Read-only | 0 bits of trust evidence |
-| `VERIFIED` | Posterior: P(safe|tests) > θ₁ | Read + write | ~log₂(|tests_passed|) bits |
-| `TRUSTED` | Posterior: P(safe|human) > θ₂ | Full autonomy | Human oracle verdict |
+| `UNTRUSTED` | Initial policy state | Restricted access where configured | No accepted trust evidence |
+| `VERIFIED` | Candidate state after selected checks | Profile-dependent access | Evidence from named checks |
+| `TRUSTED` | Explicit policy/review state | Profile-dependent access | External approval and configured evidence |
 
 This is a Bayesian trust model. Each tool invocation is an observation that updates the posterior:
 
 $$P(\text{safe} \mid \text{observations}) = \frac{P(\text{observations} \mid \text{safe}) \cdot P(\text{safe})}{P(\text{observations})}$$
 
-Hadfield-Menell et al.'s (2017) **cooperative inverse reinforcement learning** (CIRL) formalizes the key insight: the system *defers* to human judgment about what constitutes acceptable behavior. The trust gateway implements CIRL by making trust level *revocable* — a tool that misbehaves is demoted, and the system accepts the demotion without resistance (corrigibility).
+Hadfield-Menell et al.'s (2017) **cooperative inverse reinforcement learning** (CIRL)
+provides a comparison point for systems that infer preferences while deferring to a
+human. A revocable trust state can support a corrigibility-oriented interface, but a
+trust gateway is not a CIRL implementation without a formal human-agent model,
+preference inference, and behavioral evaluation.
 
 The information-theoretic cost of trust: each trust decision requires ~O(log₂ n) bits of human attention where n is the number of trust-worthy vs. untrustworthy tools. This quantifies the *scalable oversight* burden.
 
 ### Primitive 2: Validation — Controlling the Action Space
 
-The `validation` module implements Hoare-logic contracts. The alignment interpretation: contracts *restrict the action space* to the set of actions consistent with human specifications.
+The `validation` module provides contract-like checks. The alignment interpretation is
+conditional: such checks restrict the observed action space only for properties that
+are actually encoded and exercised.
 
 $$\mathcal{A}_{aligned} = \{a \in \mathcal{A} : P(a) \text{ holds} \wedge Q(a) \text{ holds}\} \subseteq \mathcal{A}_{total}$$
 
 The reduction from total action space to aligned action space is the *alignment tax* at the action level. Measuring |A_aligned|/|A_total| gives the **alignment coverage ratio** — the fraction of possible actions that are specification-compliant.
 
-Critically, contracts also prevent **reward hacking** (the second Amodei problem): by constraining outputs to valid schemas, the system cannot produce degenerate outputs that satisfy the letter of the objective while violating its spirit. Schema validation is a *syntactic alignment constraint*.
+Contracts can reduce some malformed-output failures, but they do not prevent reward
+hacking or guarantee semantic alignment. Schema validation is a *syntactic alignment
+constraint* with a residual specification gap.
 
 ### Primitive 3: Defense — The Danger Model
 
-The `defense` module implements Matzinger's (1994) *danger model* of immunology: the system responds not to "non-self" generically but to *danger signals* — anomalous patterns indicating active threat.
+The `defense` module can be compared with Matzinger's (1994) *danger model* of
+immunology. This is an analogy until the threat signals, adaptation rule, and false
+positive/negative behavior are specified and measured.
 
 The formal detection criterion uses **KL divergence** as an anomaly metric:
 
 $$D_{KL}(p_{observed} \| p_{expected}) = \sum_x p_{observed}(x) \log \frac{p_{observed}(x)}{p_{expected}(x)} > \tau$$
 
-When the KL divergence between observed behavior and expected behavior exceeds threshold τ, the defense module triggers a circuit breaker. This addresses Amodei's **safe exploration** problem: the system can try new actions, but anomalous outcomes are caught and halted.
+In a future instrumented deployment, a KL threshold could trigger a circuit breaker.
+The equation is a candidate detector, not evidence that the current defense module
+computes this statistic or catches every anomalous outcome.
 
-The `RabbitHole` honeypot class extends this with *active probing*: deliberately offering adversarial inputs to test whether tools resist misuse — a digital analogue of immunological challenge tests.
+The `RabbitHole` surface can support active-probing experiments. It should not be
+treated as a validated immunological challenge test without measured attack coverage
+and false-positive behavior.
 
 ### Primitive 4: Observability — Entropy-Based Monitoring
 
-The monitoring infrastructure implements scalable oversight through information-theoretic metrics:
+The monitoring infrastructure exposes observability surfaces that could support
+scalable-oversight experiments; it does not implement scalable oversight merely by
+recording metrics:
 
 - **`logging_monitoring`** — Structured audit logs with correlation IDs. The entropy H(log) measures the *complexity* of system behavior: high-entropy logs indicate diverse, potentially uncontrolled behavior.
 - **`telemetry`** — Behavioral metrics enabling **distributional shift detection**: when the distribution of tool invocations, response times, or error rates shifts from baseline, the system may be operating outside its alignment envelope.
@@ -100,7 +117,12 @@ where m = (p + q)/2 is the Jensen-Shannon divergence — a symmetric, bounded me
 
 The `identity` module's Persona System provides fine-grained accountability. The `privacy` module's CrumbCleaner and MixnetProxy implement *data minimization* — limiting information available to agents.
 
-This is alignment through **information asymmetry**: by controlling what information agents can access, the system limits the *capability surface* available for misaligned behavior. A tool that cannot read private data cannot leak it, regardless of its objective function. This implements the **principle of least authority** (PoLA) from capability-based security (Miller, 2006).
+This motivates an **information-asymmetry** analysis: restricting what an agent can access
+may reduce one class of reachable behavior. A tool that truly cannot read private data
+cannot leak that data through that path, but the claim depends on complete resource and
+side-effect auditing. The configuration is compatible with the **principle of least
+authority** (PoLA) from capability-based security (Miller, 2006); compatibility is not a
+proof that every path enforces it.
 
 ## Coverage Against Amodei et al. Taxonomy
 
@@ -108,9 +130,9 @@ This is alignment through **information asymmetry**: by controlling what informa
 |:--------------|:---------|:---------|:-----------------------------|
 | **Negative side effects** | Hoare contracts | ⚠️ Partial | Action space restriction |
 | **Reward hacking** | Schema validation | ⚠️ Syntactic only | Semantic gap: K(V_H) > K(R_spec) |
-| **Scalable oversight** | Entropy monitoring | ✅ Strong | H(actions) as complexity measure |
-| **Safe exploration** | KL divergence detection | ✅ Strong | D_KL threshold as safety bound |
-| **Distributional shift** | Jensen-Shannon monitoring | ⚠️ Partial | d_JS baseline comparison |
+| **Scalable oversight** | Observability surfaces | Partial | Metrics require an explicit estimator and review protocol |
+| **Safe exploration** | Candidate anomaly checks | Unmeasured | A KL threshold would be a safety bound only after validation |
+| **Distributional shift** | Candidate Jensen-Shannon monitoring | Unmeasured | Baseline comparison requires calibrated traces |
 
 ## The Alignment Tax
 
@@ -124,19 +146,28 @@ The overhead of alignment primitives per tool invocation:
 | Defense check | ~10ms | O(|pattern_set|) matching |
 | **Total** | **~18ms** | **~3.5% of 500ms tool call** |
 
-Askell et al. (2021) identify 5-10% overhead as the sustainable alignment tax threshold. At 3.5%, codomyrmex is well within this range.
+No latency or alignment-tax benchmark is reported here. Any comparison with an
+overhead target requires a reproducible workload, environment, warm-up policy, and
+confidence interval; the illustrative formulas above do not provide those data.
 
 ## Mechanism Design for Alignment
 
 Alignment can be viewed through **mechanism design** (Myerson, 1981): designing the rules of a system so that self-interested agents produce socially desirable outcomes. In codomyrmex, the "agents" are the AI models and the "desired outcome" is safe, helpful behavior.
 
-The **revelation principle** states that any implementable outcome can be achieved by a mechanism where agents truthfully report their types. The trust gateway implements this: agents declare their identity (type) and the system grants capabilities accordingly. The incentive compatibility constraint:
+The **revelation principle** states that any implementable outcome can be achieved by a
+mechanism where agents truthfully report their types. The trust gateway provides an
+interface that can be analyzed this way: agents declare an identity and the system may
+grant capabilities accordingly. The incentive compatibility constraint:
 
 $$U_i(\text{truthful report}) \geq U_i(\text{misreport}) \quad \forall i$$
 
-Is satisfied because: (1) misreporting identity triggers cryptographic verification failure in the `identity` module, (2) operating above one's trust level triggers `defense` module circuit breakers, (3) the cost of detection exceeds the benefit of elevated access.
+This inequality is a design objective, not a demonstrated property. It would require
+an explicit utility model and adversarial tests showing that identity misreporting,
+privilege escalation, and detection costs produce the stated incentive ordering.
 
-The **Vickrey-Clarke-Groves** (VCG) principle applies to multi-agent tool allocation: each agent's allocation should maximize social welfare minus the externalities it imposes on others. The `orchestrator` DAG scheduling approximates this: tasks are allocated to agents based on capability matching, with the scheduling order minimizing total completion time (social welfare) while respecting resource constraints (externalities).
+The **Vickrey-Clarke-Groves** (VCG) principle is a possible comparison for tool
+allocation. The `orchestrator` may schedule DAG work, but no VCG mechanism, truthful
+reporting proof, or welfare-minimization result is claimed.
 
 ## Goodhart's Law and Specification Gaming
 
@@ -154,9 +185,12 @@ Three architectural defenses:
 |:--------|:---------|:-------------------|
 | Zero-mock policy | Tests must use real implementations | Prevents trivial pass-throughs |
 | Ruff enforcement | 0 lint violations; structural constraints | Cannot game code quality metrics |
-| Human oracle gate | Trust gateway human review | External oracle immune to metric gaming |
+| External review gate | Trust gateway and release review | Independent judgment can expose metric gaming; reviewers are not assumed immune |
 
-The deepest defense is that the fitness function F is **not fully specified in code** — the human reviewer applies implicit criteria (code elegance, architectural consistency, domain appropriateness) that cannot be gamed because they are never formalized as optimizable metrics. This is alignment through *specification incompleteness*: the system cannot optimize what it cannot measure.
+An external reviewer can supply accountability that is absent from automated metrics,
+but implicit criteria are not automatically resistant to gaming. They should be made
+explicit where possible and audited for consistency. Specification incompleteness is a
+risk boundary, not a safety guarantee.
 
 ## Cross-References
 

@@ -35,9 +35,9 @@ Documentation files and guides for project.
 - Current needs focus
 
 ### Testing
-- Comprehensive coverage
-- TDD practices
-- Real data analysis
+- A measured project coverage floor enforced by `pyproject.toml` and CI
+- TDD practices where behavior is changed
+- Real component and fixture analysis, with external services opt-in
 
 ### Documentation
 - Self-documenting code
@@ -85,4 +85,7 @@ The implementation of this component follows the core principles of the Codomyrm
 4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
 
 ### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+The codebase targets Python 3.11+ and uses typed interfaces where practical. Interaction
+patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files; local type
+checking and tests provide evidence for the exercised surfaces, not a blanket guarantee
+for every deployment or integration.

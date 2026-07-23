@@ -108,7 +108,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Auction state machine tests
 - Bid ordering and selection tests
 

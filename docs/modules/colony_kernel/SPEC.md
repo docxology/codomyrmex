@@ -79,6 +79,23 @@ Formula:
 gate_score = budget_ok * 0.30 + risk_ok * 0.30 + trust_ok * 0.25 + completeness * 0.15
 ```
 
+The coefficients and thresholds are initial, example configuration values for the
+control-plane model, not universal constants. The runtime source is authoritative and
+future deployments may tune them through an explicit configuration contract. Any tuning
+must be accompanied by sensitivity analysis, invariant checks, and regenerated
+documentation/evidence so that the specification and implementation cannot silently
+drift.
+
+## Formalism and Code Correspondence
+
+The kernel separates typed operational state, pheromone recurrence, piecewise gate
+semantics, and runtime invariant predicates. These are executable contracts with
+bounded evidence, not a complete formal semantics or proof of safety. The generated
+[formalism-to-code crosswalk](../../../docs/manuscript/10_formalism_code_crosswalk.md)
+identifies the code symbols, translation mechanisms, tests, and limits for each layer.
+In particular, the optional SMT bridge proves supplied obligations only; it does not
+prove the Python kernel without a kernel-specific translation and refinement test.
+
 ## Trust Lifecycle
 
 ```mermaid

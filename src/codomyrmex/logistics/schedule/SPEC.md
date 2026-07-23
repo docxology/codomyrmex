@@ -77,7 +77,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Cron expression parsing tests
 - Recurring schedule tests
 - Timezone conversion tests

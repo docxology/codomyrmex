@@ -16,13 +16,24 @@ These invariants serve three purposes:
 All invariant functions return ``True`` when the invariant holds and
 ``False`` when it is violated, never raising.
 
-Zero dependencies beyond the colony_kernel package itself.
+The canonical thresholds and strength limits are imported from the runtime modules
+that enforce them. This prevents a second, stale set of constants from masquerading
+as a formal model.
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
+
+from codomyrmex.agentic_memory.stigmergy.models import StigmergyConfig
+from codomyrmex.colony_kernel.actuation_gate import GATE_SCORE_WEIGHTS
+from codomyrmex.colony_kernel.role_adapter import (
+    _ROLE_DISPATCHER_MIN_TRUST,
+    _ROLE_GUARD_MIN_TRUST,
+    _ROLE_MEMORY_MIN_TRUST,
+    _ROLE_REPAIR_MIN_TRUST,
+)
 
 if TYPE_CHECKING:
     from codomyrmex.colony_kernel.models import AgentTrustProfile, DecayRate
@@ -31,12 +42,9 @@ if TYPE_CHECKING:
 # Gate-weight invariant
 # ---------------------------------------------------------------------------
 
-# Canonical gate score weights from actuation_gate.py (must sum to 1.0)
-_GATE_WEIGHTS: tuple[float, float, float, float] = (
-    0.30,  # budget_ok
-    0.30,  # risk_ok
-    0.25,  # trust_ok
-    0.15,  # completeness
+# Canonical gate score weights from actuation_gate.py (must sum to 1.0).
+_GATE_WEIGHTS: tuple[float, ...] = tuple(
+    GATE_SCORE_WEIGHTS[name] for name in ("budget", "risk", "trust", "completeness")
 )
 
 # Tolerance for floating-point summation errors
@@ -118,30 +126,28 @@ def check_trust_score_in_range(
 # Pheromone strength bounds invariant
 # ---------------------------------------------------------------------------
 
-# These mirror the bounds from models.py (ColonySignal.__post_init__) and
-# pheromone_store.py (_MAX_DEPOSIT_STRENGTH).
+# These bounds are enforced by TraceField and PheromoneStore.
 _PHEROMONE_MIN_STRENGTH: float = 0.0
-_PHEROMONE_MAX_STRENGTH: float = 1_000_000.0  # matches _MAX_DEPOSIT_STRENGTH
+_PHEROMONE_MAX_STRENGTH: float = StigmergyConfig().max_strength
 
 
 def check_pheromone_strength_bounds(
     strengths: Sequence[float] | None = None,
 ) -> bool:
-    """Return True iff every pheromone strength is in [0.0, 1e6].
+    """Return True iff every pheromone strength is within the field bounds.
 
     Args:
         strengths: Optional sequence of float strength values to validate.
             When ``None`` the invariant is trivially True.
 
     Returns:
-        ``True`` if all values satisfy
-        ``_PHEROMONE_MIN_STRENGTH <= s <= _PHEROMONE_MAX_STRENGTH``.
+        ``True`` if all values satisfy the live ``TraceField`` bounds.
 
     Example::
 
-        assert check_pheromone_strength_bounds([0.0, 1.5, 999.9])
+        assert check_pheromone_strength_bounds([0.0, 1.5, 9.9])
         assert not check_pheromone_strength_bounds([-0.1])  # below floor
-        assert not check_pheromone_strength_bounds([1_000_001.0])  # above ceiling
+        assert not check_pheromone_strength_bounds([10.1])  # above default ceiling
     """
     if strengths is None:
         return True
@@ -160,12 +166,12 @@ def check_pheromone_strength_bounds(
 # ---------------------------------------------------------------------------
 
 # Trust thresholds must be monotonically increasing along the promotion ladder.
-# Matches role_adapter.py constants exactly.
+# They are imported from role_adapter.py so the predicate follows live policy.
 _ROLE_LADDER_THRESHOLDS: tuple[float, ...] = (
-    0.20,  # REPAIR_ANT
-    0.35,  # MEMORY_ANT
-    0.50,  # DISPATCHER
-    0.70,  # GUARD_ANT
+    _ROLE_REPAIR_MIN_TRUST,
+    _ROLE_MEMORY_MIN_TRUST,
+    _ROLE_DISPATCHER_MIN_TRUST,
+    _ROLE_GUARD_MIN_TRUST,
 )
 
 

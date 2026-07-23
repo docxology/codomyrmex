@@ -1,4 +1,4 @@
-# Conclusion {#sec:conclusion}
+# Conclusion: What the Release Establishes {#sec:conclusion}
 
 This paper presents the Colony Kernel as a deterministic, inspectable prototype for
 placing a control decision between an agent's proposal and software actuation. Within

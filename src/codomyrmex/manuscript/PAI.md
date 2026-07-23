@@ -21,7 +21,7 @@ shelling out to ad-hoc scripts.
 | Export | Type | Purpose |
 | :--- | :--- | :--- |
 | `compute_variables` | Function | Compute manuscript token variables |
-| `inject_via_infrastructure` | Function | Inject variables into the manuscript build |
+| `inject_manuscript_variables` | Function | Inject variables into the manuscript build |
 | `figures.main` | Function | Run all figure generators |
 | `figures.FIGURES` | Registry | Enumerate available figure generators |
 

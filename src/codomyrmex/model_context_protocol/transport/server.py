@@ -592,6 +592,10 @@ class MCPServer:
         )
 
         origins = [origin.rstrip("/") for origin in (allowed_origins or [])]
+        if any(not origin or origin == "*" for origin in origins):
+            raise ValueError(
+                "allowed_origins must contain explicit origins; wildcard CORS is unsafe"
+            )
         app.add_middleware(
             CORSMiddleware,
             allow_origins=origins,

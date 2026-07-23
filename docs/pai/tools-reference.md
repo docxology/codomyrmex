@@ -215,7 +215,7 @@ uv run python scripts/agents/improve_src.py --dry-run --limit 2 --json
 
 Beyond the 20 static tools (see line above; the 9-entry "Static proxy" row in the Tool Count Summary is a sub-category), the MCP bridge auto-discovers additional tools at runtime:
 
-1. **Decorated tools**: Functions with `@mcp_tool` decorator in any `mcp_tools.py` submodule — **149 modules auto-discovered**
+1. **Decorated tools**: Functions with `@mcp_tool` decorator in any `mcp_tools.py` submodule — **150 modules auto-discovered**
 2. **pkgutil scan**: All `mcp_tools.py` files are scanned at startup (5-minute TTL cache)
 
 ### Trust Classification for Dynamic Tools

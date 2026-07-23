@@ -1,4 +1,4 @@
-# Verified Formal Model {#sec:theory}
+# Operational Semantics and Verified Invariants {#sec:theory}
 
 This section states the mathematical properties that follow from the checked-in
 implementation. It deliberately separates three kinds of statement:

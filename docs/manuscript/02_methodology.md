@@ -1,4 +1,4 @@
-# Methodology {#sec:methodology}
+# Implementation Method and Control-Plane Semantics {#sec:methodology}
 
 ## Colony Kernel Architecture
 
@@ -19,6 +19,12 @@ The Colony Control Plane is realised as a single Python package (`codomyrmex.col
 | **FalsificationWorker** | `falsification/` | Runs {{CONFIG_FALSIFICATION_CHECK_COUNT}} deterministic checks across {{CONFIG_FALSIFICATION_VECTORS}} attack-vector categories and deposits finding signals. |
 | **ColonyKernel** | `kernel.py` | Owns subsystem instances and sequences the high-level proposal, outcome, status, pruning, and tick APIs. |
 : Colony Control Plane subsystem overview. {#tbl:subsystem_overview}
+
+Unless a table or experiment explicitly says otherwise, the numeric weights,
+thresholds, decay settings, and effort profiles described below are current
+implementation defaults and example/initial values. They are configurable policy
+parameters, not calibrated universal constants; tuning them requires rerunning the
+focused contract tests and regenerating the dependent evidence bundle.
 
 The integration entry point is `ColonyKernel`, instantiated once by the default MCP
 adapter. Its high-level methods coordinate the components, while lower-level classes
@@ -127,7 +133,7 @@ is a fixed-period reset from the last start or reset, not a continuously sliding
 
 ## Actuation Gate
 
-The actuation gate is the colony's central permission layer: it aggregates signals from
+The actuation gate is the colony's central advisory decision layer: it aggregates signals from
 the resource ledger, pheromone field, agent trust store, and proposal completeness into a
 scalar gate score, then routes that score to one of {{CONFIG_GATE_DECISION_COUNT}}
 decisions.
@@ -136,6 +142,10 @@ decisions.
 thresholds, trust deltas, decay amounts, and presentation ranges below describe the
 current release snapshot. “Configured” therefore means “declared by the current
 runtime/configuration contract,” not “validated as optimal for every deployment.”
+The numerical details in this subsection are example/initial values that can be tuned
+through their owning runtime or presentation configuration. Any tuning should rerun
+the contract suite and regenerate the dependent tables, figures, captions, and
+provenance before a new interpretation is made.
 
 ### Gate Scoring Formula
 
@@ -300,7 +310,7 @@ Promotion is governed by the `RoleAdapter.infer_role` ladder shown in the table.
 agent must first accumulate at least {{CONFIG_ROLE_MIN_PROPOSALS}} total proposals;
 before that minimum, it remains `SANDBOX` regardless of trust score. Once the proposal
 minimum is met, the four thresholds are generated directly from the live adapter. The
-`trust_promote_threshold` compatibility mirror records the first promotion floor
+`trust_promote_threshold` runtime projection records the first promotion floor
 ({{CONFIG_TRUST_PROMOTE_THRESHOLD}}); it is not a separate general threshold.
 
 Role inference runs on proposal and outcome cycles. The live gate enforces the SANDBOX

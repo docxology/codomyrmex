@@ -100,7 +100,7 @@ graph TD
 
 ### Testing Standards
 
-- >=80% coverage
+- 60% project-wide line-coverage floor
 - Algorithm-specific tests
 - Security and edge case testing
 

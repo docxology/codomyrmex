@@ -85,7 +85,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Preset-specific tests
 - File format validation tests
 

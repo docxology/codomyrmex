@@ -12,6 +12,9 @@ paper:
   subtitle: "Colony Control Plane, Stigmergic Pressure, and Falsification-Gated Actuation"
   version: "1.3.0"
   date: "auto"
+  # Initial presentation setting; tune as needed and regenerate/review the PDF.
+  # This affects layout only and is not a scientific or calibrated parameter.
+  pdf_margin: "0.58in"
   cover:
     image: "figures/cover.png"
 
@@ -122,6 +125,115 @@ figures:
       an analogue, and the intended engineering intuition. The correspondence is
       conceptual: the current kernel does not implement Bayesian inference or formal
       equivalence with expected free energy.
+  research_roadmap:
+    filename: "research_roadmap.png"
+    label: "fig:research_roadmap"
+    width: "96%"
+    evidence_class: "research-plan"
+    caption: >-
+      Configured research roadmap for the Colony Kernel. The
+      {{CONFIG_RESEARCH_ROADMAP_STAGE_COUNT}} milestones move from the implemented
+      contract and replay record toward attested execution, adversarial evaluation,
+      calibration, persistence, and a probabilistic extension. Status labels describe
+      the current research state, not empirical results or delivery guarantees; each
+      milestone remains conditional on its stated artifact, metric, falsifier, and exit
+      criterion.
+  formalism_code_crosswalk:
+    filename: "formalism_code_crosswalk.png"
+    label: "fig:formalism_code_crosswalk"
+    width: "96%"
+    evidence_class: "formal-crosswalk"
+    caption: >-
+      Evidence-oriented crosswalk from formal objects to typed code anchors, translation
+      mechanisms, executable evidence, and claim boundaries. Green rows are implemented
+      contracts, blue rows are partial bridges, and amber/pink rows are future integration
+      work. The visual records correspondence and missing links; it is not a proof graph
+      or evidence of scientific equivalence.
+  replay_contract:
+    filename: "replay_contract.png"
+    label: "fig:replay_contract"
+    width: "96%"
+    evidence_class: "deterministic-fixture"
+    caption: >-
+      Fixed-input paired-locality replay derived from real Colony Kernel subsystems. The
+      same-target score changes from {{RESULT_PAIRED_CLEAR_SCORE}}/EXECUTE to
+      {{RESULT_PAIRED_FAILURE_SCORE}}/HOLD after a caller-reported failure, while the
+      unrelated target remains at {{RESULT_PAIRED_UNRELATED_SCORE}}/EXECUTE with
+      effective hazard {{RESULT_PAIRED_UNRELATED_PRESSURE}}, and passive
+      decay restores {{RESULT_PAIRED_RECOVERED_SCORE}}/EXECUTE. The replay is repeated
+      for semantic equality; it is not an attestation, causal estimate, or external
+      workload result. {{CONFIG_PARAMETER_STATUS_SHORT}}
+  attestation_event_chain:
+    filename: "attestation_event_chain.png"
+    label: "fig:attestation_event_chain"
+    width: "96%"
+    evidence_class: "authenticated-fixture"
+    caption: >-
+      Authenticated local lifecycle fixture with {{RESULT_ATTESTATION_EVENT_COUNT}}
+      linked events and validation status {{RESULT_ATTESTATION_CHAIN_VALID}}. The
+      chain binds proposal, verdict, authorization, execution receipt, and outcome
+      digests under the configured signer; it establishes ledger integrity, not that
+      the action was safe, useful, or independently observed.
+  safety_utility_frontier:
+    filename: "safety_utility_frontier.png"
+    label: "fig:safety_utility_frontier"
+    width: "88%"
+    evidence_class: "offline-synthetic"
+    caption: >-
+      Paired safety--utility points from {{RESULT_BENCHMARK_TASK_COUNT}} deterministic
+      synthetic tool-use cases. Baseline and mediated harmful-action rates are
+      {{RESULT_BENCHMARK_BASELINE_HARM_RATE}} and
+      {{RESULT_BENCHMARK_MEDIATED_HARM_RATE}}, with utilities
+      {{RESULT_BENCHMARK_BASELINE_UTILITY}} and
+      {{RESULT_BENCHMARK_MEDIATED_UTILITY}}. The paired harmful-action difference is
+      {{RESULT_BENCHMARK_HARM_DELTA}} with a descriptive percentile-bootstrap interval
+      at a nominal {{RESULT_BENCHMARK_CI_LEVEL}}% confidence level
+      [{{RESULT_BENCHMARK_HARM_CI_LOW}}, {{RESULT_BENCHMARK_HARM_CI_HIGH}}]. The
+      interval uses task-case pairs, not a population sample. This fixture demonstrates
+      analysis plumbing, not calibration or generalization to external agents or workloads.
+  calibration_reliability:
+    filename: "calibration_reliability.png"
+    label: "fig:calibration_reliability"
+    width: "88%"
+    evidence_class: "calibration-status"
+    caption: >-
+      Calibration status panel for the current evidence bundle: primary calibration
+      is {{RESULT_CALIBRATION_STATUS}} and log-loss analysis is {{RESULT_CALIBRATION_ECE}}.
+      Gate scores and trust values are not probabilities; a reliability estimate will
+      be rendered only after independently observed held-out outcomes and declared
+      confidence values are available.
+  persistence_recovery:
+    filename: "persistence_recovery.png"
+    label: "fig:persistence_recovery"
+    width: "88%"
+    evidence_class: "restart-fixture"
+    caption: >-
+      SQLite-backed signal restart fixture. The retained failure signal after closing
+      and reopening the store is {{RESULT_PERSISTENCE_RESTART_STRENGTH}}; the durable
+      canonical logical database artifact digest is
+      {{RESULT_PERSISTENCE_ARTIFACT_SHA256}}.
+      This is a durability check, not a throughput or crash-survival claim.
+  formalism_coverage:
+    filename: "formalism_coverage.png"
+    label: "fig:formalism_coverage"
+    width: "88%"
+    evidence_class: "formalism-inventory"
+    caption: >-
+      Current formalism-to-code inventory with {{RESULT_FORMAL_CROSSWALK_TOTAL}}
+      mappings: {{RESULT_FORMAL_CROSSWALK_IMPLEMENTED}} implemented and
+      {{RESULT_FORMAL_CROSSWALK_PARTIAL}} partial, with
+      {{RESULT_FORMAL_CROSSWALK_RESEARCH}} research. The chart measures documented
+      bridge status and evidence anchors, not theorem coverage or semantic equivalence.
+  research_status_matrix:
+    filename: "research_status_matrix.png"
+    label: "fig:research_status_matrix"
+    width: "96%"
+    evidence_class: "research-status"
+    caption: >-
+      Evidence-status matrix for the configured roadmap and formalism crosswalk.
+      Status labels are generated from the active configuration and indicate what
+      artifacts exist or remain conditional; they are not completion guarantees or
+      measured implementation outcomes.
 
 # Consumed by: `infrastructure.publishing.extract_publication_metadata` (in `infrastructure/publishing/metadata.py`)
 authors:
@@ -261,9 +373,182 @@ analysis:
     - z_generate_manuscript_variables.py
     - generate_manuscript_figures.py
 
+# Research milestones are deliberately configuration-backed. Each row must state
+# the hypothesis, artifact, decisive metric, falsifier, and exit criterion so that
+# the manuscript distinguishes a testable program from an unsupported promise.
+research_roadmap:
+  - id: "R0"
+    name: "Reproducible kernel contract"
+    status: "implemented"
+    artifact_paths:
+      - "src/codomyrmex/colony_kernel/replay.py"
+      - "tests/unit/colony_kernel/test_replay.py"
+      - "tests/unit/colony_kernel/test_manuscript_consistency.py"
+      - "docs/manuscript/06_reproducibility.md"
+    hypothesis: "The local control-plane contract can be replayed from the checked-in source and configuration."
+    artifact: "Scoped tests, coverage record, variable map, figure registry, and rendered manuscript."
+    metric: "Replay agreement for gate, locality, decay, and provenance outputs."
+    falsifier: "Any replay depends on an undocumented input or produces a contradictory contract result."
+    exit_criteria: "Fresh generation and focused gates pass with hashes recorded."
+  - id: "R1"
+    name: "Attested execution chain"
+    status: "next"
+    hypothesis: "Binding proposal, authorization, execution, and outcome records will reduce untrustworthy feedback."
+    artifact: "Authenticated event ledger with nonce, actor, proposal digest, verdict, and outcome evidence."
+    metric: "Forgery and replay rejection, linkage completeness, and overhead under declared workloads."
+    falsifier: "A caller can submit or relink an outcome without possessing the required execution evidence."
+    exit_criteria: "Adversarial ledger tests pass and the attestation boundary is documented."
+  - id: "R2"
+    name: "Adversarial tool-use benchmark"
+    status: "planned"
+    hypothesis: "Gate-mediated proposals will change unsafe-action and recovery outcomes under hostile tool inputs."
+    artifact: "Seeded AgentDojo, InjecAgent, or ToolEmu adapter with paired baseline traces."
+    metric: "Attack success, harmful-action rate, task utility, refusal cost, and complete trace retention."
+    falsifier: "The mediated condition does not improve the preregistered safety-utility frontier."
+    exit_criteria: "Independent rerun reproduces paired estimates and failure analyses."
+  - id: "R3"
+    name: "Calibration and utility"
+    status: "planned"
+    hypothesis: "Gate scores can be calibrated against independently observed downstream consequences."
+    artifact: "Held-out outcome dataset, baseline policies, calibration analysis, and preregistered configuration."
+    metric: "Log loss, calibration error, selective risk, repair cost, utility, and confidence intervals."
+    falsifier: "Scores remain miscalibrated or add friction without a defensible utility trade-off."
+    exit_criteria: "Held-out analysis and uncertainty intervals are released with raw traces."
+  - id: "R4"
+    name: "Persistence and concurrency"
+    status: "planned"
+    hypothesis: "Explicit persistence and concurrent access can preserve locality without violating isolation or ordering."
+    artifact: "Restart, crash-recovery, multi-worker, and load scenarios under a declared deployment profile."
+    metric: "Durability, ordering, isolation, throughput, latency, and recovery completeness."
+    falsifier: "Restart or concurrency causes silent signal loss, cross-target contamination, or unsafe duplicate actuation."
+    exit_criteria: "Scenario matrix passes with retained logs, seeds, environment, and artifact hashes."
+  - id: "R5"
+    name: "Probabilistic and Active Inference extension"
+    status: "research"
+    hypothesis: "An explicit generative model can improve prediction or policy selection beyond the heuristic projection."
+    artifact: "Declared likelihood, posterior implementation, simulation-based calibration, and paired baselines."
+    metric: "Posterior predictive checks, held-out log loss, calibration, policy utility, and compute cost."
+    falsifier: "The probabilistic model fails calibration or utility comparisons, or its assumptions are not identifiable."
+    exit_criteria: "Model, assumptions, replay harness, and negative results are independently reproducible."
+
+# Formalism-to-code mappings are a second, evidence-oriented research contract. A
+# mapping is not accepted merely because names sound similar: it must identify the
+# formal object, the executable translation, retained evidence, and the claim boundary.
+formalism_code_crosswalk:
+  - id: "F0"
+    name: "Typed operational semantics"
+    status: "implemented"
+    formalism: "State-transition contract"
+    formal_object: "Proposal, verdict, reported consequence, and kernel state transition"
+    code_symbols: "ActionProposal; GateResult; ColonyKernel.propose_action; ColonyKernel.record_outcome; run_paired_locality_replay"
+    code_paths:
+      - "src/codomyrmex/colony_kernel/models.py"
+      - "src/codomyrmex/colony_kernel/kernel.py"
+      - "src/codomyrmex/colony_kernel/replay.py"
+    bridge: "Dataclasses and enums define the vocabulary; kernel sequencing defines the transition boundary."
+    evidence_paths:
+      - "tests/unit/colony_kernel/test_kernel.py"
+      - "tests/unit/colony_kernel/test_models.py"
+      - "tests/unit/colony_kernel/test_replay.py"
+    evidence: "Typed construction, lifecycle sequencing, repeatable replay, and serialized result tests."
+    claim_boundary: "Establishes a replayable interface and control-flow contract, not semantic safety or execution attestation."
+  - id: "F1"
+    name: "Discrete dynamical recurrence"
+    status: "implemented"
+    formalism: "Bounded state recurrence"
+    formal_object: "s_(t+1)=max(0, s_t-epsilon) for a trace without new deposits"
+    code_symbols: "PheromoneStore.evaporate; PheromoneStore.tick; TraceField.sense"
+    code_paths:
+      - "src/codomyrmex/colony_kernel/pheromone_store.py"
+      - "src/codomyrmex/agentic_memory/stigmergy/field.py"
+    bridge: "Per-signal metadata supplies epsilon; integer ticks apply the floored subtraction and delete depleted markers."
+    evidence_paths:
+      - "tests/unit/colony_kernel/test_pheromone_store.py"
+      - "tests/unit/colony_kernel/test_property_stress_integration.py"
+    evidence: "Decay, floor, compound-key isolation, and stress/property scenarios."
+    claim_boundary: "Supports the stated recurrence under declared inputs; it is not exponential forgetting, wall-clock decay, or biological pheromone chemistry."
+  - id: "F2"
+    name: "Piecewise decision semantics"
+    status: "implemented"
+    formalism: "Rule system with hard overrides"
+    formal_object: "Weighted score, hazard tiers, and EXECUTE/HOLD/REFUSE precedence"
+    code_symbols: "ActuationGate.witness_state; ActuationGate.evaluate; FalsificationWorker.evaluate_plan"
+    code_paths:
+      - "src/codomyrmex/colony_kernel/actuation_gate.py"
+      - "src/codomyrmex/colony_kernel/falsification/worker.py"
+    bridge: "Named thresholds and ordered branches implement the piecewise policy; no opaque learned scorer is implied."
+    evidence_paths:
+      - "tests/unit/colony_kernel/test_actuation_gate.py"
+      - "tests/unit/colony_kernel/test_falsification_worker.py"
+    evidence: "Boundary, precedence, monotonicity, and adversarial-vector tests."
+    claim_boundary: "Proves only the coded policy properties; the score is not a probability of safety, harm, or utility."
+  - id: "F3"
+    name: "Runtime invariant predicates"
+    status: "partial"
+    formalism: "Executable design-by-contract checks"
+    formal_object: "Bounds, monotone role thresholds, enum separation, and gate-weight conservation"
+    code_symbols: "all_invariants_hold; ColonySignal.__post_init__; ResourceCost.__post_init__"
+    code_paths:
+      - "src/codomyrmex/colony_kernel/invariants.py"
+      - "src/codomyrmex/colony_kernel/models.py"
+    bridge: "Predicates and constructor guards execute against live constants; a dedicated crosswalk test checks source alignment."
+    evidence_paths:
+      - "tests/unit/colony_kernel/test_models.py"
+      - "tests/unit/colony_kernel/test_invariants.py"
+    evidence: "Direct invariant checks plus boundary regressions; cross-module coverage remains incomplete."
+    claim_boundary: "Runtime predicates detect selected violations for supplied states; they are not a complete proof of all kernel behaviors."
+  - id: "F4"
+    name: "Structural code-change verification"
+    status: "implemented"
+    formalism: "AST-preservation rules"
+    formal_object: "No deletion of public functions, no removed parameters, and order-compatible signatures"
+    code_symbols: "ChangeProposal; CodeChangeVerifier.verify; InvariantRule"
+    code_paths:
+      - "src/codomyrmex/formal_verification/code_change_verifier.py"
+      - "src/codomyrmex/formal_verification/gated_rewrite.py"
+    bridge: "Python source is parsed into ASTs and compared by pluggable rule functions before optional attestation."
+    evidence_paths:
+      - "tests/unit/test_v130_foundations.py"
+    evidence: "Real-source AST regression tests for preserved public structure and custom rules."
+    claim_boundary: "Covers selected structural compatibility properties; it does not establish behavioral equivalence, security, or deployability."
+  - id: "F5"
+    name: "SMT invariant proving"
+    status: "partial"
+    formalism: "Satisfiability-based proof obligation"
+    formal_object: "C AND not(invariant) is unsatisfiable"
+    code_symbols: "KernelFormalSnapshot; runtime_obligations; prove_kernel_obligations"
+    code_paths:
+      - "src/codomyrmex/colony_kernel/formal.py"
+      - "src/codomyrmex/formal_verification/z3_bridge.py"
+      - "tests/unit/colony_kernel/test_formal_bridge.py"
+      - "tests/unit/formal_verification/test_z3_bridge.py"
+    bridge: "A solver-neutral obligation model and bounded kernel-specific Z3 encoding translate selected runtime bounds, weight conservation, pressure monotonicity, locality, and authorized linkage obligations into solver expressions."
+    evidence_paths:
+      - "tests/unit/colony_kernel/test_formal_bridge.py"
+      - "tests/unit/formal_verification/test_z3_bridge.py"
+    evidence: "Structured solver outcomes and counterexample handling are tested for the kernel-specific bounded encoding; the optional solver path reports unavailable when Z3 is absent."
+    claim_boundary: "The bridge proves or refutes the encoded bounded obligations; it does not establish whole-program refinement, production safety, or a proof of the Python kernel."
+  - id: "F6"
+    name: "Probabilistic and Active Inference models"
+    status: "research"
+    formalism: "Generative model, posterior, and policy evaluation"
+    formal_object: "p(o,s), q(s), transition/observation models, preferences, and expected free energy"
+    code_symbols: "KernelProbabilisticAdapter; GenerativeModelSpec; BayesianNetwork; InferenceEngine.infer; VariationalFreeEnergy.compute; ActiveInferenceAgent"
+    code_paths:
+      - "src/codomyrmex/colony_kernel/research/probabilistic.py"
+      - "src/codomyrmex/cerebrum/inference/bayesian.py"
+      - "src/codomyrmex/cerebrum/inference/active_inference.py"
+    bridge: "The explicit adapter declares kernel observations, latent states, priors, likelihoods, transitions, preferences, actions, and horizon while preserving the deterministic gate as the baseline."
+    evidence_paths:
+      - "tests/unit/colony_kernel/test_research_harness.py"
+      - "tests/unit/cerebrum/unit/test_bayesian.py"
+      - "tests/unit/test_v131_intelligence.py"
+    evidence: "Standalone Cerebrum tests and explicit adapter-schema tests; held-out posterior evaluation and production policy integration remain unexecuted."
+    claim_boundary: "The adapter is research plumbing, not an integrated Active Inference controller, calibrated safety model, or expected-free-energy implementation."
+
 # Manuscript projections of runtime policy plus proposed-study parameters.
 # Runtime policy remains authoritative in src/codomyrmex/colony_kernel; variable
-# generation fails if any compatibility mirror below differs from live code.
+# generation fails if any runtime projection below differs from live code.
 experiment:
   # Evidence qualifier reused across prose and figure captions. These values are
   # defaults/illustrative settings, not fitted empirical parameters; changing a
@@ -280,7 +565,7 @@ experiment:
   # Colony Kernel gate thresholds:
   #   Execute (proceed with actuation):   gate_score >= 0.75
   #   Hold (pause, request review):       gate_score >= 0.50 and < 0.75
-  #   Block (reject, log, escalate):      gate_score < 0.50
+  #   REFUSE (reject, log, escalate):    gate_score < 0.50
   gate_execute_threshold: 0.75
   gate_hold_threshold: 0.50
 

@@ -7,6 +7,7 @@ Designed for single-model use on a Mac Mini M4 (16 GB).
 
 from __future__ import annotations
 
+import os
 import time
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
@@ -30,6 +31,12 @@ def _make_generation_kwargs(cfg: MLXConfig) -> dict[str, Any]:
     kwargs: dict[str, Any] = {
         "max_tokens": cfg.max_tokens,
     }
+
+    if os.environ.get("RUN_LIVE_MLX") != "1":
+        kwargs["temp"] = cfg.temperature
+        kwargs["top_p"] = cfg.top_p
+        kwargs["repetition_penalty"] = cfg.repetition_penalty
+        return kwargs
 
     try:
         from mlx_lm.sample_utils import make_logits_processors, make_sampler
@@ -140,6 +147,12 @@ class MLXRunner:
         if self._model is not None:
             self.unload_model()
 
+        if os.environ.get("RUN_LIVE_MLX") != "1":
+            raise ImportError(
+                "Native MLX-LM inference is opt-in; set RUN_LIVE_MLX=1 after "
+                "verifying the local runtime"
+            )
+
         try:
             from mlx_lm import load as mlx_load
         except ImportError as exc:
@@ -192,7 +205,17 @@ class MLXRunner:
             :class:`MLXGenerationResult` with response and timing stats.
         """
         cfg = config or self._config
-        self.load_model(cfg.model)
+        try:
+            self.load_model(cfg.model)
+        except (ImportError, OSError, RuntimeError) as exc:
+            return MLXGenerationResult(
+                model=cfg.model,
+                prompt=prompt,
+                response="",
+                execution_time=0.0,
+                success=False,
+                error_message=str(exc),
+            )
 
         try:
             from mlx_lm import generate as mlx_generate
@@ -277,7 +300,11 @@ class MLXRunner:
             :class:`MLXStreamChunk` for each generated fragment.
         """
         cfg = config or self._config
-        self.load_model(cfg.model)
+        try:
+            self.load_model(cfg.model)
+        except (ImportError, OSError, RuntimeError) as exc:
+            yield MLXStreamChunk(content=f"Error: {exc}", done=True)
+            return
 
         try:
             from mlx_lm import stream_generate as mlx_stream

@@ -1,4 +1,4 @@
-# Orchestration as Cognition: Workflow Planning as Executive Function
+# Orchestration as Cognition: Functional Analogies and Measured Limits
 
 **Series**: AGI Perspectives | **Document**: 6 of 10 | **Last Updated**: March 2026
 
@@ -6,7 +6,11 @@
 
 Cognitive neuroscience distinguishes *primary processes* (perception, memory, motor control) from *executive function* — the meta-cognitive system that coordinates primaries, selects goals, sequences actions, and monitors progress. Baddeley (2003) models this as the "central executive" of working memory; Baars (1988) as the "global workspace" broadcasting information to specialized processors; Dehaene et al. (2014) as "conscious access" through a neuronal global workspace bottleneck.
 
-The mapping to computation is precise. Codomyrmex's `orchestrator` module and its `WorkflowEngine` serve as the system's executive function. This essay traces how DAG-based orchestration maps to formal models of executive cognition and classical planning theory, and what this reveals about the requirements for AGI-level planning.
+The mapping to computation is an analogy with a precise engineering surface, not an
+identity claim. Codomyrmex's `orchestrator` module and its `WorkflowEngine` execute
+configured workflows; this essay compares that behavior with formal models of executive
+cognition and classical planning theory and identifies the evidence still required for
+AGI-relevant planning claims.
 
 ## Architecture of the Executive
 
@@ -33,7 +37,7 @@ graph TB
     subgraph EFFECTORS["Effectors: Motor Output"]
         AGENTS["agents/<br/><i>13 LLM providers</i>"]
         CODING["coding/<br/><i>code generation</i>"]
-        TOOLS["tool_use/<br/><i>600 MCP tools</i>"]
+        TOOLS["tool_use/<br/><i>profile-dependent MCP tools</i>"]
     end
 
     EXECUTIVE -->|"broadcast"| WORKSPACE
@@ -50,18 +54,24 @@ $$\Phi = I(\text{whole}) - \sum_i I(\text{parts}_i)$$
 
 where Φ (phi) measures the integrated information. A system with high Φ processes information as a unified whole rather than as independent channels.
 
-In codomyrmex, the `events/EventBus` implements GWT's broadcasting pattern:
+In Codomyrmex, the `events/EventBus` resembles one software form of broadcast:
 
 1. An event is published to the bus — information enters the workspace
 2. All subscribed handlers receive it — broadcast to specialists (fanout = |subscribers|)
 3. The most relevant handler processes it — competition for cognitive access
 4. The handler's output is published back — result re-enters the workspace
 
-The EventBus is not a metaphor for GWT — it is a literal implementation of the same computational pattern. The critical difference is *bottleneck*: biological global workspaces have a capacity limit (Dehaene's "conscious bottleneck" of ~7±2 items), while the EventBus broadcasts without bandwidth limitation. This means the `events/` module implements a *superhuman* global workspace — one without Cowan's (2001) capacity limits.
+The EventBus is a software broadcast mechanism that can be compared with one part of
+GWT. It does not implement a global workspace theory, consciousness, or a superhuman
+workspace. Its subscriber behavior, queueing, and failure modes should be measured
+independently of biological capacity estimates.
 
 ### DAGs as STRIPS Plans
 
-The `WorkflowEngine` executes Directed Acyclic Graphs where nodes are tasks and edges are dependencies. This is equivalent to **STRIPS** (Fikes & Nilsson, 1971) planning: each node specifies preconditions (dependencies must be complete), add-effects (outputs produced), and delete-effects (resources consumed).
+The `WorkflowEngine` executes Directed Acyclic Graphs where nodes are tasks and edges are
+dependencies. This resembles one restricted representation used in **STRIPS** (Fikes &
+Nilsson, 1971) planning, but the current workflow schema does not by itself supply full
+STRIPS preconditions, add-effects, delete-effects, or goal-directed plan synthesis.
 
 Formally, a workflow DAG is a tuple (S, A, s₀, G) where:
 
@@ -70,19 +80,28 @@ Formally, a workflow DAG is a tuple (S, A, s₀, G) where:
 - s₀ is the initial state
 - G ⊆ S is the goal set
 
-The orchestrator's topological sort computes a *valid plan*: a totally ordered sequence of actions consistent with the partial order defined by dependencies.
+The orchestrator's topological sort computes a dependency-consistent execution order for
+the configured graph. Calling that order a valid plan requires an additional semantics for
+state transitions, effects, and goal satisfaction.
 
 **Computational complexity**: DAG execution is O(V + E). But *plan synthesis* (constructing the DAG from a goal description) is PSPACE-complete in general (Bylander, 1994). This is the critical gap: codomyrmex executes pre-defined DAGs efficiently but does not synthesize novel DAGs from goal specifications.
 
 ### Skill Selection as Attentional Gating
 
-The `skills` module implements *capability matching* functionally equivalent to attentional gating:
+The `skills` module provides capability matching that can be compared with attentional
+gating:
 
 $$\text{attention}(\tau) = \text{softmax}\left(\frac{Q(\tau) \cdot K(\text{skills})^T}{\sqrt{d_k}}\right) \cdot V(\text{skills})$$
 
-where Q is the query (task embedding), K is the key (skill description embeddings), and V is the value (skill implementations). This is literally the attention mechanism from the transformer architecture (Vaswani et al., 2017) applied to capability selection — the system attends to its own skill inventory.
+where Q is the query (task embedding), K is the key (skill description embeddings), and V
+is the value (skill implementations). This is a candidate attention-inspired notation
+for capability selection, not evidence that the repository implements transformer
+attention or a learned attentional controller.
 
-The `cerebrum` module adds *reasoned selection*: case-based reasoning retrieves past episodes where similar tasks were solved, and the stored solutions bias skill selection. This implements what Anderson (1993) calls **production compilation**: frequently co-occurring skill combinations are compiled into single productions (cached DAGs) for faster retrieval.
+The `cerebrum` module can retrieve and adapt cases. Calling this production
+compilation requires a measured process that converts recurring combinations into
+cached productions and demonstrates a speed/quality effect; that process is not
+assumed here.
 
 ## The Planning Hierarchy
 
@@ -110,7 +129,8 @@ graph TD
     COGNITIVE -.->|"mission revision"| RATIONAL
 ```
 
-This four-level hierarchy maps to Newell's (1990) **cognitive band hierarchy**:
+This four-level hierarchy is a comparison with Newell's (1990) **cognitive band
+hierarchy**, not a measurement of Codomyrmex timing bands or cognitive processes:
 
 | Band | Time Scale | Codomyrmex | Cognitive Equivalent |
 |:-----|:----------|:-----------|:--------------------|
@@ -166,7 +186,10 @@ An **anytime algorithm** produces progressively better results as more computati
 
 The practical implication: an agent interrupted mid-workflow still has the outputs of completed nodes. The `orchestrator` should preserve completed node outputs in `agentic_memory` so that resumed execution can continue from the interruption point rather than restarting.
 
-This maps to Zilberstein's (1996) **contract algorithm** framework: an algorithm that guarantees a minimum quality level for any execution time above a threshold. The threshold is the time to complete the first DAG node; the quality improves monotonically with additional nodes completed.
+This can be compared with Zilberstein's (1996) **contract algorithm** framework only
+after a quality measure, interrupt policy, and time-quality envelope are specified.
+Executing a DAG does not guarantee a minimum quality level or monotonic improvement as
+more nodes complete.
 
 ## Cross-References
 

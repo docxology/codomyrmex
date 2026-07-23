@@ -25,7 +25,7 @@ graph TD
     end
 
     subgraph kernel["ColonyKernel Singleton"]
-        CK["ColonyKernel<br/>(lazy init, thread-safe)"]
+        CK["ColonyKernel<br/>(lazy init, caller-serialized)"]
     end
 
     subgraph subsystems["Subsystems"]

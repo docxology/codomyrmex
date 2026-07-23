@@ -79,7 +79,7 @@ The `telemetry` module provides a unified observability framework based on the O
 
 - Comprehensive unit tests for context propagation.
 - Benchmarking of span start/end overhead.
-- ≥80% test coverage.
+- 60% project-wide line-coverage floor.
 
 ## Navigation
 

@@ -510,7 +510,7 @@ All APIs documented above are tested using **real implementations**, never mocks
 
 ### **Data Visualization Testing**
 ```python
-# From tests/unit/test_data_visualization.py
+# From tests/unit/data_visualization/
 def test_create_line_plot_real():
     """Test actual line plot creation with real matplotlib."""
     from codomyrmex.data_visualization.line_plot import create_line_plot
@@ -585,7 +585,11 @@ def test_execute_code_real():
 
 ---
 
-**API Guarantee** ✅: Every function listed in this document exists in the codebase with the exact signature shown. All examples are tested and functional. This is the definitive API reference for production use.
+**Reference status**: This page is a source-derived API snapshot. The documentation gates
+check that listed source paths and declared signatures remain resolvable; example coverage
+is established only where a corresponding test or executable validation is named. Module
+specifications remain the authoritative contract for stability, security, and deployment
+conditions.
 
 ## Navigation Links
 

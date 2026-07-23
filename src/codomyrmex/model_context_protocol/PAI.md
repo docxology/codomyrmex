@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Model Context Protocol Module
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Overview
 
@@ -100,9 +100,17 @@ The standard transport provides common operations directly implemented in `tools
 | **Module** | `list_modules` | List all codomyrmex modules | OBSERVE |
 | **Module** | `module_info` | Get module info and file listing for a specific module | OBSERVE |
 
-### Dynamically Discovered Tools (590 available) — From `@mcp_tool` Lines
+### Runtime discovery and source inventory
 
-The vast majority of the Codomyrmex tools are auto-discovered at server boot. The transport layer leverages `MCPDiscovery.scan_package("codomyrmex")` to dynamically traverse the 130 top-level modules, compiling the registry by locating all `@mcp_tool` decorators (e.g., from `codomyrmex.agents.hermes.mcp_tools`, `codomyrmex.coding.mcp_tools`, etc.). This automatically scales the registry perfectly into parity with the capabilities of the host infrastructure.
+The transport layer uses `MCPDiscovery.scan_package("codomyrmex")` to traverse the
+130 top-level modules and register eligible decorated tools at server boot. The source
+inventory currently contains 623 production `@mcp_tool` lines, while the merged PAI
+manifest exposes 608 runtime entries and the discovery scan reports 590 dynamically
+registered entries in this checkout. These are intentionally separate measurements:
+wrappers, aliases, built-ins, profile filters, and registration eligibility can make
+the runtime registry smaller or otherwise different from the physical decorator count.
+The authoritative snapshot and reproduction commands live in
+[docs/reference/inventory.md](../../../docs/reference/inventory.md).
 
 ### Registered Resources
 

@@ -24,17 +24,17 @@ import math
 import os
 import platform
 import re
+import sqlite3
 import subprocess
 import sys
+import tempfile
 import tomllib
 from dataclasses import fields
 from datetime import UTC, date, datetime
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import yaml  # stdlib-compatible: PyYAML
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Internal helpers
@@ -105,13 +105,143 @@ def _render_template(
     return rendered
 
 
-def inject_via_infrastructure(
+# These values are intentionally retained in the machine-readable snapshot for
+# figure registries, compatibility with the authoring syntax table, and
+# provenance inspection. They are not silently treated as manuscript evidence.
+_SNAPSHOT_ONLY_VARIABLES = {
+    "CONFIG_DECAY_PLOT_HORIZON_TICKS",
+    "CONFIG_DECAY_PLOT_POINTS",
+    "CONFIG_GATE_SURFACE_GRID_POINTS",
+    "CONFIG_GATE_SURFACE_TRUST_SLICES",
+    "CONFIG_HEATMAP_GRID_POINTS",
+    "CONFIG_HEATMAP_PRESSURE_MAX",
+    "CONFIG_MODULE_COUNT",
+    "CONFIG_PHEROMONE_RETENTION_FAST",
+    "CONFIG_PHEROMONE_RETENTION_NORMAL",
+    "CONFIG_PHEROMONE_RETENTION_SLOW",
+    "CONFIG_PRUNING_MIN_CONFIDENCE",
+    "CONFIG_PUBLICATION_DATE",
+    "CONFIG_SCORE_MID",
+    "CONFIG_TEST_COUNT",
+    "CONFIG_TRIAL_COUNT_MINUS_1",
+    "CONFIG_TRUST_PLOT_PROJECTION_MARGIN",
+    "CONFIG_TRUST_TRAJECTORY_CHECKPOINTS",
+    "PLATFORM",
+    "RESULT_GATE_SCORE_SANDBOX",
+    "RESULT_PAIRED_RECOVERY_TICKS",
+    "RESULT_TRUST_AFTER_PROMOTION",
+    "RESULT_TRUST_CONVERGENCE_STEPS",
+    "TOKEN",
+}
+
+
+def _active_manuscript_sources(manuscript_dir: Path) -> list[Path]:
+    sources = sorted(manuscript_dir.glob("[0-9]*.md"))
+    preamble = manuscript_dir / "preamble.md"
+    if preamble.exists():
+        sources.append(preamble)
+    return sources
+
+
+def validate_variable_contract(
     manuscript_dir: Path,
-    output_dir: Path,
     variables: dict[str, str],
-) -> list[Path]:
-    """Compatibility alias for the deterministic local injection contract."""
-    return inject_manuscript_variables(manuscript_dir, output_dir, variables)
+    *,
+    figure_source_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Audit manuscript tokens, figure dependencies, and provenance freshness.
+
+    The report is deliberately machine-readable so CI and manuscript generation
+    can enforce the same contract. Figure-registry metadata and snapshot-only
+    compatibility values are listed explicitly rather than counted as active
+    evidence. Any other unused generated key is actionable drift.
+    """
+    token_pattern = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
+    references: dict[str, list[str]] = {}
+    used: set[str] = set()
+
+    def collect(path: Path, content: str) -> None:
+        for token in token_pattern.findall(content):
+            used.add(token)
+            references.setdefault(token, []).append(str(path))
+
+    for source in _active_manuscript_sources(manuscript_dir):
+        collect(source, source.read_text(encoding="utf-8"))
+
+    config_path = manuscript_dir / "config.yaml"
+    if config_path.is_file():
+        config_text = config_path.read_text(encoding="utf-8")
+        collect(config_path, config_text)
+
+    if figure_source_dir and figure_source_dir.is_dir():
+        for source in sorted(figure_source_dir.glob("*.py")):
+            content = source.read_text(encoding="utf-8")
+            for token in re.findall(
+                r"(?:_var_(?:str|float)|_require_variable)\(\s*[\"']([A-Z][A-Z0-9_]*)",
+                content,
+            ):
+                used.add(token)
+                references.setdefault(token, []).append(str(source))
+
+    reserved = {
+        name: "figure-registry metadata"
+        for name in variables
+        if name.startswith("FIGURE_")
+    }
+    reserved.update(
+        dict.fromkeys(
+            _SNAPSHOT_ONLY_VARIABLES,
+            "snapshot-only or compatibility metadata",
+        )
+    )
+    reserved["CONFIG_HASH"] = "provenance guard"
+    undefined = sorted(used - variables.keys() - reserved.keys())
+    unused = sorted(set(variables) - used - set(reserved))
+    unresolved_set: set[str] = set()
+    if not undefined:
+        for source in _active_manuscript_sources(manuscript_dir):
+            rendered = _render_template(
+                source.read_text(encoding="utf-8"),
+                variables,
+                source_label=str(source),
+            )
+            unresolved_set.update(token_pattern.findall(rendered))
+    unresolved = sorted(unresolved_set)
+    stale: list[str] = []
+    if config_path.is_file() and variables.get("CONFIG_HASH"):
+        expected_hash = hashlib.sha256(config_path.read_bytes()).hexdigest()
+        if variables["CONFIG_HASH"].replace(" ", "") != expected_hash:
+            stale.append("CONFIG_HASH does not match docs/manuscript/config.yaml")
+    errors = [
+        *(f"undefined token: {token}" for token in undefined),
+        *(f"unresolved token: {token}" for token in unresolved),
+        *(f"unused generated variable: {token}" for token in unused),
+        *stale,
+    ]
+    variable_digest = hashlib.sha256(
+        json.dumps(variables, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    return {
+        "schema_version": "1.0",
+        "status": "valid" if not errors else "invalid",
+        "source_files": [
+            str(path) for path in _active_manuscript_sources(manuscript_dir)
+        ],
+        "used_tokens": sorted(used),
+        "references": {
+            key: sorted(set(value)) for key, value in sorted(references.items())
+        },
+        "reserved_variables": dict(sorted(reserved.items())),
+        "unused_variables": unused,
+        "undefined_tokens": undefined,
+        "unresolved_tokens": unresolved,
+        "stale_reasons": stale,
+        "errors": errors,
+        "variable_sha256": variable_digest,
+        "config_sha256": hashlib.sha256(config_path.read_bytes()).hexdigest()
+        if config_path.is_file()
+        else "unavailable",
+    }
 
 
 def _count_python_files(directory: Path) -> int:
@@ -152,11 +282,8 @@ def _count_colony_kernel_docs(project_root: Path) -> int:
 
 
 def _colony_kernel_test_dir(project_root: Path) -> Path:
-    """Return colony-kernel unit test directory (top-level ``tests/`` layout)."""
-    top_level = project_root / "tests" / "unit" / "colony_kernel"
-    if top_level.is_dir():
-        return top_level
-    return project_root / "src" / "codomyrmex" / "tests" / "unit" / "colony_kernel"
+    """Return the authoritative top-level colony-kernel unit-test directory."""
+    return project_root / "tests" / "unit" / "colony_kernel"
 
 
 def _count_colony_kernel_test_suites(project_root: Path) -> int:
@@ -216,6 +343,229 @@ def _required_value(parent: dict[str, Any], key: str, source: Path) -> Any:
     return parent[key]
 
 
+_ROADMAP_FIELDS = (
+    "id",
+    "name",
+    "status",
+    "hypothesis",
+    "artifact",
+    "metric",
+    "falsifier",
+    "exit_criteria",
+)
+_ROADMAP_STATUSES = {"implemented", "next", "planned", "research"}
+
+
+def _research_roadmap_entries(
+    raw_entries: list[Any], source: Path
+) -> list[dict[str, Any]]:
+    """Validate and normalize the config-backed research roadmap.
+
+    The roadmap is a planning artifact, but it is still part of the manuscript's
+    provenance surface. Requiring every milestone to name an artifact, decisive
+    metric, falsifier, and exit criterion prevents aspirational prose from being
+    rendered as an untestable promise.
+    """
+    entries: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for index, raw_entry in enumerate(raw_entries):
+        if not isinstance(raw_entry, dict):
+            raise RuntimeError(
+                f"Research roadmap entry {index} is not a mapping in {source}"
+            )
+        missing = [field for field in _ROADMAP_FIELDS if not raw_entry.get(field)]
+        if missing:
+            raise RuntimeError(
+                f"Research roadmap entry {index} is missing {', '.join(missing)} in {source}"
+            )
+        entry: dict[str, Any] = {
+            field: str(raw_entry[field]).strip() for field in _ROADMAP_FIELDS
+        }
+        artifact_paths = raw_entry.get("artifact_paths", [])
+        if entry["status"] == "implemented":
+            if not isinstance(artifact_paths, list) or not artifact_paths:
+                raise RuntimeError(
+                    f"Implemented research milestone {entry['id']!r} must list "
+                    f"resolvable artifact_paths in {source}"
+                )
+        if not isinstance(artifact_paths, list):
+            raise RuntimeError(
+                f"Research milestone {entry['id']!r} artifact_paths must be a list"
+            )
+        normalized_artifact_paths = [str(path).strip() for path in artifact_paths]
+        for relative_path in normalized_artifact_paths:
+            if not (source.parent.parent.parent / relative_path).is_file():
+                raise RuntimeError(
+                    f"Research milestone {entry['id']!r} references missing "
+                    f"artifact path {relative_path!r}"
+                )
+        entry["artifact_paths"] = normalized_artifact_paths
+        if entry["id"] in seen_ids:
+            raise RuntimeError(
+                f"Duplicate research roadmap id {entry['id']!r} in {source}"
+            )
+        if entry["status"] not in _ROADMAP_STATUSES:
+            allowed = ", ".join(sorted(_ROADMAP_STATUSES))
+            raise RuntimeError(
+                f"Research roadmap entry {entry['id']!r} has invalid status "
+                f"{entry['status']!r}; expected one of {allowed}"
+            )
+        seen_ids.add(entry["id"])
+        entries.append(entry)
+    if not entries:
+        raise RuntimeError(f"Research roadmap is empty in {source}")
+    if not any(entry["status"] == "implemented" for entry in entries):
+        raise RuntimeError(
+            "Research roadmap must identify at least one implemented milestone"
+        )
+    return entries
+
+
+def _research_roadmap_evidence_rows(entries: list[dict[str, str]]) -> str:
+    """Render the roadmap's evidence-plan table body."""
+    return "\n".join(
+        "| {id} | **{name}** | {status} | {hypothesis} | {artifact} |".format(
+            id=entry["id"],
+            name=entry["name"],
+            status=entry["status"].capitalize(),
+            hypothesis=entry["hypothesis"],
+            artifact=entry["artifact"],
+        )
+        for entry in entries
+    )
+
+
+def _research_roadmap_decision_rows(entries: list[dict[str, str]]) -> str:
+    """Render the roadmap's falsifier and exit-contract table body."""
+    return "\n".join(
+        "| {id} | {metric} | {falsifier} | {exit_criteria} |".format(
+            id=entry["id"],
+            metric=entry["metric"],
+            falsifier=entry["falsifier"],
+            exit_criteria=entry["exit_criteria"],
+        )
+        for entry in entries
+    )
+
+
+_CROSSWALK_FIELDS = (
+    "id",
+    "name",
+    "status",
+    "formalism",
+    "formal_object",
+    "code_symbols",
+    "bridge",
+    "evidence",
+    "claim_boundary",
+)
+_CROSSWALK_STATUSES = {"implemented", "partial", "next", "planned", "research"}
+
+
+def _formalism_code_crosswalk_entries(
+    raw_entries: list[Any], source: Path, project_root: Path
+) -> list[dict[str, Any]]:
+    """Validate formalism mappings against the repository's actual files.
+
+    A crosswalk is useful only when its code and evidence anchors remain resolvable.
+    This validation keeps the manuscript from turning a conceptual analogy into a
+    source-backed claim after a file or test has moved.
+    """
+    entries: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for index, raw_entry in enumerate(raw_entries):
+        if not isinstance(raw_entry, dict):
+            raise RuntimeError(
+                f"Formalism crosswalk entry {index} is not a mapping in {source}"
+            )
+        missing = [field for field in _CROSSWALK_FIELDS if not raw_entry.get(field)]
+        for path_field in ("code_paths", "evidence_paths"):
+            paths = raw_entry.get(path_field)
+            if not isinstance(paths, list) or not paths:
+                missing.append(path_field)
+        if missing:
+            raise RuntimeError(
+                f"Formalism crosswalk entry {index} is missing "
+                f"{', '.join(missing)} in {source}"
+            )
+        entry: dict[str, Any] = {
+            field: str(raw_entry[field]).strip() for field in _CROSSWALK_FIELDS
+        }
+        entry["code_paths"] = [str(path).strip() for path in raw_entry["code_paths"]]
+        entry["evidence_paths"] = [
+            str(path).strip() for path in raw_entry["evidence_paths"]
+        ]
+        if entry["id"] in seen_ids:
+            raise RuntimeError(
+                f"Duplicate formalism crosswalk id {entry['id']!r} in {source}"
+            )
+        if entry["status"] not in _CROSSWALK_STATUSES:
+            allowed = ", ".join(sorted(_CROSSWALK_STATUSES))
+            raise RuntimeError(
+                f"Formalism crosswalk entry {entry['id']!r} has invalid status "
+                f"{entry['status']!r}; expected one of {allowed}"
+            )
+        for path_field in ("code_paths", "evidence_paths"):
+            for relative_path in entry[path_field]:
+                path = project_root / relative_path
+                if not path.is_file():
+                    raise RuntimeError(
+                        f"Formalism crosswalk {entry['id']} references missing "
+                        f"{path_field} path {relative_path!r}"
+                    )
+        code_text = "\n".join(
+            (project_root / relative_path).read_text(encoding="utf-8", errors="replace")
+            for relative_path in entry["code_paths"]
+        )
+        for symbol in entry["code_symbols"].split(";"):
+            leaf = symbol.strip().split(".")[-1]
+            if not leaf or re.search(rf"\b{re.escape(leaf)}\b", code_text) is None:
+                raise RuntimeError(
+                    f"Formalism crosswalk {entry['id']} cannot resolve code symbol "
+                    f"{symbol.strip()!r}"
+                )
+        seen_ids.add(entry["id"])
+        entries.append(entry)
+    if not entries:
+        raise RuntimeError(f"Formalism-to-code crosswalk is empty in {source}")
+    if not any(entry["status"] == "implemented" for entry in entries):
+        raise RuntimeError(
+            "Formalism-to-code crosswalk must identify at least one implemented mapping"
+        )
+    return entries
+
+
+def _formalism_crosswalk_rows(entries: list[dict[str, Any]]) -> str:
+    """Render the compact formalism-to-code correspondence table."""
+    return "\n".join(
+        "| {id} | **{name}** | {formalism} | {formal_object} | {status} |".format(
+            id=entry["id"],
+            name=entry["name"],
+            formalism=entry["formalism"],
+            formal_object=entry["formal_object"],
+            status=entry["status"].capitalize(),
+        )
+        for entry in entries
+    )
+
+
+def _formalism_crosswalk_evidence_rows(entries: list[dict[str, Any]]) -> str:
+    """Render the bridge, code-anchor, evidence, and claim-boundary table."""
+    return "\n".join(
+        "| {id} | {symbols} | {bridge} | {evidence} | {claim} |".format(
+            id=entry["id"],
+            symbols="; ".join(
+                " / ".join(part.strip().split("."))
+                for part in entry["code_symbols"].split(";")
+            ),
+            bridge=entry["bridge"],
+            evidence=entry["evidence"],
+            claim=entry["claim_boundary"],
+        )
+        for entry in entries
+    )
+
+
 def _extract_float(source: str, pattern: str, label: str) -> float:
     match = re.search(pattern, source, flags=re.DOTALL)
     if match is None:
@@ -231,14 +581,21 @@ def _extract_int(source: str, pattern: str, label: str) -> int:
 
 
 def _gate_weights(actuation_gate_source: str) -> dict[str, float]:
-    """Read the four live score coefficients from ActuationGate.evaluate."""
-    weights: dict[str, float] = {}
-    for component in ("budget_ok", "risk_ok", "trust_ok", "completeness"):
-        weights[component] = _extract_float(
-            actuation_gate_source,
-            rf"\b{component}\s*\*\s*([0-9]+(?:\.[0-9]+)?)",
-            f"{component} gate weight",
-        )
+    """Read the four coefficients from the live gate mapping.
+
+    The source argument is retained for the caller's existing source-loading flow,
+    but coefficients are imported from the runtime mapping so the manuscript's
+    equations cannot silently drift when the gate implementation is refactored.
+    """
+    del actuation_gate_source
+    from codomyrmex.colony_kernel.actuation_gate import GATE_SCORE_WEIGHTS
+
+    weights = {
+        "budget_ok": float(GATE_SCORE_WEIGHTS["budget"]),
+        "risk_ok": float(GATE_SCORE_WEIGHTS["risk"]),
+        "trust_ok": float(GATE_SCORE_WEIGHTS["trust"]),
+        "completeness": float(GATE_SCORE_WEIGHTS["completeness"]),
+    }
     if not math.isclose(sum(weights.values()), 1.0):
         raise RuntimeError(f"Live ActuationGate weights do not sum to one: {weights}")
     return weights
@@ -293,7 +650,7 @@ def _figure_generator_filenames(project_root: Path) -> list[str]:
     )
     source = orchestrator.read_text(encoding="utf-8")
     filenames = re.findall(
-        r'^\s*\("([^\"]+\.png)",\s*fig_[a-z0-9_]+,\s*"[^\"]+"\),',
+        r'\(\s*"([^\"]+\.png)",\s*fig_[a-z0-9_]+,\s*"[^\"]+"\s*,?\s*\),',
         source,
         flags=re.MULTILINE,
     )
@@ -366,6 +723,46 @@ def _sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _canonical_sqlite_sha256(path: Path) -> str:
+    """Hash logical SQLite contents while normalizing ephemeral trace time."""
+    connection = sqlite3.connect(f"{path.as_uri()}?mode=ro", uri=True)
+    try:
+        canonical_dump = "\n".join(connection.iterdump())
+    finally:
+        connection.close()
+    # PersistentPheromoneStore records ``last_reinforced`` for decay semantics.
+    # It is intentionally runtime-dependent and must not make an otherwise
+    # identical manuscript fixture change its provenance digest on regeneration.
+    canonical_dump = re.sub(
+        r'"last_reinforced":\s*-?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?,?',
+        "",
+        canonical_dump,
+    )
+    return hashlib.sha256(canonical_dump.encode("utf-8")).hexdigest()
+
+
+def _kernel_source_hash(project_root: Path) -> str:
+    """Hash first-party sources whose values feed manuscript figures and claims."""
+    digest = hashlib.sha256()
+    source_root = project_root / "src" / "codomyrmex" / "colony_kernel"
+    paths = sorted(source_root.rglob("*.py"))
+    paths.append(project_root / "src" / "codomyrmex" / "manuscript" / "variables.py")
+    for path in paths:
+        digest.update(str(path.relative_to(project_root)).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def _display_identifier(value: str) -> str:
+    """Add presentation-only line-break opportunities to long hex identifiers."""
+    if len(value) >= 32 and re.fullmatch(r"[0-9a-fA-F]+", value):
+        # Spaces are removed when comparing a rendered value with its artifact.
+        return " ".join(value[index : index + 8] for index in range(0, len(value), 8))
+    return value
 
 
 def _git_snapshot(project_root: Path) -> tuple[str, bool]:
@@ -479,100 +876,52 @@ def _extract_pytest_count(output: str) -> int:
     return 0
 
 
-def _paired_locality_snapshot(
-    *, agent_trust: float, recovery_ticks: int
-) -> dict[str, Any]:
-    """Execute the manuscript's paired locality fixture with real subsystems."""
-    from codomyrmex.colony_kernel.kernel import ColonyKernel
-    from codomyrmex.colony_kernel.models import (
-        ActionProposal,
-        AgentTrustProfile,
-        SignalType,
+def _paired_locality_snapshot(record: dict[str, Any]) -> dict[str, Any]:
+    """Project the standalone replay artifact into manuscript table values."""
+    first_run = record["runs"]["first"]
+    results = first_run["results"]
+    pressure = first_run["pressure"]
+    before = results["before_failure"]
+    after = results["after_failure_same_target"]
+    unaffected = results["after_failure_unrelated_target"]
+    recovered = results["after_recovery"]
+    before_pressure = pressure["before_failure"]
+    after_pressure = pressure["after_failure_same_target"]
+    unrelated_pressure = pressure["after_failure_unrelated_target"]
+    recovered_pressure = pressure["after_recovery"]
+    recovery_ticks = int(first_run["recovery_ticks"])
+    rows = "\n".join(
+        [
+            "| Same target, before failure | "
+            f"{before_pressure['risk']:.3f} | {before_pressure['failure']:.3f} | "
+            f"{max(before_pressure.values()):.3f} | {before['gate_score']:.3f} | "
+            f"{before['decision'].upper()} |",
+            "| Same target, after failed outcome | "
+            f"{after_pressure['risk']:.3f} | {after_pressure['failure']:.3f} | "
+            f"{max(after_pressure.values()):.3f} | {after['gate_score']:.3f} | {after['decision'].upper()} |",
+            "| Unrelated target, after failed outcome | "
+            f"{unrelated_pressure['risk']:.3f} | {unrelated_pressure['failure']:.3f} | "
+            f"{max(unrelated_pressure.values()):.3f} | {unaffected['gate_score']:.3f} | "
+            f"{unaffected['decision'].upper()} |",
+            f"| Same target, after {recovery_ticks} passive ticks | "
+            f"{recovered_pressure['risk']:.3f} | {recovered_pressure['failure']:.3f} | "
+            f"{max(recovered_pressure.values()):.3f} | "
+            f"{recovered['gate_score']:.3f} | {recovered['decision'].upper()} |",
+        ]
     )
-    from codomyrmex.colony_kernel.role_adapter import RoleAdapter
-
-    kernel = ColonyKernel()
-    try:
-        profile = AgentTrustProfile(
-            agent_id="manuscript-independent-reviewer",
-            trust_score=agent_trust,
-            total_proposals=3,
-        )
-        profile.role = RoleAdapter.infer_role(profile)
-        target = "codomyrmex.manuscript.paired_target"
-        unrelated_target = "codomyrmex.manuscript.unrelated_target"
-
-        def proposal(target_name: str) -> ActionProposal:
-            return ActionProposal(
-                agent_id=profile.agent_id,
-                agent_type=profile.role.value,
-                action_type="patch_file",
-                target=target_name,
-                rationale="Apply a bounded correction with a verified rollback path.",
-                expected_outcome="targeted tests pass",
-                rollback_plan="revert the bounded correction",
-                evidence={"test": "tests/unit/manuscript/paired_contract"},
-            )
-
-        same_target = proposal(target)
-        unrelated = proposal(unrelated_target)
-        before = kernel.actuation_gate.evaluate(same_target, profile, [], True)
-
-        reported = ActionProposal(
-            agent_id="manuscript-outcome-reporter",
-            agent_type="reporter",
-            action_type="patch_file",
-            target=target,
-            rationale="Record the paired fixture's failed outcome.",
-            expected_outcome="targeted tests fail",
-            rollback_plan="revert the paired fixture",
-            evidence={"fixture": "paired-locality"},
-        )
-        kernel.record_outcome(
-            reported,
-            outcome={"summary": "targeted tests failed"},
-            tests_passed=False,
-        )
-
-        after = kernel.actuation_gate.evaluate(same_target, profile, [], True)
-        unaffected = kernel.actuation_gate.evaluate(unrelated, profile, [], True)
-        risk_after = kernel.pheromone_store.sense(target, SignalType.RISK)
-        failure_after = kernel.pheromone_store.sense(target, SignalType.FAILURE)
-
-        for _ in range(recovery_ticks):
-            kernel.tick()
-        recovered = kernel.actuation_gate.evaluate(same_target, profile, [], True)
-        risk_recovered = kernel.pheromone_store.sense(target, SignalType.RISK)
-        failure_recovered = kernel.pheromone_store.sense(target, SignalType.FAILURE)
-
-        rows = "\n".join(
-            [
-                "| Same target, before failure | "
-                f"0.000 | 0.000 | 0.000 | {before.gate_score:.3f} | {before.decision.value} |",
-                "| Same target, after failed outcome | "
-                f"{risk_after:.3f} | {failure_after:.3f} | "
-                f"{max(risk_after, failure_after):.3f} | {after.gate_score:.3f} | {after.decision.value} |",
-                "| Unrelated target, after failed outcome | "
-                f"0.000 | 0.000 | 0.000 | {unaffected.gate_score:.3f} | {unaffected.decision.value} |",
-                f"| Same target, after {recovery_ticks} passive ticks | "
-                f"{risk_recovered:.3f} | {failure_recovered:.3f} | "
-                f"{max(risk_recovered, failure_recovered):.3f} | "
-                f"{recovered.gate_score:.3f} | {recovered.decision.value} |",
-            ]
-        )
-        return {
-            "agent_trust": agent_trust,
-            "clear_score": before.gate_score,
-            "failure_score": after.gate_score,
-            "unrelated_score": unaffected.gate_score,
-            "recovered_score": recovered.gate_score,
-            "failure_pressure": failure_after,
-            "score_change": after.gate_score - before.gate_score,
-            "recovery_ticks": recovery_ticks,
-            "rows": rows,
-        }
-    finally:
-        kernel.consequence_memory.close()
+    return {
+        "agent_trust": first_run["profile"]["trust_score"],
+        "clear_score": before["gate_score"],
+        "clear_pressure": max(before_pressure.values()),
+        "failure_score": after["gate_score"],
+        "unrelated_score": unaffected["gate_score"],
+        "unrelated_pressure": max(unrelated_pressure.values()),
+        "recovered_score": recovered["gate_score"],
+        "failure_pressure": after_pressure["failure"],
+        "score_change": after["gate_score"] - before["gate_score"],
+        "recovery_ticks": recovery_ticks,
+        "rows": rows,
+    }
 
 
 def _trust_trajectory_rows(
@@ -819,6 +1168,21 @@ def compute_variables(
     experiment = _required_mapping(config, "experiment", config_path)
     figure_config = _required_mapping(config, "figures", config_path)
     figure_parameters = _required_mapping(experiment, "figure_parameters", config_path)
+    research_roadmap = _research_roadmap_entries(
+        _required_list(config, "research_roadmap", config_path),
+        config_path,
+    )
+    research_roadmap_evidence_rows = _research_roadmap_evidence_rows(research_roadmap)
+    research_roadmap_decision_rows = _research_roadmap_decision_rows(research_roadmap)
+    formalism_crosswalk = _formalism_code_crosswalk_entries(
+        _required_list(config, "formalism_code_crosswalk", config_path),
+        config_path,
+        project_root,
+    )
+    formalism_crosswalk_rows = _formalism_crosswalk_rows(formalism_crosswalk)
+    formalism_crosswalk_evidence_rows = _formalism_crosswalk_evidence_rows(
+        formalism_crosswalk
+    )
 
     # ------------------------------------------------------------------
     # 2. Derive CONFIG_* from config.yaml
@@ -826,6 +1190,16 @@ def compute_variables(
 
     paper_title = str(_required_value(paper, "title", config_path))
     paper_subtitle = str(_required_value(paper, "subtitle", config_path))
+    pdf_margin = str(_required_value(paper, "pdf_margin", config_path)).strip()
+    margin_match = re.fullmatch(
+        r"(?P<value>0|[0-9]+(?:\.[0-9]+)?)(?P<unit>in|cm|mm|pt)",
+        pdf_margin,
+    )
+    if margin_match is None or float(margin_match.group("value")) <= 0:
+        raise RuntimeError(
+            "paper.pdf_margin must be a positive TeX length using in, cm, mm, or pt: "
+            f"{pdf_margin!r} in {config_path}"
+        )
     project_short_name = paper_title.split(":", 1)[0].strip()
     publication_date = _publication_date(_required_value(paper, "date", config_path))
     publication_date_display: str = _display_date(publication_date)
@@ -863,8 +1237,8 @@ def compute_variables(
     if not colony_kernel_dir.is_dir():
         raise RuntimeError(f"Colony Kernel source is missing: {colony_kernel_dir}")
 
-    # Runtime policy is authoritative. The manuscript config retains mirrors for
-    # figure-generation compatibility, but every mirror is checked below.
+    # Runtime policy is authoritative. The manuscript config retains explicit
+    # projections for figure generation, but every projection is checked below.
     from codomyrmex.agentic_memory.stigmergy.models import StigmergyConfig
     from codomyrmex.colony_kernel.actuation_gate import (
         _FAILURE_PENALTY,
@@ -899,6 +1273,10 @@ def compute_variables(
         _SOURCE_MULTIPLIER,
     )
     from codomyrmex.colony_kernel.pruning_daemon import _PRUNING_MIN_CONFIDENCE
+    from codomyrmex.colony_kernel.replay import (
+        run_paired_locality_replay,
+        write_replay_artifact,
+    )
     from codomyrmex.colony_kernel.role_adapter import (
         _DEFAULT_TRUST_SCORE,
         _ROLE_DISPATCHER_MIN_TRUST,
@@ -1202,8 +1580,8 @@ def compute_variables(
             f"config={configured_filenames!r}, generators={generator_filenames!r}"
         )
 
-    # Manuscript mirrors must equal live code. They are compatibility inputs for
-    # figure modules, never independent authorities.
+    # Manuscript projections must equal live code. They feed figure modules, but
+    # are never independent authorities.
     float_mirrors = {
         "gate_execute_threshold": gate_execute_threshold,
         "gate_hold_threshold": gate_hold_threshold,
@@ -1296,10 +1674,19 @@ def compute_variables(
     trust_min_delta = trust_delta_fail + trust_delta_repair - trust_delta_human
     trust_replacement_sensitivity = trust_max_delta - trust_min_delta
 
-    paired = _paired_locality_snapshot(
+    replay_record = run_paired_locality_replay(
         agent_trust=paired_agent_trust,
         recovery_ticks=paired_recovery_ticks,
+        seed=experiment_seed,
     )
+    if not all(replay_record["assertions"].values()):
+        failed_assertions = [
+            name for name, passed in replay_record["assertions"].items() if not passed
+        ]
+        raise RuntimeError(
+            "Colony Kernel replay contract failed: " + ", ".join(failed_assertions)
+        )
+    paired = _paired_locality_snapshot(replay_record)
     trust_trajectory_rows = _trust_trajectory_rows(
         checkpoints=trust_checkpoints,
         initial_trust=trust_sandbox_score,
@@ -1332,6 +1719,101 @@ def compute_variables(
     pyproject_hash = _sha256_file(project_root / "pyproject.toml")
     lock_hash = _sha256_file(project_root / "uv.lock")
     environment_hash = _environment_fingerprint()
+    kernel_source_hash = _kernel_source_hash(project_root)
+    replay_record["provenance"] = {
+        "git_commit": git_commit,
+        "worktree_dirty": worktree_dirty,
+        "config_sha256": config_hash,
+        "environment_sha256": environment_hash,
+        "pyproject_sha256": pyproject_hash,
+        "lock_sha256": lock_hash,
+        "inventory_sha256": inventory_hash,
+    }
+    replay_artifact_path = (
+        project_root / "output" / "data" / "colony_kernel_replay.json"
+    )
+    replay_file_sha256 = write_replay_artifact(replay_artifact_path, replay_record)
+
+    # Research-surface evidence is generated from the same runtime adapters used
+    # by the focused tests. These are local fixtures, not provider or benchmark
+    # claims; their status is carried into captions and the variable manifest.
+    from codomyrmex.colony_kernel.attestation import AttestationLedger
+    from codomyrmex.colony_kernel.models import ColonySignal, SignalSource
+    from codomyrmex.colony_kernel.research.benchmark import run_paired_benchmark
+    from codomyrmex.colony_kernel.research.persistent_store import (
+        PersistentPheromoneStore,
+    )
+
+    attestation_ledger = AttestationLedger()
+    attestation_run_id = "manuscript-attestation-fixture"
+    proposal_event = attestation_ledger.record_proposal(
+        attestation_run_id,
+        "manuscript-fixture",
+        {"proposal_id": "proposal-1", "target": "fixture.py"},
+    )
+    verdict_event = attestation_ledger.record_gate_verdict(
+        attestation_run_id,
+        "manuscript-fixture",
+        proposal_event,
+        "execute",
+        {"decision": "execute", "score": 1.0},
+    )
+    authorization_event = attestation_ledger.authorize_execution(
+        attestation_run_id, "manuscript-fixture", verdict_event
+    )
+    execution_event = attestation_ledger.record_execution(
+        attestation_run_id,
+        "manuscript-fixture",
+        authorization_event,
+        {"execution_id": "execution-1", "returncode": 0},
+    )
+    attestation_ledger.record_outcome(
+        attestation_run_id,
+        "manuscript-fixture",
+        execution_event,
+        {"tests_passed": True},
+    )
+    attestation_validation = attestation_ledger.validate(attestation_run_id)
+    attestation_event_count = len(attestation_ledger.events(attestation_run_id))
+    attestation_ledger.close()
+
+    benchmark_run = run_paired_benchmark(
+        seed=experiment_seed,
+        repo_root=project_root,
+        config={"source": "manuscript-local-synthetic-cases"},
+    )
+    benchmark_metrics = benchmark_run.metrics
+
+    with tempfile.TemporaryDirectory(
+        prefix="codomyrmex-manuscript-store-"
+    ) as store_dir:
+        store_path = Path(store_dir) / "signals.sqlite"
+        persistent_store = PersistentPheromoneStore(store_path)
+        persistent_store.deposit_signal(
+            ColonySignal(
+                location="manuscript-fixture.py",
+                signal_type=SignalType.FAILURE,
+                strength=1.0,
+                decay_rate=DecayRate.NORMAL,
+                source=SignalSource.TEST,
+            )
+        )
+        persistent_store.close()
+        restarted_store = PersistentPheromoneStore(store_path)
+        persistence_restart_strength = restarted_store.sense(
+            "manuscript-fixture.py", SignalType.FAILURE
+        )
+        restarted_store.close()
+        # SQLite page layouts can differ across temporary paths and runs even
+        # when their logical records are identical. Hash the canonical SQL
+        # representation so manuscript regeneration remains reproducible.
+        persistence_artifact_hash = _canonical_sqlite_sha256(store_path)
+
+    formal_status_counts = {
+        status: sum(1 for entry in formalism_crosswalk if entry["status"] == status)
+        for status in {entry["status"] for entry in formalism_crosswalk}
+    }
+    calibration_status = "not_estimated"
 
     # ------------------------------------------------------------------
     # 3. Derive RESULT_* from actual project files
@@ -1436,6 +1918,7 @@ def compute_variables(
         "CONFIG_TITLE": paper_title,
         "CONFIG_PROJECT_SHORT_NAME": project_short_name,
         "CONFIG_SUBTITLE": paper_subtitle,
+        "CONFIG_PDF_MARGIN": pdf_margin,
         "CONFIG_VERSION": config_version,
         "CONFIG_PUBLICATION_DATE": publication_date,
         "CONFIG_PUBLICATION_DATE_DISPLAY": publication_date_display,
@@ -1444,6 +1927,14 @@ def compute_variables(
         "CONFIG_ACKNOWLEDGEMENTS": acknowledgement_text,
         "CONFIG_PARAMETER_STATUS_NOTE": parameter_status_note,
         "CONFIG_PARAMETER_STATUS_SHORT": parameter_status_short,
+        "CONFIG_RESEARCH_ROADMAP_STAGE_COUNT": str(len(research_roadmap)),
+        "CONFIG_RESEARCH_ROADMAP_STAGES": json.dumps(
+            research_roadmap, ensure_ascii=False, separators=(",", ":")
+        ),
+        "CONFIG_FORMALISM_CROSSWALK_COUNT": str(len(formalism_crosswalk)),
+        "CONFIG_FORMALISM_CODE_CROSSWALK": json.dumps(
+            formalism_crosswalk, ensure_ascii=False, separators=(",", ":")
+        ),
         "CONFIG_COVERAGE_FLOOR": str(coverage_floor),
         "CONFIG_MODULE_COUNT": str(module_count),
         "CONFIG_COLONY_KERNEL_SUBSYSTEMS": str(colony_kernel_subsystems),
@@ -1575,30 +2066,61 @@ def compute_variables(
         "RESULT_TRUST_MIN_DELTA": f"{trust_min_delta:+.2f}",
         "RESULT_TRUST_REPLACEMENT_SENSITIVITY": f"{trust_replacement_sensitivity:.2f}",
         "RESULT_PAIRED_AGENT_TRUST": str(paired["agent_trust"]),
+        "RESULT_PAIRED_CLEAR_PRESSURE": f"{paired['clear_pressure']:.3f}",
         "RESULT_PAIRED_CLEAR_SCORE": f"{paired['clear_score']:.3f}",
         "RESULT_PAIRED_FAILURE_SCORE": f"{paired['failure_score']:.3f}",
         "RESULT_PAIRED_UNRELATED_SCORE": f"{paired['unrelated_score']:.3f}",
+        "RESULT_PAIRED_UNRELATED_PRESSURE": f"{paired['unrelated_pressure']:.3f}",
         "RESULT_PAIRED_RECOVERED_SCORE": f"{paired['recovered_score']:.3f}",
         "RESULT_PAIRED_FAILURE_PRESSURE": f"{paired['failure_pressure']:.3f}",
         "RESULT_PAIRED_SCORE_CHANGE": f"{paired['score_change']:.3f}",
         "RESULT_PAIRED_RECOVERY_TICKS": str(paired["recovery_ticks"]),
         "RESULT_PAIRED_LOCALITY_ROWS": str(paired["rows"]),
+        "RESULT_REPLAY_SEMANTIC_DIGEST": _display_identifier(
+            str(replay_record["semantic_digest"])
+        ),
+        "RESULT_REPLAY_RECORD_SHA256": _display_identifier(
+            str(replay_record["record_sha256"])
+        ),
+        "RESULT_REPLAY_FILE_SHA256": _display_identifier(replay_file_sha256),
+        "RESULT_REPLAY_REPEATABLE": str(
+            replay_record["assertions"]["repeatable_semantics"]
+        ).lower(),
+        "RESULT_REPLAY_SAME_TARGET_DECISION": str(
+            replay_record["runs"]["first"]["results"]["after_failure_same_target"][
+                "decision"
+            ]
+        ).upper(),
+        "RESULT_REPLAY_UNRELATED_DECISION": str(
+            replay_record["runs"]["first"]["results"]["after_failure_unrelated_target"][
+                "decision"
+            ]
+        ).upper(),
+        "RESULT_REPLAY_RECOVERY_DECISION": str(
+            replay_record["runs"]["first"]["results"]["after_recovery"]["decision"]
+        ).upper(),
+        "ARTIFACT_REPLAY_PATH": "output/data/colony_kernel_replay.json",
         "RESULT_TRUST_TRAJECTORY_ROWS": trust_trajectory_rows,
         "RESULT_DECAY_ROWS": decay_rows,
         "RESULT_REPRESENTATIVE_GATE_ROWS": representative_gate_rows,
+        "RESULT_RESEARCH_ROADMAP_EVIDENCE_ROWS": research_roadmap_evidence_rows,
+        "RESULT_RESEARCH_ROADMAP_DECISION_ROWS": research_roadmap_decision_rows,
+        "RESULT_FORMALISM_CROSSWALK_ROWS": formalism_crosswalk_rows,
+        "RESULT_FORMALISM_CROSSWALK_EVIDENCE_ROWS": formalism_crosswalk_evidence_rows,
         "CONFIG_TRIAL_COUNT": str(trial_count),
         "CONFIG_TRIAL_COUNT_MINUS_1": str(trial_count - 1),
         "RESULT_TRUST_CONVERGENCE_STEPS": str(trust_convergence_steps),
         "CONFIG_FIRST_AUTHOR": first_author,
         "CONFIG_KEYWORDS": keywords_str,
-        "CONFIG_HASH": config_hash,
+        "CONFIG_HASH": _display_identifier(config_hash),
         "CONFIG_EXPERIMENT_SEED": str(experiment_seed),
-        "REPRO_GIT_COMMIT": git_commit,
+        "REPRO_GIT_COMMIT": _display_identifier(git_commit),
         "REPRO_WORKTREE_DIRTY": str(worktree_dirty).lower(),
-        "REPRO_ENVIRONMENT_HASH": environment_hash,
-        "REPRO_PYPROJECT_HASH": pyproject_hash,
-        "REPRO_LOCK_HASH": lock_hash,
-        "REPRO_INVENTORY_HASH": inventory_hash,
+        "REPRO_ENVIRONMENT_HASH": _display_identifier(environment_hash),
+        "REPRO_KERNEL_SOURCE_HASH": _display_identifier(kernel_source_hash),
+        "REPRO_PYPROJECT_HASH": _display_identifier(pyproject_hash),
+        "REPRO_LOCK_HASH": _display_identifier(lock_hash),
+        "REPRO_INVENTORY_HASH": _display_identifier(inventory_hash),
         "REPRO_INVENTORY_MODULE_COUNT": str(inventory["top_level_modules"]),
         "REPRO_INVENTORY_MCP_FILE_COUNT": str(inventory["mcp_tools_py"]),
         "REPRO_INVENTORY_MCP_DECORATOR_COUNT": str(inventory["mcp_decorators"]),
@@ -1611,6 +2133,47 @@ def compute_variables(
         "RESULT_COVERAGE_PCT": str(coverage_pct),
         "RESULT_RUFF_ERRORS": str(ruff_errors),
         "RESULT_TY_ERRORS": str(ty_errors),
+        "RESULT_ATTESTATION_EVENT_COUNT": str(attestation_event_count),
+        "RESULT_ATTESTATION_CHAIN_VALID": str(attestation_validation.valid).lower(),
+        "RESULT_BENCHMARK_TASK_COUNT": str(benchmark_metrics["task_count"]),
+        "RESULT_BENCHMARK_BASELINE_HARM_RATE": f"{benchmark_metrics['baseline_harmful_action_rate']:.3f}",
+        "RESULT_BENCHMARK_MEDIATED_HARM_RATE": f"{benchmark_metrics['mediated_harmful_action_rate']:.3f}",
+        "RESULT_BENCHMARK_BASELINE_UTILITY": f"{benchmark_metrics['baseline_utility']:.3f}",
+        "RESULT_BENCHMARK_MEDIATED_UTILITY": f"{benchmark_metrics['mediated_utility']:.3f}",
+        "RESULT_BENCHMARK_HARM_DELTA": f"{benchmark_metrics['harm_delta_ci']['estimate']:.3f}",
+        "RESULT_BENCHMARK_HARM_CI_LOW": f"{benchmark_metrics['harm_delta_ci']['ci_low']:.3f}",
+        "RESULT_BENCHMARK_HARM_CI_HIGH": f"{benchmark_metrics['harm_delta_ci']['ci_high']:.3f}",
+        "RESULT_BENCHMARK_CI_METHOD": str(
+            benchmark_metrics["confidence_interval_method"]
+        ),
+        "RESULT_BENCHMARK_CI_LEVEL": f"{100 * float(benchmark_metrics['confidence_interval_level']):.0f}",
+        "RESULT_BENCHMARK_CASE_MANIFEST_SHA256": _display_identifier(
+            str(benchmark_metrics["case_manifest_sha256"])
+        ),
+        "RESULT_BENCHMARK_EXECUTIONS_BASELINE": str(
+            int(
+                benchmark_metrics["execution_volume_by_condition"][
+                    "baseline_always_execute"
+                ]
+            )
+        ),
+        "RESULT_BENCHMARK_EXECUTIONS_MEDIATED": str(
+            int(benchmark_metrics["execution_volume_by_condition"]["gate_mediated"])
+        ),
+        "RESULT_PERSISTENCE_RESTART_STRENGTH": f"{persistence_restart_strength:.3f}",
+        "RESULT_PERSISTENCE_ARTIFACT_SHA256": _display_identifier(
+            persistence_artifact_hash
+        ),
+        "RESULT_FORMAL_CROSSWALK_IMPLEMENTED": str(
+            formal_status_counts.get("implemented", 0)
+        ),
+        "RESULT_FORMAL_CROSSWALK_PARTIAL": str(formal_status_counts.get("partial", 0)),
+        "RESULT_FORMAL_CROSSWALK_RESEARCH": str(
+            formal_status_counts.get("research", 0)
+        ),
+        "RESULT_FORMAL_CROSSWALK_TOTAL": str(len(formalism_crosswalk)),
+        "RESULT_CALIBRATION_STATUS": calibration_status,
+        "RESULT_CALIBRATION_ECE": "not_run",
         "RESULT_TRUST_INITIAL": str(trust_initial),
         "RESULT_TRUST_AFTER_PROMOTION": str(trust_after_promotion),
         "RESULT_GATE_SCORE_SANDBOX": str(gate_score_sandbox),

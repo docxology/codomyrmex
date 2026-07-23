@@ -22,6 +22,12 @@ downloads and model evaluation require an explicit `--live` flag or
 `RUN_LIVE_SAIR=1`; the presence of credentials alone never enables network
 traffic. CI and ordinary test runs leave this lane disabled.
 
+The `run_sair.py offline` command evaluates caller-supplied JSONL fixtures with
+deterministic paired policies. It records full input hashes, seed, schema
+status, and the explicit confidence state. A missing confidence is not treated
+as `0.9` or `0.1` in primary scoring; any compatibility imputation is labelled
+and excluded from the primary log-loss result.
+
 ## Evaluation Template (Official Jinja2)
 
 ```jinja2

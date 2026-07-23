@@ -86,7 +86,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Validator-specific tests
 - Schema validation tests
 
@@ -128,4 +128,3 @@ class Validator:
 - **Related**: [config_management](../config_management/AGENTS.md), [api](../api/AGENTS.md)
 
 <!-- Navigation Links keyword for score -->
-

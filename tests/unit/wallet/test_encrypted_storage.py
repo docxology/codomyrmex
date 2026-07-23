@@ -72,11 +72,12 @@ class TestEncryptedStoreInit:
     def test_init_with_no_key_generates_random_key(self):
         store1 = EncryptedStore()
         store2 = EncryptedStore()
-        # Two stores with random keys will produce different ciphertexts
+        # Two stores have independent random nonces and authentication tags.
         entry1 = store1.put("k", "v")
         entry2 = store2.put("k", "v")
-        # They encrypt the same value but with different keys
-        assert entry1.ciphertext != entry2.ciphertext
+        # A one-byte plaintext can coincidentally produce the same ciphertext
+        # under different keys; the complete encrypted entries must differ.
+        assert entry1.to_dict() != entry2.to_dict()
 
     def test_init_with_explicit_key(self):
         key = b"a" * 32

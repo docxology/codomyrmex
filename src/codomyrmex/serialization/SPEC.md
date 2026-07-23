@@ -94,7 +94,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Format-specific tests
 - Round-trip serialization tests
 

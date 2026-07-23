@@ -4,6 +4,10 @@
 **Scope:** Whole-repo health (`projects/ongoing/codomyrmex`, v1.3.0)  
 **Rubric:** thermo-nuclear-code-quality-review (cursor-team-kit)
 
+> Historical snapshot. The paths and blocker counts below describe the state observed
+> on 2026-07-05 and are retained as audit provenance. The later package split and
+> current canonical entry points are documented in `src/codomyrmex/manuscript/README.md`.
+
 ## Executive verdict
 
 **Pre-P0:** BLOCK — four production files >1k LOC, script-layer figure logic, namespace leak for manuscript tokens, Hermes MCP god-module.

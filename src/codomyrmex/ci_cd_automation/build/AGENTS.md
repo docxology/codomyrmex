@@ -10,6 +10,9 @@ Build orchestration and artifact synthesis for trusted repository workflows.
 - Artifact paths are explicit caller targets; `output_root` is a hard
   containment boundary, and cleanup never scans or deletes a directory
   implicitly or removes the boundary itself.
+- Pipeline results distinguish `success`, `failed`, `timed_out`, `invalid`, and
+  intentional `noop`. Rollback removes only artifacts newly owned by that build;
+  pre-existing destinations remain recoverable caller state.
 - Public behavior is covered by `tests/unit/build_synthesis/test_build_synthesis.py`.
 - Keep `README.md`, `SPEC.md`, and `PAI.md` aligned with the implementation.
 

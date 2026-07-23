@@ -6,15 +6,34 @@ import hashlib
 import json
 
 from codomyrmex.manuscript.figures._common import FIGDIR, _figure_metadata, _var_str
+from codomyrmex.manuscript.figures.attestation_event_chain import (
+    fig_attestation_event_chain,
+)
+from codomyrmex.manuscript.figures.calibration_reliability import (
+    fig_calibration_reliability,
+)
 from codomyrmex.manuscript.figures.cover import fig_cover_art
 from codomyrmex.manuscript.figures.falsification_vectors import (
     fig_falsification_vectors,
 )
 from codomyrmex.manuscript.figures.fep_correspondence import fig_fep_correspondence
+from codomyrmex.manuscript.figures.formalism_code_crosswalk import (
+    fig_formalism_code_crosswalk,
+)
+from codomyrmex.manuscript.figures.formalism_coverage import fig_formalism_coverage
 from codomyrmex.manuscript.figures.gate_heatmap import fig_gate_score_heatmap
 from codomyrmex.manuscript.figures.gate_score_3d import fig_gate_score_3d
+from codomyrmex.manuscript.figures.persistence_recovery import fig_persistence_recovery
 from codomyrmex.manuscript.figures.pheromone_decay import fig_pheromone_decay
 from codomyrmex.manuscript.figures.pressure_loop import fig_colony_pressure_loop
+from codomyrmex.manuscript.figures.replay_contract import fig_replay_contract
+from codomyrmex.manuscript.figures.research_roadmap import fig_research_roadmap
+from codomyrmex.manuscript.figures.research_status_matrix import (
+    fig_research_status_matrix,
+)
+from codomyrmex.manuscript.figures.safety_utility_frontier import (
+    fig_safety_utility_frontier,
+)
 from codomyrmex.manuscript.figures.subsystem_architecture import (
     fig_subsystem_architecture,
 )
@@ -30,6 +49,19 @@ _FIGURE_GENERATORS = (
     ("subsystem_architecture.png", fig_subsystem_architecture, "schematic"),
     ("gate_score_3d.png", fig_gate_score_3d, "analytic"),
     ("fep_correspondence.png", fig_fep_correspondence, "conceptual-analogy"),
+    ("research_roadmap.png", fig_research_roadmap, "research-plan"),
+    ("formalism_code_crosswalk.png", fig_formalism_code_crosswalk, "formal-crosswalk"),
+    ("replay_contract.png", fig_replay_contract, "deterministic-fixture"),
+    (
+        "attestation_event_chain.png",
+        fig_attestation_event_chain,
+        "authenticated-fixture",
+    ),
+    ("safety_utility_frontier.png", fig_safety_utility_frontier, "offline-synthetic"),
+    ("calibration_reliability.png", fig_calibration_reliability, "calibration-status"),
+    ("persistence_recovery.png", fig_persistence_recovery, "restart-fixture"),
+    ("formalism_coverage.png", fig_formalism_coverage, "formalism-inventory"),
+    ("research_status_matrix.png", fig_research_status_matrix, "research-status"),
 )
 
 
@@ -52,7 +84,7 @@ def _write_registry() -> None:
         )
     registry = {
         "schema_version": 2,
-        "config_hash": _var_str("CONFIG_HASH", "unhashed"),
+        "config_hash": _var_str("CONFIG_HASH"),
         "count": len(entries),
         "figures": entries,
     }

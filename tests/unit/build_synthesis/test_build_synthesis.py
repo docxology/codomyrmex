@@ -170,6 +170,48 @@ if __name__ == "__main__":
         with zipfile.ZipFile(output) as archive:
             assert archive.read(".artifact-source/payload.txt") == b"payload"
 
+        first_bytes = output.read_bytes()
+        assert synthesize_build_artifact(source, output, artifact_type="archive")
+        assert output.read_bytes() == first_bytes
+
+    def test_timeout_is_reported_as_terminal_status(self):
+        result = orchestrate_build_pipeline(
+            {
+                "build_commands": [
+                    [sys.executable, "-c", "import time; time.sleep(0.2)"]
+                ],
+                "timeout": 0.01,
+            }
+        )
+        assert result["success"] is False
+        assert result["status"] == "timed_out"
+        assert result["stages"][0]["status"] == "timed_out"
+
+    def test_missing_dependency_is_invalid_before_execution(self):
+        result = orchestrate_build_pipeline(
+            {
+                "dependencies": ["codomyrmex_dependency_that_does_not_exist"],
+                "build_commands": [["python", "-c", "raise SystemExit(99)"]],
+            }
+        )
+        assert result["success"] is False
+        assert result["status"] == "invalid"
+        assert result["stages"] == []
+
+    def test_rollback_does_not_remove_preexisting_output(self, tmp_path):
+        source = tmp_path / "source.txt"
+        output = tmp_path / "artifact.txt"
+        source.write_text("new", encoding="utf-8")
+        output.write_text("old", encoding="utf-8")
+
+        result = orchestrate_build_pipeline(
+            {"source_path": source, "output_path": output, "artifact_type": "copy"}
+        )
+        assert result["status"] == "success"
+        assert result["owned_artifacts"] == []
+        assert rollback_build(result["build_id"]) is True
+        assert output.read_text(encoding="utf-8") == "new"
+
     def test_validate_nonexistent_output(self):
         """Test validation of nonexistent output file."""
         validation = validate_build_output("/nonexistent/file.py")

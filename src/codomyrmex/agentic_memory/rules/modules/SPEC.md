@@ -41,7 +41,7 @@ Contains 60 module-specific rules organized by domain (Security, AI/Agents, Infr
 - All rules mandate Zero-Mock testing (no mocks, MagicMock, test doubles)
 - Environment-gated tests for external services
 - Real data factories for test data
-- ≥80% test coverage target
+- 60% project-wide line-coverage floor
 
 ### Documentation
 

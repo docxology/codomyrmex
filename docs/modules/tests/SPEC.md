@@ -39,7 +39,7 @@ Testing directory providing comprehensive test suites following test-driven deve
 ### Testing
 
 - Test-driven development
-- Comprehensive coverage (≥80%)
+- Comprehensive coverage with the 60% project-wide line-coverage floor
 - Unit and integration tests
 - Performance benchmarks
 
@@ -91,7 +91,7 @@ graph TD
 ### Test Standards
 
 - Real data analysis (no mocks)
-- ≥80% code coverage
+- 60% project-wide line coverage
 - Clear test descriptions
 - Independent test execution
 - Fast test execution

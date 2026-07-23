@@ -229,7 +229,7 @@ tests = generator.generate_tests("src/new_feature.py", coverage_target=0.85)
 
 ### 2. Zero-Mock Policy: External Dependency Handling
 
-This project prohibits `unittest.mock`, `MagicMock`, `monkeypatch`, and `pytest-mock`. Instead, handle external dependencies with `skipif` guards:
+This project prohibits `unittest.mock`, `MagicMock`, and `pytest-mock` for replacing production behavior. Narrow `monkeypatch` use for environment variables, working directories, and other test-input isolation is permitted by the repository testing contract. Handle unavailable external dependencies with `skipif` guards:
 
 ```python
 import os
@@ -247,7 +247,7 @@ def test_cache_operations():
     assert client.get("key") == "value"
 ```
 
-When an external service is unavailable, the test is **skipped** — never faked. This ensures every passing test represents real, verified behavior.
+When an external service is unavailable, the test is **skipped** — never faked. A passing test then represents observed behavior for the exercised configuration, not a universal verification claim.
 
 ### 3. Coverage-Driven ISC: Make Coverage a Verification Gate
 
@@ -257,7 +257,7 @@ Integrate coverage thresholds into the PAI Algorithm's ISC so the VERIFY phase t
 # In PAI ISC definition:
 isc_criteria = {
     "tests_pass": True,
-    "coverage_minimum": 0.80,        # 80% line coverage required
+    "coverage_minimum": 0.60,        # project-wide line coverage floor
     "no_regressions": True,           # No previously-passing tests now fail
     "security_markers_clean": True,   # All @pytest.mark.security tests pass
 }

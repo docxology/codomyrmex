@@ -13,7 +13,6 @@ Demonstrates actual encryption capabilities in an orchestrated manner:
 
 import sys
 import tempfile
-import warnings
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -29,8 +28,6 @@ from codomyrmex.encryption import (
     Encryptor,
     KeyManager,
     Signer,
-    decrypt_file,
-    encrypt_file,
     generate_key,
     hash_data,
 )
@@ -155,16 +152,15 @@ def main():
             input_file.write_text("This is a secret file content.")
 
             enc_file = test_dir / "secret.enc"
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", DeprecationWarning)
-                if encrypt_file(input_file, enc_file, key):
-                    print_success("  File encrypted via AES-CBC (legacy).")
+            file_gcm = AESGCMEncryptor(key)
+            enc_file.write_bytes(file_gcm.encrypt(input_file.read_bytes()))
+            print_success("  File encrypted via authenticated AES-GCM.")
 
-                dec_file = test_dir / "secret.dec.txt"
-                if decrypt_file(enc_file, dec_file, key):
-                    print_success("  File decrypted.")
-                    if dec_file.read_text() == "This is a secret file content.":
-                        print_success("  Decrypted content matches original.")
+            dec_file = test_dir / "secret.dec.txt"
+            dec_file.write_bytes(file_gcm.decrypt(enc_file.read_bytes()))
+            print_success("  File decrypted.")
+            if dec_file.read_text() == "This is a secret file content.":
+                print_success("  Decrypted content matches original.")
     except Exception as e:
         print_error(f"  File encryption failed: {e}")
 

@@ -8,7 +8,7 @@
 
 This document describes how to run and filter the Codomyrmex test suite. Canonical counts and inventory live in [docs/reference/inventory.md](../../reference/inventory.md).
 
-**Collected tests (repo-wide):** **35,375** — `uv run python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths.
+**Collected tests (repo-wide):** **35,444** — `uv run python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --all-extras --dev`. Count varies with optional extras and discovery paths; refresh the snapshot in [docs/reference/inventory.md](../../reference/inventory.md) after test discovery changes.
 
 ### Zero-Mock Policy
 
@@ -24,15 +24,21 @@ This document describes how to run and filter the Codomyrmex test suite. Canonic
 
 | Category | Location | Count (indicative) | Notes |
 |----------|----------|--------------------|--------|
-| **All collected** | under `tests/` (`tests/` + `tests/**`) | **35,375** | Single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
-| **`unit` marker** | mostly `tests/unit/**` | **21,024** | `pytest -m unit --collect-only` |
-| **`integration` marker** | mixed | **253** | `pytest -m integration --collect-only` |
-| **Integration tree** | `tests/integration/` | **339** | `pytest tests/integration/ --collect-only` |
+| **All collected** | under `tests/` (`tests/` + `tests/**`) | **35,444** | Single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
+| **`unit` marker** | mostly `tests/unit/**` | **20,922** | `pytest -m unit --collect-only` |
+| **`integration` marker** | mixed | **245** | `pytest -m integration --collect-only` |
+| **Integration tree** | `tests/integration/` | **343** | `pytest tests/integration/ --collect-only` |
 | **Example tests** | `tests/unit/examples/` | **24** | Example validation lives under unit tree |
 | **Performance tree** | `tests/performance/` | **59** | Benchmark-style jobs |
-| **Unit test files** | `tests/unit/**/test_*.py` | **1,156** | `find` count; changes as tests are added |
+| **Unit test files** | `tests/unit/**/test_*.py` | **1,187** | `find` count; changes as tests are added |
 
 Full-suite wall time varies widely (often **tens of minutes**); use markers, `-k`, scoped directories, or `make test-unit` / `make test-integration` for tighter loops.
+
+The native Apple MLX quantization lane is hardware/backend dependent and is
+skipped by default so collection remains safe on hosts where importing MLX can
+abort the interpreter. Run it explicitly with
+`RUN_LIVE_MLX=1 uv run pytest tests/unit/test_v132_execution.py -q` after
+verifying the local MLX runtime.
 
 ### Test Markers
 
@@ -350,7 +356,7 @@ Coverage reports are generated automatically:
 
 ```bash
 # HTML report
-open tests/htmlcov/index.html
+open htmlcov/index.html
 
 # Terminal summary
 uv run pytest --cov=src/codomyrmex --cov-report=term-missing

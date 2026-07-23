@@ -84,9 +84,15 @@ Every essay follows this canonical structure:
 - Must reference actual module paths (`src/codomyrmex/<module>/`)
 - Must identify specific classes or functions where possible (e.g., `ActiveInferenceAgent`, `scan_all_modules()`)
 - Must distinguish between:
-  - **Identity mapping**: module *implements* the formal concept (e.g., `shannon_entropy()` *is* Shannon's H)
-  - **Structural analogy**: module exhibits pattern similarity (e.g., EventBus *resembles* GWT broadcasting)
-  - **Aspirational**: concept is absent but module could be extended (e.g., causal reasoning)
+  - **Identity mapping**: equation- or semantics-level correspondence is implemented,
+    its translation is explicit, and executable tests cover the stated domain
+  - **Structural analogy**: module exhibits a bounded pattern similarity (e.g., EventBus
+    resembles GWT broadcasting) without inheriting the formalism's theorems
+  - **Aspirational**: concept is absent or only partially represented and is framed as a
+    research hypothesis (e.g., causal reasoning)
+- Every nontrivial mapping should identify the formal object, code anchor, translation
+  mechanism, executable evidence, and claim boundary. See the generated
+  [formalism-to-code crosswalk](../manuscript/10_formalism_code_crosswalk.md).
 
 ### Diagram Standards
 
@@ -100,16 +106,16 @@ Every essay follows this canonical structure:
 
 | # | File | Bytes | Key AGI Concept | Key Formalisms |
 |:-:|:-----|:-----:|:------|:------|
-| 1 | `scaffolding.md` | 11,783 | Architectural preconditions | Category **Mod**, Yoneda lemma, Legg-Hutter Υ(π) |
-| 2 | `tool_use_and_agency.md` | 10,271 | Autonomous tool use | Contextual bandits, agency lattice 2ᵀ, Thompson sampling |
-| 3 | `world_models.md` | 11,391 | Internal representations | Variational free energy F, JEPA, Pearl's causal hierarchy |
-| 4 | `recursive_self_improvement.md` | 10,212 | Self-modifying systems | NK fitness landscapes, Boltzmann selection, Red Queen |
-| 5 | `alignment_and_safety.md` | 10,041 | Value alignment | Channel capacity I(V_H;A_S), KL anomaly detection |
-| 6 | `orchestration_as_cognition.md` | 10,831 | Executive function | IIT Φ, STRIPS (PSPACE), transformer attention |
-| 7 | `memory_and_continuity.md` | 13,774 | Persistent knowledge | ACT* proceduralisation, CLS, rational analysis |
-| 8 | `emergence_and_scale.md` | 11,494 | Emergent capabilities | Percolation p_c, renormalization, transfer entropy |
-| 9 | `formal_specification.md` | 11,076 | Provable safety | Arithmetical hierarchy, Löb's theorem, sheaf cohomology |
-| 10 | `the_colony_thesis.md` | 14,961 | Distributed AGI | Response thresholds, K-lines, hard problem analogue |
+| 1 | `scaffolding.md` | Generated inventory | Architectural preconditions and crosswalk | Category-inspired composition, Yoneda as a research lens |
+| 2 | `tool_use_and_agency.md` | Generated inventory | Tool surfaces and control boundaries | Retrieval, agency subsets, bandit hypothesis |
+| 3 | `world_models.md` | Generated inventory | Representations and open gaps | Free-energy background, JEPA hypothesis, causal hierarchy |
+| 4 | `recursive_self_improvement.md` | Generated inventory | Change evaluation and claim boundaries | Fitness model, NK lens, conditional stability |
+| 5 | `alignment_and_safety.md` | Generated inventory | Policy controls and evidence boundaries | Channel model, candidate anomaly metrics |
+| 6 | `orchestration_as_cognition.md` | Generated inventory | Workflow coordination and measured limits | GWT analogy, STRIPS comparison, attention lens |
+| 7 | `memory_and_continuity.md` | Generated inventory | Persistence and retrieval hypotheses | ACT* comparison, retention and transfer protocol |
+| 8 | `emergence_and_scale.md` | Generated inventory | Scale hypotheses and experimental protocol | Percolation null model, transfer entropy |
+| 9 | `formal_specification.md` | Generated inventory | Formal reasoning boundaries | Static contracts, SMT obligations, proof limits |
+| 10 | `the_colony_thesis.md` | Generated inventory | Distributed coordination hypothesis | Response thresholds, K-line analogy, ablation plan |
 
 ## Theoretical Dependencies
 

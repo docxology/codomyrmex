@@ -132,14 +132,31 @@ def parse_llm_response(response_text: str) -> dict[str, str]:
     return result
 
 
-def extract_confidence(parsed: dict[str, str]) -> Optional[float]:
+def confidence_status(parsed: dict[str, str]) -> str:
+    """Classify confidence provenance without inventing a probability."""
+    raw = parsed.get("CONFIDENCE", "").strip()
+    if not raw:
+        return "missing"
+    try:
+        value = float(raw)
+    except ValueError:
+        return "invalid"
+    return "reported" if 0.0 <= value <= 1.0 else "out_of_range"
+
+
+def extract_confidence(
+    parsed: dict[str, str], *, legacy_impute: bool = False
+) -> Optional[float]:
     """Extract confidence probability from parsed response (Stage 2 log-loss support).
 
     Returns float in [0, 1] or None if not parseable.
     """
     raw = parsed.get("CONFIDENCE", "").strip()
     if not raw:
-        # Infer from verdict: 0.9 for TRUE, 0.1 for FALSE (conservative baseline)
+        if not legacy_impute:
+            return None
+        # Compatibility-only imputation; callers must label it and exclude it
+        # from primary calibration claims.
         verdict = parsed.get("VERDICT", "UNKNOWN")
         if verdict == "TRUE":
             return 0.9
@@ -148,7 +165,7 @@ def extract_confidence(parsed: dict[str, str]) -> Optional[float]:
         return None
     try:
         val = float(raw)
-        return max(0.0, min(1.0, val))  # Clamp to [0, 1]
+        return val if 0.0 <= val <= 1.0 else None
     except ValueError:
         return None
 
@@ -225,6 +242,7 @@ def evaluate_problem(
             parsed = parse_llm_response(raw_content)
             verdict = parsed["VERDICT"]
             confidence = extract_confidence(parsed) if stage2 else None
+            confidence_state = confidence_status(parsed) if stage2 else "not_requested"
 
             is_correct: Optional[bool] = None
             log_loss: Optional[float] = None
@@ -240,6 +258,7 @@ def evaluate_problem(
                 "ground_truth": ground_truth,
                 "verdict": verdict,
                 "confidence": confidence,
+                "confidence_status": confidence_state,
                 "is_correct": is_correct,
                 "log_loss": log_loss,
                 "parsed": parsed,
@@ -275,6 +294,7 @@ def evaluate_problem(
         "equation1": problem.get("equation1"),
         "equation2": problem.get("equation2"),
         "ground_truth": ground_truth,
+        "confidence_status": "error" if stage2 else "not_requested",
         "error": str(last_error),
         "timestamp": datetime.utcnow().isoformat() + "Z",
     }

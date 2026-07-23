@@ -86,7 +86,7 @@ ggshield scan pre-commit
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with **128** top-level modules under `src/codomyrmex/` organized in a **layered architecture** (see `docs/reference/inventory.md`):
+Codomyrmex is a modular development platform with **130** top-level modules under `src/codomyrmex/` organized in a **layered architecture** (see `docs/reference/inventory.md`):
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -129,7 +129,7 @@ Each module is self-contained with standard structure:
 - **Model Context Protocol (MCP)**: Standardized interface for AI/LLM integration across modules
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
-- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently **149** `mcp_tools.py` files are under `src/codomyrmex/` (non-test); see `docs/reference/inventory.md`.
+- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently **150** `mcp_tools.py` files are under `src/codomyrmex/` (non-test); see `docs/reference/inventory.md`.
 
 ### Extended Modules (auto-discovered via MCP)
 
@@ -232,7 +232,7 @@ All dependencies are managed in `pyproject.toml`:
 - Module-specific optional: `[project.optional-dependencies.<module>]`
 - Development tools: `[dependency-groups.dev]`
 
-Module-specific `requirements.txt` files are **deprecated** - do not modify them.
+Module-specific `requirements.txt` files are not maintained; do not modify them.
 
 ## Multi-Agent Git Coordination
 

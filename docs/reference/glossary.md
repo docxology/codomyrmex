@@ -1,6 +1,6 @@
 # Codomyrmex Glossary
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 Terminology reference for the Codomyrmex platform and PAI integration system.
 
@@ -18,7 +18,7 @@ Python decorator from `src/codomyrmex/model_context_protocol/decorators.py` that
 
 ### Dynamic Tools (Auto-Discovered Tools)
 
-MCP tools discovered at runtime via `@mcp_tool` decorators across the package tree. The current source inventory reports 150 non-test `mcp_tools.py` files and 623 production `@mcp_tool` decorators; the full runtime profile currently exposes 608 tools and the HTTP default exposes 10 readonly tools.
+Eligible MCP tools discovered at runtime via `@mcp_tool` decorators across the package tree. Discovery and registration filters mean that physical decorator lines are not a one-to-one runtime count: the current source inventory reports 150 non-test `mcp_tools.py` files and 623 production decorators; the merged runtime manifest exposes 608 tools, the standalone full launcher exposes 605, and the HTTP default exposes 10 readonly tools.
 
 ### Foundation / Core / Service / Application Layers
 

@@ -134,7 +134,7 @@ The `concurrency` module provides synchronization primitives to ensure data inte
 - `async acquire(timeout: float | None = None) -> bool`
 
 ## Quality Standards
-- Comprehensive unit tests with ≥80% coverage.
+- Comprehensive unit tests with the 60% project-wide line-coverage floor.
 - Zero traditional mocks (using `fakeredis` for Redis tests).
 - Verified thread-safety and process-safety through stress tests.
 - Clear documentation for each primitive and usage pattern.

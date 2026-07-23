@@ -6,6 +6,13 @@ within constrained memory boundaries (<2GB).
 """
 
 import dataclasses
+import os
+
+if os.environ.get("RUN_LIVE_MLX") != "1":
+    raise ImportError(
+        "The native MLX backend is opt-in; set RUN_LIVE_MLX=1 after verifying "
+        "the local MLX runtime"
+    )
 
 import mlx.core as mx
 

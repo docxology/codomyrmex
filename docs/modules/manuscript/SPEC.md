@@ -12,7 +12,7 @@ for the Codomyrmex paper, decoupled from the top-level orchestrator scripts.
 1. Compute manuscript token variables from real repository state
    (`variables.compute_variables()`).
 2. Inject computed variables into the manuscript build via
-   `variables.inject_via_infrastructure()`.
+   `variables.inject_manuscript_variables()`.
 3. Generate one figure per `figures/fig_*()` generator, sharing palettes,
    config loading, and provenance helpers from `figures/_common.py`.
 4. Run all figure generators through `figures.orchestrator.main()`.
@@ -20,11 +20,20 @@ for the Codomyrmex paper, decoupled from the top-level orchestrator scripts.
 ## Interface Contracts
 
 ```python
-from codomyrmex.manuscript.variables import compute_variables, inject_via_infrastructure
+from pathlib import Path
+
+from codomyrmex.manuscript.variables import (
+    compute_variables,
+    inject_manuscript_variables,
+)
 from codomyrmex.manuscript.figures import main as generate_all_figures
 
-variables = compute_variables()
-inject_via_infrastructure(variables)
+project_root = Path.cwd()  # run this example from the repository root
+config_path = project_root / "docs/manuscript/config.yaml"
+manuscript_dir = project_root / "docs/manuscript"
+output_dir = project_root / "output/manuscript"
+variables = compute_variables(config_path, project_root)
+inject_manuscript_variables(manuscript_dir, output_dir, variables)
 generate_all_figures()
 ```
 

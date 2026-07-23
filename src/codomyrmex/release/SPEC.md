@@ -21,7 +21,7 @@ and support user-defined custom checks.
 |----|-------------|
 | FR-1.1 | `ReleaseValidator` accepts a version string at construction |
 | FR-1.2 | `check_tests(failures, total, max_skips)` records test suite pass/fail |
-| FR-1.3 | `check_coverage(overall, tier1)` enforces overall >= 65% and tier1 >= 80% |
+| FR-1.3 | `check_coverage(overall, tier1)` enforces the repository floor of overall >= 60%; supplied tier-1 coverage must be >= 80% |
 | FR-1.4 | `check_type_safety(errors)` records type-check error count (WARN, not FAIL) |
 | FR-1.5 | `check_security(cve_count, secrets_found)` blocks on any CVE or leaked secret |
 | FR-1.6 | `check_documentation(complete)` records doc completeness (WARN, not FAIL) |
@@ -119,7 +119,7 @@ The canonical release workflow proceeds in strict order:
 From `release_validator.py`:
 
 - **Test Suite**: `failures == 0` required. Any nonzero failure count produces FAIL.
-- **Code Coverage**: `overall >= 65.0` AND (if tier1 provided) `tier1 >= 80.0`.
+- **Code Coverage**: `overall >= 60.0` AND (if tier1 is supplied) `tier1 >= 80.0`. The overall floor mirrors `pyproject.toml`, Make, and CI; tier-1 coverage is an optional stricter release signal.
   Both conditions must hold for PASS.
 - **Type Safety**: `errors == 0` for PASS, nonzero produces WARN (not blocking).
 - **Security**: `cve_count == 0 AND secrets_found == 0` required. Either nonzero
@@ -204,7 +204,7 @@ from codomyrmex.release import (
 def test_certification_passes_when_no_failures():
     v = ReleaseValidator(version="1.0.0")
     v.check_tests(failures=0, total=100)
-    v.check_coverage(overall=70, tier1=85)
+    v.check_coverage(overall=60, tier1=80)
     cert = v.certify()
     assert cert.certified is True
     assert cert.blockers == []

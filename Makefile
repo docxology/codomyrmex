@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help dev install setup submodules test lint lint-imports format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check docs-generate serve-docs
+.PHONY: help dev install setup submodules test lint lint-imports format format-check type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check manuscript-check docs-generate serve-docs
 
 # Hypothesis loads its pytest plugin (and may bind NumPy RNG) before any conftest runs.
 # Export for all subprocesses so `uv run pytest` sees it even when not using a shell wrapper.
@@ -30,6 +30,7 @@ help:
 	@echo "  type-check   - Run type checking with ty"
 	@echo "  security     - Run security scanning"
 	@echo "  docs         - Generate and check documentation"
+	@echo "  manuscript-check - Validate generated manuscript, figures, claims, and provenance"
 	@echo "  serve-docs   - Serve documentation locally"
 	@echo "  dev-server   - Start development server placeholder"
 	@echo "  clean        - Clean build artifacts and caches"
@@ -107,6 +108,10 @@ format:
 	@echo "Formatting code with ruff..."
 	uv run ruff format .
 
+format-check:
+	@echo "Checking formatting with ruff..."
+	uv run ruff format --check .
+
 type-check:
 	@echo "Running type checking with ty..."
 	uv run ty check src/
@@ -138,6 +143,11 @@ docs-check:
 	uv run python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken
 	uv run python scripts/documentation/analyze_content_quality.py --repo-root . --format both --min-score 70 --fail-on-below
 	uv run python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
+	uv run python scripts/documentation/enforce_quality_gate.py --repo-root . --max-broken-links 10
+
+manuscript-check:
+	@echo "Checking manuscript evidence integrity..."
+	uv run python scripts/validate_manuscript_integrity.py
 
 docs-generate:
 	@echo "Generating missing documentation..."

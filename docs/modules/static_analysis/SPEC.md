@@ -41,7 +41,7 @@ AST-based static analysis module for import dependency scanning, architectural l
 
 ## Quality Requirements
 
-- **Test Coverage**: ≥80% coverage
+- **Test Coverage**: 60% project-wide line-coverage floor
 - **Type Hints**: All public functions have full type annotations
 - **Documentation**: Complete docstrings on all public functions
 

@@ -71,7 +71,7 @@ The `concurrency` module provides a suite of synchronization primitives to ensur
 
 - Stress tests for race conditions.
 - Verification of lock cleanup on process termination.
-- ≥80% test coverage.
+- 60% project-wide line-coverage floor.
 
 ## Navigation
 

@@ -31,8 +31,8 @@ that a failed outcome lowers the next complete proposal at the same target from
 EXECUTE to HOLD while leaving an unrelated target unchanged; a separate all-success
 fixture reaches its first non-sandbox role after {{RESULT_PROPOSALS_TO_PROMOTION}} recorded outcomes. These results validate internal
 mechanics, not production safety or ecological optimality. The paper therefore pairs
-the implementation evidence with explicit falsification criteria, reproducibility
-artifacts, and deployment limitations. Within that bounded surface, process-local
+the implementation evidence with explicit falsification criteria, a fixed-input replay
+artifact, and deployment limitations. Within that bounded surface, process-local
 failure memory raises friction for repeated same-location proposals; external workloads,
 outcome attestation, and restart-persistent field storage remain necessary to establish
 generality. Numeric claims are injected from generated

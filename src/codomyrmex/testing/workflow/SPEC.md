@@ -38,7 +38,8 @@ Fields: `id`, `name`, `description`, `steps: list[WorkflowStep]`, `variables: di
 | `config` | `dict[str, Any]` | `{}` | Step-specific configuration |
 | `dependencies` | `list[str]` | `[]` | Step IDs this depends on |
 | `retry_count` | `int` | `0` | Max retry attempts |
-| `timeout_seconds` | `float` | `30.0` | Step timeout |
+| `timeout_seconds` | `float` | `30.0` | Step timeout supplied to an executor |
+| `continue_on_error` | `bool` | `False` | Explicitly allow later steps after a non-passing result |
 
 ### WorkflowRunner
 
@@ -78,7 +79,7 @@ Assertion types supported via `step.config["type"]`:
 
 ### StepStatus (Enum)
 
-Values: `PENDING`, `RUNNING`, `PASSED`, `FAILED`, `SKIPPED`, `ERROR`
+Values: `PENDING`, `RUNNING`, `PASSED`, `FAILED`, `TIMEOUT`, `SKIPPED`, `ERROR`
 
 ### WorkflowStepType (Enum)
 
@@ -92,9 +93,21 @@ Values: `HTTP_REQUEST`, `ASSERTION`, `WAIT`, `SCRIPT`, `CONDITIONAL`
 
 - `HTTP_REQUEST` and `CONDITIONAL` step types are defined but have no default executor; using them without registering a custom executor returns an ERROR result.
 - `ScriptExecutor` restricted eval disables all builtins; only `ctx` (the context dict) is accessible. Callable functions bypass eval.
-- `WorkflowRunner.run()` breaks on ERROR status but continues on FAILED status.
+- `WorkflowRunner.run()` stops after any non-passing step by default, including
+  `FAILED`, `TIMEOUT`, `ERROR`, `SKIPPED`, and missing-executor results. Set the
+  step's `continue_on_error=True` only when continuation is an intentional part of
+  the workflow contract.
 - `WorkflowStep.dependencies` field is defined but not enforced by `WorkflowRunner` (steps execute in list order).
-- `WorkflowStep.timeout_seconds` field is defined but not enforced by the default executors.
+- `WorkflowStep.timeout_seconds` is passed to custom executors through the step
+  definition; the default synchronous executors do not interrupt a running Python
+  call. A timeout-aware executor should return `StepStatus.TIMEOUT`.
+
+### Trusted workflow boundary
+
+`ScriptExecutor` supports callable functions and a restricted expression DSL for
+local test workflows. Workflow definitions and expressions are trusted inputs only;
+do not load them from untrusted users or expose them as a general-purpose shell or
+remote code-execution interface.
 
 ## Error Handling
 

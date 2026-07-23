@@ -211,6 +211,16 @@ class TestReleaseValidatorBasics:
         check = validator.check_coverage(overall=80.0)
         assert check.status == CertificationStatus.PASS
 
+    def test_check_coverage_passes_at_repository_floor(self):
+        validator = ReleaseValidator()
+        check = validator.check_coverage(overall=60.0)
+        assert check.status == CertificationStatus.PASS
+
+    def test_check_coverage_fails_below_repository_floor(self):
+        validator = ReleaseValidator()
+        check = validator.check_coverage(overall=59.9)
+        assert check.status == CertificationStatus.FAIL
+
     def test_check_coverage_fail_below_threshold(self):
         validator = ReleaseValidator()
         check = validator.check_coverage(overall=40.0)

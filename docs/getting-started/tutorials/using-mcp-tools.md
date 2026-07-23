@@ -7,7 +7,7 @@ This tutorial walks through discovering and invoking MCP tools exposed by Codomy
 ## Prerequisites
 
 - Codomyrmex installed (`uv sync`)
-- Python 3.10+
+- Python 3.11+
 
 ## 1. Discover Available Tools
 

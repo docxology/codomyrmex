@@ -14,7 +14,6 @@ Automation and utility scripts.
 - `dashboard.py` – File
 - `generate_skills.py` – File
 - `pm/` – Subdirectory
-- `test_email_compose.py` – File
 - `update_pai_docs.py` – File
 - `update_pai_skill.py` – File
 - `validate_pai_integration.py` – File

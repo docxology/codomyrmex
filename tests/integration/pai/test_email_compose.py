@@ -8,16 +8,16 @@ Validates that real project/calendar context data is used in generated emails.
 
 Usage:
     # Test all templates (requires ollama running)
-    uv run python scripts/pai/test_email_compose.py
+    uv run python -m pytest tests/integration/pai/test_email_compose.py
 
     # Test a specific template
-    uv run python scripts/pai/test_email_compose.py --template daily-schedule
+    uv run python -m pytest tests/integration/pai/test_email_compose.py --template daily-schedule
 
     # Use a different backend (claude, gemini)
-    uv run python scripts/pai/test_email_compose.py --backend gemini
+    uv run python -m pytest tests/integration/pai/test_email_compose.py --backend gemini
 
     # Dry-run: only test API connectivity, skip LLM compose
-    uv run python scripts/pai/test_email_compose.py --dry-run
+    uv run python -m pytest tests/integration/pai/test_email_compose.py --dry-run
 
 Prerequisites:
     - PMServer running: bun scripts/pai/pm/server.ts --port 8888

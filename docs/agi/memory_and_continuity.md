@@ -1,4 +1,4 @@
-# Memory and Continuity: Persistent Knowledge as Foundation for Generality
+# Memory and Continuity: Storage Mechanisms and Temporal Hypotheses
 
 **Series**: AGI Perspectives | **Document**: 7 of 10 | **Last Updated**: March 2026
 
@@ -6,7 +6,10 @@
 
 A stateless function cannot be generally intelligent. Generality requires *temporal continuity*: learning from past experiences, accumulating knowledge, and retrieving relevant information when needed. Tulving (1972) distinguished episodic from semantic memory; Hassabis et al. (2017) argued that memory systems are the neural substrate for imagination and future planning; Lake et al. (2017) identified memory-augmented learning as a requirement for human-like intelligence.
 
-The formal requirement is **Bayesian updating**: an agent with prior P₀(θ) and observations O must compute the posterior P(θ|O) and use it for future decisions. Without persistent memory, each invocation starts from P₀ — no information accumulates across sessions. The agent's effective intelligence is bounded by:
+One formal requirement that can motivate evaluation is **Bayesian updating**: an agent
+with prior P₀(θ) and observations O may compute a posterior P(θ|O) and use it for future
+decisions. The repository's persistence surfaces do not currently establish such a
+posterior update across sessions. A candidate information-accounting model is:
 
 $$I_{effective} \leq I_{single\_session} + I_{memory}(O_1, O_2, \ldots, O_n)$$
 
@@ -17,13 +20,13 @@ where I_memory is the mutual information between stored observations and future 
 ```mermaid
 graph TB
     subgraph SENSORY["Sensory Register (~ms)"]
-        LLM_CTX["LLM context window<br/><i>~128K tokens</i><br/><i>iconic: full fidelity, instant decay</i>"]
+        LLM_CTX["LLM context window<br/><i>provider-dependent capacity</i><br/><i>volatile session state</i>"]
     end
 
-    subgraph WORKING["Working Memory (~minutes)"]
-        SESSION["AgentSession<br/><i>7±2 active items (Cowan)</i>"]
+    subgraph WORKING["Working Memory (session-scoped)"]
+        SESSION["AgentSession<br/><i>active session items</i>"]
         CONFIG["config_management<br/><i>runtime parameters</i>"]
-        CACHE["cache/<br/><i>TTL decay: e^(-λt)</i>"]
+        CACHE["cache/<br/><i>policy-dependent retention</i>"]
     end
 
     subgraph EPISODIC["Episodic Memory (~hours → years)"]
@@ -56,7 +59,10 @@ graph TB
 
 ### Tier 0: Sensory Register — The LLM Context Window
 
-Sperling's (1960) experiments established that iconic memory holds a complete, high-fidelity representation that decays within ~250ms. The LLM context window is the computational analogue: it holds the complete current state (~128K tokens) at full fidelity, but the information is *volatile* — it is discarded entirely when the session ends.
+Sperling's (1960) experiments provide a biological comparison. An LLM context window is
+better described here as provider-dependent, session-scoped working state; its capacity,
+retention, and attention behavior must be read from the active provider rather than
+assigned a universal token count or treated as a complete state representation.
 
 The capacity constraint: Cowan's (2001) revised estimate of 4±1 chunks for human working memory. LLM context windows are far larger in tokens but have an analogous *attention bottleneck*: the model can attend to ~all tokens but its effective information bandwidth (bits per token of useful output) is bounded by the transformer's fixed-depth computation.
 
@@ -71,11 +77,13 @@ Baddeley's (2003) multicomponent model distinguishes:
 | **Visuospatial sketchpad** | `spatial/` representations | Module-limited |
 | **Episodic buffer** | `cache/` hot data | TTL-bounded |
 
-The `cache` module implements exponential decay:
+Some cache policies can be analyzed with an exponential-retention model:
 
 $$P(\text{retained}) = e^{-\lambda t}$$
 
-where λ is the decay rate (inverse TTL). LRU and LFU eviction policies provide alternative decay kernels — recency-biased and frequency-biased respectively. These map to the two dominant theories of forgetting: *trace decay* (Thorndike, 1914) and *interference* (McGeoch, 1932).
+where λ would be a fitted decay rate. LRU and LFU eviction policies provide alternative
+recency- and frequency-biased retention rules. These are engineering analogies to
+forgetting models, not evidence that the cache implements biological memory.
 
 ### Tier 2: Episodic Memory — Mental Time Travel
 
@@ -92,7 +100,10 @@ memory.store(
 )
 ```
 
-The Obsidian bridge (19 submodules: filesystem CLI, vault search, link graph, backlinks) provides *external episodic memory* — a knowledge graph that persists across sessions and even across agent instances. This implements what Donald (1991) calls **exographic memory**: externalized memory systems that transcend biological storage limits.
+The Obsidian bridge provides filesystem/CLI, vault-search, and link-graph surfaces for
+external persistence. This is compatible with Donald's (1991) notion of **exographic
+memory**, but persistence, synchronization, and cross-agent recall should be measured
+rather than inferred from the integration's existence.
 
 The **spacing effect** (Ebbinghaus, 1885) suggests that spaced retrieval strengthens memory more than massed rehearsal. The Obsidian vault's backlink structure creates implicit spaced retrieval: revisiting a concept through different incoming links provides natural spaced exposure.
 
@@ -102,7 +113,9 @@ Semantic memory stores general knowledge independent of specific episodes. The d
 
 Three complementary implementations:
 
-1. **`vector_store`** — Dense embedding retrieval on a Riemannian manifold (see [world_models.md](./world_models.md)). Captures *analogical similarity*: problems with similar embeddings likely have similar solutions. The *curse of dimensionality* (Bellman, 1961) is mitigated by the manifold hypothesis: data concentrates on low-dimensional submanifolds.
+1. **`vector_store`** — Dense-vector retrieval can support similarity-based recall.
+   The geometric and analogical claims in [world_models.md](./world_models.md) remain
+   research hypotheses until measured on representative tasks.
 
 2. **`graph_rag`** — Knowledge graph with typed edges. Captures *structural relations* irreducible to similarity. Graph operations:
    - **Traversal**: Find all entities related to entity_x by relation_r → O(degree(x))

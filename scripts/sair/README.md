@@ -19,7 +19,7 @@ Official competition playground for testing: [playground.sair.foundation](https:
 
 | Script | Purpose |
 | :--- | :--- |
-| `run_sair.py` | **Unified orchestrator** — `evaluate`, `generate`, `analyze`, `full`, `compare` |
+| `run_sair.py` | **Unified orchestrator** — `offline`, `evaluate`, `generate`, `analyze`, `full`, `compare` |
 | `evaluate.py` | Local evaluation engine (Jinja2 template, retries, full telemetry) |
 | `generate_cheatsheet.py` | Build and iteratively refine cheatsheets from run results |
 | `analyze_results.py` | Post-hoc analysis: accuracy, latency percentiles, trend table |
@@ -35,6 +35,19 @@ Official competition playground for testing: [playground.sair.foundation](https:
 | `output/logs/telemetry.ndjson` | Appended NDJSON line per run (model, accuracy, tokens, latency) |
 | `output/cheatsheets/*.txt` | Generated cheatsheet text files (≤10KB enforced) |
 | `output/visualizations/*.png` | **[NEW]** Matplotlib analysis charts (latency distributions, trends) |
+
+The provider-free reproducibility path is:
+
+```bash
+python scripts/sair/run_sair.py offline \
+  --dataset tests/fixtures/sair/offline_fixture.jsonl --seed 0 \
+  --output output/research/sair_offline.json
+```
+
+It records input hashes and paired baseline/refinement metadata. Missing
+confidence is reported explicitly and is excluded from primary log-loss
+scoring; compatibility imputation is available only through an explicit
+legacy option and is never silently applied.
 
 ## Quick Start
 

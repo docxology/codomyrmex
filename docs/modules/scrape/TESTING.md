@@ -101,27 +101,28 @@
 
 ## Verification
 
-All public methods are:
-- ✅ Fully documented with docstrings
-- ✅ Include example usage
-- ✅ Document all parameters and return values
-- ✅ Document exceptions raised
-- ✅ Covered by unit tests
-- ✅ Tested for error cases
-- ✅ Tested for edge cases
+The maintained unit suite currently covers the module's core data models,
+validation, extractors, and error paths. The checklist below describes the
+intended quality bar; it is not a claim that every adapter or external service
+path is exercised in every local run.
+
+- ✅ Public behavior has module documentation and typed interfaces where implemented
+- ✅ Core paths are covered by real-data unit tests
+- ✅ Error and boundary behavior is covered where the adapter is available
+- ⚠️ External-provider behavior requires a separately configured, opt-in run
 
 ## Running Tests
 
 ```bash
 # All unit tests
-pytest src/codomyrmex/scrape/tests/unit/ -v
+pytest tests/unit/scrape/ -v
 
 # With coverage
-pytest src/codomyrmex/scrape/tests/unit/ --cov=codomyrmex.scrape --cov-report=term-missing
+pytest tests/unit/scrape/ --cov=codomyrmex.scrape --cov-report=term-missing
 
-# Integration tests (requires API key)
-export FIRECRAWL_API_KEY="your-key"
-pytest src/codomyrmex/scrape/tests/integration/ -v
+# No scrape-specific integration directory is maintained in this checkout.
+# Run the unit suite by default; add an explicitly configured provider lane
+# only when its test path and credentials are present.
 ```
 
 ## Test Quality

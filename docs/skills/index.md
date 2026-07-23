@@ -82,5 +82,7 @@ For the full module specification, source structure, and API details, see the
 
 The skills module sits in the **Service Layer** of the codomyrmex architecture.
 It depends on `logging_monitoring` from the Foundation Layer and `git_operations`
-from the Core Layer (for upstream sync). No circular dependencies exist; all
-dependency arrows point downward.
+from the Core Layer (for upstream sync). These are the documented cross-layer
+dependencies; the repository's normalized dependency analyzer remains the
+authority for package-local cycle findings, so this page does not claim global
+acyclicity.

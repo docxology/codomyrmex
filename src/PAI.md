@@ -1,10 +1,10 @@
 # Personal AI Infrastructure Context: src/
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
-This is the main source directory containing the `codomyrmex` Python package with 124 specialized modules organized across four architectural layers.
+This is the main source directory containing the `codomyrmex` Python package organized across four architectural layers. Volatile module and MCP counts are measured in [the repository inventory](../docs/reference/inventory.md), not maintained as constants here.
 
 ## AI Agent Guidance
 
@@ -27,7 +27,7 @@ This is the main source directory containing the `codomyrmex` Python package wit
 ### Key Patterns
 
 - **Imports**: Always use `from codomyrmex.<module> import <class>`
-- **Testing**: Tests are in `tests/` or per-module `tests/` folders
+- **Testing**: The authoritative repository test tree is `tests/`; any module-local fixtures or legacy test files are non-authoritative and must not be used as the active test contract.
 - **Documentation**: Every module has README, AGENTS, SPEC, PAI
 
 ### MCP Integration

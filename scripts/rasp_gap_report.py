@@ -5,7 +5,10 @@ Writes docs/plans/agents-readme-gap-report.md (Markdown) and prints summary.
 
 Excludes: __pycache__, .git, node_modules, .venv, venv, dist, build, htmlcov,
 .pytest_cache, .ruff_cache, .mypy_cache, .docusaurus, .tox, *.egg-info, .eggs,
-vendor caches, and paths matching SUBSTRING_EXCLUDES.
+vendor/generated/embedded trees, and paths matching SUBSTRING_EXCLUDES. The
+first-party inclusion boundary is aligned with
+``scripts/documentation/validate_agents_structure.py``; embedded application,
+upstream skill, and generated documentation trees are not RASP targets.
 
 Run from repo root: uv run python scripts/rasp_gap_report.py
 """
@@ -52,6 +55,18 @@ SUBSTRING_EXCLUDES = (
     "/.tox/",
     "/.eggs/",
     "/vendor/openfang/",
+    # Embedded or generated trees excluded by the authoritative AGENTS validator.
+    "/src/codomyrmex/agents/open_gauss/",
+    "/src/codomyrmex/agents/mission_control/app/",
+    "/src/codomyrmex/skills/skills/upstream/",
+    "/src/codomyrmex/skills/skills/custom/",
+    "/src/codomyrmex/documentation/docs/",
+    "/src/codomyrmex/agents/hermes/evolution/",
+    "/src/codomyrmex/llm/outputs/config/",
+    "/src/codomyrmex/llm/outputs/logs/",
+    "/src/codomyrmex/llm/outputs/models/",
+    "/src/codomyrmex/skills/skills/.cache/",
+    "/docs/assets/demo_stills/",
     "/.cursor/",
     "/.claude/plugins/cache/",
     # Ephemeral / generated — not RASP documentation targets

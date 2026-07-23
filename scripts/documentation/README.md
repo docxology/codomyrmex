@@ -29,7 +29,7 @@ uv run python scripts/documentation/enforce_quality_gate.py \
 uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root .
 ```
 
-**Placeholders (quality gate):** `enforce_quality_gate.py` sums per-file `metrics.placeholder_count` from `analyze_content_quality.py`. That count reflects actionable markers (task-style `TODO:`, `FIXME:`, HTML comment TODOs, `[TBD]` / `[WIP]`, etc.), not prose like “TODO queues” or `example.com` URLs. See the module docstring in `analyze_content_quality.py` for the exact rules.
+**Placeholders (quality gate):** `enforce_quality_gate.py` sums per-file `metrics.placeholder_count` from `analyze_content_quality.py`. That count reflects actionable task markers (for example, an unfinished TODO item, FIXME, HTML comment TODO, or bracketed TBD/WIP marker), not ordinary prose such as “TODO queues” or `example.com` URLs. See the module docstring in `analyze_content_quality.py` for the exact rules.
 
 ## Directory Contents
 - `PAI.md` – File

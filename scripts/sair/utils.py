@@ -67,6 +67,15 @@ def compute_hash(content: str) -> str:
     return hashlib.sha256(content.encode("utf-8")).hexdigest()[:12]
 
 
+def compute_file_hash(filepath: str | os.PathLike[str]) -> str:
+    """Compute a full SHA-256 digest for an input artifact."""
+    digest = hashlib.sha256()
+    with open(filepath, "rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def format_equation(law_data: dict[str, Any]) -> str:
     """Format equational law data into a human-readable string."""
     return law_data.get("equation", "Unknown")
@@ -107,6 +116,7 @@ def summarize_results(results: list[dict[str, Any]]) -> dict[str, Any]:
     - false_correct / false_total (accuracy on ground-truth FALSE problems)
     - unknown_verdicts (LLM returned neither TRUE nor FALSE)
     - avg_latency, total_tokens
+    - confidence_status_counts: provenance-aware confidence counts
     - missed_problems: list of problem_ids answered incorrectly
     """
     total = len(results)
@@ -124,10 +134,15 @@ def summarize_results(results: list[dict[str, Any]]) -> dict[str, Any]:
     total_tokens = 0
     total_log_loss = 0.0
     valid_log_loss_count = 0
+    confidence_status_counts: dict[str, int] = {}
 
     for r in results:
         if "error" in r:
             continue
+        confidence_state = str(r.get("confidence_status", "not_requested"))
+        confidence_status_counts[confidence_state] = (
+            confidence_status_counts.get(confidence_state, 0) + 1
+        )
         verdict = (r.get("parsed") or {}).get("VERDICT", "UNKNOWN")
         if verdict not in ("TRUE", "FALSE"):
             unknown_verdicts += 1
@@ -183,11 +198,24 @@ def summarize_results(results: list[dict[str, Any]]) -> dict[str, Any]:
         "unknown_verdicts": unknown_verdicts,
         "avg_latency_sec": round(avg_latency, 3),
         "total_tokens": total_tokens,
+        "confidence_status_counts": confidence_status_counts,
+        "confidence_reported": confidence_status_counts.get("reported", 0),
+        "confidence_missing": confidence_status_counts.get("missing", 0),
+        "confidence_invalid": confidence_status_counts.get("invalid", 0),
+        "confidence_out_of_range": confidence_status_counts.get("out_of_range", 0),
+        "log_loss_count": valid_log_loss_count,
         "missed_problems": missed_problems,
     }
-    if valid_log_loss_count > 0:
+    if any(
+        status not in {"not_requested", "error"} for status in confidence_status_counts
+    ):
         ans["stage2"] = True
+    if valid_log_loss_count > 0:
         ans["avg_log_loss"] = round(total_log_loss / valid_log_loss_count, 4)
+    elif ans.get("stage2"):
+        # Keep the field explicit when calibration was requested but no
+        # valid, non-imputed confidence values were available.
+        ans["avg_log_loss"] = None
     return ans
 
 

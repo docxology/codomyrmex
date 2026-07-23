@@ -4,29 +4,52 @@
 
 ## Overview
 
-The manuscript module computes manuscript token variables from real
-repository state and generates the publication-quality figures used in the
-Codomyrmex paper. It replaces the former `src/manuscript_variables.py` and
-`scripts/generate_manuscript_figures.py` monoliths with a tested package.
+The manuscript module computes manuscript token variables from real repository
+state and generates the publication-quality figures used in the Codomyrmex paper.
+The package is the single implementation authority; the project-local scripts are
+thin command-line entry points.
 
 ## Key Components
 
 | Component | File | Purpose |
 | :--- | :--- | :--- |
 | `compute_variables()` | `variables.py` | Compute manuscript token variables from repo state |
-| `inject_via_infrastructure()` | `variables.py` | Inject computed variables into the manuscript build |
+| `inject_manuscript_variables()` | `variables.py` | Inject computed variables into the manuscript build |
+| `validate_variable_contract()` | `variables.py` | Detect undefined, unresolved, stale, and unused publication tokens |
 | `figures.main()` | `figures/orchestrator.py` | Run every figure generator |
 | `FIGURES` registry | `figures/__init__.py` | Registry of `fig_*()` generators |
+
+The generator writes `output/data/manuscript_variables.json` and the
+machine-readable `output/data/manuscript_variable_manifest.json`. Every active
+prose token, table value, caption, figure annotation, and accessibility string
+must resolve from that snapshot or be explicitly classified as mathematical
+notation, a citation year, or provenance metadata. The manifest is a contract
+check, not evidence that a scientific hypothesis has been supported.
 
 ## Quick Start
 
 ```python
-from codomyrmex.manuscript.variables import compute_variables, inject_via_infrastructure
+from pathlib import Path
+
+from codomyrmex.manuscript.variables import (
+    compute_variables,
+    inject_manuscript_variables,
+)
 from codomyrmex.manuscript.figures import main as generate_all_figures
 
-variables = compute_variables()
-inject_via_infrastructure(variables)
+project_root = Path.cwd()  # run this example from the repository root
+config_path = project_root / "docs/manuscript/config.yaml"
+manuscript_dir = project_root / "docs/manuscript"
+output_dir = project_root / "output/manuscript"
+variables = compute_variables(config_path, project_root)
+inject_manuscript_variables(manuscript_dir, output_dir, variables)
 generate_all_figures()
+```
+
+For a read-only check of an existing snapshot:
+
+```bash
+uv run python scripts/validate_manuscript_contract.py
 ```
 
 ## Validation

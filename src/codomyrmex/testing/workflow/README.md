@@ -4,7 +4,10 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Workflow.
+Module implementation, resources, and local coordination for Workflow. A non-passing
+step stops the runner by default; use the explicit `continue_on_error=True` step
+option only for workflows whose continuation policy is intentional. Script and
+expression steps are trusted-workflow-only and are not a sandbox or remote shell.
 
 ## Directory Contents
 - `PAI.md` – File

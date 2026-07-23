@@ -3,10 +3,11 @@
 Strict zero-mock policy on macOS host ensuring all bridges are fully concrete.
 """
 
+import os
+
 import pytest
 
 from codomyrmex.plugin_system.wasm import WasmSandbox, WasmSandboxError
-from codomyrmex.quantization import QuantizationConfig, dequantize_array, quantize_array
 from codomyrmex.spatial.coordinates.geodesic import generate_icosahedron
 from codomyrmex.spatial.three_d.engine_3d import Vector3D
 from codomyrmex.spatial.three_d.geodesic_bvh import build_bvh, ray_intersect_bvh
@@ -77,11 +78,28 @@ class TestWasmSandbox:
             sandbox.execute_plugin(wat, "anything")
 
 
+def _mlx_symbols():
+    """Load the optional MLX backend only in its explicitly opt-in test lane."""
+    mx = pytest.importorskip("mlx.core")
+    from codomyrmex.quantization import (
+        QuantizationConfig,
+        dequantize_array,
+        quantize_array,
+    )
+
+    return mx, QuantizationConfig, dequantize_array, quantize_array
+
+
+@pytest.mark.skipif(
+    os.environ.get("RUN_LIVE_MLX") != "1",
+    reason="MLX hardware/backend tests require explicit RUN_LIVE_MLX=1 opt-in",
+)
 class TestMLXQuantizer:
     """Test suite for the MLX array quantization module."""
 
     def test_quantization_config_validation(self):
         """Test invalid bit depths and group sizes raise ValueError."""
+        _, QuantizationConfig, _, _ = _mlx_symbols()
         with pytest.raises(ValueError, match="must be exactly 4, 8, or 16"):
             QuantizationConfig(bits=2)
 
@@ -90,7 +108,7 @@ class TestMLXQuantizer:
 
     def test_quantize_dequantize_int4(self):
         """Test full INT4 quantization round-trip on native MLX array."""
-        mx = pytest.importorskip("mlx.core")
+        mx, QuantizationConfig, dequantize_array, quantize_array = _mlx_symbols()
 
         # Original continuous floating point weights
         original = mx.random.normal((128, 128))
@@ -112,7 +130,7 @@ class TestMLXQuantizer:
 
     def test_quantize_dequantize_int8(self):
         """Test full INT8 quantization round-trip on native MLX array."""
-        mx = pytest.importorskip("mlx.core")
+        mx, QuantizationConfig, dequantize_array, quantize_array = _mlx_symbols()
 
         original = mx.random.normal((64, 64))
         config = QuantizationConfig(bits=8, group_size=64)
@@ -129,7 +147,7 @@ class TestMLXQuantizer:
 
     def test_quantize_fallback_fp16(self):
         """Test the 16-bit fallback logic bypassed structural quantization."""
-        mx = pytest.importorskip("mlx.core")
+        mx, QuantizationConfig, dequantize_array, quantize_array = _mlx_symbols()
 
         original = mx.random.normal((32, 32))
         config = QuantizationConfig(bits=16)
@@ -147,7 +165,7 @@ class TestMLXQuantizer:
 
     def test_dequantize_missing_scales_biases(self):
         """Test error when dequantizing low-bit arrays without mandatory constants."""
-        mx = pytest.importorskip("mlx.core")
+        mx, QuantizationConfig, dequantize_array, _ = _mlx_symbols()
         wq = mx.zeros((32, 32))
         config = QuantizationConfig(bits=4)
 

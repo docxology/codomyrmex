@@ -7,12 +7,12 @@
 - Compute manuscript token variables from real repository state (test
   counts, coverage, module counts, file hashes) rather than hardcoded values.
 - Inject computed variables into the manuscript build via
-  `inject_via_infrastructure()`.
+  `inject_manuscript_variables()`.
 - Generate one figure per `fig_*()` generator under `figures/`, sharing
   palettes, config loading, and provenance helpers from `figures/_common.py`.
 - Run all figure generators through `figures.orchestrator.main()`.
-- Preserve backward-compatible import paths: `src/manuscript_variables.py`
-  and `scripts/generate_manuscript_figures.py` remain thin shims.
+- Keep `scripts/generate_manuscript_figures.py` as the supported command-line entry
+  point; its implementation delegates to the package registry.
 
 ## Non-Functional Requirements
 

@@ -324,7 +324,7 @@ if analysis.readability_score < 50:
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.11+
 - Standard library modules (re, statistics, pathlib, dataclasses)
 - Codomyrmex logging_monitoring module
 
@@ -482,4 +482,3 @@ The TextAnalyzer class is thread-safe for read operations. Multiple threads can 
 - Typical performance: ~1000 words/second on modern hardware
 - File size limits: Recommended maximum 10MB per file
 ```
-

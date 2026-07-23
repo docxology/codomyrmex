@@ -157,7 +157,7 @@ class IDEClient(ABC):
 
 ### Testing Requirements
 
-- ≥80% code coverage
+- 60% project-wide line-coverage floor
 - Unit tests for all public methods
 - Integration tests where feasible
 - Performance benchmarks for critical paths

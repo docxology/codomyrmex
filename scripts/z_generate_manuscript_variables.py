@@ -48,6 +48,7 @@ def _clean_output_dir(output_dir: Path) -> None:
 from codomyrmex.manuscript.variables import (
     compute_variables,
     inject_manuscript_variables,
+    validate_variable_contract,
 )
 
 
@@ -64,11 +65,33 @@ def main() -> int:
         project_root=project_root,
     )
 
+    contract = validate_variable_contract(
+        manuscript_dir=project_root / "docs" / "manuscript",
+        variables=variables,
+        figure_source_dir=project_root
+        / "src"
+        / "codomyrmex"
+        / "manuscript"
+        / "figures",
+    )
+    if contract["errors"]:
+        print(
+            "ERROR: manuscript variable contract failed:\n"
+            + "\n".join(f"- {error}" for error in contract["errors"]),
+            file=sys.stderr,
+        )
+        return 1
+
     manuscript_dir = project_root / "docs" / "manuscript"
     # Write JSON snapshot.
     json_out = project_root / "output" / "data" / "manuscript_variables.json"
     _write_json(json_out, variables)
     print(f"[z_generate] wrote {json_out.relative_to(project_root)}")
+    contract_out = (
+        project_root / "output" / "data" / "manuscript_variable_manifest.json"
+    )
+    _write_json(contract_out, contract)
+    print(f"[z_generate] wrote {contract_out.relative_to(project_root)}")
 
     # Inject into manuscript markdown files.
     output_manuscript = project_root / "output" / "manuscript"

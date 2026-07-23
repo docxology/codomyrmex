@@ -1,4 +1,4 @@
-# Active Inference as a Design Analogy {#sec:active-inference}
+# Active Inference: Bounded Crosswalk and Upgrade Path {#sec:active-inference}
 
 Active inference provides a vocabulary for relating perception, belief, action, and
 learning under uncertainty [@friston2010free; @friston2017active]. That vocabulary can
@@ -8,12 +8,18 @@ kernel an active-inference system.
 {{CONFIG_PARAMETER_STATUS_NOTE}} The active-inference correspondence below is therefore
 a research scaffold: it identifies missing model components and testable upgrade steps,
 not a retrospective theoretical certification of the current heuristic gate.
+The deterministic settings used in this crosswalk are example/initial engineering
+values that can be tuned through their owning code or configuration; tuning them does
+not create a probabilistic model or an empirical Active Inference result.
 
-The current implementation is deterministic and heuristic. It does not encode a
+The core implementation is deterministic and heuristic. It does not integrate a
 probabilistic generative model, maintain a variational posterior, estimate precision from
-data, evaluate policies over a planning horizon, or minimize expected free energy. This
-section therefore presents a conceptual crosswalk and an implementation agenda. Its
-correspondences are analogies to be tested, not formal equivalences or empirical results.
+data, evaluate policies over a planning horizon, or minimize expected free energy. A
+separate offline research adapter declares these objects for explicit experiments, but
+it is not called by the production gate and does not relabel deterministic scores.
+This section therefore presents a conceptual crosswalk and an implementation agenda.
+Its correspondences are analogies to be tested, not formal equivalences or empirical
+results.
 
 ## Canonical Requirements {#sec:ai-generative}
 
@@ -47,7 +53,7 @@ inference procedure.
 
 ![{{FIGURE_CAPTION_FEP_CORRESPONDENCE}}](figures/{{FIGURE_FILENAME_FEP_CORRESPONDENCE}}){#{{FIGURE_LABEL_FEP_CORRESPONDENCE}} width={{FIGURE_WIDTH_FEP_CORRESPONDENCE}}}
 
-Figure [@fig:fep_correspondence] is therefore a reading aid, not a model diagram. The
+The crosswalk in [@fig:fep_correspondence] is therefore a reading aid, not a model diagram. The
 crosswalk identifies where a future probabilistic implementation might attach to the
 existing interfaces.
 

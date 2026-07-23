@@ -20,8 +20,9 @@ keywords:
   - python
   - zero-mock-testing
 abstract: >-
-  Codomyrmex is a modular, AI-native coding workspace with 129 top-level
-  modules and 610 production MCP tool decorators. It provides multi-agent
+  Codomyrmex is a modular, AI-native coding workspace with 130 top-level
+  modules and 623 production MCP tool decorators. Its current merged runtime
+  manifest exposes 608 tools. It provides multi-agent
   orchestration for Claude, Gemini, GPT, and 10+ agent providers,
   integrated with the Personal AI Infrastructure (PAI) via the Model
   Context Protocol.

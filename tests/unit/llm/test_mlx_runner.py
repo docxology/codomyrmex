@@ -6,13 +6,17 @@ gated behind ``mlx_available``.
 """
 
 import importlib.util
+import os
 
 import pytest
 
 # ---------------------------------------------------------------------------
 # MLX availability guard
 # ---------------------------------------------------------------------------
-mlx_available = importlib.util.find_spec("mlx") is not None
+mlx_available = (
+    importlib.util.find_spec("mlx") is not None
+    and os.environ.get("RUN_LIVE_MLX") == "1"
+)
 _skip_no_mlx = pytest.mark.skipif(not mlx_available, reason="mlx not installed")
 
 

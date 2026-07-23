@@ -1,0 +1,9 @@
+# GitNexus indexes source and documentation text. Binary media cannot contribute
+# useful symbols and can make the parser fail on invalid byte sequences.
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.pdf

@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
     paths:
+      - '*.md'
+      - 'docs/**'
+      - 'scripts/documentation/**'
+      - 'scripts/validate_manuscript_*.py'
       - 'src/codomyrmex/**/README.md'
       - 'src/codomyrmex/**/docs/**'
       - 'src/codomyrmex/**/CHANGELOG.md'
@@ -15,6 +19,10 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - '*.md'
+      - 'docs/**'
+      - 'scripts/documentation/**'
+      - 'scripts/validate_manuscript_*.py'
       - 'src/codomyrmex/**/README.md'
       - 'src/codomyrmex/**/docs/**'
       - 'src/codomyrmex/**/CHANGELOG.md'
@@ -335,7 +343,11 @@ jobs:
       - name: Check internal links
         run: |
           echo "🔗 Checking documentation links..."
-          blc http://localhost:8000 --recursive --exclude-external --filter-level 3 || true
+          # Keep the link checker on the hard-gate path.  The repository-level
+          # validator remains authoritative for Markdown source links; this
+          # second check covers links as rendered by the documentation site.
+          blc http://localhost:8000 --recursive --exclude-external --filter-level 3 \
+            2>&1 | tee link-checker.log
 
       - name: Generate link report
         run: |
@@ -343,13 +355,17 @@ jobs:
           echo "" >> link-report.md
           echo "Checked at: $(date)" >> link-report.md
           echo "" >> link-report.md
-          echo "Run completed. Check logs above for any broken links." >> link-report.md
+          echo '```text' >> link-report.md
+          cat link-checker.log >> link-report.md
+          echo '```' >> link-report.md
 
       - name: Upload link check report
         uses: actions/upload-artifact@v4
         with:
           name: link-check-report
-          path: link-report.md
+          path: |
+            link-report.md
+            link-checker.log
 
   documentation-pr-preview:
     name: Documentation PR Preview
@@ -396,7 +412,8 @@ jobs:
   documentation-status:
     name: Documentation Status
     runs-on: ubuntu-latest
-    needs: [validate-documentation, aggregate-documentation, build-documentation]
+    needs:
+      [validate-documentation, aggregate-documentation, build-documentation, link-checker]
     if: always()
     steps:
       - name: Check Documentation Status
@@ -425,6 +442,14 @@ jobs:
           else
             echo "❌ **Build**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
+
+          if [[ "${{ needs.link-checker.result }}" == "success" ]]; then
+            echo "✅ **Rendered links**: Passed" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.link-checker.result }}" == "skipped" ]]; then
+            echo "⏭️  **Rendered links**: Skipped (no documentation build)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Rendered links**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
           
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Docs Changed**: ${{ needs.validate-documentation.outputs.docs-changed }}" >> $GITHUB_STEP_SUMMARY
@@ -442,6 +467,11 @@ jobs:
           fi
           if [[ "$build_result" != "success" && "$build_result" != "skipped" ]]; then
             echo "❌ Documentation build failed: $build_result"
+            exit 1
+          fi
+          link_result="${{ needs.link-checker.result }}"
+          if [[ "$link_result" != "success" && "$link_result" != "skipped" ]]; then
+            echo "❌ Rendered documentation link check failed: $link_result"
             exit 1
           fi
           echo "✅ Documentation status gate passed."

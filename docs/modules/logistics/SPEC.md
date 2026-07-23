@@ -83,7 +83,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Submodule-specific tests
 - Integration tests
 

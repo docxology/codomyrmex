@@ -10,6 +10,12 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 
+# The repository-wide floor is authoritative in pyproject.toml, Make, and CI.
+# Release certification mirrors that floor; tier-1 coverage remains an optional
+# stricter signal for callers that provide it.
+PROJECT_COVERAGE_FLOOR = 60.0
+TIER1_COVERAGE_FLOOR = 80.0
+
 
 class CertificationStatus(Enum):
     """Release certification status."""
@@ -79,7 +85,7 @@ class ReleaseValidator:
 
         validator = ReleaseValidator(version="1.0.0")
         validator.check_tests(failures=0, total=9000)
-        validator.check_coverage(overall=67, tier1=82)
+        validator.check_coverage(overall=60, tier1=80)
         cert = validator.certify()
         assert cert.certified
     """
@@ -110,16 +116,19 @@ class ReleaseValidator:
 
     def check_coverage(self, overall: float, tier1: float = 0) -> CertificationCheck:
         """Validate code coverage."""
-        passed = overall >= 65
+        passed = overall >= PROJECT_COVERAGE_FLOOR
         if tier1 > 0:
-            passed = passed and tier1 >= 80
+            passed = passed and tier1 >= TIER1_COVERAGE_FLOOR
         status = CertificationStatus.PASS if passed else CertificationStatus.FAIL
         check = CertificationCheck(
             name="Code Coverage",
             category="quality",
             status=status,
             value=f"overall={overall}%, tier1={tier1}%",
-            threshold="overall≥65%, tier1≥80%",
+            threshold=(
+                f"overall≥{PROJECT_COVERAGE_FLOOR:.0f}%, "
+                f"tier1≥{TIER1_COVERAGE_FLOOR:.0f}% when supplied"
+            ),
         )
         self._checks.append(check)
         return check

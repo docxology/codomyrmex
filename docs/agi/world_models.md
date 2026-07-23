@@ -1,4 +1,4 @@
-# Internal World Models: Representation, Grounding, and the Binding Problem
+# Software World Models: Representations, Interfaces, and Open Gaps
 
 **Series**: AGI Perspectives | **Document**: 3 of 10 | **Last Updated**: March 2026
 
@@ -10,7 +10,10 @@ $$F = D_{KL}[q(\theta) \| p(\theta \mid o)] = \underbrace{\langle \log q(\theta)
 
 where q(θ) is the approximate posterior (the model's beliefs), p(θ|o) is the true posterior, and p(o) is the evidence. Minimizing F simultaneously maximizes model accuracy and minimizes surprise — the dual imperative of perception (updating beliefs) and action (seeking expected outcomes).
 
-Codomyrmex implements aspects of a world model not for physical environments but for the *software development environment*: codebases, repositories, documentation, test results, and agent interactions.
+Codomyrmex contains representations and observation interfaces that could contribute to
+a software-development world model. The current components do not form a validated
+generative model with demonstrated action-consequence prediction or counterfactual
+planning.
 
 ## World Model Architecture
 
@@ -24,19 +27,19 @@ graph TB
     end
 
     subgraph REPRESENTATION["Representation: θ → latent state"]
-        VEC["vector_store<br/><i>ℝ^d embedding manifold</i>"]
-        GRAPH["graph_rag<br/><i>knowledge hypergraph G(V,E)</i>"]
-        AMEM["agentic_memory<br/><i>episodic timeline {(s,a,r,t)}</i>"]
+        VEC["vector_store<br/><i>dense-vector retrieval</i>"]
+        GRAPH["graph_rag<br/><i>entity-relation graph</i>"]
+        AMEM["agentic_memory<br/><i>persistent experience records</i>"]
     end
 
     subgraph INFERENCE["Inference: q(θ) → beliefs"]
         CEREB["cerebrum/core<br/><i>CBR: P(solution|problem,cases)</i>"]
-        ACT_INF["cerebrum/inference<br/><i>active inference: argmin EFE(π)</i>"]
+        ACT_INF["cerebrum/inference<br/><i>standalone inference components</i>"]
     end
 
     subgraph ACTION["Action: a = argmin F(a)"]
         ORCH["orchestrator<br/><i>DAG planning: π* = (a₁,...,aₖ)</i>"]
-        FORMAL["formal_verification<br/><i>consequence prediction: a ⊨ φ</i>"]
+        FORMAL["formal_verification<br/><i>selected obligation checking</i>"]
     end
 
     PERCEPTION -->|"encode"| REPRESENTATION
@@ -49,13 +52,23 @@ graph TB
 
 A world model must be grounded in observations. Codomyrmex's perception layer provides four information-theoretically distinct channels:
 
-- **Proprioception** (`system_discovery`) — The system's awareness of its own structure. `scan_all_modules()` returns a `ModuleHealthReport` for each of **130** top-level modules — a typed self-state vector. This is the computational equivalent of the proprioceptive nervous system: awareness of limb position without looking.
+- **Proprioception** (`system_discovery`) — The system's structural inventory and health
+  observations. This is a software analogy for self-state sensing, not a validated
+  proprioceptive or self-awareness mechanism. Counts belong to generated inventory
+  reports, not this essay.
 
-- **Temporal perception** (`git_operations`) — Repository-state tracking: branches, commits, diffs. Each commit is a timestamped snapshot, enabling *temporal difference learning*: computing `Δstate = state(t) - state(t-1)`. The git graph provides a *causal history* that Pearl's (2009) do-calculus could potentially exploit for intervention reasoning.
+- **Temporal perception** (`git_operations`) — Repository-state tracking through
+  branches, commits, and diffs. These observations provide temporal order; they do not
+  by themselves establish temporal-difference learning or causal history suitable for
+  do-calculus.
 
 - **Interoception** (`telemetry`) — Runtime performance: latency distributions, error rates, resource consumption. This is the system's *internal milieu* (Bernard, 1865): the physiological signals that indicate whether the organism is functioning correctly, independent of external environment.
 
-- **Exteroception** (`search`) — On-demand codebase observation. Unlike the other channels (which are push-based or periodic), search is *active perception*: the system decides where to look. This implements Friston's concept of **epistemic foraging** — actions taken to reduce uncertainty rather than achieve immediate reward.
+- **Exteroception** (`search`) — On-demand codebase observation. Unlike the other
+  channels (which may be push-based or periodic), search is an active-query surface: a
+  caller chooses where to look. This can be compared with Friston's concept of
+  **epistemic foraging**, but the current search path does not establish uncertainty
+  reduction or an epistemic objective.
 
 ### Representation: The Tripartite Manifold
 
@@ -63,17 +76,22 @@ Three modules provide structurally distinct representations of the same underlyi
 
 | Module | Mathematical Structure | Topology | Query Complexity |
 |:-------|:---------------------|:---------|:----------------|
-| `vector_store` | Riemannian manifold ℝ^d | Metric space with cosine distance | O(n·d) brute force; O(log n) with HNSW |
-| `graph_rag` | Hypergraph G = (V, E) where E ⊆ 2^V | Discrete topology | O(V + E) traversal |
-| `agentic_memory` | Ordered set {(s, a, r, t)} with temporal index | Order topology | O(log n) binary search on timestamp |
+| `vector_store` | Dense vectors | Backend-defined similarity space | Depends on index/backend |
+| `graph_rag` | Entity-relation graph | Discrete graph structure | Depends on traversal/index |
+| `agentic_memory` | Persistent records | Application-defined temporal metadata | Depends on store/query |
 
 These three representations address different information-geometric requirements:
 
-1. **Vector embeddings** — The `InMemoryVectorStore` maps text to dense vectors on a Riemannian manifold. Similarity is geodesic distance. This captures *analogical similarity*: things that are "like" each other are geometrically close. The manifold hypothesis (Bengio et al., 2013) states that high-dimensional data concentrates near low-dimensional manifolds — embeddings exploit this concentration.
+1. **Vector embeddings** — A vector store can support dense-vector similarity. Calling
+   its space Riemannian or its distance geodesic would require a specified metric and
+   implementation; similarity does not by itself establish analogical reasoning.
 
-2. **Knowledge graphs** — `KnowledgeGraph` stores entity-relation triples forming a hypergraph. This captures *structural similarity*: things related by the same predicate share structure. The graph's adjacency spectrum (eigenvalues of the Laplacian) encodes topological invariants that persist under perturbation — robust to noise.
+2. **Knowledge graphs** — `KnowledgeGraph` stores entity-relation structures that can
+   support graph retrieval. Spectral invariants, robustness, and structural analogy
+   require an explicit graph analysis and are not implied by storage.
 
-3. **Episodic traces** — Timestamped experience records (state, action, reward, time). This captures *temporal similarity*: things that happened in related contexts are co-indexed. The temporal index provides causal ordering that the other two representations lack.
+3. **Episodic traces** — Records may include time and context. Temporal ordering is not
+   causal ordering, and retrieval does not establish episodic binding or transfer.
 
 ### The Binding Problem
 
@@ -125,23 +143,35 @@ The dependency graph in `ARCHITECTURE.md` provides the *skeleton* of such an SCM
 
 ## Information Geometry of Representation Spaces
 
-The three representation modules operate on fundamentally different **information geometries** (Amari, 2016). Each module's state space is a statistical manifold — a manifold where points represent probability distributions:
+The three representation modules have different data structures and query semantics.
+Information geometry (Amari, 2016) is a possible analysis framework, but the current
+implementations do not establish statistical manifolds or a shared metric:
 
-- **`vector_store`** — Points on a Riemannian manifold with **Fisher-Rao metric**: the natural distance measure between embeddings respects the information content of the underlying text. The Fisher information matrix:
+- **`vector_store`** — A future probabilistic embedding model could use a **Fisher-Rao
+  metric**. The equation below is background mathematics, not the metric used by the
+  current vector store:
 
 $$g_{ij}(\theta) = E\left[\frac{\partial \log p(x|\theta)}{\partial \theta_i} \frac{\partial \log p(x|\theta)}{\partial \theta_j}\right]$$
 
-defines a Riemannian metric on the parameter space. Gradient descent on this manifold — the **natural gradient** (Amari, 1998) — converges faster than ordinary gradient descent because it respects the information geometry rather than the Euclidean geometry of the parameter space.
+defines a metric for a specified statistical model. No natural-gradient optimization or
+convergence result is claimed for the repository's embeddings.
 
-- **`graph_rag`** — The knowledge graph operates on a **discrete manifold** where distance is graph-theoretic (shortest path length). The graph Laplacian L = D - A (where D is degree matrix, A is adjacency) has eigenvalues that encode the manifold's spectral geometry. The **Fiedler value** (second-smallest eigenvalue of L) measures graph connectivity — a low Fiedler value indicates the graph is close to disconnecting, signaling structural fragility in the knowledge representation.
+- **`graph_rag`** — A graph can be analyzed with graph distances and Laplacians. No
+  Fiedler-value monitoring or robustness claim follows until that analysis is implemented
+  and linked to an operational decision.
 
-- **`agentic_memory`** — The episodic timeline operates on an **order topology** where the natural metric is temporal distance. The kernel function k(t₁, t₂) = exp(-|t₁ - t₂|/τ) defines a temporal similarity that decays exponentially — recent experiences are "closer" than distant ones.
+- **`agentic_memory`** — Temporal metadata can support an order-based analysis. The
+  exponential kernel shown above is a candidate decay model, not evidence that all
+  memory paths use exponential decay.
 
 The fundamental incompatibility: these three metrics cannot be naively combined. A function at graph distance 1 (directly related) might be at cosine distance 0.8 (semantically distant) and temporal distance 100 (hours ago). **Multimodal binding** (the gap identified above) requires a principled way to combine these incompatible metrics — potentially via **optimal transport** (Villani, 2009): finding the minimum-cost mapping between representation spaces.
 
 ## Markov Blankets and Module Boundaries
 
-Friston's (2013) **Markov blanket** formalism provides a principled account of module boundaries. A Markov blanket of a system partitions variables into:
+Friston's (2013) **Markov blanket** formalism provides a comparison for module
+boundaries. A software interface resembles a blanket diagrammatically, but the
+conditional-independence equation requires a probabilistic model and is not implied by
+encapsulation:
 
 - **Internal states** (μ) — the module's private state
 - **External states** (η) — everything outside the module
@@ -175,24 +205,31 @@ The key property: conditional on the blanket states (s, a), the internal states 
 
 $$p(\mu, \eta \mid s, a) = p(\mu \mid s, a) \cdot p(\eta \mid s, a)$$
 
-This is exactly the encapsulation principle of software engineering, given a formal statistical interpretation. A well-designed module's behavior is determined entirely by its inputs (sensory states) and outputs (active states) — its internal implementation is independent of the external world given the interface.
+Software encapsulation can motivate this interpretation, but it is not exactly the
+Markov-blanket property. Hidden implementation state may affect side effects, timing,
+errors, global resources, and event delivery even when the interface is fixed.
 
-The `__init__.py` exports + `@mcp_tool` decorators constitute the **active states**; function parameters and event subscriptions constitute the **sensory states**. The module's internal implementation is the **internal state** — hidden behind the Markov blanket.
+Exports, tool registrations, parameters, and event subscriptions are candidate
+interface observations. They should be treated as software boundary metadata, not as
+active/sensory states in a validated probabilistic model.
 
-The world modeling implication: each module maintains its own *local world model* (beliefs about its inputs), and the system's global world model is the *composition* of all local models mediated by Markov blankets. This is the **free energy minimization** principle applied at the architectural level: each module minimizes its own surprise by updating its internal states to better predict its sensory states.
+The research implication is a proposed experiment: test whether local module state and
+interface observations support prediction of downstream outcomes. The repository does
+not currently establish local generative models, free-energy minimization, or a global
+world model formed by Markov-blanket composition.
 
 ## Gap Analysis
 
 | World Model Capability | Status | Information-Theoretic Gap |
 |:----------------------|:-------|:------------------------|
-| Multi-channel perception | ✅ | — |
-| Riemannian embeddings | ✅ | — |
-| Knowledge hypergraph | ✅ | — |
-| Episodic timeline | ✅ | — |
-| Multimodal binding | ❌ | No Φ: V × G × E → ℝ^D |
-| Forward simulation (JEPA) | ⚠️ | spatial/world_models/ exists but not integrated |
-| Causal reasoning (do-calculus) | ❌ | No SCM; no interventional distributions |
-| Epistemic foraging | ⚠️ | search is active but not uncertainty-directed |
+| Multi-channel observation | Surface exists | Need a shared event/observation schema |
+| Riemannian embeddings | Not established | Specify and implement a probabilistic metric |
+| Knowledge graph | Graph retrieval surface | Link graph analysis to measured tasks |
+| Episodic persistence | Persistence surface | Measure binding, retention, and recall |
+| Multimodal binding | Not implemented | Define Φ and content-identity/trace contract |
+| Forward simulation (JEPA) | Research hypothesis | Add predictor, actions, held-out transitions |
+| Causal reasoning (do-calculus) | Not implemented | Add SCM and interventional evaluations |
+| Epistemic foraging | Unmeasured | Link search choice to uncertainty reduction |
 
 ## Cross-References
 

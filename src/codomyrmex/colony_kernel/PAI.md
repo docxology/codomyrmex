@@ -4,11 +4,13 @@
 
 ## Overview
 
-The Colony Kernel is Codomyrmex's emergent proposal-evaluation control plane:
-it returns advisory gate verdicts, tracks caller-reported outcomes and resource
-use, derives trust and role labels, and maintains process-local pheromone
-pressure. Downstream callers remain responsible for enforcing verdicts and for
-the accuracy of submitted outcome reports.
+The Colony Kernel is Codomyrmex's proposal-evaluation control plane for the
+artificial-ecology research program: it returns advisory gate verdicts, tracks
+caller-reported outcomes and resource use, derives trust and role labels, and
+maintains process-local pheromone pressure. These mechanics implement a
+deterministic coordination substrate; they do not establish emergent cognition.
+Downstream callers remain responsible for enforcing verdicts and for the
+accuracy of submitted outcome reports.
 
 This document maps each PAI Algorithm phase to the Colony Kernel subsystem
 that serves it, explains how colony roles map to PAI agent types, describes
@@ -66,8 +68,10 @@ gate scoring. When reading pheromone pressure, give operator-deposited signals
 ### THINK → FalsificationWorker
 
 The THINK phase produces a plan. Before committing to any approach, the
-colony applies adversarial review via `FalsificationWorker`. This maps
-exactly to PAI's THINK phase goal: generate a plan and then attack it.
+recommended colony workflow applies adversarial review via
+`FalsificationWorker`. This is a functional mapping to PAI's THINK phase—generate
+a plan and then attack it—not an assertion that the two systems are formally
+equivalent.
 
 **Subsystem**: `falsification_worker.FalsificationWorker`
 
@@ -105,9 +109,10 @@ colony_falsify_plan(plan_json='{"action_type": "patch_file",
   "budget_estimate": {"llm_calls": 3, "runtime_seconds": 30.0}}')
 ```
 
-The THINK phase should call `colony_falsify_plan` for every candidate
-approach before selecting one. The approach with the lowest `severity_score`
-and `recommendation: "execute"` is the plan to carry forward.
+The recommended workflow calls `colony_falsify_plan` for each candidate approach
+before selecting one. Within that workflow, the approach with the lowest
+`severity_score` and `recommendation: "execute"` is the plan to carry forward;
+callers may define a stricter selection policy.
 
 ---
 
@@ -153,6 +158,12 @@ gate_score = clamp(gate_score, 0.0, 1.0)
   what to address before optional resubmission
 - `GateDecision.REFUSE`: the kernel deposits a FAILURE signal at the proposal
   target; it does not automatically change trust or enforce a downstream stop
+
+The weights and thresholds above are the current configured defaults used by
+the implementation and its deterministic fixtures. They are example/initial,
+tunable policy parameters rather than universal constants; changing them
+requires rerunning the focused contract suite and regenerating dependent
+evidence.
 
 **MCP tool**:
 ```python
@@ -265,6 +276,10 @@ at least 0.50.
 The `ResourceLedger` enforces multi-dimensional spending caps. PAI effort tiers
 (E1–E5) correspond to different `ResourceBudget` profiles that the colony
 enforces per run.
+
+The profiles below are illustrative starting points for comparative experiments.
+They are configurable per kernel instance and must not be read as validated
+effort-tier standards or fixed production limits.
 
 | PAI effort tier | Typical task scope | Suggested `ResourceBudget` profile |
 |---|---|---|

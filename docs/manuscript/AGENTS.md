@@ -24,7 +24,7 @@ This directory contains the Codomyrmex manuscript source files, configuration, a
 ## Key Files
 
 - `config.yaml` — Paper metadata and gate/trust/decay parameters.
-- `00_abstract.md` through `08_active_inference.md` — Main manuscript sections.
+- `00_abstract.md` through `10_formalism_code_crosswalk.md` — Main manuscript sections.
 - `90_appendix_design_rationale.md` — Design-rationale appendix.
 - `98_acknowledgements.md` — Configuration-injected, unnumbered acknowledgements.
 - `99_references.md` — Minimal citeproc bibliography anchor; no citation syntax prose.
@@ -75,21 +75,24 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 | `01_introduction.md` | Problem framing, bounded thesis, architecture, evidence boundary | `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_TRIAL_COUNT` | None |
 | `02_methodology.md` | Control-plane design, linear field, gate, trust, labels, pruning, falsification, and feedback sequence | `CONFIG_BASE_EVAPORATION_RATE`, `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_PHEROMONE_RETENTION_FAST_PCT`, `CONFIG_PHEROMONE_RETENTION_NORMAL_PCT`, `CONFIG_PHEROMONE_RETENTION_SLOW_PCT` | `fig:architecture`, `fig:falsification_vectors`, `fig:pressure_loop` |
 | `02_theory.md` | Verified recurrence, local-pressure, gate, trust, and privacy bounds | `CONFIG_PARAMETER_STATUS_NOTE` | `fig:pheromone_decay`, `fig:gate_score_3d` |
-| `03_results.md` | Executed gates, paired locality, analytical score cases, trust fixture, decay, and MCP boundary | `CONFIG_PARAMETER_STATUS_NOTE`, generated row blocks plus scoped gate/result tokens | `fig:trust_trajectory`, `fig:gate_heatmap` |
+| `03_results.md` | Executed gates, paired locality replay, analytical score cases, trust fixture, decay, and MCP boundary | `CONFIG_PARAMETER_STATUS_NOTE`, replay digests, generated row blocks plus scoped gate/result tokens | `fig:trust_trajectory`, `fig:gate_heatmap`, `fig:replay_contract` |
 | `04_conclusion.md` | Summary of contributions, ecological metaphor, future directions | `CONFIG_PARAMETER_STATUS_NOTE` | None |
 | `05_experimental_setup.md` | Proposed benchmark, parameter classes, live gate/field/budget configuration, software snapshot, and pipeline | `CONFIG_AGENT_COUNT`, `CONFIG_BUDGET_MAX_LLM_CALLS`, `CONFIG_BUDGET_MAX_RISK`, `CONFIG_BUDGET_MAX_RUNTIME`, `CONFIG_BUDGET_MAX_SECURITY`, `CONFIG_GATE_EXECUTE_THRESHOLD`, `CONFIG_GATE_HOLD_THRESHOLD`, `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_TRIAL_COUNT`, `CONFIG_VERSION`, `CONFIG_WARMUP_TICKS`, `CONFIG_WORKLOAD_TASK_COUNT`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION` | None |
-| `06_reproducibility.md` | Configuration provenance, artifact registry, quality-gate summary | `ARTIFACT_CONFIG_FILES`, `ARTIFACT_MCP_TOOLS`, `ARTIFACT_TEST_SUITES`, `CONFIG_EXPERIMENT_SEED`, `CONFIG_FIRST_AUTHOR`, `CONFIG_HASH`, `CONFIG_KEYWORDS`, `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_VERSION`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION`, `REPRO_ENVIRONMENT_HASH`, `REPRO_GIT_COMMIT`, `REPRO_INVENTORY_HASH`, `REPRO_LOCK_HASH`, `REPRO_PYPROJECT_HASH`, `REPRO_WORKTREE_DIRTY`, `RESULT_COLONY_KERNEL_FILES`, `RESULT_COVERAGE_PCT`, `RESULT_MODULE_DOCS_COUNT`, `RESULT_RUFF_ERRORS`, `RESULT_TEST_COUNT`, `RESULT_TY_ERRORS` | None |
+| `06_reproducibility.md` | Configuration provenance, artifact registry, quality-gate summary, and paired replay identity | `ARTIFACT_CONFIG_FILES`, `ARTIFACT_MCP_TOOLS`, `ARTIFACT_REPLAY_PATH`, `ARTIFACT_TEST_SUITES`, `CONFIG_EXPERIMENT_SEED`, `CONFIG_FIRST_AUTHOR`, `CONFIG_HASH`, `CONFIG_KEYWORDS`, `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_VERSION`, `GENERATION_TIMESTAMP`, `PYTHON_VERSION`, `REPRO_ENVIRONMENT_HASH`, `REPRO_GIT_COMMIT`, `REPRO_INVENTORY_HASH`, `REPRO_KERNEL_SOURCE_HASH`, `REPRO_LOCK_HASH`, `REPRO_PYPROJECT_HASH`, `REPRO_WORKTREE_DIRTY`, `RESULT_COLONY_KERNEL_FILES`, `RESULT_COVERAGE_PCT`, `RESULT_MODULE_DOCS_COUNT`, `RESULT_REPLAY_FILE_SHA256`, `RESULT_REPLAY_RECORD_SHA256`, `RESULT_REPLAY_REPEATABLE`, `RESULT_REPLAY_SEMANTIC_DIGEST`, `RESULT_RUFF_ERRORS`, `RESULT_TEST_COUNT`, `RESULT_TY_ERRORS` | None |
 | `07_scope_and_related_work.md` | Bounded comparison with agentic engineering, stigmergy, trust, security, assurance, and external evaluation | `CONFIG_PARAMETER_STATUS_NOTE` | None |
 | `08_active_inference.md` | Explicitly non-equivalent Active Inference crosswalk and implementation agenda | `CONFIG_PARAMETER_STATUS_NOTE` | `fig:fep_correspondence` |
+| `09_research_roadmap.md` | Evidence-bound research milestones, promotion rules, and reproducibility bundle | `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_RESEARCH_ROADMAP_STAGE_COUNT`, `RESULT_RESEARCH_ROADMAP_EVIDENCE_ROWS`, `RESULT_RESEARCH_ROADMAP_DECISION_ROWS` | `fig:research_roadmap` |
+| `10_formalism_code_crosswalk.md` | Formal objects, code anchors, translation mechanisms, evidence, and claim boundaries | `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_FORMALISM_CROSSWALK_COUNT`, `RESULT_FORMALISM_CROSSWALK_ROWS`, `RESULT_FORMALISM_CROSSWALK_EVIDENCE_ROWS` | `fig:formalism_code_crosswalk` |
 | `90_appendix_design_rationale.md` | Auditable design choices, rejected alternatives, and calibration boundaries | `CONFIG_PARAMETER_STATUS_NOTE` | None |
 | `98_acknowledgements.md` | Contributor credit | `CONFIG_ACKNOWLEDGEMENTS` | None |
 | `99_references.md` | Citeproc bibliography anchor; bibliography rendered from `references.bib` | None | None |
 | `config.yaml` | Paper metadata, gate parameters, trust thresholds, pheromone decay rates, budget caps, publication settings, steganography profile | — | — |
 | `layer_contract.yaml` | Declares which `src/` files are permitted to import `infrastructure.*`; enforced at CI boundary | — | — |
 | `manuscript.css` | HTML rendering style; mirrors the PDF red hyperlink contract | — | — |
-| `preamble.md` | LaTeX injections shared by PDF output, including red hyperlinks | — | — |
+| `preamble.md` | LaTeX injections shared by PDF output, including red hyperlinks and configuration-backed layout | `CONFIG_PDF_MARGIN` | — |
 | `references.bib` | BibTeX bibliography | — | — |
 | `SYNTAX.md` | Citation, figure, and cross-reference syntax reference | — | — |
+| `claim_ledger.yaml` | Machine-readable claim classes, evidence paths, citations, and boundaries | — | — |
 | `README.md` | Human quick-reference for this directory | — | — |
 | `AGENTS.md` | This file — agent technical directives | — | — |
 
@@ -105,7 +108,13 @@ The categories are:
 - `RESULT_*`: live repository measurements and deterministic simulation outputs used by the paper.
 - `ARTIFACT_*`: counts of versioned or generated artifacts that the reproducibility section reports.
 - `PYTHON_VERSION`, `PLATFORM`, `GENERATION_TIMESTAMP`, and `REPRO_ENVIRONMENT_HASH`: environment values captured at generation time.
-- `REPRO_*`: commit, worktree, project/lockfile, and authoritative inventory provenance for replay.
+- `REPRO_*`: commit, worktree, environment, first-party source, project/lockfile, and authoritative inventory provenance for replay.
+- Replay tokens: `ARTIFACT_REPLAY_PATH`, `RESULT_REPLAY_SEMANTIC_DIGEST`,
+  `RESULT_REPLAY_RECORD_SHA256`, `RESULT_REPLAY_FILE_SHA256`,
+  `RESULT_REPLAY_REPEATABLE`, `RESULT_REPLAY_SAME_TARGET_DECISION`,
+  `RESULT_REPLAY_UNRELATED_DECISION`, and `RESULT_REPLAY_RECOVERY_DECISION` identify
+  the fixed-input, caller-reported paired locality artifact, its semantic/file
+  digests, and the decision states exercised by the fixture.
 
 ## `{{VARIABLE}}` Protocol
 
@@ -167,12 +176,14 @@ Follow these steps in order whenever prose, parameters, or measured results chan
 6. When cross-referencing sections, use Pandoc-crossref `[@sec:label]` syntax — never hardcoded section numbers.
 7. When adding a table, figure, or display equation, add a stable `{#tbl:*}`, `{#fig:*}`, or `{#eq:*}` label and reference it in prose.
 8. Keep citation syntax examples in `SYNTAX.md`; do not put raw `[@key]` examples or citation-key inventories in `99_references.md`.
+9. Every active manuscript claim that could be mistaken for an empirical, causal, safety, calibration, or biological claim must have a class, status, evidence path, and explicit boundary in `claim_ledger.yaml`. Keep the ledger qualitative; drifting numbers belong in generated variables.
 
 ## See also
 
 - [`README.md`](README.md) — Quick orientation for this directory
 - [`SYNTAX.md`](SYNTAX.md) — Pandoc syntax reference (citations, cross-references)
 - [`config.yaml`](config.yaml) — Authoritative source for all configurable parameters
+- [`claim_ledger.yaml`](claim_ledger.yaml) — Active claim audit and evidence boundaries
 - [`layer_contract.yaml`](layer_contract.yaml) — Infrastructure import boundary declarations
 - [`../modules/colony_kernel/SPEC.md`](../modules/colony_kernel/SPEC.md) — Colony Kernel formal specification
 - [`../../src/codomyrmex/manuscript/variables.py`](../../src/codomyrmex/manuscript/variables.py) — Variable computation logic (`compute_variables()`)

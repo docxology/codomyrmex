@@ -1,6 +1,6 @@
 # UV Usage Guide for Codomyrmex
 
-This guide covers the use of `uv` (the fast Python package manager) with Codomyrmex for optimal development experience.
+This guide covers the use of `uv` (the fast Python package manager) with Codomyrmex for a consistent, lockfile-backed development environment.
 
 ## 🚀 Why UV?
 
@@ -123,7 +123,7 @@ uv run pytest
 uv run pytest --cov=src/codomyrmex --cov-fail-under=60
 
 # Run specific test file
-uv run pytest tests/unit/test_data_visualization.py
+uv run pytest tests/unit/data_visualization/
 
 # Run with verbose output
 uv run pytest -v
@@ -133,7 +133,7 @@ uv run pytest -v
 
 ```bash
 # Format code
-uv run black src/ tests/
+uv run ruff format --check .
 
 # Lint code
 uv run ruff check src/ tests/
@@ -213,7 +213,7 @@ uv venv --python 3.11 .venv
 # Run scripts without activating environment
 uv run python script.py
 uv run pytest
-uv run black src/
+uv run ruff format --check .
 ```
 
 ## 📊 Monitoring and Debugging
@@ -261,8 +261,8 @@ extra-index-url = ["https://pypi.org/simple"]
 # Development dependencies
 dev-dependencies = [
     "pytest>=7.0.0",
-    "black>=23.0.0",
-    "mypy>=1.0.0",
+    "ruff>=0.9.0",
+    "ty>=0.0.1",
 ]
 ```
 

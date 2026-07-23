@@ -115,7 +115,6 @@ jobs:
           echo "🔍 Running linting checks..."
           uv run ruff check . --output-format=github
           uv run ruff format --check .
-          uv run black --check .
 
       - name: Validate package metadata
         run: |
@@ -331,7 +330,7 @@ jobs:
     if: always() && (needs.publish-pypi.result == 'success' || needs.publish-test-pypi.result == 'success')
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
     steps:
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5

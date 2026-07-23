@@ -14,7 +14,7 @@ Setting up a development environment for Codomyrmex involves:
 ## 🛠️ Core Development Setup
 
 ### **Prerequisites**
-- Python 3.10+ (3.11 or 3.12 recommended)
+- Python 3.11+ (the supported range is defined in `pyproject.toml`)
 - Git 2.30+
 - Node.js 18+ (for documentation)
 - Docker (for code execution sandbox)
@@ -61,19 +61,16 @@ The development environment includes additional tools beyond the base installati
 
 ### **Code Quality Tools**
 ```bash
-# Linting and formatting
-black              # Code formatting
-ruff               # Fast linting
-pylint             # Comprehensive code analysis
-mypy               # Type checking
-bandit             # Security scanning
+# Linting, formatting, typing, and security
+ruff               # Linting and formatting
+ty                 # Type checking
+bandit             # Scoped security scanning
 
 # Usage
-black src/ tests/              # Format code
-ruff src/ tests/               # Quick linting
-pylint src/codomyrmex/          # Detailed analysis
-mypy src/codomyrmex/            # Type checking
-bandit -r src/codomyrmex/       # Security scan
+uv run ruff check .
+uv run ruff format --check .
+uv run ty check --output-format concise src/codomyrmex
+uv run bandit -r src/codomyrmex -lll -iii
 ```
 
 ### **Testing Tools**
@@ -193,16 +190,16 @@ pytest -m integration   # Integration tests only
 pytest -k "test_ai"     # Tests matching pattern
 
 # Run tests for specific module
-pytest tests/unit/test_data_visualization.py -v
+pytest tests/unit/data_visualization/ -v
 
 # Run tests in parallel (faster)
 pytest -n auto  # Requires pytest-xdist
 ```
 
 ### **Test Coverage Requirements**
-- **Minimum coverage**: 80% (enforced by CI)
-- **Target coverage**: 90%+ for new modules
-- **Coverage reporting**: HTML reports generated in `tests/htmlcov/`
+- **Minimum coverage**: 60% line coverage (enforced by `pyproject.toml`, CI, and `make test`)
+- **Target coverage**: 90%+ for new modules where practical; targets are not release floors
+- **Coverage reporting**: HTML reports are generated in the repository `htmlcov/` directory
 
 ### **Writing Tests**
 Follow the existing patterns (zero-mock policy -- use skip-when-unavailable guards for external dependencies):

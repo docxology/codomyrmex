@@ -1,4 +1,4 @@
-# Autonomous Tool Use as Proto-AGI Capability
+# Tool Use and Agency: Capability Surfaces and Control Boundaries
 
 **Series**: AGI Perspectives | **Document**: 2 of 10 | **Last Updated**: March 2026
 
@@ -8,7 +8,10 @@ The capacity for autonomous tool use — selecting, composing, and invoking tool
 
 But tool use is not merely an engineering convenience. It is an instance of **extended cognition** (Clark & Chalmers, 1998): the tools become part of the cognitive system's functional organization. The boundary between "the agent" and "the tool" dissolves when tool invocation is seamless and automatic — precisely as it does in skilled human tool use, where the hammer becomes a transparent extension of the carpenter's motor system (Heidegger's *Zuhandenheit*, readiness-to-hand).
 
-Codomyrmex's **623** production `@mcp_tool`-decorated functions across 130 top-level modules constitute one of the largest compositional tool surfaces in any open-source AI development platform. This essay examines how this tool ecosystem relates to the AGI requirement for autonomous agency. (See [reference/inventory.md](../reference/inventory.md).)
+Codomyrmex exposes a configuration- and inventory-dependent MCP tool surface. Current
+counts are generated in [reference/inventory.md](../reference/inventory.md), not copied
+into this essay, and tool count is a measure of available interface surface rather than
+agency, quality, or autonomy.
 
 ## Tool Anatomy: The Four-Phase Lifecycle
 
@@ -17,7 +20,7 @@ graph TB
     subgraph DISCOVERY["1. Tool Discovery (δ)"]
         SD["system_discovery<br/><i>scan_all_modules()</i>"]
         MCP["model_context_protocol<br/><i>@mcp_tool registration</i>"]
-        BRIDGE["agents/pai/mcp_bridge<br/><i>list_tools() → T ⊂ Hom(Mod)</i>"]
+        BRIDGE["agents/pai/mcp_bridge<br/><i>list_tools() → active descriptors</i>"]
     end
 
     subgraph SELECTION["2. Tool Selection (σ)"]
@@ -49,19 +52,28 @@ graph TB
 
 The `system_discovery` module scans `src/codomyrmex/*/mcp_tools.py` files, introspects `@mcp_tool` decorators, and registers them with `model_context_protocol`. This is *dynamic*: modules added at runtime are discovered without restart.
 
-Formally, discovery computes: δ: **Mod** → Set(T) where T is the set of tool descriptors. Each descriptor is a typed signature: `t: (τ₁ × τ₂ × ... × τₙ) → τᵣ`. The MCP bridge exposes the full tool set |T| = 600 to agents.
+Formally, discovery can be described as a partial mapping δ from module profiles to
+tool descriptors. Each descriptor may carry a typed signature. The active MCP profile
+determines which subset is exposed; there is no assumption that every registered tool
+is available to every agent.
 
-This implements Patil et al.'s (2023) "tool retrieval" — the first bottleneck in tool-augmented AI. The information-theoretic cost: selecting from |T| tools requires ≥ log₂(600) ≈ 9.23 bits of decision per invocation. Reducing this cost is the function of Phase 2.
+This creates a surface on which tool-retrieval experiments can be run. A lower bound of
+log₂(|T|) applies only to a specified uniform identification problem; real selection
+cost depends on priors, schemas, profiles, and task structure.
 
 ### Phase 2: Selection — The Bandits Problem
 
-Given task τ, the agent must select tools from the 600 available. This is a **contextual multi-armed bandit** problem (Li et al., 2010): each tool is an arm, the context is the task description, and the reward is task completion quality.
+Given task τ, selecting among an active tool profile can be studied as a **contextual
+multi-armed bandit** problem (Li et al., 2010). The repository does not establish that
+its current selection path performs bandit learning or optimizes task reward.
 
 Three modules contribute complementary selection strategies:
 
-- **`cerebrum`** — **Case-Based Reasoning**: given task τ, retrieve k-nearest cases from the case library using embedding similarity, adapt their tool sequences to the current context. This implements *exploitation* — reusing past successful strategies.
+- **`cerebrum`** — **Case-Based Reasoning**: can retrieve and adapt cases; whether this
+  improves selection is an evaluation question.
 - **`skills`** — **Semantic matching**: `SkillRegistry.match(query)` computes cosine similarity between the query embedding and skill description embeddings. Time complexity: O(|skills| · d) where d is embedding dimension.
-- **`orchestrator`** — **DAG composition**: known-good tool sequences are encoded as workflow DAGs. This implements *static exploitation* — reusing expert-designed compositions.
+- **`orchestrator`** — **DAG composition**: can execute configured workflow graphs;
+  reuse and quality effects require paired measurements.
 
 The exploration-exploitation trade-off: cases from `cerebrum` bias toward past success (exploitation); `evolutionary_ai`'s mutation operator introduces random tool substitutions (exploration). The balance is governed by the selection temperature T in Boltzmann selection — see [recursive_self_improvement.md](./recursive_self_improvement.md).
 
@@ -69,9 +81,15 @@ The exploration-exploitation trade-off: cases from `cerebrum` bias toward past s
 
 Selected tools are invoked through a layered execution environment:
 
-- **`tool_use`** — The `ToolRegistry` manages invocation, argument marshaling via `marshmallow` schemas, and result collection. Each invocation is an atomic transaction with rollback on failure.
-- **`coding/sandbox`** — Code execution in isolated environments with resource limits. The sandbox implements a *capability model* (Dennis & Van Horn, 1966): the executing code can access only the capabilities explicitly granted.
-- **`containerization`** — Docker-based isolation for heavy operations. The container is a *strict monad* in the categorical sense: computation inside cannot affect the outside without explicit projection.
+- **`tool_use`** — The `ToolRegistry` manages invocation, argument marshaling via
+  configured schemas, and result collection. Atomicity and rollback are properties to
+  verify for each registered tool, not assumptions of the registry abstraction.
+- **`coding/sandbox`** — Code execution may be isolated by configured limits. A strict
+  capability-model claim requires an audit of every reachable resource and escape path.
+- **`containerization`** — Docker-based isolation for heavy operations. A container can
+  be analyzed as an effect boundary, but calling it a strict monad requires a typed
+  semantics for effects, projection, failure, and resource escape; the repository does
+  not currently provide that proof.
 
 ### Phase 4: Learning — Posterior Policy Update
 
@@ -79,31 +97,37 @@ After execution, outcomes update the tool selection policy:
 
 $$P(t_{i} \mid \tau, \text{history}) \propto P(t_{i} \mid \tau) \cdot \prod_{j} P(\text{outcome}_{j} \mid t_{i}, \tau)$$
 
-where the likelihood term accounts for all past outcomes of tool tᵢ on similar tasks. This is **Thompson sampling** — a Bayesian approach to the bandit problem that naturally balances exploration and exploitation.
+where the likelihood term would account for past outcomes of tool tᵢ on similar tasks.
+This is a candidate Bayesian policy model, not a description of a deployed Thompson
+sampling implementation; the current repository does not establish posterior updates or
+bandit regret behavior for its tool surface.
 
 ## The Agency Boundary
 
-Mialon et al.'s (2023) insight: **the boundary of agency is the boundary of tool access**. An agent with 600 tools spanning code editing, security scanning, database management, LLM inference, and container orchestration has an *agency volume* proportional to the product of its capability dimensions.
+Mialon et al.'s (2023) insight motivates treating tool access as one agency boundary.
+The active profile, authority, side effects, and composition semantics matter as much as
+the number of descriptors; no agency volume is calculated here.
 
 Formally, the **agency lattice** L is the power set 2ᵀ of all tools, partially ordered by subset inclusion. The current agent operates at a position in this lattice determined by its trust level. The trust gateway restricts the lattice position:
 
 ```mermaid
 graph TD
     subgraph LATTICE["Agency Lattice 2^T"]
-        TOP["⊤ = All 600 tools<br/><i>full autonomy</i>"]
-        TRUSTED["Trusted subset<br/><i>~400 tools</i>"]
-        VERIFIED["Verified subset<br/><i>~200 tools</i>"]
-        UNTRUSTED["Untrusted subset<br/><i>~50 read-only tools</i>"]
+        TOP["⊤ = active profile<br/><i>configured access</i>"]
+        TRUSTED["Trusted subset<br/><i>policy-defined</i>"]
+        VERIFIED["Verified subset<br/><i>policy-defined</i>"]
+        UNTRUSTED["Untrusted subset<br/><i>restricted profile</i>"]
         BOT["⊥ = ∅<br/><i>no agency</i>"]
     end
 
     TOP --> TRUSTED --> VERIFIED --> UNTRUSTED --> BOT
 
-    CDM["Current position<br/>VERIFIED → TRUSTED<br/><i>Level 3-4 autonomy</i>"]
+    CDM["Position depends on profile<br/><i>authority must be measured</i>"]
     CDM -.-> TRUSTED
 ```
 
-The tool count is not vanity — it is a *measure of potential agency*. The autonomy spectrum maps to lattice positions:
+The tool set is an interface-surface descriptor, not a measure of realized agency. The
+autonomy spectrum can be specified as authorization positions:
 
 | Level | Agency Lattice Position | Human Role |
 |:------|:----------------------|:-----------|
@@ -113,7 +137,8 @@ The tool count is not vanity — it is a *measure of potential agency*. The auto
 | L4 | Agent chains from Trusted ⊂ 2ᵀ | Human = reviewer |
 | L5 | Agent operates at ⊤ | Human = goal-setter |
 
-Codomyrmex operates at **L3–L4**: agents select and chain tools autonomously within trust-bounded sublattices.
+The autonomy level is deployment- and profile-dependent. It should be reported from
+observed authorization and human-approval traces, not assigned from tool inventory.
 
 ## Game-Theoretic Multi-Agent Tool Access
 
@@ -127,13 +152,20 @@ The **contention cost** arises when multiple agents invoke the same tool simulta
 
 The `containerization` module provides the resolution: isolated execution environments partition the resource space, converting a *common-pool resource* game into a *private goods* game. Each agent operates in its own container, eliminating contention at the cost of resource duplication.
 
-The **Nash equilibrium** for tool selection in the partitioned game:
+The following is a candidate **Nash equilibrium** condition for a specified tool-access
+game:
 
 $$\sigma_i^* = \argmax_{s_i \in S_i} U_i(s_i, \sigma_{-i}^*) \quad \forall i$$
 
-Under containerized isolation, agents' strategy spaces are independent — the game becomes **dominance solvable**: each agent selects tools optimally without considering others' choices.
+Containerization may reduce some contention, but it does not make strategy spaces
+independent or make the game dominance-solvable without assumptions about shared state,
+budgets, scheduling, and payoffs.
 
-The **Pareto efficiency** question: could agents do better by coordinating? Yes — `orchestrator` DAGs implement *coalitional* strategies where agents divide work to avoid redundancy. A DAG is a **correlated equilibrium** (Aumann, 1974): a coordination device that tells each agent which action to take, with each agent willing to comply.
+The **Pareto efficiency** question asks whether agents could do better by coordinating.
+`orchestrator` DAGs can be studied as coalitional coordination strategies, but a DAG is
+not automatically a **correlated equilibrium** (Aumann, 1974). That claim requires a
+defined game, a recommendation distribution, and incentive constraints verified from
+observed payoffs.
 
 ## The Tool Ontology: Ready-to-Hand and Present-at-Hand
 
@@ -162,9 +194,16 @@ graph TD
     PRESENT -.-> DEBUG
 ```
 
-When a tool works, it is *transparent* — the agent uses it without attending to it (Zuhandenheit). When it fails, it *breaks down* and becomes the object of explicit attention (Unzuhandenheit → Vorhandenheit). The `telemetry` and `logging_monitoring` modules implement the transition to explicit inspection: the tool that was invisible becomes the focus of diagnostic analysis.
+When a tool works, it can be described as *transparent* in this analogy—the caller need
+not attend to its internal mechanics. When it fails, it becomes the object of explicit
+inspection (Unzuhandenheit → Vorhandenheit). The `telemetry` and `logging_monitoring`
+modules provide diagnostic surfaces that could support this transition; they do not imply
+an experiencing agent or successful repair.
 
-Dreyfus (1992) argued that this breakdown/repair cycle is essential to *skill acquisition*: expertise develops precisely through the cycle of transparent use, breakdown, explicit analysis, and re-integration at a higher level. The `agentic_memory` module's recording of tool failures and repair strategies constitutes a *developmental history* of tool mastery.
+Dreyfus (1992) argued that this breakdown/repair cycle is relevant to *skill
+acquisition*. The `agentic_memory` module can retain failure and repair records, but those
+records constitute a developmental history of tool use only after retrieval, adaptation,
+and improved task performance are measured.
 
 ## Gap Analysis
 

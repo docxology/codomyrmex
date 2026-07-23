@@ -234,10 +234,7 @@ def fig_cover_art() -> None:
     )
 
     # Title
-    subtitle = _var_str(
-        "CONFIG_SUBTITLE",
-        "Colony Control Plane, Stigmergic Pressure, and Falsification-Gated Actuation",
-    )
+    subtitle = _var_str("CONFIG_SUBTITLE")
     ax.text(
         0,
         H / 2 - 0.24,

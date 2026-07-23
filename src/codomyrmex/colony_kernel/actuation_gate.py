@@ -1,4 +1,4 @@
-"""Actuation gate — the +1/0/-1 permission layer for the Colony Kernel.
+"""Actuation gate — the +1/0/-1 advisory decision layer for the Colony Kernel.
 
 The gate enters a non-actuating witness state before evaluating any proposal,
 inspecting all available signals and trust data before rendering a verdict.
@@ -34,11 +34,23 @@ from codomyrmex.colony_kernel.models import (
 )
 
 # ---------------------------------------------------------------------------
-# Gate thresholds — exported so kernel.py can re-export them for tests
+# Gate thresholds — exported so kernel.py can re-export them for tests. These
+# are example/initial policy values, not universal safety constants; callers
+# should tune them for a measured deployment and rerun the contract evidence.
 # ---------------------------------------------------------------------------
 
 _GATE_SCORE_EXECUTE = 0.75  # score >= this → EXECUTE
 _GATE_SCORE_HOLD = 0.50  # score >= this → HOLD; below → REFUSE
+
+# Single runtime source for the ordinary score composition. Manuscript variables,
+# invariant checks, and analytical figures read this mapping rather than copying
+# the coefficients into a second formal model.
+GATE_SCORE_WEIGHTS: dict[str, float] = {
+    "budget": 0.30,
+    "risk": 0.30,
+    "trust": 0.25,
+    "completeness": 0.15,
+}
 
 _HIGH_RISK_THRESHOLD = 6.0
 _MED_RISK_THRESHOLD = 3.0
@@ -81,10 +93,10 @@ class ActuationGate:
 
     Gate score formula (0.0–1.0):
         score = (
-            budget_ok  * 0.30
-            + risk_ok  * 0.30
-            + trust_ok * 0.25
-            + completeness * 0.15
+            budget_ok * GATE_SCORE_WEIGHTS["budget"]
+            + risk_ok * GATE_SCORE_WEIGHTS["risk"]
+            + trust_ok * GATE_SCORE_WEIGHTS["trust"]
+            + completeness * GATE_SCORE_WEIGHTS["completeness"]
         )
 
     Components:
@@ -393,7 +405,10 @@ class ActuationGate:
 
         # composite gate score (no falsification multiplier — already handled as hard override)
         gate_score = (
-            budget_ok * 0.30 + risk_ok * 0.30 + trust_ok * 0.25 + completeness * 0.15
+            budget_ok * GATE_SCORE_WEIGHTS["budget"]
+            + risk_ok * GATE_SCORE_WEIGHTS["risk"]
+            + trust_ok * GATE_SCORE_WEIGHTS["trust"]
+            + completeness * GATE_SCORE_WEIGHTS["completeness"]
         )
         gate_score = max(0.0, min(1.0, gate_score))
 

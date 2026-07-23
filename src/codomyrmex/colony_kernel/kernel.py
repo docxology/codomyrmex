@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import logging
 import time
+import uuid
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -36,6 +37,12 @@ from codomyrmex.colony_kernel.actuation_gate import (
     _GATE_SCORE_EXECUTE,
     _GATE_SCORE_HOLD,
     ActuationGate,
+)
+from codomyrmex.colony_kernel.attestation import (
+    AttestationLedger,
+    HMACSigner,
+    LedgerEvent,
+    LedgerValidationResult,
 )
 from codomyrmex.colony_kernel.consequence_memory import ConsequenceMemory
 from codomyrmex.colony_kernel.falsification_worker import FalsificationWorker
@@ -91,9 +98,16 @@ class ColonyKernelConfig:
     repo_root: str = "."
     budget: ResourceBudget | None = field(default=None)
     pheromone_config: StigmergyConfig = field(default_factory=StigmergyConfig)
+    attestation_mode: str = "disabled"
+    attestation_db_path: str = ":memory:"
+    attestation_secret_key: bytes | str | None = field(default=None, repr=False)
 
     def __post_init__(self) -> None:
         """Resolve *budget* from YAML when the caller left it as ``None``."""
+        if self.attestation_mode not in {"disabled", "optional", "required"}:
+            raise ValueError(
+                "attestation_mode must be one of disabled, optional, or required"
+            )
         if self.budget is None:
             try:
                 from codomyrmex.colony_kernel.config_loader import (
@@ -129,6 +143,23 @@ class ColonyKernel:
         """Initialise all subsystems from *config* (uses sensible defaults if None)."""
         self._config = config or ColonyKernelConfig()
         self._tick_count: int = 0
+        self._attestation_proposals: dict[str, LedgerEvent] = {}
+        self._attestation_verdicts: dict[str, LedgerEvent] = {}
+        self._attestation_authorizations: dict[str, LedgerEvent] = {}
+        self._attestation_executions: dict[str, LedgerEvent] = {}
+        self._attestation_run_id = f"kernel-{uuid.uuid4().hex}"
+
+        self.attestation_ledger: AttestationLedger | None = None
+        if self._config.attestation_mode != "disabled":
+            signer = (
+                HMACSigner(self._config.attestation_secret_key, key_id="kernel")
+                if self._config.attestation_secret_key is not None
+                else None
+            )
+            self.attestation_ledger = AttestationLedger(
+                self._config.attestation_db_path,
+                signer=signer,
+            )
 
         self.pheromone_store = PheromoneStore(config=self._config.pheromone_config)
         self.resource_ledger = ResourceLedger(budget=self._config.budget)
@@ -186,6 +217,23 @@ class ColonyKernel:
             findings=findings,
             budget_approved=budget_approved,
         )
+
+        if self.attestation_ledger is not None:
+            proposal_id = proposal.proposal_id
+            proposal_event = self.attestation_ledger.record_proposal(
+                self._attestation_run_id,
+                proposal.agent_id,
+                _dataclass_to_dict(proposal),
+            )
+            verdict_event = self.attestation_ledger.record_gate_verdict(
+                self._attestation_run_id,
+                proposal.agent_id,
+                proposal_event,
+                result.decision.value,
+                _dataclass_to_dict(result),
+            )
+            self._attestation_proposals[proposal_id] = proposal_event
+            self._attestation_verdicts[proposal_id] = verdict_event
 
         # Step 5 — deposit signals based on outcome
         if result.decision == GateDecision.REFUSE:
@@ -260,6 +308,15 @@ class ColonyKernel:
           - tests_passed=True  → reinforce SUCCESS at target
           - tests_passed=False → deposit FAILURE at target (FAST decay)
         """
+        if (
+            self._config.attestation_mode == "required"
+            and proposal.proposal_id not in self._attestation_executions
+        ):
+            raise ValueError(
+                "attestation_mode='required' needs an authorized execution receipt "
+                "before recording an outcome"
+            )
+
         # Parse human_feedback string to float
         hf_float = _parse_human_feedback(human_feedback)
 
@@ -339,6 +396,79 @@ class ColonyKernel:
             self.consequence_memory.save_profile(updated_profile)
 
         return record
+
+    # ------------------------------------------------------------------
+    # Optional authenticated execution path
+    # ------------------------------------------------------------------
+
+    def authorize_execution(self, proposal_id: str, actor_id: str) -> LedgerEvent:
+        """Authorize one proposal after an attested EXECUTE verdict."""
+        if self.attestation_ledger is None:
+            raise ValueError("attestation is disabled for this kernel")
+        verdict = self._attestation_verdicts.get(proposal_id)
+        if verdict is None:
+            raise ValueError(
+                f"no attested gate verdict exists for proposal {proposal_id}"
+            )
+        authorization = self.attestation_ledger.authorize_execution(
+            verdict.run_id, actor_id, verdict
+        )
+        self._attestation_authorizations[proposal_id] = authorization
+        return authorization
+
+    def record_execution_receipt(
+        self,
+        proposal_id: str,
+        receipt: dict[str, Any],
+        actor_id: str = "executor",
+    ) -> LedgerEvent:
+        """Record an execution receipt linked to a prior authorization."""
+        if self.attestation_ledger is None:
+            raise ValueError("attestation is disabled for this kernel")
+        authorization = self._attestation_authorizations.get(proposal_id)
+        if authorization is None:
+            raise ValueError(f"proposal {proposal_id} has no execution authorization")
+        execution = self.attestation_ledger.record_execution(
+            authorization.run_id, actor_id, authorization, receipt
+        )
+        self._attestation_executions[proposal_id] = execution
+        return execution
+
+    def record_attested_outcome(
+        self,
+        proposal: ActionProposal,
+        outcome: dict[str, Any],
+        tests_passed: bool,
+        human_feedback: str | None = None,
+        actor_id: str = "observer",
+    ) -> ConsequenceRecord:
+        """Record an outcome only after linking it to an execution receipt."""
+        if self.attestation_ledger is None:
+            raise ValueError("attestation is disabled for this kernel")
+        execution = self._attestation_executions.get(proposal.proposal_id)
+        if execution is None:
+            raise ValueError(
+                f"proposal {proposal.proposal_id} has no execution receipt"
+            )
+        self.attestation_ledger.record_outcome(
+            execution.run_id, actor_id, execution, outcome
+        )
+        return self.record_outcome(
+            proposal,
+            outcome,
+            tests_passed,
+            human_feedback=human_feedback,
+        )
+
+    def attestation_status(
+        self, run_id: str | None = None
+    ) -> LedgerValidationResult | None:
+        """Return the ledger validation result for the current run, if enabled."""
+        if self.attestation_ledger is None:
+            return None
+        if run_id is None:
+            run_id = self._attestation_run_id
+        return self.attestation_ledger.validate(run_id)
 
     # ------------------------------------------------------------------
     # Accessors

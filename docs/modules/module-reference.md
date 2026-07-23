@@ -4,7 +4,7 @@ Complete module listing, quick reference, and use cases. For architecture diagra
 
 ## Core Modules
 
-Codomyrmex modules are organized in a layered architecture where higher layers depend on lower layers, preventing circular dependencies:
+Codomyrmex modules are organized in a layered architecture where higher layers depend on lower layers. This prevents forbidden cross-layer dependencies; it is not a claim that all package-local import cycles are absent:
 
 ```mermaid
 graph TD

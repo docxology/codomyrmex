@@ -161,7 +161,7 @@ Edit `~/.claude/PAI/settings.json` to change:
 
 | Issue | Solution |
 |-------|---------|
-| MCP server won't start | Run `uv sync` in codomyrmex directory, check Python version (3.10+) |
+| MCP server won't start | Run `uv sync` in codomyrmex directory, check Python version (3.11+) |
 | Tools not appearing in Claude Code | Verify `claude_desktop_config.json` paths are absolute |
 | "Module not found" errors | Ensure codomyrmex is installed: `uv sync --all-extras` |
 | PAI Algorithm doesn't run | Check `~/.claude/PAI/SKILL.md` exists and is loaded |

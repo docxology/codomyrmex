@@ -10,7 +10,11 @@
 
 ## Purpose
 
-Provide deterministic constraint solving capabilities via Z3 SMT solver, implementing the mcp-solver 6-tool interface for interactive model building. Primary integration point: PAI Algorithm ISC verification.
+Provide deterministic constraint-solving capabilities through an optional Z3 backend,
+implementing the mcp-solver interface for interactive model building. The bridge checks
+the supplied constraints; it does not automatically translate arbitrary Python runtime
+behavior or the Colony Kernel into SMT. Primary integration point: PAI Algorithm ISC
+verification.
 
 ## Dependencies
 
@@ -53,10 +57,14 @@ Provide deterministic constraint solving capabilities via Z3 SMT solver, impleme
 
 ## Quality Requirements
 
-- All backends gracefully degrade when not installed
+- All backends gracefully degrade when not installed; Z3-dependent claims are explicitly
+  conditional on the optional dependency
 - ISC verification is advisory (never blocks on UNSAT)
 - MCP tools are stateful within a session, stateless across sessions
 - Solver timeout is configurable (default 30s)
+- `Z3Verifier` proves only the expressions supplied to it. Kernel-specific proof claims
+  require a separately reviewed state/invariant translation and regression tests. See
+  [the formalism-to-code crosswalk](../../../docs/manuscript/10_formalism_code_crosswalk.md).
 
 ## Code-Change Verification (v1.3.0)
 

@@ -106,7 +106,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Tier enforcement boundary tests
 - Verification accuracy benchmarks
 

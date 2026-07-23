@@ -105,4 +105,4 @@ colony_tick
 - **Source**: [src/codomyrmex/colony_kernel/](../../../src/codomyrmex/colony_kernel/)
 - **MCP Tool Specification**: [src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md)
 - **Tests**: [tests/unit/colony_kernel/](../../../tests/unit/colony_kernel/)
-- **Scope / TODO**: [docs/todo/COLONY_KERNEL.md](../../todo/COLONY_KERNEL.md)
+- **Scope document**: [docs/todo/COLONY_KERNEL.md](../../todo/COLONY_KERNEL.md)

@@ -88,7 +88,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Protocol-specific tests
 - Mock server integration tests
 

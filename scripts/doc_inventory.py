@@ -3,8 +3,8 @@
 
 Run from repo root: uv run python scripts/doc_inventory.py
 
-Always prints a ``.github/workflows`` ``*.yml`` file count (for inventory and
-``.github/README.md`` workflow tables).
+Always prints ``.github/workflows`` ``*.yml`` and ``docs/**/*.md`` file counts
+(for the inventory and public documentation surfaces).
 
 Optional: pass --pytest to also run pytest --collect-only (slower, ~30s).
 Optional: pass --manifest for runtime merged MCP tool count via get_skill_manifest() (imports codomyrmex).
@@ -93,6 +93,14 @@ def count_github_workflow_yml(root: Path) -> int:
     return sum(1 for p in wf.glob("*.yml") if p.is_file())
 
 
+def count_documentation_markdown(root: Path) -> int:
+    """Count first-party Markdown documentation under ``docs/``."""
+    docs = root / "docs"
+    if not docs.is_dir():
+        return 0
+    return sum(1 for path in docs.rglob("*.md") if path.is_file())
+
+
 def pytest_collect_count(root: Path) -> int | None:
     try:
         # --no-cov keeps the count independent of optional coverage instrumentation.
@@ -160,6 +168,7 @@ def main() -> int:
     print(f"  mcp_tools.py (non-test):  {mcp_files}")
     print(f"  @mcp_tool (production):   {decorators}")
     print(f"  .github/workflows *.yml:  {count_github_workflow_yml(root)}")
+    print(f"  docs/**/*.md:             {count_documentation_markdown(root)}")
     if args.manifest:
         n = manifest_tool_count()
         if n is not None:

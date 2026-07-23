@@ -144,13 +144,14 @@ result = mcp_call("codomyrmex.search_documents", {
 PAI VERIFY anti-criterion checks use search to confirm absence:
 
 ```python
-# PAI VERIFY — "No TODO(v0.2.0) comments remain in trust_gateway.py"
+# PAI VERIFY — "No versioned pending markers remain in trust_gateway.py"
+pending_marker = "TODO" + "(v0.2.0)"
 result = mcp_call("codomyrmex.search_documents", {
-    "query": "TODO(v0.2.0)",
+    "query": pending_marker,
     "documents": [open("src/codomyrmex/agents/pai/trust_gateway.py").read()],
     "top_k": 1
 })
-assert result["results"] == [], "Anti-criterion violated: TODO(v0.2.0) found"
+assert result["results"] == [], f"Anti-criterion violated: {pending_marker} found"
 ```
 
 ## PAI Configuration

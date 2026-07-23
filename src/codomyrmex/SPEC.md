@@ -1,10 +1,10 @@
 # codomyrmex - Functional Specification
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
-Core Python package containing 88 specialized modules organized in a four-layer architecture. Provides modular development capabilities through independent modules with clear interfaces. The package serves as the central coordination point for AI-assisted software development, code analysis, testing, documentation generation, and comprehensive workflow automation.
+Core Python package organized in a four-layer architecture. It provides modular development capabilities through independent modules with clear interfaces and serves as the coordination point for AI-assisted software development, code analysis, testing, documentation generation, and workflow automation. Current module and MCP-surface counts are maintained in [docs/reference/inventory.md](../../docs/reference/inventory.md).
 
 ## Design Principles
 
@@ -20,7 +20,7 @@ Core Python package containing 88 specialized modules organized in a four-layer 
 - Layered architecture (Foundation → Core → Service → Specialized)
 - Consistent module structure across all modules
 - Unified naming conventions and patterns
-- Logical dependency flow (no circular dependencies)
+- Logical dependency flow, checked by import-layer rules; package-local cycles are separately reported by dependency analysis and are not silently claimed absent.
 
 ### Parsimony
 
@@ -38,7 +38,7 @@ Core Python package containing 88 specialized modules organized in a four-layer 
 
 ### Testing
 
-- ≥80% test coverage per module
+- 60% project-wide line-coverage floor, enforced by the repository coverage configuration and CI. Per-module coverage is diagnostic rather than a release contract.
 - Unit tests for all public functions
 - Integration tests for module interactions
 - Real data analysis (no mocks)
@@ -370,7 +370,8 @@ Modules must integrate with:
 
 ### Strict Dependency Rules
 
-1. **No Circular Dependencies**: Modules cannot create circular import chains
+1. **Import-Layer Policy**: Modules must respect the enforced layer boundaries;
+   package-local cycles are measured separately and are not silently claimed absent
 2. **Layer Boundaries**: Modules can only depend on lower layers
 3. **Foundation Independence**: Foundation modules have no Codomyrmex dependencies
 4. **Explicit Dependencies**: All dependencies must be explicit in imports
@@ -399,7 +400,7 @@ Specialized Layer (may depend on any layer)
 
 1. **Template**: Use `module_template` to generate structure
 2. **Implementation**: Implement core functionality
-3. **Tests**: Add comprehensive test suite (≥80% coverage)
+3. **Tests**: Add a comprehensive suite and preserve the 60% project-wide coverage floor
 4. **Documentation**: Create README, AGENTS, SPEC, API_SPEC
 5. **Integration**: Integrate with foundation services
 6. **Validation**: Run dependency checks and tests
@@ -430,7 +431,7 @@ Each module must provide:
 3. **Configuration Management**: Support for configuration via `config_management`
 4. **Error Handling**: Comprehensive error handling with unified exceptions
 5. **Logging Integration**: Structured logging via `logging_monitoring`
-6. **Test Suite**: Comprehensive tests with ≥80% coverage
+6. **Test Suite**: Comprehensive tests with the 60% project-wide coverage floor
 7. **Documentation**: Complete documentation (README, AGENTS, SPEC, API_SPEC)
 
 ### Package Organization Requirements
@@ -444,7 +445,7 @@ Each module must provide:
 ### Quality Requirements
 
 - **Code Quality**: PEP 8 compliant, type hints, docstrings
-- **Test Coverage**: ≥80% coverage per module
+- **Test Coverage**: 60% project-wide line coverage; report module-level gaps separately
 - **Documentation**: Complete and up-to-date
 - **Performance**: Meets performance benchmarks
 - **Security**: Follows security best practices
@@ -457,11 +458,12 @@ Each module must provide:
 - **Documentation Coverage**: 100% of public APIs documented
 - **Linting**: Zero linting errors (pylint, flake8)
 - **Complexity**: Cyclomatic complexity ≤10 per function
-- **Dependencies**: No circular dependencies
+- **Dependencies**: Import-layer policy passes; package-local cycles are reported
+  separately by dependency analysis
 
 ### Testing Metrics
 
-- **Coverage**: ≥80% test coverage per module
+- **Coverage**: 60% project-wide line coverage
 - **Unit Tests**: All public functions have unit tests
 - **Integration Tests**: Module interactions have integration tests
 - **Performance Tests**: Critical paths have performance benchmarks
@@ -534,7 +536,7 @@ Each module must provide:
 
 ### Testing Guidelines
 
-- **Test Coverage**: Achieve ≥80% coverage
+- **Test Coverage**: Preserve the 60% project-wide line-coverage floor
 - **Real Data**: Use real data, avoid mocks
 - **Unit Tests**: Test all public functions
 - **Integration Tests**: Test module interactions

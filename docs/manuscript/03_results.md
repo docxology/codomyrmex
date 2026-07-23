@@ -1,4 +1,4 @@
-# Verified Implementation Results {#sec:results}
+# Executed Contract Results and Evidence Boundary {#sec:results}
 
 This section reports only evidence reproducible from the checked-in Colony Kernel. It
 distinguishes:
@@ -16,6 +16,9 @@ population-level safety rate.
 {{CONFIG_PARAMETER_STATUS_NOTE}} The analytical figures and deterministic fixtures
 below should be read as reproducible policy probes, not as measurements of a deployed
 agent population.
+Their numerical settings are current example/initial values, not universal constants;
+they can be tuned through the owning code or configuration, with the full evidence
+chain regenerated after each change.
 
 ## Executed quality gates {#sec:results-quality}
 
@@ -73,6 +76,19 @@ establishes reversibility after passive decay. These facts support a bounded sta
 the recorded failure increases friction for later same-location action in the running
 process. They do not show that the original outcome report was truthful, that the effect
 persists across restarts, or that the gate reduces real-world harm.
+
+The same fixture is replayed twice by <code>run_paired_locality_replay</code> with fixed proposal
+identities and no random draws. The generated semantic digest is
+<code>{{RESULT_REPLAY_SEMANTIC_DIGEST}}</code>; the retained JSON artifact is
+<code>{{ARTIFACT_REPLAY_PATH}}</code> with file digest <code>{{RESULT_REPLAY_FILE_SHA256}}</code>.
+Repeatability is an assertion of semantic equality for this fixture, not evidence that
+the caller-reported outcome was attested or that the implementation is deterministic
+under concurrency, restart, or external workloads.
+
+[@fig:replay_contract] summarizes the four semantic states and the repeatability
+assertion in a compact visual form.
+
+![{{FIGURE_CAPTION_REPLAY_CONTRACT}}](figures/{{FIGURE_FILENAME_REPLAY_CONTRACT}}){#{{FIGURE_LABEL_REPLAY_CONTRACT}} width={{FIGURE_WIDTH_REPLAY_CONTRACT}}}
 
 ## Gate landscape and attainable scores {#sec:results-gate}
 
@@ -174,11 +190,14 @@ in-memory; restarting the process loses both. Supplying a file-backed SQLite pat
 persist consequence records, but the pheromone field still has no restart-persistent
 backend.
 
-The principal integrity gap is proposal–outcome linkage. `colony_propose_action` does
-not return a durable authorization record consumed by `colony_record_outcome`, and the
-outcome tool synthesizes a proposal from caller input. Unknown, refused, mismatched, or
-duplicate outcome reports are not rejected by an attestation ledger because no such
-ledger exists yet.
+The default MCP compatibility path still has a proposal–outcome linkage gap:
+`colony_propose_action` does not return a durable authorization record consumed by
+`colony_record_outcome`, and the outcome tool synthesizes a proposal from caller input.
+The additive `AttestationLedger` now provides proposal, verdict, authorization,
+receipt, outcome, rejection, and error events; its optional/required modes reject
+unlinked outcomes and duplicate nonces. That ledger is not automatically inserted into
+the default caller-reported MCP path, so this release does not claim that every outcome
+report is authenticated.
 
 ## What has not been measured {#sec:results-not-measured}
 

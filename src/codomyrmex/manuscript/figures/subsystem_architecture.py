@@ -15,7 +15,7 @@ from codomyrmex.manuscript.figures._common import (
 
 
 def fig_subsystem_architecture() -> None:
-    subsystem_total = _var_str("CONFIG_COLONY_KERNEL_SUBSYSTEMS", "8")
+    subsystem_total = _var_str("CONFIG_COLONY_KERNEL_SUBSYSTEMS")
     subsystems = [
         ("Pheromone\nStore", _OI["orange"], "Stigmergic\ntraces & decay"),
         ("Resource\nLedger", _OI["blue"], "Budget\nenforcement"),

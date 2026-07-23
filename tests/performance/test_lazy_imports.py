@@ -10,6 +10,8 @@ Verifies that:
 from __future__ import annotations
 
 import importlib
+import json
+import subprocess
 import sys
 import time
 
@@ -27,20 +29,30 @@ class TestCoreImportTime:
 
     def test_codomyrmex_import_under_200ms(self) -> None:
         """Importing codomyrmex should take < 200ms."""
-        # Remove from cache
-        mods_to_remove = [k for k in sys.modules if k.startswith("codomyrmex")]
-        cached = {k: sys.modules.pop(k) for k in mods_to_remove}
-
-        try:
-            t0 = time.perf_counter()
-            importlib.import_module("codomyrmex")
-            t1 = time.perf_counter()
-
-            elapsed = t1 - t0
-            assert elapsed < 2.0, f"Import took {elapsed:.3f}s, budget is < 2.0s"
-        finally:
-            # Restore
-            sys.modules.update(cached)
+        # Measure a genuinely cold import in a child process.  Removing
+        # ``codomyrmex`` entries from the parent process and then restoring
+        # only ``sys.modules`` leaves package attributes (for example,
+        # ``codomyrmex.cloud``) pointing at the child graph.  That creates
+        # duplicate module identities and contaminates all later tests.  A
+        # subprocess gives the benchmark an isolated import graph without
+        # mutating the test runner's interpreter.
+        script = (
+            "import json, time\n"
+            "started = time.perf_counter()\n"
+            "import codomyrmex  # noqa: F401\n"
+            "elapsed = time.perf_counter() - started\n"
+            "print(json.dumps({'elapsed': elapsed}))\n"
+        )
+        completed = subprocess.run(
+            [sys.executable, "-c", script],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=10,
+        )
+        elapsed = json.loads(completed.stdout.strip())["elapsed"]
+        assert elapsed < 2.0, f"Import took {elapsed:.3f}s, budget is < 2.0s"
 
 
 # ── Heavy deps not eagerly loaded ─────────────────────────────────────

@@ -22,3 +22,10 @@ result = orchestrate_build_pipeline(
     {"build_commands": [["python", "-m", "compileall", "src"]]}
 )
 ```
+
+Pipeline results use explicit statuses: `success`, `failed`, `timed_out`,
+`invalid`, or intentional `noop`. A rollback may remove only artifacts created
+by that recorded build and only beneath its resolved `output_root`; it does not
+delete pre-existing outputs merely because they share a destination. Timeout
+and malformed-command results are failures for CI purposes even when a caller
+chooses to continue collecting diagnostics.

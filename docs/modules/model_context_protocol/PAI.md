@@ -1,10 +1,10 @@
 # Personal AI Infrastructure — Model Context Protocol Module
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Overview
 
-The Model Context Protocol (MCP) module is **the operational bridge** between the PAI system (`~/.claude/PAI/`) and codomyrmex. PAI is TypeScript/Bun; codomyrmex is Python. MCP is the JSON-RPC protocol that connects them, exposing 33 tools across file operations, code analysis, git, shell execution, memory, and module introspection.
+The Model Context Protocol (MCP) module is **the operational bridge** between the PAI system (`~/.claude/PAI/`) and codomyrmex. PAI is TypeScript/Bun; codomyrmex is Python. MCP is the JSON-RPC protocol that connects them, exposing a configured profile of up to 608 merged runtime tools across file operations, code analysis, git, shell execution, memory, and module introspection.
 
 ## Architecture
 
@@ -56,6 +56,13 @@ graph TB
 
 The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) with interactive tool testing, server info, resource browsing, and prompt browsing.
 
+### HTTP security defaults
+
+- HTTP binds to `127.0.0.1` unless an explicit host is supplied.
+- The launcher defaults HTTP to the 10-tool `readonly` profile. Use `--profile full` only for intentionally trusted local work.
+- A non-loopback bind requires `--auth-token` or `CODOMYRMEX_MCP_AUTH_TOKEN`; the bearer token protects every endpoint.
+- CORS is disabled unless explicit `--cors-origin` values are supplied. Wildcard origins are rejected.
+
 ## HTTP Endpoints (8 REST + 1 JSON-RPC)
 
 | Endpoint | Method | Purpose |
@@ -69,7 +76,7 @@ The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) wi
 | `/resources` | GET | List registered resources |
 | `/prompts` | GET | List registered prompt templates |
 
-## Available Tools (~984 Total)
+## Available Tools (608 PAI-manifest tools; 605 standalone full-profile tools; 10 readonly HTTP tools)
 
 ### Built-in Transport Tools (15) — Fully Implemented
 
@@ -93,9 +100,17 @@ The standard transport provides common operations directly implemented in `tools
 | **Module** | `list_modules` | List all codomyrmex modules | OBSERVE |
 | **Module** | `module_info` | Get module info and file listing for a specific module | OBSERVE |
 
-### Dynamically Discovered Decorators (623) — From `@mcp_tool` Lines
+### Runtime discovery and source inventory
 
-The vast majority of the Codomyrmex tools are auto-discovered at server boot. The transport layer leverages `MCPDiscovery.scan_package("codomyrmex")` to dynamically traverse the 130 top-level modules, compiling the registry by locating all `@mcp_tool` decorators (e.g., from `codomyrmex.agents.hermes.mcp_tools`, `codomyrmex.coding.mcp_tools`, etc.). This automatically scales the registry perfectly into parity with the capabilities of the host infrastructure.
+The transport layer uses `MCPDiscovery.scan_package("codomyrmex")` to traverse the
+130 top-level modules and register eligible decorated tools at server boot. The source
+inventory currently contains 623 production `@mcp_tool` lines, while the merged PAI
+manifest exposes 608 runtime entries and the discovery scan reports 590 dynamically
+registered entries in this checkout. These are intentionally separate measurements:
+wrappers, aliases, built-ins, profile filters, and registration eligibility can make
+the runtime registry smaller or otherwise different from the physical decorator count.
+The authoritative snapshot and reproduction commands live in
+[../../reference/inventory.md](../../reference/inventory.md).
 
 ### Registered Resources
 
@@ -144,10 +159,15 @@ The UI uses a dark theme with the codomyrmex accent color (`#6c8cff`), and the t
 # stdio mode (for Claude Desktop / Claude Code)
 uv run python scripts/model_context_protocol/run_mcp_server.py --transport stdio
 
-# HTTP mode (with Web UI at http://localhost:8080/)
+# HTTP mode (loopback + readonly tools + Web UI at http://localhost:8080/)
 uv run python scripts/model_context_protocol/run_mcp_server.py --transport http --port 8080
 
-# List all 33 available tools
+# Explicitly opt in to write/shell tools on a trusted workstation
+export CODOMYRMEX_MCP_AUTH_TOKEN='replace-with-a-secret'
+uv run python scripts/model_context_protocol/run_mcp_server.py \
+  --transport http --profile full --auth-token "$CODOMYRMEX_MCP_AUTH_TOKEN"
+
+# List the standalone launcher's 605 full-profile tools or 10 readonly HTTP tools
 uv run python scripts/model_context_protocol/run_mcp_server.py --list-tools
 ```
 
@@ -174,15 +194,19 @@ Add to `~/.claude/claude_desktop_config.json`:
 ```bash
 # Quick verification via HTTP
 curl http://localhost:8080/health
-# → {"status":"ok","tool_count":33,"resource_count":1,"prompt_count":2,...}
+# → {"status":"ok","tool_count":10,"resource_count":1,"prompt_count":2,...}
 
-# Test a tool
+# Test a readonly tool
 curl -X POST http://localhost:8080/tools/git_status/call \
   -H "Content-Type: application/json" \
   -d '{"path":"."}'
 
 # Open Web UI in browser
 open http://localhost:8080/
+
+# For a token-protected server, add the bearer header to every request.
+curl -H "Authorization: Bearer $CODOMYRMEX_MCP_AUTH_TOKEN" \
+  http://localhost:8080/health
 ```
 
 ## PAI Algorithm Phase Mapping

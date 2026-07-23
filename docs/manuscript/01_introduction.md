@@ -1,4 +1,4 @@
-# Introduction {#sec:introduction}
+# Introduction: A Bounded Control-Plane Question {#sec:introduction}
 
 Tool-using language-model agents can browse, retrieve, call APIs, edit repositories, and
 run software [@nakano2021webgpt; @karpas2022mrkl; @yao2022react; @schick2023toolformer;

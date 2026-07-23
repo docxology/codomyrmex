@@ -1,4 +1,4 @@
-# Appendix: Design Rationale and Visual Evidence {#sec:design-rationale}
+# Appendix: Design Rationale, Assumptions, and Alternatives {#sec:design-rationale}
 
 This appendix records why the released Colony Kernel uses its present mechanisms and
 what each choice gives up. The decisions are engineering choices, not proofs that the

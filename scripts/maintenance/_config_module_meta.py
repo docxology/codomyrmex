@@ -2,7 +2,7 @@
 
 Extracted from generate_config_docs.py for LOC budget compliance.
 Contains the MODULE_META dictionary with descriptions, environment
-variables, MCP tools, and config notes for all 129 modules.
+variables, MCP tools, and config notes for all 130 modules.
 """
 
 from __future__ import annotations

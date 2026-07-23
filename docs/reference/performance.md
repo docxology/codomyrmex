@@ -7,10 +7,10 @@ This overview covers performance tiers and philosophy for Codomyrmex modules. Fu
 ## 🎯 Performance Overview
 
 ### **Performance Philosophy**
-- **Efficiency by Design**: Optimal algorithms and data structures
+- **Efficiency by Design**: Algorithms and data structures selected for the stated workload
 - **Resource Awareness**: Memory and CPU conscious implementations
-- **Scalability**: Performance scales with system resources
-- **Real-World Focus**: Benchmarks reflect actual usage patterns
+- **Scalability**: Performance is workload- and environment-dependent and must be measured
+- **Measured Focus**: Benchmarks are interpreted only with their workload, environment, and configuration
 
 ### **Performance Tiers**
 

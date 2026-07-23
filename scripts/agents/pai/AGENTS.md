@@ -15,7 +15,6 @@ Automation and utility scripts.
 - `hook_lifecycle.py` – Project file
 - `mcp_server_ops.py` – Project file
 - `memory_explorer.py` – Project file
-- `pai_dashboard.py` – Project file
 - `pai_example.py` – Project file
 - `security_audit.py` – Project file
 - `simulate_pai_chat.py` – Project file
@@ -41,7 +40,6 @@ Automation and utility scripts.
 - `hook_lifecycle.py`
 - `mcp_server_ops.py`
 - `memory_explorer.py`
-- `pai_dashboard.py`
 - `pai_example.py`
 - `security_audit.py`
 - `simulate_pai_chat.py`

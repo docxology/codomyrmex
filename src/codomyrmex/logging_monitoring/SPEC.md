@@ -112,7 +112,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% test coverage
+- 60% project-wide line-coverage floor
 - Configuration validation tests
 - Output format verification
 - Integration tests

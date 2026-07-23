@@ -27,7 +27,7 @@ All modules follow consistent patterns:
 
 ### **3. Layered Dependencies**
 
-Modules are organized in dependency layers to prevent circular dependencies:
+Modules are organized in dependency layers. The enforced import-linter contract prevents forbidden cross-layer dependencies; package-local cycles remain a separate analyzer finding and must not be inferred away from the layer diagram:
 
 ```mermaid
 graph TD

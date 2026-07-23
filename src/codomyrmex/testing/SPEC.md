@@ -37,7 +37,7 @@ Testing module providing test framework utilities, fixtures, and test infrastruc
 
 1. **Isolation**: Tests don't affect each other
 2. **Speed**: Fast feedback loops
-3. **Coverage**: Aim for 80%+ coverage
+3. **Coverage**: Preserve the 60% project-wide line-coverage floor
 4. **Clarity**: Tests document behavior
 
 ## Running Tests

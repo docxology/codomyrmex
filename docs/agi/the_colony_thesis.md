@@ -1,18 +1,27 @@
-# The Colony Thesis: Distributed AGI as Superorganism
+# The Colony Thesis: A Systems Metaphor for Modular Coordination
 
 **Series**: AGI Perspectives | **Document**: 10 of 10 (Capstone) | **Last Updated**: March 2026
 
 ## The Central Argument
 
-This essay presents the *Colony Thesis*: general intelligence need not reside in a single agent. It can emerge from a colony of specialized agents operating over a shared substrate — and codomyrmex's architecture is precisely this colony model.
+This essay presents the *Colony Thesis* as a research hypothesis: generality might be
+studied as a property of specialized components coordinating over a shared substrate.
+Codomyrmex is a useful software case for examining that hypothesis, but its modular
+architecture does not by itself establish general intelligence or emergent cognition.
 
 The intellectual lineage runs through three traditions:
 
 1. **Society of Mind** (Minsky, 1986): Intelligence from many individually unintelligent "agents." The mind is a committee, not a dictator.
 2. **Subsumption Architecture** (Brooks, 1991): Complex behavior from layered reactive agents without central planning. Intelligence is embodied and distributed — "intelligence without representation."
-3. **Comprehensive AI Services** (Drexler, 2019): AGI-level capabilities achieved via composition of narrow services, avoiding the creation of a unified superintelligent agent — making the system both more controllable and more incrementally deployable.
+3. **Comprehensive AI Services** (Drexler, 2019): a proposal that broad capability could
+   arise from composition of narrow services, avoiding a unified superintelligent agent;
+   the safety and generality advantages remain empirical questions.
 
-The Colony Thesis synthesizes these: codomyrmex is a **society** of 130 top-level modules (Minsky), organized in **subsumption layers** (Brooks), composed through a **service protocol** (Drexler/MCP), without any module — or combination of modules — constituting a general intelligence. The generality emerges from the colony's interaction dynamics, not from any component's individual capability.
+The Colony Thesis synthesizes these as an analytical mapping: Codomyrmex is a society-like
+collection of modules, with layered services and protocol-mediated composition. The
+current implementation does not demonstrate subsumption behavior, colony-level
+generality, or emergence; those are outcomes for controlled experiments, not premises
+of the architecture.
 
 ## The Colony Model
 
@@ -76,13 +85,20 @@ graph TB
 
 In ant colonies, the queen does not command — she provides *reproductive coherence*. The colony's behavior emerges from individual worker decisions governed by local rules and pheromone gradients. Similarly, codomyrmex's `orchestrator` does not micromanage modules — it defines *workflow DAGs* that coordinate module invocations without controlling internal logic.
 
-The "queen paradox" is deeper: the orchestrator is *itself a module* in the colony. It does not stand above the system — it participates in it. The colony has no external control point; coordination emerges from the same substrate as computation. This is Hofstadter's (1979) **strange loop**: the controller is contained within the controlled, and the system's coherence arises from this self-referential architecture. (Hofstadter distinguishes: the *strange loop* is the experiential phenomenon, the *tangled hierarchy* is the underlying recursive structure that generates it.)
+The "queen paradox" is deeper: the orchestrator is *itself a module* in the colony. It
+does not stand above the system—it participates in it. This is a useful comparison with
+Hofstadter's (1979) **strange loop**, but the repository also has external operators,
+reviewers, and deployment boundaries; recursive inspection is not evidence of experience
+or self-originating coherence. (Hofstadter distinguishes: the *strange loop* is the
+experiential phenomenon, while the *tangled hierarchy* is the underlying recursive
+structure that generates it.)
 
 ## The Tangled Hierarchy
 
 Hofstadter's (1979) concept of a **tangled hierarchy** (or "strange loop") describes a system where moving through the hierarchy's levels brings you back to where you started. In Gödel's incompleteness, the statements "talk about" the formal system that contains them, creating a self-referential loop.
 
-Codomyrmex exhibits multiple tangled hierarchies:
+Codomyrmex contains several recursive inspection patterns that can be analyzed against
+the tangled-hierarchy metaphor:
 
 1. **`system_discovery` discovers itself** — It is a module that scans modules, including itself. The scanner is part of the scanned set.
 
@@ -92,9 +108,14 @@ Codomyrmex exhibits multiple tangled hierarchies:
 
 4. **`ci_cd_automation` tests `ci_cd_automation`** — The CI pipeline is tested by the CI pipeline.
 
-Each strange loop creates what Hofstadter calls an "I" — a pattern in a system that perceives itself as a pattern. The multiplicity of strange loops in codomyrmex is not a bug but a *structural necessity*: self-reference is required for self-improvement, self-monitoring, and self-documentation.
+These patterns can support self-monitoring and self-documentation, but they do not create
+an experiencing "I" or show that self-reference is necessary for every form of
+self-improvement.
 
-The key insight: these are not merely analogies. The `system_discovery → system_discovery` loop implements *literal computational self-reference*, and its properties (fixed-point behavior, potential for paradox, Gödelian limitations) are formally identical to those analyzed in mathematical logic.
+The key insight is a structural analogy with a testable software correspondence. The
+`system_discovery → system_discovery` path is recursive inspection, but it is not a
+formal fixed-point construction. Its behavior should be characterized with executable
+tests and traces before importing claims about paradoxes or Gödelian limitations.
 
 ## System 1 / System 2 in Codomyrmex
 
@@ -103,20 +124,26 @@ Kahneman's (2011) **dual-process theory** distinguishes two modes of cognition:
 - **System 1**: Fast, automatic, intuitive, low-effort
 - **System 2**: Slow, deliberate, analytical, high-effort
 
-Codomyrmex implements both systems:
+Codomyrmex offers components that can be compared with these functional descriptions;
+it does not implement a validated human dual-process model:
 
 | Property | System 1 (Fast) | System 2 (Slow) |
 |:---------|:---------------|:---------------|
 | **Module** | `vector_store` similarity search | `cerebrum` case-based reasoning |
-| **Mechanism** | kNN lookup in embedding space | Active inference with expected free energy |
-| **Latency** | O(log n) with HNSW index | O(cases × complexity) |
-| **Accuracy** | Good for familiar patterns | Better for novel situations |
-| **Energy** | Low (single embedding lookup) | High (multiple LLM calls) |
+| **Mechanism** | Similarity lookup when configured | Standalone inference components and explicit planning code |
+| **Latency** | Depends on backend and index | Depends on model, horizon, and configuration |
+| **Accuracy** | Must be measured on retrieval tasks | Must be measured on inference/planning tasks |
+| **Energy** | Must be measured for the selected backend | Must be measured for the selected backend |
 | **When used** | Cached, familiar queries | Novel, complex tasks |
 
-The `orchestrator` implements what Kahneman calls the "lazy controller" — it defaults to System 1 (retrieve cached DAG, apply known pattern) and escalates to System 2 (generate new plan, invoke reasoning) only when System 1 fails or confidence is low.
+The `orchestrator` can be configured as a retrieval-first or reasoning-first controller;
+calling it Kahneman's "lazy controller" would require an explicit escalation policy and
+measurements of when and why escalation occurs.
 
-This dual-process architecture explains why the system can handle routine tasks efficiently (System 1 cached lookups) while maintaining the capacity for novel problem-solving (System 2 reasoning chains). The boundary between systems is not fixed but adaptive — tasks that initially require System 2 are gradually compiled into System 1 patterns through `skills` registry learning.
+This mapping suggests an evaluation design: compare retrieval-first and reasoning-first
+routes on paired routine and novel tasks. No result is claimed here, and the current
+`skills` registry should not be described as automatically compiling System 2 work into
+System 1 patterns without a measured learning protocol.
 
 ### Caste Differentiation and Response Thresholds
 
@@ -130,13 +157,15 @@ In codomyrmex, modules are extreme specialists (θᵢ ≈ 0 for their domain, θ
 
 | Caste | Stimulus | Responding Modules | θ |
 |:------|:---------|:-------------------|:---|
-| Forager | "information needed" | search, scrape, git_operations | ~0 |
-| Builder | "code change requested" | coding, templating, ci_cd | ~0 |
-| Soldier | "threat detected" | defense, security, identity | ~0 |
-| Nurse | "state maintenance" | cache, validation, maintenance | ~0 |
-| Scout | "reasoning required" | llm, cerebrum, vector_store | ~0 |
+| Forager | "information needed" | search, scrape, git_operations | Not calibrated |
+| Builder | "code change requested" | coding, templating, ci_cd | Not calibrated |
+| Soldier | "threat detected" | defense, security, identity | Not calibrated |
+| Nurse | "state maintenance" | cache, validation, maintenance | Not calibrated |
+| Scout | "reasoning required" | llm, cerebrum, vector_store | Not calibrated |
 
-Total specialization (θ = 0 or ∞) means modules respond *only* to their domain stimuli. This creates maximal division of labor — the colony extreme in Oster and Wilson's (1978) ergonomic optimization framework.
+The threshold equation is a biological analogy for role specialization. Modules do not
+currently expose calibrated response thresholds θ, and the repository provides no
+evidence for total specialization or an ergonomic optimum.
 
 ### The Pheromone Layer: Algorithmic Stigmergy
 
@@ -170,7 +199,7 @@ graph LR
         DEFENSE2["defense/<br/><i>prevent harmful actions</i>"]
         TRUST2["trust_gateway<br/><i>gate capability access</i>"]
         SEARCH2["search + system_discovery<br/><i>environmental sensing</i>"]
-        MODULES2["128 domain modules<br/><i>specialized processors</i>"]
+        MODULES2["domain modules<br/><i>specialized processors</i>"]
     end
 
     K_LINE --> AMEM2
@@ -180,25 +209,38 @@ graph LR
     PROTO --> MODULES2
 ```
 
-Minsky's **K-lines** (knowledge lines) are particularly relevant: a K-line is a "wire" that, when activated, partially reactivates the mental state that was active when it was formed. `agentic_memory`'s tag-based retrieval implements exactly this: a tag is a K-line that, when queried, retrieves the stored experience — partially reinstating the context in which the experience was recorded.
+Minsky's **K-lines** (knowledge lines) offer a comparison point: a K-line is a
+conceptual mechanism for reinstating a prior mental configuration. Tag-based retrieval
+in `agentic_memory` can be tested against that analogy, but a tag is not thereby a
+K-line and no reinstatement or transfer result is claimed.
 
 ## Drexler's CAIS and the Safety Advantage
 
-Drexler (2019) argues that Comprehensive AI Services (CAIS) is *inherently safer* than monolithic AGI. Three properties:
+Drexler (2019) argues that Comprehensive AI Services (CAIS) may offer safety advantages
+through service decomposition. The following are design hypotheses, not guarantees:
 
 1. **No unified agent with persistent goals** — The system doesn't "want" anything. It responds to requests. No module has a utility function over world-states.
-2. **Compositional transparency** — Each module is auditable in isolation. The RASP documentation provides a *self-explanatory component model* — every module explains itself.
-3. **Substitutable components** — Any module can be replaced. The `plugin_system` enables hot-swapping without cascade failures.
+2. **Compositional transparency** — smaller modules can make review easier, while the
+   RASP documentation provides a maintained component description; neither implies
+   isolated auditability of compositions.
+3. **Substitutable components** — interfaces may support replacement in selected cases;
+   `plugin_system` does not establish hot-swapping without cascade failures.
 
-The safety argument in formal terms: the system's *effective optimization power* (Bostrom, 2014) is bounded by the optimization power of its most capable component, not the sum. Individual modules optimize within narrow domains; no module (and no composition of modules) optimizes over the full environment-state space.
+The safety argument requires an explicit threat model. Decomposition can reduce some
+blast radii, but composition can also increase capability and create new failure paths.
+The repository does not measure an effective optimization-power bound or prove that no
+composition optimizes over a broader state space.
 
-The biological parallel reinforces this: ant colonies are robust because they are distributed. The death of any individual — even the queen — does not immediately destroy the colony. `defense` module circuit breakers isolate failures; the orchestrator reroutes around broken components.
+The biological parallel is illustrative only. In software, resilience must be shown by
+fault-injection and recovery tests; the presence of circuit-breaker or orchestration
+code does not prove isolation or rerouting for every component.
 
 ## The Threshold of Generality
 
 When does a colony of specialists become a generalist? An ant colony does not solve differential equations — but it solves *every* problem in its ecological niche: shelter, food acquisition, defense, waste, climate, reproduction, disease. The colony is *general within its niche* — what Chollet (2019) calls **task-specific generality** (as opposed to universal generality).
 
-Codomyrmex is general within the software development niche. The critical question: can niche-generality extend to broader domains through colony expansion?
+Codomyrmex targets a software-development niche. Whether its interfaces transfer to
+other domains is an open empirical question, not an established form of generality.
 
 The Colony Thesis predicts yes — through **ontogenic growth**, not phylogenetic change:
 
@@ -209,23 +251,34 @@ The Colony Thesis predicts yes — through **ontogenic growth**, not phylogeneti
 | Create inter-colony bridges | Supercolony formation | MCP cross-instance federation |
 | Import foreign modules | Symbiosis / parasitism | External API integration |
 
-The generality of the colony grows *monotonically* with module count — each new module adds capabilities without removing existing ones, provided the pheromone layer scales. The EventBus fanout is O(|subscribers|) per event; telemetry overhead is O(1) per metric per module. Both scale linearly — the colony architecture supports indefinite growth.
+Adding modules may expand available operations, but it can also add dependency,
+security, and coordination costs. The EventBus and telemetry complexity statements are
+local implementation analyses, not evidence of indefinite colony scaling. A scaling
+study should measure valid compositions, latency, failure propagation, and task
+performance as the inventory changes.
 
 ## The Hard Problem of Colony Intelligence
 
 There is an analogue to Chalmers' (1995) "hard problem of consciousness": even if we explain every causal mechanism in the colony — every tool invocation, every event, every trust-level transition — we have not explained *why the colony seems to understand software development*. The hard problem of colony intelligence:
 
-**Why does the interaction of 128 specialized modules, none of which understands software, produce a system that appears to understand software?**
+**Why might interaction among specialized modules produce useful software workflows?**
 
 This is the emergence question from [emergence_and_scale.md](./emergence_and_scale.md) restated in the starkest terms. The Colony Thesis does not answer it — it simply observes that the same question applies to ant colonies, to brains, and to economies. In each case, the answer appears to be: *there is no understanding inside*. There is only interaction. The colony's "understanding" of software is the colony-level pattern of tool invocations over time — a pattern that an external observer interprets as understanding but that has no internal locus.
 
-## Conclusion: The Colony Is the Agent
+## Conclusion: A Testable Colony Hypothesis
 
-The Colony Thesis reframes the AGI question. Instead of "how do we build a general intelligence?", ask "how do we grow a colony of specialists whose coordination produces generality?"
+The Colony Thesis reframes the AGI question. Instead of asking only whether one model is
+general, ask whether a colony of specialists can coordinate to produce measured
+cross-task transfer and robust performance.
 
-Codomyrmex answers: composable modules, indirect coordination via shared protocols, multi-tier memory for colony-level learning, trust-gated self-improvement, formal verification where possible, and human oracle for what cannot be verified. The colony-level intelligence exceeds any component's capability — not because any module is intelligent, but because their **interaction across the pheromone layer produces emergent generality**.
+Codomyrmex supplies a test surface for this question: composable modules, shared
+protocols, persistent stores, policy gates, selected formal obligations, and external
+review. It does not yet establish colony-level intelligence or emergent generality;
+those claims require preregistered tasks, baselines, ablations, and reproducible traces.
 
-The ant is not intelligent. The colony is.
+The stronger claim—that a coordinated colony is intelligent in a scientifically meaningful
+sense—remains open. The next step is a controlled comparison of composition, ablation,
+failure propagation, and transfer, with claims bounded by the retained traces.
 
 ## Cross-References
 

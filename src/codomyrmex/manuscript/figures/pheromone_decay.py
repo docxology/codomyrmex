@@ -17,25 +17,24 @@ from codomyrmex.manuscript.figures._common import (
 
 
 def fig_pheromone_decay() -> None:
-    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN", 0.0))
-    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX", 1.0))
+    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN"))
+    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX"))
     plot_horizon = float(
         _figure_parameter(
             "decay_plot_horizon_ticks",
             "CONFIG_DECAY_PLOT_HORIZON_TICKS",
-            10,
         )
     )
     plot_points = int(
-        _figure_parameter("decay_plot_points", "CONFIG_DECAY_PLOT_POINTS", 600, int)
+        _figure_parameter("decay_plot_points", "CONFIG_DECAY_PLOT_POINTS", int)
     )
     t = np.linspace(score_min, plot_horizon, plot_points)
     base_rate = _experiment_float(
-        "base_evaporation_rate", "CONFIG_BASE_EVAPORATION_RATE", 0.10
+        "base_evaporation_rate", "CONFIG_BASE_EVAPORATION_RATE"
     )
-    fast_mult = _var_float("CONFIG_DECAY_RATE_FAST", 3.0)
-    normal_mult = _var_float("CONFIG_DECAY_RATE_NORMAL", 1.0)
-    slow_mult = _var_float("CONFIG_DECAY_RATE_SLOW", 0.2)
+    fast_mult = _var_float("CONFIG_DECAY_RATE_FAST")
+    normal_mult = _var_float("CONFIG_DECAY_RATE_NORMAL")
+    slow_mult = _var_float("CONFIG_DECAY_RATE_SLOW")
     configs = [
         (
             f"FAST  (ε={base_rate * fast_mult:.2f}) — FAILURE, RISK",
@@ -164,7 +163,7 @@ def fig_pheromone_decay() -> None:
     slow_rate = base_rate * slow_mult
     slow_per_tick = max(score_min, score_max - slow_rate)
     slow_retention = (slow_per_tick - score_min) / (score_max - score_min)
-    slow_example_tick = _var_float("CONFIG_DECAY_REPORT_TICK", plot_horizon)
+    slow_example_tick = _var_float("CONFIG_DECAY_REPORT_TICK")
     slow_example_strength = max(score_min, score_max - slow_rate * slow_example_tick)
     slow_extinction = score_max / slow_rate
     ax.annotate(
@@ -191,7 +190,7 @@ def fig_pheromone_decay() -> None:
     ax.set_title(
         "Pheromone signal decay by rate class\n"
         f"s(t) = max({score_min:g}, s0 - epsilon t) for s0={score_max:g}\n"
-        f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT', 'Current default/illustrative decay rates')}",
+        f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT')}",
         fontsize=11,
         pad=12,
     )

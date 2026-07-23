@@ -1,10 +1,10 @@
 # src - Functional Specification
 
-**Version**: v1.2.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
-Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 124 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
+Source code directory containing the core Codomyrmex platform implementation. It provides a modular Python package organized in a layered architecture. Current module and MCP-surface counts are measured by `scripts/doc_inventory.py` and published in [docs/reference/inventory.md](../docs/reference/inventory.md); they are intentionally not duplicated as hardcoded claims here.
 
 ## Design Principles
 
@@ -20,7 +20,7 @@ Source code directory containing the core Codomyrmex platform implementation. Pr
 - Layered architecture: Foundation → Core → Service → Specialized
 - Consistent module structure across all modules
 - Unified naming conventions and patterns
-- Logical dependency flow (no circular dependencies)
+- Logical dependency flow, checked by import-layer rules; package-local cycles are separately reported by dependency analysis and are not silently claimed absent.
 
 ### Parsimony
 
@@ -201,7 +201,8 @@ Each module must provide:
 - Type hints for all public functions
 - PEP 8 compliance
 - Docstrings (Google/NumPy style)
-- No circular dependencies
+- Import-layer policy is enforced; package-local cycles are measured separately
+  by dependency analysis and must not be represented as absent when present.
 - Clear module boundaries
 
 ### Testing Standards

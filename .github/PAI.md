@@ -1,6 +1,6 @@
 # .github -- PAI Integration Guide
 
-**Status**: Active | **Last Updated**: February 2026
+**Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
@@ -11,12 +11,12 @@ authorization via the Trust Gateway (`VERIFIED` or `TRUSTED` state).
 
 ## Workflow Inventory
 
-The repository contains 36 workflow files. The table below lists those relevant to
+The repository contains 37 workflow files. The table below lists those relevant to
 PAI's Algorithm phases:
 
 | Workflow | Trigger | What It Does |
 |----------|---------|-------------|
-| `ci.yml` | push/PR to main, develop | Lint (ruff, black, mypy), test matrix (3 OS x 4 Python), security scan, complexity, build package |
+| `ci.yml` | push/PR to main, develop | Ruff/format, ty, test matrix, security scan, documentation hard gate, build package |
 | `pre-commit.yml` | push/PR | Pre-commit hooks and commit message validation |
 | `security.yml` | daily 2 AM UTC + push pyproject/uv.lock | Dependency scan (pip-audit, Safety), Bandit SAST, Semgrep, CodeQL, license compliance, TruffleHog secrets |
 | `release.yml` | tag push `v*.*.*` or manual | Quality gate, build sdist+wheel, GitHub Release, PyPI publish, verify install |
@@ -47,7 +47,7 @@ PAI reads CI/CD state to understand the current health of the codebase:
 
 PAI analyzes workflow outputs to identify coverage gaps and risks:
 
-- **`ci.yml` coverage reports** -- test coverage per module (target: 70% unit, 80% release)
+- **`ci.yml` coverage reports** -- repository coverage against the enforced 60% floor; optional tier-1 signals may be stricter
 - **`security.yml` artifacts** -- Bandit findings, pip-audit vulnerabilities, license issues
 - **`benchmarks.yml` results** -- performance regression data for informed decision-making
 - **`complexity-analysis` artifacts** -- radon cyclomatic complexity and maintainability index
@@ -82,7 +82,7 @@ PAI checks that all CI quality gates pass:
 
 - **`ci.yml` final-status job** -- aggregates lint, security, test, build results
 - **`security.yml` security-status job** -- aggregates all security scan results
-- **`release.yml` quality-gate job** -- 80% coverage + clean lint + security before release
+- **`release.yml` quality-gate job** -- 60% repository coverage floor + clean lint + security before release
 - **`documentation-validation.yml`** -- link checking and structure validation for docs
 
 ### LEARN Phase

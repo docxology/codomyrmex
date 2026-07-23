@@ -18,48 +18,43 @@ from codomyrmex.manuscript.figures._common import (
 
 
 def fig_gate_score_heatmap() -> None:
-    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN", 0.0))
-    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX", 1.0))
+    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN"))
+    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX"))
     grid_points = int(
-        _figure_parameter("heatmap_grid_points", "CONFIG_HEATMAP_GRID_POINTS", 160, int)
+        _figure_parameter("heatmap_grid_points", "CONFIG_HEATMAP_GRID_POINTS", int)
     )
     pressure_max = float(
-        _figure_parameter("heatmap_pressure_max", "CONFIG_HEATMAP_PRESSURE_MAX", 10.0)
+        _figure_parameter("heatmap_pressure_max", "CONFIG_HEATMAP_PRESSURE_MAX")
     )
     trust_vals = np.linspace(score_min, score_max, grid_points)
     pressure_vals = np.linspace(score_min, pressure_max, grid_points)
     T, P = np.meshgrid(trust_vals, pressure_vals)
 
-    w_budget = _gate_weight("budget", 0.30)
-    w_risk = _gate_weight("risk", 0.30)
-    w_trust = _gate_weight("trust", 0.25)
-    w_completeness = _gate_weight("completeness", 0.15)
+    w_budget = _gate_weight("budget")
+    w_risk = _gate_weight("risk")
+    w_trust = _gate_weight("trust")
+    w_completeness = _gate_weight("completeness")
     hold_threshold = _experiment_float(
-        "gate_hold_threshold", "CONFIG_GATE_HOLD_THRESHOLD", 0.50
+        "gate_hold_threshold", "CONFIG_GATE_HOLD_THRESHOLD"
     )
     execute_threshold = _experiment_float(
         "gate_execute_threshold",
         "CONFIG_GATE_EXECUTE_THRESHOLD",
-        0.75,
     )
-    trust_hard_floor = _experiment_float(
-        "trust_hard_floor", "CONFIG_TRUST_HARD_FLOOR", 0.30
-    )
+    trust_hard_floor = _experiment_float("trust_hard_floor", "CONFIG_TRUST_HARD_FLOOR")
     trust_full_credit = _experiment_float(
-        "trust_full_credit_threshold", "CONFIG_TRUST_FULL_CREDIT_THRESHOLD", 0.60
+        "trust_full_credit_threshold", "CONFIG_TRUST_FULL_CREDIT_THRESHOLD"
     )
-    medium_hazard = _var_float("CONFIG_HAZARD_MEDIUM_THRESHOLD", 3.0)
-    high_hazard = _var_float("CONFIG_HAZARD_HIGH_THRESHOLD", 6.0)
-    risk_credit_medium = _var_float("CONFIG_RISK_CREDIT_MEDIUM", 0.5)
+    medium_hazard = _var_float("CONFIG_HAZARD_MEDIUM_THRESHOLD")
+    high_hazard = _var_float("CONFIG_HAZARD_HIGH_THRESHOLD")
+    risk_credit_medium = _var_float("CONFIG_RISK_CREDIT_MEDIUM")
 
     risk_ok = np.where(
         medium_hazard > P,
         score_max,
         np.where(high_hazard > P, risk_credit_medium, score_min),
     )
-    trust_credit_lower = _var_float(
-        "CONFIG_TRUST_CREDIT_LOWER", (score_min + score_max) / 2
-    )
+    trust_credit_lower = _var_float("CONFIG_TRUST_CREDIT_LOWER")
     trust_ok = np.where(trust_full_credit <= T, score_max, trust_credit_lower)
     score = (
         w_budget * score_max * np.ones_like(T)
@@ -284,7 +279,7 @@ def fig_gate_score_heatmap() -> None:
         f"(budget={score_max:.1f}, completeness={score_max:.1f}; "
         f"trust_ok tiers at {trust_full_credit:.2f}; "
         f"trust < {trust_hard_floor:.2f} forces score={score_min:.1f})\n"
-        f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT', 'Current default/illustrative policy slice')}"
+        f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT')}"
     )
     ax.set_title(gate_title, fontsize=9.5, pad=10)
     ax.tick_params(labelsize=9.5)

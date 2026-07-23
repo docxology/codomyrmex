@@ -86,7 +86,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Backend-specific tests
 - Job execution tests
 

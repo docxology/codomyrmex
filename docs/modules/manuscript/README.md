@@ -5,8 +5,9 @@
 ## Overview
 
 Manuscript token computation and publication figure generation for the
-Codomyrmex paper. Provides `compute_variables()` / `inject_via_infrastructure()`
-for token provenance, and one module per figure under `figures/`.
+Codomyrmex paper. Provides `compute_variables()` /
+`inject_manuscript_variables()` for token provenance, and one module per figure
+under `figures/`.
 
 ## Directory Contents
 

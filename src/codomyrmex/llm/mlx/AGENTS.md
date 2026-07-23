@@ -20,7 +20,9 @@ Native Apple Silicon LLM inference via MLX. Provides model management, text gene
 - Model loading is lazy: first call to `generate()` triggers load.
 - All imports of `mlx` / `mlx_lm` are guarded; the module can be imported without these installed.
 - Environment variables (`MLX_*`) take precedence over defaults.
-- Follows the zero-mock testing policy: integration tests gate behind `mlx_available`.
+- Native MLX/MLX-LM execution is explicitly gated behind `RUN_LIVE_MLX=1`; the
+  default suite exercises portable configuration paths without importing the
+  native backend.
 
 ## Key Files
 

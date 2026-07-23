@@ -59,7 +59,8 @@ graph TD
 
 ### Core Capabilities
 
-1. **Python Version Validation**: Enforce Python >= 3.10 (customizable).
+1. **Python Version Validation**: Enforce a caller-selected minimum; the packaged project
+   targets Python >= 3.11 while the helper's compatibility default remains >= 3.10.
 2. **Manager Detection**: Detect `uv`, `venv`, `conda`, and system contexts.
 3. **Dependency Validation**: Deep inspection of installed vs required packages.
 4. **Configuration**: Seamless `.env` loading and required key validation.

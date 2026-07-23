@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import os
@@ -9,7 +10,9 @@ import re
 from pathlib import Path
 from typing import Any
 
-os.environ.setdefault("MPLBACKEND", "Agg")
+# Figure generation is a headless artifact pipeline. Force a non-GUI backend so
+# macOS window services cannot affect reproducibility or CI execution.
+os.environ["MPLBACKEND"] = "Agg"
 
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
@@ -54,7 +57,6 @@ PROJECT_ROOT = Path(__file__).resolve().parents[4]
 FIGDIR = PROJECT_ROOT / "output" / "figures"
 VARIABLES_PATH = PROJECT_ROOT / "output" / "data" / "manuscript_variables.json"
 CONFIG_PATH = PROJECT_ROOT / "docs" / "manuscript" / "config.yaml"
-ROLES_CONFIG_PATH = PROJECT_ROOT / "config" / "colony_kernel" / "roles.yaml"
 
 
 def _load_json(path: Path) -> dict[str, str]:
@@ -78,192 +80,192 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 _VARIABLES = _load_json(VARIABLES_PATH)
 _CONFIG = _load_yaml(CONFIG_PATH)
-_ROLES_CONFIG = _load_yaml(ROLES_CONFIG_PATH)
-_EXPERIMENT = (
-    _CONFIG.get("experiment", {})
-    if isinstance(_CONFIG.get("experiment", {}), dict)
-    else {}
-)
 
 
-def _var_str(name: str, default: str = "") -> str:
+class FigureConfigurationError(RuntimeError):
+    """Raised when a figure cannot be tied to the generated manuscript snapshot."""
+
+
+def _require_variable(name: str) -> str:
+    """Return a generated variable or fail closed instead of inventing a value.
+
+    Figure generation is a publication step, so a missing or stale snapshot is a
+    correctness error rather than an invitation to use a plausible default.  The
+    config digest catches the common case where prose/configuration changed after
+    variable generation; the source digest catches kernel changes that would alter
+    the derived values while leaving the YAML untouched.
+    """
+    if not _VARIABLES:
+        raise FigureConfigurationError(
+            f"Generated manuscript variables are missing: {VARIABLES_PATH}. "
+            "Run scripts/z_generate_manuscript_variables.py first."
+        )
+    config_hash = str(_VARIABLES.get("CONFIG_HASH", "")).replace(" ", "")
+    if config_hash != hashlib.sha256(CONFIG_PATH.read_bytes()).hexdigest():
+        raise FigureConfigurationError(
+            "Generated manuscript variables are stale relative to "
+            f"{CONFIG_PATH}; regenerate before drawing figures."
+        )
+    source_hash = str(_VARIABLES.get("REPRO_KERNEL_SOURCE_HASH", "")).replace(" ", "")
+    if not source_hash or source_hash != _kernel_source_hash():
+        raise FigureConfigurationError(
+            "Generated manuscript variables are missing or stale relative to "
+            "Colony Kernel source; regenerate before drawing figures."
+        )
     value = _VARIABLES.get(name)
-    return value if value not in {None, ""} else default
+    if value in {None, ""}:
+        raise FigureConfigurationError(
+            f"Generated manuscript variable {name!r} is missing; regenerate the "
+            "manuscript variable snapshot."
+        )
+    return str(value)
 
 
-def _var_float(name: str, default: float) -> float:
+def _kernel_source_hash() -> str:
+    """Hash the first-party sources used to derive kernel manuscript values."""
+    digest = hashlib.sha256()
+    source_root = PROJECT_ROOT / "src" / "codomyrmex" / "colony_kernel"
+    paths = sorted(source_root.rglob("*.py"))
+    paths.append(PROJECT_ROOT / "src" / "codomyrmex" / "manuscript" / "variables.py")
+    for path in paths:
+        digest.update(str(path.relative_to(PROJECT_ROOT)).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def _var_str(name: str) -> str:
+    return _require_variable(name)
+
+
+def _var_float(name: str) -> float:
     try:
-        return float(_VARIABLES.get(name, default))
-    except (TypeError, ValueError):
-        return default
+        return float(_require_variable(name))
+    except (TypeError, ValueError) as exc:
+        raise FigureConfigurationError(
+            f"Generated manuscript variable {name!r} is not numeric"
+        ) from exc
 
 
-def _var_list(name: str, default: list[float]) -> list[float]:
+def _var_list(name: str) -> list[float]:
     """Decode a generated JSON list token without accepting malformed values."""
-    raw = _VARIABLES.get(name)
-    if raw:
-        try:
-            value = json.loads(raw)
-            if isinstance(value, list):
-                return [float(item) for item in value]
-        except (TypeError, ValueError, json.JSONDecodeError):
-            pass
-    return default
+    try:
+        value = json.loads(_require_variable(name))
+        if not isinstance(value, list):
+            raise TypeError("expected a JSON list")
+        return [float(item) for item in value]
+    except (TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise FigureConfigurationError(
+            f"Generated manuscript variable {name!r} is not a numeric JSON list"
+        ) from exc
 
 
 def _experiment_list(key: str, variable_name: str) -> list[float]:
-    """Read a list from generated values or the manuscript experiment config."""
-    if variable_name in _VARIABLES:
-        return _var_list(variable_name, [])
-    value = _EXPERIMENT.get(key, [])
-    return [float(item) for item in value] if isinstance(value, list) else []
+    """Read a list from the generated snapshot, never directly from config."""
+    del key
+    return _var_list(variable_name)
 
 
-def _experiment_float(key: str, var_name: str, default: float) -> float:
-    if var_name in _VARIABLES:
-        return _var_float(var_name, default)
-    try:
-        return float(_EXPERIMENT.get(key, default))
-    except (TypeError, ValueError):
-        return default
+def _experiment_float(key: str, var_name: str) -> float:
+    del key
+    return _var_float(var_name)
 
 
-def _gate_weight(name: str, default: float) -> float:
-    weights = _EXPERIMENT.get("gate_score_weights", {})
+def _gate_weight(name: str) -> float:
     var_name = f"CONFIG_GATE_WEIGHT_{name.upper()}"
-    if var_name in _VARIABLES:
-        return _var_float(var_name, default)
-    if isinstance(weights, dict):
-        try:
-            return float(weights.get(name, default))
-        except (TypeError, ValueError):
-            return default
-    return default
+    return _var_float(var_name)
 
 
-def _role_threshold(role_key: str, threshold_key: str, default: float) -> float:
-    thresholds = _ROLES_CONFIG.get("thresholds", {})
-    if not isinstance(thresholds, dict):
-        return default
-    role_config = thresholds.get(role_key, {})
-    if not isinstance(role_config, dict):
-        return default
+def _role_threshold(role_key: str, threshold_key: str) -> float:
+    del threshold_key
+    variable_names = {
+        "repair_ant": "CONFIG_ROLE_REPAIR_THRESHOLD",
+        "memory_ant": "CONFIG_ROLE_MEMORY_THRESHOLD",
+        "dispatcher": "CONFIG_ROLE_DISPATCHER_THRESHOLD",
+        "guard_ant": "CONFIG_ROLE_GUARD_THRESHOLD",
+    }
     try:
-        return float(role_config.get(threshold_key, default))
-    except (TypeError, ValueError):
-        return default
+        variable_name = variable_names[role_key]
+    except KeyError as exc:
+        raise FigureConfigurationError(
+            f"No generated role-threshold variable is defined for {role_key!r}"
+        ) from exc
+    return _var_float(variable_name)
 
 
-def _role_min_proposals(role_key: str, default: int = 3) -> int:
-    thresholds = _ROLES_CONFIG.get("thresholds", {})
-    if not isinstance(thresholds, dict):
-        return default
-    role_config = thresholds.get(role_key, {})
-    if not isinstance(role_config, dict):
-        return default
+def _role_min_proposals(role_key: str) -> int:
+    del role_key
     try:
-        return int(role_config.get("min_total_proposals", default))
-    except (TypeError, ValueError):
-        return default
+        return int(_var_float("CONFIG_ROLE_MIN_PROPOSALS"))
+    except (TypeError, ValueError) as exc:
+        raise FigureConfigurationError(
+            "Generated manuscript role proposal threshold is not an integer"
+        ) from exc
 
 
 def _figure_parameter(
     key: str,
     variable_name: str,
-    default: Any,
     converter: type[Any] = float,
 ) -> Any:
-    """Read a presentation parameter from the generated snapshot/configuration."""
-    if variable_name in _VARIABLES:
-        try:
-            return converter(_VARIABLES[variable_name])
-        except (TypeError, ValueError):
-            pass
-    parameters = _EXPERIMENT.get("figure_parameters", {})
-    if isinstance(parameters, dict) and key in parameters:
-        try:
-            return converter(parameters[key])
-        except (TypeError, ValueError):
-            pass
-    return default
+    """Read a presentation parameter only from the generated snapshot."""
+    del key
+    try:
+        return converter(_require_variable(variable_name))
+    except (TypeError, ValueError) as exc:
+        raise FigureConfigurationError(
+            f"Generated figure variable {variable_name!r} has an invalid value"
+        ) from exc
 
 
 def _figure_parameter_list(key: str, variable_name: str) -> list[float]:
-    """Read a configured numeric list, preferring the generated snapshot."""
-    raw = _VARIABLES.get(variable_name)
-    if raw:
-        try:
-            value = json.loads(raw)
-            if isinstance(value, list):
-                return [float(item) for item in value]
-        except (TypeError, ValueError, json.JSONDecodeError):
-            pass
-    parameters = _EXPERIMENT.get("figure_parameters", {})
-    value = parameters.get(key, []) if isinstance(parameters, dict) else []
-    return [float(item) for item in value] if isinstance(value, list) else []
+    """Read a configured numeric list only from the generated snapshot."""
+    del key
+    return _var_list(variable_name)
 
 
 def _figure_metadata(filename: str) -> dict[str, str]:
     """Return one configured figure record with its caption tokens resolved."""
+    _require_variable("CONFIG_HASH")
     figures = _CONFIG.get("figures", {})
     if not isinstance(figures, dict):
-        return {}
+        raise FigureConfigurationError("Manuscript figure metadata is not a mapping")
     for spec in figures.values():
         if not isinstance(spec, dict) or spec.get("filename") != filename:
             continue
         metadata = {str(key): str(value) for key, value in spec.items()}
         token_pattern = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
         metadata["caption"] = token_pattern.sub(
-            lambda match: _VARIABLES.get(match.group(1), match.group(0)),
+            lambda match: _require_variable(match.group(1)),
             metadata.get("caption", ""),
         )
         return metadata
-    return {}
+    raise FigureConfigurationError(
+        f"Figure {filename!r} is not present in manuscript config metadata"
+    )
 
 
 def _falsification_severity_map() -> dict[str, str]:
-    """Return generated vector severities, with a live-source fallback."""
+    """Return the generated live severity map without source-level fallback."""
     encoded = _var_str("CONFIG_FALSIFICATION_VECTOR_SEVERITIES")
-    if encoded:
-        return {
-            name: severity
-            for item in encoded.split(";")
-            if "=" in item
-            for name, severity in [item.split("=", 1)]
-        }
-
-    from codomyrmex.colony_kernel.falsification.models import (
-        _SEVERITY_RANK,
-        AttackVector,
-    )
-    from codomyrmex.colony_kernel.models import FalsificationSeverity
-
-    checks_dir = PROJECT_ROOT / "src/codomyrmex/colony_kernel/falsification/checks"
-    rank_to_name = {rank: severity.name for severity, rank in _SEVERITY_RANK.items()}
-    values: dict[str, int] = {}
-    for path in checks_dir.glob("*.py"):
-        source = path.read_text(encoding="utf-8", errors="replace")
-        for vector in AttackVector:
-            matches = re.findall(
-                rf"AttackVector\.{vector.name}\.value.{{0,220}}?"
-                r"FalsificationSeverity\.([A-Z]+)",
-                source,
-                flags=re.DOTALL,
-            )
-            for severity_name in matches:
-                severity = FalsificationSeverity[severity_name]
-                values[vector.name] = max(
-                    values.get(vector.name, 0), _SEVERITY_RANK[severity]
-                )
-    return {name: rank_to_name[rank] for name, rank in values.items()}
+    values = {
+        name: severity
+        for item in encoded.split(";")
+        if "=" in item
+        for name, severity in [item.split("=", 1)]
+    }
+    if not values:
+        raise FigureConfigurationError(
+            "Generated falsification severity map is empty or malformed"
+        )
+    return values
 
 
 def _figure_provenance() -> str:
-    version = _var_str(
-        "CONFIG_VERSION", str(_CONFIG.get("paper", {}).get("version", "unknown"))
-    )
-    config_hash = _var_str("CONFIG_HASH", "unhashed")
-    generated = _var_str("GENERATION_TIMESTAMP", "not regenerated")
+    version = _var_str("CONFIG_VERSION")
+    config_hash = _var_str("CONFIG_HASH")
+    generated = _var_str("GENERATION_TIMESTAMP")
     if "T" in generated:
         generated = generated.split("T", 1)[0]
     return f"Codomyrmex v{version} | config {config_hash} | generated {generated}"
@@ -341,7 +343,6 @@ __all__ = [
     "DPI",
     "FIGDIR",
     "_COVER",
-    "_EXPERIMENT",
     "_OI",
     "BoundaryNorm",
     "FancyBboxPatch",

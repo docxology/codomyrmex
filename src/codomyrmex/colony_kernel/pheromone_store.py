@@ -41,10 +41,11 @@ from codomyrmex.colony_kernel.models import (
 
 _BASE_EVAPORATION: float = 0.1
 
-# Maximum allowed deposit strength — guards against runaway reinforcement.
-# Deposits exceeding this are clamped with a warning rather than silently allowed
-# (or rejected with an exception that would break the pipeline).
-_MAX_DEPOSIT_STRENGTH: float = 1_000_000.0  # 1e6
+# Maximum accepted input strength — guards against runaway reinforcement before
+# the backing field applies its stored-state ceiling.  ``TraceField`` clamps
+# every marker to ``StigmergyConfig.max_strength`` (10.0 by default); the two
+# bounds are intentionally distinct and documented as input versus stored state.
+_MAX_DEPOSIT_STRENGTH: float = 1_000_000.0
 
 # Maps DecayRate enum value to evaporation_per_tick
 # Per-signal-type decay class assignments are documented in
@@ -173,9 +174,9 @@ class PheromoneStore:
             signal: The colony signal to deposit.
 
         Raises:
-            ValueError: If ``signal.strength`` exceeds ``_MAX_DEPOSIT_STRENGTH``
-                (1e6) — this guards against accidental or adversarial runaway
-                reinforcement that would dominate the field.
+            Values above ``_MAX_DEPOSIT_STRENGTH`` are clamped with a warning;
+            this guards against accidental or adversarial runaway reinforcement
+            while keeping the stored value within the backing field's bound.
         """
         if signal.strength > _MAX_DEPOSIT_STRENGTH:
             import warnings as _warnings

@@ -2,7 +2,9 @@
 
 This document provides usage examples for the tools and scripts within the `documentation` module, primarily focusing on the `documentation_website.py` helper script.
 
-<!-- TODO: Ensure all examples are tested and accurately reflect the script's capabilities and options as defined in `documentation_website.py --help` and the main README.md. -->
+The examples below describe the supported `documentation_website.py` actions;
+verify the available options with `documentation_website.py --help` when the
+script or documentation build tooling changes.
 
 ## Example 1: Starting the Docusaurus Development Server
 

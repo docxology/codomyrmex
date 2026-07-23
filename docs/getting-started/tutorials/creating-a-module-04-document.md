@@ -7,10 +7,10 @@
 cd ../../../
 
 # Run tests for your module
-pytest src/codomyrmex/text_analysis/tests/ -v
+pytest tests/unit/text_analysis/ -v
 
 # Run with coverage
-pytest src/codomyrmex/text_analysis/tests/ --cov=src/codomyrmex/text_analysis --cov-report=term
+pytest tests/unit/text_analysis/ --cov=src/codomyrmex/text_analysis --cov-report=term
 
 # Add to main test suite
 pytest tests/unit/test_text_analysis.py -v

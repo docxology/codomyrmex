@@ -27,6 +27,7 @@ class StepStatus(Enum):
     RUNNING = "running"
     PASSED = "passed"
     FAILED = "failed"
+    TIMEOUT = "timeout"
     SKIPPED = "skipped"
     ERROR = "error"
 
@@ -42,6 +43,7 @@ class WorkflowStep:
     dependencies: list[str] = field(default_factory=list)
     retry_count: int = 0
     timeout_seconds: float = 30.0
+    continue_on_error: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
@@ -50,6 +52,10 @@ class WorkflowStep:
             "name": self.name,
             "type": self.step_type.value,
             "config": self.config,
+            "dependencies": list(self.dependencies),
+            "retry_count": self.retry_count,
+            "timeout_seconds": self.timeout_seconds,
+            "continue_on_error": self.continue_on_error,
         }
 
 

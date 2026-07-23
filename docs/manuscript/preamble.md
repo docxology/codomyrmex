@@ -13,7 +13,7 @@ This file contains LaTeX packages and commands that are automatically injected i
 
 % Document layout
 \usepackage{geometry}
-\geometry{margin=0.72in,headheight=14pt}
+\geometry{margin={{CONFIG_PDF_MARGIN}},headheight=14pt}
 \setlength{\emergencystretch}{2em}
 \usepackage{float}
 \usepackage{graphicx}

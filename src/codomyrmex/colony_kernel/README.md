@@ -178,6 +178,36 @@ Tests live in `tests/unit/colony_kernel/`. Run with:
 uv run pytest tests/unit/colony_kernel/ -v
 ```
 
+## Deterministic replay artifact
+
+The checked-in paired-locality contract can be replayed without external services:
+
+```bash
+uv run python scripts/replay_colony_kernel.py
+```
+
+The command runs the fixed-input case twice, compares semantic outputs, and writes
+`output/data/colony_kernel_replay.json`. The record includes proposal identities,
+decisions, pressure observations, assertion results, source/config provenance when
+generated through the manuscript pipeline, and digests. It intentionally models a
+caller-reported failure; it is not an execution-attestation or external benchmark.
+
+## Evidence-first research surfaces
+
+The additive `attestation.py`, `reference.py`, `formal.py`, and `research/`
+surfaces extend the replay contract without changing its schema. The ledger can
+require a prior authorization and execution receipt before accepting an outcome;
+HMAC is the local default and Ed25519 is optional and explicit. The reference
+interpreter and formal bridge return structured counterexamples or unavailable
+states rather than implying proof when an optional solver is absent.
+
+`research/` runs deterministic synthetic paired cases, persistence/restart
+fixtures, and declared probabilistic adapters offline. Its numerical settings
+are example/initial configurable values, not calibrated or universal constants.
+Run `uv run python scripts/run_colony_research.py --output
+output/research/colony_kernel_offline.json --seed 0` to create a local manifest
+and hashed artifact. No external benchmark or provider traffic is performed.
+
 The test suite follows the zero-mock policy: all tests use real `ColonyKernel` instances with `db_path=":memory:"`. No `unittest.mock`, no `MagicMock`. Coverage target: ≥ 60% (project-wide gate).
 
 Key test modules:

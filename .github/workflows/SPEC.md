@@ -1,6 +1,6 @@
 # .github/workflows — Specification
 
-**Status**: Active | **Last Updated**: February 2026
+**Status**: Active | **Last Updated**: July 2026
 
 ## Design Principles
 
@@ -14,7 +14,9 @@
 
 ### ci.yml
 - Triggers: push/PR to `main`, `develop`
-- Gates: ruff, black, mypy, pytest (matrix: 3.10, 3.11, 3.12 × ubuntu/windows/macos)
+- Gates: Ruff, Ruff format, `ty`, import layering, dependency validation, package build,
+  documentation contracts, scoped Bandit, the 60% coverage floor, and offline research
+  provenance tests on Python 3.11. Live-provider and benchmark lanes are explicitly opt-in.
 - Artifacts: coverage.xml, junit-*.xml
 - Codecov upload: `codecov/codecov-action@v5` with OIDC token
 
@@ -26,7 +28,8 @@
 
 ### release.yml
 - Triggers: `v*.*.*` tag push
-- Flow: quality-gate → build-artifacts → publish-pypi → verify-install (retry loop 10×) → GitHub Release
+- Flow: quality-gate → build-artifacts → publish-pypi → verify-install (retry loop 10×) → GitHub Release;
+  the release gate uses the same Ruff/ty/security contracts as CI.
 - Git identity: `github-actions[bot]` for automated version bumps
 
 ### benchmarks.yml

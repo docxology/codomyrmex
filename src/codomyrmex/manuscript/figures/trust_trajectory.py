@@ -21,21 +21,16 @@ from codomyrmex.manuscript.figures._common import (
 
 
 def fig_trust_trajectory() -> None:
-    trust_init = _var_float(
-        "RESULT_TRUST_INITIAL",
-        _experiment_float("trust_sandbox_score", "CONFIG_TRUST_SANDBOX_SCORE", 0.10),
-    )
-    delta = _experiment_float("trust_delta_pass", "CONFIG_TRUST_DELTA_PASS", 0.04)
-    repair_threshold = _role_threshold("repair_ant", "min_trust", 0.20)
-    memory_threshold = _role_threshold("memory_ant", "min_trust", 0.35)
-    dispatcher_threshold = _role_threshold("dispatcher", "min_trust", 0.50)
-    guard_threshold = _role_threshold("guard_ant", "min_trust", 0.70)
-    proposal_min = _role_min_proposals("repair_ant", 3)
-    trust_hard_floor = _experiment_float(
-        "trust_hard_floor", "CONFIG_TRUST_HARD_FLOOR", 0.30
-    )
-    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN", 0.0))
-    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX", 1.0))
+    trust_init = _var_float("RESULT_TRUST_INITIAL")
+    delta = _experiment_float("trust_delta_pass", "CONFIG_TRUST_DELTA_PASS")
+    repair_threshold = _role_threshold("repair_ant", "min_trust")
+    memory_threshold = _role_threshold("memory_ant", "min_trust")
+    dispatcher_threshold = _role_threshold("dispatcher", "min_trust")
+    guard_threshold = _role_threshold("guard_ant", "min_trust")
+    proposal_min = _role_min_proposals("repair_ant")
+    trust_hard_floor = _experiment_float("trust_hard_floor", "CONFIG_TRUST_HARD_FLOOR")
+    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN"))
+    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX"))
     checkpoints = [
         int(value)
         for value in _experiment_list(
@@ -47,7 +42,6 @@ def fig_trust_trajectory() -> None:
         _figure_parameter(
             "trust_plot_projection_margin",
             "CONFIG_TRUST_PLOT_PROJECTION_MARGIN",
-            6,
             int,
         )
     )

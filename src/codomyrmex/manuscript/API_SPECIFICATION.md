@@ -7,7 +7,7 @@
 | Symbol | Module | Purpose |
 | :--- | :--- | :--- |
 | `compute_variables()` | `variables.py` | Compute manuscript token variables from repository state |
-| `inject_via_infrastructure()` | `variables.py` | Inject computed variables into the manuscript build |
+| `inject_manuscript_variables()` | `variables.py` | Inject computed variables into the manuscript build |
 | `main()` | `figures/orchestrator.py` | Run every registered figure generator |
 
 ## Figures Package

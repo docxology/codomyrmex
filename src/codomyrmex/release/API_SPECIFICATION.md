@@ -40,7 +40,7 @@ The `release` module provides Python-native tools for validating release readine
 |--------|-----------|---------|-------------|
 | `__init__` | `(version="1.0.0")` | — | Initialize with version string |
 | `check_tests` | `(failures, total, max_skips=50)` | `CertificationCheck` | Pass if `failures == 0` |
-| `check_coverage` | `(overall, tier1=0)` | `CertificationCheck` | Pass if `overall >= 65%` and `tier1 >= 80%` (when tier1 > 0) |
+| `check_coverage` | `(overall, tier1=0)` | `CertificationCheck` | Pass if `overall >= 60%` and `tier1 >= 80%` when tier-1 coverage is supplied |
 | `check_type_safety` | `(errors: int)` | `CertificationCheck` | WARN (not FAIL) if errors > 0 |
 | `check_security` | `(cve_count, secrets_found)` | `CertificationCheck` | Pass if both are 0 |
 | `check_documentation` | `(complete: bool)` | `CertificationCheck` | WARN (not FAIL) if incomplete |
@@ -95,7 +95,7 @@ from codomyrmex.release import (
 # Validate release
 validator = ReleaseValidator(version="1.2.0")
 validator.check_tests(failures=0, total=9000)
-validator.check_coverage(overall=68.5, tier1=83.0)
+validator.check_coverage(overall=60.0, tier1=80.0)
 validator.check_security(cve_count=0, secrets_found=0)
 cert = validator.certify()
 print(f"Certified: {cert.certified} ({cert.passed_checks}/{cert.total_checks})")

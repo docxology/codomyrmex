@@ -73,10 +73,10 @@ pytest tests/unit/ -x
 
 ### **Required**
 
-- **Python 3.10+** (latest versions recommended for best package compatibility)
+- **Python 3.11+** (the supported range is defined in `pyproject.toml`)
 
   ```bash
-  python3 --version  # Should be 3.10 or higher
+  python3 --version  # Should be 3.11 or higher
   ```
 
 - **uv** (package manager used across Codomyrmex)
@@ -286,26 +286,26 @@ print(f"✅ Sandbox test: {sandbox_result['success']}")
 pytest tests/ --cov=src/codomyrmex --cov-report=html
 
 # Run specific module tests
-pytest tests/unit/test_data_visualization.py -v
+pytest tests/unit/data_visualization/ -v
 
 # Run integration tests
 pytest tests/integration/ -v
 
 # Check test coverage
-open tests/htmlcov/index.html  # View coverage report
+open htmlcov/index.html  # View coverage report
 ```
 
 ### **Step 5: Code Quality Check**
 
 ```bash
 # Run linting on the main codebase
-python -m ruff check src/codomyrmex/
+uv run ruff check .
 
 # Format code (if needed)
-python -m black src/codomyrmex/
+uv run ruff format --check .
 
 # Type checking (if configured)
-python -m mypy src/codomyrmex/
+uv run ty check --output-format concise src/codomyrmex/
 ```
 
 ## 🚨 Troubleshooting Guide
@@ -364,7 +364,7 @@ uv run python -c "import codomyrmex; print('Success!')"
 
 ```bash
 # Problem: Python 3.9 or older detected
-# Solution: Upgrade to Python 3.10+
+# Solution: Upgrade to Python 3.11+
 
 # macOS with Homebrew
 brew install python@3.11
@@ -375,7 +375,7 @@ sudo apt-get update
 sudo apt-get install python3.11 python3.11-venv
 
 # Windows: Download from python.org
-# Install Python 3.10+ and add to PATH
+# Install Python 3.11+ and add to PATH
 ```
 
 #### **❌ Virtual Environment Problems**

@@ -27,8 +27,7 @@ def fig_falsification_vectors() -> None:
         "LOW": _OI["sky"],
     }
     severity_weights = {
-        name: int(_var_float(f"CONFIG_SEVERITY_RANK_{name}", fallback))
-        for name, fallback in zip(severity_names, (4, 3, 2, 1), strict=False)
+        name: int(_var_float(f"CONFIG_SEVERITY_RANK_{name}")) for name in severity_names
     }
     vectors = [
         (

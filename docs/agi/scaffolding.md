@@ -1,4 +1,4 @@
-# From Modules to Scaffolding: Architectural Preconditions for General Intelligence
+# Architectural Scaffolding: Composability Hypotheses and Code Anchors
 
 **Series**: AGI Perspectives | **Document**: 1 of 10 | **Last Updated**: March 2026
 
@@ -6,21 +6,28 @@
 
 The AGI literature converges on a structural observation: general intelligence does not emerge from a single algorithm but from an *architecture* that allows many algorithms to interoperate, share representations, and be composed in novel ways. Newell (1990) formalized this in his unified theories of cognition; Goertzel (2014) operationalized it in the OpenCog AGI framework; Laird (2012) implemented it in Soar. The common thread is that generality requires *scaffolding* — a set of architectural properties that enable the system to acquire new capabilities without fundamental redesign.
 
-This essay argues that codomyrmex satisfies five scaffolding preconditions for AGI. The argument is structural, not aspirational: the same engineering principles that make a codebase maintainable, extensible, and composable are precisely the principles that AGI architecture demands.
+This essay treats five architectural properties as scaffolding hypotheses. Codomyrmex
+contains mechanisms relevant to those properties, but their presence does not establish
+generality or AGI capability. Each mapping is therefore separated into a code anchor, a
+formal interpretation, and an evidence gap.
 
 ## Formal Preconditions
 
-### Precondition 1: Composability — The Category-Theoretic View
+### Hypothesis 1: Composability — A Category-Inspired View
 
-Goertzel's analysis of OpenCog identifies *combinatorial composability* as the first requirement. We can formalize this using category theory. Define a category **Mod** where:
+Goertzel's analysis of OpenCog identifies *combinatorial composability* as the first requirement. Category theory provides a useful notation, but the repository does not currently define the objects and morphisms needed to claim a category. A proposed **Mod** abstraction would treat:
 
-- **Objects** are codomyrmex modules (|Ob(**Mod**)| = 130)
-- **Morphisms** are valid module invocations via MCP tool calls
-- **Composition** is sequential tool chaining: if `f: A → B` and `g: B → C`, then `g ∘ f: A → C`
+- **Objects** as Codomyrmex modules and their declared interfaces
+- **Morphisms** as validated module invocations or adapter functions
+- **Composition** as a typed sequential workflow, when the output of `f: A → B` is accepted by `g: B → C`
 
-The MCP protocol guarantees *associativity* (tool chains are order-preserving) and every module has an *identity morphism* (the no-op self-invocation). Codomyrmex's module system forms a legitimate category.
+MCP transport alone does not guarantee associativity, identity morphisms, or semantic
+preservation. Those properties would require typed composition tests and a specification
+of failure, cancellation, and side effects.
 
-The **623** production `@mcp_tool` lines are the morphisms of this category. The *composability surface* is not the module count but the **hom-set cardinality**: |Hom(**Mod**)| = 623. The combinatorial explosion of multi-step compositions — paths of length *k* through the dependency graph — gives rise to novel capabilities that no individual morphism encodes.
+The MCP tool inventory is a capability surface, not a hom-set cardinality. Counting
+decorators does not measure valid compositions, semantic compatibility, or emergent
+capability. The formalism-to-code crosswalk in the manuscript records this distinction.
 
 ```mermaid
 graph LR
@@ -39,9 +46,14 @@ graph LR
     CATEGORY -.-> RAG
 ```
 
-**Measurement**: With 130 top-level modules and 440+ directed edges in the dependency graph, the number of distinct paths of length ≤5 exceeds 10⁶ — a combinatorial surface far larger than any individual module's design scope.
+**Measurement requirement**: the repository inventory and dependency graph can quantify
+available modules, edges, and *enumerated* compatible paths. Those counts are not
+reported here as evidence of useful composition: a path is only a candidate until its
+types, effects, failure semantics, and tests are checked. A reproducible composition
+benchmark should report valid-path yield, failure modes, and task performance rather
+than infer capability from graph size.
 
-### Precondition 2: Self-Description — Autopoietic Closure
+### Hypothesis 2: Self-Description — A Discoverable Capability Surface
 
 Legg and Hutter's (2007) formal definition of universal intelligence requires that an agent model its own capabilities:
 
@@ -49,13 +61,22 @@ $$\Upsilon(\pi) = \sum_{\mu \in E} 2^{-K(\mu)} V_\mu^\pi$$
 
 where Υ is the intelligence measure, π is the agent's policy, μ ranges over environments, K(μ) is the Kolmogorov complexity of the environment, and V is the value achieved. Critically, an agent maximizing Υ must *know what it can do* — self-description is prerequisite to policy optimization over diverse environments.
 
-Maturana and Varela's (1980) autopoiesis formalizes this as *organizational closure*: a system whose components produce the very network of production that produced them. Codomyrmex achieves a software version of organizational closure:
+Maturana and Varela's (1980) autopoiesis formalizes a biological notion of
+organizational closure. The repository should not be described as autopoietic merely
+because it can inspect itself. A narrower, testable claim is that Codomyrmex exposes a
+partial capability-discovery surface:
 
 - **`system_discovery`** — Dynamically scans all top-level modules via `scan_all_modules()`, producing a typed `ModuleHealthReport` for each. This is the system's *proprioceptive loop*.
-- **RASP documentation** — Every module carries machine-readable metadata (README, AGENTS, SPEC, PAI) constituting a *self-model* that agents parse at runtime.
-- **`@mcp_tool` registration** — Tools self-register with typed signatures, enabling runtime capability enumeration. The `list_tools()` method returns the system's complete morphism set.
+- **RASP documentation** — module metadata can serve as a maintained description for
+  humans and tooling; it is not automatically a coherent self-model used for planning.
+- **`@mcp_tool` registration** — selected profiles can enumerate registered tools and
+  schemas. This is a discoverable interface surface, not a complete morphism set or a
+  model of the system's competence.
 
-The autopoietic property: `system_discovery` *is itself a module* discovered by `system_discovery`. The self-model includes its own description — a fixed point in the system's self-referential structure, analogous to the quine in computability theory.
+The self-reference observation is useful as a test design: verify whether discovery
+can describe its own registration, documentation, and health status without special
+cases. Passing such a fixed-point-shaped test would establish self-description under
+that test, not autopoiesis, a quine, or autonomous self-knowledge.
 
 ### Precondition 3: Open-Ended Tool Acquisition — Algorithmic Information Gain
 
@@ -87,11 +108,11 @@ The `agentic_memory` module provides multi-tier persistence implementing Atkinso
 
 The temporal binding problem: how does information transfer between stores? Currently, consolidation is explicit (agents call `memory.store()`). Missing: an automatic consolidation process analogous to hippocampal replay during sleep (Diekelmann & Born, 2010).
 
-### Precondition 5: Recursive Improvement — Bounded Gödel Machines
+### Hypothesis 5: Recursive Improvement — Bounded Change Evaluation
 
 Good's (1965) intelligence explosion and Schmidhuber's (2003) Gödel Machine formalize recursive self-improvement: a system S that can construct S' > S. The Gödel Machine provably self-improves by searching for self-modifications whose benefits can be formally proved.
 
-Codomyrmex implements *bounded* recursive improvement:
+Codomyrmex supports parts of a bounded change-evaluation workflow:
 
 ```mermaid
 graph TB
@@ -109,74 +130,88 @@ graph TB
     VERIFY -->|"pass? → gate"| DEPLOY
     DEPLOY -.->|"measure effect"| OBSERVE
 
-    HUMAN["Human Reviewer<br/><i>Löbian circuit-breaker</i>"]
+    HUMAN["Human reviewer<br/><i>external approval</i>"]
     DEPLOY --> HUMAN
     HUMAN -.-> DEPLOY
 ```
 
-The human reviewer serves as a *Löbian circuit-breaker* (Fallenstein & Soares, 2017): because the final verification step is external to the system, the self-referential proof obligation is discharged externally. The system can self-modify and self-verify, but deployment requires an oracle not subject to the same Gödelian incompleteness constraints. This implements Russell's (2019) *corrigible* self-improvement: the system *defers* to external judgment.
+The human reviewer is an external approval and accountability boundary, not a literal
+oracle that discharges a Gödelian proof obligation. The workflow can propose a change,
+run selected structural and behavioral checks, and require review before release. That
+is evidence for bounded change evaluation and corrigibility-oriented process design;
+it is not an implementation of a Gödel Machine, autonomous recursive improvement, or
+convergence guarantee.
 
-## The Yoneda Lemma and Module Identity
+## A Category-Inspired Observation About Module Identity
 
 A deep structural observation: the Yoneda lemma from category theory states that an object is fully characterized by its relationships to all other objects. In **Mod**, a module M is fully characterized by the set of all morphisms into and out of M:
 
 $$M \cong \text{Nat}(\text{Hom}(-, M), F)$$
 
-This has a concrete interpretation: a module's *identity* is the totality of its interactions with other modules — its API surface, its dependencies, and its dependents. The RASP documentation system captures precisely this information. The Yoneda perspective explains why documentation *is* the module: the self-description and the described entity are informationally equivalent.
+This suggests a useful engineering question: which observable interfaces distinguish
+one module from another? Codomyrmex records APIs, dependencies, dependents, tests, and
+documentation, but that record is not the full presheaf required by Yoneda and the
+repository does not define **Mod** as a category. Documentation is therefore evidence
+about a module's public description, not the module itself or an informationally
+equivalent representation. A future category-level treatment must define objects,
+morphisms, identities, composition, and observational equivalence before invoking the
+lemma as more than an analogy.
 
-## The Topos-Theoretic Interpretation
+## A Prospective Topos-Theoretic Research Hypothesis
 
-Pushing the category-theoretic view further: the category **Mod** with its morphisms and the sheaf of valid states (see [formal_specification.md](./formal_specification.md)) forms a **topos** — a category with enough structure to support internal logic.
+Pushing the category-theoretic view further is a research hypothesis, not a property
+of the current implementation. No category **Mod**, sheaf of valid states, or topos is
+implemented. The formal-specification document can motivate a future construction,
+but the required closure and gluing definitions are still missing.
 
-In a topos, there exists a **subobject classifier** Ω that generalizes the Boolean values {true, false}. For codomyrmex, Ω represents the *trust level* assigned to each module-action pair:
+In a topos, there exists a **subobject classifier** Ω that generalizes the Boolean values {true, false}. A possible future Codomyrmex model could associate an observation-valued trust state with each module-action pair:
 
 $$\Omega = \{\text{UNTRUSTED}, \text{VERIFIED}, \text{TRUSTED}\}$$
 
-This is a three-valued logic — more expressive than classical Boolean but less than full intuitionistic logic. The subobject classifier determines which morphisms (tool invocations) are "safe" in a given context:
+The existing trust labels must not be called a subobject classifier: three labels do
+not supply the categorical structure or internal logic required by that term. A future
+model would need to define the order, predicates, pullbacks, and composition laws, then
+test them against counterexamples. Until then, the trust gateway is an engineering
+policy boundary, not a logical functor between sub-toposes.
 
-$$\chi_{safe} : \text{Hom}(\textbf{Mod}) \to \Omega$$
+The notation below is a candidate interface for that future model, not an implemented
+theorem or safety criterion:
 
-A tool call is safe iff χ(tool) ≥ agent's trust level. This is safety as a topological property — not a binary predicate but a continuous variable in a partially ordered truth-value space.
+$$\chi_{safe} : \text{candidate action observations} \to \Omega$$
 
-The **internal language** of this topos is the language of allowed tool compositions at a given trust level. An `UNTRUSTED` agent speaks a restricted sublanguage; a `TRUSTED` agent speaks the full language. The trust gateway is a **logical functor** that maps between sub-toposes of different richness.
+The current system can enforce selected policy checks and expose restricted tool
+profiles. It does not establish continuous safety, an internal language, or a functor
+between sub-toposes.
 
-## The Scaffolding Spectrum
+## Evidence Rubric, Not a Capability Score
 
-AGI scaffolding is not binary. We can define a **scaffolding index** S ∈ [0, 1] as the weighted sum of precondition satisfaction:
+A scalar scaffolding score would imply commensurable dimensions, defensible weights,
+validated measurements, and a comparison protocol that this repository does not yet
+provide. I therefore do not report an index or rank Codomyrmex against other
+architectures. The crosswalk uses an auditable status and an explicit missing-evidence
+field instead:
 
-$$S = \sum_{i=1}^{5} w_i \cdot s_i \quad \text{where} \quad s_i \in [0, 1]$$
+| Property | Current evidence | What would justify a stronger claim |
+|:---------|:-----------------|:------------------------------------|
+| Composability | Typed proposals, tool schemas, and selected workflow tests | A defined composition calculus with effect/failure laws and task-level yield |
+| Self-description | Module discovery, inventories, and profile enumeration | A tested self-model used for planning and robustly updated after change |
+| Tool acquisition | Plugin and skill registration surfaces | Reproducible acquisition tasks, synthesis boundaries, compatibility, and rollback |
+| Persistent memory | Durable stores and explicit recall APIs | Paired retention/forgetting experiments with retrieval and transfer metrics |
+| Recursive improvement | Proposal, verification, review, and release gates | Pre-registered change benchmarks with rollback, safety, and human-oversight outcomes |
 
-| Precondition | Weight (wᵢ) | Score (sᵢ) | Justification |
-|:-------------|:----------:|:----------:|:-------------|
-| Composability | 0.25 | 0.90 | 600 morphisms (production `@mcp_tool` lines), full associativity, but Python-only |
-| Self-description | 0.20 | 0.85 | RASP + system_discovery, but self-model not used for planning |
-| Tool acquisition | 0.15 | 0.70 | Dynamic plugins + MCP, but no cross-language, no tool synthesis |
-| Persistent memory | 0.20 | 0.75 | 5-tier architecture, but no auto-consolidation or forgetting |
-| Recursive improvement | 0.20 | 0.65 | Bounded Gödel loop, but human-gated deployment |
-
-$$S_{codomyrmex} = 0.25(0.90) + 0.20(0.85) + 0.15(0.70) + 0.20(0.75) + 0.20(0.65) = \mathbf{0.785}$$
-
-For comparison with other AGI-oriented architectures:
-
-| Architecture | S Index | Strongest Precondition | Weakest Precondition |
-|:------------|:-------:|:----------------------|:--------------------|
-| **Codomyrmex** | **0.785** | Composability (0.90) | Recursive improvement (0.65) |
-| OpenCog (Goertzel) | ~0.75 | Composability (AtomSpace) | Self-description |
-| Soar (Laird) | ~0.70 | Memory (chunking) | Tool acquisition |
-| ACT-R (Anderson) | ~0.65 | Memory (declarative/procedural) | Composability |
-| NARS (Wang) | ~0.60 | Self-description (NAL) | Tool acquisition |
-
-*Estimates are based on architectural analysis, not benchmarks. The S index is a structural measure, not a capability measure.*
+The table is a research rubric, not a capability measurement. It should be replaced by
+measured results only after the corresponding protocols, seeds, artifacts, and failure
+criteria are implemented.
 
 ## Gap Analysis
 
 | Precondition | Status | Formal Gap |
 |:-------------|:-------|:-----------|
-| Composability (category **Mod**) | ✅ | Missing: functorial mappings to other categories (e.g., proof category) |
-| Self-description (autopoiesis) | ✅ | Missing: self-model used for planning, not just inventory |
-| Tool acquisition (Kolmogorov gain) | ⚠️ | Tools must be Python modules; no cross-language morphisms |
-| Persistent memory (temporal binding) | ✅ | Missing: automatic consolidation (hippocampal replay) |
-| Recursive improvement (Gödel machine) | ⚠️ | Human-in-the-loop; no autonomous deployment |
+| Composability (category-inspired) | Partial | Define typed composition, effects, identity, failure semantics, and task-level yield |
+| Self-description | Partial | Use discovery data in planning and test updates after module changes |
+| Tool acquisition | Surface exists; outcome unmeasured | Benchmark acquisition, synthesis, compatibility, and rollback |
+| Persistent memory | Persistence APIs exist | Measure consolidation, forgetting, retrieval, and transfer under paired runs |
+| Recursive improvement | Bounded evaluation workflow | Measure proposed changes under explicit review, rollback, and safety criteria |
 
 ## Cross-References
 

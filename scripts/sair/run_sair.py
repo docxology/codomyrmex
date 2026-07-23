@@ -5,6 +5,7 @@ Modes:
     evaluate  — Run LLM evaluation on a dataset, auto-save results & telemetry.
     generate  — Generate/refine a cheat sheet (optionally from previous run).
     analyze   — Analyze and compare run result files.
+    offline   — Evaluate deterministic local fixtures without network access.
     full      — download → generate baseline cheatsheet → evaluate → analyze (all-in-one).
 
 Usage examples:
@@ -163,6 +164,39 @@ def cmd_analyze(args: argparse.Namespace) -> None:
             print(analyze_run(runs[-1], verbose=getattr(args, "verbose", False)))
 
 
+def cmd_offline(args: argparse.Namespace) -> None:
+    """Run the provider-free, reproducible SAIR evaluation path."""
+    # ``python scripts/sair/run_sair.py`` puts ``scripts/sair`` on
+    # ``sys.path`` but not necessarily the repository root.  Keep the
+    # documented direct-script invocation working without changing the
+    # package import path used by tests and module execution.
+    try:
+        from scripts.sair.offline import run_offline_pair
+    except ModuleNotFoundError as exc:
+        if exc.name != "scripts":
+            raise
+        repo_root = Path(__file__).resolve().parents[2]
+        sys.path.insert(0, str(repo_root))
+        from scripts.sair.offline import run_offline_pair
+
+    pair = run_offline_pair(
+        args.dataset,
+        limit=args.limit,
+        seed=args.seed,
+        output_file=args.output,
+    )
+    baseline = pair["baseline"]["summary"]
+    refinement = pair["refinement"]["summary"]
+    print(
+        "Offline paired evaluation complete: "
+        f"n={baseline['dataset_count']} seed={pair['seed']} "
+        f"baseline_accuracy={baseline['accuracy']:.3f} "
+        f"refinement_accuracy={refinement['accuracy']:.3f}"
+    )
+    if args.output:
+        print(f"Artifact saved -> {args.output}")
+
+
 def cmd_full(args: argparse.Namespace) -> None:
     """Full pipeline: ensure data → generate baseline cheatsheet → evaluate → analyze."""
     live = getattr(args, "live", False) or os.getenv("RUN_LIVE_SAIR") == "1"
@@ -273,6 +307,15 @@ def build_parser() -> argparse.ArgumentParser:
     an_group.add_argument("--run-dir", help="Directory of run JSON files.")
     an.add_argument("--verbose", "-v", action="store_true")
 
+    # ---- offline ----
+    off = sub.add_parser(
+        "offline", help="Run paired deterministic evaluation without network access."
+    )
+    off.add_argument("--dataset", default=DEFAULT_NORMAL)
+    off.add_argument("--limit", type=int, default=None)
+    off.add_argument("--seed", type=int, default=0)
+    off.add_argument("--output", default=None, help="Optional JSON artifact path.")
+
     # ---- full ----
     fl = sub.add_parser(
         "full", help="Full pipeline: data → generate → evaluate → analyze."
@@ -309,6 +352,7 @@ if __name__ == "__main__":
         "evaluate": cmd_evaluate,
         "generate": cmd_generate,
         "analyze": cmd_analyze,
+        "offline": cmd_offline,
         "full": cmd_full,
         "compare": cmd_compare,
     }

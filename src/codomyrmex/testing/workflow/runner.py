@@ -91,7 +91,10 @@ class WorkflowRunner:
 
             if not step_result.passed:
                 all_passed = False
-                if step_result.status == StepStatus.ERROR:
+                # A failed, timed-out, errored, skipped, or unimplemented step is
+                # terminal by default. Continuing is an explicit property of the
+                # step so a workflow cannot silently actuate after an unsafe result.
+                if not step.continue_on_error:
                     break
 
         result.status = StepStatus.PASSED if all_passed else StepStatus.FAILED

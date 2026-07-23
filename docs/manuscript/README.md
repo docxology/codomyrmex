@@ -9,6 +9,7 @@ This manuscript presents **Codomyrmex**, an agentic software-development framewo
 - **Agent Guide**: [AGENTS.md](AGENTS.md)
 - **Syntax Reference**: [SYNTAX.md](SYNTAX.md)
 - **Configuration**: [config.yaml](config.yaml)
+- **Claim Ledger**: [claim_ledger.yaml](claim_ledger.yaml)
 - **Colony Kernel Specification**: [../modules/colony_kernel/SPEC.md](../modules/colony_kernel/SPEC.md)
 
 ## Manuscript Structure
@@ -27,6 +28,8 @@ The `manuscript/` directory contains raw Markdown files rendered by `scripts/com
 - `06_reproducibility.md` — Reproduction commands, generated evidence, and explicit limits of the configuration/artifact chain.
 - `07_scope_and_related_work.md` — Bounded positioning against agentic software engineering, stigmergy, computational trust, capability security, runtime assurance, and external benchmarks.
 - `08_active_inference.md` — A bounded Active Inference interpretation that distinguishes structural analogy from implemented Bayesian inference.
+- `09_research_roadmap.md` — Evidence-bound research milestones, promotion rules, and reproducibility requirements.
+- `10_formalism_code_crosswalk.md` — Methods for translating formal objects into code anchors, evidence, and bounded claims.
 - `90_appendix_design_rationale.md` — Design decisions, alternatives, trade-offs, and calibration limits.
 - `98_acknowledgements.md` — Unnumbered, configuration-injected contributor credit.
 - `99_references.md` — Minimal bibliography anchor; rendered entries come from `references.bib` through Pandoc citeproc.
@@ -79,6 +82,9 @@ uv run python scripts/generate_manuscript_figures.py
 # 3. Render linked HTML, contents, bookends, and the final PDF
 uv run python scripts/compile_manuscript.py --pdf --bookends --skip-generate
 
+# 4. Verify source, figure, claim-ledger, HTML, and PDF integrity
+uv run python scripts/validate_manuscript_integrity.py --require-rendered
+
 # Or, from the parent template checkout, run the integrated pipeline:
 ./run.sh --pipeline --project ongoing/codomyrmex --core-only
 ```
@@ -93,6 +99,7 @@ If you are an AI agent operating in this repository, you **MUST** read [`AGENTS.
 - [`../../README.md`](../../README.md) — Project overview, architecture diagram, and contributor links.
 - [`../modules/colony_kernel/SPEC.md`](../modules/colony_kernel/SPEC.md) — Colony Kernel formal specification.
 - [`config.yaml`](config.yaml) — Manuscript metadata: title, authors, keywords, DOI.
+- [`claim_ledger.yaml`](claim_ledger.yaml) — Machine-readable classification of active claims, evidence, and boundaries.
 - [`manuscript.css`](manuscript.css) — HTML rendering style, including the red hyperlink contract shared with the PDF preamble.
 - [`layer_contract.yaml`](layer_contract.yaml) — Subsystem interface contracts enforced at compose time.
 - [`SYNTAX.md`](SYNTAX.md) — Codomyrmex manuscript syntax, labels, generated variables, and rendering conventions.

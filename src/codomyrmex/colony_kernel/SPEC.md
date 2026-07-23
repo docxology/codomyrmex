@@ -40,6 +40,13 @@ All shared types are defined in `models.py`. Canonical subsystem implementations
 
 **Effective deposit strength**: `signal.strength × source_multiplier × trust_factor`
 
+The backing `TraceField` clamps stored strengths to its configured
+`StigmergyConfig.max_strength` (10.0 by default), and the runtime invariant
+predicate checks that stored-state ceiling. `PheromoneStore` additionally guards
+extreme input deposits at its private 1e6 input limit before the backing field
+clamps them. These are distinct input and stored-state bounds, not a claim about
+biological pheromone concentration.
+
 | Method | Inputs | Output | Invariants |
 |--------|--------|--------|------------|
 | `deposit(signal, trust_factor=1.0)` | `ColonySignal`, `float` | `None` | Effective strength ≥ 0; compound key created or reinforced |

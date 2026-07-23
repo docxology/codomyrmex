@@ -100,6 +100,14 @@ class TestWorkflowStep:
         assert result["id"] == "test"
         assert result["type"] == "wait"
 
+    def test_step_defaults_to_terminal_failure_policy(self):
+        from codomyrmex.testing.workflow import WorkflowStep, WorkflowStepType
+
+        step = WorkflowStep(id="test", name="Test", step_type=WorkflowStepType.WAIT)
+
+        assert step.continue_on_error is False
+        assert step.to_dict()["continue_on_error"] is False
+
 
 @pytest.mark.unit
 class TestStepResult:
@@ -578,6 +586,127 @@ class TestWorkflowRunner:
         assert (
             len([r for r in result.step_results if r.status != StepStatus.PENDING]) <= 1
         )
+
+    def test_runner_stops_on_failed_step_by_default(self):
+        from codomyrmex.testing.workflow import (
+            StepStatus,
+            Workflow,
+            WorkflowRunner,
+            WorkflowStep,
+            WorkflowStepType,
+        )
+
+        workflow = Workflow(id="test", name="Test")
+        workflow.add_step(
+            WorkflowStep(
+                id="failed",
+                name="Failed Step",
+                step_type=WorkflowStepType.ASSERTION,
+                config={"type": "equals", "actual": 1, "expected": 2},
+            )
+        )
+        workflow.add_assertion(
+            id="should_not_run",
+            name="Should Not Run",
+            assertion_type="equals",
+            expected=True,
+            actual_key="unreachable",
+        )
+
+        result = WorkflowRunner().run(workflow)
+
+        assert result.status == StepStatus.FAILED
+        assert [step.step_id for step in result.step_results] == ["failed"]
+
+    def test_runner_continues_only_with_explicit_opt_in(self):
+        from codomyrmex.testing.workflow import (
+            StepStatus,
+            Workflow,
+            WorkflowRunner,
+            WorkflowStep,
+            WorkflowStepType,
+        )
+
+        workflow = Workflow(id="test", name="Test")
+        workflow.add_step(
+            WorkflowStep(
+                id="failed",
+                name="Failed Step",
+                step_type=WorkflowStepType.ASSERTION,
+                config={"type": "equals", "actual": 1, "expected": 2},
+                continue_on_error=True,
+            )
+        )
+        workflow.add_step(
+            WorkflowStep(
+                id="after_failure",
+                name="After Failure",
+                step_type=WorkflowStepType.ASSERTION,
+                config={"type": "equals", "actual": True, "expected": True},
+            )
+        )
+
+        result = WorkflowRunner().run(workflow)
+
+        assert result.status == StepStatus.FAILED
+        assert [step.step_id for step in result.step_results] == [
+            "failed",
+            "after_failure",
+        ]
+
+    def test_runner_treats_timeout_and_missing_executor_as_terminal(self):
+        from codomyrmex.testing.workflow import (
+            StepExecutor,
+            StepResult,
+            StepStatus,
+            Workflow,
+            WorkflowRunner,
+            WorkflowStep,
+            WorkflowStepType,
+        )
+
+        class TimeoutExecutor(StepExecutor):
+            def execute(self, step, context):
+                return StepResult(step_id=step.id, status=StepStatus.TIMEOUT)
+
+        runner = WorkflowRunner()
+        runner.register_executor(WorkflowStepType.CONDITIONAL, TimeoutExecutor())
+        workflow = Workflow(id="test", name="Test")
+        workflow.add_step(
+            WorkflowStep(
+                id="timeout", name="Timeout", step_type=WorkflowStepType.CONDITIONAL
+            )
+        )
+        workflow.add_step(
+            WorkflowStep(
+                id="unimplemented",
+                name="Unimplemented",
+                step_type=WorkflowStepType.HTTP_REQUEST,
+            )
+        )
+
+        timeout_result = runner.run(workflow)
+        assert [step.step_id for step in timeout_result.step_results] == ["timeout"]
+
+        unimplemented_workflow = Workflow(id="test-2", name="Test 2")
+        unimplemented_workflow.add_step(
+            WorkflowStep(
+                id="unimplemented",
+                name="Unimplemented",
+                step_type=WorkflowStepType.HTTP_REQUEST,
+            )
+        )
+        unimplemented_workflow.add_step(
+            WorkflowStep(
+                id="should_not_run",
+                name="Should Not Run",
+                step_type=WorkflowStepType.ASSERTION,
+                config={"type": "equals", "actual": True, "expected": True},
+            )
+        )
+        error_result = runner.run(unimplemented_workflow)
+        assert error_result.step_results[0].status == StepStatus.ERROR
+        assert len(error_result.step_results) == 1
 
     def test_runner_register_executor(self):
         """Verify custom executor registration."""

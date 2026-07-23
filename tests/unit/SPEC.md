@@ -1,7 +1,7 @@
 # tests/unit — Behavioral Specification
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Layout
 
@@ -15,7 +15,7 @@
 | Metric | Baseline | Target | Gate |
 |--------|----------|--------|------|
 | Line coverage | varies per run | 60%+ stretch | CI fails below **60%** floor (`pyproject.toml`) |
-| Tests collected | 34,520 (April 2026; `pytest --collect-only`) | growing | `uv run pytest tests/unit --collect-only -q` |
+| Tests collected | 35,444 (July 2026; `uv run python scripts/doc_inventory.py --pytest`) | growing | `uv run pytest tests --collect-only -q` |
 | Skipped | varies | minimize | — |
 | Failures | 0 | 0 | Blocks merge |
 
@@ -117,9 +117,9 @@ uv run pytest tests/unit/ ... --cov=src/codomyrmex --cov-fail-under=60
 Coverage floor is **60%** in `[tool.coverage.report] fail_under` and mirrored on the CI command line.
 All tests must pass and coverage must meet the floor when that job is configured to fail the workflow (see workflow `continue-on-error` flags).
 
-### Baseline note (April 2026 layout refresh)
+### Offline baseline (July 2026)
 
-A full local `uv run pytest tests/unit/ --cov=src/codomyrmex --cov-fail-under=60` completed coverage aggregation with **~76%** line coverage on measured `src/codomyrmex` before exit, while the same run reported **multiple failures** tied to optional services,plot backends, and provider SDK drift—**not** to file moves under `tests/unit/`. Treat **CI green** as the release gate; use module-scoped pytest locally when debugging.
+The latest host-capable coverage-gated sweep recorded **34,304 passed, 1,096 skipped, and 60 deselected**, with **74.26% total coverage** against the 60% floor. These are run-specific results, not permanent properties of the repository; keep live-provider lanes opt-in.
 
 ## Navigation
 

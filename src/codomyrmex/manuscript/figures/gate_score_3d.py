@@ -18,36 +18,34 @@ from codomyrmex.manuscript.figures._common import (
 
 
 def fig_gate_score_3d() -> None:
-    """3D surface with budget and local-hazard clearance fixed at 1.0.
+    """3D surface with budget and local-hazard clearance fixed at score maximum.
 
     The trust hard floor and tiered trust credit mirror ActuationGate. Completeness
     is continuous only as a visual envelope; runtime values are discrete.
     """
     from mpl_toolkits.mplot3d import Axes3D
 
-    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN", 0.0))
-    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX", 1.0))
+    score_min = float(_figure_parameter("score_min", "CONFIG_SCORE_MIN"))
+    score_max = float(_figure_parameter("score_max", "CONFIG_SCORE_MAX"))
     grid_points = int(
         _figure_parameter(
-            "gate_surface_grid_points", "CONFIG_GATE_SURFACE_GRID_POINTS", 60, int
+            "gate_surface_grid_points", "CONFIG_GATE_SURFACE_GRID_POINTS", int
         )
     )
-    w_budget = _var_float("CONFIG_GATE_WEIGHT_BUDGET", 0.30)
-    w_risk = _var_float("CONFIG_GATE_WEIGHT_RISK", 0.30)
-    w_trust = _var_float("CONFIG_GATE_WEIGHT_TRUST", 0.25)
-    w_complete = _var_float("CONFIG_GATE_WEIGHT_COMPLETENESS", 0.15)
-    gate_exec = _var_float("CONFIG_GATE_EXECUTE_THRESHOLD", 0.75)
-    gate_hold = _var_float("CONFIG_GATE_HOLD_THRESHOLD", 0.50)
-    trust_floor = _var_float("CONFIG_TRUST_HARD_FLOOR", 0.30)
-    trust_full_credit = _var_float("CONFIG_TRUST_FULL_CREDIT_THRESHOLD", 0.60)
+    w_budget = _var_float("CONFIG_GATE_WEIGHT_BUDGET")
+    w_risk = _var_float("CONFIG_GATE_WEIGHT_RISK")
+    w_trust = _var_float("CONFIG_GATE_WEIGHT_TRUST")
+    w_complete = _var_float("CONFIG_GATE_WEIGHT_COMPLETENESS")
+    gate_exec = _var_float("CONFIG_GATE_EXECUTE_THRESHOLD")
+    gate_hold = _var_float("CONFIG_GATE_HOLD_THRESHOLD")
+    trust_floor = _var_float("CONFIG_TRUST_HARD_FLOOR")
+    trust_full_credit = _var_float("CONFIG_TRUST_FULL_CREDIT_THRESHOLD")
 
     trust = np.linspace(score_min, score_max, grid_points)
     completeness = np.linspace(score_min, score_max, grid_points)
     T, C = np.meshgrid(trust, completeness)
 
-    trust_credit_lower = _var_float(
-        "CONFIG_TRUST_CREDIT_LOWER", (score_min + score_max) / 2
-    )
+    trust_credit_lower = _var_float("CONFIG_TRUST_CREDIT_LOWER")
     trust_credit = np.where(trust_full_credit <= T, score_max, trust_credit_lower)
     score_base = w_budget * score_max + w_risk * score_max
     score_best = score_base + w_trust * trust_credit + w_complete * C
@@ -146,7 +144,7 @@ def fig_gate_score_3d() -> None:
     ax2.set_title(
         f"Score slices at fixed trust levels\n"
         f"(budget=hazard clearance={score_max:.1f})\n"
-        f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT', 'Current default/illustrative policy slice')}",
+        f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT')}",
         fontsize=10,
     )
     ax2.legend(fontsize=7.5, loc="lower right", framealpha=0.85)

@@ -1,4 +1,4 @@
-# Proposed Evaluation Protocol and Release Configuration {#sec:experimental_setup}
+# Evaluation Protocol, Configuration, and Reproducibility Inputs {#sec:experimental_setup}
 
 This section separates a **proposed external benchmark** from the configuration and
 contract checks that were actually executed for this release. The comparative benchmark

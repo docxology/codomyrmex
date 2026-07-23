@@ -254,8 +254,8 @@ uv sync
 pytest --cov=src/codomyrmex --cov-report=html --cov-report=term
 
 # View coverage report
-open tests/htmlcov/index.html  # macOS
-xdg-open tests/htmlcov/index.html  # Linux
+open htmlcov/index.html  # macOS
+xdg-open htmlcov/index.html  # Linux
 ```
 
 ### **Linting and Code Quality Issues**
@@ -279,13 +279,13 @@ git commit --no-verify -m "temporary commit"
 #### Issue: Code formatting inconsistencies
 
 ```bash
-# Run Black formatter
-black src/ tests/
+# Run the repository formatter
+uv run ruff format src/ tests/
 
 # Check what would be formatted
-black --check --diff src/ tests/
+uv run ruff format --check --diff src/ tests/
 
-# Configure Black in pyproject.toml if needed
+# Formatter and type-checker configuration lives in pyproject.toml.
 ```
 
 ## 📊 Data Visualization Issues
@@ -426,16 +426,11 @@ git commit -m "Remove generated files from tracking"
 }
 ```
 
-#### Issue: Type checking errors with mypy
+#### Issue: Type checking errors with ty
 
 ```bash
-# Install type stubs
-uv pip install types-requests types-PyYAML
-
-# Configure mypy in pyproject.toml
-[tool.mypy]
-ignore_missing_imports = true
-python_version = "3.10"
+# Run the repository type checker
+uv run ty check src/
 ```
 
 ## 🔍 Debugging Techniques

@@ -1,8 +1,8 @@
 # Contributing to Codomyrmex
 
-**Version**: v1.1.9 | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Last Updated**: July 2026
 
-Welcome! Codomyrmex is a 128-module Python development platform. This guide covers how to set up your environment, follow our quality standards, and submit changes.
+Welcome! Codomyrmex is a 130-module Python development platform. This guide covers how to set up your environment, follow our quality standards, and submit changes.
 
 ---
 
@@ -22,7 +22,7 @@ Welcome! Codomyrmex is a 128-module Python development platform. This guide cove
 
 ### Prerequisites
 
-- Python 3.10+ (tested on 3.10–3.13)
+- Python 3.11+ (the supported range is defined in `pyproject.toml`)
 - [uv](https://docs.astral.sh/uv/) for dependency management
 - Git
 
@@ -65,8 +65,8 @@ All code must pass formatting and linting before merging.
 ### Formatters
 
 ```bash
-# Format code
-uv run black src/
+# Check formatting
+uv run ruff format --check .
 
 # Check imports
 uv run ruff check src/ --select I

@@ -1,4 +1,4 @@
-# Scope, Related Work, and Positioning {#sec:scope}
+# Scope, Related Work, and Claim Boundaries {#sec:scope}
 
 {{CONFIG_PARAMETER_STATUS_NOTE}} This distinction is central to the scholarship: the
 paper contributes an inspectable implementation and a falsifiable evaluation agenda,
@@ -63,17 +63,22 @@ count, and SANDBOX is a hard gate condition. The other role labels do not curren
 define or enforce an action-by-role permission matrix.
 
 **Not a security boundary.** Trust scores are mutable state associated with caller-supplied
-agent identifiers, not unforgeable capability tokens. Outcome submission is not, in the
-present interface, a cryptographic attestation that an approved proposal executed and
-produced the reported consequence.
+agent identifiers, not unforgeable capability tokens. The default compatibility outcome
+path remains caller-reported. An opt-in `AttestationLedger` can authenticate lifecycle
+linkage and required-attestation mode can reject outcomes without a prior authorization
+and receipt, but the ledger does not prove that an external observer saw a safe or useful
+action and is not automatically enabled for every interface.
 
 **Not production- or scale-validated.** The checked-in tests exercise internal contracts.
 The manuscript does not release the repeated-trial traces, production replays, concurrent
 load results, or external benchmark runs needed for effectiveness or scaling claims.
 
-**Not an Active Inference implementation.** The kernel has no explicit probabilistic
-generative model, variational posterior, or expected-free-energy policy optimizer. The
-comparison in [@sec:active-inference] is a design analogy.
+**Not an integrated Active Inference implementation.** The core kernel remains
+deterministic and has no posterior or expected-free-energy policy optimizer. A separate,
+explicit probabilistic adapter now declares states, observations, likelihoods, priors,
+transitions, preferences, horizon, and seed for offline research; its presence does not
+turn gate scores into probabilities or connect that model to production actuation. The
+comparison in [@sec:active-inference] remains a design crosswalk.
 
 ## Stigmergy and Environmental Traces
 

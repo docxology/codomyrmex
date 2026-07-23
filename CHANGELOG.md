@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`open_gauss` submodule RASP docs**: 34 files (AGENTS.md + README.md for 17 subdirectories) committed at submodule commit `032e9a9c`.
 - **Colony Kernel `PAI.md`**: gate formula corrected (was 0.4+0.3+0.3, now 0.30+0.30+0.25+0.15); version bumped to v1.3.0.
 - **Manuscript pandoc-crossref integration**: `scripts/compile_manuscript.py` now auto-detects `pandoc-crossref` and inserts `-F pandoc-crossref` before `--citeproc`; all `[@sec:xxx]`, `[@fig:xxx]`, `[@eq:xxx]` cross-references resolve correctly. Section IDs added to all 9 manuscript chapters.
-- **Manuscript token system** (71 tokens): `{{CONFIG_FALSIFICATION_VECTORS}}`, `{{PYTHON_VERSION}}`, and LOC tokens replace stale hardcoded values; `src/manuscript_variables.py` now sources them from live code introspection.
+- **Manuscript token system**: `{{CONFIG_FALSIFICATION_VECTORS}}`, `{{PYTHON_VERSION}}`, and LOC tokens replace stale hardcoded values; the namespaced manuscript package sources them from live code introspection.
 
 ### Fixed
 

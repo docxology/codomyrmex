@@ -1,0 +1,192 @@
+schema_version: "1.0"
+description: >-
+  Machine-readable claim audit for the active manuscript. This ledger classifies
+  statements by epistemic status and names the evidence and boundary required for
+  a reader to interpret them. Numeric values belong in generated variables, not here.
+
+source_audit:
+  covered:
+    - "docs/manuscript/00_abstract.md"
+    - "docs/manuscript/01_introduction.md"
+    - "docs/manuscript/02_methodology.md"
+    - "docs/manuscript/02_theory.md"
+    - "docs/manuscript/03_results.md"
+    - "docs/manuscript/04_conclusion.md"
+    - "docs/manuscript/05_experimental_setup.md"
+    - "docs/manuscript/06_reproducibility.md"
+    - "docs/manuscript/07_scope_and_related_work.md"
+    - "docs/manuscript/08_active_inference.md"
+    - "docs/manuscript/09_research_roadmap.md"
+    - "docs/manuscript/10_formalism_code_crosswalk.md"
+    - "docs/manuscript/90_appendix_design_rationale.md"
+  excluded:
+    "docs/manuscript/00_00_cover.md": "publication metadata and title page only"
+    "docs/manuscript/98_acknowledgements.md": "authorship and acknowledgements only"
+    "docs/manuscript/99_references.md": "bibliography inventory, not claim prose"
+
+claims:
+  - id: "C1"
+    class: "definition"
+    status: "supported"
+    statement: "The Colony Kernel is a deterministic proposal-governance control plane with typed state, a ternary gate, consequence recording, and local signal pressure."
+    source:
+      - "docs/manuscript/01_introduction.md"
+      - "docs/manuscript/02_methodology.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/kernel.py"
+      - "src/codomyrmex/colony_kernel/models.py"
+      - "tests/unit/colony_kernel/test_kernel.py"
+    boundary: "This defines the implemented surface; it does not imply deployment safety or downstream task benefit."
+    citations: []
+
+  - id: "C2"
+    class: "implementation_contract"
+    status: "supported"
+    statement: "A caller-reported failure can increase effective local hazard for the same target while leaving an unrelated target unchanged in the fixed replay fixture."
+    source:
+      - "docs/manuscript/01_introduction.md"
+      - "docs/manuscript/03_results.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/replay.py"
+      - "tests/unit/colony_kernel/test_replay.py"
+      - "output/data/colony_kernel_replay.json"
+    boundary: "The result is process-local, report-dependent, deterministic fixture evidence; it is not a causal or external-workload estimate."
+    citations: []
+
+  - id: "C3"
+    class: "local_measurement"
+    status: "supported"
+    statement: "The scoped Colony Kernel quality gates and branch-coverage result are regenerated from the current checkout during manuscript variable generation."
+    source:
+      - "docs/manuscript/06_reproducibility.md"
+      - "docs/manuscript/03_results.md"
+    evidence:
+      - "src/codomyrmex/manuscript/variables.py"
+      - "output/data/colony_kernel_coverage.json"
+      - "output/data/manuscript_variables.json"
+    boundary: "The scoped result does not certify the full repository, another environment, or a signed release."
+    citations: []
+
+  - id: "C4"
+    class: "implementation_contract"
+    status: "conditional"
+    statement: "The attestation ledger can bind proposal, gate, authorization, execution receipt, and outcome events with hash-chain and signature validation."
+    source:
+      - "docs/manuscript/09_research_roadmap.md"
+      - "docs/manuscript/10_formalism_code_crosswalk.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/attestation.py"
+      - "tests/unit/colony_kernel/test_attestation.py"
+      - "tests/unit/colony_kernel/test_kernel_attestation_integration.py"
+    boundary: "The local fixture verifies ledger mechanics; it does not independently observe an external action or prove that an authorized action was safe."
+    citations: []
+
+  - id: "C5"
+    class: "local_measurement"
+    status: "conditional"
+    statement: "The offline research harness executes paired synthetic baseline and mediated traces and computes descriptive safety, utility, refusal, and trace metrics."
+    source:
+      - "docs/manuscript/09_research_roadmap.md"
+      - "docs/manuscript/05_experimental_setup.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/research/benchmark.py"
+      - "tests/unit/colony_kernel/test_research_harness.py"
+      - "output/research/colony_kernel_offline.json"
+    boundary: "Synthetic cases demonstrate analysis plumbing only; they are not external benchmark, calibrated probability, or generalization evidence."
+    citations: []
+
+  - id: "C6"
+    class: "hypothesis"
+    status: "not_run"
+    statement: "A gate-mediated policy might improve the safety–utility frontier on hostile tool-use workloads relative to declared baselines."
+    source:
+      - "docs/manuscript/05_experimental_setup.md"
+      - "docs/manuscript/09_research_roadmap.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/research/benchmark.py"
+      - "src/codomyrmex/colony_kernel/research/schemas.py"
+    boundary: "No external dataset, independent oracle, or released repeated-trial comparison is included in this manuscript."
+    citations: []
+
+  - id: "C7"
+    class: "analogy"
+    status: "conditional"
+    statement: "The signal field and gate can be discussed using stigmergy and Active Inference vocabulary as bounded engineering correspondences."
+    source:
+      - "docs/manuscript/02_methodology.md"
+      - "docs/manuscript/08_active_inference.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/pheromone_store.py"
+      - "src/codomyrmex/colony_kernel/research/probabilistic.py"
+    boundary: "The correspondences do not establish biological equivalence, Bayesian inference, posterior probabilities, or expected free energy."
+    citations:
+      - "friston2010free"
+      - "bonabeau1999swarm"
+
+  - id: "C8"
+    class: "external_scholarship"
+    status: "supported"
+    statement: "Prior work motivates explicit state, tool-use, runtime-assurance, computational-trust, and reproducibility questions without serving as evidence for Codomyrmex outcomes."
+    source:
+      - "docs/manuscript/01_introduction.md"
+      - "docs/manuscript/07_scope_and_related_work.md"
+    evidence:
+      - "docs/manuscript/references.bib"
+    boundary: "The cited literature is contextual scholarship; comparative superiority and transfer to this implementation remain untested."
+    citations:
+      - "peng2011reproducible"
+      - "raji2020accountability"
+      - "seto1998simplex"
+
+  - id: "C9"
+    class: "implementation_contract"
+    status: "conditional"
+    statement: "The kernel-specific formal bridge encodes selected bounded obligations and returns structured solver outcomes when the optional solver is available."
+    source:
+      - "docs/manuscript/10_formalism_code_crosswalk.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/formal.py"
+      - "tests/unit/colony_kernel/test_formal_bridge.py"
+    boundary: "Encoded obligations are not a whole-program proof, refinement theorem, or production security guarantee."
+    citations: []
+
+  - id: "C10"
+    class: "hypothesis"
+    status: "not_run"
+    statement: "An explicit probabilistic adapter might improve held-out prediction or policy selection beyond the deterministic gate."
+    source:
+      - "docs/manuscript/08_active_inference.md"
+      - "docs/manuscript/09_research_roadmap.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/research/probabilistic.py"
+      - "tests/unit/colony_kernel/test_research_harness.py"
+    boundary: "The current adapter declares model structure but does not provide integrated, calibrated, held-out, or causal evidence."
+    citations: []
+
+  - id: "C11"
+    class: "implementation_contract"
+    status: "supported"
+    statement: "Selected boundedness and monotonicity properties follow from the implemented signal recurrence, gate arithmetic, and trust update rules exercised by the checked-in tests."
+    source:
+      - "docs/manuscript/00_abstract.md"
+      - "docs/manuscript/02_theory.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/invariants.py"
+      - "src/codomyrmex/colony_kernel/actuation_gate.py"
+      - "tests/unit/colony_kernel/test_invariants.py"
+    boundary: "These are selected implementation obligations; they are not a whole-program proof, empirical calibration, or deployment safety guarantee."
+    citations: []
+
+  - id: "C12"
+    class: "implementation_contract"
+    status: "conditional"
+    statement: "The release documents process-local state, caller-reported outcomes, role-label limits, and the need for attestation, restart, and external-workload evidence before broader claims are made."
+    source:
+      - "docs/manuscript/04_conclusion.md"
+      - "docs/manuscript/90_appendix_design_rationale.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/kernel.py"
+      - "src/codomyrmex/colony_kernel/attestation.py"
+      - "src/codomyrmex/colony_kernel/research/schemas.py"
+    boundary: "This is a documented limitation and evidence requirement, not evidence that the unrun external studies have succeeded."
+    citations: []

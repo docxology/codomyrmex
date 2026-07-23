@@ -20,7 +20,7 @@ This directory is distinct from the root `TODO.md`, which holds repo-wide, cross
 
 | File | Module | Status |
 |------|--------|--------|
-| `COLONY_KERNEL.md` | Colony Kernel (control plane, 8 MCP tools, 8 subsystems) | Fully implemented — all 4 phases complete, 641 tests |
+| `COLONY_KERNEL.md` | Colony Kernel (control plane, 8 MCP tools, 8 subsystems) | R0 contract/replay baseline implemented; R1–R5 remain evidence-gated research work |
 
 ## File Naming Convention
 

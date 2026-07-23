@@ -66,11 +66,26 @@ def run_build_command(
     timeout: float = 300,
 ) -> tuple[bool, str, str]:
     """Run one trusted build command without shell interpretation."""
+    detail = _run_build_command_detailed(command, cwd=cwd, timeout=timeout)
+    return detail["success"], detail["stdout"], detail["stderr"]
+
+
+def _run_build_command_detailed(
+    command: Sequence[str],
+    cwd: str | os.PathLike[str] | None = None,
+    timeout: float = 300,
+) -> dict[str, Any]:
+    """Run a command and retain a machine-readable terminal status."""
     try:
         args = _command_args(command)
     except (TypeError, ValueError) as exc:
         logger.error("Invalid build command: %s", exc)
-        return False, "", str(exc)
+        return {
+            "success": False,
+            "status": "invalid",
+            "stdout": "",
+            "stderr": str(exc),
+        }
     if (
         isinstance(timeout, bool)
         or not isinstance(timeout, (int, float))
@@ -78,7 +93,12 @@ def run_build_command(
     ):
         error = "Build timeout must be a positive number"
         logger.error(error)
-        return False, "", error
+        return {
+            "success": False,
+            "status": "invalid",
+            "stdout": "",
+            "stderr": error,
+        }
     try:
         completed = subprocess.run(
             args,
@@ -88,11 +108,31 @@ def run_build_command(
             timeout=timeout,
             check=False,
         )
-    except (OSError, subprocess.TimeoutExpired) as exc:
-        logger.error("Build command failed to start or timed out: %s", exc)
-        return False, "", str(exc)
+    except subprocess.TimeoutExpired as exc:
+        logger.error("Build command timed out: %s", exc)
+        return {
+            "success": False,
+            "status": "timed_out",
+            "stdout": exc.stdout or "",
+            "stderr": str(exc),
+        }
+    except OSError as exc:
+        logger.error("Build command failed to start: %s", exc)
+        return {
+            "success": False,
+            "status": "failed",
+            "stdout": "",
+            "stderr": str(exc),
+        }
 
-    return completed.returncode == 0, completed.stdout, completed.stderr
+    success = completed.returncode == 0
+    return {
+        "success": success,
+        "status": "success" if success else "failed",
+        "stdout": completed.stdout,
+        "stderr": completed.stderr,
+        "returncode": completed.returncode,
+    }
 
 
 def _copy_source(source: Path, output: Path) -> None:
@@ -170,25 +210,7 @@ def synthesize_build_artifact(
 
     try:
         if artifact_type == "archive":
-            output.parent.mkdir(parents=True, exist_ok=True)
-            base_dir = output.parent / f".{output.stem}-source"
-            try:
-                if source.is_dir():
-                    _copy_source(source, base_dir)
-                else:
-                    base_dir.mkdir(parents=True, exist_ok=True)
-                    shutil.copy2(source, base_dir / source.name)
-                archive_base = output.with_suffix("")
-                archive_path = shutil.make_archive(
-                    str(archive_base),
-                    "zip",
-                    root_dir=base_dir.parent,
-                    base_dir=base_dir.name,
-                )
-                if Path(archive_path) != output:
-                    shutil.move(archive_path, output)
-            finally:
-                shutil.rmtree(base_dir, ignore_errors=True)
+            _create_deterministic_archive(source, output)
         elif artifact_type in {"package", "copy"}:
             _copy_source(source, output)
         else:
@@ -204,9 +226,51 @@ def synthesize_build_artifact(
             except OSError:
                 logger.debug("Could not mark build artifact executable: %s", output)
         return output.exists()
-    except (OSError, UnicodeError) as exc:
+    except (OSError, UnicodeError, ValueError) as exc:
         logger.error("Failed to synthesize build artifact %s: %s", output, exc)
         return False
+
+
+def _create_deterministic_archive(source: Path, output: Path) -> None:
+    """Write a deterministic ZIP with safe, relative member names."""
+    if source.is_symlink():
+        raise ValueError("Archive source symlinks are not supported")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    root_name = f".{output.stem}-source"
+    entries: list[tuple[str, Path | None]] = []
+    if source.is_dir():
+        entries.append((root_name + "/", None))
+        for path in sorted(source.rglob("*"), key=lambda item: item.as_posix()):
+            if path.is_symlink():
+                raise ValueError(f"Archive source contains symlink: {path}")
+            relative = path.relative_to(source).as_posix()
+            member = f"{root_name}/{relative}"
+            if path.is_dir():
+                entries.append((member.rstrip("/") + "/", None))
+            elif path.is_file():
+                entries.append((member, path))
+            else:
+                raise ValueError(f"Unsupported archive source entry: {path}")
+    elif source.is_file():
+        entries.append((f"{root_name}/{source.name}", source))
+    else:
+        raise ValueError(f"Unsupported archive source: {source}")
+
+    temporary = output.with_name(f".{output.name}.{uuid.uuid4().hex}.tmp")
+    try:
+        with zipfile.ZipFile(
+            temporary, "w", compression=zipfile.ZIP_DEFLATED
+        ) as archive:
+            for member, path in entries:
+                info = zipfile.ZipInfo(member, date_time=(1980, 1, 1, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = (
+                    0o755 << 16 if member.endswith("/") else 0o644 << 16
+                )
+                archive.writestr(info, b"" if path is None else path.read_bytes())
+        temporary.replace(output)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def validate_build_output(output_path: str | os.PathLike[str]) -> dict[str, Any]:
@@ -522,7 +586,7 @@ def rollback_build(build_id: str) -> bool:
     if record is None:
         return False
     return cleanup_build_artifacts(
-        record.get("artifacts", []), allowed_root=record.get("output_root")
+        record.get("owned_artifacts", []), allowed_root=record.get("output_root")
     )
 
 
@@ -542,8 +606,8 @@ def orchestrate_build_pipeline(
 ) -> dict[str, Any]:
     """Run configured build commands and/or synthesize a source artifact.
 
-    The returned mapping retains both ``success`` and ``overall_success`` for
-    compatibility with the CLI and the historical build-synthesis tests.
+    The returned mapping retains both ``success`` and ``overall_success`` so the
+    CLI and current build-synthesis contract tests can inspect both outcomes.
     """
     config = dict(build_config or {})
     config.update({key: value for key, value in overrides.items() if value is not None})
@@ -561,37 +625,46 @@ def orchestrate_build_pipeline(
         "overall_success": False,
         "stages": [],
         "artifacts": [],
+        "owned_artifacts": [],
         "errors": list(validation_errors),
         "warnings": [],
         "duration": 0.0,
         "status": "pending",
     }
     if not valid:
-        _record_build({**result, "status": "failed"})
+        result["status"] = "invalid"
+        _record_build(result)
         return result
 
     started = time.monotonic()
     cwd = config.get("project_path") or config.get("cwd")
     dependencies = validate_build_dependencies(config.get("dependencies"))
     if dependencies["missing"]:
-        result["warnings"].append({"missing_dependencies": dependencies["missing"]})
+        result["errors"].append(
+            f"Missing build dependencies: {', '.join(dependencies['missing'])}"
+        )
+        result["status"] = "invalid"
 
     commands = config.get("build_commands") or []
     timeout = config.get("timeout", 300)
-    for command in commands:
+    for command in commands if not result["errors"] else []:
         stage_started = time.monotonic()
-        success, stdout, stderr = run_build_command(command, cwd=cwd, timeout=timeout)
+        detail = _run_build_command_detailed(command, cwd=cwd, timeout=timeout)
         result["stages"].append(
             {
                 "command": list(command),
-                "success": success,
+                "success": detail["success"],
+                "status": detail["status"],
                 "duration": round(time.monotonic() - stage_started, 3),
-                "output": stdout,
-                "error": stderr,
+                "output": detail["stdout"],
+                "error": detail["stderr"],
             }
         )
-        if not success:
-            result["errors"].append(stderr or f"Build command failed: {command}")
+        if not detail["success"]:
+            result["errors"].append(
+                detail["stderr"] or f"Build command failed: {command}"
+            )
+            result["status"] = detail["status"]
             break
 
     source_path = config.get("source_path")
@@ -607,8 +680,15 @@ def orchestrate_build_pipeline(
             result["errors"].append(str(exc))
     if source_path and target_path and not result["errors"]:
         artifact_type = config.get("artifact_type", "package")
+        existed_before = target_path.exists() or target_path.is_symlink()
         if synthesize_build_artifact(source_path, target_path, artifact_type):
             result["artifacts"].append(str(target_path))
+            if not existed_before:
+                result["owned_artifacts"].append(str(target_path))
+            else:
+                result["warnings"].append(
+                    "Existing output was updated; it is not owned by this build and will not be removed on rollback"
+                )
             result["output_root"] = str(output_root)
         else:
             result["errors"].append("Artifact synthesis failed")
@@ -618,7 +698,10 @@ def orchestrate_build_pipeline(
         stage["success"] for stage in result["stages"]
     )
     result["overall_success"] = result["success"]
-    result["status"] = "success" if result["success"] else "failed"
+    if result["success"]:
+        result["status"] = "success"
+    elif result["status"] == "pending":
+        result["status"] = "failed"
     if result["success"] and not result["stages"] and not result["artifacts"]:
         result["status"] = "noop"
         result["warnings"].append("No build command or artifact was requested")

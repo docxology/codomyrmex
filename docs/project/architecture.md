@@ -228,7 +228,7 @@ Source Code → Static Analysis → Testing → Build Validation → Deployment
 
 - **Unit tests**: In `tests/unit/` for individual module testing
 - **Integration tests**: In `tests/integration/` for cross-module workflows
-- **Comprehensive coverage**: Target >80% coverage across all modules
+- **Coverage contract**: Preserve the 60% project-wide line-coverage floor; module-level coverage is diagnostic and should be improved where gaps are found.
 
 ## Extension Points
 

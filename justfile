@@ -125,6 +125,11 @@ docs-check:
     uv run python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken
     uv run python scripts/documentation/analyze_content_quality.py --repo-root . --format both --min-score 70 --fail-on-below
     uv run python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
+    uv run python scripts/documentation/enforce_quality_gate.py --repo-root . --max-broken-links 10
+
+# Validate generated manuscript, figures, claims, and provenance.
+manuscript-check:
+    uv run python scripts/validate_manuscript_integrity.py
 
 # Generate missing documentation
 docs-generate:

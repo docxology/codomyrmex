@@ -19,3 +19,7 @@ perform implicit workspace cleanup.
 - Artifact cleanup accepts only explicitly supplied paths and can enforce an
   `output_root` containment boundary; rollback never removes that root itself.
 - Build history is bounded to the most recent 100 in-process records.
+- A language label is descriptive only. Compiler support exists only when the
+  caller supplies an explicit compiler command in `build_commands`.
+- The result schema distinguishes `success`, `failed`, `timed_out`, `invalid`,
+  and `noop`; these states must not be collapsed into a boolean.

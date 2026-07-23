@@ -1,0 +1,4 @@
+{"id":"identity-true","equation1":"x*y = x*y","equation2":"x*y = x*y","answer":"TRUE"}
+{"id":"different-false","equation1":"x*y = y*x","equation2":"x = x","answer":"FALSE"}
+{"id":"second-identity-true","equation1":"a + b = a + b","equation2":"a + b = a + b","answer":"TRUE"}
+{"id":"nonidentity-false","equation1":"x * x = x","equation2":"x * y = y * x","answer":"FALSE"}

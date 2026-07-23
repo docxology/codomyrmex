@@ -181,7 +181,7 @@ Return the current `AgentTrustProfile` for `agent_id`.  Creates a default
 | Field | Type | Description |
 |-------|------|-------------|
 | `agent_id` | `str` | As requested |
-| `role` | `AgentRole` | Emergent role: `SANDBOX`, `REPAIR_ANT`, `MEMORY_ANT`, `DISPATCHER`, or `GUARD_ANT` |
+| `role` | `AgentRole` | Deterministic role label derived from trust/history: `SANDBOX`, `REPAIR_ANT`, `MEMORY_ANT`, `DISPATCHER`, or `GUARD_ANT` |
 | `trust_score` | `float` | `[0.0, 1.0]`; new agents start at `0.1` |
 | `total_proposals` | `int` | Lifetime proposal count |
 | `accepted_proposals` | `int` | Recorded outcomes with `tests_passed=True` and `repair_needed=False` |
@@ -231,6 +231,29 @@ imposes no clock rate.
 
 **Side effects**: mutates `PheromoneStore` and potentially `ResourceLedger`
 internal state.
+
+---
+
+## Deterministic replay
+
+```python
+def run_paired_locality_replay(
+    *, agent_trust: float, recovery_ticks: int, seed: int = 0
+) -> dict[str, Any]
+```
+
+Runs the fixed-input caller-reported locality fixture twice and returns a JSON-shaped
+record containing semantic outputs, assertion results, and digests. The replay uses
+real kernel subsystems, fixed proposal IDs, and no random draws. `seed` is retained as
+an explicit protocol input for future stochastic extensions. Invalid trust or negative
+tick inputs raise `ValueError`; the record does not attest execution or outcomes.
+
+```python
+def write_replay_artifact(path: Path, record: dict[str, Any]) -> str
+```
+
+Writes the replay record as sorted, indented JSON through a sibling temporary file and
+returns the byte-level SHA-256 of the emitted artifact.
 
 ---
 

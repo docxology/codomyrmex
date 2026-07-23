@@ -16,6 +16,11 @@ Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial
 - `falsification_worker.py` — Full 10-vector `FalsificationWorker` with AST-based circular-dependency analysis
 - `actuation_gate.py` — Protocol-based `ActuationGate` with pheromone pressure queries
 - `pheromone_store.py` — Standalone `PheromoneStore` with per-key evaporation rates
+- `replay.py` — Fixed-input paired-locality replay and machine-readable artifact writer
+- `attestation.py` — Versioned hash-chained execution ledger with explicit validation states
+- `reference.py` — Pure reference gate/state semantics for differential replay
+- `formal.py` — Runtime obligations and optional solver-neutral/Z3 result bridge
+- `research/` — Offline adversarial, calibration, persistence, and probabilistic adapters
 - `README.md` — Module overview, quick-start, and architecture diagram (Mermaid)
 - `AGENTS.md` — This document
 - `SPEC.md` — Formal specification with API contracts and invariants (Mermaid)
@@ -43,6 +48,10 @@ Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial
 | `ResourceCost` | `models.py` | Seven-dimensional cost estimate or actual cost |
 | `PruningCandidate` | `models.py` | A module location flagged as stale with confidence score |
 | `FalsificationFinding` | `models.py` | A single adversarial finding with severity and remediation |
+| `run_paired_locality_replay` | `replay.py` | Repeats the caller-reported locality fixture and returns semantic/file-digest inputs |
+| `AttestationLedger` | `attestation.py` | Authenticated lifecycle evidence; required-attestation mode is explicit opt-in |
+| `ReferenceGate` | `reference.py` | Independent deterministic semantics used for differential checks |
+| `run_paired_benchmark` | `research/benchmark.py` | Deterministic synthetic baseline/mediated comparison; not an external benchmark |
 
 ## Dependencies
 

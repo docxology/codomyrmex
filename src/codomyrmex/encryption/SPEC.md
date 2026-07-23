@@ -110,7 +110,7 @@ graph TD
 ### Testing Standards
 
 - Strictly zero-mock testing using real `cryptography`
-- >=80% coverage
+- 60% project-wide line-coverage floor
 - Algorithm-specific tests
 - Security and edge case testing (including tampered data detection)
 

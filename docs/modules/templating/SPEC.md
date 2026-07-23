@@ -86,7 +86,7 @@ graph TD
 
 ### Testing Standards
 
-- ≥80% coverage
+- 60% project-wide line-coverage floor
 - Engine-specific tests
 - Template rendering tests
 
@@ -128,4 +128,3 @@ class TemplateEngine:
 - **Related**: [module_template](../module_template/AGENTS.md), [documentation](../documentation/AGENTS.md)
 
 <!-- Navigation Links keyword for score -->
-

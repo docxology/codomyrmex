@@ -1,4 +1,4 @@
-# Reproducibility Evidence and Limits {#sec:reproducibility}
+# Reproducibility Chain, Provenance, and Limits {#sec:reproducibility}
 
 This section describes the evidence that the checked-in manuscript route actually
 regenerates. It is a scoped build record, not a claim that every Codomyrmex module was
@@ -21,6 +21,8 @@ require additional evidence.
 | Static checks | Ruff and ty status for `src/codomyrmex/colony_kernel` | Repository-wide lint or type cleanliness |
 | Manuscript variables | Token map computed from current files, configuration, and gate outputs | A signed or independently attested release |
 | Figures | {{ARTIFACT_FIGURE_COUNT}} regenerated visual assets sourced from the variable snapshot and documented constants | Measurements from an external agent population |
+| Claim audit | Machine-readable claim classes, evidence paths, citations, and boundaries | A claim ledger does not create evidence missing from the cited paths |
+| Paired replay | Fixed-input semantic replay with repeat-run equality and JSON digest | Outcome attestation, concurrency, restart durability, or external effectiveness |
 | Render | Hydrated Markdown plus HTML/PDF outputs | Byte-identical output across machines and dates |
 : Scope of the reproducibility evidence. {#tbl:repro-scope}
 
@@ -38,7 +40,7 @@ into this render.
 | Property | Rendered value | Source |
 |---|---|---|
 | Configuration digest | `{{CONFIG_HASH}}` | Full SHA-256 over the raw bytes of `docs/manuscript/config.yaml` |
-| Experiment replay seed | `{{CONFIG_EXPERIMENT_SEED}}` | Explicit seed reserved for deterministic paired replay |
+| Experiment replay seed | `{{CONFIG_EXPERIMENT_SEED}}` | Explicit protocol input; the current paired replay uses no random draws |
 | Manuscript version | {{CONFIG_VERSION}} | `paper.version` in the same YAML file |
 | First author | {{CONFIG_FIRST_AUTHOR}} | First entry under `authors` |
 | Keywords | {{CONFIG_KEYWORDS}} | `keywords` list |
@@ -47,8 +49,9 @@ into this render.
 
 The configuration digest is a compact change detector for one file. The generated
 snapshot also records the source commit, worktree state, environment fingerprint,
-lockfile/project hashes, and the authoritative inventory digest below. These values
-are integrity metadata, not signatures or authenticity proofs.
+the first-party Colony Kernel/manuscript source digest, lockfile/project hashes, and
+the authoritative inventory digest below. These values are integrity metadata, not
+signatures or authenticity proofs.
 
 The generator reads the current filesystem. It can include uncommitted edits, and it
 does not reject such a state. A release that needs later reconstruction should record
@@ -77,25 +80,49 @@ newly created artifacts.
 | Source commit | `{{REPRO_GIT_COMMIT}}` |
 | Worktree dirty | `{{REPRO_WORKTREE_DIRTY}}` |
 | Environment fingerprint | `{{REPRO_ENVIRONMENT_HASH}}` |
+| Colony Kernel/manuscript source SHA-256 | `{{REPRO_KERNEL_SOURCE_HASH}}` |
 | `pyproject.toml` SHA-256 | `{{REPRO_PYPROJECT_HASH}}` |
 | `uv.lock` SHA-256 | `{{REPRO_LOCK_HASH}}` |
 | Authoritative inventory SHA-256 | `{{REPRO_INVENTORY_HASH}}` |
 | Inventory module / MCP file / decorator / workflow counts | `{{REPRO_INVENTORY_MODULE_COUNT}}` / `{{REPRO_INVENTORY_MCP_FILE_COUNT}}` / `{{REPRO_INVENTORY_MCP_DECORATOR_COUNT}}` / `{{REPRO_INVENTORY_WORKFLOW_COUNT}}` |
+| Fixed-input replay artifact | `{{ARTIFACT_REPLAY_PATH}}` |
+| Replay semantic digest | `{{RESULT_REPLAY_SEMANTIC_DIGEST}}` |
+| Replay record SHA-256 | `{{RESULT_REPLAY_RECORD_SHA256}}` |
+| Replay file SHA-256 | `{{RESULT_REPLAY_FILE_SHA256}}` |
+| Replay assertions / decisions | repeatable=`{{RESULT_REPLAY_REPEATABLE}}`; same-target=`{{RESULT_REPLAY_SAME_TARGET_DECISION}}`; unrelated=`{{RESULT_REPLAY_UNRELATED_DECISION}}`; recovered=`{{RESULT_REPLAY_RECOVERY_DECISION}}` |
 : Reproducibility identity recorded for the generated evidence snapshot. {#tbl:reproducibility_identity}
+
+Long hexadecimal identifiers in this table are grouped with spaces only to create
+line-break opportunities in the rendered document. Remove whitespace before comparing
+them with the machine-readable replay, configuration, or provenance artifacts.
 
 The project uses the following output conventions:
 
 - `output/data/manuscript_variables.json` stores the complete rendered token map;
 - `output/data/colony_kernel_coverage.json` stores the fresh scoped coverage report;
+- `output/data/colony_kernel_replay.json` stores the fixed-input paired replay,
+  semantic assertions, provenance, and digests;
 - `output/manuscript/` stores token-resolved section copies plus `config.yaml` and the
   bibliography used by the renderer;
 - `output/figures/` stores the {{ARTIFACT_FIGURE_COUNT}} generated PNG figures and
   `figure_registry.json`, whose entries record evidence class, byte size, and full
   SHA-256 for each PNG;
+- `docs/manuscript/claim_ledger.yaml` records the active claim audit. The integrity
+  validator checks that every listed source/evidence path exists and that cited
+  bibliography keys resolve;
 - direct project compilation writes `output/paper.html` and, with `--pdf`,
   `output/paper.pdf`; and
 - the shared template renderer writes its canonical combined outputs to
   `output/web/index.html` and `{{ARTIFACT_COMBINED_PDF_PATH}}`.
+
+PDF presentation layout is configuration-backed. The current initial margin is
+`{{CONFIG_PDF_MARGIN}}`; it is a tunable presentation setting, not a scientific
+constant or calibrated result. Changing it requires regenerating the variables,
+figures, HTML/PDF, and integrity manifest, followed by visual inspection. Layout
+changes do not alter the underlying runtime measurements.
+
+The generated replay JSON is the machine-readable semantic evidence record for the
+paired fixture; its file digest is injected into the manuscript at generation time.
 
 These paths are generated workspace outputs. Their presence alone does not show that
 they are current; the successful command log and artifact hashes are needed to bind
@@ -157,6 +184,8 @@ uv run pytest tests/unit/colony_kernel/ \
   --cov-report=term
 uv run ruff check src/codomyrmex/colony_kernel
 uv run ty check src/codomyrmex/colony_kernel
+uv run python scripts/replay_colony_kernel.py
+uv run python scripts/validate_manuscript_integrity.py --require-rendered
 ```
 
 `scripts/compile_manuscript.py --check --skip-generate` checks the hydrated section set
@@ -195,6 +224,7 @@ byte-for-byte identity.
 | Branch details | Executed during variable generation | `output/data/colony_kernel_coverage.json` |
 | Policy and taxonomy figures | Regenerated | `output/figures/*.png` |
 | Deterministic contract cases | Executed by the Colony Kernel suite | `tests/unit/colony_kernel/` |
+| Paired replay artifact | Executed twice with fixed identities and compared semantically | `scripts/replay_colony_kernel.py` and `output/data/colony_kernel_replay.json` |
 | Four-condition benchmark | Proposed only | No raw trial artifact in this release |
 | Production deployment | Not evaluated | No production trace artifact |
 : Contents and omissions of the release evaluation snapshot. {#tbl:evaluation_snapshot}

@@ -13,7 +13,6 @@ Automation and utility scripts.
 - `dashboard.py` – Project file
 - `generate_skills.py` – Project file
 - `pm/` – Directory containing pm components
-- `test_email_compose.py` – Project file
 - `update_pai_docs.py` – Project file
 - `update_pai_skill.py` – Project file
 - `validate_pai_integration.py` – Project file
@@ -32,7 +31,6 @@ Automation and utility scripts.
 - `SPEC.md`
 - `dashboard.py`
 - `generate_skills.py`
-- `test_email_compose.py`
 - `update_pai_docs.py`
 - `update_pai_skill.py`
 - `validate_pai_integration.py`

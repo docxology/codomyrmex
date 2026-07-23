@@ -29,7 +29,13 @@ from scripts.sair.download_data import (
     list_local_datasets,
     verify_dataset_integrity,
 )
-from scripts.sair.evaluate import OFFICIAL_TEMPLATE, parse_llm_response, run_evaluation
+from scripts.sair.evaluate import (
+    OFFICIAL_TEMPLATE,
+    confidence_status,
+    extract_confidence,
+    parse_llm_response,
+    run_evaluation,
+)
 
 # ---------- generate_cheatsheet ---------------------------------------------
 from scripts.sair.generate_cheatsheet import (
@@ -41,6 +47,7 @@ from scripts.sair.generate_cheatsheet import (
     trim_to_budget,
     validate_size,
 )
+from scripts.sair.offline import run_offline_evaluation, run_offline_pair
 
 # ---------- utils -----------------------------------------------------------
 from scripts.sair.utils import (
@@ -78,6 +85,17 @@ class TestParseLLMResponse:
         resp = "VERDICT: MAYBE\nREASONING: Unclear."
         parsed = parse_llm_response(resp)
         assert parsed["VERDICT"] == "MAYBE"
+
+    def test_missing_confidence_is_not_imputed(self):
+        parsed = parse_llm_response("VERDICT: TRUE\nREASONING: identity")
+        assert confidence_status(parsed) == "missing"
+        assert extract_confidence(parsed) is None
+        assert extract_confidence(parsed, legacy_impute=True) == pytest.approx(0.9)
+
+    def test_invalid_confidence_is_not_clamped(self):
+        parsed = parse_llm_response("VERDICT: FALSE\nCONFIDENCE: 1.2")
+        assert confidence_status(parsed) == "out_of_range"
+        assert extract_confidence(parsed) is None
 
     def test_multiline_reasoning(self):
         resp = (
@@ -279,6 +297,48 @@ class TestUtils:
         s = summarize_results(results)
         assert s["errors"] == 1
         assert s["evaluated"] == 1
+
+    def test_summarize_results_reports_confidence_provenance(self):
+        summary = summarize_results(
+            [
+                {
+                    "ground_truth": "TRUE",
+                    "is_correct": True,
+                    "confidence_status": "missing",
+                },
+                {
+                    "ground_truth": "FALSE",
+                    "is_correct": True,
+                    "confidence_status": "reported",
+                    "log_loss": 0.1,
+                },
+            ]
+        )
+        assert summary["stage2"] is True
+        assert summary["confidence_missing"] == 1
+        assert summary["confidence_reported"] == 1
+        assert summary["log_loss_count"] == 1
+        assert summary["avg_log_loss"] == pytest.approx(0.1)
+
+    def test_offline_evaluation_is_provider_free_and_hashed(self, tmp_path):
+        dataset = tmp_path / "fixture.jsonl"
+        dataset.write_text(
+            '{"id":"same","equation1":"x*y","equation2":"x*y","answer":"TRUE"}\n'
+            '{"id":"different","equation1":"x*y","equation2":"y*x","answer":"FALSE"}\n',
+            encoding="utf-8",
+        )
+        result = run_offline_evaluation(dataset, seed=17)
+        assert result["summary"]["live"] is False
+        assert result["summary"]["dataset_sha256"]
+        assert result["summary"]["confidence_missing"] == 0
+        assert result["summary"]["avg_log_loss"] is None
+
+        pair = run_offline_pair(dataset, seed=17)
+        assert pair["paired_inputs"] is True
+        assert (
+            pair["baseline"]["summary"]["dataset_sha256"]
+            == pair["refinement"]["summary"]["dataset_sha256"]
+        )
 
     def test_compare_runs(self):
         run_a = {

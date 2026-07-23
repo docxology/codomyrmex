@@ -1,9 +1,7 @@
 # Codomyrmex — `tests/unit`
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
-
-**Status**: Active | **Last updated**: April 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 

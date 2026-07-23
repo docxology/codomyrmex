@@ -37,7 +37,7 @@ Use 50–150 directory pairs per PR when doing incremental human edits. Columns 
 | `relative_path` | `README done` | `AGENTS done` | `PR` | `notes` |
 | --------------- | ------------- | ------------- | ---- | ------- |
 | `.` (root README/ARCH) | yes | N/A | — | Inventory-aligned copy; reduced filler adjectives |
-| `.github/README.md` | yes | N/A | — | Manual twin of root README; stats match `README.md` + [inventory.md](../reference/inventory.md) (34,422 tests, 1,164 `docs/*.md`, 37 workflows) |
+| `.github/README.md` | yes | N/A | — | Manual twin of root README; historical 2026-05-13 stats are superseded by the measured snapshot in [inventory.md](../reference/inventory.md) |
 | `docs/` hub | yes | yes | — | Curated; AGENTS: readme marker + apply_curated note |
 | `src/` hub | yes | yes | — | Curated; signposts, table layout, correct agent links |
 | `src/codomyrmex/` package hub | yes | yes | — | `AGENTS.md`: curated marker; Active Components collapsed to README + `list_modules()`; `__init__.py` docstring tightened |

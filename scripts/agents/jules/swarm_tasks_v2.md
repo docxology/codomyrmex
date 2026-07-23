@@ -14,7 +14,7 @@
 
 # --- concurrency ---
 
-In src/codomyrmex/concurrency/, review and improve all methods in core.py and pool.py. Add comprehensive zero-mock tests in src/codomyrmex/tests/unit/concurrency/ covering thread pool creation, async task submission, parallel execution, and edge cases (empty task list, exception propagation). Use 'uv run pytest' to verify. No mocking allowed.
+In src/codomyrmex/concurrency/, review and improve all methods in core.py and pool.py. Add comprehensive zero-mock tests in tests/unit/concurrency/ covering thread pool creation, async task submission, parallel execution, and edge cases (empty task list, exception propagation). Use 'uv run pytest' to verify. No mocking allowed.
 In src/codomyrmex/concurrency/, review README.md, SPEC.md, and AGENTS.md for accuracy. Update all docstrings in every .py file to include Args, Returns, Raises, and Example sections. Ensure SPEC.md documents the complete public API surface.
 
 # --- events ---
@@ -578,7 +578,7 @@ For modules tool_use, vector_store, video, and wallet: create or improve mcp_too
 
 # ============================================================================
 
-Run 'uv run ty check src/codomyrmex/agents/' and fix any type errors. Add missing type annotations to all function signatures. Ensure all return types are annotated. Do not break any existing tests. Run 'uv run pytest src/codomyrmex/tests/unit/agents/' to verify.
+Run 'uv run ty check src/codomyrmex/agents/' and fix any type errors. Add missing type annotations to all function signatures. Ensure all return types are annotated. Do not break any existing tests. Run 'uv run pytest tests/unit/agents/' to verify.
 Run 'uv run ty check src/codomyrmex/llm/' and fix any type errors. Add missing type annotations to all function signatures. Ensure all return types are annotated. Do not break any existing tests. Run 'uv run pytest' to verify.
 Run 'uv run ty check src/codomyrmex/orchestrator/' and fix any type errors. Add missing type annotations to all function signatures. Ensure all return types are annotated. Do not break any existing tests. Run 'uv run pytest' to verify.
 Run 'uv run ty check src/codomyrmex/model_context_protocol/' and fix any type errors. Add missing type annotations to all function signatures. Ensure all return types are annotated. Do not break any existing tests. Run 'uv run pytest' to verify.
@@ -616,18 +616,18 @@ In scripts/agents/history/, review and improve all agent history scripts. Ensure
 
 # ============================================================================
 
-In src/codomyrmex/tests/, audit the test directory structure. Ensure every module in src/codomyrmex/ has a corresponding test directory under src/codomyrmex/tests/unit/. Create missing test directories and add __init__.py files.
+In tests/, audit the test directory structure. Ensure every module in src/codomyrmex/ has a corresponding test directory under tests/unit/. Create missing test directories and add __init__.py files.
 In src/codomyrmex/testing/, review and improve the testing utilities module. Ensure test fixtures, helpers, and assertions are well-documented and have their own zero-mock tests. Use 'uv run pytest' to verify.
 Review src/codomyrmex/conftest.py and all conftest.py files throughout the test directories. Ensure fixtures are properly scoped, documented, and not duplicated. Remove any unused fixtures.
-Run 'uv run pytest --collect-only src/codomyrmex/tests/unit/cache/' and verify that cache tests are comprehensive. Add missing tests for cache eviction, concurrent access, and serialization. Aim for mutation testing readiness (v1.1.7 target).
-Run 'uv run pytest --collect-only src/codomyrmex/tests/unit/concurrency/' and verify that concurrency tests are comprehensive. Add missing tests for thread safety, deadlock detection, and pool exhaustion. Aim for mutation testing readiness (v1.1.7 target).
-Run 'uv run pytest --collect-only src/codomyrmex/tests/unit/events/' and verify that events tests are comprehensive. Add missing tests for event ordering, handler priority, and event cancellation. Aim for mutation testing readiness (v1.1.7 target).
+Run 'uv run pytest --collect-only tests/unit/cache/' and verify that cache tests are comprehensive. Add missing tests for cache eviction, concurrent access, and serialization. Aim for mutation testing readiness (v1.1.7 target).
+Run 'uv run pytest --collect-only tests/unit/concurrency/' and verify that concurrency tests are comprehensive. Add missing tests for thread safety, deadlock detection, and pool exhaustion. Aim for mutation testing readiness (v1.1.7 target).
+Run 'uv run pytest --collect-only tests/unit/events/' and verify that events tests are comprehensive. Add missing tests for event ordering, handler priority, and event cancellation. Aim for mutation testing readiness (v1.1.7 target).
 Run 'uv run pytest --collect-only' across the entire test suite. Identify the 10 module test directories with the fewest tests relative to the module size. For the top 3, add at least 5 new zero-mock tests each.
 Review all conftest.py files in the repository. Ensure none contain mock objects or mock fixtures. Replace any remaining mock-based fixtures with real InMemory or Test implementations per the Zero-Mock policy.
 Audit the repository for any remaining uses of unittest.mock, MagicMock, or patch() in test files. List all occurrences. Replace each with a real functional alternative following the Zero-Mock policy. Use 'uv run pytest' to verify.
 In pyproject.toml, review the [tool.pytest] and [tool.coverage] configuration. Ensure coverage source includes all **128** top-level modules. Verify the fail_under gate is set correctly. Audit the mutmut configuration for the v1.1.7 expansion targets.
 Review the pytest markers defined in pyproject.toml. Ensure all custom markers (slow, integration, flaky, etc.) are properly registered and used consistently across the test suite.
-In src/codomyrmex/tests/integration/, review and improve all integration tests. Ensure they test real cross-module interactions without mocking. Add missing integration tests for critical module boundaries.
+In tests/integration/, review and improve all integration tests. Ensure they test real cross-module interactions without mocking. Add missing integration tests for critical module boundaries.
 Run 'uv run pytest -x --tb=short' to identify and fix the first failing test. Then run the full suite with 'uv run pytest --tb=short' and report the results (pass/fail/skip counts).
 Review the GitHub Actions CI workflow (.github/workflows/ci.yml). Ensure the test matrix covers Python 3.11 and 3.12. Verify cacheing, timeouts, and artifact upload are properly configured.
 Add pytest-rerunfailures configuration as specified in TODO.md v1.1.7. Apply @pytest.mark.flaky(reruns=2) to any tests identified as flaky in CI. Document which tests are marked flaky and why.

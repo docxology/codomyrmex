@@ -1,4 +1,4 @@
-# Formal Specification and Provable Safety for Self-Modifying Systems
+# Formal Reasoning Boundaries: From Static Checks to Executable Contracts
 
 **Series**: AGI Perspectives | **Document**: 9 of 10 | **Last Updated**: March 2026
 
@@ -6,7 +6,7 @@
 
 Turing (1936) proved the halting problem undecidable: no algorithm can determine, for all programs, whether they terminate. Rice (1953) generalized this to all non-trivial semantic properties. These results establish a *decidability frontier* — a hard boundary between properties that can be algorithmically verified and those that cannot. For AGI systems, which are by definition Turing-complete and self-modifying, this frontier is the central challenge.
 
-But the decidability frontier is not a binary wall. Between the decidable and the undecidable lies a rich landscape of *semi-decidable* properties (recognizable by Turing machines that halt on positive instances), *co-semi-decidable* properties, and properties that are decidable *for restricted subclasses* of programs. Codomyrmex's formal verification strategy exploits this landscape by operating at different points on the decidability spectrum for different properties.
+But the decidability frontier is not a binary wall. Between the decidable and the undecidable lies a rich landscape of *semi-decidable* properties (recognizable by Turing machines that halt on positive instances), *co-semi-decidable* properties, and properties that are decidable *for restricted subclasses* of programs. Codomyrmex uses this distinction as a vocabulary for separating static checks, bounded execution, runtime contracts, and optional symbolic reasoning; the repository does not claim to solve the general self-modification problem.
 
 ## The Arithmetical Hierarchy and Safety Properties
 
@@ -22,7 +22,7 @@ Safety properties can be classified using the **arithmetical hierarchy** (Rogers
 Codomyrmex's safety properties distribute across this hierarchy:
 
 - **Σ₀⁰ (decidable)**: typing, lint rules (ruff), import structure → `static_analysis` handles these
-- **Σ₁⁰ (semi-decidable)**: "does a bug exist?" → the test suite (**35,375** collected tests, `uv run python scripts/doc_inventory.py --pytest`) is a partial oracle
+- **Σ₁⁰ (semi-decidable)**: "does a bug exist?" → a bounded test suite provides partial behavioral evidence, not an oracle for arbitrary inputs
 - **Π₁⁰ (co-semi-decidable)**: "is this function correct for all inputs?" → property-based testing (Hypothesis) approximates
 - **Σ₂⁰ (undecidable)**: "is this self-modification safe?" → the Löbian obstacle
 
@@ -46,21 +46,35 @@ graph TB
 
 ## Verification Architecture: Defense in Depth
 
-### Layer 1: Syntactic and Type-Theoretic Verification (Σ₀⁰)
+### Layer 1: Syntactic and Type-Theoretic Checks (Σ₀⁰)
 
-The most tractable layer. The Curry-Howard correspondence tells us that type-checking is *proof-checking*: a well-typed program is a proof of its type signature's proposition. Codomyrmex enforces:
+This is the most tractable layer. Curry--Howard explains a correspondence between
+typing judgments and proofs in a formal type system; it does not turn ordinary Python
+type checking into a proof of runtime behavior. Codomyrmex enforces:
 
-- **Ruff** — 0 violations enforced repo-wide (ratcheted v1.1.9). This eliminates entire *syntactic* classes of bugs — unused variables, undefined names, import cycles. Formally: ruff enforces a decidable subset of Python's context-free grammar constraints.
-- **Type hints + py.typed** — 572 PEP 561 markers across the codebase. Under the Curry-Howard isomorphism, `def f(x: int) -> str` asserts the proposition `Int → Str` — a morphism in the category **Typ** of types.
-- **AST analysis** — `static_analysis` inspects syntax trees for structural invariants (pass-only stubs, circular imports). These are decidable because they reduce to graph properties of the AST.
+- **Ruff** — configured style and static-rule checks. A violation is evidence that the
+  source fails the selected lint contract; it is not, by itself, a proof that the
+  program is semantically wrong.
+- **Type hints + py.typed** — a machine-readable interface vocabulary. A judgment such
+  as `def f(x: int) -> str` constrains callers and implementations under the configured
+  type checker; it does not prove that every runtime value or side effect obeys the
+  annotation.
+- **AST analysis** — `static_analysis` inspects syntax trees for selected structural
+  invariants. These checks are decidable for the inspected syntax, but incomplete for
+  behavior.
 
-Soundness guarantee: **everything ruff rejects is wrong.** The cost is incompleteness: ruff cannot detect semantic bugs.
+The useful claim is conformance to a declared static contract, with an explicit
+incompleteness boundary. See the formalism-to-code crosswalk in the manuscript for the
+source anchors and evidence classes.
 
 ### Layer 2: Behavioral Verification (Σ₁⁰)
 
-The test suite constitutes a *semi-decision procedure* for correctness: if a test fails, the bug is real (no false negatives for tested paths). But passing tests does not prove correctness (many false negatives for untested paths).
-
-The coverage metric quantifies incompleteness: ~32% line coverage means ~68% of paths are *formally unverified*. Property-based testing via Hypothesis partially addresses this by generating adversarial inputs from type specifications — an automated search through the Σ₁⁰ space.
+The test suite is bounded behavioral evidence: a failing test shows a mismatch between
+an expected contract and an observed run, subject to the possibility that the test or
+fixture is wrong. Passing tests supports only the exercised paths and configurations.
+Coverage is a diagnostic for incompleteness, not a percentage of formally verified
+program behavior. Property-based testing via Hypothesis broadens the sampled input
+space; it remains testing rather than universal proof.
 
 The **mutation testing** interpretation: a correct test suite should detect all semantically meaningful mutations. The mutation detection rate (MDR) measures test quality independent of coverage:
 
@@ -74,7 +88,10 @@ The `formal_verification` and `validation` modules implement **design by contrac
 - **Postconditions**: Return value validators assert guarantees on outputs
 - **Invariants**: Class invariants checked at method boundaries
 
-Contracts transform Π₁⁰ properties (∀ inputs, output is correct) into Σ₁⁰ properties (for this specific input, the contract is satisfied) through *runtime monitoring*. The contract is checked at every invocation — a form of *online verification* that trades completeness for practical safety.
+Contracts instantiate a universal-looking requirement for a particular invocation
+through *runtime monitoring*. Checking a contract at every invocation is useful online
+evidence, but it trades completeness for practical observability and depends on the
+contract being correctly specified.
 
 The Hoare triple formalization:
 
@@ -82,7 +99,7 @@ $$\{P\}\ S\ \{Q\}$$
 
 where P is the precondition, S is the statement, and Q is the postcondition. The `validation` module's schema checking implements the precondition P; the return-type checking implements the postcondition Q.
 
-### Layer 4: The Löbian Obstacle and Its Resolution
+### Layer 4: Self-Reference and External Review
 
 Fallenstein and Soares (2017) formalize the self-referential verification problem. Consider:
 
@@ -112,15 +129,17 @@ graph TD
     GODEL["Gödel's 2nd<br/>Incompleteness Thm:<br/>S' ⊬ Con(S')"]
     S_PRIME -.-> GODEL
 
-    RESOLUTION["Resolution:<br/>External oracle (human)<br/>breaks self-reference"]
+    RESOLUTION["Operational response:<br/>External review and approval<br/>remain outside the automated proof"]
     GODEL -.-> RESOLUTION
 ```
 
-**Codomyrmex's resolution**: the trust gateway interposes a **human oracle** between verification and deployment. Because the human is external to the system's proof theory, the self-referential cycle is broken. The human serves as an oracle for the Π₁⁰-complete problem "is this modification safe?" — a problem that the system alone cannot decide.
+The repository uses human review as an external decision point for changes that the
+automated checks do not establish. This can break an operational approval loop, but it
+does not make the reviewer a literal Turing oracle or solve an undecidable safety
+problem. The reviewer supplies context, judgment, and accountability outside the
+automated proof obligations; the decision remains fallible and should be recorded.
 
-This is not a hack but a principled strategy: Turing oracle machines (Turing, 1939) extend computability by postulating access to oracles for specific undecidable problems. The human reviewer is literally a Turing oracle for the safety verification problem.
-
-## Sheaf-Theoretic View of Consistency
+## A Prospective Sheaf-Theoretic Consistency Abstraction
 
 A deeper formalization uses **sheaf theory** (MacLane & Moerdijk, 1994). Define a sheaf F on the dependency graph G where:
 
@@ -128,7 +147,12 @@ A deeper formalization uses **sheaf theory** (MacLane & Moerdijk, 1994). Define 
 - For each dependency edge (m₁, m₂), the restriction map F(m₁) → F(m₂) enforces interface contracts
 - The **gluing axiom** requires: if local sections (per-module states) are compatible on overlaps (shared interfaces), they glue to a unique global section (system state)
 
-System consistency is equivalent to the existence of a *global section* of this sheaf. The obstructions are H¹(G, F) — nontrivial cohomology classes in the first cohomology group of G with coefficients in F. When H¹(G, F) = 0, local patches glue consistently. When H¹ ≠ 0, there exist *genuine* global inconsistencies that cannot be resolved by choosing different local representatives.
+This is a possible abstraction for reasoning about interface consistency, not a model
+implemented by the repository. To make it more than an analogy, one would need to define
+the category of states and restriction maps, prove that the selected module graph and
+contracts form the required structure, and connect detected obstructions to executable
+counterexamples. Until then, global sections and cohomology are research notation rather
+than reported Codomyrmex results.
 
 ## The Reflection Tower
 
@@ -142,9 +166,10 @@ Smith's (1984) concept of a **reflection tower** describes a hierarchy of self-a
 | **L₃** — Meta³ | Modify reasoning strategy | `evolutionary_ai` evolving cerebrum strategies |
 | **L₄** — Meta⁴ | Verify modification correctness | `formal_verification` checking evolution |
 
-The tower is **finite** (terminating at L₄) because L₄ requires human oracle for deployment. An infinite tower would require each level to verify the level above — creating exactly the Gödelian regress that Löb's theorem prohibits.
-
-The relationship to Löbian obstacles: at each level Lₖ, the system can prove safety of Lₖ₋₁. But Lₖ cannot prove its own safety — that requires Lₖ₊₁. The human oracle at the top of the tower serves as the *final metalevel* that breaks the chain, providing external verification that the system cannot provide for itself.
+This tower is an illustrative decomposition of responsibilities, not a demonstrated
+reflective hierarchy. The current repository has monitoring, analysis, modification, and
+verification components, but it does not establish that each level can verify the level
+below or that a human decision resolves the corresponding logical regress.
 
 ## Turing Degrees of Self-Knowledge
 
@@ -159,22 +184,26 @@ $$\mathbf{0} \leq_T \mathbf{0'} \leq_T \mathbf{0''} \leq_T \cdots$$
 | "Is my improvement safe?" | **0''** (Σ₂⁰) | ❌ | `formal_verification` (bounded) |
 | "Will I converge to AGI?" | **0'''** (Σ₃⁰) | ❌ | Not addressable computationally |
 
-The practical implication: codomyrmex can answer Level-0 questions about its own state completely and correctly. Level-0' questions (will this test pass?) require running the test — they are equivalent to the halting problem for the specific program. Level-0'' questions (is this modification globally safe?) are strictly harder than the halting problem and require the human oracle.
+The practical implication is weaker and more useful: direct health checks can be
+automated; questions about a particular test run require bounded execution; and global
+semantic safety remains outside the demonstrated automated surface. The table is a
+classification of question types and available evidence, not a measured assignment of
+Turing degrees to modules.
 
-This hierarchy is not merely academic — it determines the *architectural ceiling* of autonomous self-improvement. The system can autonomously handle Turing degree 0 operations (self-monitoring, health checks). Degree 0' operations (test execution) require bounded computation. Degree 0'' operations (global safety verification) require external oracle consultation.
-
-The `validation` module's cross-module contract checking is a *computational approximation* to computing H¹(G, F): it verifies the gluing axiom at each interface, detecting cohomological obstructions at runtime.
+The `validation` module checks selected interface conditions. It should not be described
+as computing sheaf cohomology unless a corresponding mathematical structure and
+translation are implemented.
 
 ## What Can Be Proved: A Realistic Assessment
 
 | Property | Hierarchy Level | Method | Completeness |
 |:---------|:-------------|:-------|:-------------|
-| Type safety | Σ₀⁰ | Static typing | Sound + complete for type system |
-| Import structure | Σ₀⁰ | Graph analysis | Sound + complete |
-| Specific bug absence | Σ₁⁰ | Test suite | Sound but incomplete (~32% coverage) |
-| Universal correctness | Π₁⁰ | Contracts + Hypothesis | Approximation |
-| Self-modification safety | Σ₂⁰ | Human oracle | Sound (assuming oracle correctness) |
-| Emergent property preservation | Σ₂⁰+ | Unknown | Open problem |
+| Type/interface conformance | Decidable for the selected checker | Static typing | Complete only relative to that checker and model |
+| Import structure | Decidable for the inspected graph | Graph analysis | Complete only relative to the inspected graph |
+| Specific behavior | Bounded execution | Test suite | Evidence for exercised cases; incomplete globally |
+| Universal correctness | Open semantic question | Contracts + property tests | Approximation |
+| Self-modification safety | Open semantic question | AST checks, tests, review | Incomplete |
+| Emergent property preservation | Open research question | No complete method | Unestablished |
 
 ## Cross-References
 

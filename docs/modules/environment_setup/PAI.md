@@ -35,9 +35,10 @@ from codomyrmex.environment_setup import (
     check_and_setup_env_vars,
 )
 
-# 1. Check Runtime
-if not validate_python_version():
-    raise SystemError("Python 3.10+ required")
+# 1. Check Runtime. The package contract targets Python 3.11+;
+#    the validator remains configurable for compatibility callers.
+if not validate_python_version("3.11"):
+    raise SystemError("Python 3.11+ required")
 
 # 2. Check Tooling
 if is_uv_available():
@@ -55,7 +56,7 @@ if not check_and_setup_env_vars("/path/to/repo_root"):
 | `validate_environment_completeness` | Function | **Primary entry point**: Runs all checks |
 | `ensure_dependencies_installed` | Function | Verifies `cased/kit` and `python-dotenv` |
 | `check_and_setup_env_vars` | Function | Loads `.env` into `os.environ` |
-| `validate_python_version` | Function | Enforces Python 3.10+ requirement |
+| `validate_python_version` | Function | Checks a caller-selected minimum; project setup uses Python 3.11+ |
 | `is_uv_available` | Function | Detects `uv` package manager |
 
 ## PAI Algorithm Phase Mapping

@@ -391,7 +391,7 @@ graph TD
 
 ### Layered Design Principles
 
-Codomyrmex follows a **layered architecture** that ensures clean separation of concerns and prevents circular dependencies. Each layer builds upon the layers below it, creating a stable foundation for complex workflows.
+Codomyrmex follows a **layered architecture** that enforces clean separation of concerns and rejects forbidden cross-layer imports. Each layer builds upon the layers below it, creating a stable foundation for complex workflows. This contract does not imply that every intra-package import graph is acyclic; the dependency analyzer reports those potential cycles separately for remediation.
 
 **Key Architectural Decisions**:
 
@@ -622,7 +622,7 @@ See **[MCP documentation](../../src/codomyrmex/model_context_protocol/)** for te
 
 ### Layered Dependencies
 
-Modules organized to prevent circular dependencies:
+Modules are organized to prevent forbidden cross-layer dependencies:
 
 - **Foundation Layer**: Base services (logging, environment, terminal)
 - **Core Layer**: Functional capabilities (analysis, execution, visualization)

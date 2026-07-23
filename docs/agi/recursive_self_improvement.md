@@ -1,4 +1,4 @@
-# Recursive Self-Improvement: Gödel Machines, Fitness Landscapes, and Corrigible Growth
+# Recursive Improvement: Search, Verification, and Claim Boundaries
 
 **Series**: AGI Perspectives | **Document**: 4 of 10 | **Last Updated**: March 2026
 
@@ -6,7 +6,9 @@
 
 Good's (1965) formulation remains the clearest: an ultraintelligent machine could design a better machine, which could design a still better one — an "intelligence explosion." Schmidhuber (2003) formalized this as the Gödel Machine: a self-referential universal problem solver that rewrites its own code whenever it can prove the rewrite improves expected reward. Bostrom (2014) extended the analysis to existential risk. Solomonoff (1964) provided the information-theoretic foundation: optimal inductive inference via the universal prior implies self-improvement as a natural consequence of compressing observed data.
 
-Codomyrmex implements *bounded* recursive self-improvement. This essay traces the loop through five stages, characterizes the fitness landscape over which improvement operates, and analyzes the safety constraints that prevent unbounded growth.
+Codomyrmex supports a *bounded change-evaluation workflow*. This essay traces the
+workflow through five stages, states which mathematical descriptions are proposals,
+and distinguishes repository gates from claims about recursive self-improvement.
 
 ## The Self-Improvement Loop
 
@@ -36,7 +38,7 @@ graph TB
     end
 
     subgraph DEPLOY["5. Deploy (Selection)"]
-        TRUST["trust_gateway<br/><i>human oracle gate</i>"]
+        TRUST["review and release gates<br/><i>external approval boundary</i>"]
         GIT["git_operations/<br/><i>immutable version control</i>"]
     end
 
@@ -59,7 +61,12 @@ A self-modification Δ is accepted iff:
 
 $$F(C + \Delta C, T, M') > F(C, T, M) + \epsilon$$
 
-where ε is a *noise margin* (prevents accepting trivially small improvements that may be measurement noise), and M' is the updated self-model. This is a **steady-state evolutionary algorithm** with elitist selection.
+where ε is a *noise margin* (prevents accepting trivially small improvements that may
+be measurement noise), and M' is the updated self-model. This equation is not the
+repository's current acceptance algorithm: the coefficients, noise margin, measured
+performance function, and population semantics are not defined as one executable
+contract. It is a candidate research model that becomes testable only after its
+configuration and scoring implementation are added.
 
 ### The Fitness Landscape
 
@@ -73,19 +80,31 @@ Three landscape properties determine the dynamics of improvement:
 | **Neutrality** | Fraction of mutations with ΔF ≈ 0 | Moderate — many changes are cosmetic (comments, formatting) |
 | **Epistasis** | Non-additivity: F(AB) ≠ F(A) + F(B) - F(∅) | Strong — module interactions create non-linear effects |
 
-Strong epistasis implies that combinatorial improvements (modifying multiple modules simultaneously) can access fitness peaks unreachable by single-module changes. The Jules AI swarm's parallel modification strategy (113+ concurrent sessions) is precisely a *multi-point mutation* strategy that explores the landscape's epistatic structure.
+Strong epistasis would imply that combinatorial changes can access regions unreachable
+by single-module changes. The repository's multi-agent editing surface is compatible
+with that hypothesis, but concurrent sessions are not a controlled evolutionary
+experiment and no population-level fitness result is established here.
 
 ### Developmental Constraints
 
-Kauffman's (1993) NK model predicts that ruggedness increases with epistasis (K), making search harder but potentially placing higher peaks available. Codomyrmex's modular architecture implements what developmental biologists call **developmental constraints** (Maynard Smith et al., 1985): the module boundaries channel modification along specific directions, just as compartmentalized body plans channel evolutionary change.
+Kauffman's (1993) NK model predicts that ruggedness increases with epistasis (K), making search harder but potentially placing higher peaks available. Codomyrmex's modular architecture can be analyzed as a source of **developmental constraints** (Maynard Smith et al., 1985): module boundaries may channel modification along specific directions. This is an architectural interpretation, not evidence that the repository realizes the biological mechanism.
 
-These constraints are *beneficial*: they reduce the effective dimensionality of the search space. A modification confined to one module (dimension ≤ dim(module)) is far easier to evaluate than a cross-cutting change (dimension ~ dim(codebase)). The 130-module partition creates 130 *quasi-independent* optimization cells.
+These constraints may reduce the effective dimensionality of some changes, but module
+boundaries do not make modules independent. Cross-module effects, shared configuration,
+and integration contracts must be measured for each change; no optimization-cell count
+is inferred from the module inventory.
 
 ## The Gödel Machine Connection
 
 Schmidhuber's (2003) Gödel Machine searches for *provably optimal* self-modifications. The search space is the set of all programs expressible in itself (self-referential). When it finds a modification whose improvement can be *formally proved*, it applies the modification.
 
-Codomyrmex approximates this with a weaker verification criterion: modifications must pass *tests and validation*, not *formal proofs*. The **35,375** collected tests (`uv run python scripts/doc_inventory.py --pytest`) serve as *empirical evidence* rather than *deductive proof*. The gap between empirical evidence and formal proof is precisely the gap between Σ₁⁰ (testing) and Π₁⁰ (universal correctness) in the arithmetical hierarchy — see [formal_specification.md](./formal_specification.md).
+Codomyrmex uses a weaker verification criterion: modifications may be accepted by
+selected tests and validation checks, not by a single formal proof. Current test counts
+are generated by the inventory script and must not be embedded in this essay. Passing a
+finite suite is empirical evidence about exercised cases, not deductive proof of
+universal correctness. The formalism-to-code crosswalk records that boundary; see
+[formal_specification.md](./formal_specification.md) and
+[the manuscript crosswalk](../manuscript/10_formalism_code_crosswalk.md).
 
 The `evolutionary_ai` module adds a critical capability: **population-based search**. Rather than the Gödel Machine's exhaustive proof search, `evolutionary_ai` maintains a *population* of candidate modifications and applies selection pressure:
 
@@ -101,19 +120,24 @@ $$\sum_{t=0}^{\infty} [F(C_{t+1}) - F(C_t)] < \infty$$
 
 This sum converging implies that improvements become vanishingly small — the system approaches a fitness peak. The danger is **fitness landscape shifting**: as the system modifies itself, the landscape itself changes (because the evaluation criteria are partly internal). This creates a *Red Queen* dynamic (van Valen, 1973): the system must keep improving just to maintain its relative fitness.
 
-Codomyrmex bounds this through **ratcheting**: the coverage gate (`fail_under=60` in `pyproject.toml`) prevents fitness degradation. Each improvement must maintain at least the current fitness — a *monotonic* constraint that guarantees convergence to a local optimum (though not necessarily a global one).
+Codomyrmex bounds one quality dimension through a coverage floor
+(`fail_under=60` in `pyproject.toml`). That gate does not measure total fitness, does
+not compare every regression dimension, and does not guarantee monotonic improvement or
+convergence to a local optimum.
 
 ## Five Safety Bounds
 
 | Bound | Mechanism | Formal Property |
 |:------|:----------|:---------------|
-| **Test constitution** | Full collected suite must pass | F(C') ≥ F(C) enforced |
-| **Trust governor** | `UNTRUSTED → VERIFIED → TRUSTED` | Rate-limited capability acquisition |
-| **Human oracle** | Trust gateway requires human approval | Löbian circuit-breaker (external to proof system) |
-| **Formal verification** | Property proofs for critical invariants | Π₁⁰ approximation for selected properties |
-| **Containment** | `containerization/` isolates experiments | Resource bounds (CPU, memory, network) |
+| **Test constitution** | Selected suites and coverage gate may be required | Evidence for exercised cases; not F(C') ≥ F(C) over all dimensions |
+| **Trust governor** | Policy and profile checks where configured | A bounded access mechanism; effectiveness requires threat tests |
+| **Human approval** | Review and release controls | External accountability boundary, not a proof oracle |
+| **Formal verification** | Generic or selected invariant obligations | Proof of supplied obligations only; no universal kernel proof |
+| **Containment** | Sandboxing/container controls where enabled | Resource bounds only when configured and tested |
 
-The combination makes the system *safely autopoietic*: it can maintain and improve itself within constraints, but cannot unilaterally expand those constraints. The constraints themselves are *outside the system's modification scope* — a key architectural decision.
+Together these mechanisms provide a reviewable change-control process. They do not
+establish safe autopoiesis, autonomous self-improvement, or that all constraints are
+outside the system's modification scope.
 
 ## Lyapunov Stability of the Improvement Loop
 
@@ -127,11 +151,16 @@ For the self-improvement loop to be **Lyapunov stable**, we need:
 
 $$\dot{V}(C_t) = V(C_{t+1}) - V(C_t) = F(C_t) - F(C_{t+1}) \leq 0$$
 
-The ratchet constraint (F(C') ≥ F(C)) ensures exactly this: the fitness can only increase, so V can only decrease. The system converges monotonically to a local optimum.
+If a future executable protocol established F(C') ≥ F(C) for every accepted change,
+then this conditional Lyapunov argument would apply. The current coverage gate is not
+such a total-order ratchet, so monotonic convergence is unestablished.
 
 **Asymptotic stability** requires the stricter condition: V → 0 as t → ∞. This is *not guaranteed* — the system may stall at a local optimum where F < F*. The gap F* - F(C_local) is the **optimality gap** — the price of bounded self-improvement.
 
-The `evolutionary_ai` module's population-based search partially addresses this by maintaining diversity. In Wright's fitness landscape metaphor, a population explores multiple peaks simultaneously, increasing the probability of finding the global optimum.
+Population-based search is a possible route to testing the diversity hypothesis. The
+presence of an `evolutionary_ai` module alone does not establish that it is connected
+to repository change selection or that it increases the probability of a global
+optimum.
 
 ## Information-Theoretic Speed Limits on Self-Improvement
 

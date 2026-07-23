@@ -171,7 +171,7 @@ graph TB
 
 - **Scaffolding**: Use `doc_scaffolder.py` to initialize new modules with the correct directory structure and documentation templates.
 - **Signposting**: Maintain current parent/child navigation links in all markdown files to support agent traversal.
-- **Dependency Management**: All dependencies are declared in `pyproject.toml`; module-specific `requirements.txt` files are deprecated.
+- **Dependency Management**: All dependencies are declared in `pyproject.toml`; use optional extras for module-specific dependency sets.
 - **Refactoring**: Regularly audit modules for TODO cleanup, placeholder replacement, and adherence to current conventions.
 - **Versioning**: All modules follow semantic versioning starting at `v0.1.0`; version bumps are coordinated at the repository level.
 

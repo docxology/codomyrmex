@@ -17,6 +17,7 @@ from codomyrmex.colony_kernel.models import (
     FalsificationSeverity,
 )
 from codomyrmex.colony_kernel.role_adapter import RoleAdapter
+from codomyrmex.manuscript.variables import _display_identifier
 
 pytestmark = pytest.mark.unit
 
@@ -26,6 +27,10 @@ FIGURE_COMMON_PATH = "src/codomyrmex/manuscript/figures/_common.py"
 FENCED_BLOCK_PATTERN = re.compile(r"```.*?```", re.DOTALL)
 
 PUBLIC_CLAIM_FILES = [
+    ".github/README.md",
+    "CITATION.cff",
+    "CLAUDE.md",
+    "MODULES.md",
     "package.json",
     "skill.json",
     "CHANGELOG.md",
@@ -40,12 +45,16 @@ PUBLIC_CLAIM_FILES = [
     "TODO.md",
     "src/README.md",
     "src/INDEX.md",
+    "src/PAI.md",
+    "src/SPEC.md",
     "src/codomyrmex/README.md",
     "src/codomyrmex/INDEX.md",
     "src/codomyrmex/SPEC.md",
+    "src/codomyrmex/PAI.md",
     "docs/AGENTS.md",
     "docs/README.md",
     "docs/index.md",
+    "docs/pai/architecture.md",
     "docs/todo/AGENTS.md",
     "docs/todo/COLONY_KERNEL.md",
     "docs/todo/README.md",
@@ -63,12 +72,23 @@ PUBLIC_CLAIM_FILES = [
     "docs/manuscript/06_reproducibility.md",
     "docs/manuscript/07_scope_and_related_work.md",
     "docs/manuscript/08_active_inference.md",
+    "docs/manuscript/09_research_roadmap.md",
+    "docs/manuscript/10_formalism_code_crosswalk.md",
     "docs/manuscript/90_appendix_design_rationale.md",
     "docs/manuscript/manuscript.css",
     "docs/manuscript/preamble.md",
     "docs/manuscript/config.yaml",
     "docs/agi/emergence_and_scale.md",
     "docs/agi/recursive_self_improvement.md",
+    "docs/agi/alignment_and_safety.md",
+    "docs/agi/orchestration_as_cognition.md",
+    "docs/agi/world_models.md",
+    "docs/agi/scaffolding.md",
+    "docs/agi/the_colony_thesis.md",
+    "docs/agi/tool_use_and_agency.md",
+    "docs/agi/memory_and_continuity.md",
+    "docs/agi/formal_specification.md",
+    "docs/agi/PAI.md",
     "docs/pai/on-ramp.md",
     "scripts/generate_manuscript_figures.py",
     FIGURE_COMMON_PATH,
@@ -81,6 +101,8 @@ PUBLIC_CLAIM_FILES = [
     "src/codomyrmex/colony_kernel/README.md",
     "src/codomyrmex/colony_kernel/SPEC.md",
     "src/codomyrmex/colony_kernel/PAI.md",
+    "src/codomyrmex/model_context_protocol/PAI.md",
+    "docs/modules/model_context_protocol/PAI.md",
     "docs/modules/colony_kernel/AGENTS.md",
     "docs/modules/colony_kernel/README.md",
     "docs/modules/colony_kernel/SPEC.md",
@@ -179,53 +201,53 @@ FORBIDDEN_CLAIMS = {
     ): "configuration inventory should distinguish config dirs from config.yaml files",
     re.compile(
         r"\b35,183\b"
-    ): "full-suite collection is currently documented as 35,119 tests",
+    ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b35,118\b"
-    ): "full-suite collection is currently documented as 35,119 tests",
+    ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b35,137\b"
-    ): "full-suite collection is currently documented as 35,119 tests",
+    ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b1,191\b"
-    ): "docs inventory is currently 1,196 Markdown files under docs/",
+    ): "docs inventory is currently 1,205 Markdown files under docs/",
     re.compile(
         r"\b1,192\b"
-    ): "docs inventory is currently 1,196 Markdown files under docs/",
+    ): "docs inventory is currently 1,205 Markdown files under docs/",
     re.compile(
         r"\b1,193\b"
-    ): "docs inventory is currently 1,196 Markdown files under docs/",
+    ): "docs inventory is currently 1,205 Markdown files under docs/",
     re.compile(
         r"\b1,194\b"
-    ): "docs inventory is currently 1,196 Markdown files under docs/",
+    ): "docs inventory is currently 1,205 Markdown files under docs/",
     re.compile(
         r"\b1,195\b"
-    ): "docs inventory is currently 1,196 Markdown files under docs/",
+    ): "docs inventory is currently 1,205 Markdown files under docs/",
     re.compile(
         r"\b35,122\b"
-    ): "full-suite collection is currently documented as 35,119 tests",
+    ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b35,124\b"
-    ): "full-suite collection is currently documented as 35,119 tests",
-    re.compile(r"35%2C124"): "full-suite collection badge is currently 35,119 tests",
+    ): "full-suite collection count must match the current inventory snapshot",
+    re.compile(r"35%2C124"): "full-suite collection badge is stale",
     re.compile(
         r"\b35,114\b"
-    ): "full-suite collection is currently documented as 35,119 tests",
+    ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b34,451\b"
-    ): "full-suite collection is currently documented as 35,119 tests",
+    ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b35,130\b"
     ): "full-suite collection is currently documented as 35,119 tests",
-    re.compile(r"35%2C130"): "full-suite collection badge is currently 35,119 tests",
+    re.compile(r"35%2C130"): "full-suite collection badge is stale",
     re.compile(
         r"\b35,131\b"
-    ): "full-suite collection is currently documented as 35,119 tests",
-    re.compile(r"35%2C131"): "full-suite collection badge is currently 35,119 tests",
-    re.compile(r"35%2C137"): "full-suite collection badge is currently 35,119 tests",
+    ): "full-suite collection count must match the current inventory snapshot",
+    re.compile(r"35%2C131"): "full-suite collection badge is stale",
+    re.compile(r"35%2C137"): "full-suite collection badge is stale",
     re.compile(
         r"\b9\s+test\s+files\b", re.IGNORECASE
-    ): "colony-kernel test suite currently spans 12 test files",
+    ): "colony-kernel test suite currently spans 15 test files",
     re.compile(
         r"\bAll\s+52\s+tokens\b", re.IGNORECASE
     ): "manuscript variable inventory must be generated from the current token map",
@@ -256,6 +278,15 @@ FORBIDDEN_CLAIMS = {
     re.compile(
         r"\bcurrently\s+\*\*433\*\*", re.IGNORECASE
     ): "colony-kernel manuscript test count should come from the live scoped run",
+    re.compile(
+        r"\b33\s+tools?\b", re.IGNORECASE
+    ): "active MCP documentation must use the measured profile counts",
+    re.compile(
+        r"~984\s+Total", re.IGNORECASE
+    ): "active MCP documentation must use the measured profile counts",
+    re.compile(
+        r"tool_count:33", re.IGNORECASE
+    ): "active MCP documentation must use the measured HTTP readonly count",
     re.compile(
         r"\b433\s+tests\b", re.IGNORECASE
     ): "colony-kernel manuscript test count should come from the live scoped run",
@@ -330,7 +361,7 @@ FORBIDDEN_CLAIMS = {
     ): "the manuscript should not claim a queue budget path absent a checked-in trace",
     re.compile(
         r"\b610 MCP tools\b", re.IGNORECASE
-    ): "root docs must distinguish 593 runtime tools from 623 decorator lines",
+    ): "root docs must distinguish 608 runtime tools from 623 decorator lines",
     re.compile(
         r"\b610 decorators\b", re.IGNORECASE
     ): "production @mcp_tool decorator count is now 623, not 610",
@@ -391,18 +422,24 @@ REQUIRED_CLAIMS = {
     "docs/manuscript/07_scope_and_related_work.md": [
         "Not a security boundary",
         "Not production- or scale-validated",
-        "Not an Active Inference implementation",
+        "Not an integrated Active Inference implementation",
         "unattested report",
     ],
     "docs/manuscript/08_active_inference.md": [
         "deterministic and heuristic",
         "conceptual crosswalk",
     ],
+    "docs/manuscript/09_research_roadmap.md": [
+        "scoped research program",
+        "{{RESULT_RESEARCH_ROADMAP_EVIDENCE_ROWS}}",
+        "{{RESULT_RESEARCH_ROADMAP_DECISION_ROWS}}",
+        "not a delivery timeline",
+    ],
     "README.md": [
         "608 runtime MCP tools",
         "623 decorators",
-        "1,203",
-        "35,375",
+        "1,207",
+        "35,444",
     ],
 }
 
@@ -444,6 +481,13 @@ def test_compiler_declares_scientific_narrative_order() -> None:
     assert names.index("02_methodology.md") < names.index("05_experimental_setup.md")
     assert names.index("05_experimental_setup.md") < names.index("03_results.md")
     assert names.index("03_results.md") < names.index("04_conclusion.md")
+    assert names.index("04_conclusion.md") < names.index("09_research_roadmap.md")
+    assert names.index("09_research_roadmap.md") < names.index(
+        "10_formalism_code_crosswalk.md"
+    )
+    assert names.index("10_formalism_code_crosswalk.md") < names.index(
+        "90_appendix_design_rationale.md"
+    )
     assert names[-1] == "99_references.md"
 
 
@@ -518,6 +562,15 @@ def test_manuscript_config_matches_kernel_contract() -> None:
         "subsystem_architecture",
         "gate_score_3d",
         "fep_correspondence",
+        "research_roadmap",
+        "formalism_code_crosswalk",
+        "replay_contract",
+        "attestation_event_chain",
+        "safety_utility_frontier",
+        "calibration_reliability",
+        "persistence_recovery",
+        "formalism_coverage",
+        "research_status_matrix",
     ]
     assert (
         experiment["figure_parameters"]["score_min"]
@@ -560,6 +613,38 @@ def test_source_publication_metadata_has_no_placeholders() -> None:
     assert source["authors"][0]["orcid"] == "0000-0001-6232-9096"
     assert source["publication"]["doi_status"] == "forthcoming"
     assert "placeholder" not in str(source["publication"]).lower()
+
+
+def test_formalism_code_crosswalk_is_a_resolvable_evidence_contract() -> None:
+    """Every crosswalk row must point to real code and evidence surfaces."""
+    config = yaml.safe_load(_read("docs/manuscript/config.yaml"))
+    entries = config["formalism_code_crosswalk"]
+    assert entries
+    assert {entry["status"] for entry in entries} >= {"implemented", "partial"}
+    identifiers = [entry["id"] for entry in entries]
+    assert len(identifiers) == len(set(identifiers))
+
+    for entry in entries:
+        assert entry["formal_object"]
+        assert entry["bridge"]
+        assert entry["claim_boundary"]
+        for relative_path in [*entry["code_paths"], *entry["evidence_paths"]]:
+            assert (REPO_ROOT / relative_path).exists(), relative_path
+
+
+def test_implemented_roadmap_milestones_have_resolvable_artifacts() -> None:
+    config = yaml.safe_load(_read("docs/manuscript/config.yaml"))
+    implemented = [
+        entry
+        for entry in config["research_roadmap"]
+        if entry.get("status") == "implemented"
+    ]
+    assert implemented
+    for entry in implemented:
+        paths = entry.get("artifact_paths")
+        assert isinstance(paths, list) and paths, entry["id"]
+        for relative_path in paths:
+            assert (REPO_ROOT / relative_path).is_file(), relative_path
 
 
 def test_manuscript_generator_uses_branch_coverage_contract() -> None:
@@ -606,7 +691,14 @@ def test_variable_inventory_matches_syntax_and_source_tokens() -> None:
         "RESULT_TRUST_TRAJECTORY_ROWS",
         "RESULT_DECAY_ROWS",
         "RESULT_REPRESENTATIVE_GATE_ROWS",
+        "RESULT_RESEARCH_ROADMAP_EVIDENCE_ROWS",
+        "RESULT_RESEARCH_ROADMAP_DECISION_ROWS",
+        "CONFIG_FORMALISM_CROSSWALK_COUNT",
+        "RESULT_FORMALISM_CROSSWALK_ROWS",
+        "RESULT_FORMALISM_CROSSWALK_EVIDENCE_ROWS",
+        "RESULT_FORMAL_CROSSWALK_RESEARCH",
     } <= source_tokens
+    assert "CONFIG_FORMALISM_CODE_CROSSWALK" in generated_tokens
     assert "RESULT_GATE_SCORE_PROMOTED" not in generated_tokens | source_tokens
 
 
@@ -671,9 +763,17 @@ def test_numbered_manuscript_has_no_raw_mutable_policy_literals() -> None:
 
 def test_falsification_figure_uses_canonical_attack_vector_names_and_severity() -> None:
     figures = _read_figure_generators()
-    from codomyrmex.manuscript.figures._common import _falsification_severity_map
+    from codomyrmex.colony_kernel.falsification.models import _SEVERITY_RANK
+    from codomyrmex.manuscript.variables import _falsification_vector_severities
 
-    actual = _falsification_severity_map()
+    # Use the live source derivation here so manuscript generation can run its
+    # scoped suite before replacing a stale snapshot. Figure rendering itself is
+    # tested separately and fails closed when that snapshot is stale or missing.
+    actual = _falsification_vector_severities(
+        REPO_ROOT,
+        AttackVector,
+        _SEVERITY_RANK,
+    )
     assert set(actual) == {vector.name for vector in AttackVector}
     assert set(actual.values()) <= {severity.name for severity in FalsificationSeverity}
     assert "SECURITY_RISK" in actual
@@ -689,7 +789,6 @@ def test_manuscript_figure_generator_uses_live_snapshot_and_provenance() -> None
     for required in (
         "VARIABLES_PATH",
         "CONFIG_PATH",
-        "ROLES_CONFIG_PATH",
         "json.loads",
         "yaml.safe_load",
         "_figure_metadata",
@@ -699,6 +798,7 @@ def test_manuscript_figure_generator_uses_live_snapshot_and_provenance() -> None
         '_gate_weight("budget"',
         "CONFIG_TRUST_DELTA_PASS",
         "CONFIG_HASH",
+        "REPRO_KERNEL_SOURCE_HASH",
         "GENERATION_TIMESTAMP",
         "_figure_provenance",
         "_add_provenance_note",
@@ -713,6 +813,8 @@ def test_manuscript_figure_generator_uses_live_snapshot_and_provenance() -> None
         "trust_trajectory.png",
         "falsification_vectors.png",
         "subsystem_architecture.png",
+        "research_roadmap.png",
+        "formalism_code_crosswalk.png",
     ):
         assert f'_save(fig, "{figure_name}")' in figures
 
@@ -1007,21 +1109,75 @@ def test_rendered_html_contains_toc_linked_citations_crossrefs_and_mathml() -> N
 
 
 def test_public_inventory_counts_match_live_tree() -> None:
-    docs_count = sum(1 for path in (REPO_ROOT / "docs").rglob("*.md") if path.is_file())
+    import importlib.util
+
+    inventory_path = REPO_ROOT / "scripts" / "doc_inventory.py"
+    spec = importlib.util.spec_from_file_location(
+        "codomyrmex_doc_inventory", inventory_path
+    )
+    assert spec is not None and spec.loader is not None
+    inventory_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(inventory_module)
+
+    docs_count = inventory_module.count_documentation_markdown(REPO_ROOT)
+    pytest_count = inventory_module.pytest_collect_count(REPO_ROOT)
+    runtime_count = inventory_module.manifest_tool_count()
     readme = _read("README.md")
     inventory = _read("docs/reference/inventory.md")
 
-    assert docs_count == 1203
+    assert pytest_count is not None
+    assert runtime_count is not None
+    module_count = inventory_module.count_top_level_modules(REPO_ROOT)
+    decorator_count = inventory_module.count_mcp_tool_decorators(REPO_ROOT)
+    workflow_count = inventory_module.count_github_workflow_yml(REPO_ROOT)
+    assert (
+        f"**{module_count} top-level modules**" in readme
+        or f"**{module_count}** top-level modules" in readme
+    )
+    assert f"**{decorator_count}** production `@mcp_tool`" in readme
     assert f"{docs_count:,} Markdown" in readme
     assert f"{docs_count:,} (`find docs" in inventory
-    assert "35,375" in readme
+    assert f"**{pytest_count:,}** collected tests" in readme
+    assert f"| Pytest tests collected | {pytest_count:,}" in inventory
+    assert f"{workflow_count} GitHub Actions workflows" in readme
     assert (
-        "| Runtime MCP tools | 608 (PAI merged manifest; standalone launcher full profile enumerates 605; HTTP defaults to 10 readonly tools) |"
+        f"| Runtime MCP tools | {runtime_count} (PAI merged manifest; standalone launcher full profile enumerates 605; HTTP defaults to 10 readonly tools) |"
         in inventory
     )
-    assert "| Production `@mcp_tool` decorators | 623 |" in inventory
-    assert "608 runtime MCP tools" in readme
-    assert "623 decorators" in readme
+    assert f"| Production `@mcp_tool` decorators | {decorator_count} |" in inventory
+    assert f"**{runtime_count}** runtime MCP tools" in readme
+    assert f"{decorator_count} decorators" in readme
+
+    # The MCP PAI guides are active operational contracts.  Keep their
+    # profile/version claims tied to the measured inventory while leaving
+    # historical release notes free to retain their original values.
+    for rel_path in (
+        "src/codomyrmex/model_context_protocol/PAI.md",
+        "docs/modules/model_context_protocol/PAI.md",
+    ):
+        text = _read(rel_path)
+        assert "608 PAI-manifest tools" in text
+        assert "605 standalone full-profile tools" in text
+        assert "10 readonly HTTP tools" in text
+        assert "33 tools" not in text
+        assert "~984 Total" not in text
+        assert "tool_count:33" not in text
+        assert "v1.1.9" not in text
+
+    for rel_path in (
+        "src/PAI.md",
+        "src/SPEC.md",
+        "src/codomyrmex/README.md",
+        "src/codomyrmex/SPEC.md",
+    ):
+        text = _read(rel_path)
+        assert "124 specialized modules" not in text
+        assert "88 specialized modules" not in text
+        assert "≥80%" not in text
+        assert "inventory.md" in text
+    for rel_path in ("src/PAI.md", "src/SPEC.md", "src/codomyrmex/SPEC.md"):
+        assert "v1.1.9" not in _read(rel_path)
+        assert "March 2026" not in _read(rel_path)
 
 
 def test_todo_docs_reference_current_root_backlog_name() -> None:
@@ -1043,7 +1199,10 @@ def test_manuscript_artifact_count_sources_match_documented_surfaces() -> None:
     spec.loader.exec_module(module)
 
     assert module._count_colony_kernel_docs(REPO_ROOT) == 3
-    assert module._count_colony_kernel_test_suites(REPO_ROOT) == 13
+    expected_test_suites = len(
+        list((REPO_ROOT / "tests" / "unit" / "colony_kernel").glob("test_*.py"))
+    )
+    assert module._count_colony_kernel_test_suites(REPO_ROOT) == expected_test_suites
     assert module._count_colony_kernel_config_files(REPO_ROOT) == 3
     assert (
         module._count_colony_kernel_mcp_tools(
@@ -1146,9 +1305,7 @@ def test_layer_contract_forbids_infrastructure_imports() -> None:
     allowed = {
         (REPO_ROOT / rel).resolve() for rel in contract["allow_infrastructure_imports"]
     }
-    assert allowed, (
-        "layer_contract.yaml allowlist must not be empty for this test to be meaningful"
-    )
+    assert not allowed, "The manuscript layer contract has no infrastructure exceptions"
 
     violations: list[str] = []
     for path in sorted((REPO_ROOT / "src" / "codomyrmex").rglob("*.py")):
@@ -1164,3 +1321,14 @@ def test_layer_contract_forbids_infrastructure_imports() -> None:
         "src/codomyrmex/ files import infrastructure.* outside the layer_contract.yaml "
         f"allowlist: {violations}"
     )
+
+
+def test_display_identifier_preserves_machine_value_for_rendered_line_breaks() -> None:
+    """Rendered provenance may wrap hashes but must remain losslessly comparable."""
+    raw = "0123456789abcdef" * 4
+    displayed = _display_identifier(raw)
+
+    assert displayed != raw
+    assert " " in displayed
+    assert displayed.replace(" ", "") == raw
+    assert _display_identifier("not-a-digest") == "not-a-digest"

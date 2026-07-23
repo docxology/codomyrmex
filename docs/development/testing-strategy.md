@@ -22,9 +22,9 @@ graph TB
     end
 
     subgraph sg_4fe987e1c4 [Coverage Targets]
-        UnitCov["Unit: 90%+"]
-        IntegCov["Integration: 80%+"]
-        E2ECov["E2E: Critical paths 100%"]
+        UnitCov["Unit: illustrative target"]
+        IntegCov["Integration: measured separately"]
+        E2ECov["E2E: critical paths"]
     end
 ```
 
@@ -294,7 +294,7 @@ uv run pytest tests/integration/       # Integration tests only
 uv run pytest tests/e2e/              # End-to-end tests only
 
 # Run tests for specific module
-uv run pytest tests/unit/test_data_visualization.py
+uv run pytest tests/unit/data_visualization/
 
 # Run with coverage + 60% gate
 uv run pytest --cov=src/codomyrmex --cov-report=html --cov-fail-under=60
@@ -314,7 +314,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.10, 3.11, 3.12]
+        python-version: [3.11, 3.12, 3.13]
 
     steps:
     - uses: actions/checkout@v4
