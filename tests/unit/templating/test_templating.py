@@ -16,12 +16,12 @@ from pathlib import Path
 import pytest
 
 try:
-    from codomyrmex.templating.template_engine import (
+    from codomyrmex.templating.engines.template_engine import (
         Template,
         TemplateEngine,
         TemplatingError,
     )
-    from codomyrmex.templating.template_manager import TemplateManager
+    from codomyrmex.templating.loaders.template_manager import TemplateManager
 except ImportError:
     pytest.skip("templating module not available", allow_module_level=True)
 
@@ -331,7 +331,26 @@ class TestTemplateManager:
         template = Template(jinja_template, "jinja2")
         manager.add_template("value_template", template)
         retrieved = manager.get_template("value_template")
-        assert retrieved is template
+        assert retrieved == str(template)
+
+    def test_remove_template(self, manager):
+        """Test removing a template."""
+        manager.register("temp_template", "Hello {{ name }}!")
+        assert manager.has_template("temp_template")
+
+        # Test successful removal
+        assert manager.remove_template("temp_template") is True
+        assert not manager.has_template("temp_template")
+
+        # Test removing non-existent template
+        assert manager.remove_template("non_existent") is False
+
+        # Test removal with parent relationship
+        manager.register("child", "Child content", parent="parent")
+        assert manager.get_parent("child") == "parent"
+        assert manager.remove_template("child") is True
+        assert not manager.has_template("child")
+        assert manager.get_parent("child") is None
 
     def test_get_nonexistent_template(self, manager):
         """Test getting nonexistent template returns None."""
