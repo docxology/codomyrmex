@@ -15,19 +15,24 @@ from codomyrmex.fpf.core.models import FPFSpec, Pattern
 class TermAnalyzer:
     """Analyzer for shared terms and variables in FPF specifications."""
 
+    _U_TYPE_PATTERN = re.compile(r"`?U\.([A-Z][a-zA-Z0-9]*)`?")
+    _VARIABLE_PATTERN = re.compile(
+        r"`([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`"
+    )
+    _TERM_PATTERN = re.compile(
+        r"\b([A-Z][a-z]+(?:[A-Z][a-z]+)*)\b"
+    )  # CamelCase terms
+    _KEYWORD_PATTERN = re.compile(
+        r"\*\*?([A-Z][a-zA-Z\s-]+?)\*\*?"
+    )  # Bold terms
+
     def __init__(self):
         """Initialize the term analyzer."""
         # Patterns for extracting terms
-        self.u_type_pattern = re.compile(r"`?U\.([A-Z][a-zA-Z0-9]*)`?")
-        self.variable_pattern = re.compile(
-            r"`([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`"
-        )
-        self.term_pattern = re.compile(
-            r"\b([A-Z][a-z]+(?:[A-Z][a-z]+)*)\b"
-        )  # CamelCase terms
-        self.keyword_pattern = re.compile(
-            r"\*\*?([A-Z][a-zA-Z\s-]+?)\*\*?"
-        )  # Bold terms
+        self.u_type_pattern = self._U_TYPE_PATTERN
+        self.variable_pattern = self._VARIABLE_PATTERN
+        self.term_pattern = self._TERM_PATTERN
+        self.keyword_pattern = self._KEYWORD_PATTERN
 
     def extract_terms_from_pattern(self, pattern: Pattern) -> set[str]:
         """Extract all terms from a pattern.

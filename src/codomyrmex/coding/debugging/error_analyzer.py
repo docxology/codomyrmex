@@ -73,17 +73,21 @@ class ErrorAnalyzer:
         ...     print(f"Found {result.error_type} at line {result.line_number}")
     """
 
+    _PYTHON_TRACEBACK_PATTERN = re.compile(
+        r'File "(?P<file>[^"]+)", line (?P<line>\d+), in .*?\n(?P<line_content>.*?)\n(?P<error_type>\w+): (?P<message>.*)',
+        re.DOTALL,
+    )
+
+    _PYTHON_SYNTAX_ERROR_PATTERN = re.compile(
+        r'File "(?P<file>[^"]+)", line (?P<line>\d+)\n(?P<line_content>.*?)\nSyntaxError: (?P<message>.*)',
+        re.DOTALL,
+    )
+
     def __init__(self):
         """Initialize the ErrorAnalyzer with regex patterns for error parsing."""
         # Patterns for common Python errors
-        self.python_traceback_pattern = re.compile(
-            r'File "(?P<file>[^"]+)", line (?P<line>\d+), in .*?\n(?P<line_content>.*?)\n(?P<error_type>\w+): (?P<message>.*)',
-            re.DOTALL,
-        )
-        self.python_syntax_error_pattern = re.compile(
-            r'File "(?P<file>[^"]+)", line (?P<line>\d+)\n(?P<line_content>.*?)\nSyntaxError: (?P<message>.*)',
-            re.DOTALL,
-        )
+        self.python_traceback_pattern = self._PYTHON_TRACEBACK_PATTERN
+        self.python_syntax_error_pattern = self._PYTHON_SYNTAX_ERROR_PATTERN
 
     def analyze(
         self, stdout: str, stderr: str, exit_code: int
