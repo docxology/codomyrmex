@@ -4,7 +4,7 @@ This module wraps the firecrawl-py SDK, providing typed interfaces
 and error translation to module exceptions.
 """
 
-from typing import Any
+from typing import Any, cast
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.scrape.config import ScrapeConfig
@@ -96,7 +96,7 @@ class FirecrawlClient:
         try:
             result = self._client.scrape(url, formats=formats)
             logger.debug("Successfully scraped %s", url)
-            return result
+            return cast("dict[str, Any]", result)
         except Exception as e:
             error_msg = str(e).lower()
             if "timeout" in error_msg or "timed out" in error_msg:
@@ -162,7 +162,7 @@ class FirecrawlClient:
                 scrape_options=scrape_options or {},
             )
             logger.debug("Crawl job started for %s", url)
-            return result
+            return cast("dict[str, Any]", result)
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
@@ -211,7 +211,7 @@ class FirecrawlClient:
                 else self._client.map(url)
             )
             logger.debug("Successfully mapped %s", url)
-            return result
+            return cast("dict[str, Any]", result)
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
@@ -262,7 +262,7 @@ class FirecrawlClient:
                 query, limit=limit, scrape_options=scrape_options
             )
             logger.debug("Search completed for: %s", query)
-            return result
+            return cast("dict[str, Any]", result)
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
