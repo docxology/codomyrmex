@@ -410,6 +410,103 @@ HIGH severity; the CRITICAL class remains part of the actuation-gate override co
 
 ---
 
+## Supporting Modules and Research Adapters
+
+Beyond the eight primary subsystems, the Colony Kernel package includes
+several supporting modules that strengthen verification, configuration, and
+research extensibility. These modules are part of the checked-in codebase and
+are exercised by the test suite, but they are not counted among the eight
+primary control-plane subsystems because they serve verification, configuration,
+or research roles rather than runtime actuation.
+
+### Configuration loading (`config_loader.py`)
+
+`config_loader.py` loads YAML-backed configuration from `config/colony_kernel/`
+(`kernel.yaml`, `roles.yaml`, `decay_rates.yaml`). It provides structured
+defaults for gate thresholds, trust boundaries, role promotion criteria, and
+pheromone evaporation rates. The manuscript variable generator reads the same
+live constants from source, so the configuration file and the code are kept in
+sync by the `float_mirrors` and `exact_mirrors` validation in
+`variables.py`.
+
+### Invariant predicates (`invariants.py`)
+
+`invariants.py` contains executable design-by-contract predicates that check
+selected properties of the runtime state: gate-weight conservation, trust-score
+range, pheromone-strength bounds, role-ladder monotonicity, and enum-value
+separation. The function `all_invariants_hold()` runs all checks against live
+constants; these predicates are distinct from the SMT obligations in `formal.py`
+because they execute against runtime values rather than symbolic expressions.
+
+### Reference gate (`reference.py`)
+
+`reference.py` provides an independent deterministic reimplementation of the
+gate-scoring arithmetic with parameters that mirror the live gate constants
+(execute threshold, hold threshold, trust hard floor, etc.). It is used for
+differential testing: the reference gate and the production `ActuationGate`
+should produce identical scores for identical inputs. This module is mentioned
+in [@sec:crosswalk-composition] as part of the refinement-test bridge.
+
+### Formal bridge (`formal.py`)
+
+`formal.py` defines runtime obligations and an optional solver-neutral result
+bridge. The `KernelFormalSnapshot` dataclass captures a bounded kernel state;
+`runtime_obligations()` evaluates selected properties (weight conservation,
+trust range, pressure monotonicity, unrelated-target locality, authorized
+outcome linkage) against that snapshot. The optional Z3 backend in
+`formal_verification/z3_bridge.py` translates a subset of these obligations
+into solver expressions, returning `proved`, `refuted`, `unknown`, `timeout`,
+or `unavailable` (when Z3 is not installed). The bridge proves or refutes only
+the encoded bounded obligations; it does not establish whole-program
+refinement or production safety.
+
+### Attestation ledger (`attestation.py`)
+
+`attestation.py` implements a versioned, hash-chained execution ledger that
+binds proposal, verdict, authorization, execution receipt, outcome, rejection,
+and error events under a configurable signer. The default `HMACSigner` uses
+constant-time comparison; an optional `Ed25519Signer` uses the `cryptography`
+library with a delayed import. The ledger supports optional and required
+attestation modes: in required mode, unlinked outcomes and duplicate nonces are
+rejected. This ledger is not automatically inserted into the default
+caller-reported MCP path, so the release does not claim that every outcome
+report is authenticated. The ledger is exercised by focused tests for replay,
+omission, duplication, nonce reuse, and unauthorized relinking.
+
+### Replay harness (`replay.py`)
+
+`replay.py` provides the fixed-input paired-locality replay used to generate
+the deterministic fixture evidence reported in [@sec:results-locality]. The
+function `run_paired_locality_replay()` constructs a real `ColonyKernel`
+instance, runs the paired scenario, and returns both semantic and file
+digests. The replay is repeated for semantic equality; it is not an
+attestation, causal estimate, or external workload result.
+
+### Research subpackage (`research/`)
+
+The `research/` subpackage contains offline-first adapters that are not called
+by the production gate:
+
+- `benchmark.py` — `run_paired_benchmark()` executes deterministic synthetic
+  baseline and mediated traces and computes descriptive safety, utility,
+  refusal, and trace metrics. The paired cases are synthetic; they demonstrate
+  analysis plumbing, not calibration or generalization.
+- `metrics.py` — descriptive log loss, Brier score, calibration error,
+  selective risk, and bootstrap confidence intervals.
+- `persistent_store.py` — SQLite WAL persistence adapter with crash-injection
+  boundaries for durability testing.
+- `probabilistic.py` — `KernelProbabilisticAdapter` declares an observation
+  model, latent-state space, priors, likelihoods, transitions, preferences, and
+  policy horizon. It is research plumbing, not an integrated Active Inference
+  controller.
+- `schemas.py` — versioned cases, traces, manifests, and leakage reports.
+
+These adapters preserve the boundary between deterministic runtime contracts
+and research interpretations. They are exercised by focused tests but do not
+relabel deterministic gate scores as probabilistic outputs.
+
+---
+
 ## The Pressure Loop
 
 The feedback path is composed from separate public operations. `propose_action` returns a

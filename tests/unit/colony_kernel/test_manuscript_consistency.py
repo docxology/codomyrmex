@@ -438,7 +438,7 @@ REQUIRED_CLAIMS = {
     "README.md": [
         "608 runtime MCP tools",
         "623 decorators",
-        "1,207",
+        "1,205",
         "35,444",
     ],
 }

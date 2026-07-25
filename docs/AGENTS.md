@@ -34,7 +34,7 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 
 ## Documentation Architecture
 
-The `docs/` directory is organized into **19 thematic sections** containing **1,201 markdown files** ([reference/inventory.md](reference/inventory.md)):
+The `docs/` directory is organized into **19 thematic sections** containing **1,205 markdown files** ([reference/inventory.md](reference/inventory.md)):
 
 ### Core references (top level)
 

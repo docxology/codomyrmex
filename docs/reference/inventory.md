@@ -2,7 +2,7 @@
 
 Single source of truth for counts used in documentation and marketing copy. **Refresh** after large changes to modules, tools, documentation, or tests. Values below are a measured snapshot, not a timeless project invariant.
 
-**Last updated:** 2026-07-22
+**Last updated:** 2026-07-24
 
 ## Definitions
 
@@ -28,7 +28,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | Production `@mcp_tool` decorators | 623 |
 | Pytest tests collected | 35,444 (`uv run python scripts/doc_inventory.py --pytest`) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
-| Markdown files under `docs/` | 1,207 (`find docs -name '*.md' -type f \| wc -l`) |
+| Markdown files under `docs/` | 1,205 (`find docs -name '*.md' -type f \\| wc -l`) |
 
 ## Reproduce
 
