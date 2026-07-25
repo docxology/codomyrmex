@@ -485,6 +485,16 @@ class PheromoneStore:
         count_after = len(self._field)
         return max(0, count_before - count_after)
 
+    def clear(self) -> int:
+        """Remove all pheromone traces from the field; returns removed count.
+
+        Public API for emergency-brake and reset operations so callers do not
+        need to access ``_field._markers`` directly.
+        """
+        count_before = len(self._field)
+        self._field._markers.clear()
+        return count_before
+
     def top_signals(self, k: int = 10) -> list[dict]:
         """Return the k strongest signals as plain dicts for colony_status.
 

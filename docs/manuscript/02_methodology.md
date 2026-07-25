@@ -319,6 +319,14 @@ labels; those labels currently express trust tiers and intended specializations.
 recording persists a changed role. The transition out of SANDBOX depends on externally
 recorded outcomes, which are not yet linked to prior authorized execution.
 
+`RoleAdapter` also exposes a standalone `assign_role()` API that is not called by the
+kernel's proposal path. This specialization-based path applies higher trust thresholds
+({{CONFIG_TRUST_STANDALONE_REPAIR_THRESHOLD}} for REPAIR_ANT and MEMORY_ANT,
+{{CONFIG_TRUST_STANDALONE_GUARD_THRESHOLD}} for GUARD_ANT) and matches action types
+(e.g. `test_fix`, `doc_write`, `security_scan`) to role labels. It is a separate
+interface for callers that want action-aware role assignment; the kernel path uses only
+the trust-and-proposal-count ladder above.
+
 ---
 
 ## Pruning Daemon (Death and Pruning)
@@ -472,6 +480,15 @@ rejected. This ledger is not automatically inserted into the default
 caller-reported MCP path, so the release does not claim that every outcome
 report is authenticated. The ledger is exercised by focused tests for replay,
 omission, duplication, nonce reuse, and unauthorized relinking.
+
+The `AttestationLedger` is an optional additive component, not one of the
+{{CONFIG_COLONY_KERNEL_SUBSYSTEMS}} core subsystems. `ColonyKernelConfig` accepts
+an `attestation_mode` of `disabled` (default), `optional`, or `required`. When
+disabled, `attestation_ledger` is `None` and the kernel operates without the
+ledger; when `optional` or `required`, the ledger is instantiated and the
+kernel records proposal, verdict, authorization, receipt, and outcome events.
+In `required` mode, `record_outcome` rejects outcomes that lack a prior
+authorized execution receipt.
 
 ### Replay harness (`replay.py`)
 

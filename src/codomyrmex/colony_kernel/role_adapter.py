@@ -106,6 +106,10 @@ _ROLE_REPAIR_MIN_TRUST = 0.20
 _ROLE_MEMORY_MIN_TRUST = 0.35
 _ROLE_DISPATCHER_MIN_TRUST = 0.50
 _ROLE_GUARD_MIN_TRUST = 0.70
+
+# Standalone assign_role() thresholds (higher than kernel path):
+_ROLE_STANDALONE_REPAIR_MIN_TRUST = 0.80
+_ROLE_STANDALONE_GUARD_MIN_TRUST = 0.85
 _ROLE_MIN_PROPOSALS_FOR_PROMOTION = 3
 
 
@@ -182,16 +186,16 @@ class RoleAdapter:
         if trust < 0.3 or _consecutive_failures(records) >= 3:
             return AgentRole.SANDBOX
 
-        # Rule 3: GUARD_ANT requires trust >= 0.85 and security actions
-        if trust >= 0.85 and successful & _GUARD_ACTION_TYPES:
+        # Rule 3: GUARD_ANT requires trust >= standalone guard threshold and security actions
+        if trust >= _ROLE_STANDALONE_GUARD_MIN_TRUST and successful & _GUARD_ACTION_TYPES:
             return AgentRole.GUARD_ANT
 
-        # Rule 1: REPAIR_ANT requires trust >= 0.8 and repair actions
-        if trust >= 0.8 and successful & _REPAIR_ACTION_TYPES:
+        # Rule 1: REPAIR_ANT requires trust >= standalone repair threshold and repair actions
+        if trust >= _ROLE_STANDALONE_REPAIR_MIN_TRUST and successful & _REPAIR_ACTION_TYPES:
             return AgentRole.REPAIR_ANT
 
-        # Rule 2: MEMORY_ANT requires trust >= 0.8 and memory actions
-        if trust >= 0.8 and successful & _MEMORY_ACTION_TYPES:
+        # Rule 2: MEMORY_ANT requires trust >= standalone repair threshold and memory actions
+        if trust >= _ROLE_STANDALONE_REPAIR_MIN_TRUST and successful & _MEMORY_ACTION_TYPES:
             return AgentRole.MEMORY_ANT
 
         # Rule 4: DISPATCHER requires >= 20 proposals and >= 70% acceptance

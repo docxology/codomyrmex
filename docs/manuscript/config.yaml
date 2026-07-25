@@ -580,6 +580,9 @@ experiment:
   trust_sandbox_score: 0.10
   trust_hard_floor: 0.30
   trust_promote_threshold: 0.20
+  # Standalone RoleAdapter assign_role() thresholds (not used by kernel path):
+  trust_standalone_repair_threshold: 0.80
+  trust_standalone_guard_threshold: 0.85
 
   # Pheromone / stigmergic signal types broadcast on the colony bus.
   # Each signal type carries a payload and decays independently.

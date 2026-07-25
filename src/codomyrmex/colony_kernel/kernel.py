@@ -594,11 +594,8 @@ class ColonyKernel:
         # Count signals before clearing
         signals_cleared = len(self.pheromone_store)
 
-        # Clear the pheromone field by evaporating everything to zero
-        # We drain by setting all strengths to floor — tick enough times
-        # (up to 1000) or directly zero out markers.
-        for key in list(self.pheromone_store._field._markers.keys()):
-            del self.pheromone_store._field._markers[key]
+        # Clear the pheromone field using the public clear() API.
+        self.pheromone_store.clear()
         self.pheromone_store._key_evaporation.clear()
 
         # Reset the ledger period
