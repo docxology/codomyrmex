@@ -658,7 +658,8 @@ experiment:
 
   # Colony Control Plane subsystem count — the 8 design subsystems:
   # pheromone_gradients, resource_budget, actuation_gate, consequence_memory,
-  # role_adaptation, death_and_pruning, falsification_worker, reproduction_after_return
+  # role_adaptation, death_and_pruning, falsification_worker, lifecycle_coordination
+  # (the ColonyKernel coordinator itself counts as the 8th).
   colony_kernel_subsystems: 8
 
   # MCP tool surface exposed by the colony control plane.

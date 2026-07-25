@@ -59,7 +59,7 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 | Gate weights | **generated tokens** | live expressions in `ActuationGate.evaluate` |
 | Colony kernel subsystems | **generated count** | live `ColonyKernel` ownership graph |
 | MCP tools exposed | **generated count** | live decorators in `src/codomyrmex/colony_kernel/mcp_tools.py` |
-| Falsification attack vector (import-cycle) | **`CIRCULAR_ARCHITECTURE`** | `AttackVector` enum in `falsification_worker.py` — not `CIRCULAR_DEPS` |
+| Falsification attack vector (import-cycle) | **`CIRCULAR_ARCHITECTURE`** | `AttackVector` enum in `falsification/models.py` — not `CIRCULAR_DEPS` |
 | Transmission bookends | **enabled** | `config.yaml` → `publication.transmission_bookends.enabled: true` |
 | Token injection pipeline | 3-step: compute → persist → render | `scripts/z_generate_manuscript_variables.py` → `output/data/manuscript_variables.json` → `output/manuscript/*.md` |
 | Contents page | **generated after cover** | `scripts/compile_manuscript.py` writes `output/manuscript/00_01_contents.md` before render |
@@ -171,7 +171,7 @@ Follow these steps in order whenever prose, parameters, or measured results chan
 1. Every `{{TOKEN}}` in the source manuscript files must have a corresponding key in `compute_variables()`. Reviewer-sensitive tokens and public claims must have corresponding assertions in `tests/unit/colony_kernel/test_manuscript_consistency.py`. A manuscript file that references an undefined token causes a non-zero exit before the PDF renderer runs.
 2. `src/codomyrmex/manuscript/variables.py` is the only manuscript variable generator. Colony kernel modules remain independent of the parent template infrastructure.
 3. Do not hardcode numeric results (test counts, coverage percentages, gate thresholds, figure horizons, or figure captions) directly into manuscript prose. Every claim that can drift must be backed by a token. Put figure metadata and captions in `config.yaml`; use the generated `FIGURE_*` tokens in Markdown. Use `CONFIG_PARAMETER_STATUS_NOTE` / `CONFIG_PARAMETER_STATUS_SHORT` for the evidence qualifier that parameters are current defaults or illustrative starting values and remain tunable. Use the **Current State** table above when hand-editing prose that cannot use a token.
-4. The falsification attack vector for import-cycle detection is `CIRCULAR_ARCHITECTURE`, not `CIRCULAR_DEPS`. The canonical enum lives in `src/codomyrmex/colony_kernel/falsification_worker.py`; do not invent aliases.
+4. The falsification attack vector for import-cycle detection is `CIRCULAR_ARCHITECTURE`, not `CIRCULAR_DEPS`. The canonical enum lives in `src/codomyrmex/colony_kernel/falsification/models.py`; do not invent aliases.
 5. Avoid boilerplate closers ("In summary", "In conclusion") at the end of sections unless the section genuinely warrants them.
 6. When cross-referencing sections, use Pandoc-crossref `[@sec:label]` syntax — never hardcoded section numbers.
 7. When adding a table, figure, or display equation, add a stable `{#tbl:*}`, `{#fig:*}`, or `{#eq:*}` label and reference it in prose.
