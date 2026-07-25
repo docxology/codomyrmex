@@ -69,6 +69,9 @@ except ImportError:
             return dict(kwargs)
 
 
+_ENV_VAR_PATTERN = re.compile(r"\$\{(?P<var>[A-Z0-9_]+)(?::-(?P<default>[^}]*))?\}")
+
+
 def deep_merge(base: dict[str, Any], extension: dict[str, Any]) -> dict[str, Any]:
     """
     Deeply merge two dictionaries.
@@ -108,9 +111,6 @@ def resolve_env_vars(data: Any) -> Any:
     if isinstance(data, list):
         return [resolve_env_vars(item) for item in data]
     if isinstance(data, str):
-        # Match ${VAR} or ${VAR:-default}
-        # Variable name must be alphanumeric or underscore
-        pattern = re.compile(r"\$\{(?P<var>[A-Z0-9_]+)(?::-(?P<default>[^}]*))?\}")
 
         def replace(match):
             var_name = match.group("var")
@@ -123,7 +123,7 @@ def resolve_env_vars(data: Any) -> Any:
                 return default_value
             return match.group(0)
 
-        return pattern.sub(replace, data)
+        return _ENV_VAR_PATTERN.sub(replace, data)
     return data
 
 
