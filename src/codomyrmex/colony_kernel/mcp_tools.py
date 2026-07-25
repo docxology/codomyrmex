@@ -31,7 +31,6 @@ from codomyrmex.colony_kernel.models import (
     AgentTrustProfile,
     ColonySignal,
     DecayRate,
-    FalsificationFinding,
     FalsificationSeverity,
     GateResult,
     PruningCandidate,
