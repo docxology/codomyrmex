@@ -234,7 +234,7 @@ jobs:
               print(json.dumps(results, indent=2))
           EOF
           
-          cd benchmarks && python memory_profiler.py
+          cd benchmarks && uv run python memory_profiler.py
 
       - name: Generate memory report
         run: |
