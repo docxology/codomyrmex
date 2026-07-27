@@ -23,6 +23,8 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
+_PRIORITY_MAP = {"info": 0, "warning": 1, "error": 2, "critical": 2}
+
 
 class EventPriority(Enum):
     """Event priority levels for logging and processing."""
@@ -491,8 +493,6 @@ def create_alert_event(
     current_value: Any = None,
 ) -> Event:
     """Create an alert event."""
-    priority_map = {"info": 0, "warning": 1, "error": 2, "critical": 2}
-
     return Event(
         event_type=EventType.ALERT_TRIGGERED,
         source="alert_manager",
@@ -503,5 +503,5 @@ def create_alert_event(
             "threshold": threshold,
             "current_value": current_value,
         },
-        priority=priority_map.get(level, 0),
+        priority=_PRIORITY_MAP.get(level, 0),
     )

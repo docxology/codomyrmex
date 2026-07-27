@@ -31,6 +31,26 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+_CORE_DEP_MAPPING = {
+    "python-dotenv": "dotenv",
+    "cased-kit": "kit",
+    "openai": "openai",
+    "anthropic": "anthropic",
+    "matplotlib": "matplotlib",
+    "numpy": "numpy",
+    "pytest": "pytest",
+    "fastapi": "fastapi",
+}
+
+_STATUS_DEP_MAPPING = {
+    "python-dotenv": "dotenv",
+    "cased-kit": "kit",
+    "openai": "openai",
+    "anthropic": "anthropic",
+    "matplotlib": "matplotlib",
+    "numpy": "numpy",
+    "pytest": "pytest",
+}
 
 class SystemHealthChecker:
     """Checks system health, dependency status, git state, and runs demo workflows.
@@ -88,22 +108,11 @@ class SystemHealthChecker:
         """Attempt to import each core dependency and print pass/fail status."""
         print("\nCore Dependencies:")
 
-        dep_mapping = {
-            "python-dotenv": "dotenv",
-            "cased-kit": "kit",
-            "openai": "openai",
-            "anthropic": "anthropic",
-            "matplotlib": "matplotlib",
-            "numpy": "numpy",
-            "pytest": "pytest",
-            "fastapi": "fastapi",
-        }
-
-        core_deps = list(dep_mapping.keys())
+        core_deps = list(_CORE_DEP_MAPPING.keys())
 
         for dep in core_deps:
             try:
-                import_name = dep_mapping[dep]
+                import_name = _CORE_DEP_MAPPING[dep]
                 importlib.import_module(import_name)
                 print(f"   OK {dep}")
             except ImportError:
@@ -170,17 +179,7 @@ class SystemHealthChecker:
             "git": {},
         }
 
-        dep_mapping = {
-            "python-dotenv": "dotenv",
-            "cased-kit": "kit",
-            "openai": "openai",
-            "anthropic": "anthropic",
-            "matplotlib": "matplotlib",
-            "numpy": "numpy",
-            "pytest": "pytest",
-        }
-
-        for dep, import_name in dep_mapping.items():
+        for dep, import_name in _STATUS_DEP_MAPPING.items():
             try:
                 importlib.import_module(import_name)
                 status["dependencies"][dep] = True

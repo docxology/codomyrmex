@@ -22,6 +22,8 @@ except ImportError:
 from codomyrmex.events.core.event_bus import EventBus, get_event_bus
 from codomyrmex.events.core.event_schema import Event, EventType
 
+_PRIORITY_MAP = {"info": 0, "warning": 1, "error": 2, "critical": 2}
+
 
 class EventEmitter:
     """
@@ -362,8 +364,6 @@ class EventEmitter:
             threshold: Threshold value that triggered the alert
             current_value: Current value that exceeded threshold
         """
-        priority_map = {"info": 0, "warning": 1, "error": 2, "critical": 2}
-
         self.emit(
             EventType.ALERT_TRIGGERED,
             data={
@@ -373,7 +373,7 @@ class EventEmitter:
                 "threshold": threshold,
                 "current_value": current_value,
             },
-            priority=priority_map.get(level, 0),
+            priority=_PRIORITY_MAP.get(level, 0),
         )
 
     def set_correlation_context(self, correlation_id: str) -> None:
