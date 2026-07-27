@@ -8,3 +8,7 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-07-27 - Extract Static Dictionaries to Module Constants
+
+**Learning:** Recreating static dictionaries on every function call (e.g. `dep_mapping = {"int": int, ...}`) adds unnecessary allocation overhead, especially in frequently called paths like logging, system discovery loops, or event-emitting logic.
+**Action:** Move static mapping dictionaries to module-level constants (e.g. `_PRIORITY_MAP`, `_CORE_DEP_MAPPING`) to initialize them once and eliminate per-call allocation overhead. Do not narrate internal scratchpad thoughts in code comments.
