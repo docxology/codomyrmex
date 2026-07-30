@@ -33,6 +33,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Cross-platform local isolation and locking**: Windows imports no longer fail
+  on POSIX-only `resource`, `fcntl`, or `SIGALRM` APIs. Local file locks use
+  `msvcrt.locking` on Windows and `fcntl.flock` on POSIX; subprocess isolation
+  retains timeout enforcement when `setrlimit` is unavailable.
+- **Clean-checkout agent documentation contracts**: repository-referenced
+  GitNexus and qmd skill files are now versioned, and the README/AGENTS audit
+  recognizes links beneath registered but uninitialized submodule paths while
+  continuing to reject ordinary missing relative links.
 - **Documentation package API/MCP drift**: corrected invalid PAI examples,
   obsolete MCP build tools, stale coverage figures, and the `audit_rasp()` exit
   code versus missing-file-count mismatch. Documentation MCP generation now
@@ -263,7 +271,6 @@ Unified OAuth2 env var pattern across all Google integrations. PAI can now send 
 | Gmail MCP tools | 0 | **4** |
 | Google auth pattern | per-provider ad hoc | **unified `from_env()` OAuth2** |
 | Email integration tests | 0 | **11** (9 skip without live creds) |
-
 
 ---
 

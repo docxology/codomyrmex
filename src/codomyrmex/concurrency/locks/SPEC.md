@@ -15,7 +15,7 @@ All locks extend `BaseLock` (ABC) which defines `acquire`/`release` and a contex
 ### `BaseLock` (ABC)
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `acquire` | `timeout: float = 10.0, retry_interval: float = 0.1` | `bool` | Acquire the lock within timeout |
 | `release` | none | `None` | Release the lock |
 | `__enter__` | none | `self` | Acquires lock; raises `TimeoutError` on failure |
@@ -24,15 +24,15 @@ All locks extend `BaseLock` (ABC) which defines `acquire`/`release` and a contex
 ### `LocalLock`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
-| `__init__` | `name: str, lock_dir: str = "/tmp/codomyrmex/locks"` | -- | Creates lock directory if missing |
-| `acquire` | `timeout: float, retry_interval: float` | `bool` | Uses `fcntl.flock(LOCK_EX \ LOCK_NB)` with retry loop |
-| `release` | none | `None` | Unlocks via `fcntl.LOCK_UN`, closes file, removes lock file |
+| --- | --- | --- | --- |
+| `__init__` | `name: str, lock_dir: str = DEFAULT_LOCK_DIR` | -- | Creates a platform-temporary lock directory if missing |
+| `acquire` | `timeout: float, retry_interval: float` | `bool` | Uses non-blocking `fcntl.flock` on POSIX or `msvcrt.locking` on Windows |
+| `release` | none | `None` | Releases the platform file lock, closes the descriptor, and removes the lock file |
 
 ### `RedisLock`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `__init__` | `name: str, redis_client: redis.Redis, ttl: int = 30` | -- | Generates UUID owner_id; key is `codomyrmex:lock:{name}` |
 | `acquire` | `timeout: float, retry_interval: float` | `bool` | Uses `SET NX EX` for atomic acquire with TTL |
 | `release` | none | `None` | Lua script: check owner_id then DEL (atomic) |
@@ -41,7 +41,7 @@ All locks extend `BaseLock` (ABC) which defines `acquire`/`release` and a contex
 ### `LockManager`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `register_lock` | `name: str, lock: BaseLock` | `None` | Register a lock by name |
 | `acquire_all` | `names: list[str], timeout: float` | `bool` | Sort names, acquire in order; rollback on failure |
 | `release_all` | `names: list[str]` | `None` | Release all named locks |
@@ -50,7 +50,7 @@ All locks extend `BaseLock` (ABC) which defines `acquire`/`release` and a contex
 ### `ReadWriteLock`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `acquire_read` | none | `None` | Wait until no writers, increment reader count |
 | `release_read` | none | `None` | Decrement reader count; notify if last reader |
 | `acquire_write` | none | `None` | Wait until no readers and no writers |
@@ -59,11 +59,11 @@ All locks extend `BaseLock` (ABC) which defines `acquire`/`release` and a contex
 ## Dependencies
 
 - **Internal**: `codomyrmex.logging_monitoring.core.logger_config`
-- **External**: `fcntl` (Unix), `threading`, `redis` (optional)
+- **External**: `fcntl` (POSIX) or `msvcrt` (Windows), `threading`, `redis` (optional)
 
 ## Constraints
 
-- `LocalLock` uses `fcntl.flock` -- Unix/macOS only (not available on Windows).
+- `LocalLock` uses the operating system's standard advisory file-lock backend.
 - `RedisLock` requires the `redis` Python package; import is guarded with try/except in `__init__.py`.
 - `LockManager.acquire_all` sorts names to impose a global lock ordering.
 - Zero-mock: real data only, `NotImplementedError` for unimplemented paths.

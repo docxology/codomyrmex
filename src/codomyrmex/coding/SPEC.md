@@ -32,7 +32,9 @@ This module is critical for the "Verification" phase of the AI coding loop, allo
 ### Functionality
 
 - **Timeouts**: Derived from configuration with sensible defaults
-- **Resource Limits**: Prevent fork bombs or memory exhaustion
+- **Resource Limits**: POSIX enforces CPU and address-space limits with
+  `resource.setrlimit`; Windows retains subprocess timeout/isolation without
+  claiming those unavailable hard limits
 - **Quality Gates**: Configurable thresholds for code quality enforcement
 - **Comprehensive Analysis**: Multiple analysis types (quality, security, performance, etc.)
 
@@ -48,7 +50,7 @@ graph TD
     Container --> Monitor[Monitoring Submodule]
     Venv --> Monitor
     Monitor --> Result[Execution Result]
-    
+
     Result -->|Failure| Debugger[Debugging Submodule]
     Debugger --> ErrorAnalyzer[Error Analyzer]
     ErrorAnalyzer --> PatchGen[Patch Generator]
@@ -68,7 +70,9 @@ graph TD
 1. **Run Multiple Languages**: Execute code in Python, JavaScript, Java, C/C++, Go, Rust, Bash
 2. **File Access**: Mount specific directories as read-only or read-write
 3. **Network Control**: Block or allow network access (default block)
-4. **Resource Limits**: Enforce CPU, memory, and time constraints
+4. **Resource Limits**: Enforce CPU, memory, and time constraints on POSIX;
+   Windows local execution retains subprocess timeout/isolation without
+   claiming unavailable `setrlimit` enforcement
 5. **Session Management**: Support persistent execution environments
 
 ### Static Analysis (Consolidated)

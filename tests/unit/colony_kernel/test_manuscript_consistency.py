@@ -440,7 +440,7 @@ REQUIRED_CLAIMS = {
         "608 runtime MCP tools",
         "623 decorators",
         "1,199",
-        "35,780",
+        "35,782",
     ],
 }
 

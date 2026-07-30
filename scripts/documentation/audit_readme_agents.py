@@ -3,8 +3,10 @@
 
 The audit complements presence, link, and structure checks by validating the
 reader-facing command paths and local skill references that ordinary Markdown
-link checkers cannot see. It also inventories generated-boilerplate debt
-without making that legacy debt a release-blocking error.
+link checkers cannot see. Relative links beneath registered submodule paths are
+treated as externally owned when the submodule is not initialized. The audit
+also inventories generated-boilerplate debt without making that legacy debt a
+release-blocking error.
 
 First-party scope follows ``scripts/rasp_gap_report.py``. The repository root
 is included explicitly. Under ``tests/``, only directories that already carry
@@ -45,6 +47,10 @@ PYTHON_COMMAND_RE = re.compile(
 )
 LOCAL_SKILL_RE = re.compile(r"(?P<path>\.claude/skills/[A-Za-z0-9_./-]+/SKILL\.md)")
 MARKDOWN_LINK_RE = re.compile(r"!?\[[^\]]*]\(([^)]+)\)")
+SUBMODULE_PATH_RE = re.compile(
+    r"^\s*path\s*=\s*(?P<path>[^\r\n]+?)\s*$",
+    re.MULTILINE,
+)
 VERSION_RE = re.compile(r"\*\*Version\*\*:\s*v(?P<version>[0-9]+\.[0-9]+\.[0-9]+)")
 PLACEHOLDER_SCRIPT_NAMES = {
     "custom_validation_script.py",
@@ -119,7 +125,25 @@ def _resolve_command_path(document: Path, target: str, repo_root: Path) -> Path 
     return next((candidate for candidate in candidates if candidate.is_file()), None)
 
 
-def _markdown_link_target_exists(document: Path, raw_target: str) -> bool:
+def _submodule_paths(repo_root: Path) -> tuple[Path, ...]:
+    """Return registered submodule paths that are not initialized locally."""
+    gitmodules = repo_root / ".gitmodules"
+    if not gitmodules.is_file():
+        return ()
+    text = gitmodules.read_text(encoding="utf-8", errors="replace")
+    paths = []
+    for match in SUBMODULE_PATH_RE.finditer(text):
+        submodule_path = (repo_root / match.group("path").strip()).resolve()
+        if not (submodule_path / ".git").exists():
+            paths.append(submodule_path)
+    return tuple(paths)
+
+
+def _markdown_link_target_exists(
+    document: Path,
+    raw_target: str,
+    submodule_paths: tuple[Path, ...],
+) -> bool:
     target = raw_target.strip().strip("<>")
     if not target or target.startswith(
         ("#", "http://", "https://", "mailto:", "data:")
@@ -128,10 +152,20 @@ def _markdown_link_target_exists(document: Path, raw_target: str) -> bool:
     target = target.split("#", 1)[0].split("?", 1)[0]
     if not target:
         return True
-    return (document.parent / target).resolve().exists()
+    resolved_target = (document.parent / target).resolve()
+    if resolved_target.exists():
+        return True
+    return any(
+        resolved_target == submodule_path or submodule_path in resolved_target.parents
+        for submodule_path in submodule_paths
+    )
 
 
-def _file_findings(path: Path, repo_root: Path) -> list[Finding]:
+def _file_findings(
+    path: Path,
+    repo_root: Path,
+    submodule_paths: tuple[Path, ...],
+) -> list[Finding]:
     """Validate one README/AGENTS file."""
     relative = _relative(path, repo_root)
     try:
@@ -183,7 +217,7 @@ def _file_findings(path: Path, repo_root: Path) -> list[Finding]:
                 )
         for match in MARKDOWN_LINK_RE.finditer(line):
             target = match.group(1)
-            if not _markdown_link_target_exists(path, target):
+            if not _markdown_link_target_exists(path, target, submodule_paths):
                 findings.append(
                     Finding(
                         "error",
@@ -224,6 +258,7 @@ def audit_repository(repo_root: Path) -> dict[str, Any]:
     findings: list[Finding] = []
     files: list[Path] = []
     metrics: Counter[str] = Counter()
+    submodule_paths = _submodule_paths(repo_root)
 
     for directory in directories:
         present = {name: (directory / name).is_file() for name in PAIR_NAMES}
@@ -244,7 +279,7 @@ def audit_repository(repo_root: Path) -> dict[str, Any]:
 
     for path in files:
         text = path.read_text(encoding="utf-8", errors="replace")
-        findings.extend(_file_findings(path, repo_root))
+        findings.extend(_file_findings(path, repo_root, submodule_paths))
         metrics["readme_files" if path.name == "README.md" else "agents_files"] += 1
         metrics["curated_files"] += int(": curated -->" in text[:800])
         metrics["generated_files"] += int(": generated -->" in text[:800])

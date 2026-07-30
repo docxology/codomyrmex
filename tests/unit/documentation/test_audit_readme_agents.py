@@ -106,6 +106,59 @@ def test_existing_relative_command_and_link_are_accepted(tmp_path: Path) -> None
     assert result["finding_counts"]["error"] == 0
 
 
+def test_uninitialized_submodule_link_is_accepted(tmp_path: Path) -> None:
+    repo = _make_repository(tmp_path)
+    (repo / ".gitmodules").write_text(
+        '[submodule "vendor/project"]\n'
+        "\tpath = vendor/project\n"
+        "\turl = https://example.com/vendor/project.git\n",
+        encoding="utf-8",
+    )
+    (repo / "README.md").write_text(
+        "# Repository\n\nRead the [vendor guide](vendor/project/README.md).\n",
+        encoding="utf-8",
+    )
+
+    result = audit_repository(repo)
+
+    assert result["finding_counts"]["error"] == 0
+
+    submodule = repo / "vendor" / "project"
+    submodule.mkdir(parents=True)
+    (submodule / ".git").write_text(
+        "gitdir: ../../../.git/modules/vendor/project\n",
+        encoding="utf-8",
+    )
+
+    initialized_result = audit_repository(repo)
+    initialized_errors = [
+        finding
+        for finding in initialized_result["findings"]
+        if finding["code"] == "broken_markdown_link"
+    ]
+
+    assert len(initialized_errors) == 1
+    assert initialized_result["finding_counts"]["error"] == 1
+
+
+def test_missing_relative_link_outside_submodule_is_blocking(tmp_path: Path) -> None:
+    repo = _make_repository(tmp_path)
+    (repo / "README.md").write_text(
+        "# Repository\n\nRead the [missing guide](docs/missing.md).\n",
+        encoding="utf-8",
+    )
+
+    result = audit_repository(repo)
+    errors = [
+        finding
+        for finding in result["findings"]
+        if finding["code"] == "broken_markdown_link"
+    ]
+
+    assert len(errors) == 1
+    assert result["finding_counts"]["error"] == 1
+
+
 def test_placeholder_script_names_are_not_treated_as_entry_points(
     tmp_path: Path,
 ) -> None:

@@ -5,13 +5,17 @@ Provides process isolation and resource limit enforcement for secure code execut
 """
 
 import multiprocessing
-import resource
 import threading
 import time
 from collections.abc import Generator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any
+
+try:
+    import resource
+except ImportError:
+    resource = None  # type: ignore[assignment]
 
 try:
     import psutil
@@ -63,7 +67,12 @@ class ExecutionLimits:
 
 @contextmanager
 def resource_limits_context(limits: ExecutionLimits) -> Generator[None, None, None]:
-    """Context manager to set and restore resource limits."""
+    """Set and restore POSIX resource limits, or yield unchanged on Windows."""
+    if resource is None:
+        logger.debug("POSIX resource limits are unavailable on this platform")
+        yield
+        return
+
     old_limits = {}
 
     try:
@@ -178,6 +187,44 @@ def execute_with_limits(
         return result
 
 
+def _execute_in_subprocess(
+    queue: Any,
+    language: str,
+    code: str,
+    limits: ExecutionLimits,
+    stdin: str | None,
+) -> None:
+    """Execute code in a spawn-safe subprocess worker."""
+    try:
+        if resource is not None:
+            resource.setrlimit(
+                resource.RLIMIT_CPU, (limits.time_limit, limits.time_limit + 10)
+            )
+            memory_bytes = limits.memory_limit * 1024 * 1024
+            import os
+
+            if "PYTEST_CURRENT_TEST" not in os.environ:
+                resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+
+        from codomyrmex.coding.execution.executor import execute_code
+
+        result = execute_code(language, code, stdin, limits.time_limit)
+
+        if len(result.get("stdout", "")) > limits.max_output_chars:
+            result["stdout"] = (
+                result["stdout"][: limits.max_output_chars] + "\n... [Output truncated]"
+            )
+        if len(result.get("stderr", "")) > limits.max_output_chars:
+            result["stderr"] = (
+                result["stderr"][: limits.max_output_chars]
+                + "\n... [Error output truncated]"
+            )
+
+        queue.put(("success", result))
+    except Exception as exc:
+        queue.put(("error", str(exc)))
+
+
 def sandbox_process_isolation(
     language: str,
     code: str,
@@ -187,8 +234,9 @@ def sandbox_process_isolation(
     """
     Execute code in a completely isolated process environment.
 
-    This function creates a subprocess with its own resource limits,
-    completely separate from the main process.
+    This function creates a subprocess completely separate from the main
+    process. POSIX applies CPU and address-space limits; other platforms retain
+    process isolation and timeout enforcement without ``resource.setrlimit``.
 
     Args:
         language: Programming language of the code
@@ -200,44 +248,12 @@ def sandbox_process_isolation(
         Dictionary with execution results
     """
 
-    def execute_in_subprocess(queue: multiprocessing.Queue) -> None:
-        """Execute code in a subprocess with resource limits."""
-        try:
-            # set resource limits in the subprocess
-            resource.setrlimit(
-                resource.RLIMIT_CPU, (limits.time_limit, limits.time_limit + 10)
-            )
-            memory_bytes = limits.memory_limit * 1024 * 1024
-            import os
-
-            if "PYTEST_CURRENT_TEST" not in os.environ:
-                resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
-
-            # Execute the code
-            from codomyrmex.coding.execution.executor import execute_code
-
-            result = execute_code(language, code, stdin, limits.time_limit)
-
-            # Cap output size
-            if len(result.get("stdout", "")) > limits.max_output_chars:
-                result["stdout"] = (
-                    result["stdout"][: limits.max_output_chars]
-                    + "\n... [Output truncated]"
-                )
-            if len(result.get("stderr", "")) > limits.max_output_chars:
-                result["stderr"] = (
-                    result["stderr"][: limits.max_output_chars]
-                    + "\n... [Error output truncated]"
-                )
-
-            queue.put(("success", result))
-
-        except Exception as e:
-            queue.put(("error", str(e)))
-
     queue = multiprocessing.Queue()
 
-    process = multiprocessing.Process(target=execute_in_subprocess, args=(queue,))
+    process = multiprocessing.Process(
+        target=_execute_in_subprocess,
+        args=(queue, language, code, limits, stdin),
+    )
     process.start()
 
     # Wait for completion with timeout

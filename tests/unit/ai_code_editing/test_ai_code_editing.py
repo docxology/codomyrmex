@@ -7,6 +7,12 @@ import sys
 
 import pytest
 
+if not hasattr(signal, "SIGALRM") or not hasattr(signal, "alarm"):
+    pytest.skip(
+        "ai_code_helpers import guard requires SIGALRM",
+        allow_module_level=True,
+    )
+
 # Guard against hanging imports (google.genai init blocks in sandbox)
 _AI_CODE_HELPERS_AVAILABLE = False
 try:
@@ -232,7 +238,9 @@ class TestAICodeEditing:
 
         # Test with invalid API key to trigger error
         original_key = os.environ.get("OPENAI_API_KEY")
-        os.environ["OPENAI_API_KEY"] = "invalid-key-for-testing"
+        os.environ["OPENAI_API_KEY"] = (
+            "invalid-key-for-testing"  # pragma: allowlist secret
+        )
 
         try:
             # Should raise RuntimeError when API call fails

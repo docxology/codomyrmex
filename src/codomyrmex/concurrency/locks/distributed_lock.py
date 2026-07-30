@@ -1,14 +1,52 @@
 """Abstract base class and local implementation of distributed locks."""
 
-import fcntl
 import os
+import tempfile
 import threading
 import time
 from abc import ABC, abstractmethod
 
 from codomyrmex.logging_monitoring import get_logger
 
+try:
+    import fcntl
+except ImportError:
+    fcntl = None  # type: ignore[assignment]
+
+try:
+    import msvcrt
+except ImportError:
+    msvcrt = None  # type: ignore[assignment]
+
 logger = get_logger(__name__)
+
+DEFAULT_LOCK_DIR = os.path.join(tempfile.gettempdir(), "codomyrmex", "locks")
+
+
+def _lock_file_descriptor(fd: int) -> None:
+    """Acquire a non-blocking platform-native lock for one file descriptor."""
+    if fcntl is not None:
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        return
+    if msvcrt is not None:
+        if os.fstat(fd).st_size == 0:
+            os.write(fd, b"\0")
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+        return
+    raise OSError("No supported file-locking backend is available")
+
+
+def _unlock_file_descriptor(fd: int) -> None:
+    """Release a platform-native lock for one file descriptor."""
+    if fcntl is not None:
+        fcntl.flock(fd, fcntl.LOCK_UN)
+        return
+    if msvcrt is not None:
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+        return
+    raise OSError("No supported file-locking backend is available")
 
 
 class BaseLock(ABC):
@@ -93,7 +131,7 @@ class LocalLock(BaseLock):
     Now includes thread-safety via a re-entrant threading lock.
     """
 
-    def __init__(self, name: str, lock_dir: str = "/tmp/codomyrmex/locks"):
+    def __init__(self, name: str, lock_dir: str = DEFAULT_LOCK_DIR):
         """Initialize a local file-based lock.
 
         Args:
@@ -139,9 +177,9 @@ class LocalLock(BaseLock):
         while True:
             try:
                 # Open the file and try to get an exclusive lock
-                fd = os.open(self.lock_path, os.O_CREAT | os.O_WRONLY)
+                fd = os.open(self.lock_path, os.O_CREAT | os.O_RDWR, 0o600)
                 try:
-                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    _lock_file_descriptor(fd)
                     self._lock_file = fd
                     self.is_held = True
                     self._nesting_level = 1
@@ -173,7 +211,7 @@ class LocalLock(BaseLock):
 
             if self._lock_file is not None:
                 try:
-                    fcntl.flock(self._lock_file, fcntl.LOCK_UN)
+                    _unlock_file_descriptor(self._lock_file)
                     os.close(self._lock_file)
                 except Exception as e:
                     logger.debug("Error releasing lock file %s: %s", self.lock_path, e)
