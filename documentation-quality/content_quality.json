@@ -19,7 +19,7 @@
       "heading_count": 147,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 8380,
+      "word_count": 8452,
       "link_count": 2
     }
   },
@@ -34145,7 +34145,7 @@
       "heading_count": 21,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 814,
+      "word_count": 839,
       "link_count": 3
     }
   },
@@ -50749,7 +50749,7 @@
       "heading_count": 13,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 551,
+      "word_count": 602,
       "link_count": 4
     }
   },
@@ -65272,6 +65272,78 @@
     }
   },
   {
+    "file": ".claude/skills/gitnexus/gitnexus-debugging/SKILL.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 7,
+      "placeholder_count": 0,
+      "code_block_count": 7,
+      "word_count": 506,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 8,
+      "placeholder_count": 0,
+      "code_block_count": 5,
+      "word_count": 413,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".claude/skills/gitnexus/gitnexus-guide/SKILL.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 10,
+      "placeholder_count": 0,
+      "code_block_count": 3,
+      "word_count": 1346,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".claude/skills/gitnexus/gitnexus-cli/SKILL.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 9,
+      "placeholder_count": 0,
+      "code_block_count": 5,
+      "word_count": 628,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".claude/skills/gitnexus/gitnexus-exploring/SKILL.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 7,
+      "placeholder_count": 0,
+      "code_block_count": 5,
+      "word_count": 369,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".claude/skills/gitnexus/gitnexus-refactoring/SKILL.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 10,
+      "placeholder_count": 0,
+      "code_block_count": 9,
+      "word_count": 538,
+      "link_count": 0
+    }
+  },
+  {
     "file": ".claude/skills/systems-thinking/SKILL.md",
     "score": 75,
     "issues": [
@@ -65283,6 +65355,18 @@
       "placeholder_count": 0,
       "code_block_count": 0,
       "word_count": 37,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".claude/skills/qmd/SKILL.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 3,
+      "word_count": 211,
       "link_count": 0
     }
   },

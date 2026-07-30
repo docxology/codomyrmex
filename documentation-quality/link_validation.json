@@ -387,28 +387,28 @@
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434/api/embed`",
-    "line": 151,
+    "line": 159,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434\"",
-    "line": 151,
+    "line": 159,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:3100`",
-    "line": 157,
+    "line": 165,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:8080/`",
-    "line": 1087,
+    "line": 1094,
     "status": "external",
     "message": "External link (not validated)"
   },
@@ -1380,7 +1380,7 @@
   },
   {
     "file": "README.md",
-    "link": "https://img.shields.io/badge/tests-35%2C780-brightgreen?style=flat-square\"",
+    "link": "https://img.shields.io/badge/tests-35%2C782-brightgreen?style=flat-square\"",
     "line": 22,
     "status": "external",
     "message": "External link (not validated)"
@@ -5867,7 +5867,7 @@
   },
   {
     "file": ".github/README.md",
-    "link": "https://img.shields.io/badge/tests-35%2C780-brightgreen?style=flat-square\"",
+    "link": "https://img.shields.io/badge/tests-35%2C782-brightgreen?style=flat-square\"",
     "line": 25,
     "status": "external",
     "message": "External link (not validated)"
@@ -52250,21 +52250,21 @@
   {
     "file": "src/codomyrmex/coding/SPEC.md",
     "link": "README.md",
-    "line": 165,
+    "line": 169,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/coding/SPEC.md",
     "link": "AGENTS.md",
-    "line": 166,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/coding/SPEC.md",
     "link": "../SPEC.md",
-    "line": 167,
+    "line": 171,
     "status": "ok",
     "message": "File exists"
   },
@@ -112551,5 +112551,12 @@
     "line": 22,
     "status": "ok",
     "message": "File exists"
+  },
+  {
+    "file": ".claude/skills/gitnexus/gitnexus-cli/SKILL.md",
+    "link": "https://github.com/abhigyanpatwari/GitNexus/issues/1939",
+    "line": 12,
+    "status": "external",
+    "message": "External link (not validated)"
   }
 ]
